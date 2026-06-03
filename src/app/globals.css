@@ -29,9 +29,34 @@
     --color-text-muted:     #525252;
     --color-text-faint:     #a3a3a3;
 
-    /* Accent */
+    /* Accent — RevampIT green stays as the brand accent */
     --color-accent:         var(--primitive-green-600);
     --color-accent-hover:   var(--primitive-green-700);
+
+    /* ─── Public-surface SSOT (fleetcrown / x.ai-inspired) ─────────────────
+     * Achromatic surfaces, RevampIT green as the only chromatic accent.
+     * Used by .ui-public-* classes below for landing / marketing pages.
+     * Light-mode values track foreground; .dark below flips them. */
+    --text-primary:          #0a0a0a;       /* near-black */
+    --text-secondary:        #404040;       /* neutral-700 */
+    --text-tertiary:         #737373;       /* neutral-500 */
+    --text-muted:            #a3a3a3;       /* neutral-400 */
+    --text-inverted:         #fafafa;       /* page bg, used on dark CTAs */
+    --surface-page:          #fafafa;
+    --surface-base:          #ffffff;
+    --surface-raised:        #f5f5f5;
+    --surface-overlay:       #ededed;
+    --border-subtle:         rgba(0, 0, 0, 0.06);
+    --border-default:        rgba(0, 0, 0, 0.10);
+    --border-strong:         rgba(0, 0, 0, 0.20);
+    /* Fluid display type — single SSOT, used by .ui-public-hero-title */
+    --hero-title-min:        2.75rem;        /* 44px — fits iPhone SE */
+    --hero-title-fluid:      8.5vw;
+    --hero-title-max:        5.75rem;        /* 92px */
+    --display-tracking:      -0.035em;
+    --text-micro:            0.625rem;       /* 10px */
+    /* Mobile chrome safety */
+    --mobile-safe-bottom:    env(safe-area-inset-bottom, 0px);
 
     /* Base */
     font-size: 16px;
@@ -50,6 +75,20 @@
     --color-text-faint:     #737373;  /* neutral-500 */
     --color-accent:         var(--primitive-green-500);
     --color-accent-hover:   var(--primitive-green-600);
+
+    /* Public-surface SSOT — dark flips text + surfaces; accent stays brand-green */
+    --text-primary:          #ffffff;
+    --text-secondary:        #a3a3a3;
+    --text-tertiary:         #737373;
+    --text-muted:            #525252;
+    --text-inverted:         #0a0a0a;
+    --surface-page:          #0a0a0a;
+    --surface-base:          #131313;
+    --surface-raised:        #1f1f1f;
+    --surface-overlay:       #2a2a2a;
+    --border-subtle:         rgba(255, 255, 255, 0.06);
+    --border-default:        rgba(255, 255, 255, 0.10);
+    --border-strong:         rgba(255, 255, 255, 0.24);
   }
 
   html {
@@ -363,6 +402,134 @@
   /* Page section with neutral tint */
   .section-tint {
     background-color: var(--color-surface-raised);
+  }
+
+  /* ─── Public surface primitives (fleetcrown / x.ai-inspired) ──────────────
+   * SSOT for landing / marketing / public-info pages. JSX consumes semantic
+   * class names — never hardcodes typography, color, or surface chrome.
+   * Mobile-first: the hero-fold IS one viewport — actionable above-the-fold
+   * is the default, not an afterthought.
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  /* Hero fold — fills viewport on every screen so CTAs land above the fold.
+     min-h:88vh (mobile chrome safe) leaving room for nav above + safe-area
+     below. JSX renders: badge → title → lede → sublede → CTA row, centered. */
+  .ui-public-hero-fold {
+    @apply relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 text-center;
+    min-height: 88vh;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Eyebrow / kicker — small caps label above a title. */
+  .ui-public-eyebrow {
+    @apply text-xs uppercase tracking-[0.18em];
+    color: var(--text-tertiary);
+  }
+
+  /* Hero badge — pill above the title (positioning, mission anchor). */
+  .ui-public-hero-badge {
+    @apply mb-6 inline-block rounded-full px-4 py-1 text-xs uppercase tracking-[0.15em];
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+
+  /* Hero display title — fluid clamp() type, brand display weight + tracking. */
+  .ui-public-hero-title {
+    font-size: clamp(var(--hero-title-min), var(--hero-title-fluid), var(--hero-title-max));
+    line-height: 0.95;
+    letter-spacing: var(--display-tracking);
+    @apply font-bold;
+    color: var(--text-primary);
+  }
+
+  /* Hero lede — primary subtitle, comfortable reading line-length. */
+  .ui-public-hero-lede {
+    @apply mx-auto mt-6 sm:mt-8 max-w-2xl text-xl sm:text-2xl leading-tight tracking-tight;
+    color: var(--text-secondary);
+  }
+
+  /* Hero sublede — secondary subtitle / micro-context. */
+  .ui-public-hero-sublede {
+    @apply mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg;
+    color: var(--text-tertiary);
+  }
+
+  /* CTA primary — RevampIT green; large tap target; opacity hover. */
+  .ui-public-cta {
+    @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
+    background: var(--color-accent);
+    color: #ffffff;
+    min-height: 48px;
+  }
+
+  /* CTA ghost — bordered, secondary action. */
+  .ui-public-cta-ghost {
+    @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-colors;
+    border: 1px solid var(--border-default);
+    color: var(--text-secondary);
+    min-height: 48px;
+  }
+  .ui-public-cta-ghost:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  /* CTA row container — wraps gracefully on mobile (stacks), aligns on sm+. */
+  .ui-public-cta-row {
+    @apply mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto;
+  }
+
+  /* Section band — tinted page-wide band for narrative beats. */
+  .ui-public-band {
+    background: var(--surface-raised);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  /* Display headings for sections below the hero. */
+  .ui-public-display-lg {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    @apply font-bold;
+    color: var(--text-primary);
+  }
+  .ui-public-display-md {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    @apply font-bold;
+    color: var(--text-primary);
+  }
+
+  /* Section lede — text alongside a section title. */
+  .ui-public-section-lede {
+    @apply max-w-2xl text-lg sm:text-xl leading-relaxed;
+    color: var(--text-secondary);
+  }
+
+  /* Surface card — fleetcrown-style content card for sections. */
+  .ui-public-card {
+    @apply flex flex-col rounded-2xl p-6 text-left;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-base);
+    transition: border-color 200ms ease;
+  }
+  .ui-public-card:hover {
+    border-color: var(--border-default);
+  }
+  .ui-public-card-label {
+    @apply mb-6 font-mono text-xs uppercase tracking-[0.18em];
+    color: var(--text-muted);
+  }
+  .ui-public-card-title {
+    @apply text-lg sm:text-xl font-semibold leading-tight;
+    color: var(--text-primary);
+  }
+  .ui-public-card-body {
+    @apply mt-3 text-sm leading-relaxed;
+    color: var(--text-secondary);
   }
 }
 

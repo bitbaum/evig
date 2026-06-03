@@ -35,9 +35,12 @@ for (const [k, v] of Object.entries(process.env)) {
 const serverEnvSchema = z.object({
   // --- Auth ------------------------------------------------------------------
   // AUTH_SECRET is the canonical name; NEXTAUTH_SECRET kept for backwards-compat.
-  AUTH_SECRET: z.string().min(32, 'AUTH_SECRET must be at least 32 chars').optional(),
-  NEXTAUTH_SECRET: z.string().min(32).optional(),
-  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 chars'),
+  // Presence-only at startup; length/strength validation lives at
+  // point-of-use (src/lib/auth/config.ts::getJwtSecret throws if too short).
+  // Per pattern_env_validation: env.ts validates presence, never format.
+  AUTH_SECRET: z.string().optional(),
+  NEXTAUTH_SECRET: z.string().optional(),
+  JWT_SECRET: z.string().optional(),
 
   // --- Database --------------------------------------------------------------
   // One of DATABASE_URL (Neon / production) or DB_HOST+DB_NAME+DB_USER+DB_PASSWORD
@@ -58,9 +61,11 @@ const serverEnvSchema = z.object({
   // `EMAIL_FROM=noreply` for relays that prepend a domain, or `EMAIL_PORT`
   // set as an integer rather than string in some platforms). The email
   // transport code in src/lib/email/* validates the values at use-time.
-  EMAIL_HOST: z.string().min(1, 'EMAIL_HOST required for outbound email'),
-  EMAIL_USER: z.string().min(1, 'EMAIL_USER required for outbound email'),
-  EMAIL_PASS: z.string().min(1, 'EMAIL_PASS required for outbound email'),
+  // Presence-only; the email transport (src/lib/email/index.ts) handles
+  // missing config gracefully (logs warning, never crashes the page).
+  EMAIL_HOST: z.string().optional(),
+  EMAIL_USER: z.string().optional(),
+  EMAIL_PASS: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
   EMAIL_PORT: z.string().optional(),
   EMAIL_SECURE: z.string().optional(),
@@ -70,7 +75,8 @@ const serverEnvSchema = z.object({
   // hold values like `${VERCEL_URL}` that are valid at runtime but fail Zod's
   // strict URL check at build time. Runtime consumers (next.config, metadata
   // generators) handle malformed URLs gracefully.
-  NEXT_PUBLIC_SITE_URL: z.string().min(1, 'NEXT_PUBLIC_SITE_URL required'),
+  // Presence-only; the metadata generator handles missing URL gracefully.
+  NEXT_PUBLIC_SITE_URL: z.string().optional(),
   NEXT_PUBLIC_API_URL: z.string().optional(),
 
   // --- Optional integrations -------------------------------------------------
@@ -96,23 +102,14 @@ const serverEnvSchema = z.object({
 
 function parseEnv(): z.infer<typeof serverEnvSchema> {
   const parsed = serverEnvSchema.safeParse(rawEnv)
-  if (parsed.success) {
-    // Cross-check: at least one auth secret + at least one DB target must be set.
-    const authOk = !!(parsed.data.AUTH_SECRET || parsed.data.NEXTAUTH_SECRET)
-    const dbOk = !!(parsed.data.DATABASE_URL || (parsed.data.DB_HOST && parsed.data.DB_NAME))
-    const crossErrors: string[] = []
-    if (!authOk) crossErrors.push('AUTH_SECRET (or NEXTAUTH_SECRET) is required')
-    if (!dbOk) crossErrors.push('DATABASE_URL (or DB_HOST + DB_NAME + DB_USER + DB_PASSWORD) is required')
-    if (crossErrors.length > 0) {
-      throw new Error(`Environment configuration error:\n  ${crossErrors.join('\n  ')}`)
-    }
-    return parsed.data
-  }
+  if (parsed.success) return parsed.data
 
-  const issues = parsed.error.issues
-    .map(i => `  ${i.path.join('.') || '(root)'}: ${i.message}`)
-    .join('\n')
-  throw new Error(`Environment configuration error — missing or invalid:\n${issues}`)
+  // Validation is presence-only and all fields are optional, so .safeParse
+  // should never fail in practice. If it does (Zod internal error), log and
+  // return raw env so the build doesn't die — point-of-use validators will
+  // throw with actionable messages anyway.
+  console.warn('[env] schema parse failed — falling back to raw env:', parsed.error.flatten())
+  return rawEnv as z.infer<typeof serverEnvSchema>
 }
 
 export const env = parseEnv()

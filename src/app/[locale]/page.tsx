@@ -3,13 +3,11 @@ export const dynamic = 'force-dynamic'
 
 import { Store, Wrench, BookOpen, Heart, Users, Award, Gift } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { buttonClass } from '@/components/ui/button-class'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import Heading from '@/components/ui/Heading'
-import { PageHero } from '@/components/layout/PageHero'
 import { CommunityStats } from '@/components/community/CommunityStats'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
@@ -199,28 +197,35 @@ export default async function Home() {
         }}
       />
 
-      {/* Section 1: Hero — display scale (the one billboard-sized
-          headline on the entire homepage). Icon removed: the headline
-          itself carries the brand; an icon badge above massive type
-          becomes visual noise. x.ai aesthetic = headline does the work. */}
-      <PageHero
-        theme="home"
-        title={t('hero.title')}
-        subtitle={t('hero.subtitle')}
-        size="display"
-      >
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
-          <Link
-            href={ROUTES.public.marketplace}
-            className={buttonClass({ variant: 'primary', className: 'w-full sm:w-auto text-center' })}
-          >
-            {t('hero.ctaDiscover')}
-          </Link>
-          <Link href="/about" className="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
-            {t('hero.ctaAbout')} <span aria-hidden="true">→</span>
-          </Link>
+      {/* Section 1: Hero fold — fleetcrown/x.ai pattern.
+          One viewport (min-h:88vh), centered. Everything actionable —
+          badge, title, lede, sublede, CTAs — fits above the fold on
+          every screen size. Mobile users see the same call-to-action
+          as desktop without scrolling first. */}
+      <section className="ui-public-hero-fold">
+        <div className="max-w-5xl">
+          <div className="ui-public-hero-badge">
+            {t('hero.positioning')}
+          </div>
+
+          <h1 className="ui-public-hero-title">
+            {t('hero.title')}
+          </h1>
+
+          <p className="ui-public-hero-lede">
+            {t('hero.subtitle')}
+          </p>
+
+          <div className="ui-public-cta-row">
+            <Link href={ROUTES.public.marketplace} className="ui-public-cta">
+              {t('hero.ctaDiscover')}
+            </Link>
+            <Link href="/about" className="ui-public-cta-ghost">
+              {t('hero.ctaAbout')}
+            </Link>
+          </div>
         </div>
-      </PageHero>
+      </section>
 
       {/* Section 2: Three Action Cards */}
       <div id="actions" className="bg-canvas py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
