@@ -69,21 +69,55 @@ export const CATEGORY_WEIGHT_KG: Record<string, number> = {
 }
 
 /**
+ * Direct CO₂ savings values (kg CO₂e) for categories with a credible
+ * category-specific LCA study. We prefer these over the weight × factor
+ * approximation because they come from a primary source citing a real
+ * study — same source used in org-numbers.defaults.ts.
+ *
+ * Categories without an override fall through to the weight-based
+ * estimate (less precise, also conservative).
+ */
+const CATEGORY_CO2_KG_OVERRIDE: Record<string, number> = {
+  // Laptop family — Circular Computing 2021 (230-laptop study) gives
+  // ~285 kg CO₂e avoided per refurbished laptop. The weight-based formula
+  // (2 kg × 57 = 114 kg) under-claims by ~60%, which is conservative but
+  // wastes the credibility we already have in our cited number.
+  '10':  285,   // Laptops
+  '101': 285,   // Business Laptops
+  '102': 285,   // Consumer Laptops
+  '103': 285,   // Gaming Laptops
+  '104': 285,   // Ultrabooks
+  '105': 285,   // Convertibles
+  // Desktops, monitors, smartphones, etc. don't yet have a per-category
+  // citation — fall back to weight × factor. Add overrides here as we
+  // wire in additional studies (e.g. Apple/Dell per-SKU PCFs).
+}
+
+/**
  * Estimate CO₂ savings for a product listing in kg CO₂e.
  *
- * Returns `null` if the category isn't in CATEGORY_WEIGHT_KG (callers
- * should hide the badge entirely rather than display a fallback —
- * showing 0 or a guessed number erodes credibility).
+ * Prefers a per-category cited value when available, else falls back
+ * to weight × per-kg factor. Returns `null` if the category is unknown
+ * (callers should hide the badge entirely — showing 0 or a guessed
+ * number erodes credibility).
  *
  * Rounded to nearest 5 kg under 100, nearest 10 above — spurious
  * precision ("287.4 kg") signals over-confidence. Always render with
  * a `~` prefix and a link to /transparenz/co2 in the UI.
  */
 export function estimateCO2Savings(category: string): number | null {
-  const weightKg = CATEGORY_WEIGHT_KG[category]
-  if (weightKg == null) return null
-  const raw = weightKg * CO2_PER_KG
+  const direct = CATEGORY_CO2_KG_OVERRIDE[category]
+  const raw = direct ?? (CATEGORY_WEIGHT_KG[category] ?? 0) * CO2_PER_KG
   if (raw <= 0) return null
   const step = raw < 100 ? 5 : 10
   return Math.round(raw / step) * step
 }
+
+/** Internal: which mode produced the estimate, for the methodology page. */
+export function estimateCO2Source(category: string): 'direct' | 'weight' | null {
+  if (CATEGORY_CO2_KG_OVERRIDE[category] != null) return 'direct'
+  if (CATEGORY_WEIGHT_KG[category] != null) return 'weight'
+  return null
+}
+
+export { CATEGORY_CO2_KG_OVERRIDE }

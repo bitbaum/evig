@@ -423,7 +423,12 @@ export default function BuildYourComputerPage() {
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary-600 mb-2">{getDefaultValue('co2_savings_per_device')} kg</div>
-                  <div className="text-sm text-neutral-600">{t('certification.co2Saved')}</div>
+                  <div className="text-sm text-neutral-600">
+                    {t('certification.co2Saved')}{' · '}
+                    <Link href="/transparenz/co2" className="text-primary-700 hover:underline underline-offset-2">
+                      Wie berechnet?
+                    </Link>
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary-600 mb-2">{getDefaultValue('devices_processed_per_year')}</div>

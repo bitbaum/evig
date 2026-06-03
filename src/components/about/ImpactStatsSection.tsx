@@ -11,7 +11,7 @@ import { getTranslations } from 'next-intl/server'
 import Heading from '@/components/ui/Heading'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_WEIGHT_KG, CO2_PER_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
+import { CATEGORY_WEIGHT_KG, CATEGORY_CO2_KG_OVERRIDE, CO2_PER_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { logger } from '@/lib/logger'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -42,8 +42,13 @@ async function fetchImpactStats() {
       totalDevices += count
       if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
+        // Prefer per-category cited value (e.g. Circular Computing for
+        // laptops at 285 kg) over the rough weight × factor. Stays in
+        // sync with the /transparenz/co2 methodology table.
+        const directCo2 = CATEGORY_CO2_KG_OVERRIDE[row.category]
         const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? FALLBACK_DEVICE_WEIGHT_KG
-        co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
+        const perDevice = directCo2 ?? weightKg * CO2_PER_KG
+        co2SavedKg += count * perDevice
       }
     }
 
@@ -78,14 +83,17 @@ export default async function ImpactStatsSection() {
     {
       value: `${stats.totalDevices}+`,
       description: t('devicesSaved'),
+      methodologyHref: null as string | null,
     },
     {
       value: `~${stats.co2SavedTons} t`,
       description: t('co2Saved'),
+      methodologyHref: '/transparenz/co2',
     },
     {
       value: `${Math.round((stats.totalDevices * AVG_DEVICE_WEIGHT_KG) / 1000 * 10) / 10} t`,
       description: t('ewasteReduced'),
+      methodologyHref: null as string | null,
     },
   ]
 
@@ -129,6 +137,14 @@ export default async function ImpactStatsSection() {
                   </p>
                   <p className="text-sm sm:text-base text-neutral-600">
                     {stat.description}
+                    {stat.methodologyHref && (
+                      <>
+                        {' · '}
+                        <Link href={stat.methodologyHref} className="text-primary-700 hover:underline underline-offset-2">
+                          Wie berechnet?
+                        </Link>
+                      </>
+                    )}
                   </p>
                 </div>
               ))}

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Leaf, ExternalLink, Calculator, FileText } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { ORG_NUMBERS_DEFAULTS } from '@/lib/org-numbers.defaults'
-import { CATEGORY_WEIGHT_KG } from '@/config/co2-impact'
+import { CATEGORY_WEIGHT_KG, CATEGORY_CO2_KG_OVERRIDE, estimateCO2Savings, estimateCO2Source } from '@/config/co2-impact'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 
@@ -179,11 +179,14 @@ export default function Co2MethodologyPage() {
                   <th className="px-4 py-3 text-left font-medium">Kategorie</th>
                   <th className="px-4 py-3 text-right font-medium">Gewicht</th>
                   <th className="px-4 py-3 text-right font-medium">≈ CO₂ vermieden</th>
+                  <th className="px-4 py-3 text-left font-medium">Quelle</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
                 {mainCategories.map(([catId, weight]) => {
-                  const co2 = Math.round((weight * 57) / 5) * 5
+                  const co2 = estimateCO2Savings(catId) ?? 0
+                  const source = estimateCO2Source(catId)
+                  const direct = CATEGORY_CO2_KG_OVERRIDE[catId]
                   return (
                     <tr key={catId}>
                       <td className="px-4 py-3 text-neutral-900 dark:text-white">
@@ -195,11 +198,21 @@ export default function Co2MethodologyPage() {
                       <td className="px-4 py-3 text-right tabular-nums text-primary-600 dark:text-primary-400 font-medium">
                         ~{co2} kg
                       </td>
+                      <td className="px-4 py-3 text-xs text-neutral-500 dark:text-neutral-400">
+                        {source === 'direct'
+                          ? <span title={`Direkter Studienwert: ${direct} kg`}>Studie (zitiert)</span>
+                          : <span title={`Berechnet: ${weight} kg × 57 kg/kg`}>Gewicht × Faktor</span>}
+                      </td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 p-4 border-t border-neutral-100 dark:border-white/[0.04]">
+              Bei „Studie (zitiert)" verwenden wir den direkten Wert aus der Eingangs­wert­tabelle oben statt der
+              groben Gewicht-mal-Faktor-Schätzung. Sobald wir weitere kategorie­spezifische LCAs (Apple/Dell PER)
+              eingepflegt haben, wandern weitere Kategorien hierhin.
+            </p>
           </div>
         </div>
       </section>

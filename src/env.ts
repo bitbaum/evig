@@ -16,6 +16,19 @@ import 'server-only'
 import { z } from 'zod'
 
 // =============================================================================
+// Empty-string handling
+// =============================================================================
+// Vercel's env-var UI saves "" when you clear a field instead of removing the
+// variable. Zod's `.optional()` treats undefined as absent but "" as present
+// (and invalid for typed fields like .email() or .regex). Strip empty strings
+// to undefined before schema validation so optional fields behave intuitively.
+
+const rawEnv: Record<string, unknown> = {}
+for (const [k, v] of Object.entries(process.env)) {
+  rawEnv[k] = typeof v === 'string' && v.trim() === '' ? undefined : v
+}
+
+// =============================================================================
 // Schema — REQUIRED vars are validated; OPTIONAL vars get type-safe defaults.
 // =============================================================================
 
@@ -68,7 +81,7 @@ const serverEnvSchema = z.object({
 // =============================================================================
 
 function parseEnv(): z.infer<typeof serverEnvSchema> {
-  const parsed = serverEnvSchema.safeParse(process.env)
+  const parsed = serverEnvSchema.safeParse(rawEnv)
   if (parsed.success) {
     // Cross-check: at least one auth secret + at least one DB target must be set.
     const authOk = !!(parsed.data.AUTH_SECRET || parsed.data.NEXTAUTH_SECRET)
