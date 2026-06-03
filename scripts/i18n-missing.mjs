@@ -16,7 +16,7 @@
  *   1. npm run i18n:missing
  *   2. Send messages/_missing/<locale>.json to a translator
  *   3. Translator fills in "translation" values
- *   4. npm run i18n:apply (separate script — TODO when needed)
+ *   4. npm run i18n:apply <locale>  (see scripts/i18n-apply.mjs)
  *      merges them back into messages/<locale>.json
  *
  * Until step 4 runs, missing keys gracefully fall back to DE via the

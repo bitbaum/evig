@@ -252,7 +252,7 @@ These warrant separate, focused exercises if specific concerns arise.
 ### H — Production safety
 - `src/env.ts` added: Zod-validated env-var schema. Imported once from `src/app/layout.tsx`. Throws at app startup with clear field-by-field error listing if required vars are missing.
 - Husky + `lint-staged` installed. Pre-commit hook runs `eslint --fix` on staged TS/TSX (typecheck stays in CI for speed).
-- Sentry: **skipped per session decision** (no DSN). TODO documented inline.
+- Sentry: skipped initially (no DSN at that point). **Subsequently wired** in Phase M (`src/instrumentation.ts` + `src/sentry.{server,edge}.config.ts`) — inert until `SENTRY_DSN` is set in Vercel env.
 
 ### I — Migration 082 to Neon
 - Applied `082_projects_needs_contributions.sql` to production Neon.
@@ -287,7 +287,7 @@ Per session preference: Phase A–I landed in a single commit (`75ef7e96`). PR h
 - New script `npm run i18n:missing` writes per-locale missing-keys inventory (`messages/_missing/<locale>.json`, gitignored) in translator-friendly `{ key: { de, translation } }` shape.
 - 1,334 total missing keys across 6 non-DE locales — 125 of those per locale are admin strings (acceptable as DE fallback per team convention).
 - `docs/TRANSLATION.md` documents workflow, priority queue by audience impact, rough translator cost (~CHF 90–120 per locale), and why machine-translation is the wrong tool for UI.
-- `scripts/i18n-apply.mjs` reverse-merge script will land when the first translator returns work.
+- `scripts/i18n-apply.mjs` reverse-merge script delivered in Phase R (`npm run i18n:apply <locale>`).
 
 ### O — Dependency upgrade investigation
 - `docs/UPGRADE_PLAN.md` catalogs every outdated dep into 3 tiers:
@@ -297,9 +297,8 @@ Per session preference: Phase A–I landed in a single commit (`75ef7e96`). PR h
   - **Do-not-bump:** `@types/node` past Node 20 LTS, several `@types/*` packages with regressed numbering.
 - Removed `@types/puppeteer` (puppeteer ships its own types now — the stub on npm is for legacy puppeteer 5.x and was actively wrong).
 
-### L — DEFERRED: TimecardsClient refactor
-- 669-line god component identified by Phase 1 first-principles audit.
-- Reason for explicit defer: no test coverage on the component, complex multi-period state, refactor risk outweighs mission value (internal admin tool used by ~5 staff). Should be tackled when test coverage exists OR as part of a planned UX rework.
+### L — partial: TimecardsClient extraction (light)
+- Deferred to dedicated test-first session originally; **subsequently done as Phase S** (light extraction). Types + pure helpers split out into `types.ts` and `draft-utils.ts`; state and JSX stay in `TimecardsClient.tsx` (669 → 635 lines). Full state-machine refactor still warrants test coverage first.
 
 ### Pre-flight verification
 - `npm run typecheck` → **0 errors** in everything touched.
@@ -308,3 +307,38 @@ Per session preference: Phase A–I landed in a single commit (`75ef7e96`). PR h
 ### Cumulative state after Phase A–O
 - **8 commits this session window:** `75ef7e96` (A–I) → `70745617` (env hotfix) → `5b0b1d3c` (env hotfix #2 + shop mission UX + CO₂ reconciliation) → `682de723` (J + M + N + O).
 - **Production live at `revampit.vercel.app`** (and per-deploy aliases). API + DB roundtrip confirmed via `vercel curl`. (`revamp-it.ch` is a future canonical domain — not active yet, ignore.)
+
+---
+
+## Execution log (Phase P–T, design + infra refinement, 2026-06-03)
+
+### P — Design refinement (x.ai aesthetic, RevampIT colors preserved)
+- `Heading` gained a third variant `display` (text-4xl → text-8xl, `tracking-tighter leading-[1.05]`) for billboard-sized hero headlines. The existing `site`/`admin` scales are unchanged — `display` is **opt-in** for the one or two headlines per page that should land like a billboard.
+- `PageHero`: optional icon (omit when a badge over massive type becomes noise), opt-in `size="display"` with breathing-room `py-20 → py-36`, removed the decorative accent-line bar (x.ai: the headline carries the brand, never the chrome).
+- New `Section` primitive (`src/components/layout/Section.tsx`) — density (`compact`/`default`/`spacious`) × tone (`surface`/`tinted`/`inverse`). SSOT for vertical rhythm; eliminates `py-12 sm:py-16` scatter; pages adopt incrementally.
+- Applied: homepage hero (display, no icon) and `/transparenz/co2` (PageHero + Section throughout).
+
+### Q — Dependency Tier 1 update
+- `npm update` bumped patches/minors per UPGRADE_PLAN Tier 1: next 16.2.7, `@auth/pg-adapter`, `@playwright/test`, `framer-motion`, `jest`, `next-intl`, `nodemailer`, `pg`, `postcss`, `zod`, `ioredis`, `lru-cache`, `tailwind-merge`, and others.
+- **One follow-on fix:** Puppeteer 24.43 dropped `'networkidle0'` from `setContent` `waitUntil` type — switched `src/lib/invoices/pdf-template.ts` to `'load'` (correct gate for inline-HTML invoice generation, no external requests).
+
+### R — i18n:apply companion script
+- New `scripts/i18n-apply.mjs`: reverse-merge of translator output (`messages/_missing/<locale>.json` with filled-in `translation` fields) back into `messages/<locale>.json`.
+- Safe by design: skips empty/whitespace translations (partial returns work); never overwrites existing non-empty values; surfaces **conflicts** when an existing translation differs from a candidate (does NOT silently overwrite).
+- `npm run i18n:apply <locale>`.
+
+### S — TimecardsClient extraction (light)
+- 669 → 635 lines. Extracted types (`PeriodMode`, `TimecardAIResult`, `DraftState`) → `src/app/admin/timecards/types.ts`; pure helpers (`createDraft`, `toDraftState`) → `draft-utils.ts`.
+- Behavior unchanged. State and JSX stay in the main component (state is bound to one consumer; moving it to a hook is premature without test coverage). Removed unused `TimecardStatus` import.
+
+### T — React 19 / TS 6 / ESLint 10 investigation
+- **Key finding:** `next-auth@5.0.0-beta.31` and `recharts` already declare React 19 in peerDeps. UPGRADE_PLAN's "wait 1-2 weeks for ecosystem" was overly cautious — updated to "upgradable now (4-8 h branch)".
+- No actual upgrade in this commit — dedicated branch with smoke testing remains the right shape.
+
+### Pre-existing tech debt observed (NOT session regressions)
+- `npm run lint`: **59 errors across 14 pre-existing files** flagging React Compiler rules (`setState in effect`, `purity`, `immutability`). None in any code I touched this session. These existed before the session — the lint config is stricter than what the codebase has caught up to. Recommend a dedicated react-compiler-cleanup branch with the React 19 upgrade.
+- `npm audit`: 2 MOD (uuid via exceljs, documented accepted-risk in Phase A).
+
+### Cumulative state (Phase A–T)
+- 7 commits this session window: `75ef7e96` (A–I) · `70745617` (env hotfix) · `5b0b1d3c` (env hotfix #2 + UX) · `682de723` (J + M + N + O) · `badec29f` (docs) · `544ae5af` (P + Q + R + S + T) · plus this cleanup commit.
+- **All deployed Ready** at `revampit.vercel.app`. No outstanding errors. Typecheck clean. Umlaut linter clean.
