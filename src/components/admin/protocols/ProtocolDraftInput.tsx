@@ -2,7 +2,13 @@ import { Loader2, Wand2, Upload } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { ExternalAIPanel } from './ExternalAIPanel'
+
+// ExternalAIPanel removed per admin UX audit Z.2 — it pushed staff to
+// open ChatGPT/Claude in another tab, then paste structured JSON back.
+// The in-app ProtocolAIChat covers the same need without the
+// out-of-app round-trip. Net deletion: 182 lines + prop chain across 4
+// files. /api/protocols/[id]/process-notes endpoint is preserved
+// (still used by the AI structuring button in this same component).
 
 interface Props {
   inputMethod: string
@@ -13,7 +19,6 @@ interface Props {
   onAudioFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   onProcess: () => void
-  onImportExternal: (content: string) => void
 }
 
 export function ProtocolDraftInput({
@@ -25,7 +30,6 @@ export function ProtocolDraftInput({
   onAudioFileSelect,
   onFileUpload,
   onProcess,
-  onImportExternal,
 }: Props) {
   return (
     <div id="protocol-step-input" className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-6 space-y-4">
@@ -97,13 +101,6 @@ export function ProtocolDraftInput({
         </Button>
       </div>
 
-      {inputMethod !== 'audio' && (
-        <ExternalAIPanel
-          transcript={transcript}
-          importing={processing}
-          onImport={onImportExternal}
-        />
-      )}
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
 import { adminIconBox, adminIconColor, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
 import { cn } from '@/lib/utils'
@@ -13,6 +14,8 @@ export interface StatCardItem {
   /** Optional trend or secondary text below label */
   trend?: string
   trendColor?: 'green' | 'red' | 'amber'
+  /** When set, the entire card becomes a Link to this href (quick-filter UX) */
+  href?: string
 }
 
 interface AdminStatsGridProps {
@@ -41,29 +44,32 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
         const colorClasses = adminIconColor[item.color ?? 'gray']
         const valueColor = item.valueColor ?? ''
 
-        return (
-          <div
-            key={index}
-            className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900"
-          >
-            <div className="flex items-start gap-3">
-              {/* Icon box */}
-              <div className={cn(adminIconBox.sm, colorClasses)}>
-                <Icon className={adminIconBox.icon} />
-              </div>
+        const cardClass = cn(
+          'rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900',
+          item.href && 'transition-colors hover:border-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+        )
 
-              {/* Value + label */}
-              <div className="min-w-0">
-                <p className={cn(adminType.stat, valueColor)}>{item.value}</p>
-                <p className={adminType.statLabel}>{item.label}</p>
-                {item.trend && (
-                  <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-neutral-400')}>
-                    {item.trend}
-                  </p>
-                )}
-              </div>
+        const body = (
+          <div className="flex items-start gap-3">
+            <div className={cn(adminIconBox.sm, colorClasses)}>
+              <Icon className={adminIconBox.icon} />
+            </div>
+            <div className="min-w-0">
+              <p className={cn(adminType.stat, valueColor)}>{item.value}</p>
+              <p className={adminType.statLabel}>{item.label}</p>
+              {item.trend && (
+                <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-neutral-400')}>
+                  {item.trend}
+                </p>
+              )}
             </div>
           </div>
+        )
+
+        return item.href ? (
+          <Link key={index} href={item.href} className={cardClass}>{body}</Link>
+        ) : (
+          <div key={index} className={cardClass}>{body}</div>
         )
       })}
     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
@@ -28,7 +28,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
   const [savingMapping, setSavingMapping] = useState(false)
   const [creatingTask, setCreatingTask] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(initialProcessingError?.message || null)
-  const [transcript, setTranscript] = useState('')
+  const [transcript, setTranscript] = useState(protocol.raw_transcript ?? '')
   const [audioFile, setAudioFile] = useState<File | null>(null)
   const [bulkCreatingTasks, setBulkCreatingTasks] = useState(false)
   const [bulkTaskErrors, setBulkTaskErrors] = useState<string[]>([])
@@ -42,12 +42,6 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
 
   // Topics are collapsed by default — users expand what they need
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(() => new Set())
-
-  useEffect(() => {
-    if (!transcript && protocol.raw_transcript) {
-      setTranscript(protocol.raw_transcript)
-    }
-  }, [protocol.raw_transcript, transcript])
 
   const [attendeeMapping, setAttendeeMapping] = useState<Record<string, string>>(() => {
     if (!notes?.action_items) return {}
@@ -280,24 +274,11 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     }
   }
 
-  const handleImportExternal = async (content: string) => {
-    if (!content.trim()) return
-    setProcessing(true)
-    setError(null)
-
-    try {
-      const result = await apiFetch<void>(`/api/protocols/${protocol.id}/process-notes`, {
-        method: 'POST',
-        body: { content },
-      })
-      if (!result.success) throw new Error(result.error || 'Import fehlgeschlagen')
-      router.refresh()
-    } catch (err) {
-      setError(getErrorMessage(err))
-    } finally {
-      setProcessing(false)
-    }
-  }
+  // handleImportExternal removed per admin UX audit Z.2 — was the only
+  // caller of ExternalAIPanel, which posted user-pasted external-AI
+  // structured JSON to /api/protocols/[id]/process-notes. The in-app AI
+  // structuring (handleProcessNotes above) uses the same endpoint without
+  // the out-of-app round-trip.
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -349,7 +330,6 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     audioFile,
     processing,
     handleProcess,
-    handleImportExternal,
     handleFileUpload,
     handleAudioFileSelect,
     getReprocessMinLength,

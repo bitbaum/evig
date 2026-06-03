@@ -30,7 +30,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
     audioFile, setAudioFile,
     whisperModel, setWhisperModel,
     loading, processing, error,
-    setupComplete, canSubmit,
+    canSubmit,
     contentFormat,
     filteredTeamMembers,
     handleAIFieldsFilled,
@@ -163,9 +163,9 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         </div>
       </div>
 
-      {/* Step 2: Content */}
-      {setupComplete && (
-        <div className="bg-white rounded-lg border p-6 space-y-4">
+      {/* Inhalt — always visible (collapsed wizard per Z.5). canSubmit still
+          enforces that meeting details + content are filled before submission. */}
+      <div className="bg-white rounded-lg border p-6 space-y-4">
           <Heading level={2} className="text-lg font-semibold text-neutral-900">Inhalt</Heading>
           <p className="text-sm text-neutral-600">
             Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
@@ -280,7 +280,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             </Button>
           </div>
         </div>
-      )}
     </div>
   )
 }

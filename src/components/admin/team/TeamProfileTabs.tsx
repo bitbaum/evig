@@ -70,6 +70,10 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
 
   return (
     <div className="space-y-4">
+      {/* Leave periods — hoisted above the tab strip (Z.3) so HR always
+          sees who's away regardless of which tab is active. */}
+      <TeamLeavePeriodsCard profileId={profile.id} />
+
       {/* Tab bar */}
       <div className="flex items-center justify-between gap-3 border-b border-neutral-200 dark:border-white/[0.06]">
         <nav className="flex -mb-px overflow-x-auto" role="tablist" aria-label="Profilbereiche">
@@ -107,15 +111,12 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
       {/* Tab content */}
       <div className="min-h-[400px]">
         {tab === 'uebersicht' && (
-          <div className="space-y-4">
-            <TeamProfileView
-              profile={profile}
-              isSuperAdmin={isSuperAdmin}
-              onEdit={() => router.push(`/admin/team/${profile.id}/edit`)}
-              onBack={() => router.push('/admin/team')}
-            />
-            <TeamLeavePeriodsCard profileId={profile.id} />
-          </div>
+          <TeamProfileView
+            profile={profile}
+            isSuperAdmin={isSuperAdmin}
+            onEdit={() => router.push(`/admin/team/${profile.id}/edit`)}
+            onBack={() => router.push('/admin/team')}
+          />
         )}
         {tab === 'zeiterfassung' && (
           <TeamProfileTimecardsTab userId={profile.user_id} />

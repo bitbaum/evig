@@ -137,6 +137,7 @@ export interface TaskListItem {
   title: string;
   description: string | null;
   task_type: TaskType;
+  schedule_human: string | null;
   category: TaskCategory;
   priority: TaskPriority;
   current_status: TaskStatus;
@@ -144,6 +145,10 @@ export interface TaskListItem {
   due_date: string | null;
   is_completed: boolean;
   completion_count: number;
+  /** Number of pending task_requests on this task (broadcast + targeted combined). */
+  open_request_count: number;
+  /** True if at least one pending request is a broadcast (any-staff-can-claim). */
+  has_open_broadcast: boolean;
   created_at: string;
   created_by_name: string | null;
   assigned_to: string | null;

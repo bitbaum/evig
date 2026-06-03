@@ -35,15 +35,15 @@ describe('ProtocolFormClient', () => {
     }) as jest.Mock
   })
 
-  it('creates protocol with transcript in 2-step flow', async () => {
+  it('creates protocol with transcript', async () => {
     render(<ProtocolFormClient teamMembers={teamMembers} />)
 
-    // Step 1: Setup — select meeting type
+    // Setup: select meeting type
     fireEvent.change(screen.getByLabelText(/Sitzungstyp/i), {
       target: { value: 'team_weekly' },
     })
 
-    // Step 2: Content — enter transcript
+    // Content: enter transcript
     const textarea = await screen.findByLabelText(/Transkript oder Notizen/i)
     fireEvent.change(textarea, {
       target: { value: 'Dies ist ein genügend langes Transkript für die Verarbeitung mit mehr als fünfzig Zeichen.' },

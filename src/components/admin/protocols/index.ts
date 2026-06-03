@@ -19,11 +19,4 @@ export { ProtocolReviewQueue } from './ProtocolReviewQueue'
 export { ProtocolProgressStrip } from './ProtocolProgressStrip'
 export { ProtocolAIChat } from './ProtocolAIChat'
 export { ProtocolAttendeesCard } from './ProtocolAttendeesCard'
-export { ExternalAIPanel } from './ExternalAIPanel'
 export type { ProtocolDetailProps } from './types'
-
-// Form components
-export { MeetingTypeStep } from './MeetingTypeStep'
-export { ProtocolDetailsStep } from './ProtocolDetailsStep'
-export { InputMethodStep } from './InputMethodStep'
-export { ContentInputStep } from './ContentInputStep'

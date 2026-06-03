@@ -83,10 +83,22 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 |---|---|---|
 | Timecards: drop aside panel, inline day-edit grid | medium | Layout rewrite; mobile flow risk |
 | Tasks: collapse new-task form 11 → 5 fields | medium | Need to confirm which fields admin actually uses |
-| Tasks: localStorage-backed default filter ("needs attention" first) | medium | Server→client conversion; URL vs storage tradeoff |
 | Tasks: delete standalone analytics page | medium | Decide if anyone uses it |
-| Protocols: collapse intake wizard into one form | medium | Verify staff have raw input ready |
 | Protocols: kill DecisionActions voting flow → "approve + create tasks" 2-button | large | 4 API routes to consolidate |
 | Protocols: split ProtocolDetailClient (357 lines) by lifecycle state | large | Refactor; test-first approach |
 | Team: profile form compression (drop schema-first compensation fields) | medium | HR adoption signal needed |
 | Team: separate "team roster" from "team culture" | large | New route + IA decision |
+
+---
+
+## Execution log (Phase Z — second batch of Musk cuts)
+
+| # | Change | Result |
+|---|---|---|
+| Z.1 | Tasks: SQL subqueries for `open_request_count` + `has_open_broadcast`; 📢/👤 emoji badges next to title | ✓ |
+| Z.2 | Protocols: deleted `ExternalAIPanel` (`handleImportExternal` was the only caller — same `/process-notes` endpoint is reachable from in-app flow) | ✓ |
+| Z.3 | Team: hoisted `TeamLeavePeriodsCard` above the tab strip — HR sees who's away regardless of active tab | ✓ |
+| Z.4 | Tasks: top stat cards are now Links (`Gesamt`, `Braucht Aufmerksamkeit`, `Angefragt`) — 1-click filter; `AdminStatsGrid` got optional `href` prop | ✓ |
+| Z.5 | Protocols: collapsed wizard gate (`{setupComplete && ...}`) — Inhalt section always visible; `canSubmit` still validates. Deleted 4 orphan step components (`MeetingTypeStep`, `ProtocolDetailsStep`, `InputMethodStep`, `ContentInputStep`) — only re-exported by `index.ts`, no actual consumers | ✓ |
+
+Net: -714 LOC (5 dead component files), 15 files touched, typecheck clean.

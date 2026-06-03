@@ -153,7 +153,19 @@ async function getTasks(
         SELECT COUNT(*)::int
         FROM ${TABLE_NAMES.TASK_COMPLETIONS} tc
         WHERE tc.task_id = t.id
-      ) as completion_count
+      ) as completion_count,
+      -- Open request signal — surfaces the broadcast-vs-targeted distinction
+      -- on the task list itself, killing one detail-page click for staff
+      -- triaging "what's pending input from me?". Per admin UX audit Y/Z phase.
+      (
+        SELECT COUNT(*)::int
+        FROM ${TABLE_NAMES.TASK_REQUESTS} tr
+        WHERE tr.task_id = t.id AND tr.status = 'pending'
+      ) as open_request_count,
+      EXISTS (
+        SELECT 1 FROM ${TABLE_NAMES.TASK_REQUESTS} tr
+        WHERE tr.task_id = t.id AND tr.status = 'pending' AND tr.requested_user_id IS NULL
+      ) as has_open_broadcast
     FROM ${TABLE_NAMES.TASKS} t
     LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
     LEFT JOIN ${TABLE_NAMES.USERS} au ON t.assigned_to = au.id
@@ -241,13 +253,14 @@ export default async function TasksAdminPage({
         </>
       }
     >
-      {/* Stats Cards */}
+      {/* Stats Cards — clickable as quick filters */}
       <AdminStatsGrid items={[
         {
           icon: ClipboardList,
           color: 'gray',
           label: 'Gesamt',
           value: stats.total,
+          href: ROUTES.admin.tasks,
         },
         {
           icon: AlertTriangle,
@@ -255,14 +268,15 @@ export default async function TasksAdminPage({
           label: 'Braucht Aufmerksamkeit',
           value: stats.needsAttention,
           valueColor: 'text-error-600',
+          href: `${ROUTES.admin.tasks}?status=${TASK_STATUSES.NEEDS_ATTENTION}`,
         },
         {
           icon: Clock,
-          // amber is the SSOT "pending/warning" tone (no yellow token in adminIconColor)
           color: 'amber',
           label: 'Angefragt',
           value: stats.requested,
           valueColor: 'text-warning-600',
+          href: `${ROUTES.admin.tasks}?status=${TASK_STATUSES.REQUESTED}`,
         },
         {
           icon: CheckCircle2,
@@ -347,12 +361,30 @@ export default async function TasksAdminPage({
               {tasks.map((task) => (
                 <tr key={task.id} className="hover:bg-neutral-50">
                   <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
-                    <Link
-                      href={ROUTES.admin.task(task.id)}
-                      className="font-medium text-neutral-900 hover:text-primary-600 truncate block focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
-                    >
-                      {task.title}
-                    </Link>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Link
+                        href={ROUTES.admin.task(task.id)}
+                        className="font-medium text-neutral-900 hover:text-primary-600 truncate min-w-0 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
+                      >
+                        {task.title}
+                      </Link>
+                      {/* Request signal — broadcast (📢 any-staff) outranks
+                          targeted (👤 user-specific). Per admin UX audit Z.1:
+                          surfaces "what's pending input?" without a click. */}
+                      {task.has_open_broadcast ? (
+                        <span
+                          className="inline-flex flex-shrink-0 items-center text-xs"
+                          aria-label={`${task.open_request_count} offene Broadcast-Anfrage(n)`}
+                          title={`${task.open_request_count} offene Anfrage(n) — Broadcast`}
+                        >📢</span>
+                      ) : task.open_request_count > 0 ? (
+                        <span
+                          className="inline-flex flex-shrink-0 items-center text-xs"
+                          aria-label={`${task.open_request_count} offene gezielte Anfrage(n)`}
+                          title={`${task.open_request_count} offene Anfrage(n) — gezielt`}
+                        >👤</span>
+                      ) : null}
+                    </div>
                     {task.description && (
                       <p className="text-sm text-neutral-500 truncate max-w-full">
                         {task.description}
