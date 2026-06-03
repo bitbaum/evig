@@ -99,12 +99,3 @@ export {
   CATEGORIES,
   getSortedCategories,
 } from './permissions'
-
-export type {
-  AdminSection,
-  StaffUser,
-  ContentStatus,
-  SectionConfig,
-  SectionCategory,
-  SectionColor,
-} from './permissions'

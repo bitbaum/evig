@@ -95,6 +95,10 @@ jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
+  // audit.ts calls getTableName on module load to build raw SQL fragments —
+  // any non-empty stable string keeps the import side-effect free in tests.
+  getTableName: () => 'auth_audit_log',
+  sql: { raw: (s: unknown) => s },
 }))
 
 jest.mock('@/lib/permissions', () => ({

@@ -70,6 +70,9 @@ jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
   eq: jest.fn().mockReturnValue({ __eq: true }),
   sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'NOW()' }), { raw: jest.fn(), join: jest.fn() }),
+  // audit.ts calls getTableName(authAuditLog) at module load; the @/db/schema
+  // mock returns plain objects (not real Drizzle tables), so override here.
+  getTableName: () => 'auth_audit_log',
 }))
 
 jest.mock('@/lib/schemas', () => ({

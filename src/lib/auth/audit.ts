@@ -164,6 +164,13 @@ export function logAuditEvent(entry: Omit<AuditLogEntry, 'id' | 'created_at'>): 
 export async function logAuditEventSync(
   entry: Omit<AuditLogEntry, 'id' | 'created_at'>
 ): Promise<void> {
+  // Mirror critical events to the logger immediately — sync is used for
+  // compliance-critical writes (super-admin grants, user deletions, data
+  // exports). If the DB write fails we still want a log trail.
+  if (entry.severity === 'critical') {
+    logger.warn('[AUDIT CRITICAL]', { entry })
+  }
+
   try {
     await db.insert(authAuditLog).values({
       eventType: entry.event_type,

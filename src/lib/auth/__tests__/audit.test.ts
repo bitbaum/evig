@@ -100,11 +100,17 @@ async function flush(): Promise<void> {
   await Promise.resolve()
 }
 
-/** Get the last entry from the most recent batch insert. */
+/**
+ * Get the last entry passed to db.insert(...).values(...).
+ *
+ * Handles both call shapes:
+ *   - buffered flush  → values([entry, entry, entry])  (array)
+ *   - logAuditEventSync → values(entry)                 (single object)
+ */
 function lastFlushedEntry(): Record<string, unknown> {
   expect(valuesSpy).toHaveBeenCalled()
   const lastCall = valuesSpy.mock.calls[valuesSpy.mock.calls.length - 1][0]
-  return lastCall[lastCall.length - 1]
+  return Array.isArray(lastCall) ? lastCall[lastCall.length - 1] : lastCall
 }
 
 // ============================================================================

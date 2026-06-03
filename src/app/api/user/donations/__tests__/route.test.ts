@@ -26,10 +26,14 @@ jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
 }))
 
+// The route runs two queries:
+//   1. donations:  select.from(donations).where().orderBy()   → MOCK_DONATIONS
+//   2. linked:     select.from(items).leftJoin().leftJoin().where()  → linked rows
+// mockOrderBy controls the first; mockLinkedWhere controls the second.
 const mockOrderBy = jest.fn()
-const mockWhere = jest.fn().mockReturnValue({ orderBy: mockOrderBy })
-const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
-const mockSelect = jest.fn().mockReturnValue({ from: mockFrom })
+const mockLinkedWhere = jest.fn()
+
+const mockSelect = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
@@ -48,12 +52,24 @@ jest.mock('@/db/schema', () => ({
     receiptRequested: 'd_receipt_req', receiptSent: 'd_receipt_sent',
     createdAt: 'd_created',
   },
+  inventoryItems: {
+    id: 'i_id', sourceDonationId: 'i_source', status: 'i_status',
+    intakeTier: 'i_tier', checklistComplete: 'i_checklist',
+    aiProductId: 'i_ai_id',
+  },
+  marketplaceListings: {
+    inventoryItemId: 'ml_inventory', status: 'ml_status', soldAt: 'ml_sold',
+  },
+  aiExtractedProducts: { id: 'aep_id', itemUuid: 'aep_uuid' },
 }))
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
   eq: jest.fn().mockReturnValue({ __eq: true }),
   desc: jest.fn().mockReturnValue({ __desc: true }),
+  // audit.ts calls getTableName(authAuditLog) at module load; the @/db/schema
+  // mock returns plain objects (not real Drizzle tables), so override here.
+  getTableName: () => 'auth_audit_log',
 }))
 
 jest.mock('@/lib/api/helpers', () => ({
@@ -108,10 +124,28 @@ function makeRequest() {
 beforeEach(() => {
   jest.clearAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
-  mockSelect.mockReturnValue({ from: mockFrom })
-  mockFrom.mockReturnValue({ where: mockWhere })
-  mockWhere.mockReturnValue({ orderBy: mockOrderBy })
   mockOrderBy.mockResolvedValue(MOCK_DONATIONS)
+  mockLinkedWhere.mockResolvedValue([])
+
+  // First select call returns the donations chain (from → where → orderBy).
+  // Subsequent calls return the linked-inventory chain
+  // (from → leftJoin → leftJoin → where).
+  let n = 0
+  mockSelect.mockImplementation(() => {
+    n += 1
+    if (n === 1) {
+      return {
+        from: () => ({ where: () => ({ orderBy: mockOrderBy }) }),
+      }
+    }
+    return {
+      from: () => ({
+        leftJoin: () => ({
+          leftJoin: () => ({ where: mockLinkedWhere }),
+        }),
+      }),
+    }
+  })
 })
 
 // ============================================================================
