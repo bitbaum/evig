@@ -146,6 +146,3 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
     </div>
   )
 }
-
-// Default export for backwards compatibility
-export default AICameraProductListing

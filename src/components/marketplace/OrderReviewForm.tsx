@@ -184,5 +184,3 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
     </form>
   )
 }
-
-export default OrderReviewForm

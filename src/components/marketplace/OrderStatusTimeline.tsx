@@ -122,5 +122,3 @@ export function OrderStatusTimeline({
     </div>
   )
 }
-
-export default OrderStatusTimeline
