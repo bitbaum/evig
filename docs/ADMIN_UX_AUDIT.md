@@ -61,6 +61,32 @@ These are real wins but each is medium-to-large with risk of breaking a workflow
 
 ---
 
-## Execution log (Phase Y, this session)
+## Execution log (Phase Y — commit `93db2e89`)
 
-(filled in after the quick wins land — see commit)
+| # | Change | Result |
+|---|---|---|
+| Y.1 | Timecards: deleted month/week toggle UI; mode dormant at 'month' | ✓ |
+| Y.2 | Timecards: submit button → "Zur Prüfung einreichen"; save already clear | ✓ |
+| Y.3 | Tasks detail: removed duplicate `is_completed` badge (status = SSOT) | ✓ |
+| Y.5 | Tasks list: replaced "Typ" column with "Zeitplan" (surfaces `schedule_human`) | ✓ |
+| Y.6 | Protocols: deleted `ProtocolWorkflowStepper` (dead code, grep-verified) | ✓ |
+| Y.7 | Protocols: attendee-mapping warning → neutral advisory | ✓ |
+| Y.4 | Tasks: localStorage default filter | **deferred** (server→client conversion) |
+| Y.8 | Team: leave card to main profile | **deferred** (structural rework) |
+| — | Audit hotfix: extended `AuditEventType` union (Phase W.5 helpers) | ✓ (unblocked DB deploy) |
+
+### What's deferred to a dedicated branch
+
+Per the audit reports, the highest-leverage further changes are non-trivial and warrant their own focused session:
+
+| Item | Effort | Why dedicated |
+|---|---|---|
+| Timecards: drop aside panel, inline day-edit grid | medium | Layout rewrite; mobile flow risk |
+| Tasks: collapse new-task form 11 → 5 fields | medium | Need to confirm which fields admin actually uses |
+| Tasks: localStorage-backed default filter ("needs attention" first) | medium | Server→client conversion; URL vs storage tradeoff |
+| Tasks: delete standalone analytics page | medium | Decide if anyone uses it |
+| Protocols: collapse intake wizard into one form | medium | Verify staff have raw input ready |
+| Protocols: kill DecisionActions voting flow → "approve + create tasks" 2-button | large | 4 API routes to consolidate |
+| Protocols: split ProtocolDetailClient (357 lines) by lifecycle state | large | Refactor; test-first approach |
+| Team: profile form compression (drop schema-first compensation fields) | medium | HR adoption signal needed |
+| Team: separate "team roster" from "team culture" | large | New route + IA decision |
