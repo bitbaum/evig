@@ -1,5 +1,7 @@
 import { pgTable, uuid, text, boolean, integer, jsonb, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { users } from './auth'
+import { meetingProtocols } from './protocols'
 
 // =============================================================================
 // DECISIONS (standalone team decisions & voting)
@@ -53,6 +55,14 @@ export const decisions = pgTable('decisions', {
   // Public voting — when true, anyone with the link can vote (no account needed)
   allowPublicVoting: boolean('allow_public_voting').notNull().default(false),
 
+  // Optional link to a protocol meeting + action item that spawned this
+  // decision. Nullable — most decisions are standalone. Populated only
+  // when a protocol-embedded vote is created via the unified pipeline
+  // (see docs/ARCHITECTURE_DEBT.md #1). action_item_id is a string ID
+  // from the AI-extracted notes.action_items array (not a FK).
+  protocolId: uuid('protocol_id').references(() => meetingProtocols.id, { onDelete: 'cascade' }),
+  actionItemId: text('action_item_id'),
+
   // Creator
   createdBy: uuid('created_by').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
@@ -62,6 +72,9 @@ export const decisions = pgTable('decisions', {
   index('idx_decisions_status').on(table.status),
   index('idx_decisions_created_by').on(table.createdBy),
   index('idx_decisions_voting_deadline').on(table.votingDeadline),
+  uniqueIndex('decisions_protocol_action_item_uniq')
+    .on(table.protocolId, table.actionItemId)
+    .where(sql`protocol_id IS NOT NULL AND action_item_id IS NOT NULL`),
 ])
 
 export type Decision = typeof decisions.$inferSelect
