@@ -215,7 +215,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'helpful'
                     ? 'bg-action-muted/20 text-action'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 <ThumbsUp className="w-3 h-3" />
@@ -226,7 +226,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'unhelpful'
                     ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 <ThumbsDown className="w-3 h-3" />

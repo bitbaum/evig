@@ -218,7 +218,7 @@ export default function TechnikerListClient() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
                   ? 'bg-action text-white'
-                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
               }`}
               aria-pressed={tier === tab.value}
             >
@@ -303,7 +303,7 @@ export default function TechnikerListClient() {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
+              className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('list.prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -314,7 +314,7 @@ export default function TechnikerListClient() {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
+              className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('list.nextPage')}
             >
               <ChevronRight className="w-4 h-4" />

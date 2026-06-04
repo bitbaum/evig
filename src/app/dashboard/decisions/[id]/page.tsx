@@ -160,9 +160,9 @@ export default async function DashboardDecisionPage({ params }: Props) {
               )}
             </span>
           </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-surface-overlay">
             <div
-              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-action' : 'bg-neutral-400'}`}
+              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-action' : 'bg-surface-overlay'}`}
               style={{ width: `${participationPct}%` }}
             />
           </div>
@@ -183,7 +183,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
           <ul className="space-y-1.5">
             {decision.options.map((opt) => (
               <li key={opt.id} className="flex items-start gap-2 text-sm text-text-secondary">
-                <span className="mt-0.5 shrink-0 text-neutral-300 dark:text-text-secondary">—</span>
+                <span className="mt-0.5 shrink-0 text-text-muted dark:text-text-secondary">—</span>
                 <span>
                   <span className="font-medium">{opt.label}</span>
                   {opt.description && (

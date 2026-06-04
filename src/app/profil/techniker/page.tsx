@@ -121,7 +121,7 @@ export default function TechnikerProfilPage() {
                       className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                         profile.skills.includes(skill.id)
                           ? 'bg-action-muted-muted text-action border-2 border-action'
-                          : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
+                          : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
                       }`}
                       title={skill.description}
                     >
@@ -153,7 +153,7 @@ export default function TechnikerProfilPage() {
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${
                   profile.serviceTypes.includes(type.id)
                     ? 'bg-action-muted-muted text-action border-2 border-action'
-                    : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
                 }`}
               >
                 {type.name}
@@ -288,7 +288,7 @@ export default function TechnikerProfilPage() {
                       acceptsGratis: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
+                  className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon} {t('pricing.acceptsGratis')}
@@ -305,7 +305,7 @@ export default function TechnikerProfilPage() {
                       acceptsKulturlegi: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
+                  className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon} {t('pricing.acceptsKulturlegi')}
@@ -361,7 +361,7 @@ export default function TechnikerProfilPage() {
                 }
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-base after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action"></div>
+              <div className="w-11 h-6 bg-surface-overlay peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-base after:border-default after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action"></div>
             </div>
           </label>
         </div>
@@ -370,7 +370,7 @@ export default function TechnikerProfilPage() {
         <div className="flex justify-end gap-4">
           <Link
             href={IT_HILFE.routes.browse}
-            className="px-6 py-3 text-text-secondary border border-neutral-300 rounded-lg hover:bg-surface-raised transition-colors"
+            className="px-6 py-3 text-text-secondary border border-default rounded-lg hover:bg-surface-raised transition-colors"
           >
             {t('cancel')}
           </Link>

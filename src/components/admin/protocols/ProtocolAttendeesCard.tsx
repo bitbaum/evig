@@ -134,7 +134,7 @@ export function ProtocolAttendeesCard({
                         : [...prev, member.id]
                     )
                   }
-                  className="rounded-sm border-neutral-300 text-action focus:ring-action"
+                  className="rounded-sm border-default text-action focus:ring-action"
                 />
                 {member.name}
               </label>

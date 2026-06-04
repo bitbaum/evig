@@ -82,7 +82,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
         <div className="p-6 border-t border-subtle flex gap-3">
           <button
             onClick={onEdit}
-            className="px-6 py-2.5 rounded-lg border border-neutral-300 font-medium text-text-secondary hover:bg-surface-raised"
+            className="px-6 py-2.5 rounded-lg border border-default font-medium text-text-secondary hover:bg-surface-raised"
           >
             {tCommon('edit')}
           </button>

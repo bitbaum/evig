@@ -26,7 +26,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
   return (
     <div className="card-shell p-6">
       <div className="flex items-start gap-4 mb-4">
-        <div className={`p-3 ${categoryConfig?.color || 'bg-neutral-500'} rounded-xl`}>
+        <div className={`p-3 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-xl`}>
           <CategoryIcon className="w-6 h-6 text-white" aria-hidden="true" />
         </div>
         <div className="flex-1">

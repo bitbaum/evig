@@ -33,7 +33,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
           member.is_active
             ? 'bg-action'
-            : 'bg-neutral-500'
+            : 'bg-surface-overlay'
         }`}>
           <span className="text-white font-medium text-sm">{initials}</span>
         </div>
@@ -45,7 +45,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
               {displayName}
             </Heading>
             {!member.is_active && (
-              <span className="px-2 py-0.5 text-xs rounded-sm bg-neutral-200 text-text-secondary">
+              <span className="px-2 py-0.5 text-xs rounded-sm bg-surface-overlay text-text-secondary">
                 Inaktiv
               </span>
             )}
@@ -111,7 +111,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       <div className="flex gap-2 mt-4 pt-4 border-t border-subtle dark:border-white/6">
         <Link
           href={`/admin/team/${member.id}`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-text-secondary bg-surface-raised hover:bg-neutral-200 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-text-secondary bg-surface-raised hover:bg-surface-overlay rounded-lg transition-colors"
           onClick={() => onView?.(member.id)}
         >
           <Eye className="w-4 h-4" />

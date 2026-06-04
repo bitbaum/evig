@@ -27,7 +27,7 @@ export function ProductCard({ product, stockOneLabel }: Props) {
           />
         ) : (
           <div className="flex items-center justify-center h-full">
-            <Package className="w-12 h-12 text-neutral-200" />
+            <Package className="w-12 h-12 text-text-muted" />
           </div>
         )}
         {stockOneLabel && product.quantity <= 1 && (

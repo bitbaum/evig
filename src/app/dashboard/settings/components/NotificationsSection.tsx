@@ -76,7 +76,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                   type="button"
                   onClick={() => handleChange(option.id, !option.value)}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
-                    option.value ? 'bg-action' : 'bg-neutral-200'
+                    option.value ? 'bg-action' : 'bg-surface-overlay'
                   }`}
                 >
                   <span

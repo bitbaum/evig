@@ -149,7 +149,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded-sm border-neutral-300 text-action focus:ring-action"
+                      className="rounded-sm border-default text-action focus:ring-action"
                     />
                     {member.name}
                   </label>
@@ -199,7 +199,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               Oder Datei hochladen
             </label>
             <div className="flex items-center gap-3">
-              <label className="inline-flex items-center gap-2 px-4 min-h-11 bg-surface-raised text-text-secondary rounded-lg hover:bg-neutral-200 cursor-pointer transition-colors text-sm">
+              <label className="inline-flex items-center gap-2 px-4 min-h-11 bg-surface-raised text-text-secondary rounded-lg hover:bg-surface-overlay cursor-pointer transition-colors text-sm">
                 <Upload className="w-4 h-4" />
                 Datei wählen
                 <input

@@ -86,7 +86,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 onClick={() => handleChange('profile_visibility', 'private')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                   profile.profile_visibility === 'private'
-                    ? 'border-neutral-500 bg-surface-raised text-text-secondary'
+                    ? 'border-strong bg-surface-raised text-text-secondary'
                     : 'border bg-surface-base text-text-secondary hover:border-strong'
                 }`}
               >
@@ -129,7 +129,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                   type="button"
                   onClick={() => handleChange('show_email', !profile.show_email)}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
-                    profile.show_email ? 'bg-action' : 'bg-neutral-200'
+                    profile.show_email ? 'bg-action' : 'bg-surface-overlay'
                   }`}
                 >
                   <span
@@ -166,7 +166,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                   type="button"
                   onClick={() => handleChange('show_phone', !profile.show_phone)}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
-                    profile.show_phone ? 'bg-action' : 'bg-neutral-200'
+                    profile.show_phone ? 'bg-action' : 'bg-surface-overlay'
                   }`}
                 >
                   <span

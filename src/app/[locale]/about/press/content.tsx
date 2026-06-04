@@ -63,7 +63,7 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
       <div className="flex items-center gap-2 text-sm text-text-tertiary mb-3">
         <Newspaper className="h-4 w-4" />
         <span className="font-medium">{mention.sourceShort}</span>
-        <span className="text-neutral-300">|</span>
+        <span className="text-text-muted">|</span>
         <span>{mention.date}</span>
       </div>
 
@@ -111,7 +111,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
         </p>
         <p className="text-xs text-text-tertiary truncate">{mention.date}</p>
       </div>
-      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-action transition-colors shrink-0" />
+      <ExternalLink className="h-4 w-4 text-text-muted group-hover:text-action transition-colors shrink-0" />
     </a>
   )
 }
@@ -214,7 +214,7 @@ export default function PressPageContent() {
                     </p>
                     <p className="text-xs text-text-tertiary truncate">{mention.title}</p>
                   </div>
-                  <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-action transition-colors shrink-0" />
+                  <ExternalLink className="h-4 w-4 text-text-muted group-hover:text-action transition-colors shrink-0" />
                 </a>
               ))}
             </div>

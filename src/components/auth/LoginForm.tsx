@@ -131,7 +131,7 @@ export function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+            <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
               {t('email')}
             </label>
             <div className="relative">
@@ -149,7 +149,7 @@ export function LoginForm() {
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
                   'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
-                  'border-neutral-300',
+                  'border-default',
                   'bg-surface-base',
                   getTextColor('white', 'primary'),
                   'dark:text-white',
@@ -163,7 +163,7 @@ export function LoginForm() {
           {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="password" className={cn('block text-sm font-medium', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+              <label htmlFor="password" className={cn('block text-sm font-medium', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
                 {t('password')}
               </label>
               <Link
@@ -188,7 +188,7 @@ export function LoginForm() {
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
                   'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
-                  'border-neutral-300',
+                  'border-default',
                   'bg-surface-base',
                   getTextColor('white', 'primary'),
                   'dark:text-white',

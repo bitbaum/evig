@@ -287,7 +287,7 @@ export default async function ApprovalsPage() {
           </div>
         ) : (
           <div className="p-8 text-center">
-            <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+            <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               Keine ausstehenden Freigaben
             </Heading>

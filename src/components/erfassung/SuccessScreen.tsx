@@ -41,7 +41,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
           </Button>
           <Link
             href={ROUTES.admin.products}
-            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
           >
             <FileText className="w-5 h-5" />
             {t('toOverview')}

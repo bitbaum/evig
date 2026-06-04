@@ -51,7 +51,7 @@ export function OnboardingChecklist({ role, emailVerified, className }: Onboardi
             {step.done ? (
               <CheckCircle className="w-4 h-4 text-action shrink-0" />
             ) : (
-              <Circle className="w-4 h-4 text-neutral-300 dark:text-text-secondary shrink-0" />
+              <Circle className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
             )}
             {step.href && !step.done ? (
               <a href={step.href} className="text-text-secondary hover:text-action hover:underline">

@@ -226,7 +226,7 @@ export default function CustomerBookings() {
 
                   <Link
                     href={'/dashboard/bookings/' + apt.id}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-raised text-text-secondary rounded-md hover:bg-neutral-200 text-sm font-medium sm:ml-auto transition-colors"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-raised text-text-secondary rounded-md hover:bg-surface-overlay text-sm font-medium sm:ml-auto transition-colors"
                   >
                     {t('details')}
                     <ChevronRight className="h-4 w-4" />
@@ -249,7 +249,7 @@ export default function CustomerBookings() {
                     className="p-1"
                   >
                     <Star
-                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-text-secondary')}
+                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-text-muted dark:text-text-secondary')}
                     />
                   </button>
                 ))}

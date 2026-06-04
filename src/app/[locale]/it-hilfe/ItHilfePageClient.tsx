@@ -143,7 +143,7 @@ export default function ITHilfePage() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
               aria-expanded={showFilters}
               aria-controls="filter-panel"
             >
@@ -297,7 +297,7 @@ export default function ITHilfePage() {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
+              className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -308,7 +308,7 @@ export default function ITHilfePage() {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
+              className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('nextPage')}
             >
               <ChevronRight className="w-4 h-4" />

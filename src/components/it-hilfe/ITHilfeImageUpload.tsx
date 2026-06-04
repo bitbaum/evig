@@ -90,7 +90,7 @@ export function ITHilfeImageUpload({
       )}
 
       {imageUrls.length < maxImages && (
-        <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center mb-4">
+        <div className="border-2 border-dashed border-default rounded-lg p-6 text-center mb-4">
           {uploading ? (
             <Loader2 className="w-10 h-10 text-text-muted mx-auto mb-2 animate-spin" />
           ) : (

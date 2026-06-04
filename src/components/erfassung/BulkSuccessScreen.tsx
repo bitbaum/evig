@@ -124,7 +124,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
           <button
             type="button"
             onClick={handleDownloadCSV}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised font-medium transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-default text-text-secondary rounded-lg hover:bg-surface-raised font-medium transition-colors"
           >
             <Download className="w-4 h-4" />
             {t('downloadCsv')}

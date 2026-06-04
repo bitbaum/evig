@@ -37,7 +37,7 @@ function renderStars(rating: number) {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-4 h-4 ${star <= rating ? 'text-warning-400 fill-current' : 'text-neutral-300'}`}
+          className={`w-4 h-4 ${star <= rating ? 'text-warning-400 fill-current' : 'text-text-muted'}`}
         />
       ))}
       <span className="ml-2 text-sm text-text-secondary">{rating}/5</span>
@@ -100,7 +100,7 @@ export default function AdminReviewsPage() {
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
                     ? 'bg-action-muted-muted text-action'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 {getReviewFilterLabel(status)}

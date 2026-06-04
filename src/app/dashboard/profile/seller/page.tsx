@@ -129,7 +129,7 @@ export default function SellerProfileEditPage() {
                   <User className="w-6 h-6 text-text-tertiary" />
                 </div>
               )}
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (

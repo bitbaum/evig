@@ -227,7 +227,7 @@ export default function CategoryForm({
                       }
                       className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${
                         formData.color === color
-                          ? 'border-neutral-900 dark:border-white scale-110'
+                          ? 'border-strong dark:border-white scale-110'
                           : 'border-transparent'
                       }`}
                       style={{ backgroundColor: color }}
@@ -266,7 +266,7 @@ export default function CategoryForm({
                       is_active: e.target.checked,
                     }))
                   }
-                  className="w-5 h-5 rounded-sm border-neutral-300 text-action focus:ring-action"
+                  className="w-5 h-5 rounded-sm border-default text-action focus:ring-action"
                 />
                 <label
                   htmlFor="is_active"

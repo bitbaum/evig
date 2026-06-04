@@ -120,15 +120,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <Link href="/" className="hover:text-action transition-colors">
               <Home className="w-4 h-4" />
             </Link>
-            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary" />
+            <ChevronRight className="w-4 h-4 text-text-muted dark:text-text-secondary" />
             <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">Shop</Link>
             {product.category && (
               <>
-                <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary" />
+                <ChevronRight className="w-4 h-4 text-text-muted dark:text-text-secondary" />
                 <span className="text-text-primary font-medium truncate max-w-[200px]">{product.category}</span>
               </>
             )}
-            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary" />
+            <ChevronRight className="w-4 h-4 text-text-muted dark:text-text-secondary" />
             <span className="text-text-primary font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
         </PageShell>
@@ -150,7 +150,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 />
               ) : (
                 <div className="flex items-center justify-center h-full bg-surface-raised">
-                  <Package className="w-24 h-24 text-neutral-200 dark:text-text-secondary" />
+                  <Package className="w-24 h-24 text-text-muted dark:text-text-secondary" />
                 </div>
               )}
             </div>
@@ -275,7 +275,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        <Package className="w-10 h-10 text-neutral-200 dark:text-text-secondary" />
+                        <Package className="w-10 h-10 text-text-muted dark:text-text-secondary" />
                       </div>
                     )}
                   </div>

@@ -36,7 +36,7 @@ export default function SellerDashboard() {
 
   const quickActions = [
     { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: ROUTES.public.marketplaceSell, icon: Plus, color: 'bg-action' },
-    { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-neutral-500' },
+    { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-surface-overlay' },
     { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-action' },
     { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: ROUTES.public.marketplace, icon: BarChart3, color: 'bg-secondary-500' },
   ]

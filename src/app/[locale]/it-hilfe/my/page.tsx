@@ -116,7 +116,7 @@ export default function MyRequestsPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
                   ? 'bg-action-muted-muted text-action'
-                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
               }`}
             >
               {t('filterAll', { total })}
@@ -128,7 +128,7 @@ export default function MyRequestsPage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
                     ? 'bg-action-muted-muted text-action'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 {s.name}
@@ -147,7 +147,7 @@ export default function MyRequestsPage() {
         {/* Requests List */}
         {requests.length === 0 && !fetchError ? (
           <div className="card-shell p-12 text-center">
-            <FileText className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+            <FileText className="w-16 h-16 text-text-muted mx-auto mb-4" />
             <Heading level={3} className="text-xl text-text-primary mb-2">
               {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
             </Heading>
@@ -185,7 +185,7 @@ export default function MyRequestsPage() {
                   className="block card-shell p-6 hover:border-strong transition-all group"
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`p-3 ${categoryConfig?.color || 'bg-neutral-500'} rounded-xl`}>
+                    <div className={`p-3 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-xl`}>
                       <CategoryIcon className="w-6 h-6 text-white" />
                     </div>
 

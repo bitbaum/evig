@@ -106,7 +106,7 @@ export default async function ProtocolDetailPage({
             <ArrowLeft className="w-4 h-4" />
             Zurück
           </Link>
-          <div className="w-px h-5 bg-neutral-200 dark:bg-surface-base/8 shrink-0" />
+          <div className="w-px h-5 bg-surface-overlay dark:bg-surface-base/8 shrink-0" />
           <div className="flex items-center gap-3 min-w-0">
             <div className={`${adminIconBox.sm} ${adminIconColor.green}`}>
               <MeetingIcon className={adminIconBox.icon} />

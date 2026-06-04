@@ -55,7 +55,7 @@ export default function ParticipationCard({ decisionId, refreshTrigger }: { deci
             Quorum: {quorumPct}% erforderlich
           </span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
+        <div className="h-2 overflow-hidden rounded-full bg-surface-overlay">
           <div
             className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-action' : 'bg-warning-500')}
             style={{ width: `${data.progressPercent}%` }}

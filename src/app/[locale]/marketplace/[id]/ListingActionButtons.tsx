@@ -202,7 +202,7 @@ export function ListingActionButtons({
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
               isFavorited
                 ? 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-600'
-                : 'border-neutral-300 text-text-secondary hover:bg-surface-raised'
+                : 'border-default text-text-secondary hover:bg-surface-raised'
             }`}
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-error-500 text-error-500' : ''}`} aria-hidden="true" />
@@ -211,7 +211,7 @@ export function ListingActionButtons({
         )}
         <button
           onClick={onShare}
-          className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
+          className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-default text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
           title={t('share')}
         >
           {shareConfirm ? (
@@ -224,7 +224,7 @@ export function ListingActionButtons({
         {isOwner && (
           <Link
             href={`/marketplace/sell?edit=${listing.id}`}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 text-text-secondary hover:bg-surface-raised focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-default text-text-secondary hover:bg-surface-raised focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
           >
             {t('edit')}
           </Link>
@@ -232,7 +232,7 @@ export function ListingActionButtons({
         {sessionUserId && !isOwner && (
           <button
             onClick={onShowReportModal}
-            className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
+            className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-default text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
             title={t('report')}
           >
             <Flag className="w-4 h-4" aria-hidden="true" />

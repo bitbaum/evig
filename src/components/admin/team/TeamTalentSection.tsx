@@ -126,7 +126,7 @@ export function TeamTalentSection({
           <button
             type="button"
             onClick={() => onAddInterest(interestInput)}
-            className="px-3 py-2 bg-surface-raised hover:bg-neutral-200 rounded-lg"
+            className="px-3 py-2 bg-surface-raised hover:bg-surface-overlay rounded-lg"
           >
             <Plus className="w-5 h-5" />
           </button>

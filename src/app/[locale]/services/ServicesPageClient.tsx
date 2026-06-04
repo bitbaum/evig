@@ -277,7 +277,7 @@ export default function ServicesPage() {
               </Button>
               <Link
                 href={ROUTES.public.shop}
-                className="inline-block border-2 border-neutral-300 text-text-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors duration-300 text-base sm:text-lg"
+                className="inline-block border-2 border-default text-text-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}
               </Link>

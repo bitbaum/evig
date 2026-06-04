@@ -95,7 +95,7 @@ export default function AbosPageClient() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
-            <Tag className="w-12 h-12 text-neutral-200 mx-auto mb-4" />
+            <Tag className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <h3 className="text-lg font-medium text-text-secondary mb-1">
               {activeCategory ? t('emptyCategory') : t('emptyAll')}
             </h3>

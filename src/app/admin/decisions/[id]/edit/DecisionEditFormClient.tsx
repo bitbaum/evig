@@ -134,7 +134,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         </Button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-neutral-300 dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
+          className="rounded-lg border border-default dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
         >
           Abbrechen
         </Link>

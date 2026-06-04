@@ -18,7 +18,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
       <article className="grid lg:grid-cols-2 gap-8 items-center">
         {/* Image */}
         {post.featuredImage ? (
-          <div className="aspect-16/10 lg:aspect-4/3 overflow-hidden rounded-lg bg-neutral-200 order-2 lg:order-1 relative">
+          <div className="aspect-16/10 lg:aspect-4/3 overflow-hidden rounded-lg bg-surface-overlay order-2 lg:order-1 relative">
             <Image
               src={post.featuredImage}
               alt={post.title}
@@ -58,9 +58,9 @@ export default function BlogHero({ post }: BlogHeroProps) {
           {/* Meta */}
           <div className="flex items-center gap-4 text-sm text-text-tertiary">
             <span className="font-semibold text-text-primary">{post.author}</span>
-            <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
+            <span className="w-1 h-1 bg-surface-overlay rounded-full"></span>
             <time>{formatDate(post.publishedAt || post.createdAt)}</time>
-            <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
+            <span className="w-1 h-1 bg-surface-overlay rounded-full"></span>
             <span className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
               {readingTime} min read

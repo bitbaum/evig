@@ -21,7 +21,7 @@ export function SimpleMajorityVote({ response, onChange }: Props) {
                 ? 'border-action bg-action-muted-muted text-action'
                 : r === 'no'
                   ? 'border-error-500 bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300'
-                  : 'border-neutral-500 bg-surface-raised text-text-secondary'
+                  : 'border-strong bg-surface-raised text-text-secondary'
               : 'border text-text-secondary hover:border-strong'
           }`}
         >

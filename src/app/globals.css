@@ -115,6 +115,7 @@
   --color-brand-facebook-hover: #0c63d4;
 
   --border-color-subtle: var(--border-subtle);
+  --border-color-default: var(--border-default);
   --border-color-strong: var(--border-strong);
   --border-color-interactive: var(--border-strong);
 

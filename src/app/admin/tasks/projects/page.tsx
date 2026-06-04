@@ -126,7 +126,7 @@ export default async function TaskProjectsPage() {
 
       {projects.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-12 text-center')}>
-          <FolderKanban className="mx-auto h-12 w-12 text-neutral-300 dark:text-text-secondary mb-4" />
+          <FolderKanban className="mx-auto h-12 w-12 text-text-muted dark:text-text-secondary mb-4" />
           <p className="text-sm font-semibold text-text-primary mb-1">
             Noch keine Projekte
           </p>
@@ -221,7 +221,7 @@ export default async function TaskProjectsPage() {
                       </span>
                     )}
                   </div>
-                  <ArrowRight className="h-3.5 w-3.5 text-neutral-300 dark:text-text-secondary group-hover:text-action transition-colors" />
+                  <ArrowRight className="h-3.5 w-3.5 text-text-muted dark:text-text-secondary group-hover:text-action transition-colors" />
                 </div>
               </Link>
             )

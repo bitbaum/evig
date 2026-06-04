@@ -112,7 +112,7 @@ export default function LogoutPage() {
                   </Button>
                   <Link
                     href="/dashboard"
-                    className="inline-flex items-center justify-center gap-2 bg-surface-raised hover:bg-neutral-200 text-text-primary font-medium px-6 py-3 rounded-lg transition-colors w-full"
+                    className="inline-flex items-center justify-center gap-2 bg-surface-raised hover:bg-surface-overlay text-text-primary font-medium px-6 py-3 rounded-lg transition-colors w-full"
                   >
                     {t('backToDashboard')}
                   </Link>

@@ -83,7 +83,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
       {/* Card Header */}
       <div className="p-5 border-b border-subtle">
         <div className="flex items-start justify-between mb-3">
-          <div className={`p-2.5 ${categoryConfig?.color || 'bg-neutral-500'} rounded-lg`}>
+          <div className={`p-2.5 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-lg`}>
             <CategoryIcon className="w-5 h-5 text-white" />
           </div>
           <div className="flex items-center gap-2">

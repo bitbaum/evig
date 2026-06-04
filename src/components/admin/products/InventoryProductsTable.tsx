@@ -72,7 +72,7 @@ export function InventoryProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
+                    className="h-4 w-4 rounded-sm border-default text-action focus:ring-action"
                   />
                 </th>
               )}
@@ -113,7 +113,7 @@ export function InventoryProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
+                      className="h-4 w-4 rounded-sm border-default text-action focus:ring-action"
                     />
                   </td>
                 )}

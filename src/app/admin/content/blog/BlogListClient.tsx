@@ -149,7 +149,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                         </Link>
                       ) : (
                         <span
-                          className="text-neutral-300 dark:text-text-secondary cursor-not-allowed"
+                          className="text-text-muted dark:text-text-secondary cursor-not-allowed"
                           title="Artikel muss veröffentlicht sein"
                         >
                           <Eye className="w-4 h-4" />

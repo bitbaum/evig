@@ -351,7 +351,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
                                 <div className="text-sm text-text-secondary mb-1">
                                   {t('detail.registrationCount', { current: instance.current_participants, max: maxParts })}
                                 </div>
-                                <div className="w-24 bg-neutral-200 rounded-full h-2">
+                                <div className="w-24 bg-surface-overlay rounded-full h-2">
                                   <div
                                     className="bg-action h-2 rounded-full"
                                     style={{ width: `${Math.min(100, (instance.current_participants / maxParts) * 100)}%` }}

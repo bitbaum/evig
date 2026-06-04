@@ -63,17 +63,17 @@ export function TeamListClient() {
               className="bg-surface-base rounded-xl border border p-5 animate-pulse"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-neutral-200 rounded-full" />
+                <div className="w-12 h-12 bg-surface-overlay rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-5 bg-neutral-200 rounded-sm w-3/4" />
-                  <div className="h-4 bg-neutral-200 rounded-sm w-1/2" />
-                  <div className="h-3 bg-neutral-200 rounded-sm w-full" />
+                  <div className="h-5 bg-surface-overlay rounded-sm w-3/4" />
+                  <div className="h-4 bg-surface-overlay rounded-sm w-1/2" />
+                  <div className="h-3 bg-surface-overlay rounded-sm w-full" />
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-subtle dark:border-white/6">
                 <div className="flex gap-2">
-                  <div className="h-8 bg-neutral-200 rounded-sm flex-1" />
-                  <div className="h-8 bg-neutral-200 rounded-sm flex-1" />
+                  <div className="h-8 bg-surface-overlay rounded-sm flex-1" />
+                  <div className="h-8 bg-surface-overlay rounded-sm flex-1" />
                 </div>
               </div>
             </div>

@@ -118,17 +118,17 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-text-secondary">{stats.totalUsers}</strong> Benutzer</span>
         </Link>
-        <span className="text-neutral-300 dark:text-text-secondary" aria-hidden="true">·</span>
+        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">·</span>
         <Link href={ROUTES.admin.team} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
           <UserCheck className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-text-secondary">{stats.totalStaff}</strong> Team</span>
         </Link>
-        <span className="text-neutral-300 dark:text-text-secondary" aria-hidden="true">·</span>
+        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">·</span>
         <Link href={ROUTES.admin.services} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
           <Wrench className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-text-secondary">{stats.totalTechnicians}</strong> Techniker</span>
         </Link>
-        <span className="text-neutral-300 dark:text-text-secondary" aria-hidden="true">·</span>
+        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">·</span>
         <Link href={ROUTES.admin.marketplace} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
           <span><strong className="text-text-secondary">{stats.activeListings}</strong> aktive Inserate</span>
         </Link>

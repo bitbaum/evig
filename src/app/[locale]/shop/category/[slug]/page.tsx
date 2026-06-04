@@ -105,7 +105,7 @@ function Breadcrumbs({
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
           </Link>
         </li>
-        <ChevronRight className="w-4 h-4 text-neutral-300" />
+        <ChevronRight className="w-4 h-4 text-text-muted" />
         <li>
           <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">
             {shopLabel}
@@ -113,7 +113,7 @@ function Breadcrumbs({
         </li>
         {parent && (
           <>
-            <ChevronRight className="w-4 h-4 text-neutral-300" />
+            <ChevronRight className="w-4 h-4 text-text-muted" />
             <li>
               <Link
                 href={getCategoryUrl(parent.slug)}
@@ -124,7 +124,7 @@ function Breadcrumbs({
             </li>
           </>
         )}
-        <ChevronRight className="w-4 h-4 text-neutral-300" />
+        <ChevronRight className="w-4 h-4 text-text-muted" />
         <li>
           <span className="text-text-primary font-medium">{category.name}</span>
         </li>

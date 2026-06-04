@@ -111,13 +111,13 @@ function Breadcrumbs({
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
           </Link>
         </li>
-        <ChevronRight className="w-4 h-4 text-neutral-300" />
+        <ChevronRight className="w-4 h-4 text-text-muted" />
         <li>
           <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">
             {shopLabel}
           </Link>
         </li>
-        <ChevronRight className="w-4 h-4 text-neutral-300" />
+        <ChevronRight className="w-4 h-4 text-text-muted" />
         <li>
           <span className="text-text-primary font-medium">
             {query ? searchWithQueryLabel : searchLabel}
@@ -248,7 +248,7 @@ function NoQueryState({
                   </p>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-text-secondary group-hover:text-action transition-colors" />
+              <ChevronRight className="w-5 h-5 text-text-muted dark:text-text-secondary group-hover:text-action transition-colors" />
             </Link>
           ))}
         </div>

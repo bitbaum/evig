@@ -32,7 +32,7 @@ export default async function NewProtocolPage() {
           <ArrowLeft className="w-5 h-5" />
           Zurück
         </Link>
-        <div className="w-px h-6 bg-neutral-300" />
+        <div className="w-px h-6 bg-surface-overlay" />
         <div className="flex items-center gap-3">
           <div className={`${adminIconBox.md} ${adminIconColor.green}`}>
             <FileText className={adminIconBox.iconMd} />

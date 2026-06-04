@@ -42,7 +42,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         <span className={`text-xs px-2 py-0.5 rounded-full ${
           completedCount === group.items.length
             ? 'bg-action-muted-muted text-action'
-            : 'bg-neutral-200 text-text-secondary'
+            : 'bg-surface-overlay text-text-secondary'
         }`}>
           {completedCount}/{group.items.length}
         </span>
@@ -63,7 +63,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                     item.state.completed
                       ? 'bg-action border-action text-white'
-                      : 'border-neutral-300 hover:border-action'
+                      : 'border-default hover:border-action'
                   }`}
                   aria-label={item.state.completed ? `${item.label} rückgängig machen` : `${item.label} abhaken`}
                 >

@@ -75,7 +75,7 @@ export function TeamProfileView({
           <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
             profile.is_active
               ? 'bg-action'
-              : 'bg-neutral-500'
+              : 'bg-surface-overlay'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
           </div>
@@ -87,7 +87,7 @@ export function TeamProfileView({
                 {displayName}
               </Heading>
               {!profile.is_active && (
-                <span className="px-2 py-1 text-sm rounded-sm bg-neutral-200 text-text-secondary">
+                <span className="px-2 py-1 text-sm rounded-sm bg-surface-overlay text-text-secondary">
                   {t('inactive')}
                 </span>
               )}

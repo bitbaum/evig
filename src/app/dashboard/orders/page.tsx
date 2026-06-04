@@ -131,7 +131,7 @@ export default function DashboardOrdersPage() {
             className={`px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${
               activeTab === tab.key
                 ? 'bg-action text-white'
-                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }`}
           >
             {tab.label}

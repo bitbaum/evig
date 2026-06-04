@@ -160,7 +160,7 @@ export default function PublicVoteClient({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-neutral-300 dark:border-white/8 bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted dark:placeholder:text-text-tertiary focus:outline-hidden focus:ring-2 focus:ring-action dark:focus:ring-primary-400"
+          className="w-full rounded-lg border border-default dark:border-white/8 bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted dark:placeholder:text-text-tertiary focus:outline-hidden focus:ring-2 focus:ring-action dark:focus:ring-primary-400"
         />
         <p className="mt-1.5 text-xs text-text-secondary dark:text-text-muted">
           {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}

@@ -202,7 +202,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             <button
               onClick={resetForm}
               disabled={submitting}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
             >
               <X className="w-3.5 h-3.5" /> Abbrechen
             </button>

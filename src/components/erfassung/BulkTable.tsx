@@ -89,7 +89,7 @@ export function BulkTable({
                   type="checkbox"
                   checked={allSelected}
                   onChange={onSelectAll}
-                  className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-action"
+                  className="w-4 h-4 text-action rounded-sm border-default focus:ring-action"
                 />
               </th>
               {/* Row number */}
@@ -129,7 +129,7 @@ export function BulkTable({
                       type="checkbox"
                       checked={product._selected}
                       onChange={() => onProductSelect(product._tempId)}
-                      className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-action"
+                      className="w-4 h-4 text-action rounded-sm border-default focus:ring-action"
                     />
                   </td>
                   {/* Row number */}
@@ -194,7 +194,7 @@ export function BulkTable({
                         onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         title={value}
                       >
-                        {value || <span className="text-neutral-300 dark:text-text-secondary">-</span>}
+                        {value || <span className="text-text-muted dark:text-text-secondary">-</span>}
                       </td>
                     )
                   })}
@@ -222,7 +222,7 @@ export function BulkTable({
               type="button"
               onClick={() => onPageChange(page - 1)}
               disabled={page === 0}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-30 hover:bg-surface-raised"
+              className="p-2 rounded-lg border border-default disabled:opacity-30 hover:bg-surface-raised"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -233,7 +233,7 @@ export function BulkTable({
               type="button"
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages - 1}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-30 hover:bg-surface-raised"
+              className="p-2 rounded-lg border border-default disabled:opacity-30 hover:bg-surface-raised"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

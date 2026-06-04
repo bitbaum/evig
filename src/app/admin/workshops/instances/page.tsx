@@ -45,7 +45,7 @@ export default function AdminWorkshopInstancesPage() {
             <div className="flex gap-3">
               <Link
                 href={ROUTES.admin.workshops}
-                className="inline-flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-text-secondary hover:bg-surface-raised transition-colors"
+                className="inline-flex items-center px-4 py-2 border border-default rounded-lg text-text-secondary hover:bg-surface-raised transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Workshop-Vorschläge

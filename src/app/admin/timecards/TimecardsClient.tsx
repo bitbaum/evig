@@ -325,7 +325,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               type="button"
               onClick={submitDraft}
               disabled={isSubmitting || periodEntries.length === 0 || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg bg-success-600 px-3 py-2 text-sm font-medium text-white hover:bg-success-700 disabled:bg-neutral-300 disabled:text-text-tertiary"
+              className="inline-flex items-center gap-2 rounded-lg bg-success-600 px-3 py-2 text-sm font-medium text-white hover:bg-success-700 disabled:bg-surface-overlay disabled:text-text-tertiary"
             >
               <Send className="h-4 w-4" />
               {isSubmitting ? 'Sende…' : 'Zur Prüfung einreichen'}
@@ -333,7 +333,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             <button
               type="button"
               onClick={rebuildCurrentDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
+              className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 <RotateCcw className="h-4 w-4" />
                 Vorlage zurücksetzen
@@ -342,7 +342,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               type="button"
               onClick={saveDraft}
               disabled={isSaving || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-surface-base/6"
+              className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-surface-base/6"
             >
               <Check className="h-4 w-4" />
               {isSaving ? 'Speichere…' : 'Entwurf speichern'}
@@ -471,14 +471,14 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('frei')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 Frei
               </button>
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('krank')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 Krank
               </button>
@@ -557,7 +557,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={restoreSelectedDateFromSchedule}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                className="w-full rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 Tag aus Vorlage wiederherstellen
               </button>

@@ -160,7 +160,7 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStartVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-action w-full justify-center text-sm text-text-secondary"
+                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-default rounded-lg hover:border-action w-full justify-center text-sm text-text-secondary"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme starten

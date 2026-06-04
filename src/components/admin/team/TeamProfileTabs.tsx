@@ -101,7 +101,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
         </nav>
         <Link
           href={`/admin/team/${profile.id}/edit`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 whitespace-nowrap"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 whitespace-nowrap"
         >
           <Edit2 className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Bearbeiten</span>

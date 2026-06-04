@@ -123,7 +123,7 @@ function SingleColumnLayout({
               </p>
             )}
           </div>
-          <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
+          <ArrowRight className="w-4 h-4 text-text-muted dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
         </Link>
       ))}
     </div>
@@ -164,7 +164,7 @@ function MenuLink({
           </p>
         )}
       </div>
-      <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 shrink-0" />
+      <ArrowRight className="w-4 h-4 text-text-muted dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 shrink-0" />
     </Link>
   )
 }

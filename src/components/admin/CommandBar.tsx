@@ -275,12 +275,12 @@ export function CommandBar() {
       {/* Trigger button in top bar (Search icon) */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-neutral-200 dark:bg-surface-base/4 dark:hover:bg-surface-base/8 sm:flex"
+        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-surface-overlay dark:bg-surface-base/4 dark:hover:bg-surface-base/8 sm:flex"
         aria-label="Suche öffnen (⌘K)"
       >
         <Search className="w-3.5 h-3.5" />
         <span className="text-xs">Suche</span>
-        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-neutral-200 rounded-sm text-xs font-mono leading-none">
+        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-surface-overlay rounded-sm text-xs font-mono leading-none">
           ⌘K
         </kbd>
       </button>

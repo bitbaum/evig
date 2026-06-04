@@ -173,7 +173,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
                   type="checkbox"
                   checked={check.checked}
                   onChange={() => handleConditionCheckToggle(check.key)}
-                  className="mt-0.5 rounded-sm border-neutral-300 text-action focus:ring-action"
+                  className="mt-0.5 rounded-sm border-default text-action focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">{check.label}</span>
               </label>

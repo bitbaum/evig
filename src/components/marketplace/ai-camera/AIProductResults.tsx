@@ -58,7 +58,7 @@ export function AIProductResults({
       <div className="flex gap-3 pt-4 border-t border">
         <button
           onClick={onRetry}
-          className="flex-1 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+          className="flex-1 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
         >
           Neues Foto
         </button>

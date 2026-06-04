@@ -88,7 +88,7 @@ function TimelineItem({
       <div className="hidden md:flex flex-col items-center">
         <div
           className={`w-4 h-4 rounded-full ${
-            milestone.highlight ? 'bg-action ring-4 ring-action/20' : 'bg-neutral-300'
+            milestone.highlight ? 'bg-action ring-4 ring-action/20' : 'bg-surface-overlay'
           }`}
         />
       </div>
@@ -146,7 +146,7 @@ export default function GeschichteSection() {
         {/* Timeline */}
         <div className="relative">
           {/* Vertical Line - Hidden on mobile, shown on desktop */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-neutral-200" />
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-surface-overlay" />
 
           {/* Timeline Items */}
           <div className="space-y-8 md:space-y-12">

@@ -34,7 +34,7 @@ export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
                     ? 'bg-action-muted-muted text-action'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 {getApprovalStatusLabel(status)}

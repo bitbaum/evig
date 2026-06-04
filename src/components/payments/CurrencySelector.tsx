@@ -111,7 +111,7 @@ export default function CurrencySelector({
               </span>
             </div>
 
-            <hr className="border-neutral-300" />
+            <hr className="border-default" />
 
             <div className="flex justify-between items-center font-semibold">
               <span>{t('total')}</span>

@@ -21,7 +21,7 @@ const VALUE_STYLES = [
   { borderColor: 'border-warning-500', bgColor: 'bg-warning-100 dark:bg-warning-900/30', iconColor: 'text-warning-600', titleColor: 'text-warning-800 dark:text-warning-400' },
   { borderColor: 'border-error-500', bgColor: 'bg-error-100', iconColor: 'text-error-600', titleColor: 'text-error-800' },
   { borderColor: 'border-info-700', bgColor: 'bg-info-100', iconColor: 'text-info-700', titleColor: 'text-info-900' },
-  { borderColor: 'border-neutral-400', bgColor: 'bg-surface-raised', iconColor: 'text-text-secondary', titleColor: 'text-text-primary' },
+  { borderColor: 'border-strong', bgColor: 'bg-surface-raised', iconColor: 'text-text-secondary', titleColor: 'text-text-primary' },
 ]
 
 const VALUE_KEYS = ['openSource', 'decentralization', 'privacyFirst', 'ownYourData', 'ownYourCode', 'maxAutomation', 'userExperience', 'developerExperience'] as const

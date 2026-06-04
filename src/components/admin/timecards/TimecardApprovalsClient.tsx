@@ -186,7 +186,7 @@ export function TimecardApprovalsClient() {
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 periodFilter === opt
                   ? 'bg-action text-white'
-                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
               }`}
             >
               {opt === 'all' ? 'Alle' : opt === 'week' ? 'Wochen' : 'Monate'}
@@ -197,7 +197,7 @@ export function TimecardApprovalsClient() {
           <button
             onClick={loadQueue}
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -270,7 +270,7 @@ export function TimecardApprovalsClient() {
                 checked={allSelected}
                 onChange={toggleAll}
                 aria-label="Alle auswählen"
-                className="w-4 h-4 rounded-sm border-neutral-300 text-action focus:ring-action"
+                className="w-4 h-4 rounded-sm border-default text-action focus:ring-action"
               />
               <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
                 {items.length} eingereicht
@@ -299,9 +299,9 @@ export function TimecardApprovalsClient() {
                       checked={isSelected}
                       onChange={() => toggle(row.id)}
                       aria-label={`Zeitkarte von ${row.user_name || row.user_email} auswählen`}
-                      className="w-4 h-4 rounded-sm border-neutral-300 text-action focus:ring-action shrink-0"
+                      className="w-4 h-4 rounded-sm border-default text-action focus:ring-action shrink-0"
                     />
-                    <div className="w-9 h-9 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-semibold text-text-secondary shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-surface-overlay flex items-center justify-center text-xs font-semibold text-text-secondary shrink-0">
                       {initials(row.user_name || row.user_email)}
                     </div>
                     <div className="min-w-0 flex-1">

@@ -48,7 +48,7 @@ export function ProblemDetailsSection({
             value={deviceBrand}
             onChange={(e) => onDeviceBrandChange(e.target.value)}
             placeholder={t('deviceBrandPlaceholder')}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="w-full px-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
         <div>
@@ -63,7 +63,7 @@ export function ProblemDetailsSection({
             value={deviceModel}
             onChange={(e) => onDeviceModelChange(e.target.value)}
             placeholder={t('deviceModelPlaceholder')}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="w-full px-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
       </div>
@@ -80,7 +80,7 @@ export function ProblemDetailsSection({
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           placeholder={t('problemTitlePlaceholder')}
-          className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+          className="w-full px-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
         />
         <span className="text-xs text-text-muted">{title.length}/200</span>
       </div>

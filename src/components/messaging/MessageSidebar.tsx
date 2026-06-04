@@ -155,7 +155,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
                   />
                 </div>
               </div>
@@ -164,7 +164,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               <div className="flex-1 overflow-y-auto">
                 {filteredConversations.length === 0 ? (
                   <div className="p-8 text-center text-text-tertiary">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
+                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-text-muted" />
                     <p>{t('noConversations')}</p>
                   </div>
                 ) : (
@@ -174,7 +174,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                       onClick={() => setSelectedConversation(conversation.id)}
                       className="w-full p-4 border-b border-subtle hover:bg-surface-raised text-left flex items-start gap-3"
                     >
-                      <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 bg-surface-overlay rounded-full flex items-center justify-center shrink-0">
                         <User className="w-5 h-5 text-text-secondary" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -231,7 +231,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                   <div className="text-center text-text-tertiary">{t('loading')}</div>
                 ) : messages.length === 0 ? (
                   <div className="text-center text-text-tertiary">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
+                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-text-muted" />
                     <p>{t('noMessages')}</p>
                   </div>
                 ) : (
@@ -278,7 +278,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder={t('messagePlaceholder')}
-                    className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+                    className="flex-1 px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
                   />
                   <Button
                     onClick={sendMessage}

@@ -167,7 +167,7 @@ export function ImageCapture({
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               isDragging
                 ? 'border-action bg-action-muted-muted'
-                : 'border-neutral-300'
+                : 'border-default'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}

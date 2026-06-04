@@ -135,7 +135,7 @@ export default function ForgotPasswordPage() {
                   aria-describedby={error ? 'email-error' : undefined}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-2.5 border border-neutral-300 rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
+                  className="w-full pl-11 pr-4 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
                   placeholder={t('emailPlaceholder')}
                 />
               </div>

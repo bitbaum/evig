@@ -72,7 +72,7 @@ export default async function AdminProjectsPage() {
 
       {list.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-8 sm:p-12 text-center')}>
-          <Lightbulb className="mx-auto h-12 w-12 text-neutral-300 dark:text-text-secondary mb-4" />
+          <Lightbulb className="mx-auto h-12 w-12 text-text-muted dark:text-text-secondary mb-4" />
           <p className="text-sm font-semibold text-text-primary mb-1">{t('empty.title')}</p>
           <p className="text-sm text-text-tertiary">{t('empty.description')}</p>
         </div>
@@ -120,7 +120,7 @@ export default async function AdminProjectsPage() {
               </div>
 
               <div className="mt-auto pt-4 border-t border-subtle flex items-center justify-end">
-                <ArrowRight className="h-3.5 w-3.5 text-neutral-300 dark:text-text-secondary group-hover:text-action transition-colors" />
+                <ArrowRight className="h-3.5 w-3.5 text-text-muted dark:text-text-secondary group-hover:text-action transition-colors" />
               </div>
             </Link>
           ))}

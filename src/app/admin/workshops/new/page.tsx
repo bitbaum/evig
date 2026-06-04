@@ -90,7 +90,7 @@ export default function NewWorkshopPage() {
         <div className="flex justify-end gap-4">
           <Link
             href={ROUTES.admin.workshops}
-            className="px-6 py-3 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 font-medium"
+            className="px-6 py-3 border border-default text-text-secondary rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 font-medium"
           >
             Abbrechen
           </Link>

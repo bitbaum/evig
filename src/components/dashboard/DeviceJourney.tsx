@@ -138,7 +138,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                   className={
                     stageReached(STEPPER_STAGES[idx + 1])
                       ? 'h-0.5 w-4 sm:w-8 bg-action mb-5'
-                      : 'h-0.5 w-4 sm:w-8 bg-neutral-200 mb-5'
+                      : 'h-0.5 w-4 sm:w-8 bg-surface-overlay mb-5'
                   }
                   aria-hidden="true"
                 />

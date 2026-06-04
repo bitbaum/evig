@@ -70,7 +70,7 @@ export function ShopProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
+                    className="h-4 w-4 rounded-sm border-default text-action focus:ring-action"
                   />
                 </th>
               )}
@@ -108,13 +108,13 @@ export function ShopProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
+                      className="h-4 w-4 rounded-sm border-default text-action focus:ring-action"
                     />
                   </td>
                 )}
                 <td className="px-6 py-4">
                   <div className="flex items-center">
-                    <div className="w-12 h-12 bg-neutral-200 rounded-lg flex items-center justify-center mr-3 overflow-hidden">
+                    <div className="w-12 h-12 bg-surface-overlay rounded-lg flex items-center justify-center mr-3 overflow-hidden">
                       {product.image_url ? (
                         <Image
                           src={product.image_url}

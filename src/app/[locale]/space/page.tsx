@@ -161,7 +161,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                                 >
                                   Google Maps <ExternalLink className="w-3 h-3 ml-1" />
                                 </a>
-                                <span className="text-neutral-300">|</span>
+                                <span className="text-text-muted">|</span>
                                 <a
                                   href={STORE_OSM_URL}
                                   target="_blank"

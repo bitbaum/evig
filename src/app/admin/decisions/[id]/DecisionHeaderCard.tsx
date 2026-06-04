@@ -105,7 +105,7 @@ export default function DecisionHeaderCard({
               'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
               linkCopied
                 ? 'bg-action-muted text-action-muted'
-                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             )}
           >
             {linkCopied ? (
@@ -122,7 +122,7 @@ export default function DecisionHeaderCard({
                 'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
                 invitationsResult
                   ? 'bg-action-muted text-action-muted'
-                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 disabled:opacity-50'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay disabled:opacity-50'
               )}
             >
               <Mail className="h-3.5 w-3.5" />

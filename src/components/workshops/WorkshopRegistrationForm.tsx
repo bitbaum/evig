@@ -209,7 +209,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           disabled
-          className="w-full px-4 py-3 bg-neutral-300 text-text-tertiary rounded-lg cursor-not-allowed"
+          className="w-full px-4 py-3 bg-surface-overlay text-text-tertiary rounded-lg cursor-not-allowed"
         >
           {t('fullButton')}
         </button>
@@ -233,7 +233,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full px-4 py-3 bg-neutral-600 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+          className="w-full px-4 py-3 bg-surface-overlay text-white rounded-lg hover:bg-surface-overlay transition-colors"
         >
           {t('retryButton')}
         </button>

@@ -58,7 +58,7 @@ export function UserSearchField({
             />
             {searchingUsers && (
               <div className="absolute right-3">
-                <div className="w-4 h-4 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-default border-t-neutral-600 rounded-full animate-spin" />
               </div>
             )}
           </div>

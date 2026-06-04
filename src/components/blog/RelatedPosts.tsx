@@ -25,7 +25,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
             >
               <article className="bg-surface-base rounded-lg border overflow-hidden hover:border-strong transition-all">
                 {post.featuredImage && (
-                  <div className="aspect-video overflow-hidden bg-neutral-200 relative">
+                  <div className="aspect-video overflow-hidden bg-surface-overlay relative">
                     <Image
                       src={post.featuredImage}
                       alt={post.title}

@@ -194,7 +194,7 @@ export default function FactSheetPage() {
                     className="w-full h-full object-contain"
                   />
                 ) : (
-                  <Package className="w-20 h-20 text-neutral-300" />
+                  <Package className="w-20 h-20 text-text-muted" />
                 )}
               </div>
 

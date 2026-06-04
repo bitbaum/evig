@@ -147,11 +147,11 @@ export default function BuildYourComputerPage() {
 
             {/* Progress Bar */}
             <div className="flex items-center justify-center mb-8">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-action text-white' : 'bg-neutral-300 text-text-secondary'}`}>1</div>
-              <div className={`w-24 h-1 ${step >= 2 ? 'bg-action' : 'bg-neutral-300'}`}></div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-action text-white' : 'bg-neutral-300 text-text-secondary'}`}>2</div>
-              <div className={`w-24 h-1 ${step >= 3 ? 'bg-action' : 'bg-neutral-300'}`}></div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-action text-white' : 'bg-neutral-300 text-text-secondary'}`}>3</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-action text-white' : 'bg-surface-overlay text-text-secondary'}`}>1</div>
+              <div className={`w-24 h-1 ${step >= 2 ? 'bg-action' : 'bg-surface-overlay'}`}></div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-action text-white' : 'bg-surface-overlay text-text-secondary'}`}>2</div>
+              <div className={`w-24 h-1 ${step >= 3 ? 'bg-action' : 'bg-surface-overlay'}`}></div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-action text-white' : 'bg-surface-overlay text-text-secondary'}`}>3</div>
             </div>
 
             <div className="card-shell p-8">

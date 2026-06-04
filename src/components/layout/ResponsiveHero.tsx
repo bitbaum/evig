@@ -47,11 +47,11 @@ export function ResponsiveHero({
       getTextColor('primary', 'primary')
     ),
     blue: cn(
-      'bg-neutral-800',
+      'bg-surface-overlay',
       getTextColor('dark', 'primary')
     ),
     gray: cn(
-      'bg-neutral-800',
+      'bg-surface-overlay',
       getTextColor('dark', 'primary')
     ),
     white: cn(
@@ -117,8 +117,8 @@ export function ResponsiveHero({
                 : backgroundColor === 'green'
                 ? 'text-action-text'
                 : backgroundColor === 'blue'
-                ? 'text-neutral-200'
-                : 'text-neutral-200'
+                ? 'text-text-muted'
+                : 'text-text-muted'
             )}>
               {subtitle}
             </h2>
@@ -133,8 +133,8 @@ export function ResponsiveHero({
                 : backgroundColor === 'green'
                 ? 'text-action-text'
                 : backgroundColor === 'blue'
-                ? 'text-neutral-300'
-                : 'text-neutral-300'
+                ? 'text-text-muted'
+                : 'text-text-muted'
             )}>
               {description}
             </p>

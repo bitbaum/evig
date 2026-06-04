@@ -62,7 +62,7 @@ export default function SettingsPage() {
             </div>
             <Link
               href="/dashboard/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-raised hover:bg-neutral-200 text-text-secondary rounded-lg transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-raised hover:bg-surface-overlay text-text-secondary rounded-lg transition-colors text-sm"
             >
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">{t('editProfile')}</span>

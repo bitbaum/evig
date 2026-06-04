@@ -45,7 +45,7 @@ export default function CommunitySpaceSection() {
   const address = getFormattedAddress()
 
   return (
-    <section className="py-20 bg-neutral-900 text-white relative overflow-hidden">
+    <section className="py-20 bg-surface-overlay text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-action rounded-full blur-3xl" />
@@ -69,21 +69,21 @@ export default function CommunitySpaceSection() {
 
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           {/* Current Location */}
-          <div className="bg-neutral-800 rounded-2xl p-8 border border-neutral-700">
+          <div className="bg-surface-overlay rounded-2xl p-8 border border-strong">
             <Heading level={3} className="text-2xl font-bold mb-2">{PHYSICAL_SPACE.current.name}</Heading>
             <p className="text-action font-medium mb-6 flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               {address}
             </p>
 
-            <Heading level={4} className="text-lg font-semibold mb-4 text-neutral-300">{t('offeringsTitle')}</Heading>
+            <Heading level={4} className="text-lg font-semibold mb-4 text-text-muted">{t('offeringsTitle')}</Heading>
             <ul className="space-y-3">
               {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
                 <li key={index} className="flex items-center gap-3">
                   <div className="p-2 bg-action/20 rounded-lg text-action">
                     {offeringIcons[index] || <Store className="h-5 w-5" />}
                   </div>
-                  <span className="text-neutral-300">{offering}</span>
+                  <span className="text-text-muted">{offering}</span>
                 </li>
               ))}
             </ul>
@@ -100,7 +100,7 @@ export default function CommunitySpaceSection() {
           </div>
 
           {/* Workshops */}
-          <div className="bg-neutral-800/50 rounded-2xl p-8 border border-neutral-700">
+          <div className="bg-surface-overlay/50 rounded-2xl p-8 border border-strong">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-action/20 rounded-lg text-action">
                 <GraduationCap className="h-6 w-6" />
@@ -114,7 +114,7 @@ export default function CommunitySpaceSection() {
 
             <ul className="space-y-2 mb-6">
               {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
-                <li key={index} className="flex items-center gap-2 text-neutral-300">
+                <li key={index} className="flex items-center gap-2 text-text-muted">
                   <ArrowRight className="h-4 w-4 text-action shrink-0" />
                   {topic}
                 </li>
@@ -139,7 +139,7 @@ export default function CommunitySpaceSection() {
             </div>
           </div>
 
-          <p className="text-lg text-neutral-300 mb-8 max-w-3xl">
+          <p className="text-lg text-text-muted mb-8 max-w-3xl">
             {PHYSICAL_SPACE.vision.description}
           </p>
 
@@ -147,17 +147,17 @@ export default function CommunitySpaceSection() {
             {PHYSICAL_SPACE.vision.features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-neutral-900/50 rounded-xl p-4 flex items-start gap-3 border border-neutral-700/50"
+                className="bg-surface-overlay/50 rounded-xl p-4 flex items-start gap-3 border border-strong/50"
               >
                 <div className="p-2 bg-action/10 rounded-lg text-action shrink-0">
                   {visionIcons[index] || <Sparkles className="h-5 w-5" />}
                 </div>
-                <span className="text-neutral-300 text-sm">{feature}</span>
+                <span className="text-text-muted text-sm">{feature}</span>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 pt-8 border-t border-neutral-700/50 text-center">
+          <div className="mt-8 pt-8 border-t border-strong/50 text-center">
             <p className="text-text-muted mb-4">
               {t('visionCta')}
             </p>

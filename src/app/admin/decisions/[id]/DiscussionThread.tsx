@@ -224,7 +224,7 @@ export default function DiscussionThread({
                               </Button>
                               <button
                                 onClick={cancelEdit}
-                                className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-text-secondary hover:bg-surface-raised"
+                                className="flex items-center gap-1 rounded-md border border-default px-3 py-1 text-xs text-text-secondary hover:bg-surface-raised"
                               >
                                 <X className="w-3 h-3" />
                                 Abbrechen
@@ -261,7 +261,7 @@ export default function DiscussionThread({
                   className={`rounded-full px-3 py-1 text-xs font-medium transition ${
                     position === pos
                       ? conf.color
-                      : 'bg-surface-raised text-text-tertiary hover:bg-neutral-200'
+                      : 'bg-surface-raised text-text-tertiary hover:bg-surface-overlay'
                   }`}
                 >
                   {conf.label}

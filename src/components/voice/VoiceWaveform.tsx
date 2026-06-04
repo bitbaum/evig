@@ -30,7 +30,7 @@ export function VoiceWaveform({ recordingTime, maxDuration, state }: VoiceWavefo
                 : state === 'paused'
                   ? 'bg-warning-500'
                   : 'bg-action'
-              : 'bg-neutral-300'
+              : 'bg-surface-overlay'
           }`}
         />
       ))}

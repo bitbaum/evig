@@ -72,7 +72,7 @@ function StarDisplay({ rating }: { rating: number }) {
       {[1, 2, 3, 4, 5].map(s => (
         <Star
           key={s}
-          className={`w-4 h-4 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-text-secondary'}`}
+          className={`w-4 h-4 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-text-muted dark:text-text-secondary'}`}
         />
       ))}
     </div>
@@ -311,7 +311,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(s => (
                   <button key={s} onClick={() => setRating(s)} className="p-1">
-                    <Star className={`w-8 h-8 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-text-secondary'}`} />
+                    <Star className={`w-8 h-8 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-text-muted dark:text-text-secondary'}`} />
                   </button>
                 ))}
               </div>

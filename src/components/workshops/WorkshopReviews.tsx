@@ -60,7 +60,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
         className={`w-4 h-4 ${
           i < rating
             ? 'text-warning-400 fill-warning-400'
-            : 'text-neutral-300'
+            : 'text-text-muted'
         }`}
       />
     ))
@@ -69,9 +69,9 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
   if (loading) {
     return (
       <div className="animate-pulse">
-        <div className="h-6 bg-neutral-200 rounded-sm w-1/2 mb-4"></div>
-        <div className="h-20 bg-neutral-200 rounded-sm mb-2"></div>
-        <div className="h-20 bg-neutral-200 rounded-sm"></div>
+        <div className="h-6 bg-surface-overlay rounded-sm w-1/2 mb-4"></div>
+        <div className="h-20 bg-surface-overlay rounded-sm mb-2"></div>
+        <div className="h-20 bg-surface-overlay rounded-sm"></div>
       </div>
     )
   }
@@ -87,7 +87,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
   if (stats.reviewCount === 0) {
     return (
       <div className="text-center py-8">
-        <Star className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
+        <Star className="w-12 h-12 text-text-muted mx-auto mb-3" />
         <p className="text-text-tertiary">{t('emptyTitle')}</p>
         <p className="text-text-tertiary text-sm mt-1">
           {t('emptyMessage')}
@@ -118,7 +118,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
         {reviews.slice(0, 5).map((review) => (
           <div key={review.id} className="border-b border-subtle pb-4 last:border-0">
             <div className="flex items-start gap-3">
-              <div className="shrink-0 w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+              <div className="shrink-0 w-8 h-8 bg-surface-overlay rounded-full flex items-center justify-center">
                 <User className="w-4 h-4 text-text-secondary" />
               </div>
               <div className="flex-1 min-w-0">

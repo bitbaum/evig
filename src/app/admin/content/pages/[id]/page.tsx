@@ -41,13 +41,13 @@ export default function EditStaticPagePage() {
     return (
       <div className="space-y-8">
         <div className="flex items-center gap-4">
-          <div className="h-5 w-5 bg-neutral-200 rounded-sm animate-pulse"></div>
-          <div className="h-8 bg-neutral-200 rounded-sm w-1/3 animate-pulse"></div>
+          <div className="h-5 w-5 bg-surface-overlay rounded-sm animate-pulse"></div>
+          <div className="h-8 bg-surface-overlay rounded-sm w-1/3 animate-pulse"></div>
         </div>
         <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-8">
           <div className="animate-pulse space-y-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-12 bg-neutral-200 rounded-sm"></div>
+              <div key={i} className="h-12 bg-surface-overlay rounded-sm"></div>
             ))}
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function EditStaticPagePage() {
           <Link
             href={`/${formData.slug}`}
             target="_blank"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg text-sm text-text-secondary hover:bg-surface-raised transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-default rounded-lg text-sm text-text-secondary hover:bg-surface-raised transition-colors"
           >
             <Eye className="w-4 h-4" />
             Vorschau
@@ -148,7 +148,7 @@ export default function EditStaticPagePage() {
 
           <FormField label="URL-Slug" required>
             <div className="flex gap-2">
-              <div className="flex items-center px-3 bg-surface-raised border border-r-0 border-neutral-300 rounded-l-lg text-sm text-text-tertiary">
+              <div className="flex items-center px-3 bg-surface-raised border border-r-0 border-default rounded-l-lg text-sm text-text-tertiary">
                 /
               </div>
               <Input
@@ -161,7 +161,7 @@ export default function EditStaticPagePage() {
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary"
+                className="px-3 py-2 text-sm border border-default rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary"
               >
                 Generieren
               </button>
@@ -184,7 +184,7 @@ export default function EditStaticPagePage() {
               id="is_published"
               checked={formData.is_published}
               onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-              className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
+              className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
             />
             <label htmlFor="is_published" className="text-sm font-medium text-text-secondary">
               Veröffentlicht
@@ -219,7 +219,7 @@ export default function EditStaticPagePage() {
         <div className="flex justify-end gap-3">
           <Link
             href={ROUTES.admin.contentPages}
-            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
+            className="px-4 py-2 border border-default rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
           >
             Abbrechen
           </Link>

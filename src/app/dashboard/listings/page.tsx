@@ -224,7 +224,7 @@ export default function MyListingsPage() {
             <button
               onClick={goPrev}
               disabled={!hasPrev}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 text-text-secondary hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-default text-text-secondary hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               {t('prevPage')}
@@ -240,7 +240,7 @@ export default function MyListingsPage() {
             <button
               onClick={goNext}
               disabled={!hasNext}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 text-text-secondary hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-default text-text-secondary hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {t('nextPage')}
               <ChevronRight className="w-4 h-4" />

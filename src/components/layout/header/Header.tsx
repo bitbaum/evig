@@ -117,7 +117,7 @@ export function Header() {
               <ThemeToggle />
 
               {/* Divider */}
-              <div className="w-px h-5 bg-neutral-200 dark:bg-surface-base/10" />
+              <div className="w-px h-5 bg-surface-overlay dark:bg-surface-base/10" />
 
               {/* User Menu / Auth */}
               <UserMenu />

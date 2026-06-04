@@ -129,7 +129,7 @@ export function IntakePipelineView({
         <div className="text-center py-8 text-text-tertiary">Laden...</div>
       ) : items.length === 0 ? (
         <div className="text-center py-12 bg-surface-raised rounded-lg">
-          <Package className="w-12 h-12 mx-auto text-neutral-300 mb-3" />
+          <Package className="w-12 h-12 mx-auto text-text-muted mb-3" />
           <p className="text-text-tertiary mb-2">Keine Geräte in der Pipeline</p>
           <button
             onClick={onCreateNew}
@@ -176,7 +176,7 @@ export function IntakePipelineView({
                       </td>
                       <td className="py-2.5">
                         <div className="flex items-center gap-2">
-                          <div className="w-20 h-2 bg-neutral-200 rounded-full overflow-hidden">
+                          <div className="w-20 h-2 bg-surface-overlay rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
                                 progress.percentage === 100 ? 'bg-action' :

@@ -107,7 +107,7 @@ export default async function TechnikerDashboardPage() {
           <div className="flex items-center gap-3">
             <Link
               href={IT_HILFE.routes.register}
-              className="px-4 py-2 text-sm border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+              className="px-4 py-2 text-sm border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
             >
               {t('editProfile')}
             </Link>

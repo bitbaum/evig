@@ -253,7 +253,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           {t('soldOut')}
                         </span>
                       ) : (
-                        <span className="flex-1 bg-neutral-300 text-text-tertiary px-4 py-2 rounded-lg text-center text-sm font-medium">
+                        <span className="flex-1 bg-surface-overlay text-text-tertiary px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('noDate')}
                         </span>
                       )}
@@ -265,7 +265,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           </div>
         ) : (
           <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-neutral-300 dark:text-text-secondary mx-auto mb-4" />
+            <BookOpen className="w-16 h-16 text-text-muted dark:text-text-secondary mx-auto mb-4" />
             <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? t('emptyFiltered.title')

@@ -145,7 +145,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
                 key === 'agree' ? 'bg-action'
                   : key === 'block' ? 'bg-error-400'
                   : key === 'disagree' ? 'bg-warning-400'
-                  : 'bg-neutral-300'
+                  : 'bg-surface-overlay'
               }
             />
           ))}
@@ -240,7 +240,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               label={SIMPLE_MAJORITY_RESPONSE_CONFIG[key]?.label || key}
               value={count}
               max={data.totalVotes || 0}
-              color={key === 'yes' ? 'bg-action' : key === 'no' ? 'bg-error-400' : 'bg-neutral-300'}
+              color={key === 'yes' ? 'bg-action' : key === 'no' ? 'bg-error-400' : 'bg-surface-overlay'}
             />
           ))}
         </div>

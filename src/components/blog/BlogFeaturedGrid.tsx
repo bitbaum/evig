@@ -21,7 +21,7 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
             <article>
               {/* Image */}
               {post.featuredImage ? (
-                <div className="aspect-16/10 overflow-hidden rounded-lg bg-neutral-200 mb-4 relative">
+                <div className="aspect-16/10 overflow-hidden rounded-lg bg-surface-overlay mb-4 relative">
                   <Image
                     src={post.featuredImage}
                     alt={post.title}
@@ -59,7 +59,7 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
               {/* Meta */}
               <div className="flex items-center gap-3 text-xs text-text-tertiary">
                 <span className="font-semibold text-text-secondary">{post.author}</span>
-                <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
+                <span className="w-1 h-1 bg-surface-overlay rounded-full"></span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {readingTime} min

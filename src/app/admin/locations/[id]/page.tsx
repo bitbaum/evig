@@ -81,11 +81,11 @@ export default function LocationDetailPage() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 rounded-sm w-1/3 mb-4"></div>
-              <div className="h-4 bg-neutral-200 rounded-sm w-1/2 mb-8"></div>
+              <div className="h-8 bg-surface-overlay rounded-sm w-1/3 mb-4"></div>
+              <div className="h-4 bg-surface-overlay rounded-sm w-1/2 mb-8"></div>
               <div className="space-y-4">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-16 bg-neutral-200 rounded-sm"></div>
+                  <div key={i} className="h-16 bg-surface-overlay rounded-sm"></div>
                 ))}
               </div>
             </div>

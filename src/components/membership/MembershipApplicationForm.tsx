@@ -187,7 +187,7 @@ export function MembershipApplicationForm() {
             required
             value={formData.applicantName}
             onChange={(e) => setFormData({ ...formData, applicantName: e.target.value })}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
         <div>
@@ -198,7 +198,7 @@ export function MembershipApplicationForm() {
             required
             value={formData.applicantEmail}
             onChange={(e) => setFormData({ ...formData, applicantEmail: e.target.value })}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
       </div>
@@ -212,7 +212,7 @@ export function MembershipApplicationForm() {
           required
           value={formData.addressStreet}
           onChange={(e) => setFormData({ ...formData, addressStreet: e.target.value })}
-          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+          className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
         />
       </div>
 
@@ -227,7 +227,7 @@ export function MembershipApplicationForm() {
             required
             value={formData.addressPostalCode}
             onChange={(e) => setFormData({ ...formData, addressPostalCode: e.target.value })}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
         <div className="col-span-2">
@@ -238,7 +238,7 @@ export function MembershipApplicationForm() {
             required
             value={formData.addressCity}
             onChange={(e) => setFormData({ ...formData, addressCity: e.target.value })}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
       </div>

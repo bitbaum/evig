@@ -89,9 +89,9 @@ function SellPageContent() {
           <span className="w-7 h-7 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center">1</span>
           <span className="text-sm font-semibold text-action">{t('stepDetails')}</span>
         </div>
-        <div className="flex-1 h-px bg-neutral-300 mx-3" />
+        <div className="flex-1 h-px bg-surface-overlay mx-3" />
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-neutral-200 text-text-tertiary text-xs font-bold flex items-center justify-center">2</span>
+          <span className="w-7 h-7 rounded-full bg-surface-overlay text-text-tertiary text-xs font-bold flex items-center justify-center">2</span>
           <span className="text-sm text-text-tertiary">{t('stepPreview')}</span>
         </div>
       </div>
@@ -117,7 +117,7 @@ function SellPageContent() {
             <button
               type="button"
               onClick={() => setShowCamera(true)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-neutral-300 text-text-tertiary hover:border-action hover:text-action transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-default text-text-tertiary hover:border-action hover:text-action transition-colors text-sm"
             >
               <Camera className="w-4 h-4" />
               {t('cameraButton')}
@@ -160,7 +160,7 @@ function SellPageContent() {
           <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Link
               href={ROUTES.public.marketplace}
-              className="px-6 py-2.5 rounded-lg border border-neutral-300 font-medium text-text-secondary hover:bg-surface-raised text-center"
+              className="px-6 py-2.5 rounded-lg border border-default font-medium text-text-secondary hover:bg-surface-raised text-center"
             >
               {t('cancelButton')}
             </Link>

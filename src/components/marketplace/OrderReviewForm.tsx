@@ -104,7 +104,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
                   className={`w-8 h-8 ${
                     filled
                       ? 'fill-warning-400 text-warning-400'
-                      : 'text-neutral-300 dark:text-text-secondary'
+                      : 'text-text-muted dark:text-text-secondary'
                   }`}
                 />
               </button>
@@ -147,7 +147,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               recommend
                 ? 'bg-action text-white'
-                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }`}
           >
             <ThumbsUp className="w-4 h-4" /> {t('recommendYes')}
@@ -158,7 +158,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               !recommend
                 ? 'bg-error-600 text-white'
-                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }`}
           >
             <ThumbsDown className="w-4 h-4" /> {t('recommendNo')}

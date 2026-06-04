@@ -2,7 +2,7 @@ import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
-const RATING_COLORS = ['bg-action', 'bg-action', 'bg-info-500', 'bg-secondary-500', 'bg-warning-500', 'bg-error-500', 'bg-info-700', 'bg-neutral-400']
+const RATING_COLORS = ['bg-action', 'bg-action', 'bg-info-500', 'bg-secondary-500', 'bg-warning-500', 'bg-error-500', 'bg-info-700', 'bg-surface-overlay']
 
 export async function PhilosophySection() {
   const t = await getTranslations('services.webDesign.philosophy')
@@ -63,7 +63,7 @@ export async function PhilosophySection() {
                     <div className="flex items-center space-x-3 mb-1">
                       <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
                       <span className="text-sm font-medium text-text-secondary">{item.label}</span>
-                      <div className="flex-1 bg-neutral-200 rounded-full h-2">
+                      <div className="flex-1 bg-surface-overlay rounded-full h-2">
                         <div className={`${item.color} h-2 rounded-full transition-all duration-500`} style={{width: '95%'}}></div>
                       </div>
                     </div>

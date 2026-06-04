@@ -127,7 +127,7 @@ export default function MarketplacePage() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/10 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 border border-default dark:border-white/10 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
             aria-expanded={mobileFiltersOpen}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
+                  className="p-2 rounded-lg border border-default dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
                   aria-label={t('pagination.previousPage')}
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -249,7 +249,7 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
+                  className="p-2 rounded-lg border border-default dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
                   aria-label={t('pagination.nextPage')}
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -279,7 +279,7 @@ export default function MarketplacePage() {
               </Button>
               <Link
                 href={ROUTES.public.register}
-                className="px-6 py-2.5 border border-neutral-300 dark:border-white/10 text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 border border-default dark:border-white/10 text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.register')}
               </Link>

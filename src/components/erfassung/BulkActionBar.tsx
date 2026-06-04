@@ -53,7 +53,7 @@ export function BulkActionBar({
           <div className="flex-1 max-w-xs">
             <div className="flex items-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin text-action" />
-              <div className="flex-1 h-2 bg-neutral-200 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-surface-overlay rounded-full overflow-hidden">
                 <div
                   className="h-full bg-action rounded-full transition-all duration-300"
                   style={{ width: `${totalCount > 0 ? (savedCount / totalCount) * 100 : 0}%` }}
@@ -71,7 +71,7 @@ export function BulkActionBar({
             onClick={() => onSave('draft')}
             disabled={selectedCount === 0 || isSaving}
             size="sm"
-            className="gap-1.5 bg-neutral-500 hover:bg-neutral-600 disabled:bg-neutral-300"
+            className="gap-1.5 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
           >
             <Save className="w-4 h-4" />
             <span className="hidden sm:inline">{t('draft')}</span>

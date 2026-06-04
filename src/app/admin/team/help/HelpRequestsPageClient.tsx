@@ -210,11 +210,11 @@ export function HelpRequestsPageClient({
               className="bg-surface-base rounded-xl border border p-4 animate-pulse"
             >
               <div className="flex gap-3">
-                <div className="w-10 h-10 bg-neutral-200 rounded-full" />
+                <div className="w-10 h-10 bg-surface-overlay rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-neutral-200 rounded-sm w-1/2" />
-                  <div className="h-4 bg-neutral-200 rounded-sm w-3/4" />
-                  <div className="h-3 bg-neutral-200 rounded-sm w-1/4" />
+                  <div className="h-4 bg-surface-overlay rounded-sm w-1/2" />
+                  <div className="h-4 bg-surface-overlay rounded-sm w-3/4" />
+                  <div className="h-3 bg-surface-overlay rounded-sm w-1/4" />
                 </div>
               </div>
             </div>

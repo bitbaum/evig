@@ -126,7 +126,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                         className={`w-3 h-3 ${
                           i < review.overallRating
                             ? 'text-warning-400 fill-warning-400'
-                            : 'text-neutral-300 dark:text-text-secondary'
+                            : 'text-text-muted dark:text-text-secondary'
                         }`}
                       />
                     ))}
@@ -151,7 +151,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
       {canReview && !hasReviewed && !showForm && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full py-2.5 px-4 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
+          className="w-full py-2.5 px-4 rounded-lg border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
         >
           {t('writeReview')}
         </button>

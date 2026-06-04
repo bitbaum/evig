@@ -47,7 +47,7 @@ export function OffersList({
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-action-muted-muted' : 'bg-neutral-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-action-muted-muted' : 'bg-surface-overlay'}`}>
                     {offer.repairerProfile ? (
                       <Wrench className="w-5 h-5 text-action" aria-hidden="true" />
                     ) : (

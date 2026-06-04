@@ -236,7 +236,7 @@ export default function AdminWorkshopInstanceDetailPage({
                     <tr key={reg.id} className="hover:bg-surface-raised">
                       <td className="px-6 py-4">
                         <div className="flex items-center">
-                          <div className="shrink-0 h-10 w-10 bg-neutral-200 rounded-full flex items-center justify-center">
+                          <div className="shrink-0 h-10 w-10 bg-surface-overlay rounded-full flex items-center justify-center">
                             <User className="w-5 h-5 text-text-secondary" />
                           </div>
                           <div className="ml-4">

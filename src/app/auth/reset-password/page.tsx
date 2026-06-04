@@ -203,7 +203,7 @@ function ResetPasswordContent() {
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
+                  className="w-full pl-11 pr-11 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
                   placeholder={t('newPasswordPlaceholder')}
                 />
                 <button
@@ -233,7 +233,7 @@ function ResetPasswordContent() {
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
+                  className="w-full pl-11 pr-11 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
                   placeholder={t('confirmPasswordPlaceholder')}
                 />
                 <button

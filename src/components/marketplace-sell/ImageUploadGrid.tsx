@@ -42,7 +42,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="aspect-square rounded-lg border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center gap-1 text-text-tertiary hover:text-text-secondary hover:border-strong transition-colors"
+            className="aspect-square rounded-lg border-2 border-dashed border-default flex flex-col items-center justify-center gap-1 text-text-tertiary hover:text-text-secondary hover:border-strong transition-colors"
           >
             {isUploading ? (
               <Loader2 className="w-6 h-6 animate-spin" />

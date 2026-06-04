@@ -38,7 +38,7 @@ export function VoiceTimer({ currentTime, maxDuration, state }: VoiceTimerProps)
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-neutral-200 rounded-full h-2 mb-6">
+      <div className="w-full bg-surface-overlay rounded-full h-2 mb-6">
         <div
           className={`h-2 rounded-full transition-all duration-100 ${
             state === 'recording'

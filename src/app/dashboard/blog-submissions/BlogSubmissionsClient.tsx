@@ -55,9 +55,9 @@ export default function BlogSubmissionsClient() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8 border-2 border">
             <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-neutral-200 rounded-sm w-1/3" />
-              <div className="h-4 bg-neutral-200 rounded-sm w-full" />
-              <div className="h-4 bg-neutral-200 rounded-sm w-3/4" />
+              <div className="h-8 bg-surface-overlay rounded-sm w-1/3" />
+              <div className="h-4 bg-surface-overlay rounded-sm w-full" />
+              <div className="h-4 bg-surface-overlay rounded-sm w-3/4" />
             </div>
           </div>
         </div>
@@ -280,7 +280,7 @@ function SubmissionCard({
                 <button
                   onClick={onCancelEditing}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg border border-neutral-300 text-text-secondary hover:bg-surface-raised text-sm"
+                  className="px-4 py-2 rounded-lg border border-default text-text-secondary hover:bg-surface-raised text-sm"
                 >
                   {t('cancel')}
                 </button>
@@ -325,7 +325,7 @@ function EmptyState() {
   const t = useTranslations('dashboard.blogSubmissions')
   return (
     <div className="bg-surface-base rounded-xl shadow-xs p-8 text-center border-2 border">
-      <FileText className="w-16 h-16 text-neutral-300 dark:text-text-secondary mx-auto mb-4" />
+      <FileText className="w-16 h-16 text-text-muted dark:text-text-secondary mx-auto mb-4" />
       <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
         {t('emptyTitle')}
       </Heading>

@@ -173,7 +173,7 @@ export function VerifyStep({
             className={cn(
               'w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border-2 transition-colors',
               'focus:ring-2 focus:ring-action focus:border-action',
-              digit ? 'border-action bg-action-muted-muted' : 'border-neutral-300',
+              digit ? 'border-action bg-action-muted-muted' : 'border-default',
               (isVerifying || isLoading) && 'opacity-50'
             )}
           />

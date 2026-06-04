@@ -159,7 +159,7 @@ export function IntakeDetailView({
             </span>
           </div>
         </div>
-        <div className="w-full h-3 bg-neutral-200 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-surface-overlay rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all ${
               progress.percentage === 100 ? 'bg-action' :
@@ -223,7 +223,7 @@ export function IntakeDetailView({
             {detail.checklist_complete && (
               <Link
                 href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised text-sm font-medium"
+                className="inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised text-sm font-medium"
                 title="Produkt in Erfassung öffnen um Details zu ergänzen"
               >
                 <ClipboardList className="w-4 h-4" />

@@ -165,7 +165,7 @@ export default async function TaskProjectDetailPage({
       {/* Tasks table */}
       {projectTasks.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-10 text-center')}>
-          <FolderKanban className="mx-auto h-10 w-10 text-neutral-300 dark:text-text-secondary mb-3" />
+          <FolderKanban className="mx-auto h-10 w-10 text-text-muted dark:text-text-secondary mb-3" />
           <p className="text-sm font-semibold text-text-primary mb-1">Noch keine Aufgaben</p>
           <p className="text-sm text-text-tertiary mb-4">
             Füge Aufgaben zu diesem Projekt hinzu.
@@ -230,7 +230,7 @@ export default async function TaskProjectDetailPage({
                     {task.assignedToName ? (
                       <span>{task.assignedToName}</span>
                     ) : (
-                      <span className="text-neutral-300 dark:text-text-secondary">&mdash;</span>
+                      <span className="text-text-muted dark:text-text-secondary">&mdash;</span>
                     )}
                   </td>
                   <td className={cn(designPrimitive.table.td, 'hidden md:table-cell text-right whitespace-nowrap')}>

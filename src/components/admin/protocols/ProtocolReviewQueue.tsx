@@ -79,7 +79,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
                     </div>
                     <Link
                       href={ROUTES.admin.protocol(protocol.id)}
-                      className="block truncate text-lg font-semibold text-neutral-950 underline-offset-2 hover:text-action hover:underline"
+                      className="block truncate text-lg font-semibold text-text-primary underline-offset-2 hover:text-action hover:underline"
                     >
                       {protocol.title}
                     </Link>

@@ -99,7 +99,7 @@ export default function FinancesContent() {
           </div>
         ) : data.length === 0 ? (
           <div className="text-center py-12">
-            <Wallet className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+            <Wallet className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <p className="text-text-secondary">{t('noData')}</p>
           </div>
         ) : (

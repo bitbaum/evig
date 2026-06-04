@@ -85,7 +85,7 @@ export function AccountStep({
 
       {/* Name */}
       <div>
-        <label htmlFor="name" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+        <label htmlFor="name" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
           {t('nameLabel')} <span className="text-text-muted">{t('nameOptional')}</span>
         </label>
         <div className="relative">
@@ -97,14 +97,14 @@ export function AccountStep({
             onChange={(e) => onNameChange(e.target.value)}
             autoComplete="name"
             placeholder={t('namePlaceholder')}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
+            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
         </div>
       </div>
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+        <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
           {t('email')} *
         </label>
         <div className="relative">
@@ -120,14 +120,14 @@ export function AccountStep({
             placeholder={t('emailPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
+            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
         </div>
       </div>
 
       {/* Password */}
       <div>
-        <label htmlFor="password" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+        <label htmlFor="password" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
           {t('password')} *
         </label>
         <div className="relative">
@@ -143,7 +143,7 @@ export function AccountStep({
             placeholder={t('passwordPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
+            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
           <button
             type="button"
@@ -161,7 +161,7 @@ export function AccountStep({
             <div className="flex gap-1 mb-2">
               <div
                 className={`h-1.5 flex-1 rounded-full ${
-                  passwordChecks.length ? 'bg-action' : 'bg-neutral-200'
+                  passwordChecks.length ? 'bg-action' : 'bg-surface-overlay'
                 }`}
               />
             </div>
@@ -176,7 +176,7 @@ export function AccountStep({
 
       {/* Confirm Password */}
       <div>
-        <label htmlFor="confirmPassword" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
+        <label htmlFor="confirmPassword" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
           {t('confirmPassword')} *
         </label>
         <div className="relative">
@@ -194,7 +194,7 @@ export function AccountStep({
             aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
             className={cn(
               'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action',
-              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-neutral-300'
+              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-default'
             )}
           />
           <button
@@ -219,7 +219,7 @@ export function AccountStep({
           checked={acceptTerms}
           onChange={(e) => onAcceptTermsChange(e.target.checked)}
           aria-required="true"
-          className="mt-1 w-4 h-4 rounded-sm border-neutral-300 text-action focus:ring-action"
+          className="mt-1 w-4 h-4 rounded-sm border-default text-action focus:ring-action"
         />
         <label htmlFor="terms" className="text-sm text-text-secondary dark:text-text-muted">
           {t('termsI')}{' '}
@@ -240,7 +240,7 @@ export function AccountStep({
             type="button"
             onClick={onBack}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>{t('back')}</span>

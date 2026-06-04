@@ -39,9 +39,9 @@ export default function WorkshopProposalDetailPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
             <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-neutral-200 rounded-sm w-1/3"></div>
-              <div className="h-4 bg-neutral-200 rounded-sm w-full"></div>
-              <div className="h-4 bg-neutral-200 rounded-sm w-2/3"></div>
+              <div className="h-8 bg-surface-overlay rounded-sm w-1/3"></div>
+              <div className="h-4 bg-surface-overlay rounded-sm w-full"></div>
+              <div className="h-4 bg-surface-overlay rounded-sm w-2/3"></div>
             </div>
           </div>
         </div>

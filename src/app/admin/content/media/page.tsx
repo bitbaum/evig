@@ -174,7 +174,7 @@ export default async function AdminMediaPage() {
 
           {/* Upload Area */}
           <div className="max-w-lg mx-auto">
-            <div className="border-2 border-dashed border-neutral-300 rounded-xl p-8 hover:border-action dark:hover:border-action transition-colors cursor-pointer">
+            <div className="border-2 border-dashed border-default rounded-xl p-8 hover:border-action dark:hover:border-action transition-colors cursor-pointer">
               <Upload className="w-8 h-8 text-text-muted mx-auto mb-3" />
               <p className="text-sm text-text-secondary mb-2">
                 <span className="text-action font-medium">

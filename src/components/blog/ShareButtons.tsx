@@ -42,7 +42,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           href={shareLinks.x}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-neutral-800 transition-colors text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-surface-overlay transition-colors text-sm font-medium"
           title={t('shareX')}
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

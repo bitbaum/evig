@@ -142,7 +142,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               ? 'bg-action'
               : userIsStaff
                 ? 'bg-action'
-                : 'bg-neutral-500'
+                : 'bg-surface-overlay'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
           </div>

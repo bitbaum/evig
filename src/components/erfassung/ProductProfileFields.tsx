@@ -48,13 +48,13 @@ export function ProductProfileFields({
                 className={`group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-2 rounded-full border-2 transition-colors touch-manipulation min-h-touch text-sm ${
                   kundenprofile.includes(profile.slug)
                     ? 'border-action bg-action-muted-muted text-action'
-                    : 'border-neutral-300 hover:border-strong active:bg-surface-raised dark:active:bg-neutral-700'
+                    : 'border-default hover:border-strong active:bg-surface-raised dark:active:bg-surface-overlay'
                 }`}
               >
                 <span className="text-lg sm:text-base">{profile.icon}</span>
                 <span>{profile.name_de}</span>
                 {/* Tooltip on hover - hidden on mobile */}
-                <span className="hidden sm:block invisible group-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-neutral-900 text-white text-xs rounded-lg whitespace-nowrap z-10 max-w-xs">
+                <span className="hidden sm:block invisible group-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-surface-overlay text-white text-xs rounded-lg whitespace-nowrap z-10 max-w-xs">
                   {profile.description}
                   <span className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-neutral-900" />
                 </span>

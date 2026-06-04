@@ -53,7 +53,7 @@ export function LearningObjectivesSection({
         <button
           type="button"
           onClick={onAdd}
-          className="w-full py-2 border-2 border-dashed border-neutral-300 text-text-secondary hover:border-strong hover:text-text-secondary rounded-lg transition-colors"
+          className="w-full py-2 border-2 border-dashed border-default text-text-secondary hover:border-strong hover:text-text-secondary rounded-lg transition-colors"
         >
           {t('sections.learningObjectives.add')}
         </button>

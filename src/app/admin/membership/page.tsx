@@ -95,7 +95,7 @@ export default async function MembershipPage() {
       <div className="bg-surface-base rounded-xl border border overflow-hidden">
         {members.length === 0 ? (
           <div className="p-8 text-center">
-            <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+            <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <Heading level={3} className="text-lg text-text-primary mb-2">
               Noch keine Mitglieder
             </Heading>

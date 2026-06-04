@@ -58,10 +58,10 @@ export default function AdminLocationsPage() {
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-neutral-200 rounded-sm w-1/4"></div>
+        <div className="h-8 bg-surface-overlay rounded-sm w-1/4"></div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 bg-neutral-200 rounded-sm"></div>
+            <div key={i} className="h-16 bg-surface-overlay rounded-sm"></div>
           ))}
         </div>
       </div>
@@ -175,7 +175,7 @@ export default function AdminLocationsPage() {
                 <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:shrink-0">
                   <Link
                     href={ROUTES.admin.location(location.id)}
-                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
+                    className="inline-flex items-center px-3 py-2 border border-default rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     Details

@@ -59,7 +59,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
                     ? 'bg-action text-white transform scale-105'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 hover:text-text-primary'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay hover:text-text-primary'
                 }`}
               >
                 {category}

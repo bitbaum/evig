@@ -44,7 +44,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
 
             <div className="p-6 space-y-6">
               {/* File Upload */}
-              <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
+              <div className="border-2 border-dashed border-default rounded-lg p-8 text-center">
                 <Upload className="w-12 h-12 text-text-muted mx-auto mb-4" />
                 <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
                   CSV-Datei auswählen

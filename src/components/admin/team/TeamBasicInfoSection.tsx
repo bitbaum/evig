@@ -88,7 +88,7 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
             type="checkbox"
             checked={form.is_active}
             onChange={(e) => onChange('is_active', e.target.checked)}
-            className="rounded-sm border-neutral-300"
+            className="rounded-sm border-default"
           />
           Aktiv
         </label>

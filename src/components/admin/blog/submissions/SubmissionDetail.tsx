@@ -234,7 +234,7 @@ export function SubmissionDetail({
           {submission.published_post_id && (
             <Link
               href={`/admin/content/blog/${submission.published_post_id}`}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors text-sm"
             >
               <Edit className="w-4 h-4" />
               Im Admin bearbeiten

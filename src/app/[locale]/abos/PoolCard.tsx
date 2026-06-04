@@ -75,7 +75,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-neutral-50">
+      <div className="flex items-center justify-between pt-2 border-t border-subtle">
         <span className="text-xs text-text-muted">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
         {userId ? (
           <button

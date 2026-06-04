@@ -79,7 +79,7 @@ function RadioOption({
         name={name}
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
+        className="h-3.5 w-3.5 text-secondary-600 border-default focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
       />
       <span className="text-sm text-text-secondary group-hover:text-text-primary leading-snug">
         {label}
@@ -103,7 +103,7 @@ function CheckOption({
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 rounded-sm text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
+        className="h-3.5 w-3.5 rounded-sm text-secondary-600 border-default focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
       />
       <span className="text-sm text-text-secondary group-hover:text-text-primary leading-snug">
         {label}

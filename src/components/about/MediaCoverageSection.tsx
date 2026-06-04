@@ -53,7 +53,7 @@ function MediaCard({ mention, tierLabel, readArticleLabel }: { mention: MediaMen
       <div className="flex items-center gap-2 text-sm text-text-tertiary mb-3">
         <Newspaper className="h-4 w-4" />
         <span className="font-medium">{mention.sourceShort}</span>
-        <span className="text-neutral-300">|</span>
+        <span className="text-text-muted">|</span>
         <span>{mention.date}</span>
       </div>
 
@@ -101,7 +101,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
         </p>
         <p className="text-xs text-text-tertiary truncate">{mention.date}</p>
       </div>
-      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-action transition-colors shrink-0" />
+      <ExternalLink className="h-4 w-4 text-text-muted group-hover:text-action transition-colors shrink-0" />
     </a>
   )
 }
@@ -145,12 +145,12 @@ export default function MediaCoverageSection() {
             <p className="text-3xl font-bold text-action">{stats.totalMentions}+</p>
             <p className="text-sm text-text-tertiary">{t('statMentions')}</p>
           </div>
-          <div className="hidden sm:block w-px bg-neutral-200" />
+          <div className="hidden sm:block w-px bg-surface-overlay" />
           <div className="text-center">
             <p className="text-3xl font-bold text-action">{stats.uniqueSources}</p>
             <p className="text-sm text-text-tertiary">{t('statSources')}</p>
           </div>
-          <div className="hidden sm:block w-px bg-neutral-200" />
+          <div className="hidden sm:block w-px bg-surface-overlay" />
           <div className="text-center">
             <p className="text-3xl font-bold text-action">{stats.partnerships}</p>
             <p className="text-sm text-text-tertiary">{t('statPartnerships')}</p>
@@ -213,7 +213,7 @@ export default function MediaCoverageSection() {
                   </p>
                   <p className="text-xs text-text-tertiary truncate">{mention.title}</p>
                 </div>
-                <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-action transition-colors shrink-0" />
+                <ExternalLink className="h-4 w-4 text-text-muted group-hover:text-action transition-colors shrink-0" />
               </a>
             ))}
           </div>

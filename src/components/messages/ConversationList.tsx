@@ -42,7 +42,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
   if (conversations.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <MessageSquare className="w-12 h-12 text-neutral-300 dark:text-text-secondary mb-3" aria-hidden="true" />
+        <MessageSquare className="w-12 h-12 text-text-muted dark:text-text-secondary mb-3" aria-hidden="true" />
         <p className="text-text-tertiary font-medium">{t('emptyTitle')}</p>
         <p className="text-sm text-text-muted mt-1">
           {t('emptyDesc')}

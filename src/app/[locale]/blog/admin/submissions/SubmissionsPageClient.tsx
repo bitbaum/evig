@@ -73,7 +73,7 @@ export default function SubmissionsAdminPage() {
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   filter === key
                     ? 'bg-action text-white'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 {label}

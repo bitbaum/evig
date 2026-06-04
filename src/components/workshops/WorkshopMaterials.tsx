@@ -88,10 +88,10 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   if (loading) {
     return (
       <div className="animate-pulse">
-        <div className="h-6 bg-neutral-200 rounded-sm w-1/2 mb-4"></div>
+        <div className="h-6 bg-surface-overlay rounded-sm w-1/2 mb-4"></div>
         <div className="space-y-2">
-          <div className="h-12 bg-neutral-200 rounded-sm"></div>
-          <div className="h-12 bg-neutral-200 rounded-sm"></div>
+          <div className="h-12 bg-surface-overlay rounded-sm"></div>
+          <div className="h-12 bg-surface-overlay rounded-sm"></div>
         </div>
       </div>
     )
@@ -108,7 +108,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   if (materials.length === 0) {
     return (
       <div className="text-center py-6">
-        <FileText className="w-10 h-10 text-neutral-300 mx-auto mb-2" />
+        <FileText className="w-10 h-10 text-text-muted mx-auto mb-2" />
         <p className="text-text-tertiary text-sm">{t('emptyTitle')}</p>
         {accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
           <p className="text-text-tertiary text-xs mt-1">

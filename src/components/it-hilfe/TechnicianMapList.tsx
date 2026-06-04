@@ -229,7 +229,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                       <div className="flex items-center justify-between text-xs text-text-secondary mb-1">
                         <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
                       </div>
-                      <div className="w-full bg-neutral-200 rounded-full h-1.5">
+                      <div className="w-full bg-surface-overlay rounded-full h-1.5">
                         <div
                           className="bg-action h-1.5 rounded-full transition-all"
                           style={{ width: `${matchPercentage}%` }}

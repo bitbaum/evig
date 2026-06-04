@@ -89,7 +89,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
           <Button
             onClick={() => handleSubmit(false)}
             disabled={saving || !formData.title || !formData.content}
-            className="gap-2 bg-neutral-600 hover:bg-neutral-700 disabled:bg-neutral-400"
+            className="gap-2 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Speichern

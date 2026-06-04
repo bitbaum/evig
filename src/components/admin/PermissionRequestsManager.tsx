@@ -96,10 +96,10 @@ export function PermissionRequestsManager() {
     return (
       <div className="p-6 bg-surface-base rounded-xl border border">
         <div className="animate-pulse">
-          <div className="h-6 bg-neutral-200 rounded-sm w-1/3 mb-4" />
+          <div className="h-6 bg-surface-overlay rounded-sm w-1/3 mb-4" />
           <div className="space-y-3">
-            <div className="h-16 bg-neutral-200 rounded-sm" />
-            <div className="h-16 bg-neutral-200 rounded-sm" />
+            <div className="h-16 bg-surface-overlay rounded-sm" />
+            <div className="h-16 bg-surface-overlay rounded-sm" />
           </div>
         </div>
       </div>

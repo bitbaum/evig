@@ -226,7 +226,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                       />
                     ) : (
                       <div className="w-full h-full bg-surface-raised flex items-center justify-center">
-                        <Package className="w-12 h-12 text-neutral-300 dark:text-text-tertiary" />
+                        <Package className="w-12 h-12 text-text-muted dark:text-text-tertiary" />
                       </div>
                     )}
                     <div className="absolute top-2 left-2">

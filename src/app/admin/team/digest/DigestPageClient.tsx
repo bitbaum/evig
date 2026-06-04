@@ -89,16 +89,16 @@ export function DigestPageClient() {
                 key={i}
                 className="bg-surface-base rounded-xl border border p-4 animate-pulse"
               >
-                <div className="h-8 bg-neutral-200 rounded-sm w-16 mb-2" />
-                <div className="h-4 bg-neutral-200 rounded-sm w-24" />
+                <div className="h-8 bg-surface-overlay rounded-sm w-16 mb-2" />
+                <div className="h-4 bg-surface-overlay rounded-sm w-24" />
               </div>
             ))}
           </div>
           <div className="bg-surface-base rounded-xl border border p-6 animate-pulse">
-            <div className="h-6 bg-neutral-200 rounded-sm w-40 mb-4" />
+            <div className="h-6 bg-surface-overlay rounded-sm w-40 mb-4" />
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 bg-neutral-200 rounded-sm" />
+                <div key={i} className="h-12 bg-surface-overlay rounded-sm" />
               ))}
             </div>
           </div>
@@ -214,7 +214,7 @@ export function DigestPageClient() {
                           index === 0
                             ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200'
                             : index === 1
-                              ? 'bg-neutral-200 text-text-secondary'
+                              ? 'bg-surface-overlay text-text-secondary'
                               : index === 2
                                 ? 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-300'
                                 : 'bg-surface-raised text-text-tertiary'

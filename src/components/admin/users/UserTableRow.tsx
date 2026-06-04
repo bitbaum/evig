@@ -70,7 +70,7 @@ function UserInfoCell({
     ? 'bg-action'
     : userIsStaff
       ? 'bg-action'
-      : 'bg-neutral-500'
+      : 'bg-surface-overlay'
 
   const initials = user.name
     ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2)

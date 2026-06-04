@@ -84,7 +84,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
                 className={`w-6 h-6 transition-colors ${
                   i < (hoverRating || rating)
                     ? 'text-warning-400 fill-warning-400'
-                    : 'text-neutral-300 dark:text-text-secondary'
+                    : 'text-text-muted dark:text-text-secondary'
                 }`}
               />
             </button>

@@ -31,7 +31,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                         onSet(opt.id, n);
                       }}
                       className={`text-lg transition ${
-                        (scores[opt.id] || 0) >= n ? 'text-warning-400' : 'text-neutral-300 hover:text-warning-300'
+                        (scores[opt.id] || 0) >= n ? 'text-warning-400' : 'text-text-muted hover:text-warning-300'
                       }`}
                     >
                       ★
@@ -72,7 +72,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                     className={`h-9 w-9 rounded-md text-sm font-bold transition ${
                       (scores[opt.id] || 0) >= n
                         ? 'bg-warning-400 text-white'
-                        : 'border border-neutral-300 text-text-tertiary hover:border-warning-300'
+                        : 'border border-default text-text-tertiary hover:border-warning-300'
                     }`}
                   >
                     {n}

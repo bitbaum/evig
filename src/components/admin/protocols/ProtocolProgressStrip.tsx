@@ -29,19 +29,19 @@ const STATE_CONFIG = {
     icon: Clock,
     dotClass: 'bg-warning-100 dark:bg-warning-900/30 border-2 border-warning-400 text-warning-600',
     labelClass: 'text-warning-700 dark:text-warning-200 font-semibold',
-    lineClass: 'bg-neutral-200',
+    lineClass: 'bg-surface-overlay',
   },
   blocked: {
     icon: CircleAlert,
     dotClass: 'bg-error-100 dark:bg-error-900/30 border-2 border-error-400 text-error-600',
     labelClass: 'text-error-700 dark:text-error-400 font-semibold',
-    lineClass: 'bg-neutral-200',
+    lineClass: 'bg-surface-overlay',
   },
   pending: {
     icon: Circle,
-    dotClass: 'bg-surface-raised border border-neutral-300 text-text-muted',
+    dotClass: 'bg-surface-raised border border-default text-text-muted',
     labelClass: 'text-text-muted',
-    lineClass: 'bg-neutral-200',
+    lineClass: 'bg-surface-overlay',
   },
 }
 

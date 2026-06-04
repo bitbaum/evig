@@ -36,7 +36,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-surface-base border border-neutral-300 rounded-lg hover:border-strong transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-surface-base border border-default rounded-lg hover:border-strong transition-colors"
       >
         <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
           <RenderIcon iconName={value} className="w-6 h-6 text-text-secondary" />

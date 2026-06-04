@@ -74,7 +74,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
               ? 'bg-action text-white'
-              : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+              : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
           )}
         >
           {t('allCategories')}
@@ -87,7 +87,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
                 ? 'bg-action text-white'
-                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             )}
           >
             {cat.icon} {cat.label}

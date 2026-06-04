@@ -187,7 +187,7 @@ export function NotificationBell() {
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
-                <Bell className="w-8 h-8 text-neutral-200 dark:text-text-secondary mx-auto mb-2" />
+                <Bell className="w-8 h-8 text-text-muted dark:text-text-secondary mx-auto mb-2" />
                 <p className="text-sm text-text-tertiary">Keine Benachrichtigungen</p>
               </div>
             ) : (

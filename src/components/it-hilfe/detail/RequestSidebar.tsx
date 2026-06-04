@@ -145,7 +145,7 @@ export function RequestSidebar({
           {t('requesterSection')}
         </Heading>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-neutral-200 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-surface-overlay rounded-full flex items-center justify-center">
             <User className="w-6 h-6 text-text-tertiary" aria-hidden="true" />
           </div>
           <div>

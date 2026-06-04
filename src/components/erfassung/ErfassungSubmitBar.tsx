@@ -22,7 +22,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       <div className="hidden sm:flex justify-between items-center pt-4">
         <Link
           href={ROUTES.admin.products}
-          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-neutral-300 bg-surface-base hover:bg-surface-raised text-text-primary"
+          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-default bg-surface-base hover:bg-surface-raised text-text-primary"
         >
           {t('cancel')}
         </Link>
@@ -42,7 +42,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 type="button"
                 onClick={(e) => onSubmit(e, 'draft')}
                 disabled={isLoading}
-                className="gap-2 px-5 py-3 bg-neutral-500 hover:bg-neutral-600 disabled:bg-neutral-400"
+                className="gap-2 px-5 py-3 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -109,7 +109,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               type="button"
               onClick={(e) => onSubmit(e, 'draft')}
               disabled={isLoading}
-              className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-neutral-500 hover:bg-neutral-600 disabled:bg-neutral-400"
+              className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
