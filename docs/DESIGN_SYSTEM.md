@@ -119,43 +119,59 @@ Reference migrated file: `src/app/admin/appointments/page.tsx`.
 
 ## Migration backlog
 
-Counted via grep at the time of writing:
+Updated 2026-06-04 after commits `dc746eab` (CC.1) and `0f7999cf` (CC.2):
 
-| Pattern | Count | Priority |
+| Pattern | Count | Status |
 |---|---|---|
-| Raw `<select>` in feature code | 44 | High — covered by lint warning |
-| Raw `<textarea>` in feature code | 49 | High — covered by lint warning |
-| `bg-white` (palette) | hundreds | Medium — auto-handled by global override; visual works but tokens are cleaner |
+| Raw `<select>` in feature code | **0** | ✅ Done. ESLint warns on any new occurrence. |
+| Raw `<textarea>` in feature code | **0** | ✅ Done. ESLint warns on any new occurrence. |
+| Raw text `<input>` in feature code | low | Most done. A few stay raw deliberately (CommandBar search has custom chrome). |
+| `bg-white` (palette) | hundreds | Medium — auto-handled by global override; visual works but tokens are cleaner. Migrate during routine refactors. |
 | `text-neutral-X` (palette) | hundreds | Medium |
 | `bg-primary-X` (palette) | hundreds | Medium |
-| Explicit `dark:` variants | hundreds | Low — they work, just verbose; remove during routine refactors |
+| Explicit `dark:` variants | hundreds | Low — they work, just verbose; remove during routine refactors. |
 
 Run `npm run lint` to see current warning count.
 
+**Result**: every form control in the codebase routes through the
+Input/Select/Textarea primitives → semantic tokens → automatic
+light/dark theming. The BB.6 bug class is structurally extinct.
+
 ## Tailwind 4 + shadcn — the deferred upgrades
 
-These were on the table for this session but deferred for safety:
+Both were attempted in the BB session. **Tailwind 4 upgrade failed at the
+auto-converter step**: the upgrade tool wraps `.dark .X { ... }` override
+blocks into `@utility dark { ... }`, but the project's globals.css has
+250+ such overrides including selectors with colons (`.dark .hover:bg-X`).
+Tailwind 4 rejects those as invalid utility names. The upgrade was rolled
+back.
 
-- **Tailwind 3 → 4** is a build-tool migration (CSS-first `@theme`,
-  removed utilities like `bg-opacity-X`, changed shadow defaults). The
-  upgrade tool `npx @tailwindcss/upgrade` automates ~80% of it. Worth
-  doing as a dedicated session AFTER the token migration is at >50%
-  coverage, so the upgrade doesn't mask design drift.
-- **shadcn/ui** would replace the custom primitives with Radix-based
-  accessible components. Worth doing if the team welcomes the Radix
-  peer-dep weight. Lower priority — the existing primitives already
-  consume semantic tokens correctly, so the bug-prevention goal is met
-  without shadcn.
+The real prerequisite for Tailwind 4 is to **restructure the dark-mode
+override block in globals.css first**. Two options:
+
+1. Replace the overrides with the new `@custom-variant dark` + plain
+   CSS selectors (which Tailwind 4 supports natively).
+2. Eliminate the overrides entirely by completing the palette → semantic
+   token migration. Once everything uses semantic tokens, the
+   "compat layer" for `bg-white`/`text-neutral-X` becomes unnecessary.
+
+Option 2 is the strategically better path — finish what we started.
 
 Order of operations when ready:
 
-1. Run `npx @tailwindcss/upgrade` on a branch.
-2. Fix breakage (typecheck + dev compile).
-3. Visual smoke-test the migrated surfaces (the ones already on semantic
-   tokens — they should look identical).
-4. Roll out shadcn primitive-by-primitive (Input first, then Select,
-   etc.). Keep the existing public API of each primitive so callers
-   don't break.
+1. Sweep the codebase converting `bg-white`/`text-neutral-X`/etc. to
+   semantic tokens. Each commit one surface; visual diff per commit.
+2. When the dark-mode override block is no longer needed (or
+   substantially smaller), restructure what's left to `@custom-variant`
+   style.
+3. THEN run `npx @tailwindcss/upgrade`.
+4. shadcn/ui adoption stays optional — the existing primitives already
+   consume semantic tokens correctly, so the bug-prevention goal is met
+   without shadcn. Worth doing if the team welcomes the Radix peer-dep
+   weight, but it's polish, not structure.
+
+Estimated effort: 8-15 hours of focused surface migration before
+Tailwind 4 is safe to attempt again.
 
 ## Why this works
 
