@@ -275,7 +275,7 @@ export default async function TaskAnalyticsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Contributor Stats */}
         <div className="bg-white rounded-lg border p-6">
           <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">

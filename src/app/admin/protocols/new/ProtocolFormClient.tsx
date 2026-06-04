@@ -199,7 +199,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               Oder Datei hochladen
             </label>
             <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 cursor-pointer transition-colors text-sm">
+              <label className="inline-flex items-center gap-2 px-4 min-h-11 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 cursor-pointer transition-colors text-sm">
                 <Upload className="w-4 h-4" />
                 Datei wählen
                 <input

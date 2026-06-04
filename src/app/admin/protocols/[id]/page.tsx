@@ -12,6 +12,7 @@ import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
+import { adminIconBox, adminIconColor } from '@/lib/admin-ui'
 import { getProtocolById, getActionLinks, getTeamMembers, getDecisionData } from '@/lib/services/protocols'
 import {
   MEETING_TYPE_LABELS,
@@ -107,8 +108,8 @@ export default async function ProtocolDetailPage({
           </Link>
           <div className="w-px h-5 bg-neutral-200 dark:bg-white/[0.08] flex-shrink-0" />
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 bg-primary-100 dark:bg-primary-500/[0.12] rounded-lg flex items-center justify-center flex-shrink-0">
-              <MeetingIcon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+            <div className={`${adminIconBox.sm} ${adminIconColor.green}`}>
+              <MeetingIcon className={adminIconBox.icon} />
             </div>
             <div className="min-w-0">
               <Heading level={1} className="text-xl font-bold text-neutral-900 dark:text-white truncate">

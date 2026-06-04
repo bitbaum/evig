@@ -24,24 +24,12 @@ import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { formatDateShort } from '@/lib/date-formats'
 import { leavePeriodKindOptions, type LeavePeriodKind } from '@/lib/schemas/team'
-
-const KIND_LABELS: Record<LeavePeriodKind, string> = {
-  vacation: 'Urlaub',
-  sick: 'Krankheit',
-  parental: 'Elternzeit',
-  unpaid: 'Unbezahlt',
-  military: 'Militär',
-  other: 'Sonstiges',
-}
-
-const KIND_COLORS: Record<LeavePeriodKind, string> = {
-  vacation: 'bg-info-100 text-info-700 dark:bg-info-500/15 dark:text-info-300',
-  sick: 'bg-warning-100 text-warning-700 dark:bg-warning-500/15 dark:text-warning-300',
-  parental: 'bg-success-100 text-success-700 dark:bg-success-500/15 dark:text-success-300',
-  unpaid: 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200',
-  military: 'bg-neutral-300 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-100',
-  other: 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200',
-}
+import {
+  LEAVE_PERIOD_KIND_LABELS,
+  LEAVE_PERIOD_KIND_COLORS,
+  getLeavePeriodKindLabel,
+  getLeavePeriodKindColor,
+} from '@/config/team'
 
 interface LeaveRow {
   id: string
@@ -157,17 +145,17 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
           <button
             onClick={load}
             disabled={isLoading}
-            className="p-1.5 rounded-md text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="w-11 h-11 inline-flex items-center justify-center rounded-md text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] disabled:opacity-60"
             aria-label="Aktualisieren"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold"
+              className="inline-flex items-center gap-1.5 px-3 min-h-11 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-4 h-4" />
               Urlaub erfassen
             </button>
           )}
@@ -195,7 +183,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
               <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">Art</span>
               <Select value={formKind} onChange={e => setFormKind(e.target.value as LeavePeriodKind)}>
                 {leavePeriodKindOptions.map(k => (
-                  <option key={k} value={k}>{KIND_LABELS[k]}</option>
+                  <option key={k} value={k}>{LEAVE_PERIOD_KIND_LABELS[k]}</option>
                 ))}
               </Select>
             </label>
@@ -248,8 +236,8 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${KIND_COLORS[kind] ?? KIND_COLORS.other}`}>
-                        {KIND_LABELS[kind] ?? row.kind}
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${getLeavePeriodKindColor(kind)}`}>
+                        {getLeavePeriodKindLabel(kind)}
                       </span>
                       <span className="text-sm font-medium text-neutral-900 dark:text-white">
                         {formatDateShort(row.starts_on)} – {formatDateShort(row.ends_on)}
@@ -266,10 +254,10 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                   </div>
                   <button
                     onClick={() => remove(row.id)}
-                    className="p-1.5 rounded-md text-neutral-400 hover:text-error-600 dark:hover:text-error-400 hover:bg-error-50 dark:hover:bg-error-500/10"
+                    className="w-11 h-11 inline-flex items-center justify-center rounded-md text-neutral-400 hover:text-error-600 dark:hover:text-error-400 hover:bg-error-50 dark:hover:bg-error-500/10"
                     aria-label="Eintrag löschen"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </li>

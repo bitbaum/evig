@@ -111,7 +111,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.06]">
         <Link
           href={`/admin/team/${member.id}`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"
           onClick={() => onView?.(member.id)}
         >
           <Eye className="w-4 h-4" />
@@ -119,7 +119,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         </Link>
         <Link
           href={`/admin/team/${member.id}/edit`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 rounded-lg transition-colors"
           onClick={() => onEdit?.(member.id)}
         >
           <Edit2 className="w-4 h-4" />

@@ -33,8 +33,8 @@ export function ProtocolReprocessSection({
     : 'Transkript erneut verarbeiten'
 
   return (
-    <details id="protocol-step-input" className="bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200">
-      <summary className="p-4 cursor-pointer text-sm font-medium text-warning-800 dark:text-warning-200 hover:text-warning-900">
+    <details id="protocol-step-input" className="bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200 dark:border-warning-700/50">
+      <summary className="p-4 cursor-pointer text-sm font-medium text-warning-800 dark:text-warning-200 hover:text-warning-900 dark:hover:text-warning-100">
         Nicht zufrieden? {summaryLabel}
       </summary>
       <div className="px-4 pb-4 space-y-3">

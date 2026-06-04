@@ -233,29 +233,29 @@ export default function DecisionActions({
             <button
               onClick={() => handleVote('up')}
               disabled={loading === 'vote'}
-              className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'up'
                   ? 'bg-primary-100 dark:bg-primary-900/30 border-primary-300 text-primary-800 dark:text-primary-300'
                   : 'bg-white border-neutral-200 text-neutral-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-200'
               } disabled:opacity-50`}
             >
               {loading === 'vote' ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <ThumbsUp className="w-3.5 h-3.5" />
+                <ThumbsUp className="w-4 h-4" />
               )}
               {votesUp}
             </button>
             <button
               onClick={() => handleVote('down')}
               disabled={loading === 'vote'}
-              className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'down'
                   ? 'bg-error-100 dark:bg-error-900/30 border-error-300 text-error-800 dark:text-error-400'
                   : 'bg-white border-neutral-200 text-neutral-600 hover:bg-error-50 dark:hover:bg-error-900/20 hover:border-error-200'
               } disabled:opacity-50`}
             >
-              <ThumbsDown className="w-3.5 h-3.5" />
+              <ThumbsDown className="w-4 h-4" />
               {votesDown}
             </button>
           </div>

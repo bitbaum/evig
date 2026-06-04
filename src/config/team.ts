@@ -238,3 +238,37 @@ export function getDepartmentColor(dept: string | null | undefined): string {
   if (!dept) return 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
   return DEPARTMENT_COLORS[dept as Department] || 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
 }
+
+// ============================================================================
+// LEAVE PERIODS — kinds, labels, colors
+// The kind enum is defined in @/lib/schemas/team.ts (next to its Zod schema);
+// labels + colors live here next to the other team-config SSOT maps.
+// ============================================================================
+
+import type { LeavePeriodKind } from '@/lib/schemas/team'
+
+export const LEAVE_PERIOD_KIND_LABELS: Record<LeavePeriodKind, string> = {
+  vacation: 'Urlaub',
+  sick: 'Krankheit',
+  parental: 'Elternzeit',
+  unpaid: 'Unbezahlt',
+  military: 'Militär',
+  other: 'Sonstiges',
+}
+
+export const LEAVE_PERIOD_KIND_COLORS: Record<LeavePeriodKind, string> = {
+  vacation: 'bg-info-100 text-info-700 dark:bg-info-500/15 dark:text-info-300',
+  sick: 'bg-warning-100 text-warning-700 dark:bg-warning-500/15 dark:text-warning-300',
+  parental: 'bg-success-100 text-success-700 dark:bg-success-500/15 dark:text-success-300',
+  unpaid: 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200',
+  military: 'bg-neutral-300 text-neutral-800 dark:bg-neutral-600 dark:text-neutral-100',
+  other: 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200',
+}
+
+export function getLeavePeriodKindLabel(kind: string): string {
+  return LEAVE_PERIOD_KIND_LABELS[kind as LeavePeriodKind] ?? kind
+}
+
+export function getLeavePeriodKindColor(kind: string): string {
+  return LEAVE_PERIOD_KIND_COLORS[kind as LeavePeriodKind] ?? LEAVE_PERIOD_KIND_COLORS.other
+}
