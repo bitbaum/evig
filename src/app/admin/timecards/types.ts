@@ -8,8 +8,6 @@
 import type { TimecardStatus } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 
-export type PeriodMode = 'month' | 'week'
-
 export interface TimecardAIResult {
   entries?: TimecardEntryInput[]
   notes?: string

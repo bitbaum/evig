@@ -21,28 +21,23 @@ import {
   WEEKDAY_IDS,
   WEEKDAY_LABELS,
   buildTimecardEntriesForMonth,
-  buildTimecardEntriesFromSchedule,
   calculateTimeRangeMinutes,
   getMonthStart,
   getNextMonthStart,
   parseWeeklySchedule,
   summarizeWeeklySchedule,
-  addDays,
   toISODate,
 } from '@/lib/team/schedule'
 import {
-  startOfWeek,
   getDaysInRange,
-  getWeekDates,
   getDisplayDate,
-  formatShortDateRange,
   normalizeEntry,
   mergeEntries,
   getEntryForDate,
 } from '@/lib/team/timecard-utils'
 import type { Timecard, TimecardEntryInput, TimecardSaveInput } from '@/lib/schemas/timecards'
 import { ROUTES } from '@/config/routes'
-import type { PeriodMode, TimecardAIResult, DraftState } from './types'
+import type { TimecardAIResult, DraftState } from './types'
 import { createDraft, toDraftState } from './draft-utils'
 
 interface TimecardsClientProps {
@@ -57,18 +52,11 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
     [schedule]
   )
   const currentDate = useMemo(() => new Date(), [])
-  const currentWeekStart = useMemo(() => startOfWeek(currentDate), [currentDate])
   const currentMonthStart = useMemo(() => getMonthStart(currentDate), [currentDate])
   const currentMonthEnd = useMemo(() => getNextMonthStart(currentDate), [currentDate])
-  const weekPeriodStart = useMemo(() => toISODate(currentWeekStart), [currentWeekStart])
-  const weekDates = useMemo(() => getWeekDates(weekPeriodStart), [weekPeriodStart])
   const monthDates = useMemo(
     () => getDaysInRange(currentMonthStart, currentMonthEnd),
     [currentMonthStart, currentMonthEnd]
-  )
-  const weekEntries = useMemo(
-    () => buildTimecardEntriesFromSchedule(schedule, weekPeriodStart),
-    [schedule, weekPeriodStart]
   )
   const monthEntries = useMemo(
     () => buildTimecardEntriesForMonth(schedule, currentMonthStart),
@@ -79,50 +67,42 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
     [currentDate]
   )
 
-  const [mode, setMode] = useState<PeriodMode>('month')
-  const [drafts, setDrafts] = useState<Record<PeriodMode, DraftState>>({
-    month: createDraft(monthEntries, monthDates.find(date => getEntryForDate(monthEntries, date)) || monthDates[0]),
-    week: createDraft(weekEntries, weekDates.find(date => getEntryForDate(weekEntries, date)) || weekDates[0]),
-  })
+  // Month-only by design: payroll cadence is monthly, weekly mode was deleted
+  // in the Phase Y admin UX audit. The previous version kept "mode" state
+  // ('month' | 'week') and dual drafts as scaffolding for a later refactor;
+  // this is that refactor.
+  const [draft, setDraft] = useState<DraftState>(() =>
+    createDraft(
+      monthEntries,
+      monthDates.find(date => getEntryForDate(monthEntries, date)) || monthDates[0],
+    ),
+  )
   const [isLoadingDraft, setIsLoadingDraft] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [syncMessage, setSyncMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const currentPeriodRange = mode === 'month'
-    ? {
-        period_type: 'month' as const,
-        period_start: toISODate(currentMonthStart),
-        period_end: toISODate(currentMonthEnd),
-      }
-    : {
-        period_type: 'week' as const,
-        period_start: weekPeriodStart,
-        period_end: toISODate(addDays(currentWeekStart, 7)),
-      }
+  const currentPeriodRange = {
+    period_type: 'month' as const,
+    period_start: toISODate(currentMonthStart),
+    period_end: toISODate(currentMonthEnd),
+  }
 
-  const draft = drafts[mode]
   const periodEntries = draft.entries
   const totalMinutes = sumTimecardMinutes(periodEntries)
   const selectedEntry = getEntryForDate(periodEntries, draft.selectedDate)
   const scheduleSummary = hasSchedule ? summarizeWeeklySchedule(schedule) : 'Noch kein Standardschedule hinterlegt'
-  const currentPeriodLabel = mode === 'month'
-    ? monthLabel
-    : `${formatShortDateRange(currentWeekStart)} bis ${formatShortDateRange(addDays(currentWeekStart, 4))}`
 
   const updateCurrentDraft = (updater: (current: DraftState) => DraftState) => {
-    setDrafts(prev => ({
-      ...prev,
-      [mode]: updater(prev[mode]),
-    }))
+    setDraft(prev => updater(prev))
     setSyncMessage(null)
     setErrorMessage(null)
   }
 
   const rebuildCurrentDraft = () => {
-    const nextEntries = mode === 'month' ? monthEntries : weekEntries
-    const nextSelected = (mode === 'month' ? monthDates : weekDates).find(date => getEntryForDate(nextEntries, date)) || (mode === 'month' ? monthDates[0] : weekDates[0])
+    const nextEntries = monthEntries
+    const nextSelected = monthDates.find(date => getEntryForDate(nextEntries, date)) || monthDates[0]
     updateCurrentDraft(current => ({
       ...current,
       entries: nextEntries,
@@ -140,7 +120,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
     entries: periodEntries,
   }
 
-  const visibleDates = mode === 'month' ? monthDates : weekDates
+  const visibleDates = monthDates
 
   useEffect(() => {
     let active = true
@@ -161,10 +141,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         }
         const loadedTimecard = result.data
 
-        setDrafts(prev => ({
-          ...prev,
-          [mode]: toDraftState(loadedTimecard, visibleDates[0]),
-        }))
+        setDraft(toDraftState(loadedTimecard, visibleDates[0]))
         setSyncMessage('Zeitkarte geladen')
       } finally {
         if (active) setIsLoadingDraft(false)
@@ -181,7 +158,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
     return () => {
       active = false
     }
-  }, [mode, currentPeriodRange.period_end, currentPeriodRange.period_start, currentPeriodRange.period_type, visibleDates])
+  }, [currentPeriodRange.period_end, currentPeriodRange.period_start, currentPeriodRange.period_type, visibleDates])
 
   const saveDraft = async () => {
     setIsSaving(true)
@@ -194,10 +171,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       })
       if (!result.success || !result.data) throw new Error(result.error || 'save_failed')
       const savedTimecard = result.data
-      setDrafts(prev => ({
-        ...prev,
-        [mode]: toDraftState(savedTimecard, draft.selectedDate),
-      }))
+      setDraft(toDraftState(savedTimecard, draft.selectedDate))
       setSyncMessage('Gespeichert')
     } catch {
       setErrorMessage('Zeitkarte konnte nicht gespeichert werden.')
@@ -217,10 +191,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       })
       if (!result.success || !result.data) throw new Error(result.error || 'submit_failed')
       const submittedTimecard = result.data
-      setDrafts(prev => ({
-        ...prev,
-        [mode]: toDraftState(submittedTimecard, draft.selectedDate),
-      }))
+      setDraft(toDraftState(submittedTimecard, draft.selectedDate))
       setSyncMessage('Zur Prüfung gesendet')
     } catch {
       setErrorMessage('Zeitkarte konnte nicht eingereicht werden.')
@@ -295,8 +266,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
   }
 
   const restoreSelectedDateFromSchedule = () => {
-    const templateEntries = mode === 'month' ? monthEntries : weekEntries
-    const templateEntry = getEntryForDate(templateEntries, draft.selectedDate)
+    const templateEntry = getEntryForDate(monthEntries, draft.selectedDate)
     updateCurrentDraft(current => ({
       ...current,
       entries: templateEntry
@@ -330,10 +300,9 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
     : 'Lege zuerst deinen offiziellen Schedule im Team-Profil fest. Danach ist die Zeitkarte automatisch vorbereitet.'
 
   const currentData = {
-    mode,
-    period_label: currentPeriodLabel,
+    period_label: monthLabel,
     schedule: scheduleSummary,
-    summary: `${userName}: ${formatTimecardDuration(totalMinutes)} in diesem ${mode === 'month' ? 'Monat' : 'Woche'}. ${periodEntries.length} Einträge.`,
+    summary: `${userName}: ${formatTimecardDuration(totalMinutes)} in diesem Monat. ${periodEntries.length} Einträge.`,
     entries: periodEntries,
     notes: draft.notes,
   }
@@ -343,12 +312,6 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-2">
-            {/* Month/week toggle removed (admin UX audit 2026-06-03): payroll
-                cadence is monthly, never weekly. Week mode added cognitive
-                load + 1-2 clicks per session for ~0 actual users. The mode
-                state machinery is left intact (defaults to 'month') so the
-                rest of this file stays touchable without a full refactor —
-                a follow-up dedicated session can drop the conditionals. */}
             <div>
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
                 {`${monthLabel} ist vorbereitet`}
@@ -400,7 +363,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       <div className="grid gap-3 md:grid-cols-3">
         <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-            {mode === 'month' ? 'Diesen Monat' : 'Diese Woche'}
+            Diesen Monat
           </p>
           <p className="mt-2 text-2xl font-semibold text-neutral-900 dark:text-white">
             {formatTimecardDuration(totalMinutes)}
@@ -446,9 +409,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         variant="section"
         defaultExpanded={false}
         currentData={currentData}
-        placeholder={mode === 'month'
-          ? 'z.B. 12. und 13. frei, sonst normal'
-          : 'z.B. Freitag frei oder Mittwoch 10-14 Uhr'}
+        placeholder="z.B. 12. und 13. frei, sonst normal"
         onFieldsFilled={handleAIFieldsFilled}
       />
 
@@ -457,18 +418,18 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
-                {mode === 'month' ? monthLabel : 'Aktuelle Woche'}
+                {monthLabel}
               </h2>
               <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
                 Normale Tage bleiben unverändert. Wähle nur einen Tag aus, wenn etwas anders war.
               </p>
             </div>
             <div className="text-sm text-neutral-500 dark:text-neutral-400">
-              {mode === 'month' ? 'Monatsübersicht' : `${weekDates[0]} bis ${weekDates[4]}`}
+              Monatsübersicht
             </div>
           </div>
 
-          <div className={`grid gap-2 ${mode === 'month' ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-7' : 'grid-cols-2 sm:grid-cols-5'}`}>
+          <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-7">
             {visibleDates.map((date) => {
               const entry = getEntryForDate(periodEntries, date)
               const active = draft.selectedDate === date
