@@ -39,6 +39,8 @@ export const ROUTES = {
     workshopProposal:   (id: string) => `/admin/workshops/proposals/${id}`,
     services:           '/admin/services',
     serviceNew:         '/admin/services/new',
+    appointments:       '/admin/appointments',
+    appointment:        (id: string) => `/admin/appointments/${id}`,
     itHilfe:            '/admin/it-hilfe',
     marketplace:        '/admin/marketplace',
     listing:            (id: string) => `/admin/marketplace/${id}`,

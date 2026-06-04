@@ -6631,7 +6631,8 @@
       "analytics": "Analyses",
       "kennzahlen": "Indicateurs",
       "wirkung": "Impact",
-      "transparenz": "Transparence"
+      "transparenz": "Transparence",
+      "appointments": "Rendez-vous"
     },
     "currencySelector": {
       "selectCurrency": "Choisir la devise",

@@ -6689,7 +6689,8 @@
       "analytics": "Analytics",
       "kennzahlen": "Metrics",
       "wirkung": "Impact",
-      "transparenz": "Transparency"
+      "transparenz": "Transparency",
+      "appointments": "Appointments"
     },
     "currencySelector": {
       "selectCurrency": "Select currency",

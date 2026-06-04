@@ -1,8 +1,7 @@
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { serviceAppointments, serviceTypes, users, repairerProfiles } from '@/db/schema'
-import { eq, and, sql, desc } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+import { serviceAppointments, serviceTypes } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -13,12 +12,11 @@ import { REVAMPIT_NOTIFICATION_EMAIL, URGENCY_DEFAULT } from '@/config/it-hilfe'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
+import { ROUTES } from '@/config/routes'
 import { TABLE_NAMES } from '@/config/database'
-import { notifyUsers } from '@/lib/services/notifications'
+import { listAppointments } from '@/lib/services/appointments'
+import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-
-const customer = alias(users, 'customer')
-const repairer = alias(users, 'repairer')
 
 // GET /api/appointments - Get appointments for current user (as customer or repairer)
 export const GET = withAuth(async (
@@ -36,81 +34,25 @@ export const GET = withAuth(async (
     if (!queryValidation.success) return queryValidation.error
     const { role, status, limit, offset } = queryValidation.data
 
-    const conditions = []
-
-    if (role === ROLES.REPAIRER) {
-      conditions.push(eq(serviceAppointments.repairerId, session.user.id))
-    } else {
-      conditions.push(eq(serviceAppointments.userId, session.user.id))
-    }
-
-    if (status) {
-      conditions.push(eq(serviceAppointments.status, status))
-    }
-
-    const where = and(...conditions)
-
-    const rows = await db
-      .select({
-        id: serviceAppointments.id,
-        user_id: serviceAppointments.userId,
-        repairer_id: serviceAppointments.repairerId,
-        repairer_profile_id: serviceAppointments.repairerProfileId,
-        service_type_id: serviceAppointments.serviceTypeId,
-        description: serviceAppointments.description,
-        device_info: serviceAppointments.deviceInfo,
-        preferred_date: serviceAppointments.preferredDate,
-        confirmed_date: serviceAppointments.confirmedDate,
-        urgency: serviceAppointments.urgency,
-        status: serviceAppointments.status,
-        is_home_visit: serviceAppointments.isHomeVisit,
-        visit_address: serviceAppointments.visitAddress,
-        visit_city: serviceAppointments.visitCity,
-        quoted_price_chf: serviceAppointments.quotedPriceChf,
-        diagnosis_notes: serviceAppointments.diagnosisNotes,
-        completion_notes: serviceAppointments.completionNotes,
-        customer_rating: serviceAppointments.customerRating,
-        created_at: serviceAppointments.createdAt,
-        updated_at: serviceAppointments.updatedAt,
-        customer_name: customer.name,
-        customer_email: customer.email,
-        repairer_name: repairer.name,
-        business_name: repairerProfiles.businessName,
-        service_name: serviceTypes.name,
-      })
-      .from(serviceAppointments)
-      .leftJoin(customer, eq(serviceAppointments.userId, customer.id))
-      .leftJoin(repairer, eq(serviceAppointments.repairerId, repairer.id))
-      .leftJoin(repairerProfiles, eq(serviceAppointments.repairerProfileId, repairerProfiles.id))
-      .leftJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
-      .where(where)
-      .orderBy(desc(serviceAppointments.createdAt))
-      .limit(limit)
-      .offset(offset)
-
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)::int` })
-      .from(serviceAppointments)
-      .where(where)
-
-    const total = Number(countRow?.total ?? 0)
+    // User scope: customer sees rows they booked; repairer sees rows assigned
+    // to them. Admin listing lives at /api/admin/appointments and uses the
+    // same listAppointments helper without a user filter.
+    const data = await listAppointments({
+      ...(role === ROLES.REPAIRER
+        ? { repairerId: session.user.id }
+        : { customerId: session.user.id }),
+      status: status || undefined,
+      limit,
+      offset,
+    })
 
     logger.info('Appointments fetched', {
       userId: session.user.id,
       role,
-      count: rows.length
+      count: data.appointments.length,
     })
 
-    return apiSuccess({
-      appointments: rows,
-      pagination: {
-        total,
-        limit,
-        offset,
-        hasMore: offset + rows.length < total
-      }
-    })
-
+    return apiSuccess(data)
   } catch (error) {
     logger.error('Error fetching appointments', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
@@ -172,7 +114,13 @@ export const POST = withAuth(async (
       `)
       const createdAppointment = result.rows[0] as Record<string, unknown> | undefined
 
-      notifyUnassigned(repairer_id, createdAppointment?.id as string | undefined, session, description, urgency)
+      notifyAdminsOfNewBooking(
+        createdAppointment?.id as string | undefined,
+        session,
+        description,
+        urgency,
+        repairer_id,
+      )
       if (repairer_id && createdAppointment?.id) {
         notifyUsers([repairer_id], {
           type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
@@ -210,7 +158,7 @@ export const POST = withAuth(async (
       repairerId: repairer_id,
     })
 
-    notifyUnassigned(repairer_id, createdAppointment?.id, session, description, urgency)
+    notifyAdminsOfNewBooking(createdAppointment?.id, session, description, urgency, repairer_id)
     if (repairer_id && createdAppointment?.id) {
       notifyUsers([repairer_id], {
         type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
@@ -232,23 +180,44 @@ export const POST = withAuth(async (
   }
 })
 
-// Fire-and-forget alert if no repairer assigned
-function notifyUnassigned(
-  repairerId: string | null | undefined,
+/**
+ * Fire-and-forget admin notification for a new booking.
+ *
+ * Two channels:
+ *   1. In-app via notifyAllStaff — surfaces in the admin NotificationBell
+ *      regardless of whether the booking was pre-assigned. This is the
+ *      fix for the pre-existing gap where admins only learned about
+ *      bookings by email.
+ *   2. Email fallback via appointmentUnassignedAlert — only when no
+ *      repairer was pre-assigned. Same behavior as before; just now
+ *      links to the new /admin/appointments page (ROUTES SSOT) instead
+ *      of /admin/services (which is the service catalog, not bookings).
+ */
+function notifyAdminsOfNewBooking(
   appointmentId: string | undefined,
   session: ValidSession,
   description: string,
-  urgency: string | undefined
+  urgency: string | undefined,
+  repairerId: string | null | undefined,
 ) {
-  if (!repairerId && appointmentId) {
-    const baseUrl = APP_URL
+  if (!appointmentId) return
+
+  notifyAllStaff({
+    type: NOTIFICATION_TYPES.SYSTEM,
+    title: 'Neuer Termin angefragt',
+    content: `${session.user.name || session.user.email} hat einen Termin angefragt: ${description?.slice(0, 100)}`,
+    related_type: RELATED_TYPES.APPOINTMENT,
+    related_id: appointmentId,
+  }).catch(() => {})
+
+  if (!repairerId) {
     const emailContent = appointmentUnassignedAlert(
       'Admin',
       session.user.name || 'Kunde',
       'Reparatur',
       description,
       urgency || URGENCY_DEFAULT,
-      baseUrl + '/admin/services'
+      APP_URL + ROUTES.admin.appointments,
     )
     // sendCustomEmail resolves { success: false } on failure rather than
     // throw — catch both modes per the documented swallow pattern.

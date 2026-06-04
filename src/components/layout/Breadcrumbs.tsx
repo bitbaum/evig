@@ -32,7 +32,7 @@ const SEGMENT_KEYS: Record<string, string> = {
   projects: 'projects', timecards: 'timecards', payroll: 'payroll',
   donations: 'donations', membership: 'membership', intake: 'intake',
   reviews: 'reviews', analytics: 'analytics', kennzahlen: 'kennzahlen',
-  wirkung: 'wirkung', transparenz: 'transparenz',
+  wirkung: 'wirkung', transparenz: 'transparenz', appointments: 'appointments',
 }
 
 export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {

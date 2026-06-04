@@ -624,6 +624,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'angebot',
   },
 
+  'appointments-admin': {
+    id: 'appointments-admin',
+    path: '/admin/appointments',
+    ui: {
+      label: 'Termine',
+      description: 'Service-Termine prüfen und zuweisen',
+      icon: Calendar,
+      emoji: '📅',
+      color: 'warning',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 103,
+    category: 'management',
+    sidebarGroup: 'angebot',
+  },
+
   locations: {
     id: 'locations',
     path: '/admin/locations',

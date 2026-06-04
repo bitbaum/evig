@@ -6752,7 +6752,8 @@
       "analytics": "Analyse",
       "kennzahlen": "Kennzahlen",
       "wirkung": "Wirkung",
-      "transparenz": "Transparenz"
+      "transparenz": "Transparenz",
+      "appointments": "Termine"
     },
     "currencySelector": {
       "selectCurrency": "Währung wählen",
