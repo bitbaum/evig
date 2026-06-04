@@ -8,9 +8,8 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 import { validateBody, CreateOfferSchema } from '@/lib/schemas'
-import { sendCustomEmail } from '@/lib/email'
-import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
-import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
+import { notifyUsers } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { signOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { APP_URL } from '@/config/urls'
@@ -257,53 +256,37 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       helperId: session.user.id,
     })
 
-    // In-app notification for requester
-    sendItHilfeNotification({
-      recipientIds: [requestData.requesterId],
+    // Notify requester — in-app + rich email in a single central call. The
+    // signed acceptToken powers the one-tap accept flow at
+    // /it-hilfe/accept?token=... — HMAC failure only happens if AUTH_SECRET
+    // isn't configured (dev). Fall through to view-only email then.
+    const requestUrl = `${APP_URL}/it-hilfe/${id}`
+    let acceptUrl: string | undefined
+    try {
+      const acceptToken = signOfferAcceptToken(newOffer.id)
+      acceptUrl = `${APP_URL}/it-hilfe/accept?token=${encodeURIComponent(acceptToken)}`
+    } catch (err) {
+      logger.warn('Could not sign offer-accept token; email will fall back to view-only link', {
+        err,
+        offerId: newOffer.id,
+      })
+    }
+
+    notifyUsers([requestData.requesterId], {
+      type: NOTIFICATION_TYPES.IT_HILFE_NEW_OFFER,
       title: `Neues Angebot für "${requestData.title}"`,
       content: `${session.user.name || 'Ein Techniker'} hat ein Angebot für deine Anfrage abgegeben.`,
-      requestId: id,
-    })
-
-    // Notify requester about new offer (fire-and-forget). The signed
-    // acceptToken is the proof-of-authorization for the one-tap accept
-    // flow at /it-hilfe/accept?token=... — token verification is HMAC,
-    // so signing failures only happen if AUTH_SECRET isn't configured.
-    // In that (dev-only) case, fall back to the no-token email instead
-    // of failing the whole offer-creation request.
-    if (requestData.requester_email) {
-      const requestUrl = `${APP_URL}/it-hilfe/${id}`
-      let acceptUrl: string | undefined
-      try {
-        const acceptToken = signOfferAcceptToken(newOffer.id)
-        acceptUrl = `${APP_URL}/it-hilfe/accept?token=${encodeURIComponent(acceptToken)}`
-      } catch (err) {
-        logger.warn('Could not sign offer-accept token; email will fall back to view-only link', {
-          err,
-          offerId: newOffer.id,
-        })
-      }
-      // sendCustomEmail resolves {success:false} on SMTP failure rather
-      // than throwing; bare-catch misses that mode. Same fix class as
-      // a4f2d601 / 7ef4fd75 / 0caff6ba / aa776a13.
-      sendCustomEmail(
-        requestData.requester_email,
-        itHilfeNewOfferReceived(
-          requestData.requester_name || 'Nutzer',
-          requestData.title,
-          session.user.name || 'Ein Techniker',
-          message,
-          requestUrl,
-          acceptUrl
-        )
-      )
-        .then(r => {
-          if (!r.success) {
-            logger.warn('Failed to send new offer notification (resolved)', { error: r.error, requestId: id })
-          }
-        })
-        .catch(err => logger.warn('Failed to send new offer notification (rejected)', { error: err, requestId: id }))
-    }
+      related_type: RELATED_TYPES.IT_HILFE,
+      related_id: id,
+      metadata: {
+        requesterName: requestData.requester_name || 'Nutzer',
+        requestTitle: requestData.title,
+        helperName: session.user.name || 'Ein Techniker',
+        offerMessage: message,
+        requestUrl,
+        ...(acceptUrl ? { acceptUrl } : {}),
+      },
+    }).catch(err => logger.warn('Failed to notify on new offer', { error: err, requestId: id }))
 
     return apiSuccess({
       message: 'Angebot erfolgreich abgegeben',
