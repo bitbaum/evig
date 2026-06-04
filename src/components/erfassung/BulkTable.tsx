@@ -29,13 +29,13 @@ function StatusIcon({ status }: { status: BulkProductStatus }) {
   switch (status) {
     case 'valid':
     case 'saved':
-      return <CheckCircle2 className="w-4 h-4 text-primary-500" />
+      return <CheckCircle2 className="w-4 h-4 text-action" />
     case 'warning':
       return <AlertTriangle className="w-4 h-4 text-warning-500" />
     case 'error':
       return <AlertCircle className="w-4 h-4 text-error-500" />
     case 'processing':
-      return <Loader2 className="w-4 h-4 text-primary-500 animate-spin" />
+      return <Loader2 className="w-4 h-4 text-action animate-spin" />
     default:
       return null
   }
@@ -82,14 +82,14 @@ export function BulkTable({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-surface-raised dark:bg-neutral-900/50 border-b border dark:border-neutral-700 sticky top-0">
+            <tr className="bg-surface-raised border-b border sticky top-0">
               {/* Checkbox */}
               <th className="w-10 px-3 py-3 text-left">
                 <input
                   type="checkbox"
                   checked={allSelected}
                   onChange={onSelectAll}
-                  className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-primary-500"
+                  className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-action"
                 />
               </th>
               {/* Row number */}
@@ -117,9 +117,9 @@ export function BulkTable({
               return (
                 <tr
                   key={product._tempId}
-                  className={`border-b border-subtle dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/30 transition-colors cursor-pointer ${
+                  className={`border-b border-subtle hover:bg-surface-raised transition-colors cursor-pointer ${
                     product._status === 'error' ? 'bg-error-50/50 dark:bg-error-900/10' :
-                    product._status === 'saved' ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''
+                    product._status === 'saved' ? 'bg-action-muted/50' : ''
                   }`}
                   onClick={() => onProductClick(product._tempId)}
                 >
@@ -129,7 +129,7 @@ export function BulkTable({
                       type="checkbox"
                       checked={product._selected}
                       onChange={() => onProductSelect(product._tempId)}
-                      className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-primary-500"
+                      className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-action"
                     />
                   </td>
                   {/* Row number */}
@@ -159,7 +159,7 @@ export function BulkTable({
                       return (
                         <td
                           key={col.key}
-                          className={`px-3 py-2 font-medium ${col.editable ? 'hover:bg-primary-50 dark:hover:bg-primary-900/20' : ''}`}
+                          className={`px-3 py-2 font-medium ${col.editable ? 'hover:bg-action-muted-muted' : ''}`}
                           onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         >
                           {value ? `${value} CHF` : '-'}
@@ -190,11 +190,11 @@ export function BulkTable({
                     return (
                       <td
                         key={col.key}
-                        className={`px-3 py-2 ${col.editable ? 'hover:bg-primary-50 dark:hover:bg-primary-900/20' : ''} truncate max-w-[200px]`}
+                        className={`px-3 py-2 ${col.editable ? 'hover:bg-action-muted-muted' : ''} truncate max-w-[200px]`}
                         onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         title={value}
                       >
-                        {value || <span className="text-neutral-300 dark:text-neutral-600">-</span>}
+                        {value || <span className="text-neutral-300 dark:text-text-secondary">-</span>}
                       </td>
                     )
                   })}
@@ -213,7 +213,7 @@ export function BulkTable({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border dark:border-neutral-700 bg-surface-raised dark:bg-neutral-900/50">
+        <div className="flex items-center justify-between px-4 py-3 border-t border bg-surface-raised">
           <span className="text-sm text-text-secondary">
             {page * pageSize + 1}-{Math.min((page + 1) * pageSize, products.length)} {t('ofText')} {products.length} {t('productsText')}
           </span>
@@ -222,7 +222,7 @@ export function BulkTable({
               type="button"
               onClick={() => onPageChange(page - 1)}
               disabled={page === 0}
-              className="p-2 rounded-lg border border-neutral-300 dark:border-neutral-600 disabled:opacity-30 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-30 hover:bg-surface-raised"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -233,7 +233,7 @@ export function BulkTable({
               type="button"
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages - 1}
-              className="p-2 rounded-lg border border-neutral-300 dark:border-neutral-600 disabled:opacity-30 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-30 hover:bg-surface-raised"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

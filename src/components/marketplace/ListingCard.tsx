@@ -68,7 +68,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
   return (
     <Link
       href={`/marketplace/${listing.id}`}
-      className={`group card-shell overflow-hidden hover:border-neutral-300 transition-all ${className}`}
+      className={`group card-shell overflow-hidden hover:border-strong transition-all ${className}`}
     >
       {/* Image */}
       <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-4/3'}`}>
@@ -98,7 +98,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {/* RevampIT Badge (top right, only if not verified — avoid overlap) */}
         {listing.is_revampit && !isVerified && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-action-muted-muted text-action">
               {!isCompact && ORG.name}
             </span>
           </div>
@@ -116,7 +116,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
       {/* Info */}
       <div className={isCompact ? 'p-2 md:p-3' : 'p-3 md:p-4'}>
-        <Heading level={3} className={`font-semibold text-text-primary mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-primary-600 transition-colors`}>
+        <Heading level={3} className={`font-semibold text-text-primary mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-action transition-colors`}>
           {listing.title}
         </Heading>
 
@@ -128,7 +128,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {specTags.length > 0 && !isCompact && (
           <div className="flex flex-wrap gap-1 mb-2">
             {specTags.map((tag, idx) => (
-              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded-sm bg-surface-raised dark:bg-neutral-700 text-text-secondary">
+              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded-sm bg-surface-raised text-text-secondary">
                 {tag}
               </span>
             ))}

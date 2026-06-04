@@ -111,15 +111,15 @@ export default function DonationsDashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/2"></div>
+                <div className="h-4 bg-neutral-200 rounded-sm w-full"></div>
+                <div className="h-4 bg-neutral-200 rounded-sm w-3/4"></div>
+                <div className="h-4 bg-neutral-200 rounded-sm w-1/2"></div>
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function DonationsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
           <EmptyState
             icon={LogIn}
@@ -148,13 +148,13 @@ export default function DonationsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center mb-4 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400"
+            className="inline-flex items-center mb-4 text-text-secondary hover:text-action"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
@@ -188,7 +188,7 @@ export default function DonationsDashboard() {
                     'w-12 h-12 rounded-lg flex items-center justify-center shrink-0',
                     donation.donation_type === DONATION_TYPES.MONETARY
                       ? 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'
-                      : 'bg-surface-raised dark:bg-neutral-800 text-text-secondary'
+                      : 'bg-surface-raised text-text-secondary'
                   )}>
                     {getDonationIcon(donation.donation_type)}
                   </div>
@@ -259,13 +259,13 @@ export default function DonationsDashboard() {
         )}
 
         {/* Info Box */}
-        <div className="mt-8 bg-surface-raised dark:bg-neutral-800 border border dark:border-neutral-700 rounded-lg p-4">
-          <Heading level={4} className="font-medium mb-2 text-neutral-800 dark:text-neutral-200">
+        <div className="mt-8 bg-surface-raised border border rounded-lg p-4">
+          <Heading level={4} className="font-medium mb-2 text-text-primary">
             {t('receiptInfoTitle')}
           </Heading>
           <p className="text-sm text-text-secondary">
             {t('receiptInfoText')}{' '}
-            <a href={`mailto:${CONTACT.email}`} className="underline text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white">{CONTACT.email}</a>.
+            <a href={`mailto:${CONTACT.email}`} className="underline text-text-primary hover:text-text-primary">{CONTACT.email}</a>.
           </p>
         </div>
       </div>

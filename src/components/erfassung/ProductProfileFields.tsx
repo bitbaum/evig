@@ -47,8 +47,8 @@ export function ProductProfileFields({
                 title={profile.description}
                 className={`group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-2 rounded-full border-2 transition-colors touch-manipulation min-h-touch text-sm ${
                   kundenprofile.includes(profile.slug)
-                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                    : 'border-neutral-300 dark:border-neutral-600 hover:border-neutral-400 active:bg-neutral-100 dark:active:bg-neutral-700'
+                    ? 'border-action bg-action-muted-muted text-action'
+                    : 'border-neutral-300 hover:border-strong active:bg-surface-raised dark:active:bg-neutral-700'
                 }`}
               >
                 <span className="text-lg sm:text-base">{profile.icon}</span>

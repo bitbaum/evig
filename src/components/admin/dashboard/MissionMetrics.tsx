@@ -40,7 +40,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'Geräte erfasst',
       sublabel: MONTH_LABEL,
       icon: Monitor,
-      iconBg: 'bg-primary-100 dark:bg-primary-900/30',
+      iconBg: 'bg-action-muted-muted',
       iconColor: 'text-action',
       href: ROUTES.admin.erfassung,
     },
@@ -50,7 +50,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'Geräte verkauft',
       sublabel: MONTH_LABEL,
       icon: Monitor,
-      iconBg: 'bg-primary-100 dark:bg-primary-900/30',
+      iconBg: 'bg-action-muted-muted',
       iconColor: 'text-action',
       href: ROUTES.admin.products,
     },
@@ -60,7 +60,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'IT-Hilfen abgeschlossen',
       sublabel: MONTH_LABEL,
       icon: Wrench,
-      iconBg: 'bg-primary-100 dark:bg-primary-900/30',
+      iconBg: 'bg-action-muted-muted',
       iconColor: 'text-action',
       href: ROUTES.admin.itHilfe,
     },
@@ -86,7 +86,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
             <Link
               key={card.href}
               href={card.href}
-              className="bg-surface-base rounded-lg p-4 shadow-xs border border-subtle dark:border-white/6 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+              className="bg-surface-base rounded-lg p-4 shadow-xs border border-subtle dark:border-white/6 hover:border-strong transition-colors"
             >
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center shrink-0`}>
@@ -113,24 +113,24 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       </div>
 
       {/* Reference stats — collapsed into a single compact row */}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-subtle dark:border-white/6 bg-surface-raised dark:bg-neutral-900/50 px-4 py-2.5 text-xs text-text-tertiary">
-        <Link href={ROUTES.admin.users} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-subtle dark:border-white/6 bg-surface-raised px-4 py-2.5 text-xs text-text-tertiary">
+        <Link href={ROUTES.admin.users} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-text-secondary dark:text-neutral-200">{stats.totalUsers}</strong> Benutzer</span>
+          <span><strong className="text-text-secondary">{stats.totalUsers}</strong> Benutzer</span>
         </Link>
-        <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
-        <Link href={ROUTES.admin.team} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+        <span className="text-neutral-300 dark:text-text-secondary" aria-hidden="true">·</span>
+        <Link href={ROUTES.admin.team} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
           <UserCheck className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-text-secondary dark:text-neutral-200">{stats.totalStaff}</strong> Team</span>
+          <span><strong className="text-text-secondary">{stats.totalStaff}</strong> Team</span>
         </Link>
-        <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
-        <Link href={ROUTES.admin.services} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+        <span className="text-neutral-300 dark:text-text-secondary" aria-hidden="true">·</span>
+        <Link href={ROUTES.admin.services} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
           <Wrench className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-text-secondary dark:text-neutral-200">{stats.totalTechnicians}</strong> Techniker</span>
+          <span><strong className="text-text-secondary">{stats.totalTechnicians}</strong> Techniker</span>
         </Link>
-        <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
-        <Link href={ROUTES.admin.marketplace} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
-          <span><strong className="text-text-secondary dark:text-neutral-200">{stats.activeListings}</strong> aktive Inserate</span>
+        <span className="text-neutral-300 dark:text-text-secondary" aria-hidden="true">·</span>
+        <Link href={ROUTES.admin.marketplace} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
+          <span><strong className="text-text-secondary">{stats.activeListings}</strong> aktive Inserate</span>
         </Link>
       </div>
     </div>

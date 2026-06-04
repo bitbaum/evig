@@ -122,7 +122,7 @@ export default function DecisionListClient({
                     <td className={adminTable.td}>
                       <Link
                         href={`/admin/decisions/${d.id}`}
-                        className="font-medium text-text-primary hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                        className="font-medium text-text-primary hover:text-action transition-colors"
                       >
                         {d.title}
                       </Link>

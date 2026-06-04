@@ -32,14 +32,14 @@ export default function NewLocationPage() {
         <div className="mb-8">
           <Link
             href={ROUTES.admin.locations}
-            className="inline-flex items-center text-text-secondary hover:text-neutral-800 mb-4"
+            className="inline-flex items-center text-text-secondary hover:text-text-primary mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zur Ortsverwaltung
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted-muted rounded-full mb-6">
               <MapPin className="w-8 h-8 text-action" />
             </div>
             <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">
@@ -56,7 +56,7 @@ export default function NewLocationPage() {
             id={submitResult.success ? undefined : 'location-form-error'}
             className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
-              ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-300'
+              ? 'bg-action-muted-muted border-strong text-action'
               : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-400'
           }`}>
             <div className="flex items-center">

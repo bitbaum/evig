@@ -57,7 +57,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-neutral-600"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
               aria-label={t('clearAriaLabel')}
             >
               <X className="w-5 h-5" />
@@ -73,7 +73,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           className={cn(
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
-              ? 'bg-primary-600 text-white'
+              ? 'bg-action text-white'
               : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
           )}
         >
@@ -86,7 +86,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             className={cn(
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
-                ? 'bg-primary-600 text-white'
+                ? 'bg-action text-white'
                 : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
             )}
           >

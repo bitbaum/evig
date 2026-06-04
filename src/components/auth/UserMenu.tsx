@@ -74,9 +74,9 @@ export function UserMenu() {
         <Link
           href={ROUTES.public.login}
           className={cn(
-            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
-            "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
-            "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
+            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-text-secondary dark:text-text-muted",
+            "hover:text-text-primary transition-colors duration-200",
+            "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
           )}
         >
           {t('login')}
@@ -131,11 +131,11 @@ export function UserMenu() {
         className={cn(
           "flex items-center gap-2 p-1.5 rounded-full",
           "transition-all duration-200",
-          "ring-2 ring-primary-100 dark:ring-primary-500/20",
+          "ring-2 ring-primary-100 dark:ring-action/20",
           isOpen
-            ? "bg-primary-50 dark:bg-primary-500/10 ring-primary-200 dark:ring-primary-500/30"
-            : "hover:bg-primary-50 dark:hover:bg-primary-500/10 hover:ring-primary-200 dark:hover:ring-primary-500/30",
-          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            ? "bg-action-muted/10 ring-action/20 dark:ring-action/30"
+            : "hover:bg-action-muted/10 hover:ring-action/20 dark:hover:ring-action/30",
+          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -151,14 +151,14 @@ export function UserMenu() {
             unoptimized
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
+          <div className="w-8 h-8 rounded-full bg-action flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
             {initials}
           </div>
         )}
         <ChevronDown
           className={cn(
-            "w-4 h-4 text-neutral-500 transition-transform duration-200",
-            isOpen && "rotate-180 text-primary-600"
+            "w-4 h-4 text-text-tertiary transition-transform duration-200",
+            isOpen && "rotate-180 text-action"
           )}
         />
       </button>
@@ -173,9 +173,9 @@ export function UserMenu() {
             : "opacity-0 scale-95 pointer-events-none"
         )}
       >
-        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-neutral-100 dark:border-white/6 overflow-hidden">
+        <div className="bg-surface-base rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-subtle dark:border-white/6 overflow-hidden">
           {/* User Info Header */}
-          <div className="px-5 py-4 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-100 dark:border-white/6">
+          <div className="px-5 py-4 bg-surface-raised border-b border-subtle dark:border-white/6">
             <div className="flex items-center gap-3">
               {session.user.image ? (
                 <Image
@@ -187,15 +187,15 @@ export function UserMenu() {
                   unoptimized
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold">
+                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-white text-sm font-semibold">
                   {initials}
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
+                <p className="text-sm font-semibold text-text-primary truncate">
                   {session.user.name || t('user')}
                 </p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                <p className="text-xs text-text-tertiary dark:text-text-muted truncate">
                   {session.user.email}
                 </p>
               </div>
@@ -207,7 +207,7 @@ export function UserMenu() {
             {menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 {groupIndex > 0 && (
-                  <div className="my-1 mx-3 border-t border-neutral-100 dark:border-white/6" />
+                  <div className="my-1 mx-3 border-t border-subtle dark:border-white/6" />
                 )}
                 {group.map((item) => (
                   <Link
@@ -219,14 +219,14 @@ export function UserMenu() {
                       "text-sm transition-colors duration-150",
                       'highlight' in item && item.highlight
                         ? "text-warning-700 dark:text-warning-400 bg-warning-50 dark:bg-warning-500/10 hover:bg-warning-100 dark:hover:bg-warning-500/20 font-medium"
-                        : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/4"
+                        : "text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/4"
                     )}
                   >
                     <item.icon className={cn(
                       "w-4 h-4 transition-colors",
                       'highlight' in item && item.highlight
                         ? "text-warning-600 dark:text-warning-400"
-                        : "text-neutral-400 dark:text-neutral-500 group-hover:text-primary-600 dark:group-hover:text-primary-400"
+                        : "text-text-muted dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action"
                     )} />
                     {item.label}
                   </Link>
@@ -236,17 +236,17 @@ export function UserMenu() {
           </div>
 
           {/* Settings & Logout */}
-          <div className="py-2 border-t border-neutral-100 dark:border-white/6">
+          <div className="py-2 border-t border-subtle dark:border-white/6">
             <Link
               href="/dashboard/settings"
               onClick={() => setIsOpen(false)}
               className={cn(
                 "group flex items-center gap-3 px-5 py-2.5",
-                "text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white",
-                "hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-150"
+                "text-sm text-text-secondary hover:text-text-primary",
+                "hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-150"
               )}
             >
-              <Settings className="w-4 h-4 text-neutral-500 dark:text-neutral-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
+              <Settings className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action transition-colors" />
               {t('settings')}
             </Link>
             <button
@@ -256,11 +256,11 @@ export function UserMenu() {
               }}
               className={cn(
                 "group flex items-center gap-3 w-full px-5 py-2.5",
-                "text-sm text-neutral-600 dark:text-neutral-300 hover:text-error-600 dark:hover:text-error-400",
+                "text-sm text-text-secondary hover:text-error-600 dark:hover:text-error-400",
                 "hover:bg-error-50 dark:hover:bg-error-500/10 transition-colors duration-150"
               )}
             >
-              <LogOut className="w-4 h-4 text-neutral-500 dark:text-neutral-500 group-hover:text-error-500 dark:group-hover:text-error-400 transition-colors" />
+              <LogOut className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-error-500 dark:group-hover:text-error-400 transition-colors" />
               {t('logout')}
             </button>
           </div>

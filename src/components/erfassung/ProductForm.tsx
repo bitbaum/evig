@@ -69,7 +69,7 @@ export function ProductForm({
       <button
         type="button"
         onClick={onToggleAdvanced}
-        className="sm:hidden w-full flex items-center justify-between px-4 py-3 bg-surface-raised dark:bg-neutral-700 rounded-xl text-text-secondary touch-manipulation"
+        className="sm:hidden w-full flex items-center justify-between px-4 py-3 bg-surface-raised rounded-xl text-text-secondary touch-manipulation"
       >
         <span className="font-medium">Erweiterte Optionen</span>
         {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}

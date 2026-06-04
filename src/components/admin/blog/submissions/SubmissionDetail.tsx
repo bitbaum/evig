@@ -97,7 +97,7 @@ export function SubmissionDetail({
                 {submission.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded-sm"
+                    className="px-2 py-0.5 bg-surface-raised text-text-secondary text-xs rounded-sm"
                   >
                     {tag}
                   </span>
@@ -110,7 +110,7 @@ export function SubmissionDetail({
 
       {/* Review info */}
       {submission.reviewed_at && (
-        <div className="mb-4 p-3 bg-surface-raised dark:bg-neutral-700/50 rounded-lg text-sm">
+        <div className="mb-4 p-3 bg-surface-raised rounded-lg text-sm">
           <div className="font-medium text-text-secondary mb-1">
             Geprüft von {submission.reviewer_name || 'Admin'}
           </div>
@@ -135,8 +135,8 @@ export function SubmissionDetail({
         <Heading level={3} className="font-semibold text-text-primary mb-3">
           Inhalt:
         </Heading>
-        <div className="bg-surface-raised dark:bg-neutral-700/50 rounded-lg p-4 max-h-72 overflow-y-auto">
-          <pre className="whitespace-pre-wrap text-sm text-neutral-800 dark:text-neutral-200 font-sans">
+        <div className="bg-surface-raised rounded-lg p-4 max-h-72 overflow-y-auto">
+          <pre className="whitespace-pre-wrap text-sm text-text-primary font-sans">
             {submission.content}
           </pre>
         </div>
@@ -234,7 +234,7 @@ export function SubmissionDetail({
           {submission.published_post_id && (
             <Link
               href={`/admin/content/blog/${submission.published_post_id}`}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-white/6 transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors text-sm"
             >
               <Edit className="w-4 h-4" />
               Im Admin bearbeiten

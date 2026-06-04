@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function AICMSPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-surface-base">
       <HeroSection />
       <ProblemSection />
       <WorkflowSection />

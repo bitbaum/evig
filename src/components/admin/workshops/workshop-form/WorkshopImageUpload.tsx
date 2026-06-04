@@ -18,11 +18,11 @@ export function WorkshopImageUpload({ imagePreviews, onImageUpload, onRemoveImag
       </Heading>
 
       <div className="space-y-4">
-        <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg p-8 text-center">
+        <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
           <Upload className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <div className="text-sm text-text-secondary">
             <label htmlFor="workshop-image-upload" className="cursor-pointer">
-              <span className="font-medium text-action hover:text-primary-500">
+              <span className="font-medium text-action hover:text-action">
                 Bilder auswählen
               </span>
               <span> oder hierhin ziehen</span>

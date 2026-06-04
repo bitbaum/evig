@@ -240,13 +240,13 @@ export function DataEntryTabs({
 
   return (
     <div
-      className={`bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-800 overflow-hidden ${className}`}
+      className={`bg-action-muted-muted rounded-xl border border-strong overflow-hidden ${className}`}
     >
       {/* Collapsible header */}
       <button
         type="button"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-primary-100/50 dark:hover:bg-primary-800/30 transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-action-muted/50-hover/30 transition-colors"
       >
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-action" />
@@ -264,7 +264,7 @@ export function DataEntryTabs({
 
       {/* Tab headers */}
       {!isCollapsed && tabs.length > 1 && (
-        <div className="flex border-b border-t border-primary-200 dark:border-primary-800">
+        <div className="flex border-b border-t border-strong">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -272,8 +272,8 @@ export function DataEntryTabs({
               onClick={() => setActiveMode(tab.id)}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeMode === tab.id
-                  ? 'bg-white dark:bg-neutral-800 text-primary-700 dark:text-primary-300 border-b-2 border-primary-600 -mb-px'
-                  : 'text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white/50 dark:hover:bg-neutral-800/50'
+                  ? 'bg-surface-base text-action border-b-2 border-action -mb-px'
+                  : 'text-text-secondary hover:text-action hover:bg-surface-base/50'
               }`}
             >
               {tab.icon}
@@ -353,7 +353,7 @@ export function DataEntryTabs({
 
             {/* Status feedback */}
             {quickEntryState === 'success' && (
-              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg text-primary-700 dark:text-primary-400">
+              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-action-muted-muted rounded-lg text-action">
                 <CheckCircle2 className="w-5 h-5" />
                 <span className="font-medium">{t('dataFilled')}</span>
               </div>
@@ -379,15 +379,15 @@ export function DataEntryTabs({
               </p>
             </div>
 
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-primary-300 dark:border-primary-600 rounded-xl cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-strong dark:border-action rounded-xl cursor-pointer hover:border-action hover:bg-action-muted-muted transition-colors">
               {isUploading ? (
                 <>
-                  <Loader2 className="w-10 h-10 text-primary-500 mb-2 animate-spin" />
+                  <Loader2 className="w-10 h-10 text-action mb-2 animate-spin" />
                   <span className="text-sm text-action font-medium">{t('processing')}</span>
                 </>
               ) : (
                 <>
-                  <FileUp className="w-10 h-10 text-primary-400 mb-2" />
+                  <FileUp className="w-10 h-10 text-action mb-2" />
                   <span className="text-sm text-text-secondary font-medium">{t('chooseFile')}</span>
                   <span className="text-xs text-text-muted mt-1">{t('fileHint')}</span>
                 </>

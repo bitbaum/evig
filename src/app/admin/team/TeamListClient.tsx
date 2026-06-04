@@ -63,17 +63,17 @@ export function TeamListClient() {
               className="bg-surface-base rounded-xl border border p-5 animate-pulse"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
+                <div className="w-12 h-12 bg-neutral-200 rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-5 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4" />
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/2" />
-                  <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full" />
+                  <div className="h-5 bg-neutral-200 rounded-sm w-3/4" />
+                  <div className="h-4 bg-neutral-200 rounded-sm w-1/2" />
+                  <div className="h-3 bg-neutral-200 rounded-sm w-full" />
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-subtle dark:border-white/6">
                 <div className="flex gap-2">
-                  <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm flex-1" />
-                  <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm flex-1" />
+                  <div className="h-8 bg-neutral-200 rounded-sm flex-1" />
+                  <div className="h-8 bg-neutral-200 rounded-sm flex-1" />
                 </div>
               </div>
             </div>
@@ -103,7 +103,7 @@ export function TeamListClient() {
                   isActive: 'all',
                 })
               }
-              className="text-action hover:text-primary-700 text-sm"
+              className="text-action hover:text-action text-sm"
             >
               Filter zurücksetzen
             </button>
@@ -120,7 +120,7 @@ export function TeamListClient() {
             </p>
             <button
               onClick={refetch}
-              className="flex items-center gap-1 text-sm text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300"
+              className="flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren

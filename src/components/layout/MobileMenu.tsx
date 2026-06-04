@@ -131,9 +131,9 @@ export function MobileMenu({
             type="button"
             className={cn(
               "p-2 -mr-2 rounded-lg",
-              "text-text-tertiary hover:text-neutral-900 hover:bg-neutral-100 dark:hover:text-white dark:hover:bg-white/6",
+              "text-text-tertiary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/6",
               "transition-colors duration-200",
-              "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500"
+              "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action"
             )}
             onClick={onClose}
             aria-label={tAccessibility('closeMenu')}
@@ -176,7 +176,7 @@ export function MobileMenu({
                         className={cn(
                           "flex w-full items-center justify-between py-3 px-4 -mx-4",
                           "text-base font-medium text-text-primary",
-                          "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
+                          "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                         )}
                         onClick={() => handleDropdownToggle(item.name)}
                         aria-expanded={openDropdown === item.name}
@@ -211,14 +211,14 @@ export function MobileMenu({
                                     rel="noopener noreferrer"
                                     className={cn(
                                       "group flex items-center gap-2 py-2.5",
-                                      "text-sm text-text-secondary hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white",
+                                      "text-sm text-text-secondary hover:text-text-primary dark:text-text-muted",
                                       "transition-colors duration-200"
                                     )}
                                     onClick={onClose}
                                   >
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded-sm">
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action/10 rounded-sm">
                                         {subItem.badge}
                                       </span>
                                     )}
@@ -229,14 +229,14 @@ export function MobileMenu({
                                     type="button"
                                     className={cn(
                                       "group flex items-center gap-2 py-2.5 w-full text-left",
-                                      "text-sm text-text-secondary hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white",
+                                      "text-sm text-text-secondary hover:text-text-primary dark:text-text-muted",
                                       "transition-colors duration-200"
                                     )}
                                     onClick={() => handleNavigation(subItem.href)}
                                   >
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded-sm">
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action/10 rounded-sm">
                                         {subItem.badge}
                                       </span>
                                     )}
@@ -256,12 +256,12 @@ export function MobileMenu({
                       className={cn(
                         "flex items-center gap-2 py-3 px-4 -mx-4",
                         "text-base font-medium text-text-primary",
-                        "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
+                        "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                       )}
                       onClick={onClose}
                     >
                       {itemLabel}
-                      <ExternalLink className="w-4 h-4 text-text-tertiary dark:text-neutral-500" />
+                      <ExternalLink className="w-4 h-4 text-text-tertiary dark:text-text-tertiary" />
                     </a>
                   ) : (
                     <button
@@ -269,7 +269,7 @@ export function MobileMenu({
                       className={cn(
                         "block w-full text-left py-3 px-4 -mx-4",
                         "text-base font-medium text-text-primary",
-                        "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
+                        "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                       )}
                       onClick={() => handleNavigation(item.href)}
                     >
@@ -294,7 +294,7 @@ export function MobileMenu({
                         className={cn(
                           "block w-full text-left py-3 px-4 -mx-4",
                           "text-base font-medium text-text-primary",
-                          "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
+                          "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                         )}
                         onClick={() => handleNavigation(item.href)}
                       >
@@ -319,8 +319,8 @@ export function MobileMenu({
           {session?.user ? (
             <div className="space-y-3">
               {/* User Info */}
-              <div className="flex items-center gap-3 p-3 bg-primary-50 dark:bg-primary-500/8 rounded-xl border border-primary-100 dark:border-primary-500/20">
-                <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold shrink-0">
+              <div className="flex items-center gap-3 p-3 bg-action-muted/8 rounded-xl border border-subtle dark:border-action/20">
+                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-white text-sm font-semibold shrink-0">
                   {session.user.name
                     ?.split(' ')
                     .map((n) => n[0])
@@ -345,7 +345,7 @@ export function MobileMenu({
                 className={cn(
                   "flex items-center justify-center gap-2 w-full py-3",
                   "text-sm font-medium text-white",
-                  "bg-primary-600 hover:bg-primary-700 rounded-xl",
+                  "bg-action hover:bg-action rounded-xl",
                   "transition-colors duration-200"
                 )}
               >
@@ -362,7 +362,7 @@ export function MobileMenu({
                   "flex-1 py-3 text-center",
                   "text-sm font-medium text-text-secondary",
                   "border dark:border-white/10 rounded-xl",
-                  "hover:bg-neutral-50 dark:hover:bg-white/6 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200"
+                  "hover:bg-surface-raised dark:hover:bg-surface-base/6 hover:text-text-primary transition-colors duration-200"
                 )}
               >
                 {t('login')}
@@ -373,8 +373,8 @@ export function MobileMenu({
                 className={cn(
                   "flex-1 py-3 text-center",
                   "text-sm font-medium text-white",
-                  "bg-primary-600 rounded-xl",
-                  "hover:bg-primary-700 transition-colors duration-200"
+                  "bg-action rounded-xl",
+                  "hover:bg-action transition-colors duration-200"
                 )}
               >
                 {t('register')}

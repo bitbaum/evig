@@ -41,7 +41,7 @@ export default function HirnPageClient() {
       {/* Page Header */}
       <div className="flex items-center justify-between p-6 border-b border">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-action flex items-center justify-center">
             <Brain className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -57,7 +57,7 @@ export default function HirnPageClient() {
       {/* Main Content */}
       <div className="flex h-[calc(100%-5rem)]">
         {/* Sidebar */}
-        <div className="w-72 border-r border bg-surface-raised dark:bg-neutral-900">
+        <div className="w-72 border-r border bg-surface-raised">
           <HirnSidebar
             currentSessionId={currentSessionId}
             onSelectSession={handleSelectSession}

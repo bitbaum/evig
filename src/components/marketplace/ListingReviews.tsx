@@ -112,7 +112,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="border-b border-subtle dark:border-neutral-700 pb-4 last:border-0 last:pb-0"
+              className="border-b border-subtle pb-4 last:border-0 last:pb-0"
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
@@ -126,7 +126,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                         className={`w-3 h-3 ${
                           i < review.overallRating
                             ? 'text-warning-400 fill-warning-400'
-                            : 'text-neutral-300 dark:text-neutral-600'
+                            : 'text-neutral-300 dark:text-text-secondary'
                         }`}
                       />
                     ))}
@@ -151,7 +151,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
       {canReview && !hasReviewed && !showForm && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full py-2.5 px-4 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+          className="w-full py-2.5 px-4 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
         >
           {t('writeReview')}
         </button>

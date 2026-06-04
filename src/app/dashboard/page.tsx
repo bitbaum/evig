@@ -36,7 +36,7 @@ export default async function DashboardPage() {
   })
 
   return (
-    <main className="min-h-screen bg-surface-raised dark:bg-neutral-900">
+    <main className="min-h-screen bg-surface-raised">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!session.user.emailVerified && session.user.email && (
           <EmailVerificationBanner email={session.user.email} className="mb-6" />
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
           <h1 className={cn('text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
             {t('welcomeBack', { name: session.user.name || session.user.email || t('unknownUser') })}
           </h1>
-          <p className={cn('mt-2 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+          <p className={cn('mt-2 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
             {t('subtitle')}
           </p>
         </div>

@@ -77,7 +77,7 @@ function SellPageContent() {
     <div className="max-w-3xl mx-auto">
       <Link
         href={ROUTES.public.marketplace}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToMarketplace')}
@@ -86,12 +86,12 @@ function SellPageContent() {
       {/* Step indicator */}
       <div className="flex items-center gap-0 mb-6">
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-primary-600 text-white text-xs font-bold flex items-center justify-center">1</span>
-          <span className="text-sm font-semibold text-primary-700 dark:text-primary-400">{t('stepDetails')}</span>
+          <span className="w-7 h-7 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center">1</span>
+          <span className="text-sm font-semibold text-action">{t('stepDetails')}</span>
         </div>
-        <div className="flex-1 h-px bg-neutral-300 dark:bg-neutral-600 mx-3" />
+        <div className="flex-1 h-px bg-neutral-300 mx-3" />
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-neutral-200 dark:bg-neutral-600 text-text-tertiary text-xs font-bold flex items-center justify-center">2</span>
+          <span className="w-7 h-7 rounded-full bg-neutral-200 text-text-tertiary text-xs font-bold flex items-center justify-center">2</span>
           <span className="text-sm text-text-tertiary">{t('stepPreview')}</span>
         </div>
       </div>
@@ -117,7 +117,7 @@ function SellPageContent() {
             <button
               type="button"
               onClick={() => setShowCamera(true)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-neutral-300 dark:border-neutral-600 text-text-tertiary hover:border-primary-400 hover:text-primary-600 transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-neutral-300 text-text-tertiary hover:border-action hover:text-action transition-colors text-sm"
             >
               <Camera className="w-4 h-4" />
               {t('cameraButton')}
@@ -127,7 +127,7 @@ function SellPageContent() {
       )}
 
       <div className="card-shell">
-        <div className="p-4 md:p-6 border-b border-subtle dark:border-neutral-700">
+        <div className="p-4 md:p-6 border-b border-subtle">
           <Heading level={1} className="text-xl text-text-primary flex items-center gap-2">
             <Package className="w-5 h-5 text-action" />
             {editId ? t('editTitle') : t('createTitle')}
@@ -150,17 +150,17 @@ function SellPageContent() {
             />
           </div>
 
-          <div className="border-t border-subtle dark:border-neutral-700" />
+          <div className="border-t border-subtle" />
 
           <ListingFormFields formData={formData} setFormData={setFormData} />
         </div>
 
-        <div className="p-4 md:p-6 border-t border-subtle dark:border-neutral-700">
+        <div className="p-4 md:p-6 border-t border-subtle">
           {error && <ErrorAlert message={error} variant="inline" className="mb-4" />}
           <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Link
               href={ROUTES.public.marketplace}
-              className="px-6 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-600 font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 text-center"
+              className="px-6 py-2.5 rounded-lg border border-neutral-300 font-medium text-text-secondary hover:bg-surface-raised text-center"
             >
               {t('cancelButton')}
             </Link>

@@ -26,10 +26,10 @@ export default function ITHilfeAdminClient() {
       {/* Stats Row */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatsCard label="Offene Anfragen" value={stats.byStatus.open ?? 0} icon={HelpCircle} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
-          <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-surface-raised dark:bg-neutral-800/50 border text-neutral-800 dark:text-neutral-200" />
+          <StatsCard label="Offene Anfragen" value={stats.byStatus.open ?? 0} icon={HelpCircle} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-surface-raised border text-text-primary" />
           <StatsCard label="Dringend" value={stats.byUrgency.urgent ?? 0} icon={Clock} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
-          <StatsCard label="Lösungsrate" value={`${stats.resolutionRate}%`} icon={ShieldCheck} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
+          <StatsCard label="Lösungsrate" value={`${stats.resolutionRate}%`} icon={ShieldCheck} color="bg-action-muted-muted border-strong text-action-text" />
         </div>
       )}
 
@@ -41,8 +41,8 @@ export default function ITHilfeAdminClient() {
             onClick={() => switchTab(t.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               tab === t.id
-                ? 'border-primary-600 text-primary-700 dark:text-primary-400'
-                : 'border-transparent text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300'
+                ? 'border-action text-action'
+                : 'border-transparent text-text-tertiary hover:text-text-secondary'
             }`}
           >
             <t.icon className="w-4 h-4" />

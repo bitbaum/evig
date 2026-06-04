@@ -27,8 +27,8 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
           onClick={() => onSelect(submission)}
           className={`bg-surface-base rounded-xl shadow-xs border p-5 cursor-pointer transition-all ${
             selectedId === submission.id
-              ? 'border-primary-500 ring-2 ring-primary-500/20'
-              : 'border-subtle dark:border-white/6 hover:border-neutral-300 dark:hover:border-neutral-600'
+              ? 'border-action ring-2 ring-action/20'
+              : 'border-subtle dark:border-white/6 hover:border-strong'
           }`}
         >
           <div className="flex items-start justify-between mb-3">
@@ -37,8 +37,8 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                 <span
                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full font-medium ${
                     submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
-                      ? 'bg-surface-raised text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
-                      : 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
+                      ? 'bg-surface-raised text-text-primary'
+                      : 'bg-action-muted text-action-muted'
                   }`}
                 >
                   {submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA ? (
@@ -59,7 +59,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                     submission.status}
                 </span>
                 {submission.last_edited_at && (
-                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300 rounded-sm">
+                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-text-primary rounded-sm">
                     Von Admin bearbeitet
                   </span>
                 )}
@@ -80,7 +80,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
             </div>
           </div>
           {(submission.category_label || submission.category_name) && (
-            <span className="inline-flex items-center px-2 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded-sm">
+            <span className="inline-flex items-center px-2 py-1 bg-surface-raised text-text-secondary text-xs rounded-sm">
               <Folder className="w-3 h-3 mr-1" />
               {submission.category_label || submission.category_name}
             </span>

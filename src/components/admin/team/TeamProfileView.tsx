@@ -61,7 +61,7 @@ export function TeamProfileView({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           {t('backToTeam')}
@@ -74,7 +74,7 @@ export function TeamProfileView({
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
             profile.is_active
-              ? 'bg-primary-500'
+              ? 'bg-action'
               : 'bg-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
@@ -87,7 +87,7 @@ export function TeamProfileView({
                 {displayName}
               </Heading>
               {!profile.is_active && (
-                <span className="px-2 py-1 text-sm rounded-sm bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
+                <span className="px-2 py-1 text-sm rounded-sm bg-neutral-200 text-text-secondary">
                   {t('inactive')}
                 </span>
               )}
@@ -147,12 +147,12 @@ export function TeamProfileView({
         <div className="bg-surface-base rounded-xl border border p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-primary-500" />
-              <Heading level={3} className="text-text-primary dark:text-neutral-100">{t('activities')}</Heading>
+              <Activity className="w-5 h-5 text-action" />
+              <Heading level={3} className="text-text-primary">{t('activities')}</Heading>
             </div>
             <Link
               href={ROUTES.admin.teamActivity}
-              className="px-3 py-1.5 text-sm text-action hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-lg"
+              className="px-3 py-1.5 text-sm text-action hover:bg-action-muted-muted rounded-lg"
             >
               {t('viewTeamActivities')}
             </Link>
@@ -183,7 +183,7 @@ export function TeamProfileView({
                   {profile.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm rounded-full"
+                      className="px-3 py-1 bg-action-muted-muted text-action text-sm rounded-full"
                     >
                       {skill}
                     </span>
@@ -203,7 +203,7 @@ export function TeamProfileView({
                   {profile.interests.map((interest) => (
                     <span
                       key={interest}
-                      className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm rounded-full"
+                      className="px-3 py-1 bg-action-muted-muted text-action text-sm rounded-full"
                     >
                       {interest}
                     </span>
@@ -216,7 +216,7 @@ export function TeamProfileView({
           {/* Development Areas */}
           <div className="bg-surface-base rounded-xl border border p-6">
             <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5 text-primary-500" />
+              <Target className="w-5 h-5 text-action" />
               {t('development')}
             </Heading>
 
@@ -264,7 +264,7 @@ export function TeamProfileView({
           {/* Availability */}
           <div className="bg-surface-base rounded-xl border border p-6">
             <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-primary-500" />
+              <Clock className="w-5 h-5 text-action" />
               {t('availability')}
             </Heading>
 

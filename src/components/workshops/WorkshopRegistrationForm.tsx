@@ -269,7 +269,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full mt-3 px-4 py-2 text-text-secondary text-sm hover:text-neutral-800 transition-colors"
+          className="w-full mt-3 px-4 py-2 text-text-secondary text-sm hover:text-text-primary transition-colors"
         >
           {t('cancelButton')}
         </button>

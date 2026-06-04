@@ -92,16 +92,16 @@ export default async function DashboardDecisionPage({ params }: Props) {
           {statusConf.label}
         </span>
         {typeConf && (
-          <span className="flex items-center gap-1 rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary dark:text-neutral-300">
+          <span className="flex items-center gap-1 rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
             <span>{typeConf.icon}</span>
             {typeConf.label}
           </span>
         )}
-        <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary dark:text-neutral-300">
+        <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
           {methodConf.label}
         </span>
         {scopeConf && (
-          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary dark:text-neutral-300">
+          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
             {scopeConf.label}
           </span>
         )}
@@ -146,7 +146,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
 
       {/* Participation progress */}
       {decisionStatus === DECISION_STATUS.VOTING && totalCount > 0 && (
-        <div className="mb-6 rounded-lg border border dark:border-neutral-700 bg-surface-raised p-4">
+        <div className="mb-6 rounded-lg border border bg-surface-raised p-4">
           <div className="mb-2 flex items-center justify-between text-xs">
             <span className="font-medium text-text-secondary">
               Beteiligung
@@ -160,9 +160,9 @@ export default async function DashboardDecisionPage({ params }: Props) {
               )}
             </span>
           </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div
-              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-primary-500' : 'bg-neutral-400 dark:bg-neutral-500'}`}
+              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-action' : 'bg-neutral-400'}`}
               style={{ width: `${participationPct}%` }}
             />
           </div>
@@ -176,14 +176,14 @@ export default async function DashboardDecisionPage({ params }: Props) {
 
       {/* Options preview (for informational context, shown before ballot) */}
       {decision.options.length > 0 && decisionStatus === DECISION_STATUS.VOTING && !decision.hasUserVoted && (
-        <div className="mb-4 rounded-lg border border dark:border-neutral-700 bg-surface-base dark:bg-neutral-800 p-4">
+        <div className="mb-4 rounded-lg border border bg-surface-base p-4">
           <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-muted">
             Zur Auswahl stehen
           </p>
           <ul className="space-y-1.5">
             {decision.options.map((opt) => (
               <li key={opt.id} className="flex items-start gap-2 text-sm text-text-secondary">
-                <span className="mt-0.5 shrink-0 text-neutral-300 dark:text-neutral-600">—</span>
+                <span className="mt-0.5 shrink-0 text-neutral-300 dark:text-text-secondary">—</span>
                 <span>
                   <span className="font-medium">{opt.label}</span>
                   {opt.description && (
@@ -214,7 +214,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
       )}
 
       {decisionStatus === DECISION_STATUS.DISCUSSION && (
-        <div className="rounded-lg border border dark:border-neutral-700 bg-surface-raised p-4 text-sm text-text-secondary">
+        <div className="rounded-lg border border bg-surface-raised p-4 text-sm text-text-secondary">
           Diese Abstimmung befindet sich noch in der Diskussionsphase. Du wirst per E-Mail benachrichtigt, wenn die Abstimmung geöffnet wird.
         </div>
       )}

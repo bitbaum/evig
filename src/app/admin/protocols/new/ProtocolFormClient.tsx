@@ -114,7 +114,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           <button
             type="button"
             onClick={() => setShowAttendees(!showAttendees)}
-            className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-neutral-900"
+            className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary"
           >
             <Users className="w-4 h-4" />
             Teilnehmer ({selectedAttendees.length}/{teamMembers.length})
@@ -134,7 +134,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 <button
                   type="button"
                   onClick={selectAllAttendees}
-                  className="text-xs text-action hover:text-primary-800 font-medium whitespace-nowrap"
+                  className="text-xs text-action hover:text-action font-medium whitespace-nowrap"
                 >
                   {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
                 </button>
@@ -143,13 +143,13 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 {filteredTeamMembers.map((member) => (
                   <label
                     key={member.id}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-neutral-100 cursor-pointer text-sm"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-surface-raised cursor-pointer text-sm"
                   >
                     <input
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                      className="rounded-sm border-neutral-300 text-action focus:ring-action"
                     />
                     {member.name}
                   </label>
@@ -179,12 +179,12 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               placeholder="Sitzungsnotizen hier einfügen..."
               rows={10}
               disabled={!!audioFile}
-              className="font-mono text-sm disabled:opacity-100! disabled:bg-neutral-100 disabled:text-neutral-500"
+              className="font-mono text-sm disabled:opacity-100! disabled:bg-surface-raised disabled:text-text-tertiary"
             />
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">
                 {contentFormat && (
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-surface-raised text-text-secondary'}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-action-muted-muted text-action' : 'bg-surface-raised text-text-secondary'}`}>
                     {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
                   </span>
                 )}
@@ -217,12 +217,12 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Mic className="w-4 h-4 text-action" />
-                    <span className="text-sm font-medium text-neutral-800">{audioFile.name}</span>
+                    <span className="text-sm font-medium text-text-primary">{audioFile.name}</span>
                     <span className="text-xs text-action">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
                   </div>
                   <button
                     onClick={() => setAudioFile(null)}
-                    className="text-xs text-action hover:text-primary-800"
+                    className="text-xs text-action hover:text-action"
                   >
                     Entfernen
                   </button>

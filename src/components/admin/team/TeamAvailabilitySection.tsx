@@ -60,7 +60,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border bg-surface-raised p-4 dark:bg-neutral-900/40">
+      <div className="rounded-lg border border bg-surface-raised p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-sm font-semibold text-text-primary">
@@ -73,7 +73,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
           <button
             type="button"
             onClick={() => onChange('working_hours', applyStandardSchedule())}
-            className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
+            className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/6"
           >
             Mo-Fr 09-17
           </button>
@@ -87,12 +87,12 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
                 key={day}
                 className="grid grid-cols-[44px_minmax(0,1fr)] gap-2 rounded-lg border border bg-surface-base p-2 md:grid-cols-[44px_92px_92px_92px_minmax(140px,1fr)]"
               >
-                <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-100">
+                <label className="flex items-center gap-2 text-sm font-medium text-text-primary">
                   <input
                     type="checkbox"
                     checked={daySchedule.enabled}
                     onChange={(e) => updateScheduleDay(day, 'enabled', e.target.checked)}
-                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
                   />
                   {WEEKDAY_LABELS[day]}
                 </label>

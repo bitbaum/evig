@@ -251,11 +251,11 @@ export default async function ProtocolsAdminPage({
               {filteredProtocols.map((protocol) => {
                 const TypeIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType]
                 return (
-                  <tr key={protocol.id} className="hover:bg-neutral-50">
+                  <tr key={protocol.id} className="hover:bg-surface-raised">
                     <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
                         href={ROUTES.admin.protocol(protocol.id)}
-                        className="font-medium text-text-primary hover:text-primary-600 underline-offset-2 hover:underline truncate block focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-sm"
+                        className="font-medium text-text-primary hover:text-action underline-offset-2 hover:underline truncate block focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-1 rounded-sm"
                       >
                         {protocol.title}
                       </Link>
@@ -268,7 +268,7 @@ export default async function ProtocolsAdminPage({
                     <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full ${
-                          MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-surface-raised text-neutral-800'
+                          MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-surface-raised text-text-primary'
                         }`}
                       >
                         {TypeIcon && <TypeIcon className="w-3 h-3" />}
@@ -304,7 +304,7 @@ export default async function ProtocolsAdminPage({
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span
                         className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                          PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-surface-raised text-neutral-800'
+                          PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-surface-raised text-text-primary'
                         }`}
                       >
                         {PROTOCOL_STATUS_LABELS[protocol.status]}
@@ -336,7 +336,7 @@ export default async function ProtocolsAdminPage({
                         )}
                         <Link
                           href={ROUTES.admin.protocol(protocol.id)}
-                          className="text-sm text-action hover:text-primary-800 underline focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-sm"
+                          className="text-sm text-action hover:text-action underline focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-1 rounded-sm"
                         >
                           Öffnen
                         </Link>

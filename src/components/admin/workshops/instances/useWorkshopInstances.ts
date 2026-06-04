@@ -155,7 +155,7 @@ export function useWorkshopInstances() {
 
   const getStatusBadge = (status: string) => ({
     label: WORKSHOP_INSTANCE_STATUS_LABELS[status as keyof typeof WORKSHOP_INSTANCE_STATUS_LABELS] ?? status,
-    className: WORKSHOP_INSTANCE_STATUS_COLORS[status as keyof typeof WORKSHOP_INSTANCE_STATUS_COLORS] ?? 'bg-neutral-100 text-neutral-800',
+    className: WORKSHOP_INSTANCE_STATUS_COLORS[status as keyof typeof WORKSHOP_INSTANCE_STATUS_COLORS] ?? 'bg-surface-raised text-text-primary',
   })
 
   return {

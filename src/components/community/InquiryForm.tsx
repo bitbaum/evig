@@ -55,7 +55,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
   if (success) {
     return (
       <div className="text-center py-12 px-4">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-action-muted-muted mb-4">
           <CheckCircle className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-text-primary mb-2">{t('successHeading', { name })}</Heading>
@@ -64,7 +64,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         </p>
         <Link
           href="/get-involved"
-          className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 hover:text-primary-600"
+          className="inline-flex items-center gap-2 text-sm font-medium text-action hover:text-action"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('successBackLink')}
@@ -88,7 +88,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
           onChange={e => setName(e.target.value)}
           required
           minLength={2}
-          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent"
           placeholder={t('namePlaceholder')}
         />
       </div>
@@ -103,7 +103,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
-          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent"
           placeholder={t('emailPlaceholder')}
         />
       </div>

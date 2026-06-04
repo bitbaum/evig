@@ -89,8 +89,8 @@ export function OrderStatusTimeline({
             <div className="flex flex-col items-center shrink-0 min-w-[60px]">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                 reached
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-neutral-200 dark:bg-neutral-700 text-text-muted'
+                  ? 'bg-action text-white'
+                  : 'bg-neutral-200 text-text-muted'
               }`}>
                 {reached
                   ? <CheckCircle className="w-4 h-4" />
@@ -113,7 +113,7 @@ export function OrderStatusTimeline({
             </div>
             {idx < steps.length - 1 && (
               <div className={`flex-1 h-0.5 mx-2 ${
-                idx < currentIdx ? 'bg-primary-500' : 'bg-neutral-200 dark:bg-neutral-700'
+                idx < currentIdx ? 'bg-action' : 'bg-neutral-200'
               }`} />
             )}
           </div>

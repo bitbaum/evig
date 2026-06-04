@@ -77,7 +77,7 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
     <Modal isOpen={true} onClose={onClose} title={labels.dialogTitle} size="lg">
       {done ? (
         <div className="text-center py-6">
-          <CheckCircle2 className="mx-auto h-12 w-12 text-primary-500 mb-3" />
+          <CheckCircle2 className="mx-auto h-12 w-12 text-action mb-3" />
           <h3 className="text-lg font-semibold text-text-primary mb-2">
             {labels.successTitle}
           </h3>
@@ -99,7 +99,7 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="rounded-lg border bg-surface-raised dark:bg-white/3 p-3 text-sm">
+          <div className="rounded-lg border bg-surface-raised dark:bg-surface-base/3 p-3 text-sm">
             <p className="font-medium text-text-primary wrap-break-word">{need.title}</p>
             <p className="text-xs text-text-tertiary mt-0.5">{typeLabel}</p>
           </div>

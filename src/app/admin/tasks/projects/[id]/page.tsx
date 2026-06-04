@@ -21,8 +21,8 @@ import { designPrimitive } from '@/lib/design-system'
 import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react'
 
 const STATUS_BADGE: Record<ProjectStatus, string> = {
-  planning:  'bg-surface-raised text-text-secondary dark:bg-white/6',
-  active:    'bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400',
+  planning:  'bg-surface-raised text-text-secondary dark:bg-surface-base/6',
+  active:    'bg-action-muted text-action/15',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
   cancelled: 'bg-error-100 text-error-800 dark:bg-error-500/15 dark:text-error-400',
@@ -152,9 +152,9 @@ export default async function TaskProjectDetailPage({
                 {progress}%
               </span>
             </div>
-            <div className="h-2 w-full rounded-full bg-surface-raised dark:bg-white/6">
+            <div className="h-2 w-full rounded-full bg-surface-raised dark:bg-surface-base/6">
               <div
-                className="h-2 rounded-full bg-primary-500 transition-all"
+                className="h-2 rounded-full bg-action transition-all"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -165,7 +165,7 @@ export default async function TaskProjectDetailPage({
       {/* Tasks table */}
       {projectTasks.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-10 text-center')}>
-          <FolderKanban className="mx-auto h-10 w-10 text-neutral-300 dark:text-neutral-600 mb-3" />
+          <FolderKanban className="mx-auto h-10 w-10 text-neutral-300 dark:text-text-secondary mb-3" />
           <p className="text-sm font-semibold text-text-primary mb-1">Noch keine Aufgaben</p>
           <p className="text-sm text-text-tertiary mb-4">
             Füge Aufgaben zu diesem Projekt hinzu.
@@ -200,7 +200,7 @@ export default async function TaskProjectDetailPage({
                   <td className={cn(designPrimitive.table.td, 'max-w-xs')}>
                     <Link
                       href={ROUTES.admin.task(task.id)}
-                      className="font-medium text-text-primary hover:text-primary-600 dark:hover:text-primary-400 truncate block transition-colors"
+                      className="font-medium text-text-primary hover:text-action truncate block transition-colors"
                     >
                       {task.title}
                     </Link>
@@ -230,7 +230,7 @@ export default async function TaskProjectDetailPage({
                     {task.assignedToName ? (
                       <span>{task.assignedToName}</span>
                     ) : (
-                      <span className="text-neutral-300 dark:text-neutral-600">&mdash;</span>
+                      <span className="text-neutral-300 dark:text-text-secondary">&mdash;</span>
                     )}
                   </td>
                   <td className={cn(designPrimitive.table.td, 'hidden md:table-cell text-right whitespace-nowrap')}>

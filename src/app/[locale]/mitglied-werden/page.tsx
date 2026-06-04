@@ -69,7 +69,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
   return (
     <div className="bg-canvas">
       {/* Compact header */}
-      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/6 py-8 sm:py-12">
+      <div className="bg-surface-raised border-b border-subtle dark:border-white/6 py-8 sm:py-12">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <Award className="w-10 h-10 text-action mx-auto mb-4" />
           <Heading level={1} className="text-2xl sm:text-3xl text-text-primary mb-3">
@@ -100,7 +100,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       </div>
 
       {/* Form or status */}
-      <div className="bg-primary-50 dark:bg-primary-900/20 py-10 sm:py-14">
+      <div className="bg-action-muted-muted py-10 sm:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
           <div className="bg-surface-base rounded-2xl p-6 sm:p-8 border">
             {status.isMember ? (

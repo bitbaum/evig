@@ -78,13 +78,13 @@ export default function DecisionHeaderCard({
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConf.color}`}>
             {statusConf.label}
           </span>
-          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary">
+          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
             {typeConf.label}
           </span>
-          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary">
+          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
             {methodConf.label}
           </span>
-          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary">
+          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
             {DECISION_CATEGORY_LABELS[decision.category] || decision.category}
           </span>
           <span className={adminType.meta}>
@@ -104,8 +104,8 @@ export default function DecisionHeaderCard({
             className={cn(
               'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
               linkCopied
-                ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
-                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600'
+                ? 'bg-action-muted text-action-muted'
+                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
             )}
           >
             {linkCopied ? (
@@ -121,8 +121,8 @@ export default function DecisionHeaderCard({
               className={cn(
                 'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
                 invitationsResult
-                  ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
-                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 disabled:opacity-50'
+                  ? 'bg-action-muted text-action-muted'
+                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 disabled:opacity-50'
               )}
             >
               <Mail className="h-3.5 w-3.5" />
@@ -198,7 +198,7 @@ export default function DecisionHeaderCard({
 
       {/* Close confirmation */}
       {showCloseInput && (
-        <div className="mt-3 rounded-md border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20 p-3">
+        <div className="mt-3 rounded-md border border-strong bg-action-muted-muted p-3">
           <label className={cn('mb-1 block', adminType.subTitle)}>
             Zusammenfassung (optional)
           </label>
@@ -287,7 +287,7 @@ export default function DecisionHeaderCard({
           {decision.options.some((o) => o.imageUrl) ? (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {decision.options.map((opt) => (
-                <div key={opt.id} className="rounded-lg border border bg-surface-raised dark:bg-neutral-700/50 overflow-hidden">
+                <div key={opt.id} className="rounded-lg border border bg-surface-raised overflow-hidden">
                   {opt.imageUrl ? (
                     <div className="relative aspect-square w-full bg-surface-base">
                       <Image
@@ -299,7 +299,7 @@ export default function DecisionHeaderCard({
                       />
                     </div>
                   ) : (
-                    <div className="flex aspect-square w-full items-center justify-center bg-surface-raised dark:bg-neutral-700 text-3xl font-bold text-text-muted">
+                    <div className="flex aspect-square w-full items-center justify-center bg-surface-raised text-3xl font-bold text-text-muted">
                       {opt.label.charAt(0).toUpperCase()}
                     </div>
                   )}

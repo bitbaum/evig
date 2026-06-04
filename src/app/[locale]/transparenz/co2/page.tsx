@@ -160,7 +160,7 @@ export default function Co2MethodologyPage() {
           </p>
           <div className={cn(designPrimitive.surface.card, 'overflow-hidden')}>
             <table className="w-full text-sm">
-              <thead className="bg-surface-raised dark:bg-white/3 text-xs uppercase tracking-wider text-text-tertiary">
+              <thead className="bg-surface-raised dark:bg-surface-base/3 text-xs uppercase tracking-wider text-text-tertiary">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">Kategorie</th>
                   <th className="px-4 py-3 text-right font-medium">Gewicht</th>

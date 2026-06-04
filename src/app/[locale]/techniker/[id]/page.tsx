@@ -72,7 +72,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
         {/* Back link */}
         <Link
           href={ROUTES.public.techniker}
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6 text-sm"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('detail.backToList')}
@@ -87,7 +87,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   {technician.name}
                 </Heading>
                 {technician.isVerified && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">
                     <CheckCircle className="w-3.5 h-3.5" />
                     {t('detail.verified')}
                   </span>
@@ -95,7 +95,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     isProfessional
-                      ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+                      ? 'bg-action-muted-muted text-action'
                       : 'bg-surface-raised text-text-secondary'
                   }`}
                 >
@@ -174,7 +174,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               </span>
             )}
             {technician.hourlyRateCents && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-action-muted-muted text-action">
                 <Euro className="w-3.5 h-3.5" />
                 {t('detail.hourlyRate', { rate: Math.round(technician.hourlyRateCents / 100) })}
               </span>

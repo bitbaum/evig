@@ -34,17 +34,17 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
               type="checkbox"
               checked={termsAccepted}
               onChange={(e) => onChange(e.target.checked)}
-              className="mt-1 mr-3 text-action focus:ring-primary-500"
+              className="mt-1 mr-3 text-action focus:ring-action"
               required
               aria-required="true"
             />
             <span className="text-sm font-medium text-text-secondary">
               {t('sections.terms.checkboxPrefix')}{' '}
-              <Link href="/agb" className="text-action hover:text-primary-700 underline">
+              <Link href="/agb" className="text-action hover:text-action underline">
                 {t('sections.terms.termsLink')}
               </Link>{' '}
               {t('sections.terms.checkboxMiddle')}{' '}
-              <Link href="/datenschutz" className="text-action hover:text-primary-700 underline">
+              <Link href="/datenschutz" className="text-action hover:text-action underline">
                 {t('sections.terms.privacyLink')}
               </Link>
             </span>

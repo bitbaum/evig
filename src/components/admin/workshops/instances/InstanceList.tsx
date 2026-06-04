@@ -45,7 +45,7 @@ export function InstanceList({
         {instances.map((instance) => {
           const badge = getStatusBadge(instance.status)
           return (
-            <div key={instance.id} className="p-6 hover:bg-neutral-50">
+            <div key={instance.id} className="p-6 hover:bg-surface-raised">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">

@@ -34,7 +34,7 @@ export function CameraCapture({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <Camera className="w-8 h-8 text-action" />
         </div>
         <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
@@ -118,7 +118,7 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <button
         onClick={onStartCamera}
-        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
+        className="p-6 border-2 border-dashed border-strong rounded-lg hover:border-action hover:bg-action-muted-muted transition-colors text-center"
       >
         <Camera className="w-12 h-12 text-action mx-auto mb-3" />
         <div className="font-medium text-text-primary">{labelOpenCamera}</div>
@@ -127,7 +127,7 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
 
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
+        className="p-6 border-2 border-dashed border-strong rounded-lg hover:border-action hover:bg-action-muted-muted transition-colors text-center"
       >
         <Upload className="w-12 h-12 text-action mx-auto mb-3" />
         <div className="font-medium text-text-primary">{labelUploadFile}</div>

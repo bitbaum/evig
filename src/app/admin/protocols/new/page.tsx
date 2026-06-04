@@ -27,7 +27,7 @@ export default async function NewProtocolPage() {
       <div className="flex items-center gap-4">
         <Link
           href={ROUTES.admin.protocols}
-          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück

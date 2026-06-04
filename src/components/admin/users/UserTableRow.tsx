@@ -30,7 +30,7 @@ export function UserTableRow({
   const hasFullAccess = permissions.includes('*')
 
   return (
-    <tr className="hover:bg-neutral-50 dark:hover:bg-white/6">
+    <tr className="hover:bg-surface-raised dark:hover:bg-surface-base/6">
       <UserInfoCell user={user} userIsSuperAdmin={userIsSuperAdmin} userIsStaff={userIsStaff} />
       <StatusCell
         userIsSuperAdmin={userIsSuperAdmin}
@@ -67,9 +67,9 @@ function UserInfoCell({
   userIsStaff: boolean
 }) {
   const avatarClass = userIsSuperAdmin
-    ? 'bg-primary-600'
+    ? 'bg-action'
     : userIsStaff
-      ? 'bg-primary-500'
+      ? 'bg-action'
       : 'bg-neutral-500'
 
   const initials = user.name
@@ -111,24 +111,24 @@ function StatusCell({
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex flex-col gap-1">
         {userIsSuperAdmin && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-action-muted text-action-muted">
             <Crown className="w-3 h-3" />
             Super Admin
           </span>
         )}
         {userIsStaff && !userIsSuperAdmin && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-action-muted text-action-muted">
             <Shield className="w-3 h-3" />
             Staff
           </span>
         )}
         {!userIsStaff && (
-          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-surface-raised text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300">
+          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-surface-raised text-text-primary">
             Benutzer
           </span>
         )}
         {emailVerified && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-action-muted text-action-muted">
             <UserCheck className="w-3 h-3" />
             Verifiziert
           </span>
@@ -177,7 +177,7 @@ function PermissionsCell({
     <td className="px-6 py-4">
       <div className="flex flex-wrap gap-1 max-w-xs">
         {permissions.slice(0, 3).map(p => (
-          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-surface-raised dark:bg-neutral-700 rounded-sm">
+          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-surface-raised rounded-sm">
             {p}
           </span>
         ))}
@@ -221,7 +221,7 @@ function ActionsCell({
       <div className="flex items-center gap-2">
         <button
           onClick={() => onEditProfile(user)}
-          className="text-action hover:text-primary-900 dark:hover:text-primary-300"
+          className="text-action hover:text-action"
           title="Profil bearbeiten"
         >
           <Pencil className="w-4 h-4" />
@@ -229,7 +229,7 @@ function ActionsCell({
         {userIsStaff && (
           <button
             onClick={() => onEditPermissions(user)}
-            className="text-action hover:text-primary-900 dark:hover:text-primary-300"
+            className="text-action hover:text-action"
             title="Berechtigungen bearbeiten"
           >
             <Edit className="w-4 h-4" />

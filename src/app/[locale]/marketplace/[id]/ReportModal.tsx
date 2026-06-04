@@ -37,8 +37,8 @@ export function ReportModal({
     <Modal isOpen={true} onClose={onClose} title={t('title')} size="sm">
       {reportSent ? (
         <div className="text-center py-4">
-          <Check className="w-12 h-12 text-primary-500 mx-auto mb-3" aria-hidden="true" />
-          <p className="text-primary-700 dark:text-primary-400 font-medium">{t('sent')}</p>
+          <Check className="w-12 h-12 text-action mx-auto mb-3" aria-hidden="true" />
+          <p className="text-action font-medium">{t('sent')}</p>
           <p className="text-sm text-text-tertiary mt-1">{t('sentThanks')}</p>
         </div>
       ) : (
@@ -49,8 +49,8 @@ export function ReportModal({
                 key={r.value}
                 className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                   reportReason === r.value
-                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                    : 'border dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
+                    ? 'border-action bg-action-muted-muted'
+                    : 'border hover:bg-surface-raised'
                 }`}
               >
                 <input

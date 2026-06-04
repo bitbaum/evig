@@ -116,7 +116,7 @@ export default async function AdminCategoriesPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -185,21 +185,21 @@ export default async function AdminCategoriesPage() {
         {categories.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-surface-raised dark:bg-neutral-700">
+              <thead className="bg-surface-raised">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Kategorie
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Farbe
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Artikel
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Aktionen
                   </th>
                 </tr>
@@ -208,7 +208,7 @@ export default async function AdminCategoriesPage() {
                 {categories.map((category) => (
                   <tr
                     key={category.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-white/6"
+                    className="hover:bg-surface-raised dark:hover:bg-surface-base/6"
                   >
                     <td className="px-6 py-4">
                       <div>
@@ -229,7 +229,7 @@ export default async function AdminCategoriesPage() {
                       {category.color ? (
                         <div className="flex items-center gap-2">
                           <div
-                            className="w-6 h-6 rounded-full border border dark:border-neutral-600"
+                            className="w-6 h-6 rounded-full border border"
                             style={{ backgroundColor: category.color }}
                           />
                           <span className="text-sm text-text-secondary font-mono">
@@ -249,8 +249,8 @@ export default async function AdminCategoriesPage() {
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${
                           category.is_active
-                            ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
-                            : 'bg-surface-raised text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
+                            ? 'bg-action-muted text-action-muted'
+                            : 'bg-surface-raised text-text-primary'
                         }`}
                       >
                         {category.is_active ? (
@@ -270,7 +270,7 @@ export default async function AdminCategoriesPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/admin/content/categories/${category.id}`}
-                          className="text-action hover:text-primary-900 dark:hover:text-primary-300"
+                          className="text-action hover:text-action"
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
@@ -310,13 +310,13 @@ export default async function AdminCategoriesPage() {
       </div>
 
       {/* Info Banner */}
-      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
+      <div className="bg-surface-raised border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center shrink-0">
             <Tag className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
+            <Heading level={3} className="font-medium text-text-primary">
               Kategorien-Verwaltung
             </Heading>
             <p className="text-sm text-text-secondary mt-1">

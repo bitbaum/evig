@@ -21,30 +21,30 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
   const remainingSkillsCount = technician.skills.length - 5
 
   return (
-    <div className="card-shell hover:border-neutral-300 transition-all">
+    <div className="card-shell hover:border-strong transition-all">
       {/* Header */}
-      <div className="p-6 border-b border-neutral-100">
+      <div className="p-6 border-b border-subtle">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center shrink-0">
-              <User className="w-6 h-6 text-neutral-500" />
+            <div className="w-12 h-12 bg-surface-raised rounded-full flex items-center justify-center shrink-0">
+              <User className="w-6 h-6 text-text-tertiary" />
             </div>
             <div>
               <Link href={`/techniker/${technician.id}`} className="hover:underline">
-                <Heading level={3} className="font-semibold text-neutral-900">
+                <Heading level={3} className="font-semibold text-text-primary">
                   {isProfessional
                     ? (technician.businessName ?? technician.name)
                     : technician.name}
                 </Heading>
               </Link>
               {isProfessional && technician.businessName && (
-                <p className="text-sm text-neutral-500">{technician.name}</p>
+                <p className="text-sm text-text-tertiary">{technician.name}</p>
               )}
             </div>
           </div>
 
           {technician.isVerified && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 shrink-0">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action shrink-0">
               <CheckCircle className="w-3 h-3" />
               {t('verified')}
             </span>
@@ -55,11 +55,11 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {technician.averageRating !== null && (
           <div className="flex items-center gap-2 mb-3">
             <StarRating value={technician.averageRating} size="sm" />
-            <span className="text-sm text-neutral-600">
+            <span className="text-sm text-text-secondary">
               {technician.averageRating.toFixed(1)}
             </span>
             {technician.totalJobsCompleted > 0 && (
-              <span className="text-sm text-neutral-500">
+              <span className="text-sm text-text-tertiary">
                 ({t('jobsCompleted', { count: technician.totalJobsCompleted })})
               </span>
             )}
@@ -68,7 +68,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
 
         {/* Bio */}
         {technician.bio && (
-          <p className="text-neutral-600 text-sm mb-3 line-clamp-2">{technician.bio}</p>
+          <p className="text-text-secondary text-sm mb-3 line-clamp-2">{technician.bio}</p>
         )}
 
         {/* Professional: services offered */}
@@ -77,13 +77,13 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             {technician.servicesOffered.slice(0, 3).map((service) => (
               <span
                 key={service}
-                className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-100 text-neutral-800"
+                className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-surface-raised text-text-primary"
               >
                 {service}
               </span>
             ))}
             {technician.servicesOffered.length > 3 && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-100 text-neutral-800">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-surface-raised text-text-primary">
                 +{technician.servicesOffered.length - 3}
               </span>
             )}
@@ -96,13 +96,13 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             {displayedSkills.map((skill) => (
               <span
                 key={skill}
-                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-secondary"
               >
                 {skill}
               </span>
             ))}
             {remainingSkillsCount > 0 && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
                 +{remainingSkillsCount}
               </span>
             )}
@@ -114,7 +114,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
       <div className="p-6">
         {/* Location */}
         {(technician.city || technician.postalCode) && (
-          <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
+          <div className="flex items-center gap-2 text-sm text-text-secondary mb-3">
             <MapPin className="w-4 h-4 shrink-0" />
             <span>
               {[technician.postalCode, technician.city].filter(Boolean).join(' ')}
@@ -125,7 +125,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {/* Pricing badges */}
         <div className="flex flex-wrap gap-2 mb-4">
           {technician.acceptsGratis && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
               <Users className="w-3 h-3" />
               {t('gratis')}
             </span>
@@ -137,13 +137,13 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             </span>
           )}
           {technician.hourlyRateCents && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
               <Euro className="w-3 h-3" />
               {formatCentsToChf(technician.hourlyRateCents)}/h
             </span>
           )}
           {!technician.hourlyRateCents && !technician.acceptsGratis && (
-            <span className="text-sm text-neutral-500">{t('priceOnRequest')}</span>
+            <span className="text-sm text-text-tertiary">{t('priceOnRequest')}</span>
           )}
         </div>
 

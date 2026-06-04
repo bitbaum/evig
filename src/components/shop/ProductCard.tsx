@@ -14,9 +14,9 @@ export function ProductCard({ product, stockOneLabel }: Props) {
   return (
     <Link
       href={`/shop/product/${product.item_uuid}`}
-      className="group card-shell hover:border-primary-300 transition-all overflow-hidden flex flex-col"
+      className="group card-shell hover:border-strong transition-all overflow-hidden flex flex-col"
     >
-      <div className="relative aspect-4/3 bg-neutral-50">
+      <div className="relative aspect-4/3 bg-surface-raised">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -38,13 +38,13 @@ export function ProductCard({ product, stockOneLabel }: Props) {
       </div>
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div>
-          <p className="text-xs text-neutral-500 font-medium uppercase tracking-wide">{product.brand}</p>
-          <h3 className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors line-clamp-2 leading-snug">
+          <p className="text-xs text-text-tertiary font-medium uppercase tracking-wide">{product.brand}</p>
+          <h3 className="font-medium text-text-primary group-hover:text-action transition-colors line-clamp-2 leading-snug">
             {product.title}
           </h3>
         </div>
         {product.description && (
-          <p className="text-sm text-neutral-500 line-clamp-2">{product.description}</p>
+          <p className="text-sm text-text-tertiary line-clamp-2">{product.description}</p>
         )}
         {/* CO₂ Badge — silently hides when category isn't a known KATEGORIEN
             ID (shop inventory categories are sometimes free text from CSV
@@ -54,10 +54,10 @@ export function ProductCard({ product, stockOneLabel }: Props) {
         )}
         <div className="mt-auto flex items-center justify-between pt-2">
           <div className="flex items-center gap-1.5">
-            <Tag className="w-3.5 h-3.5 text-primary-600" />
-            <span className="font-bold text-primary-700">{formatCHF(product.price)}</span>
+            <Tag className="w-3.5 h-3.5 text-action" />
+            <span className="font-bold text-action">{formatCHF(product.price)}</span>
           </div>
-          <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded-full capitalize">
+          <span className="text-xs bg-surface-raised text-text-secondary px-2 py-0.5 rounded-full capitalize">
             {product.condition}
           </span>
         </div>

@@ -13,7 +13,7 @@ export function CreateStrip({ actions }: CreateStripProps) {
   return (
     <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
       <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
-        <Plus className="w-5 h-5 text-primary-500 shrink-0" aria-hidden="true" />
+        <Plus className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           Erstellen
         </Heading>

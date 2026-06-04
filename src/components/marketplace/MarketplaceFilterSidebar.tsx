@@ -46,7 +46,7 @@ function FilterSection({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between text-sm font-semibold text-neutral-800 hover:text-neutral-600 py-0.5"
+        className="flex w-full items-center justify-between text-sm font-semibold text-text-primary hover:text-text-secondary py-0.5"
         aria-expanded={open}
       >
         {title}
@@ -81,7 +81,7 @@ function RadioOption({
         onChange={onChange}
         className="h-3.5 w-3.5 text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
       />
-      <span className="text-sm text-text-secondary group-hover:text-neutral-900 leading-snug">
+      <span className="text-sm text-text-secondary group-hover:text-text-primary leading-snug">
         {label}
       </span>
     </label>
@@ -105,7 +105,7 @@ function CheckOption({
         onChange={onChange}
         className="h-3.5 w-3.5 rounded-sm text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
       />
-      <span className="text-sm text-text-secondary group-hover:text-neutral-900 leading-snug">
+      <span className="text-sm text-text-secondary group-hover:text-text-primary leading-snug">
         {label}
       </span>
     </label>

@@ -84,12 +84,12 @@ export default async function FAQPage({ params }: FAQPageProps) {
             <div className="space-y-8 sm:space-y-10">
               {groups.map((group) => (
                 <section key={group.category}>
-                  <Heading level={2} className="text-lg sm:text-xl text-neutral-800 mb-3 sm:mb-4">
+                  <Heading level={2} className="text-lg sm:text-xl text-text-primary mb-3 sm:mb-4">
                     {group.category}
                   </Heading>
                   <div className="divide-y divide-neutral-200 dark:divide-white/6 rounded-xl border bg-surface-base">
                     {group.items.map((item, idx) => (
-                      <details key={idx} className="group p-4 sm:p-5 open:bg-neutral-50/60">
+                      <details key={idx} className="group p-4 sm:p-5 open:bg-surface-raised/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
                           <span className="text-sm sm:text-base text-text-primary font-medium pr-2">
                             {item.q}
@@ -104,7 +104,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
                             <p className="mt-2">
                               <Link
                                 href={item.link.href}
-                                className="text-action hover:text-primary-800 underline"
+                                className="text-action hover:text-action underline"
                               >
                                 {item.link.label}
                               </Link>
@@ -118,11 +118,11 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-surface-raised dark:bg-neutral-900 border text-xs sm:text-sm">
-              <p className="text-neutral-800">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-surface-raised border text-xs sm:text-sm">
+              <p className="text-text-primary">
                 {t('notListed')}
                 <span className="ml-2">
-                  <Link href="/contact" className="text-primary-700 hover:text-primary-800 underline font-medium">
+                  <Link href="/contact" className="text-action hover:text-action underline font-medium">
                     {t('contactTeam')}
                   </Link>
                 </span>

@@ -4,13 +4,13 @@ export default function WorkshopsLoading() {
   return (
     <>
       {/* Hero skeleton */}
-      <div className="bg-warning-50 dark:bg-neutral-900 border-b border-warning-100 dark:border-white/6 py-12 sm:py-16 lg:py-20">
+      <div className="bg-warning-50 border-b border-warning-100 dark:border-white/6 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center mb-6">
             <div className="h-16 w-16 rounded-2xl bg-warning-200 animate-pulse" />
           </div>
           <div className="h-10 bg-warning-200 rounded-sm w-64 mx-auto mb-6 animate-pulse" />
-          <div className="h-5 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-96 mx-auto animate-pulse" />
+          <div className="h-5 bg-neutral-200 rounded-sm w-96 mx-auto animate-pulse" />
         </div>
       </div>
 

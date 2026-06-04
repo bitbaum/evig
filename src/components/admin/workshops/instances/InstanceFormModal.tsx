@@ -38,7 +38,7 @@ export function InstanceFormModal({
           <Heading level={2} className="text-xl text-text-primary">
             {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}
           </Heading>
-          <button onClick={onClose} className="text-text-tertiary hover:text-neutral-600">
+          <button onClick={onClose} className="text-text-tertiary hover:text-text-secondary">
             <X className="w-5 h-5" />
           </button>
         </div>

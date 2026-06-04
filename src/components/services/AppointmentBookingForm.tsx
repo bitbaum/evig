@@ -100,7 +100,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
 
   return (
     <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:border dark:border-white/6 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-text-primary">
@@ -108,7 +108,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
             </h3>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-text-tertiary hover:text-neutral-700 min-w-[touch] min-h-[touch] touch-target p-2 -mr-2"
+              className="text-text-tertiary hover:text-text-secondary min-w-[touch] min-h-[touch] touch-target p-2 -mr-2"
               aria-label="Schliessen"
             >
               ✕
@@ -117,7 +117,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
 
           {pricing && (
             <div className="bg-surface-raised border rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-              <div className="flex items-center text-neutral-800">
+              <div className="flex items-center text-text-primary">
                 <Wrench className="w-5 h-5 mr-2 shrink-0" />
                 <span className="font-medium text-sm sm:text-base">Preis: {pricing}</span>
               </div>

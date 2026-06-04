@@ -37,13 +37,13 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
 
   if (!decision) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-surface-raised flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
-          <p className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">{t('notFound')}</p>
-          <p className="text-neutral-500 dark:text-neutral-400 mb-6">
+          <p className="text-2xl font-bold text-text-primary mb-2">{t('notFound')}</p>
+          <p className="text-text-tertiary dark:text-text-muted mb-6">
             {t('notFoundDesc')}
           </p>
-          <Link href="/" className="text-primary-600 dark:text-primary-400 hover:underline text-sm">
+          <Link href="/" className="text-action hover:underline text-sm">
             {t('backHome')}
           </Link>
         </div>
@@ -57,28 +57,28 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
   const loginUrl = `/auth/login?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4">
+    <div className="min-h-screen bg-surface-raised py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 mb-6">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary dark:text-text-muted mb-6">
             <span>{ORG.name}</span>
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
-          <div className="inline-block rounded-full bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400 text-xs font-medium px-3 py-1 mb-4">
+          <div className="inline-block rounded-full bg-action-muted text-action/15 text-xs font-medium px-3 py-1 mb-4">
             {isVotingPhase ? t('statusVoting') : t('statusDiscussion')}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-primary leading-tight">
             {decision.title}
           </h1>
         </div>
 
         {/* Decision context */}
-        <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/6 p-6 mb-6 shadow-xs dark:shadow-none">
-          <h2 className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3">
+        <div className="rounded-xl bg-surface-base border border-strong dark:border-white/6 p-6 mb-6 shadow-xs dark:shadow-none">
+          <h2 className="text-sm font-semibold text-text-tertiary dark:text-text-muted uppercase tracking-wide mb-3">
             {t('contextHeading')}
           </h2>
-          <p className="text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap leading-relaxed">
+          <p className="text-text-secondary whitespace-pre-wrap leading-relaxed">
             {decision.description}
           </p>
 
@@ -99,15 +99,15 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
             const hasImages = decision.options.some((o) => o.imageUrl)
             return (
               <div className="mt-5">
-                <p className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 mb-2">
+                <p className="text-sm font-semibold text-text-tertiary dark:text-text-muted mb-2">
                   {t('optionsCount', { count: decision.options.length })}
                 </p>
                 {hasImages ? (
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {decision.options.map((opt) => (
-                      <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-white/6 bg-neutral-50 dark:bg-neutral-800 overflow-hidden">
+                      <div key={opt.id} className="rounded-lg border border-strong dark:border-white/6 bg-surface-raised overflow-hidden">
                         {opt.imageUrl && (
-                          <div className="relative aspect-square bg-white dark:bg-neutral-900">
+                          <div className="relative aspect-square bg-surface-base">
                             <Image
                               src={opt.imageUrl}
                               alt={opt.label}
@@ -117,7 +117,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
                             />
                           </div>
                         )}
-                        <p className="px-2 py-1.5 text-xs font-medium text-neutral-700 dark:text-neutral-300 truncate">{opt.label}</p>
+                        <p className="px-2 py-1.5 text-xs font-medium text-text-secondary truncate">{opt.label}</p>
                       </div>
                     ))}
                   </div>
@@ -126,11 +126,11 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
                     {decision.options.map((opt) => (
                       <div
                         key={opt.id}
-                        className="rounded-md border border-neutral-200 dark:border-white/6 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm"
+                        className="rounded-md border border-strong dark:border-white/6 bg-surface-raised px-3 py-2 text-sm"
                       >
-                        <span className="font-medium text-neutral-800 dark:text-neutral-200">{opt.label}</span>
+                        <span className="font-medium text-text-primary">{opt.label}</span>
                         {opt.description && (
-                          <span className="ml-2 text-neutral-500 dark:text-neutral-400">— {opt.description}</span>
+                          <span className="ml-2 text-text-tertiary dark:text-text-muted">— {opt.description}</span>
                         )}
                       </div>
                     ))}
@@ -157,7 +157,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
           loginUrl={loginUrl}
         />
 
-        <p className="mt-6 text-center text-xs text-neutral-400">
+        <p className="mt-6 text-center text-xs text-text-muted">
           {t('footer', { org: ORG.name })}
         </p>
       </div>

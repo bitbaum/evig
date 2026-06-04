@@ -66,9 +66,9 @@ export default async function SettingsPage() {
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
       blue: 'bg-surface-raised text-text-secondary',
-      green: 'bg-primary-100 dark:bg-primary-900/30 text-action',
+      green: 'bg-action-muted-muted text-action',
       red: 'bg-error-100 dark:bg-error-900/30 text-error-600 dark:text-error-400',
-      purple: 'bg-primary-100 dark:bg-primary-900/30 text-action',
+      purple: 'bg-action-muted-muted text-action',
       orange: 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-600',
     }
     return colors[color] || colors.blue
@@ -95,7 +95,7 @@ export default async function SettingsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <Heading level={3} className="font-semibold text-text-primary">{section.title}</Heading>
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-surface-raised text-text-secondary dark:bg-neutral-700 dark:text-neutral-300">
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-surface-raised text-text-secondary">
                     Demnächst
                   </span>
                 </div>
@@ -106,7 +106,7 @@ export default async function SettingsPage() {
         ))}
       </div>
 
-      <div className="p-6 bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl">
+      <div className="p-6 bg-surface-raised border border rounded-xl">
         <p className="text-sm text-text-secondary">
           <strong>In Entwicklung:</strong> Die Einstellungsseiten werden schrittweise implementiert.
           Aktuell werden Konfigurationen über Code (<code>src/config/org.ts</code>) und Umgebungsvariablen verwaltet.

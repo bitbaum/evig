@@ -53,34 +53,34 @@ export default async function ImpactStatsSection() {
   ]
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <Heading level={2} className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">
           {t('sectionTitle')}
         </Heading>
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
           {/* Environmental Impact */}
-          <div className="bg-primary-50 dark:bg-primary-900/20 p-6 sm:p-8 rounded-lg shadow-md">
+          <div className="bg-action-muted-muted p-6 sm:p-8 rounded-lg shadow-md">
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-primary-600 p-2 rounded-lg">
+              <div className="bg-action p-2 rounded-lg">
                 <Leaf className="h-5 w-5 text-white" />
               </div>
-              <Heading level={3} className="text-xl sm:text-2xl font-bold text-primary-800">
+              <Heading level={3} className="text-xl sm:text-2xl font-bold text-action">
                 {t('environmentalTitle')}
               </Heading>
             </div>
             <div className="space-y-4 sm:space-y-6">
               {environmentalStats.map((stat) => (
                 <div key={stat.description}>
-                  <p className="text-3xl sm:text-4xl font-bold text-primary-700 mb-2">
+                  <p className="text-3xl sm:text-4xl font-bold text-action mb-2">
                     {stat.value}
                   </p>
-                  <p className="text-sm sm:text-base text-neutral-600">
+                  <p className="text-sm sm:text-base text-text-secondary">
                     {stat.description}
                     {stat.methodologyHref && (
                       <>
                         {' · '}
-                        <Link href={stat.methodologyHref} className="text-primary-700 hover:underline underline-offset-2">
+                        <Link href={stat.methodologyHref} className="text-action hover:underline underline-offset-2">
                           Wie berechnet?
                         </Link>
                       </>
@@ -92,22 +92,22 @@ export default async function ImpactStatsSection() {
           </div>
 
           {/* Social Impact */}
-          <div className="bg-primary-50 dark:bg-primary-900/20 p-6 sm:p-8 rounded-lg shadow-md">
+          <div className="bg-action-muted-muted p-6 sm:p-8 rounded-lg shadow-md">
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-primary-600 p-2 rounded-lg">
+              <div className="bg-action p-2 rounded-lg">
                 <Users className="h-5 w-5 text-white" />
               </div>
-              <Heading level={3} className="text-xl sm:text-2xl font-bold text-primary-800">
+              <Heading level={3} className="text-xl sm:text-2xl font-bold text-action">
                 {t('socialTitle')}
               </Heading>
             </div>
             <div className="space-y-4 sm:space-y-6">
               {socialStats.map((stat) => (
                 <div key={stat.description}>
-                  <p className="text-3xl sm:text-4xl font-bold text-primary-700 mb-2">
+                  <p className="text-3xl sm:text-4xl font-bold text-action mb-2">
                     {stat.value}
                   </p>
-                  <p className="text-sm sm:text-base text-neutral-600">
+                  <p className="text-sm sm:text-base text-text-secondary">
                     {stat.description}
                   </p>
                 </div>
@@ -119,7 +119,7 @@ export default async function ImpactStatsSection() {
         <div className="text-center mt-8">
           <Link
             href="/about/impact"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium transition-colors"
+            className="inline-flex items-center gap-2 text-action hover:text-action font-medium transition-colors"
           >
             {t('learnMore')}
             <span aria-hidden="true">→</span>

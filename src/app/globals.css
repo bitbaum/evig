@@ -500,404 +500,58 @@
 }
 
 @layer utilities {
-  /* ─── Global Dark Mode SSOT (plain CSS — outside @layer utilities) ─────────
-   Tailwind 4's upgrade tool wraps @layer utilities { .dark .X { ... } } into
-   @utility dark { ... } blocks which fails on selectors with colons
-   (.dark .hover\:bg-X). Keeping these as plain CSS at top level dodges the
-   wrap. Specificity (.dark .X = 0,2,0) still beats Tailwind's .X (0,1,0)
-   without the @layer cascade boost. */
-  /* ─── Global Dark Mode SSOT ───────────────────────────────────────────────
- * Makes standard Tailwind light-mode utility classes dark-mode aware globally.
- * Values align with the CSS vars in :root/.dark above — one place to retheme.
- * Components need zero dark: variants for these common patterns.
- * Note: this block is placed after @tailwind utilities in source order,
- * so it wins over same-specificity Tailwind dark: classes when values differ.
- * All values here align exactly with explicit dark: entries in the codebase,
- * so there are no visual conflicts.
- * ───────────────────────────────────────────────────────────────────────── */
+  /* ─── Status color dark-mode adjustments ──────────────────────────────────
+   * Status colors (warning/error/success/info) stay chromatic in both modes.
+   * Light shades (text-error-900, bg-error-50, etc.) become near-unreadable
+   * on dark surfaces — these overrides remap them to legible variants.
+   * All non-status overrides have been removed; semantic tokens auto-flip.
+   * ───────────────────────────────────────────────────────────────────────── */
 
-  /* Default border — Tailwind's plain `border` without a color class defaults to
- * neutral-200 in light mode. In dark mode we want ultra-subtle instead. */
-  .dark .border {
-    border-color: var(--color-border);
-  }
-  /* border-t, border-b, border-l, border-r — same fix */
-  .dark .border-t {
-    border-top-color: var(--color-border);
-  }
-  .dark .border-b {
-    border-bottom-color: var(--color-border);
-  }
-  .dark .border-l {
-    border-left-color: var(--color-border);
-  }
-  .dark .border-r {
-    border-right-color: var(--color-border);
-  }
+  /* Status text — dark shades unreadable on dark bg → lighter variants */
+  .dark .text-error-900 { color: rgba(252, 165, 165, 1); }
+  .dark .text-error-800 { color: rgba(252, 165, 165, 0.95); }
+  .dark .text-error-700 { color: rgba(248, 113, 113, 0.9); }
+  .dark .text-error-600 { color: rgba(248, 113, 113, 0.85); }
+  .dark .text-warning-900 { color: rgba(253, 230, 138, 1); }
+  .dark .text-warning-800 { color: rgba(253, 186, 36, 0.95); }
+  .dark .text-warning-700 { color: rgba(251, 191, 36, 0.9); }
+  .dark .text-warning-600 { color: rgba(245, 158, 11, 0.9); }
+  .dark .text-success-800 { color: rgba(74, 222, 128, 0.95); }
+  .dark .text-success-700 { color: rgba(74, 222, 128, 0.9); }
+  .dark .text-info-900 { color: rgba(186, 230, 253, 1); }
+  .dark .text-info-800 { color: rgba(147, 197, 253, 0.95); }
+  .dark .text-info-700 { color: rgba(96, 165, 250, 0.9); }
+  .dark .text-info-600 { color: rgba(96, 165, 250, 0.85); }
+  .dark .text-info-500 { color: rgba(147, 197, 253, 0.65); }
 
-  /* Neutral backgrounds */
-  .dark .bg-white {
-    background-color: var(--color-surface);
-  }
-  .dark .bg-neutral-50 {
-    background-color: var(--color-surface-raised);
-  }
-  .dark .bg-neutral-100 {
-    background-color: var(--color-surface-raised);
-  }
-  /* Higher neutral shades used for progress bars, dividers — subtle in dark */
-  .dark .bg-neutral-200 {
-    background-color: rgba(255, 255, 255, 0.06);
-  }
-  .dark .bg-neutral-300 {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
+  /* Status pastel backgrounds → semi-transparent dark fills */
+  .dark .bg-info-50 { background-color: rgba(59, 130, 246, 0.08); }
+  .dark .bg-info-100 { background-color: rgba(59, 130, 246, 0.12); }
+  .dark .bg-warning-50 { background-color: rgba(245, 158, 11, 0.08); }
+  .dark .bg-warning-100 { background-color: rgba(245, 158, 11, 0.12); }
+  .dark .bg-error-50 { background-color: rgba(239, 68, 68, 0.08); }
+  .dark .bg-error-100 { background-color: rgba(239, 68, 68, 0.12); }
+  .dark .bg-success-50 { background-color: rgba(22, 163, 74, 0.08); }
+  .dark .bg-success-100 { background-color: rgba(22, 163, 74, 0.12); }
 
-  /* Brand-tint backgrounds — light pastel fills become subtle dark surfaces */
-  .dark .bg-primary-50 {
-    background-color: rgba(22, 163, 74, 0.08);
-  }
-  .dark .bg-primary-100 {
-    background-color: rgba(22, 163, 74, 0.12);
-  }
-  .dark .bg-emerald-50 {
-    background-color: rgba(22, 163, 74, 0.08);
-  }
-  .dark .bg-emerald-100 {
-    background-color: rgba(22, 163, 74, 0.12);
-  }
-  .dark .bg-info-50 {
-    background-color: rgba(59, 130, 246, 0.08);
-  }
-  .dark .bg-info-100 {
-    background-color: rgba(59, 130, 246, 0.12);
-  }
-  .dark .bg-warning-50 {
-    background-color: rgba(245, 158, 11, 0.08);
-  }
-  .dark .bg-warning-100 {
-    background-color: rgba(245, 158, 11, 0.12);
-  }
-  .dark .bg-error-50 {
-    background-color: rgba(239, 68, 68, 0.08);
-  }
-  .dark .bg-error-100 {
-    background-color: rgba(239, 68, 68, 0.12);
-  }
-  .dark .bg-success-50 {
-    background-color: rgba(22, 163, 74, 0.08);
-  }
-  .dark .bg-success-100 {
-    background-color: rgba(22, 163, 74, 0.12);
-  }
-  .dark .bg-sky-50 {
-    background-color: rgba(14, 165, 233, 0.08);
-  }
-  .dark .bg-teal-50 {
-    background-color: rgba(20, 184, 166, 0.08);
-  }
-  .dark .bg-purple-50 {
-    background-color: rgba(168, 85, 247, 0.08);
-  }
-  .dark .bg-rose-50 {
-    background-color: rgba(244, 63, 94, 0.08);
-  }
-  .dark .bg-orange-50 {
-    background-color: rgba(249, 115, 22, 0.08);
-  }
+  /* Status pastel borders → semi-transparent in dark */
+  .dark .border-error-100 { border-color: rgba(239, 68, 68, 0.12); }
+  .dark .border-error-200 { border-color: rgba(239, 68, 68, 0.2); }
+  .dark .border-error-300 { border-color: rgba(239, 68, 68, 0.3); }
+  .dark .border-warning-100 { border-color: rgba(245, 158, 11, 0.12); }
+  .dark .border-warning-200 { border-color: rgba(245, 158, 11, 0.2); }
+  .dark .border-warning-300 { border-color: rgba(245, 158, 11, 0.3); }
+  .dark .border-success-100 { border-color: rgba(22, 163, 74, 0.12); }
+  .dark .border-success-200 { border-color: rgba(22, 163, 74, 0.2); }
+  .dark .border-info-200 { border-color: rgba(59, 130, 246, 0.2); }
+  .dark .border-info-300 { border-color: rgba(59, 130, 246, 0.3); }
+  .dark .border-info-500 { border-color: rgba(59, 130, 246, 0.5); }
 
-  /* Brand-tint text — readable on near-black surfaces */
-  .dark .text-primary-900 {
-    color: rgba(74, 222, 128, 1);
-  } /* green-400 */
-  .dark .text-primary-800 {
-    color: rgba(74, 222, 128, 0.95);
-  }
-  .dark .text-primary-700 {
-    color: rgba(74, 222, 128, 0.9);
-  }
-  .dark .text-primary-600 {
-    color: var(--primitive-green-500);
-  } /* #22c55e — brand green */
-  .dark .text-emerald-900 {
-    color: rgba(74, 222, 128, 1);
-  }
-  .dark .text-emerald-800 {
-    color: rgba(74, 222, 128, 0.95);
-  }
-  .dark .text-emerald-700 {
-    color: rgba(74, 222, 128, 0.9);
-  }
-
-  /* Status text — dark shades that are unreadable on dark bg → lighter variants */
-  .dark .text-error-900 {
-    color: rgba(252, 165, 165, 1);
-  } /* red-300 */
-  .dark .text-error-800 {
-    color: rgba(252, 165, 165, 0.95);
-  }
-  .dark .text-error-700 {
-    color: rgba(248, 113, 113, 0.9);
-  } /* red-400 */
-  .dark .text-error-600 {
-    color: rgba(248, 113, 113, 0.85);
-  }
-  .dark .text-warning-900 {
-    color: rgba(253, 230, 138, 1);
-  } /* amber-200 */
-  .dark .text-warning-800 {
-    color: rgba(253, 186, 36, 0.95);
-  } /* amber-400 */
-  .dark .text-warning-700 {
-    color: rgba(251, 191, 36, 0.9);
-  }
-  .dark .text-warning-600 {
-    color: rgba(245, 158, 11, 0.9);
-  }
-  .dark .text-success-800 {
-    color: rgba(74, 222, 128, 0.95);
-  } /* green-400 */
-  .dark .text-success-700 {
-    color: rgba(74, 222, 128, 0.9);
-  }
-  .dark .text-info-900 {
-    color: rgba(186, 230, 253, 1);
-  } /* blue-200 */
-  .dark .text-info-800 {
-    color: rgba(147, 197, 253, 0.95);
-  } /* blue-300 */
-  .dark .text-info-700 {
-    color: rgba(96, 165, 250, 0.9);
-  } /* blue-400 */
-  .dark .text-info-600 {
-    color: rgba(96, 165, 250, 0.85);
-  } /* blue-400 */
-  .dark .text-info-500 {
-    color: rgba(147, 197, 253, 0.65);
-  } /* blue-300 muted */
-
-  /* Status borders — light pastel shades → semi-transparent in dark */
-  .dark .border-primary-100 {
-    border-color: rgba(22, 163, 74, 0.15);
-  }
-  .dark .border-primary-200 {
-    border-color: rgba(22, 163, 74, 0.25);
-  }
-  .dark .border-error-100 {
-    border-color: rgba(239, 68, 68, 0.12);
-  }
-  .dark .border-error-200 {
-    border-color: rgba(239, 68, 68, 0.2);
-  }
-  .dark .border-error-300 {
-    border-color: rgba(239, 68, 68, 0.3);
-  }
-  .dark .border-warning-100 {
-    border-color: rgba(245, 158, 11, 0.12);
-  }
-  .dark .border-warning-200 {
-    border-color: rgba(245, 158, 11, 0.2);
-  }
-  .dark .border-warning-300 {
-    border-color: rgba(245, 158, 11, 0.3);
-  }
-  .dark .border-success-100 {
-    border-color: rgba(22, 163, 74, 0.12);
-  }
-  .dark .border-success-200 {
-    border-color: rgba(22, 163, 74, 0.2);
-  }
-  .dark .border-info-200 {
-    border-color: rgba(59, 130, 246, 0.2);
-  }
-  .dark .border-info-300 {
-    border-color: rgba(59, 130, 246, 0.3);
-  }
-  .dark .border-info-500 {
-    border-color: rgba(59, 130, 246, 0.5);
-  }
-
-  /* Neutral text */
-  .dark .text-neutral-900 {
-    color: var(--color-text);
-  }
-  .dark .text-neutral-800 {
-    color: var(--color-text);
-  }
-  .dark .text-neutral-700 {
-    color: var(--color-text-muted);
-  }
-  .dark .text-neutral-600 {
-    color: var(--color-text-muted);
-  }
-  .dark .text-neutral-500 {
-    color: var(--color-text-faint);
-  }
-
-  /* Neutral borders */
-  .dark .border-neutral-200 {
-    border-color: var(--color-border);
-  }
-  .dark .border-neutral-100 {
-    border-color: var(--color-border-subtle);
-  }
-  /* border-neutral-300 used for form controls — keep slightly more visible than others */
-  .dark .border-neutral-300 {
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  /* border-neutral-400/500 used for selected/active states */
-  .dark .border-neutral-400 {
-    border-color: rgba(255, 255, 255, 0.15);
-  }
-  .dark .border-neutral-500 {
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  /* Hover backgrounds — hover: variants are different CSS classes, must override separately */
-  .dark .hover\:bg-neutral-50:hover {
-    background-color: var(--color-surface-raised);
-  }
-  .dark .hover\:bg-neutral-100:hover {
-    background-color: var(--color-surface-raised);
-  }
-  .dark .hover\:bg-neutral-200:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-  .dark .hover\:bg-neutral-300:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  .dark .hover\:bg-white:hover {
-    background-color: var(--color-surface);
-  }
-  .dark .hover\:bg-primary-50:hover {
-    background-color: rgba(22, 163, 74, 0.12);
-  }
-  .dark .hover\:bg-emerald-50:hover {
-    background-color: rgba(22, 163, 74, 0.12);
-  }
-  .dark .hover\:bg-info-200:hover {
-    background-color: rgba(59, 130, 246, 0.18);
-  }
-  .dark .hover\:bg-warning-200:hover {
-    background-color: rgba(245, 158, 11, 0.16);
-  }
-  .dark .hover\:bg-error-100:hover {
-    background-color: rgba(239, 68, 68, 0.12);
-  }
-  .dark .hover\:bg-error-50:hover {
-    background-color: rgba(239, 68, 68, 0.08);
-  }
-
-  /* Hover text — neutrals */
-  .dark .hover\:text-neutral-900:hover {
-    color: var(--color-text);
-  }
-  .dark .group:hover .group-hover\:text-neutral-900 {
-    color: var(--color-text);
-  }
-
-  /* Hover text — primary (blog link hovers, project "learn more", etc.) */
-  .dark .hover\:text-primary-600:hover {
-    color: var(--primitive-green-500);
-  }
-  .dark .hover\:text-primary-700:hover {
-    color: rgba(74, 222, 128, 0.9);
-  }
-  .dark .group:hover .group-hover\:text-primary-600 {
-    color: var(--primitive-green-500);
-  }
-  .dark .group:hover .group-hover\:text-primary-700 {
-    color: rgba(74, 222, 128, 0.9);
-  }
-
-  /* Hover borders — primary (resource card hovers on knowhow page) */
-  .dark .hover\:border-primary-200:hover {
-    border-color: rgba(22, 163, 74, 0.2);
-  }
-  .dark .hover\:border-primary-500:hover {
-    border-color: rgba(22, 163, 74, 0.5);
-  }
-
-  /* bg-neutral-400 — separator dots in blog post meta */
-  .dark .bg-neutral-400 {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  /* ─── Dark-mode explicit variant overrides ────────────────────────────────
- * Override Tailwind's dark: prefix classes so all dark-mode neutrals resolve
- * through CSS vars. This lets us retheme by editing :root/.dark vars only.
- *
- * Specificity: [0,2,0] — same as Tailwind's .dark .dark\:* generated rules,
- * but these appear after @tailwind utilities in source, so they win.
- * ───────────────────────────────────────────────────────────────────────── */
-
-  /* Backgrounds — dark: variant neutrals → semantic CSS vars */
-  .dark .dark\:bg-neutral-950 {
-    background-color: var(--color-bg);
-  }
-  .dark .dark\:bg-neutral-900 {
-    background-color: var(--color-surface);
-  }
-  .dark .dark\:bg-neutral-800 {
-    background-color: var(--color-surface-raised);
-  }
-  .dark .dark\:bg-neutral-700 {
-    background-color: var(--color-surface-raised);
-  }
-  /* neutral-600 used for interactive highlights (hover targets, selected rows) */
-  .dark .dark\:bg-neutral-600 {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-
-  /* Hover backgrounds */
-  .dark .dark\:hover\:bg-neutral-800:hover {
-    background-color: var(--color-surface-raised);
-  }
-  .dark .dark\:hover\:bg-neutral-700:hover {
-    background-color: var(--color-surface-raised);
-  }
-  .dark .dark\:hover\:bg-neutral-600:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-
-  /* Borders — x.ai aesthetic: ultra-subtle, rgba-based */
-  .dark .dark\:border-neutral-700 {
-    border-color: var(--color-border-subtle);
-  }
-  .dark .dark\:border-neutral-600 {
-    border-color: var(--color-border);
-  }
-  .dark .dark\:border-neutral-500 {
-    border-color: var(--color-border);
-  }
-
-  /* Hover border neutrals in dark mode */
-  .dark .hover\:border-neutral-300:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-  }
-  .dark .hover\:border-neutral-400:hover {
-    border-color: rgba(255, 255, 255, 0.18);
-  }
-
-  /* Text — dark: variant neutrals → semantic CSS vars */
-  .dark .dark\:text-white {
-    color: var(--color-text);
-  }
-  .dark .dark\:text-neutral-100 {
-    color: var(--color-text);
-  }
-  .dark .dark\:text-neutral-200 {
-    color: rgba(255, 255, 255, 0.9);
-  }
-  .dark .dark\:text-neutral-300 {
-    color: rgba(255, 255, 255, 0.75);
-  }
-  .dark .dark\:text-neutral-400 {
-    color: var(--color-text-muted);
-  }
-  .dark .dark\:text-neutral-500 {
-    color: var(--color-text-faint);
-  }
+  /* Status hover backgrounds */
+  .dark .hover\:bg-info-200:hover { background-color: rgba(59, 130, 246, 0.18); }
+  .dark .hover\:bg-warning-200:hover { background-color: rgba(245, 158, 11, 0.16); }
+  .dark .hover\:bg-error-100:hover { background-color: rgba(239, 68, 68, 0.12); }
+  .dark .hover\:bg-error-50:hover { background-color: rgba(239, 68, 68, 0.08); }
 
   @keyframes fadeIn {
     from {

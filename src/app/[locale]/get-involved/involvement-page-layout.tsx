@@ -28,7 +28,7 @@ export async function InvolvementPageLayout({
       <ResponsiveHero title={title} description={description}>
         <a
           href={ctaHref}
-          className={`${responsiveButtons.primary} bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-center`}
+          className={`${responsiveButtons.primary} bg-surface-base text-action hover:bg-action-muted-muted text-center`}
         >
           {ctaText}
         </a>
@@ -44,7 +44,7 @@ export async function InvolvementPageLayout({
       </section>
 
       {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-surface-raised dark:bg-neutral-900`}>
+      <section className={`${responsiveSpacing.section} bg-surface-raised`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
           <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbMedium}`}>
             {t('readyHeading')}
@@ -58,7 +58,7 @@ export async function InvolvementPageLayout({
             </Link>
             <Link
               href="/get-involved"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-action hover:bg-primary-50 dark:hover:bg-primary-900/20`}
+              className={`${responsiveButtons.large} bg-transparent border-2 border-action text-action hover:bg-action-muted-muted`}
             >
               {t('exploreOptionsBtn')}
             </Link>

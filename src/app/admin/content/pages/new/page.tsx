@@ -86,7 +86,7 @@ function NewStaticPageContent() {
       <div className="flex items-center gap-4">
         <Link
           href={ROUTES.admin.contentPages}
-          className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+          className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-text-secondary" />
         </Link>
@@ -134,7 +134,7 @@ function NewStaticPageContent() {
           {/* Slug */}
           <FormField label="URL-Slug" required>
             <div className="flex gap-2">
-              <div className="flex items-center px-3 bg-surface-raised dark:bg-neutral-700 border border-r-0 border-neutral-300 dark:border-neutral-600 rounded-l-lg text-sm text-text-tertiary">
+              <div className="flex items-center px-3 bg-surface-raised border border-r-0 border-neutral-300 rounded-l-lg text-sm text-text-tertiary">
                 /
               </div>
               <Input
@@ -148,7 +148,7 @@ function NewStaticPageContent() {
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-white/6 text-text-secondary"
+                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary"
               >
                 Generieren
               </button>
@@ -173,7 +173,7 @@ function NewStaticPageContent() {
               id="is_published"
               checked={formData.is_published}
               onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-              className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-primary-500"
+              className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
             />
             <label htmlFor="is_published" className="text-sm font-medium text-text-secondary">
               Sofort veröffentlichen
@@ -209,7 +209,7 @@ function NewStaticPageContent() {
         <div className="flex justify-end gap-3">
           <Link
             href={ROUTES.admin.contentPages}
-            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 transition-colors"
+            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
           >
             Abbrechen
           </Link>

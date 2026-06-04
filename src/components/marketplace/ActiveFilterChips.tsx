@@ -186,7 +186,7 @@ export function ActiveFilterChips({
         <button
           type="button"
           onClick={clearFilters}
-          className="text-sm text-text-tertiary hover:text-neutral-700 font-medium underline underline-offset-2"
+          className="text-sm text-text-tertiary hover:text-text-secondary font-medium underline underline-offset-2"
         >
           {t('filters.clearFilters')}
         </button>

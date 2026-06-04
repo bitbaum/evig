@@ -79,9 +79,9 @@ export function RequestsTab({
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {requests?.items.map(r => (
-              <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
+              <tr key={r.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
                 <td className="px-4 py-3">
-                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-primary-600 flex items-center gap-1">
+                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
                     {r.title} <ExternalLink className="w-3 h-3 shrink-0" />
                   </a>
                 </td>
@@ -101,7 +101,7 @@ export function RequestsTab({
                 <td className="px-4 py-3 text-text-tertiary">{r.canton}</td>
                 <td className="px-4 py-3 text-text-secondary whitespace-nowrap">{formatBudget(r.budget_amount_cents, r.budget_type)}</td>
                 <td className="px-4 py-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-surface-raised text-text-tertiary'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-action-muted-muted text-action' : 'bg-surface-raised text-text-tertiary'}`}>
                     {r.offer_count}
                   </span>
                 </td>
@@ -110,14 +110,14 @@ export function RequestsTab({
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
-                      className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
+                      className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                       title="Bearbeiten"
                     >
                       <Edit3 className="w-4 h-4 text-action" />
                     </button>
                     <Link
                       href={`/admin/tasks/new?source=it_hilfe&source_id=${r.id}&title=${encodeURIComponent(`IT-Hilfe: ${r.title}`)}&priority=${r.urgency === 'urgent' ? 'urgent' : 'normal'}`}
-                      className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
+                      className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                       title="Aufgabe erstellen"
                     >
                       <ClipboardList className="w-4 h-4 text-text-tertiary" />

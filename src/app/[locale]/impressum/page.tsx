@@ -26,7 +26,7 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
-      <Heading level={1} className="mb-8 text-3xl dark:text-white">{t('title')}</Heading>
+      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
 
       <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('legalInfo')}</Heading>
@@ -41,8 +41,8 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
 
         <Heading level={3}>{t('contact')}</Heading>
         <p>
-          {t('emailLabel')} <a href={`mailto:${CONTACT.email}`} className="text-primary-700 underline">{CONTACT.email}</a><br />
-          {t('phoneLabel')} <a href={CONTACT.phoneTel} className="text-primary-700 underline">{CONTACT.phone}</a>
+          {t('emailLabel')} <a href={`mailto:${CONTACT.email}`} className="text-action underline">{CONTACT.email}</a><br />
+          {t('phoneLabel')} <a href={CONTACT.phoneTel} className="text-action underline">{CONTACT.phone}</a>
         </p>
 
         <Heading level={3}>{t('authorised')}</Heading>
@@ -68,9 +68,9 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
         <Heading level={2}>{t('furtherLegal')}</Heading>
         <p>
           {t('furtherLegalText')}{' '}
-          <Link href="/datenschutz" className="text-primary-700 underline">{t('privacyLinkLabel')}</Link>
+          <Link href="/datenschutz" className="text-action underline">{t('privacyLinkLabel')}</Link>
           {' '}{t('agbLinkLabel') && (
-            <Link href="/agb" className="text-primary-700 underline">{t('agbLinkLabel')}</Link>
+            <Link href="/agb" className="text-action underline">{t('agbLinkLabel')}</Link>
           )}.
         </p>
 

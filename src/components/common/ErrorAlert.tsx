@@ -57,10 +57,10 @@ export function ErrorAlert({
       <div className="mx-auto w-16 h-16 rounded-full bg-error-100 dark:bg-error-900/20 flex items-center justify-center mb-4">
         <AlertCircle className="w-8 h-8 text-error-600 dark:text-error-400" />
       </div>
-      <Heading level={3} className={`${TYPOGRAPHY.sectionTitleSmall} text-neutral-900 dark:text-neutral-100 mb-2`}>
+      <Heading level={3} className={`${TYPOGRAPHY.sectionTitleSmall} text-text-primary mb-2`}>
         {effectiveTitle}
       </Heading>
-      <p className={`${TYPOGRAPHY.body} text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto`}>
+      <p className={`${TYPOGRAPHY.body} text-text-secondary dark:text-text-muted mb-6 max-w-md mx-auto`}>
         {message}
       </p>
       {onRetry && (

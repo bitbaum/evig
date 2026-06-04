@@ -64,7 +64,7 @@ export function LocationSection({
                 value="venue"
                 checked={locationType === 'venue'}
                 onChange={(e) => onChange('locationType', e.target.value)}
-                className="mr-3 text-action focus:ring-primary-500"
+                className="mr-3 text-action focus:ring-action"
               />
               <span className="text-sm text-text-secondary">{t('sections.location.typeVenue')}</span>
             </label>
@@ -74,7 +74,7 @@ export function LocationSection({
                 value="online"
                 checked={locationType === 'online'}
                 onChange={(e) => onChange('locationType', e.target.value)}
-                className="mr-3 text-action focus:ring-primary-500"
+                className="mr-3 text-action focus:ring-action"
               />
               <span className="text-sm text-text-secondary">{t('sections.location.typeOnline')}</span>
             </label>
@@ -84,7 +84,7 @@ export function LocationSection({
                 value="home"
                 checked={locationType === 'home'}
                 onChange={(e) => onChange('locationType', e.target.value)}
-                className="mr-3 text-action focus:ring-primary-500"
+                className="mr-3 text-action focus:ring-action"
               />
               <span className="text-sm text-text-secondary">{t('sections.location.typeHome')}</span>
             </label>
@@ -99,7 +99,7 @@ export function LocationSection({
               </label>
               {loadingLocations ? (
                 <div className="flex items-center space-x-2 text-text-tertiary">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-action"></div>
                   <span>{t('sections.location.loading')}</span>
                 </div>
               ) : availableLocations.length > 0 ? (

@@ -113,7 +113,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
           <div className="max-w-4xl mx-auto">
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary-200 hidden md:block" />
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-action-muted hidden md:block" />
 
               <div className="space-y-8">
                 {historyLocations.map((location, index) => {
@@ -123,8 +123,8 @@ export default async function SpacePage({ params }: SpacePageProps) {
                       {/* Timeline dot */}
                       <div className={`hidden md:flex w-16 h-16 rounded-full items-center justify-center shrink-0 z-10 ${
                         isCurrent
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-white border-2 border-primary-300 text-primary-700 dark:text-primary-300'
+                          ? 'bg-action text-white'
+                          : 'bg-surface-base border-2 border-strong text-action'
                       }`}>
                         <MapPin className="w-6 h-6" />
                       </div>
@@ -138,7 +138,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                             </div>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                               isCurrent
-                                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
+                                ? 'bg-action-muted-muted text-action'
                                 : 'bg-surface-raised text-text-secondary'
                             }`}>
                               {location.highlight}
@@ -157,7 +157,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                                   href={STORE_GOOGLE_MAPS_URL}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-sm text-action hover:text-primary-700 inline-flex items-center"
+                                  className="text-sm text-action hover:text-action inline-flex items-center"
                                 >
                                   Google Maps <ExternalLink className="w-3 h-3 ml-1" />
                                 </a>
@@ -166,7 +166,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                                   href={STORE_OSM_URL}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-sm text-action hover:text-primary-700 inline-flex items-center"
+                                  className="text-sm text-action hover:text-action inline-flex items-center"
                                 >
                                   OpenStreetMap <ExternalLink className="w-3 h-3 ml-1" />
                                 </a>
@@ -214,7 +214,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       </section>
 
       {/* Future Space Vision */}
-      <section id="zukunft" className="py-16 md:py-24 bg-surface-raised dark:bg-neutral-900">
+      <section id="zukunft" className="py-16 md:py-24 bg-surface-raised">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300 px-4 py-2 rounded-full mb-6">
@@ -232,10 +232,10 @@ export default async function SpacePage({ params }: SpacePageProps) {
             <div className="relative aspect-video bg-surface-raised rounded-2xl overflow-hidden border">
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
                 <Sparkles className="w-16 h-16 text-action mb-4" />
-                <p className="text-xl font-semibold text-primary-800 dark:text-primary-300 mb-2">
+                <p className="text-xl font-semibold text-action mb-2">
                   {t('future.visionTagline', { orgName: ORG.name })}
                 </p>
-                <p className="text-primary-700 dark:text-primary-300 max-w-md">
+                <p className="text-action max-w-md">
                   {t('future.visionDesc')}
                 </p>
               </div>
@@ -250,7 +250,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
             {spaceFeatures.map((feature, index) => {
               const Icon = spaceFeatureIcons[index]
               return (
-                <Card key={index} className="text-center p-4 hover:border-neutral-300 transition-colors">
+                <Card key={index} className="text-center p-4 hover:border-strong transition-colors">
                   {Icon && <IconBadge icon={Icon} theme="space" size="lg" shape="circle" className="mx-auto mb-3" />}
                   <Heading level={3} className="font-semibold text-text-primary mb-1">{feature.name}</Heading>
                   <p className="text-sm text-text-secondary">{feature.description}</p>
@@ -273,15 +273,15 @@ export default async function SpacePage({ params }: SpacePageProps) {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-4 bg-surface-raised rounded-lg">
-                  <p className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-1">{t('future.params.areaValue')}</p>
+                  <p className="text-3xl font-bold text-action mb-1">{t('future.params.areaValue')}</p>
                   <p className="text-sm text-text-secondary">{t('future.params.areaLabel')}</p>
                 </div>
                 <div className="text-center p-4 bg-surface-raised rounded-lg">
-                  <p className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-1">{t('future.params.budgetValue')}</p>
+                  <p className="text-3xl font-bold text-action mb-1">{t('future.params.budgetValue')}</p>
                   <p className="text-sm text-text-secondary">{t('future.params.budgetLabel')}</p>
                 </div>
                 <div className="text-center p-4 bg-surface-raised rounded-lg">
-                  <p className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-1">{t('future.params.locationValue')}</p>
+                  <p className="text-3xl font-bold text-action mb-1">{t('future.params.locationValue')}</p>
                   <p className="text-sm text-text-secondary">{t('future.params.locationLabel')}</p>
                 </div>
               </div>
@@ -335,10 +335,10 @@ export default async function SpacePage({ params }: SpacePageProps) {
                         <p className="text-sm text-text-tertiary">{t('impact.todayLabel')}</p>
                         <p className="text-2xl font-bold text-text-muted">{item.current}</p>
                       </div>
-                      <ChevronRight className="w-6 h-6 text-primary-500 mb-2" />
+                      <ChevronRight className="w-6 h-6 text-action mb-2" />
                       <div>
                         <p className="text-sm text-action">{t('impact.potentialLabel')}</p>
-                        <p className="text-2xl font-bold text-primary-700 dark:text-primary-300">{item.potential}</p>
+                        <p className="text-2xl font-bold text-action">{item.potential}</p>
                       </div>
                     </div>
                     <p className="text-sm text-text-secondary">{item.reason}</p>
@@ -348,18 +348,18 @@ export default async function SpacePage({ params }: SpacePageProps) {
             </div>
 
             {/* Donation CTA */}
-            <Card className="bg-primary-600 text-white">
+            <Card className="bg-action text-white">
               <CardContent className="p-8 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-4 opacity-90" />
                 <Heading level={3} className="text-2xl mb-3">
                   {t('impact.donateCard.title')}
                 </Heading>
-                <p className="text-primary-100 max-w-xl mx-auto mb-6">
+                <p className="text-action-text max-w-xl mx-auto mb-6">
                   {t('impact.donateCard.body')}
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Link href="/get-involved/donate">
-                    <Button size="lg" className="bg-white text-primary-700 hover:bg-primary-50 dark:hover:bg-primary-900/20">
+                    <Button size="lg" className="bg-surface-base text-action hover:bg-action-muted-muted">
                       <Heart className="w-5 h-5 mr-2" />
                       {t('impact.donateCard.donateBtn')}
                     </Button>

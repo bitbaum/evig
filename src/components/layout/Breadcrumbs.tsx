@@ -72,7 +72,7 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
         <li>
           <Link
             href={resolvedHomePath}
-            className="flex items-center gap-1 hover:text-neutral-900 transition-colors"
+            className="flex items-center gap-1 hover:text-text-primary transition-colors"
           >
             <Home className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
@@ -82,13 +82,13 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
           <li key={path} className="flex items-center gap-1.5">
             <ChevronRight className="h-3.5 w-3.5 text-neutral-300 shrink-0" />
             {isLast ? (
-              <span className="font-medium text-neutral-800 dark:text-neutral-200 truncate max-w-[200px]" aria-current="page">
+              <span className="font-medium text-text-primary truncate max-w-[200px]" aria-current="page">
                 {label}
               </span>
             ) : (
               <Link
                 href={path}
-                className="hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors truncate max-w-[200px]"
+                className="hover:text-text-primary transition-colors truncate max-w-[200px]"
               >
                 {label}
               </Link>

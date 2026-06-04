@@ -43,12 +43,12 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       {/* Toggle header — same structure as card headers, but interactive */}
       <button
         onClick={toggle}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors rounded-xl"
+        className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors rounded-xl"
         aria-expanded={open}
         aria-controls="monatsueberblick-content"
       >
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-primary-500 shrink-0" aria-hidden="true" />
+          <TrendingUp className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
           <Heading level={2} className="font-semibold text-text-primary">
             Monatsüberblick
           </Heading>

@@ -88,7 +88,7 @@ export function LoginForm() {
           <Heading level={1} className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
             {t('heading')}
           </Heading>
-          <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
+          <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-text-muted')}>
             {t('subtitle')}
           </p>
         </div>
@@ -135,7 +135,7 @@ export function LoginForm() {
               {t('email')}
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
               <input
                 id="email"
                 type="email"
@@ -149,12 +149,12 @@ export function LoginForm() {
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
                   'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
-                  'border-neutral-300 dark:border-neutral-600',
-                  'bg-white dark:bg-neutral-700',
+                  'border-neutral-300',
+                  'bg-surface-base',
                   getTextColor('white', 'primary'),
                   'dark:text-white',
                   'placeholder-neutral-400',
-                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                  'focus:ring-2 focus:ring-action focus:border-action'
                 )}
               />
             </div>
@@ -168,13 +168,13 @@ export function LoginForm() {
               </label>
               <Link
                 href={ROUTES.public.forgotPassword}
-                className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
+                className="text-sm text-action hover:text-action"
               >
                 {t('forgotPassword')}
               </Link>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -188,18 +188,18 @@ export function LoginForm() {
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
                   'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
-                  'border-neutral-300 dark:border-neutral-600',
-                  'bg-white dark:bg-neutral-700',
+                  'border-neutral-300',
+                  'bg-surface-base',
                   getTextColor('white', 'primary'),
                   'dark:text-white',
                   'placeholder-neutral-400',
-                  'focus:ring-2 focus:ring-primary-500 focus:border-primary-500'
+                  'focus:ring-2 focus:ring-action focus:border-action'
                 )}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
                 aria-label={showPassword ? t('hidePassword') : t('showPassword')}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -236,10 +236,10 @@ export function LoginForm() {
         {/* Divider */}
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-neutral-200 dark:border-neutral-700"></div>
+            <div className="w-full border-t border-strong"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white dark:bg-neutral-800 text-neutral-500">
+            <span className="px-4 bg-surface-base text-text-tertiary">
               {t('newHere', { orgName: ORG.name })}
             </span>
           </div>
@@ -248,7 +248,7 @@ export function LoginForm() {
         {/* Register Link */}
         <Link
           href={ROUTES.public.register}
-          className="w-full flex items-center justify-center gap-2 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-semibold py-3 px-4 rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-2 border-2 border-action text-action hover:bg-action-muted-muted font-semibold py-3 px-4 rounded-lg transition-colors"
         >
           {t('createAccount')}
         </Link>
@@ -256,10 +256,10 @@ export function LoginForm() {
 
       {/* Benefits */}
       <div className="mt-8 text-center">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+        <p className="text-sm text-text-secondary dark:text-text-muted mb-3">
           {t('benefits')}
         </p>
-        <ul className="text-sm text-neutral-600 dark:text-neutral-500 space-y-1">
+        <ul className="text-sm text-text-secondary dark:text-text-tertiary space-y-1">
           <li>✓ {t('benefit1')}</li>
           <li>✓ {t('benefit2')}</li>
           <li>✓ {t('benefit3')}</li>

@@ -51,7 +51,7 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
               {inaccessibleSections.slice(0, 6).map(section => (
                 <span
                   key={section.id}
-                  className="px-3 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-sm rounded-lg"
+                  className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-lg"
                 >
                   {section.label}
                 </span>

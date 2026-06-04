@@ -24,11 +24,11 @@ interface DashboardCardProps {
 
 const colorClasses = {
   info: {
-    bg: 'bg-primary-100 dark:bg-primary-900',
+    bg: 'bg-action-muted',
     text: 'text-action',
   },
   success: {
-    bg: 'bg-primary-100 dark:bg-primary-900',
+    bg: 'bg-action-muted',
     text: 'text-action',
   },
   warning: {
@@ -57,7 +57,7 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
       href={card.href}
       className={cn(
         'card-shell rounded-lg border-2',
-        'p-4 sm:p-6 hover:border-neutral-300 transition-colors',
+        'p-4 sm:p-6 hover:border-strong transition-colors',
         className
       )}
     >
@@ -80,7 +80,7 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
               {card.title}
             </Heading>
             {card.badge && (
-              <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-sm">
+              <span className="px-2 py-0.5 text-xs font-medium bg-action-muted text-action rounded-sm">
                 {card.badge}
               </span>
             )}
@@ -88,7 +88,7 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
           <p className={cn(
             'text-sm mt-1',
             getTextColor('white', 'muted'),
-            'dark:text-neutral-400 line-clamp-2'
+            'dark:text-text-muted line-clamp-2'
           )}>
             {card.description}
           </p>

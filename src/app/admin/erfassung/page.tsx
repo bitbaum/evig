@@ -190,7 +190,7 @@ function ErfassungContent() {
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
           href={ROUTES.admin.products}
-          className="p-2 sm:p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/6 touch-manipulation"
+          className="p-2 sm:p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 touch-manipulation"
         >
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>
@@ -206,7 +206,7 @@ function ErfassungContent() {
           <button
             type="button"
             onClick={handleBulkReset}
-            className="text-sm text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200"
+            className="text-sm text-text-tertiary hover:text-text-secondary"
           >
             Zurück zur Einzelerfassung
           </button>
@@ -216,9 +216,9 @@ function ErfassungContent() {
       {/* Intake cross-link banner */}
       {!form.isEditMode && (
         <div className="flex items-center gap-3 bg-surface-raised border border rounded-lg px-4 py-3 text-sm">
-          <span className="text-neutral-800">
+          <span className="text-text-primary">
             Für Geräte-Eingang mit Checkliste und Spenden-Erfassung →{' '}
-            <Link href="/admin/intake" className="font-medium underline hover:text-neutral-900">
+            <Link href="/admin/intake" className="font-medium underline hover:text-text-primary">
               Geräte-Eingang verwenden
             </Link>
           </span>

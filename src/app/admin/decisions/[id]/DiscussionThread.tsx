@@ -190,7 +190,7 @@ export default function DiscussionThread({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => startEdit(c)}
-                                className="p-2 text-text-tertiary hover:text-primary-600 rounded-sm"
+                                className="p-2 text-text-tertiary hover:text-action rounded-sm"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
@@ -224,7 +224,7 @@ export default function DiscussionThread({
                               </Button>
                               <button
                                 onClick={cancelEdit}
-                                className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-text-secondary hover:bg-neutral-50"
+                                className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-text-secondary hover:bg-surface-raised"
                               >
                                 <X className="w-3 h-3" />
                                 Abbrechen

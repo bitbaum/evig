@@ -31,9 +31,9 @@ export function HelpersTab({
       {/* Helper stats */}
       {stats && (
         <div className="grid grid-cols-3 gap-4">
-          <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
-          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-surface-raised dark:bg-neutral-800/50 border text-neutral-800 dark:text-neutral-200" />
-          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
+          <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-surface-raised border text-text-primary" />
+          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-action-muted-muted border-strong text-action-text" />
         </div>
       )}
 
@@ -67,13 +67,13 @@ export function HelpersTab({
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {helpers?.items.map(h => (
-              <tr key={h.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
+              <tr key={h.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
                 <td className="px-4 py-3">
                   <div>
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Gratis</span>}
+                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted-muted text-action">Gratis</span>}
                     {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">KulturLegi</span>}
                   </div>
                 </td>
@@ -92,9 +92,9 @@ export function HelpersTab({
                     {h.suspended_at ? (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400">Gesperrt</span>
                     ) : h.is_verified ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Verifiziert</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">Verifiziert</span>
                     ) : h.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Aktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">Aktiv</span>
                     ) : (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">Inaktiv</span>
                     )}
@@ -106,16 +106,16 @@ export function HelpersTab({
                     {!h.is_verified && !h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'verify')}
-                        className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
+                        className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                         title="Verifizieren"
                       >
-                        <ShieldCheck className="w-4 h-4 text-primary-500" />
+                        <ShieldCheck className="w-4 h-4 text-action" />
                       </button>
                     )}
                     {!h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'suspend')}
-                        className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
+                        className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                         title="Sperren"
                       >
                         <Ban className="w-4 h-4 text-error-500" />
@@ -124,10 +124,10 @@ export function HelpersTab({
                     {h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'reactivate')}
-                        className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
+                        className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                         title="Reaktivieren"
                       >
-                        <UserCheck className="w-4 h-4 text-primary-500" />
+                        <UserCheck className="w-4 h-4 text-action" />
                       </button>
                     )}
                   </div>

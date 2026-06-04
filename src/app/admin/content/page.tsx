@@ -32,9 +32,9 @@ export default function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentBlog}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Blog-Artikel</Heading>
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Blog-Artikel</Heading>
           <p className="text-sm text-text-secondary">
             News, Tutorials und Ankündigungen
           </p>
@@ -42,9 +42,9 @@ export default function ContentPage() {
 
         <Link
           href={ROUTES.admin.categories}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Kategorien</Heading>
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Kategorien</Heading>
           <p className="text-sm text-text-secondary">
             Blog-Kategorien verwalten
           </p>
@@ -52,9 +52,9 @@ export default function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentPages}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Seiten</Heading>
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Seiten</Heading>
           <p className="text-sm text-text-secondary">
             Statische Seiten wie Über uns, Kontakt, etc.
           </p>
@@ -62,16 +62,16 @@ export default function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentMedia}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Medien</Heading>
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Medien</Heading>
           <p className="text-sm text-text-secondary">
             Bilder, Videos und Dokumente
           </p>
         </Link>
       </div>
 
-      <div className="p-6 bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl">
+      <div className="p-6 bg-surface-raised border border rounded-xl">
         <p className="text-sm text-text-secondary">
           <strong>In Entwicklung:</strong> Die Inhaltsverwaltung wird mit dem AI-CMS verbunden.
         </p>

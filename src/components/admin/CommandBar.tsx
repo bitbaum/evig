@@ -275,12 +275,12 @@ export function CommandBar() {
       {/* Trigger button in top bar (Search icon) */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-neutral-200 dark:bg-white/4 dark:hover:bg-white/8 sm:flex"
+        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-neutral-200 dark:bg-surface-base/4 dark:hover:bg-surface-base/8 sm:flex"
         aria-label="Suche öffnen (⌘K)"
       >
         <Search className="w-3.5 h-3.5" />
         <span className="text-xs">Suche</span>
-        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-neutral-200 dark:bg-neutral-600 rounded-sm text-xs font-mono leading-none">
+        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-neutral-200 rounded-sm text-xs font-mono leading-none">
           ⌘K
         </kbd>
       </button>
@@ -306,7 +306,7 @@ export function CommandBar() {
             autoComplete="off"
             spellCheck={false}
           />
-          <kbd className="shrink-0 rounded-sm bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-white/6">
+          <kbd className="shrink-0 rounded-sm bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-surface-base/6">
             Esc
           </kbd>
         </div>
@@ -334,11 +334,11 @@ export function CommandBar() {
                       onMouseEnter={() => setActiveIdx(currentFlatIdx)}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                         isCurrent
-                          ? 'bg-primary-50 text-primary-700 dark:bg-primary-500/8 dark:text-primary-300'
-                          : 'text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/3'
+                          ? 'bg-action-muted text-action/8'
+                          : 'text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/3'
                       }`}
                     >
-                      <span className={`shrink-0 ${isCurrent ? 'text-primary-500' : 'text-text-muted'}`}>
+                      <span className={`shrink-0 ${isCurrent ? 'text-action' : 'text-text-muted'}`}>
                         {item.icon}
                       </span>
                       <span className="flex-1 min-w-0">
@@ -352,7 +352,7 @@ export function CommandBar() {
                         )}
                       </span>
                       {isCurrent && (
-                        <ChevronRight className="w-3.5 h-3.5 shrink-0 text-primary-400" aria-hidden="true" />
+                        <ChevronRight className="w-3.5 h-3.5 shrink-0 text-action" aria-hidden="true" />
                       )}
                     </button>
                   )
@@ -365,15 +365,15 @@ export function CommandBar() {
         {/* Footer hint */}
         <div className="flex items-center gap-4 border-t border-subtle px-4 py-2 text-xs text-text-muted">
           <span className="flex items-center gap-1">
-            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/6">↑↓</kbd>
+            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">↑↓</kbd>
             Navigieren
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/6">↵</kbd>
+            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">↵</kbd>
             Öffnen
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/6">Esc</kbd>
+            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">Esc</kbd>
             Schliessen
           </span>
         </div>

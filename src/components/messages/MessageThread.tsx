@@ -127,11 +127,11 @@ export default function MessageThread({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border dark:border-neutral-700 bg-surface-base dark:bg-neutral-800">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border bg-surface-base">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors lg:hidden"
+            className="p-1 rounded-lg hover:bg-surface-raised transition-colors lg:hidden"
             aria-label={t('back')}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
@@ -165,8 +165,8 @@ export default function MessageThread({
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                     isMine
-                      ? 'bg-primary-600 text-white rounded-br-md'
-                      : 'bg-surface-raised dark:bg-neutral-700 text-text-primary rounded-bl-md'
+                      ? 'bg-action text-white rounded-br-md'
+                      : 'bg-surface-raised text-text-primary rounded-bl-md'
                   }`}
                 >
                   {!isMine && (
@@ -176,7 +176,7 @@ export default function MessageThread({
                   )}
                   <p className="text-sm whitespace-pre-line wrap-break-word">{msg.content}</p>
                   <p className={`text-xs mt-1 ${
-                    isMine ? 'text-primary-200' : 'text-text-muted'
+                    isMine ? 'text-action-text' : 'text-text-muted'
                   }`}>
                     {formatTime(msg.created_at)}
                   </p>
@@ -189,7 +189,7 @@ export default function MessageThread({
       </div>
 
       {/* Reply input */}
-      <div className="border-t border dark:border-neutral-700 bg-surface-base dark:bg-neutral-800 px-4 py-3">
+      <div className="border-t border bg-surface-base px-4 py-3">
         <div className="flex items-end gap-2">
           <Textarea
             ref={textareaRef}

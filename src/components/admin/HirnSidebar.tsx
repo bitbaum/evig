@@ -81,14 +81,14 @@ export function HirnSidebar({
       {stats && (
         <div className="px-4 pb-4">
           <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 p-2 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-surface-raised rounded-lg">
               <FileText className="w-4 h-4 text-action" />
               <div>
                 <p className="text-xs text-text-tertiary">Dokumente</p>
                 <p className="font-medium text-text-primary">{stats.totalDocuments}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 p-2 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-surface-raised rounded-lg">
               <BarChart3 className="w-4 h-4 text-action" />
               <div>
                 <p className="text-xs text-text-tertiary">Chunks</p>
@@ -121,8 +121,8 @@ export function HirnSidebar({
                 onClick={() => onSelectSession(session.sessionId)}
                 className={`w-full flex items-center gap-2 p-2 rounded-lg text-left transition-colors ${
                   currentSessionId === session.sessionId
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-900 dark:text-primary-100'
-                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-text-secondary'
+                    ? 'bg-action-muted-muted text-action-text'
+                    : 'hover:bg-surface-raised text-text-secondary'
                 }`}
               >
                 <MessageSquare className="w-4 h-4 shrink-0" />

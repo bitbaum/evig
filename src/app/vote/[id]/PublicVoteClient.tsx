@@ -94,25 +94,25 @@ export default function PublicVoteClient({
   if (success) {
     return (
       <div className="space-y-4">
-        <div className="rounded-xl bg-primary-50 dark:bg-primary-500/8 border border-primary-200 dark:border-primary-500/20 p-6 text-center">
-          <CheckCircle className="mx-auto h-10 w-10 text-primary-500 mb-3" />
-          <p className="text-lg font-semibold text-primary-800 dark:text-primary-300">{t('successHeading')}</p>
-          <p className="mt-1 text-sm text-primary-700 dark:text-primary-400">{t('successDesc')}</p>
+        <div className="rounded-xl bg-action-muted/8 border border-strong dark:border-action/20 p-6 text-center">
+          <CheckCircle className="mx-auto h-10 w-10 text-action mb-3" />
+          <p className="text-lg font-semibold text-action">{t('successHeading')}</p>
+          <p className="mt-1 text-sm text-action">{t('successDesc')}</p>
         </div>
 
         {/* Registration gate — results require an account */}
-        <div className="rounded-xl border border-neutral-200 dark:border-white/6 bg-white dark:bg-neutral-900 p-6 shadow-xs dark:shadow-none">
+        <div className="rounded-xl border border-strong dark:border-white/6 bg-surface-base p-6 shadow-xs dark:shadow-none">
           <div className="flex items-start gap-3">
-            <UserPlus className="h-5 w-5 text-neutral-500 dark:text-neutral-400 mt-0.5 shrink-0" />
+            <UserPlus className="h-5 w-5 text-text-tertiary dark:text-text-muted mt-0.5 shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold text-neutral-900 dark:text-white">{t('successRegisterHeading')}</p>
-              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{t('successRegisterDesc')}</p>
+              <p className="font-semibold text-text-primary">{t('successRegisterHeading')}</p>
+              <p className="mt-1 text-sm text-text-secondary dark:text-text-muted">{t('successRegisterDesc')}</p>
               <Button as={Link} href={registerUrl} variant="primary" size="sm" className="mt-3">
                 {t('successRegisterCta')}
               </Button>
-              <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
+              <p className="mt-3 text-xs text-text-tertiary dark:text-text-muted">
                 {t('successOrLogin')}{' '}
-                <Link href={loginUrl} className="text-primary-600 dark:text-primary-400 hover:underline">
+                <Link href={loginUrl} className="text-action hover:underline">
                   {t('successLoginCta')}
                 </Link>
               </p>
@@ -150,8 +150,8 @@ export default function PublicVoteClient({
       />
 
       {/* Email identification */}
-      <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/6 p-5">
-        <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+      <div className="rounded-xl bg-surface-raised border border-strong dark:border-white/6 p-5">
+        <label className="block text-sm font-semibold text-text-primary mb-2">
           {t('emailLabel')}
         </label>
         <input
@@ -160,16 +160,16 @@ export default function PublicVoteClient({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-neutral-300 dark:border-white/8 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+          className="w-full rounded-lg border border-neutral-300 dark:border-white/8 bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted dark:placeholder:text-text-tertiary focus:outline-hidden focus:ring-2 focus:ring-action dark:focus:ring-primary-400"
         />
-        <p className="mt-1.5 text-xs text-neutral-700 dark:text-neutral-400">
+        <p className="mt-1.5 text-xs text-text-secondary dark:text-text-muted">
           {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}
         </p>
       </div>
 
       {/* Ballot */}
-      <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/6 p-5 shadow-xs dark:shadow-none">
-        <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-4">{t('yourVote')}</p>
+      <div className="rounded-xl bg-surface-base border border-strong dark:border-white/6 p-5 shadow-xs dark:shadow-none">
+        <p className="text-sm font-semibold text-text-secondary mb-4">{t('yourVote')}</p>
 
         {votingMethod === 'consent' && (
           <ConsentVote

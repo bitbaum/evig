@@ -38,7 +38,7 @@ export default function ListingDetailError({
           </Button>
           <Link
             href={ROUTES.public.marketplace}
-            className="text-sm text-text-secondary hover:text-neutral-900 min-h-touch inline-flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm"
+            className="text-sm text-text-secondary hover:text-text-primary min-h-touch inline-flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm"
           >
             {t('listingDetail.back')}
           </Link>

@@ -60,7 +60,7 @@ export default function TechnikerProfilPage() {
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-4"
+            className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             {t('backToDashboard')}
@@ -82,7 +82,7 @@ export default function TechnikerProfilPage() {
         )}
 
         {success && (
-          <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg text-primary-700 dark:text-primary-300 flex items-center gap-2">
+          <div className="mb-6 p-4 bg-action-muted-muted border border-strong rounded-lg text-action flex items-center gap-2">
             <CheckCircle className="w-5 h-5" />
             {t('saveSuccess')}
           </div>
@@ -120,7 +120,7 @@ export default function TechnikerProfilPage() {
                       onClick={() => handleSkillToggle(skill.id)}
                       className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                         profile.skills.includes(skill.id)
-                          ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-2 border-primary-500'
+                          ? 'bg-action-muted-muted text-action border-2 border-action'
                           : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
                       }`}
                       title={skill.description}
@@ -152,7 +152,7 @@ export default function TechnikerProfilPage() {
                 onClick={() => handleServiceTypeToggle(type.id)}
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${
                   profile.serviceTypes.includes(type.id)
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-2 border-primary-500'
+                    ? 'bg-action-muted-muted text-action border-2 border-action'
                     : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
                 }`}
               >
@@ -288,7 +288,7 @@ export default function TechnikerProfilPage() {
                       acceptsGratis: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon} {t('pricing.acceptsGratis')}
@@ -305,7 +305,7 @@ export default function TechnikerProfilPage() {
                       acceptsKulturlegi: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-primary-500"
+                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon} {t('pricing.acceptsKulturlegi')}
@@ -361,7 +361,7 @@ export default function TechnikerProfilPage() {
                 }
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-base after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action"></div>
             </div>
           </label>
         </div>
@@ -370,7 +370,7 @@ export default function TechnikerProfilPage() {
         <div className="flex justify-end gap-4">
           <Link
             href={IT_HILFE.routes.browse}
-            className="px-6 py-3 text-text-secondary border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
+            className="px-6 py-3 text-text-secondary border border-neutral-300 rounded-lg hover:bg-surface-raised transition-colors"
           >
             {t('cancel')}
           </Link>

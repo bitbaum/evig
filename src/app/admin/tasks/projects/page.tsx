@@ -40,8 +40,8 @@ export const metadata: Metadata = {
 }
 
 const STATUS_COLORS: Record<ProjectStatus, string> = {
-  planning:  'bg-surface-raised text-text-secondary dark:bg-white/6',
-  active:    'bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400',
+  planning:  'bg-surface-raised text-text-secondary dark:bg-surface-base/6',
+  active:    'bg-action-muted text-action/15',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
   cancelled: 'bg-error-100 text-error-800 dark:bg-error-500/15 dark:text-error-400',
@@ -126,7 +126,7 @@ export default async function TaskProjectsPage() {
 
       {projects.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-12 text-center')}>
-          <FolderKanban className="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-600 mb-4" />
+          <FolderKanban className="mx-auto h-12 w-12 text-neutral-300 dark:text-text-secondary mb-4" />
           <p className="text-sm font-semibold text-text-primary mb-1">
             Noch keine Projekte
           </p>
@@ -158,14 +158,14 @@ export default async function TaskProjectsPage() {
                 href={ROUTES.admin.taskProject(project.id)}
                 className={cn(
                   designPrimitive.surface.card,
-                  'group flex flex-col p-5 transition-colors hover:border-neutral-300 dark:hover:border-white/12'
+                  'group flex flex-col p-5 transition-colors hover:border-strong dark:hover:border-white/12'
                 )}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <FolderKanban className="h-4 w-4 shrink-0 text-text-muted group-hover:text-primary-500 transition-colors" />
-                    <span className="text-sm font-semibold text-text-primary truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                    <FolderKanban className="h-4 w-4 shrink-0 text-text-muted group-hover:text-action transition-colors" />
+                    <span className="text-sm font-semibold text-text-primary truncate group-hover:text-action dark:group-hover:text-action transition-colors">
                       {project.title}
                     </span>
                   </div>
@@ -192,13 +192,13 @@ export default async function TaskProjectsPage() {
                       <span className="text-xs text-text-muted">
                         {project.completedTaskCount}/{project.taskCount} Aufgaben
                       </span>
-                      <span className="text-xs font-medium text-text-secondary dark:text-neutral-300">
+                      <span className="text-xs font-medium text-text-secondary">
                         {progress}%
                       </span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-surface-raised dark:bg-white/6">
+                    <div className="h-1.5 w-full rounded-full bg-surface-raised dark:bg-surface-base/6">
                       <div
-                        className="h-1.5 rounded-full bg-primary-500 transition-all"
+                        className="h-1.5 rounded-full bg-action transition-all"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
@@ -221,7 +221,7 @@ export default async function TaskProjectsPage() {
                       </span>
                     )}
                   </div>
-                  <ArrowRight className="h-3.5 w-3.5 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 transition-colors" />
+                  <ArrowRight className="h-3.5 w-3.5 text-neutral-300 dark:text-text-secondary group-hover:text-action transition-colors" />
                 </div>
               </Link>
             )

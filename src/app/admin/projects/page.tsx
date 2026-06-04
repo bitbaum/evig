@@ -72,7 +72,7 @@ export default async function AdminProjectsPage() {
 
       {list.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-8 sm:p-12 text-center')}>
-          <Lightbulb className="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-600 mb-4" />
+          <Lightbulb className="mx-auto h-12 w-12 text-neutral-300 dark:text-text-secondary mb-4" />
           <p className="text-sm font-semibold text-text-primary mb-1">{t('empty.title')}</p>
           <p className="text-sm text-text-tertiary">{t('empty.description')}</p>
         </div>
@@ -84,7 +84,7 @@ export default async function AdminProjectsPage() {
               href={ROUTES.admin.project(p.slug)}
               className={cn(
                 designPrimitive.surface.card,
-                'group flex flex-col p-5 transition-colors hover:border-neutral-300 dark:hover:border-white/12',
+                'group flex flex-col p-5 transition-colors hover:border-strong dark:hover:border-white/12',
               )}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -92,12 +92,12 @@ export default async function AdminProjectsPage() {
                   <p className="text-xs uppercase tracking-wider text-text-muted mb-0.5 truncate">
                     /projects/{p.slug}
                   </p>
-                  <h3 className="text-sm font-semibold text-text-primary truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  <h3 className="text-sm font-semibold text-text-primary truncate group-hover:text-action dark:group-hover:text-action transition-colors">
                     {p.slug}
                   </h3>
                 </div>
                 {!p.isActive && (
-                  <span className={cn(designPrimitive.badgeBase, 'bg-surface-raised text-text-secondary dark:bg-white/6 shrink-0')}>
+                  <span className={cn(designPrimitive.badgeBase, 'bg-surface-raised text-text-secondary dark:bg-surface-base/6 shrink-0')}>
                     {t('card.inactive')}
                   </span>
                 )}
@@ -120,7 +120,7 @@ export default async function AdminProjectsPage() {
               </div>
 
               <div className="mt-auto pt-4 border-t border-subtle flex items-center justify-end">
-                <ArrowRight className="h-3.5 w-3.5 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 transition-colors" />
+                <ArrowRight className="h-3.5 w-3.5 text-neutral-300 dark:text-text-secondary group-hover:text-action transition-colors" />
               </div>
             </Link>
           ))}

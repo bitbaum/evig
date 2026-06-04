@@ -56,7 +56,7 @@ export default function AdminReviewsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-action"></div>
       </div>
     )
   }
@@ -99,7 +99,7 @@ export default function AdminReviewsPage() {
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
+                    ? 'bg-action-muted-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
@@ -147,7 +147,7 @@ export default function AdminReviewsPage() {
                       </Heading>
                       <AdminStatusBadge status={review.status} config={REVIEW_STATUS_CONFIG} />
                       {review.isVerifiedPurchase && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-neutral-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-primary">
                           Verifizierter Kauf
                         </span>
                       )}
@@ -173,7 +173,7 @@ export default function AdminReviewsPage() {
                           </span>
                           <span className="text-xs text-text-secondary">{formatDateShort(review.response.createdAt)}</span>
                         </div>
-                        <p className="text-neutral-800 text-sm">{review.response.content}</p>
+                        <p className="text-text-primary text-sm">{review.response.content}</p>
                       </div>
                     )}
                   </div>

@@ -81,7 +81,7 @@ export default function CategoryForm({
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.categories}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -133,7 +133,7 @@ export default function CategoryForm({
         </div>
       )}
       {success && (
-        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg">
+        <div className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
           {success}
         </div>
       )}
@@ -266,7 +266,7 @@ export default function CategoryForm({
                       is_active: e.target.checked,
                     }))
                   }
-                  className="w-5 h-5 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                  className="w-5 h-5 rounded-sm border-neutral-300 text-action focus:ring-action"
                 />
                 <label
                   htmlFor="is_active"

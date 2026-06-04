@@ -51,7 +51,7 @@ export function ConfirmReviewCard({
   }
 
   return (
-    <div className="bg-primary-50 dark:bg-primary-900/20 rounded-xl border-2 border-primary-300 dark:border-primary-800/30 p-6">
+    <div className="bg-action-muted-muted rounded-xl border-2 border-strong p-6">
       <div className="flex items-start gap-3 mb-4">
         <CheckCircle className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
         <div>
@@ -84,7 +84,7 @@ export function ConfirmReviewCard({
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHover(star)}
                 onMouseLeave={() => setHover(0)}
-                className="p-2 focus:outline-hidden focus:ring-2 focus:ring-primary-500 rounded-sm"
+                className="p-2 focus:outline-hidden focus:ring-2 focus:ring-action rounded-sm"
                 aria-label={t('starAriaLabel', { count: star })}
               >
                 <Star
@@ -124,10 +124,10 @@ export function ConfirmReviewCard({
             <button
               type="button"
               onClick={() => setRecommended(true)}
-              className={`flex-1 py-3 px-4 min-h-touch rounded-lg font-medium border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+              className={`flex-1 py-3 px-4 min-h-touch rounded-lg font-medium border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
                 recommended === true
-                  ? 'bg-primary-600 text-white border-primary-600'
-                  : 'bg-surface-base text-text-secondary border-neutral-300 hover:border-primary-400'
+                  ? 'bg-action text-white border-action'
+                  : 'bg-surface-base text-text-secondary border-neutral-300 hover:border-action'
               }`}
             >
               {t('recommendYes')}

@@ -102,7 +102,7 @@ export default async function AnalysePage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+          <div className="p-2 bg-action-muted-muted rounded-lg">
             <BarChart3 className="w-6 h-6 text-action" />
           </div>
           <div>
@@ -242,9 +242,9 @@ export default async function AnalysePage() {
 
         {/* Positive Insights */}
         {positiveInsights.length > 0 && (
-          <Card className="border-primary-200">
+          <Card className="border-strong">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-primary-700 dark:text-primary-300">
+              <CardTitle className="text-lg flex items-center gap-2 text-action">
                 <CheckCircle2 className="w-5 h-5" />
                 Positive Entwicklungen
               </CardTitle>
@@ -252,11 +252,11 @@ export default async function AnalysePage() {
             <CardContent>
               <ul className="space-y-3">
                 {positiveInsights.map(insight => (
-                  <li key={insight.id} className="border-l-4 border-primary-400 pl-3">
+                  <li key={insight.id} className="border-l-4 border-action pl-3">
                     <div className="font-medium">{insight.title}</div>
                     <div className="text-sm text-muted-foreground">{insight.description}</div>
                     {insight.implication && (
-                      <div className="text-sm text-primary-700 dark:text-primary-300 mt-1">
+                      <div className="text-sm text-action mt-1">
                         {insight.implication}
                       </div>
                     )}
@@ -271,7 +271,7 @@ export default async function AnalysePage() {
       {/* Quick Links */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Link href={ROUTES.admin.analyseFinanzen} className="block">
-          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+          <Card className="hover:bg-surface-raised transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Finanzen</div>
               <div className="text-sm text-muted-foreground">
@@ -281,7 +281,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href={ROUTES.admin.analyseKennzahlen} className="block">
-          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+          <Card className="hover:bg-surface-raised transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Kennzahlen</div>
               <div className="text-sm text-muted-foreground">
@@ -291,7 +291,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href={ROUTES.admin.analyseWirkung} className="block">
-          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+          <Card className="hover:bg-surface-raised transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Wirkung</div>
               <div className="text-sm text-muted-foreground">
@@ -301,7 +301,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href={ROUTES.admin.analyseTransparenz} className="block">
-          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+          <Card className="hover:bg-surface-raised transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Transparenz</div>
               <div className="text-sm text-muted-foreground">
@@ -313,7 +313,7 @@ export default async function AnalysePage() {
       </div>
 
       {/* Data Source */}
-      <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-surface-raised rounded-lg text-sm text-muted-foreground">
         <strong>Datenquellen:</strong> Finanzdaten aus Kivitendo • Letzte Aktualisierung: {latestData?.metadata.importedAt ? formatDateShort(latestData.metadata.importedAt) : 'N/A'}
       </div>
     </div>

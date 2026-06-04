@@ -185,7 +185,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
         <PageShell maxWidth="4xl" py="py-6">
           <Link
             href="/workshops"
-            className="inline-flex items-center text-text-secondary hover:text-neutral-800 mb-4"
+            className="inline-flex items-center text-text-secondary hover:text-text-primary mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('detail.backToWorkshops')}
@@ -281,7 +281,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
                   <ul className="space-y-2">
                     {workshop.learning_objectives.map((objective, index) => (
                       <li key={index} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-primary-500 mr-3 mt-0.5 shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-action mr-3 mt-0.5 shrink-0" />
                         <span className="text-text-secondary">{objective}</span>
                       </li>
                     ))}
@@ -353,7 +353,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
                                 </div>
                                 <div className="w-24 bg-neutral-200 rounded-full h-2">
                                   <div
-                                    className="bg-primary-600 h-2 rounded-full"
+                                    className="bg-action h-2 rounded-full"
                                     style={{ width: `${Math.min(100, (instance.current_participants / maxParts) * 100)}%` }}
                                   />
                                 </div>

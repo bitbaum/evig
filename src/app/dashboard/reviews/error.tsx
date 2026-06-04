@@ -20,7 +20,7 @@ export default function ReviewsError({
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
-      <div className="max-w-md w-full bg-surface-base dark:bg-neutral-800 shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
+      <div className="max-w-md w-full bg-surface-base shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
         <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           Fehler beim Laden der Bewertungen
@@ -34,7 +34,7 @@ export default function ReviewsError({
           </Button>
           <Link
             href="/dashboard"
-            className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 min-h-touch inline-flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm"
+            className="text-sm text-text-secondary hover:text-text-primary min-h-touch inline-flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm"
           >
             Zurück zum Dashboard
           </Link>

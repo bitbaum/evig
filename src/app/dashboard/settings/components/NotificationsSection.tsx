@@ -59,10 +59,10 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
         {notificationOptions.map((option) => (
           <div
             key={option.id}
-            className="flex items-start gap-4 p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg border-2 border dark:border-neutral-600"
+            className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border-2 border"
           >
             <div className="shrink-0">
-              <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
                 <option.icon className="w-5 h-5 text-text-secondary" />
               </div>
             </div>
@@ -75,8 +75,8 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                 <button
                   type="button"
                   onClick={() => handleChange(option.id, !option.value)}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                    option.value ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-600'
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
+                    option.value ? 'bg-action' : 'bg-neutral-200'
                   }`}
                 >
                   <span

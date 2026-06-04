@@ -55,9 +55,9 @@ export default function ParticipationCard({ decisionId, refreshTrigger }: { deci
             Quorum: {quorumPct}% erforderlich
           </span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
+        <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
           <div
-            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-primary-500' : 'bg-warning-500')}
+            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-action' : 'bg-warning-500')}
             style={{ width: `${data.progressPercent}%` }}
           />
         </div>
@@ -76,7 +76,7 @@ export default function ParticipationCard({ decisionId, refreshTrigger }: { deci
           <p className={cn(adminType.meta, 'mb-1.5')}>Noch nicht abgestimmt:</p>
           <div className="flex flex-wrap gap-1">
             {data.notVoted.map((u) => (
-              <span key={u.id} className="rounded-md bg-surface-raised dark:bg-neutral-700 px-2 py-0.5 text-xs text-text-secondary">
+              <span key={u.id} className="rounded-md bg-surface-raised px-2 py-0.5 text-xs text-text-secondary">
                 {u.email}
               </span>
             ))}

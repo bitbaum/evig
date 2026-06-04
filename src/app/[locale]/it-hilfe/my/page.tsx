@@ -81,7 +81,7 @@ export default function MyRequestsPage() {
   if (status === 'loading' || (status === 'authenticated' && loading)) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
     )
   }
@@ -115,7 +115,7 @@ export default function MyRequestsPage() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
-                  ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                  ? 'bg-action-muted-muted text-action'
                   : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
               }`}
             >
@@ -127,7 +127,7 @@ export default function MyRequestsPage() {
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                    ? 'bg-action-muted-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
@@ -182,7 +182,7 @@ export default function MyRequestsPage() {
                 <Link
                   key={req.id}
                   href={`/it-hilfe/${req.id}`}
-                  className="block card-shell p-6 hover:border-neutral-300 transition-all group"
+                  className="block card-shell p-6 hover:border-strong transition-all group"
                 >
                   <div className="flex items-start gap-4">
                     <div className={`p-3 ${categoryConfig?.color || 'bg-neutral-500'} rounded-xl`}>
@@ -207,7 +207,7 @@ export default function MyRequestsPage() {
                         </span>
                       </div>
 
-                      <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 transition-colors">
+                      <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors">
                         {req.title}
                       </Heading>
 
@@ -236,7 +236,7 @@ export default function MyRequestsPage() {
                       </div>
                     </div>
 
-                    <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary-600 transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-action transition-colors" />
                   </div>
                 </Link>
               )

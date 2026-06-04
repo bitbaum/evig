@@ -44,7 +44,7 @@ export default function NewsletterSignup() {
       <div className="border-t border-b border py-12">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted-muted rounded-full mb-4">
             <Mail className="w-8 h-8 text-action" />
           </div>
           <Heading level={3} className="text-2xl font-bold text-text-primary mb-3">
@@ -84,12 +84,12 @@ export default function NewsletterSignup() {
 
         {/* Signup Form */}
         {status === 'success' ? (
-          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-3">
+          <div className="bg-action-muted-muted border border-strong rounded-lg p-6 text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-action-muted-muted rounded-full mb-3">
               <Check className="w-6 h-6 text-action" />
             </div>
-            <p className="text-primary-800 dark:text-primary-300 font-semibold mb-1">{message}</p>
-            <p className="text-primary-700 dark:text-primary-400 text-sm">
+            <p className="text-action font-semibold mb-1">{message}</p>
+            <p className="text-action text-sm">
               {t('confirmEmail')}
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function NewsletterSignup() {
           </p>
           <Link
             href="/support"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary border border-neutral-300 rounded-lg hover:bg-surface-raised transition-colors"
           >
             <Heart className="w-4 h-4" />
             {t('supportButton')}

@@ -18,7 +18,7 @@ export interface BenefitCardProps {
 
 export function BenefitCard({ icon: Icon, title, description, className = '' }: BenefitCardProps) {
   return (
-    <div className={`card-shell ${responsiveSpacing.cardPadding} hover:border-primary-200 transition-colors duration-300 ${className}`}>
+    <div className={`card-shell ${responsiveSpacing.cardPadding} hover:border-strong transition-colors duration-300 ${className}`}>
       <div className={`text-action ${responsiveSpacing.mbSmall}`}>
         <Icon className="w-10 h-10" />
       </div>

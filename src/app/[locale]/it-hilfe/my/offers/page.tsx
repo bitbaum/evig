@@ -48,7 +48,7 @@ export default function MyOffersPage() {
   if (sessionStatus === 'loading' || (sessionStatus === 'authenticated' && loading)) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
     )
   }
@@ -78,7 +78,7 @@ export default function MyOffersPage() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
-                  ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+                  ? 'bg-action-muted-muted text-action'
                   : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
               }`}
             >
@@ -90,7 +90,7 @@ export default function MyOffersPage() {
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+                    ? 'bg-action-muted-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
@@ -142,7 +142,7 @@ export default function MyOffersPage() {
               return (
                 <div
                   key={offer.id}
-                  className="card-shell hover:border-neutral-300 transition-all"
+                  className="card-shell hover:border-strong transition-all"
                 >
                   <Link href={`/it-hilfe/${offer.requestId}`} className="block p-6 group">
                     <div className="flex items-start gap-4">
@@ -165,7 +165,7 @@ export default function MyOffersPage() {
                           )}
                         </div>
 
-                        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 transition-colors">
+                        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors">
                           {offer.request.title}
                         </Heading>
 
@@ -197,7 +197,7 @@ export default function MyOffersPage() {
                         </div>
                       </div>
 
-                      <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary-600 transition-colors" />
+                      <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-action transition-colors" />
                     </div>
                   </Link>
 

@@ -9,26 +9,26 @@ export function ComparisonSection() {
   ]
 
   return (
-    <section className="py-16 px-4 bg-neutral-50">
+    <section className="py-16 px-4 bg-surface-raised">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-neutral-900 text-center mb-12">
+        <h2 className="text-3xl font-bold text-text-primary text-center mb-12">
           Klassisches CMS vs. Kontextuelles System
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-neutral-200">
-                <th className="text-left py-3 pr-4 font-semibold text-neutral-700">Funktion</th>
-                <th className="text-left py-3 px-4 font-semibold text-neutral-500">Klassisch</th>
-                <th className="text-left py-3 pl-4 font-semibold text-primary-700">Unser System</th>
+              <tr className="border-b border-strong">
+                <th className="text-left py-3 pr-4 font-semibold text-text-secondary">Funktion</th>
+                <th className="text-left py-3 px-4 font-semibold text-text-tertiary">Klassisch</th>
+                <th className="text-left py-3 pl-4 font-semibold text-action">Unser System</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={r.feature} className={i % 2 === 0 ? 'bg-white' : ''}>
-                  <td className="py-3 pr-4 text-neutral-700 font-medium">{r.feature}</td>
-                  <td className="py-3 px-4 text-neutral-500">{r.classic}</td>
-                  <td className="py-3 pl-4 text-neutral-800">{r.new}</td>
+                <tr key={r.feature} className={i % 2 === 0 ? 'bg-surface-base' : ''}>
+                  <td className="py-3 pr-4 text-text-secondary font-medium">{r.feature}</td>
+                  <td className="py-3 px-4 text-text-tertiary">{r.classic}</td>
+                  <td className="py-3 pl-4 text-text-primary">{r.new}</td>
                 </tr>
               ))}
             </tbody>

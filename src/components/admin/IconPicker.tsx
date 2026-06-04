@@ -36,10 +36,10 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-surface-base border border-neutral-300 dark:border-neutral-600 rounded-lg hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-surface-base border border-neutral-300 rounded-lg hover:border-strong transition-colors"
       >
-        <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-lg flex items-center justify-center">
-          <RenderIcon iconName={value} className="w-6 h-6 text-text-secondary dark:text-neutral-300" />
+        <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
+          <RenderIcon iconName={value} className="w-6 h-6 text-text-secondary" />
         </div>
         <div className="flex-1 text-left">
           <span className="text-text-primary">{currentLabel}</span>
@@ -83,13 +83,13 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     title={label}
                     className={`
                       flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${isSelected
-                        ? 'bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-500'
-                        : 'hover:bg-neutral-100 dark:hover:bg-white/6 border-2 border-transparent'
+                        ? 'bg-action-muted-muted border-2 border-action'
+                        : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 border-2 border-transparent'
                       }
                     `}
                   >
                     <IconComponent
-                      className={`w-6 h-6 ${isSelected ? 'text-action' : 'text-text-secondary dark:text-neutral-300'}`}
+                      className={`w-6 h-6 ${isSelected ? 'text-action' : 'text-text-secondary'}`}
                     />
                     <span className="text-xs mt-1 text-text-tertiary truncate w-full text-center">
                       {label.split('/')[0]}

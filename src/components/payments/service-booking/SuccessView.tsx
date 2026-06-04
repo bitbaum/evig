@@ -25,15 +25,15 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
         <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
-        <CardTitle className="text-primary-800">{t('successTitle')}</CardTitle>
+        <CardTitle className="text-action">{t('successTitle')}</CardTitle>
         <CardDescription>
           {t('successDesc')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
-          <Heading level={3} className="font-semibold text-primary-800 dark:text-primary-300 mb-2">{t('bookingDetails')}</Heading>
-          <div className="space-y-2 text-sm text-primary-700 dark:text-primary-400">
+        <div className="bg-action-muted-muted p-4 rounded-lg">
+          <Heading level={3} className="font-semibold text-action mb-2">{t('bookingDetails')}</Heading>
+          <div className="space-y-2 text-sm text-action">
             <p><strong>{t('detailService')}</strong> {service.name}</p>
             <p><strong>{t('detailAppointmentId')}</strong> {paymentData?.appointmentId}</p>
             <p><strong>{t('detailInvoice')}</strong> {paymentData?.invoiceNumber}</p>

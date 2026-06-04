@@ -54,13 +54,13 @@ export function NewsletterSignup({
 
   if (status === 'success') {
     return (
-      <div className="rounded-lg p-4 text-sm bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
+      <div className="rounded-lg p-4 text-sm bg-action-muted text-action">
         {t('successMessage')}
       </div>
     )
   }
 
-  const inputClass = 'flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-neutral-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/10 dark:bg-neutral-800 dark:placeholder:text-neutral-500'
+  const inputClass = 'flex h-10 w-full rounded-md border border-neutral-300 bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action dark:border-white/10 dark:placeholder:text-text-tertiary'
 
   return (
     <div>

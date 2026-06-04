@@ -45,7 +45,7 @@ export function ProductSpecFields({
         <button
           type="button"
           onClick={onSpecAdd}
-          className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 touch-manipulation p-2 -m-2"
+          className="inline-flex items-center gap-1 text-sm text-action hover:text-action touch-manipulation p-2 -m-2"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">{t('addField')}</span>

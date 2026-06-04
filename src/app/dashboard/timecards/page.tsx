@@ -84,7 +84,7 @@ export default async function DashboardTimecardsPage() {
         </div>
         <Link
           href="/dashboard/shift"
-          className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
+          className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-action text-white text-sm font-semibold hover:bg-action transition-colors"
         >
           Schicht starten
         </Link>

@@ -31,7 +31,7 @@ export default function SubmissionsAdminPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -49,7 +49,7 @@ export default function SubmissionsAdminPage() {
             <div className="text-2xl font-bold">{s.counts.pending}</div>
             <div className="text-xs">Ausstehend</div>
           </div>
-          <div className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-2 rounded-lg text-center">
+          <div className="bg-action-muted-muted text-action px-4 py-2 rounded-lg text-center">
             <div className="text-2xl font-bold">{s.counts.published}</div>
             <div className="text-xs">Veröffentlicht</div>
           </div>
@@ -63,7 +63,7 @@ export default function SubmissionsAdminPage() {
         </div>
       )}
       {s.success && (
-        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg">
+        <div className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
           {s.success}
         </div>
       )}

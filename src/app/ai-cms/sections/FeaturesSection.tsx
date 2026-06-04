@@ -9,17 +9,17 @@ export function FeaturesSection() {
   ]
 
   return (
-    <section className="py-16 px-4 bg-neutral-50">
+    <section className="py-16 px-4 bg-surface-raised">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-neutral-900 text-center mb-12">
+        <h2 className="text-3xl font-bold text-text-primary text-center mb-12">
           Funktionen
         </h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {features.map((f) => (
-            <div key={f.title} className="bg-white rounded-lg border border-neutral-200 p-6">
+            <div key={f.title} className="bg-surface-base rounded-lg border border-strong p-6">
               <div className="text-3xl mb-3">{f.icon}</div>
-              <h3 className="font-semibold text-neutral-900 mb-2">{f.title}</h3>
-              <p className="text-neutral-600 text-sm">{f.description}</p>
+              <h3 className="font-semibold text-text-primary mb-2">{f.title}</h3>
+              <p className="text-text-secondary text-sm">{f.description}</p>
             </div>
           ))}
         </div>

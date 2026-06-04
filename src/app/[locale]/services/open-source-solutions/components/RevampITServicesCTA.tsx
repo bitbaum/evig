@@ -26,10 +26,10 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
         <div className="flex items-start gap-3 mb-3">
           <Wrench className="w-5 h-5 text-action shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-neutral-800">{services.itHilfeNote}</p>
+            <p className="text-sm text-text-primary">{services.itHilfeNote}</p>
             <Link
               href={ROUTES.public.itHilfe}
-              className="text-sm font-medium text-primary-700 hover:text-neutral-900 underline"
+              className="text-sm font-medium text-action hover:text-text-primary underline"
             >
               {t('itHilfeLink')}
             </Link>
@@ -41,10 +41,10 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
         <div className="flex items-start gap-3">
           <GraduationCap className="w-5 h-5 text-action shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-neutral-800">{t('workshopAvailable')}</p>
+            <p className="text-sm text-text-primary">{t('workshopAvailable')}</p>
             <Link
               href={`/workshops/${services.workshopSlug}`}
-              className="text-sm font-medium text-primary-700 hover:text-neutral-900 underline"
+              className="text-sm font-medium text-action hover:text-text-primary underline"
             >
               {t('workshopLink')}
             </Link>

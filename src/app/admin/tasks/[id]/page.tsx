@@ -174,14 +174,14 @@ export default async function TaskDetailPage({
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.tasks}
-            className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 transition-colors"
+            className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück
           </Link>
           <div className="w-px h-6 bg-neutral-300" />
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
               <ClipboardList className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -196,7 +196,7 @@ export default async function TaskDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/tasks/${id}/edit`}
-            className="px-4 py-2 text-sm text-text-secondary hover:text-neutral-900 border border hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary border border hover:border-strong rounded-lg transition-colors flex items-center gap-2"
           >
             <Edit className="w-4 h-4" />
             Bearbeiten
@@ -208,14 +208,14 @@ export default async function TaskDetailPage({
       <div className="flex items-center gap-3">
         <span
           className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-neutral-800'
+            TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-text-primary'
           }`}
         >
           {TASK_STATUS_LABELS[task.current_status]}
         </span>
         <span
           className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-neutral-800'
+            TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-text-primary'
           }`}
         >
           {TASK_PRIORITY_LABELS[task.priority]}
@@ -226,7 +226,7 @@ export default async function TaskDetailPage({
             (Per admin UX audit 2026-06-03; the boolean is kept in schema
             for completion-history aggregates.) */}
         {task.is_archived && (
-          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-surface-raised text-neutral-800">
+          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-surface-raised text-text-primary">
             Archiviert
           </span>
         )}
@@ -322,7 +322,7 @@ export default async function TaskDetailPage({
                     key={completion.id}
                     className="flex items-start gap-3 pb-4 border-b last:border-0"
                   >
-                    <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-action-muted-muted rounded-full flex items-center justify-center">
                       <CheckCircle2 className="w-4 h-4 text-action" />
                     </div>
                     <div className="flex-1">

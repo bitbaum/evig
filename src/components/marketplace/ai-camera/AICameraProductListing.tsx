@@ -75,7 +75,7 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white dark:border dark:border-white/6 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -124,7 +124,7 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
     <div className="p-6 border-b border">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
             <Zap className="w-5 h-5 text-action" />
           </div>
           <div>
@@ -138,7 +138,7 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
         </div>
         <button
           onClick={onClose}
-          className="text-text-tertiary hover:text-neutral-600 transition-colors"
+          className="text-text-tertiary hover:text-text-secondary transition-colors"
         >
           <X className="w-6 h-6" />
         </button>

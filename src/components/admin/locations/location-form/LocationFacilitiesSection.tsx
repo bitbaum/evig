@@ -43,7 +43,7 @@ export function LocationFacilitiesSection({ formData, onFieldChange, onFacilityC
                   type="checkbox"
                   checked={formData.facilities.includes(facility)}
                   onChange={(e) => onFacilityChange(facility, e.target.checked)}
-                  className="mr-2 text-action focus:ring-primary-500"
+                  className="mr-2 text-action focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary capitalize">
                   {facility.replace('_', ' ')}

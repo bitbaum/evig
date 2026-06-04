@@ -112,7 +112,7 @@ export function IntakeDetailView({
 
         <div className="flex items-center gap-2">
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted-muted text-action">
               <Check className="w-4 h-4" /> Im Shop
             </span>
           ) : (
@@ -120,7 +120,7 @@ export function IntakeDetailView({
               <button
                 type="button"
                 onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
-                className="flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg hover:bg-neutral-50"
+                className="flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg hover:bg-surface-raised"
                 title="Stufe ändern"
               >
                 <ArrowDownUp className="w-3.5 h-3.5" /> Stufe ändern
@@ -162,7 +162,7 @@ export function IntakeDetailView({
         <div className="w-full h-3 bg-neutral-200 rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all ${
-              progress.percentage === 100 ? 'bg-primary-500' :
+              progress.percentage === 100 ? 'bg-action' :
               progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
             }`}
             style={{ width: `${progress.percentage}%` }}
@@ -185,7 +185,7 @@ export function IntakeDetailView({
       {detail.intake_tier === INTAKE_TIERS.REFURBISH && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
-            ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20'
+            ? 'border-strong bg-action-muted-muted'
             : 'border bg-surface-raised'
         }`}>
           <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
@@ -223,7 +223,7 @@ export function IntakeDetailView({
             {detail.checklist_complete && (
               <Link
                 href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-neutral-50 text-sm font-medium"
+                className="inline-flex items-center gap-1.5 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised text-sm font-medium"
                 title="Produkt in Erfassung öffnen um Details zu ergänzen"
               >
                 <ClipboardList className="w-4 h-4" />
@@ -236,11 +236,11 @@ export function IntakeDetailView({
 
       {/* Published confirmation */}
       {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
-        <div className="border-2 border-primary-300 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4 text-center">
+        <div className="border-2 border-strong bg-action-muted-muted rounded-lg p-4 text-center">
           <Check className="w-8 h-8 text-action mx-auto mb-2" />
-          <p className="font-medium text-primary-800 dark:text-primary-300">Dieses Gerät ist im Shop veröffentlicht</p>
+          <p className="font-medium text-action">Dieses Gerät ist im Shop veröffentlicht</p>
           {detail.selling_price_chf && (
-            <p className="text-sm text-primary-700 dark:text-primary-300 mt-1">Preis: CHF {detail.selling_price_chf.toFixed(2)}</p>
+            <p className="text-sm text-action mt-1">Preis: CHF {detail.selling_price_chf.toFixed(2)}</p>
           )}
         </div>
       )}
@@ -289,7 +289,7 @@ export function IntakeDetailView({
             <button
               type="button"
               onClick={() => setShowTierChange(false)}
-              className="px-3 py-1.5 border rounded-lg hover:bg-neutral-50 text-sm"
+              className="px-3 py-1.5 border rounded-lg hover:bg-surface-raised text-sm"
             >
               Abbrechen
             </button>

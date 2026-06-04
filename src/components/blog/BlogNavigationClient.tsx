@@ -77,8 +77,8 @@ export default function BlogNavigationClient({
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                 selectedCategorySlugs.length === 0
-                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                  : "bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  ? "bg-neutral-900 dark:bg-surface-raised text-white dark:text-text-primary"
+                  : "bg-surface-raised text-text-secondary hover:bg-neutral-200"
               )}
             >
               {t('all')}
@@ -95,14 +95,14 @@ export default function BlogNavigationClient({
                       "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                       selected
                         ? "text-white"
-                        : "bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                        : "bg-surface-raised text-text-secondary hover:bg-neutral-200"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >
                     <span
                       className={cn(
                         "inline-block w-2 h-2 rounded-full mr-1.5",
-                        selected ? "bg-white/80" : ""
+                        selected ? "bg-surface-base/80" : ""
                       )}
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
@@ -165,7 +165,7 @@ export default function BlogNavigationClient({
                 className={cn(
                   "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                   selectedCategorySlugs.length === 0
-                    ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                    ? "bg-neutral-900 dark:bg-surface-raised text-white dark:text-text-primary"
                     : "bg-surface-raised text-text-secondary"
                 )}
               >
@@ -190,7 +190,7 @@ export default function BlogNavigationClient({
                     <span
                       className={cn(
                         "inline-block w-2 h-2 rounded-full mr-1.5",
-                        selected ? "bg-white/80" : ""
+                        selected ? "bg-surface-base/80" : ""
                       )}
                       style={!selected ? { backgroundColor: color } : undefined}
                     />

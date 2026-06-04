@@ -40,13 +40,13 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-surface-raised dark:bg-neutral-900">
+    <main className="min-h-screen bg-surface-raised">
       {/* Header */}
-      <div className="bg-surface-base dark:bg-neutral-800 border-b-2 border dark:border-neutral-700">
+      <div className="bg-surface-base border-b-2 border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-text-secondary hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 mb-4 transition-colors"
+            className="inline-flex items-center text-text-secondary hover:text-text-secondary dark:text-text-muted mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
@@ -62,7 +62,7 @@ export default function SettingsPage() {
             </div>
             <Link
               href="/dashboard/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-raised hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-text-secondary dark:text-neutral-200 rounded-lg transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-raised hover:bg-neutral-200 text-text-secondary rounded-lg transition-colors text-sm"
             >
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">{t('editProfile')}</span>
@@ -74,7 +74,7 @@ export default function SettingsPage() {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 mb-6 overflow-x-auto">
+        <div className="bg-surface-base rounded-xl shadow-xs border-2 border mb-6 overflow-x-auto">
           <nav className="flex">
             {tabs.map((tab) => (
               <button
@@ -82,8 +82,8 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'border-primary-600 text-action bg-primary-50/50 dark:bg-primary-900/10'
-                    : 'border-transparent text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
+                    ? 'border-action text-action bg-action-muted/50'
+                    : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-raised'
                 }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -97,9 +97,9 @@ export default function SettingsPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Success Message */}
           {saveSuccess && (
-            <div className="bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-200 dark:border-primary-800 rounded-lg p-4 flex items-center gap-3">
+            <div className="bg-action-muted-muted border-2 border-strong rounded-lg p-4 flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-action" />
-              <p className="text-primary-700 dark:text-primary-300">
+              <p className="text-action">
                 {labels.saveSuccess}
               </p>
             </div>
@@ -113,7 +113,7 @@ export default function SettingsPage() {
           )}
 
           {/* Tab Content */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6">
             {activeTab === 'account' && (
               <AccountSection
                 profile={profile}

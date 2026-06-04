@@ -34,7 +34,7 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
           {options.map((opt) => (
             <label
               key={opt.id}
-              className="flex items-center gap-3 rounded-md border border p-3 hover:bg-neutral-50 cursor-pointer"
+              className="flex items-center gap-3 rounded-md border border p-3 hover:bg-surface-raised cursor-pointer"
             >
               <input
                 type="checkbox"
@@ -46,7 +46,7 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
                 className="rounded-sm"
               />
               <div>
-                <span className="font-medium text-neutral-800">{opt.label}</span>
+                <span className="font-medium text-text-primary">{opt.label}</span>
                 {opt.description && (
                   <span className="ml-2 text-sm text-text-tertiary">{opt.description}</span>
                 )}

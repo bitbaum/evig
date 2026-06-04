@@ -42,7 +42,7 @@ export default function DecisionFormClient() {
         <button
           type="button"
           onClick={() => setShowTemplates(!showTemplates)}
-          className="text-sm text-action hover:text-primary-700 hover:underline"
+          className="text-sm text-action hover:text-action hover:underline"
         >
           {showTemplates ? '▼' : '▶'} Vorlage wählen
         </button>
@@ -55,12 +55,12 @@ export default function DecisionFormClient() {
 
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
-        <div className="flex items-start justify-between gap-3 rounded-md border border-primary-200 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 text-sm text-primary-700 dark:text-primary-300">
+        <div className="flex items-start justify-between gap-3 rounded-md border border-strong bg-action-muted-muted px-4 py-3 text-sm text-action">
           <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
           <button
             type="button"
             onClick={() => form.setAiRecommendationReason('')}
-            className="shrink-0 text-text-muted hover:text-primary-600"
+            className="shrink-0 text-text-muted hover:text-action"
           >
             ×
           </button>
@@ -125,7 +125,7 @@ export default function DecisionFormClient() {
         <button
           type="button"
           onClick={() => setShowMore((v) => !v)}
-          className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-700"
+          className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary"
         >
           <span className="text-xs">{showMore ? '▼' : '▶'}</span>
           Weitere Einstellungen
@@ -205,16 +205,16 @@ export default function DecisionFormClient() {
       </div>
 
       {/* Public voting — surfaced prominently so sharing is easy */}
-      <label className="flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 cursor-pointer">
+      <label className="flex items-start gap-3 rounded-lg border border-strong bg-action-muted-muted px-4 py-3 cursor-pointer">
         <input
           type="checkbox"
           checked={form.allowPublicVoting}
           onChange={(e) => form.setAllowPublicVoting(e.target.checked)}
-          className="mt-0.5 rounded-sm border-primary-400 text-action focus:ring-primary-500"
+          className="mt-0.5 rounded-sm border-action text-action focus:ring-action"
         />
         <div>
-          <span className="text-sm font-medium text-primary-900 dark:text-primary-200">Mit Link teilen — kein Konto nötig</span>
-          <p className="text-xs text-primary-700 dark:text-primary-300 mt-0.5">
+          <span className="text-sm font-medium text-action-text">Mit Link teilen — kein Konto nötig</span>
+          <p className="text-xs text-action mt-0.5">
             Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
           </p>
         </div>

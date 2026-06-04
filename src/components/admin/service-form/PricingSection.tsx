@@ -68,7 +68,7 @@ export function PricingSection({
           <button
             type="button"
             onClick={onDetailAdd}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-action-muted-muted rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Detail hinzufügen
@@ -102,7 +102,7 @@ export function PricingSection({
           <button
             type="button"
             onClick={onMediaPriceAdd}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-action-muted-muted rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Medienpreis hinzufügen

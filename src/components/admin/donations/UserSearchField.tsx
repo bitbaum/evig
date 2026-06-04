@@ -27,7 +27,7 @@ export function UserSearchField({
         Benutzer verknüpfen (optional)
       </label>
       {selectedUser ? (
-        <div className="flex items-center gap-2 p-3 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-action-muted-muted border border-strong rounded-lg">
           <User className="w-5 h-5 text-action" />
           <div className="flex-1">
             <div className="text-sm font-medium text-text-primary">
@@ -40,7 +40,7 @@ export function UserSearchField({
           <button
             type="button"
             onClick={onClearUser}
-            className="text-text-tertiary hover:text-neutral-600"
+            className="text-text-tertiary hover:text-text-secondary"
           >
             <X className="w-4 h-4" />
           </button>
@@ -69,7 +69,7 @@ export function UserSearchField({
                   key={user.id}
                   type="button"
                   onClick={() => onSelectUser(user)}
-                  className="w-full px-3 py-2 text-left hover:bg-neutral-50 flex items-center gap-2"
+                  className="w-full px-3 py-2 text-left hover:bg-surface-raised flex items-center gap-2"
                 >
                   <User className="w-4 h-4 text-text-muted" />
                   <div>

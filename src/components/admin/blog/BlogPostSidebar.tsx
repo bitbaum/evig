@@ -38,7 +38,7 @@ export function BlogPostSidebar({
               onChange={(e) => onFormDataChange({ ...formData, isPublished: e.target.checked })}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-neutral-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-500 peer-checked:bg-primary-600"></div>
+            <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-base after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action"></div>
           </label>
           <span className="text-sm text-text-secondary">
             {formData.isPublished ? 'Veröffentlicht' : 'Entwurf'}
@@ -104,13 +104,13 @@ export function BlogPostSidebar({
           {formData.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-sm text-sm"
+              className="inline-flex items-center gap-1 px-2 py-1 bg-action-muted-muted text-action rounded-sm text-sm"
             >
               {tag}
               <button
                 type="button"
                 onClick={() => onRemoveTag(tag)}
-                className="hover:text-primary-900 dark:hover:text-primary-100"
+                className="hover:text-action-text"
               >
                 ×
               </button>

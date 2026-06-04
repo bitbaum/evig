@@ -63,7 +63,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" />
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">{error}</Heading>
-        <Link href="/dashboard/orders" className="text-action hover:text-primary-700 font-medium">
+        <Link href="/dashboard/orders" className="text-action hover:text-action font-medium">
           {t('backToOrders')}
         </Link>
       </div>
@@ -81,7 +81,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     <div className="max-w-3xl mx-auto">
       <Link
         href="/dashboard/orders"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToOrders')}
@@ -138,7 +138,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Status timeline */}
       {!isCancelled && (
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs mb-6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs mb-6">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('orderTimeline')}</Heading>
           <OrderStatusTimeline
             status={order.status}
@@ -155,13 +155,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Listing info */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('articleSection')}</Heading>
           <Link
             href={`/marketplace/${order.listingId}`}
             className="flex gap-3 hover:opacity-80 transition-opacity"
           >
-            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised dark:bg-neutral-700">
+            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
               {order.thumbnail ? (
                 <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={64} height={64} className="w-full h-full object-cover" />
               ) : (
@@ -182,7 +182,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           {/* Tracking info */}
           {order.shippingAddress?.tracking_number && (
             <div className="mt-4 p-3 bg-surface-raised rounded-lg">
-              <p className="text-sm font-medium text-neutral-800 dark:text-neutral-300">
+              <p className="text-sm font-medium text-text-primary">
                 {t('trackingNumber', { number: order.shippingAddress.tracking_number })}
               </p>
               {order.shippingAddress.tracking_url && (
@@ -190,7 +190,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   href={order.shippingAddress.tracking_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-action hover:text-primary-700 flex items-center gap-1 mt-1"
+                  className="text-sm text-action hover:text-action flex items-center gap-1 mt-1"
                 >
                   {t('trackShipment')} <ExternalLink className="w-3 h-3" />
                 </a>
@@ -200,7 +200,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         </div>
 
         {/* Price breakdown */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('priceSection')}</Heading>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -212,13 +212,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               <span className="text-text-primary">{formatCHF(Number(order.commissionChf))}</span>
             </div>
             {order.role === 'seller' && (
-              <div className="flex justify-between font-medium pt-2 border-t border dark:border-neutral-700">
+              <div className="flex justify-between font-medium pt-2 border-t border">
                 <span className="text-text-secondary">{t('yourPayout')}</span>
                 <span className="text-action">{formatCHF(Number(order.sellerPayoutChf))}</span>
               </div>
             )}
             {order.role === 'buyer' && (
-              <div className="flex justify-between font-bold pt-2 border-t border dark:border-neutral-700">
+              <div className="flex justify-between font-bold pt-2 border-t border">
                 <span className="text-text-primary">{t('totalPaid')}</span>
                 <span className="text-text-primary">{formatCHF(Number(order.amountChf))}</span>
               </div>
@@ -231,12 +231,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         </div>
 
         {/* Counterparty info */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">
             {order.role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}
           </Heading>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -244,7 +244,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               {order.role === 'buyer' && (
                 <Link
                   href={`/sellers/${order.sellerId}`}
-                  className="text-sm text-action hover:text-primary-700"
+                  className="text-sm text-action hover:text-action"
                 >
                   {t('viewProfile')}
                 </Link>
@@ -255,7 +255,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
         {/* Shipping address */}
         {order.deliveryMethod === 'shipping' && order.shippingAddress && (
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
+          <div className="bg-surface-base rounded-xl p-6 shadow-xs">
             <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('shippingAddress')}</Heading>
             <div className="text-sm text-text-secondary space-y-1">
               {order.shippingAddress.name && <p className="font-medium">{order.shippingAddress.name}</p>}
@@ -269,7 +269,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* Action buttons */}
-      <div className="mt-6 bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
+      <div className="mt-6 bg-surface-base rounded-xl p-6 shadow-xs">
         <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('actionsSection')}</Heading>
 
         <div className="space-y-3">
@@ -356,12 +356,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Review section — only for buyer once order is completed */}
       {order.role === 'buyer' && order.status === ORDER_STATUS.COMPLETED && (
-        <div className="mt-6 bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
+        <div className="mt-6 bg-surface-base rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">
             {hasReview ? t('reviewSectionHasReview') : t('reviewSectionNoReview')}
           </Heading>
           {hasReview ? (
-            <div className="flex items-center gap-2 text-sm text-text-secondary dark:text-neutral-300">
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
               <CheckCircle className="w-4 h-4 text-action" />
               {t('reviewedNote', { date: order.reviewedAt ? formatDateShort(order.reviewedAt) : '' })}
             </div>

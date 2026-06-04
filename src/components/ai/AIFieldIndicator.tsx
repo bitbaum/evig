@@ -35,7 +35,7 @@ const SOURCE_LABELS = {
 }
 
 function getConfidenceColor(confidence: number): string {
-  if (confidence >= 0.85) return 'bg-primary-100 text-primary-700 border-primary-300 dark:bg-primary-900/30 dark:text-primary-300 dark:border-primary-700'
+  if (confidence >= 0.85) return 'bg-action-muted text-action border-strong-muted'
   if (confidence >= 0.7) return 'bg-warning-100 text-warning-700 border-warning-300 dark:bg-warning-900/30 dark:text-warning-200 dark:border-warning-700'
   if (confidence >= 0.5) return 'bg-secondary-100 text-secondary-700 border-secondary-300 dark:bg-secondary-900/30 dark:text-secondary-300 dark:border-secondary-700'
   return 'bg-error-100 text-error-700 border-error-300 dark:bg-error-900/30 dark:text-error-300 dark:border-error-700'
@@ -84,7 +84,7 @@ export function AIFieldIndicator({
           />
 
           {/* Popover */}
-          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-surface-base dark:bg-neutral-800 rounded-lg shadow-lg border dark:border-neutral-700 p-3">
+          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-surface-base rounded-lg shadow-lg border p-3">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export function AIFieldIndicator({
               <button
                 type="button"
                 onClick={() => setShowDetails(false)}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
+                className="p-2 hover:bg-surface-raised rounded-sm"
               >
                 <X className="w-4 h-4 text-text-tertiary" />
               </button>
@@ -125,7 +125,7 @@ export function AIFieldIndicator({
               {source.model && (
                 <div className="flex items-center justify-between">
                   <span className="text-text-secondary">Modell:</span>
-                  <code className="px-1.5 py-0.5 bg-surface-raised dark:bg-neutral-700 rounded-sm text-xs">
+                  <code className="px-1.5 py-0.5 bg-surface-raised rounded-sm text-xs">
                     {source.model}
                   </code>
                 </div>
@@ -133,11 +133,11 @@ export function AIFieldIndicator({
 
               {/* Source input */}
               {source.inputText && (
-                <div className="mt-2 pt-2 border-t border dark:border-neutral-700">
+                <div className="mt-2 pt-2 border-t border">
                   <span className="text-text-secondary block mb-1">
                     Eingabe:
                   </span>
-                  <div className="bg-surface-raised dark:bg-neutral-900 rounded-sm p-2 text-xs text-text-secondary max-h-20 overflow-y-auto">
+                  <div className="bg-surface-raised rounded-sm p-2 text-xs text-text-secondary max-h-20 overflow-y-auto">
                     &ldquo;{source.inputText}&rdquo;
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export function AIFieldIndicator({
 
               {/* Verification sources */}
               {source.sources && source.sources.length > 0 && (
-                <div className="mt-2 pt-2 border-t border dark:border-neutral-700">
+                <div className="mt-2 pt-2 border-t border">
                   <span className="text-text-secondary block mb-1.5 flex items-center gap-1">
                     <ExternalLink className="w-3 h-3" />
                     Quellen prüfen:
@@ -157,7 +157,7 @@ export function AIFieldIndicator({
                         href={verifySource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-primary-50 dark:bg-primary-900/20 rounded-sm px-2 py-1"
+                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-action-muted-muted rounded-sm px-2 py-1"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink className="w-3 h-3 shrink-0" />

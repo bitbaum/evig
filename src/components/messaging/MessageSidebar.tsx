@@ -133,9 +133,9 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
-      <div className="ml-auto w-full max-w-md bg-white h-full flex flex-col">
+      <div className="ml-auto w-full max-w-md bg-surface-base h-full flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
+        <div className="p-4 border-b border-strong flex items-center justify-between">
           <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
           <Button onClick={onClose} variant="ghost" size="icon" className="p-1">
             ×
@@ -147,15 +147,15 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
           {!selectedConversation && (
             <div className="flex-1 flex flex-col">
               {/* Search */}
-              <div className="p-4 border-b border-neutral-200">
+              <div className="p-4 border-b border-strong">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
                   <input
                     type="text"
                     placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
                   />
                 </div>
               </div>
@@ -163,7 +163,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Conversations */}
               <div className="flex-1 overflow-y-auto">
                 {filteredConversations.length === 0 ? (
-                  <div className="p-8 text-center text-neutral-500">
+                  <div className="p-8 text-center text-text-tertiary">
                     <MessageSquare className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
                     <p>{t('noConversations')}</p>
                   </div>
@@ -172,29 +172,29 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     <button
                       key={conversation.id}
                       onClick={() => setSelectedConversation(conversation.id)}
-                      className="w-full p-4 border-b border-neutral-100 hover:bg-neutral-50 text-left flex items-start gap-3"
+                      className="w-full p-4 border-b border-subtle hover:bg-surface-raised text-left flex items-start gap-3"
                     >
                       <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center shrink-0">
-                        <User className="w-5 h-5 text-neutral-600" />
+                        <User className="w-5 h-5 text-text-secondary" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
                           <p className="font-medium truncate">
                             {conversation.other_participant.name}
                           </p>
-                          <span className="text-xs text-neutral-500 shrink-0">
+                          <span className="text-xs text-text-tertiary shrink-0">
                             {formatDateShort(conversation.last_message_at)}
                           </span>
                         </div>
-                        <p className="text-sm text-neutral-600 truncate mb-1">
+                        <p className="text-sm text-text-secondary truncate mb-1">
                           {conversation.last_message_preview || t('newConversation')}
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-neutral-500 capitalize">
+                          <span className="text-xs text-text-tertiary capitalize">
                             {conversation.type}
                           </span>
                           {conversation.unread_count > 0 && (
-                            <span className="bg-primary-600 text-white text-xs px-2 py-1 rounded-full">
+                            <span className="bg-action text-white text-xs px-2 py-1 rounded-full">
                               {conversation.unread_count}
                             </span>
                           )}
@@ -211,7 +211,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
           {selectedConversation && (
             <div className="flex-1 flex flex-col">
               {/* Message Header */}
-              <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
+              <div className="p-4 border-b border-strong flex items-center justify-between">
                 <Button onClick={() => setSelectedConversation(null)} variant="ghost" size="icon" className="p-1">
                   ←
                 </Button>
@@ -228,9 +228,9 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {isLoading ? (
-                  <div className="text-center text-neutral-500">{t('loading')}</div>
+                  <div className="text-center text-text-tertiary">{t('loading')}</div>
                 ) : messages.length === 0 ? (
-                  <div className="text-center text-neutral-500">
+                  <div className="text-center text-text-tertiary">
                     <MessageSquare className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
                     <p>{t('noMessages')}</p>
                   </div>
@@ -245,13 +245,13 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                         <div
                           className={`max-w-xs px-4 py-2 rounded-lg ${
                             isOwn
-                              ? 'bg-primary-600 text-white'
-                              : 'bg-neutral-100 text-neutral-900'
+                              ? 'bg-action text-white'
+                              : 'bg-surface-raised text-text-primary'
                           }`}
                         >
                           <p className="text-sm">{message.content}</p>
                           <div className={`flex items-center gap-1 mt-1 text-xs ${
-                            isOwn ? 'text-primary-100' : 'text-neutral-500'
+                            isOwn ? 'text-action-text' : 'text-text-tertiary'
                           }`}>
                             <span>{formatTime(message.created_at)}</span>
                             {isOwn && (
@@ -270,7 +270,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               </div>
 
               {/* Message Input */}
-              <div className="p-4 border-t border-neutral-200">
+              <div className="p-4 border-t border-strong">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -278,7 +278,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder={t('messagePlaceholder')}
-                    className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
                   />
                   <Button
                     onClick={sendMessage}

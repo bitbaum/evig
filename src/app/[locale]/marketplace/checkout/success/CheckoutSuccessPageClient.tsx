@@ -59,7 +59,7 @@ function CheckoutSuccessContent() {
   return (
     <div className="max-w-lg mx-auto py-12 text-center">
       <div className="card-shell rounded-2xl p-8">
-        <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+        <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
 
         <Heading level={1} className="text-2xl text-text-primary mb-2">
           {t('heading')}
@@ -69,9 +69,9 @@ function CheckoutSuccessContent() {
         </p>
 
         {order && (
-          <div className="bg-surface-raised dark:bg-neutral-700/50 rounded-xl p-4 mb-6 text-left">
+          <div className="bg-surface-raised rounded-xl p-4 mb-6 text-left">
             <div className="flex gap-3">
-              <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-neutral-200 dark:bg-neutral-600">
+              <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-neutral-200">
                 {order.thumbnail ? (
                   <Image src={order.thumbnail} alt={order.listing_title || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
                 ) : (

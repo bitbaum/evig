@@ -71,15 +71,15 @@ export default function WorkshopsDashboard() {
 
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/2"></div>
+                <div className="h-4 bg-neutral-200 rounded-sm w-full"></div>
+                <div className="h-4 bg-neutral-200 rounded-sm w-3/4"></div>
+                <div className="h-4 bg-neutral-200 rounded-sm w-1/2"></div>
               </div>
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function WorkshopsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg p-8 text-center border-2 border">
             <Heading level={1} className="text-2xl font-bold mb-4 text-text-primary">{t('loginRequired')}</Heading>
@@ -105,12 +105,12 @@ export default function WorkshopsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center mb-4 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400"
+            className="inline-flex items-center mb-4 text-text-secondary hover:text-action"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
@@ -120,14 +120,14 @@ export default function WorkshopsDashboard() {
         </div>
 
         {paymentSuccess && (
-          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
+          <div className="bg-action-muted-muted border border-strong rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <CheckCircle className="w-5 h-5 text-action shrink-0" />
-              <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
+              <p className="text-action font-medium">{t('paymentSuccess')}</p>
             </div>
             <button
               onClick={() => setPaymentSuccess(false)}
-              className="text-action hover:text-primary-800 text-lg leading-none"
+              className="text-action hover:text-action text-lg leading-none"
               aria-label={t('cancel')}
             >
               ×
@@ -164,12 +164,12 @@ export default function WorkshopsDashboard() {
                 </div>
 
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED && (
-                  <div className="bg-primary-50 dark:bg-primary-500/10 border border-primary-200 dark:border-primary-500/30 rounded-lg p-4">
-                    <div className="flex items-center text-primary-800 dark:text-primary-300">
+                  <div className="bg-action-muted/10 border border-strong dark:border-action/30 rounded-lg p-4">
+                    <div className="flex items-center text-action">
                       <CheckCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('confirmedTitle')}</span>
                     </div>
-                    <p className="text-primary-700 dark:text-primary-400 text-sm mt-1">{t('confirmedDesc')}</p>
+                    <p className="text-action text-sm mt-1">{t('confirmedDesc')}</p>
                   </div>
                 )}
 
@@ -221,8 +221,8 @@ export default function WorkshopsDashboard() {
         ) : (
           <EmptyState
             icon={Calendar}
-            iconBg="bg-primary-50 dark:bg-primary-900/20"
-            iconColor="text-primary-500 dark:text-primary-400"
+            iconBg="bg-action-muted-muted"
+            iconColor="text-action"
             title={t('emptyTitle')}
             description={t('emptyDesc')}
             action={

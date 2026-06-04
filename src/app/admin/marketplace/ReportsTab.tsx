@@ -46,9 +46,9 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {reports?.items.map(r => (
-              <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
+              <tr key={r.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
                 <td className="px-4 py-3">
-                  <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-primary-600 flex items-center gap-1">
+                  <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
                     {r.listing_title} <ExternalLink className="w-3 h-3" />
                   </a>
                   <p className="text-xs text-text-tertiary">Verkäufer: {r.seller_name || r.seller_email}</p>
@@ -70,7 +70,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                   {r.status === REPORT_STATUS.PENDING && (
                     <button
                       onClick={() => onHandle(r.id)}
-                      className="px-3 py-1.5 text-sm rounded-lg border border dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-white/6"
+                      className="px-3 py-1.5 text-sm rounded-lg border border hover:bg-surface-raised dark:hover:bg-surface-base/6"
                     >
                       Bearbeiten
                     </button>

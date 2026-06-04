@@ -28,7 +28,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
-      <Heading level={1} className="mb-8 text-3xl dark:text-white">{t('title')}</Heading>
+      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
 
       <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('section1.title')}</Heading>
@@ -50,7 +50,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
         <p>
           {t('section5.body')}{' '}
           {t('section5.contactLabel')}{' '}
-          <a href={`mailto:${CONTACT.email}`} className="text-primary-700 underline">{CONTACT.email}</a>.
+          <a href={`mailto:${CONTACT.email}`} className="text-action underline">{CONTACT.email}</a>.
         </p>
 
         <Heading level={2}>{t('section6.title')}</Heading>
@@ -62,7 +62,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
         <Heading level={2}>{t('section8.title')}</Heading>
         <p>
           {t('section8.body')}{' '}
-          <Link href="/datenschutz" className="text-primary-700 underline">
+          <Link href="/datenschutz" className="text-action underline">
             {t('section8.privacyLinkLabel')}
           </Link>
         </p>
@@ -73,7 +73,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
         <Heading level={2}>{t('section10.title')}</Heading>
         <p>
           {t('section10.body', { orgName: ORG.name })}{' '}
-          <Link href="/impressum" className="text-primary-700 underline">
+          <Link href="/impressum" className="text-action underline">
             {t('section10.impressumLinkLabel')}
           </Link>.
         </p>

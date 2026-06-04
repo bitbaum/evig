@@ -104,7 +104,7 @@ export function ProjectNeedsSection({ slug, labels }: Props) {
               return (
                 <div key={need.id} className={cn(designPrimitive.surface.card, 'p-5 sm:p-6 flex flex-col')}>
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-action-muted/15">
                       <Icon className="h-5 w-5 text-action" />
                     </div>
                     <div className="min-w-0 flex-1">

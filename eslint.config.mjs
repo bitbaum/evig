@@ -36,6 +36,17 @@ const DESIGN_SYSTEM_RULES = {
         "Use <Input> from @/components/ui/input instead of raw text <input>. " +
         "The primitive handles dark mode + tokens correctly; raw <input> doesn't.",
     },
+    {
+      // Block raw <button> in feature code. <Button> from @/components/ui/button
+      // bakes in token-aware variants, focus rings, sizes. Style drift is
+      // inevitable without enforcement (see 402 violations before this rule).
+      // Exempt: small components without inline action role (icon-only,
+      // toolbar items) MUST still use <Button variant="ghost" size="icon" />.
+      selector: "JSXOpeningElement[name.name='button']",
+      message:
+        "Use <Button> from @/components/ui/button instead of raw <button>. " +
+        "Variants/sizes/tokens are baked in; raw <button> drifts.",
+    },
   ],
 };
 

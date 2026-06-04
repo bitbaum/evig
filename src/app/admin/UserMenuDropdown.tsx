@@ -48,13 +48,13 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
         onClick={() => setUserMenuOpen(!userMenuOpen)}
         className={`flex items-center gap-3 p-1.5 pr-3 rounded-full transition-all duration-200 ${
           userMenuOpen
-            ? 'bg-surface-raised dark:bg-neutral-700'
-            : 'hover:bg-neutral-100 dark:hover:bg-white/6'
+            ? 'bg-surface-raised'
+            : 'hover:bg-surface-raised dark:hover:bg-surface-base/6'
         }`}
         aria-expanded={userMenuOpen}
         aria-haspopup="true"
       >
-        <div className="w-9 h-9 bg-primary-600 rounded-full flex items-center justify-center">
+        <div className="w-9 h-9 bg-action rounded-full flex items-center justify-center">
           <span className="text-white font-medium text-sm">
             {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'S'}
           </span>
@@ -82,7 +82,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
         }`}
       >
         <div className="overflow-hidden rounded-xl border border bg-surface-base shadow-xl">
-          <div className="border-b border bg-surface-raised px-4 py-3 dark:bg-white/3">
+          <div className="border-b border bg-surface-raised px-4 py-3 dark:bg-surface-base/3">
             <p className="text-sm font-semibold text-text-primary truncate">
               {user?.name || 'Staff'}
             </p>
@@ -95,7 +95,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             <Link
               href={ROUTES.public.home}
               onClick={() => setUserMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors hover:bg-neutral-100 dark:hover:bg-white/4"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/4"
             >
               <ExternalLink className="w-4 h-4 text-text-tertiary" />
               Zur Website

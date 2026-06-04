@@ -89,8 +89,8 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
                 className={cn(
                   'inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                   isActive
-                    ? 'border-primary-600 text-primary-700 dark:text-primary-300'
-                    : 'border-transparent text-text-secondary hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-white/10',
+                    ? 'border-action text-action'
+                    : 'border-transparent text-text-secondary hover:text-text-primary hover:border-strong dark:hover:border-white/10',
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -101,7 +101,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
         </nav>
         <Link
           href={`/admin/team/${profile.id}/edit`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 whitespace-nowrap"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 whitespace-nowrap"
         >
           <Edit2 className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Bearbeiten</span>

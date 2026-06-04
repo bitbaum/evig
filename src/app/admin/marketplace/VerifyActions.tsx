@@ -108,7 +108,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
         </Button>
         <button
           onClick={() => { setShowNotes(false); setNotes('') }}
-          className="px-2 py-1.5 text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="px-2 py-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
         >
           Abbrechen
         </button>
@@ -119,7 +119,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   return (
     <button
       onClick={() => setShowNotes(true)}
-      className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+      className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-strong text-action hover:bg-action-muted-muted transition-colors"
       title="Als geprüft markieren"
     >
       <ShieldCheck className="w-4 h-4" />

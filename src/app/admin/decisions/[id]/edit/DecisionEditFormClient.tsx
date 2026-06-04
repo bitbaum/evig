@@ -91,7 +91,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         <button
           type="button"
           onClick={() => setShowAdvanced((v) => !v)}
-          className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-700"
+          className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary"
         >
           <span className="text-xs">{showAdvanced ? '▼' : '▶'}</span>
           Erweiterte Einstellungen
@@ -110,16 +110,16 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
               blindVoting={blindVoting}
               onBlindVotingChange={setBlindVoting}
             />
-            <label className="flex items-start gap-3 rounded-lg border border-primary-200 dark:border-primary-800/50 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 cursor-pointer">
+            <label className="flex items-start gap-3 rounded-lg border border-strong bg-action-muted-muted px-4 py-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={allowPublicVoting}
                 onChange={(e) => setAllowPublicVoting(e.target.checked)}
-                className="mt-0.5 rounded-sm border-primary-400 text-action focus:ring-primary-500"
+                className="mt-0.5 rounded-sm border-action text-action focus:ring-action"
               />
               <div>
-                <span className="text-sm font-medium text-primary-900 dark:text-primary-300">Mit Link teilen — kein Konto nötig</span>
-                <p className="text-xs text-primary-700 dark:text-primary-400 mt-0.5">
+                <span className="text-sm font-medium text-action">Mit Link teilen — kein Konto nötig</span>
+                <p className="text-xs text-action mt-0.5">
                   Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
                 </p>
               </div>
@@ -134,7 +134,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         </Button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-neutral-300 dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800"
+          className="rounded-lg border border-neutral-300 dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
         >
           Abbrechen
         </Link>

@@ -26,7 +26,7 @@ export async function BenefitsSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {benefits.map((benefit, index) => (
-            <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-colors duration-300">
+            <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-strong dark:hover:border-white/12 transition-colors duration-300">
               <div className="flex items-start">
                 <IconBadge icon={benefit.icon} theme="services" size="lg" className="mr-4" />
                 <div>

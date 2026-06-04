@@ -29,22 +29,22 @@ export default function DecisionTemplateSelector({ onSelect }: Props) {
             onClick={() => onSelect(template)}
             className={cn(
               adminSurface.card,
-              'p-4 text-left hover:border-primary-400 dark:hover:border-primary-400 transition-colors cursor-pointer w-full'
+              'p-4 text-left hover:border-action dark:hover:border-action transition-colors cursor-pointer w-full'
             )}
           >
             <p className={cn(adminType.sectionTitle, 'mb-1')}>{template.label}</p>
             <p className={cn(adminType.meta, 'mb-3 line-clamp-2')}>{template.description}</p>
             <div className="flex flex-wrap gap-1">
-              <span className="rounded-full bg-primary-100 dark:bg-primary-900/40 px-2 py-0.5 text-xs text-primary-700 dark:text-primary-300">
+              <span className="rounded-full bg-action-muted px-2 py-0.5 text-xs text-action">
                 {DECISION_TYPE_CONFIG[template.decisionType]?.label}
               </span>
-              <span className="rounded-full bg-primary-100 dark:bg-primary-900/40 px-2 py-0.5 text-xs text-primary-700 dark:text-primary-300">
+              <span className="rounded-full bg-action-muted px-2 py-0.5 text-xs text-action">
                 {VOTING_METHOD_CONFIG[template.votingMethod]?.label}
               </span>
-              <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2 py-0.5 text-xs text-text-secondary">
+              <span className="rounded-full bg-surface-raised px-2 py-0.5 text-xs text-text-secondary">
                 {PARTICIPANT_SCOPE_CONFIG[template.participantScope]?.label}
               </span>
-              <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2 py-0.5 text-xs text-text-secondary">
+              <span className="rounded-full bg-surface-raised px-2 py-0.5 text-xs text-text-secondary">
                 {DECISION_CATEGORY_LABELS[template.category]}
               </span>
             </div>

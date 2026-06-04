@@ -19,15 +19,15 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-surface-raised px-4">
       <div className="max-w-md w-full text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-error-100 rounded-full mb-6">
           <AlertTriangle className="w-8 h-8 text-error-600" />
         </div>
-        <Heading level={1} className="text-2xl text-neutral-900 mb-2" role="alert">
+        <Heading level={1} className="text-2xl text-text-primary mb-2" role="alert">
           Etwas ist schiefgelaufen
         </Heading>
-        <p className="text-neutral-600 mb-8">
+        <p className="text-text-secondary mb-8">
           Ein unerwarteter Fehler ist aufgetreten. Versuche die Seite neu zu laden — falls das Problem weiterhin besteht, kontaktiere uns.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

@@ -84,8 +84,8 @@ export default function ProjectsPage() {
               className={cn(
                 'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                 selectedCategory === null
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/16'
+                  ? 'bg-action text-white'
+                  : 'bg-surface-base text-text-secondary border hover:border-strong dark:hover:border-white/16'
               )}
             >
               {t('filter.all')}
@@ -97,8 +97,8 @@ export default function ProjectsPage() {
                 className={cn(
                   'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                   selectedCategory === key
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/16'
+                    ? 'bg-action text-white'
+                    : 'bg-surface-base text-text-secondary border hover:border-strong dark:hover:border-white/16'
                 )}
               >
                 {t(`categories.${key}`)}
@@ -125,7 +125,7 @@ export default function ProjectsPage() {
                       <div className={cn(
                         'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors',
                         iconBadge.bg,
-                        'group-hover:bg-primary-600'
+                        'group-hover:bg-action'
                       )}>
                         <Icon className={cn(
                           'h-5 w-5 transition-colors',
@@ -162,7 +162,7 @@ export default function ProjectsPage() {
                       <ul className="space-y-2 mb-5">
                         {project.features.map((feat, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-text-tertiary">
-                            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-primary-500" />
+                            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-action" />
                             <span>{feat}</span>
                           </li>
                         ))}
@@ -176,7 +176,7 @@ export default function ProjectsPage() {
                       </span>
                       <Link
                         href={`/projects/${project.slug}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-action hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-action hover:text-action transition-colors"
                       >
                         {t('learnMore')}
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

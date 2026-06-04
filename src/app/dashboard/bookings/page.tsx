@@ -44,7 +44,7 @@ export default function CustomerBookings() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
@@ -54,7 +54,7 @@ export default function CustomerBookings() {
           <div className="flex gap-2">
             <button
               onClick={fetchAppointments}
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-surface-base dark:bg-neutral-800 border border dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 text-text-secondary text-sm md:text-base"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-surface-base border border rounded-lg hover:bg-surface-raised text-text-secondary text-sm md:text-base"
             >
               <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">{t('refresh')}</span>
@@ -86,21 +86,21 @@ export default function CustomerBookings() {
             onClick={() => setActiveTab('active')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
               (activeTab === 'active'
-                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                : 'bg-surface-base dark:bg-neutral-800 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700')}
+                ? 'bg-action-muted-muted text-action'
+                : 'bg-surface-base text-text-secondary hover:bg-surface-raised')}
           >
             <Clock className="h-4 w-4" />
             {t('tabActive')}
             {activeCount > 0 && (
-              <span className="bg-primary-500 text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
+              <span className="bg-action text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
             )}
           </button>
           <button
             onClick={() => setActiveTab('completed')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
               (activeTab === 'completed'
-                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                : 'bg-surface-base dark:bg-neutral-800 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700')}
+                ? 'bg-action-muted-muted text-action'
+                : 'bg-surface-base text-text-secondary hover:bg-surface-raised')}
           >
             <CheckCircle className="h-4 w-4" />
             {t('tabCompleted')}
@@ -111,8 +111,8 @@ export default function CustomerBookings() {
           {filteredAppointments.length === 0 ? (
             <EmptyState
               icon={Wrench}
-              iconBg="bg-primary-50 dark:bg-primary-900/20"
-              iconColor="text-primary-500 dark:text-primary-400"
+              iconBg="bg-action-muted-muted"
+              iconColor="text-action"
               title={t('emptyTitle')}
               action={
                 <Button as={Link} href={ROUTES.public.techniker} variant="primary">
@@ -126,7 +126,7 @@ export default function CustomerBookings() {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
-                      (STATUS_CONFIG[apt.status]?.color || 'bg-surface-raised dark:bg-neutral-800')}>
+                      (STATUS_CONFIG[apt.status]?.color || 'bg-surface-raised')}>
                       {STATUS_CONFIG[apt.status]?.label || apt.status}
                     </span>
                     <p className="text-xs text-text-tertiary mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
@@ -137,7 +137,7 @@ export default function CustomerBookings() {
                 </div>
 
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-surface-raised rounded-full flex items-center justify-center">
                     <Wrench className="h-5 w-5 text-text-secondary" />
                   </div>
                   <div>
@@ -226,7 +226,7 @@ export default function CustomerBookings() {
 
                   <Link
                     href={'/dashboard/bookings/' + apt.id}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-raised dark:bg-neutral-800 text-text-secondary rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium sm:ml-auto transition-colors"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-raised text-text-secondary rounded-md hover:bg-neutral-200 text-sm font-medium sm:ml-auto transition-colors"
                   >
                     {t('details')}
                     <ChevronRight className="h-4 w-4" />
@@ -249,7 +249,7 @@ export default function CustomerBookings() {
                     className="p-1"
                   >
                     <Star
-                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-neutral-600')}
+                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-text-secondary')}
                     />
                   </button>
                 ))}

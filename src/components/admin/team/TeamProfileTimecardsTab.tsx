@@ -95,7 +95,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
           <button
             onClick={load}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -119,7 +119,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
               const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
               const dateRef = row.reviewed_at || row.submitted_at
               return (
-                <li key={row.id} className="px-4 sm:px-5 py-3 hover:bg-neutral-50 dark:hover:bg-white/2 transition-colors">
+                <li key={row.id} className="px-4 sm:px-5 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors">
                   <div className="flex items-start gap-3">
                     <Icon className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                     <div className="min-w-0 flex-1">

@@ -50,7 +50,7 @@ export default async function TechnikerDashboardPage() {
 
   if (!profile) {
     return (
-      <main className="min-h-screen bg-surface-raised dark:bg-neutral-900">
+      <main className="min-h-screen bg-surface-raised">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
           <div className="w-20 h-20 bg-cyan-100 dark:bg-cyan-900 rounded-full flex items-center justify-center mx-auto mb-6">
             <span className="text-4xl">💻</span>
@@ -58,7 +58,7 @@ export default async function TechnikerDashboardPage() {
           <Heading level={1} className={cn('text-2xl font-bold mb-3', getTextColor('neutral', 'primary'), 'dark:text-white')}>
             {t('noProfile')}
           </Heading>
-          <p className={cn('text-base mb-8', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+          <p className={cn('text-base mb-8', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
             {t('noProfileDesc')}
           </p>
           <Link
@@ -70,7 +70,7 @@ export default async function TechnikerDashboardPage() {
           <div className="mt-4">
             <Link
               href="/dashboard"
-              className={cn('text-sm', getTextColor('neutral', 'muted'), 'hover:underline dark:text-neutral-400')}
+              className={cn('text-sm', getTextColor('neutral', 'muted'), 'hover:underline dark:text-text-muted')}
             >
               {t('backToDashboard')}
             </Link>
@@ -85,7 +85,7 @@ export default async function TechnikerDashboardPage() {
     : '–'
 
   return (
-    <main className="min-h-screen bg-surface-raised dark:bg-neutral-900">
+    <main className="min-h-screen bg-surface-raised">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Header */}
@@ -94,7 +94,7 @@ export default async function TechnikerDashboardPage() {
             <Heading level={1} className={cn('text-2xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {t('pageTitle')}
             </Heading>
-            <p className={cn('mt-1 text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+            <p className={cn('mt-1 text-sm', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('pageSubtitle')}
               {profile.city ? ` · ${profile.city}` : ''}
               {!profile.isActive && (
@@ -107,7 +107,7 @@ export default async function TechnikerDashboardPage() {
           <div className="flex items-center gap-3">
             <Link
               href={IT_HILFE.routes.register}
-              className="px-4 py-2 text-sm border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              className="px-4 py-2 text-sm border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
             >
               {t('editProfile')}
             </Link>
@@ -122,38 +122,38 @@ export default async function TechnikerDashboardPage() {
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-lg border dark:border-neutral-700 p-5">
-            <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+          <div className="bg-surface-base rounded-lg border p-5">
+            <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('statsCompleted')}
             </p>
             <p className={cn('text-3xl font-bold mt-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {profile.totalJobsCompleted}
             </p>
-            <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-500')}>
+            <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-tertiary')}>
               {t('statsCompletedSub')}
             </p>
           </div>
 
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-lg border dark:border-neutral-700 p-5">
-            <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+          <div className="bg-surface-base rounded-lg border p-5">
+            <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('statsRating')}
             </p>
             <p className={cn('text-3xl font-bold mt-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {ratingDisplay}
             </p>
-            <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-500')}>
+            <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-tertiary')}>
               {t('statsRatingSub')}
             </p>
           </div>
 
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-lg border dark:border-neutral-700 p-5 col-span-2 md:col-span-1">
-            <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+          <div className="bg-surface-base rounded-lg border p-5 col-span-2 md:col-span-1">
+            <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('statsActiveOffers')}
             </p>
             <p className={cn('text-3xl font-bold mt-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {activeOfferCount}
             </p>
-            <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-500')}>
+            <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-tertiary')}>
               {t('statsActiveOffersSub')}
             </p>
           </div>
@@ -163,13 +163,13 @@ export default async function TechnikerDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Section 1: Passende Anfragen */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-lg border dark:border-neutral-700">
-            <div className="p-5 border-b border-subtle dark:border-neutral-700 flex items-center justify-between">
+          <div className="bg-surface-base rounded-lg border">
+            <div className="p-5 border-b border-subtle flex items-center justify-between">
               <div>
                 <Heading level={2} className={cn('text-base font-semibold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
                   {t('matchingTitle')}
                 </Heading>
-                <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+                <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
                   {t('matchingSubtitle')}
                 </p>
               </div>
@@ -185,7 +185,7 @@ export default async function TechnikerDashboardPage() {
               {matchingRequests.length === 0 ? (
                 <div className="text-center py-8">
                   <span className="text-3xl block mb-3">🔍</span>
-                  <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+                  <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
                     {t('noMatching')}
                   </p>
                   <Link
@@ -201,7 +201,7 @@ export default async function TechnikerDashboardPage() {
                     <Link
                       key={req.id}
                       href={IT_HILFE.routes.detail(req.id)}
-                      className="block p-3 rounded-lg border border-subtle dark:border-neutral-700 hover:border-cyan-200 dark:hover:border-cyan-700 hover:bg-cyan-50/30 dark:hover:bg-cyan-900/10 transition-colors"
+                      className="block p-3 rounded-lg border border-subtle hover:border-cyan-200 dark:hover:border-cyan-700 hover:bg-cyan-50/30 dark:hover:bg-cyan-900/10 transition-colors"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <p className={cn('text-sm font-medium line-clamp-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
@@ -209,7 +209,7 @@ export default async function TechnikerDashboardPage() {
                         </p>
                         <UrgencyBadge urgency={req.urgency} />
                       </div>
-                      <p className={cn('text-xs mt-1', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+                      <p className={cn('text-xs mt-1', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
                         {req.city}, {req.canton}
                         {' · '}
                         {formatBudget(req.budgetAmountCents, req.budgetTier ?? undefined)}
@@ -223,13 +223,13 @@ export default async function TechnikerDashboardPage() {
           </div>
 
           {/* Section 2: Meine Angebote */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-lg border dark:border-neutral-700">
-            <div className="p-5 border-b border-subtle dark:border-neutral-700 flex items-center justify-between">
+          <div className="bg-surface-base rounded-lg border">
+            <div className="p-5 border-b border-subtle flex items-center justify-between">
               <div>
                 <Heading level={2} className={cn('text-base font-semibold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
                   {t('myOffersTitle')}
                 </Heading>
-                <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+                <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
                   {t('myOffersSubtitle')}
                 </p>
               </div>
@@ -239,7 +239,7 @@ export default async function TechnikerDashboardPage() {
               {myOffers.length === 0 ? (
                 <div className="text-center py-8">
                   <span className="text-3xl block mb-3">📋</span>
-                  <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+                  <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
                     {t('noOffers')}
                   </p>
                   <Link
@@ -255,7 +255,7 @@ export default async function TechnikerDashboardPage() {
                     <Link
                       key={offer.offerId}
                       href={IT_HILFE.routes.detail(offer.requestId)}
-                      className="block p-3 rounded-lg border border-subtle dark:border-neutral-700 hover:border-cyan-200 dark:hover:border-cyan-700 hover:bg-cyan-50/30 dark:hover:bg-cyan-900/10 transition-colors"
+                      className="block p-3 rounded-lg border border-subtle hover:border-cyan-200 dark:hover:border-cyan-700 hover:bg-cyan-50/30 dark:hover:bg-cyan-900/10 transition-colors"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <p className={cn('text-sm font-medium line-clamp-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
@@ -263,7 +263,7 @@ export default async function TechnikerDashboardPage() {
                         </p>
                         <OfferStatusBadge status={offer.offerStatus} />
                       </div>
-                      <p className={cn('text-xs mt-1', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+                      <p className={cn('text-xs mt-1', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
                         {offer.city}, {offer.canton}
                         {' · '}
                         {t('requestStatus', { status: requestStatusLabels[offer.requestStatus] ?? offer.requestStatus })}
@@ -282,9 +282,9 @@ export default async function TechnikerDashboardPage() {
             href={IT_HILFE.routes.register}
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium',
-              'bg-surface-base dark:bg-neutral-800 border dark:border-neutral-700',
+              'bg-surface-base border',
               getTextColor('neutral', 'primary'), 'dark:text-white',
-              'hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors'
+              'hover:bg-surface-raised transition-colors'
             )}
           >
             ✏️ {t('editProfile')}
@@ -293,9 +293,9 @@ export default async function TechnikerDashboardPage() {
             href={IT_HILFE.routes.browse}
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium',
-              'bg-surface-base dark:bg-neutral-800 border dark:border-neutral-700',
+              'bg-surface-base border',
               getTextColor('neutral', 'primary'), 'dark:text-white',
-              'hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors'
+              'hover:bg-surface-raised transition-colors'
             )}
           >
             🔍 {t('allRequests')}
@@ -304,9 +304,9 @@ export default async function TechnikerDashboardPage() {
             href="/dashboard"
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium',
-              'bg-surface-base dark:bg-neutral-800 border dark:border-neutral-700',
-              getTextColor('neutral', 'muted'), 'dark:text-neutral-400',
-              'hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors'
+              'bg-surface-base border',
+              getTextColor('neutral', 'muted'), 'dark:text-text-muted',
+              'hover:bg-surface-raised transition-colors'
             )}
           >
             ← {t('backToDashboard')}

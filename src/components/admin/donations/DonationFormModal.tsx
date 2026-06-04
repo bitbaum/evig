@@ -64,7 +64,7 @@ export function DonationFormModal({
               onClick={() => onFormTypeChange(DONATION_TYPES.MONETARY)}
               className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
                 formType === DONATION_TYPES.MONETARY
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-action text-white'
                   : 'bg-surface-raised text-text-secondary'
               }`}
             >
@@ -76,7 +76,7 @@ export function DonationFormModal({
               onClick={() => onFormTypeChange(DONATION_TYPES.DEVICE)}
               className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
                 formType === DONATION_TYPES.DEVICE
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-action text-white'
                   : 'bg-surface-raised text-text-secondary'
               }`}
             >

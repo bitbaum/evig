@@ -38,7 +38,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
     : t('spotsLeftPlural', { count: pool.spotsLeft })
 
   return (
-    <div className="card-shell rounded-2xl p-6 flex flex-col gap-4 hover:border-neutral-300 transition-colors">
+    <div className="card-shell rounded-2xl p-6 flex flex-col gap-4 hover:border-strong transition-colors">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-3xl">{emoji}</span>
@@ -69,7 +69,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400'
             : pool.spotsLeft <= 2
             ? 'bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-400'
-            : 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400'
+            : 'bg-action-muted-muted text-action'
         }`}>
           {isFull ? t('full') : spotsText}
         </div>

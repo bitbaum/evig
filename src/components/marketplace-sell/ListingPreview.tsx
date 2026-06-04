@@ -29,14 +29,14 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
     <div className="max-w-4xl mx-auto">
       <button
         onClick={onEdit}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToEdit')}
       </button>
 
       <div className="card-shell overflow-hidden">
-        <div className="p-6 border-b border-subtle dark:border-neutral-700">
+        <div className="p-6 border-b border-subtle">
           <Heading level={1} className="text-xl font-bold text-text-primary flex items-center gap-2">
             <Eye className="w-5 h-5" />
             {t('title')}
@@ -60,8 +60,8 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
               <Heading level={2} className="text-2xl font-bold text-text-primary">{formData.title}</Heading>
               <p className="text-3xl font-bold text-action mt-2">{formatCHF(parseFloat(formData.price) || 0)}</p>
               <div className="flex gap-2 mt-3">
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised dark:bg-neutral-700 text-text-secondary">{MARKETPLACE_CATEGORY_LABELS[formData.category] || formData.category}</span>
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised text-neutral-800">{conditionLabel}</span>
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">{MARKETPLACE_CATEGORY_LABELS[formData.category] || formData.category}</span>
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-primary">{conditionLabel}</span>
               </div>
             </div>
             <div className="space-y-2 text-sm">
@@ -79,10 +79,10 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
           </div>
         </div>
 
-        <div className="p-6 border-t border-subtle dark:border-neutral-700 flex gap-3">
+        <div className="p-6 border-t border-subtle flex gap-3">
           <button
             onClick={onEdit}
-            className="px-6 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-600 font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800"
+            className="px-6 py-2.5 rounded-lg border border-neutral-300 font-medium text-text-secondary hover:bg-surface-raised"
           >
             {tCommon('edit')}
           </button>
@@ -104,9 +104,9 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
       </div>
 
       {success && (
-        <div className="mt-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-4 flex items-center gap-3">
+        <div className="mt-4 bg-action-muted-muted border border-strong rounded-xl p-4 flex items-center gap-3">
           <CheckCircle className="w-5 h-5 text-action shrink-0" />
-          <p className="text-primary-800 dark:text-primary-200 font-medium">{success}</p>
+          <p className="text-action-text font-medium">{success}</p>
         </div>
       )}
       {error && (

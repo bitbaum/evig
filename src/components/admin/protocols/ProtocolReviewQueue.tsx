@@ -43,11 +43,11 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
       />
 
       {!hasItems ? (
-        <div className="mt-5 flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 dark:bg-primary-900/20 p-4 text-primary-900 dark:text-primary-300">
+        <div className="mt-5 flex items-start gap-3 rounded-lg border border-strong bg-action-muted-muted p-4 text-action">
           <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-action" />
           <div>
-            <p className={cn(adminType.body, 'font-medium text-primary-900 dark:text-primary-300')}>{t('noPendingReviews')}</p>
-            <p className="mt-1 text-base text-primary-800 dark:text-primary-300">
+            <p className={cn(adminType.body, 'font-medium text-action')}>{t('noPendingReviews')}</p>
+            <p className="mt-1 text-base text-action">
               {t('noPendingDescription')}
             </p>
           </div>
@@ -59,7 +59,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
             return (
               <article
                 key={protocol.id}
-                className="rounded-lg border border bg-surface-base p-4 transition-colors hover:border-primary-300 hover:bg-primary-50/40 dark:hover:bg-primary-900/20"
+                className="rounded-lg border border bg-surface-base p-4 transition-colors hover:border-strong hover:bg-action-muted/40-muted"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div className="min-w-0">
@@ -79,7 +79,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
                     </div>
                     <Link
                       href={ROUTES.admin.protocol(protocol.id)}
-                      className="block truncate text-lg font-semibold text-neutral-950 underline-offset-2 hover:text-primary-700 hover:underline"
+                      className="block truncate text-lg font-semibold text-neutral-950 underline-offset-2 hover:text-action hover:underline"
                     >
                       {protocol.title}
                     </Link>

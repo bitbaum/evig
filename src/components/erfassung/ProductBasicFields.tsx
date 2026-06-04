@@ -54,7 +54,7 @@ export function ProductBasicFields({
             type="text"
             value={formData.hersteller}
             onChange={(e) => onFieldChange('hersteller', e.target.value)}
-            className={aiMetadata.hersteller ? 'border-primary-300 dark:border-primary-600' : ''}
+            className={aiMetadata.hersteller ? 'border-strong dark:border-action' : ''}
             placeholder={t('manufacturerPlaceholder')}
             required
           />
@@ -71,7 +71,7 @@ export function ProductBasicFields({
             id="basic-condition"
             value={formData.zustand}
             onChange={(e) => onFieldChange('zustand', e.target.value)}
-            className={aiMetadata.zustand ? 'border-primary-300 dark:border-primary-600' : ''}
+            className={aiMetadata.zustand ? 'border-strong dark:border-action' : ''}
             required
           >
             {ZUSTAND_OPTIONS.map(opt => (
@@ -92,7 +92,7 @@ export function ProductBasicFields({
             type="text"
             value={formData.produktname}
             onChange={(e) => onFieldChange('produktname', e.target.value)}
-            className={aiMetadata.produktname ? 'border-primary-300 dark:border-primary-600' : ''}
+            className={aiMetadata.produktname ? 'border-strong dark:border-action' : ''}
             placeholder={t('productNamePlaceholder')}
             required
           />
@@ -112,7 +112,7 @@ export function ProductBasicFields({
             step="0.01"
             value={formData.verkaufspreis}
             onChange={(e) => onFieldChange('verkaufspreis', e.target.value)}
-            className={`text-xl font-semibold ${aiMetadata.verkaufspreis ? 'border-primary-300 dark:border-primary-600' : ''}`}
+            className={`text-xl font-semibold ${aiMetadata.verkaufspreis ? 'border-strong dark:border-action' : ''}`}
             placeholder={t('pricePlaceholder')}
             required
           />
@@ -130,7 +130,7 @@ export function ProductBasicFields({
             value={formData.kurzbeschreibung}
             onChange={(e) => onFieldChange('kurzbeschreibung', e.target.value)}
             rows={2}
-            className={aiMetadata.kurzbeschreibung ? 'border-primary-300 dark:border-primary-600' : ''}
+            className={aiMetadata.kurzbeschreibung ? 'border-strong dark:border-action' : ''}
             placeholder={t('descriptionPlaceholder')}
           />
         </div>
@@ -146,7 +146,7 @@ export function ProductBasicFields({
             id="basic-category"
             value={formData.hauptkategorie}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className={aiMetadata.hauptkategorie ? 'border-primary-300 dark:border-primary-600' : ''}
+            className={aiMetadata.hauptkategorie ? 'border-strong dark:border-action' : ''}
           >
             <option value="">{t('categoryPlaceholder')}</option>
             {KATEGORIEN.map(kat => (
@@ -166,7 +166,7 @@ export function ProductBasicFields({
             id="basic-subcategory"
             value={formData.unterkategorie}
             onChange={(e) => onFieldChange('unterkategorie', e.target.value)}
-            className={aiMetadata.unterkategorie ? 'border-primary-300 dark:border-primary-600' : ''}
+            className={aiMetadata.unterkategorie ? 'border-strong dark:border-action' : ''}
             disabled={!formData.hauptkategorie}
           >
             <option value="">{t('categoryPlaceholder')}</option>

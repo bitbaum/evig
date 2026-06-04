@@ -25,7 +25,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
 
       <p className="text-text-secondary mb-4 whitespace-pre-wrap">{diagnosis}</p>
 
-      <div className="bg-white/60 rounded-lg p-4 mb-3">
+      <div className="bg-surface-base/60 rounded-lg p-4 mb-3">
         <div className="flex items-start gap-2">
           <MapPin className="w-4 h-4 text-action mt-0.5 shrink-0" />
           <div>
@@ -39,7 +39,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
               href={REVAMPIT_STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 mt-1"
+              className="inline-flex items-center gap-1 text-sm text-action hover:text-action mt-1"
             >
               {t('mapsLink')}
               <ExternalLink className="w-3 h-3" />

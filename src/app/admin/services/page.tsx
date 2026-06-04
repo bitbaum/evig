@@ -196,28 +196,28 @@ export default async function AdminServicesPage() {
         {services.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-surface-raised dark:bg-neutral-700">
+              <thead className="bg-surface-raised">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Dienstleistung
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Kategorie
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Preis
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Flags
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                     Aktionen
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
                 {services.map((service) => (
-                  <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-white/6">
+                  <tr key={service.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/6">
                     <td className="px-6 py-4">
                       <div>
                         <div className="text-sm font-medium text-text-primary">
@@ -245,8 +245,8 @@ export default async function AdminServicesPage() {
                       <div className="flex items-center gap-1.5">
                         <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
                           service.is_active
-                            ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
-                            : 'bg-surface-raised text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
+                            ? 'bg-action-muted text-action-muted'
+                            : 'bg-surface-raised text-text-primary'
                         }`}>
                           {service.is_active ? 'Aktiv' : 'Inaktiv'}
                         </span>
@@ -256,7 +256,7 @@ export default async function AdminServicesPage() {
                           </span>
                         )}
                         {service.is_bookable && (
-                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-action-muted text-action-muted">
                             <Calendar className="w-3 h-3" />
                           </span>
                         )}
@@ -268,7 +268,7 @@ export default async function AdminServicesPage() {
                           <Link
                             href={`/services/${service.slug}`}
                             target="_blank"
-                            className="p-2.5 text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 rounded-sm"
+                            className="p-2.5 text-text-secondary hover:text-text-primary hover:bg-surface-raised rounded-sm"
                             title="Auf Website ansehen"
                           >
                             <Eye className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default async function AdminServicesPage() {
                         )}
                         <Link
                           href={`/admin/services/${service.id}/edit`}
-                          className="p-2.5 text-action hover:text-primary-900 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-sm"
+                          className="p-2.5 text-action hover:text-action hover:bg-action-muted-muted rounded-sm"
                           title="Bearbeiten"
                         >
                           <Edit className="w-4 h-4" />
@@ -306,13 +306,13 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
+      <div className="bg-surface-raised border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center shrink-0">
             <Wrench className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <h3 className="font-medium text-text-primary dark:text-neutral-200">
+            <h3 className="font-medium text-text-primary">
               Dienstleistungs-Verwaltung
             </h3>
             <p className="text-sm text-text-secondary mt-1 mb-3">

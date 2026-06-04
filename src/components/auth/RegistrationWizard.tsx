@@ -191,13 +191,13 @@ export function RegistrationWizard() {
       <div className="w-full max-w-md mx-auto">
         <div className="card-shell rounded-2xl p-6 sm:p-8">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-primary-600" />
+            <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-action" />
             </div>
-            <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+            <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
               {t('welcomeHeading', { orgName: ORG.name })}
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400">
+            <p className="text-text-secondary dark:text-text-muted">
               {state.emailVerified
                 ? t('accountReady')
                 : t('accountCreatedVerifyPending')}
@@ -206,66 +206,66 @@ export function RegistrationWizard() {
 
           {/* What do you want to do? */}
           <div className="space-y-3">
-            <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+            <p className="text-sm font-medium text-text-secondary mb-3">
               {t('nextStepsTitle')}
             </p>
 
             <Link
               href={ROUTES.public.itHilfe}
-              className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
+              className="flex items-center gap-3 p-4 rounded-lg border border-strong hover:bg-surface-raised transition-colors"
             >
-              <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-                <Search className="w-5 h-5 text-primary-600" />
+              <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+                <Search className="w-5 h-5 text-action" />
               </div>
               <div className="flex-1">
-                <div className="font-medium text-neutral-900 dark:text-white">
+                <div className="font-medium text-text-primary">
                   {t('findHelp')}
                 </div>
-                <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                <div className="text-sm text-text-tertiary dark:text-text-muted">
                   {t('findHelpDesc')}
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-neutral-500" />
+              <ArrowRight className="w-5 h-5 text-text-tertiary" />
             </Link>
 
             <Link
               href={ROUTES.public.profilTechniker}
-              className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
+              className="flex items-center gap-3 p-4 rounded-lg border border-strong hover:bg-surface-raised transition-colors"
             >
-              <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-primary-600" />
+              <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-action" />
               </div>
               <div className="flex-1">
-                <div className="font-medium text-neutral-900 dark:text-white">
+                <div className="font-medium text-text-primary">
                   {t('offerHelp')}
                 </div>
-                <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                <div className="text-sm text-text-tertiary dark:text-text-muted">
                   {t('offerHelpDesc')}
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-neutral-500" />
+              <ArrowRight className="w-5 h-5 text-text-tertiary" />
             </Link>
 
             <Link
               href={ROUTES.public.shop}
-              className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
+              className="flex items-center gap-3 p-4 rounded-lg border border-strong hover:bg-surface-raised transition-colors"
             >
-              <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-                <ShoppingBag className="w-5 h-5 text-primary-600" />
+              <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+                <ShoppingBag className="w-5 h-5 text-action" />
               </div>
               <div className="flex-1">
-                <div className="font-medium text-neutral-900 dark:text-white">
+                <div className="font-medium text-text-primary">
                   {t('browseShop')}
                 </div>
-                <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                <div className="text-sm text-text-tertiary dark:text-text-muted">
                   {t('browseShopDesc')}
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-neutral-500" />
+              <ArrowRight className="w-5 h-5 text-text-tertiary" />
             </Link>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="mt-6 pt-6 border-t border-strong">
             <Button as={Link} href={ROUTES.public.login} variant="primary" className="w-full">
               {t('signInNow')}
               <ArrowRight className="w-4 h-4" />
@@ -325,12 +325,12 @@ export function RegistrationWizard() {
         )}
 
         {/* Login Link */}
-        <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-700 text-center">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="mt-8 pt-6 border-t border-strong text-center">
+          <p className="text-sm text-text-secondary dark:text-text-muted">
             {t('alreadyRegistered')}{' '}
             <Link
               href={ROUTES.public.login}
-              className="text-primary-600 hover:underline font-medium"
+              className="text-action hover:underline font-medium"
             >
               {t('login')}
             </Link>

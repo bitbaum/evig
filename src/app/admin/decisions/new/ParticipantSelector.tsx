@@ -38,8 +38,8 @@ export function ParticipantSelector({
               onClick={() => onScopeChange(scope)}
               className={`rounded-lg border-2 p-2.5 text-left transition ${
                 participantScope === scope
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border hover:border-neutral-300 bg-surface-base'
+                  ? 'border-action bg-action-muted-muted'
+                  : 'border hover:border-strong bg-surface-base'
               }`}
             >
               <div className="text-xs font-medium text-text-primary">{conf.label}</div>
@@ -64,7 +64,7 @@ export function ParticipantSelector({
               {filteredMembers.map((m) => (
                 <label
                   key={m.id}
-                  className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-neutral-100 cursor-pointer"
+                  className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface-raised cursor-pointer"
                 >
                   <input
                     type="checkbox"

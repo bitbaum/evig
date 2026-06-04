@@ -22,8 +22,8 @@ export function ListingImage({ src, alt, className = 'w-full h-full object-cover
 
   if (!src || hasError) {
     return (
-      <div className="w-full h-full bg-surface-raised dark:bg-neutral-700 flex items-center justify-center">
-        <Package className={`${fallbackIconSize} text-neutral-300 dark:text-neutral-500`} aria-hidden="true" />
+      <div className="w-full h-full bg-surface-raised flex items-center justify-center">
+        <Package className={`${fallbackIconSize} text-neutral-300 dark:text-text-tertiary`} aria-hidden="true" />
       </div>
     )
   }

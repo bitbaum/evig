@@ -88,7 +88,7 @@ export function HelpRequestCard({
           className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
             request.is_broadcast
               ? 'bg-warning-100 dark:bg-warning-900/30'
-              : 'bg-primary-100 dark:bg-primary-900/30'
+              : 'bg-action-muted-muted'
           }`}
         >
           {request.is_broadcast ? (
@@ -103,7 +103,7 @@ export function HelpRequestCard({
           {/* Title with urgency */}
           <div className="flex items-center gap-2 flex-wrap">
             {getUrgencyIcon(request.urgency)}
-            <Heading level={4} className="text-text-primary dark:text-neutral-100">{request.title}</Heading>
+            <Heading level={4} className="text-text-primary">{request.title}</Heading>
           </div>
 
           {/* Requester */}
@@ -138,7 +138,7 @@ export function HelpRequestCard({
               {getHelpRequestUrgencyLabel(request.urgency)}
             </span>
             {request.category && (
-              <span className="px-2 py-0.5 text-xs rounded-full bg-surface-raised text-text-secondary dark:bg-neutral-700">
+              <span className="px-2 py-0.5 text-xs rounded-full bg-surface-raised text-text-secondary">
                 {getActivityCategoryLabel(request.category)}
               </span>
             )}
@@ -146,8 +146,8 @@ export function HelpRequestCard({
 
           {/* Resolution info */}
           {isResolved && request.resolved_by_name && (
-            <div className="mt-3 p-2 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
-              <p className="text-sm text-primary-700 dark:text-primary-300 flex items-center gap-1">
+            <div className="mt-3 p-2 bg-action-muted-muted rounded-lg">
+              <p className="text-sm text-action flex items-center gap-1">
                 <CheckCircle className="w-4 h-4" />
                 Gelöst von {request.resolved_by_name}
               </p>
@@ -174,7 +174,7 @@ export function HelpRequestCard({
             <button
               onClick={() => onTakeOn?.(request.id)}
               disabled={isTakingOn}
-              className="flex-1 px-3 py-2 text-sm text-action bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isTakingOn ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -188,7 +188,7 @@ export function HelpRequestCard({
             <button
               onClick={() => onResolve?.(request.id)}
               disabled={isResolving}
-              className="flex-1 px-3 py-2 text-sm text-action bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isResolving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

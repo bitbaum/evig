@@ -34,7 +34,7 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     label: 'Ollama',
     icon: Cpu,
     color: 'text-action',
-    bgColor: 'bg-primary-100 dark:bg-primary-900/30',
+    bgColor: 'bg-action-muted-muted',
     category: 'local',
     description: 'Lokal, kostenlos, privat',
     keyName: '',
@@ -54,8 +54,8 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
   openrouter: {
     label: 'OpenRouter',
     icon: Cloud,
-    color: 'text-primary-500',
-    bgColor: 'bg-primary-100 dark:bg-primary-900/30',
+    color: 'text-action',
+    bgColor: 'bg-action-muted-muted',
     category: 'free',
     description: 'Viele Modelle, pay-per-use',
     keyName: 'OPENROUTER_API_KEY',
@@ -153,7 +153,7 @@ export function HirnProviderSelector() {
       {/* Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 text-sm bg-surface-base border border hover:border-primary-300 dark:hover:border-primary-600 rounded-xl transition-all shadow-xs"
+        className="flex items-center gap-2 px-3 py-2 text-sm bg-surface-base border border hover:border-strong dark:hover:border-action rounded-xl transition-all shadow-xs"
       >
         {currentMeta ? (
           <>
@@ -220,9 +220,9 @@ export function HirnProviderSelector() {
                             disabled={changing || !canSelect}
                             className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
                               isSelected
-                                ? 'bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-300 dark:border-primary-700'
+                                ? 'bg-action-muted-muted border-2 border-strong'
                                 : canSelect
-                                ? 'hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 border-2 border-transparent'
+                                ? 'hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 border-2 border-transparent'
                                 : 'opacity-50 cursor-not-allowed border-2 border-transparent'
                             }`}
                           >
@@ -236,7 +236,7 @@ export function HirnProviderSelector() {
                                   {meta.label}
                                 </span>
                                 {isSelected && (
-                                  <span className="flex items-center gap-1 text-xs text-action bg-primary-100 dark:bg-primary-900/50 px-2 py-0.5 rounded-full">
+                                  <span className="flex items-center gap-1 text-xs text-action bg-action-muted px-2 py-0.5 rounded-full">
                                     <Check className="w-3 h-3" />
                                     Aktiv
                                   </span>
@@ -255,7 +255,7 @@ export function HirnProviderSelector() {
                                     e.stopPropagation()
                                     void saveApiKey(provider.provider)
                                   }}
-                                  className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-primary-700 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
+                                  className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted-muted rounded-lg"
                                 >
                                   <Key className="w-3 h-3" />
                                   Key speichern
@@ -266,7 +266,7 @@ export function HirnProviderSelector() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={e => e.stopPropagation()}
-                                    className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-primary-700 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
+                                    className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted-muted rounded-lg"
                                   >
                                     <ExternalLink className="w-3 h-3" />
                                   </a>
@@ -289,7 +289,7 @@ export function HirnProviderSelector() {
               </div>
             )}
 
-            <div className="p-3 bg-surface-raised dark:bg-neutral-900/50 border-t border-subtle dark:border-white/6">
+            <div className="p-3 bg-surface-raised border-t border-subtle dark:border-white/6">
               <p className="text-xs text-text-tertiary text-center">
                 Wähle einen Provider mit aktivem API-Key
               </p>

@@ -126,7 +126,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       <div className="flex items-center justify-between">
         <Link
           href={ROUTES.admin.users}
-          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück zur Übersicht
@@ -139,9 +139,9 @@ export default async function UserDetailPage({ params }: PageProps) {
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
             userIsSuperAdmin
-              ? 'bg-primary-600'
+              ? 'bg-action'
               : userIsStaff
-                ? 'bg-primary-500'
+                ? 'bg-action'
                 : 'bg-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
@@ -154,19 +154,19 @@ export default async function UserDetailPage({ params }: PageProps) {
                 {user.name || 'Kein Name'}
               </Heading>
               {userIsSuperAdmin && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-action-muted text-action-muted">
                   <Crown className="w-3 h-3" />
                   Super Admin
                 </span>
               )}
               {userIsStaff && !userIsSuperAdmin && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-action-muted text-action-muted">
                   <Shield className="w-3 h-3" />
                   Staff
                 </span>
               )}
               {user.email_verified && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-action-muted text-action-muted">
                   <UserCheck className="w-3 h-3" />
                   Verifiziert
                 </span>
@@ -255,7 +255,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               {permissions.map(p => (
                 <span
                   key={p}
-                  className="px-3 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-sm rounded-full"
+                  className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full"
                 >
                   {p}
                 </span>

@@ -23,7 +23,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base dark:bg-neutral-950 lg:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base lg:hidden"
       aria-label="Mobile Navigation"
     >
       {items.map(section => {
@@ -40,7 +40,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
             className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs transition-colors ${
               active
                 ? 'text-action'
-                : 'text-text-tertiary dark:text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
+                : 'text-text-tertiary dark:text-text-tertiary hover:text-text-secondary'
             }`}
             aria-current={active ? 'page' : undefined}
           >
@@ -53,7 +53,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
       {/* Mehr — opens sidebar */}
       <button
         onClick={onMenuClick}
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs text-text-tertiary hover:text-text-secondary transition-colors"
         aria-label="Seitenleiste öffnen"
       >
         <Menu className="w-5 h-5" aria-hidden="true" />

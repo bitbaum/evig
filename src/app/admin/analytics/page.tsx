@@ -313,9 +313,9 @@ export default async function AnalyticsPage() {
                 <div key={item.month} className="flex items-center justify-between">
                   <span className="text-sm text-text-secondary">{formatMonth(item.month)}</span>
                   <div className="flex items-center gap-3">
-                    <div className="w-32 bg-surface-raised dark:bg-neutral-700 rounded-full h-2">
+                    <div className="w-32 bg-surface-raised rounded-full h-2">
                       <div
-                        className="h-2 rounded-full bg-primary-500"
+                        className="h-2 rounded-full bg-action"
                         style={{
                           width: `${Math.min(100, (item.count / Math.max(...userGrowth.map(g => g.count))) * 100)}%`,
                         }}
@@ -336,28 +336,28 @@ export default async function AnalyticsPage() {
         <div className="p-6 bg-surface-base rounded-xl border border">
           <Heading level={3} className="font-semibold text-text-primary mb-4">Aktivitäts-Übersicht</Heading>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-action-muted-muted rounded-lg">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-action" />
                 <span className="text-sm text-text-secondary">Aufgaben erledigt (diese Woche)</span>
               </div>
               <span className="text-lg font-bold text-action">{activity.taskCompletionsThisWeek}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-action-muted-muted rounded-lg">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-action" />
                 <span className="text-sm text-text-secondary">Aufgaben erledigt (diesen Monat)</span>
               </div>
               <span className="text-lg font-bold text-action">{activity.taskCompletionsThisMonth}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-action-muted-muted rounded-lg">
               <div className="flex items-center gap-2">
                 <Package className="w-5 h-5 text-action" />
                 <span className="text-sm text-text-secondary">Neue Einreichungen (diesen Monat)</span>
               </div>
               <span className="text-lg font-bold text-action">{activity.contentSubmissionsThisMonth}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-surface-raised dark:bg-neutral-700/50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-surface-raised rounded-lg">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-text-secondary" />
                 <span className="text-sm text-text-secondary">Aktive Aufgaben</span>
@@ -372,10 +372,10 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-2 gap-4">
         <Link
           href={ROUTES.admin.analyseFinanzen}
-          className="flex items-center justify-between p-4 bg-surface-base rounded-xl border border hover:border-primary-400 transition-colors group"
+          className="flex items-center justify-between p-4 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -383,15 +383,15 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-text-tertiary">Detaillierte Finanz-Statistiken und Diagramme</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-action transition-colors" />
         </Link>
 
         <Link
           href={ROUTES.admin.tasksAnalytics}
-          className="flex items-center justify-between p-4 bg-surface-base rounded-xl border border hover:border-primary-400 transition-colors group"
+          className="flex items-center justify-between p-4 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
               <ClipboardList className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -399,15 +399,15 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-text-tertiary">Beiträge, Kategorien und Verlauf</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-action transition-colors" />
         </Link>
       </div>
 
-      <div className="p-6 bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl">
+      <div className="p-6 bg-surface-raised border border rounded-xl">
         <p className="text-sm text-text-secondary">
           <strong>Hinweis:</strong> Die Statistiken werden in Echtzeit aus der Datenbank berechnet.
           Für detaillierte Finanz-Analytics, siehe{' '}
-          <Link href={ROUTES.admin.analyseFinanzen} className="underline hover:text-neutral-900">
+          <Link href={ROUTES.admin.analyseFinanzen} className="underline hover:text-text-primary">
             Finanzen-Analyse
           </Link>.
         </p>

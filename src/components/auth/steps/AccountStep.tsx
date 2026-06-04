@@ -64,10 +64,10 @@ export function AccountStep({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center mb-6">
-        <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-neutral-600 dark:text-neutral-400">
+        <p className="text-text-secondary dark:text-text-muted">
           {t('subtitle')}
         </p>
       </div>
@@ -86,10 +86,10 @@ export function AccountStep({
       {/* Name */}
       <div>
         <label htmlFor="name" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
-          {t('nameLabel')} <span className="text-neutral-400">{t('nameOptional')}</span>
+          {t('nameLabel')} <span className="text-text-muted">{t('nameOptional')}</span>
         </label>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
           <input
             id="name"
             type="text"
@@ -97,7 +97,7 @@ export function AccountStep({
             onChange={(e) => onNameChange(e.target.value)}
             autoComplete="name"
             placeholder={t('namePlaceholder')}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
         </div>
       </div>
@@ -108,7 +108,7 @@ export function AccountStep({
           {t('email')} *
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
           <input
             id="email"
             type="email"
@@ -120,7 +120,7 @@ export function AccountStep({
             placeholder={t('emailPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
         </div>
       </div>
@@ -131,7 +131,7 @@ export function AccountStep({
           {t('password')} *
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
           <input
             id="password"
             type={showPassword ? 'text' : 'password'}
@@ -143,12 +143,12 @@ export function AccountStep({
             placeholder={t('passwordPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
             aria-label={showPassword ? t('hidePassword') : t('showPassword')}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -161,12 +161,12 @@ export function AccountStep({
             <div className="flex gap-1 mb-2">
               <div
                 className={`h-1.5 flex-1 rounded-full ${
-                  passwordChecks.length ? 'bg-primary-500' : 'bg-neutral-200'
+                  passwordChecks.length ? 'bg-action' : 'bg-neutral-200'
                 }`}
               />
             </div>
-            <ul className="text-xs text-neutral-500 space-y-0.5">
-              <li className={passwordChecks.length ? 'text-primary-600' : ''}>
+            <ul className="text-xs text-text-tertiary space-y-0.5">
+              <li className={passwordChecks.length ? 'text-action' : ''}>
                 {passwordChecks.length ? '✓' : '○'} {t('passwordMin')}
               </li>
             </ul>
@@ -180,7 +180,7 @@ export function AccountStep({
           {t('confirmPassword')} *
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
           <input
             id="confirmPassword"
             type={showConfirmPassword ? 'text' : 'password'}
@@ -193,14 +193,14 @@ export function AccountStep({
             aria-invalid={!!(confirmPassword && !passwordsMatch)}
             aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
             className={cn(
-              'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-neutral-300 dark:border-neutral-600'
+              'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action',
+              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-neutral-300'
             )}
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
             aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
           >
             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -219,15 +219,15 @@ export function AccountStep({
           checked={acceptTerms}
           onChange={(e) => onAcceptTermsChange(e.target.checked)}
           aria-required="true"
-          className="mt-1 w-4 h-4 rounded-sm border-neutral-300 text-primary-600 focus:ring-primary-500"
+          className="mt-1 w-4 h-4 rounded-sm border-neutral-300 text-action focus:ring-action"
         />
-        <label htmlFor="terms" className="text-sm text-neutral-600 dark:text-neutral-400">
+        <label htmlFor="terms" className="text-sm text-text-secondary dark:text-text-muted">
           {t('termsI')}{' '}
-          <Link href="/agb" className="text-primary-600 hover:underline">
+          <Link href="/agb" className="text-action hover:underline">
             {t('agb')}
           </Link>{' '}
           {t('termsAnd')}{' '}
-          <Link href="/datenschutz" className="text-primary-600 hover:underline">
+          <Link href="/datenschutz" className="text-action hover:underline">
             {t('datenschutz')}
           </Link>
         </label>
@@ -240,7 +240,7 @@ export function AccountStep({
             type="button"
             onClick={onBack}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>{t('back')}</span>

@@ -100,15 +100,15 @@ export function UserPermissionsEditor({
         {/* Content */}
         <div className="overflow-y-auto max-h-[60vh]">
           {/* Super Admin Toggle */}
-          <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+          <div className="mb-6 p-4 bg-action-muted-muted rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Crown className="w-5 h-5 text-action" />
                 <div>
-                  <p className="font-medium text-primary-900 dark:text-primary-200">
+                  <p className="font-medium text-action-text">
                     Super Admin Status
                   </p>
-                  <p className="text-sm text-primary-700 dark:text-primary-300">
+                  <p className="text-sm text-action">
                     Voller Zugriff auf alle Bereiche inkl. Benutzerverwaltung
                   </p>
                 </div>
@@ -118,8 +118,8 @@ export function UserPermissionsEditor({
                 disabled={isInHardcodedList && superAdminStatus}
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   superAdminStatus
-                    ? 'bg-primary-600'
-                    : 'bg-neutral-300 dark:bg-neutral-600'
+                    ? 'bg-action'
+                    : 'bg-neutral-300'
                 } ${isInHardcodedList && superAdminStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface-base rounded-full transition-transform ${
@@ -136,15 +136,15 @@ export function UserPermissionsEditor({
 
           {/* Full Access Toggle */}
           {!superAdminStatus && (
-            <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+            <div className="mb-6 p-4 bg-action-muted-muted rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Shield className="w-5 h-5 text-action" />
                   <div>
-                    <p className="font-medium text-primary-900 dark:text-primary-200">
+                    <p className="font-medium text-action-text">
                       Voller Zugriff
                     </p>
-                    <p className="text-sm text-primary-700 dark:text-primary-300">
+                    <p className="text-sm text-action">
                       Zugriff auf alle Bereiche (ohne Super Admin Rechte)
                     </p>
                   </div>
@@ -153,8 +153,8 @@ export function UserPermissionsEditor({
                   onClick={() => setGrantFullAccess(!grantFullAccess)}
                   className={`relative w-12 h-6 rounded-full transition-colors ${
                     grantFullAccess
-                      ? 'bg-primary-600'
-                      : 'bg-neutral-300 dark:bg-neutral-600'
+                      ? 'bg-action'
+                      : 'bg-neutral-300'
                   }`}
                 >
                   <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface-base rounded-full transition-transform ${
@@ -178,14 +178,14 @@ export function UserPermissionsEditor({
                     onClick={() => togglePermission(section.id)}
                     className={`p-3 text-left rounded-lg border transition-colors ${
                       selectedPermissions.includes(section.id)
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border hover:border-neutral-300'
+                        ? 'border-action bg-action-muted-muted'
+                        : 'border hover:border-strong'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <div className={`w-4 h-4 rounded border flex items-center justify-center ${
                         selectedPermissions.includes(section.id)
-                          ? 'bg-primary-600 border-primary-600'
+                          ? 'bg-action border-action'
                           : 'border-neutral-300'
                       }`}>
                         {selectedPermissions.includes(section.id) && (

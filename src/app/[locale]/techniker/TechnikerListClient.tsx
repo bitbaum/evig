@@ -37,7 +37,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
   return (
     <Link
       href={ROUTES.public.technicianProfile(technician.id)}
-      className="block card-shell p-5 hover:border-neutral-300 transition-all"
+      className="block card-shell p-5 hover:border-strong transition-all"
     >
       {/* Name + tier badge */}
       <div className="flex items-start justify-between gap-2 mb-3">
@@ -47,7 +47,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         <span
           className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
             technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
-              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+              ? 'bg-action-muted-muted text-action'
               : 'bg-surface-raised text-text-secondary'
           }`}
         >
@@ -124,7 +124,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
           </span>
         )}
         {technician.hourlyRateCents && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">
             <Euro className="w-3 h-3" />
             {formatCentsToChf(technician.hourlyRateCents)}/h
           </span>
@@ -168,7 +168,7 @@ export default function TechnikerListClient() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact header */}
-      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/6 py-6 sm:py-8">
+      <div className="bg-surface-raised border-b border-subtle dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -217,7 +217,7 @@ export default function TechnikerListClient() {
               onClick={() => setTierFilter(tab.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-action text-white'
                   : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
               }`}
               aria-pressed={tier === tab.value}
@@ -250,7 +250,7 @@ export default function TechnikerListClient() {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="ml-3 text-sm text-action hover:text-primary-700 font-medium"
+              className="ml-3 text-sm text-action hover:text-action font-medium"
             >
               {t('list.resetFilters')}
             </button>
@@ -303,7 +303,7 @@ export default function TechnikerListClient() {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('list.prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -314,7 +314,7 @@ export default function TechnikerListClient() {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('list.nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
@@ -340,7 +340,7 @@ export default function TechnikerListClient() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-surface-base hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 bg-surface-base hover:bg-action-muted-muted text-action border border-action rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaToITHelp')}
               </Link>

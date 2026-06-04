@@ -166,15 +166,15 @@ export function ImageCapture({
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               isDragging
-                ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                : 'border-neutral-300 dark:border-neutral-600'
+                ? 'border-action bg-action-muted-muted'
+                : 'border-neutral-300'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
             <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center">
                 <ImageIcon className="w-8 h-8 text-text-tertiary" />
               </div>
 
@@ -206,7 +206,7 @@ export function ImageCapture({
                 </div>
               </div>
 
-              <p className="text-xs text-text-tertiary dark:text-neutral-500">
+              <p className="text-xs text-text-tertiary dark:text-text-tertiary">
                 {t('fileHint')}
               </p>
             </div>
@@ -238,7 +238,7 @@ export function ImageCapture({
             <div className="space-y-4">
               {/* Image preview */}
               <div className="relative">
-                <div className="relative w-full aspect-video bg-surface-raised dark:bg-neutral-700 rounded-lg overflow-hidden">
+                <div className="relative w-full aspect-video bg-surface-raised rounded-lg overflow-hidden">
                   <Image
                     src={imagePreview}
                     alt={t('imageAlt')}

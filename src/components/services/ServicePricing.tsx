@@ -26,7 +26,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
           <div className="space-y-3 sm:space-y-4">
             {pricing.details.map((detail, index) => (
               <div key={index} className="flex items-start">
-                <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-action mr-3 shrink-0 mt-0.5" />
                 <span className={cn('text-sm sm:text-base', getTextColor('white', 'muted'))}>{detail}</span>
               </div>
             ))}
@@ -38,7 +38,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
               <div className="space-y-2 sm:space-y-3">
                 {pricing.mediaPrices.map((price, index) => (
                   <div key={index} className="flex items-start">
-                    <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-action mr-3 shrink-0 mt-0.5" />
                     <span className={cn('text-sm sm:text-base', getTextColor('white', 'muted'))}>{price}</span>
                   </div>
                 ))}

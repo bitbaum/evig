@@ -21,7 +21,7 @@ export function ApplicationDetails({ application }: Props) {
           <Heading level={4} className="text-text-primary mb-2">Dienstleistungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.servicesOffered.map((service, index) => (
-              <span key={index} className="px-2 py-1 bg-surface-raised text-neutral-800 rounded-full text-xs">
+              <span key={index} className="px-2 py-1 bg-surface-raised text-text-primary rounded-full text-xs">
                 {service}
               </span>
             ))}
@@ -32,7 +32,7 @@ export function ApplicationDetails({ application }: Props) {
           <Heading level={4} className="text-text-primary mb-2">Spezialisierungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.specializations.map((spec, index) => (
-              <span key={index} className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs">
+              <span key={index} className="px-2 py-1 bg-action-muted-muted text-action rounded-full text-xs">
                 {spec}
               </span>
             ))}
@@ -90,7 +90,7 @@ export function ApplicationDetails({ application }: Props) {
                   href={doc}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-action hover:text-primary-700"
+                  className="flex items-center gap-2 text-sm text-action hover:text-action"
                 >
                   <FileText className="w-4 h-4" />
                   Dokument {index + 1}

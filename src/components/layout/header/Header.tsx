@@ -69,8 +69,8 @@ export function Header() {
           // Scrolled state: border-only (no shadow). Double-cueing scroll
           // with both shadow + border was a calmer-than-x.com signal.
           isScrolled || anyDropdownOpen
-            ? "bg-white/95 backdrop-blur-xl border-b border dark:bg-neutral-950/95 dark:border-white/6"
-            : "bg-white/80 backdrop-blur-md dark:bg-neutral-950/80"
+            ? "bg-surface-base/95 backdrop-blur-xl border-b border dark:border-white/6"
+            : "bg-surface-base/80 backdrop-blur-md"
         )}
       >
         <div className="max-w-7xl mx-auto">
@@ -102,8 +102,8 @@ export function Header() {
                   href={contactItem.href}
                   className={cn(
                     "px-4 py-2 text-sm font-medium text-text-secondary",
-                    "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
-                    "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
+                    "hover:text-text-primary transition-colors duration-200",
+                    "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
                   )}
                 >
                   {contactItem.nameKey ? tNav(contactItem.nameKey as never) : contactItem.name}
@@ -117,7 +117,7 @@ export function Header() {
               <ThemeToggle />
 
               {/* Divider */}
-              <div className="w-px h-5 bg-neutral-200 dark:bg-white/10" />
+              <div className="w-px h-5 bg-neutral-200 dark:bg-surface-base/10" />
 
               {/* User Menu / Auth */}
               <UserMenu />
@@ -135,9 +135,9 @@ export function Header() {
                 type="button"
                 className={cn(
                   "relative p-2 rounded-lg",
-                  "text-text-secondary hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-white/6",
+                  "text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:text-text-muted dark:hover:bg-surface-base/6",
                   "transition-colors duration-200",
-                  "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500"
+                  "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action"
                 )}
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label={tAccessibility('openMenu')}

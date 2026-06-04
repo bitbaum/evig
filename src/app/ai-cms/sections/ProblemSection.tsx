@@ -15,12 +15,12 @@ export function ProblemSection() {
   ]
 
   return (
-    <section className="py-16 px-4 bg-white">
+    <section className="py-16 px-4 bg-surface-base">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-neutral-900 text-center mb-4">
+        <h2 className="text-3xl font-bold text-text-primary text-center mb-4">
           Das Problem mit klassischem Feedback
         </h2>
-        <p className="text-neutral-600 text-center mb-12 max-w-2xl mx-auto">
+        <p className="text-text-secondary text-center mb-12 max-w-2xl mx-auto">
           Traditionelle Rückmeldewege — E-Mail, Kontaktformular, Ticket-System — haben alle denselben
           Nachteil: sie trennen Kontext vom Problem.
         </p>

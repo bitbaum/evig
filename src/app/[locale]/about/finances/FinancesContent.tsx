@@ -161,7 +161,7 @@ export default function FinancesContent() {
                   </thead>
                   <tbody className="divide-y divide-neutral-100">
                     {tableRows.map(row => (
-                      <tr key={row.key} className="hover:bg-neutral-50">
+                      <tr key={row.key} className="hover:bg-surface-raised">
                         <td className="px-6 py-3 text-text-secondary">{t(`table.${row.labelKey}` as Parameters<typeof t>[0])}</td>
                         {data.map(d => (
                           <td key={d.year} className="px-6 py-3 text-right font-mono text-text-primary">
@@ -192,9 +192,9 @@ export default function FinancesContent() {
             </div>
 
             {/* Methodology Note */}
-            <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6">
-              <Heading level={3} className="text-primary-900 dark:text-primary-200 mb-2">{t('methodology.title')}</Heading>
-              <ul className="text-sm text-primary-800 dark:text-primary-300 space-y-1">
+            <div className="bg-action-muted-muted border border-strong rounded-xl p-6">
+              <Heading level={3} className="text-action-text mb-2">{t('methodology.title')}</Heading>
+              <ul className="text-sm text-action space-y-1">
                 <li>{t('methodology.point1')}</li>
                 <li>{t('methodology.point2')}</li>
                 <li>{t('methodology.point3')}</li>

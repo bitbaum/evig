@@ -97,12 +97,12 @@ export function ListingActionButtons({
       {/* RevampIT direct purchase — only when ACTIVE */}
       {!isOwner && isRevampit && isAvailable && (
         <>
-          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
-            <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
+          <div className="bg-action-muted-muted border border-strong rounded-lg p-4 space-y-2">
+            <div className="flex items-center gap-2 text-action font-medium text-sm">
               <Shield className="w-4 h-4" aria-hidden="true" />
               {t('revampitTrustTitle')}
             </div>
-            <p className="text-xs text-primary-700 dark:text-primary-400">
+            <p className="text-xs text-action">
               {t('revampitTrustDesc')}
             </p>
           </div>
@@ -118,12 +118,12 @@ export function ListingActionButtons({
 
       {/* P2P payment info */}
       {!isOwner && !isRevampit && isAvailable && (
-        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
-          <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
+        <div className="bg-action-muted-muted border border-strong rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2 text-action font-medium text-sm">
             <Shield className="w-4 h-4" aria-hidden="true" />
             {t('payment_info')}
           </div>
-          <p className="text-xs text-primary-700 dark:text-primary-400">
+          <p className="text-xs text-action">
             {t('payment_methods')}
           </p>
         </div>
@@ -131,13 +131,13 @@ export function ListingActionButtons({
       {!isOwner && !isRevampit && isAvailable && (
         <>
           {messageSent ? (
-            <div className="w-full bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 text-center space-y-2">
-              <p className="text-primary-700 dark:text-primary-400 font-medium">
+            <div className="w-full bg-action-muted-muted border border-strong rounded-lg p-4 text-center space-y-2">
+              <p className="text-action font-medium">
                 {t('messageSent')}
               </p>
               <Link
                 href="/dashboard/messages"
-                className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 font-medium underline focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-1"
+                className="inline-flex items-center gap-1 text-sm text-action hover:text-action font-medium underline focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm px-1"
               >
                 {t('goToMessages')}
               </Link>
@@ -199,10 +199,10 @@ export function ListingActionButtons({
           <button
             onClick={onToggleFavorite}
             disabled={togglingFav}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
               isFavorited
                 ? 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-600'
-                : 'border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                : 'border-neutral-300 text-text-secondary hover:bg-surface-raised'
             }`}
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-error-500 text-error-500' : ''}`} aria-hidden="true" />
@@ -211,7 +211,7 @@ export function ListingActionButtons({
         )}
         <button
           onClick={onShare}
-          className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
           title={t('share')}
         >
           {shareConfirm ? (
@@ -224,7 +224,7 @@ export function ListingActionButtons({
         {isOwner && (
           <Link
             href={`/marketplace/sell?edit=${listing.id}`}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 text-text-secondary hover:bg-surface-raised focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
           >
             {t('edit')}
           </Link>
@@ -232,7 +232,7 @@ export function ListingActionButtons({
         {sessionUserId && !isOwner && (
           <button
             onClick={onShowReportModal}
-            className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
             title={t('report')}
           >
             <Flag className="w-4 h-4" aria-hidden="true" />

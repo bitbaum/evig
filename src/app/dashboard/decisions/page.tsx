@@ -52,7 +52,7 @@ export default async function DashboardDecisionsPage() {
       </p>
 
       {votingDecisions.length === 0 ? (
-        <div className="rounded-lg border border dark:border-neutral-700 bg-surface-raised p-8 text-center">
+        <div className="rounded-lg border border bg-surface-raised p-8 text-center">
           <p className="text-sm text-text-tertiary">{t('noVotings')}</p>
         </div>
       ) : (
@@ -68,7 +68,7 @@ export default async function DashboardDecisionsPage() {
               <Link
                 key={d.id}
                 href={`/dashboard/decisions/${d.id}`}
-                className="block rounded-lg border border dark:border-neutral-700 bg-surface-base dark:bg-neutral-800 p-4 hover:border-primary-400 dark:hover:border-primary-500 hover:shadow-xs dark:hover:shadow-black/20 transition-all"
+                className="block rounded-lg border border bg-surface-base p-4 hover:border-action dark:hover:border-action hover:shadow-xs dark:hover:shadow-black/20 transition-all"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -82,7 +82,7 @@ export default async function DashboardDecisionsPage() {
                       <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusConf.color}`}>
                         {statusConf.label}
                       </span>
-                      <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2 py-0.5 text-xs text-text-secondary dark:text-neutral-300">
+                      <span className="rounded-full bg-surface-raised px-2 py-0.5 text-xs text-text-secondary">
                         {methodConf.label}
                       </span>
                       {deadlineInfo && (
@@ -91,7 +91,7 @@ export default async function DashboardDecisionsPage() {
                         </span>
                       )}
                       {d.hasUserVoted ? (
-                        <span className="rounded-full bg-primary-100 dark:bg-primary-900/30 px-2 py-0.5 text-xs text-primary-700 dark:text-primary-300">
+                        <span className="rounded-full bg-action-muted-muted px-2 py-0.5 text-xs text-action">
                           {t('voted')}
                         </span>
                       ) : (

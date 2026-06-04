@@ -267,7 +267,7 @@ export function WorkshopProposalForm() {
           id={submitResult.success ? undefined : 'workshop-propose-error'}
           className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
-              ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/30 text-primary-800 dark:text-primary-300'
+              ? 'bg-action-muted-muted border-strong text-action'
               : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800/30 text-error-800 dark:text-error-400'
           }`}
         >
@@ -282,7 +282,7 @@ export function WorkshopProposalForm() {
               <p className="mb-4">{t('form.successMessage')}</p>
               <Link
                 href="/workshops"
-                className="inline-flex items-center text-primary-700 underline hover:text-primary-900 font-medium"
+                className="inline-flex items-center text-action underline hover:text-action font-medium"
               >
                 {t('form.backToWorkshops')}
               </Link>

@@ -34,7 +34,7 @@ import { ROUTES } from '@/config/routes'
 
 function getStatusBadge(status: string) {
   return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-neutral-800'}`}>
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-text-primary'}`}>
       {WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status}
     </span>
   )
@@ -42,7 +42,7 @@ function getStatusBadge(status: string) {
 
 function getPaymentBadge(paymentStatus: string) {
   return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-surface-raised text-neutral-800'}`}>
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-surface-raised text-text-primary'}`}>
       {WORKSHOP_PAYMENT_STATUS_LABELS[paymentStatus] ?? paymentStatus}
     </span>
   )
@@ -109,7 +109,7 @@ export default function AdminWorkshopInstanceDetailPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href={ROUTES.admin.workshopsInstances}
-            className="inline-flex items-center text-text-secondary hover:text-neutral-800 mb-4"
+            className="inline-flex items-center text-text-secondary hover:text-text-primary mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zur Übersicht
@@ -158,7 +158,7 @@ export default function AdminWorkshopInstanceDetailPage({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-surface-base rounded-xl shadow-xs border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+              <div className="p-2 bg-action-muted-muted rounded-lg">
                 <CheckCircle className="w-5 h-5 text-action" />
               </div>
               <div>
@@ -233,7 +233,7 @@ export default function AdminWorkshopInstanceDetailPage({
                 </thead>
                 <tbody className="divide-y divide-neutral-200">
                   {registrations.map((reg) => (
-                    <tr key={reg.id} className="hover:bg-neutral-50">
+                    <tr key={reg.id} className="hover:bg-surface-raised">
                       <td className="px-6 py-4">
                         <div className="flex items-center">
                           <div className="shrink-0 h-10 w-10 bg-neutral-200 rounded-full flex items-center justify-center">
@@ -282,7 +282,7 @@ export default function AdminWorkshopInstanceDetailPage({
                             <>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CONFIRMED)}
-                                className="text-action hover:text-primary-800 text-sm"
+                                className="text-action hover:text-action text-sm"
                               >
                                 Bestätigen
                               </button>
@@ -298,13 +298,13 @@ export default function AdminWorkshopInstanceDetailPage({
                             <>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.ATTENDED)}
-                                className="text-action hover:text-primary-800 text-sm"
+                                className="text-action hover:text-action text-sm"
                               >
                                 Teilgenommen
                               </button>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.NO_SHOW)}
-                                className="text-text-secondary hover:text-neutral-800 text-sm"
+                                className="text-text-secondary hover:text-text-primary text-sm"
                               >
                                 Nicht erschienen
                               </button>

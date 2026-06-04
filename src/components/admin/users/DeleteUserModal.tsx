@@ -36,7 +36,7 @@ export function DeleteUserModal({
         <p className="text-text-secondary mb-2">
           Bist du sicher, dass du diesen Benutzer löschen möchten?
         </p>
-        <div className="p-3 bg-surface-raised dark:bg-neutral-700 rounded-lg">
+        <div className="p-3 bg-surface-raised rounded-lg">
           <p className="font-medium text-text-primary">
             {user.name || 'Kein Name'}
           </p>

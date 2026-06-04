@@ -32,7 +32,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         {/* Avatar */}
         <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
           member.is_active
-            ? 'bg-primary-500'
+            ? 'bg-action'
             : 'bg-neutral-500'
         }`}>
           <span className="text-white font-medium text-sm">{initials}</span>
@@ -45,7 +45,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
               {displayName}
             </Heading>
             {!member.is_active && (
-              <span className="px-2 py-0.5 text-xs rounded-sm bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
+              <span className="px-2 py-0.5 text-xs rounded-sm bg-neutral-200 text-text-secondary">
                 Inaktiv
               </span>
             )}
@@ -82,7 +82,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
               {member.skills.slice(0, 3).map((skill) => (
                 <span
                   key={skill}
-                  className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary dark:text-neutral-300 text-xs rounded-sm"
+                  className="px-2 py-0.5 bg-surface-raised text-text-secondary text-xs rounded-sm"
                 >
                   {skill}
                 </span>
@@ -111,7 +111,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       <div className="flex gap-2 mt-4 pt-4 border-t border-subtle dark:border-white/6">
         <Link
           href={`/admin/team/${member.id}`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-text-secondary bg-surface-raised dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-text-secondary bg-surface-raised hover:bg-neutral-200 rounded-lg transition-colors"
           onClick={() => onView?.(member.id)}
         >
           <Eye className="w-4 h-4" />
@@ -119,7 +119,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         </Link>
         <Link
           href={`/admin/team/${member.id}/edit`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-action bg-action-muted-muted hover:bg-action-muted rounded-lg transition-colors"
           onClick={() => onEdit?.(member.id)}
         >
           <Edit2 className="w-4 h-4" />

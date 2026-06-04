@@ -32,8 +32,8 @@ export async function MissionStrip({ className }: MissionStripProps) {
   return (
     <section
       className={cn(
-        'border-y border-primary-100 dark:border-primary-900/30',
-        'bg-primary-50/60 dark:bg-primary-900/10',
+        'border-y border-subtle',
+        'bg-action-muted/60',
         className,
       )}
       aria-label={t('ariaLabel')}
@@ -42,12 +42,12 @@ export async function MissionStrip({ className }: MissionStripProps) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {/* Mission anchor */}
           <div className="flex items-start sm:items-center gap-3 min-w-0">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
-              <Recycle className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-action-muted/15">
+              <Recycle className="h-4 w-4 text-action" />
             </div>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-snug">
-              <strong className="text-neutral-900 dark:text-white">{t('anchor')}</strong>
-              <span className="block sm:inline sm:ml-1 text-neutral-600 dark:text-neutral-400">
+            <p className="text-sm text-text-secondary leading-snug">
+              <strong className="text-text-primary">{t('anchor')}</strong>
+              <span className="block sm:inline sm:ml-1 text-text-secondary dark:text-text-muted">
                 {t('subAnchor')}
               </span>
             </p>
@@ -56,27 +56,27 @@ export async function MissionStrip({ className }: MissionStripProps) {
           {/* Live stats — devices + CO₂ */}
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm shrink-0">
             <span className="inline-flex items-center gap-1.5">
-              <Heart className="h-4 w-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-              <span className="font-semibold text-neutral-900 dark:text-white tabular-nums">
+              <Heart className="h-4 w-4 text-action" aria-hidden="true" />
+              <span className="font-semibold text-text-primary tabular-nums">
                 {stats.soldDevices || stats.totalDevices}+
               </span>
-              <span className="text-neutral-600 dark:text-neutral-400">{t('devicesRehomed')}</span>
+              <span className="text-text-secondary dark:text-text-muted">{t('devicesRehomed')}</span>
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Leaf className="h-4 w-4 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-              <span className="font-semibold text-neutral-900 dark:text-white tabular-nums">
+              <Leaf className="h-4 w-4 text-action" aria-hidden="true" />
+              <span className="font-semibold text-text-primary tabular-nums">
                 ~{stats.co2SavedTons} t
               </span>
-              <span className="text-neutral-600 dark:text-neutral-400">{t('co2Avoided')}</span>
+              <span className="text-text-secondary dark:text-text-muted">{t('co2Avoided')}</span>
               <Link
                 href="/transparenz/co2"
-                className="text-xs text-primary-600 dark:text-primary-400 hover:underline underline-offset-2 ml-1"
+                className="text-xs text-action hover:underline underline-offset-2 ml-1"
               >
                 {t('methodologyLink')}
               </Link>
             </span>
             {!stats.live && (
-              <span className="text-xs text-neutral-500 dark:text-neutral-500 italic">
+              <span className="text-xs text-text-tertiary dark:text-text-tertiary italic">
                 {t('estimateNote')}
               </span>
             )}

@@ -199,11 +199,11 @@ export default async function ApprovalsPage() {
             </div>
           </div>
         </div>
-        <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
+        <div className="p-4 bg-action-muted-muted rounded-lg border border-strong">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-action" />
             <div>
-              <p className="text-2xl font-bold text-primary-800 dark:text-primary-200">{stats.approved}</p>
+              <p className="text-2xl font-bold text-action-text">{stats.approved}</p>
               <p className="text-sm text-action">Genehmigt (30 Tage)</p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default async function ApprovalsPage() {
             <Link
               key={source.href}
               href={source.href}
-              className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors"
+              className="p-4 flex items-center justify-between hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors"
             >
               <span className="text-text-primary">{source.label}</span>
               <span className="flex items-center gap-2">
@@ -309,7 +309,7 @@ export default async function ApprovalsPage() {
         </div>
       )}
 
-      <div className="p-6 bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl">
+      <div className="p-6 bg-surface-raised border border rounded-xl">
         <p className="text-sm text-text-secondary">
           <strong>Hinweis:</strong> Workshop-Vorschläge und Blog-Artikel von Benutzern
           müssen hier geprüft und freigegeben werden, bevor sie öffentlich sichtbar sind.

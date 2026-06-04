@@ -30,8 +30,8 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
             <button
               key={img.id}
               onClick={() => onSelectImage(idx)}
-              className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
-                idx === selectedImage ? 'border-primary-500' : 'border-transparent hover:border-neutral-300'
+              className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
+                idx === selectedImage ? 'border-action' : 'border-transparent hover:border-strong'
               }`}
               aria-label={t('imageAriaLabel', { n: idx + 1 })}
             >

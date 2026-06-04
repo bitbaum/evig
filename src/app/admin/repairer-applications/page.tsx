@@ -43,7 +43,7 @@ export default function RepairerApplicationsAdmin() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-action"></div>
       </div>
     )
   }
@@ -69,7 +69,7 @@ export default function RepairerApplicationsAdmin() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.push('/admin')}
-            className="flex items-center gap-2 text-text-secondary hover:text-neutral-900"
+            className="flex items-center gap-2 text-text-secondary hover:text-text-primary"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück zum Admin-Bereich
@@ -80,8 +80,8 @@ export default function RepairerApplicationsAdmin() {
 
       {/* Success Message */}
       {successMessage && (
-        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 rounded-lg p-4">
-          <p className="text-primary-800 dark:text-primary-300">{successMessage}</p>
+        <div className="bg-action-muted-muted border border-strong rounded-lg p-4">
+          <p className="text-action">{successMessage}</p>
         </div>
       )}
 

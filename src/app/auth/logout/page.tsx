@@ -62,7 +62,7 @@ export default function LogoutPage() {
   }, [t])
 
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -71,26 +71,26 @@ export default function LogoutPage() {
 
         {/* Logout Card */}
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700 text-center">
+          <div className="bg-surface-base rounded-2xl shadow-xl p-8 border border-subtle text-center">
             {!error ? (
               <>
-                <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+                <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Loader2 className="w-8 h-8 text-action animate-spin" />
                 </div>
-                <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
+                <Heading level={2} className="text-xl text-text-primary mb-2">
                   {t('heading')}
                 </Heading>
-                <p className="text-neutral-600 dark:text-neutral-400">{t('wait')}</p>
+                <p className="text-text-secondary dark:text-text-muted">{t('wait')}</p>
               </>
             ) : (
               <>
                 <div className="w-16 h-16 bg-error-100 dark:bg-error-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                   <AlertCircle className="w-8 h-8 text-error-600" />
                 </div>
-                <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
+                <Heading level={2} className="text-xl text-text-primary mb-2">
                   {t('errorHeading')}
                 </Heading>
-                <p className="text-neutral-600 dark:text-neutral-400 mb-6">{error}</p>
+                <p className="text-text-secondary dark:text-text-muted mb-6">{error}</p>
                 <div className="space-y-3">
                   <Button
                     onClick={() => {
@@ -112,7 +112,7 @@ export default function LogoutPage() {
                   </Button>
                   <Link
                     href="/dashboard"
-                    className="inline-flex items-center justify-center gap-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
+                    className="inline-flex items-center justify-center gap-2 bg-surface-raised hover:bg-neutral-200 text-text-primary font-medium px-6 py-3 rounded-lg transition-colors w-full"
                   >
                     {t('backToDashboard')}
                   </Link>

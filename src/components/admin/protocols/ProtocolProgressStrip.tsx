@@ -21,9 +21,9 @@ const SHORT_LABELS: Record<string, string> = {
 const STATE_CONFIG = {
   done: {
     icon: CheckCircle2,
-    dotClass: 'bg-primary-500 text-white',
-    labelClass: 'text-primary-700',
-    lineClass: 'bg-primary-400',
+    dotClass: 'bg-action text-white',
+    labelClass: 'text-action',
+    lineClass: 'bg-action',
   },
   active: {
     icon: Clock,

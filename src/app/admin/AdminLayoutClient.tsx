@@ -49,7 +49,7 @@ export function AdminLayoutClient({
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
 
   return (
-    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950">
+    <div className="min-h-screen bg-surface-raised">
       {/* Sidebar */}
       <AdminSidebar
         sidebarCollapsed={sidebarCollapsed}
@@ -75,19 +75,19 @@ export function AdminLayoutClient({
         }`}
       >
         {/* Top Bar */}
-        <div className="sticky top-0 z-40 border-b border bg-white/90 backdrop-blur-xs dark:bg-neutral-950/80">
+        <div className="sticky top-0 z-40 border-b border bg-surface-base/90 backdrop-blur-xs">
           <div className="flex h-14 items-center justify-between px-4 lg:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="shrink-0 rounded-lg p-2 hover:bg-neutral-100 dark:hover:bg-white/6 lg:hidden"
+                className="shrink-0 rounded-lg p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:hidden"
               >
                 <Menu className="h-5 w-5" />
               </button>
 
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/6 lg:flex"
+                className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:flex"
                 title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
               >
                 <Menu className="h-4 w-4 text-text-tertiary" />
@@ -100,7 +100,7 @@ export function AdminLayoutClient({
             <div className="flex items-center gap-3 shrink-0">
               <Link
                 href="/"
-                className="hidden items-center gap-1.5 rounded-md border border-primary-500/40 px-3 py-1.5 text-xs font-medium text-primary-500 transition-colors hover:border-primary-500 hover:bg-primary-500/10 dark:border-primary-500/30 dark:text-primary-400 dark:hover:bg-primary-500/10 sm:flex"
+                className="hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30/10 sm:flex"
               >
                 <Globe className="w-3.5 h-3.5" />
                 Website

@@ -58,7 +58,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
               className="flex items-center gap-3 rounded-md border border p-3"
             >
               <div className="flex-1">
-                <span className="font-medium text-neutral-800">{opt.label}</span>
+                <span className="font-medium text-text-primary">{opt.label}</span>
               </div>
               <div className="flex gap-1">
                 {Array.from(

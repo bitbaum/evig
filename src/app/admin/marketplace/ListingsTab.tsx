@@ -79,12 +79,12 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {listings?.items.map(l => (
-              <tr key={l.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
+              <tr key={l.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-medium text-text-primary">{l.title}</span>
                     {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-action" />}
-                    {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">RIT</span>}
+                    {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-action-muted text-action-muted">RIT</span>}
                     {parseInt(l.report_count) > 0 && (
                       <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
                         {l.report_count} Meldung{parseInt(l.report_count) > 1 ? 'en' : ''}
@@ -106,15 +106,15 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                 <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(l.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6" title="Ansehen">
+                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Ansehen">
                       <Eye className="w-4 h-4 text-text-tertiary" />
                     </a>
-                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6" title="Bearbeiten">
+                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Bearbeiten">
                       <Edit3 className="w-4 h-4 text-text-tertiary" />
                     </button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
-                      <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6" title="Entfernen">
+                      <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Entfernen">
                         <Trash2 className="w-4 h-4 text-error-500" />
                       </button>
                     )}

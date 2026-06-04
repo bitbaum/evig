@@ -8,7 +8,7 @@ interface Props {
 export function DonationStatsCards({ stats }: Props) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-      <div className="bg-surface-base rounded-lg shadow-sm p-4 border-l-4 border-primary-500">
+      <div className="bg-surface-base rounded-lg shadow-sm p-4 border-l-4 border-action">
         <div className="text-2xl font-bold text-text-primary">{stats.total}</div>
         <div className="text-sm text-text-secondary">Total Spenden</div>
       </div>
@@ -16,7 +16,7 @@ export function DonationStatsCards({ stats }: Props) {
         <div className="text-2xl font-bold text-text-primary">{stats.monetary}</div>
         <div className="text-sm text-text-secondary">Geldspenden</div>
       </div>
-      <div className="bg-surface-base rounded-lg shadow-sm p-4 border-l-4 border-primary-500">
+      <div className="bg-surface-base rounded-lg shadow-sm p-4 border-l-4 border-action">
         <div className="text-2xl font-bold text-text-primary">{stats.device}</div>
         <div className="text-sm text-text-secondary">Sachspenden</div>
       </div>

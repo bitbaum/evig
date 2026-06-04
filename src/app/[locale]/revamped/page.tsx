@@ -52,21 +52,21 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/30 px-6 py-3 rounded-full mb-6 mt-6">
+        <div className="inline-flex items-center gap-2 bg-action-muted-muted px-6 py-3 rounded-full mb-6 mt-6">
           <Award className="w-6 h-6 text-action" />
-          <span className="text-xl font-bold text-primary-800 dark:text-primary-300">REVAMPED</span>
+          <span className="text-xl font-bold text-action">REVAMPED</span>
           <Sparkles className="w-5 h-5 text-action" />
         </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -92,7 +92,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 <div className="space-y-4">
                   {(['check1', 'check2', 'check3', 'check4'] as const).map((key) => (
                     <div key={key} className="flex items-center">
-                      <div className="w-3 h-3 bg-primary-500 rounded-full mr-4"></div>
+                      <div className="w-3 h-3 bg-action rounded-full mr-4"></div>
                       <span className="text-lg">{t(`heroSection.${key}`)}</span>
                     </div>
                   ))}
@@ -105,7 +105,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   </Link>
                   <a
                     href="#certificate"
-                    className="inline-block border-2 border-primary-600 text-action px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                    className="inline-block border-2 border-action text-action px-6 py-3 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors"
                   >
                     {t('heroSection.learnBtn')}
                   </a>
@@ -123,7 +123,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                   />
-                  <div className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-xs">
+                  <div className="absolute top-4 right-4 bg-action text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-xs">
                     <div className="flex items-center">
                       <Award className="w-4 h-4 mr-2" />
                       REVAMPED
@@ -187,7 +187,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 <div className="space-y-4">
                   {(['check1', 'check2', 'check3', 'check4', 'check5'] as const).map((key) => (
                     <div key={key} className="flex items-center">
-                      <CheckCircle2 className="w-6 h-6 text-primary-500 mr-3" />
+                      <CheckCircle2 className="w-6 h-6 text-action mr-3" />
                       <span className="text-lg">{t(`certificate.${key}`)}</span>
                     </div>
                   ))}
@@ -198,7 +198,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   <div className="inline-flex items-center justify-center w-32 h-32 bg-surface-base rounded-full border mb-6">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-action mx-auto mb-2" />
-                      <div className="text-sm font-bold text-primary-800">REVAMPED</div>
+                      <div className="text-sm font-bold text-action">REVAMPED</div>
                       <div className="text-xs text-text-secondary">CERTIFIED</div>
                     </div>
                   </div>
@@ -256,11 +256,11 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   <div className="w-40 h-40 mx-auto flex items-center justify-center bg-surface-base rounded-xl border">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-action mx-auto mb-2" />
-                      <div className="text-sm font-bold text-primary-800">REVAMPED</div>
+                      <div className="text-sm font-bold text-action">REVAMPED</div>
                       <div className="text-xs text-text-secondary">CERTIFIED</div>
                     </div>
                   </div>
-                  <div className="absolute top-3 right-3 bg-primary-600 text-white text-xs px-3 py-1 rounded-full">NEW</div>
+                  <div className="absolute top-3 right-3 bg-action text-white text-xs px-3 py-1 rounded-full">NEW</div>
                 </div>
                 <Heading level={3} className="text-xl font-bold mb-2">{t('stickers.sticker3.title')}</Heading>
                 <p className="text-text-secondary">{t('stickers.sticker3.body')}</p>
@@ -285,7 +285,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               </Link>
               <Link
                 href="/contact"
-                className="inline-block border-2 border-primary-600 text-action px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
+                className="inline-block border-2 border-action text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-lg"
               >
                 {t('cta.learnBtn')}
               </Link>

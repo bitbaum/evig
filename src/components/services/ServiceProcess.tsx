@@ -21,7 +21,7 @@ export default function ServiceProcessSection({ process }: ServiceProcessProps) 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {process.map((step, index) => (
             <div key={index} className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold mx-auto mb-3 sm:mb-4">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-action text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold mx-auto mb-3 sm:mb-4">
                 {step.step}
               </div>
               <h3 className={cn('text-lg sm:text-xl font-bold mb-2 sm:mb-3', getTextColor('neutral', 'primary'))}>{step.title}</h3>

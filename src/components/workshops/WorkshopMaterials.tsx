@@ -139,13 +139,13 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           target={isExternalLink(material.url) ? '_blank' : undefined}
           rel={isExternalLink(material.url) ? 'noopener noreferrer' : undefined}
           download={!isExternalLink(material.url)}
-          className="flex items-start gap-3 p-3 bg-surface-raised rounded-lg hover:bg-neutral-100 transition-colors group"
+          className="flex items-start gap-3 p-3 bg-surface-raised rounded-lg hover:bg-surface-raised transition-colors group"
         >
           <div className={`p-2 rounded-lg ${
             material.material_type === 'pdf' ? 'bg-error-100 dark:bg-error-900/20 text-error-600' :
-            material.material_type === 'video' ? 'bg-primary-100 dark:bg-primary-900/30 text-action' :
+            material.material_type === 'video' ? 'bg-action-muted-muted text-action' :
             material.material_type === 'archive' ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-600' :
-            'bg-primary-100 dark:bg-primary-900/30 text-action'
+            'bg-action-muted-muted text-action'
           }`}>
             {getMaterialIcon(material.material_type)}
           </div>
@@ -158,8 +158,8 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
               {material.access_type !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
                 <span className={`text-xs px-1.5 py-0.5 rounded ${
                   material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                    : 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                    ? 'bg-action-muted-muted text-action'
+                    : 'bg-action-muted-muted text-action'
                 }`}>
                   {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? t('badgeAttended') : t('badgeRegistered')}
                 </span>

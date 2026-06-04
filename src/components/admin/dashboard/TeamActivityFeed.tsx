@@ -71,7 +71,7 @@ export async function TeamActivityFeed() {
           const actionLabel = ACTION_LABELS[row.action as ActivityAction] ?? row.action
           return (
             <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-              <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-600 mt-2 shrink-0" aria-hidden="true" />
+              <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 mt-2 shrink-0" aria-hidden="true" />
               <span className="leading-snug">
                 <strong className="text-text-primary font-medium">{actorName}</strong>
                 {' '}{actionLabel}

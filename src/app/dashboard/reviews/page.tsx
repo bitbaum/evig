@@ -137,7 +137,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               </Heading>
               <StatusBadge status={review.status} />
               {review.isVerifiedPurchase && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 gap-1">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action gap-1">
                   <CheckCircle className="w-3 h-3" />
                   {t('verifiedPurchase')}
                 </span>
@@ -170,7 +170,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                         {t('responseFrom', { name: review.response.responderName })}
                       </span>
                     </div>
-                    <p className="text-neutral-800 text-sm">{review.response.content}</p>
+                    <p className="text-text-primary text-sm">{review.response.content}</p>
                   </div>
                 )}
               </>
@@ -214,8 +214,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 onClick={() => onVote(review.id, 'helpful')}
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'helpful'
-                    ? 'bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-400'
-                    : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                    ? 'bg-action-muted/20 text-action'
+                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
                 <ThumbsUp className="w-3 h-3" />
@@ -226,7 +226,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'unhelpful'
                     ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
-                    : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
                 <ThumbsDown className="w-3 h-3" />
@@ -262,7 +262,7 @@ export default function UserReviewsPage() {
   if (status === 'loading' || loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-action"></div>
       </div>
     )
   }

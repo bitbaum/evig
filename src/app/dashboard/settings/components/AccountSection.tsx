@@ -79,7 +79,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
       </div>
 
       {/* Password Change Link */}
-      <div className="border-t-2 border dark:border-neutral-700 pt-6">
+      <div className="border-t-2 border pt-6">
         <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {labels.password}
         </Heading>

@@ -36,7 +36,7 @@ const STATUS_ICONS: Record<string, typeof CheckCircle> = {
 
 function getStatusBadge(status: string) {
   const Icon = STATUS_ICONS[status] ?? AlertCircle
-  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-neutral-800'
+  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-text-primary'
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}>
       <Icon className="w-4 h-4" />
@@ -109,7 +109,7 @@ export default function LocationDetailPage() {
             <Heading level={2} className="text-lg font-medium text-text-primary mb-2">{error}</Heading>
             <Link
               href={ROUTES.admin.locations}
-              className="inline-flex items-center text-action hover:text-primary-700 mt-4"
+              className="inline-flex items-center text-action hover:text-action mt-4"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
               Zurück zur Ortsverwaltung
@@ -136,7 +136,7 @@ export default function LocationDetailPage() {
               <div className="flex items-center gap-3 mb-2">
                 <Link
                   href={ROUTES.admin.locations}
-                  className="text-text-tertiary hover:text-neutral-600 transition-colors"
+                  className="text-text-tertiary hover:text-text-secondary transition-colors"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Link>

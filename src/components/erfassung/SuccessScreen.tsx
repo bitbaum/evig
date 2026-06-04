@@ -19,7 +19,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <Package className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">
@@ -41,7 +41,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
           </Button>
           <Link
             href={ROUTES.admin.products}
-            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-text-secondary dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
           >
             <FileText className="w-5 h-5" />
             {t('toOverview')}

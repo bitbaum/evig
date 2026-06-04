@@ -76,7 +76,7 @@ export function ProtocolActionItemsList({
 }: Props) {
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
-      <div id="protocol-step-tasks" className="bg-surface-raised dark:bg-neutral-900 border border rounded-lg p-4">
+      <div id="protocol-step-tasks" className="bg-surface-raised border border rounded-lg p-4">
         <Heading level={3} className="text-sm text-text-primary mb-1">Keine Aktionen erkannt</Heading>
         <p className="text-sm text-text-secondary">
           Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
@@ -109,7 +109,7 @@ export function ProtocolActionItemsList({
           <button
             onClick={onCreateAllTasks}
             disabled={bulkCreatingTasks}
-            className="text-xs px-3 py-1.5 rounded-lg border border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 disabled:opacity-50 transition-colors"
+            className="text-xs px-3 py-1.5 rounded-lg border border-strong text-action hover:bg-action-muted-muted disabled:opacity-50 transition-colors"
           >
             {bulkCreatingTasks
               ? <><Loader2 className="w-3 h-3 animate-spin inline mr-1" />Erstellt…</>
@@ -137,7 +137,7 @@ export function ProtocolActionItemsList({
             icon={<ListChecks className="w-3.5 h-3.5 text-action" />}
             label="Aufgaben"
             count={tasks.length}
-            accent="bg-primary-50/50 dark:bg-primary-900/10 border-subtle"
+            accent="bg-action-muted/50 border-subtle"
           />
           <div className="divide-y divide-subtle">
             {tasks.map((item) => (
@@ -201,7 +201,7 @@ export function ProtocolActionItemsList({
             icon={<HelpCircle className="w-3.5 h-3.5 text-text-tertiary" />}
             label="Offene Fragen / Info"
             count={openQuestions.length}
-            accent="bg-surface-raised dark:bg-neutral-800/30 border-subtle"
+            accent="bg-surface-raised border-subtle"
           />
           <div className="divide-y divide-subtle">
             {openQuestions.map((item) => (
@@ -295,7 +295,7 @@ function ActionRow({
         {isLinked && link ? (
           <Link
             href={`/admin/tasks/${link.linked_task_id}`}
-            className="inline-flex items-center gap-1 text-xs text-action hover:text-primary-800 dark:hover:text-primary-300"
+            className="inline-flex items-center gap-1 text-xs text-action hover:text-action"
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             Verknüpft
@@ -305,7 +305,7 @@ function ActionRow({
           <button
             onClick={() => onCreateTask(item)}
             disabled={creatingTask === item.id}
-            className="inline-flex items-center gap-1 text-xs text-action hover:text-primary-800 dark:hover:text-primary-300 disabled:opacity-50"
+            className="inline-flex items-center gap-1 text-xs text-action hover:text-action disabled:opacity-50"
           >
             {creatingTask === item.id
               ? <Loader2 className="w-3.5 h-3.5 animate-spin" />

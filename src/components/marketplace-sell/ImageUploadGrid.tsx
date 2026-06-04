@@ -22,7 +22,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
       </label>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
-          <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border dark:border-neutral-600">
+          <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border">
             <img src={url} alt={t('imageAlt', { index: idx + 1 })} className="w-full h-full object-cover" />
             <button
               onClick={() => onRemove(idx)}
@@ -42,7 +42,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="aspect-square rounded-lg border-2 border-dashed border-neutral-300 dark:border-neutral-600 flex flex-col items-center justify-center gap-1 text-text-tertiary hover:text-neutral-600 hover:border-neutral-400 transition-colors"
+            className="aspect-square rounded-lg border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center gap-1 text-text-tertiary hover:text-text-secondary hover:border-strong transition-colors"
           >
             {isUploading ? (
               <Loader2 className="w-6 h-6 animate-spin" />

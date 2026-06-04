@@ -122,7 +122,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={ROUTES.admin.services} className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors">
+          <Link href={ROUTES.admin.services} className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors">
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
@@ -145,7 +145,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
         </div>
       )}
       {success && (
-        <div role="status" className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg">
+        <div role="status" className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
           {success}
         </div>
       )}

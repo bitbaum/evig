@@ -6,18 +6,18 @@ export function AccessControlSection() {
   ]
 
   const colorMap: Record<string, string> = {
-    blue: 'bg-primary-50 dark:bg-primary-900/20 border-primary-100 dark:border-primary-800/30 text-primary-900 dark:text-primary-300',
-    green: 'bg-primary-50 dark:bg-primary-900/20 border-primary-100 dark:border-primary-800/30 text-primary-900 dark:text-primary-300',
-    purple: 'bg-primary-50 dark:bg-primary-900/20 border-primary-100 dark:border-primary-800/30 text-primary-900 dark:text-primary-300',
+    blue: 'bg-action-muted-muted border-subtle text-action',
+    green: 'bg-action-muted-muted border-subtle text-action',
+    purple: 'bg-action-muted-muted border-subtle text-action',
   }
 
   return (
-    <section className="py-16 px-4 bg-white">
+    <section className="py-16 px-4 bg-surface-base">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-neutral-900 text-center mb-4">
+        <h2 className="text-3xl font-bold text-text-primary text-center mb-4">
           Zugangskontrolle
         </h2>
-        <p className="text-neutral-600 text-center mb-12">
+        <p className="text-text-secondary text-center mb-12">
           Das System funktioniert für alle — anonym oder eingeloggt. Mehr Rechte erhalten Mitglieder und Staff.
         </p>
         <div className="grid md:grid-cols-3 gap-6">

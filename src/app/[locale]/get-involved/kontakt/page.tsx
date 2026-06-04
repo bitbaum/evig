@@ -42,7 +42,7 @@ export default async function KontaktPage({ params, searchParams }: KontaktPageP
         {/* Back link */}
         <Link
           href="/get-involved"
-          className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-700 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backLink')}

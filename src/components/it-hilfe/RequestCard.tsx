@@ -78,10 +78,10 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
   return (
     <Link
       href={IT_HILFE.routes.detail(request.id)}
-      className={`card-shell overflow-hidden hover:border-neutral-300 transition-all group ${className}`}
+      className={`card-shell overflow-hidden hover:border-strong transition-all group ${className}`}
     >
       {/* Card Header */}
-      <div className="p-5 border-b border-subtle dark:border-neutral-700">
+      <div className="p-5 border-b border-subtle">
         <div className="flex items-start justify-between mb-3">
           <div className={`p-2.5 ${categoryConfig?.color || 'bg-neutral-500'} rounded-lg`}>
             <CategoryIcon className="w-5 h-5 text-white" />
@@ -99,7 +99,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
           </div>
         </div>
 
-        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
+        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors line-clamp-2">
           {request.title}
         </Heading>
 

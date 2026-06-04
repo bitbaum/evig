@@ -139,7 +139,7 @@ export default function AdminLocationsPage() {
 
         <div className="divide-y divide-neutral-200">
           {filteredLocations.map((location) => (
-            <div key={location.id} className="p-6 hover:bg-neutral-50">
+            <div key={location.id} className="p-6 hover:bg-surface-raised">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
@@ -175,7 +175,7 @@ export default function AdminLocationsPage() {
                 <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:shrink-0">
                   <Link
                     href={ROUTES.admin.location(location.id)}
-                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"
+                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     Details

@@ -131,7 +131,7 @@ export default function CurrencySelector({
             )}
             {selectedCurrency === 'CHF' && (
               <div className="flex items-start space-x-1">
-                <span className="text-primary-500">🇨🇭</span>
+                <span className="text-action">🇨🇭</span>
                 <span>{t('chfNote')}</span>
               </div>
             )}

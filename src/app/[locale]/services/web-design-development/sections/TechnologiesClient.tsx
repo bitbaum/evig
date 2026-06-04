@@ -58,8 +58,8 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
-                    ? 'bg-primary-600 text-white transform scale-105'
-                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 hover:text-neutral-800'
+                    ? 'bg-action text-white transform scale-105'
+                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 hover:text-text-primary'
                 }`}
               >
                 {category}
@@ -78,27 +78,27 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 href={tech.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-surface-raised dark:bg-neutral-900 rounded-xl p-6 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
+                className="bg-surface-raised rounded-xl p-6 border hover:border-strong dark:hover:border-white/12 transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-start mb-4">
                   <IconBadge icon={IconComponent} theme="services" size="lg" className="mr-4" />
                   <div className="min-w-0 flex-1">
                     <div className="text-sm text-action font-semibold mb-1 truncate">{tech.category}</div>
-                    <Heading level={3} className="mb-2 line-clamp-2 group-hover:text-primary-700 transition-colors duration-300">{tech.name}</Heading>
+                    <Heading level={3} className="mb-2 line-clamp-2 group-hover:text-action transition-colors duration-300">{tech.name}</Heading>
                   </div>
                 </div>
                 <p className="text-text-secondary mb-4 text-sm leading-relaxed">{tech.description}</p>
                 <div className="space-y-2">
                   {tech.benefits.map((benefit, i) => (
                     <div key={i} className="flex items-center text-sm text-text-secondary">
-                      <CheckCircle2 className="w-4 h-4 text-primary-500 mr-2 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-action mr-2 shrink-0" />
                       <span className="truncate">{benefit}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border flex items-center text-sm text-action group-hover:text-primary-700 transition-colors duration-300">
+                <div className="mt-4 pt-3 border-t border flex items-center text-sm text-action group-hover:text-action transition-colors duration-300">
                   <ArrowRight className="w-4 h-4 mr-2 transform group-hover:translate-x-1 transition-transform duration-300" />
                   <span>{labels.visitWebsite}</span>
                 </div>

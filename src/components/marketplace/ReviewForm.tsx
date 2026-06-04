@@ -63,7 +63,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
   }
 
   return (
-    <div className="border-t border-subtle dark:border-neutral-700 pt-4 mt-4 space-y-4">
+    <div className="border-t border-subtle pt-4 mt-4 space-y-4">
       <Heading level={3} className="text-sm font-semibold text-text-primary">{t('heading')}</Heading>
 
       {/* Star Rating */}
@@ -84,7 +84,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
                 className={`w-6 h-6 transition-colors ${
                   i < (hoverRating || rating)
                     ? 'text-warning-400 fill-warning-400'
-                    : 'text-neutral-300 dark:text-neutral-600'
+                    : 'text-neutral-300 dark:text-text-secondary'
                 }`}
               />
             </button>

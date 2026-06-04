@@ -96,9 +96,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {serviceItems.map((service, index) => {
               const Icon = SERVICE_ICONS[index]
               return (
-                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-neutral-300 transition-all duration-300">
+                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300">
                   <div className="flex items-start">
-                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-action mr-4">
+                    <div className="p-3 bg-action-muted-muted rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div>
@@ -149,7 +149,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
               </Link>
               <Link
                 href={CONTACT.phoneTel}
-                className="inline-flex items-center border-2 border-primary-600 text-action px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                className="inline-flex items-center border-2 border-action text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors"
               >
                 {t('quickCta.call')}
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -172,7 +172,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {benefitItems.map((benefit, index) => {
               const Icon = BENEFIT_ICONS[index]
               return (
-                <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-neutral-300 transition-all duration-300">
+                <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-strong transition-all duration-300">
                   <div className="flex items-center mb-4">
                     <Icon className="w-6 h-6 text-action mr-3" />
                     <Heading level={3} className="">{benefit.title}</Heading>
@@ -198,9 +198,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {distroItems.map((distro, index) => {
               const Icon = DISTRO_ICONS[index]
               return (
-                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-neutral-300 transition-all duration-300">
+                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300">
                   <div className="flex items-start mb-6">
-                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-action mr-4">
+                    <div className="p-3 bg-action-muted-muted rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div className="flex-1">
@@ -209,7 +209,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                         href={DISTRO_WEBSITES[index]}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-action hover:text-primary-700 text-sm mb-4 inline-flex items-center"
+                        className="text-action hover:text-action text-sm mb-4 inline-flex items-center"
                       >
                         {t('distrosSection.visitWebsite')} <ArrowRight className="w-4 h-4 ml-1" />
                       </a>
@@ -220,7 +220,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           <ul className="space-y-2">
                             {distro.useCases.map((useCase, i) => (
                               <li key={i} className="flex items-start">
-                                <div className="p-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3 mt-0.5">
+                                <div className="p-1 bg-action-muted-muted rounded-full mr-3 mt-0.5">
                                   <CheckCircle2 className="w-4 h-4 text-action" />
                                 </div>
                                 <span className="text-text-secondary">{useCase}</span>
@@ -233,7 +233,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           <ul className="space-y-2">
                             {distro.pros.map((pro, i) => (
                               <li key={i} className="flex items-start">
-                                <div className="p-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3 mt-0.5">
+                                <div className="p-1 bg-action-muted-muted rounded-full mr-3 mt-0.5">
                                   <CheckCircle2 className="w-4 h-4 text-action" />
                                 </div>
                                 <span className="text-text-secondary">{pro}</span>
@@ -267,22 +267,22 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-primary-700 text-white">
+      <section className="py-20 bg-action text-white">
         <div className="container mx-auto px-4 text-center">
           <Heading level={2} className="mb-6">{t('finalCta.heading')}</Heading>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-action-text">
             {t('finalCta.body')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
+              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-lg"
             >
               {t('finalCta.start')}
             </Link>
             <Link
               href="/services"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-surface-base/10 transition-colors duration-300 text-lg"
             >
               {t('finalCta.explore')}
             </Link>

@@ -20,7 +20,7 @@ interface AdminSectionHeaderProps {
  * Replaces the scattered pattern of:
  *   <Heading level={2} className="font-semibold ...">
  *   <div className="p-4 border-b"><Heading ...>
- *   <h3 className="text-sm font-medium text-neutral-700">
+ *   <h3 className="text-sm font-medium text-text-secondary">
  *
  * Usage:
  *   <AdminSectionHeader title="Teilnehmer" divider />

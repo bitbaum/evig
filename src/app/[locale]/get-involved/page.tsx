@@ -81,7 +81,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           </Button>
           <a
             href="#learn-more"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-surface-base text-action hover:bg-neutral-50 border-2 border-primary-600 transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-surface-base text-action hover:bg-surface-raised border-2 border-action transition-colors"
           >
             {t('hero.learnBtn')}
           </a>
@@ -89,7 +89,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </PageHero>
 
       {/* Core Values Section */}
-      <section id="learn-more" className={`${responsiveSpacing.section} bg-surface-raised dark:bg-neutral-900`}>
+      <section id="learn-more" className={`${responsiveSpacing.section} bg-surface-raised`}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
           <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             {t('coreValues.heading')}
@@ -98,7 +98,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             {coreValueItems.map((value, index) => {
               const Icon = CORE_VALUE_ICONS[index]
               return (
-                <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-neutral-300 transition-all duration-300`}>
+                <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-strong transition-all duration-300`}>
                   <div className={`text-action ${responsiveSpacing.mbMedium}`}>
                     <Icon className="w-10 h-10 sm:w-12 sm:h-12" />
                   </div>
@@ -123,7 +123,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           </Heading>
           <div className={responsiveGrid.cards}>
             {optionItems.map((option, index) => (
-              <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-neutral-300 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}>
+              <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-strong transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}>
                 <div className={`text-action ${responsiveSpacing.mbMedium}`}>
                   <Users className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
@@ -136,7 +136,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                 <ul className={`space-y-2 sm:space-y-3 ${responsiveSpacing.mbMedium}`}>
                   {option.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start text-text-secondary">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-primary-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-action shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className={responsiveTypography.small}>{feature}</span>
@@ -153,7 +153,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* Testimonials Section */}
-      <section className={`${responsiveSpacing.section} bg-surface-raised dark:bg-neutral-900`}>
+      <section className={`${responsiveSpacing.section} bg-surface-raised`}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
           <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             {t('testimonials.heading')}
@@ -189,12 +189,12 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                   href={PARTNER_URLS[index]}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center ${responsiveSpacing.cardPadding} card-shell hover:border-primary-300 transition-all duration-300 group`}
+                  className={`flex items-center ${responsiveSpacing.cardPadding} card-shell hover:border-strong transition-all duration-300 group`}
                 >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-primary-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-action shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className={`${responsiveTypography.body} text-text-secondary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300`}>
+                  <span className={`${responsiveTypography.body} text-text-secondary group-hover:text-action dark:group-hover:text-action transition-colors duration-300`}>
                     {name}
                   </span>
                 </a>
@@ -205,21 +205,21 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-primary-700 text-white`}>
+      <section className={`${responsiveSpacing.section} bg-action text-white`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
           <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbSmall}`}>
             {t('cta.heading')}
           </Heading>
-          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbMedium} max-w-2xl mx-auto text-primary-100`}>
+          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbMedium} max-w-2xl mx-auto text-action-text`}>
             {t('cta.body')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <ContactLink variant="outline" size="lg" className="bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20">
+            <ContactLink variant="outline" size="lg" className="bg-surface-base text-action hover:bg-action-muted-muted">
               {t('cta.contactBtn')}
             </ContactLink>
             <Link
               href="/workshops"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-white text-white hover:bg-white/10`}
+              className={`${responsiveButtons.large} bg-transparent border-2 border-white text-white hover:bg-surface-base/10`}
             >
               {t('cta.workshopsBtn')}
             </Link>

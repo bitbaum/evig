@@ -117,9 +117,9 @@ export default function ImpactPageContent() {
   }
 
   const CATEGORY_COLOR: Record<ImpactMetric['category'], string> = {
-    environmental: 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/30',
+    environmental: 'bg-action-muted-muted border-strong',
     social: 'bg-surface-raised border',
-    economic: 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/30',
+    economic: 'bg-action-muted-muted border-strong',
   }
 
   return (
@@ -159,7 +159,7 @@ export default function ImpactPageContent() {
                 <div className="flex items-center justify-between">
                   {getCategoryIcon(metric.category)}
                   {metric.verified && (
-                    <Badge className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+                    <Badge className="bg-action-muted-muted text-action">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       {t('verified')}
                     </Badge>
@@ -319,8 +319,8 @@ export default function ImpactPageContent() {
             {donationMethods.map((method) => (
               <Card
                 key={method.id}
-                className={`cursor-pointer transition-all hover:border-neutral-300 ${
-                  method.popular ? 'ring-2 ring-action bg-primary-50 dark:bg-primary-900/20' : ''
+                className={`cursor-pointer transition-all hover:border-strong ${
+                  method.popular ? 'ring-2 ring-action bg-action-muted-muted' : ''
                 }`}
                 onClick={() => setSelectedDonationMethod(method.id)}
               >
@@ -331,7 +331,7 @@ export default function ImpactPageContent() {
                       <CardTitle className="text-xl">{method.name}</CardTitle>
                     </div>
                     {method.popular && (
-                      <Badge className="bg-primary-600 text-white">{t('donation.popular')}</Badge>
+                      <Badge className="bg-action text-white">{t('donation.popular')}</Badge>
                     )}
                   </div>
                   <CardDescription className="text-base">{method.description}</CardDescription>
@@ -449,14 +449,14 @@ export default function ImpactPageContent() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-primary-600 text-white">
+      <section className="py-16 bg-action text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
           <Heading level={2} className="mb-6">{t('ctaDonate.title')}</Heading>
           <p className="text-xl mb-8">
             {t('ctaDonate.description')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-surface-base text-action hover:bg-neutral-100">
+            <Button size="lg" className="bg-surface-base text-action hover:bg-surface-raised">
               {t('ctaDonate.donate')}
               <Heart className="h-5 w-5 ml-2" />
             </Button>

@@ -79,12 +79,12 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   }
 
   return (
-    <div className="group card-shell hover:border-neutral-300 transition-all duration-300 overflow-hidden flex flex-col h-full">
+    <div className="group card-shell hover:border-strong transition-all duration-300 overflow-hidden flex flex-col h-full">
       <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
             service.available
-              ? 'bg-primary-100 dark:bg-primary-900/30 text-action group-hover:bg-primary-600 group-hover:text-white'
+              ? 'bg-action-muted-muted text-action group-hover:bg-action group-hover:text-white'
               : 'bg-surface-raised text-text-muted'
           }`}>
             <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -93,7 +93,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             <div className="flex items-center gap-2 mb-2">
               <Heading level={3} className="text-xl sm:text-2xl font-bold">{service.title}</Heading>
               {service.badge && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
                   {service.badge}
                 </span>
               )}
@@ -111,7 +111,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.features.map((feature, i) => (
             <div key={i} className="flex items-center text-text-secondary">
               <CheckCircle2 className={`w-5 h-5 mr-3 shrink-0 ${
-                service.available ? 'text-primary-500' : 'text-text-muted'
+                service.available ? 'text-action' : 'text-text-muted'
               }`} />
               <span>{feature}</span>
             </div>
@@ -132,8 +132,8 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               href={service.href}
               className={`inline-flex items-center font-medium transition-colors duration-300 group text-sm ${
                 service.available
-                  ? 'text-text-secondary hover:text-neutral-700'
-                  : 'text-text-tertiary hover:text-neutral-600'
+                  ? 'text-text-secondary hover:text-text-secondary'
+                  : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
               <span>{t('details')}</span>
@@ -144,7 +144,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
-                <div className="w-full inline-flex items-center justify-center text-action font-semibold bg-primary-50 dark:bg-primary-900/20 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-action font-semibold bg-action-muted-muted px-4 py-2 rounded-lg">
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   {t('appointmentRequested')}
                 </div>
@@ -156,7 +156,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : !session?.user ? (
                 <button
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
-                  className="flex-1 inline-flex items-center justify-center text-action hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted-muted hover:bg-action-muted-muted px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
@@ -173,7 +173,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : (
                 <Link
                   href={service.href}
-                  className="flex-1 inline-flex items-center justify-center text-action hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted-muted hover:bg-action-muted-muted px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <ArrowRight className="w-4 h-4 mr-2" />
                   {t('learnMore')}
@@ -277,7 +277,7 @@ export default function ServicesPage() {
               </Button>
               <Link
                 href={ROUTES.public.shop}
-                className="inline-block border-2 border-neutral-300 dark:border-neutral-600 text-text-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
+                className="inline-block border-2 border-neutral-300 text-text-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}
               </Link>

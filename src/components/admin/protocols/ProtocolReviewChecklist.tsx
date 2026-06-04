@@ -15,12 +15,12 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
 }> = {
   done: {
     icon: CheckCircle2,
-    className: 'bg-primary-50 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 border-primary-200',
+    className: 'bg-action-muted-muted text-action border-strong',
     label: 'Erledigt',
   },
   active: {
     icon: LoaderCircle,
-    className: 'bg-surface-raised text-neutral-800 border',
+    className: 'bg-surface-raised text-text-primary border',
     label: 'Prüfen',
   },
   blocked: {
@@ -54,7 +54,7 @@ export function ProtocolReviewChecklist({ items }: ProtocolReviewChecklistProps)
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className={cn(adminType.body, 'font-semibold text-inherit')}>{item.label}</h3>
-                    <span className="rounded-full bg-white/70 px-2.5 py-0.5 text-sm font-medium">
+                    <span className="rounded-full bg-surface-base/70 px-2.5 py-0.5 text-sm font-medium">
                       {config.label}
                     </span>
                   </div>

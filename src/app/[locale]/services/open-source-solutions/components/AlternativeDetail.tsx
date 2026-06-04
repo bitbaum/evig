@@ -33,7 +33,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <Link
             href="/services/open-source-solutions"
-            className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-neutral-900 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             {t('detail.backToOverview')}
@@ -91,7 +91,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-text-primary">{app.name}</span>
                             <ArrowRight className="w-4 h-4 text-text-muted" />
-                            <span className="font-semibold text-primary-700">{alternative.name}</span>
+                            <span className="font-semibold text-action">{alternative.name}</span>
                           </div>
                           <MigrationDifficultyBadge difficulty={r.migrationDifficulty} />
                         </div>
@@ -111,7 +111,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                             <ul className="space-y-1">
                               {r.migrationTips.map((tip, i) => (
                                 <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-                                  <span className="text-primary-500 mt-0.5">•</span>
+                                  <span className="text-action mt-0.5">•</span>
                                   {tip}
                                 </li>
                               ))}
@@ -202,11 +202,11 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             <RevampITServicesCTA alternative={alternative} />
 
             {/* General CTA */}
-            <div className="rounded-xl border-2 border-primary-200 dark:border-primary-800/30 bg-primary-50 dark:bg-primary-900/20 p-5">
-              <Heading level={3} className="text-base font-bold text-primary-900 mb-2">
+            <div className="rounded-xl border-2 border-strong bg-action-muted-muted p-5">
+              <Heading level={3} className="text-base font-bold text-action mb-2">
                 {t('detail.helpWithMigration')}
               </Heading>
-              <p className="text-sm text-primary-800 mb-3">
+              <p className="text-sm text-action mb-3">
                 {t('detail.helpDescription')}
               </p>
               <Button as={Link} href="/contact" variant="primary" size="sm">

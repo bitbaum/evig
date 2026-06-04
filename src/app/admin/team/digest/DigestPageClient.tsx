@@ -40,13 +40,13 @@ export function DigestPageClient() {
     <div className="space-y-6">
       {/* Period Selector */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 bg-surface-raised dark:bg-neutral-900 p-1 rounded-lg">
+        <div className="flex items-center gap-2 bg-surface-raised p-1 rounded-lg">
           <button
             onClick={() => setDateRange('week')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'week'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
-                : 'text-text-secondary hover:text-neutral-900 dark:hover:text-white'
+                ? 'bg-surface-base text-text-primary shadow-xs'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Diese Woche
@@ -55,8 +55,8 @@ export function DigestPageClient() {
             onClick={() => setDateRange('month')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'month'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
-                : 'text-text-secondary hover:text-neutral-900 dark:hover:text-white'
+                ? 'bg-surface-base text-text-primary shadow-xs'
+                : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             Dieser Monat
@@ -66,7 +66,7 @@ export function DigestPageClient() {
         <button
           onClick={() => refetch()}
           disabled={loading}
-          className="p-2 text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg"
+          className="p-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg"
           title="Aktualisieren"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -89,16 +89,16 @@ export function DigestPageClient() {
                 key={i}
                 className="bg-surface-base rounded-xl border border p-4 animate-pulse"
               >
-                <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-16 mb-2" />
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-24" />
+                <div className="h-8 bg-neutral-200 rounded-sm w-16 mb-2" />
+                <div className="h-4 bg-neutral-200 rounded-sm w-24" />
               </div>
             ))}
           </div>
           <div className="bg-surface-base rounded-xl border border p-6 animate-pulse">
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-40 mb-4" />
+            <div className="h-6 bg-neutral-200 rounded-sm w-40 mb-4" />
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded-sm" />
+                <div key={i} className="h-12 bg-neutral-200 rounded-sm" />
               ))}
             </div>
           </div>
@@ -120,8 +120,8 @@ export function DigestPageClient() {
           <div className="grid md:grid-cols-5 gap-4">
             <div className="p-4 bg-surface-base rounded-xl border border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-action dark:text-primary-300" />
+                <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-action" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-text-primary">
@@ -162,8 +162,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-surface-base rounded-xl border border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-action dark:text-primary-300" />
+                <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-action" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-text-primary">
@@ -195,7 +195,7 @@ export function DigestPageClient() {
             <div className="bg-surface-base rounded-xl border border p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-warning-500" />
-                <Heading level={3} className="font-semibold text-text-primary dark:text-neutral-100">Top Beiträger</Heading>
+                <Heading level={3} className="font-semibold text-text-primary">Top Beiträger</Heading>
               </div>
 
               {digest.top_contributors.length === 0 ? (
@@ -207,7 +207,7 @@ export function DigestPageClient() {
                   {digest.top_contributors.slice(0, 5).map((user, index) => (
                     <div
                       key={user.user_id}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50"
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50"
                     >
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
@@ -223,7 +223,7 @@ export function DigestPageClient() {
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-text-primary dark:text-neutral-100 truncate">
+                        <p className="font-medium text-text-primary truncate">
                           {user.user_name || user.user_email.split('@')[0]}
                         </p>
                         <p className="text-xs text-text-tertiary">
@@ -231,7 +231,7 @@ export function DigestPageClient() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold text-text-primary dark:text-neutral-100">
+                        <p className="text-lg font-bold text-text-primary">
                           {user.total_score}
                         </p>
                         <p className="text-xs text-text-tertiary">Punkte</p>
@@ -245,8 +245,8 @@ export function DigestPageClient() {
             {/* Recent Milestones */}
             <div className="bg-surface-base rounded-xl border border p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Flag className="w-5 h-5 text-primary-500" />
-                <Heading level={3} className="font-semibold text-text-primary dark:text-neutral-100">
+                <Flag className="w-5 h-5 text-action" />
+                <Heading level={3} className="font-semibold text-text-primary">
                   Letzte Meilensteine
                 </Heading>
               </div>
@@ -260,13 +260,13 @@ export function DigestPageClient() {
                   {digest.recent_milestones.map((milestone) => (
                     <div
                       key={milestone.id}
-                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50"
+                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50"
                     >
-                      <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center shrink-0">
-                        <Flag className="w-4 h-4 text-action dark:text-primary-300" />
+                      <div className="w-8 h-8 bg-action-muted-muted rounded-lg flex items-center justify-center shrink-0">
+                        <Flag className="w-4 h-4 text-action" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-text-primary dark:text-neutral-100">
+                        <p className="font-medium text-text-primary">
                           {milestone.title}
                         </p>
                         <p className="text-xs text-text-tertiary">
@@ -283,16 +283,16 @@ export function DigestPageClient() {
           {/* Category Breakdown */}
           {digest.by_category.length > 0 && (
             <div className="bg-surface-base rounded-xl border border p-6">
-              <Heading level={3} className="font-semibold text-text-primary dark:text-neutral-100 mb-4">
+              <Heading level={3} className="font-semibold text-text-primary mb-4">
                 Aufgaben nach Kategorie
               </Heading>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {digest.by_category.map((cat) => (
                   <div
                     key={cat.category}
-                    className="p-3 bg-surface-raised dark:bg-neutral-700/50 rounded-lg"
+                    className="p-3 bg-surface-raised rounded-lg"
                   >
-                    <p className="text-2xl font-bold text-text-primary dark:text-neutral-100">
+                    <p className="text-2xl font-bold text-text-primary">
                       {cat.count}
                     </p>
                     <p className="text-sm text-text-secondary">
@@ -307,7 +307,7 @@ export function DigestPageClient() {
           {/* All Users Activity */}
           {digest.by_user.length > 0 && (
             <div className="bg-surface-base rounded-xl border border p-6">
-              <Heading level={3} className="font-semibold text-text-primary dark:text-neutral-100 mb-4">
+              <Heading level={3} className="font-semibold text-text-primary mb-4">
                 Alle Mitarbeiter
               </Heading>
               <div className="overflow-x-auto">
@@ -335,10 +335,10 @@ export function DigestPageClient() {
                     {digest.by_user.map((user) => (
                       <tr
                         key={user.user_id}
-                        className="border-b border-subtle dark:border-white/[0.06]/50 hover:bg-neutral-50 dark:hover:bg-white/[0.06]/30"
+                        className="border-b border-subtle dark:border-white/[0.06]/50 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/30"
                       >
                         <td className="py-2 px-3">
-                          <span className="font-medium text-text-primary dark:text-neutral-100">
+                          <span className="font-medium text-text-primary">
                             {user.user_name || user.user_email.split('@')[0]}
                           </span>
                           {user.department && (
@@ -347,16 +347,16 @@ export function DigestPageClient() {
                             </span>
                           )}
                         </td>
-                        <td className="text-center py-2 px-3 text-text-primary dark:text-neutral-100">
+                        <td className="text-center py-2 px-3 text-text-primary">
                           {user.task_completions}
                         </td>
-                        <td className="text-center py-2 px-3 text-text-primary dark:text-neutral-100">
+                        <td className="text-center py-2 px-3 text-text-primary">
                           {user.activity_updates}
                         </td>
-                        <td className="text-center py-2 px-3 text-text-primary dark:text-neutral-100">
+                        <td className="text-center py-2 px-3 text-text-primary">
                           {user.help_requests_created}
                         </td>
-                        <td className="text-center py-2 px-3 text-text-primary dark:text-neutral-100">
+                        <td className="text-center py-2 px-3 text-text-primary">
                           {user.help_requests_resolved}
                         </td>
                       </tr>

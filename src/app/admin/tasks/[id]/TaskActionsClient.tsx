@@ -88,8 +88,8 @@ export default function TaskActionsClient({
 
       {/* Complete Form */}
       {showCompleteForm && (
-        <div className="mt-4 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200">
-          <Heading level={3} className="font-medium text-primary-800 dark:text-primary-200 mb-3">
+        <div className="mt-4 p-4 bg-action-muted-muted rounded-lg border border-strong">
+          <Heading level={3} className="font-medium text-action-text mb-3">
             Aufgabe als erledigt markieren
           </Heading>
           <div className="space-y-3">

@@ -46,10 +46,10 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+          <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-neutral-300 rounded-lg cursor-pointer hover:border-action hover:bg-action-muted-muted transition-colors">
             <Camera className="w-8 h-8 text-text-tertiary mb-2" />
             <span className="text-sm text-text-secondary">{t('upload')}</span>
-            <span className="text-xs text-text-tertiary dark:text-neutral-500 mt-1">{t('drag')}</span>
+            <span className="text-xs text-text-tertiary dark:text-text-tertiary mt-1">{t('drag')}</span>
             <input
               type="file"
               accept="image/*"

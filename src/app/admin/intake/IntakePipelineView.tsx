@@ -57,10 +57,10 @@ export function IntakePipelineView({
       {/* Stats — sourced from server aggregate counts, not current-page items */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total', value: statusCounts.total, color: 'bg-surface-raised text-neutral-800' },
+          { label: 'Total', value: statusCounts.total, color: 'bg-surface-raised text-text-primary' },
           { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200' },
-          { label: 'Bereit', value: statusCounts.ready, color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
-          { label: 'Publiziert', value: statusCounts.published, color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
+          { label: 'Bereit', value: statusCounts.ready, color: 'bg-action-muted-muted text-action' },
+          { label: 'Publiziert', value: statusCounts.published, color: 'bg-action-muted-muted text-action' },
         ].map((stat) => (
           <div key={stat.label} className={`rounded-lg p-3 ${stat.color}`}>
             <div className="text-2xl font-bold">{stat.value}</div>
@@ -159,7 +159,7 @@ export function IntakePipelineView({
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-neutral-50 cursor-pointer"
+                      className="hover:bg-surface-raised cursor-pointer"
                       onClick={() => onOpenDetail(item.id)}
                     >
                       <td className="py-2.5 font-mono text-xs text-text-tertiary">{item.item_uuid}</td>
@@ -179,7 +179,7 @@ export function IntakePipelineView({
                           <div className="w-20 h-2 bg-neutral-200 rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
-                                progress.percentage === 100 ? 'bg-primary-500' :
+                                progress.percentage === 100 ? 'bg-action' :
                                 progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
                               }`}
                               style={{ width: `${progress.percentage}%` }}
@@ -192,11 +192,11 @@ export function IntakePipelineView({
                       </td>
                       <td className="py-2.5">
                         {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted-muted text-action">
                             <Check className="w-3 h-3" /> Publiziert
                           </span>
                         ) : item.checklist_complete ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted-muted text-action">
                             Bereit
                           </span>
                         ) : (

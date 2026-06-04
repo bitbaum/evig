@@ -71,7 +71,7 @@ export function ProtocolAttendeesCard({
         {isReview && !editing && (
           <button
             onClick={() => { setSelected(attendees); setSearch(''); setEditing(true) }}
-            className="flex items-center gap-1 text-xs text-action hover:text-primary-800"
+            className="flex items-center gap-1 text-xs text-action hover:text-action"
           >
             <Pencil className="w-3 h-3" />
             Bearbeiten
@@ -81,7 +81,7 @@ export function ProtocolAttendeesCard({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setEditing(false)}
-              className="flex items-center gap-1 text-xs text-text-tertiary hover:text-neutral-700"
+              className="flex items-center gap-1 text-xs text-text-tertiary hover:text-text-secondary"
             >
               <X className="w-3 h-3" />
               Abbrechen
@@ -100,7 +100,7 @@ export function ProtocolAttendeesCard({
             ? attendees.map((uid) => (
                 <span
                   key={uid}
-                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-white/6 text-text-secondary"
+                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-surface-base/6 text-text-secondary"
                 >
                   {attendeeNames[uid] || 'Unbekannt'}
                 </span>
@@ -122,7 +122,7 @@ export function ProtocolAttendeesCard({
             {filtered.map((member) => (
               <label
                 key={member.id}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-neutral-50 dark:hover:bg-white/4 cursor-pointer text-sm text-text-secondary"
+                className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/4 cursor-pointer text-sm text-text-secondary"
               >
                 <input
                   type="checkbox"
@@ -134,7 +134,7 @@ export function ProtocolAttendeesCard({
                         : [...prev, member.id]
                     )
                   }
-                  className="rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                  className="rounded-sm border-neutral-300 text-action focus:ring-action"
                 />
                 {member.name}
               </label>

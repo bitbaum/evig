@@ -77,9 +77,9 @@ export default async function MembershipPage() {
       {isMember ? (
         <div className="space-y-4">
           {/* Status card */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl border dark:border-neutral-700 p-6">
+          <div className="bg-surface-base rounded-xl border p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-full bg-action-muted-muted flex items-center justify-center shrink-0">
                 <BadgeCheck className="w-6 h-6 text-action" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
@@ -90,7 +90,7 @@ export default async function MembershipPage() {
                       : t('memberLabel')}
                   </Heading>
                   {paid ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-action-muted-muted text-action rounded-full text-xs font-medium">
                       <CheckCircle className="w-3 h-3" aria-hidden="true" />
                       {t('paidBadge')}
                     </span>
@@ -112,22 +112,22 @@ export default async function MembershipPage() {
           </div>
 
           {/* Payment details */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl border dark:border-neutral-700 p-6">
+          <div className="bg-surface-base rounded-xl border p-6">
             <Heading level={3} className="text-base font-semibold text-text-primary mb-4 flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-text-tertiary" aria-hidden="true" />
               {t('annualFee')}
             </Heading>
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center py-2 border-b border-subtle dark:border-neutral-700">
+              <div className="flex justify-between items-center py-2 border-b border-subtle">
                 <span className="text-text-secondary">{t('amountLabel')}</span>
                 <span className="font-semibold text-text-primary">
                   {t('amountValue', { currency: MEMBERSHIP.currency, fee })}
                 </span>
               </div>
               {membership?.member_paid_until && (
-                <div className="flex justify-between items-center py-2 border-b border-subtle dark:border-neutral-700">
+                <div className="flex justify-between items-center py-2 border-b border-subtle">
                   <span className="text-text-secondary">{t('paidUntilLabel')}</span>
-                  <span className={`font-medium ${paid ? 'text-primary-700 dark:text-primary-400' : 'text-warning-700 dark:text-warning-400'}`}>
+                  <span className={`font-medium ${paid ? 'text-action' : 'text-warning-700 dark:text-warning-400'}`}>
                     {formatDate(membership.member_paid_until)}
                   </span>
                 </div>
@@ -150,21 +150,21 @@ export default async function MembershipPage() {
           </div>
 
           {/* What membership means */}
-          <div className="bg-surface-raised dark:bg-neutral-900/50 rounded-xl p-6 border dark:border-neutral-700">
+          <div className="bg-surface-raised rounded-xl p-6 border">
             <Heading level={3} className="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">
               {t('benefitsTitle')}
             </Heading>
             <ul className="space-y-2 text-sm text-text-secondary">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-action shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit1')}
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-action shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit2')}
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-action shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit3')}
               </li>
             </ul>
@@ -173,7 +173,7 @@ export default async function MembershipPage() {
       ) : (
         <EmptyState
           icon={BadgeCheck}
-          iconBg="bg-primary-50 dark:bg-primary-900/20"
+          iconBg="bg-action-muted-muted"
           iconColor="text-action"
           title={t('notMemberTitle')}
           description={t('notMemberDesc', { orgName: ORG.legalName, currency: MEMBERSHIP.currency, fee: MEMBERSHIP.fees.regular })}

@@ -16,8 +16,8 @@ interface LoadingSpinnerProps {
 export function LoadingSpinner({ message = 'Wird geladen...', className = '' }: LoadingSpinnerProps) {
   return (
     <div className={`flex flex-col items-center justify-center ${SPACING.cardLarge} ${className}`}>
-      <Loader2 className="w-8 h-8 animate-spin text-primary-600 mb-3" />
-      <p className={`${TYPOGRAPHY.body} text-neutral-600`}>{message}</p>
+      <Loader2 className="w-8 h-8 animate-spin text-action mb-3" />
+      <p className={`${TYPOGRAPHY.body} text-text-secondary`}>{message}</p>
     </div>
   )
 }
@@ -32,12 +32,12 @@ export function LoadingSkeleton({ count = 6, className = '' }: LoadingSkeletonPr
     <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${className}`}>
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="card-shell p-4 animate-pulse">
-          <div className="w-full h-48 bg-neutral-200 dark:bg-neutral-700 rounded-lg mb-4" />
-          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm mb-2" />
-          <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-2/3 mb-4" />
+          <div className="w-full h-48 bg-neutral-200 rounded-lg mb-4" />
+          <div className="h-4 bg-neutral-200 rounded-sm mb-2" />
+          <div className="h-4 bg-neutral-200 rounded-sm w-2/3 mb-4" />
           <div className="flex justify-between">
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/4" />
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3" />
+            <div className="h-6 bg-neutral-200 rounded-sm w-1/4" />
+            <div className="h-6 bg-neutral-200 rounded-sm w-1/3" />
           </div>
         </div>
       ))}

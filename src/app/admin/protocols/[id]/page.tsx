@@ -101,12 +101,12 @@ export default async function ProtocolDetailPage({
         <div className="flex items-center gap-4 min-w-0">
           <Link
             href={ROUTES.admin.protocols}
-            className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors shrink-0"
+            className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-primary transition-colors shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
             Zurück
           </Link>
-          <div className="w-px h-5 bg-neutral-200 dark:bg-white/8 shrink-0" />
+          <div className="w-px h-5 bg-neutral-200 dark:bg-surface-base/8 shrink-0" />
           <div className="flex items-center gap-3 min-w-0">
             <div className={`${adminIconBox.sm} ${adminIconColor.green}`}>
               <MeetingIcon className={adminIconBox.icon} />
@@ -126,14 +126,14 @@ export default async function ProtocolDetailPage({
         <div className="flex items-center gap-2 shrink-0">
           <span
             className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
-              PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-surface-raised text-neutral-800'
+              PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-surface-raised text-text-primary'
             }`}
           >
             {PROTOCOL_STATUS_LABELS[protocol.status]}
           </span>
           <span
             className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
-              MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-surface-raised text-neutral-800'
+              MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-surface-raised text-text-primary'
             }`}
           >
             {MEETING_TYPE_LABELS[protocol.meeting_type]}
@@ -171,7 +171,7 @@ export default async function ProtocolDetailPage({
                 <dt className="text-xs text-text-muted mb-0.5">Datum</dt>
                 <dd className="flex items-center gap-2">
                   <Calendar className="w-3.5 h-3.5 text-text-muted" />
-                  <span className="text-sm text-text-primary dark:text-neutral-200">
+                  <span className="text-sm text-text-primary">
                     {formatDateWithWeekday(protocol.meeting_date)}
                   </span>
                 </dd>
@@ -180,7 +180,7 @@ export default async function ProtocolDetailPage({
                 <dt className="text-xs text-text-muted mb-0.5">Erstellt von</dt>
                 <dd className="flex items-center gap-2">
                   <User className="w-3.5 h-3.5 text-text-muted" />
-                  <span className="text-sm text-text-primary dark:text-neutral-200">
+                  <span className="text-sm text-text-primary">
                     {protocol.created_by_name || protocol.created_by_email || 'Unbekannt'}
                   </span>
                 </dd>
@@ -189,7 +189,7 @@ export default async function ProtocolDetailPage({
                 <dt className="text-xs text-text-muted mb-0.5">Sichtbarkeit</dt>
                 <dd className="flex items-center gap-2">
                   <Eye className="w-3.5 h-3.5 text-text-muted" />
-                  <span className="text-sm text-text-primary dark:text-neutral-200">
+                  <span className="text-sm text-text-primary">
                     {PROTOCOL_VISIBILITY_LABELS[protocol.visibility]}
                   </span>
                 </dd>
@@ -202,7 +202,7 @@ export default async function ProtocolDetailPage({
                       const InputIcon = INPUT_METHOD_ICON_COMPONENTS[protocol.input_method as InputMethod]
                       return InputIcon ? <InputIcon className="w-3.5 h-3.5 text-text-muted" /> : null
                     })()}
-                    <span className="text-sm text-text-primary dark:text-neutral-200">
+                    <span className="text-sm text-text-primary">
                       {INPUT_METHOD_LABELS[protocol.input_method as InputMethod] || protocol.input_method}
                     </span>
                   </dd>
@@ -233,11 +233,11 @@ export default async function ProtocolDetailPage({
           {/* Raw Transcript (collapsed) */}
           {protocol.raw_transcript && (
             <details className="bg-surface-base rounded-lg border border">
-              <summary className="p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-neutral-900 dark:hover:text-white select-none">
+              <summary className="p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">
                 Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
               </summary>
               <div className="px-4 pb-4">
-                <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-80 overflow-y-auto bg-surface-raised dark:bg-neutral-800/50 rounded-lg p-3 leading-relaxed">
+                <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-80 overflow-y-auto bg-surface-raised rounded-lg p-3 leading-relaxed">
                   {protocol.raw_transcript}
                 </pre>
               </div>

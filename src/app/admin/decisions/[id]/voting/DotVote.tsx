@@ -29,7 +29,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                     onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1));
                   }}
                   disabled={(allocations[opt.id] || 0) <= 0}
-                  className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-neutral-100 disabled:opacity-30"
+                  className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
                 >
                   -
                 </button>
@@ -43,7 +43,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                     onSet(opt.id, (allocations[opt.id] || 0) + 1);
                   }}
                   disabled={usedDots >= maxDots}
-                  className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-neutral-100 disabled:opacity-30"
+                  className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
                 >
                   +
                 </button>
@@ -58,14 +58,14 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
             className="flex items-center gap-3 rounded-md border border p-3"
           >
             <div className="flex-1">
-              <span className="font-medium text-neutral-800">{opt.label}</span>
+              <span className="font-medium text-text-primary">{opt.label}</span>
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1))}
                 disabled={(allocations[opt.id] || 0) <= 0}
-                className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-neutral-100 disabled:opacity-30"
+                className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
               >
                 -
               </button>
@@ -76,7 +76,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                 type="button"
                 onClick={() => onSet(opt.id, (allocations[opt.id] || 0) + 1)}
                 disabled={usedDots >= maxDots}
-                className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-neutral-100 disabled:opacity-30"
+                className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
               >
                 +
               </button>

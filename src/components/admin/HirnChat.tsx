@@ -205,7 +205,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       <div className={`flex-1 overflow-y-auto space-y-4 ${compact ? 'p-3' : 'p-4'}`}>
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-text-tertiary">
-            <Sparkles className="w-12 h-12 mb-4 text-primary-500" />
+            <Sparkles className="w-12 h-12 mb-4 text-action" />
             <Heading level={3} className="text-lg font-medium">Willkommen bei Hirn</Heading>
             <p className="text-sm max-w-md mt-2">
               Stelle Fragen zu {ORG.name} — ich kenne unsere Mission, Geschichte, Zahlen,
@@ -219,7 +219,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
             >
               {message.role === 'assistant' && (
-                <div className="shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-action-muted flex items-center justify-center">
                   <Bot className="w-4 h-4 text-action" />
                 </div>
               )}
@@ -227,8 +227,8 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               <div
                 className={`max-w-[80%] ${
                   message.role === 'user'
-                    ? 'bg-primary-600 text-white rounded-2xl rounded-br-sm px-4 py-2'
-                    : 'bg-surface-raised dark:bg-neutral-900 text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
+                    ? 'bg-action text-white rounded-2xl rounded-br-sm px-4 py-2'
+                    : 'bg-surface-raised text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
                 }`}
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
@@ -236,11 +236,11 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                 {message.role === 'assistant' && message.actions && message.actions.length > 0 && (
                   <div className="mt-3 space-y-2">
                     {message.actions.map(action => (
-                      <div key={action.id} className="rounded-xl border border-primary-200 dark:border-primary-700 p-3 bg-white/70 dark:bg-neutral-900/40">
+                      <div key={action.id} className="rounded-xl border border-strong p-3 bg-surface-base/70">
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <p className="text-sm font-semibold">{action.title}</p>
-                            <p className="text-xs text-text-secondary dark:text-neutral-300 mt-1">{action.summary}</p>
+                            <p className="text-xs text-text-secondary mt-1">{action.summary}</p>
                           </div>
                           {action.risky && <TriangleAlert className="w-4 h-4 text-warning-500" />}
                         </div>
@@ -267,7 +267,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               </div>
 
               {message.role === 'user' && (
-                <div className="shrink-0 w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-action flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -277,14 +277,14 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
         {loading && (
           <div className="flex gap-3">
-            <div className="shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+            <div className="shrink-0 w-8 h-8 rounded-full bg-action-muted flex items-center justify-center">
               <Bot className="w-4 h-4 text-action" />
             </div>
-            <div className="bg-surface-raised dark:bg-neutral-900 rounded-2xl rounded-bl-sm px-4 py-3">
+            <div className="bg-surface-raised rounded-2xl rounded-bl-sm px-4 py-3">
               <div className="flex gap-1">
-                <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <span className="w-2 h-2 bg-action rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 bg-action rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 bg-action rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           </div>

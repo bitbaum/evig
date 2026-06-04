@@ -59,7 +59,7 @@ export default function AbosPageClient() {
             <button
               onClick={() => setActiveCategory(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                !activeCategory ? 'bg-primary-600 text-white' : 'bg-white text-text-secondary hover:bg-neutral-100 border'
+                !activeCategory ? 'bg-action text-white' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
               }`}
             >
               {t('filterAll')}
@@ -71,7 +71,7 @@ export default function AbosPageClient() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === cat ? 'bg-primary-600 text-white' : 'bg-white text-text-secondary hover:bg-neutral-100 border'
+                    activeCategory === cat ? 'bg-action text-white' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
                   }`}
                 >
                   {/* @ts-expect-error — dynamic category key */}

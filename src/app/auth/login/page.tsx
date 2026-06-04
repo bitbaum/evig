@@ -12,9 +12,9 @@ import { Logo } from '@/components/ui/Logo'
 function LoginFormFallback() {
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 p-8">
+      <div className="bg-surface-base rounded-2xl border border-strong p-8">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-action" />
         </div>
       </div>
     </div>
@@ -38,19 +38,19 @@ export default function LoginPage() {
 
   if (status === 'loading' || status === 'authenticated') {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+      <main className="min-h-screen flex items-center justify-center bg-surface-raised">
+        <Loader2 className="w-8 h-8 animate-spin text-action" />
       </main>
     )
   }
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Back link */}
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 transition-colors"
+            className="inline-flex items-center text-action hover:text-action transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             {t('backHome')}

@@ -105,16 +105,16 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 <div
                   key={index}
                   className={`relative rounded-xl border-2 p-6 ${
-                    highlight ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20' : 'border bg-surface-raised'
+                    highlight ? 'border-action bg-action-muted-muted' : 'border bg-surface-raised'
                   }`}
                 >
                   {highlight && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary-600 px-3 py-0.5 text-xs font-semibold text-white">
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-action px-3 py-0.5 text-xs font-semibold text-white">
                       {t('tiers.recommended')}
                     </span>
                   )}
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-900/30">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-action-muted-muted">
                       <Icon className="h-5 w-5 text-action" />
                     </div>
                     <span className="text-2xl font-bold text-text-primary">CHF {TIER_AMOUNTS[index]}</span>
@@ -131,7 +131,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
         <div className="text-center mb-12">
           <a
             href="#bankueberweisung"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-600"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-action hover:text-action"
           >
             {t('bridgeCta')} <ArrowDown className="h-4 w-4" />
           </a>
@@ -139,7 +139,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
 
         {/* Bank transfer box */}
         <section id="bankueberweisung" className="mb-12 scroll-mt-8">
-          <div className="rounded-xl border-2 border-primary-200 dark:border-primary-800/30 bg-primary-50 dark:bg-primary-900/20 p-6 sm:p-8">
+          <div className="rounded-xl border-2 border-strong bg-action-muted-muted p-6 sm:p-8">
             <Heading level={2} className="text-text-primary mb-2">{t('transfer.heading')}</Heading>
             <p className="text-sm text-text-tertiary mb-6">{t('transfer.intro')}</p>
             <div className="space-y-4">

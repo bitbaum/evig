@@ -75,7 +75,7 @@ export default function MarketplacePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact search hero — orange accents maintained for marketplace identity */}
-      <div className="bg-secondary-50 dark:bg-neutral-900 border-b border-secondary-100 dark:border-white/6 py-6 sm:py-8">
+      <div className="bg-secondary-50 border-b border-secondary-100 dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -127,7 +127,7 @@ export default function MarketplacePage() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/10 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/10 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
             aria-expanded={mobileFiltersOpen}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors"
+                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
                   aria-label={t('pagination.previousPage')}
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -249,7 +249,7 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors"
+                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
                   aria-label={t('pagination.nextPage')}
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -279,7 +279,7 @@ export default function MarketplacePage() {
               </Button>
               <Link
                 href={ROUTES.public.register}
-                className="px-6 py-2.5 border border-neutral-300 dark:border-white/10 text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/4 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 border border-neutral-300 dark:border-white/10 text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.register')}
               </Link>
@@ -302,7 +302,7 @@ export default function MarketplacePage() {
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
-                className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors"
+                className="p-1.5 rounded-md hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors"
                 aria-label={t('filters.closeLabel')}
               >
                 <X className="w-5 h-5 text-text-secondary" />

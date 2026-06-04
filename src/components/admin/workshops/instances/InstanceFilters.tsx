@@ -44,7 +44,7 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
         </div>
 
         <div className="flex items-end">
-          <label className="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer hover:bg-neutral-50">
+          <label className="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer hover:bg-surface-raised">
             <input
               type="checkbox"
               checked={filters.upcoming}

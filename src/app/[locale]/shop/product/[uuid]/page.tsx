@@ -57,9 +57,9 @@ function mapConditionToSchema(condition: string): string {
 
 // Condition badge colors (labels come from translations)
 const CONDITION_COLORS: Record<string, string> = {
-  'wie neu':    'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
-  'sehr gut':   'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
-  'gut':        'bg-surface-raised text-neutral-800',
+  'wie neu':    'bg-action-muted-muted text-action',
+  'sehr gut':   'bg-action-muted-muted text-action',
+  'gut':        'bg-surface-raised text-text-primary',
   'akzeptabel': 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300',
 }
 
@@ -79,7 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const relatedProducts = similar.products.filter(p => p.id !== product.id).slice(0, 3)
 
   const conditionKey = product.condition.toLowerCase()
-  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-surface-raised text-neutral-800'
+  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-surface-raised text-text-primary'
   const CONDITION_LABEL_MAP: Record<string, string> = {
     'wie neu': t('product.conditionLabels.wieNeu'),
     'sehr gut': t('product.conditionLabels.sehrGut'),
@@ -117,18 +117,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="bg-surface-base border-b border-subtle">
         <PageShell py="py-3">
           <nav className="flex items-center gap-2 text-sm text-text-tertiary">
-            <Link href="/" className="hover:text-primary-600 transition-colors">
+            <Link href="/" className="hover:text-action transition-colors">
               <Home className="w-4 h-4" />
             </Link>
-            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
-            <Link href={ROUTES.public.shop} className="hover:text-primary-600 transition-colors">Shop</Link>
+            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary" />
+            <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">Shop</Link>
             {product.category && (
               <>
-                <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
+                <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary" />
                 <span className="text-text-primary font-medium truncate max-w-[200px]">{product.category}</span>
               </>
             )}
-            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
+            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary" />
             <span className="text-text-primary font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
         </PageShell>
@@ -149,8 +149,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-surface-raised dark:bg-neutral-900">
-                  <Package className="w-24 h-24 text-neutral-200 dark:text-neutral-700" />
+                <div className="flex items-center justify-center h-full bg-surface-raised">
+                  <Package className="w-24 h-24 text-neutral-200 dark:text-text-secondary" />
                 </div>
               )}
             </div>
@@ -174,7 +174,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2">
                 <Tag className="w-5 h-5 text-action" />
-                <span className="text-3xl font-bold text-primary-700">
+                <span className="text-3xl font-bold text-action">
                   {formatCHF(product.price)}
                 </span>
               </div>
@@ -185,8 +185,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Availability */}
             <div className="flex items-center gap-2 text-sm">
-              <div className={`w-2 h-2 rounded-full ${product.quantity > 0 ? 'bg-primary-500' : 'bg-error-400'}`} />
-              <span className={product.quantity > 0 ? 'text-primary-700 font-medium' : 'text-error-600'}>
+              <div className={`w-2 h-2 rounded-full ${product.quantity > 0 ? 'bg-action' : 'bg-error-400'}`} />
+              <span className={product.quantity > 0 ? 'text-action font-medium' : 'text-error-600'}>
                 {product.quantity > 1
                   ? t('product.stockMany', { count: product.quantity })
                   : product.quantity === 1
@@ -217,11 +217,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
 
             {/* Trust badge */}
-            <div className="flex items-start gap-3 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-xl">
+            <div className="flex items-start gap-3 p-4 bg-action-muted-muted rounded-xl">
               <Shield className="w-5 h-5 text-action shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-primary-900 dark:text-primary-100">{t('product.verifiedTitle')}</p>
-                <p className="text-primary-700 dark:text-primary-300 mt-0.5">
+                <p className="font-semibold text-action-text">{t('product.verifiedTitle')}</p>
+                <p className="text-action mt-0.5">
                   {t('product.verifiedDesc', { orgName: ORG.name })}
                 </p>
               </div>
@@ -262,9 +262,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Link
                   key={p.id}
                   href={`/shop/product/${p.item_uuid}`}
-                  className="group card-shell hover:border-primary-300 transition-all overflow-hidden flex flex-col"
+                  className="group card-shell hover:border-strong transition-all overflow-hidden flex flex-col"
                 >
-                  <div className="relative aspect-4/3 bg-surface-raised dark:bg-neutral-900">
+                  <div className="relative aspect-4/3 bg-surface-raised">
                     {p.image_url ? (
                       <Image
                         src={p.image_url}
@@ -275,16 +275,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        <Package className="w-10 h-10 text-neutral-200 dark:text-neutral-700" />
+                        <Package className="w-10 h-10 text-neutral-200 dark:text-text-secondary" />
                       </div>
                     )}
                   </div>
                   <div className="p-4">
                     <p className="text-xs text-text-tertiary font-medium uppercase tracking-wide">{p.brand}</p>
-                    <h3 className="font-medium text-text-primary group-hover:text-primary-600 transition-colors line-clamp-2 mt-0.5">
+                    <h3 className="font-medium text-text-primary group-hover:text-action transition-colors line-clamp-2 mt-0.5">
                       {p.title}
                     </h3>
-                    <p className="mt-2 font-bold text-primary-700">CHF {p.price.toFixed(2)}</p>
+                    <p className="mt-2 font-bold text-action">CHF {p.price.toFixed(2)}</p>
                   </div>
                 </Link>
               ))}

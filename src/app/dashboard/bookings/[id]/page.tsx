@@ -72,7 +72,7 @@ function StarDisplay({ rating }: { rating: number }) {
       {[1, 2, 3, 4, 5].map(s => (
         <Star
           key={s}
-          className={`w-4 h-4 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-neutral-600'}`}
+          className={`w-4 h-4 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-text-secondary'}`}
         />
       ))}
     </div>
@@ -160,7 +160,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
         </Heading>
         <Link
           href="/dashboard/bookings"
-          className="text-action hover:text-primary-700 font-medium"
+          className="text-action hover:text-action font-medium"
         >
           {td('backToBookings')}
         </Link>
@@ -186,7 +186,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
       {/* Back link */}
       <Link
         href="/dashboard/bookings"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 text-sm"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action text-sm"
       >
         <ArrowLeft className="w-4 h-4" />
         {td('backToBookings')}
@@ -266,13 +266,13 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
         {/* Completion section */}
         {appointment.status === BOOKING_STATUS.COMPLETED && (
-          <div className="bg-primary-50 dark:bg-primary-500/10 border border-primary-200 dark:border-primary-500/30 rounded-lg p-4 mb-4">
-            <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 mb-1">
+          <div className="bg-action-muted/10 border border-strong dark:border-action/30 rounded-lg p-4 mb-4">
+            <div className="flex items-center gap-2 text-action mb-1">
               <CheckCircle className="w-4 h-4" />
               <span className="font-medium text-sm">{statusBadge.label}</span>
             </div>
             {appointment.completion_notes && (
-              <p className="text-sm text-primary-700 dark:text-primary-400">{appointment.completion_notes}</p>
+              <p className="text-sm text-action">{appointment.completion_notes}</p>
             )}
           </div>
         )}
@@ -311,7 +311,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(s => (
                   <button key={s} onClick={() => setRating(s)} className="p-1">
-                    <Star className={`w-8 h-8 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-neutral-600'}`} />
+                    <Star className={`w-8 h-8 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-text-secondary'}`} />
                   </button>
                 ))}
               </div>
@@ -389,7 +389,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
         {appointment.outcome_notes && (
           <div className="flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-action shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-text-secondary mb-0.5">{td('outcomeNotes')}</p>
               <p className="text-text-primary text-sm">{appointment.outcome_notes}</p>
@@ -405,7 +405,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
             {td('sectionTechnician')}
           </Heading>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-full flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 bg-surface-raised rounded-full flex items-center justify-center shrink-0">
               <User className="w-5 h-5 text-text-tertiary" />
             </div>
             <div>
@@ -450,14 +450,14 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
         )}
         {appointment.confirmed_date && (
           <div className="flex items-center gap-3 text-sm">
-            <CheckCircle className="w-4 h-4 text-primary-500 shrink-0" />
+            <CheckCircle className="w-4 h-4 text-action shrink-0" />
             <span className="text-text-tertiary w-36 shrink-0">{td('confirmedDate')}</span>
             <span className="text-text-primary">{formatDateTime(appointment.confirmed_date)}</span>
           </div>
         )}
         {appointment.completed_at && (
           <div className="flex items-center gap-3 text-sm">
-            <CheckCircle className="w-4 h-4 text-primary-500 shrink-0" />
+            <CheckCircle className="w-4 h-4 text-action shrink-0" />
             <span className="text-text-tertiary w-36 shrink-0">{td('completedAt')}</span>
             <span className="text-text-primary">{formatDateShort(appointment.completed_at)}</span>
           </div>

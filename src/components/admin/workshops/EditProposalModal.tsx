@@ -176,7 +176,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
           <Heading level={2} className="text-2xl">Vorschlag bearbeiten</Heading>
           <button
             onClick={onClose}
-            className="text-text-tertiary hover:text-neutral-600 transition-colors"
+            className="text-text-tertiary hover:text-text-secondary transition-colors"
           >
             <X className="w-6 h-6" />
           </button>

@@ -77,21 +77,21 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       {filtered.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-surface-raised dark:bg-neutral-700">
+            <thead className="bg-surface-raised">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                   Titel
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                   Kategorie
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                   Datum
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
                   Aktionen
                 </th>
               </tr>
@@ -100,7 +100,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               {filtered.map((post) => (
                 <tr
                   key={post.id}
-                  className="hover:bg-neutral-50 dark:hover:bg-white/6"
+                  className="hover:bg-surface-raised dark:hover:bg-surface-base/6"
                 >
                   <td className="px-6 py-4">
                     <div>
@@ -123,7 +123,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         post.is_published
-                          ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
+                          ? 'bg-action-muted text-action-muted'
                           : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
                       }`}
                     >
@@ -141,7 +141,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                       {post.is_published && post.published_at && new Date(post.published_at) <= new Date() ? (
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300"
+                          className="text-text-secondary hover:text-text-primary"
                           target="_blank"
                           title="Artikel ansehen"
                         >
@@ -149,7 +149,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                         </Link>
                       ) : (
                         <span
-                          className="text-neutral-300 dark:text-neutral-600 cursor-not-allowed"
+                          className="text-neutral-300 dark:text-text-secondary cursor-not-allowed"
                           title="Artikel muss veröffentlicht sein"
                         >
                           <Eye className="w-4 h-4" />
@@ -157,7 +157,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                       )}
                       <Link
                         href={`/admin/content/blog/${post.id}`}
-                        className="text-action hover:text-primary-900 dark:hover:text-primary-300"
+                        className="text-action hover:text-action"
                         title="Artikel bearbeiten"
                       >
                         <Edit className="w-4 h-4" />

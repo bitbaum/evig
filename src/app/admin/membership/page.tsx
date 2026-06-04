@@ -104,7 +104,7 @@ export default async function MembershipPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-surface-raised dark:bg-neutral-900/50 border-b border">
+              <thead className="bg-surface-raised border-b border">
                 <tr>
                   <th className="text-left px-4 py-3 font-medium text-text-secondary">Name</th>
                   <th className="text-left px-4 py-3 font-medium text-text-secondary">E-Mail</th>
@@ -119,7 +119,7 @@ export default async function MembershipPage() {
                   const paid = isPaid(member)
                   const fee = member.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
                   return (
-                    <tr key={member.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/30">
+                    <tr key={member.id} className="hover:bg-surface-raised">
                       <td className="px-4 py-3 font-medium text-text-primary">
                         {member.name || '—'}
                       </td>
@@ -140,7 +140,7 @@ export default async function MembershipPage() {
                       </td>
                       <td className="px-4 py-3">
                         {paid ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs font-medium">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-action-muted-muted text-action rounded-full text-xs font-medium">
                             <CheckCircle className="w-3 h-3" />
                             Bezahlt
                           </span>

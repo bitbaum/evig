@@ -34,29 +34,29 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               </Heading>
             ),
             p: ({ children }) => (
-              <p className="text-[21px] text-neutral-800 leading-[1.58] mb-8 font-serif">
+              <p className="text-[21px] text-text-primary leading-[1.58] mb-8 font-serif">
                 {children}
               </p>
             ),
             ul: ({ children }) => (
-              <ul className="text-[21px] text-neutral-800 leading-[1.58] mb-8 pl-8 space-y-2">
+              <ul className="text-[21px] text-text-primary leading-[1.58] mb-8 pl-8 space-y-2">
                 {children}
               </ul>
             ),
             ol: ({ children }) => (
-              <ol className="text-[21px] text-neutral-800 leading-[1.58] mb-8 pl-8 space-y-2 list-decimal">
+              <ol className="text-[21px] text-text-primary leading-[1.58] mb-8 pl-8 space-y-2 list-decimal">
                 {children}
               </ol>
             ),
             li: ({ children }) => (
-              <li className="text-[21px] text-neutral-800 leading-[1.58]">
+              <li className="text-[21px] text-text-primary leading-[1.58]">
                 {children}
               </li>
             ),
             a: ({ href, children }) => (
               <a
                 href={href}
-                className="text-text-primary underline decoration-neutral-900 hover:text-primary-700 hover:decoration-primary-700 transition-colors"
+                className="text-text-primary underline decoration-neutral-900 hover:text-action hover:decoration-primary-700 transition-colors"
               >
                 {children}
               </a>
@@ -72,7 +72,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               </em>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-neutral-900 dark:border-neutral-500 pl-6 py-2 my-8 italic text-[21px] text-text-secondary leading-[1.58]">
+              <blockquote className="border-l-4 border-neutral-900 pl-6 py-2 my-8 italic text-[21px] text-text-secondary leading-[1.58]">
                 {children}
               </blockquote>
             ),
@@ -80,13 +80,13 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               const isInline = !className
               if (isInline) {
                 return (
-                  <code className="bg-surface-raised text-neutral-800 px-2 py-0.5 rounded-sm text-[18px] font-mono">
+                  <code className="bg-surface-raised text-text-primary px-2 py-0.5 rounded-sm text-[18px] font-mono">
                     {children}
                   </code>
                 )
               }
               return (
-                <code className="block bg-neutral-900 dark:bg-neutral-800 text-neutral-100 p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
+                <code className="block bg-neutral-900 text-neutral-100 p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
                   {children}
                 </code>
               )
@@ -107,7 +107,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
             {post.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full hover:bg-neutral-200 transition-colors"
               >
                 {tag}
               </span>

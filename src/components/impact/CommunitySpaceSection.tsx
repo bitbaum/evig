@@ -48,21 +48,21 @@ export default function CommunitySpaceSection() {
     <section className="py-20 bg-neutral-900 text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-500 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-action rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-action rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-action/20 text-action px-4 py-2 rounded-full text-sm font-medium mb-6">
             <MapPin className="h-4 w-4" />
             {t('badge')}
           </div>
           <Heading level={2} className="text-4xl md:text-5xl font-bold mb-6">
             {t('heading')}
           </Heading>
-          <p className="text-xl text-neutral-500 max-w-3xl mx-auto">
+          <p className="text-xl text-text-tertiary max-w-3xl mx-auto">
             {t('intro')}
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function CommunitySpaceSection() {
           {/* Current Location */}
           <div className="bg-neutral-800 rounded-2xl p-8 border border-neutral-700">
             <Heading level={3} className="text-2xl font-bold mb-2">{PHYSICAL_SPACE.current.name}</Heading>
-            <p className="text-primary-400 font-medium mb-6 flex items-center gap-2">
+            <p className="text-action font-medium mb-6 flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               {address}
             </p>
@@ -80,7 +80,7 @@ export default function CommunitySpaceSection() {
             <ul className="space-y-3">
               {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
                 <li key={index} className="flex items-center gap-3">
-                  <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
+                  <div className="p-2 bg-action/20 rounded-lg text-action">
                     {offeringIcons[index] || <Store className="h-5 w-5" />}
                   </div>
                   <span className="text-neutral-300">{offering}</span>
@@ -102,39 +102,39 @@ export default function CommunitySpaceSection() {
           {/* Workshops */}
           <div className="bg-neutral-800/50 rounded-2xl p-8 border border-neutral-700">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
+              <div className="p-2 bg-action/20 rounded-lg text-action">
                 <GraduationCap className="h-6 w-6" />
               </div>
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</Heading>
             </div>
 
-            <p className="text-neutral-400 mb-6">
+            <p className="text-text-muted mb-6">
               {t('workshopDesc')}
             </p>
 
             <ul className="space-y-2 mb-6">
               {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
                 <li key={index} className="flex items-center gap-2 text-neutral-300">
-                  <ArrowRight className="h-4 w-4 text-primary-400 shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-action shrink-0" />
                   {topic}
                 </li>
               ))}
             </ul>
 
-            <Button variant="outline-light" className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white w-full sm:w-auto">
+            <Button variant="outline-light" className="border-action text-action hover:bg-action hover:text-white w-full sm:w-auto">
               {t('workshopLink')}
             </Button>
           </div>
         </div>
 
         {/* Vision Section */}
-        <div className="bg-primary-900/30 rounded-2xl p-8 md:p-12 border border-primary-700/50">
+        <div className="bg-action-muted rounded-2xl p-8 md:p-12 border border-action">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
+            <div className="p-2 bg-action/20 rounded-lg text-action">
               <Sparkles className="h-6 w-6" />
             </div>
             <div>
-              <span className="text-sm text-primary-400 font-medium">{t('visionLabel')}</span>
+              <span className="text-sm text-action font-medium">{t('visionLabel')}</span>
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.vision.title}</Heading>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function CommunitySpaceSection() {
                 key={index}
                 className="bg-neutral-900/50 rounded-xl p-4 flex items-start gap-3 border border-neutral-700/50"
               >
-                <div className="p-2 bg-primary-500/10 rounded-lg text-primary-500 shrink-0">
+                <div className="p-2 bg-action/10 rounded-lg text-action shrink-0">
                   {visionIcons[index] || <Sparkles className="h-5 w-5" />}
                 </div>
                 <span className="text-neutral-300 text-sm">{feature}</span>
@@ -158,7 +158,7 @@ export default function CommunitySpaceSection() {
           </div>
 
           <div className="mt-8 pt-8 border-t border-neutral-700/50 text-center">
-            <p className="text-neutral-400 mb-4">
+            <p className="text-text-muted mb-4">
               {t('visionCta')}
             </p>
             <Button>

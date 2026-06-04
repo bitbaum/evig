@@ -112,8 +112,8 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                 <div
                   className={
                     reached
-                      ? 'w-8 h-8 rounded-full flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 text-action'
-                      : 'w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-text-muted dark:text-neutral-600'
+                      ? 'w-8 h-8 rounded-full flex items-center justify-center bg-action-muted-muted text-action'
+                      : 'w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-text-muted dark:text-text-secondary'
                   }
                   aria-current={reached ? 'step' : undefined}
                 >
@@ -127,7 +127,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                   className={
                     reached
                       ? 'mt-1 text-[10px] sm:text-xs text-text-secondary text-center'
-                      : 'mt-1 text-[10px] sm:text-xs text-text-muted dark:text-neutral-600 text-center'
+                      : 'mt-1 text-[10px] sm:text-xs text-text-muted dark:text-text-secondary text-center'
                   }
                 >
                   {t(`stage.${stage}`)}
@@ -137,8 +137,8 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                 <div
                   className={
                     stageReached(STEPPER_STAGES[idx + 1])
-                      ? 'h-0.5 w-4 sm:w-8 bg-primary-300 dark:bg-primary-700 mb-5'
-                      : 'h-0.5 w-4 sm:w-8 bg-neutral-200 dark:bg-neutral-700 mb-5'
+                      ? 'h-0.5 w-4 sm:w-8 bg-action mb-5'
+                      : 'h-0.5 w-4 sm:w-8 bg-neutral-200 mb-5'
                   }
                   aria-hidden="true"
                 />
@@ -162,7 +162,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
             <Link
               key={url}
               href={url}
-              className="inline-flex items-center gap-1 text-sm text-primary-700 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 underline"
+              className="inline-flex items-center gap-1 text-sm text-action hover:text-action underline"
             >
               {listingLinks.length === 1 ? t('viewInShop') : t('viewInShopNumbered', { index: i + 1 })}
               <ExternalLink className="w-3 h-3" aria-hidden="true" />

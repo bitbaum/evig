@@ -16,7 +16,7 @@ export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
       {/* Back Link */}
       <Link
         href={ROUTES.public.blog}
-        className="inline-flex items-center text-text-secondary hover:text-neutral-900 mb-8 transition-colors"
+        className="inline-flex items-center text-text-secondary hover:text-text-primary mb-8 transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Blog
@@ -25,7 +25,7 @@ export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
       {/* Category */}
       {post.category && (
         <div className="mb-4">
-          <span className="text-sm font-medium text-primary-700 dark:text-primary-400 uppercase tracking-wide">
+          <span className="text-sm font-medium text-action uppercase tracking-wide">
             {post.category}
           </span>
         </div>

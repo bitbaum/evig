@@ -74,7 +74,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       </div>
 
       {/* Section 2: Stats */}
-      <div className="bg-surface-raised dark:bg-neutral-900 py-12 sm:py-16">
+      <div className="bg-surface-raised py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -87,7 +87,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
 
           <dl className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
             {compactMetrics.map((metric, index) => (
-              <div key={index} className="bg-white dark:bg-neutral-800 rounded-xl p-4 sm:p-6 text-center border border-subtle">
+              <div key={index} className="bg-surface-base rounded-xl p-4 sm:p-6 text-center border border-subtle">
                 <dd className="text-2xl sm:text-3xl font-bold text-action">{metric.value}</dd>
                 <dt className="mt-1 text-xs sm:text-sm text-text-secondary">{metric.label}</dt>
               </div>
@@ -97,7 +97,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
           <div className="mt-8 text-center">
             <Link
               href="/about/impact"
-              className="text-sm font-semibold text-action hover:text-primary-700 underline underline-offset-2"
+              className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
             >
               {t('stats.moreLink')} <span aria-hidden="true">→</span>
             </Link>
@@ -127,9 +127,9 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
               <Link
                 key={platform.href}
                 href={platform.href}
-                className="card-shell-inset rounded-xl p-6 hover:border-neutral-300 transition-colors group"
+                className="card-shell-inset rounded-xl p-6 hover:border-strong transition-colors group"
               >
-                <Heading level={3} className="text-lg font-bold text-text-primary group-hover:text-primary-600 transition-colors">
+                <Heading level={3} className="text-lg font-bold text-text-primary group-hover:text-action transition-colors">
                   {platform.title}
                 </Heading>
                 <p className="mt-2 text-sm text-text-secondary">{platform.description}</p>
@@ -157,7 +157,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
           <div className="mt-6">
             <Link
               href="/mitglied-werden"
-              className="text-sm font-semibold text-action hover:text-primary-700 underline underline-offset-2"
+              className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
             >
               {t('finances.memberLink')} <span aria-hidden="true">→</span>
             </Link>
@@ -178,7 +178,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
             {t('board.body', { orgName: ORG.name })}{' '}
             <a
               href={`mailto:${CONTACT.email}`}
-              className="font-semibold text-action hover:text-primary-700 underline"
+              className="font-semibold text-action hover:text-action underline"
             >
               {CONTACT.email}
             </a>
@@ -190,7 +190,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
             </Link>
             <Link
               href="/get-involved/donate"
-              className="rounded-md bg-surface-base px-5 py-2.5 text-sm font-semibold text-action border border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-center"
+              className="rounded-md bg-surface-base px-5 py-2.5 text-sm font-semibold text-action border border-action hover:bg-action-muted-muted text-center"
             >
               {t('board.donateBtn')}
             </Link>

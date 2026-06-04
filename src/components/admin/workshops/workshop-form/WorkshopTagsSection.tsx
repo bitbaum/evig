@@ -41,7 +41,7 @@ export function WorkshopTagsSection({ tags, onAddTag, onRemoveTag }: Props) {
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-sm"
+                className="inline-flex items-center gap-1 px-3 py-1 bg-action-muted-muted text-action rounded-full text-sm"
               >
                 {tag}
                 <button

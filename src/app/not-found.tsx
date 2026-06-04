@@ -9,13 +9,13 @@ import { buttonClass } from '@/components/ui/button-class'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-surface-raised px-4">
       <div className="max-w-md w-full text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-neutral-100 rounded-full mb-6">
-          <Search className="w-8 h-8 text-neutral-400" />
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-raised rounded-full mb-6">
+          <Search className="w-8 h-8 text-text-muted" />
         </div>
-        <Heading level={1} className="text-2xl text-neutral-900 mb-2">Seite nicht gefunden</Heading>
-        <p className="text-neutral-600 mb-8">
+        <Heading level={1} className="text-2xl text-text-primary mb-2">Seite nicht gefunden</Heading>
+        <p className="text-text-secondary mb-8">
           Die gesuchte Seite existiert nicht oder wurde verschoben.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

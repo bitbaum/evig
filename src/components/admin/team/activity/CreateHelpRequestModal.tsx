@@ -121,8 +121,8 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(true)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 isBroadcast
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                  : 'border dark:border-neutral-600 hover:border-neutral-300'
+                  ? 'border-action bg-action-muted-muted text-action'
+                  : 'border hover:border-strong'
               }`}
             >
               <Users className="w-5 h-5" />
@@ -133,8 +133,8 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(false)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 !isBroadcast
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                  : 'border dark:border-neutral-600 hover:border-neutral-300'
+                  ? 'border-action bg-action-muted-muted text-action'
+                  : 'border hover:border-strong'
               }`}
             >
               <User className="w-5 h-5" />

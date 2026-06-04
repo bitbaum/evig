@@ -106,7 +106,7 @@ export default function FactSheetPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-raised">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-action border-t-transparent"></div>
       </div>
     )
   }
@@ -140,7 +140,7 @@ export default function FactSheetPage() {
         <div className="max-w-[210mm] mx-auto flex items-center justify-between">
           <Link
             href={ROUTES.admin.products}
-            className="flex items-center gap-2 text-text-secondary hover:text-neutral-900"
+            className="flex items-center gap-2 text-text-secondary hover:text-text-primary"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück
@@ -158,11 +158,11 @@ export default function FactSheetPage() {
       </div>
 
       {/* A4 Fact Sheet */}
-      <div className="bg-surface-raised min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-white">
+      <div className="bg-surface-raised min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-surface-base">
         <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-surface-base shadow-lg print:shadow-none">
 
           {/* Green Header Bar */}
-          <div className="bg-primary-600 text-white px-8 py-4">
+          <div className="bg-action text-white px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-surface-base rounded-xl flex items-center justify-center">
@@ -170,11 +170,11 @@ export default function FactSheetPage() {
                 </div>
                 <div>
                   <Heading level={1} className="text-2xl font-bold tracking-tight">{ORG.name}</Heading>
-                  <p className="text-primary-100 text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
+                  <p className="text-action-text text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-primary-200 text-xs uppercase tracking-wider">Artikel-Nr.</div>
+                <div className="text-action-text text-xs uppercase tracking-wider">Artikel-Nr.</div>
                 <div className="text-xl font-mono font-bold">{product.item_uuid}</div>
               </div>
             </div>
@@ -222,8 +222,8 @@ export default function FactSheetPage() {
 
               {/* Price Box */}
               <div className="w-44 shrink-0">
-                <div className="bg-primary-50 border-2 border-primary-500 rounded-xl p-4 text-center">
-                  <div className="text-primary-700 text-sm font-medium mb-1">Ihr Preis</div>
+                <div className="bg-action-muted border-2 border-action rounded-xl p-4 text-center">
+                  <div className="text-action text-sm font-medium mb-1">Ihr Preis</div>
                   <div className="text-4xl font-bold text-action mb-1">
                     {Number(product.estimated_price_chf).toFixed(0)}.-
                   </div>
@@ -288,7 +288,7 @@ export default function FactSheetPage() {
                 </Heading>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center shrink-0">
                       <Shield className="w-5 h-5 text-action" />
                     </div>
                     <div>
@@ -297,7 +297,7 @@ export default function FactSheetPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center shrink-0">
                       <Leaf className="w-5 h-5 text-action" />
                     </div>
                     <div>

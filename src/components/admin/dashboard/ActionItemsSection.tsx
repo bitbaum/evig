@@ -20,9 +20,9 @@ const URGENCY_CONFIG = {
     text: 'text-warning-700 dark:text-warning-400',
   },
   success: {
-    dot: 'bg-primary-500',
+    dot: 'bg-action',
     label: 'Information',
-    text: 'text-primary-700 dark:text-primary-400',
+    text: 'text-action',
   },
 }
 
@@ -41,7 +41,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
       <div className="p-4">
         {hasNoActionItems ? (
           <div className="flex items-center gap-3 text-action">
-            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-action-muted-muted flex items-center justify-center">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
             <span className="font-medium">Alles erledigt! Keine offenen Aufgaben.</span>
@@ -55,7 +55,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                 <li key={index}>
                   <Link
                     href={item.href}
-                    className="flex items-center justify-between p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors group"
+                    className="flex items-center justify-between p-3 rounded-lg bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors group"
                     aria-label={`${urgency.label}: ${item.label}${age ? ` (${age})` : ''}`}
                   >
                     <div className="flex items-start gap-3">
@@ -74,7 +74,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                         )}
                       </div>
                     </div>
-                    <span className="flex items-center gap-1 text-sm text-text-secondary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors shrink-0 ml-3">
+                    <span className="flex items-center gap-1 text-sm text-text-secondary group-hover:text-action dark:group-hover:text-action transition-colors shrink-0 ml-3">
                       {item.actionLabel}
                       <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </span>

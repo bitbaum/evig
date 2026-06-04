@@ -81,7 +81,7 @@ export function CurrentFocusInput({
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="p-1 text-action hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-sm disabled:opacity-50"
+              className="p-1 text-action hover:bg-action-muted-muted rounded-sm disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -96,7 +96,7 @@ export function CurrentFocusInput({
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex-1 text-left text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 truncate"
+            className="flex-1 text-left text-sm text-text-secondary hover:text-text-primary truncate"
           >
             {focus || 'Fokus setzen...'}
           </button>
@@ -109,7 +109,7 @@ export function CurrentFocusInput({
     <div className="bg-surface-base rounded-xl border border p-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-text-tertiary" />
-        <Heading level={3} className="text-text-primary dark:text-neutral-100">Aktueller Fokus</Heading>
+        <Heading level={3} className="text-text-primary">Aktueller Fokus</Heading>
       </div>
 
       {error && (

@@ -32,10 +32,10 @@ export function QuickActionsSection({ quickActions, fulfillActions }: QuickActio
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="relative flex flex-col items-center gap-2 p-3 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors"
+                    className="relative flex flex-col items-center gap-2 p-3 rounded-lg bg-action-muted-muted text-action hover:bg-action-muted transition-colors"
                   >
                     {/* Badge */}
-                    <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-600 px-1 text-xs font-bold text-white">
+                    <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-action px-1 text-xs font-bold text-white">
                       {action.count > 99 ? '99+' : action.count}
                     </span>
                     <Icon className="w-5 h-5" aria-hidden="true" />

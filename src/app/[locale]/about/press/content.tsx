@@ -25,9 +25,9 @@ import {
 // Tier badge colors
 const TIER_STYLES = {
   1: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-400 border-warning-200 dark:border-warning-800/30',
-  2: 'bg-surface-raised text-neutral-800 border',
-  3: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-400 border-primary-200 dark:border-primary-800/30',
-  4: 'bg-surface-raised text-neutral-800 border'
+  2: 'bg-surface-raised text-text-primary border',
+  3: 'bg-action-muted-muted text-action border-strong',
+  4: 'bg-surface-raised text-text-primary border'
 } as const
 
 function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readArticleLabel: string }) {
@@ -44,7 +44,7 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
       href={mention.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block card-shell p-6 hover:border-primary-300 transition-all duration-300 h-full"
+      className="group block card-shell p-6 hover:border-strong transition-all duration-300 h-full"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -52,11 +52,11 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
           <span className={`inline-block text-xs font-medium px-2 py-1 rounded-full border ${TIER_STYLES[mention.tier]} mb-2`}>
             {tierLabels[mention.tier]}
           </span>
-          <Heading level={3} className="text-text-primary group-hover:text-primary-600 transition-colors line-clamp-2">
+          <Heading level={3} className="text-text-primary group-hover:text-action transition-colors line-clamp-2">
             {mention.title}
           </Heading>
         </div>
-        <ExternalLink className="h-4 w-4 text-text-tertiary group-hover:text-primary-500 shrink-0 transition-colors" />
+        <ExternalLink className="h-4 w-4 text-text-tertiary group-hover:text-action shrink-0 transition-colors" />
       </div>
 
       {/* Source and Date */}
@@ -76,8 +76,8 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
 
       {/* Quote */}
       {mention.quote && (
-        <div className="bg-surface-raised rounded-lg p-3 border-l-3 border-primary-500">
-          <Quote className="h-4 w-4 text-primary-500 mb-1" />
+        <div className="bg-surface-raised rounded-lg p-3 border-l-3 border-action">
+          <Quote className="h-4 w-4 text-action mb-1" />
           <p className="text-sm text-text-secondary italic">
             &ldquo;{mention.quote}&rdquo;
           </p>
@@ -100,18 +100,18 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
       href={mention.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 bg-surface-base rounded-full px-5 py-3 border hover:border-primary-400 transition-all duration-300"
+      className="group flex items-center gap-3 bg-surface-base rounded-full px-5 py-3 border hover:border-action transition-all duration-300"
     >
-      <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+      <div className="w-8 h-8 bg-action rounded-full flex items-center justify-center text-white text-xs font-bold">
         {mention.sourceShort.charAt(0)}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-text-primary text-sm group-hover:text-primary-600 transition-colors truncate">
+        <p className="font-semibold text-text-primary text-sm group-hover:text-action transition-colors truncate">
           {mention.sourceShort}
         </p>
         <p className="text-xs text-text-tertiary truncate">{mention.date}</p>
       </div>
-      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors shrink-0" />
+      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-action transition-colors shrink-0" />
     </a>
   )
 }
@@ -200,21 +200,21 @@ export default function PressPageContent() {
                   href={mention.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 p-4 rounded-lg bg-surface-base hover:bg-neutral-50 transition-all"
+                  className="group flex items-center gap-3 p-4 rounded-lg bg-surface-base hover:bg-surface-raised transition-all"
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${
-                    mention.tier === 3 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400' :
+                    mention.tier === 3 ? 'bg-action-muted-muted text-action' :
                     'bg-surface-raised text-text-secondary'
                   }`}>
                     {mention.sourceShort.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-text-primary text-sm group-hover:text-primary-600 transition-colors truncate">
+                    <p className="font-medium text-text-primary text-sm group-hover:text-action transition-colors truncate">
                       {mention.sourceShort}
                     </p>
                     <p className="text-xs text-text-tertiary truncate">{mention.title}</p>
                   </div>
-                  <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors shrink-0" />
+                  <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-action transition-colors shrink-0" />
                 </a>
               ))}
             </div>
@@ -223,22 +223,22 @@ export default function PressPageContent() {
       </section>
 
       {/* Press Contact CTA */}
-      <section className="py-20 bg-primary-600 text-white">
+      <section className="py-20 bg-action text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
           <Heading level={2} className="mb-6">{t('pressContact.title')}</Heading>
-          <p className="text-xl mb-8 text-primary-100">
+          <p className="text-xl mb-8 text-action-text">
             {t('pressContact.description')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href={`mailto:${CONTACT.email}`}
-              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-neutral-100 transition-colors"
+              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors"
             >
               {CONTACT.email}
             </a>
             <Link
               href="/contact"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-surface-base/10 transition-colors"
             >
               {t('pressContact.contactForm')}
             </Link>

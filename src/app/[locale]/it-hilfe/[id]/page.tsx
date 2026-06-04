@@ -54,7 +54,7 @@ export default function ITHilfeDetailPage() {
   if (detail.loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
     )
   }
@@ -80,7 +80,7 @@ export default function ITHilfeDetailPage() {
         {/* Back link */}
         <Link
           href={ROUTES.public.itHilfe}
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6 px-2 py-1 min-h-touch rounded-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6 px-2 py-1 min-h-touch rounded-sm focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           {t('backToList')}
@@ -105,9 +105,9 @@ export default function ITHilfeDetailPage() {
 
         {/* Just-Accepted Banner — landed here via ?accepted=1 from email link */}
         {showAcceptedBanner && request.status === REQUEST_STATUS.MATCHED && (
-          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-4 mb-6 flex items-center gap-3">
+          <div className="bg-action-muted-muted border border-strong rounded-xl p-4 mb-6 flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
-            <p className="text-primary-800 dark:text-primary-300 text-sm font-medium">
+            <p className="text-action text-sm font-medium">
               {t('acceptedBanner')}
             </p>
           </div>
@@ -156,9 +156,9 @@ export default function ITHilfeDetailPage() {
 
             {/* Completion badge (status completed, visible to everyone) */}
             {request.status === REQUEST_STATUS.COMPLETED && request.completedAt && (
-              <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-4 flex items-center gap-3">
+              <div className="bg-action-muted-muted border border-strong rounded-xl p-4 flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
-                <p className="text-primary-800 dark:text-primary-300 text-sm font-medium">
+                <p className="text-action text-sm font-medium">
                   {t('completedAt', { date: formatDate(request.completedAt) })}
                 </p>
               </div>
@@ -216,9 +216,9 @@ export default function ITHilfeDetailPage() {
 
             {/* Review submitted confirmation */}
             {detail.reviewSubmitted && (
-              <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6 text-center">
+              <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
                 <CheckCircle className="w-8 h-8 text-action mx-auto mb-2" aria-hidden="true" />
-                <p className="text-primary-800 dark:text-primary-300 font-medium">{t('reviewSubmittedTitle')}</p>
+                <p className="text-action font-medium">{t('reviewSubmittedTitle')}</p>
                 <p className="text-sm text-action mt-1">{t('reviewSubmittedMessage')}</p>
               </div>
             )}

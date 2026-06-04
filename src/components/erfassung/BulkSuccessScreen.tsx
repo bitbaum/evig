@@ -57,7 +57,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
               <AlertCircle className="w-10 h-10 text-warning-600 dark:text-warning-400" />
             </div>
           ) : (
-            <div className="w-20 h-20 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-action-muted-muted flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-action" />
             </div>
           )}
@@ -94,7 +94,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
 
         {/* Item UUIDs list for successful saves */}
         {result.results.some(r => r.success && r.itemUUID) && (
-          <div className="bg-surface-raised dark:bg-neutral-900/50 rounded-lg p-4 text-left max-h-48 overflow-y-auto">
+          <div className="bg-surface-raised rounded-lg p-4 text-left max-h-48 overflow-y-auto">
             <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">{t('createdIds')}</Heading>
             <div className="space-y-1">
               {result.results
@@ -124,7 +124,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
           <button
             type="button"
             onClick={handleDownloadCSV}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 font-medium transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-neutral-300 text-text-secondary rounded-lg hover:bg-surface-raised font-medium transition-colors"
           >
             <Download className="w-4 h-4" />
             {t('downloadCsv')}

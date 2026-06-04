@@ -23,7 +23,7 @@ export default function AboutSubNav() {
   ]
 
   return (
-    <nav className="bg-white border-b border-neutral-200 sticky top-16 z-40">
+    <nav className="bg-surface-base border-b border-strong sticky top-16 z-40">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center gap-1 overflow-x-auto py-2 -mx-4 px-4 scrollbar-hide">
           {navItems.map((item) => {
@@ -34,8 +34,8 @@ export default function AboutSubNav() {
                 href={item.href}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                    ? 'bg-action-muted-muted text-action'
+                    : 'text-text-secondary hover:bg-surface-raised hover:text-text-primary'
                 }`}
               >
                 {item.icon}

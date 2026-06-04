@@ -96,10 +96,10 @@ export function PermissionRequestsManager() {
     return (
       <div className="p-6 bg-surface-base rounded-xl border border">
         <div className="animate-pulse">
-          <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3 mb-4" />
+          <div className="h-6 bg-neutral-200 rounded-sm w-1/3 mb-4" />
           <div className="space-y-3">
-            <div className="h-16 bg-neutral-200 dark:bg-neutral-700 rounded-sm" />
-            <div className="h-16 bg-neutral-200 dark:bg-neutral-700 rounded-sm" />
+            <div className="h-16 bg-neutral-200 rounded-sm" />
+            <div className="h-16 bg-neutral-200 rounded-sm" />
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@ export function PermissionRequestsManager() {
         </div>
         <button
           onClick={fetchRequests}
-          className="text-text-tertiary hover:text-neutral-600"
+          className="text-text-tertiary hover:text-text-secondary"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
@@ -168,7 +168,7 @@ export function PermissionRequestsManager() {
                   {request.requested_sections.map(section => (
                     <span
                       key={section}
-                      className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded-sm"
+                      className="px-2 py-0.5 bg-surface-raised text-text-secondary text-xs rounded-sm"
                     >
                       {getSectionLabel(section)}
                     </span>

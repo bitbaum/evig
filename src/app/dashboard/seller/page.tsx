@@ -25,7 +25,7 @@ import { ROUTES } from '@/config/routes'
 function getStatusLabel(status: string) {
   const config = LISTING_STATUS_CONFIG[status as ListingStatus]
   if (config) return { label: config.label, className: config.color }
-  return { label: status, className: 'bg-surface-raised text-neutral-800' }
+  return { label: status, className: 'bg-surface-raised text-text-primary' }
 }
 
 export default function SellerDashboard() {
@@ -35,9 +35,9 @@ export default function SellerDashboard() {
     useSellerDashboard(t('unexpectedError'))
 
   const quickActions = [
-    { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: ROUTES.public.marketplaceSell, icon: Plus, color: 'bg-primary-500' },
+    { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: ROUTES.public.marketplaceSell, icon: Plus, color: 'bg-action' },
     { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-neutral-500' },
-    { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-primary-600' },
+    { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-action' },
     { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: ROUTES.public.marketplace, icon: BarChart3, color: 'bg-secondary-500' },
   ]
 
@@ -69,19 +69,19 @@ export default function SellerDashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome Header */}
-      <div className="bg-primary-700 rounded-xl p-6 text-white">
+      <div className="bg-action rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2">
               {t('pageTitle')}
             </h1>
-            <p className="text-primary-100">
+            <p className="text-action-text">
               {t('pageSubtitle')}
             </p>
           </div>
           <button
             onClick={fetchDashboardData}
-            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            className="p-2 rounded-lg bg-surface-base/10 hover:bg-surface-base/20 transition-colors"
             title={t('refresh')}
             aria-label={t('refresh')}
           >
@@ -92,7 +92,7 @@ export default function SellerDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsProducts')}</p>
@@ -103,7 +103,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsRevenue')}</p>
@@ -119,7 +119,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsViews')}</p>
@@ -130,7 +130,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsOrders')}</p>
@@ -144,8 +144,8 @@ export default function SellerDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Products */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700">
-          <div className="p-6 border-b border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+          <div className="p-6 border-b border-subtle">
             <h2 className="text-lg font-semibold text-text-primary">
               {t('recentTitle')}
             </h2>
@@ -171,7 +171,7 @@ export default function SellerDashboard() {
                 {products.map((product) => {
                   const statusInfo = getStatusLabel(product.status)
                   return (
-                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-subtle dark:border-neutral-700">
+                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-subtle">
                       <div className="w-12 h-12 rounded-lg overflow-hidden">
                         <ListingImage src={product.image} alt={product.title} fallbackIconSize="w-5 h-5" />
                       </div>
@@ -195,10 +195,10 @@ export default function SellerDashboard() {
             )}
 
             {products.length > 0 && (
-              <div className="mt-6 pt-4 border-t border-subtle dark:border-neutral-700">
+              <div className="mt-6 pt-4 border-t border-subtle">
                 <Link
                   href="/dashboard/listings"
-                  className="text-sm text-action hover:text-primary-700 dark:text-primary-400 font-medium flex items-center gap-1"
+                  className="text-sm text-action hover:text-action font-medium flex items-center gap-1"
                 >
                   {t('manageAll')}
                   <ArrowRight className="w-4 h-4" />
@@ -209,8 +209,8 @@ export default function SellerDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700">
-          <div className="p-6 border-b border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+          <div className="p-6 border-b border-subtle">
             <h2 className="text-lg font-semibold text-text-primary">
               {t('quickActionsTitle')}
             </h2>
@@ -225,13 +225,13 @@ export default function SellerDashboard() {
                 <Link
                   key={action.href}
                   href={action.href}
-                  className="group p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="group p-4 bg-surface-raised rounded-lg hover:bg-surface-raised transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center`}>
                       <action.icon className="w-4 h-4 text-white" />
                     </div>
-                    <h3 className="font-medium text-text-primary group-hover:text-primary-600 transition-colors">
+                    <h3 className="font-medium text-text-primary group-hover:text-action transition-colors">
                       {action.title}
                     </h3>
                   </div>
@@ -246,13 +246,13 @@ export default function SellerDashboard() {
       </div>
 
       {/* Marketplace Info */}
-      <div className="bg-surface-raised dark:bg-neutral-900/20 border dark:border-neutral-700 rounded-xl p-6">
+      <div className="bg-surface-raised border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center shrink-0">
             <Package className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <h3 className="font-medium text-text-primary dark:text-neutral-200">
+            <h3 className="font-medium text-text-primary">
               {t('infoTitle')}
             </h3>
             <p className="text-sm text-text-secondary mt-1">

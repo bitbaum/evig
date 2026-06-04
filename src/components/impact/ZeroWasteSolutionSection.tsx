@@ -22,18 +22,18 @@ const getIcon = (icon: ZeroWastePrinciple['icon']) => {
 
 const getPriorityColor = (priority: number) => {
   switch (priority) {
-    case 1: return 'bg-primary-600 text-white'
-    case 2: return 'bg-primary-500 text-white'
-    case 3: return 'bg-primary-400 text-white'
-    case 4: return 'bg-primary-300 text-primary-900'
-    default: return 'bg-primary-200 text-primary-900'
+    case 1: return 'bg-action text-white'
+    case 2: return 'bg-action text-white'
+    case 3: return 'bg-action text-white'
+    case 4: return 'bg-action text-action'
+    default: return 'bg-action-muted text-action'
   }
 }
 
 function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWastePrinciple; isLast: boolean; priorityLabel: string }) {
   return (
     <div className="relative">
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/6 hover:border-neutral-300 dark:hover:border-white/12 transition-colors">
+      <div className="bg-surface-base rounded-xl p-6 border border-strong dark:border-white/6 hover:border-strong dark:hover:border-white/12 transition-colors">
         <div className="flex items-start gap-4">
           <div className={`p-3 rounded-lg ${getPriorityColor(principle.priority)}`}>
             {getIcon(principle.icon)}
@@ -44,15 +44,15 @@ function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWa
                 {priorityLabel}
               </span>
             </div>
-            <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2">{principle.title}</Heading>
-            <p className="text-neutral-600">{principle.description}</p>
+            <Heading level={3} className="text-xl font-bold text-text-primary mb-2">{principle.title}</Heading>
+            <p className="text-text-secondary">{principle.description}</p>
           </div>
         </div>
       </div>
       {/* Arrow connector */}
       {!isLast && (
         <div className="flex justify-center py-3">
-          <ArrowDown className="h-6 w-6 text-primary-400" />
+          <ArrowDown className="h-6 w-6 text-action" />
         </div>
       )}
     </div>
@@ -65,18 +65,18 @@ export default async function ZeroWasteSolutionSection() {
   const sortedPrinciples = [...ZERO_WASTE_PRINCIPLES].sort((a, b) => a.priority - b.priority)
 
   return (
-    <section className="py-20 bg-neutral-50 dark:bg-neutral-900">
+    <section className="py-20 bg-surface-raised">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-action-muted-muted text-action px-4 py-2 rounded-full text-sm font-medium mb-6">
             <CheckCircle className="h-4 w-4" />
             {t('badge')}
           </div>
-          <Heading level={2} className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
+          <Heading level={2} className="text-4xl md:text-5xl font-bold text-text-primary mb-6">
             {t('heading')}
           </Heading>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-xl text-text-secondary max-w-3xl mx-auto">
             {t('description')}
           </p>
         </div>
@@ -97,12 +97,12 @@ export default async function ZeroWasteSolutionSection() {
 
           {/* Impact Summary */}
           <div className="lg:sticky lg:top-24 space-y-6">
-            <div className="bg-primary-600 rounded-2xl p-8 text-white">
+            <div className="bg-action rounded-2xl p-8 text-white">
               <Heading level={3} className="text-2xl font-bold mb-6">{t('impactTitle')}</Heading>
 
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                  <div className="w-16 h-16 bg-surface-base/20 rounded-xl flex items-center justify-center shrink-0">
                     <span className="text-2xl font-bold">{envSummary.devicesSaved}+</span>
                   </div>
                   <div>
@@ -112,7 +112,7 @@ export default async function ZeroWasteSolutionSection() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                  <div className="w-16 h-16 bg-surface-base/20 rounded-xl flex items-center justify-center shrink-0">
                     <span className="text-2xl font-bold">{Math.round(envSummary.reuseRate * 100)}%</span>
                   </div>
                   <div>
@@ -122,7 +122,7 @@ export default async function ZeroWasteSolutionSection() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                  <div className="w-16 h-16 bg-surface-base/20 rounded-xl flex items-center justify-center shrink-0">
                     <span className="text-2xl font-bold">{envSummary.co2SavedTons}</span>
                   </div>
                   <div>
@@ -134,12 +134,12 @@ export default async function ZeroWasteSolutionSection() {
             </div>
 
             {/* Key Insight */}
-            <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/6">
-              <Heading level={4} className="font-bold text-neutral-900 mb-3">{t('whyRepairTitle')}</Heading>
-              <p className="text-neutral-600 text-sm mb-4">
+            <div className="bg-surface-base rounded-xl p-6 border border-strong dark:border-white/6">
+              <Heading level={4} className="font-bold text-text-primary mb-3">{t('whyRepairTitle')}</Heading>
+              <p className="text-text-secondary text-sm mb-4">
                 {t('whyRepairText')}
               </p>
-              <div className="flex items-center gap-2 text-sm text-primary-700 font-medium">
+              <div className="flex items-center gap-2 text-sm text-action font-medium">
                 <CheckCircle className="h-4 w-4" />
                 <span>{t('whyRepairConclusion')}</span>
               </div>

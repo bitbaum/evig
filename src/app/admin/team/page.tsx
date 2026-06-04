@@ -202,7 +202,7 @@ export default async function TeamPage() {
           </p>
         </div>
 
-        <div className="p-4 bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl">
+        <div className="p-4 bg-surface-raised border border rounded-xl">
           <p className="text-sm text-text-secondary">
             <strong>Hinweis:</strong> Benutzer mit @{ORG.emailDomain} E-Mail-Adresse werden automatisch als Staff erkannt.
           </p>

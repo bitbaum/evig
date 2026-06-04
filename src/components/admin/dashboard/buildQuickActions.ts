@@ -18,7 +18,7 @@ export function buildQuickActions(
       label: 'Neuer Blogartikel',
       href: '/admin/content/blog/new',
       icon: FileText,
-      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
+      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -27,7 +27,7 @@ export function buildQuickActions(
       label: 'Gerät annehmen',
       href: '/admin/intake',
       icon: PackageCheck,
-      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
+      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -36,7 +36,7 @@ export function buildQuickActions(
       label: 'Gerät erfassen',
       href: '/admin/erfassung',
       icon: ScanLine,
-      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
+      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -45,7 +45,7 @@ export function buildQuickActions(
       label: 'Neuer Workshop',
       href: '/admin/workshops/new',
       icon: GraduationCap,
-      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
+      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -63,7 +63,7 @@ export function buildQuickActions(
       label: 'Neuer Standort',
       href: '/admin/locations/new',
       icon: MapPin,
-      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
+      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
     })
   }
 

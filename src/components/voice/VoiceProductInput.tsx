@@ -144,11 +144,11 @@ export function VoiceProductInput({
       case 'processing':
         return 'bg-warning-500 text-white cursor-wait'
       case 'success':
-        return 'bg-primary-500 hover:bg-primary-600 text-white'
+        return 'bg-action hover:bg-action text-white'
       case 'error':
         return 'bg-error-100 hover:bg-error-200 text-error-700 border-error-300 dark:bg-error-900/30 dark:hover:bg-error-900/40 dark:text-error-300'
       default:
-        return 'bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-300 dark:bg-primary-900/30 dark:hover:bg-primary-900/40 dark:text-primary-300'
+        return 'bg-action-muted hover:bg-action-muted text-action border-strong-muted'
     }
   }
 
@@ -198,7 +198,7 @@ export function VoiceProductInput({
 
       {/* Transcription preview */}
       {transcribedText && state === 'success' && (
-        <div className="text-sm text-primary-700 bg-primary-50 px-3 py-2 rounded-md dark:bg-primary-900/20 dark:text-primary-300">
+        <div className="text-sm text-action bg-action-muted px-3 py-2 rounded-md-muted">
           <span className="font-medium">{t('transcribedPrefix')}</span> {transcribedText}
         </div>
       )}
@@ -212,7 +212,7 @@ export function VoiceProductInput({
 
       {/* Recording hint */}
       {state === 'recording' && (
-        <div className="text-sm text-neutral-600">
+        <div className="text-sm text-text-secondary">
           {t('recordingHint')}
         </div>
       )}

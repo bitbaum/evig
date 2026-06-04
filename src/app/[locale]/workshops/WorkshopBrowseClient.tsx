@@ -52,7 +52,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   return (
     <>
       {/* Compact hero — workshops visible without scrolling */}
-      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/6 py-6 sm:py-8">
+      <div className="bg-surface-base border-b border-subtle dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -114,7 +114,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   setCategoryFilter('all')
                   setLevelFilter('all')
                 }}
-                className="self-end px-3 py-2 text-sm text-action hover:text-primary-700 font-medium"
+                className="self-end px-3 py-2 text-sm text-action hover:text-action font-medium"
               >
                 {t('clearFilters')}
               </button>
@@ -143,11 +143,11 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 : null
 
               return (
-                <div key={workshop.id} className="card-shell overflow-hidden hover:border-neutral-300 transition-all flex flex-col">
+                <div key={workshop.id} className="card-shell overflow-hidden hover:border-strong transition-all flex flex-col">
                   {/* Workshop Header */}
                   <div className="p-6 border-b border-subtle flex-1">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+                      <div className="p-3 bg-action-muted-muted rounded-lg">
                         <IconComponent className="w-6 h-6 text-action" />
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
@@ -227,7 +227,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           : formatCentsToChf(workshop.price_cents)}
                       </span>
                       {workshop.user_registered && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
                           <CheckCircle className="w-3 h-3 mr-1" />
                           {t('registered')}
                         </span>
@@ -253,7 +253,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           {t('soldOut')}
                         </span>
                       ) : (
-                        <span className="flex-1 bg-neutral-300 dark:bg-neutral-700 text-text-tertiary px-4 py-2 rounded-lg text-center text-sm font-medium">
+                        <span className="flex-1 bg-neutral-300 text-text-tertiary px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('noDate')}
                         </span>
                       )}
@@ -265,7 +265,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           </div>
         ) : (
           <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
+            <BookOpen className="w-16 h-16 text-neutral-300 dark:text-text-secondary mx-auto mb-4" />
             <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? t('emptyFiltered.title')
@@ -282,7 +282,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   setCategoryFilter('all')
                   setLevelFilter('all')
                 }}
-                className="text-action hover:text-primary-700 font-medium"
+                className="text-action hover:text-action font-medium"
               >
                 {t('emptyFiltered.clearFilters')}
               </button>
@@ -291,17 +291,17 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         )}
 
         {/* Call to Action */}
-        <div className="mt-16 bg-primary-600 dark:bg-primary-700 rounded-xl p-8 text-white text-center">
+        <div className="mt-16 bg-action rounded-xl p-8 text-white text-center">
           <Sparkles className="w-12 h-12 mx-auto mb-4" />
           <Heading level={2} className="mb-4">
             {t('cta.title')}
           </Heading>
-          <p className="text-primary-100 mb-6 max-w-2xl mx-auto">
+          <p className="text-action-text mb-6 max-w-2xl mx-auto">
             {t('cta.subtitle')}
           </p>
           <Link
             href="/workshops/propose"
-            className="inline-flex items-center gap-2 bg-surface-base text-action px-6 py-3 rounded-lg font-semibold hover:bg-neutral-50 transition-colors"
+            className="inline-flex items-center gap-2 bg-surface-base text-action px-6 py-3 rounded-lg font-semibold hover:bg-surface-raised transition-colors"
           >
             {t('cta.button')}
             <ArrowRight className="w-5 h-5" />

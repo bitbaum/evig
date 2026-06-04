@@ -160,7 +160,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
         {/* Left: List */}
         <div className="space-y-4 order-1 lg:order-1">
           {/* RevampIT Store Card - Always visible */}
-          <div className="bg-surface-raised border-2 border-primary-300 dark:border-primary-500/30 rounded-xl p-5">
+          <div className="bg-surface-raised border-2 border-strong dark:border-action/30 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-2">
               <Store className="w-5 h-5 text-action" />
               <Heading level={4} className="font-semibold text-text-primary">{REVAMPIT_STORE.name}</Heading>
@@ -176,7 +176,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               href={REVAMPIT_STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 font-medium"
+              className="inline-flex items-center gap-1 text-sm text-action hover:text-action font-medium"
             >
               {t('planRoute')}
               <ExternalLink className="w-3 h-3" />
@@ -231,7 +231,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                       </div>
                       <div className="w-full bg-neutral-200 rounded-full h-1.5">
                         <div
-                          className="bg-primary-500 h-1.5 rounded-full transition-all"
+                          className="bg-action h-1.5 rounded-full transition-all"
                           style={{ width: `${matchPercentage}%` }}
                         />
                       </div>
@@ -242,7 +242,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                         {helper.matchReasons.slice(0, 3).map((reason, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action"
                           >
                             {reason}
                           </span>
@@ -263,7 +263,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                 <div className="text-center">
                   <Link
                     href={ROUTES.public.techniker}
-                    className="inline-flex items-center gap-2 text-action hover:text-primary-700 font-medium text-sm"
+                    className="inline-flex items-center gap-2 text-action hover:text-action font-medium text-sm"
                   >
                     {t('showAllTechnicians', { count: matches.length })}
                     <TrendingUp className="w-4 h-4" />
@@ -272,7 +272,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               )}
             </>
           ) : (
-            <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6 text-center">
+            <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
               <p className="text-sm text-text-secondary">
                 {t('noMatchesYet')}
               </p>

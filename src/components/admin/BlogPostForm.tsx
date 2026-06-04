@@ -50,7 +50,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.contentBlog}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -70,7 +70,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               <Link
                 href={ROUTES.public.blogPost(formData.slug)}
                 target="_blank"
-                className="inline-flex items-center gap-2 px-4 py-2 text-text-secondary hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
                 title="Veröffentlichten Artikel ansehen"
               >
                 <Eye className="w-4 h-4" />
@@ -112,7 +112,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
       )}
       {success && (
-        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg">
+        <div className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
           {success}
         </div>
       )}

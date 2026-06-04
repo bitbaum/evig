@@ -186,7 +186,7 @@ export function EditSubmissionModal({
           <Heading level={2} className="text-2xl">Einreichung bearbeiten</Heading>
           <button
             onClick={onClose}
-            className="text-text-tertiary hover:text-neutral-600 transition-colors"
+            className="text-text-tertiary hover:text-text-secondary transition-colors"
           >
             <X className="w-6 h-6" />
           </button>

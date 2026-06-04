@@ -64,7 +64,7 @@ export function IntakeCreateForm({
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <Heading level={2} className="text-lg font-semibold">Neues Gerät erfassen</Heading>
-        <button onClick={onCancel} className="text-text-tertiary hover:text-neutral-700">
+        <button onClick={onCancel} className="text-text-tertiary hover:text-text-secondary">
           <X className="w-5 h-5" />
         </button>
       </div>
@@ -80,8 +80,8 @@ export function IntakeCreateForm({
               onClick={() => setFormData(f => ({ ...f, intake_tier: opt.value }))}
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border hover:border-neutral-300'
+                  ? 'border-action bg-action-muted-muted'
+                  : 'border hover:border-strong'
               }`}
             >
               <div className="text-2xl mb-1">{opt.icon}</div>
@@ -97,9 +97,9 @@ export function IntakeCreateForm({
         <button
           type="button"
           onClick={() => setAiOpen(!aiOpen)}
-          className="w-full flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 text-left"
+          className="w-full flex items-center justify-between p-3 bg-action-muted-muted hover:bg-action-muted-muted text-left"
         >
-          <span className="text-sm font-medium text-primary-800 dark:text-primary-300 flex items-center gap-2">
+          <span className="text-sm font-medium text-action flex items-center gap-2">
             <Loader2 className="w-4 h-4" />
             KI-Schnelleingabe
           </span>
@@ -121,8 +121,8 @@ export function IntakeCreateForm({
                   onClick={() => setAiTab(tab.key)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px transition-colors ${
                     aiTab === tab.key
-                      ? 'border-primary-600 text-primary-700 font-medium'
-                      : 'border-transparent text-text-tertiary hover:text-neutral-700'
+                      ? 'border-action text-action font-medium'
+                      : 'border-transparent text-text-tertiary hover:text-text-secondary'
                   }`}
                 >
                   <tab.icon className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStartVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-primary-400 w-full justify-center text-sm text-text-secondary"
+                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-action w-full justify-center text-sm text-text-secondary"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme starten
@@ -177,7 +177,7 @@ export function IntakeCreateForm({
                   </button>
                 )}
                 {voiceState === 'processing' && (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg justify-center text-sm text-primary-700 dark:text-primary-300">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-action-muted-muted rounded-lg justify-center text-sm text-action">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Verarbeite Sprache...
                   </div>
@@ -285,7 +285,7 @@ export function IntakeCreateForm({
       )}
 
       {/* Donation Toggle */}
-      <div className="border rounded-lg p-4 bg-primary-50 dark:bg-primary-900/20">
+      <div className="border rounded-lg p-4 bg-action-muted-muted">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"

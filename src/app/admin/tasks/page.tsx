@@ -242,7 +242,7 @@ export default async function TasksAdminPage({
         <>
           <Link
             href={ROUTES.admin.tasksAnalytics}
-            className="px-4 py-2 text-sm text-text-secondary hover:text-neutral-900 border border hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary border border hover:border-strong rounded-lg transition-colors flex items-center gap-2"
           >
             <BarChart3 className="w-4 h-4" />
             Statistiken
@@ -360,12 +360,12 @@ export default async function TasksAdminPage({
             </thead>
             <tbody className="divide-y">
               {tasks.map((task) => (
-                <tr key={task.id} className="hover:bg-neutral-50">
+                <tr key={task.id} className="hover:bg-surface-raised">
                   <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
                     <div className="flex items-center gap-2 min-w-0">
                       <Link
                         href={ROUTES.admin.task(task.id)}
-                        className="font-medium text-text-primary hover:text-primary-600 truncate min-w-0 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-sm"
+                        className="font-medium text-text-primary hover:text-action truncate min-w-0 focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-1 rounded-sm"
                       >
                         {task.title}
                       </Link>
@@ -400,7 +400,7 @@ export default async function TasksAdminPage({
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-neutral-800'
+                        TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-text-primary'
                       }`}
                     >
                       {TASK_STATUS_LABELS[task.current_status]}
@@ -409,7 +409,7 @@ export default async function TasksAdminPage({
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-neutral-800'
+                        TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-text-primary'
                       }`}
                     >
                       {TASK_PRIORITY_LABELS[task.priority]}

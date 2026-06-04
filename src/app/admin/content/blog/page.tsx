@@ -194,13 +194,13 @@ export default async function AdminBlogPage() {
       <BlogListClient posts={posts} />
 
       {/* Info Banner */}
-      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
+      <div className="bg-surface-raised border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center shrink-0">
             <FileText className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
+            <Heading level={3} className="font-medium text-text-primary">
               Blog-Verwaltung
             </Heading>
             <p className="text-sm text-text-secondary mt-1 mb-3">

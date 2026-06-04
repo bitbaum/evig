@@ -43,7 +43,7 @@ export function ResponsiveHero({
 }: ResponsiveHeroProps) {
   const bgClasses = {
     green: cn(
-      'bg-primary-700',
+      'bg-action',
       getTextColor('primary', 'primary')
     ),
     blue: cn(
@@ -62,7 +62,7 @@ export function ResponsiveHero({
 
   const buttonClasses = {
     primary: cn(
-      'bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20',
+      'bg-surface-base text-action hover:bg-action-muted-muted',
       responsiveButtons.primary,
       'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),
@@ -74,7 +74,7 @@ export function ResponsiveHero({
       'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),
     outline: cn(
-      'bg-transparent border-2 border-white text-white hover:bg-white/20',
+      'bg-transparent border-2 border-white text-white hover:bg-surface-base/20',
       responsiveButtons.secondary,
       'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),
@@ -115,7 +115,7 @@ export function ResponsiveHero({
               backgroundColor === 'white' 
                 ? getTextColor('white', 'secondary')
                 : backgroundColor === 'green'
-                ? 'text-primary-100'
+                ? 'text-action-text'
                 : backgroundColor === 'blue'
                 ? 'text-neutral-200'
                 : 'text-neutral-200'
@@ -131,7 +131,7 @@ export function ResponsiveHero({
               backgroundColor === 'white' 
                 ? getTextColor('white', 'muted')
                 : backgroundColor === 'green'
-                ? 'text-primary-50'
+                ? 'text-action-text'
                 : backgroundColor === 'blue'
                 ? 'text-neutral-300'
                 : 'text-neutral-300'

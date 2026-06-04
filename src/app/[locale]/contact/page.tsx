@@ -68,15 +68,15 @@ export default async function ContactPage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {contactInfo.map((info, index) => (
-              <div key={index} className="bg-primary-50 dark:bg-primary-900/20 rounded-xl p-4 sm:p-6 text-center">
+              <div key={index} className="bg-action-muted-muted rounded-xl p-4 sm:p-6 text-center">
                 <div className="flex justify-center mb-3 sm:mb-4">
                   <info.icon className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
                 </div>
-                <Heading level={3} className="text-base sm:text-lg font-semibold text-primary-700 dark:text-primary-300 mb-2">{info.title}</Heading>
+                <Heading level={3} className="text-base sm:text-lg font-semibold text-action mb-2">{info.title}</Heading>
                 {info.link ? (
                   <a
                     href={info.link}
-                    className="text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
+                    className="text-text-secondary hover:text-action transition-colors duration-200"
                   >
                     {info.value}
                   </a>
@@ -135,9 +135,9 @@ export default async function ContactPage() {
               </div>
 
               {/* Explanation about map choices */}
-              <div className="mt-6 rounded-lg border dark:border-neutral-700 bg-surface-raised p-4 text-sm text-text-secondary max-w-2xl mx-auto">
+              <div className="mt-6 rounded-lg border bg-surface-raised p-4 text-sm text-text-secondary max-w-2xl mx-auto">
                 <div className="flex items-start gap-3">
-                  <Shield className="mt-0.5 w-4 h-4 text-primary-700 shrink-0" />
+                  <Shield className="mt-0.5 w-4 h-4 text-action shrink-0" />
                   <div>
                     <p className="font-medium text-text-primary mb-1">{t('map.mapChoiceTitle')}</p>
                     <p>
@@ -147,14 +147,14 @@ export default async function ContactPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border dark:border-neutral-700">
+              <div className="pt-4 border-t border">
                 <p className="text-text-secondary mb-3">{t('map.warehouseNote', { address: LOCATIONS.warehouse.full, note: LOCATIONS.warehouse.note })}</p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <a
                     href={WAREHOUSE_GOOGLE_MAPS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-sm text-action hover:text-primary-700"
+                    className="inline-flex items-center text-sm text-action hover:text-action"
                   >
                     <MapPin className="w-4 h-4 mr-1" /> {t('map.warehouseGoogleMaps')}
                   </a>
@@ -162,7 +162,7 @@ export default async function ContactPage() {
                     href={WAREHOUSE_OSM_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-sm text-action hover:text-primary-700"
+                    className="inline-flex items-center text-sm text-action hover:text-action"
                   >
                     <MapIcon className="w-4 h-4 mr-1" /> {t('map.warehouseOSM')}
                   </a>

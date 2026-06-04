@@ -70,7 +70,7 @@ export function ShopProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
                   />
                 </th>
               )}
@@ -100,7 +100,7 @@ export function ShopProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-primary-50 dark:bg-primary-900/20")}
+                className={cn("hover:bg-surface-raised", selectable && selectedIds.has(product.id) && "bg-action-muted-muted")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">
@@ -108,7 +108,7 @@ export function ShopProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
                     />
                   </td>
                 )}
@@ -196,14 +196,14 @@ export function ShopProductsTable({
                   <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => onView?.(product)}
-                      className="p-1 text-text-tertiary hover:text-neutral-600"
+                      className="p-1 text-text-tertiary hover:text-text-secondary"
                       title="Im Shop ansehen"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onEdit?.(product)}
-                      className="p-1 text-text-tertiary hover:text-neutral-600"
+                      className="p-1 text-text-tertiary hover:text-text-secondary"
                       title="Bearbeiten"
                     >
                       <Edit className="w-4 h-4" />

@@ -99,7 +99,7 @@ function Breadcrumbs({
         <li>
           <Link
             href="/"
-            className="hover:text-primary-600 transition-colors flex items-center gap-1"
+            className="hover:text-action transition-colors flex items-center gap-1"
           >
             <Home className="w-4 h-4" />
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
@@ -107,7 +107,7 @@ function Breadcrumbs({
         </li>
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <Link href={ROUTES.public.shop} className="hover:text-primary-600 transition-colors">
+          <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">
             {shopLabel}
           </Link>
         </li>
@@ -117,7 +117,7 @@ function Breadcrumbs({
             <li>
               <Link
                 href={getCategoryUrl(parent.slug)}
-                className="hover:text-primary-600 transition-colors"
+                className="hover:text-action transition-colors"
               >
                 {parent.name}
               </Link>
@@ -146,14 +146,14 @@ function SubcategoryCard({
   return (
     <Link
       href={getCategoryUrl(category.slug)}
-      className="group block p-4 card-shell hover:border-primary-300 transition-all"
+      className="group block p-4 card-shell hover:border-strong transition-all"
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-action flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
+        <div className="w-10 h-10 rounded-lg bg-action-muted-muted text-action flex items-center justify-center group-hover:bg-action group-hover:text-white transition-colors">
           <Package className="w-5 h-5" />
         </div>
         <div>
-          <Heading level={3} className="font-medium text-text-primary group-hover:text-primary-600 transition-colors">
+          <Heading level={3} className="font-medium text-text-primary group-hover:text-action transition-colors">
             {category.name}
           </Heading>
           {category.count !== undefined && (
@@ -188,7 +188,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-primary-700 text-white py-12 sm:py-16">
+      <section className="bg-action text-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             category={category}
@@ -199,11 +199,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <Heading level={1} className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             {category.name}
           </Heading>
-          <p className="text-lg text-primary-100 max-w-2xl">
+          <p className="text-lg text-action-text max-w-2xl">
             {t("category.heroSubtitle", { categoryNameLower: category.name.toLowerCase() })}
           </p>
           {category.count !== undefined && (
-            <p className="mt-4 text-primary-200">
+            <p className="mt-4 text-action-text">
               {t("category.productCount", { count: category.count })}
             </p>
           )}
@@ -239,7 +239,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </Heading>
               <Link
                 href={ROUTES.public.shop}
-                className="text-sm text-action hover:text-primary-700 font-medium flex items-center gap-1"
+                className="text-sm text-action hover:text-action font-medium flex items-center gap-1"
               >
                 {t("category.allShopOptions")}
                 <ChevronRight className="w-4 h-4" />
@@ -265,7 +265,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         ) : (
           <div className="card-shell p-8 text-center">
             <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-action flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-action-muted-muted text-action flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />
               </div>
               <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">

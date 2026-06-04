@@ -92,9 +92,9 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
       />
 
       {/* Panel */}
-      <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-surface-base dark:bg-neutral-800 z-50 shadow-2xl overflow-y-auto">
+      <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-surface-base z-50 shadow-2xl overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-surface-base dark:bg-neutral-800 border-b border dark:border-neutral-700 px-4 py-3 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-surface-base border-b border px-4 py-3 flex items-center justify-between z-10">
           <div>
             <Heading level={3} className="font-semibold text-text-primary">
               {localData.hersteller || 'Produkt'} {localData.produktname || t('editLabel')}
@@ -106,7 +106,7 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700"
+            className="p-2 rounded-lg hover:bg-surface-raised"
           >
             <X className="w-5 h-5" />
           </button>
@@ -140,7 +140,7 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
         </div>
 
         {/* Footer with apply button */}
-        <div className="sticky bottom-0 bg-surface-base dark:bg-neutral-800 border-t border dark:border-neutral-700 px-4 py-3 flex gap-3">
+        <div className="sticky bottom-0 bg-surface-base border-t border px-4 py-3 flex gap-3">
           <Button type="button" onClick={onClose} variant="outline" className="flex-1 py-2.5">
             {t('close')}
           </Button>

@@ -61,14 +61,14 @@ export default function SellerProfileEditPage() {
     <div className="max-w-2xl mx-auto">
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToDashboard')}
       </Link>
 
-      <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700">
-        <div className="p-6 border-b border-subtle dark:border-neutral-700">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+        <div className="p-6 border-b border-subtle">
           <Heading level={1} className="text-xl font-bold text-text-primary flex items-center gap-2">
             <User className="w-5 h-5 text-action" />
             {t('pageTitle')}
@@ -114,7 +114,7 @@ export default function SellerProfileEditPage() {
                   <img
                     src={avatarUrl}
                     alt={t('avatarAlt')}
-                    className="w-16 h-16 rounded-full object-cover border-2 border dark:border-neutral-600"
+                    className="w-16 h-16 rounded-full object-cover border-2 border"
                   />
                   <button
                     type="button"
@@ -125,11 +125,11 @@ export default function SellerProfileEditPage() {
                   </button>
                 </div>
               ) : (
-                <div className="w-16 h-16 rounded-full bg-surface-raised dark:bg-neutral-700 flex items-center justify-center border dark:border-neutral-600">
+                <div className="w-16 h-16 rounded-full bg-surface-raised flex items-center justify-center border">
                   <User className="w-6 h-6 text-text-tertiary" />
                 </div>
               )}
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
@@ -180,7 +180,7 @@ export default function SellerProfileEditPage() {
           </div>
         </div>
 
-        <div className="p-6 border-t border-subtle dark:border-neutral-700">
+        <div className="p-6 border-t border-subtle">
           {error && (
             <div className="mb-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-3 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-error-500 shrink-0" />
@@ -188,9 +188,9 @@ export default function SellerProfileEditPage() {
             </div>
           )}
           {success && (
-            <div className="mb-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-3 flex items-center gap-2">
+            <div className="mb-4 bg-action-muted-muted border border-strong rounded-lg p-3 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-action shrink-0" />
-              <p className="text-sm text-primary-800 dark:text-primary-200">{success}</p>
+              <p className="text-sm text-action-text">{success}</p>
             </div>
           )}
           <Button

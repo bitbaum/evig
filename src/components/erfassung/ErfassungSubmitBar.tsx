@@ -22,7 +22,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       <div className="hidden sm:flex justify-between items-center pt-4">
         <Link
           href={ROUTES.admin.products}
-          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-neutral-300 bg-surface-base hover:bg-neutral-50 text-text-primary"
+          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-neutral-300 bg-surface-base hover:bg-surface-raised text-text-primary"
         >
           {t('cancel')}
         </Link>
@@ -55,7 +55,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 type="button"
                 onClick={(e) => onSubmit(e, 'erfassen')}
                 disabled={isLoading}
-                variant="primary" className="gap-2 px-5 py-3 disabled:bg-primary-400"
+                variant="primary" className="gap-2 px-5 py-3 disabled:bg-action"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -82,7 +82,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       </div>
 
       {/* Mobile Sticky Bottom Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface-base dark:bg-neutral-800 border-t border dark:border-neutral-700 p-4 z-50 safe-area-inset-bottom">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface-base border-t border p-4 z-50 safe-area-inset-bottom">
         {isEditMode ? (
           <Button
             type="button"
@@ -122,7 +122,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               type="button"
               onClick={(e) => onSubmit(e, 'erfassen')}
               disabled={isLoading}
-              variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-primary-400"
+              variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-action"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

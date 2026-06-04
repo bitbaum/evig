@@ -15,7 +15,7 @@ interface Props {
 
 function getStatusIcon(status: string) {
   switch (status) {
-    case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-primary-500" />
+    case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-action" />
     case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-error-500" />
     case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-secondary-500" />
     default: return <Clock className="w-5 h-5 text-text-tertiary" />
@@ -65,7 +65,7 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
                 href={application.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-action hover:text-primary-700"
+                className="flex items-center gap-1 text-action hover:text-action"
               >
                 <ExternalLink className="w-4 h-4" />
                 Website

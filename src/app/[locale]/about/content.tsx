@@ -29,7 +29,7 @@ export default async function AboutContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-500/15 text-primary-800 dark:text-primary-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 bg-action-muted/15 text-action px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Target className="h-4 w-4" />
               {t('mission.badge')}
             </div>
@@ -53,7 +53,7 @@ export default async function AboutContent() {
                 />
               </div>
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-primary-600 text-white p-4 rounded-xl shadow-xs hidden md:block">
+              <div className="absolute -bottom-6 -right-6 bg-action text-white p-4 rounded-xl shadow-xs hidden md:block">
                 <p className="text-3xl font-bold">{yearsActive}+</p>
                 <p className="text-sm">{t('mission.yearsExperience')}</p>
               </div>
@@ -62,9 +62,9 @@ export default async function AboutContent() {
             {/* Content Column */}
             <div className="space-y-6">
               {/* Quote Box */}
-              <div className="bg-surface-raised border-l-4 border-primary-500 dark:border-primary-400 p-6 rounded-r-xl">
-                <Quote className="h-8 w-8 text-primary-500 mb-3" />
-                <p className="text-xl md:text-2xl font-medium text-neutral-800 italic">
+              <div className="bg-surface-raised border-l-4 border-action dark:border-action p-6 rounded-r-xl">
+                <Quote className="h-8 w-8 text-action mb-3" />
+                <p className="text-xl md:text-2xl font-medium text-text-primary italic">
                   &ldquo;{t('mission.quote')}&rdquo;
                 </p>
               </div>
@@ -96,8 +96,8 @@ export default async function AboutContent() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1 - Hardware Recycling */}
-            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300">
-              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-strong dark:hover:border-white/12 transition-all duration-300">
+              <div className="w-14 h-14 bg-action-muted/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-action group-hover:scale-110 transition-all duration-300">
                 <Recycle className="h-7 w-7 text-action group-hover:text-white transition-colors" />
               </div>
               <Heading level={3} className="text-xl font-bold text-text-primary mb-3">{t('impactAreas.hardware.title')}</Heading>
@@ -107,8 +107,8 @@ export default async function AboutContent() {
             </div>
 
             {/* Card 2 - Open Source */}
-            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300">
-              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-strong dark:hover:border-white/12 transition-all duration-300">
+              <div className="w-14 h-14 bg-action-muted/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-action group-hover:scale-110 transition-all duration-300">
                 <Code className="h-7 w-7 text-action group-hover:text-white transition-colors" />
               </div>
               <Heading level={3} className="text-xl font-bold text-text-primary mb-3">{t('impactAreas.openSource.title')}</Heading>
@@ -118,8 +118,8 @@ export default async function AboutContent() {
             </div>
 
             {/* Card 3 - Community */}
-            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300">
-              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-strong dark:hover:border-white/12 transition-all duration-300">
+              <div className="w-14 h-14 bg-action-muted/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-action group-hover:scale-110 transition-all duration-300">
                 <Users className="h-7 w-7 text-action group-hover:text-white transition-colors" />
               </div>
               <Heading level={3} className="text-xl font-bold text-text-primary mb-3">{t('impactAreas.community.title')}</Heading>
@@ -138,7 +138,7 @@ export default async function AboutContent() {
       <GeschichteSection />
 
       {/* Call to Action */}
-      <section className="py-20 bg-primary-600 text-white">
+      <section className="py-20 bg-action text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
           <Heading level={2} className="mb-6">{t('cta.title')}</Heading>
           <p className="text-xl mb-8">
@@ -146,7 +146,7 @@ export default async function AboutContent() {
           </p>
           <Link
             href="/get-involved"
-            className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-neutral-100 transition-colors"
+            className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors"
           >
             {t('cta.button')}
           </Link>

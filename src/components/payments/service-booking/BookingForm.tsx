@@ -134,7 +134,7 @@ function ServiceDetailsCard({
 
   return (
     <div className="p-4 bg-surface-raised rounded-lg">
-      <Heading level={3} className="font-semibold text-neutral-800 mb-2">{t('detailsHeading')}</Heading>
+      <Heading level={3} className="font-semibold text-text-primary mb-2">{t('detailsHeading')}</Heading>
       <div className="space-y-2 text-sm text-text-secondary">
         <p><strong>{t('detailService')}</strong> {service.name}</p>
         <p><strong>{t('detailPrice')}</strong> {selectedCurrency} {currentPricing.subtotal.toFixed(2)}</p>

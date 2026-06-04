@@ -27,7 +27,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
               <span className="w-6 text-center text-sm font-bold text-action">
                 {index + 1}.
               </span>
-              <span className="flex-1 text-sm font-medium text-neutral-800">{opt.label}</span>
+              <span className="flex-1 text-sm font-medium text-text-primary">{opt.label}</span>
               {opt.description && (
                 <span className="hidden text-xs text-text-muted sm:block">{opt.description}</span>
               )}
@@ -36,7 +36,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                   type="button"
                   onClick={() => onMoveUp(index)}
                   disabled={index === 0}
-                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-neutral-100 disabled:opacity-30"
+                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-surface-raised disabled:opacity-30"
                   title="Höher"
                 >
                   ↑
@@ -45,7 +45,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                   type="button"
                   onClick={() => onMoveDown(index)}
                   disabled={index === ranking.length - 1}
-                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-neutral-100 disabled:opacity-30"
+                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-surface-raised disabled:opacity-30"
                   title="Tiefer"
                 >
                   ↓

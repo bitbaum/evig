@@ -21,7 +21,7 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
             <article className="flex gap-4">
               {/* Thumbnail */}
               {post.featuredImage ? (
-                <div className="w-32 h-32 shrink-0 overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 relative">
+                <div className="w-32 h-32 shrink-0 overflow-hidden rounded-lg bg-neutral-200 relative">
                   <Image
                     src={post.featuredImage}
                     alt={post.title}
@@ -47,7 +47,7 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
                 )}
 
                 {/* Title */}
-                <Heading level={3} className="text-lg font-bold text-text-primary mb-2 leading-snug group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                <Heading level={3} className="text-lg font-bold text-text-primary mb-2 leading-snug group-hover:text-action dark:group-hover:text-action transition-colors line-clamp-2">
                   {post.title}
                 </Heading>
 

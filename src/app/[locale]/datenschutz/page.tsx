@@ -30,7 +30,7 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
-      <Heading level={1} className="mb-8 text-3xl dark:text-white">{t('title')}</Heading>
+      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
 
       <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('section1.title')}</Heading>
@@ -69,11 +69,11 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
         </ul>
         <p>
           {t('section7.downloadText')}{' '}
-          <Link href="/dashboard/settings" className="text-primary-700 underline">
+          <Link href="/dashboard/settings" className="text-action underline">
             {t('section7.settingsLinkLabel')}
           </Link>
           . {t('section7.contactText')}{' '}
-          <a href={`mailto:${CONTACT.email}`} className="text-primary-700 underline">{CONTACT.email}</a>
+          <a href={`mailto:${CONTACT.email}`} className="text-action underline">{CONTACT.email}</a>
         </p>
 
         <Heading level={2}>{t('section8.title')}</Heading>
@@ -85,7 +85,7 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
         <Heading level={2}>{t('section10.title')}</Heading>
         <p>
           {t('section10.body')}{' '}
-          <Link href="/impressum" className="text-primary-700 underline">{t('section10.impressumLinkLabel')}</Link>.
+          <Link href="/impressum" className="text-action underline">{t('section10.impressumLinkLabel')}</Link>.
         </p>
 
         <p className="mt-12 text-sm text-text-tertiary">{t('asOf')}</p>

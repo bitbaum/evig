@@ -52,7 +52,7 @@ export default function EditRequestPage() {
   if (authStatus === 'loading' || loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action" />
       </div>
     )
   }
@@ -72,7 +72,7 @@ export default function EditRequestPage() {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+          <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
           <Heading level={2} className="text-2xl text-text-primary mb-2">{t('savedTitle')}</Heading>
           <p className="text-text-secondary">{t('savedRedirect')}</p>
         </div>
@@ -86,7 +86,7 @@ export default function EditRequestPage() {
     <PageShell maxWidth="3xl">
         <Link
           href={`/it-hilfe/${id}`}
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backToRequest')}
@@ -94,7 +94,7 @@ export default function EditRequestPage() {
 
         <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+            <div className="p-2 bg-action-muted-muted rounded-lg">
               <Wrench className="w-6 h-6 text-action" />
             </div>
             <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
@@ -118,8 +118,8 @@ export default function EditRequestPage() {
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border hover:border-neutral-300'
+                        ? 'border-action bg-action-muted-muted'
+                        : 'border hover:border-strong'
                     }`}
                   >
                     <div className={`w-10 h-10 mx-auto mb-2 rounded-lg ${cat.color} flex items-center justify-center`}>

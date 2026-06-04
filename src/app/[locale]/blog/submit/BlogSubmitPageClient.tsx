@@ -42,7 +42,7 @@ export default function SubmitPostPage() {
       <div className="absolute top-4 left-4 sm:left-8">
         <Link
           href={ROUTES.public.blog}
-          className="inline-flex items-center text-text-secondary hover:text-neutral-900 transition-colors bg-surface-base px-4 py-2 rounded-lg"
+          className="inline-flex items-center text-text-secondary hover:text-text-primary transition-colors bg-surface-base px-4 py-2 rounded-lg"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t('backToBlog')}
@@ -57,14 +57,14 @@ export default function SubmitPostPage() {
         {hero}
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="card-shell rounded-lg p-12">
-            <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-6" />
+            <CheckCircle className="w-16 h-16 text-action mx-auto mb-6" />
             <Heading level={2} className="text-2xl text-text-primary mb-3">{t('successTitle')}</Heading>
             <p className="text-text-secondary text-lg mb-2">{t('successMessage')}</p>
             <p className="text-text-tertiary text-sm mb-8">{t('successEmailNote')}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center justify-center px-6 py-3 border border-primary-600 text-action rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors font-medium"
+                className="inline-flex items-center justify-center px-6 py-3 border border-action text-action rounded-lg hover:bg-action-muted-muted transition-colors font-medium"
               >
                 {t('submitAnotherButton')}
               </button>
@@ -95,7 +95,7 @@ export default function SubmitPostPage() {
                   key={type}
                   type="button"
                   onClick={() => setSubmissionType(type)}
-                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border hover:border-primary-300'}`}
+                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-action bg-action-muted-muted' : 'border hover:border-strong'}`}
                 >
                   {isIdea
                     ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-action' : 'text-text-muted'}`} />
@@ -226,7 +226,7 @@ export default function SubmitPostPage() {
           {/* Guidelines */}
           <div className="bg-surface-raised border rounded-lg p-4 mb-6">
             <Heading level={3} className="text-sm font-semibold text-text-primary mb-2">📋 {t('guidelinesTitle')}</Heading>
-            <ul className="text-sm text-neutral-800 space-y-1">
+            <ul className="text-sm text-text-primary space-y-1">
               <li>• {t('guidelineOriginal')}</li>
               <li>• {t('guidelineLanguage')}</li>
               <li>• {t('guidelineExamples')}</li>

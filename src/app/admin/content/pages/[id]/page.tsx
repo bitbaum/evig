@@ -66,7 +66,7 @@ export default function EditStaticPagePage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.contentPages}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -77,7 +77,7 @@ export default function EditStaticPagePage() {
           <Heading level={2} className="text-lg font-medium text-text-primary mb-2">{error}</Heading>
           <Link
             href={ROUTES.admin.contentPages}
-            className="inline-flex items-center text-action hover:text-primary-700 mt-4"
+            className="inline-flex items-center text-action hover:text-action mt-4"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Zurück zu Statische Seiten
@@ -94,7 +94,7 @@ export default function EditStaticPagePage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.contentPages}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
+            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -111,7 +111,7 @@ export default function EditStaticPagePage() {
           <Link
             href={`/${formData.slug}`}
             target="_blank"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg text-sm text-text-secondary hover:bg-neutral-50 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg text-sm text-text-secondary hover:bg-surface-raised transition-colors"
           >
             <Eye className="w-4 h-4" />
             Vorschau
@@ -127,9 +127,9 @@ export default function EditStaticPagePage() {
         </div>
       )}
       {success && (
-        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 flex items-center gap-2">
+        <div className="bg-action-muted-muted border border-strong rounded-lg p-4 flex items-center gap-2">
           <CheckCircle className="w-5 h-5 text-action shrink-0" />
-          <p className="text-primary-800 dark:text-primary-300">{success}</p>
+          <p className="text-action">{success}</p>
         </div>
       )}
 
@@ -148,7 +148,7 @@ export default function EditStaticPagePage() {
 
           <FormField label="URL-Slug" required>
             <div className="flex gap-2">
-              <div className="flex items-center px-3 bg-surface-raised dark:bg-neutral-700 border border-r-0 border-neutral-300 dark:border-neutral-600 rounded-l-lg text-sm text-text-tertiary">
+              <div className="flex items-center px-3 bg-surface-raised border border-r-0 border-neutral-300 rounded-l-lg text-sm text-text-tertiary">
                 /
               </div>
               <Input
@@ -161,7 +161,7 @@ export default function EditStaticPagePage() {
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-white/6 text-text-secondary"
+                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary"
               >
                 Generieren
               </button>
@@ -184,7 +184,7 @@ export default function EditStaticPagePage() {
               id="is_published"
               checked={formData.is_published}
               onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-              className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-primary-500"
+              className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-action"
             />
             <label htmlFor="is_published" className="text-sm font-medium text-text-secondary">
               Veröffentlicht
@@ -219,7 +219,7 @@ export default function EditStaticPagePage() {
         <div className="flex justify-end gap-3">
           <Link
             href={ROUTES.admin.contentPages}
-            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 transition-colors"
+            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
           >
             Abbrechen
           </Link>

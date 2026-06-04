@@ -142,7 +142,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
 
       {reviews.length > 5 && (
         <div className="mt-4 text-center">
-          <button className="text-action hover:text-primary-700 text-sm font-medium">
+          <button className="text-action hover:text-action text-sm font-medium">
             {t('showAll', { count: reviews.length })}
           </button>
         </div>

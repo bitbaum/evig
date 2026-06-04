@@ -65,9 +65,9 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
       {/* Panel */}
       <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-surface-base shadow-2xl flex flex-col animate-slide-in-right">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border bg-primary-700">
+        <div className="flex items-center justify-between px-4 py-3 border-b border bg-action">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-surface-base/20 flex items-center justify-center">
               <Brain className="w-4 h-4 text-white" />
             </div>
             <div>
@@ -81,7 +81,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
             <Link
               href={ROUTES.admin.hirn}
               onClick={onClose}
-              className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 text-white/80 hover:text-white hover:bg-surface-base/10 rounded-lg transition-colors"
               title={t('openFullscreen')}
             >
               <Maximize2 className="w-4 h-4" />
@@ -90,7 +90,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
             {/* Close button */}
             <button
               onClick={onClose}
-              className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 text-white/80 hover:text-white hover:bg-surface-base/10 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

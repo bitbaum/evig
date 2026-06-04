@@ -17,12 +17,12 @@ interface AboutSectionProps {
 
 export default function AboutSection({ section }: AboutSectionProps) {
   const bgClass = {
-    white: 'bg-white',
-    gray: 'bg-neutral-50'
+    white: 'bg-surface-base',
+    gray: 'bg-surface-raised'
   }[section.backgroundColor]
 
-  const textColorClass = 'text-neutral-900'
-  const textSecondaryClass = 'text-neutral-600'
+  const textColorClass = 'text-text-primary'
+  const textSecondaryClass = 'text-text-secondary'
 
   return (
     <section className={`py-20 ${bgClass}`}>
@@ -54,7 +54,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
                   key={index}
                   className={section.backgroundColor === 'gray'
                     ? 'card-shell p-8'
-                    : 'card-shell-inset rounded-2xl p-8 hover:border-neutral-300 transition-colors duration-300'
+                    : 'card-shell-inset rounded-2xl p-8 hover:border-strong transition-colors duration-300'
                   }
                 >
                   {/* Card Title */}
@@ -79,7 +79,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
                       <ul className="space-y-2">
                         {card.features.map((feature, i) => (
                           <li key={i} className="flex items-start">
-                            <CheckCircle className="w-5 h-5 mr-3 shrink-0 text-primary-500 mt-0.5" />
+                            <CheckCircle className="w-5 h-5 mr-3 shrink-0 text-action mt-0.5" />
                             <span className={textSecondaryClass}>{feature}</span>
                           </li>
                         ))}

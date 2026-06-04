@@ -146,7 +146,7 @@ export default function FavoritesPage() {
             return (
               <div
                 key={listing.id}
-                className="group bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700 overflow-hidden"
+                className="group bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden"
               >
                 <Link href={`/marketplace/${listing.id}`}>
                   <div className="relative aspect-4/3">
@@ -165,7 +165,7 @@ export default function FavoritesPage() {
                     )}
                   </div>
                   <div className="p-3">
-                    <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
+                    <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-action transition-colors">
                       {listing.title}
                     </Heading>
                     <p className="text-lg font-bold text-text-primary mb-1">

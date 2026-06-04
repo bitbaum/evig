@@ -33,7 +33,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-3 bg-surface-raised hover:bg-neutral-100 text-left"
+        className="w-full flex items-center justify-between p-3 bg-surface-raised hover:bg-surface-raised text-left"
       >
         <div className="flex items-center gap-2">
           {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -41,7 +41,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         </div>
         <span className={`text-xs px-2 py-0.5 rounded-full ${
           completedCount === group.items.length
-            ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+            ? 'bg-action-muted-muted text-action'
             : 'bg-neutral-200 text-text-secondary'
         }`}>
           {completedCount}/{group.items.length}
@@ -53,7 +53,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
           {group.items.map((item) => (
             <div
               key={item.id}
-              className={`p-3 transition-colors ${item.state.completed ? 'bg-primary-50 dark:bg-primary-900/20' : ''}`}
+              className={`p-3 transition-colors ${item.state.completed ? 'bg-action-muted-muted' : ''}`}
             >
               <div className="flex items-start gap-3">
                 {/* Checkbox */}
@@ -62,8 +62,8 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   onClick={() => onToggle(item.id, !item.state.completed)}
                   className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                     item.state.completed
-                      ? 'bg-primary-500 border-primary-500 text-white'
-                      : 'border-neutral-300 hover:border-primary-400'
+                      ? 'bg-action border-action text-white'
+                      : 'border-neutral-300 hover:border-action'
                   }`}
                   aria-label={item.state.completed ? `${item.label} rückgängig machen` : `${item.label} abhaken`}
                 >
@@ -97,7 +97,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           <button
                             type="button"
                             onClick={() => openNotes(item.id, item.state.notes)}
-                            className="text-xs text-text-muted hover:text-primary-600 flex items-center gap-0.5 transition-colors"
+                            className="text-xs text-text-muted hover:text-action flex items-center gap-0.5 transition-colors"
                           >
                             <StickyNote className="w-3 h-3" />
                             {item.state.notes ? 'Notiz bearbeiten' : 'Notiz hinzufügen'}
@@ -135,7 +135,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         <button
                           type="button"
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}
-                          className="text-xs px-2.5 py-1 border rounded-sm hover:bg-neutral-50 transition-colors"
+                          className="text-xs px-2.5 py-1 border rounded-sm hover:bg-surface-raised transition-colors"
                         >
                           Abbrechen
                         </button>

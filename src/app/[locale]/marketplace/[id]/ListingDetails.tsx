@@ -47,7 +47,7 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
           </Heading>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
             {listing.specs.filter(s => s.value).map(spec => (
-              <div key={spec.key} className="flex justify-between py-1.5 border-b border-subtle dark:border-neutral-700 last:border-0">
+              <div key={spec.key} className="flex justify-between py-1.5 border-b border-subtle last:border-0">
                 <span className="text-sm text-text-tertiary">{spec.key}</span>
                 <span className="text-sm font-medium text-text-primary">
                   {spec.value}{spec.unit ? ` ${spec.unit}` : ''}
@@ -60,7 +60,7 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
 
       {/* Verification Details */}
       {isVerified && (
-        <div className={`mt-6 rounded-xl p-6 border ${VERIFICATION_CONFIG.badge.borderColor} bg-primary-50 dark:bg-primary-900/10`}>
+        <div className={`mt-6 rounded-xl p-6 border ${VERIFICATION_CONFIG.badge.borderColor} bg-action-muted`}>
           <Heading level={2} className="text-lg text-text-primary mb-2 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-action" aria-hidden="true" />
             {VERIFICATION_CONFIG.badge.label}
@@ -85,7 +85,7 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
           <ul className="space-y-1.5">
             {conditionCriteria.map(c => (
               <li key={c.key} className="flex items-start gap-2 text-sm text-text-secondary">
-                <span className="text-primary-500 mt-0.5">&#10003;</span>
+                <span className="text-action mt-0.5">&#10003;</span>
                 {c.label}
               </li>
             ))}

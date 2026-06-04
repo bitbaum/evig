@@ -26,7 +26,7 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
             <Link
               key={sim.id}
               href={`/marketplace/${sim.id}`}
-              className="group card-shell overflow-hidden hover:border-neutral-300 transition-all focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="group card-shell overflow-hidden hover:border-strong transition-all focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
             >
               <div className="relative aspect-4/3">
                 <ListingImage src={sim.thumbnail} alt={sim.title} fallbackIconSize="w-10 h-10" />
@@ -37,7 +37,7 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
                 </div>
               </div>
               <div className="p-3">
-                <Heading level={3} className="text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
+                <Heading level={3} className="text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-action transition-colors">
                   {sim.title}
                 </Heading>
                 <p className="text-lg font-bold text-text-primary">

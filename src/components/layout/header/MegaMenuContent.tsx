@@ -105,13 +105,13 @@ function SingleColumnLayout({
           className={cn(
             "group flex items-center gap-3 px-4 py-3 rounded-xl",
             "transition-all duration-200",
-            "hover:bg-neutral-50 dark:hover:bg-white/4"
+            "hover:bg-surface-raised dark:hover:bg-surface-base/4"
           )}
           {...(subItem.external && { target: "_blank", rel: "noopener noreferrer" })}
         >
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-text-primary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <span className="font-medium text-text-primary group-hover:text-action dark:group-hover:text-action transition-colors">
                 {getLabel(subItem, t)}
               </span>
               <ItemBadge badge={subItem.badge} />
@@ -123,7 +123,7 @@ function SingleColumnLayout({
               </p>
             )}
           </div>
-          <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
+          <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
         </Link>
       ))}
     </div>
@@ -146,13 +146,13 @@ function MenuLink({
       className={cn(
         "group flex items-start gap-3 p-3 -mx-3 rounded-xl",
         "transition-all duration-200",
-        "hover:bg-neutral-50 dark:hover:bg-white/4"
+        "hover:bg-surface-raised dark:hover:bg-surface-base/4"
       )}
       {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-text-primary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+          <span className="font-medium text-text-primary group-hover:text-action dark:group-hover:text-action transition-colors">
             {getLabel(item, t)}
           </span>
           <ItemBadge badge={item.badge} />
@@ -164,7 +164,7 @@ function MenuLink({
           </p>
         )}
       </div>
-      <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 shrink-0" />
+      <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 shrink-0" />
     </Link>
   )
 }
@@ -173,7 +173,7 @@ function ItemBadge({ badge }: { badge?: string }) {
   if (!badge) return null
 
   return (
-    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded-full">
+    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-action-muted text-action/10 rounded-full">
       {badge}
     </span>
   )

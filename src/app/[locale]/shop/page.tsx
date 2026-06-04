@@ -53,10 +53,10 @@ export default async function ShopPage({ params }: ShopPageProps) {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Physical Store */}
-            <Card className="overflow-hidden border dark:border-neutral-700">
-              <CardHeader className="bg-primary-50 dark:bg-primary-900/20">
+            <Card className="overflow-hidden border">
+              <CardHeader className="bg-action-muted-muted">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary-600 text-white flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-action text-white flex items-center justify-center">
                     <Store className="w-5 h-5" />
                   </div>
                   <div>
@@ -67,7 +67,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 w-5 h-5 text-primary-700" />
+                  <MapPin className="mt-0.5 w-5 h-5 text-action" />
                   <div>
                     <p className="font-medium text-text-primary">{STORE_ADDRESS}</p>
                     <p className="text-sm text-text-secondary">
@@ -76,7 +76,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Clock className="mt-0.5 w-5 h-5 text-primary-700" />
+                  <Clock className="mt-0.5 w-5 h-5 text-action" />
                   <div>
                     <p className="font-medium text-text-primary">{t('page.store.openingHours')}</p>
                     <p className="text-sm text-text-secondary">
@@ -97,9 +97,9 @@ export default async function ShopPage({ params }: ShopPageProps) {
                     {t('page.store.contact')}
                   </Link>
                 </div>
-                <div className="mt-4 rounded-lg border dark:border-neutral-700 bg-surface-raised p-4 text-sm text-text-secondary">
+                <div className="mt-4 rounded-lg border bg-surface-raised p-4 text-sm text-text-secondary">
                   <div className="flex items-start gap-3">
-                    <Shield className="mt-0.5 w-4 h-4 text-primary-700" />
+                    <Shield className="mt-0.5 w-4 h-4 text-action" />
                     <div>
                       <p className="font-medium text-text-primary mb-1">{t('page.store.mapsInfoTitle')}</p>
                       <p>{t('page.store.mapsInfoBody')}</p>
@@ -110,10 +110,10 @@ export default async function ShopPage({ params }: ShopPageProps) {
             </Card>
 
             {/* Online Shops */}
-            <Card className="overflow-hidden border dark:border-neutral-700">
+            <Card className="overflow-hidden border">
               <CardHeader className="bg-surface-raised">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary-600 text-white flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-action text-white flex items-center justify-center">
                     <ShoppingCart className="w-5 h-5" />
                   </div>
                   <div>
@@ -138,9 +138,9 @@ export default async function ShopPage({ params }: ShopPageProps) {
                     <ShoppingCart className="w-4 h-4 mr-2" /> {t('page.online.onlineShop', { orgName: ORG.name })}
                   </Link>
                 </div>
-                <div className="mt-4 rounded-lg border dark:border-neutral-700 bg-surface-raised p-4 text-sm text-text-secondary">
+                <div className="mt-4 rounded-lg border bg-surface-raised p-4 text-sm text-text-secondary">
                   <div className="flex items-start gap-3">
-                    <Shield className="mt-0.5 w-4 h-4 text-text-secondary dark:text-neutral-400" />
+                    <Shield className="mt-0.5 w-4 h-4 text-text-secondary dark:text-text-muted" />
                     <div>
                       <p className="font-medium text-text-primary mb-1">{t('page.online.multiShopTitle')}</p>
                       <p>{t('page.online.multiShopBody', { orgName: ORG.name })}</p>
@@ -157,7 +157,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
           Kept visually secondary to the two shop cards above so people who
           DID come to buy aren't distracted; people who came to give or who
           can't afford the shop find their path on the same page. */}
-      <section className="py-12 sm:py-16 bg-surface-raised dark:bg-neutral-950 border-t border" aria-label={t('page.otherPaths.altTitle')}>
+      <section className="py-12 sm:py-16 bg-surface-raised border-t border" aria-label={t('page.otherPaths.altTitle')}>
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
           <div className="text-center mb-8 sm:mb-10">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-text-primary mb-2">
@@ -171,13 +171,13 @@ export default async function ShopPage({ params }: ShopPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <Link
               href="/get-involved/donate"
-              className="group flex gap-3 sm:gap-4 p-5 rounded-xl border bg-surface-base hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+              className="group flex gap-3 sm:gap-4 p-5 rounded-xl border bg-surface-base hover:border-strong transition-colors"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-action-muted/15">
                 <Heart className="h-5 w-5 text-action" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-base font-semibold text-text-primary mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                <h3 className="text-base font-semibold text-text-primary mb-1 group-hover:text-action dark:group-hover:text-action transition-colors">
                   {t('page.otherPaths.donateTitle')}
                 </h3>
                 <p className="text-sm text-text-secondary mb-2">
@@ -191,13 +191,13 @@ export default async function ShopPage({ params }: ShopPageProps) {
 
             <Link
               href="/projects/compirat"
-              className="group flex gap-3 sm:gap-4 p-5 rounded-xl border bg-surface-base hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+              className="group flex gap-3 sm:gap-4 p-5 rounded-xl border bg-surface-base hover:border-strong transition-colors"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-action-muted/15">
                 <HandHelping className="h-5 w-5 text-action" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-base font-semibold text-text-primary mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                <h3 className="text-base font-semibold text-text-primary mb-1 group-hover:text-action dark:group-hover:text-action transition-colors">
                   {t('page.otherPaths.needTitle')}
                 </h3>
                 <p className="text-sm text-text-secondary mb-2">

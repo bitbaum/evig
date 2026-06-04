@@ -106,10 +106,10 @@ function MessagesContent() {
           }
         />
       ) : (
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border dark:border-neutral-700 overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
+        <div className="bg-surface-base rounded-xl shadow-xs border overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
           <div className="flex h-full">
             {/* Conversation list — hidden on mobile when thread is open */}
-            <div className={`w-full lg:w-80 lg:border-r border dark:border-neutral-700 overflow-y-auto shrink-0 ${
+            <div className={`w-full lg:w-80 lg:border-r border overflow-y-auto shrink-0 ${
               selectedConvId ? 'hidden lg:block' : 'block'
             }`}>
               <ConversationList

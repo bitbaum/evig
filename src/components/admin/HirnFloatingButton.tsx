@@ -25,7 +25,7 @@ export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-primary-700 hover:bg-primary-600 shadow-lg transition-all hover:scale-105 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-action hover:bg-action shadow-lg transition-all hover:scale-105 flex items-center justify-center group"
         title="Hirn AI öffnen"
       >
         <Brain className="w-6 h-6 text-white" />

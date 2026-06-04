@@ -133,7 +133,7 @@ export default async function TransparenzPage() {
             Statt Probleme durch Analogie zu lösen (&quot;so haben wir es immer gemacht&quot;),
             zerlegen wir sie in ihre fundamentalen Bestandteile und bauen von dort neu auf.
           </p>
-          <div className="p-4 bg-surface-raised dark:bg-neutral-800/50 border-l-4 border-neutral-400 rounded-sm">
+          <div className="p-4 bg-surface-raised border-l-4 border-neutral-400 rounded-sm">
             <p className="text-sm italic">
               &quot;Vom Grundprinzip zur Lösung – für Menschen und AI.&quot;
             </p>
@@ -153,7 +153,7 @@ export default async function TransparenzPage() {
               <ul className="space-y-2">
                 {principle.examples.map((example, idx) => (
                   <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-primary-500">✓</span>
+                    <span className="text-action">✓</span>
                     {example}
                   </li>
                 ))}
@@ -191,7 +191,7 @@ export default async function TransparenzPage() {
                     <td className="py-2 px-4 font-medium">{source.name}</td>
                     <td className="py-2 px-4 text-muted-foreground">{source.type}</td>
                     <td className="py-2 px-4">
-                      <code className="bg-surface-raised dark:bg-neutral-900 px-2 py-1 rounded-sm text-sm">
+                      <code className="bg-surface-raised px-2 py-1 rounded-sm text-sm">
                         {source.format}
                       </code>
                     </td>
@@ -214,20 +214,20 @@ export default async function TransparenzPage() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-4">
-            Die vollständige Hirn-Dokumentation befindet sich im <code className="bg-surface-raised dark:bg-neutral-900 px-2 py-1 rounded-sm">docs/hirn/</code> Verzeichnis
+            Die vollständige Hirn-Dokumentation befindet sich im <code className="bg-surface-raised px-2 py-1 rounded-sm">docs/hirn/</code> Verzeichnis
             und enthält:
           </p>
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2">
-              <span className="text-primary-500">✓</span>
+              <span className="text-action">✓</span>
               CLAUDE.md – Entwicklungsrichtlinien für AI-Agenten
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-primary-500">✓</span>
+              <span className="text-action">✓</span>
               Knowledge Graph und Glossar
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-primary-500">✓</span>
+              <span className="text-action">✓</span>
               First Principles Templates für neue Bereiche
             </li>
           </ul>

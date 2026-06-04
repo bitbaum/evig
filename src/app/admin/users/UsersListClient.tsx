@@ -78,7 +78,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
           {hasActiveFilters && (
             <button
               onClick={resetFilters}
-              className="text-action hover:text-primary-700 text-sm"
+              className="text-action hover:text-action text-sm"
             >
               Filter zurücksetzen
             </button>
@@ -95,7 +95,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
             </p>
             <button
               onClick={fetchUsers}
-              className="flex items-center gap-1 text-sm text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300"
+              className="flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren

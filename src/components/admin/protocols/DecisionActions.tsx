@@ -235,8 +235,8 @@ export default function DecisionActions({
               disabled={loading === 'vote'}
               className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'up'
-                  ? 'bg-primary-100 dark:bg-primary-900/30 border-primary-300 text-primary-800 dark:text-primary-300'
-                  : 'bg-surface-base border text-text-secondary hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-200'
+                  ? 'bg-action-muted-muted border-strong text-action'
+                  : 'bg-surface-base border text-text-secondary hover:bg-action-muted-muted hover:border-strong'
               } disabled:opacity-50`}
             >
               {loading === 'vote' ? (
@@ -270,7 +270,7 @@ export default function DecisionActions({
             <button
               onClick={handleClose}
               disabled={loading === 'close'}
-              className="text-xs text-text-tertiary hover:text-neutral-700 underline disabled:opacity-50"
+              className="text-xs text-text-tertiary hover:text-text-secondary underline disabled:opacity-50"
             >
               {loading === 'close' ? (
                 <Loader2 className="w-3 h-3 animate-spin inline mr-1" />
@@ -307,7 +307,7 @@ export default function DecisionActions({
               <button
                 onClick={handlePropose}
                 disabled={loading === 'propose'}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 border border-primary-200 rounded-md hover:bg-primary-100 dark:hover:bg-primary-900/30 disabled:opacity-50"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-action-muted-muted text-action border border-strong rounded-md hover:bg-action-muted-muted disabled:opacity-50"
               >
                 {loading === 'propose' ? (
                   <Loader2 className="w-3 h-3 animate-spin" />

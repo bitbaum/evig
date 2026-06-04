@@ -148,7 +148,7 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
           </div>
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Nachricht</dt>
-            <dd className="text-sm text-text-secondary mt-0.5 whitespace-pre-wrap bg-surface-raised rounded-lg p-3 border-l-2 border-primary-500">
+            <dd className="text-sm text-text-secondary mt-0.5 whitespace-pre-wrap bg-surface-raised rounded-lg p-3 border-l-2 border-action">
               {offerDisplay.offer_message}
             </dd>
           </div>

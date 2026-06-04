@@ -125,7 +125,7 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         onClick={handleOpen}
-        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors"
+        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors"
         aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
       >
         <Bell className="w-5 h-5 text-text-secondary" />
@@ -153,7 +153,7 @@ export function NotificationBell() {
                 <button
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-white/6 dark:hover:text-neutral-200"
+                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-surface-raised hover:text-text-secondary dark:hover:bg-surface-base/6"
                   title="Alle als gelesen markieren"
                 >
                   <Check className="w-3 h-3" />
@@ -162,7 +162,7 @@ export function NotificationBell() {
               )}
               <button
                 onClick={() => setOpen(false)}
-                className="rounded-md p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-white/6"
+                className="rounded-md p-1 transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 <X className="w-4 h-4 text-text-tertiary" />
               </button>
@@ -176,7 +176,7 @@ export function NotificationBell() {
                 <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
                 <button
                   onClick={() => void fetchNotifications()}
-                  className="text-xs text-primary-500 hover:text-primary-700 dark:hover:text-primary-400"
+                  className="text-xs text-action hover:text-action"
                 >
                   Erneut versuchen
                 </button>
@@ -187,7 +187,7 @@ export function NotificationBell() {
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
-                <Bell className="w-8 h-8 text-neutral-200 dark:text-neutral-600 mx-auto mb-2" />
+                <Bell className="w-8 h-8 text-neutral-200 dark:text-text-secondary mx-auto mb-2" />
                 <p className="text-sm text-text-tertiary">Keine Benachrichtigungen</p>
               </div>
             ) : (
@@ -197,13 +197,13 @@ export function NotificationBell() {
                   <button
                     key={n.id}
                     onClick={() => void markOneRead(n)}
-                    className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors ${
-                      !n.is_read ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''
+                    className={`w-full text-left px-4 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors ${
+                      !n.is_read ? 'bg-action-muted/50' : ''
                     }`}
                   >
                     <div className="flex items-start gap-2">
                       {!n.is_read && (
-                        <span className="mt-1.5 shrink-0 w-2 h-2 rounded-full bg-primary-500" />
+                        <span className="mt-1.5 shrink-0 w-2 h-2 rounded-full bg-action" />
                       )}
                       <div className={!n.is_read ? '' : 'pl-4'}>
                         <p className={`text-sm leading-snug ${
@@ -221,7 +221,7 @@ export function NotificationBell() {
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (
-                            <span className="text-xs text-primary-500">Öffnen →</span>
+                            <span className="text-xs text-action">Öffnen →</span>
                           )}
                         </div>
                       </div>

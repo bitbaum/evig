@@ -42,12 +42,12 @@ export function OffersList({
             <div
               key={offer.id}
               className={`p-4 rounded-lg border ${
-                isAccepted ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20' : 'border'
+                isAccepted ? 'border-strong bg-action-muted-muted' : 'border'
               }`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-primary-100 dark:bg-primary-900/30' : 'bg-neutral-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-action-muted-muted' : 'bg-neutral-200'}`}>
                     {offer.repairerProfile ? (
                       <Wrench className="w-5 h-5 text-action" aria-hidden="true" />
                     ) : (
@@ -65,7 +65,7 @@ export function OffersList({
                       <div className="flex items-center gap-2 text-sm">
                         <Link
                           href={`/techniker/${offer.repairerProfile.id}`}
-                          className="text-action hover:text-primary-700 font-medium"
+                          className="text-action hover:text-action font-medium"
                         >
                           {offer.repairerProfile.businessName || t('technicianProfileFallback')}
                         </Link>

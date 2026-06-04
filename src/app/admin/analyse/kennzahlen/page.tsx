@@ -133,7 +133,7 @@ export default async function KennzahlenPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+          <div className="p-2 bg-action-muted-muted rounded-lg">
             <TrendingUp className="w-6 h-6 text-action" />
           </div>
           <div>
@@ -155,7 +155,7 @@ export default async function KennzahlenPage() {
 
       {/* Year Context */}
       {latestYear && (
-        <div className="p-3 bg-surface-raised dark:bg-neutral-800/50 border border rounded-lg text-sm text-text-secondary">
+        <div className="p-3 bg-surface-raised border border rounded-lg text-sm text-text-secondary">
           Finanzielle Kennzahlen für <strong>{latestYear}</strong>
           {previousYear && (
             <span> (Vergleich mit {previousYear})</span>
@@ -233,7 +233,7 @@ export default async function KennzahlenPage() {
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+            <div className="p-4 bg-surface-raised rounded-lg">
               <div className="font-medium text-action">Automatisch</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Kivitendo-Export (Finanzen)
@@ -242,7 +242,7 @@ export default async function KennzahlenPage() {
                 Monatlich aktualisiert
               </div>
             </div>
-            <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+            <div className="p-4 bg-surface-raised rounded-lg">
               <div className="font-medium text-text-secondary">Berechnet</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Abgeleitet aus anderen Metriken
@@ -251,7 +251,7 @@ export default async function KennzahlenPage() {
                 Bei Datenänderung neu berechnet
               </div>
             </div>
-            <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+            <div className="p-4 bg-surface-raised rounded-lg">
               <div className="font-medium text-warning-600">Manuell</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Manuelle Dateneingabe erforderlich

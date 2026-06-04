@@ -105,7 +105,7 @@ function Breadcrumbs({
         <li>
           <Link
             href="/"
-            className="hover:text-primary-600 transition-colors flex items-center gap-1"
+            className="hover:text-action transition-colors flex items-center gap-1"
           >
             <Home className="w-4 h-4" />
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
@@ -113,7 +113,7 @@ function Breadcrumbs({
         </li>
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <Link href={ROUTES.public.shop} className="hover:text-primary-600 transition-colors">
+          <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">
             {shopLabel}
           </Link>
         </li>
@@ -154,7 +154,7 @@ function SearchResults({
     return (
       <div className="card-shell p-8 text-center">
         <div className="max-w-md mx-auto">
-          <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-action flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-full bg-action-muted-muted text-action flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8" />
           </div>
           <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">
@@ -214,7 +214,7 @@ function NoQueryState({
             <Link
               key={search.slug}
               href={getSearchUrl(search.name)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-neutral-800 border dark:border-neutral-700 rounded-full text-sm font-medium text-text-secondary hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base border rounded-full text-sm font-medium text-text-secondary hover:bg-action-muted-muted hover:border-strong dark:hover:border-action hover:text-action transition-colors"
             >
               <Search className="w-4 h-4" />
               {search.name}
@@ -233,13 +233,13 @@ function NoQueryState({
             <Link
               key={category.slug}
               href={getCategoryUrl(category.slug)}
-              className="flex items-center gap-3 p-4 card-shell hover:border-primary-300 transition-all group"
+              className="flex items-center gap-3 p-4 card-shell hover:border-strong transition-all group"
             >
-              <div className="w-10 h-10 rounded-lg bg-surface-raised dark:bg-neutral-700 text-text-secondary flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-surface-raised text-text-secondary flex items-center justify-center group-hover:bg-action-muted dark:group-hover:bg-action-muted group-hover:text-action transition-colors">
                 <Package className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-text-primary truncate group-hover:text-primary-600 transition-colors">
+                <p className="font-medium text-text-primary truncate group-hover:text-action transition-colors">
                   {category.name}
                 </p>
                 {category.count !== undefined && (
@@ -248,14 +248,14 @@ function NoQueryState({
                   </p>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 transition-colors" />
+              <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-text-secondary group-hover:text-action transition-colors" />
             </Link>
           ))}
         </div>
         <div className="mt-4 text-center">
           <Link
             href={ROUTES.public.shop}
-            className="text-action hover:text-primary-700 font-medium"
+            className="text-action hover:text-action font-medium"
           >
             {allCategoriesLabel}
           </Link>
@@ -280,7 +280,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-primary-700 text-white py-12 sm:py-16">
+      <section className="bg-action text-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             query={query}

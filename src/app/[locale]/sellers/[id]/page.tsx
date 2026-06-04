@@ -111,7 +111,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         <Heading level={2} className="text-xl text-text-primary mb-2">
           {error || t('seller.sellerNotFound')}
         </Heading>
-        <Link href={ROUTES.public.marketplace} className="text-action hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplace} className="text-action hover:text-action font-medium">
           {t('seller.backToMarketplace')}
         </Link>
       </div>
@@ -126,7 +126,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     <div className="max-w-6xl mx-auto">
       <Link
         href={ROUTES.public.marketplace}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('seller.backToMarketplace')}
@@ -135,7 +135,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       {/* Seller Header */}
       <div className="card-shell p-6 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center shrink-0">
+          <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center shrink-0">
             {seller.avatar_url ? (
               <Image src={seller.avatar_url} alt={displayName} width={64} height={64} className="w-16 h-16 rounded-full object-cover" />
             ) : (
@@ -163,7 +163,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-subtle dark:border-neutral-700">
+        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-subtle">
           <div className="text-center">
             <div className="text-2xl font-bold text-text-primary">
               {seller.total_listings}
@@ -215,7 +215,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 <Link
                   key={listing.id}
                   href={ROUTES.public.marketplaceListing(listing.id)}
-                  className="group card-shell overflow-hidden hover:border-neutral-300 transition-all"
+                  className="group card-shell overflow-hidden hover:border-strong transition-all"
                 >
                   <div className="relative aspect-4/3">
                     {listing.thumbnail ? (
@@ -225,8 +225,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-surface-raised dark:bg-neutral-700 flex items-center justify-center">
-                        <Package className="w-12 h-12 text-neutral-300 dark:text-neutral-500" />
+                      <div className="w-full h-full bg-surface-raised flex items-center justify-center">
+                        <Package className="w-12 h-12 text-neutral-300 dark:text-text-tertiary" />
                       </div>
                     )}
                     <div className="absolute top-2 left-2">
@@ -236,7 +236,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
                   <div className="p-3">
-                    <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
+                    <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-action transition-colors">
                       {listing.title}
                     </Heading>
                     <p className="text-lg font-bold text-text-primary">

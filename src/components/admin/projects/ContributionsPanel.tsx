@@ -45,7 +45,7 @@ const STATUS_BADGE: Record<ContributionStatus, string> = {
   new:       'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   contacted: 'bg-info-100 text-info-800 dark:bg-info-500/15 dark:text-info-400',
   accepted:  'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
-  declined:  'bg-surface-raised text-text-secondary dark:bg-white/6 dark:text-neutral-400',
+  declined:  'bg-surface-raised text-text-secondary dark:bg-surface-base/6 dark:text-text-muted',
 }
 
 export function ContributionsPanel({ slug, initialContributions, needs }: Props) {
@@ -125,7 +125,7 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-tertiary w-full sm:w-auto">
-                    <a href={`mailto:${c.email}`} className="inline-flex items-center gap-1 hover:text-primary-600 break-all">
+                    <a href={`mailto:${c.email}`} className="inline-flex items-center gap-1 hover:text-action break-all">
                       <Mail className="h-3.5 w-3.5 shrink-0" /> {c.email}
                     </a>
                     {c.phone && (
@@ -137,7 +137,7 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                   </div>
                 </div>
 
-                <div className="rounded-sm bg-surface-raised dark:bg-white/3 border border-subtle p-3 text-sm text-text-secondary whitespace-pre-wrap mb-3 wrap-break-word">
+                <div className="rounded-sm bg-surface-raised dark:bg-surface-base/3 border border-subtle p-3 text-sm text-text-secondary whitespace-pre-wrap mb-3 wrap-break-word">
                   {c.message}
                 </div>
 

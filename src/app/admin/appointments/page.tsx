@@ -79,7 +79,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
       color: 'green',
       label: 'Heute erledigt',
       value: stats.completed_today,
-      valueColor: 'text-primary-600',
+      valueColor: 'text-action',
     },
   ]
 

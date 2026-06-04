@@ -42,7 +42,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
   if (conversations.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <MessageSquare className="w-12 h-12 text-neutral-300 dark:text-neutral-600 mb-3" aria-hidden="true" />
+        <MessageSquare className="w-12 h-12 text-neutral-300 dark:text-text-secondary mb-3" aria-hidden="true" />
         <p className="text-text-tertiary font-medium">{t('emptyTitle')}</p>
         <p className="text-sm text-text-muted mt-1">
           {t('emptyDesc')}
@@ -57,14 +57,14 @@ export default function ConversationList({ conversations, selectedId, onSelect }
         <button
           key={conv.id}
           onClick={() => onSelect(conv.id)}
-          className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-primary-500 ${
+          className={`w-full text-left px-4 py-3 hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-action ${
             selectedId === conv.id
-              ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-primary-500'
+              ? 'bg-action-muted-muted border-l-2 border-action'
               : ''
           }`}
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 bg-surface-raised rounded-full flex items-center justify-center shrink-0">
               <User className="w-5 h-5 text-text-muted" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
@@ -83,13 +83,13 @@ export default function ConversationList({ conversations, selectedId, onSelect }
               <div className="flex items-center justify-between mt-0.5">
                 <p className={`text-sm truncate ${
                   conv.unread_count > 0
-                    ? 'text-neutral-800 dark:text-neutral-200'
+                    ? 'text-text-primary'
                     : 'text-text-tertiary'
                 }`}>
                   {conv.last_message_preview || t('noMessage')}
                 </p>
                 {conv.unread_count > 0 && (
-                  <span className="ml-2 shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-primary-500 rounded-full">
+                  <span className="ml-2 shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-action rounded-full">
                     {conv.unread_count}
                   </span>
                 )}

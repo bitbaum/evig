@@ -23,10 +23,10 @@ const URGENCY_CONFIG = {
     badge: 'bg-warning-100 text-warning-700 dark:bg-warning-900/40 dark:text-warning-300',
   },
   success: {
-    dot: 'bg-primary-500',
+    dot: 'bg-action',
     label: 'Info',
-    ageText: 'text-primary-700 dark:text-primary-400',
-    badge: 'bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300',
+    ageText: 'text-action',
+    badge: 'bg-action-muted text-action',
   },
 } as const
 
@@ -45,7 +45,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
       <div className="p-4">
         {items.length === 0 ? (
           <div className="flex items-center gap-3 text-action">
-            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-action-muted-muted flex items-center justify-center shrink-0">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
             <span className="font-medium">Alles erledigt — keine offenen Aufgaben.</span>
@@ -62,7 +62,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                   <Link
                     href={item.href}
                     aria-label={ariaLabel}
-                    className="flex items-center justify-between gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors group"
+                    className="flex items-center justify-between gap-3 p-3 rounded-lg bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors group"
                   >
                     {/* Left: dot + text */}
                     <div className="flex items-start gap-3 min-w-0">
@@ -98,7 +98,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                           {item.count > 99 ? '99+' : item.count}
                         </span>
                       )}
-                      <span className="flex items-center gap-1 text-sm text-text-tertiary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      <span className="flex items-center gap-1 text-sm text-text-tertiary group-hover:text-action dark:group-hover:text-action transition-colors">
                         {item.actionLabel}
                         <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </span>

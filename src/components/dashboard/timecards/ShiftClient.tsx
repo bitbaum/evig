@@ -230,20 +230,20 @@ export function ShiftClient({
 
       {/* Hero: start / running / submitted */}
       {active ? (
-        <div className="rounded-2xl border border-primary-200 dark:border-primary-500/30 bg-primary-50 dark:bg-primary-500/10 p-6 sm:p-8">
-          <div className="flex items-center gap-2 text-primary-700 dark:text-primary-300 text-sm font-medium mb-2">
+        <div className="rounded-2xl border border-strong dark:border-action/30 bg-action-muted/10 p-6 sm:p-8">
+          <div className="flex items-center gap-2 text-action text-sm font-medium mb-2">
             <Clock className="w-4 h-4" /> Schicht läuft
           </div>
-          <div className="text-5xl sm:text-6xl font-bold text-primary-900 dark:text-primary-100 tabular-nums tracking-tight">
+          <div className="text-5xl sm:text-6xl font-bold text-action-text tabular-nums tracking-tight">
             {elapsedLabel}
           </div>
-          <p className="mt-2 text-sm text-primary-700 dark:text-primary-300">
+          <p className="mt-2 text-sm text-action">
             Start {hhmm(new Date(active.startedAt))} Uhr · {TIMECARD_ENTRY_CATEGORY_LABELS[active.category]}
           </p>
 
           <div className="mt-6 space-y-3">
             <label className="block">
-              <span className="block text-xs font-medium text-primary-900 dark:text-primary-200 mb-1">
+              <span className="block text-xs font-medium text-action-text mb-1">
                 Optional: Was machst du?
               </span>
               <Input
@@ -267,7 +267,7 @@ export function ShiftClient({
               <button
                 onClick={handleCancel}
                 disabled={submitting}
-                className="px-4 py-3 rounded-lg border border-primary-300 dark:border-primary-500/40 text-primary-700 dark:text-primary-200 text-base font-medium hover:bg-primary-100 dark:hover:bg-primary-500/20 transition-colors disabled:opacity-60"
+                className="px-4 py-3 rounded-lg border border-strong dark:border-action/40 text-action-text text-base font-medium hover:bg-action-muted/20 transition-colors disabled:opacity-60"
               >
                 Abbrechen
               </button>

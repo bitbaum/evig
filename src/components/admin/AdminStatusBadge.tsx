@@ -12,7 +12,7 @@ interface AdminStatusBadgeProps {
 export function AdminStatusBadge({
   status,
   config,
-  fallbackColor = 'bg-surface-raised text-neutral-800',
+  fallbackColor = 'bg-surface-raised text-text-primary',
 }: AdminStatusBadgeProps) {
   const entry = config[status]
   const label = entry?.label ?? status

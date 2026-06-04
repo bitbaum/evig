@@ -9,14 +9,14 @@ interface ProjectCallToActionProps {
 
 export function ProjectCallToAction({ cta }: ProjectCallToActionProps) {
   return (
-    <section className="bg-primary-700 py-16 sm:py-20">
+    <section className="bg-action py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-3">
             {cta.title}
           </h2>
           {cta.subtitle && (
-            <p className="text-base sm:text-lg text-primary-100 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-action-text max-w-2xl mx-auto">
               {cta.subtitle}
             </p>
           )}
@@ -29,11 +29,11 @@ export function ProjectCallToAction({ cta }: ProjectCallToActionProps) {
           'max-w-sm mx-auto'
         )}>
           {cta.actions.map((action, i) => (
-            <div key={i} className="flex flex-col rounded-lg bg-white/10 p-6">
+            <div key={i} className="flex flex-col rounded-lg bg-surface-base/10 p-6">
               <h3 className="text-base font-semibold text-white mb-2">
                 {action.title}
               </h3>
-              <p className="text-sm text-primary-100 grow mb-5">
+              <p className="text-sm text-action-text grow mb-5">
                 {action.description}
               </p>
               {action.href.startsWith('http') ? (

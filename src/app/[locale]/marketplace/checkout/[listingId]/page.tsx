@@ -60,7 +60,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" />
         <Heading level={2} className="text-xl text-text-primary mb-2">{error}</Heading>
-        <Link href={ROUTES.public.marketplace} className="text-action hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplace} className="text-action hover:text-action font-medium">
           {t('backToMarketplace')}
         </Link>
       </div>
@@ -79,7 +79,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         <p className="text-text-secondary mb-4">
           {t('ownListingDesc')}
         </p>
-        <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-action hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-action hover:text-action font-medium">
           {t('backToListing')}
         </Link>
       </div>
@@ -90,7 +90,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     <div className="max-w-3xl mx-auto">
       <Link
         href={ROUTES.public.marketplaceListing(listing.id)}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToListing')}
@@ -107,8 +107,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               <div className="space-y-3">
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'pickup'
-                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                    : 'border dark:border-neutral-700 hover:border-neutral-300'
+                    ? 'border-action bg-action-muted-muted'
+                    : 'border hover:border-strong'
                 }`}>
                   <input
                     type="radio"
@@ -116,7 +116,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value="pickup"
                     checked={deliveryMethod === 'pickup'}
                     onChange={() => setDeliveryMethod('pickup')}
-                    className="text-action focus:ring-primary-500"
+                    className="text-action focus:ring-action"
                   />
                   <MapPin className="w-5 h-5 text-text-tertiary" />
                   <div>
@@ -130,8 +130,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'shipping'
-                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                    : 'border dark:border-neutral-700 hover:border-neutral-300'
+                    ? 'border-action bg-action-muted-muted'
+                    : 'border hover:border-strong'
                 }`}>
                   <input
                     type="radio"
@@ -139,7 +139,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value="shipping"
                     checked={deliveryMethod === 'shipping'}
                     onChange={() => setDeliveryMethod('shipping')}
-                    className="text-action focus:ring-primary-500"
+                    className="text-action focus:ring-action"
                   />
                   <Truck className="w-5 h-5 text-text-tertiary" />
                   <div>
@@ -236,7 +236,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             <Heading level={2} className="text-lg text-text-primary mb-4">{t('summary.title')}</Heading>
 
             <div className="flex gap-3 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised dark:bg-neutral-700">
+              <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
                 <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
               </div>
               <div className="min-w-0">
@@ -247,7 +247,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               </div>
             </div>
 
-            <hr className="border dark:border-neutral-700 mb-4" />
+            <hr className="border mb-4" />
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -274,14 +274,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               )}
             </div>
 
-            <hr className="border dark:border-neutral-700 my-4" />
+            <hr className="border my-4" />
 
             <div className="flex justify-between text-lg font-bold">
               <span className="text-text-primary">{t('summary.total')}</span>
               <span className="text-action">{formatCHF(totalAmount)}</span>
             </div>
 
-            <div className="mt-4 p-3 bg-surface-raised dark:bg-neutral-700/50 rounded-lg text-xs text-text-tertiary">
+            <div className="mt-4 p-3 bg-surface-raised rounded-lg text-xs text-text-tertiary">
               <p className="flex items-center gap-1.5">
                 {deliveryMethod === 'shipping' ? (
                   <><Truck className="w-3.5 h-3.5" /> {t('summary.shipping')}</>

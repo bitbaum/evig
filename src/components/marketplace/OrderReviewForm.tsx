@@ -71,10 +71,10 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
 
   if (success) {
     return (
-      <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-6 text-center">
+      <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
         <CheckCircle className="w-10 h-10 text-action mx-auto mb-2" />
-        <Heading level={3} className="font-semibold text-primary-800 dark:text-primary-200">{t('successHeading')}</Heading>
-        <p className="text-sm text-primary-700 dark:text-primary-300 mt-1">
+        <Heading level={3} className="font-semibold text-action-text">{t('successHeading')}</Heading>
+        <p className="text-sm text-action mt-1">
           {t('successDesc')}
         </p>
       </div>
@@ -104,7 +104,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
                   className={`w-8 h-8 ${
                     filled
                       ? 'fill-warning-400 text-warning-400'
-                      : 'text-neutral-300 dark:text-neutral-600'
+                      : 'text-neutral-300 dark:text-text-secondary'
                   }`}
                 />
               </button>
@@ -146,8 +146,8 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             onClick={() => setRecommend(true)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               recommend
-                ? 'bg-primary-600 text-white'
-                : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200'
+                ? 'bg-action text-white'
+                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
             }`}
           >
             <ThumbsUp className="w-4 h-4" /> {t('recommendYes')}
@@ -158,7 +158,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               !recommend
                 ? 'bg-error-600 text-white'
-                : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
             }`}
           >
             <ThumbsDown className="w-4 h-4" /> {t('recommendNo')}

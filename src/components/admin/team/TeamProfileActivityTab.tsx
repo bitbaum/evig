@@ -71,7 +71,7 @@ export function TeamProfileActivityTab({ userId }: Props) {
         <button
           onClick={load}
           disabled={isLoading}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           Aktualisieren
@@ -89,7 +89,7 @@ export function TeamProfileActivityTab({ userId }: Props) {
         <ol className="relative border-l border ml-1.5 space-y-3">
           {events.map(event => (
             <li key={event.id} className="ml-4 pl-3">
-              <span className="absolute -left-1.5 w-3 h-3 rounded-full bg-primary-500 ring-4 ring-white dark:ring-neutral-950" />
+              <span className="absolute -left-1.5 w-3 h-3 rounded-full bg-action ring-4 ring-white dark:ring-neutral-950" />
               <div className="rounded-lg border border bg-surface-base px-3 py-2.5">
                 <div className="flex items-start justify-between gap-2 flex-wrap">
                   <div className="min-w-0">

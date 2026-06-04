@@ -23,9 +23,9 @@ const getStatIcon = (id: string) => {
 
 function StatCard({ stat }: { stat: EWasteStat }) {
   return (
-    <div className="bg-white/10 backdrop-blur-xs rounded-xl p-6 border border-white/20">
+    <div className="bg-surface-base/10 backdrop-blur-xs rounded-xl p-6 border border-white/20">
       <div className="flex items-start gap-4">
-        <div className="p-3 bg-white/20 rounded-lg text-white">
+        <div className="p-3 bg-surface-base/20 rounded-lg text-white">
           {getStatIcon(stat.id)}
         </div>
         <div className="flex-1">
@@ -65,7 +65,7 @@ export default async function EWasteProblemSection() {
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-surface-base/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
             <AlertTriangle className="h-4 w-4" />
             {t('badge')}
           </div>
@@ -85,7 +85,7 @@ export default async function EWasteProblemSection() {
         </div>
 
         {/* Key Message */}
-        <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-8 border border-white/20 text-center">
+        <div className="bg-surface-base/10 backdrop-blur-xs rounded-2xl p-8 border border-white/20 text-center">
           <p className="text-2xl md:text-3xl font-semibold text-white mb-4">
             {t('keyMessage')}
           </p>

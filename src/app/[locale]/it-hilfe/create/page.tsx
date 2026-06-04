@@ -62,7 +62,7 @@ export default function CreatePeerRepairPage() {
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
     )
   }
@@ -70,7 +70,7 @@ export default function CreatePeerRepairPage() {
   if (success && anonymousAccountCreated) {
     return (
       <PageShell maxWidth="2xl" py="py-24" className="text-center">
-        <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+        <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
         <Heading level={2} className="text-2xl text-text-primary mb-2">
           Anfrage gespeichert!
         </Heading>
@@ -80,7 +80,7 @@ export default function CreatePeerRepairPage() {
           Anfrage zuzugreifen. Techniker aus der Community werden deine Anfrage sehen,
           während du dein Konto aktivierst.
         </p>
-        <p className="text-xs text-text-tertiary dark:text-neutral-500 mb-6">
+        <p className="text-xs text-text-tertiary dark:text-text-tertiary mb-6">
           Keine E-Mail erhalten? Überprüfe deinen Spam-Ordner oder fordere auf der
           Anmeldeseite mit &ldquo;Passwort vergessen&rdquo; einen neuen Link an.
         </p>
@@ -97,7 +97,7 @@ export default function CreatePeerRepairPage() {
       : '/auth/login'
     return (
       <PageShell maxWidth="2xl" py="py-24" className="text-center">
-        <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+        <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
         <Heading level={2} className="text-2xl text-text-primary mb-2">
           Anfrage gespeichert!
         </Heading>
@@ -109,7 +109,7 @@ export default function CreatePeerRepairPage() {
         <Button as={Link} href={loginHref} variant="primary">
           Anmelden
         </Button>
-        <p className="text-xs text-text-tertiary dark:text-neutral-500 mt-6">
+        <p className="text-xs text-text-tertiary dark:text-text-tertiary mt-6">
           Passwort vergessen? Du kannst es auf der Anmeldeseite zurücksetzen.
         </p>
       </PageShell>
@@ -120,7 +120,7 @@ export default function CreatePeerRepairPage() {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+          <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
           <Heading level={2} className="text-2xl text-text-primary mb-2">{t('createdTitle')}</Heading>
           <p className="text-text-secondary">{t('createdRedirect')}</p>
         </div>
@@ -132,7 +132,7 @@ export default function CreatePeerRepairPage() {
     <PageShell maxWidth="3xl">
         <Link
           href={ROUTES.public.itHilfe}
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backToList')}
@@ -140,7 +140,7 @@ export default function CreatePeerRepairPage() {
 
         <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+            <div className="p-2 bg-action-muted-muted rounded-lg">
               <Wrench className="w-6 h-6 text-action" />
             </div>
             <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
@@ -152,7 +152,7 @@ export default function CreatePeerRepairPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {status === 'unauthenticated' && (
-            <div className="card-shell p-6 border-l-4 border-primary-500">
+            <div className="card-shell p-6 border-l-4 border-action">
               <Heading level={2} className="text-lg text-text-primary mb-2">
                 Deine E-Mail-Adresse
               </Heading>
@@ -205,8 +205,8 @@ export default function CreatePeerRepairPage() {
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border hover:border-neutral-300'
+                        ? 'border-action bg-action-muted-muted'
+                        : 'border hover:border-strong'
                     }`}
                   >
                     <div className={`w-10 h-10 mx-auto mb-2 rounded-lg ${cat.color} flex items-center justify-center`}>

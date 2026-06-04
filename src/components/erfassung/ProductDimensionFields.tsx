@@ -99,7 +99,7 @@ export function ProductDimensionFields({
               step="0.01"
               value={formData.verkaufspreis}
               onChange={(e) => onFieldChange('verkaufspreis', e.target.value)}
-              className={aiMetadata.verkaufspreis ? 'border-primary-300 dark:border-primary-600' : ''}
+              className={aiMetadata.verkaufspreis ? 'border-strong dark:border-action' : ''}
               required
             />
           </div>

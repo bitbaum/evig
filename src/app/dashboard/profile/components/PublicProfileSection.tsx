@@ -16,7 +16,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
   const t = useTranslations('dashboard.profile.publicProfile')
 
   return (
-    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6">
       <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
         {t('heading')}
       </Heading>
@@ -74,8 +74,8 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               onClick={() => handleChange('profile_visibility', 'public')}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                 profile.profile_visibility === 'public'
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                  : 'border dark:border-neutral-600 bg-surface-base dark:bg-neutral-700 text-text-secondary hover:border-neutral-300 dark:hover:border-neutral-500'
+                  ? 'border-action bg-action-muted-muted text-action'
+                  : 'border bg-surface-base text-text-secondary hover:border-strong'
               }`}
             >
               <Globe className="w-5 h-5" />
@@ -87,8 +87,8 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               onClick={() => handleChange('profile_visibility', 'private')}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                 profile.profile_visibility === 'private'
-                  ? 'border-neutral-500 bg-surface-raised dark:bg-neutral-900/20 text-text-secondary'
-                  : 'border dark:border-neutral-600 bg-surface-base dark:bg-neutral-700 text-text-secondary hover:border-neutral-300 dark:hover:border-neutral-500'
+                  ? 'border-neutral-500 bg-surface-raised text-text-secondary'
+                  : 'border bg-surface-base text-text-secondary hover:border-strong'
               }`}
             >
               <Lock className="w-5 h-5" />

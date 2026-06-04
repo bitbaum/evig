@@ -2,7 +2,7 @@ import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
-const RATING_COLORS = ['bg-primary-500', 'bg-primary-400', 'bg-info-500', 'bg-secondary-500', 'bg-warning-500', 'bg-error-500', 'bg-info-700', 'bg-neutral-400']
+const RATING_COLORS = ['bg-action', 'bg-action', 'bg-info-500', 'bg-secondary-500', 'bg-warning-500', 'bg-error-500', 'bg-info-700', 'bg-neutral-400']
 
 export async function PhilosophySection() {
   const t = await getTranslations('services.webDesign.philosophy')
@@ -29,15 +29,15 @@ export async function PhilosophySection() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Heading level={3} className="mb-6 text-neutral-800">{t('effortTitle')}</Heading>
+              <Heading level={3} className="mb-6 text-text-primary">{t('effortTitle')}</Heading>
               <div className="space-y-6 text-text-secondary">
-                <div className="border-l-4 border-primary-500 pl-4">
-                  <p className="font-semibold text-primary-800 mb-2">{t('freedomPrinciple.label')}</p>
+                <div className="border-l-4 border-action pl-4">
+                  <p className="font-semibold text-action mb-2">{t('freedomPrinciple.label')}</p>
                   <p dangerouslySetInnerHTML={{ __html: t.raw('freedomPrinciple.text') as string }} />
                 </div>
 
-                <div className="border-l-4 border-primary-400 pl-4">
-                  <p className="font-semibold text-primary-800 mb-2">{t('automationLiberation.label')}</p>
+                <div className="border-l-4 border-action pl-4">
+                  <p className="font-semibold text-action mb-2">{t('automationLiberation.label')}</p>
                   <p>{t('automationLiberation.text')}</p>
                 </div>
 
@@ -53,7 +53,7 @@ export async function PhilosophySection() {
             </div>
 
             <div className="bg-surface-raised rounded-xl p-8 border">
-              <Heading level={4} className="mb-4 text-neutral-800">{t('ratingTitle')}</Heading>
+              <Heading level={4} className="mb-4 text-text-primary">{t('ratingTitle')}</Heading>
               <p className="text-text-secondary mb-4">
                 {t('ratingIntro')}
               </p>
@@ -71,9 +71,9 @@ export async function PhilosophySection() {
                   </div>
                 ))}
               </div>
-              <div className="mt-6 p-4 bg-surface-base rounded-lg border border-primary-200">
-                <p className="text-sm text-primary-800 font-semibold mb-1">{t('commitment.label')}</p>
-                <p className="text-xs text-primary-700">
+              <div className="mt-6 p-4 bg-surface-base rounded-lg border border-strong">
+                <p className="text-sm text-action font-semibold mb-1">{t('commitment.label')}</p>
+                <p className="text-xs text-action">
                   {t('commitment.text')}
                 </p>
               </div>

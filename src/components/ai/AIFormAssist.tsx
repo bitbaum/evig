@@ -96,8 +96,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
   // Styles
   const containerClass = variant === 'section'
-    ? 'bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-700'
-    : 'rounded-lg border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20'
+    ? 'bg-action-muted-muted rounded-xl border border-strong'
+    : 'rounded-lg border border-strong bg-action-muted-muted'
 
   const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4'
 
@@ -109,11 +109,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
         onClick={() => setIsExpanded(!isExpanded)}
         className={`w-full flex items-center justify-between ${padding} py-2.5 text-left`}
       >
-        <span className="text-sm font-semibold text-primary-900 dark:text-primary-100 flex items-center gap-2">
+        <span className="text-sm font-semibold text-action-text flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-action" />
           {t('heading')}
         </span>
-        <svg className={`w-4 h-4 text-primary-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className={`w-4 h-4 text-action transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
@@ -130,7 +130,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
           {/* Success feedback — persistent until next action, shows field count */}
           {success && !error && (
-            <div className="flex items-center gap-2 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 text-primary-700 dark:text-primary-400 px-3 py-2 rounded-lg text-sm">
+            <div className="flex items-center gap-2 bg-action-muted-muted border border-strong text-action px-3 py-2 rounded-lg text-sm">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               <span>
                 {filledCount > 0
@@ -152,7 +152,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
               }
               rows={2}
               disabled={isExtracting}
-              className="flex-1 border-primary-300 dark:border-primary-700 resize-none"
+              className="flex-1 border-strong resize-none"
             />
             <Button
               type="button"
@@ -179,7 +179,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
                       type="button"
                       onClick={() => handleSuggestedAction(action.prompt)}
                       disabled={isExtracting}
-                      className="px-2.5 py-1 bg-primary-100 dark:bg-primary-800/40 text-primary-700 dark:text-primary-300 rounded-md text-xs font-medium hover:bg-primary-200 dark:hover:bg-primary-700/50 disabled:opacity-50 transition-colors touch-manipulation"
+                      className="px-2.5 py-1 bg-action-muted-hover/40 text-action rounded-md text-xs font-medium hover:bg-action-muted/50 disabled:opacity-50 transition-colors touch-manipulation"
                     >
                       {action.label}
                     </button>
@@ -191,7 +191,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
                       onClick={() => handleQuickAction(action.key)}
                       disabled={isExtracting || !hasContent}
                       title={!hasContent ? t('quickActionDisabled') : undefined}
-                      className="px-2.5 py-1 bg-primary-100 dark:bg-primary-800/40 text-primary-700 dark:text-primary-300 rounded-md text-xs font-medium hover:bg-primary-200 dark:hover:bg-primary-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
+                      className="px-2.5 py-1 bg-action-muted-hover/40 text-action rounded-md text-xs font-medium hover:bg-action-muted/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
                     >
                       {action.label}
                     </button>

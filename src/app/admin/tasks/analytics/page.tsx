@@ -132,12 +132,12 @@ async function getRecentCompletions(): Promise<RecentCompletion[]> {
 
 function getProgressBarColor(index: number): string {
   const colors = [
-    'bg-primary-500',
-    'bg-primary-500',
-    'bg-primary-500',
+    'bg-action',
+    'bg-action',
+    'bg-action',
     'bg-secondary-500',
     'bg-error-500',
-    'bg-primary-500',
+    'bg-action',
     'bg-info-500',
     'bg-warning-500',
   ]
@@ -184,15 +184,15 @@ export default async function TaskAnalyticsPage() {
       <div className="flex items-center gap-4">
         <Link
           href={ROUTES.admin.tasks}
-          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück
         </Link>
         <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-action dark:text-primary-300" />
+          <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+            <BarChart3 className="w-5 h-5 text-action" />
           </div>
           <div>
             <Heading level={1} className="text-2xl font-bold text-text-primary">Aufgaben Analyse</Heading>
@@ -226,8 +226,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-surface-base rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-action dark:text-primary-300" />
+            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-action" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats.completions_today}</p>
@@ -238,8 +238,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-surface-base rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-action dark:text-primary-300" />
+            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-action" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats.completions_this_week}</p>
@@ -262,8 +262,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-surface-base rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-action dark:text-primary-300" />
+            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+              <Clock className="w-5 h-5 text-action" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">

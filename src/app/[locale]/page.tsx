@@ -243,7 +243,7 @@ export default async function Home() {
               const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
               const focusOutline = DESIGN_TOKENS.focusOutline[card.theme]
               return (
-                <div key={card.title} className="card-shell rounded-2xl p-6 sm:p-8 hover:border-neutral-300 transition-all flex flex-col">
+                <div key={card.title} className="card-shell rounded-2xl p-6 sm:p-8 hover:border-strong transition-all flex flex-col">
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
                     <card.icon className={`h-6 w-6 ${badge.text}`} />
                   </div>
@@ -282,7 +282,7 @@ export default async function Home() {
       </div>
 
       {/* Section 3: Social Proof */}
-      <div className="bg-surface-raised dark:bg-neutral-900 py-8 sm:py-12">
+      <div className="bg-surface-raised py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <Heading level={2} variant="site" className="tracking-tight text-text-primary">
@@ -309,7 +309,7 @@ export default async function Home() {
             <div className="mt-6 text-center">
               <Link
                 href="/about/impact"
-                className="text-sm font-medium text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors"
+                className="text-sm font-medium text-text-tertiary hover:text-text-primary transition-colors"
               >
                 {t('impact.moreLink')} →
               </Link>
@@ -319,7 +319,7 @@ export default async function Home() {
       </div>
 
       {/* Section 4: How to Get Involved */}
-      <div className="bg-surface-raised dark:bg-neutral-950 py-12 sm:py-16 lg:py-20">
+      <div className="bg-surface-raised py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <Heading level={2} variant="site" className="tracking-tight text-text-primary">
@@ -335,7 +335,7 @@ export default async function Home() {
               <Link
                 key={item.title}
                 href={item.href}
-                className={`card-shell p-6 border ${item.border} hover:border-neutral-300 transition-all group`}
+                className={`card-shell p-6 border ${item.border} hover:border-strong transition-all group`}
               >
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
                   <item.icon className={`h-5 w-5 ${item.badge.text}`} />

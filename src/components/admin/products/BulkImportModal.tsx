@@ -35,7 +35,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 </Heading>
                 <button
                   onClick={onClose}
-                  className="text-text-tertiary hover:text-neutral-600"
+                  className="text-text-tertiary hover:text-text-secondary"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
@@ -67,18 +67,18 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
               </div>
 
               {/* CSV Format Info */}
-              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4">
+              <div className="bg-action-muted-muted rounded-lg p-4">
                 <Heading level={4} className="font-medium text-text-primary mb-2">
                   Erforderliches CSV-Format:
                 </Heading>
-                <div className="text-sm text-neutral-800 font-mono bg-surface-raised p-3 rounded-sm">
+                <div className="text-sm text-text-primary font-mono bg-surface-raised p-3 rounded-sm">
                   Titel,Beschreibung,Preis (CHF),Kategorie,Marke,Bild-URL
                   <br />
                   &quot;Dell Latitude E7470&quot;,&quot;Professioneller Laptop&quot;,599.00,&quot;Laptops&quot;,&quot;Dell&quot;,&quot;https://...&quot;
                   <br />
                   &quot;Samsung Monitor 27&quot;&quot;,&quot;4K Monitor&quot;,449.00,&quot;Monitore&quot;,&quot;Samsung&quot;,&quot;https://...&quot;
                 </div>
-                <p className="text-xs text-primary-700 dark:text-primary-300 mt-2">
+                <p className="text-xs text-action mt-2">
                   Hinweis: Die erste Zeile muss die Spaltenüberschriften enthalten
                 </p>
               </div>

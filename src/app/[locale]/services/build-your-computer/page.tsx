@@ -88,8 +88,8 @@ export default function BuildYourComputerPage() {
   }
 
   const getConditionClass = (condition: string) => {
-    if (condition === 'used') return 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-    if (condition === 'refurbished') return 'bg-surface-raised text-neutral-800'
+    if (condition === 'used') return 'bg-action-muted-muted text-action'
+    if (condition === 'refurbished') return 'bg-surface-raised text-text-primary'
     return 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-400'
   }
 
@@ -107,15 +107,15 @@ export default function BuildYourComputerPage() {
           <strong>{t('hero.strong')}</strong>
         </p>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
             <Globe className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -129,7 +129,7 @@ export default function BuildYourComputerPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {(t.raw('howItWorks.steps') as Array<{ title: string; description: string }>).map((step, index) => (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">{index + 1}</div>
+                <div className="w-16 h-16 bg-action text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">{index + 1}</div>
                 <Heading level={3} className="mb-3">{step.title}</Heading>
                 <p className="text-text-secondary">{step.description}</p>
               </div>
@@ -147,11 +147,11 @@ export default function BuildYourComputerPage() {
 
             {/* Progress Bar */}
             <div className="flex items-center justify-center mb-8">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-text-secondary'}`}>1</div>
-              <div className={`w-24 h-1 ${step >= 2 ? 'bg-primary-600' : 'bg-neutral-300'}`}></div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-text-secondary'}`}>2</div>
-              <div className={`w-24 h-1 ${step >= 3 ? 'bg-primary-600' : 'bg-neutral-300'}`}></div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-text-secondary'}`}>3</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-action text-white' : 'bg-neutral-300 text-text-secondary'}`}>1</div>
+              <div className={`w-24 h-1 ${step >= 2 ? 'bg-action' : 'bg-neutral-300'}`}></div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-action text-white' : 'bg-neutral-300 text-text-secondary'}`}>2</div>
+              <div className={`w-24 h-1 ${step >= 3 ? 'bg-action' : 'bg-neutral-300'}`}></div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-action text-white' : 'bg-neutral-300 text-text-secondary'}`}>3</div>
             </div>
 
             <div className="card-shell p-8">
@@ -167,8 +167,8 @@ export default function BuildYourComputerPage() {
                         onClick={() => setFormData({...formData, useCase: category.id})}
                         className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                           formData.useCase === category.id
-                            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                            : 'border hover:border-neutral-300'
+                            ? 'border-action bg-action-muted-muted'
+                            : 'border hover:border-strong'
                         }`}
                       >
                         <Heading level={4} className="">{category.name}</Heading>
@@ -186,8 +186,8 @@ export default function BuildYourComputerPage() {
                           onClick={() => setFormData({...formData, performance: perf.id})}
                           className={`p-3 text-center border-2 rounded-lg transition-all ${
                             formData.performance === perf.id
-                              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                              : 'border hover:border-neutral-300'
+                              ? 'border-action bg-action-muted-muted'
+                              : 'border hover:border-strong'
                           }`}
                         >
                           <div className="font-semibold">{perf.name}</div>
@@ -273,7 +273,7 @@ export default function BuildYourComputerPage() {
                     </>
                   ) : (
                     <div className="space-y-6">
-                      <div className="animate-spin w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full mx-auto"></div>
+                      <div className="animate-spin w-12 h-12 border-4 border-action border-t-transparent rounded-full mx-auto"></div>
                       <div className="space-y-3">
                         <p className="font-semibold">{t('buildTool.scanningLabel')}</p>
                         {scanningLines.map((line, i) => (
@@ -292,15 +292,15 @@ export default function BuildYourComputerPage() {
                     <Heading level={3} className="mb-2">{t('buildTool.step3Heading')}</Heading>
                     <div className="flex justify-center gap-6 text-sm">
                       <div className="flex items-center">
-                        <Leaf className="w-4 h-4 text-primary-500 mr-1" />
+                        <Leaf className="w-4 h-4 text-action mr-1" />
                         {buildResult.sustainabilityScore}{t('buildTool.sustainableLabel')}
                       </div>
                       <div className="flex items-center">
-                        <TrendingUp className="w-4 h-4 text-primary-500 mr-1" />
+                        <TrendingUp className="w-4 h-4 text-action mr-1" />
                         {buildResult.performance}{t('buildTool.performanceMatchLabel')}
                       </div>
                       <div className="flex items-center">
-                        <Recycle className="w-4 h-4 text-primary-500 mr-1" />
+                        <Recycle className="w-4 h-4 text-action mr-1" />
                         {buildResult.usedPartsPercent}{t('buildTool.usedPartsLabel')}
                       </div>
                     </div>
@@ -407,10 +407,10 @@ export default function BuildYourComputerPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-surface-raised dark:bg-neutral-900 rounded-2xl border p-8 md:p-12 text-center">
-              <div className="inline-flex items-center bg-primary-100 dark:bg-primary-900/30 px-6 py-3 rounded-full mb-6">
+            <div className="bg-surface-raised rounded-2xl border p-8 md:p-12 text-center">
+              <div className="inline-flex items-center bg-action-muted-muted px-6 py-3 rounded-full mb-6">
                 <Award className="w-8 h-8 text-action mr-3" />
-                <span className="text-2xl font-bold text-primary-800 dark:text-primary-300">Revamped</span>
+                <span className="text-2xl font-bold text-action">Revamped</span>
                 <Sparkles className="w-6 h-6 text-action ml-2" />
               </div>
               <Heading level={2} className="mb-4">{t('certification.heading')}</Heading>
@@ -426,7 +426,7 @@ export default function BuildYourComputerPage() {
                   <div className="text-3xl font-bold text-action mb-2">{getDefaultValue('co2_savings_per_device')} kg</div>
                   <div className="text-sm text-text-secondary">
                     {t('certification.co2Saved')}{' · '}
-                    <Link href="/transparenz/co2" className="text-primary-700 hover:underline underline-offset-2">
+                    <Link href="/transparenz/co2" className="text-action hover:underline underline-offset-2">
                       Wie berechnet?
                     </Link>
                   </div>
@@ -446,22 +446,22 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-primary-700 text-white">
+      <section className="py-20 bg-action text-white">
         <div className="container mx-auto px-4 text-center">
           <Heading level={2} className="mb-6">{t('cta.heading')}</Heading>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-action-text">
             {t('cta.body')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
+              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-lg"
             >
               {t('cta.startBuild')}
             </Link>
             <Link
               href="/services"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
+              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-surface-base/10 transition-colors duration-300 text-lg"
             >
               {t('cta.explore')}
             </Link>

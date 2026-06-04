@@ -58,7 +58,7 @@ export default function ContactForm() {
     <div className="card-shell p-8">
       <Heading level={2} className="text-3xl font-bold mb-6 text-center">{t('title')}</Heading>
       {status === 'success' && (
-        <div className="mb-6 rounded-lg border border-primary-200 dark:border-primary-700/50 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 text-primary-800 dark:text-primary-200 text-sm">
+        <div className="mb-6 rounded-lg border border-strong dark:border-action bg-action-muted-muted px-4 py-3 text-action-text text-sm">
           {t('successMessage')}
         </div>
       )}

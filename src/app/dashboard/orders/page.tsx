@@ -98,13 +98,13 @@ export default function DashboardOrdersPage() {
         </Heading>
 
         {/* Role toggle */}
-        <div className="flex bg-surface-raised dark:bg-neutral-800 rounded-lg p-1">
+        <div className="flex bg-surface-raised rounded-lg p-1">
           <button
             onClick={() => setRole('buyer')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
               role === 'buyer'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
-                : 'text-text-tertiary hover:text-neutral-700'
+                ? 'bg-surface-base text-text-primary shadow-xs'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
           >
             {t('roleBuyer')}
@@ -113,8 +113,8 @@ export default function DashboardOrdersPage() {
             onClick={() => setRole('seller')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
               role === 'seller'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
-                : 'text-text-tertiary hover:text-neutral-700'
+                ? 'bg-surface-base text-text-primary shadow-xs'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
           >
             {t('roleSeller')}
@@ -130,8 +130,8 @@ export default function DashboardOrdersPage() {
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${
               activeTab === tab.key
-                ? 'bg-primary-600 text-white'
-                : 'bg-surface-raised dark:bg-neutral-800 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                ? 'bg-action text-white'
+                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
             }`}
           >
             {tab.label}
@@ -147,7 +147,7 @@ export default function DashboardOrdersPage() {
       ) : orders.length === 0 ? (
         <EmptyState
           icon={ShoppingBag}
-          iconBg="bg-primary-50 dark:bg-primary-900/20"
+          iconBg="bg-action-muted-muted"
           iconColor="text-action"
           title={t('emptyTitle')}
           description={role === 'buyer' ? t('emptyBuyerDesc') : t('emptySellerDesc')}
@@ -167,9 +167,9 @@ export default function DashboardOrdersPage() {
               <Link
                 key={order.id}
                 href={`/dashboard/orders/${order.id}`}
-                className="flex items-center gap-4 bg-surface-base dark:bg-neutral-800 rounded-xl p-4 shadow-xs hover:shadow-md hover:ring-1 hover:ring-primary-200 dark:hover:ring-primary-800 transition-all"
+                className="flex items-center gap-4 bg-surface-base rounded-xl p-4 shadow-xs hover:shadow-md hover:ring-1 hover:ring-action/20 dark:hover:ring-primary-800 transition-all"
               >
-                <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-raised dark:bg-neutral-700">
+                <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
                   {order.thumbnail ? (
                     <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={56} height={56} className="w-full h-full object-cover" />
                   ) : (

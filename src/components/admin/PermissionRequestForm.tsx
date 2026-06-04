@@ -54,16 +54,16 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
   if (form.success) {
     return (
-      <div className="p-6 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl">
+      <div className="p-6 bg-action-muted-muted border border-strong rounded-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
             <Check className="w-5 h-5 text-action" />
           </div>
           <div>
-            <Heading level={3} className="font-semibold text-primary-900 dark:text-primary-200">
+            <Heading level={3} className="font-semibold text-action-text">
               Anfrage gesendet
             </Heading>
-            <p className="text-sm text-primary-700 dark:text-primary-300">
+            <p className="text-sm text-action">
               Ein Super Admin wird deine Anfrage prüfen.
             </p>
           </div>
@@ -71,7 +71,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         {onClose && (
           <button
             onClick={onClose}
-            className="text-sm text-action hover:text-primary-700"
+            className="text-sm text-action hover:text-action"
           >
             Schliessen
           </button>
@@ -83,7 +83,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
           <Shield className="w-5 h-5 text-action" />
         </div>
         <div>
@@ -98,7 +98,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <button
             type="button"
             onClick={onClose}
-            className="ml-auto text-text-tertiary hover:text-neutral-600"
+            className="ml-auto text-text-tertiary hover:text-text-secondary"
           >
             <X className="w-5 h-5" />
           </button>
@@ -118,8 +118,8 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               onClick={() => toggleSection(section.id)}
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border hover:border-neutral-300'
+                  ? 'border-action bg-action-muted-muted'
+                  : 'border hover:border-strong'
               }`}
             >
               <span className="font-medium text-text-primary">

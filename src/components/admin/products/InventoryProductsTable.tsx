@@ -72,7 +72,7 @@ export function InventoryProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
                   />
                 </th>
               )}
@@ -105,7 +105,7 @@ export function InventoryProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-primary-50 dark:bg-primary-900/20")}
+                className={cn("hover:bg-surface-raised", selectable && selectedIds.has(product.id) && "bg-action-muted-muted")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">
@@ -113,7 +113,7 @@ export function InventoryProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
+                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-action"
                     />
                   </td>
                 )}
@@ -194,7 +194,7 @@ export function InventoryProductsTable({
                     {product.marketplace_status !== MARKETPLACE_STATUS.PUBLISHED && (
                       <button
                         onClick={() => onPublish?.(product)}
-                        className="p-1 text-primary-500 hover:text-primary-700"
+                        className="p-1 text-action hover:text-action"
                         title="Im Shop veröffentlichen"
                       >
                         <Upload className="w-4 h-4" />
@@ -202,21 +202,21 @@ export function InventoryProductsTable({
                     )}
                     <Link
                       href={ROUTES.admin.productFactsheet(product.id)}
-                      className="p-1 text-primary-500 hover:text-primary-700"
+                      className="p-1 text-action hover:text-action"
                       title="Factsheet drucken"
                     >
                       <Printer className="w-4 h-4" />
                     </Link>
                     <button
                       onClick={() => onView?.(product)}
-                      className="p-1 text-text-tertiary hover:text-neutral-600"
+                      className="p-1 text-text-tertiary hover:text-text-secondary"
                       title="Ansehen"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onEdit?.(product)}
-                      className="p-1 text-text-tertiary hover:text-neutral-600"
+                      className="p-1 text-text-tertiary hover:text-text-secondary"
                       title="Bearbeiten"
                     >
                       <Edit className="w-4 h-4" />

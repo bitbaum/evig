@@ -154,7 +154,7 @@ export default function AdminWorkshopsPage() {
             const statusLabel = PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status
 
             return (
-              <div key={proposal.id} className="p-6 hover:bg-neutral-50">
+              <div key={proposal.id} className="p-6 hover:bg-surface-raised">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
@@ -165,7 +165,7 @@ export default function AdminWorkshopsPage() {
                       {statusIcon}
                       <span className="text-sm text-text-secondary">{statusLabel}</span>
                       {proposal.last_edited_at && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 rounded-sm">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-text-primary rounded-sm">
                           Von Admin bearbeitet
                         </span>
                       )}
@@ -199,7 +199,7 @@ export default function AdminWorkshopsPage() {
                   <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:shrink-0">
                     <Link
                       href={ROUTES.admin.workshopProposal(proposal.id)}
-                      className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"
+                      className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
                     >
                       <Eye className="w-4 h-4 mr-1" /> Details
                     </Link>
@@ -256,7 +256,7 @@ export default function AdminWorkshopsPage() {
                       </Button>
                       <button
                         onClick={cancelReject}
-                        className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"
+                        className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
                       >
                         Abbrechen
                       </button>

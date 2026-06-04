@@ -27,7 +27,7 @@ export function DocumentVerificationSection({
         <Heading level={4} className="text-text-primary">Dokumentenverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
-          className="text-sm text-action hover:text-primary-700 font-medium"
+          className="text-sm text-action hover:text-action font-medium"
         >
           Dokumente prüfen
         </button>
@@ -43,7 +43,7 @@ export function DocumentVerificationSection({
                   <div key={doc.id} className="flex items-center justify-between p-3 bg-surface-raised rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
-                        doc.status === APPROVAL_STATUS.APPROVED ? 'bg-primary-500' :
+                        doc.status === APPROVAL_STATUS.APPROVED ? 'bg-action' :
                         doc.status === APPROVAL_STATUS.REJECTED ? 'bg-error-500' :
                         'bg-warning-500'
                       }`} />
@@ -65,7 +65,7 @@ export function DocumentVerificationSection({
                         href={doc.filePath}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-action hover:text-primary-700 text-sm"
+                        className="text-action hover:text-action text-sm"
                       >
                         Anzeigen
                       </a>
@@ -74,7 +74,7 @@ export function DocumentVerificationSection({
                           <button
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-sm text-xs hover:bg-primary-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-action-muted-muted text-action rounded-sm text-xs hover:bg-action-muted disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
                           </button>

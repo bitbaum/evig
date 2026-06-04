@@ -98,7 +98,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 return (
                   <div key={index} className="card-shell p-6 sm:p-8 border-l-4 border-l-primary-600">
                     <div className="flex items-start">
-                      <div className="p-2 sm:p-3 bg-primary-100 dark:bg-primary-500/15 rounded-lg text-action mr-3 sm:mr-4">
+                      <div className="p-2 sm:p-3 bg-action-muted/15 rounded-lg text-action mr-3 sm:mr-4">
                         <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
                       </div>
                       <div>
@@ -124,7 +124,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
 
               <div className="card-shell rounded-2xl p-6 sm:p-8 md:p-12">
                 <div className="text-center mb-6 sm:mb-8">
-                  <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
+                  <div className="inline-block bg-action-muted-muted text-action px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     {t('pricing.badge')}
                   </div>
                   <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-text-primary mb-2">
@@ -226,23 +226,23 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
         </section>
 
         {/* CTA Section */}
-        <section className="py-12 sm:py-16 md:py-20 bg-primary-700 text-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-action text-white">
           <div className="container mx-auto px-4 sm:px-6 text-center">
             <Heading level={2} className="mb-4 sm:mb-6">{t('cta.heading')}</Heading>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-primary-100">
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-action-text">
               {t('cta.body')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center bg-white text-primary-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-sm sm:text-base md:text-lg"
+                className="inline-flex items-center justify-center bg-surface-base text-action px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 {t('cta.contact')}
                 <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-sm sm:text-base md:text-lg"
+                className="inline-flex items-center justify-center border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-surface-base/10 transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 {t('cta.back')}
               </Link>

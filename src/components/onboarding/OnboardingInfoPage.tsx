@@ -27,17 +27,17 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
   const HeaderIcon = config.header.icon
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-surface-raised">
       <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${config.header.iconBgColor} mb-4`}>
             <HeaderIcon className={`w-8 h-8 ${config.header.iconColor}`} />
           </div>
-          <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-4">
+          <Heading level={1} className="text-3xl font-bold text-text-primary mb-4">
             {config.header.title}
           </Heading>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+          <p className="text-lg text-text-secondary max-w-2xl mx-auto">
             {config.header.subtitle}
           </p>
         </div>
@@ -56,10 +56,10 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
                     <BenefitIcon className={`w-6 h-6 ${benefit.iconColor}`} />
                   </div>
                   <div>
-                    <Heading level={3} className="font-semibold text-neutral-900 mb-2">
+                    <Heading level={3} className="font-semibold text-text-primary mb-2">
                       {benefit.title}
                     </Heading>
-                    <p className="text-neutral-600 text-sm">
+                    <p className="text-text-secondary text-sm">
                       {benefit.description}
                     </p>
                   </div>
@@ -71,18 +71,18 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
 
         {/* Requirements Section */}
         <div className="card-shell rounded-lg p-6 mb-8">
-          <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-4">
+          <Heading level={2} className="text-xl font-semibold text-text-primary mb-4">
             {config.requirements.title}
           </Heading>
           <ul className="space-y-4">
             {config.requirements.items.map((item, index) => (
               <li key={index} className="flex items-start space-x-3">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center text-sm font-medium">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-surface-raised text-text-secondary flex items-center justify-center text-sm font-medium">
                   {index + 1}
                 </span>
                 <div>
-                  <p className="font-medium text-neutral-900">{item.title}</p>
-                  <p className="text-sm text-neutral-600">{item.description}</p>
+                  <p className="font-medium text-text-primary">{item.title}</p>
+                  <p className="text-sm text-text-secondary">{item.description}</p>
                 </div>
               </li>
             ))}
@@ -90,18 +90,18 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         </div>
 
         {/* Pricing Info Box */}
-        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-white/6 mb-8">
+        <div className="bg-surface-raised rounded-lg p-6 border border-strong dark:border-white/6 mb-8">
           <div className="flex items-center space-x-3 mb-4">
             <config.pricing.icon className={`w-6 h-6 ${config.pricing.iconColor}`} />
-            <Heading level={2} className="text-xl font-semibold text-neutral-900">
+            <Heading level={2} className="text-xl font-semibold text-text-primary">
               {config.pricing.title}
             </Heading>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {config.pricing.items.map((item, index) => (
               <div key={index} className="flex items-baseline space-x-2">
-                <span className="font-bold text-primary-600">{item.label}</span>
-                <span className="text-neutral-600 text-sm">{item.value}</span>
+                <span className="font-bold text-action">{item.label}</span>
+                <span className="text-text-secondary text-sm">{item.value}</span>
               </div>
             ))}
           </div>
@@ -114,11 +114,11 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
               const BadgeIcon = badge.icon
               return (
                 <div key={index} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-neutral-100 mb-2">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-raised mb-2">
                     <BadgeIcon className={`w-6 h-6 ${badge.iconColor}`} />
                   </div>
-                  <p className="font-medium text-neutral-900 text-sm">{badge.title}</p>
-                  <p className="text-neutral-500 text-xs">{badge.subtitle}</p>
+                  <p className="font-medium text-text-primary text-sm">{badge.title}</p>
+                  <p className="text-text-tertiary text-xs">{badge.subtitle}</p>
                 </div>
               )
             })}
@@ -134,7 +134,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
             {config.cta.label}
             <ArrowRight className="ml-2 w-5 h-5" />
           </Link>
-          <p className="mt-4 text-neutral-600">
+          <p className="mt-4 text-text-secondary">
             {config.cta.loginText}{' '}
             <Link href={config.cta.loginHref} className={config.cta.linkColor}>
               Anmelden
@@ -144,25 +144,25 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
 
         {/* FAQ Section */}
         <div className="card-shell rounded-lg p-6">
-          <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-6">
+          <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
             {config.faq.title}
           </Heading>
           <div className="space-y-4">
             {config.faq.items.map((item, index) => (
-              <div key={index} className="border-b border-neutral-100 last:border-0 pb-4 last:pb-0">
+              <div key={index} className="border-b border-subtle last:border-0 pb-4 last:pb-0">
                 <button
                   onClick={() => toggleFaq(index)}
                   className="flex items-center justify-between w-full text-left"
                 >
-                  <span className="font-medium text-neutral-900">{item.question}</span>
+                  <span className="font-medium text-text-primary">{item.question}</span>
                   {expandedFaq === index ? (
-                    <ChevronUp className="w-5 h-5 text-neutral-500" />
+                    <ChevronUp className="w-5 h-5 text-text-tertiary" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-neutral-500" />
+                    <ChevronDown className="w-5 h-5 text-text-tertiary" />
                   )}
                 </button>
                 {expandedFaq === index && (
-                  <p className="mt-2 text-neutral-600 text-sm">{item.answer}</p>
+                  <p className="mt-2 text-text-secondary text-sm">{item.answer}</p>
                 )}
               </div>
             ))}

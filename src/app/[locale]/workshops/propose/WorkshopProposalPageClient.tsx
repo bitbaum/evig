@@ -43,14 +43,14 @@ export default function WorkshopProposalPage() {
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-text-secondary hover:text-neutral-800 mb-4"
+            className="inline-flex items-center text-text-secondary hover:text-text-primary mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted-muted rounded-full mb-6">
               <GraduationCap className="w-8 h-8 text-action" />
             </div>
             <Heading level={1} className={`${responsiveTypography.section} text-text-primary mb-2`}>

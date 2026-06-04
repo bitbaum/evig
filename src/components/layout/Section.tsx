@@ -34,9 +34,9 @@ const densityClass: Record<Density, string> = {
 }
 
 const toneClass: Record<Tone, string> = {
-  surface: 'bg-surface-base dark:bg-neutral-950',
-  tinted:  'bg-surface-raised dark:bg-neutral-900',
-  inverse: 'bg-neutral-900 dark:bg-neutral-950 text-white',
+  surface: 'bg-surface-base',
+  tinted:  'bg-surface-raised',
+  inverse: 'bg-neutral-900 text-white',
 }
 
 export function Section({

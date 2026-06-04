@@ -82,7 +82,7 @@ export function TeamProfileForm({
         <button
           type="button"
           onClick={onCancel || (() => history.back())}
-          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Abbrechen
@@ -139,7 +139,7 @@ export function TeamProfileForm({
           <button
             type="button"
             onClick={() => toggleSection(section.id)}
-            className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors"
           >
             <div className="flex items-center gap-3">
               <span className="text-text-tertiary">{section.icon}</span>

@@ -185,8 +185,8 @@ export function TimecardApprovalsClient() {
               onClick={() => setPeriodFilter(opt)}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 periodFilter === opt
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-surface-raised dark:bg-neutral-800 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                  ? 'bg-action text-white'
+                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
               }`}
             >
               {opt === 'all' ? 'Alle' : opt === 'week' ? 'Wochen' : 'Monate'}
@@ -197,7 +197,7 @@ export function TimecardApprovalsClient() {
           <button
             onClick={loadQueue}
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -207,9 +207,9 @@ export function TimecardApprovalsClient() {
 
       {/* Sticky action bar — only when something is selected */}
       {selected.size > 0 && (
-        <div className="sticky top-0 z-10 -mx-4 px-4 sm:mx-0 sm:rounded-xl border border-primary-200 dark:border-primary-500/30 bg-primary-50 dark:bg-primary-500/10 p-3">
+        <div className="sticky top-0 z-10 -mx-4 px-4 sm:mx-0 sm:rounded-xl border border-strong dark:border-action/30 bg-action-muted/10 p-3">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div className="text-sm font-medium text-primary-900 dark:text-primary-100">
+            <div className="text-sm font-medium text-action-text">
               {selected.size} ausgewählt · {formatTimecardDuration(totalSelectedMinutes)}
             </div>
             <Input
@@ -264,13 +264,13 @@ export function TimecardApprovalsClient() {
           </div>
         ) : (
           <>
-            <div className="px-4 sm:px-6 py-2.5 border-b border flex items-center gap-3 bg-surface-raised dark:bg-neutral-800/40">
+            <div className="px-4 sm:px-6 py-2.5 border-b border flex items-center gap-3 bg-surface-raised">
               <input
                 type="checkbox"
                 checked={allSelected}
                 onChange={toggleAll}
                 aria-label="Alle auswählen"
-                className="w-4 h-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500"
+                className="w-4 h-4 rounded-sm border-neutral-300 text-action focus:ring-action"
               />
               <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
                 {items.length} eingereicht
@@ -291,17 +291,17 @@ export function TimecardApprovalsClient() {
                   <li
                     key={row.id}
                     className={`flex items-center gap-3 px-4 sm:px-6 py-3 transition-colors ${
-                      isSelected ? 'bg-primary-50/50 dark:bg-primary-500/5' : ''
-                    } hover:bg-neutral-50 dark:hover:bg-white/2`}
+                      isSelected ? 'bg-action-muted/50/5' : ''
+                    } hover:bg-surface-raised dark:hover:bg-surface-base/2`}
                   >
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggle(row.id)}
                       aria-label={`Zeitkarte von ${row.user_name || row.user_email} auswählen`}
-                      className="w-4 h-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500 shrink-0"
+                      className="w-4 h-4 rounded-sm border-neutral-300 text-action focus:ring-action shrink-0"
                     />
-                    <div className="w-9 h-9 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-xs font-semibold text-text-secondary dark:text-neutral-200 shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-semibold text-text-secondary shrink-0">
                       {initials(row.user_name || row.user_email)}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -313,7 +313,7 @@ export function TimecardApprovalsClient() {
                           <Link
                             href={`/admin/team/${row.team_profile_id}`}
                             target="_blank"
-                            className="text-text-muted hover:text-primary-600 dark:hover:text-primary-400"
+                            className="text-text-muted hover:text-action"
                             aria-label="Profil in neuem Tab öffnen"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />

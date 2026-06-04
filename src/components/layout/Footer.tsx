@@ -24,7 +24,7 @@ export default function Footer() {
   const tNav = useTranslations('nav')
 
   return (
-    <footer className="bg-surface-raised dark:bg-neutral-950 text-text-primary dark:text-neutral-100 border-t border">
+    <footer className="bg-surface-raised text-text-primary border-t border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand Section */}
@@ -46,7 +46,7 @@ export default function Footer() {
                   {item.external ? (
                     <a
                       href={item.href}
-                      className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
+                      className="text-sm text-text-secondary hover:text-text-primary transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -55,7 +55,7 @@ export default function Footer() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
+                      className="text-sm text-text-secondary hover:text-text-primary transition-colors"
                     >
                       {item.nameKey ? tNav(item.nameKey as never) : item.name}
                     </Link>
@@ -75,25 +75,25 @@ export default function Footer() {
                 <div className="flex items-start" key={location.key}>
                   <MapPin className="w-4 h-4 mt-0.5 mr-3 shrink-0 text-text-tertiary" />
                   <div>
-                    <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{location.name}</p>
+                    <p className="text-sm font-medium text-text-primary">{location.name}</p>
                     {location.addressLines.map((line) => (
                       <p className="text-sm text-text-secondary" key={line}>{line}</p>
                     ))}
                     {location.note && (
-                      <p className="text-xs text-text-tertiary dark:text-neutral-500 mt-0.5">{location.note}</p>
+                      <p className="text-xs text-text-tertiary dark:text-text-tertiary mt-0.5">{location.note}</p>
                     )}
                   </div>
                 </div>
               ))}
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-text-tertiary shrink-0" />
-                <a href={`tel:${CONTACT.phone}`} className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors">
+                <a href={`tel:${CONTACT.phone}`} className="text-sm text-text-secondary hover:text-text-primary transition-colors">
                   {CONTACT.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-text-tertiary shrink-0" />
-                <a href={`mailto:${CONTACT.email}`} className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors">
+                <a href={`mailto:${CONTACT.email}`} className="text-sm text-text-secondary hover:text-text-primary transition-colors">
                   {CONTACT.email}
                 </a>
               </div>
@@ -126,7 +126,7 @@ export default function Footer() {
             <a
               key={social.name}
               href={social.href}
-              className="p-2 text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors rounded-md hover:bg-neutral-100 dark:hover:bg-white/4"
+              className="p-2 text-text-tertiary hover:text-text-primary transition-colors rounded-md hover:bg-surface-raised dark:hover:bg-surface-base/4"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -139,26 +139,26 @@ export default function Footer() {
         {/* Legal Links — routes from ROUTES.public SSOT */}
         <div className="mt-6 pt-6 border-t border">
           <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-text-tertiary">
-            <Link href={ROUTES.public.impressum} className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href={ROUTES.public.impressum} className="hover:text-text-primary transition-colors">
               {tFooter('impressum')}
             </Link>
-            <Link href={ROUTES.public.datenschutz} className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href={ROUTES.public.datenschutz} className="hover:text-text-primary transition-colors">
               {tFooter('privacyPolicy')}
             </Link>
-            <Link href={ROUTES.public.agb} className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href={ROUTES.public.agb} className="hover:text-text-primary transition-colors">
               {tFooter('termsOfService')}
             </Link>
-            <Link href={ROUTES.public.transparenz} className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href={ROUTES.public.transparenz} className="hover:text-text-primary transition-colors">
               {tFooter('transparency')}
             </Link>
-            <Link href={ROUTES.public.mitgliedWerden} className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+            <Link href={ROUTES.public.mitgliedWerden} className="hover:text-text-primary transition-colors">
               {tNav('membership')}
             </Link>
           </nav>
         </div>
 
         {/* Copyright */}
-        <div className="mt-6 text-center text-xs text-text-tertiary dark:text-neutral-500">
+        <div className="mt-6 text-center text-xs text-text-tertiary dark:text-text-tertiary">
           &copy; {new Date().getFullYear()} {ORG.name}. {tFooter('allRightsReserved')}
         </div>
       </div>

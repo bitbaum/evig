@@ -45,7 +45,7 @@ export default function AdminPageWrapper({
             {backButton && (
               <Link
                 href={backButton.href}
-                className="inline-flex items-center gap-1 text-xs text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors mb-1"
+                className="inline-flex items-center gap-1 text-xs text-text-tertiary hover:text-text-secondary transition-colors mb-1"
               >
                 <ArrowLeft className="w-3 h-3" />
                 {backButton.label}

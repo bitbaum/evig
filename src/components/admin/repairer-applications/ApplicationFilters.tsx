@@ -33,7 +33,7 @@ export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange
                 onClick={() => onStatusChange(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
+                    ? 'bg-action-muted-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >

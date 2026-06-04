@@ -63,7 +63,7 @@ export default function ITHilfePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact hero — requests visible without scrolling */}
-      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/6 py-6 sm:py-8">
+      <div className="bg-surface-base border-b border-subtle dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -79,7 +79,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={IT_HILFE.routes.helpers}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 dark:border-primary-500 rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted-muted text-action border border-action dark:border-action rounded-lg text-base font-semibold transition-colors"
               >
                 <Users className="w-4 h-4" />
                 {t('findTechnician')}
@@ -117,20 +117,20 @@ export default function ITHilfePage() {
           <div className="mb-6 flex flex-wrap gap-2">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-200 dark:border-primary-500/40 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base dark:bg-transparent hover:bg-action-muted-muted text-action border border-strong dark:border-action/40 rounded-lg text-sm font-medium transition-colors"
             >
               <Wrench className="w-4 h-4" />
               {t('becomeTechnician')}
             </Link>
             <Link
               href={IT_HILFE.routes.my}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-neutral-50 text-text-secondary border rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-surface-raised text-text-secondary border rounded-lg text-sm font-medium transition-colors"
             >
               {t('myRequests')}
             </Link>
             <Link
               href={IT_HILFE.routes.myOffers}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-neutral-50 text-text-secondary border rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-surface-raised text-text-secondary border rounded-lg text-sm font-medium transition-colors"
             >
               <Heart className="w-4 h-4" />
               {t('myOffers')}
@@ -143,14 +143,14 @@ export default function ITHilfePage() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-neutral-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
               aria-expanded={showFilters}
               aria-controls="filter-panel"
             >
               <SlidersHorizontal className="w-4 h-4" />
               {t('filterButton')}
               {hasActiveFilters && (
-                <span className="w-2 h-2 rounded-full bg-primary-500" aria-label={t('activeFiltersIndicator')} />
+                <span className="w-2 h-2 rounded-full bg-action" aria-label={t('activeFiltersIndicator')} />
               )}
             </button>
 
@@ -170,7 +170,7 @@ export default function ITHilfePage() {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-action hover:text-primary-700 font-medium"
+                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-action hover:text-action font-medium"
               >
                 <X className="w-4 h-4" />
                 {t('resetFilters')}
@@ -297,7 +297,7 @@ export default function ITHilfePage() {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -308,7 +308,7 @@ export default function ITHilfePage() {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
@@ -334,7 +334,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted-muted text-action border border-action dark:border-action rounded-lg font-semibold transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaMoreInfo')}
               </Link>

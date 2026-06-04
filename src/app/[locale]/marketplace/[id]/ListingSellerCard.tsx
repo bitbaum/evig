@@ -22,11 +22,11 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
   return (
     <Link
       href={`/sellers/${listing.seller_id}`}
-      className="block card-shell p-4 hover:border-primary-300 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+      className="block card-shell p-4 hover:border-strong transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
     >
       <Heading level={3} className="text-sm text-text-primary mb-3">{t('seller')}</Heading>
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
           {listing.seller_avatar_url ? (
             <Image src={listing.seller_avatar_url} alt={t('seller')} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
           ) : (
@@ -36,7 +36,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="font-medium text-text-primary">{sellerName}</span>
-            {listing.is_revampit && <Shield className="w-4 h-4 text-primary-500" aria-hidden="true" />}
+            {listing.is_revampit && <Shield className="w-4 h-4 text-action" aria-hidden="true" />}
           </div>
           <div className="flex items-center gap-3 text-sm text-text-tertiary">
             {listing.seller_rating && Number(listing.seller_rating) > 0 && (
