@@ -1,6 +1,24 @@
 # Architecture Debt — Parallel Implementations + Spaghetti Patterns
 
-**Last updated:** 2026-06-04 (after spaghetti subagent audit on commit `a8d7d225`)
+**Last updated:** 2026-06-04 (after QQ session — partial progress on all three)
+
+**Session progress (QQ commits, 2026-06-04):**
+- #3 (status taxonomy): ✓ DONE. Additive `LifecycleStage` layer in
+  `src/config/lifecycle-stage.ts`. Maps booking + appointment + IT-Hilfe
+  statuses to `pending | active | completed | cancelled`. No existing
+  enum changes. Adoption opt-in.
+- #1 (decision systems): PARTIALLY PREPPED. Migration 086 (additive
+  `protocol_id` + `action_item_id` on `decisions`) ready in
+  `scripts/db/migrations/` but NOT applied to prod Neon (needs user
+  green light). Voting method `thumbs_up_down` added to
+  `VOTING_METHODS` + schema + tally logic. Remaining: apply migration,
+  build the protocol UI bridge, migrate existing data.
+- #2 (IT-Hilfe notifications): STEP 1 LANDED. Central `getEmailContent`
+  in `notifications.ts` now dispatches IT-Hilfe notification types to
+  the rich HTML templates. Callers still bypass via
+  `sendCustomEmail()`/`sendItHilfeNotification()` — mechanical migration
+  of those call sites deferred because the in-app-only vs
+  email-only distinctions are behavior choices that need confirmation.
 
 The codebase has three significant parallel-implementation patterns that
 should be merged. Each requires careful migration work — listing them
