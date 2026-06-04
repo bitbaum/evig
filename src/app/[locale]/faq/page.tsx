@@ -87,24 +87,24 @@ export default async function FAQPage({ params }: FAQPageProps) {
                   <Heading level={2} className="text-lg sm:text-xl text-neutral-800 mb-3 sm:mb-4">
                     {group.category}
                   </Heading>
-                  <div className="divide-y divide-neutral-200 dark:divide-white/[0.06] rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900">
+                  <div className="divide-y divide-neutral-200 dark:divide-white/[0.06] rounded-xl border bg-surface-base">
                     {group.items.map((item, idx) => (
                       <details key={idx} className="group p-4 sm:p-5 open:bg-neutral-50/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
-                          <span className="text-sm sm:text-base text-neutral-900 font-medium pr-2">
+                          <span className="text-sm sm:text-base text-text-primary font-medium pr-2">
                             {item.q}
                           </span>
-                          <span className="ml-4 text-neutral-400 group-open:rotate-180 transition-transform flex-shrink-0">
+                          <span className="ml-4 text-text-muted group-open:rotate-180 transition-transform flex-shrink-0">
                             ▾
                           </span>
                         </summary>
-                        <div className="mt-3 text-neutral-700 text-xs sm:text-sm">
+                        <div className="mt-3 text-text-secondary text-xs sm:text-sm">
                           <p>{item.a}</p>
                           {item.link && (
                             <p className="mt-2">
                               <Link
                                 href={item.link.href}
-                                className="text-primary-600 hover:text-primary-800 underline"
+                                className="text-action hover:text-primary-800 underline"
                               >
                                 {item.link.label}
                               </Link>
@@ -118,7 +118,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] text-xs sm:text-sm">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-surface-raised dark:bg-neutral-900 border text-xs sm:text-sm">
               <p className="text-neutral-800">
                 {t('notListed')}
                 <span className="ml-2">

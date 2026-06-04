@@ -35,7 +35,7 @@ export function ProductSpecFields({
   return (
     <div className="card-shell p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+        <Heading level={2} className="text-base sm:text-lg font-semibold text-text-primary flex items-center gap-2">
           <FileText className="w-5 h-5" />
           <span>{t('title')}</span>
           {aiMetadata.specs && (
@@ -45,7 +45,7 @@ export function ProductSpecFields({
         <button
           type="button"
           onClick={onSpecAdd}
-          className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 touch-manipulation p-2 -m-2"
+          className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 touch-manipulation p-2 -m-2"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">{t('addField')}</span>

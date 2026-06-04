@@ -19,7 +19,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
 
   return (
     <div className="mb-8">
-      <Heading level={2} className="text-xl text-neutral-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl text-text-primary mb-4 flex items-center">
         <MapPin className="w-5 h-5 mr-2" />
         Grundinformationen
       </Heading>
@@ -39,7 +39,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
         </FormField>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-3">
+          <label className="block text-sm font-medium text-text-secondary mb-3">
             Ortstyp *
           </label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -55,13 +55,13 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
                 <div className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.type === type.id
                     ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                    : 'border-neutral-200 hover:border-neutral-300'
+                    : 'border hover:border-neutral-300'
                 }`}>
                   <type.icon className={`w-6 h-6 mb-2 ${
-                    formData.type === type.id ? 'text-primary-600' : 'text-neutral-400'
+                    formData.type === type.id ? 'text-action' : 'text-text-muted'
                   }`} />
-                  <div className="font-medium text-neutral-900">{type.label}</div>
-                  <div className="text-sm text-neutral-600">{type.description}</div>
+                  <div className="font-medium text-text-primary">{type.label}</div>
+                  <div className="text-sm text-text-secondary">{type.description}</div>
                 </div>
               </label>
             ))}

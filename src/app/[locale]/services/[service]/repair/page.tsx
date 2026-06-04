@@ -45,7 +45,7 @@ export default async function RepairPage({ params }: Props) {
         title={t('hero.title')}
         subtitle={t('hero.description')}
       >
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto mt-4">
+        <p className="text-lg text-text-secondary max-w-2xl mx-auto mt-4">
           <strong>{t('hero.subtitle')}</strong>
         </p>
       </PageHero>
@@ -57,12 +57,12 @@ export default async function RepairPage({ params }: Props) {
             {features.map((feature, index) => {
               const Icon = FEATURE_ICONS[index]
               return (
-                <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.08]">
+                <div key={index} className="bg-surface-base rounded-xl p-8 border">
                   <div className="flex items-start mb-6">
                     <IconBadge icon={Icon} theme="services" size="lg" className="mr-4" />
                     <div>
                       <Heading level={3} className="text-2xl font-bold mb-3">{feature.title}</Heading>
-                      <p className="text-neutral-600">{feature.description}</p>
+                      <p className="text-text-secondary">{feature.description}</p>
                     </div>
                   </div>
                 </div>
@@ -73,17 +73,17 @@ export default async function RepairPage({ params }: Props) {
       </section>
 
       {/* Process Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4">
           <Heading level={2} className="text-3xl font-bold mb-12 text-center">{t('processHeading')}</Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {process.map((step, index) => (
-              <div key={index} className="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-8">
+              <div key={index} className="bg-surface-raised/50 rounded-xl p-8">
                 <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                   {index + 1}
                 </div>
                 <Heading level={3} className="text-xl font-semibold mb-3">{step.title}</Heading>
-                <p className="text-neutral-600">{step.description}</p>
+                <p className="text-text-secondary">{step.description}</p>
               </div>
             ))}
           </div>
@@ -93,16 +93,16 @@ export default async function RepairPage({ params }: Props) {
       {/* Pricing Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.08]">
+          <div className="max-w-2xl mx-auto bg-surface-base rounded-xl p-8 border">
             <Heading level={2} className="text-3xl font-bold mb-8 text-center">{t('pricing.heading')}</Heading>
             <div className="text-center mb-8">
-              <p className="text-2xl font-bold text-primary-600">{t('pricing.base')}</p>
+              <p className="text-2xl font-bold text-action">{t('pricing.base')}</p>
             </div>
             <div className="space-y-4">
               {pricingDetails.map((detail, index) => (
                 <div key={index} className="flex items-center">
                   <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3" />
-                  <span className="text-neutral-600">{detail}</span>
+                  <span className="text-text-secondary">{detail}</span>
                 </div>
               ))}
             </div>

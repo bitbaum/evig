@@ -26,13 +26,13 @@ export default function NewLocationPage() {
   } = useLocationForm()
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href={ROUTES.admin.locations}
-            className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
+            className="inline-flex items-center text-text-secondary hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zur Ortsverwaltung
@@ -40,12 +40,12 @@ export default function NewLocationPage() {
 
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6">
-              <MapPin className="w-8 h-8 text-primary-600" />
+              <MapPin className="w-8 h-8 text-action" />
             </div>
-            <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">
+            <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">
               Neuen Ort erstellen
             </Heading>
-            <p className="text-neutral-600">
+            <p className="text-text-secondary">
               Füge einen neuen Veranstaltungsort zur Plattform hinzu
             </p>
           </div>
@@ -75,7 +75,7 @@ export default function NewLocationPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg dark:shadow-black/30 p-8">
+        <form onSubmit={handleSubmit} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
           <LocationBasicInfoSection formData={formData} submitResult={submitResult} onFieldChange={handleFieldChange} />
           <LocationAddressSection formData={formData} onFieldChange={handleFieldChange} />
           <LocationFacilitiesSection formData={formData} onFieldChange={handleFieldChange} onFacilityChange={handleFacilityChange} />
@@ -102,7 +102,7 @@ export default function NewLocationPage() {
               )}
             </Button>
 
-            <p className="text-sm text-neutral-600 mt-4">
+            <p className="text-sm text-text-secondary mt-4">
               Nach Erstellung wird der Ort zur Genehmigung eingereicht und muss von einem Administrator freigegeben werden.
             </p>
           </div>

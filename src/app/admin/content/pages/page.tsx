@@ -111,13 +111,13 @@ export default async function AdminPagesPage() {
             href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
               Statische Seiten
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-text-secondary mt-1">
               Über uns, Kontakt, FAQ und andere Seiten verwalten
             </p>
           </div>
@@ -155,42 +155,42 @@ export default async function AdminPagesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Globe className="w-8 h-8 text-primary-600" />
+            <Globe className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Gesamt Seiten
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.totalPages}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-primary-600" />
+            <CheckCircle className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Veröffentlicht
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.publishedPages}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Clock className="w-8 h-8 text-secondary-600" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Entwürfe
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.draftPages}
               </p>
             </div>
@@ -199,42 +199,42 @@ export default async function AdminPagesPage() {
       </div>
 
       {/* Pages Table */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
         {pages.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-neutral-50 dark:bg-neutral-700">
+              <thead className="bg-surface-raised dark:bg-neutral-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Seite
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     URL
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Aktualisiert
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Aktionen
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
+              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
                 {pages.map((page) => (
                   <tr
                     key={page.id}
                     className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
                   >
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                      <div className="text-sm font-medium text-text-primary">
                         {page.title}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <code className="text-sm text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-700 px-2 py-1 rounded">
+                      <code className="text-sm text-text-secondary bg-surface-raised dark:bg-neutral-700 px-2 py-1 rounded">
                         /{page.slug}
                       </code>
                     </td>
@@ -250,7 +250,7 @@ export default async function AdminPagesPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-neutral-900 dark:text-white">
+                      <div className="text-sm text-text-primary">
                         {page.updated_at ? formatDateNumeric(page.updated_at) : '-'}
                       </div>
                     </td>
@@ -258,14 +258,14 @@ export default async function AdminPagesPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/${page.slug}`}
-                          className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-300"
+                          className="text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300"
                           target="_blank"
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
                         <Link
                           href={ROUTES.admin.contentPage(page.id)}
-                          className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                          className="text-action hover:text-primary-900 dark:hover:text-primary-300"
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
@@ -278,11 +278,11 @@ export default async function AdminPagesPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <FileText className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+            <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               Noch keine Seiten
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+            <p className="text-text-secondary mb-6">
               Erstelle statische Seiten wie Über uns, Kontakt oder FAQ.
             </p>
             <Link href={ROUTES.admin.contentPageNew} className={buttonClass({ variant: 'primary' })}>
@@ -313,10 +313,10 @@ export default async function AdminPagesPage() {
               <Link
                 key={suggestion.slug}
                 href={`${ROUTES.admin.contentPageNew}?title=${encodeURIComponent(suggestion.title)}&slug=${suggestion.slug}`}
-                className="flex items-center gap-2 p-3 bg-white dark:bg-neutral-900 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
+                className="flex items-center gap-2 p-3 bg-surface-base rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
               >
-                <Plus className="w-4 h-4 text-primary-600" />
-                <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                <Plus className="w-4 h-4 text-action" />
+                <span className="text-sm font-medium text-text-primary">
                   {suggestion.title}
                 </span>
               </Link>
@@ -326,16 +326,16 @@ export default async function AdminPagesPage() {
       )}
 
       {/* Info Banner */}
-      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
+      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Globe className="w-5 h-5 text-neutral-600" />
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Globe className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
+            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
               Statische Seiten
             </Heading>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               Statische Seiten enthalten wichtige Informationen über Ihre
               Organisation. Diese erscheinen in der Navigation und im Footer der
               Website. Vergiss nicht, rechtlich erforderliche Seiten wie

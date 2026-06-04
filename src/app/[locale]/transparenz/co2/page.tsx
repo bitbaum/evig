@@ -74,19 +74,19 @@ export default function Co2MethodologyPage() {
       <Section tone="tinted" density="compact">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-2 mb-4">
-            <Calculator className="h-5 w-5 text-primary-600 dark:text-primary-400" />
-            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            <Calculator className="h-5 w-5 text-action" />
+            <h2 className="text-2xl font-bold tracking-tight text-text-primary">
               Die Formel
             </h2>
           </div>
           <div className={cn(designPrimitive.surface.card, 'p-6 font-mono text-sm leading-relaxed')}>
-            <p className="text-neutral-900 dark:text-white">
+            <p className="text-text-primary">
               CO₂-Einsparung pro Gerät = Gerätegewicht (kg) × Emissionsfaktor (kg CO₂e/kg)
             </p>
-            <p className="mt-3 text-neutral-600 dark:text-neutral-300">
-              Beispiel Laptop: 2,0 kg × 57 kg CO₂e/kg ≈ <strong className="text-neutral-900 dark:text-white">115 kg CO₂e</strong>
+            <p className="mt-3 text-text-secondary">
+              Beispiel Laptop: 2,0 kg × 57 kg CO₂e/kg ≈ <strong className="text-text-primary">115 kg CO₂e</strong>
             </p>
-            <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400 not-italic">
+            <p className="mt-3 text-xs text-text-tertiary not-italic">
               Schätzung pro Gerät­klasse. Modellgenaue Zahlen (Apple, Dell) sind genauer und
               werden ergänzt, sobald wir die Modell-PCFs der jeweiligen Hersteller in unsere
               Inventarisierung übernehmen.
@@ -97,7 +97,7 @@ export default function Co2MethodologyPage() {
 
       <Section tone="surface" density="compact">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-6">
             Eingangswerte mit Quellen
           </h2>
           <div className="space-y-4">
@@ -107,24 +107,24 @@ export default function Co2MethodologyPage() {
                 className={cn(designPrimitive.surface.card, 'p-5')}
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
-                  <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
+                  <h3 className="text-base font-semibold text-text-primary">
                     {n.label}
                   </h3>
-                  <span className="text-xl font-bold text-primary-600 dark:text-primary-400 tabular-nums">
+                  <span className="text-xl font-bold text-action tabular-nums">
                     {n.value}
                   </span>
                 </div>
                 {n.methodology && (
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-2">
+                  <p className="text-sm text-text-secondary mb-2">
                     {n.methodology}
                   </p>
                 )}
                 {n.calculation && (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono mb-3">
+                  <p className="text-xs text-text-tertiary font-mono mb-3">
                     {n.calculation}
                   </p>
                 )}
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-neutral-500 dark:text-neutral-400 pt-3 border-t border-neutral-100 dark:border-white/[0.04]">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-tertiary pt-3 border-t border-subtle">
                   {n.sourceDocument && (
                     <span className="inline-flex items-center gap-1">
                       <FileText className="h-3.5 w-3.5" />
@@ -136,7 +136,7 @@ export default function Co2MethodologyPage() {
                       href={n.externalLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:underline"
+                      className="inline-flex items-center gap-1 text-action hover:underline"
                     >
                       Quelle öffnen <ExternalLink className="h-3 w-3" />
                     </a>
@@ -151,16 +151,16 @@ export default function Co2MethodologyPage() {
 
       <Section tone="tinted" density="compact">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
             Gewicht pro Geräte­kategorie
           </h2>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-6">
+          <p className="text-sm text-text-secondary mb-6">
             Diese Durchschnittsgewichte fliessen in die Formel ein. Wir verwenden konservative
             Werte aus öffentlich zugänglichen Produktdaten der häufigsten Modelle.
           </p>
           <div className={cn(designPrimitive.surface.card, 'overflow-hidden')}>
             <table className="w-full text-sm">
-              <thead className="bg-neutral-50 dark:bg-white/[0.03] text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+              <thead className="bg-surface-raised dark:bg-white/[0.03] text-xs uppercase tracking-wider text-text-tertiary">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">Kategorie</th>
                   <th className="px-4 py-3 text-right font-medium">Gewicht</th>
@@ -168,23 +168,23 @@ export default function Co2MethodologyPage() {
                   <th className="px-4 py-3 text-left font-medium">Quelle</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+              <tbody className="divide-y divide-subtle">
                 {mainCategories.map(([catId, weight]) => {
                   const co2 = estimateCO2Savings(catId) ?? 0
                   const source = estimateCO2Source(catId)
                   const direct = CATEGORY_CO2_KG_OVERRIDE[catId]
                   return (
                     <tr key={catId}>
-                      <td className="px-4 py-3 text-neutral-900 dark:text-white">
+                      <td className="px-4 py-3 text-text-primary">
                         {CATEGORY_LABELS[catId] ?? catId}
                       </td>
-                      <td className="px-4 py-3 text-right tabular-nums text-neutral-600 dark:text-neutral-300">
+                      <td className="px-4 py-3 text-right tabular-nums text-text-secondary">
                         {weight} kg
                       </td>
-                      <td className="px-4 py-3 text-right tabular-nums text-primary-600 dark:text-primary-400 font-medium">
+                      <td className="px-4 py-3 text-right tabular-nums text-action font-medium">
                         ~{co2} kg
                       </td>
-                      <td className="px-4 py-3 text-xs text-neutral-500 dark:text-neutral-400">
+                      <td className="px-4 py-3 text-xs text-text-tertiary">
                         {source === 'direct'
                           ? <span title={`Direkter Studienwert: ${direct} kg`}>Studie (zitiert)</span>
                           : <span title={`Berechnet: ${weight} kg × 57 kg/kg`}>Gewicht × Faktor</span>}
@@ -194,7 +194,7 @@ export default function Co2MethodologyPage() {
                 })}
               </tbody>
             </table>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 p-4 border-t border-neutral-100 dark:border-white/[0.04]">
+            <p className="text-xs text-text-tertiary p-4 border-t border-subtle">
               Bei „Studie (zitiert)" verwenden wir den direkten Wert aus der Eingangs­wert­tabelle oben statt der
               groben Gewicht-mal-Faktor-Schätzung. Sobald wir weitere kategorie­spezifische LCAs (Apple/Dell PER)
               eingepflegt haben, wandern weitere Kategorien hierhin.
@@ -205,12 +205,12 @@ export default function Co2MethodologyPage() {
 
       <Section tone="surface" density="compact">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
             Grenzen dieser Schätzung
           </h2>
-          <ul className="space-y-3 text-sm text-neutral-700 dark:text-neutral-300">
+          <ul className="space-y-3 text-sm text-text-secondary">
             <li className="flex gap-3">
-              <span className="text-primary-600 dark:text-primary-400 flex-shrink-0">•</span>
+              <span className="text-action flex-shrink-0">•</span>
               <span>
                 Die Zahlen umfassen die <strong>Herstellungs-Phase</strong> des Neugeräts
                 abzüglich Aufbereitungs-Aufwand. Energie­verbrauch während der Nutzung, Versand
@@ -218,7 +218,7 @@ export default function Co2MethodologyPage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-primary-600 dark:text-primary-400 flex-shrink-0">•</span>
+              <span className="text-action flex-shrink-0">•</span>
               <span>
                 Die tatsächliche Einsparung hängt vom <strong>kontrafaktischen Szenario</strong>
                 ab: Hätte die Person sonst wirklich ein Neugerät gekauft? Wir gehen davon aus,
@@ -226,14 +226,14 @@ export default function Co2MethodologyPage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-primary-600 dark:text-primary-400 flex-shrink-0">•</span>
+              <span className="text-action flex-shrink-0">•</span>
               <span>
                 Strommix­annahme: <strong>Schweizer Stromnetz</strong> (~12 g CO₂e/kWh). In
                 Ländern mit kohlelastigem Mix wären die Aufbereitungs-Emissionen höher.
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-primary-600 dark:text-primary-400 flex-shrink-0">•</span>
+              <span className="text-action flex-shrink-0">•</span>
               <span>
                 Wir runden Anzeige-Werte auf 5 kg (unter 100 kg) bzw. 10 kg (darüber) — spurious
                 Präzision wie „287,4 kg" suggeriert Genauigkeit, die wir nicht haben.
@@ -245,10 +245,10 @@ export default function Co2MethodologyPage() {
 
       <Section tone="tinted" density="compact">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
+          <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
             Aktualisierung & Mitwirken
           </h2>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-3">
+          <p className="text-sm text-text-secondary mb-3">
             Diese Methodik wird laufend aktualisiert. Quellcode der Berechnung und der hier
             verlinkten Daten:
           </p>
@@ -256,14 +256,14 @@ export default function Co2MethodologyPage() {
             href="https://github.com/g-but/revampit/blob/main/src/lib/org-numbers.defaults.ts"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+            className="inline-flex items-center gap-2 text-sm text-action hover:underline"
           >
             org-numbers.defaults.ts auf GitHub
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-4">
+          <p className="text-sm text-text-secondary mt-4">
             Fehler entdeckt oder bessere Quelle bekannt? Eine kurze Mail an{' '}
-            <a href={`mailto:${CONTACT.email}`} className="text-primary-600 dark:text-primary-400 hover:underline">
+            <a href={`mailto:${CONTACT.email}`} className="text-action hover:underline">
               {CONTACT.email}
             </a>{' '}
             reicht.

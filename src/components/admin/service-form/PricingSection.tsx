@@ -43,7 +43,7 @@ export function PricingSection({
       </FormField>
 
       <div>
-        <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <span className="block text-sm font-medium text-text-secondary mb-2">
           Preisdetails
         </span>
         <div className="space-y-2">
@@ -68,7 +68,7 @@ export function PricingSection({
           <button
             type="button"
             onClick={onDetailAdd}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Detail hinzufügen
@@ -77,7 +77,7 @@ export function PricingSection({
       </div>
 
       <div>
-        <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <span className="block text-sm font-medium text-text-secondary mb-2">
           Medienpreise (optional, für Datenrettung)
         </span>
         <div className="space-y-2">
@@ -102,7 +102,7 @@ export function PricingSection({
           <button
             type="button"
             onClick={onMediaPriceAdd}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Medienpreis hinzufügen

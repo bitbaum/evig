@@ -59,8 +59,8 @@ export default function DecisionListClient({
         columns={4}
         items={[
           { icon: Vote,          color: 'amber', label: 'Aktive Abstimmungen',  value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
-          { icon: MessageSquare, color: 'blue',  label: 'Offene Diskussionen',  value: stats.discussion,   valueColor: 'text-primary-600 dark:text-primary-400' },
-          { icon: CheckCircle,   color: 'green', label: 'Abgeschlossen',        value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
+          { icon: MessageSquare, color: 'blue',  label: 'Offene Diskussionen',  value: stats.discussion,   valueColor: 'text-action' },
+          { icon: CheckCircle,   color: 'green', label: 'Abgeschlossen',        value: stats.closed,       valueColor: 'text-action' },
           { icon: AlertCircle,   color: 'red',   label: 'Ausstehende Stimmen',  value: stats.pendingVotes, valueColor: 'text-error-600 dark:text-error-400' },
         ]}
       />
@@ -122,12 +122,12 @@ export default function DecisionListClient({
                     <td className={adminTable.td}>
                       <Link
                         href={`/admin/decisions/${d.id}`}
-                        className="font-medium text-neutral-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                        className="font-medium text-text-primary hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                       >
                         {d.title}
                       </Link>
                       {d.hasUserVoted && (
-                        <span className="ml-2 text-xs text-primary-600 dark:text-primary-400">✓ abgestimmt</span>
+                        <span className="ml-2 text-xs text-action">✓ abgestimmt</span>
                       )}
                     </td>
                     <td className={cn(adminTable.td, 'hidden md:table-cell')}>
@@ -148,7 +148,7 @@ export default function DecisionListClient({
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
                         <button
                           onClick={() => setDeleteTarget(d)}
-                          className="text-neutral-400 hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded"
+                          className="text-text-muted hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded"
                           title="Löschen"
                         >
                           <Trash2 className="w-4 h-4" />

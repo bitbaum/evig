@@ -57,7 +57,7 @@ export function IntakePipelineView({
       {/* Stats — sourced from server aggregate counts, not current-page items */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total', value: statusCounts.total, color: 'bg-neutral-100 text-neutral-800' },
+          { label: 'Total', value: statusCounts.total, color: 'bg-surface-raised text-neutral-800' },
           { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200' },
           { label: 'Bereit', value: statusCounts.ready, color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
           { label: 'Publiziert', value: statusCounts.published, color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
@@ -76,7 +76,7 @@ export function IntakePipelineView({
         </Button>
 
         <div className="flex items-center gap-1 ml-auto">
-          <Filter className="w-4 h-4 text-neutral-400" />
+          <Filter className="w-4 h-4 text-text-muted" />
         </div>
 
         <Select
@@ -113,7 +113,7 @@ export function IntakePipelineView({
         </Select>
 
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 text-neutral-500" />
+          <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 text-text-tertiary" />
           <Input
             type="text"
             placeholder="Suche..."
@@ -126,14 +126,14 @@ export function IntakePipelineView({
 
       {/* Table */}
       {loading ? (
-        <div className="text-center py-8 text-neutral-500">Laden...</div>
+        <div className="text-center py-8 text-text-tertiary">Laden...</div>
       ) : items.length === 0 ? (
-        <div className="text-center py-12 bg-neutral-50 rounded-lg">
+        <div className="text-center py-12 bg-surface-raised rounded-lg">
           <Package className="w-12 h-12 mx-auto text-neutral-300 mb-3" />
-          <p className="text-neutral-500 mb-2">Keine Geräte in der Pipeline</p>
+          <p className="text-text-tertiary mb-2">Keine Geräte in der Pipeline</p>
           <button
             onClick={onCreateNew}
-            className="text-primary-600 hover:underline text-sm"
+            className="text-action hover:underline text-sm"
           >
             Erstes Gerät erfassen
           </button>
@@ -143,7 +143,7 @@ export function IntakePipelineView({
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b text-left text-neutral-500">
+                <tr className="border-b text-left text-text-tertiary">
                   <th className="pb-2 font-medium">UUID</th>
                   <th className="pb-2 font-medium">Gerät</th>
                   <th className="pb-2 font-medium">Stufe</th>
@@ -162,10 +162,10 @@ export function IntakePipelineView({
                       className="hover:bg-neutral-50 cursor-pointer"
                       onClick={() => onOpenDetail(item.id)}
                     >
-                      <td className="py-2.5 font-mono text-xs text-neutral-500">{item.item_uuid}</td>
+                      <td className="py-2.5 font-mono text-xs text-text-tertiary">{item.item_uuid}</td>
                       <td className="py-2.5">
                         <div className="font-medium">{item.brand} {item.product_name}</div>
-                        <div className="text-xs text-neutral-500">
+                        <div className="text-xs text-text-tertiary">
                           {KATEGORIEN.find(k => k.value === item.category)?.label || '-'}
                         </div>
                       </td>
@@ -185,7 +185,7 @@ export function IntakePipelineView({
                               style={{ width: `${progress.percentage}%` }}
                             />
                           </div>
-                          <span className="text-xs text-neutral-500">
+                          <span className="text-xs text-text-tertiary">
                             {progress.requiredCompleted}/{progress.requiredTotal}
                           </span>
                         </div>
@@ -207,12 +207,12 @@ export function IntakePipelineView({
                       </td>
                       <td className="py-2.5">
                         {item.source_donation_id ? (
-                          <span className="text-xs text-primary-600">{item.donor_name || 'Ja'}</span>
+                          <span className="text-xs text-action">{item.donor_name || 'Ja'}</span>
                         ) : (
-                          <span className="text-xs text-neutral-400">-</span>
+                          <span className="text-xs text-text-muted">-</span>
                         )}
                       </td>
-                      <td className="py-2.5 text-xs text-neutral-500">
+                      <td className="py-2.5 text-xs text-text-tertiary">
                         {formatDateShort(item.created_at)}
                       </td>
                     </tr>

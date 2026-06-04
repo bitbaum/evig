@@ -15,7 +15,7 @@ interface Props {
 export function LocationAccessibilitySection({ formData, onAccessibilityChange }: Props) {
   return (
     <div className="mb-8">
-      <Heading level={2} className="text-xl text-neutral-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl text-text-primary mb-4 flex items-center">
         <CheckCircle className="w-5 h-5 mr-2" />
         Barrierefreiheit & Zugänglichkeit
       </Heading>
@@ -27,9 +27,9 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             id="wheelchair"
             checked={formData.accessibility_info.wheelchairAccessible}
             onChange={() => onAccessibilityChange('wheelchairAccessible', !formData.accessibility_info.wheelchairAccessible)}
-            className="mr-3 text-primary-600 focus:ring-primary-500"
+            className="mr-3 text-action focus:ring-primary-500"
           />
-          <label htmlFor="wheelchair" className="text-sm font-medium text-neutral-700">
+          <label htmlFor="wheelchair" className="text-sm font-medium text-text-secondary">
             Rollstuhlgerecht
           </label>
         </div>
@@ -40,9 +40,9 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             id="parking"
             checked={formData.accessibility_info.parkingAvailable}
             onChange={() => onAccessibilityChange('parkingAvailable', !formData.accessibility_info.parkingAvailable)}
-            className="mr-3 text-primary-600 focus:ring-primary-500"
+            className="mr-3 text-action focus:ring-primary-500"
           />
-          <label htmlFor="parking" className="text-sm font-medium text-neutral-700">
+          <label htmlFor="parking" className="text-sm font-medium text-text-secondary">
             Parkplatz verfügbar
           </label>
         </div>

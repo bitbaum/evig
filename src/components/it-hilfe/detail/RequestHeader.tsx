@@ -31,20 +31,20 @@ export function RequestHeader({ request }: RequestHeaderProps) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
               {statusConfig?.name || request.status}
             </span>
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
               {urgencyConfig?.name || request.urgency}
             </span>
           </div>
-          <Heading level={1} className="text-2xl font-bold text-neutral-900">{request.title}</Heading>
+          <Heading level={1} className="text-2xl font-bold text-text-primary">{request.title}</Heading>
         </div>
       </div>
 
       {/* Device info */}
       {(request.deviceBrand || request.deviceModel) && (
-        <p className="text-neutral-600 mb-4">
+        <p className="text-text-secondary mb-4">
           <span className="font-medium">{t('deviceLabel')}</span>{' '}
           {[categoryConfig?.name, request.deviceBrand, request.deviceModel].filter(Boolean).join(' - ')}
         </p>
@@ -57,7 +57,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
 
       {/* Images */}
       {request.imageUrls.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-neutral-100">
+        <div className="mt-6 pt-6 border-t border-subtle">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {request.imageUrls.map((url, index) => (
               <a
@@ -83,15 +83,15 @@ export function RequestHeader({ request }: RequestHeaderProps) {
 
       {/* Skills needed */}
       {request.skillsNeeded.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-neutral-100">
-          <Heading level={3} className="text-sm font-medium text-neutral-700 mb-2">{t('requiredSkills')}</Heading>
+        <div className="mt-6 pt-6 border-t border-subtle">
+          <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">{t('requiredSkills')}</Heading>
           <div className="flex flex-wrap gap-2">
             {request.skillsNeeded.map((skillId) => {
               const skill = getSkillById(skillId)
               return (
                 <span
                   key={skillId}
-                  className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-sm"
+                  className="px-3 py-1 bg-surface-raised text-text-secondary rounded-full text-sm"
                 >
                   {skill?.name || skillId}
                 </span>

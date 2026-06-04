@@ -147,7 +147,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
         </FormField>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
+        <div className="flex justify-end gap-3 pt-4 border-t border">
           <Button type="button" onClick={onClose} variant="ghost" size="sm">
             Abbrechen
           </Button>

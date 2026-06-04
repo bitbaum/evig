@@ -32,18 +32,18 @@ export function ProtocolDraftInput({
   onProcess,
 }: Props) {
   return (
-    <div id="protocol-step-input" className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-6 space-y-4">
-      <Heading level={2} className="text-lg text-neutral-900">
+    <div id="protocol-step-input" className="bg-surface-base rounded-lg border border p-6 space-y-4">
+      <Heading level={2} className="text-lg text-text-primary">
         {inputMethod === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
       </Heading>
-      <p className="text-sm text-neutral-600">
+      <p className="text-sm text-text-secondary">
         {inputMethod === 'audio'
           ? 'Lade eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'
           : 'Füge das Transkript ein, um es von der KI strukturieren zu lassen.'}
       </p>
 
       {inputMethod === 'audio' ? (
-        <label className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-800 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-sm text-action hover:text-primary-800 cursor-pointer">
           <Upload className="w-3.5 h-3.5" />
           Audiodatei wählen
           <input
@@ -56,8 +56,8 @@ export function ProtocolDraftInput({
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <label className="text-sm text-neutral-600">Transkript</label>
-            <label className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-800 cursor-pointer">
+            <label className="text-sm text-text-secondary">Transkript</label>
+            <label className="flex items-center gap-1.5 text-sm text-action hover:text-primary-800 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
               .txt hochladen
               <input

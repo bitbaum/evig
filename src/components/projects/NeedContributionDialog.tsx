@@ -78,10 +78,10 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
       {done ? (
         <div className="text-center py-6">
           <CheckCircle2 className="mx-auto h-12 w-12 text-primary-500 mb-3" />
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+          <h3 className="text-lg font-semibold text-text-primary mb-2">
             {labels.successTitle}
           </h3>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-6">
+          <p className="text-sm text-text-secondary mb-6">
             {labels.successBody}
           </p>
           <button
@@ -99,12 +99,12 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="rounded-lg border border-neutral-200 dark:border-white/[0.08] bg-neutral-50 dark:bg-white/[0.03] p-3 text-sm">
-            <p className="font-medium text-neutral-900 dark:text-white break-words">{need.title}</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{typeLabel}</p>
+          <div className="rounded-lg border bg-surface-raised dark:bg-white/[0.03] p-3 text-sm">
+            <p className="font-medium text-text-primary break-words">{need.title}</p>
+            <p className="text-xs text-text-tertiary mt-0.5">{typeLabel}</p>
           </div>
 
-          <p className="text-sm text-neutral-600 dark:text-neutral-300">{labels.dialogIntro}</p>
+          <p className="text-sm text-text-secondary">{labels.dialogIntro}</p>
 
           <FormField label={labels.fields.name} required htmlFor="name">
             <Input id="name" name="name" required minLength={2} maxLength={200} variant="elevated" />

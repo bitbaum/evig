@@ -18,14 +18,14 @@ export function ProductTabSwitcher({
   shopStats,
 }: ProductTabSwitcherProps) {
   return (
-    <div className="flex items-center gap-2 border-b border-neutral-200">
+    <div className="flex items-center gap-2 border-b border">
       <button
         onClick={() => onTabChange('inventory')}
         className={cn(
           "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
           activeTab === 'inventory'
-            ? "border-primary-600 text-primary-600"
-            : "border-transparent text-neutral-500 hover:text-neutral-700"
+            ? "border-primary-600 text-action"
+            : "border-transparent text-text-tertiary hover:text-neutral-700"
         )}
       >
         <Database className="w-4 h-4" />
@@ -41,8 +41,8 @@ export function ProductTabSwitcher({
         className={cn(
           "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
           activeTab === 'shop'
-            ? "border-primary-600 text-primary-600"
-            : "border-transparent text-neutral-500 hover:text-neutral-700"
+            ? "border-primary-600 text-action"
+            : "border-transparent text-text-tertiary hover:text-neutral-700"
         )}
       >
         <Store className="w-4 h-4" />

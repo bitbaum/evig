@@ -49,7 +49,7 @@ function BucketHeader({ icon, label, count, accent }: BucketHeaderProps) {
     <div className={`flex items-center gap-2 px-4 py-2.5 border-b ${accent}`}>
       {icon}
       <span className="text-sm font-semibold">{label}</span>
-      <span className="ml-auto text-xs text-neutral-500 dark:text-neutral-400 tabular-nums">{count}</span>
+      <span className="ml-auto text-xs text-text-tertiary tabular-nums">{count}</span>
     </div>
   )
 }
@@ -76,9 +76,9 @@ export function ProtocolActionItemsList({
 }: Props) {
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
-      <div id="protocol-step-tasks" className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.08] rounded-lg p-4">
-        <Heading level={3} className="text-sm text-neutral-900 dark:text-white mb-1">Keine Aktionen erkannt</Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      <div id="protocol-step-tasks" className="bg-surface-raised dark:bg-neutral-900 border border rounded-lg p-4">
+        <Heading level={3} className="text-sm text-text-primary mb-1">Keine Aktionen erkannt</Heading>
+        <p className="text-sm text-text-secondary">
           Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
         </p>
       </div>
@@ -92,16 +92,16 @@ export function ProtocolActionItemsList({
   const canAct = isReview || isFinalized
 
   return (
-    <div id="protocol-step-tasks" className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] overflow-hidden">
+    <div id="protocol-step-tasks" className="bg-surface-base rounded-lg border border overflow-hidden">
 
       {/* Header */}
-      <div className="px-4 py-3 border-b border-neutral-100 dark:border-white/[0.06] flex items-center justify-between gap-3">
+      <div className="px-4 py-3 border-b border-subtle dark:border-white/[0.06] flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <ListChecks className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
-          <Heading level={2} className="text-neutral-900 dark:text-white">
+          <ListChecks className="w-4 h-4 text-text-muted" />
+          <Heading level={2} className="text-text-primary">
             Aktionen
           </Heading>
-          <span className="text-xs text-neutral-400 dark:text-neutral-500 tabular-nums">
+          <span className="text-xs text-text-muted tabular-nums">
             {notes.action_items.length}
           </span>
         </div>
@@ -134,12 +134,12 @@ export function ProtocolActionItemsList({
       {tasks.length > 0 && (
         <div>
           <BucketHeader
-            icon={<ListChecks className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />}
+            icon={<ListChecks className="w-3.5 h-3.5 text-action" />}
             label="Aufgaben"
             count={tasks.length}
-            accent="bg-primary-50/50 dark:bg-primary-900/10 border-neutral-100 dark:border-white/[0.04]"
+            accent="bg-primary-50/50 dark:bg-primary-900/10 border-subtle"
           />
-          <div className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+          <div className="divide-y divide-subtle">
             {tasks.map((item) => (
               <ActionRow
                 key={item.id}
@@ -164,14 +164,14 @@ export function ProtocolActionItemsList({
 
       {/* Bucket 2: Decisions */}
       {decisions.length > 0 && (
-        <div className={tasks.length > 0 ? 'border-t border-neutral-200 dark:border-white/[0.06]' : ''}>
+        <div className={tasks.length > 0 ? 'border-t border' : ''}>
           <BucketHeader
             icon={<Vote className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />}
             label="Entscheidungen"
             count={decisions.length}
-            accent="bg-violet-50/50 dark:bg-violet-900/10 border-neutral-100 dark:border-white/[0.04]"
+            accent="bg-violet-50/50 dark:bg-violet-900/10 border-subtle"
           />
-          <div className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+          <div className="divide-y divide-subtle">
             {decisions.map((item) => (
               <ActionRow
                 key={item.id}
@@ -196,14 +196,14 @@ export function ProtocolActionItemsList({
 
       {/* Bucket 3: Open Questions / Info */}
       {openQuestions.length > 0 && (
-        <div className={(tasks.length > 0 || decisions.length > 0) ? 'border-t border-neutral-200 dark:border-white/[0.06]' : ''}>
+        <div className={(tasks.length > 0 || decisions.length > 0) ? 'border-t border' : ''}>
           <BucketHeader
-            icon={<HelpCircle className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />}
+            icon={<HelpCircle className="w-3.5 h-3.5 text-text-tertiary" />}
             label="Offene Fragen / Info"
             count={openQuestions.length}
-            accent="bg-neutral-50 dark:bg-neutral-800/30 border-neutral-100 dark:border-white/[0.04]"
+            accent="bg-surface-raised dark:bg-neutral-800/30 border-subtle"
           />
-          <div className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+          <div className="divide-y divide-subtle">
             {openQuestions.map((item) => (
               <ActionRow
                 key={item.id}
@@ -267,15 +267,15 @@ function ActionRow({
   return (
     <div className="px-4 py-3 flex items-start justify-between gap-4">
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-neutral-900 dark:text-white leading-relaxed">{item.description}</p>
+        <p className="text-sm text-text-primary leading-relaxed">{item.description}</p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1">
           {item.assigned_to_name && (
-            <span className="text-xs text-neutral-500 dark:text-neutral-400">
+            <span className="text-xs text-text-tertiary">
               {item.assigned_to_name}
             </span>
           )}
           {item.due_hint && (
-            <span className="text-xs text-neutral-400 dark:text-neutral-500">
+            <span className="text-xs text-text-muted">
               {item.due_hint}
             </span>
           )}
@@ -283,7 +283,7 @@ function ActionRow({
             <span className={`text-xs font-medium ${
               item.priority_hint === 'high'
                 ? 'text-error-600 dark:text-error-400'
-                : 'text-neutral-400 dark:text-neutral-500'
+                : 'text-text-muted'
             }`}>
               {PRIORITY_HINT_LABELS[item.priority_hint] ?? item.priority_hint}
             </span>
@@ -295,7 +295,7 @@ function ActionRow({
         {isLinked && link ? (
           <Link
             href={`/admin/tasks/${link.linked_task_id}`}
-            className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
+            className="inline-flex items-center gap-1 text-xs text-action hover:text-primary-800 dark:hover:text-primary-300"
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             Verknüpft
@@ -305,7 +305,7 @@ function ActionRow({
           <button
             onClick={() => onCreateTask(item)}
             disabled={creatingTask === item.id}
-            className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 disabled:opacity-50"
+            className="inline-flex items-center gap-1 text-xs text-action hover:text-primary-800 dark:hover:text-primary-300 disabled:opacity-50"
           >
             {creatingTask === item.id
               ? <Loader2 className="w-3.5 h-3.5 animate-spin" />

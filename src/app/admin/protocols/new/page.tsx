@@ -27,7 +27,7 @@ export default async function NewProtocolPage() {
       <div className="flex items-center gap-4">
         <Link
           href={ROUTES.admin.protocols}
-          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück
@@ -38,8 +38,8 @@ export default async function NewProtocolPage() {
             <FileText className={adminIconBox.iconMd} />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900">Neues Protokoll</Heading>
-            <p className="text-neutral-600">Sitzungsprotokoll erstellen und verarbeiten</p>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">Neues Protokoll</Heading>
+            <p className="text-text-secondary">Sitzungsprotokoll erstellen und verarbeiten</p>
           </div>
         </div>
       </div>

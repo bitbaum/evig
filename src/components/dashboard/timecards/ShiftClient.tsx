@@ -220,10 +220,10 @@ export function ShiftClient({
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
       <div className="mb-6">
-        <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
+        <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
           Schicht
         </Heading>
-        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-1 text-sm text-text-secondary">
           Hallo {userName} – starte deine Schicht mit einem Tipp.
         </p>
       </div>
@@ -259,7 +259,7 @@ export function ShiftClient({
               <button
                 onClick={handleStop}
                 disabled={submitting}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-base font-semibold transition-colors disabled:opacity-60"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-action hover:bg-action-hover text-action-text text-base font-semibold transition-colors disabled:opacity-60"
               >
                 <Square className="w-4 h-4" />
                 {submitting ? 'Speichern...' : 'Schicht beenden'}
@@ -301,9 +301,9 @@ export function ShiftClient({
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-6 sm:p-8">
+        <div className="rounded-2xl border bg-surface-base p-6 sm:p-8">
           <label className="block mb-4">
-            <span className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
+            <span className="block text-xs font-medium text-text-secondary mb-1">
               Kategorie
             </span>
             <Select
@@ -320,12 +320,12 @@ export function ShiftClient({
 
           <button
             onClick={handleStart}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-4 sm:py-5 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-lg font-semibold transition-colors"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-4 sm:py-5 rounded-lg bg-action hover:bg-action-hover text-action-text text-lg font-semibold transition-colors"
           >
             <Play className="w-5 h-5" />
             Schicht starten
           </button>
-          <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400 text-center">
+          <p className="mt-3 text-xs text-text-tertiary text-center">
             Wird auf deinem Gerät gespeichert, bis du sie beendest.
           </p>
         </div>
@@ -339,15 +339,15 @@ export function ShiftClient({
 
       {/* Today summary */}
       <div className="grid grid-cols-2 gap-3 mt-6">
-        <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 px-4 py-3">
-          <div className="text-xs text-neutral-500 dark:text-neutral-400">Heute</div>
-          <div className="text-xl font-semibold text-neutral-900 dark:text-white">
+        <div className="rounded-xl border bg-surface-base px-4 py-3">
+          <div className="text-xs text-text-tertiary">Heute</div>
+          <div className="text-xl font-semibold text-text-primary">
             {formatTimecardDuration(totalMinutesToday)}
           </div>
         </div>
-        <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 px-4 py-3">
-          <div className="text-xs text-neutral-500 dark:text-neutral-400">Diesen Monat</div>
-          <div className="text-xl font-semibold text-neutral-900 dark:text-white">
+        <div className="rounded-xl border bg-surface-base px-4 py-3">
+          <div className="text-xs text-text-tertiary">Diesen Monat</div>
+          <div className="text-xl font-semibold text-text-primary">
             {formatTimecardDuration(totalMinutesMonth)}
           </div>
         </div>
@@ -355,34 +355,34 @@ export function ShiftClient({
 
       {/* Today's entries */}
       {todayEntries.length > 0 && (
-        <div className="mt-6 rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
-          <div className="px-4 py-3 border-b border-neutral-200 dark:border-white/[0.06] flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+        <div className="mt-6 rounded-xl border bg-surface-base overflow-hidden">
+          <div className="px-4 py-3 border-b border flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-text-primary flex items-center gap-2">
               <History className="w-4 h-4" /> Heute erfasst
             </h2>
             <Link
               href="/dashboard/timecards"
-              className="text-xs text-primary-600 dark:text-primary-400 hover:underline"
+              className="text-xs text-action hover:underline"
             >
               Bearbeiten
             </Link>
           </div>
-          <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+          <ul className="divide-y divide-subtle">
             {todayEntries.map(e => (
               <li key={e.id} className="px-4 py-2.5 flex items-center justify-between text-sm">
                 <div className="min-w-0">
-                  <div className="font-medium text-neutral-900 dark:text-white truncate">
+                  <div className="font-medium text-text-primary truncate">
                     {TIMECARD_ENTRY_CATEGORY_LABELS[e.category as TimecardEntryCategory] || e.category}
                   </div>
                   {e.description && (
-                    <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                    <div className="text-xs text-text-tertiary truncate">
                       {e.description}
                     </div>
                   )}
                 </div>
-                <div className="text-right text-xs text-neutral-600 dark:text-neutral-400 whitespace-nowrap pl-3">
+                <div className="text-right text-xs text-text-secondary whitespace-nowrap pl-3">
                   {e.startTime && e.endTime ? `${e.startTime.slice(0,5)}–${e.endTime.slice(0,5)}` : ''}
-                  <span className="block font-semibold text-neutral-900 dark:text-white">
+                  <span className="block font-semibold text-text-primary">
                     {formatTimecardDuration(e.durationMinutes)}
                   </span>
                 </div>

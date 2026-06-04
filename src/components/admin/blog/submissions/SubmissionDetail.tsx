@@ -46,9 +46,9 @@ export function SubmissionDetail({
 
   if (!submission) {
     return (
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-12 text-center">
-        <Eye className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-        <p className="text-neutral-600 dark:text-neutral-400">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-12 text-center">
+        <Eye className="w-12 h-12 text-text-muted mx-auto mb-4" />
+        <p className="text-text-secondary">
           Wähle eine Einreichung aus, um Details anzuzeigen
         </p>
       </div>
@@ -56,34 +56,34 @@ export function SubmissionDetail({
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
       {/* Header */}
-      <div className="border-b border-neutral-200 dark:border-white/[0.06] pb-4 mb-4">
-        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-3">
+      <div className="border-b border pb-4 mb-4">
+        <Heading level={2} className="text-xl text-text-primary mb-3">
           {submission.title}
         </Heading>
         <div className="space-y-2 text-sm">
-          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center gap-2 text-text-secondary">
             <User className="w-4 h-4" />
             <span className="font-medium">
               {submission.submitter_name}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center gap-2 text-text-secondary">
             <Mail className="w-4 h-4" />
             <a
               href={`mailto:${submission.submitter_email}`}
-              className="text-primary-600 hover:underline"
+              className="text-action hover:underline"
             >
               {submission.submitter_email}
             </a>
           </div>
-          <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center gap-2 text-text-secondary">
             <Calendar className="w-4 h-4" />
             <span>{formatDateTime(submission.submitted_at)}</span>
           </div>
           {(submission.category_label || submission.category_name) && (
-            <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+            <div className="flex items-center gap-2 text-text-secondary">
               <Folder className="w-4 h-4" />
               <span>
                 {submission.category_label || submission.category_name}
@@ -91,13 +91,13 @@ export function SubmissionDetail({
             </div>
           )}
           {submission.tags?.length > 0 && (
-            <div className="flex items-start gap-2 text-neutral-600 dark:text-neutral-400">
+            <div className="flex items-start gap-2 text-text-secondary">
               <Tag className="w-4 h-4 mt-0.5" />
               <div className="flex flex-wrap gap-1">
                 {submission.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs rounded"
+                    className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded"
                   >
                     {tag}
                   </span>
@@ -110,15 +110,15 @@ export function SubmissionDetail({
 
       {/* Review info */}
       {submission.reviewed_at && (
-        <div className="mb-4 p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg text-sm">
-          <div className="font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+        <div className="mb-4 p-3 bg-surface-raised dark:bg-neutral-700/50 rounded-lg text-sm">
+          <div className="font-medium text-text-secondary mb-1">
             Geprüft von {submission.reviewer_name || 'Admin'}
           </div>
-          <div className="text-neutral-500 dark:text-neutral-400">
+          <div className="text-text-tertiary">
             {formatDateTime(submission.reviewed_at)}
           </div>
           {submission.review_notes && (
-            <div className="mt-2 text-neutral-600 dark:text-neutral-400">
+            <div className="mt-2 text-text-secondary">
               {submission.review_notes}
             </div>
           )}
@@ -132,10 +132,10 @@ export function SubmissionDetail({
 
       {/* Content */}
       <div className="mb-6">
-        <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-3">
+        <Heading level={3} className="font-semibold text-text-primary mb-3">
           Inhalt:
         </Heading>
-        <div className="bg-neutral-50 dark:bg-neutral-700/50 rounded-lg p-4 max-h-72 overflow-y-auto">
+        <div className="bg-surface-raised dark:bg-neutral-700/50 rounded-lg p-4 max-h-72 overflow-y-auto">
           <pre className="whitespace-pre-wrap text-sm text-neutral-800 dark:text-neutral-200 font-sans">
             {submission.content}
           </pre>
@@ -234,7 +234,7 @@ export function SubmissionDetail({
           {submission.published_post_id && (
             <Link
               href={`/admin/content/blog/${submission.published_post_id}`}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors text-sm"
             >
               <Edit className="w-4 h-4" />
               Im Admin bearbeiten
@@ -244,7 +244,7 @@ export function SubmissionDetail({
       )}
 
       {/* Delete */}
-      <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
+      <div className="mt-4 pt-4 border-t border">
         <button
           onClick={() => setConfirmDelete(true)}
           disabled={actionLoading !== null}

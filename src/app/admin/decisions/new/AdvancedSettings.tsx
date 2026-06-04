@@ -29,7 +29,7 @@ export function AdvancedSettings({
     <div className="space-y-4">
       <FormField
         htmlFor="decision-voting-method"
-        label={<>Abstimmungsmethode<span className="ml-1.5 font-normal text-neutral-400">(wird durch Entscheidungstyp gesetzt)</span></>}
+        label={<>Abstimmungsmethode<span className="ml-1.5 font-normal text-text-muted">(wird durch Entscheidungstyp gesetzt)</span></>}
         hint={VOTING_METHOD_CONFIG[votingMethod].description}
       >
         <Select
@@ -82,7 +82,7 @@ export function AdvancedSettings({
         </FormField>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+      <label className="flex items-center gap-2 text-sm text-text-secondary">
         <input
           type="checkbox"
           checked={blindVoting}

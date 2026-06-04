@@ -156,12 +156,12 @@ export function PayrollClient() {
   return (
     <div className="space-y-6">
       {/* Close batch card */}
-      <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-5 sm:p-6">
+      <div className="rounded-xl border border bg-surface-base p-5 sm:p-6">
         <div className="flex items-start gap-3 mb-4">
-          <Lock className="w-5 h-5 text-primary-600 mt-0.5" />
+          <Lock className="w-5 h-5 text-action mt-0.5" />
           <div>
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Monat abschliessen</h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <h2 className="text-lg font-semibold text-text-primary">Monat abschliessen</h2>
+            <p className="text-sm text-text-tertiary">
               Sperrt alle genehmigten Zeitkarten dieses Monats und friert den Stundensatz pro Person ein.
             </p>
           </div>
@@ -169,7 +169,7 @@ export function PayrollClient() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           <label className="block">
-            <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">
+            <span className="text-xs font-medium text-text-secondary mb-1 block">
               Monat
             </span>
             <Input
@@ -180,30 +180,30 @@ export function PayrollClient() {
             />
           </label>
           <div className="flex flex-col justify-end">
-            <div className="rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-800/40 px-3 py-2">
+            <div className="rounded-lg border border bg-surface-raised dark:bg-neutral-800/40 px-3 py-2">
               {previewLoading ? (
-                <span className="text-sm text-neutral-500 inline-flex items-center gap-1.5">
+                <span className="text-sm text-text-tertiary inline-flex items-center gap-1.5">
                   <Loader2 className="w-3.5 h-3.5 animate-spin" /> Lade Vorschau…
                 </span>
               ) : preview ? (
-                <span className="text-sm text-neutral-700 dark:text-neutral-300">
-                  <span className="font-semibold text-neutral-900 dark:text-white">
+                <span className="text-sm text-text-secondary">
+                  <span className="font-semibold text-text-primary">
                     {preview.pending_count}
                   </span>{' '}
-                  Karten · <span className="font-semibold text-neutral-900 dark:text-white">
+                  Karten · <span className="font-semibold text-text-primary">
                     {formatTimecardDuration(preview.pending_minutes)}
                   </span>{' '}
                   bereit
                 </span>
               ) : (
-                <span className="text-sm text-neutral-500">—</span>
+                <span className="text-sm text-text-tertiary">—</span>
               )}
             </div>
           </div>
         </div>
 
         <label className="block mb-3">
-          <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">
+          <span className="text-xs font-medium text-text-secondary mb-1 block">
             Notiz (optional)
           </span>
           <Textarea
@@ -231,7 +231,7 @@ export function PayrollClient() {
         <button
           onClick={close}
           disabled={closing || !preview || preview.pending_count === 0}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold disabled:opacity-60 bg-action hover:bg-action-hover text-action-text"
         >
           {closing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
           Lohnlauf abschliessen
@@ -239,18 +239,18 @@ export function PayrollClient() {
       </div>
 
       {/* Past batches */}
-      <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-neutral-200 dark:border-white/[0.06] flex items-center justify-between">
+      <div className="rounded-xl border border bg-surface-base overflow-hidden">
+        <div className="px-5 py-3.5 border-b border flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-neutral-500" />
-            <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">
+            <Calendar className="w-4 h-4 text-text-tertiary" />
+            <h2 className="text-sm font-semibold text-text-primary">
               Vergangene Lohnläufe
             </h2>
           </div>
           <button
             onClick={loadBatches}
             disabled={batchesLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-xs font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-xs font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${batchesLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -258,17 +258,17 @@ export function PayrollClient() {
         </div>
 
         {batches.length === 0 ? (
-          <div className="px-5 py-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+          <div className="px-5 py-8 text-center text-sm text-text-tertiary">
             Noch keine Lohnläufe abgeschlossen.
           </div>
         ) : (
-          <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+          <ul className="divide-y divide-subtle">
             {batches.map(batch => (
               <li key={batch.id} className="px-5 py-4 flex items-start gap-3 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors">
-                <FileText className="w-4 h-4 mt-1 text-neutral-400 shrink-0" />
+                <FileText className="w-4 h-4 mt-1 text-text-muted shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                    <span className="text-sm font-medium text-text-primary">
                       {formatPeriod(batch.period_start, batch.period_end)}
                     </span>
                     {batch.exported_at && (
@@ -277,7 +277,7 @@ export function PayrollClient() {
                       </span>
                     )}
                   </div>
-                  <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                  <p className="mt-0.5 text-xs text-text-tertiary">
                     {batch.timecard_count} Karten · {formatTimecardDuration(Number(batch.total_minutes) || 0)}
                     {batch.closed_by_name && (
                       <> · abgeschlossen von {batch.closed_by_name}</>
@@ -287,7 +287,7 @@ export function PayrollClient() {
                     )}
                   </p>
                   {batch.notes && (
-                    <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{batch.notes}</p>
+                    <p className="mt-1 text-xs text-text-secondary">{batch.notes}</p>
                   )}
                 </div>
                 <a

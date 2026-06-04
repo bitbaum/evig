@@ -133,9 +133,9 @@ function ServiceDetailsCard({
   const totalWithFees = currentPricing.total + estimatedFees
 
   return (
-    <div className="p-4 bg-neutral-50 rounded-lg">
+    <div className="p-4 bg-surface-raised rounded-lg">
       <Heading level={3} className="font-semibold text-neutral-800 mb-2">{t('detailsHeading')}</Heading>
-      <div className="space-y-2 text-sm text-neutral-700">
+      <div className="space-y-2 text-sm text-text-secondary">
         <p><strong>{t('detailService')}</strong> {service.name}</p>
         <p><strong>{t('detailPrice')}</strong> {selectedCurrency} {currentPricing.subtotal.toFixed(2)}</p>
         <p><strong>{t('detailVat', { vatRate })}</strong> {selectedCurrency} {currentPricing.vat.toFixed(2)}</p>

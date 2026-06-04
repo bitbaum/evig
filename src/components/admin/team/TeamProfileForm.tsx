@@ -82,7 +82,7 @@ export function TeamProfileForm({
         <button
           type="button"
           onClick={onCancel || (() => history.back())}
-          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Abbrechen
@@ -107,10 +107,10 @@ export function TeamProfileForm({
 
       {/* User Selection (only for new profiles) */}
       {!isEdit && users && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+        <div className="bg-surface-base rounded-xl border border p-6">
           <div className="flex items-center gap-3 mb-4">
-            <User className="w-5 h-5 text-neutral-500" />
-            <Heading level={2} className="text-neutral-900 dark:text-white">Benutzer auswählen</Heading>
+            <User className="w-5 h-5 text-text-tertiary" />
+            <Heading level={2} className="text-text-primary">Benutzer auswählen</Heading>
           </div>
           <Select
             value={form.user_id}
@@ -134,7 +134,7 @@ export function TeamProfileForm({
       {FORM_SECTIONS.map(section => (
         <div
           key={section.id}
-          className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-hidden"
+          className="bg-surface-base rounded-xl border border overflow-hidden"
         >
           <button
             type="button"
@@ -142,18 +142,18 @@ export function TeamProfileForm({
             className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <span className="text-neutral-500">{section.icon}</span>
-              <span className="font-semibold text-neutral-900 dark:text-white">{section.label}</span>
+              <span className="text-text-tertiary">{section.icon}</span>
+              <span className="font-semibold text-text-primary">{section.label}</span>
             </div>
             {openSections.has(section.id) ? (
-              <ChevronDown className="w-5 h-5 text-neutral-400" />
+              <ChevronDown className="w-5 h-5 text-text-muted" />
             ) : (
-              <ChevronRight className="w-5 h-5 text-neutral-400" />
+              <ChevronRight className="w-5 h-5 text-text-muted" />
             )}
           </button>
 
           {openSections.has(section.id) && (
-            <div className="p-6 pt-2 border-t border-neutral-100 dark:border-white/[0.06]">
+            <div className="p-6 pt-2 border-t border-subtle dark:border-white/[0.06]">
               {section.id === 'talent' ? (
                 <TeamTalentSection
                   form={form}

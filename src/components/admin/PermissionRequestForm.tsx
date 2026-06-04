@@ -57,7 +57,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
       <div className="p-6 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-            <Check className="w-5 h-5 text-primary-600" />
+            <Check className="w-5 h-5 text-action" />
           </div>
           <div>
             <Heading level={3} className="font-semibold text-primary-900 dark:text-primary-200">
@@ -71,7 +71,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         {onClose && (
           <button
             onClick={onClose}
-            className="text-sm text-primary-600 hover:text-primary-700"
+            className="text-sm text-action hover:text-primary-700"
           >
             Schliessen
           </button>
@@ -84,13 +84,13 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
     <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-          <Shield className="w-5 h-5 text-primary-600" />
+          <Shield className="w-5 h-5 text-action" />
         </div>
         <div>
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
+          <Heading level={3} className="font-semibold text-text-primary">
             Zugriff anfordern
           </Heading>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="text-sm text-text-secondary">
             Wähle die Bereiche aus, auf die du Zugriff benötigst.
           </p>
         </div>
@@ -98,7 +98,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <button
             type="button"
             onClick={onClose}
-            className="ml-auto text-neutral-500 hover:text-neutral-600"
+            className="ml-auto text-text-tertiary hover:text-neutral-600"
           >
             <X className="w-5 h-5" />
           </button>
@@ -107,7 +107,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
       {/* Section Selection */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        <label className="block text-sm font-medium text-text-secondary">
           Bereiche auswählen
         </label>
         <div className="grid grid-cols-2 gap-2">
@@ -119,13 +119,13 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300'
+                  : 'border hover:border-neutral-300'
               }`}
             >
-              <span className="font-medium text-neutral-900 dark:text-white">
+              <span className="font-medium text-text-primary">
                 {section.label}
               </span>
-              <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+              <span className="block text-xs text-text-tertiary mt-1">
                 {section.description}
               </span>
             </button>

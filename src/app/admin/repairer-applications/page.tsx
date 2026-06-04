@@ -69,13 +69,13 @@ export default function RepairerApplicationsAdmin() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.push('/admin')}
-            className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900"
+            className="flex items-center gap-2 text-text-secondary hover:text-neutral-900"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück zum Admin-Bereich
           </button>
         </div>
-        <Heading level={1} className="text-2xl font-bold text-neutral-900">Techniker-Bewerbungen</Heading>
+        <Heading level={1} className="text-2xl font-bold text-text-primary">Techniker-Bewerbungen</Heading>
       </div>
 
       {/* Success Message */}
@@ -105,10 +105,10 @@ export default function RepairerApplicationsAdmin() {
       {/* Applications List */}
       <div className="space-y-4">
         {applications.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-12 text-center">
-            <FileText className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">Keine Bewerbungen gefunden</Heading>
-            <p className="text-neutral-600">
+          <div className="bg-surface-base rounded-lg shadow-sm border border p-12 text-center">
+            <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">Keine Bewerbungen gefunden</Heading>
+            <p className="text-text-secondary">
               {searchQuery
                 ? 'Keine Bewerbungen entsprechen Ihrer Suchanfrage.'
                 : `Keine Bewerbungen mit Status "${selectedStatus}".`
@@ -117,7 +117,7 @@ export default function RepairerApplicationsAdmin() {
           </div>
         ) : (
           applications.map((application) => (
-            <div key={application.id} className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
+            <div key={application.id} className="bg-surface-base rounded-lg shadow-sm border border overflow-hidden">
               <ApplicationCard
                 application={application}
                 isPending={selectedStatus === APPROVAL_STATUS.PENDING}

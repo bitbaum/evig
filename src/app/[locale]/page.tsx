@@ -231,7 +231,7 @@ export default async function Home() {
       <div id="actions" className="bg-canvas py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-neutral-900 dark:text-white">
+            <Heading level={2} variant="site" className="tracking-tight text-text-primary">
               {t('actions.heading')}
             </Heading>
           </div>
@@ -247,8 +247,8 @@ export default async function Home() {
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
                     <card.icon className={`h-6 w-6 ${badge.text}`} />
                   </div>
-                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white">{card.title}</Heading>
-                  <p className="mt-2 text-base text-neutral-600 dark:text-neutral-400 flex-1">
+                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-text-primary">{card.title}</Heading>
+                  <p className="mt-2 text-base text-text-secondary flex-1">
                     {card.subtitle}
                   </p>
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -273,22 +273,22 @@ export default async function Home() {
       </div>
 
       {/* Section 2b: Professional Services (brief mention) */}
-      <div className="bg-canvas py-8 sm:py-12 border-t border-neutral-100 dark:border-white/[0.04]">
+      <div className="bg-canvas py-8 sm:py-12 border-t border-subtle">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-base text-neutral-600 dark:text-neutral-400">
+          <p className="text-base text-text-secondary">
             {t('proServices.text')}
           </p>
         </div>
       </div>
 
       {/* Section 3: Social Proof */}
-      <div className="bg-neutral-50 dark:bg-neutral-900 py-8 sm:py-12">
+      <div className="bg-surface-raised dark:bg-neutral-900 py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <Heading level={2} variant="site" className="tracking-tight text-neutral-900 dark:text-white">
+            <Heading level={2} variant="site" className="tracking-tight text-text-primary">
               {t('impact.title')}
             </Heading>
-            <p className="mt-2 text-base text-neutral-600 dark:text-neutral-400">{t('impact.subtitle')}</p>
+            <p className="mt-2 text-base text-text-secondary">{t('impact.subtitle')}</p>
           </div>
           {/* Media Logos */}
           <AsSeenInLogos />
@@ -297,19 +297,19 @@ export default async function Home() {
           <CommunityStats className="mt-6" />
 
           {/* Impact Metrics (compact) */}
-          <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-white/[0.06]">
+          <div className="mt-8 pt-8 border-t border">
             <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3">
               {compactMetrics.map((metric, index) => (
                 <div key={index} className="text-center">
-                  <dd className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">{metric.value}</dd>
-                  <dt className="mt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">{metric.label}</dt>
+                  <dd className="text-2xl sm:text-3xl font-bold text-text-primary">{metric.value}</dd>
+                  <dt className="mt-1 text-xs sm:text-sm text-text-secondary">{metric.label}</dt>
                 </div>
               ))}
             </dl>
             <div className="mt-6 text-center">
               <Link
                 href="/about/impact"
-                className="text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                className="text-sm font-medium text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors"
               >
                 {t('impact.moreLink')} →
               </Link>
@@ -319,13 +319,13 @@ export default async function Home() {
       </div>
 
       {/* Section 4: How to Get Involved */}
-      <div className="bg-neutral-50 dark:bg-neutral-950 py-12 sm:py-16 lg:py-20">
+      <div className="bg-surface-raised dark:bg-neutral-950 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-neutral-900 dark:text-white">
+            <Heading level={2} variant="site" className="tracking-tight text-text-primary">
               {t('community.heading')}
             </Heading>
-            <p className="mt-4 text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-base sm:text-lg text-text-secondary max-w-2xl mx-auto">
               {t('community.subtitle')}
             </p>
           </div>
@@ -340,8 +340,8 @@ export default async function Home() {
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
                   <item.icon className={`h-5 w-5 ${item.badge.text}`} />
                 </div>
-                <Heading level={3} className={`text-lg font-bold text-neutral-900 dark:text-white ${item.hoverColor} transition-colors`}>{item.title}</Heading>
-                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{item.desc}</p>
+                <Heading level={3} className={`text-lg font-bold text-text-primary ${item.hoverColor} transition-colors`}>{item.title}</Heading>
+                <p className="mt-2 text-sm text-text-secondary">{item.desc}</p>
               </Link>
             ))}
           </div>

@@ -13,15 +13,15 @@ export function ApplicationDetails({ application }: Props) {
       {/* Left Column */}
       <div className="space-y-4">
         <div>
-          <Heading level={4} className="text-neutral-900 mb-2">Beschreibung</Heading>
-          <p className="text-neutral-600 text-sm">{application.description}</p>
+          <Heading level={4} className="text-text-primary mb-2">Beschreibung</Heading>
+          <p className="text-text-secondary text-sm">{application.description}</p>
         </div>
 
         <div>
-          <Heading level={4} className="text-neutral-900 mb-2">Dienstleistungen</Heading>
+          <Heading level={4} className="text-text-primary mb-2">Dienstleistungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.servicesOffered.map((service, index) => (
-              <span key={index} className="px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs">
+              <span key={index} className="px-2 py-1 bg-surface-raised text-neutral-800 rounded-full text-xs">
                 {service}
               </span>
             ))}
@@ -29,7 +29,7 @@ export function ApplicationDetails({ application }: Props) {
         </div>
 
         <div>
-          <Heading level={4} className="text-neutral-900 mb-2">Spezialisierungen</Heading>
+          <Heading level={4} className="text-text-primary mb-2">Spezialisierungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.specializations.map((spec, index) => (
               <span key={index} className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs">
@@ -41,7 +41,7 @@ export function ApplicationDetails({ application }: Props) {
 
         {application.certifications.length > 0 && (
           <div>
-            <Heading level={4} className="text-neutral-900 mb-2">Zertifizierungen</Heading>
+            <Heading level={4} className="text-text-primary mb-2">Zertifizierungen</Heading>
             <div className="space-y-1">
               {application.certifications.map((cert, index) => (
                 <div key={index} className="flex items-center gap-2 text-sm">
@@ -58,8 +58,8 @@ export function ApplicationDetails({ application }: Props) {
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Heading level={4} className="text-neutral-900 mb-1">Stundensatz</Heading>
-            <p className="text-neutral-600 text-sm">
+            <Heading level={4} className="text-text-primary mb-1">Stundensatz</Heading>
+            <p className="text-text-secondary text-sm">
               {application.hourlyRateCents
                 ? `${formatCentsToChf(application.hourlyRateCents)}/Std`
                 : 'Nicht angegeben'
@@ -67,14 +67,14 @@ export function ApplicationDetails({ application }: Props) {
             </p>
           </div>
           <div>
-            <Heading level={4} className="text-neutral-900 mb-1">Service-Radius</Heading>
-            <p className="text-neutral-600 text-sm">{application.serviceRadiusKm} km</p>
+            <Heading level={4} className="text-text-primary mb-1">Service-Radius</Heading>
+            <p className="text-text-secondary text-sm">{application.serviceRadiusKm} km</p>
           </div>
         </div>
 
         <div>
-          <Heading level={4} className="text-neutral-900 mb-2">Adresse</Heading>
-          <p className="text-neutral-600 text-sm">
+          <Heading level={4} className="text-text-primary mb-2">Adresse</Heading>
+          <p className="text-text-secondary text-sm">
             {application.address}<br />
             {application.postalCode} {application.city}
           </p>
@@ -82,7 +82,7 @@ export function ApplicationDetails({ application }: Props) {
 
         {application.verificationDocuments.length > 0 && (
           <div>
-            <Heading level={4} className="text-neutral-900 mb-2">Verifizierungsdokumente</Heading>
+            <Heading level={4} className="text-text-primary mb-2">Verifizierungsdokumente</Heading>
             <div className="space-y-1">
               {application.verificationDocuments.map((doc, index) => (
                 <a
@@ -90,7 +90,7 @@ export function ApplicationDetails({ application }: Props) {
                   href={doc}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700"
+                  className="flex items-center gap-2 text-sm text-action hover:text-primary-700"
                 >
                   <FileText className="w-4 h-4" />
                   Dokument {index + 1}
@@ -102,8 +102,8 @@ export function ApplicationDetails({ application }: Props) {
 
         {application.adminNotes && (
           <div>
-            <Heading level={4} className="text-neutral-900 mb-2">Admin-Notizen</Heading>
-            <p className="text-neutral-600 text-sm bg-neutral-50 p-2 rounded">{application.adminNotes}</p>
+            <Heading level={4} className="text-text-primary mb-2">Admin-Notizen</Heading>
+            <p className="text-text-secondary text-sm bg-surface-raised p-2 rounded">{application.adminNotes}</p>
           </div>
         )}
       </div>

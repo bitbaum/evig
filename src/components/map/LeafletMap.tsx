@@ -16,8 +16,8 @@ export type { MapMarker } from './LeafletMapInner'
 function MapLoadingFallback() {
   const t = useTranslations('components.map')
   return (
-    <div className="w-full min-h-[400px] rounded-lg bg-neutral-100 animate-pulse flex items-center justify-center">
-      <p className="text-neutral-400 text-sm">{t('loading')}</p>
+    <div className="w-full min-h-[400px] rounded-lg bg-surface-raised animate-pulse flex items-center justify-center">
+      <p className="text-text-muted text-sm">{t('loading')}</p>
     </div>
   )
 }

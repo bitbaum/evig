@@ -32,18 +32,18 @@ export function BulkActionBar({
   const t = useTranslations('components.erfassung.bulkActionBar')
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-700 px-4 py-3 z-30 safe-area-inset-bottom shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 bg-surface-base dark:bg-neutral-800 border-t border dark:border-neutral-700 px-4 py-3 z-30 safe-area-inset-bottom shadow-lg">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
         {/* Left: selection info */}
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onSelectAll}
-            className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
+            className="text-sm text-action hover:text-primary-700 dark:hover:text-primary-300 font-medium"
           >
             {allSelected ? t('deselectAll') : t('selectAll')}
           </button>
-          <span className="text-sm text-neutral-600 dark:text-neutral-400">
+          <span className="text-sm text-text-secondary">
             {selectedCount} {t('ofText')} {totalCount} {t('selectedText')}
           </span>
         </div>
@@ -59,7 +59,7 @@ export function BulkActionBar({
                   style={{ width: `${totalCount > 0 ? (savedCount / totalCount) * 100 : 0}%` }}
                 />
               </div>
-              <span className="text-xs text-neutral-500">{savedCount}/{totalCount}</span>
+              <span className="text-xs text-text-tertiary">{savedCount}/{totalCount}</span>
             </div>
           </div>
         )}

@@ -85,10 +85,10 @@ function UserInfoCell({
           </div>
         </div>
         <div className="ml-4">
-          <div className="text-sm font-medium text-neutral-900 dark:text-white">
+          <div className="text-sm font-medium text-text-primary">
             {user.name || 'Kein Name'}
           </div>
-          <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
+          <div className="text-sm text-text-tertiary flex items-center gap-1">
             <Mail className="w-3 h-3" />
             {user.email}
           </div>
@@ -123,7 +123,7 @@ function StatusCell({
           </span>
         )}
         {!userIsStaff && (
-          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300">
+          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-surface-raised text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300">
             Benutzer
           </span>
         )}
@@ -150,7 +150,7 @@ function PermissionsCell({
   if (!userIsStaff) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-neutral-500">-</span>
+        <span className="text-sm text-text-tertiary">-</span>
       </td>
     )
   }
@@ -158,7 +158,7 @@ function PermissionsCell({
   if (hasFullAccess) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">
+        <span className="text-sm text-action font-medium">
           Voller Zugriff
         </span>
       </td>
@@ -168,7 +168,7 @@ function PermissionsCell({
   if (permissions.length === 0) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-neutral-500">Keine Berechtigungen</span>
+        <span className="text-sm text-text-tertiary">Keine Berechtigungen</span>
       </td>
     )
   }
@@ -177,12 +177,12 @@ function PermissionsCell({
     <td className="px-6 py-4">
       <div className="flex flex-wrap gap-1 max-w-xs">
         {permissions.slice(0, 3).map(p => (
-          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-700 rounded">
+          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-surface-raised dark:bg-neutral-700 rounded">
             {p}
           </span>
         ))}
         {permissions.length > 3 && (
-          <span className="text-xs text-neutral-500">
+          <span className="text-xs text-text-tertiary">
             +{permissions.length - 3} mehr
           </span>
         )}
@@ -194,7 +194,7 @@ function PermissionsCell({
 function DateCell({ date }: { date: string }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap">
-      <div className="text-sm text-neutral-900 dark:text-white">
+      <div className="text-sm text-text-primary">
         {formatDateShort(date)}
       </div>
     </td>
@@ -221,7 +221,7 @@ function ActionsCell({
       <div className="flex items-center gap-2">
         <button
           onClick={() => onEditProfile(user)}
-          className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+          className="text-action hover:text-primary-900 dark:hover:text-primary-300"
           title="Profil bearbeiten"
         >
           <Pencil className="w-4 h-4" />
@@ -229,7 +229,7 @@ function ActionsCell({
         {userIsStaff && (
           <button
             onClick={() => onEditPermissions(user)}
-            className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+            className="text-action hover:text-primary-900 dark:hover:text-primary-300"
             title="Berechtigungen bearbeiten"
           >
             <Edit className="w-4 h-4" />

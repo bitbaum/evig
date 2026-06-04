@@ -32,7 +32,7 @@ export function ProductStatsCards({
         <StatCard
           label="Veröffentlicht"
           value={inventoryStats.published}
-          valueColor="text-primary-600"
+          valueColor="text-action"
           icon={<CheckCircle className="w-6 h-6 text-primary-500" />}
         />
         <StatCard
@@ -44,7 +44,7 @@ export function ProductStatsCards({
         <StatCard
           label="Freigegeben"
           value={inventoryStats.approved}
-          valueColor="text-primary-600"
+          valueColor="text-action"
           icon={<CheckCircle className="w-6 h-6 text-primary-500" />}
         />
         <StatCard
@@ -74,15 +74,15 @@ export function ProductStatsCards({
           key={condition}
           label={getConditionLabel(condition)}
           value={count}
-          valueColor="text-primary-600"
+          valueColor="text-action"
           icon={<Tag className="w-6 h-6 text-primary-500" />}
         />
       ))}
       <StatCard
         label="Niedriger Bestand"
         value={shopStats.lowStock}
-        valueColor={shopStats.lowStock > 0 ? "text-error-600" : "text-neutral-600"}
-        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-error-500' : 'text-neutral-400'}`} />}
+        valueColor={shopStats.lowStock > 0 ? "text-error-600" : "text-text-secondary"}
+        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-error-500' : 'text-text-muted'}`} />}
       />
     </div>
   )
@@ -95,12 +95,12 @@ interface StatCardProps {
   icon: React.ReactNode
 }
 
-function StatCard({ label, value, valueColor = 'text-neutral-900', icon }: StatCardProps) {
+function StatCard({ label, value, valueColor = 'text-text-primary', icon }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4">
+    <div className="bg-surface-base rounded-xl shadow-sm border border p-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-neutral-600">{label}</p>
+          <p className="text-xs text-text-secondary">{label}</p>
           <p className={`text-xl font-bold ${valueColor}`}>{value}</p>
         </div>
         {icon}

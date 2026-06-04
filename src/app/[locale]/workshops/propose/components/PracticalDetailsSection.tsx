@@ -32,14 +32,14 @@ export function PracticalDetailsSection({
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-neutral-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
         <Clock className="w-5 h-5 mr-2" />
         {t('sections.practicalDetails.title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.practicalDetails.duration')}
           </label>
           <Input
@@ -54,7 +54,7 @@ export function PracticalDetailsSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.practicalDetails.price')}
           </label>
           <Input
@@ -70,7 +70,7 @@ export function PracticalDetailsSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.practicalDetails.maxParticipants')}
           </label>
           <Select
@@ -86,7 +86,7 @@ export function PracticalDetailsSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.practicalDetails.minParticipants')}
           </label>
           <Select
@@ -102,7 +102,7 @@ export function PracticalDetailsSection({
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.practicalDetails.targetAudience')}
           </label>
           <Input
@@ -114,7 +114,7 @@ export function PracticalDetailsSection({
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.practicalDetails.prerequisites')}
           </label>
           <Textarea

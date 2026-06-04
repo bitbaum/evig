@@ -31,14 +31,14 @@ export function ProductDimensionFields({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       {/* Dimensions */}
       <div className="card-shell p-4 sm:p-6">
-        <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+        <Heading level={2} className="text-base sm:text-lg font-semibold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
           <Ruler className="w-5 h-5" />
           {t('dimensionsTitle')}
         </Heading>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="dimension-length" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('length')}</label>
+            <label htmlFor="dimension-length" className="block text-sm text-text-secondary mb-1">{t('length')}</label>
             <Input
               id="dimension-length"
               type="number"
@@ -47,7 +47,7 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label htmlFor="dimension-width" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('width')}</label>
+            <label htmlFor="dimension-width" className="block text-sm text-text-secondary mb-1">{t('width')}</label>
             <Input
               id="dimension-width"
               type="number"
@@ -56,7 +56,7 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label htmlFor="dimension-height" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('height')}</label>
+            <label htmlFor="dimension-height" className="block text-sm text-text-secondary mb-1">{t('height')}</label>
             <Input
               id="dimension-height"
               type="number"
@@ -65,7 +65,7 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label htmlFor="dimension-weight" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('weight')}</label>
+            <label htmlFor="dimension-weight" className="block text-sm text-text-secondary mb-1">{t('weight')}</label>
             <Input
               id="dimension-weight"
               type="number"
@@ -79,7 +79,7 @@ export function ProductDimensionFields({
 
       {/* Inventory */}
       <div className="card-shell p-4 sm:p-6">
-        <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+        <Heading level={2} className="text-base sm:text-lg font-semibold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
           <MapPin className="w-5 h-5" />
           {t('stockTitle')}
         </Heading>
@@ -87,7 +87,7 @@ export function ProductDimensionFields({
         <div className="grid grid-cols-2 gap-3">
           {/* Desktop price */}
           <div className="hidden sm:block">
-            <label htmlFor="dimension-price" className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 mb-1">
+            <label htmlFor="dimension-price" className="flex items-center gap-2 text-sm text-text-secondary mb-1">
               <span>{t('price')}</span>
               {aiMetadata.verkaufspreis && (
                 <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
@@ -104,7 +104,7 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label htmlFor="dimension-stock" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('stock')}</label>
+            <label htmlFor="dimension-stock" className="block text-sm text-text-secondary mb-1">{t('stock')}</label>
             <Input
               id="dimension-stock"
               type="number"
@@ -113,7 +113,7 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label htmlFor="dimension-location" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('location')}</label>
+            <label htmlFor="dimension-location" className="block text-sm text-text-secondary mb-1">{t('location')}</label>
             <Input
               id="dimension-location"
               type="text"
@@ -123,7 +123,7 @@ export function ProductDimensionFields({
             />
           </div>
           <div>
-            <label htmlFor="dimension-box-id" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('boxId')}</label>
+            <label htmlFor="dimension-box-id" className="block text-sm text-text-secondary mb-1">{t('boxId')}</label>
             <Input
               id="dimension-box-id"
               type="text"

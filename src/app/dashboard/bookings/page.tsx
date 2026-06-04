@@ -38,23 +38,23 @@ export default function CustomerBookings() {
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-action" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
-            <p className="text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
+            <p className="text-text-secondary">{t('pageSubtitle')}</p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={fetchAppointments}
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-sm md:text-base"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-surface-base dark:bg-neutral-800 border border dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 text-text-secondary text-sm md:text-base"
             >
               <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">{t('refresh')}</span>
@@ -87,7 +87,7 @@ export default function CustomerBookings() {
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
               (activeTab === 'active'
                 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700')}
+                : 'bg-surface-base dark:bg-neutral-800 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700')}
           >
             <Clock className="h-4 w-4" />
             {t('tabActive')}
@@ -100,7 +100,7 @@ export default function CustomerBookings() {
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
               (activeTab === 'completed'
                 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700')}
+                : 'bg-surface-base dark:bg-neutral-800 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700')}
           >
             <CheckCircle className="h-4 w-4" />
             {t('tabCompleted')}
@@ -122,31 +122,31 @@ export default function CustomerBookings() {
             />
           ) : (
             filteredAppointments.map(apt => (
-              <div key={apt.id} className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-white/[0.06] p-4 md:p-6">
+              <div key={apt.id} className="bg-surface-base rounded-lg shadow-sm border border p-4 md:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
-                      (STATUS_CONFIG[apt.status]?.color || 'bg-neutral-100 dark:bg-neutral-800')}>
+                      (STATUS_CONFIG[apt.status]?.color || 'bg-surface-raised dark:bg-neutral-800')}>
                       {STATUS_CONFIG[apt.status]?.label || apt.status}
                     </span>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
+                    <p className="text-xs text-text-tertiary mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
                   </div>
-                  <div className="text-right text-sm text-neutral-500 dark:text-neutral-400">
+                  <div className="text-right text-sm text-text-tertiary">
                     {formatDateShort(apt.created_at)}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
-                    <Wrench className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+                  <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                    <Wrench className="h-5 w-5 text-text-secondary" />
                   </div>
                   <div>
-                    <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">{apt.business_name || apt.repairer_name}</Heading>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{apt.service_name || t('repairLabel')}</p>
+                    <Heading level={3} className="font-semibold text-text-primary">{apt.business_name || apt.repairer_name}</Heading>
+                    <p className="text-sm text-text-tertiary">{apt.service_name || t('repairLabel')}</p>
                   </div>
                 </div>
 
-                <p className="text-neutral-700 dark:text-neutral-300 mb-4">{apt.description}</p>
+                <p className="text-text-secondary mb-4">{apt.description}</p>
 
                 {apt.quoted_price_chf && (
                   <div className="bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 rounded-lg p-4 mb-4">
@@ -162,7 +162,7 @@ export default function CustomerBookings() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+                <div className="flex flex-wrap gap-4 text-sm text-text-secondary mb-4">
                   {apt.preferred_date && (
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
@@ -177,7 +177,7 @@ export default function CustomerBookings() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-neutral-100 dark:border-white/[0.06]">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-subtle dark:border-white/[0.06]">
                   {apt.status === BOOKING_STATUS.QUOTED && (
                     <>
                       <Button
@@ -226,7 +226,7 @@ export default function CustomerBookings() {
 
                   <Link
                     href={'/dashboard/bookings/' + apt.id}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium sm:ml-auto transition-colors"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-raised dark:bg-neutral-800 text-text-secondary rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium sm:ml-auto transition-colors"
                   >
                     {t('details')}
                     <ChevronRight className="h-4 w-4" />
@@ -240,7 +240,7 @@ export default function CustomerBookings() {
         <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title={t('ratingModalTitle')} size="sm">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">{t('ratingLabel')}</label>
+              <label className="block text-sm font-medium text-text-secondary mb-2">{t('ratingLabel')}</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button

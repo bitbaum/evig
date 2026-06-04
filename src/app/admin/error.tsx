@@ -19,12 +19,12 @@ export default function AdminError({
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
-      <div className="max-w-md w-full bg-white shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
+      <div className="max-w-md w-full bg-surface-base shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={1} className="text-lg font-medium text-neutral-900" role="alert">
+        <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           Etwas ist schiefgelaufen
         </Heading>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-2 text-sm text-text-secondary">
           Beim Laden der Admin-Seite ist ein Fehler aufgetreten.
         </p>
         <Button onClick={reset} variant="primary" className="mt-6 w-full min-h-[44px]">

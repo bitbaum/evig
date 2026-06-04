@@ -14,11 +14,11 @@ export async function ProcessSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
-          <p className="text-lg text-neutral-600">
+          <p className="text-lg text-text-secondary">
             {t('subtitle')}
           </p>
         </div>
@@ -29,7 +29,7 @@ export async function ProcessSection() {
                 {phase.step}
               </div>
               <Heading level={3} className="mb-3">{phase.title}</Heading>
-              <p className="text-neutral-600">{phase.description}</p>
+              <p className="text-text-secondary">{phase.description}</p>
             </div>
           ))}
         </div>

@@ -65,7 +65,7 @@ export function DonationFormModal({
               className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
                 formType === DONATION_TYPES.MONETARY
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700'
+                  : 'bg-surface-raised text-text-secondary'
               }`}
             >
               <Heart className="w-5 h-5" />
@@ -77,7 +77,7 @@ export function DonationFormModal({
               className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
                 formType === DONATION_TYPES.DEVICE
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700'
+                  : 'bg-surface-raised text-text-secondary'
               }`}
             >
               <Package className="w-5 h-5" />
@@ -206,7 +206,7 @@ export function DonationFormModal({
             />
 
             {/* Manual Donor Info */}
-            <FormField label={<>Name des Spenders {selectedUser && <span className="text-neutral-400 font-normal">(überschreibt Benutzer)</span>}</>} htmlFor="donor-name">
+            <FormField label={<>Name des Spenders {selectedUser && <span className="text-text-muted font-normal">(überschreibt Benutzer)</span>}</>} htmlFor="donor-name">
               <Input
                 id="donor-name"
                 type="text"
@@ -215,7 +215,7 @@ export function DonationFormModal({
                 placeholder={selectedUser ? selectedUser.name || 'Kein Name' : 'Max Muster'}
               />
             </FormField>
-            <FormField label={<>E-Mail des Spenders {selectedUser && <span className="text-neutral-400 font-normal">(überschreibt Benutzer)</span>}</>} htmlFor="donor-email">
+            <FormField label={<>E-Mail des Spenders {selectedUser && <span className="text-text-muted font-normal">(überschreibt Benutzer)</span>}</>} htmlFor="donor-email">
               <Input
                 id="donor-email"
                 type="email"
@@ -238,9 +238,9 @@ export function DonationFormModal({
                 id="receipt_requested"
                 checked={formData.receipt_requested}
                 onChange={(e) => updateField('receipt_requested', e.target.checked)}
-                className="w-4 h-4 text-primary-600"
+                className="w-4 h-4 text-action"
               />
-              <label htmlFor="receipt_requested" className="text-sm text-neutral-700">
+              <label htmlFor="receipt_requested" className="text-sm text-text-secondary">
                 Spendenquittung angefordert
               </label>
             </div>

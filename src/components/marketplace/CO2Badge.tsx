@@ -41,14 +41,14 @@ export function CO2Badge({ category, className = '' }: CO2BadgeProps) {
       title={t('tooltip')}
     >
       <span className="inline-flex items-center gap-1.5">
-        <Leaf className="w-4 h-4 text-primary-600 dark:text-primary-400 flex-shrink-0" aria-hidden="true" />
+        <Leaf className="w-4 h-4 text-action flex-shrink-0" aria-hidden="true" />
         <span className="text-primary-700 dark:text-primary-300 font-medium">
           {t('saved', { amount: co2Saved })}
         </span>
       </span>
       <Link
         href="/transparenz/co2"
-        className="text-xs text-primary-600 dark:text-primary-400 hover:underline underline-offset-2"
+        className="text-xs text-action hover:underline underline-offset-2"
       >
         {t('estimate')} — {t('methodologyLink')}
       </Link>

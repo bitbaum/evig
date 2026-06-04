@@ -79,10 +79,10 @@ export default function MarketplacePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
                 {t('title')}
               </Heading>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
+              <p className="text-sm text-text-secondary mt-0.5">
                 {t('listingsAvailable', { count: pagination.total })}
               </p>
             </div>
@@ -100,7 +100,7 @@ export default function MarketplacePage() {
           </div>
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               <Input
                 type="text"
                 value={filters.searchInput}
@@ -127,7 +127,7 @@ export default function MarketplacePage() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/[0.1] rounded-lg text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/[0.1] rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
             aria-expanded={mobileFiltersOpen}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -170,7 +170,7 @@ export default function MarketplacePage() {
           <div className="flex-1 min-w-0">
             {/* Results header: count + sort (desktop) */}
             <div className="hidden lg:flex items-center justify-between mb-4">
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-text-secondary">
                 {t('listingsAvailable', { count: pagination.total })}
               </p>
               <Select
@@ -238,18 +238,18 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/[0.1] text-neutral-600 dark:text-neutral-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
+                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/[0.1] text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
                   aria-label={t('pagination.previousPage')}
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="text-sm text-neutral-600 dark:text-neutral-400 px-4" aria-current="page">
+                <span className="text-sm text-text-secondary px-4" aria-current="page">
                   {t('pagination.pageOf', { current: currentPage, total: totalPages })}
                 </span>
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/[0.1] text-neutral-600 dark:text-neutral-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
+                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/[0.1] text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
                   aria-label={t('pagination.nextPage')}
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -267,10 +267,10 @@ export default function MarketplacePage() {
                 <Package className="h-6 w-6 text-secondary-600 dark:text-secondary-400" />
               </div>
             </div>
-            <Heading level={3} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+            <Heading level={3} className="text-xl font-bold text-text-primary mb-2">
               {t('signInCta.title')}
             </Heading>
-            <p className="text-base text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+            <p className="text-base text-text-secondary mb-6 max-w-md mx-auto">
               {t('signInCta.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -279,7 +279,7 @@ export default function MarketplacePage() {
               </Button>
               <Link
                 href={ROUTES.public.register}
-                className="px-6 py-2.5 border border-neutral-300 dark:border-white/[0.1] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 border border-neutral-300 dark:border-white/[0.1] text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/[0.04] rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.register')}
               </Link>
@@ -296,16 +296,16 @@ export default function MarketplacePage() {
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-white dark:bg-neutral-900 shadow-xl dark:shadow-black/40 flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-white/[0.06] flex-shrink-0">
-              <span className="font-semibold text-neutral-900 dark:text-white">{t('filters.label')}</span>
+          <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-surface-base shadow-xl dark:shadow-black/40 flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border flex-shrink-0">
+              <span className="font-semibold text-text-primary">{t('filters.label')}</span>
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
                 className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
                 aria-label={t('filters.closeLabel')}
               >
-                <X className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                <X className="w-5 h-5 text-text-secondary" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4">
@@ -314,7 +314,7 @@ export default function MarketplacePage() {
                 clearFilters={() => { clearFilters(); setMobileFiltersOpen(false) }}
               />
             </div>
-            <div className="p-4 border-t border-neutral-200 dark:border-white/[0.06] flex-shrink-0">
+            <div className="p-4 border-t border flex-shrink-0">
               <Button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}

@@ -90,7 +90,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
       <div className="flex items-start gap-4 p-4">
         {/* Icon */}
         <div className="w-10 h-10 bg-primary-100 dark:bg-primary-800/50 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Vote className="w-5 h-5 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+          <Vote className="w-5 h-5 text-action" aria-hidden="true" />
         </div>
 
         {/* Content */}
@@ -98,7 +98,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
           <p className="text-xs font-semibold text-teal-700 dark:text-teal-300 uppercase tracking-wide mb-0.5">
             Deine Stimme fehlt
           </p>
-          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white leading-snug">
+          <Heading level={2} className="font-semibold text-text-primary leading-snug">
             {first.title}
           </Heading>
           {deadline && (
@@ -108,7 +108,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
             </p>
           )}
           {more > 0 && (
-            <p className="text-sm text-primary-600 dark:text-primary-400 mt-1">
+            <p className="text-sm text-action mt-1">
               +{more} weitere offene Abstimmung{more !== 1 ? 'en' : ''}
             </p>
           )}

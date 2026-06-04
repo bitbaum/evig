@@ -65,17 +65,17 @@ export default function ProjectsPage() {
 
           {/* Section header */}
           <div className="max-w-2xl mx-auto text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mb-3">
               {t('section.title')}
             </h2>
-            <p className="text-base sm:text-lg text-neutral-500 dark:text-neutral-400">
+            <p className="text-base sm:text-lg text-text-tertiary">
               {t('section.subtitle')}
             </p>
           </div>
 
           {/* Filter row */}
           <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mb-10 sm:mb-12">
-            <span className="flex items-center gap-1.5 text-xs font-medium text-neutral-400 uppercase tracking-wider">
+            <span className="flex items-center gap-1.5 text-xs font-medium text-text-muted uppercase tracking-wider">
               <Filter className="h-3.5 w-3.5" />
               {t('filter.label')}
             </span>
@@ -85,7 +85,7 @@ export default function ProjectsPage() {
                 'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                 selectedCategory === null
                   ? 'bg-primary-600 text-white'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-white/[0.08] hover:border-neutral-300 dark:hover:border-white/[0.16]'
+                  : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/[0.16]'
               )}
             >
               {t('filter.all')}
@@ -98,7 +98,7 @@ export default function ProjectsPage() {
                   'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                   selectedCategory === key
                     ? 'bg-primary-600 text-white'
-                    : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-white/[0.08] hover:border-neutral-300 dark:hover:border-white/[0.16]'
+                    : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/[0.16]'
                 )}
               >
                 {t(`categories.${key}`)}
@@ -135,7 +135,7 @@ export default function ProjectsPage() {
                       </div>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="text-base font-semibold text-neutral-900 dark:text-white truncate">
+                          <h3 className="text-base font-semibold text-text-primary truncate">
                             {project.title}
                           </h3>
                           <span className={cn(
@@ -145,7 +145,7 @@ export default function ProjectsPage() {
                             {t(`status.${project.status}`)}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500">
+                        <div className="flex items-center gap-1.5 text-xs text-text-muted">
                           <Calendar className="h-3.5 w-3.5" />
                           <span>{t('since', { year: project.year })}</span>
                         </div>
@@ -153,7 +153,7 @@ export default function ProjectsPage() {
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-4 flex-grow leading-relaxed">
+                    <p className="text-sm text-text-secondary mb-4 flex-grow leading-relaxed">
                       {project.description}
                     </p>
 
@@ -161,7 +161,7 @@ export default function ProjectsPage() {
                     {project.features.length > 0 && (
                       <ul className="space-y-2 mb-5">
                         {project.features.map((feat, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+                          <li key={i} className="flex items-start gap-2 text-sm text-text-tertiary">
                             <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-primary-500" />
                             <span>{feat}</span>
                           </li>
@@ -170,13 +170,13 @@ export default function ProjectsPage() {
                     )}
 
                     {/* Footer */}
-                    <div className="mt-auto pt-4 border-t border-neutral-100 dark:border-white/[0.04] flex items-center justify-between">
-                      <span className="text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                    <div className="mt-auto pt-4 border-t border-subtle flex items-center justify-between">
+                      <span className="text-xs font-medium uppercase tracking-wider text-text-muted">
                         {t(`categories.${project.category}`)}
                       </span>
                       <Link
                         href={`/projects/${project.slug}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-action hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
                       >
                         {t('learnMore')}
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -189,7 +189,7 @@ export default function ProjectsPage() {
           </div>
 
           {/* Result count */}
-          <p className="text-center mt-8 text-xs text-neutral-400 dark:text-neutral-500">
+          <p className="text-center mt-8 text-xs text-text-muted">
             {selectedCategory === null
               ? t('results', { count: filteredItems.length, total: items.length })
               : t('resultsFiltered', {

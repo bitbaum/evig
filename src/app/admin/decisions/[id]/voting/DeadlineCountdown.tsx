@@ -26,7 +26,7 @@ export function DeadlineCountdown({ deadline }: { deadline: string }) {
   const days = Math.floor(hours / 24);
   const remainingHours = hours % 24;
 
-  let colorClass = 'text-neutral-600';
+  let colorClass = 'text-text-secondary';
   if (hours < 24) {
     colorClass = 'text-error-600 font-medium';
   } else if (hours < 72) {
@@ -36,12 +36,12 @@ export function DeadlineCountdown({ deadline }: { deadline: string }) {
   const dateStr = formatDateNumeric(deadline);
 
   return (
-    <div className={`rounded-md bg-neutral-50 px-3 py-2 text-sm ${colorClass}`}>
+    <div className={`rounded-md bg-surface-raised px-3 py-2 text-sm ${colorClass}`}>
       <span>
         Abstimmung endet in{' '}
         {days > 0 ? `${days} Tagen, ${remainingHours} Stunden` : `${remainingHours} Stunden`}
       </span>
-      <span className="ml-2 text-xs text-neutral-500">(Frist: {dateStr})</span>
+      <span className="ml-2 text-xs text-text-tertiary">(Frist: {dateStr})</span>
     </div>
   );
 }

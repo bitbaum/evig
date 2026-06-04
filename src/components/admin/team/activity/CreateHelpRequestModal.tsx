@@ -112,7 +112,7 @@ export function CreateHelpRequestModal({
 
         {/* Target type */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             An wen richtet sich die Anfrage?
           </label>
           <div className="flex gap-3">
@@ -122,7 +122,7 @@ export function CreateHelpRequestModal({
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 isBroadcast
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                  : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
+                  : 'border dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
               <Users className="w-5 h-5" />
@@ -134,7 +134,7 @@ export function CreateHelpRequestModal({
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 !isBroadcast
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                  : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
+                  : 'border dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
               <User className="w-5 h-5" />
@@ -193,7 +193,7 @@ export function CreateHelpRequestModal({
         </FormField>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
+        <div className="flex justify-end gap-3 pt-4 border-t border">
           <Button type="button" onClick={onClose} variant="ghost" size="sm">
             Abbrechen
           </Button>

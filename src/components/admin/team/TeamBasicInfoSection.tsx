@@ -83,7 +83,7 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
       </FormField>
 
       <div>
-        <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        <label className="flex items-center gap-2 text-sm font-medium text-text-secondary">
           <input
             type="checkbox"
             checked={form.is_active}
@@ -92,7 +92,7 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
           />
           Aktiv
         </label>
-        <p className="text-xs text-neutral-500 mt-1">
+        <p className="text-xs text-text-tertiary mt-1">
           Inaktive Profile werden in der Liste ausgegraut angezeigt
         </p>
       </div>

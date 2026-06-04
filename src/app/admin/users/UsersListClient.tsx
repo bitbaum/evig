@@ -57,20 +57,20 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
 
       {/* Loading State */}
       {loading && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-white/[0.06] p-8 text-center">
-          <RefreshCw className="w-8 h-8 text-neutral-500 mx-auto animate-spin mb-4" />
-          <p className="text-neutral-500">Lade Benutzer...</p>
+        <div className="bg-surface-base rounded-xl border border-subtle dark:border-white/[0.06] p-8 text-center">
+          <RefreshCw className="w-8 h-8 text-text-tertiary mx-auto animate-spin mb-4" />
+          <p className="text-text-tertiary">Lade Benutzer...</p>
         </div>
       )}
 
       {/* Empty State */}
       {!loading && !error && users.length === 0 && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-white/[0.06] p-12 text-center">
-          <Users className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+        <div className="bg-surface-base rounded-xl border border-subtle dark:border-white/[0.06] p-12 text-center">
+          <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             Keine Benutzer gefunden
           </Heading>
-          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
+          <p className="text-text-tertiary mb-4">
             {hasActiveFilters
               ? 'Keine Benutzer entsprechen Ihren Filterkriterien.'
               : 'Keine Benutzer vorhanden.'}
@@ -78,7 +78,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
           {hasActiveFilters && (
             <button
               onClick={resetFilters}
-              className="text-primary-600 hover:text-primary-700 text-sm"
+              className="text-action hover:text-primary-700 text-sm"
             >
               Filter zurücksetzen
             </button>
@@ -90,12 +90,12 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       {!loading && !error && users.length > 0 && (
         <>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="text-sm text-text-tertiary">
               {pagination.total} Benutzer gefunden
             </p>
             <button
               onClick={fetchUsers}
-              className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+              className="flex items-center gap-1 text-sm text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren

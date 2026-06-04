@@ -36,12 +36,12 @@ export function OnboardingChecklist({ role, emailVerified, className }: Onboardi
   const remaining = steps.filter((s) => !s.done).length
 
   return (
-    <div className={cn('bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4', className)}>
+    <div className={cn('bg-surface-base dark:bg-neutral-800 rounded-lg border dark:border-neutral-700 p-4', className)}>
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+        <h2 className="text-sm font-semibold text-text-secondary">
           Erste Schritte
         </h2>
-        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+        <span className="text-xs text-text-tertiary">
           {steps.length - remaining}/{steps.length} erledigt
         </span>
       </div>
@@ -54,11 +54,11 @@ export function OnboardingChecklist({ role, emailVerified, className }: Onboardi
               <Circle className="w-4 h-4 text-neutral-300 dark:text-neutral-600 flex-shrink-0" />
             )}
             {step.href && !step.done ? (
-              <a href={step.href} className="text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:underline">
+              <a href={step.href} className="text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 hover:underline">
                 {step.label}
               </a>
             ) : (
-              <span className={step.done ? 'text-neutral-400 dark:text-neutral-500 line-through' : 'text-neutral-600 dark:text-neutral-400'}>
+              <span className={step.done ? 'text-text-muted line-through' : 'text-text-secondary'}>
                 {step.label}
               </span>
             )}

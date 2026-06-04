@@ -249,16 +249,16 @@ export function DataEntryTabs({
         className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-primary-100/50 dark:hover:bg-primary-800/30 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-          <span className="font-semibold text-neutral-900 dark:text-white">{t('quickEntryTitle')}</span>
+          <Zap className="w-5 h-5 text-action" />
+          <span className="font-semibold text-text-primary">{t('quickEntryTitle')}</span>
           {isCollapsed && quickEntryState === 'success' && (
-            <span className="text-sm text-primary-600 dark:text-primary-400">{t('quickEntryFilled')}</span>
+            <span className="text-sm text-action">{t('quickEntryFilled')}</span>
           )}
         </div>
         {isCollapsed ? (
-          <ChevronDown className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+          <ChevronDown className="w-5 h-5 text-action" />
         ) : (
-          <ChevronUp className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+          <ChevronUp className="w-5 h-5 text-action" />
         )}
       </button>
 
@@ -273,7 +273,7 @@ export function DataEntryTabs({
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeMode === tab.id
                   ? 'bg-white dark:bg-neutral-800 text-primary-700 dark:text-primary-300 border-b-2 border-primary-600 -mb-px'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white/50 dark:hover:bg-neutral-800/50'
+                  : 'text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white/50 dark:hover:bg-neutral-800/50'
               }`}
             >
               {tab.icon}
@@ -287,7 +287,7 @@ export function DataEntryTabs({
       {!isCollapsed && <div className="p-6">
         {/* Speech mode - Coming soon */}
         {activeMode === 'speech' && (
-          <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+          <div className="text-center py-8 text-text-tertiary">
             <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>{t('speechComingSoon')}</p>
             <p className="text-sm">{t('speechRequires')}</p>
@@ -296,7 +296,7 @@ export function DataEntryTabs({
 
         {/* Picture mode - Coming soon */}
         {activeMode === 'picture' && (
-          <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
+          <div className="text-center py-8 text-text-tertiary">
             <Camera className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>{t('pictureComingSoon')}</p>
             <p className="text-sm">{t('pictureRequires')}</p>
@@ -307,10 +307,10 @@ export function DataEntryTabs({
         {activeMode === 'form' && (
           <div className="space-y-4">
             <div className="text-center mb-2">
-              <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <Heading level={3} className="text-lg font-semibold text-text-primary">
                 {t('quickEntryTitle')}
               </Heading>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-text-secondary">
                 {t('quickEntryPlaceholder')}
               </p>
             </div>
@@ -371,10 +371,10 @@ export function DataEntryTabs({
         {activeMode === 'file' && (
           <div className="space-y-4">
             <div className="text-center mb-2">
-              <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <Heading level={3} className="text-lg font-semibold text-text-primary">
                 {t('fileImportTitle')}
               </Heading>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-text-secondary">
                 {t('fileImportDesc')}
               </p>
             </div>
@@ -383,13 +383,13 @@ export function DataEntryTabs({
               {isUploading ? (
                 <>
                   <Loader2 className="w-10 h-10 text-primary-500 mb-2 animate-spin" />
-                  <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">{t('processing')}</span>
+                  <span className="text-sm text-action font-medium">{t('processing')}</span>
                 </>
               ) : (
                 <>
                   <FileUp className="w-10 h-10 text-primary-400 mb-2" />
-                  <span className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">{t('chooseFile')}</span>
-                  <span className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">{t('fileHint')}</span>
+                  <span className="text-sm text-text-secondary font-medium">{t('chooseFile')}</span>
+                  <span className="text-xs text-text-muted mt-1">{t('fileHint')}</span>
                 </>
               )}
               <input

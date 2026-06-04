@@ -21,8 +21,8 @@ export function SimpleMajorityVote({ response, onChange }: Props) {
                 ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
                 : r === 'no'
                   ? 'border-error-500 bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300'
-                  : 'border-neutral-500 bg-neutral-50 text-neutral-700'
-              : 'border-neutral-200 text-neutral-600 hover:border-neutral-300'
+                  : 'border-neutral-500 bg-surface-raised text-text-secondary'
+              : 'border text-text-secondary hover:border-neutral-300'
           }`}
         >
           {SIMPLE_MAJORITY_RESPONSE_CONFIG[r].label}

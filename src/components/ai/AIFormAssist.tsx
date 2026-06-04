@@ -110,7 +110,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
         className={`w-full flex items-center justify-between ${padding} py-2.5 text-left`}
       >
         <span className="text-sm font-semibold text-primary-900 dark:text-primary-100 flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+          <Sparkles className="w-4 h-4 text-action" />
           {t('heading')}
         </span>
         <svg className={`w-4 h-4 text-primary-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 }
 
 const STATUS_COLORS: Record<ProjectStatus, string> = {
-  planning:  'bg-neutral-100 text-neutral-700 dark:bg-white/[0.06] dark:text-neutral-300',
+  planning:  'bg-surface-raised text-text-secondary dark:bg-white/[0.06]',
   active:    'bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
@@ -95,7 +95,7 @@ export default async function TaskProjectsPage() {
 
   const stats: StatCardItem[] = [
     { icon: FolderKanban, color: 'gray',  label: 'Gesamt',          value: total },
-    { icon: BarChart3,    color: 'green', label: 'Aktiv',           value: active,    valueColor: 'text-primary-600' },
+    { icon: BarChart3,    color: 'green', label: 'Aktiv',           value: active,    valueColor: 'text-action' },
     { icon: PauseCircle,  color: 'amber', label: 'Pausiert',        value: onHold,    valueColor: 'text-warning-600' },
     { icon: CheckCircle2, color: 'green', label: 'Abgeschlossen',   value: completed, valueColor: 'text-success-600' },
   ]
@@ -127,10 +127,10 @@ export default async function TaskProjectsPage() {
       {projects.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-12 text-center')}>
           <FolderKanban className="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-600 mb-4" />
-          <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">
+          <p className="text-sm font-semibold text-text-primary mb-1">
             Noch keine Projekte
           </p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-5">
+          <p className="text-sm text-text-tertiary mb-5">
             Erstelle ein Projekt, um Aufgaben zu gruppieren und den Überblick zu behalten.
           </p>
           <Link
@@ -164,15 +164,15 @@ export default async function TaskProjectsPage() {
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <FolderKanban className="h-4 w-4 flex-shrink-0 text-neutral-400 dark:text-neutral-500 group-hover:text-primary-500 transition-colors" />
-                    <span className="text-sm font-semibold text-neutral-900 dark:text-white truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                    <FolderKanban className="h-4 w-4 flex-shrink-0 text-text-muted group-hover:text-primary-500 transition-colors" />
+                    <span className="text-sm font-semibold text-text-primary truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                       {project.title}
                     </span>
                   </div>
                   <span className={cn(
                     designPrimitive.badgeBase,
                     'whitespace-nowrap',
-                    STATUS_COLORS[project.status as ProjectStatus] ?? 'bg-neutral-100 text-neutral-700'
+                    STATUS_COLORS[project.status as ProjectStatus] ?? 'bg-surface-raised text-text-secondary'
                   )}>
                     {PROJECT_STATUS_LABELS[project.status as ProjectStatus] ?? project.status}
                   </span>
@@ -180,7 +180,7 @@ export default async function TaskProjectsPage() {
 
                 {/* Description */}
                 {project.description && (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3 line-clamp-2">
+                  <p className="text-xs text-text-tertiary mb-3 line-clamp-2">
                     {project.description}
                   </p>
                 )}
@@ -189,14 +189,14 @@ export default async function TaskProjectsPage() {
                 {project.taskCount > 0 && (
                   <div className="mb-3">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-neutral-400 dark:text-neutral-500">
+                      <span className="text-xs text-text-muted">
                         {project.completedTaskCount}/{project.taskCount} Aufgaben
                       </span>
-                      <span className="text-xs font-medium text-neutral-600 dark:text-neutral-300">
+                      <span className="text-xs font-medium text-text-secondary dark:text-neutral-300">
                         {progress}%
                       </span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-neutral-100 dark:bg-white/[0.06]">
+                    <div className="h-1.5 w-full rounded-full bg-surface-raised dark:bg-white/[0.06]">
                       <div
                         className="h-1.5 rounded-full bg-primary-500 transition-all"
                         style={{ width: `${progress}%` }}
@@ -206,8 +206,8 @@ export default async function TaskProjectsPage() {
                 )}
 
                 {/* Footer */}
-                <div className="mt-auto flex items-center justify-between pt-3 border-t border-neutral-100 dark:border-white/[0.04]">
-                  <div className="flex items-center gap-3 text-xs text-neutral-400 dark:text-neutral-500">
+                <div className="mt-auto flex items-center justify-between pt-3 border-t border-subtle">
+                  <div className="flex items-center gap-3 text-xs text-text-muted">
                     {project.targetDate && (
                       <span className="flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5" />

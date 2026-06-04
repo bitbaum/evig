@@ -16,7 +16,7 @@ interface Props {
 export function LocationAddressSection({ formData, onFieldChange }: Props) {
   return (
     <div className="mb-8">
-      <Heading level={2} className="text-xl text-neutral-900 mb-4 flex items-center">
+      <Heading level={2} className="text-xl text-text-primary mb-4 flex items-center">
         <Home className="w-5 h-5 mr-2" />
         Adresse & Standort
       </Heading>

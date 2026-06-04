@@ -31,7 +31,7 @@ const GRID_COLS: Record<2 | 3 | 4 | 5, string> = {
 }
 
 const TREND_COLOR = {
-  green: 'text-primary-600 dark:text-primary-400',
+  green: 'text-action',
   red:   'text-error-600 dark:text-error-400',
   amber: 'text-warning-600 dark:text-warning-400',
 }
@@ -45,7 +45,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
         const valueColor = item.valueColor ?? ''
 
         const cardClass = cn(
-          'rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900',
+          'rounded-lg border border bg-surface-base p-4',
           item.href && 'transition-colors hover:border-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
         )
 
@@ -58,7 +58,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
               <p className={cn(adminType.stat, valueColor)}>{item.value}</p>
               <p className={adminType.statLabel}>{item.label}</p>
               {item.trend && (
-                <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-neutral-400')}>
+                <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-text-muted')}>
                   {item.trend}
                 </p>
               )}

@@ -61,7 +61,7 @@ function SearchForm({
   return (
     <form action="/shop/search" method="GET" className="max-w-2xl mx-auto">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
         <Input
           type="search"
           name="q"
@@ -101,7 +101,7 @@ function Breadcrumbs({
 }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center gap-2 text-sm text-neutral-500">
+      <ol className="flex items-center gap-2 text-sm text-text-tertiary">
         <li>
           <Link
             href="/"
@@ -119,7 +119,7 @@ function Breadcrumbs({
         </li>
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <span className="text-neutral-900 font-medium">
+          <span className="text-text-primary font-medium">
             {query ? searchWithQueryLabel : searchLabel}
           </span>
         </li>
@@ -154,13 +154,13 @@ function SearchResults({
     return (
       <div className="card-shell p-8 text-center">
         <div className="max-w-md mx-auto">
-          <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-action flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8" />
           </div>
-          <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+          <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">
             {noResultsLabel}
           </Heading>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6">{noResultsHintLabel}</p>
+          <p className="text-text-secondary mb-6">{noResultsHintLabel}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href={ROUTES.public.marketplace} className={buttonClass({ variant: 'primary', size: 'lg' })}>
               <Package className="w-5 h-5" />
@@ -178,7 +178,7 @@ function SearchResults({
 
   return (
     <div>
-      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">{foundCountLabel}</p>
+      <p className="text-sm text-text-tertiary mb-4">{foundCountLabel}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -206,7 +206,7 @@ function NoQueryState({
     <div className="space-y-8">
       {/* Popular searches */}
       <div>
-        <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
+        <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
           {popularSearchesLabel}
         </Heading>
         <div className="flex flex-wrap gap-2">
@@ -214,7 +214,7 @@ function NoQueryState({
             <Link
               key={search.slug}
               href={getSearchUrl(search.name)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-full text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-neutral-800 border dark:border-neutral-700 rounded-full text-sm font-medium text-text-secondary hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
             >
               <Search className="w-4 h-4" />
               {search.name}
@@ -225,7 +225,7 @@ function NoQueryState({
 
       {/* Browse by category */}
       <div>
-        <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
+        <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
           {browseByCategoryLabel}
         </Heading>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -235,15 +235,15 @@ function NoQueryState({
               href={getCategoryUrl(category.slug)}
               className="flex items-center gap-3 p-4 card-shell hover:border-primary-300 transition-all group"
             >
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-surface-raised dark:bg-neutral-700 text-text-secondary flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors">
                 <Package className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-neutral-900 dark:text-white truncate group-hover:text-primary-600 transition-colors">
+                <p className="font-medium text-text-primary truncate group-hover:text-primary-600 transition-colors">
                   {category.name}
                 </p>
                 {category.count !== undefined && (
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                  <p className="text-sm text-text-tertiary">
                     {productCountLabel(category.count)}
                   </p>
                 )}
@@ -255,7 +255,7 @@ function NoQueryState({
         <div className="mt-4 text-center">
           <Link
             href={ROUTES.public.shop}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-action hover:text-primary-700 font-medium"
           >
             {allCategoriesLabel}
           </Link>

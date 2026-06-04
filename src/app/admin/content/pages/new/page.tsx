@@ -64,7 +64,7 @@ function NewStaticPageContent() {
     return (
       <div className="space-y-8">
         <div className="h-8 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
-        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border p-8">
+        <div className="bg-surface-base rounded-xl shadow-sm border p-8">
           <div className="animate-pulse space-y-6">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-12 bg-neutral-200 rounded"></div>
@@ -88,13 +88,13 @@ function NewStaticPageContent() {
           href={ROUTES.admin.contentPages}
           className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
         >
-          <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+          <ArrowLeft className="w-5 h-5 text-text-secondary" />
         </Link>
         <div>
-          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-text-primary">
             Neue Seite erstellen
           </Heading>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+          <p className="text-text-secondary mt-1">
             Erstelle eine neue statische Seite
           </p>
         </div>
@@ -110,7 +110,7 @@ function NewStaticPageContent() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6 space-y-6">
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6 space-y-6">
           {/* Title */}
           <FormField label="Titel" required htmlFor="page-title">
             <Input
@@ -134,7 +134,7 @@ function NewStaticPageContent() {
           {/* Slug */}
           <FormField label="URL-Slug" required>
             <div className="flex gap-2">
-              <div className="flex items-center px-3 bg-neutral-50 dark:bg-neutral-700 border border-r-0 border-neutral-300 dark:border-neutral-600 rounded-l-lg text-sm text-neutral-500">
+              <div className="flex items-center px-3 bg-surface-raised dark:bg-neutral-700 border border-r-0 border-neutral-300 dark:border-neutral-600 rounded-l-lg text-sm text-text-tertiary">
                 /
               </div>
               <Input
@@ -148,7 +148,7 @@ function NewStaticPageContent() {
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-white/[0.06] text-neutral-700 dark:text-neutral-300"
+                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-white/[0.06] text-text-secondary"
               >
                 Generieren
               </button>
@@ -173,17 +173,17 @@ function NewStaticPageContent() {
               id="is_published"
               checked={formData.is_published}
               onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+              className="w-4 h-4 text-action border-neutral-300 rounded focus:ring-primary-500"
             />
-            <label htmlFor="is_published" className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label htmlFor="is_published" className="text-sm font-medium text-text-secondary">
               Sofort veröffentlichen
             </label>
           </div>
         </div>
 
         {/* SEO Section */}
-        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6 space-y-6">
-          <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">SEO</Heading>
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6 space-y-6">
+          <Heading level={2} className="text-lg font-semibold text-text-primary">SEO</Heading>
 
           <FormField label="SEO Titel" htmlFor="seo-title">
             <Input
@@ -209,7 +209,7 @@ function NewStaticPageContent() {
         <div className="flex justify-end gap-3">
           <Link
             href={ROUTES.admin.contentPages}
-            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
+            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 transition-colors"
           >
             Abbrechen
           </Link>
@@ -227,7 +227,7 @@ function NewStaticPageFallback() {
   return (
     <div className="space-y-8">
       <div className="h-8 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border p-8">
+      <div className="bg-surface-base rounded-xl shadow-sm border p-8">
         <div className="animate-pulse space-y-6">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="h-12 bg-neutral-200 rounded"></div>

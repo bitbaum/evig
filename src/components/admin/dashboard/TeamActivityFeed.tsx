@@ -58,7 +58,7 @@ export async function TeamActivityFeed() {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">
+      <p className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-2">
         Team-Aktivität
       </p>
       <ul className="space-y-2" role="list">
@@ -70,16 +70,16 @@ export async function TeamActivityFeed() {
           // because the lookup uses ?? to handle the undefined case.
           const actionLabel = ACTION_LABELS[row.action as ActivityAction] ?? row.action
           return (
-            <li key={i} className="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
               <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-600 mt-2 flex-shrink-0" aria-hidden="true" />
               <span className="leading-snug">
-                <strong className="text-neutral-900 dark:text-white font-medium">{actorName}</strong>
+                <strong className="text-text-primary font-medium">{actorName}</strong>
                 {' '}{actionLabel}
                 {row.subject_label && (
                   <> &ldquo;{row.subject_label}&rdquo;</>
                 )}
                 {' '}
-                <span className="text-neutral-400 dark:text-neutral-500 text-xs">
+                <span className="text-text-muted text-xs">
                   {formatRelativeTime(row.created_at)}
                 </span>
               </span>

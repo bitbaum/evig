@@ -124,31 +124,31 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
   // Happy path: render confirmation card with the client-island button.
   return (
     <PageShell maxWidth="2xl" py="py-12">
-      <div className="rounded-2xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-8 shadow-sm">
+      <div className="rounded-2xl border bg-surface-base p-8 shadow-sm">
         <div className="flex items-start gap-4 mb-6">
-          <CheckCircle className="w-10 h-10 text-primary-600 flex-shrink-0" aria-hidden="true" />
+          <CheckCircle className="w-10 h-10 text-action flex-shrink-0" aria-hidden="true" />
           <div>
-            <Heading level={1} className="text-2xl font-semibold text-neutral-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-semibold text-text-primary">
               Angebot annehmen?
             </Heading>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               Du bist im Begriff, das folgende Angebot anzunehmen. Alle anderen Angebote für diese Anfrage werden dabei automatisch abgelehnt.
             </p>
           </div>
         </div>
 
-        <dl className="space-y-3 mb-6 border-t border-neutral-100 dark:border-white/[0.04] pt-4">
+        <dl className="space-y-3 mb-6 border-t border-subtle pt-4">
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Anfrage</dt>
-            <dd className="text-base text-neutral-900 dark:text-white mt-0.5">{offerDisplay.request_title}</dd>
+            <dt className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Anfrage</dt>
+            <dd className="text-base text-text-primary mt-0.5">{offerDisplay.request_title}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Techniker</dt>
-            <dd className="text-base text-neutral-900 dark:text-white mt-0.5">{offerDisplay.helper_name || 'Unbekannt'}</dd>
+            <dt className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Techniker</dt>
+            <dd className="text-base text-text-primary mt-0.5">{offerDisplay.helper_name || 'Unbekannt'}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Nachricht</dt>
-            <dd className="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5 whitespace-pre-wrap bg-neutral-50 dark:bg-neutral-800 rounded-lg p-3 border-l-2 border-primary-500">
+            <dt className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Nachricht</dt>
+            <dd className="text-sm text-text-secondary mt-0.5 whitespace-pre-wrap bg-surface-raised rounded-lg p-3 border-l-2 border-primary-500">
               {offerDisplay.offer_message}
             </dd>
           </div>
@@ -179,10 +179,10 @@ function StateCard({
   return (
     <PageShell maxWidth="2xl" py="py-12" className="text-center">
       <div className="flex justify-center mb-4">{icon}</div>
-      <Heading level={1} className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
+      <Heading level={1} className="text-2xl font-semibold text-text-primary mb-2">
         {title}
       </Heading>
-      <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-prose mx-auto">{message}</p>
+      <p className="text-text-secondary mb-6 max-w-prose mx-auto">{message}</p>
       {cta && (
         <Link href={cta.href} className={buttonClass({ variant: 'primary' })}>
           {cta.label}

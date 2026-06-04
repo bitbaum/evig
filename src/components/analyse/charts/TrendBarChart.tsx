@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload, label }: {
     : 'N/A'
 
   return (
-    <div className="bg-white dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
+    <div className="bg-surface-base dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
       <p className="font-semibold mb-2">{label}</p>
       <div className="space-y-1 text-sm">
         <div className="flex justify-between gap-4">
@@ -51,7 +51,7 @@ function CustomTooltip({ active, payload, label }: {
           <span className="font-medium">{formatCHF(current)}</span>
         </div>
         <div className="flex justify-between gap-4">
-          <span className="text-neutral-500">Vorjahr</span>
+          <span className="text-text-tertiary">Vorjahr</span>
           <span className="font-medium">{formatCHF(previous)}</span>
         </div>
         <div className="border-t pt-1 flex justify-between gap-4">

@@ -28,8 +28,8 @@ export function BlogPostSidebar({
   return (
     <div className="space-y-6">
       {/* Status */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Status</Heading>
+      <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <Heading level={3} className="font-medium text-text-primary mb-4">Status</Heading>
         <div className="flex items-center gap-3">
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -40,15 +40,15 @@ export function BlogPostSidebar({
             />
             <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-neutral-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-500 peer-checked:bg-primary-600"></div>
           </label>
-          <span className="text-sm text-neutral-700 dark:text-neutral-300">
+          <span className="text-sm text-text-secondary">
             {formData.isPublished ? 'Veröffentlicht' : 'Entwurf'}
           </span>
         </div>
       </div>
 
       {/* Category */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Kategorie</Heading>
+      <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <Heading level={3} className="font-medium text-text-primary mb-4">Kategorie</Heading>
         <Select
           value={formData.categoryId}
           onChange={(e) => onFormDataChange({ ...formData, categoryId: e.target.value })}
@@ -61,8 +61,8 @@ export function BlogPostSidebar({
       </div>
 
       {/* Featured Image */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <Heading level={3} className="font-medium text-text-primary mb-4 flex items-center gap-2">
           <ImageIcon className="w-4 h-4" />
           Beitragsbild
         </Heading>
@@ -82,8 +82,8 @@ export function BlogPostSidebar({
       </div>
 
       {/* Tags */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <Heading level={3} className="font-medium text-text-primary mb-4 flex items-center gap-2">
           <Tag className="w-4 h-4" />
           Tags
         </Heading>
@@ -120,11 +120,11 @@ export function BlogPostSidebar({
       </div>
 
       {/* SEO */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">SEO</Heading>
+      <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <Heading level={3} className="font-medium text-text-primary mb-4">SEO</Heading>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">Meta-Titel</label>
+            <label className="block text-sm text-text-secondary mb-1">Meta-Titel</label>
             <Input
               type="text"
               value={formData.seoTitle}
@@ -133,7 +133,7 @@ export function BlogPostSidebar({
             />
           </div>
           <div>
-            <label className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">Meta-Beschreibung</label>
+            <label className="block text-sm text-text-secondary mb-1">Meta-Beschreibung</label>
             <Textarea
               value={formData.seoDescription}
               onChange={(e) => onFormDataChange({ ...formData, seoDescription: e.target.value })}

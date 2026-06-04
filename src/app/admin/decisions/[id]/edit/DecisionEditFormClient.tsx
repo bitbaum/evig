@@ -31,7 +31,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
   } = useDecisionEditForm(decisionId);
 
   if (loading) {
-    return <div className="py-12 text-center text-neutral-500">Laden...</div>;
+    return <div className="py-12 text-center text-text-tertiary">Laden...</div>;
   }
 
   return (
@@ -65,7 +65,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
 
       <FormField
         htmlFor="edit-background"
-        label={<>Begründung &amp; Hintergrund<span className="ml-1.5 font-normal text-neutral-400">(optional)</span></>}
+        label={<>Begründung &amp; Hintergrund<span className="ml-1.5 font-normal text-text-muted">(optional)</span></>}
       >
         <Textarea
           id="edit-background"
@@ -91,13 +91,13 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         <button
           type="button"
           onClick={() => setShowAdvanced((v) => !v)}
-          className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700"
+          className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-700"
         >
           <span className="text-xs">{showAdvanced ? '▼' : '▶'}</span>
           Erweiterte Einstellungen
         </button>
         {showAdvanced && (
-          <div className="mt-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-4">
+          <div className="mt-3 rounded-lg border border bg-surface-raised p-4 space-y-4">
             <AdvancedSettings
               votingMethod={votingMethod}
               onMethodChange={setVotingMethod}
@@ -115,7 +115,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
                 type="checkbox"
                 checked={allowPublicVoting}
                 onChange={(e) => setAllowPublicVoting(e.target.checked)}
-                className="mt-0.5 rounded border-primary-400 text-primary-600 focus:ring-primary-500"
+                className="mt-0.5 rounded border-primary-400 text-action focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-primary-900 dark:text-primary-300">Mit Link teilen — kein Konto nötig</span>
@@ -134,7 +134,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         </Button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-neutral-300 dark:border-white/[0.08] px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+          className="rounded-lg border border-neutral-300 dark:border-white/[0.08] px-4 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           Abbrechen
         </Link>

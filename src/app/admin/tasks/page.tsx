@@ -242,7 +242,7 @@ export default async function TasksAdminPage({
         <>
           <Link
             href={ROUTES.admin.tasksAnalytics}
-            className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm text-text-secondary hover:text-neutral-900 border border hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
           >
             <BarChart3 className="w-4 h-4" />
             Statistiken
@@ -284,24 +284,24 @@ export default async function TasksAdminPage({
           color: 'green',
           label: 'Heute erledigt',
           value: stats.completedToday,
-          valueColor: 'text-primary-600',
+          valueColor: 'text-action',
         },
       ] satisfies StatCardItem[]} />
 
       {/* Filters */}
-      <Suspense fallback={<div className="bg-white rounded-lg border p-4 h-14" />}>
+      <Suspense fallback={<div className="bg-surface-base rounded-lg border p-4 h-14" />}>
         <TaskFiltersClient />
       </Suspense>
 
       {/* Task List */}
-      <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
+      <div className="bg-surface-base rounded-lg border overflow-hidden overflow-x-auto">
         {listError ? (
           <div className="p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               {ADMIN_CONTENT.tasks.errorMessage}
             </Heading>
-            <p className="text-neutral-600 mb-4">
+            <p className="text-text-secondary mb-4">
               Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
             </p>
             <Link href={ROUTES.admin.tasks} className={buttonClass({ variant: 'primary' })}>
@@ -310,11 +310,11 @@ export default async function TasksAdminPage({
           </div>
         ) : tasks.length === 0 ? (
           <div className="p-12 text-center">
-            <ClipboardList className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+            <ClipboardList className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               {ADMIN_CONTENT.tasks.emptyTitle}
             </Heading>
-            <p className="text-neutral-600 mb-4">
+            <p className="text-text-secondary mb-4">
               {ADMIN_CONTENT.tasks.emptyDescription}
             </p>
             <Link href={ROUTES.admin.taskNew} className={buttonClass({ variant: 'primary' })}>
@@ -324,36 +324,36 @@ export default async function TasksAdminPage({
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-neutral-50 border-b">
+            <thead className="bg-surface-raised border-b">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide">
                   Aufgabe
                 </th>
                 {/* Kategorie hidden on mobile */}
-                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide">
                   Kategorie
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide">
                   Status
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide">
                   Priorität
                 </th>
                 {/* Zeitplan — replaces "Typ" (per admin UX audit: schedule
                     is what staff actually need to know — "Jeden Montag" vs
                     "Wiederkehrend (geplant)" — the human string beats the
                     type enum). Falls back to type label for one-off tasks. */}
-                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide">
                   Zeitplan
                 </th>
                 {/* Zugewiesen hidden on mobile and tablet */}
-                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide">
                   Zugewiesen
                 </th>
-                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide whitespace-nowrap">
+                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide whitespace-nowrap">
                   Fällig
                 </th>
-                <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide whitespace-nowrap">
+                <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide whitespace-nowrap">
                   Erledigungen
                 </th>
               </tr>
@@ -365,7 +365,7 @@ export default async function TasksAdminPage({
                     <div className="flex items-center gap-2 min-w-0">
                       <Link
                         href={ROUTES.admin.task(task.id)}
-                        className="font-medium text-neutral-900 hover:text-primary-600 truncate min-w-0 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
+                        className="font-medium text-text-primary hover:text-primary-600 truncate min-w-0 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
                       >
                         {task.title}
                       </Link>
@@ -387,20 +387,20 @@ export default async function TasksAdminPage({
                       ) : null}
                     </div>
                     {task.description && (
-                      <p className="text-sm text-neutral-500 truncate max-w-full">
+                      <p className="text-sm text-text-tertiary truncate max-w-full">
                         {task.description}
                       </p>
                     )}
                   </td>
                   <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
-                    <span className="text-sm text-neutral-600">
+                    <span className="text-sm text-text-secondary">
                       {TASK_CATEGORY_LABELS[task.category]}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        TASK_STATUS_COLORS[task.current_status] || 'bg-neutral-100 text-neutral-800'
+                        TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-neutral-800'
                       }`}
                     >
                       {TASK_STATUS_LABELS[task.current_status]}
@@ -409,39 +409,39 @@ export default async function TasksAdminPage({
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        TASK_PRIORITY_COLORS[task.priority] || 'bg-neutral-100 text-neutral-800'
+                        TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-neutral-800'
                       }`}
                     >
                       {TASK_PRIORITY_LABELS[task.priority]}
                     </span>
                   </td>
                   <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
-                    <span className="text-sm text-neutral-600">
+                    <span className="text-sm text-text-secondary">
                       {task.schedule_human || TASK_TYPE_LABELS[task.task_type]}
                     </span>
                   </td>
                   <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
                     {task.assigned_to_name ? (
-                      <span className="text-sm text-neutral-600">{task.assigned_to_name}</span>
+                      <span className="text-sm text-text-secondary">{task.assigned_to_name}</span>
                     ) : (
-                      <span className="text-sm text-neutral-400">&mdash;</span>
+                      <span className="text-sm text-text-muted">&mdash;</span>
                     )}
                   </td>
                   <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
                     {task.due_date ? (() => {
                       const isOverdue = !task.is_completed && new Date(task.due_date) < new Date(new Date().toDateString())
                       return (
-                        <span className={`text-sm ${isOverdue ? 'text-error-600 font-medium' : 'text-neutral-600'}`}>
+                        <span className={`text-sm ${isOverdue ? 'text-error-600 font-medium' : 'text-text-secondary'}`}>
                           {formatDateShort(task.due_date)}
                           {isOverdue && ' (überfällig)'}
                         </span>
                       )
                     })() : (
-                      <span className="text-sm text-neutral-400">—</span>
+                      <span className="text-sm text-text-muted">—</span>
                     )}
                   </td>
                   <td className="hidden sm:table-cell px-4 py-3 text-right whitespace-nowrap">
-                    <span className="text-sm text-neutral-600">
+                    <span className="text-sm text-text-secondary">
                       {task.completion_count}
                     </span>
                   </td>

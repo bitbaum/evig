@@ -25,11 +25,11 @@ interface DashboardCardProps {
 const colorClasses = {
   info: {
     bg: 'bg-primary-100 dark:bg-primary-900',
-    text: 'text-primary-600 dark:text-primary-400',
+    text: 'text-action',
   },
   success: {
     bg: 'bg-primary-100 dark:bg-primary-900',
-    text: 'text-primary-600 dark:text-primary-400',
+    text: 'text-action',
   },
   warning: {
     bg: 'bg-warning-100 dark:bg-warning-900',
@@ -44,8 +44,8 @@ const colorClasses = {
     text: 'text-secondary-600 dark:text-secondary-400',
   },
   neutral: {
-    bg: 'bg-neutral-100 dark:bg-neutral-800',
-    text: 'text-neutral-600 dark:text-neutral-400',
+    bg: 'bg-surface-raised',
+    text: 'text-text-secondary',
   },
 }
 

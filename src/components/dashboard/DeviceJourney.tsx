@@ -53,8 +53,8 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
 
   if (totalItems === 0) {
     return (
-      <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      <div className="mt-4 pt-4 border-t border">
+        <p className="text-sm text-text-secondary">
           {t('awaiting')}
         </p>
       </div>
@@ -95,8 +95,8 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
   }
 
   return (
-    <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
-      <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-3">
+    <div className="mt-4 pt-4 border-t border">
+      <p className="text-xs font-semibold uppercase tracking-wide text-text-tertiary mb-3">
         {t('heading')}
       </p>
 
@@ -112,8 +112,8 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                 <div
                   className={
                     reached
-                      ? 'w-8 h-8 rounded-full flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'
-                      : 'w-8 h-8 rounded-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600'
+                      ? 'w-8 h-8 rounded-full flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 text-action'
+                      : 'w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-text-muted dark:text-neutral-600'
                   }
                   aria-current={reached ? 'step' : undefined}
                 >
@@ -126,8 +126,8 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                 <span
                   className={
                     reached
-                      ? 'mt-1 text-[10px] sm:text-xs text-neutral-700 dark:text-neutral-300 text-center'
-                      : 'mt-1 text-[10px] sm:text-xs text-neutral-400 dark:text-neutral-600 text-center'
+                      ? 'mt-1 text-[10px] sm:text-xs text-text-secondary text-center'
+                      : 'mt-1 text-[10px] sm:text-xs text-text-muted dark:text-neutral-600 text-center'
                   }
                 >
                   {t(`stage.${stage}`)}
@@ -149,7 +149,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
       </div>
 
       {/* Summary counts */}
-      <p className="text-sm text-neutral-700 dark:text-neutral-300">
+      <p className="text-sm text-text-secondary">
         {t('totalItems', { count: totalItems })}
         {summaryParts.length > 0 && ' · '}
         {summaryParts.join(' · ')}

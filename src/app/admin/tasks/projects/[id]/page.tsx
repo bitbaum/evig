@@ -21,7 +21,7 @@ import { designPrimitive } from '@/lib/design-system'
 import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react'
 
 const STATUS_BADGE: Record<ProjectStatus, string> = {
-  planning:  'bg-neutral-100 text-neutral-700 dark:bg-white/[0.06] dark:text-neutral-300',
+  planning:  'bg-surface-raised text-text-secondary dark:bg-white/[0.06]',
   active:    'bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
@@ -122,18 +122,18 @@ export default async function TaskProjectDetailPage({
         <div className="flex flex-wrap items-center gap-4">
           <span className={cn(
             designPrimitive.badgeBase,
-            STATUS_BADGE[project.status as ProjectStatus] ?? 'bg-neutral-100 text-neutral-700'
+            STATUS_BADGE[project.status as ProjectStatus] ?? 'bg-surface-raised text-text-secondary'
           )}>
             {PROJECT_STATUS_LABELS[project.status as ProjectStatus] ?? project.status}
           </span>
           {project.targetDate && (
-            <span className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+            <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
               <Calendar className="h-3.5 w-3.5" />
               Zieldatum: {formatDateShort(project.targetDate)}
             </span>
           )}
           {project.createdAt && (
-            <span className="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500">
+            <span className="flex items-center gap-1.5 text-xs text-text-muted">
               <Clock className="h-3.5 w-3.5" />
               Erstellt: {formatDateShort(project.createdAt)}
               {project.createdByName && ` · ${project.createdByName}`}
@@ -145,14 +145,14 @@ export default async function TaskProjectDetailPage({
         {projectTasks.length > 0 && (
           <div className="mt-4">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs text-neutral-500 dark:text-neutral-400">
+              <span className="text-xs text-text-tertiary">
                 {completedCount}/{projectTasks.length} Aufgaben erledigt
               </span>
-              <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <span className="text-xs font-semibold text-text-secondary">
                 {progress}%
               </span>
             </div>
-            <div className="h-2 w-full rounded-full bg-neutral-100 dark:bg-white/[0.06]">
+            <div className="h-2 w-full rounded-full bg-surface-raised dark:bg-white/[0.06]">
               <div
                 className="h-2 rounded-full bg-primary-500 transition-all"
                 style={{ width: `${progress}%` }}
@@ -166,8 +166,8 @@ export default async function TaskProjectDetailPage({
       {projectTasks.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-10 text-center')}>
           <FolderKanban className="mx-auto h-10 w-10 text-neutral-300 dark:text-neutral-600 mb-3" />
-          <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">Noch keine Aufgaben</p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+          <p className="text-sm font-semibold text-text-primary mb-1">Noch keine Aufgaben</p>
+          <p className="text-sm text-text-tertiary mb-4">
             Füge Aufgaben zu diesem Projekt hinzu.
           </p>
           <Link
@@ -200,12 +200,12 @@ export default async function TaskProjectDetailPage({
                   <td className={cn(designPrimitive.table.td, 'max-w-xs')}>
                     <Link
                       href={ROUTES.admin.task(task.id)}
-                      className="font-medium text-neutral-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 truncate block transition-colors"
+                      className="font-medium text-text-primary hover:text-primary-600 dark:hover:text-primary-400 truncate block transition-colors"
                     >
                       {task.title}
                     </Link>
                     {task.description && (
-                      <p className="text-xs text-neutral-400 dark:text-neutral-500 truncate">
+                      <p className="text-xs text-text-muted truncate">
                         {task.description}
                       </p>
                     )}
@@ -213,7 +213,7 @@ export default async function TaskProjectDetailPage({
                   <td className={cn(designPrimitive.table.td, 'hidden sm:table-cell whitespace-nowrap')}>
                     <span className={cn(
                       designPrimitive.badgeBase,
-                      TASK_STATUS_COLORS[task.currentStatus as keyof typeof TASK_STATUS_COLORS] ?? 'bg-neutral-100 text-neutral-700'
+                      TASK_STATUS_COLORS[task.currentStatus as keyof typeof TASK_STATUS_COLORS] ?? 'bg-surface-raised text-text-secondary'
                     )}>
                       {TASK_STATUS_LABELS[task.currentStatus as keyof typeof TASK_STATUS_LABELS] ?? task.currentStatus}
                     </span>
@@ -221,7 +221,7 @@ export default async function TaskProjectDetailPage({
                   <td className={cn(designPrimitive.table.td, 'hidden sm:table-cell whitespace-nowrap')}>
                     <span className={cn(
                       designPrimitive.badgeBase,
-                      TASK_PRIORITY_COLORS[task.priority as keyof typeof TASK_PRIORITY_COLORS] ?? 'bg-neutral-100 text-neutral-700'
+                      TASK_PRIORITY_COLORS[task.priority as keyof typeof TASK_PRIORITY_COLORS] ?? 'bg-surface-raised text-text-secondary'
                     )}>
                       {TASK_PRIORITY_LABELS[task.priority as keyof typeof TASK_PRIORITY_LABELS] ?? task.priority}
                     </span>

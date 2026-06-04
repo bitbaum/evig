@@ -76,7 +76,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-6">
-        <Loader2 className="w-5 h-5 text-neutral-400 animate-spin" />
+        <Loader2 className="w-5 h-5 text-text-muted animate-spin" />
       </div>
     )
   }
@@ -84,18 +84,18 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   return (
     <div className="card-shell p-6">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={2} className="text-lg font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+        <Heading level={2} className="text-lg font-bold text-text-primary flex items-center gap-2">
           <MessageSquare className="w-5 h-5" />
           {t('title')}
           {stats.review_count > 0 && (
-            <span className="text-sm font-normal text-neutral-500">({stats.review_count})</span>
+            <span className="text-sm font-normal text-text-tertiary">({stats.review_count})</span>
           )}
         </Heading>
 
         {stats.average_rating && Number(stats.average_rating) > 0 && (
           <div className="flex items-center gap-1">
             <Star className="w-5 h-5 text-warning-400 fill-warning-400" />
-            <span className="font-bold text-neutral-900 dark:text-white">
+            <span className="font-bold text-text-primary">
               {Number(stats.average_rating).toFixed(1)}
             </span>
           </div>
@@ -104,7 +104,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
       {/* Review List */}
       {reviews.length === 0 ? (
-        <p className="text-neutral-500 dark:text-neutral-400 text-sm py-4">
+        <p className="text-text-tertiary text-sm py-4">
           {t('empty')}
         </p>
       ) : (
@@ -112,11 +112,11 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="border-b border-neutral-100 dark:border-neutral-700 pb-4 last:border-0 last:pb-0"
+              className="border-b border-subtle dark:border-neutral-700 pb-4 last:border-0 last:pb-0"
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm text-neutral-900 dark:text-white">
+                  <span className="font-medium text-sm text-text-primary">
                     {review.reviewerName}
                   </span>
                   <div className="flex items-center gap-0.5">
@@ -132,16 +132,16 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                     ))}
                   </div>
                 </div>
-                <span className="text-xs text-neutral-500">
+                <span className="text-xs text-text-tertiary">
                   {formatDateShort(review.createdAt)}
                 </span>
               </div>
               {review.title && (
-                <Heading level={4} className="text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                <Heading level={4} className="text-sm font-medium text-text-primary mb-1">
                   {review.title}
                 </Heading>
               )}
-              <p className="text-sm text-neutral-600 dark:text-neutral-300">{review.content}</p>
+              <p className="text-sm text-text-secondary">{review.content}</p>
             </div>
           ))}
         </div>
@@ -151,7 +151,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
       {canReview && !hasReviewed && !showForm && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full py-2.5 px-4 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+          className="w-full py-2.5 px-4 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
         >
           {t('writeReview')}
         </button>

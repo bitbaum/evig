@@ -22,10 +22,10 @@ export function ParticipantSelector({
   participantSearch, onSearchChange, filteredMembers,
 }: Props) {
   return (
-    <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-3">
+    <div className="rounded-lg border border bg-surface-raised p-4 space-y-3">
       <div>
-        <Heading level={3} className="text-sm font-medium text-neutral-900">Abstimmungsberechtigt</Heading>
-        <p className="mt-0.5 text-xs text-neutral-500">Wer darf an dieser Abstimmung teilnehmen?</p>
+        <Heading level={3} className="text-sm font-medium text-text-primary">Abstimmungsberechtigt</Heading>
+        <p className="mt-0.5 text-xs text-text-tertiary">Wer darf an dieser Abstimmung teilnehmen?</p>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -39,11 +39,11 @@ export function ParticipantSelector({
               className={`rounded-lg border-2 p-2.5 text-left transition ${
                 participantScope === scope
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border-neutral-200 hover:border-neutral-300 bg-white'
+                  : 'border hover:border-neutral-300 bg-surface-base'
               }`}
             >
-              <div className="text-xs font-medium text-neutral-900">{conf.label}</div>
-              <div className="mt-0.5 text-xs text-neutral-400 leading-tight">{conf.description}</div>
+              <div className="text-xs font-medium text-text-primary">{conf.label}</div>
+              <div className="mt-0.5 text-xs text-text-muted leading-tight">{conf.description}</div>
             </button>
           );
         })}
@@ -58,7 +58,7 @@ export function ParticipantSelector({
             placeholder="Teilnehmer suchen..."
           />
           {teamMembers.length === 0 ? (
-            <p className="text-xs text-neutral-400">Team wird geladen...</p>
+            <p className="text-xs text-text-muted">Team wird geladen...</p>
           ) : (
             <div className="max-h-48 overflow-y-auto space-y-1">
               {filteredMembers.map((m) => (
@@ -72,14 +72,14 @@ export function ParticipantSelector({
                     onChange={() => onToggle(m.id)}
                     className="rounded"
                   />
-                  <span className="text-sm text-neutral-700">{m.name || m.email}</span>
-                  {m.name && <span className="text-xs text-neutral-400">{m.email}</span>}
+                  <span className="text-sm text-text-secondary">{m.name || m.email}</span>
+                  {m.name && <span className="text-xs text-text-muted">{m.email}</span>}
                 </label>
               ))}
             </div>
           )}
           {selectedParticipants.size > 0 && (
-            <p className="text-xs text-neutral-500">{selectedParticipants.size} Personen eingeladen</p>
+            <p className="text-xs text-text-tertiary">{selectedParticipants.size} Personen eingeladen</p>
           )}
         </div>
       )}

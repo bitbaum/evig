@@ -44,11 +44,11 @@ export default function TaskFiltersClient() {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-lg border dark:border-white/[0.08] p-4">
+    <div className="bg-surface-base rounded-lg border dark:border-white/[0.08] p-4">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
         {/* Search */}
         <div className="relative flex-1 w-full md:w-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
           <Input
             type="text"
             value={searchValue}
@@ -59,9 +59,9 @@ export default function TaskFiltersClient() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full md:w-auto">
-          <Filter className="w-5 h-5 text-neutral-500 shrink-0" />
+          <Filter className="w-5 h-5 text-text-tertiary shrink-0" />
           <div className="flex items-center gap-2 min-w-0">
-            <label className="text-sm text-neutral-600 dark:text-neutral-400 shrink-0">Kategorie:</label>
+            <label className="text-sm text-text-secondary shrink-0">Kategorie:</label>
             <Select
               className="py-1 text-sm"
               value={searchParams.get('category') || ''}
@@ -74,7 +74,7 @@ export default function TaskFiltersClient() {
             </Select>
           </div>
           <div className="flex items-center gap-2 min-w-0">
-            <label className="text-sm text-neutral-600 dark:text-neutral-400 shrink-0">Status:</label>
+            <label className="text-sm text-text-secondary shrink-0">Status:</label>
             <Select
               className="py-1 text-sm"
               value={searchParams.get('status') || ''}
@@ -87,7 +87,7 @@ export default function TaskFiltersClient() {
             </Select>
           </div>
           <div className="flex items-center gap-2 min-w-0">
-            <label className="text-sm text-neutral-600 dark:text-neutral-400 shrink-0">Priorität:</label>
+            <label className="text-sm text-text-secondary shrink-0">Priorität:</label>
             <Select
               className="py-1 text-sm"
               value={searchParams.get('priority') || ''}

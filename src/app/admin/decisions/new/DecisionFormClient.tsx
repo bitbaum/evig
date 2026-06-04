@@ -42,7 +42,7 @@ export default function DecisionFormClient() {
         <button
           type="button"
           onClick={() => setShowTemplates(!showTemplates)}
-          className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
+          className="text-sm text-action hover:text-primary-700 hover:underline"
         >
           {showTemplates ? '▼' : '▶'} Vorlage wählen
         </button>
@@ -60,7 +60,7 @@ export default function DecisionFormClient() {
           <button
             type="button"
             onClick={() => form.setAiRecommendationReason('')}
-            className="flex-shrink-0 text-neutral-400 hover:text-primary-600"
+            className="flex-shrink-0 text-text-muted hover:text-primary-600"
           >
             ×
           </button>
@@ -95,7 +95,7 @@ export default function DecisionFormClient() {
       {/* Background / Rationale */}
       <FormField
         htmlFor="background"
-        label={<>Begründung &amp; Hintergrund <span className="ml-1 font-normal text-neutral-400">(optional)</span></>}
+        label={<>Begründung &amp; Hintergrund <span className="ml-1 font-normal text-text-muted">(optional)</span></>}
       >
         <Textarea
           id="background"
@@ -125,18 +125,18 @@ export default function DecisionFormClient() {
         <button
           type="button"
           onClick={() => setShowMore((v) => !v)}
-          className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700"
+          className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-700"
         >
           <span className="text-xs">{showMore ? '▼' : '▶'}</span>
           Weitere Einstellungen
-          <span className="text-xs text-neutral-400">(Fristen, Kategorie, Abstimmungsmethode…)</span>
+          <span className="text-xs text-text-muted">(Fristen, Kategorie, Abstimmungsmethode…)</span>
         </button>
 
         {showMore && (
           <div className="mt-4 space-y-6">
             {/* Fristen & Kategorie */}
-            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-4">
-              <Heading level={3} className="text-sm font-medium text-neutral-900">Fristen &amp; Kategorie</Heading>
+            <div className="rounded-lg border border bg-surface-raised p-4 space-y-4">
+              <Heading level={3} className="text-sm font-medium text-text-primary">Fristen &amp; Kategorie</Heading>
 
               <FormField htmlFor="decision-category" label="Kategorie">
                 <Select
@@ -169,7 +169,7 @@ export default function DecisionFormClient() {
                 </FormField>
               </div>
 
-              <p className="text-xs text-neutral-500">
+              <p className="text-xs text-text-tertiary">
                 Entscheidungen werden automatisch geschlossen wenn die Abstimmungsfrist abläuft
               </p>
             </div>
@@ -185,8 +185,8 @@ export default function DecisionFormClient() {
               filteredMembers={form.filteredMembers}
             />
 
-            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-              <Heading level={3} className="text-sm font-medium text-neutral-900 mb-4">Abstimmungseinstellungen</Heading>
+            <div className="rounded-lg border border bg-surface-raised p-4">
+              <Heading level={3} className="text-sm font-medium text-text-primary mb-4">Abstimmungseinstellungen</Heading>
               <AdvancedSettings
                 votingMethod={form.votingMethod}
                 onMethodChange={form.setVotingMethod}
@@ -210,7 +210,7 @@ export default function DecisionFormClient() {
           type="checkbox"
           checked={form.allowPublicVoting}
           onChange={(e) => form.setAllowPublicVoting(e.target.checked)}
-          className="mt-0.5 rounded border-primary-400 text-primary-600 focus:ring-primary-500"
+          className="mt-0.5 rounded border-primary-400 text-action focus:ring-primary-500"
         />
         <div>
           <span className="text-sm font-medium text-primary-900 dark:text-primary-200">Mit Link teilen — kein Konto nötig</span>

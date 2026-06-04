@@ -26,7 +26,7 @@ function getStatusIcon(status: string) {
     case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
       return <XCircle className="w-5 h-5 text-error-500" />
     default:
-      return <AlertCircle className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+      return <AlertCircle className="w-5 h-5 text-text-tertiary" />
   }
 }
 
@@ -71,9 +71,9 @@ export default function WorkshopsDashboard() {
 
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 border-2 border-neutral-200 dark:border-white/[0.06]">
+          <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
             <div className="animate-pulse">
               <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-6"></div>
               <div className="space-y-4">
@@ -90,11 +90,11 @@ export default function WorkshopsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200 dark:border-white/[0.06]">
-            <Heading level={1} className="text-2xl font-bold mb-4 text-neutral-900 dark:text-white">{t('loginRequired')}</Heading>
-            <p className="mb-6 text-neutral-600 dark:text-neutral-400">{t('loginDesc')}</p>
+          <div className="bg-surface-base rounded-xl shadow-lg p-8 text-center border-2 border">
+            <Heading level={1} className="text-2xl font-bold mb-4 text-text-primary">{t('loginRequired')}</Heading>
+            <p className="mb-6 text-text-secondary">{t('loginDesc')}</p>
             <Button as={Link} href={ROUTES.public.login} variant="primary">
               {t('login')}
             </Button>
@@ -105,29 +105,29 @@ export default function WorkshopsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center mb-4 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
+            className="inline-flex items-center mb-4 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold mb-2 text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
-          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
+          <Heading level={1} className="text-3xl font-bold mb-2 text-text-primary">{t('pageTitle')}</Heading>
+          <p className="text-sm sm:text-base text-text-secondary">{t('pageSubtitle')}</p>
         </div>
 
         {paymentSuccess && (
           <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
+              <CheckCircle className="w-5 h-5 text-action flex-shrink-0" />
               <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
             </div>
             <button
               onClick={() => setPaymentSuccess(false)}
-              className="text-primary-600 hover:text-primary-800 text-lg leading-none"
+              className="text-action hover:text-primary-800 text-lg leading-none"
               aria-label={t('cancel')}
             >
               ×
@@ -144,13 +144,13 @@ export default function WorkshopsDashboard() {
         {registrations.length > 0 ? (
           <div className="space-y-6">
             {registrations.map((registration: WorkshopRegistration) => (
-              <div key={registration.id} className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border-neutral-200 dark:border-white/[0.06]">
+              <div key={registration.id} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <Heading level={3} className="text-xl font-semibold mb-2 text-neutral-900 dark:text-white">
+                    <Heading level={3} className="text-xl font-semibold mb-2 text-text-primary">
                       {registration.workshop_title}
                     </Heading>
-                    <div className="flex items-center gap-4 text-sm mb-3 text-neutral-600 dark:text-neutral-400">
+                    <div className="flex items-center gap-4 text-sm mb-3 text-text-secondary">
                       <div className="flex items-center">
                         {getStatusIcon(registration.status)}
                         <span className="ml-2">{getStatusText(registration.status)}</span>

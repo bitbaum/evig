@@ -82,30 +82,30 @@ export function BulkTable({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-neutral-50 dark:bg-neutral-900/50 border-b border-neutral-200 dark:border-neutral-700 sticky top-0">
+            <tr className="bg-surface-raised dark:bg-neutral-900/50 border-b border dark:border-neutral-700 sticky top-0">
               {/* Checkbox */}
               <th className="w-10 px-3 py-3 text-left">
                 <input
                   type="checkbox"
                   checked={allSelected}
                   onChange={onSelectAll}
-                  className="w-4 h-4 text-primary-600 rounded border-neutral-300 focus:ring-primary-500"
+                  className="w-4 h-4 text-action rounded border-neutral-300 focus:ring-primary-500"
                 />
               </th>
               {/* Row number */}
-              <th className="w-10 px-2 py-3 text-left text-neutral-600 dark:text-neutral-400 font-medium">{t('columnNumber')}</th>
+              <th className="w-10 px-2 py-3 text-left text-text-secondary font-medium">{t('columnNumber')}</th>
               {/* Dynamic columns */}
               {BULK_TABLE_COLUMNS.map(col => (
                 <th
                   key={col.key}
-                  className="px-3 py-3 text-left text-neutral-700 dark:text-neutral-300 font-medium"
+                  className="px-3 py-3 text-left text-text-secondary font-medium"
                   style={{ minWidth: col.width }}
                 >
                   {col.label}
                 </th>
               ))}
               {/* Status */}
-              <th className="w-16 px-3 py-3 text-center text-neutral-700 dark:text-neutral-300 font-medium">{t('columnStatus')}</th>
+              <th className="w-16 px-3 py-3 text-center text-text-secondary font-medium">{t('columnStatus')}</th>
             </tr>
           </thead>
           <tbody>
@@ -117,7 +117,7 @@ export function BulkTable({
               return (
                 <tr
                   key={product._tempId}
-                  className={`border-b border-neutral-100 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/30 transition-colors cursor-pointer ${
+                  className={`border-b border-subtle dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/30 transition-colors cursor-pointer ${
                     product._status === 'error' ? 'bg-error-50/50 dark:bg-error-900/10' :
                     product._status === 'saved' ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''
                   }`}
@@ -129,11 +129,11 @@ export function BulkTable({
                       type="checkbox"
                       checked={product._selected}
                       onChange={() => onProductSelect(product._tempId)}
-                      className="w-4 h-4 text-primary-600 rounded border-neutral-300 focus:ring-primary-500"
+                      className="w-4 h-4 text-action rounded border-neutral-300 focus:ring-primary-500"
                     />
                   </td>
                   {/* Row number */}
-                  <td className="px-2 py-2 text-neutral-400 dark:text-neutral-500">{rowNum}</td>
+                  <td className="px-2 py-2 text-text-muted">{rowNum}</td>
                   {/* Dynamic columns */}
                   {BULK_TABLE_COLUMNS.map(col => {
                     const value = (product as unknown as Record<string, unknown>)[col.key] as string || ''
@@ -213,8 +213,8 @@ export function BulkTable({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50">
-          <span className="text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="flex items-center justify-between px-4 py-3 border-t border dark:border-neutral-700 bg-surface-raised dark:bg-neutral-900/50">
+          <span className="text-sm text-text-secondary">
             {page * pageSize + 1}-{Math.min((page + 1) * pageSize, products.length)} {t('ofText')} {products.length} {t('productsText')}
           </span>
           <div className="flex gap-2">
@@ -226,7 +226,7 @@ export function BulkTable({
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="flex items-center text-sm text-neutral-600 dark:text-neutral-400 px-2">
+            <span className="flex items-center text-sm text-text-secondary px-2">
               {page + 1} / {totalPages}
             </span>
             <button

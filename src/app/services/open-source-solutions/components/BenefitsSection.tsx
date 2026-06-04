@@ -18,7 +18,7 @@ interface BenefitsSectionProps {
 
 export function BenefitsSection({ benefits }: BenefitsSectionProps) {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
           <h2 className={cn('text-3xl font-bold mb-6', getTextColor('white', 'primary'))}>

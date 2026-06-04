@@ -22,12 +22,12 @@ export function DocumentVerificationSection({
   onOpenDialog,
 }: Props) {
   return (
-    <div className="mt-6 pt-6 border-t border-neutral-200">
+    <div className="mt-6 pt-6 border-t border">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={4} className="text-neutral-900">Dokumentenverifizierung</Heading>
+        <Heading level={4} className="text-text-primary">Dokumentenverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
-          className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+          className="text-sm text-action hover:text-primary-700 font-medium"
         >
           Dokumente prüfen
         </button>
@@ -37,10 +37,10 @@ export function DocumentVerificationSection({
         <div className="space-y-4">
           {documents.length > 0 && (
             <div>
-              <h5 className="text-sm font-medium text-neutral-700 mb-2">Hochgeladene Dokumente</h5>
+              <h5 className="text-sm font-medium text-text-secondary mb-2">Hochgeladene Dokumente</h5>
               <div className="space-y-2">
                 {documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
+                  <div key={doc.id} className="flex items-center justify-between p-3 bg-surface-raised rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
                         doc.status === APPROVAL_STATUS.APPROVED ? 'bg-primary-500' :
@@ -48,10 +48,10 @@ export function DocumentVerificationSection({
                         'bg-warning-500'
                       }`} />
                       <div>
-                        <p className="text-sm font-medium text-neutral-900">
+                        <p className="text-sm font-medium text-text-primary">
                           {doc.documentTypeName || doc.originalFilename}
                         </p>
-                        <p className="text-xs text-neutral-600">
+                        <p className="text-xs text-text-secondary">
                           {doc.originalFilename} • {
                             doc.fileSizeBytes
                               ? `${Math.round(doc.fileSizeBytes / 1024)} KB`
@@ -65,7 +65,7 @@ export function DocumentVerificationSection({
                         href={doc.filePath}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary-600 hover:text-primary-700 text-sm"
+                        className="text-action hover:text-primary-700 text-sm"
                       >
                         Anzeigen
                       </a>
@@ -88,7 +88,7 @@ export function DocumentVerificationSection({
                         </>
                       )}
                       {doc.status === APPROVAL_STATUS.APPROVED && (
-                        <span className="text-xs text-primary-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.APPROVED)}</span>
+                        <span className="text-xs text-action font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.APPROVED)}</span>
                       )}
                       {doc.status === APPROVAL_STATUS.REJECTED && (
                         <span className="text-xs text-error-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.REJECTED)}</span>
@@ -118,7 +118,7 @@ export function DocumentVerificationSection({
           )}
 
           {documents.length === 0 && missingRequiredDocuments.length === 0 && (
-            <p className="text-sm text-neutral-600">Keine Dokumente verfügbar</p>
+            <p className="text-sm text-text-secondary">Keine Dokumente verfügbar</p>
           )}
         </div>
       )}

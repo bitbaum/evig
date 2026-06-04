@@ -18,8 +18,8 @@ export function DecisionOptionsEditor({
   return (
     <div>
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-sm font-medium text-neutral-700">Optionen</span>
-        <label className="flex cursor-pointer items-center gap-1.5 text-xs text-neutral-500">
+        <span className="text-sm font-medium text-text-secondary">Optionen</span>
+        <label className="flex cursor-pointer items-center gap-1.5 text-xs text-text-tertiary">
           <input
             type="checkbox"
             checked={showImageUrls}
@@ -31,7 +31,7 @@ export function DecisionOptionsEditor({
       </div>
       <div className="space-y-2">
         {options.map((opt, i) => (
-          <div key={opt.id} className="rounded-md border border-neutral-200 dark:border-white/[0.08] p-2">
+          <div key={opt.id} className="rounded-md border border p-2">
             <div className="flex gap-2">
               <Input
                 type="text"
@@ -51,7 +51,7 @@ export function DecisionOptionsEditor({
                 type="button"
                 onClick={() => onRemove(opt.id)}
                 disabled={options.length <= 2}
-                className="rounded-md px-2 text-neutral-500 hover:text-error-500 disabled:opacity-30"
+                className="rounded-md px-2 text-text-tertiary hover:text-error-500 disabled:opacity-30"
               >
                 &times;
               </button>
@@ -69,7 +69,7 @@ export function DecisionOptionsEditor({
                   <img
                     src={opt.imageUrl}
                     alt=""
-                    className="h-8 w-8 rounded object-contain border border-neutral-200"
+                    className="h-8 w-8 rounded object-contain border border"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                   />
                 )}
@@ -81,7 +81,7 @@ export function DecisionOptionsEditor({
       <button
         type="button"
         onClick={onAdd}
-        className="mt-2 text-sm text-primary-600 hover:underline"
+        className="mt-2 text-sm text-action hover:underline"
       >
         + Option hinzufügen
       </button>

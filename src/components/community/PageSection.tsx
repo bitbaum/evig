@@ -17,10 +17,10 @@ interface PageSectionProps {
 export function PageSection({ title, content, className = '' }: PageSectionProps) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <Heading level={2} className={`${responsiveTypography.section} font-bold text-neutral-900`}>
+      <Heading level={2} className={`${responsiveTypography.section} font-bold text-text-primary`}>
         {title}
       </Heading>
-      <p className={`${responsiveTypography.lead} text-neutral-600 leading-relaxed`}>
+      <p className={`${responsiveTypography.lead} text-text-secondary leading-relaxed`}>
         {content}
       </p>
     </section>

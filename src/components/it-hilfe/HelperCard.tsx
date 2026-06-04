@@ -91,16 +91,16 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       {/* Helper Info */}
       <div className="mb-4">
         <Link href={`/techniker/${helper.userId}`} className="hover:underline">
-          <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">{helper.name}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">{helper.name}</Heading>
         </Link>
         {helper.bio && (
-          <p className="text-neutral-600 text-sm line-clamp-2 mb-3">{helper.bio}</p>
+          <p className="text-text-secondary text-sm line-clamp-2 mb-3">{helper.bio}</p>
         )}
       </div>
 
       {/* Rating & Help Count */}
       {(helper.averageRating || helper.totalHelpsCompleted) ? (
-        <div className="flex items-center gap-3 text-sm text-neutral-600 mb-3">
+        <div className="flex items-center gap-3 text-sm text-text-secondary mb-3">
           {helper.averageRating && (
             <span className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-warning-400 text-warning-400" />
@@ -115,7 +115,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
 
       {/* Location */}
       {(helper.city || helper.canton) && (
-        <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
+        <div className="flex items-center gap-2 text-sm text-text-secondary mb-3">
           <MapPin className="w-4 h-4" />
           <span>
             {helper.city && helper.canton
@@ -134,14 +134,14 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
             return (
               <span
                 key={skillId}
-                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-secondary"
               >
                 {skill.name}
               </span>
             )
           })}
           {remainingSkillsCount > 0 && (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
               +{remainingSkillsCount}
             </span>
           )}

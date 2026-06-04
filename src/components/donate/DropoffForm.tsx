@@ -65,7 +65,7 @@ export function DropoffForm() {
     return (
       <div className="rounded-lg bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 p-6">
         <div className="flex items-start gap-3">
-          <CheckCircle2 className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <CheckCircle2 className="w-6 h-6 text-action flex-shrink-0 mt-0.5" aria-hidden="true" />
           <div>
             <p className="text-sm font-semibold text-primary-800 dark:text-primary-300 mb-1">
               {t('successTitle')}
@@ -79,13 +79,13 @@ export function DropoffForm() {
     )
   }
 
-  const inputClass = 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-500'
+  const inputClass = 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/[0.1] dark:bg-neutral-800 dark:placeholder:text-neutral-500'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="block">
-          <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('nameLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">{t('nameLabel')}</span>
           <input
             type="text"
             value={name}
@@ -97,7 +97,7 @@ export function DropoffForm() {
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('emailLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">{t('emailLabel')}</span>
           <input
             type="email"
             value={email}
@@ -107,7 +107,7 @@ export function DropoffForm() {
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('phoneLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">{t('phoneLabel')}</span>
           <input
             type="tel"
             value={phone}
@@ -117,7 +117,7 @@ export function DropoffForm() {
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('preferredDateLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">{t('preferredDateLabel')}</span>
           <input
             type="date"
             value={preferredDate}
@@ -128,7 +128,7 @@ export function DropoffForm() {
       </div>
 
       <label className="block">
-        <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('devicesLabel')}</span>
+        <span className="block text-sm font-medium text-text-secondary mb-1">{t('devicesLabel')}</span>
         <Textarea
           value={devices}
           onChange={e => setDevices(e.target.value)}
@@ -142,7 +142,7 @@ export function DropoffForm() {
       </label>
 
       <label className="block">
-        <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('notesLabel')}</span>
+        <span className="block text-sm font-medium text-text-secondary mb-1">{t('notesLabel')}</span>
         <Textarea
           value={notes}
           onChange={e => setNotes(e.target.value)}

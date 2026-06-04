@@ -58,17 +58,17 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
             </div>
           ) : (
             <div className="w-20 h-20 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-              <CheckCircle2 className="w-10 h-10 text-primary-600 dark:text-primary-400" />
+              <CheckCircle2 className="w-10 h-10 text-action" />
             </div>
           )}
         </div>
 
         {/* Summary */}
         <div>
-          <Heading level={2} className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+          <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">
             {hasFailures ? t('titlePartial') : t('titleAll')}
           </Heading>
-          <p className="text-neutral-600 dark:text-neutral-400">
+          <p className="text-text-secondary">
             {t('summary', { succeeded: result.succeeded, total: result.total })}
             {hasFailures && `, ${t('failed', { count: result.failed })}`}
           </p>
@@ -77,30 +77,30 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         {/* Stats */}
         <div className="flex justify-center gap-8">
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{result.succeeded}</div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">{t('successLabel')}</div>
+            <div className="text-3xl font-bold text-action">{result.succeeded}</div>
+            <div className="text-sm text-text-secondary">{t('successLabel')}</div>
           </div>
           {hasFailures && (
             <div className="text-center">
               <div className="text-3xl font-bold text-error-600 dark:text-error-400">{result.failed}</div>
-              <div className="text-sm text-neutral-600 dark:text-neutral-400">{t('failedLabel')}</div>
+              <div className="text-sm text-text-secondary">{t('failedLabel')}</div>
             </div>
           )}
           <div className="text-center">
-            <div className="text-3xl font-bold text-neutral-900 dark:text-white">{result.total}</div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">{t('totalLabel')}</div>
+            <div className="text-3xl font-bold text-text-primary">{result.total}</div>
+            <div className="text-sm text-text-secondary">{t('totalLabel')}</div>
           </div>
         </div>
 
         {/* Item UUIDs list for successful saves */}
         {result.results.some(r => r.success && r.itemUUID) && (
-          <div className="bg-neutral-50 dark:bg-neutral-900/50 rounded-lg p-4 text-left max-h-48 overflow-y-auto">
-            <Heading level={3} className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">{t('createdIds')}</Heading>
+          <div className="bg-surface-raised dark:bg-neutral-900/50 rounded-lg p-4 text-left max-h-48 overflow-y-auto">
+            <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">{t('createdIds')}</Heading>
             <div className="space-y-1">
               {result.results
                 .filter(r => r.success && r.itemUUID)
                 .map((r, i) => (
-                  <div key={i} className="text-sm text-neutral-600 dark:text-neutral-400 font-mono">
+                  <div key={i} className="text-sm text-text-secondary font-mono">
                     {r.itemUUID}
                   </div>
                 ))}
@@ -124,7 +124,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
           <button
             type="button"
             onClick={handleDownloadCSV}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 font-medium transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 font-medium transition-colors"
           >
             <Download className="w-4 h-4" />
             {t('downloadCsv')}

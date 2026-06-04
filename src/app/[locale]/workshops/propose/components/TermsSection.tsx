@@ -14,12 +14,12 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
 
   return (
     <div className="mb-8">
-      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-6">
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">
+      <div className="bg-surface-raised border rounded-lg p-6">
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
           {t('sections.terms.title')}
         </Heading>
 
-        <div className="space-y-3 text-sm text-neutral-700 mb-4">
+        <div className="space-y-3 text-sm text-text-secondary mb-4">
           <p>• {t('sections.terms.term1')}</p>
           <p>• {t('sections.terms.term2')}</p>
           <p>• {t('sections.terms.term3')}</p>
@@ -34,17 +34,17 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
               type="checkbox"
               checked={termsAccepted}
               onChange={(e) => onChange(e.target.checked)}
-              className="mt-1 mr-3 text-primary-600 focus:ring-primary-500"
+              className="mt-1 mr-3 text-action focus:ring-primary-500"
               required
               aria-required="true"
             />
-            <span className="text-sm font-medium text-neutral-700">
+            <span className="text-sm font-medium text-text-secondary">
               {t('sections.terms.checkboxPrefix')}{' '}
-              <Link href="/agb" className="text-primary-600 hover:text-primary-700 underline">
+              <Link href="/agb" className="text-action hover:text-primary-700 underline">
                 {t('sections.terms.termsLink')}
               </Link>{' '}
               {t('sections.terms.checkboxMiddle')}{' '}
-              <Link href="/datenschutz" className="text-primary-600 hover:text-primary-700 underline">
+              <Link href="/datenschutz" className="text-action hover:text-primary-700 underline">
                 {t('sections.terms.privacyLink')}
               </Link>
             </span>

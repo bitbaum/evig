@@ -16,15 +16,15 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
   const t = useTranslations('dashboard.profile.publicProfile')
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-6">
-      <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-6">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border-2 border dark:border-neutral-700 p-6">
+      <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
         {t('heading')}
       </Heading>
 
       <div className="space-y-6">
         {/* Display Name */}
         <div>
-          <label htmlFor="display_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+          <label htmlFor="display_name" className="block text-sm font-medium text-text-secondary mb-2">
             {t('displayName')}
           </label>
           <Input
@@ -36,14 +36,14 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             minLength={2}
             maxLength={50}
           />
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-text-tertiary">
             {t('displayNameDescription')}
           </p>
         </div>
 
         {/* Bio */}
         <div>
-          <label htmlFor="bio" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+          <label htmlFor="bio" className="block text-sm font-medium text-text-secondary mb-2">
             {t('bio')}
           </label>
           <Textarea
@@ -55,17 +55,17 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             rows={4}
             className="resize-none"
           />
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-text-tertiary">
             {t('bioDescription')}
           </p>
-          <p className="mt-1 text-xs text-neutral-400 dark:text-neutral-500">
+          <p className="mt-1 text-xs text-text-muted">
             {profile.bio?.length || 0} / 500
           </p>
         </div>
 
         {/* Profile Visibility */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+          <label className="block text-sm font-medium text-text-secondary mb-3">
             {t('visibility')}
           </label>
           <div className="flex gap-4">
@@ -75,7 +75,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                 profile.profile_visibility === 'public'
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                  : 'border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-500'
+                  : 'border dark:border-neutral-600 bg-surface-base dark:bg-neutral-700 text-text-secondary hover:border-neutral-300 dark:hover:border-neutral-500'
               }`}
             >
               <Globe className="w-5 h-5" />
@@ -87,15 +87,15 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               onClick={() => handleChange('profile_visibility', 'private')}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                 profile.profile_visibility === 'private'
-                  ? 'border-neutral-500 bg-neutral-50 dark:bg-neutral-900/20 text-neutral-700 dark:text-neutral-300'
-                  : 'border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-500'
+                  ? 'border-neutral-500 bg-surface-raised dark:bg-neutral-900/20 text-text-secondary'
+                  : 'border dark:border-neutral-600 bg-surface-base dark:bg-neutral-700 text-text-secondary hover:border-neutral-300 dark:hover:border-neutral-500'
               }`}
             >
               <Lock className="w-5 h-5" />
               <span className="font-medium">{t('visibilityPrivate')}</span>
             </button>
           </div>
-          <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-2 text-sm text-text-tertiary">
             {t('visibilityDescription')}
           </p>
         </div>

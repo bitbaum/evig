@@ -52,7 +52,7 @@ export default function SellerProfileEditPage() {
   if (sessionStatus === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
     )
   }
@@ -61,26 +61,26 @@ export default function SellerProfileEditPage() {
     <div className="max-w-2xl mx-auto">
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToDashboard')}
       </Link>
 
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
-        <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
-          <Heading level={1} className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-            <User className="w-5 h-5 text-primary-600" />
+      <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="p-6 border-b border-subtle dark:border-neutral-700">
+          <Heading level={1} className="text-xl font-bold text-text-primary flex items-center gap-2">
+            <User className="w-5 h-5 text-action" />
             {t('pageTitle')}
           </Heading>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+          <p className="text-sm text-text-tertiary mt-1">
             {noProfile ? t('noProfileDesc') : t('editProfileDesc')}
           </p>
         </div>
 
         <div className="p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
               {t('displayNameLabel')}
             </label>
             <Input
@@ -92,7 +92,7 @@ export default function SellerProfileEditPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
               {t('bioLabel')}
             </label>
             <Textarea
@@ -105,7 +105,7 @@ export default function SellerProfileEditPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
               {t('avatarLabel')}
             </label>
             <div className="flex items-center gap-4">
@@ -114,7 +114,7 @@ export default function SellerProfileEditPage() {
                   <img
                     src={avatarUrl}
                     alt={t('avatarAlt')}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-neutral-200 dark:border-neutral-600"
+                    className="w-16 h-16 rounded-full object-cover border-2 border dark:border-neutral-600"
                   />
                   <button
                     type="button"
@@ -125,11 +125,11 @@ export default function SellerProfileEditPage() {
                   </button>
                 </div>
               ) : (
-                <div className="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center border border-neutral-200 dark:border-neutral-600">
-                  <User className="w-6 h-6 text-neutral-500 dark:text-neutral-400" />
+                <div className="w-16 h-16 rounded-full bg-surface-raised dark:bg-neutral-700 flex items-center justify-center border dark:border-neutral-600">
+                  <User className="w-6 h-6 text-text-tertiary" />
                 </div>
               )}
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
@@ -156,7 +156,7 @@ export default function SellerProfileEditPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('cityLabel')}
               </label>
               <Input
@@ -167,7 +167,7 @@ export default function SellerProfileEditPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('cantonLabel')}
               </label>
               <Input
@@ -180,7 +180,7 @@ export default function SellerProfileEditPage() {
           </div>
         </div>
 
-        <div className="p-6 border-t border-neutral-100 dark:border-neutral-700">
+        <div className="p-6 border-t border-subtle dark:border-neutral-700">
           {error && (
             <div className="mb-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-3 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0" />
@@ -189,7 +189,7 @@ export default function SellerProfileEditPage() {
           )}
           {success && (
             <div className="mb-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-3 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-primary-600 flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 text-action flex-shrink-0" />
               <p className="text-sm text-primary-800 dark:text-primary-200">{success}</p>
             </div>
           )}

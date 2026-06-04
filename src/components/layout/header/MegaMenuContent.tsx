@@ -30,8 +30,8 @@ export function MegaMenuContent({
   return (
     <div
       className={cn(
-        "mt-2 bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl shadow-neutral-200/50 dark:shadow-black/40",
-        "border border-neutral-100 dark:border-white/[0.06]",
+        "mt-2 bg-surface-base rounded-2xl shadow-2xl shadow-neutral-200/50 dark:shadow-black/40",
+        "border border-subtle dark:border-white/[0.06]",
         "overflow-hidden",
         "animate-in fade-in slide-in-from-top-2 duration-200",
         hasMultipleGroups ? "p-0" : "p-2"
@@ -69,7 +69,7 @@ function MultiColumnLayout({
       {groups.map((group, idx) => (
         <div key={idx} className="p-6">
           {group.section && (
-            <Heading level={3} className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider mb-4">
+            <Heading level={3} className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-4">
               {getLabel(group.section, t)}
             </Heading>
           )}
@@ -111,14 +111,14 @@ function SingleColumnLayout({
         >
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <span className="font-medium text-text-primary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {getLabel(subItem, t)}
               </span>
               <ItemBadge badge={subItem.badge} />
-              {subItem.external && <ExternalLink className="w-3 h-3 text-neutral-600" />}
+              {subItem.external && <ExternalLink className="w-3 h-3 text-text-secondary" />}
             </div>
             {(subItem.descriptionKey || subItem.description) && (
-              <p className="mt-0.5 text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="mt-0.5 text-sm text-text-secondary">
                 {subItem.descriptionKey ? t(`items.${subItem.descriptionKey}` as never) : subItem.description}
               </p>
             )}
@@ -152,14 +152,14 @@ function MenuLink({
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+          <span className="font-medium text-text-primary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
             {getLabel(item, t)}
           </span>
           <ItemBadge badge={item.badge} />
-          {item.external && <ExternalLink className="w-3 h-3 text-neutral-600 dark:text-neutral-400" />}
+          {item.external && <ExternalLink className="w-3 h-3 text-text-secondary" />}
         </div>
         {(item.descriptionKey || item.description) && (
-          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+          <p className="mt-1 text-sm text-text-secondary line-clamp-2">
             {item.descriptionKey ? t(`items.${item.descriptionKey}` as never) : item.description}
           </p>
         )}

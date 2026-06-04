@@ -81,7 +81,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
       className={`card-shell overflow-hidden hover:border-neutral-300 transition-all group ${className}`}
     >
       {/* Card Header */}
-      <div className="p-5 border-b border-neutral-100 dark:border-neutral-700">
+      <div className="p-5 border-b border-subtle dark:border-neutral-700">
         <div className="flex items-start justify-between mb-3">
           <div className={`p-2.5 ${categoryConfig?.color || 'bg-neutral-500'} rounded-lg`}>
             <CategoryIcon className="w-5 h-5 text-white" />
@@ -93,29 +93,29 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
                 {expiryLabel}
               </span>
             )}
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
               {urgencyConfig?.name || request.urgency}
             </span>
           </div>
         </div>
 
-        <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
+        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
           {request.title}
         </Heading>
 
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-3">
+        <p className="text-sm text-text-secondary line-clamp-2 mb-3">
           {request.description}
         </p>
 
         {/* Device info */}
         {(request.deviceBrand || request.deviceModel) && (
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+          <p className="text-xs text-text-tertiary mb-3">
             {[request.deviceBrand, request.deviceModel].filter(Boolean).join(' ')}
           </p>
         )}
 
         {/* Meta info */}
-        <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+        <div className="flex flex-wrap items-center gap-3 text-sm text-text-tertiary">
           <div className="flex items-center gap-1">
             <MapPin className="w-4 h-4" />
             <span>{request.city}</span>
@@ -128,11 +128,11 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="px-5 py-3 bg-neutral-50 dark:bg-neutral-800 flex items-center justify-between">
-        <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+      <div className="px-5 py-3 bg-surface-raised flex items-center justify-between">
+        <span className="text-sm font-medium text-action">
           {formatBudget(request.budgetAmountCents)}
         </span>
-        <span className="text-xs text-neutral-500">
+        <span className="text-xs text-text-tertiary">
           {formatDateShort(request.createdAt)}
         </span>
       </div>

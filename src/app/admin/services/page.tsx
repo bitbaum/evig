@@ -150,94 +150,94 @@ export default async function AdminServicesPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Wrench className="w-8 h-8 text-primary-600" />
+            <Wrench className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Gesamt Services</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalServices}</p>
+              <p className="text-sm font-medium text-text-secondary">Gesamt Services</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.totalServices}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-primary-600" />
+            <CheckCircle className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Aktiv</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.activeServices}</p>
+              <p className="text-sm font-medium text-text-secondary">Aktiv</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.activeServices}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-primary-600" />
+            <Users className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Buchungen</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalBookings}</p>
+              <p className="text-sm font-medium text-text-secondary">Buchungen</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.totalBookings}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-secondary-600" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Techniker</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalTechnicians}</p>
+              <p className="text-sm font-medium text-text-secondary">Techniker</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.totalTechnicians}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Services Table */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
         {services.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-neutral-50 dark:bg-neutral-700">
+              <thead className="bg-surface-raised dark:bg-neutral-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Dienstleistung
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Kategorie
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Preis
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Flags
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Aktionen
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
+              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
                 {services.map((service) => (
                   <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]">
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                        <div className="text-sm font-medium text-text-primary">
                           {service.name}
                         </div>
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
+                        <div className="text-xs text-text-tertiary font-mono">
                           /{service.slug}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                      <span className="text-sm text-text-secondary">
                         {service.category ? SERVICE_CATEGORY_LABELS[service.category as keyof typeof SERVICE_CATEGORY_LABELS] || service.category : '-'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                      <div className="text-sm font-medium text-text-primary">
                         {formatPrice(service.price_cents)}
                       </div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                      <div className="text-xs text-text-tertiary">
                         {formatDuration(service.duration_minutes)}
                       </div>
                     </td>
@@ -246,7 +246,7 @@ export default async function AdminServicesPage() {
                         <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
                           service.is_active
                             ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
-                            : 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
+                            : 'bg-surface-raised text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
                         }`}>
                           {service.is_active ? 'Aktiv' : 'Inaktiv'}
                         </span>
@@ -268,7 +268,7 @@ export default async function AdminServicesPage() {
                           <Link
                             href={`/services/${service.slug}`}
                             target="_blank"
-                            className="p-2.5 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 rounded"
+                            className="p-2.5 text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 rounded"
                             title="Auf Website ansehen"
                           >
                             <Eye className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default async function AdminServicesPage() {
                         )}
                         <Link
                           href={`/admin/services/${service.id}/edit`}
-                          className="p-2.5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded"
+                          className="p-2.5 text-action hover:text-primary-900 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded"
                           title="Bearbeiten"
                         >
                           <Edit className="w-4 h-4" />
@@ -290,11 +290,11 @@ export default async function AdminServicesPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Wrench className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+            <Wrench className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-text-primary mb-2">
               Noch keine Dienstleistungen
             </h3>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+            <p className="text-text-secondary mb-6">
               Erstellen Sie Ihre erste Dienstleistung, um Service-Termine anzubieten.
             </p>
             <Link href={ROUTES.admin.serviceNew} className={buttonClass({ variant: 'primary' })}>
@@ -306,16 +306,16 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
+      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Wrench className="w-5 h-5 text-neutral-600" />
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Wrench className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <h3 className="font-medium text-neutral-900 dark:text-neutral-200">
+            <h3 className="font-medium text-text-primary dark:text-neutral-200">
               Dienstleistungs-Verwaltung
             </h3>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1 mb-3">
+            <p className="text-sm text-text-secondary mt-1 mb-3">
               Dienstleistungen sind die Kernkompetenz von RevampIT. Bieten Sie Reparaturen, Installationen,
               Beratungen und andere technische Services an. Kunden können online Termine buchen.
             </p>

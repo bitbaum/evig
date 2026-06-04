@@ -19,17 +19,17 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
-              <Heading level={1} className="text-4xl font-bold text-neutral-900 mt-12 mb-4 leading-tight">
+              <Heading level={1} className="text-4xl font-bold text-text-primary mt-12 mb-4 leading-tight">
                 {children}
               </Heading>
             ),
             h2: ({ children }) => (
-              <Heading level={2} className="text-3xl font-bold text-neutral-900 mt-10 mb-3 leading-tight">
+              <Heading level={2} className="text-3xl font-bold text-text-primary mt-10 mb-3 leading-tight">
                 {children}
               </Heading>
             ),
             h3: ({ children }) => (
-              <Heading level={3} className="text-2xl font-bold text-neutral-900 mt-8 mb-3 leading-tight">
+              <Heading level={3} className="text-2xl font-bold text-text-primary mt-8 mb-3 leading-tight">
                 {children}
               </Heading>
             ),
@@ -56,13 +56,13 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
             a: ({ href, children }) => (
               <a
                 href={href}
-                className="text-neutral-900 underline decoration-neutral-900 hover:text-primary-700 hover:decoration-primary-700 transition-colors"
+                className="text-text-primary underline decoration-neutral-900 hover:text-primary-700 hover:decoration-primary-700 transition-colors"
               >
                 {children}
               </a>
             ),
             strong: ({ children }) => (
-              <strong className="font-bold text-neutral-900">
+              <strong className="font-bold text-text-primary">
                 {children}
               </strong>
             ),
@@ -72,7 +72,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               </em>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-neutral-900 dark:border-neutral-500 pl-6 py-2 my-8 italic text-[21px] text-neutral-700 leading-[1.58]">
+              <blockquote className="border-l-4 border-neutral-900 dark:border-neutral-500 pl-6 py-2 my-8 italic text-[21px] text-text-secondary leading-[1.58]">
                 {children}
               </blockquote>
             ),
@@ -80,7 +80,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               const isInline = !className
               if (isInline) {
                 return (
-                  <code className="bg-neutral-100 text-neutral-800 px-2 py-0.5 rounded text-[18px] font-mono">
+                  <code className="bg-surface-raised text-neutral-800 px-2 py-0.5 rounded text-[18px] font-mono">
                     {children}
                   </code>
                 )
@@ -92,7 +92,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               )
             },
             hr: () => (
-              <hr className="my-12 border-t border-neutral-200" />
+              <hr className="my-12 border-t border" />
             ),
           }}
         >
@@ -102,12 +102,12 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
       {/* Tags */}
       {post.tags && post.tags.length > 0 && (
-        <div className="py-8 border-t border-neutral-200">
+        <div className="py-8 border-t border">
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
               >
                 {tag}
               </span>
@@ -117,7 +117,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
       )}
 
       {/* Share Buttons */}
-      <div className="py-8 border-t border-neutral-200">
+      <div className="py-8 border-t border">
         <ShareButtons
           url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.ch'}/blog/${post.slug}`}
           title={post.title}

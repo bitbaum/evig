@@ -109,8 +109,8 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
     <section className={cn(designPrimitive.surface.card, 'p-4 sm:p-5 mb-5')}>
       <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
         <div className="min-w-0">
-          <h2 className="text-base font-semibold text-neutral-900 dark:text-white">{t('needs.title')}</h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{t('needs.subtitle')}</p>
+          <h2 className="text-base font-semibold text-text-primary">{t('needs.title')}</h2>
+          <p className="text-xs text-text-tertiary mt-0.5">{t('needs.subtitle')}</p>
         </div>
         <button
           type="button"
@@ -130,7 +130,7 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
       {adding && (
         <form
           onSubmit={handleAdd}
-          className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border border-neutral-200 dark:border-white/[0.08] bg-neutral-50 dark:bg-white/[0.03]"
+          className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border border bg-surface-raised dark:bg-white/[0.03]"
         >
           <Select name="type" variant="elevated">
             {Object.values(NEED_TYPES).map(v => (
@@ -160,13 +160,13 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
       )}
 
       {needs.length === 0 ? (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 text-center py-6">{t('needs.empty')}</p>
+        <p className="text-sm text-text-tertiary text-center py-6">{t('needs.empty')}</p>
       ) : (
         <div className="space-y-3">
           {needs.map(need => (
             <div
               key={need.id}
-              className="rounded-lg border border-neutral-200 dark:border-white/[0.08] p-3 space-y-2"
+              className="rounded-lg border border p-3 space-y-2"
             >
               {/* Row 1 — main editable line. Stacks on mobile, lays out responsively on larger screens */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">

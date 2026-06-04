@@ -30,7 +30,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
 
   if (isUp) {
     return (
-      <div className="flex items-center gap-1 text-primary-600">
+      <div className="flex items-center gap-1 text-action">
         <TrendingUp className="w-4 h-4" />
         <span className="text-sm font-medium">+{percentChange.toFixed(1)}%</span>
       </div>
@@ -47,7 +47,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
   }
 
   return (
-    <div className="flex items-center gap-1 text-neutral-500">
+    <div className="flex items-center gap-1 text-text-tertiary">
       <Minus className="w-4 h-4" />
       <span className="text-sm">stabil</span>
     </div>
@@ -81,7 +81,7 @@ export function KPICard({
           {metric.formula && (
             <div className="relative">
               <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-              <div className="absolute right-0 top-6 w-64 p-2 bg-white dark:bg-neutral-800 border rounded-lg shadow-lg text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+              <div className="absolute right-0 top-6 w-64 p-2 bg-surface-base dark:bg-neutral-800 border rounded-lg shadow-lg text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                 <strong>Formel:</strong> {metric.formula}
               </div>
             </div>

@@ -49,8 +49,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
   if (isLoading || sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
-        <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
+        <Loader2 className="w-8 h-8 text-action animate-spin" />
+        <span className="ml-3 text-text-secondary">{t('loading')}</span>
       </div>
     )
   }
@@ -58,9 +58,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
   if (error && !listing) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <AlertCircle className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
-        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">{error}</Heading>
-        <Link href={ROUTES.public.marketplace} className="text-primary-600 hover:text-primary-700 font-medium">
+        <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" />
+        <Heading level={2} className="text-xl text-text-primary mb-2">{error}</Heading>
+        <Link href={ROUTES.public.marketplace} className="text-action hover:text-primary-700 font-medium">
           {t('backToMarketplace')}
         </Link>
       </div>
@@ -73,13 +73,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-warning-400 mx-auto mb-4" />
-        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl text-text-primary mb-2">
           {t('ownListing')}
         </Heading>
-        <p className="text-neutral-600 dark:text-neutral-400 mb-4">
+        <p className="text-text-secondary mb-4">
           {t('ownListingDesc')}
         </p>
-        <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-primary-600 hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-action hover:text-primary-700 font-medium">
           {t('backToListing')}
         </Link>
       </div>
@@ -90,25 +90,25 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     <div className="max-w-3xl mx-auto">
       <Link
         href={ROUTES.public.marketplaceListing(listing.id)}
-        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToListing')}
       </Link>
 
-      <Heading level={1} className="text-2xl text-neutral-900 dark:text-white mb-6">{t('title')}</Heading>
+      <Heading level={1} className="text-2xl text-text-primary mb-6">{t('title')}</Heading>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left: Form */}
         <div className="lg:col-span-3 space-y-6">
           {canSelectDelivery && (
             <div className="card-shell p-6">
-              <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('delivery.title')}</Heading>
+              <Heading level={2} className="text-lg text-text-primary mb-4">{t('delivery.title')}</Heading>
               <div className="space-y-3">
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'pickup'
                     ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
+                    : 'border dark:border-neutral-700 hover:border-neutral-300'
                 }`}>
                   <input
                     type="radio"
@@ -116,22 +116,22 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value="pickup"
                     checked={deliveryMethod === 'pickup'}
                     onChange={() => setDeliveryMethod('pickup')}
-                    className="text-primary-600 focus:ring-primary-500"
+                    className="text-action focus:ring-primary-500"
                   />
-                  <MapPin className="w-5 h-5 text-neutral-500" />
+                  <MapPin className="w-5 h-5 text-text-tertiary" />
                   <div>
-                    <p className="font-medium text-neutral-900 dark:text-white">{t('delivery.pickup')}</p>
+                    <p className="font-medium text-text-primary">{t('delivery.pickup')}</p>
                     {listing.pickup_location && (
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400">{listing.pickup_location}</p>
+                      <p className="text-sm text-text-tertiary">{listing.pickup_location}</p>
                     )}
                   </div>
-                  <span className="ml-auto font-medium text-primary-600">{t('delivery.free')}</span>
+                  <span className="ml-auto font-medium text-action">{t('delivery.free')}</span>
                 </label>
 
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'shipping'
                     ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
+                    : 'border dark:border-neutral-700 hover:border-neutral-300'
                 }`}>
                   <input
                     type="radio"
@@ -139,14 +139,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value="shipping"
                     checked={deliveryMethod === 'shipping'}
                     onChange={() => setDeliveryMethod('shipping')}
-                    className="text-primary-600 focus:ring-primary-500"
+                    className="text-action focus:ring-primary-500"
                   />
-                  <Truck className="w-5 h-5 text-neutral-500" />
+                  <Truck className="w-5 h-5 text-text-tertiary" />
                   <div>
-                    <p className="font-medium text-neutral-900 dark:text-white">{t('delivery.shipping')}</p>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('delivery.shippingNationwide')}</p>
+                    <p className="font-medium text-text-primary">{t('delivery.shipping')}</p>
+                    <p className="text-sm text-text-tertiary">{t('delivery.shippingNationwide')}</p>
                   </div>
-                  <span className="ml-auto font-medium text-neutral-900 dark:text-white">
+                  <span className="ml-auto font-medium text-text-primary">
                     {listing.shipping_cost_chf ? formatCHF(listing.shipping_cost_chf) : t('delivery.free')}
                   </span>
                 </label>
@@ -156,10 +156,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
           {deliveryMethod === 'shipping' && (
             <div className="card-shell p-6">
-              <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('address.title')}</Heading>
+              <Heading level={2} className="text-lg text-text-primary mb-4">{t('address.title')}</Heading>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.name')}</label>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.name')}</label>
                   <Input
                     type="text"
                     value={shippingAddress.name}
@@ -168,7 +168,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.street')}</label>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.street')}</label>
                   <Input
                     type="text"
                     value={shippingAddress.street}
@@ -178,7 +178,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.postalCode')}</label>
+                    <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.postalCode')}</label>
                     <Input
                       type="text"
                       value={shippingAddress.postal_code}
@@ -192,7 +192,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     )}
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.city')}</label>
+                    <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.city')}</label>
                     <Input
                       type="text"
                       value={shippingAddress.city}
@@ -233,55 +233,55 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         {/* Right: Order summary */}
         <div className="lg:col-span-2">
           <div className="card-shell p-6 sticky top-6">
-            <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('summary.title')}</Heading>
+            <Heading level={2} className="text-lg text-text-primary mb-4">{t('summary.title')}</Heading>
 
             <div className="flex gap-3 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100 dark:bg-neutral-700">
+              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-raised dark:bg-neutral-700">
                 <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
               </div>
               <div className="min-w-0">
-                <Heading level={3} className="text-neutral-900 dark:text-white text-sm line-clamp-2">{listing.title}</Heading>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                <Heading level={3} className="text-text-primary text-sm line-clamp-2">{listing.title}</Heading>
+                <p className="text-xs text-text-tertiary mt-1">
                   {t('summary.seller', { name: listing.seller_name })}
                 </p>
               </div>
             </div>
 
-            <hr className="border-neutral-200 dark:border-neutral-700 mb-4" />
+            <hr className="border dark:border-neutral-700 mb-4" />
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">{t('summary.itemPrice')}</span>
-                <span className="text-neutral-900 dark:text-white">{formatCHF(listing.price_chf)}</span>
+                <span className="text-text-tertiary">{t('summary.itemPrice')}</span>
+                <span className="text-text-primary">{formatCHF(listing.price_chf)}</span>
               </div>
               {deliveryMethod === 'shipping' && shippingCost > 0 && (
                 <div className="flex justify-between">
-                  <span className="text-neutral-500 dark:text-neutral-400">{t('summary.shippingCost')}</span>
-                  <span className="text-neutral-900 dark:text-white">{formatCHF(shippingCost)}</span>
+                  <span className="text-text-tertiary">{t('summary.shippingCost')}</span>
+                  <span className="text-text-primary">{formatCHF(shippingCost)}</span>
                 </div>
               )}
               {deliveryMethod === 'pickup' && (
                 <div className="flex justify-between">
-                  <span className="text-neutral-500 dark:text-neutral-400">{t('summary.pickup')}</span>
-                  <span className="text-primary-600">{t('delivery.free')}</span>
+                  <span className="text-text-tertiary">{t('summary.pickup')}</span>
+                  <span className="text-action">{t('delivery.free')}</span>
                 </div>
               )}
               {!listing.is_revampit && (
-                <div className="flex justify-between text-xs text-neutral-400 dark:text-neutral-500">
+                <div className="flex justify-between text-xs text-text-muted">
                   <span>{t('summary.serviceFee', { rate: COMMISSION_RATE * 100 })}</span>
                   <span>{t('summary.serviceIncl', { amount: formatCHF(commission) })}</span>
                 </div>
               )}
             </div>
 
-            <hr className="border-neutral-200 dark:border-neutral-700 my-4" />
+            <hr className="border dark:border-neutral-700 my-4" />
 
             <div className="flex justify-between text-lg font-bold">
-              <span className="text-neutral-900 dark:text-white">{t('summary.total')}</span>
-              <span className="text-primary-600">{formatCHF(totalAmount)}</span>
+              <span className="text-text-primary">{t('summary.total')}</span>
+              <span className="text-action">{formatCHF(totalAmount)}</span>
             </div>
 
-            <div className="mt-4 p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg text-xs text-neutral-500 dark:text-neutral-400">
+            <div className="mt-4 p-3 bg-surface-raised dark:bg-neutral-700/50 rounded-lg text-xs text-text-tertiary">
               <p className="flex items-center gap-1.5">
                 {deliveryMethod === 'shipping' ? (
                   <><Truck className="w-3.5 h-3.5" /> {t('summary.shipping')}</>
@@ -291,9 +291,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               </p>
             </div>
 
-            <div className="mt-4 space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
+            <div className="mt-4 space-y-2 text-xs text-text-tertiary">
               <p className="flex items-center gap-1.5">
-                <Shield className="w-3.5 h-3.5 text-primary-600" />
+                <Shield className="w-3.5 h-3.5 text-action" />
                 {t('buyerProtection')}
               </p>
             </div>

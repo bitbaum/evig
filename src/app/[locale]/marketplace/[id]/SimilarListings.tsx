@@ -18,7 +18,7 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
 
   return (
     <div className="mt-6">
-      <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('similarListings')}</Heading>
+      <Heading level={2} className="text-lg text-text-primary mb-4">{t('similarListings')}</Heading>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {listings.map((sim) => {
           const simCondition = getConditionBadge(sim.condition)
@@ -37,10 +37,10 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
                 </div>
               </div>
               <div className="p-3">
-                <Heading level={3} className="text-neutral-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
+                <Heading level={3} className="text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
                   {sim.title}
                 </Heading>
-                <p className="text-lg font-bold text-neutral-900 dark:text-white">
+                <p className="text-lg font-bold text-text-primary">
                   {formatCHF(Number(sim.price_chf))}
                 </p>
               </div>

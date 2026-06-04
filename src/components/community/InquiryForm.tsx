@@ -56,10 +56,10 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
     return (
       <div className="text-center py-12 px-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 mb-4">
-          <CheckCircle className="w-8 h-8 text-primary-600" />
+          <CheckCircle className="w-8 h-8 text-action" />
         </div>
-        <Heading level={2} className="text-neutral-900 mb-2">{t('successHeading', { name })}</Heading>
-        <p className="text-neutral-600 mb-6 max-w-md mx-auto">
+        <Heading level={2} className="text-text-primary mb-2">{t('successHeading', { name })}</Heading>
+        <p className="text-text-secondary mb-6 max-w-md mx-auto">
           {t('successText', { topic: resolvedTopic })}
         </p>
         <Link
@@ -78,7 +78,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       <input type="hidden" name="topic" value={defaultThema} />
 
       <div>
-        <label htmlFor="inquiry-name" className="block text-sm font-medium text-neutral-700 mb-1">
+        <label htmlFor="inquiry-name" className="block text-sm font-medium text-text-secondary mb-1">
           {t('nameLabel')} <span className="text-error-500">*</span>
         </label>
         <input
@@ -94,7 +94,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       </div>
 
       <div>
-        <label htmlFor="inquiry-email" className="block text-sm font-medium text-neutral-700 mb-1">
+        <label htmlFor="inquiry-email" className="block text-sm font-medium text-text-secondary mb-1">
           {t('emailLabel')} <span className="text-error-500">*</span>
         </label>
         <input
@@ -109,7 +109,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       </div>
 
       <div>
-        <label htmlFor="inquiry-message" className="block text-sm font-medium text-neutral-700 mb-1">
+        <label htmlFor="inquiry-message" className="block text-sm font-medium text-text-secondary mb-1">
           {t('messageLabel')} <span className="text-error-500">*</span>
         </label>
         <Textarea
@@ -122,7 +122,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
           className="resize-none"
           placeholder={t('messagePlaceholder')}
         />
-        <p className="text-xs text-neutral-400 mt-1">{t('charCount', { count: message.length })}</p>
+        <p className="text-xs text-text-muted mt-1">{t('charCount', { count: message.length })}</p>
       </div>
 
       {error && (
@@ -148,7 +148,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         )}
       </Button>
 
-      <p className="text-xs text-neutral-400 text-center">
+      <p className="text-xs text-text-muted text-center">
         {t('responseNote')}
       </p>
     </form>

@@ -94,7 +94,7 @@ export function PermissionRequestsManager() {
 
   if (loading) {
     return (
-      <div className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+      <div className="p-6 bg-surface-base rounded-xl border border">
         <div className="animate-pulse">
           <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-4" />
           <div className="space-y-3">
@@ -123,8 +123,8 @@ export function PermissionRequestsManager() {
 
   if (requests.length === 0) {
     return (
-      <div className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
-        <div className="flex items-center gap-3 text-neutral-500 dark:text-neutral-400">
+      <div className="p-6 bg-surface-base rounded-xl border border">
+        <div className="flex items-center gap-3 text-text-tertiary">
           <Shield className="w-5 h-5" />
           <span>Keine ausstehenden Berechtigungsanfragen</span>
         </div>
@@ -133,17 +133,17 @@ export function PermissionRequestsManager() {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
-      <div className="p-4 border-b border-neutral-200 dark:border-white/[0.06] flex items-center justify-between">
+    <div className="bg-surface-base rounded-xl border border">
+      <div className="p-4 border-b border flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-secondary-500" />
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
+          <Heading level={3} className="font-semibold text-text-primary">
             Berechtigungsanfragen ({requests.length})
           </Heading>
         </div>
         <button
           onClick={fetchRequests}
-          className="text-neutral-500 hover:text-neutral-600"
+          className="text-text-tertiary hover:text-neutral-600"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
@@ -155,11 +155,11 @@ export function PermissionRequestsManager() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span className="font-medium text-neutral-900 dark:text-white">
+                  <User className="w-4 h-4 text-text-muted" />
+                  <span className="font-medium text-text-primary">
                     {request.user_name || request.user_email}
                   </span>
-                  <span className="text-sm text-neutral-500">
+                  <span className="text-sm text-text-tertiary">
                     {request.user_email}
                   </span>
                 </div>
@@ -168,18 +168,18 @@ export function PermissionRequestsManager() {
                   {request.requested_sections.map(section => (
                     <span
                       key={section}
-                      className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs rounded"
+                      className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded"
                     >
                       {getSectionLabel(section)}
                     </span>
                   ))}
                 </div>
 
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                <p className="text-sm text-text-secondary">
                   {request.reason}
                 </p>
 
-                <div className="flex items-center gap-2 mt-2 text-xs text-neutral-400">
+                <div className="flex items-center gap-2 mt-2 text-xs text-text-muted">
                   <Clock className="w-3 h-3" />
                   {formatDateTimeNumeric(request.created_at)}
                 </div>

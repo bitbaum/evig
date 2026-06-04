@@ -103,7 +103,7 @@ export default async function AnalysePage() {
         </Link>
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-            <BarChart3 className="w-6 h-6 text-primary-600" />
+            <BarChart3 className="w-6 h-6 text-action" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Analyse</Heading>
@@ -128,8 +128,8 @@ export default async function AnalysePage() {
               </div>
               {comparison && (
                 <div className={`text-sm mt-2 ${
-                  comparison.totalChange.direction === 'up' ? 'text-primary-600 dark:text-primary-400' :
-                  comparison.totalChange.direction === 'down' ? 'text-error-600 dark:text-error-400' : 'text-neutral-500'
+                  comparison.totalChange.direction === 'up' ? 'text-action' :
+                  comparison.totalChange.direction === 'down' ? 'text-error-600 dark:text-error-400' : 'text-text-tertiary'
                 }`}>
                   {comparison.totalChange.direction === 'up' ? '+' : ''}
                   {comparison.totalChange.percentChange.toFixed(1)}% vs. {previousYear}
@@ -145,7 +145,7 @@ export default async function AnalysePage() {
                 {latestData.derived.eigenfinanzierungPct.value.toFixed(1)}%
               </div>
               <div className={`text-sm mt-2 ${
-                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-primary-600 dark:text-primary-400' : 'text-warning-600 dark:text-warning-400'
+                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-action' : 'text-warning-600 dark:text-warning-400'
               }`}>
                 {latestData.derived.eigenfinanzierungPct.value >= 50 ? 'Ziel erreicht' : 'Unter Ziel (50%)'}
               </div>
@@ -313,7 +313,7 @@ export default async function AnalysePage() {
       </div>
 
       {/* Data Source */}
-      <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
         <strong>Datenquellen:</strong> Finanzdaten aus Kivitendo • Letzte Aktualisierung: {latestData?.metadata.importedAt ? formatDateShort(latestData.metadata.importedAt) : 'N/A'}
       </div>
     </div>

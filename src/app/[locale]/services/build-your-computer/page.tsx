@@ -89,7 +89,7 @@ export default function BuildYourComputerPage() {
 
   const getConditionClass = (condition: string) => {
     if (condition === 'used') return 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-    if (condition === 'refurbished') return 'bg-neutral-100 text-neutral-800'
+    if (condition === 'refurbished') return 'bg-surface-raised text-neutral-800'
     return 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-400'
   }
 
@@ -103,7 +103,7 @@ export default function BuildYourComputerPage() {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto mt-4">
+        <p className="text-lg text-text-secondary max-w-2xl mx-auto mt-4">
           <strong>{t('hero.strong')}</strong>
         </p>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
@@ -123,7 +123,7 @@ export default function BuildYourComputerPage() {
       </PageHero>
 
       {/* How It Works */}
-      <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
         <div className="container mx-auto px-4">
           <Heading level={2} className="text-center mb-12">{t('howItWorks.heading')}</Heading>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -131,7 +131,7 @@ export default function BuildYourComputerPage() {
               <div key={index} className="text-center">
                 <div className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">{index + 1}</div>
                 <Heading level={3} className="mb-3">{step.title}</Heading>
-                <p className="text-neutral-600">{step.description}</p>
+                <p className="text-text-secondary">{step.description}</p>
               </div>
             ))}
           </div>
@@ -143,15 +143,15 @@ export default function BuildYourComputerPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <Heading level={2} className="text-center mb-4">{t('buildTool.heading')}</Heading>
-            <p className="text-center text-neutral-600 mb-12">{t('buildTool.subtitle')}</p>
+            <p className="text-center text-text-secondary mb-12">{t('buildTool.subtitle')}</p>
 
             {/* Progress Bar */}
             <div className="flex items-center justify-center mb-8">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-neutral-600'}`}>1</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-text-secondary'}`}>1</div>
               <div className={`w-24 h-1 ${step >= 2 ? 'bg-primary-600' : 'bg-neutral-300'}`}></div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-neutral-600'}`}>2</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-text-secondary'}`}>2</div>
               <div className={`w-24 h-1 ${step >= 3 ? 'bg-primary-600' : 'bg-neutral-300'}`}></div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-neutral-600'}`}>3</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-text-secondary'}`}>3</div>
             </div>
 
             <div className="card-shell p-8">
@@ -168,11 +168,11 @@ export default function BuildYourComputerPage() {
                         className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                           formData.useCase === category.id
                             ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                            : 'border-neutral-200 hover:border-neutral-300'
+                            : 'border hover:border-neutral-300'
                         }`}
                       >
                         <Heading level={4} className="">{category.name}</Heading>
-                        <p className="text-sm text-neutral-600">{category.description}</p>
+                        <p className="text-sm text-text-secondary">{category.description}</p>
                       </div>
                     ))}
                   </div>
@@ -187,11 +187,11 @@ export default function BuildYourComputerPage() {
                           className={`p-3 text-center border-2 rounded-lg transition-all ${
                             formData.performance === perf.id
                               ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                              : 'border-neutral-200 hover:border-neutral-300'
+                              : 'border hover:border-neutral-300'
                           }`}
                         >
                           <div className="font-semibold">{perf.name}</div>
-                          <div className="text-xs text-neutral-600">{perf.description}</div>
+                          <div className="text-xs text-text-secondary">{perf.description}</div>
                         </button>
                       ))}
                     </div>
@@ -238,7 +238,7 @@ export default function BuildYourComputerPage() {
 
                   {!isAnalyzing ? (
                     <>
-                      <div className="bg-neutral-50 dark:bg-neutral-800/50 p-6 rounded-lg">
+                      <div className="bg-surface-raised/50 p-6 rounded-lg">
                         <Heading level={4} className="mb-4">{t('buildTool.requirementsSummary')}</Heading>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                           <div>
@@ -259,7 +259,7 @@ export default function BuildYourComputerPage() {
                         )}
                       </div>
 
-                      <p className="text-neutral-600">{t('buildTool.analyzeDescription')}</p>
+                      <p className="text-text-secondary">{t('buildTool.analyzeDescription')}</p>
 
                       <div className="flex gap-4 justify-center">
                         <Button onClick={() => setStep(1)} variant="outline">
@@ -277,7 +277,7 @@ export default function BuildYourComputerPage() {
                       <div className="space-y-3">
                         <p className="font-semibold">{t('buildTool.scanningLabel')}</p>
                         {scanningLines.map((line, i) => (
-                          <p key={i} className="text-neutral-600">• {line}</p>
+                          <p key={i} className="text-text-secondary">• {line}</p>
                         ))}
                       </div>
                     </div>
@@ -309,8 +309,8 @@ export default function BuildYourComputerPage() {
                   {/* Component List */}
                   <div className="space-y-4">
                     {componentRows.map((item, index) => (
-                      <div key={index} className="flex items-center p-4 border border-neutral-200 rounded-lg">
-                        <item.icon className="w-8 h-8 text-primary-600 mr-4" />
+                      <div key={index} className="flex items-center p-4 border rounded-lg">
+                        <item.icon className="w-8 h-8 text-action mr-4" />
                         <div className="flex-grow">
                           <div className="flex items-center gap-2 mb-1">
                             <Heading level={4} className="">{item.component.name}</Heading>
@@ -318,8 +318,8 @@ export default function BuildYourComputerPage() {
                               {getConditionLabel(item.component.condition)}
                             </span>
                           </div>
-                          <p className="text-sm text-neutral-600">{item.type}</p>
-                          <div className="flex items-center gap-4 mt-1 text-xs text-neutral-500">
+                          <p className="text-sm text-text-secondary">{item.type}</p>
+                          <div className="flex items-center gap-4 mt-1 text-xs text-text-tertiary">
                             <span className="flex items-center">
                               <MapPin className="w-3 h-3 mr-1" />
                               {item.component.location}
@@ -329,19 +329,19 @@ export default function BuildYourComputerPage() {
                         </div>
                         <div className="text-right">
                           <div className="font-bold">CHF {item.component.price}</div>
-                          <div className="text-xs text-neutral-500">{t('buildTool.deliveryTime')}</div>
+                          <div className="text-xs text-text-tertiary">{t('buildTool.deliveryTime')}</div>
                         </div>
                       </div>
                     ))}
                   </div>
 
                   {/* Total and Actions */}
-                  <div className="bg-neutral-50 dark:bg-neutral-800/50 p-6 rounded-lg">
+                  <div className="bg-surface-raised/50 p-6 rounded-lg">
                     <div className="flex justify-between items-center mb-4">
                       <span className="text-lg font-semibold">{t('buildTool.totalCost')}</span>
-                      <span className="text-2xl font-bold text-primary-600">CHF {buildResult.totalPrice}</span>
+                      <span className="text-2xl font-bold text-action">CHF {buildResult.totalPrice}</span>
                     </div>
-                    <div className="text-sm text-neutral-600 mb-6">
+                    <div className="text-sm text-text-secondary mb-6">
                       {t('buildTool.extras')}
                     </div>
 
@@ -357,23 +357,23 @@ export default function BuildYourComputerPage() {
                   </div>
 
                   {/* Sustainability Impact */}
-                  <div className="bg-neutral-50 dark:bg-neutral-800/50 p-6 rounded-lg">
+                  <div className="bg-surface-raised/50 p-6 rounded-lg">
                     <Heading level={4} className="mb-4 flex items-center">
-                      <Leaf className="w-5 h-5 text-primary-600 mr-2" />
+                      <Leaf className="w-5 h-5 text-action mr-2" />
                       {t('buildTool.environmentHeading')}
                     </Heading>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <div className="font-semibold">{t('buildTool.co2Saved')}</div>
-                        <div className="text-primary-600">{t('buildTool.co2Value')}</div>
+                        <div className="text-action">{t('buildTool.co2Value')}</div>
                       </div>
                       <div>
                         <div className="font-semibold">{t('buildTool.reusedLabel')}</div>
-                        <div className="text-primary-600">{t('buildTool.reusedValue')}</div>
+                        <div className="text-action">{t('buildTool.reusedValue')}</div>
                       </div>
                       <div>
                         <div className="font-semibold">{t('buildTool.circularLabel')}</div>
-                        <div className="text-primary-600">{t('buildTool.circularValue')}</div>
+                        <div className="text-action">{t('buildTool.circularValue')}</div>
                       </div>
                     </div>
                   </div>
@@ -385,17 +385,17 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* Features */}
-      <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
         <div className="container mx-auto px-4">
           <Heading level={2} className="text-center mb-12">{t('features.heading')}</Heading>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[Globe, Star, CheckCircle2].map((Icon, index) => {
               const items = t.raw('features.items') as Array<{ title: string; description: string }>
               return (
-                <div key={index} className="bg-white dark:bg-neutral-900 p-8 rounded-xl border border-neutral-200 dark:border-white/[0.08]">
-                  <Icon className="w-12 h-12 text-primary-600 mb-4" />
+                <div key={index} className="bg-surface-base p-8 rounded-xl border">
+                  <Icon className="w-12 h-12 text-action mb-4" />
                   <Heading level={3} className="mb-4">{items[index].title}</Heading>
-                  <p className="text-neutral-600">{items[index].description}</p>
+                  <p className="text-text-secondary">{items[index].description}</p>
                 </div>
               )
             })}
@@ -407,24 +407,24 @@ export default function BuildYourComputerPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-neutral-50 dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.06] p-8 md:p-12 text-center">
+            <div className="bg-surface-raised dark:bg-neutral-900 rounded-2xl border p-8 md:p-12 text-center">
               <div className="inline-flex items-center bg-primary-100 dark:bg-primary-900/30 px-6 py-3 rounded-full mb-6">
-                <Award className="w-8 h-8 text-primary-600 mr-3" />
+                <Award className="w-8 h-8 text-action mr-3" />
                 <span className="text-2xl font-bold text-primary-800 dark:text-primary-300">Revamped</span>
-                <Sparkles className="w-6 h-6 text-primary-600 ml-2" />
+                <Sparkles className="w-6 h-6 text-action ml-2" />
               </div>
               <Heading level={2} className="mb-4">{t('certification.heading')}</Heading>
-              <p className="text-xl text-neutral-600 mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
                 {t('certification.body')}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary-600 mb-2">{getDefaultValue('reuse_rate')}</div>
-                  <div className="text-sm text-neutral-600">{t('certification.sustainabilityScore')}</div>
+                  <div className="text-3xl font-bold text-action mb-2">{getDefaultValue('reuse_rate')}</div>
+                  <div className="text-sm text-text-secondary">{t('certification.sustainabilityScore')}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary-600 mb-2">{getDefaultValue('co2_savings_per_device')} kg</div>
-                  <div className="text-sm text-neutral-600">
+                  <div className="text-3xl font-bold text-action mb-2">{getDefaultValue('co2_savings_per_device')} kg</div>
+                  <div className="text-sm text-text-secondary">
                     {t('certification.co2Saved')}{' · '}
                     <Link href="/transparenz/co2" className="text-primary-700 hover:underline underline-offset-2">
                       Wie berechnet?
@@ -432,8 +432,8 @@ export default function BuildYourComputerPage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-primary-600 mb-2">{getDefaultValue('devices_processed_per_year')}</div>
-                  <div className="text-sm text-neutral-600">{t('certification.certifiedComputers')}</div>
+                  <div className="text-3xl font-bold text-action mb-2">{getDefaultValue('devices_processed_per_year')}</div>
+                  <div className="text-sm text-text-secondary">{t('certification.certifiedComputers')}</div>
                 </div>
               </div>
               <Button as={Link} href="/revamped" variant="primary">

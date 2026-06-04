@@ -11,10 +11,10 @@ export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
   if (stats.newUsersThisWeek === 0 && stats.postsPublishedThisWeek === 0) return null
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-      <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06] flex items-center gap-2">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
+      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
         <TrendingUp className="w-5 h-5 text-primary-500" aria-hidden="true" />
-        <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-text-primary">
           Diese Woche
         </Heading>
       </div>
@@ -22,17 +22,17 @@ export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
       <div className="p-4">
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
           {stats.newUsersThisWeek > 0 && (
-            <span className="text-neutral-700 dark:text-neutral-300">
-              <span className="font-semibold text-primary-600">+{stats.newUsersThisWeek}</span>{' '}
+            <span className="text-text-secondary">
+              <span className="font-semibold text-action">+{stats.newUsersThisWeek}</span>{' '}
               neue Benutzer
             </span>
           )}
           {stats.newUsersThisWeek > 0 && stats.postsPublishedThisWeek > 0 && (
-            <span className="text-neutral-400 dark:text-neutral-500" aria-hidden="true">&bull;</span>
+            <span className="text-text-muted" aria-hidden="true">&bull;</span>
           )}
           {stats.postsPublishedThisWeek > 0 && (
-            <span className="text-neutral-700 dark:text-neutral-300">
-              <span className="font-semibold text-primary-600">{stats.postsPublishedThisWeek}</span>{' '}
+            <span className="text-text-secondary">
+              <span className="font-semibold text-action">{stats.postsPublishedThisWeek}</span>{' '}
               Artikel veröffentlicht
             </span>
           )}

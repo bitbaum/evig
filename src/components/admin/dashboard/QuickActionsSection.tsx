@@ -11,9 +11,9 @@ export function QuickActionsSection({ quickActions, fulfillActions }: QuickActio
   if (quickActions.length === 0 && fulfillActions.length === 0) return null
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-      <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
+      <div className="p-4 border-b border-subtle dark:border-white/[0.06]">
+        <Heading level={2} className="font-semibold text-text-primary">
           Schnellaktionen
         </Heading>
       </div>
@@ -22,7 +22,7 @@ export function QuickActionsSection({ quickActions, fulfillActions }: QuickActio
         {/* Fulfill row — process pending work */}
         {fulfillActions.length > 0 && (
           <div>
-            <p className="mb-2.5 text-xs font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+            <p className="mb-2.5 text-xs font-medium uppercase tracking-wide text-text-muted">
               Erledigen
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
@@ -52,7 +52,7 @@ export function QuickActionsSection({ quickActions, fulfillActions }: QuickActio
         {/* Create row */}
         {quickActions.length > 0 && (
           <div>
-            <p className="mb-2.5 text-xs font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+            <p className="mb-2.5 text-xs font-medium uppercase tracking-wide text-text-muted">
               Erstellen
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">

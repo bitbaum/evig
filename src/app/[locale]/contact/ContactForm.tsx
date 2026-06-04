@@ -70,12 +70,12 @@ export default function ContactForm() {
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-2">
               {t('name')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-neutral-500" />
+                <User className="h-5 w-5 text-text-tertiary" />
               </div>
               <Input
                 type="text"
@@ -89,12 +89,12 @@ export default function ContactForm() {
             </div>
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-2">
               {t('email')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-neutral-500" />
+                <Mail className="h-5 w-5 text-text-tertiary" />
               </div>
               <Input
                 type="email"
@@ -109,7 +109,7 @@ export default function ContactForm() {
           </div>
         </div>
         <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-neutral-700 mb-2">
+          <label htmlFor="subject" className="block text-sm font-medium text-text-secondary mb-2">
             {t('subject')}
           </label>
           <Input
@@ -122,12 +122,12 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-2">
+          <label htmlFor="message" className="block text-sm font-medium text-text-secondary mb-2">
             {t('message')}
           </label>
           <div className="relative">
             <div className="absolute top-3 left-3 pointer-events-none">
-              <MessageSquare className="h-5 w-5 text-neutral-500" />
+              <MessageSquare className="h-5 w-5 text-text-tertiary" />
             </div>
             <Textarea
               id="message"

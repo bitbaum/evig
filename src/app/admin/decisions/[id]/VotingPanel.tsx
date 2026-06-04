@@ -90,7 +90,7 @@ export default function VotingPanel({
         )}
         <div className="rounded-lg bg-primary-50 dark:bg-primary-900/20 p-6 text-center shadow-sm">
           <p className="font-medium text-primary-700 dark:text-primary-300">Deine Stimme wurde abgegeben</p>
-          <p className="mt-1 text-sm text-primary-600 dark:text-primary-400">
+          <p className="mt-1 text-sm text-action">
             Du kannst deine Stimme ändern, solange die Abstimmung läuft.
           </p>
         </div>
@@ -111,14 +111,14 @@ export default function VotingPanel({
         />
       )}
 
-      <div className="rounded-lg bg-white p-6 shadow-sm">
+      <div className="rounded-lg bg-surface-base p-6 shadow-sm">
       {votingDeadline && status === DECISION_STATUS.VOTING && (
         <div className="mb-4">
           <DeadlineCountdown deadline={votingDeadline} />
         </div>
       )}
 
-      <Heading level={2} className="mb-4 text-lg font-semibold text-neutral-900">
+      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">
         Deine Stimme
       </Heading>
 

@@ -36,14 +36,14 @@ export function ProductBasicFields({
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
         <Package className="w-5 h-5" />
         {t('title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <label htmlFor="basic-manufacturer" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-manufacturer" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('manufacturer')}</span>
             {aiMetadata.hersteller && (
               <AIFieldIndicator source={aiMetadata.hersteller} fieldName="hersteller" />
@@ -61,7 +61,7 @@ export function ProductBasicFields({
         </div>
 
         <div>
-          <label htmlFor="basic-condition" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-condition" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('condition')}</span>
             {aiMetadata.zustand && (
               <AIFieldIndicator source={aiMetadata.zustand} fieldName="zustand" />
@@ -81,7 +81,7 @@ export function ProductBasicFields({
         </div>
 
         <div className="md:col-span-2">
-          <label htmlFor="basic-product-name" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-product-name" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('productName')}</span>
             {aiMetadata.produktname && (
               <AIFieldIndicator source={aiMetadata.produktname} fieldName="produktname" />
@@ -100,7 +100,7 @@ export function ProductBasicFields({
 
         {/* Price field moved up for mobile */}
         <div className="md:hidden">
-          <label htmlFor="basic-price" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-price" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('price')}</span>
             {aiMetadata.verkaufspreis && (
               <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
@@ -119,7 +119,7 @@ export function ProductBasicFields({
         </div>
 
         <div className="md:col-span-2">
-          <label htmlFor="basic-description" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-description" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('description')}</span>
             {aiMetadata.kurzbeschreibung && (
               <AIFieldIndicator source={aiMetadata.kurzbeschreibung} fieldName="kurzbeschreibung" />
@@ -136,7 +136,7 @@ export function ProductBasicFields({
         </div>
 
         <div>
-          <label htmlFor="basic-category" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-category" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('category')}</span>
             {aiMetadata.hauptkategorie && (
               <AIFieldIndicator source={aiMetadata.hauptkategorie} fieldName="hauptkategorie" />
@@ -156,7 +156,7 @@ export function ProductBasicFields({
         </div>
 
         <div>
-          <label htmlFor="basic-subcategory" className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1.5">
+          <label htmlFor="basic-subcategory" className="flex items-center gap-2 text-sm font-medium text-text-secondary mb-1.5">
             <span>{t('subcategory')}</span>
             {aiMetadata.unterkategorie && (
               <AIFieldIndicator source={aiMetadata.unterkategorie} fieldName="unterkategorie" />

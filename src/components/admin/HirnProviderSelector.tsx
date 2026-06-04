@@ -33,7 +33,7 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
   ollama: {
     label: 'Ollama',
     icon: Cpu,
-    color: 'text-primary-600',
+    color: 'text-action',
     bgColor: 'bg-primary-100 dark:bg-primary-900/30',
     category: 'local',
     description: 'Lokal, kostenlos, privat',
@@ -142,7 +142,7 @@ export function HirnProviderSelector() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 px-3 py-2 text-sm text-neutral-500">
+      <div className="flex items-center gap-2 px-3 py-2 text-sm text-text-tertiary">
         <Loader2 className="w-4 h-4 animate-spin" />
       </div>
     )
@@ -153,7 +153,7 @@ export function HirnProviderSelector() {
       {/* Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] hover:border-primary-300 dark:hover:border-primary-600 rounded-xl transition-all shadow-sm"
+        className="flex items-center gap-2 px-3 py-2 text-sm bg-surface-base border border hover:border-primary-300 dark:hover:border-primary-600 rounded-xl transition-all shadow-sm"
       >
         {currentMeta ? (
           <>
@@ -161,30 +161,30 @@ export function HirnProviderSelector() {
               <currentMeta.icon className={`w-4 h-4 ${currentMeta.color}`} />
             </div>
             <div className="text-left">
-              <div className="font-medium text-neutral-900 dark:text-white">
+              <div className="font-medium text-text-primary">
                 {currentMeta.label}
               </div>
-              <div className="text-xs text-neutral-500">{currentProvider?.model}</div>
+              <div className="text-xs text-text-tertiary">{currentProvider?.model}</div>
             </div>
           </>
         ) : (
-          <span className="text-neutral-500">Kein Provider</span>
+          <span className="text-text-tertiary">Kein Provider</span>
         )}
-        <Settings className="w-4 h-4 text-neutral-500 ml-1" />
+        <Settings className="w-4 h-4 text-text-tertiary ml-1" />
       </button>
 
       {/* Dropdown */}
       {open && (
         <>
           <div className="fixed inset-0 z-40" aria-hidden="true" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-200 dark:border-white/[0.06] z-50 overflow-hidden">
+          <div className="absolute right-0 top-full mt-2 w-96 bg-surface-base rounded-2xl shadow-2xl border border z-50 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-neutral-100 dark:border-white/[0.06]">
+            <div className="flex items-center justify-between p-4 border-b border-subtle dark:border-white/[0.06]">
               <div>
-                <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">Wähle dein Gehirn</Heading>
-                <p className="text-xs text-neutral-500 mt-0.5">Welche KI soll antworten?</p>
+                <Heading level={3} className="font-semibold text-text-primary">Wähle dein Gehirn</Heading>
+                <p className="text-xs text-text-tertiary mt-0.5">Welche KI soll antworten?</p>
               </div>
-              <Button onClick={() => setOpen(false)} variant="ghost" size="icon" className="text-neutral-500">
+              <Button onClick={() => setOpen(false)} variant="ghost" size="icon" className="text-text-tertiary">
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -200,10 +200,10 @@ export function HirnProviderSelector() {
                 return (
                   <div key={category.id} className="p-2">
                     <div className="px-2 py-1 mb-1">
-                      <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                      <span className="text-xs font-medium text-text-tertiary uppercase tracking-wider">
                         {category.label}
                       </span>
-                      <span className="text-xs text-neutral-500 ml-2">{category.description}</span>
+                      <span className="text-xs text-text-tertiary ml-2">{category.description}</span>
                     </div>
 
                     <div className="space-y-1">
@@ -232,17 +232,17 @@ export function HirnProviderSelector() {
 
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="font-medium text-neutral-900 dark:text-white">
+                                <span className="font-medium text-text-primary">
                                   {meta.label}
                                 </span>
                                 {isSelected && (
-                                  <span className="flex items-center gap-1 text-xs text-primary-600 bg-primary-100 dark:bg-primary-900/50 px-2 py-0.5 rounded-full">
+                                  <span className="flex items-center gap-1 text-xs text-action bg-primary-100 dark:bg-primary-900/50 px-2 py-0.5 rounded-full">
                                     <Check className="w-3 h-3" />
                                     Aktiv
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs text-neutral-500 mt-0.5">
+                              <div className="text-xs text-text-tertiary mt-0.5">
                                 {meta.description} · {provider.model}
                               </div>
                             </div>
@@ -255,7 +255,7 @@ export function HirnProviderSelector() {
                                     e.stopPropagation()
                                     void saveApiKey(provider.provider)
                                   }}
-                                  className="flex items-center gap-1 px-2 py-1 text-xs text-primary-600 hover:text-primary-700 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
+                                  className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-primary-700 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
                                 >
                                   <Key className="w-3 h-3" />
                                   Key speichern
@@ -266,7 +266,7 @@ export function HirnProviderSelector() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={e => e.stopPropagation()}
-                                    className="flex items-center gap-1 px-2 py-1 text-xs text-primary-600 hover:text-primary-700 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
+                                    className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-primary-700 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
                                   >
                                     <ExternalLink className="w-3 h-3" />
                                   </a>
@@ -289,8 +289,8 @@ export function HirnProviderSelector() {
               </div>
             )}
 
-            <div className="p-3 bg-neutral-50 dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-white/[0.06]">
-              <p className="text-xs text-neutral-500 text-center">
+            <div className="p-3 bg-surface-raised dark:bg-neutral-900/50 border-t border-subtle dark:border-white/[0.06]">
+              <p className="text-xs text-text-tertiary text-center">
                 Wähle einen Provider mit aktivem API-Key
               </p>
             </div>

@@ -12,9 +12,9 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
   if (!topics || topics.length === 0) return null
 
   return (
-    <div className="bg-white rounded-lg border overflow-hidden">
-      <div className="p-4 border-b bg-neutral-50">
-        <Heading level={2} className="text-lg text-neutral-900">
+    <div className="bg-surface-base rounded-lg border overflow-hidden">
+      <div className="p-4 border-b bg-surface-raised">
+        <Heading level={2} className="text-lg text-text-primary">
           Themen ({topics.length})
         </Heading>
       </div>
@@ -26,15 +26,15 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
               className="flex items-center gap-2 w-full text-left"
             >
               {expandedTopics.has(topic.id) ? (
-                <ChevronDown className="w-4 h-4 text-neutral-400" />
+                <ChevronDown className="w-4 h-4 text-text-muted" />
               ) : (
-                <ChevronRight className="w-4 h-4 text-neutral-400" />
+                <ChevronRight className="w-4 h-4 text-text-muted" />
               )}
-              <span className="font-medium text-neutral-900">{topic.title}</span>
+              <span className="font-medium text-text-primary">{topic.title}</span>
             </button>
             {expandedTopics.has(topic.id) && (
               <div className="mt-3 ml-6 space-y-2">
-                <p className="text-neutral-700 text-sm">{topic.discussion}</p>
+                <p className="text-text-secondary text-sm">{topic.discussion}</p>
                 {topic.outcome && (
                   <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 rounded p-2">
                     <p className="text-sm text-primary-800 dark:text-primary-300">

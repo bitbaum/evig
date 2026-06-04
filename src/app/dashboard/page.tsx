@@ -36,7 +36,7 @@ export default async function DashboardPage() {
   })
 
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <main className="min-h-screen bg-surface-raised dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!session.user.emailVerified && session.user.email && (
           <EmailVerificationBanner email={session.user.email} className="mb-6" />

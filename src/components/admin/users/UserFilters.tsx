@@ -28,12 +28,12 @@ export function UserFilters({
   onVerifiedChange,
 }: UserFiltersProps) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Search */}
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
             <Input
               type="text"
               value={search}

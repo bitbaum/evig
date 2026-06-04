@@ -57,7 +57,7 @@ function Bar({
   return (
     <div className="flex items-center gap-3">
       {imageUrl ? (
-        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-neutral-200 bg-white">
+        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border bg-surface-base">
           <Image src={imageUrl} alt={label} fill className="object-contain p-0.5" unoptimized />
         </div>
       ) : (
@@ -65,13 +65,13 @@ function Bar({
           <span className={`text-sm ${isWinner ? 'font-bold text-warning-500' : 'text-transparent'}`}>★</span>
         )
       )}
-      <span className="w-28 truncate text-sm text-neutral-700">{label}</span>
+      <span className="w-28 truncate text-sm text-text-secondary">{label}</span>
       <div className="flex-1">
-        <div className="h-6 overflow-hidden rounded-md bg-neutral-100">
+        <div className="h-6 overflow-hidden rounded-md bg-surface-raised">
           <div className={`h-full rounded-md ${color}`} style={{ width: `${pct}%` }} />
         </div>
       </div>
-      <span className="w-10 text-right text-sm font-medium text-neutral-700">{value}</span>
+      <span className="w-10 text-right text-sm font-medium text-text-secondary">{value}</span>
     </div>
   );
 }
@@ -80,7 +80,7 @@ function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
   return (
     <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-warning-400 bg-warning-50 dark:bg-warning-900/20 p-4">
       {opt.imageUrl ? (
-        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-warning-200 bg-white shadow">
+        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-warning-200 bg-surface-base shadow">
           <Image src={opt.imageUrl} alt={opt.label} fill className="object-contain p-1" unoptimized />
         </div>
       ) : (
@@ -90,8 +90,8 @@ function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
       )}
       <div>
         <div className="text-xs font-medium uppercase tracking-wide text-warning-600">Gewinner</div>
-        <div className="text-lg font-bold text-neutral-900">{opt.label}</div>
-        <div className="text-sm text-neutral-600">{metric}</div>
+        <div className="text-lg font-bold text-text-primary">{opt.label}</div>
+        <div className="text-sm text-text-secondary">{metric}</div>
       </div>
       <span className="ml-auto text-3xl">★</span>
     </div>
@@ -103,16 +103,16 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
   if (!data) return null;
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm">
-      <Heading level={2} className="mb-4 text-lg font-semibold text-neutral-900">Ergebnis</Heading>
+    <div className="rounded-lg bg-surface-base p-6 shadow-sm">
+      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">Ergebnis</Heading>
 
       {/* AI Outcome Narrative — Beschluss hero */}
       {aiOutcomeNarrative && (
         <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 dark:bg-primary-900/20 dark:border-primary-800 p-4">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-400">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-action">
             Beschluss
           </p>
-          <p className="text-sm font-medium leading-relaxed text-neutral-900 dark:text-white">
+          <p className="text-sm font-medium leading-relaxed text-text-primary">
             {aiOutcomeNarrative}
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
           </span>
-          <span className="ml-2 text-sm text-neutral-500">{data.totalVotes} Stimmen</span>
+          <span className="ml-2 text-sm text-text-tertiary">{data.totalVotes} Stimmen</span>
         </div>
       )}
 
@@ -271,7 +271,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               />
             );
           })}
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-text-tertiary">
             Borda-Methode: {data.totalVotes} Stimmen · max. {data.maxPossiblePoints} mögliche Punkte
           </p>
         </div>
@@ -281,7 +281,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
       {outcomeSummary && (
         <div className="mt-4 rounded-md bg-primary-50 dark:bg-primary-900/20 p-3">
           <p className="text-sm font-medium text-primary-700 dark:text-primary-300">Zusammenfassung</p>
-          <p className="mt-1 text-sm text-primary-600 dark:text-primary-400">{outcomeSummary}</p>
+          <p className="mt-1 text-sm text-action">{outcomeSummary}</p>
         </div>
       )}
     </div>

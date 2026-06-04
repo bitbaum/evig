@@ -28,12 +28,12 @@ export function OptionCard({
       } ${
         selected
           ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md'
-          : 'border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-sm'
+          : 'border bg-surface-base hover:border-neutral-300 hover:shadow-sm'
       }`}
     >
       {/* Image */}
       {opt.imageUrl ? (
-        <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-neutral-100">
+        <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-surface-raised">
           <Image
             src={opt.imageUrl}
             alt={opt.label}
@@ -50,7 +50,7 @@ export function OptionCard({
           )}
         </div>
       ) : (
-        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'bg-neutral-100 text-neutral-400'}`}>
+        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-primary-100 dark:bg-primary-900/30 text-action' : 'bg-surface-raised text-text-muted'}`}>
           {opt.label.charAt(0).toUpperCase()}
         </div>
       )}
@@ -61,7 +61,7 @@ export function OptionCard({
           {opt.label}
         </p>
         {opt.description && (
-          <p className="mt-0.5 truncate text-xs text-neutral-500">{opt.description}</p>
+          <p className="mt-0.5 truncate text-xs text-text-tertiary">{opt.description}</p>
         )}
         {children}
       </div>

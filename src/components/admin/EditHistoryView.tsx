@@ -38,7 +38,7 @@ export function EditHistoryView({
   // Handle empty or null history
   if (!history || !Array.isArray(history) || history.length === 0) {
     return (
-      <div className={`text-sm text-neutral-500 italic ${className}`}>
+      <div className={`text-sm text-text-tertiary italic ${className}`}>
         Keine Bearbeitungen durch Admins
       </div>
     );
@@ -75,26 +75,26 @@ function EditHistoryEntryView({
     <div className="border-l-2 border-primary-400 pl-4 py-2 bg-primary-50/30 dark:bg-primary-900/20">
       {/* Header: Editor name and timestamp */}
       <div className="flex items-center justify-between mb-2">
-        <span className="font-medium text-neutral-900">{entry.editor_name}</span>
-        <span className="text-xs text-neutral-500">
+        <span className="font-medium text-text-primary">{entry.editor_name}</span>
+        <span className="text-xs text-text-tertiary">
           {formatDateTime(entry.timestamp)}
         </span>
       </div>
 
       {/* Changed fields summary */}
-      <div className="text-sm text-neutral-600 mb-2">
+      <div className="text-sm text-text-secondary mb-2">
         <strong>Geänderte Felder:</strong>{' '}
         <span>{fieldsChangedLabels.join(', ')}</span>
       </div>
 
       {/* Expandable details showing before/after values */}
       <details className="mt-2">
-        <summary className="text-xs text-primary-600 cursor-pointer hover:text-primary-700">
+        <summary className="text-xs text-action cursor-pointer hover:text-primary-700">
           Änderungen anzeigen
         </summary>
-        <div className="mt-2 text-xs bg-white p-3 rounded border border-neutral-200">
+        <div className="mt-2 text-xs bg-surface-base p-3 rounded border border">
           {entry.fields_changed.length === 0 ? (
-            <p className="text-neutral-500 italic">Keine Änderungen</p>
+            <p className="text-text-tertiary italic">Keine Änderungen</p>
           ) : (
             <div className="space-y-3">
               {entry.fields_changed.map((field) => (
@@ -128,10 +128,10 @@ function FieldChange({
   const formattedValue = formatValue(previousValue);
 
   return (
-    <div className="pb-2 border-b border-neutral-100 last:border-0">
-      <div className="font-semibold text-neutral-700 mb-1">{label}:</div>
-      <div className="text-neutral-600 pl-2">
-        <div className="text-xs text-neutral-500">Vorheriger Wert:</div>
+    <div className="pb-2 border-b border-subtle last:border-0">
+      <div className="font-semibold text-text-secondary mb-1">{label}:</div>
+      <div className="text-text-secondary pl-2">
+        <div className="text-xs text-text-tertiary">Vorheriger Wert:</div>
         <div className="mt-1">{formattedValue}</div>
       </div>
     </div>
@@ -143,7 +143,7 @@ function FieldChange({
  */
 function formatValue(value: unknown): React.ReactNode {
   if (value === null || value === undefined) {
-    return <span className="italic text-neutral-500">(leer)</span>;
+    return <span className="italic text-text-tertiary">(leer)</span>;
   }
 
   if (Array.isArray(value)) {
@@ -161,10 +161,10 @@ function formatValue(value: unknown): React.ReactNode {
     return (
       <>
         {strValue.substring(0, 300)}
-        <span className="text-neutral-500 italic">... (gekürzt)</span>
+        <span className="text-text-tertiary italic">... (gekürzt)</span>
       </>
     );
   }
 
-  return strValue || <span className="italic text-neutral-500">(leer)</span>;
+  return strValue || <span className="italic text-text-tertiary">(leer)</span>;
 }

@@ -43,23 +43,23 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
         <div className="flex items-center gap-3">
           <span className="text-3xl">{emoji}</span>
           <div>
-            <h3 className="font-semibold text-neutral-900">{pool.serviceName}</h3>
-            <span className="text-xs text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded-full">{catLabel}</span>
+            <h3 className="font-semibold text-text-primary">{pool.serviceName}</h3>
+            <span className="text-xs text-text-tertiary bg-surface-raised px-2 py-0.5 rounded-full">{catLabel}</span>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-lg font-bold text-primary-600">
+          <div className="text-lg font-bold text-action">
             CHF {Number(pool.costPerMemberChf).toFixed(2)}
           </div>
-          <div className="text-xs text-neutral-500">{t('perMonthPerson')}</div>
+          <div className="text-xs text-text-tertiary">{t('perMonthPerson')}</div>
         </div>
       </div>
 
       {pool.description && (
-        <p className="text-sm text-neutral-600 line-clamp-2">{pool.description}</p>
+        <p className="text-sm text-text-secondary line-clamp-2">{pool.description}</p>
       )}
 
-      <div className="flex items-center gap-4 text-sm text-neutral-500">
+      <div className="flex items-center gap-4 text-sm text-text-tertiary">
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4" />
           <span>{pool.memberCount}/{pool.maxMembers} {t('members')}</span>
@@ -76,7 +76,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-neutral-50">
-        <span className="text-xs text-neutral-400">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
+        <span className="text-xs text-text-muted">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
         {userId ? (
           <button
             onClick={handleAction}
@@ -84,7 +84,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               isMember
                 ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400 hover:bg-error-100 dark:hover:bg-error-900/30'
-                : 'bg-primary-600 text-white hover:bg-primary-700'
+                : 'bg-action hover:bg-action-hover text-action-text'
             }`}
           >
             {loading ? (
@@ -96,7 +96,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             )}
           </button>
         ) : (
-          <span className="text-xs text-neutral-400">{t('loginToJoin')}</span>
+          <span className="text-xs text-text-muted">{t('loginToJoin')}</span>
         )}
       </div>
     </div>

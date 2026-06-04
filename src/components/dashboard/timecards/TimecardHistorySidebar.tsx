@@ -31,9 +31,9 @@ interface Props {
 export function TimecardHistorySidebar({ history }: Props) {
   if (history.length === 0) {
     return (
-      <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-5">
-        <h2 className="text-sm font-semibold text-neutral-900 dark:text-white mb-2">Verlauf</h2>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="rounded-xl border bg-surface-base p-5">
+        <h2 className="text-sm font-semibold text-text-primary mb-2">Verlauf</h2>
+        <p className="text-sm text-text-tertiary">
           Noch keine Zeiterfassungen. Reiche deine erste Woche ein, sie erscheint dann hier.
         </p>
       </div>
@@ -41,14 +41,14 @@ export function TimecardHistorySidebar({ history }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
-      <div className="px-5 py-4 border-b border-neutral-200 dark:border-white/[0.06]">
-        <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">Verlauf</h2>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+    <div className="rounded-xl border bg-surface-base overflow-hidden">
+      <div className="px-5 py-4 border-b border">
+        <h2 className="text-sm font-semibold text-text-primary">Verlauf</h2>
+        <p className="text-xs text-text-tertiary">
           Letzte {history.length} Zeiterfassungen
         </p>
       </div>
-      <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+      <ul className="divide-y divide-subtle">
         {history.map(row => {
           const status = row.status as TimecardStatus
           const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock
@@ -58,10 +58,10 @@ export function TimecardHistorySidebar({ history }: Props) {
           return (
             <li key={row.id} className="px-5 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors">
               <div className="flex items-start gap-3">
-                <Icon className="w-4 h-4 mt-0.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
+                <Icon className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                    <span className="text-sm font-medium text-text-primary truncate">
                       {formatTimecardPeriod(row.periodType, row.periodStart, row.periodEnd)}
                     </span>
                     <span
@@ -71,7 +71,7 @@ export function TimecardHistorySidebar({ history }: Props) {
                     </span>
                   </div>
                   {dateRef && (
-                    <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                    <p className="mt-0.5 text-xs text-text-tertiary">
                       {row.reviewedAt ? 'Geprüft' : 'Eingereicht'} {formatDateShort(dateRef)}
                     </p>
                   )}

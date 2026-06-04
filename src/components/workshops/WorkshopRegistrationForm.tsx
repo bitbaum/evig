@@ -169,8 +169,8 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (status === 'loading' || registrationStatus === 'checking') {
     return (
       <div className="text-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-3" />
-        <p className="text-neutral-600">{t('loading')}</p>
+        <Loader2 className="w-8 h-8 animate-spin text-action mx-auto mb-3" />
+        <p className="text-text-secondary">{t('loading')}</p>
       </div>
     )
   }
@@ -195,7 +195,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (isFull) {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('fullHeading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('fullHeading')}</Heading>
 
         <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 mb-4">
           <div className="flex items-center text-error-800 dark:text-error-400 mb-2">
@@ -209,7 +209,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           disabled
-          className="w-full px-4 py-3 bg-neutral-300 text-neutral-500 rounded-lg cursor-not-allowed"
+          className="w-full px-4 py-3 bg-neutral-300 text-text-tertiary rounded-lg cursor-not-allowed"
         >
           {t('fullButton')}
         </button>
@@ -221,7 +221,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'error') {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('errorHeading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('errorHeading')}</Heading>
 
         <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 mb-4">
           <div className="flex items-center text-error-800 dark:text-error-400 mb-2">
@@ -245,18 +245,18 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'payment' && paymentData) {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('paymentHeading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('paymentHeading')}</Heading>
 
         {/* Payment Summary */}
-        <div className="bg-neutral-50 rounded-lg p-4 mb-4">
+        <div className="bg-surface-raised rounded-lg p-4 mb-4">
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-neutral-600">{t('paymentWorkshopLabel')}</span>
+              <span className="text-text-secondary">{t('paymentWorkshopLabel')}</span>
               <span className="font-medium">{workshop.title}</span>
             </div>
             <div className="flex justify-between border-t pt-2">
               <span className="font-semibold">{t('paymentAmountLabel')}</span>
-              <span className="font-semibold text-primary-600">CHF {paymentData.amount}</span>
+              <span className="font-semibold text-action">CHF {paymentData.amount}</span>
             </div>
           </div>
         </div>
@@ -269,7 +269,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full mt-3 px-4 py-2 text-neutral-600 text-sm hover:text-neutral-800 transition-colors"
+          className="w-full mt-3 px-4 py-2 text-text-secondary text-sm hover:text-neutral-800 transition-colors"
         >
           {t('cancelButton')}
         </button>
@@ -281,8 +281,8 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'processing' || registrationStatus === 'registering') {
     return (
       <div className="text-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-3" />
-        <p className="text-neutral-600">
+        <Loader2 className="w-8 h-8 animate-spin text-action mx-auto mb-3" />
+        <p className="text-text-secondary">
           {registrationStatus === 'processing'
             ? t('preparingPayment')
             : t('registering')
@@ -295,7 +295,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   // Default: Registration form
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('registerHeading')}</Heading>
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('registerHeading')}</Heading>
 
       <WorkshopInstanceCard
         instance={instance}
@@ -320,7 +320,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       </Button>
 
       {/* Info */}
-      <p className="text-xs text-neutral-500 mt-3 text-center">
+      <p className="text-xs text-text-tertiary mt-3 text-center">
         {requiresPayment
           ? t('paymentNote')
           : t('confirmationNote')

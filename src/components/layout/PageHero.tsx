@@ -42,8 +42,8 @@ export function PageHero({
   return (
     <div
       className={cn(
-        'bg-white dark:bg-neutral-950',
-        'border-b border-neutral-100 dark:border-white/[0.06]',
+        'bg-surface-base dark:bg-neutral-950',
+        'border-b border-subtle dark:border-white/[0.06]',
         // Generous vertical rhythm for display heroes; standard for site.
         isDisplay ? 'py-20 sm:py-28 lg:py-36' : 'py-16 sm:py-20 lg:py-24',
         className,
@@ -62,7 +62,7 @@ export function PageHero({
           <Heading
             level={1}
             variant={isDisplay ? 'display' : 'site'}
-            className="text-neutral-900 dark:text-white"
+            className="text-text-primary"
           >
             {title}
           </Heading>
@@ -70,7 +70,7 @@ export function PageHero({
           {subtitle && (
             <p
               className={cn(
-                'mx-auto text-neutral-500 dark:text-neutral-400',
+                'mx-auto text-text-tertiary',
                 isDisplay
                   ? 'mt-6 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-3xl'
                   : 'mt-5 text-lg sm:text-xl leading-8 max-w-2xl',

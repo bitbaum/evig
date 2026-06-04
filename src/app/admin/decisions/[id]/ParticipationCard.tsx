@@ -51,7 +51,7 @@ export default function ParticipationCard({ decisionId, refreshTrigger }: { deci
           <span className={adminType.meta}>
             {data.voted.length} / {data.total} abgestimmt ({data.progressPercent}%)
           </span>
-          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-primary-600 dark:text-primary-400' : 'text-warning-600 dark:text-warning-400')}>
+          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-action' : 'text-warning-600 dark:text-warning-400')}>
             Quorum: {quorumPct}% erforderlich
           </span>
         </div>
@@ -76,7 +76,7 @@ export default function ParticipationCard({ decisionId, refreshTrigger }: { deci
           <p className={cn(adminType.meta, 'mb-1.5')}>Noch nicht abgestimmt:</p>
           <div className="flex flex-wrap gap-1">
             {data.notVoted.map((u) => (
-              <span key={u.id} className="rounded-md bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
+              <span key={u.id} className="rounded-md bg-surface-raised dark:bg-neutral-700 px-2 py-0.5 text-xs text-text-secondary">
                 {u.email}
               </span>
             ))}

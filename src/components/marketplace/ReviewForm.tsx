@@ -63,12 +63,12 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
   }
 
   return (
-    <div className="border-t border-neutral-100 dark:border-neutral-700 pt-4 mt-4 space-y-4">
-      <Heading level={3} className="text-sm font-semibold text-neutral-900 dark:text-white">{t('heading')}</Heading>
+    <div className="border-t border-subtle dark:border-neutral-700 pt-4 mt-4 space-y-4">
+      <Heading level={3} className="text-sm font-semibold text-text-primary">{t('heading')}</Heading>
 
       {/* Star Rating */}
       <div>
-        <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
+        <label className="block text-xs font-medium text-text-tertiary mb-1">
           {t('ratingLabel')} <span className="text-error-500">*</span>
         </label>
         <div className="flex items-center gap-1">
@@ -90,15 +90,15 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
             </button>
           ))}
           {rating > 0 && (
-            <span className="ml-2 text-sm text-neutral-500">{rating}/5</span>
+            <span className="ml-2 text-sm text-text-tertiary">{rating}/5</span>
           )}
         </div>
       </div>
 
       {/* Title (optional) */}
       <div>
-        <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
-          {t('titleLabel')} <span className="text-xs text-neutral-500">{t('titleOptional')}</span>
+        <label className="block text-xs font-medium text-text-tertiary mb-1">
+          {t('titleLabel')} <span className="text-xs text-text-tertiary">{t('titleOptional')}</span>
         </label>
         <Input
           type="text"
@@ -111,7 +111,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
 
       {/* Content */}
       <div>
-        <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
+        <label className="block text-xs font-medium text-text-tertiary mb-1">
           {t('contentLabel')} <span className="text-error-500">*</span>
         </label>
         <Textarea

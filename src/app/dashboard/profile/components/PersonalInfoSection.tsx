@@ -16,22 +16,22 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
   const tAddr = useTranslations('dashboard.profile.address')
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
-          <User className="w-5 h-5 text-neutral-600" />
+        <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-lg flex items-center justify-center">
+          <User className="w-5 h-5 text-text-secondary" />
         </div>
         <div>
-          <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
             {t('title')}
           </Heading>
-          <p className="text-sm text-neutral-500">{t('description')}</p>
+          <p className="text-sm text-text-tertiary">{t('description')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('firstName')}
           </label>
           <Input
@@ -42,7 +42,7 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('lastName')}
           </label>
           <Input
@@ -53,11 +53,11 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
           />
         </div>
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('company')} <span className="text-neutral-400">{tAddr('optional')}</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('company')} <span className="text-text-muted">{tAddr('optional')}</span>
           </label>
           <div className="relative">
-            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
             <Input
               type="text"
               value={profile.company_name}

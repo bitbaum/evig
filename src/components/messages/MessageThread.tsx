@@ -127,18 +127,18 @@ export default function MessageThread({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border dark:border-neutral-700 bg-surface-base dark:bg-neutral-800">
         {onBack && (
           <button
             onClick={onBack}
             className="p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors lg:hidden"
             aria-label={t('back')}
           >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </button>
         )}
         <div className="flex-1 min-w-0">
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white truncate">
+          <Heading level={3} className="font-semibold text-text-primary truncate">
             {recipientName}
           </Heading>
         </div>
@@ -148,10 +148,10 @@ export default function MessageThread({
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-primary-600 animate-spin" aria-hidden="true" />
+            <Loader2 className="w-6 h-6 text-action animate-spin" aria-hidden="true" />
           </div>
         ) : messages.length === 0 ? (
-          <p className="text-center text-neutral-400 dark:text-neutral-500 text-sm py-8">
+          <p className="text-center text-text-muted text-sm py-8">
             {t('empty')}
           </p>
         ) : (
@@ -166,17 +166,17 @@ export default function MessageThread({
                   className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                     isMine
                       ? 'bg-primary-600 text-white rounded-br-md'
-                      : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-white rounded-bl-md'
+                      : 'bg-surface-raised dark:bg-neutral-700 text-text-primary rounded-bl-md'
                   }`}
                 >
                   {!isMine && (
-                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-0.5">
+                    <p className="text-xs font-medium text-text-tertiary mb-0.5">
                       {msg.sender_name}
                     </p>
                   )}
                   <p className="text-sm whitespace-pre-line break-words">{msg.content}</p>
                   <p className={`text-xs mt-1 ${
-                    isMine ? 'text-primary-200' : 'text-neutral-400 dark:text-neutral-500'
+                    isMine ? 'text-primary-200' : 'text-text-muted'
                   }`}>
                     {formatTime(msg.created_at)}
                   </p>
@@ -189,7 +189,7 @@ export default function MessageThread({
       </div>
 
       {/* Reply input */}
-      <div className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-3">
+      <div className="border-t border dark:border-neutral-700 bg-surface-base dark:bg-neutral-800 px-4 py-3">
         <div className="flex items-end gap-2">
           <Textarea
             ref={textareaRef}

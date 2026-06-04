@@ -29,14 +29,14 @@ const ComparisonCardComponent: React.FC<ComparisonCardProps> = ({ item, variant 
         'rounded-lg p-4 sm:p-6 border-2',
         isOpenSource
           ? 'bg-success-50 border-success-200'
-          : 'bg-neutral-50 border-neutral-200'
+          : 'bg-surface-raised border'
       )}
     >
       <div className="flex items-center mb-4">
         <div
           className={cn(
             'p-3 rounded-lg mr-4',
-            isOpenSource ? 'bg-success-100 text-success-600' : 'bg-neutral-100 text-neutral-600'
+            isOpenSource ? 'bg-success-100 text-success-600' : 'bg-surface-raised text-text-secondary'
           )}
         >
           <Icon className="w-8 h-8" />
@@ -67,13 +67,13 @@ const ComparisonCardComponent: React.FC<ComparisonCardProps> = ({ item, variant 
                 <div
                   className={cn(
                     'p-1 rounded-full mr-3 mt-0.5',
-                    isOpenSource ? 'bg-success-100' : 'bg-neutral-100'
+                    isOpenSource ? 'bg-success-100' : 'bg-surface-raised'
                   )}
                 >
                   {isOpenSource ? (
                     <FileCheck className="w-4 h-4 text-success-600" />
                   ) : (
-                    <FileX className="w-4 h-4 text-neutral-500" />
+                    <FileX className="w-4 h-4 text-text-tertiary" />
                   )}
                 </div>
                 <span className={cn('text-sm sm:text-base', getTextColor(isOpenSource ? 'success' : 'neutral', 'muted'))}>
@@ -96,13 +96,13 @@ const ComparisonCardComponent: React.FC<ComparisonCardProps> = ({ item, variant 
             <div
               className={cn(
                 'p-1 rounded-full mr-3 mt-0.5',
-                isOpenSource ? 'bg-success-100' : 'bg-neutral-100'
+                isOpenSource ? 'bg-success-100' : 'bg-surface-raised'
               )}
             >
               {isOpenSource ? (
                 <FileCheck className="w-4 h-4 text-success-600" />
               ) : (
-                <FileX className="w-4 h-4 text-neutral-500" />
+                <FileX className="w-4 h-4 text-text-tertiary" />
               )}
             </div>
             <span className={cn('text-sm sm:text-base', getTextColor(isOpenSource ? 'success' : 'neutral', 'muted'))}>

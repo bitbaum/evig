@@ -174,7 +174,7 @@ export default async function TaskDetailPage({
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.tasks}
-            className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+            className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück
@@ -182,11 +182,11 @@ export default async function TaskDetailPage({
           <div className="w-px h-6 bg-neutral-300" />
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <ClipboardList className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+              <ClipboardList className="w-5 h-5 text-action" />
             </div>
             <div>
-              <Heading level={1} className="text-2xl font-bold text-neutral-900">{task.title}</Heading>
-              <p className="text-neutral-600">
+              <Heading level={1} className="text-2xl font-bold text-text-primary">{task.title}</Heading>
+              <p className="text-text-secondary">
                 {TASK_CATEGORY_LABELS[task.category]} · {TASK_TYPE_LABELS[task.task_type]}
               </p>
             </div>
@@ -196,7 +196,7 @@ export default async function TaskDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/tasks/${id}/edit`}
-            className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm text-text-secondary hover:text-neutral-900 border border hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
           >
             <Edit className="w-4 h-4" />
             Bearbeiten
@@ -208,14 +208,14 @@ export default async function TaskDetailPage({
       <div className="flex items-center gap-3">
         <span
           className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            TASK_STATUS_COLORS[task.current_status] || 'bg-neutral-100 text-neutral-800'
+            TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-neutral-800'
           }`}
         >
           {TASK_STATUS_LABELS[task.current_status]}
         </span>
         <span
           className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            TASK_PRIORITY_COLORS[task.priority] || 'bg-neutral-100 text-neutral-800'
+            TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-neutral-800'
           }`}
         >
           {TASK_PRIORITY_LABELS[task.priority]}
@@ -226,7 +226,7 @@ export default async function TaskDetailPage({
             (Per admin UX audit 2026-06-03; the boolean is kept in schema
             for completion-history aggregates.) */}
         {task.is_archived && (
-          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-neutral-100 text-neutral-800">
+          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-surface-raised text-neutral-800">
             Archiviert
           </span>
         )}
@@ -289,19 +289,19 @@ export default async function TaskDetailPage({
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
           {task.description && (
-            <div className="bg-white rounded-lg border p-6">
-              <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-3">
+            <div className="bg-surface-base rounded-lg border p-6">
+              <Heading level={2} className="text-lg font-semibold text-text-primary mb-3">
                 Beschreibung
               </Heading>
-              <p className="text-neutral-700 whitespace-pre-wrap">{task.description}</p>
+              <p className="text-text-secondary whitespace-pre-wrap">{task.description}</p>
             </div>
           )}
 
           {/* Instructions */}
           {task.instructions && (
-            <div className="bg-white rounded-lg border p-6">
-              <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-3">Anleitung</Heading>
-              <div className="text-neutral-700 whitespace-pre-wrap">{task.instructions}</div>
+            <div className="bg-surface-base rounded-lg border p-6">
+              <Heading level={2} className="text-lg font-semibold text-text-primary mb-3">Anleitung</Heading>
+              <div className="text-text-secondary whitespace-pre-wrap">{task.instructions}</div>
             </div>
           )}
 
@@ -309,12 +309,12 @@ export default async function TaskDetailPage({
           <TaskActionsClient taskId={task.id} taskTitle={task.title} isArchived={task.is_archived} />
 
           {/* Completion History */}
-          <div className="bg-white rounded-lg border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
+          <div className="bg-surface-base rounded-lg border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
               Erledigungen ({completions.length})
             </Heading>
             {completions.length === 0 ? (
-              <p className="text-neutral-500">Noch keine Erledigungen</p>
+              <p className="text-text-tertiary">Noch keine Erledigungen</p>
             ) : (
               <div className="space-y-4">
                 {completions.map((completion) => (
@@ -323,24 +323,24 @@ export default async function TaskDetailPage({
                     className="flex items-start gap-3 pb-4 border-b last:border-0"
                   >
                     <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                      <CheckCircle2 className="w-4 h-4 text-action" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <p className="font-medium text-neutral-900">
+                        <p className="font-medium text-text-primary">
                           {completion.completed_by_name || completion.completed_by_email || 'Unbekannt'}
                         </p>
-                        <p className="text-sm text-neutral-500">
+                        <p className="text-sm text-text-tertiary">
                           {formatDateTimeNumeric(completion.completed_at)}
                         </p>
                       </div>
                       {completion.duration_minutes && (
-                        <p className="text-sm text-neutral-600">
+                        <p className="text-sm text-text-secondary">
                           Dauer: {completion.duration_minutes} Minuten
                         </p>
                       )}
                       {completion.notes && (
-                        <p className="text-sm text-neutral-600 mt-1">
+                        <p className="text-sm text-text-secondary mt-1">
                           {completion.notes}
                         </p>
                       )}
@@ -355,40 +355,40 @@ export default async function TaskDetailPage({
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Task Info */}
-          <div className="bg-white rounded-lg border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Details</Heading>
+          <div className="bg-surface-base rounded-lg border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Details</Heading>
             <dl className="space-y-4">
               <div>
-                <dt className="text-sm text-neutral-500">Erstellt von</dt>
+                <dt className="text-sm text-text-tertiary">Erstellt von</dt>
                 <dd className="flex items-center gap-2 mt-1">
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">
+                  <User className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary">
                     {task.created_by_name || task.created_by_email || 'Unbekannt'}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-neutral-500">Zugewiesen an</dt>
+                <dt className="text-sm text-text-tertiary">Zugewiesen an</dt>
                 <dd className="flex items-center gap-2 mt-1">
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">
+                  <User className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary">
                     {task.assigned_to_name || 'Nicht zugewiesen'}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-neutral-500">Erstellt am</dt>
+                <dt className="text-sm text-text-tertiary">Erstellt am</dt>
                 <dd className="flex items-center gap-2 mt-1">
-                  <Calendar className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">{formatDateTimeNumeric(task.created_at)}</span>
+                  <Calendar className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary">{formatDateTimeNumeric(task.created_at)}</span>
                 </dd>
               </div>
               {task.estimated_minutes && (
                 <div>
-                  <dt className="text-sm text-neutral-500">Geschätzte Dauer</dt>
+                  <dt className="text-sm text-text-tertiary">Geschätzte Dauer</dt>
                   <dd className="flex items-center gap-2 mt-1">
-                    <Clock className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-900">
+                    <Clock className="w-4 h-4 text-text-muted" />
+                    <span className="text-text-primary">
                       {task.estimated_minutes} Minuten
                     </span>
                   </dd>
@@ -398,10 +398,10 @@ export default async function TaskDetailPage({
                 const isOverdue = !task.is_completed && new Date(task.due_date) < new Date(new Date().toDateString())
                 return (
                   <div>
-                    <dt className="text-sm text-neutral-500">Fälligkeitsdatum</dt>
+                    <dt className="text-sm text-text-tertiary">Fälligkeitsdatum</dt>
                     <dd className="flex items-center gap-2 mt-1">
-                      <Calendar className={`w-4 h-4 ${isOverdue ? 'text-error-500' : 'text-neutral-400'}`} />
-                      <span className={isOverdue ? 'text-error-600 font-medium' : 'text-neutral-900'}>
+                      <Calendar className={`w-4 h-4 ${isOverdue ? 'text-error-500' : 'text-text-muted'}`} />
+                      <span className={isOverdue ? 'text-error-600 font-medium' : 'text-text-primary'}>
                         {formatDateShort(task.due_date)}
                         {isOverdue && ' (überfällig)'}
                       </span>
@@ -411,10 +411,10 @@ export default async function TaskDetailPage({
               })()}
               {task.schedule_human && (
                 <div>
-                  <dt className="text-sm text-neutral-500">Zeitplan</dt>
+                  <dt className="text-sm text-text-tertiary">Zeitplan</dt>
                   <dd className="flex items-center gap-2 mt-1">
-                    <Calendar className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-900">{task.schedule_human}</span>
+                    <Calendar className="w-4 h-4 text-text-muted" />
+                    <span className="text-text-primary">{task.schedule_human}</span>
                   </dd>
                 </div>
               )}
@@ -422,20 +422,20 @@ export default async function TaskDetailPage({
           </div>
 
           {/* Quick Stats */}
-          <div className="bg-white rounded-lg border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Statistiken</Heading>
+          <div className="bg-surface-base rounded-lg border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Statistiken</Heading>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-neutral-600">Erledigungen gesamt</span>
-                <span className="font-medium text-neutral-900">{completions.length}</span>
+                <span className="text-text-secondary">Erledigungen gesamt</span>
+                <span className="font-medium text-text-primary">{completions.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-600">Aufmerksamkeits-Flags</span>
-                <span className="font-medium text-neutral-900">{flags.length}</span>
+                <span className="text-text-secondary">Aufmerksamkeits-Flags</span>
+                <span className="font-medium text-text-primary">{flags.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-600">Anfragen</span>
-                <span className="font-medium text-neutral-900">{requests.length}</span>
+                <span className="text-text-secondary">Anfragen</span>
+                <span className="font-medium text-text-primary">{requests.length}</span>
               </div>
             </div>
           </div>

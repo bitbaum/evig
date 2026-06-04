@@ -93,42 +93,42 @@ export default async function AdminUsersPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-primary-600" />
+            <Users className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Gesamt Benutzer</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalUsers}</p>
+              <p className="text-sm font-medium text-text-secondary">Gesamt Benutzer</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.totalUsers}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <UserCheck className="w-8 h-8 text-primary-600" />
+            <UserCheck className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Verifiziert</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.activeUsers}</p>
+              <p className="text-sm font-medium text-text-secondary">Verifiziert</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.activeUsers}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Crown className="w-8 h-8 text-primary-600" />
+            <Crown className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Staff</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.staffCount}</p>
+              <p className="text-sm font-medium text-text-secondary">Staff</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.staffCount}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-neutral-600" />
+            <Users className="w-8 h-8 text-text-secondary" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Benutzer</p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.regularUsers}</p>
+              <p className="text-sm font-medium text-text-secondary">Benutzer</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.regularUsers}</p>
             </div>
           </div>
         </div>
@@ -138,16 +138,16 @@ export default async function AdminUsersPage() {
       <UsersListClient currentUserIsSuperAdmin={currentUserIsSuperAdmin} />
 
       {/* Info Box */}
-      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
+      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Shield className="w-5 h-5 text-neutral-600" />
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
+            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
               Berechtigungssystem
             </Heading>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               Benutzer mit @{ORG.emailDomain} E-Mail-Adressen werden automatisch als Staff erkannt.
               Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen erteilen.
             </p>

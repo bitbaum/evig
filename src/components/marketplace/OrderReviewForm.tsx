@@ -72,7 +72,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
   if (success) {
     return (
       <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-6 text-center">
-        <CheckCircle className="w-10 h-10 text-primary-600 mx-auto mb-2" />
+        <CheckCircle className="w-10 h-10 text-action mx-auto mb-2" />
         <Heading level={3} className="font-semibold text-primary-800 dark:text-primary-200">{t('successHeading')}</Heading>
         <p className="text-sm text-primary-700 dark:text-primary-300 mt-1">
           {t('successDesc')}
@@ -84,7 +84,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <label className="block text-sm font-medium text-text-secondary mb-2">
           {t('yourRatingLabel')}
         </label>
         <div className="flex items-center gap-1">
@@ -111,7 +111,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             )
           })}
           {rating > 0 && (
-            <span className="ml-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <span className="ml-2 text-sm text-text-secondary">
               {t('ratingDisplay', { rating })}
             </span>
           )}
@@ -121,9 +121,9 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
       <div>
         <label
           htmlFor="review-content"
-          className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2"
+          className="block text-sm font-medium text-text-secondary mb-2"
         >
-          {t('yourCommentLabel')} <span className="text-neutral-400 font-normal">{t('titleOptional')}</span>
+          {t('yourCommentLabel')} <span className="text-text-muted font-normal">{t('titleOptional')}</span>
         </label>
         <Textarea
           id="review-content"
@@ -133,11 +133,11 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
           placeholder={t('orderContentPlaceholder')}
           maxLength={5000}
         />
-        <p className="text-xs text-neutral-400 mt-1">{t('contentHint')}</p>
+        <p className="text-xs text-text-muted mt-1">{t('contentHint')}</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <label className="block text-sm font-medium text-text-secondary mb-2">
           {t('recommendLabel')}
         </label>
         <div className="flex gap-2">
@@ -147,7 +147,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               recommend
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200'
+                : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200'
             }`}
           >
             <ThumbsUp className="w-4 h-4" /> {t('recommendYes')}
@@ -158,7 +158,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               !recommend
                 ? 'bg-error-600 text-white'
-                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200'
+                : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200'
             }`}
           >
             <ThumbsDown className="w-4 h-4" /> {t('recommendNo')}

@@ -48,12 +48,12 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   }, [posts, search, statusFilter])
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
       {/* Filters */}
-      <div className="px-6 py-4 border-b border-neutral-200 dark:border-white/[0.06]">
+      <div className="px-6 py-4 border-b border">
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
             <Input
               type="text"
               placeholder="Titel suchen..."
@@ -77,26 +77,26 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       {filtered.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-neutral-50 dark:bg-neutral-700">
+            <thead className="bg-surface-raised dark:bg-neutral-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Titel
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Kategorie
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Datum
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Aktionen
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
+            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
               {filtered.map((post) => (
                 <tr
                   key={post.id}
@@ -104,18 +104,18 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 >
                   <td className="px-6 py-4">
                     <div>
-                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                      <div className="text-sm font-medium text-text-primary">
                         {post.title}
                       </div>
                       {post.excerpt && (
-                        <div className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-1">
+                        <div className="text-sm text-text-tertiary line-clamp-1">
                           {post.excerpt}
                         </div>
                       )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-neutral-900 dark:text-white">
+                    <div className="text-sm text-text-primary">
                       {post.category_name || '-'}
                     </div>
                   </td>
@@ -131,8 +131,8 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-neutral-900 dark:text-white flex items-center gap-1">
-                      <Calendar className="w-4 h-4 text-neutral-400" />
+                    <div className="text-sm text-text-primary flex items-center gap-1">
+                      <Calendar className="w-4 h-4 text-text-muted" />
                       {formatDateNumeric(post.published_at || post.created_at)}
                     </div>
                   </td>
@@ -141,7 +141,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                       {post.is_published && post.published_at && new Date(post.published_at) <= new Date() ? (
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-300"
+                          className="text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300"
                           target="_blank"
                           title="Artikel ansehen"
                         >
@@ -157,7 +157,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                       )}
                       <Link
                         href={`/admin/content/blog/${post.id}`}
-                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                        className="text-action hover:text-primary-900 dark:hover:text-primary-300"
                         title="Artikel bearbeiten"
                       >
                         <Edit className="w-4 h-4" />
@@ -177,13 +177,13 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         </div>
       ) : (
         <div className="text-center py-12">
-          <FileText className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+          <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             {search.trim() || statusFilter
               ? 'Keine Ergebnisse'
               : 'Noch keine Blog-Artikel'}
           </Heading>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+          <p className="text-text-secondary mb-6">
             {search.trim() || statusFilter
               ? 'Versuche andere Suchkriterien.'
               : 'Erstelle deinen ersten Blog-Artikel.'}

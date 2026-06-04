@@ -75,20 +75,20 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto mt-6">
+        <p className="text-lg text-text-secondary max-w-2xl mx-auto mt-6">
           {t('hero.intro')}
         </p>
       </PageHero>
 
       {/* Services & Pricing Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <Heading level={2} className="mb-6">{t('servicesSection.heading')}</Heading>
-            <p className="text-lg text-neutral-600 mb-4">
+            <p className="text-lg text-text-secondary mb-4">
               {t('servicesSection.subtitle')}
             </p>
-            <div className="text-primary-600 font-semibold text-xl mb-8">
+            <div className="text-action font-semibold text-xl mb-8">
               {t('servicesSection.priceInfo')}
             </div>
           </div>
@@ -96,14 +96,14 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {serviceItems.map((service, index) => {
               const Icon = SERVICE_ICONS[index]
               return (
-                <div key={index} className="bg-neutral-50 rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
+                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-start">
-                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-primary-600 dark:text-primary-400 mr-4">
+                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div>
                       <Heading level={3} className="mb-3">{service.title}</Heading>
-                      <p className="text-neutral-600">{service.description}</p>
+                      <p className="text-text-secondary">{service.description}</p>
                     </div>
                   </div>
                 </div>
@@ -115,18 +115,18 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
           <div className="mt-20">
             <div className="max-w-3xl mx-auto text-center mb-16">
               <Heading level={2} className="mb-6">{t('advantages.heading')}</Heading>
-              <p className="text-lg text-neutral-600">
+              <p className="text-lg text-text-secondary">
                 {t('advantages.subtitle')}
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {advantageItems.map((adv, index) => (
-                <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06] border-l-4 border-l-primary-600">
+                <div key={index} className="bg-surface-base rounded-xl p-8 border border-l-4 border-l-primary-600">
                   <Heading level={3} className="mb-4">{adv.title}</Heading>
                   <ul className="space-y-3">
                     {adv.points.map((point, i) => (
                       <li key={i} className="flex items-start">
-                        <CheckCircle2 className="w-5 h-5 text-primary-600 mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-5 h-5 text-action mr-3 mt-0.5 flex-shrink-0" />
                         <span>{point}</span>
                       </li>
                     ))}
@@ -137,9 +137,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
           </div>
 
           {/* Quick Contact CTA */}
-          <div className="mt-12 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-8 text-center">
+          <div className="mt-12 bg-surface-raised/50 rounded-xl p-8 text-center">
             <Heading level={3} className="mb-4">{t('quickCta.heading')}</Heading>
-            <p className="text-neutral-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-text-secondary mb-6 max-w-2xl mx-auto">
               {t('quickCta.body')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -149,7 +149,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
               </Link>
               <Link
                 href={CONTACT.phoneTel}
-                className="inline-flex items-center border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+                className="inline-flex items-center border-2 border-primary-600 text-action px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
               >
                 {t('quickCta.call')}
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -160,11 +160,11 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <Heading level={2} className="mb-6">{t('benefitsSection.heading')}</Heading>
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-text-secondary">
               {t('benefitsSection.subtitle')}
             </p>
           </div>
@@ -172,12 +172,12 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {benefitItems.map((benefit, index) => {
               const Icon = BENEFIT_ICONS[index]
               return (
-                <div key={index} className="bg-white rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
+                <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-center mb-4">
-                    <Icon className="w-6 h-6 text-primary-600 mr-3" />
+                    <Icon className="w-6 h-6 text-action mr-3" />
                     <Heading level={3} className="">{benefit.title}</Heading>
                   </div>
-                  <p className="text-neutral-600">{benefit.description}</p>
+                  <p className="text-text-secondary">{benefit.description}</p>
                 </div>
               )
             })}
@@ -186,11 +186,11 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       </section>
 
       {/* Distributions Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <Heading level={2} className="mb-6">{t('distrosSection.heading')}</Heading>
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-text-secondary">
               {t('distrosSection.subtitle')}
             </p>
           </div>
@@ -198,9 +198,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {distroItems.map((distro, index) => {
               const Icon = DISTRO_ICONS[index]
               return (
-                <div key={index} className="bg-neutral-50 rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
+                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-start mb-6">
-                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-primary-600 dark:text-primary-400 mr-4">
+                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div className="flex-1">
@@ -209,11 +209,11 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                         href={DISTRO_WEBSITES[index]}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary-600 hover:text-primary-700 text-sm mb-4 inline-flex items-center"
+                        className="text-action hover:text-primary-700 text-sm mb-4 inline-flex items-center"
                       >
                         {t('distrosSection.visitWebsite')} <ArrowRight className="w-4 h-4 ml-1" />
                       </a>
-                      <p className="text-neutral-600 mb-4">{distro.description}</p>
+                      <p className="text-text-secondary mb-4">{distro.description}</p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                           <Heading level={4} className="mb-2">{t('distrosSection.bestFor')}</Heading>
@@ -221,9 +221,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                             {distro.useCases.map((useCase, i) => (
                               <li key={i} className="flex items-start">
                                 <div className="p-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3 mt-0.5">
-                                  <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                  <CheckCircle2 className="w-4 h-4 text-action" />
                                 </div>
-                                <span className="text-neutral-600">{useCase}</span>
+                                <span className="text-text-secondary">{useCase}</span>
                               </li>
                             ))}
                           </ul>
@@ -234,9 +234,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                             {distro.pros.map((pro, i) => (
                               <li key={i} className="flex items-start">
                                 <div className="p-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3 mt-0.5">
-                                  <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                  <CheckCircle2 className="w-4 h-4 text-action" />
                                 </div>
-                                <span className="text-neutral-600">{pro}</span>
+                                <span className="text-text-secondary">{pro}</span>
                               </li>
                             ))}
                           </ul>
@@ -251,7 +251,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                                 <div className="p-1 bg-error-100 dark:bg-error-900/30 rounded-full mr-3 mt-0.5">
                                   <XCircle className="w-4 h-4 text-error-600 dark:text-error-400" />
                                 </div>
-                                <span className="text-neutral-600">{con}</span>
+                                <span className="text-text-secondary">{con}</span>
                               </li>
                             ))}
                           </ul>

@@ -173,11 +173,11 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       {notes && (
         <>
           {/* 1. Summary */}
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-5">
-            <h2 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+          <div className="bg-surface-base rounded-lg border border p-5">
+            <h2 className="text-base font-semibold text-text-primary mb-2">
               Zusammenfassung
             </h2>
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p className="text-text-secondary leading-relaxed">
               {notes.summary}
             </p>
           </div>
@@ -192,25 +192,25 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
               criticality (finalization isn't blocked, task assignments just
               fall back to manual). */}
           {isReview && notes.detected_attendees && notes.detected_attendees.length > 0 && (
-            <div className="rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-4">
+            <div className="rounded-lg border border bg-surface-base p-4">
               <div className="flex items-start gap-3">
-                <UserCheck className="w-5 h-5 flex-shrink-0 mt-0.5 text-neutral-500 dark:text-neutral-400" />
+                <UserCheck className="w-5 h-5 flex-shrink-0 mt-0.5 text-text-tertiary" />
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-semibold mb-1 text-neutral-900 dark:text-white">
+                  <h3 className="text-sm font-semibold mb-1 text-text-primary">
                     {allMapped
                       ? 'Alle Personen zugeordnet'
                       : `Erkannte Personen (${unmappedAttendees.length} noch offen)`
                     }
                   </h3>
                   {!allMapped && (
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                    <p className="text-xs text-text-tertiary mb-3">
                       Optional. Zuordnung erlaubt automatische Aufgaben­zuweisung; sonst manuell.
                     </p>
                   )}
                   <div className="space-y-2">
                     {notes.detected_attendees.map((name) => (
                       <div key={name} className="flex items-center gap-3">
-                        <span className="text-sm text-neutral-700 dark:text-neutral-300 min-w-[120px] font-medium">{name}</span>
+                        <span className="text-sm text-text-secondary min-w-[120px] font-medium">{name}</span>
                         <Select
                           value={attendeeMapping[name] || ''}
                           onChange={(e) => {
@@ -332,12 +332,12 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
       {/* Empty state */}
       {!notes && !isDraft && protocol.status !== PROTOCOL_STATUSES.PROCESSING && (
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-12 text-center">
+        <div className="bg-surface-base rounded-lg border border p-12 text-center">
           <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             Keine strukturierten Notizen
           </Heading>
-          <p className="text-neutral-500 dark:text-neutral-400">
+          <p className="text-text-tertiary">
             Füge ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
           </p>
         </div>

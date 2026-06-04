@@ -35,12 +35,12 @@ export function CameraCapture({
     <div className="space-y-6">
       <div className="text-center">
         <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Camera className="w-8 h-8 text-primary-600" />
+          <Camera className="w-8 h-8 text-action" />
         </div>
-        <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+        <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
           {t('title')}
         </Heading>
-        <p className="text-neutral-600">
+        <p className="text-text-secondary">
           {t('subtitle')}
         </p>
       </div>
@@ -81,7 +81,7 @@ interface CameraLiveViewProps {
 function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePhoto, labelCancel }: CameraLiveViewProps) {
   return (
     <div className="space-y-4">
-      <div className="relative rounded-lg overflow-hidden bg-neutral-100">
+      <div className="relative rounded-lg overflow-hidden bg-surface-raised">
         <video
           ref={videoRef}
           autoPlay
@@ -120,18 +120,18 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
         onClick={onStartCamera}
         className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
       >
-        <Camera className="w-12 h-12 text-primary-600 mx-auto mb-3" />
-        <div className="font-medium text-neutral-900">{labelOpenCamera}</div>
-        <div className="text-sm text-neutral-600 mt-1">{labelLivePhoto}</div>
+        <Camera className="w-12 h-12 text-action mx-auto mb-3" />
+        <div className="font-medium text-text-primary">{labelOpenCamera}</div>
+        <div className="text-sm text-text-secondary mt-1">{labelLivePhoto}</div>
       </button>
 
       <button
         onClick={() => fileInputRef.current?.click()}
         className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
       >
-        <Upload className="w-12 h-12 text-primary-600 mx-auto mb-3" />
-        <div className="font-medium text-neutral-900">{labelUploadFile}</div>
-        <div className="text-sm text-neutral-600 mt-1">{labelUseExisting}</div>
+        <Upload className="w-12 h-12 text-action mx-auto mb-3" />
+        <div className="font-medium text-text-primary">{labelUploadFile}</div>
+        <div className="text-sm text-text-secondary mt-1">{labelUseExisting}</div>
         <input
           ref={fileInputRef}
           type="file"

@@ -19,7 +19,7 @@ export function RelatedAlternatives({ current }: RelatedAlternativesProps) {
 
   return (
     <section className="mt-12">
-      <Heading level={2} className="text-xl font-bold text-neutral-900 mb-6">
+      <Heading level={2} className="text-xl font-bold text-text-primary mb-6">
         {t('detail.relatedAlternatives')}
       </Heading>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

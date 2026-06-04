@@ -34,7 +34,7 @@ export function HelperActionModal({
     >
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Notizen</label>
+          <label className="block text-sm font-medium text-text-secondary mb-1">Notizen</label>
           <Textarea
             value={helperNotes}
             onChange={e => setHelperNotes(e.target.value)}

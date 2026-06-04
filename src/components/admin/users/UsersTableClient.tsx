@@ -42,31 +42,31 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
 
   return (
     <>
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-neutral-50 dark:bg-neutral-700">
+            <thead className="bg-surface-raised dark:bg-neutral-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Benutzer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Berechtigungen
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                   Registriert
                 </th>
                 {currentUserIsSuperAdmin && (
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Aktionen
                   </th>
                 )}
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
+            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
               {users.map((user) => (
                 <UserTableRow
                   key={user.id}

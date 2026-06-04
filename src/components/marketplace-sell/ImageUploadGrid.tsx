@@ -17,12 +17,12 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
 
   return (
     <div>
-      <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-        {t('imagesLabel')} <span className="text-xs text-neutral-500 ml-1">({tCommon('optional')}, {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
+      <label className="block text-sm font-medium text-text-secondary mb-2">
+        {t('imagesLabel')} <span className="text-xs text-text-tertiary ml-1">({tCommon('optional')}, {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
       </label>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
-          <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-600">
+          <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border dark:border-neutral-600">
             <img src={url} alt={t('imageAlt', { index: idx + 1 })} className="w-full h-full object-cover" />
             <button
               onClick={() => onRemove(idx)}
@@ -42,7 +42,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="aspect-square rounded-lg border-2 border-dashed border-neutral-300 dark:border-neutral-600 flex flex-col items-center justify-center gap-1 text-neutral-500 hover:text-neutral-600 hover:border-neutral-400 transition-colors"
+            className="aspect-square rounded-lg border-2 border-dashed border-neutral-300 dark:border-neutral-600 flex flex-col items-center justify-center gap-1 text-text-tertiary hover:text-neutral-600 hover:border-neutral-400 transition-colors"
           >
             {isUploading ? (
               <Loader2 className="w-6 h-6 animate-spin" />

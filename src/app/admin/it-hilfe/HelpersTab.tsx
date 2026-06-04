@@ -32,7 +32,7 @@ export function HelpersTab({
       {stats && (
         <div className="grid grid-cols-3 gap-4">
           <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
-          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-white/[0.06] text-neutral-800 dark:text-neutral-200" />
+          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-surface-raised dark:bg-neutral-800/50 border text-neutral-800 dark:text-neutral-200" />
           <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
         </div>
       )}
@@ -52,17 +52,17 @@ export function HelpersTab({
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
+      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 dark:border-white/[0.06] text-left">
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Name</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Fähigkeiten</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Kanton</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Tarif</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Status</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Hilfe</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Aktionen</th>
+            <tr className="border-b border text-left">
+              <th className="px-4 py-3 font-medium text-text-secondary">Name</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Fähigkeiten</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Kanton</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Tarif</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Status</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Hilfe</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
@@ -70,21 +70,21 @@ export function HelpersTab({
               <tr key={h.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
                   <div>
-                    <Link href={`/admin/users/${h.user_id}`} className="font-medium text-primary-600 hover:underline">
+                    <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
                     {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Gratis</span>}
-                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-neutral-100 text-neutral-700">KulturLegi</span>}
+                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-surface-raised text-text-secondary">KulturLegi</span>}
                   </div>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1 max-w-xs">
                     {(h.skills ?? []).slice(0, 5).map(s => <SkillTag key={s} skillId={s} />)}
-                    {(h.skills ?? []).length > 5 && <span className="text-[10px] text-neutral-500">+{(h.skills ?? []).length - 5}</span>}
+                    {(h.skills ?? []).length > 5 && <span className="text-[10px] text-text-tertiary">+{(h.skills ?? []).length - 5}</span>}
                   </div>
                 </td>
-                <td className="px-4 py-3 text-neutral-500">{h.location_canton ?? '–'}</td>
-                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                <td className="px-4 py-3 text-text-tertiary">{h.location_canton ?? '–'}</td>
+                <td className="px-4 py-3 text-text-secondary">
                   {h.hourly_rate_cents ? `CHF ${(h.hourly_rate_cents / 100).toFixed(0)}/h` : '–'}
                 </td>
                 <td className="px-4 py-3">
@@ -96,11 +96,11 @@ export function HelpersTab({
                     ) : h.is_active ? (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Aktiv</span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">Inaktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">Inaktiv</span>
                     )}
                   </div>
                 </td>
-                <td className="px-4 py-3 text-center text-neutral-600">{h.total_helps_completed}</td>
+                <td className="px-4 py-3 text-center text-text-secondary">{h.total_helps_completed}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {!h.is_verified && !h.suspended_at && (
@@ -137,13 +137,13 @@ export function HelpersTab({
           </tbody>
         </table>
         {helpers && helpers.items.length === 0 && (
-          <div className="p-8 text-center text-neutral-500">Keine Helfer gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">Keine Helfer gefunden</div>
         )}
       </div>
 
       {helpers && helpers.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-500">{helpers.pagination.total} Helfer</span>
+          <span className="text-sm text-text-tertiary">{helpers.pagination.total} Helfer</span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={helpOffset === 0} onClick={() => setHelpOffset(o => Math.max(0, o - 50))}>Zurück</Button>
             <Button variant="outline" size="sm" disabled={!helpers.pagination.hasMore} onClick={() => setHelpOffset(o => o + 50)}>Weiter</Button>

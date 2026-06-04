@@ -133,7 +133,7 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
           )}
 
           {analysis && (
-            <div className="bg-white dark:bg-neutral-800/50 border border-info-200 dark:border-info-500/20 rounded-lg px-4 py-3 text-sm text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap leading-relaxed">
+            <div className="bg-surface-base dark:bg-neutral-800/50 border border-info-200 dark:border-info-500/20 rounded-lg px-4 py-3 text-sm text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap leading-relaxed">
               <div className="flex items-center gap-1.5 text-xs text-info-600 dark:text-info-400 font-medium mb-2">
                 <Sparkles className="w-3 h-3" />
                 KI-Antwort

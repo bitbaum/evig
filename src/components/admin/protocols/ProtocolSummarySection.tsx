@@ -26,23 +26,23 @@ export function ProtocolSummarySection({
   onSaveMapping,
 }: Props) {
   return (
-    <div id="protocol-step-review" className="bg-white rounded-lg border p-6">
-      <Heading level={2} className="text-lg text-neutral-900 mb-3">
-        <MessageSquare className="w-5 h-5 inline mr-2 text-neutral-400" />
+    <div id="protocol-step-review" className="bg-surface-base rounded-lg border p-6">
+      <Heading level={2} className="text-lg text-text-primary mb-3">
+        <MessageSquare className="w-5 h-5 inline mr-2 text-text-muted" />
         Zusammenfassung
       </Heading>
-      <p className="text-neutral-700">{notes.summary}</p>
+      <p className="text-text-secondary">{notes.summary}</p>
 
       {notes.detected_attendees && notes.detected_attendees.length > 0 && (
         <div className="mt-3 pt-3 border-t">
-          <p className="text-sm font-medium text-neutral-600 mb-2">
+          <p className="text-sm font-medium text-text-secondary mb-2">
             Erkannte Teilnehmer:
           </p>
           {isReview ? (
             <div className="space-y-2">
               {notes.detected_attendees.map((name) => (
                 <div key={name} className="flex items-center gap-3">
-                  <span className="text-sm text-neutral-700 min-w-[120px]">{name}</span>
+                  <span className="text-sm text-text-secondary min-w-[120px]">{name}</span>
                   <Select
                     value={attendeeMapping[name] || ''}
                     onChange={(e) => onMappingChange(name, e.target.value)}
@@ -75,7 +75,7 @@ export function ProtocolSummarySection({
               )}
             </div>
           ) : (
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-text-tertiary">
               {notes.detected_attendees.join(', ')}
             </p>
           )}

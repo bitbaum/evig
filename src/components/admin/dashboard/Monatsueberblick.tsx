@@ -39,7 +39,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
       {/* Toggle header — same structure as card headers, but interactive */}
       <button
         onClick={toggle}
@@ -49,12 +49,12 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       >
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
-          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
+          <Heading level={2} className="font-semibold text-text-primary">
             Monatsüberblick
           </Heading>
         </div>
         <ChevronDown
-          className={`w-5 h-5 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-text-muted transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -63,7 +63,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       {hydrated && open && (
         <div
           id="monatsueberblick-content"
-          className="border-t border-neutral-100 dark:border-white/[0.06] p-4 space-y-4"
+          className="border-t border-subtle dark:border-white/[0.06] p-4 space-y-4"
         >
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />

@@ -19,11 +19,11 @@ interface InfoSectionProps {
 export function InfoSection({ title, items, description, className = '' }: InfoSectionProps) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <Heading level={2} className={`${responsiveTypography.section} font-bold text-neutral-900`}>
+      <Heading level={2} className={`${responsiveTypography.section} font-bold text-text-primary`}>
         {title}
       </Heading>
       {description && (
-        <p className={`${responsiveTypography.lead} text-neutral-600 leading-relaxed ${responsiveSpacing.mbMedium}`}>
+        <p className={`${responsiveTypography.lead} text-text-secondary leading-relaxed ${responsiveSpacing.mbMedium}`}>
           {description}
         </p>
       )}
@@ -31,8 +31,8 @@ export function InfoSection({ title, items, description, className = '' }: InfoS
         <ul className={`space-y-${description ? '4' : '4'}`}>
           {items.map((item, index) => (
             <li key={index} className="flex items-start">
-              <span className="text-primary-600 mr-3">•</span>
-              <span className={`${responsiveTypography.body} text-neutral-600`}>{item.text}</span>
+              <span className="text-action mr-3">•</span>
+              <span className={`${responsiveTypography.body} text-text-secondary`}>{item.text}</span>
             </li>
           ))}
         </ul>
@@ -57,15 +57,15 @@ interface NumberedStepsProps {
 export function NumberedSteps({ title, steps, className = '' }: NumberedStepsProps) {
   return (
     <section className={`space-y-6 ${className}`}>
-      <Heading level={2} className={`${responsiveTypography.section} font-bold text-neutral-900`}>
+      <Heading level={2} className={`${responsiveTypography.section} font-bold text-text-primary`}>
         {title}
       </Heading>
       <div className={`card-shell ${responsiveSpacing.cardPadding}`}>
         <ol className="space-y-4">
           {steps.map((step, index) => (
             <li key={index} className="flex items-start">
-              <span className="text-primary-600 font-semibold mr-3">{index + 1}.</span>
-              <span className={`${responsiveTypography.body} text-neutral-600`}>{step.text}</span>
+              <span className="text-action font-semibold mr-3">{index + 1}.</span>
+              <span className={`${responsiveTypography.body} text-text-secondary`}>{step.text}</span>
             </li>
           ))}
         </ol>
@@ -90,10 +90,10 @@ interface CalloutProps {
 export function Callout({ title, content, className = '' }: CalloutProps) {
   return (
     <section className={`bg-primary-50 dark:bg-primary-900/20 rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}>
-      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold text-neutral-900`}>
+      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold text-text-primary`}>
         {title}
       </Heading>
-      <p className={`${responsiveTypography.body} text-neutral-600 leading-relaxed`}>
+      <p className={`${responsiveTypography.body} text-text-secondary leading-relaxed`}>
         {content}
       </p>
     </section>

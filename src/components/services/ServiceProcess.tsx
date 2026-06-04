@@ -15,7 +15,7 @@ interface ServiceProcessProps {
 
 export default function ServiceProcessSection({ process }: ServiceProcessProps) {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
       <div className="container mx-auto px-4 sm:px-6">
         <h2 className={cn('text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center', getTextColor('neutral', 'primary'))}>Unser Prozess</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">

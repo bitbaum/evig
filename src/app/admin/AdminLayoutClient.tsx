@@ -49,7 +49,7 @@ export function AdminLayoutClient({
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950">
       {/* Sidebar */}
       <AdminSidebar
         sidebarCollapsed={sidebarCollapsed}
@@ -75,7 +75,7 @@ export function AdminLayoutClient({
         }`}
       >
         {/* Top Bar */}
-        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-white/90 backdrop-blur-sm dark:border-white/[0.06] dark:bg-neutral-950/80">
+        <div className="sticky top-0 z-40 border-b border bg-white/90 backdrop-blur-sm dark:bg-neutral-950/80">
           <div className="flex h-14 items-center justify-between px-4 lg:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <button
@@ -90,7 +90,7 @@ export function AdminLayoutClient({
                 className="hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:flex"
                 title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
               >
-                <Menu className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+                <Menu className="h-4 w-4 text-text-tertiary" />
               </button>
 
               {/* Breadcrumbs in top bar — saves a full content line */}

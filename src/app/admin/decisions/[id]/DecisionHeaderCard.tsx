@@ -78,13 +78,13 @@ export default function DecisionHeaderCard({
           <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConf.color}`}>
             {statusConf.label}
           </span>
-          <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
+          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary">
             {typeConf.label}
           </span>
-          <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
+          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary">
             {methodConf.label}
           </span>
-          <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
+          <span className="rounded-full bg-surface-raised dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-text-secondary">
             {DECISION_CATEGORY_LABELS[decision.category] || decision.category}
           </span>
           <span className={adminType.meta}>
@@ -105,7 +105,7 @@ export default function DecisionHeaderCard({
               'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
               linkCopied
                 ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
-                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
+                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600'
             )}
           >
             {linkCopied ? (
@@ -122,7 +122,7 @@ export default function DecisionHeaderCard({
                 'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
                 invitationsResult
                   ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600 disabled:opacity-50'
+                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 disabled:opacity-50'
               )}
             >
               <Mail className="h-3.5 w-3.5" />
@@ -287,9 +287,9 @@ export default function DecisionHeaderCard({
           {decision.options.some((o) => o.imageUrl) ? (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {decision.options.map((opt) => (
-                <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-700/50 overflow-hidden">
+                <div key={opt.id} className="rounded-lg border border bg-surface-raised dark:bg-neutral-700/50 overflow-hidden">
                   {opt.imageUrl ? (
-                    <div className="relative aspect-square w-full bg-white dark:bg-neutral-900">
+                    <div className="relative aspect-square w-full bg-surface-base">
                       <Image
                         src={opt.imageUrl}
                         alt={opt.label}
@@ -299,7 +299,7 @@ export default function DecisionHeaderCard({
                       />
                     </div>
                   ) : (
-                    <div className="flex aspect-square w-full items-center justify-center bg-neutral-100 dark:bg-neutral-700 text-3xl font-bold text-neutral-400">
+                    <div className="flex aspect-square w-full items-center justify-center bg-surface-raised dark:bg-neutral-700 text-3xl font-bold text-text-muted">
                       {opt.label.charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -317,7 +317,7 @@ export default function DecisionHeaderCard({
               {decision.options.map((opt) => (
                 <div
                   key={opt.id}
-                  className="rounded-md border border-neutral-200 dark:border-white/[0.06] px-3 py-2"
+                  className="rounded-md border border px-3 py-2"
                 >
                   <span className={cn('font-medium', adminType.body)}>{opt.label}</span>
                   {opt.description && (

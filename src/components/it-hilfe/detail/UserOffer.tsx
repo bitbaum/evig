@@ -15,16 +15,16 @@ export function UserOffer({ offer, withdrawing, onWithdraw }: UserOfferProps) {
   const t = useTranslations('itHelp.offer')
 
   return (
-    <div className="rounded-xl border border-primary-200 bg-white dark:bg-neutral-900 p-6">
+    <div className="rounded-xl border border-primary-200 bg-surface-base p-6">
       <div className="flex items-center justify-between mb-3">
-        <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('heading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-text-primary">{t('heading')}</Heading>
         <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400">
           {t('yourOfferBadge')}
         </span>
       </div>
-      <p className="text-neutral-700 mb-3">{offer.message}</p>
+      <p className="text-text-secondary mb-3">{offer.message}</p>
       {(offer.estimatedTime || offer.proposedCompensation) && (
-        <div className="flex flex-wrap gap-4 text-sm text-neutral-600 mb-4">
+        <div className="flex flex-wrap gap-4 text-sm text-text-secondary mb-4">
           {offer.estimatedTime && (
             <span className="flex items-center gap-1">
               <Clock className="w-4 h-4" aria-hidden="true" />

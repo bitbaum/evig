@@ -24,10 +24,10 @@ export function LocationSection({
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">{t('locationHeading')}</Heading>
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">{t('locationHeading')}</Heading>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('postalCode')}
           </label>
           <input
@@ -35,11 +35,11 @@ export function LocationSection({
             value={postalCode}
             onChange={(e) => onPostalCodeChange(e.target.value.replace(/\D/g, '').slice(0, 4))}
             placeholder="8001"
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('city')}
           </label>
           <input
@@ -47,11 +47,11 @@ export function LocationSection({
             value={city}
             onChange={(e) => onCityChange(e.target.value)}
             placeholder={t('city')}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('canton')}
           </label>
           <input
@@ -59,7 +59,7 @@ export function LocationSection({
             value={canton}
             onChange={(e) => onCantonChange(e.target.value)}
             placeholder={t('canton')}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
           />
         </div>
       </div>

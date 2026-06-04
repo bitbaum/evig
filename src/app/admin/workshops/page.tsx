@@ -38,13 +38,13 @@ import { useAdminWorkshops } from '@/hooks/useAdminWorkshops'
 // ─── Status config ─────────────────────────────────────────────────────────
 
 const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
-  [PROPOSAL_STATUS.APPROVED]: { icon: <CheckCircle className="w-5 h-5 text-primary-600" /> },
+  [PROPOSAL_STATUS.APPROVED]: { icon: <CheckCircle className="w-5 h-5 text-action" /> },
   [PROPOSAL_STATUS.PENDING]: { icon: <Clock className="w-5 h-5 text-warning-600" /> },
   [PROPOSAL_STATUS.REJECTED]: { icon: <XCircle className="w-5 h-5 text-error-600" /> },
   [PROPOSAL_STATUS.REQUIRES_CHANGES]: { icon: <AlertCircle className="w-5 h-5 text-secondary-600" /> },
 }
 
-const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-neutral-400" />
+const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-text-muted" />
 
 const STRINGS = {
   APPROVE_CONFIRM: 'Möchtest du diesen Workshop-Vorschlag wirklich genehmigen?',
@@ -141,9 +141,9 @@ export default function AdminWorkshopsPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border">
-        <div className="px-6 py-4 border-b border-neutral-200">
-          <Heading level={2} className="text-lg font-semibold text-neutral-900">
+      <div className="bg-surface-base rounded-xl shadow-sm border">
+        <div className="px-6 py-4 border-b border">
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
             Workshop-Vorschläge ({proposals.length})
           </Heading>
         </div>
@@ -158,20 +158,20 @@ export default function AdminWorkshopsPage() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <GraduationCap className="w-5 h-5 text-primary-600" />
-                      <Heading level={3} className="text-lg font-semibold text-neutral-900 truncate">
+                      <GraduationCap className="w-5 h-5 text-action" />
+                      <Heading level={3} className="text-lg font-semibold text-text-primary truncate">
                         {proposal.title}
                       </Heading>
                       {statusIcon}
-                      <span className="text-sm text-neutral-600">{statusLabel}</span>
+                      <span className="text-sm text-text-secondary">{statusLabel}</span>
                       {proposal.last_edited_at && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 rounded">
                           Von Admin bearbeitet
                         </span>
                       )}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary mb-3">
                       <div className="flex items-center gap-1">
                         <BookOpen className="w-4 h-4" /> {proposal.category}
                       </div>
@@ -190,7 +190,7 @@ export default function AdminWorkshopsPage() {
                       </div>
                     </div>
 
-                    <div className="text-sm text-neutral-500">
+                    <div className="text-sm text-text-tertiary">
                       Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) •{' '}
                       {formatDateShort(proposal.created_at)}
                     </div>
@@ -199,7 +199,7 @@ export default function AdminWorkshopsPage() {
                   <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
                     <Link
                       href={ROUTES.admin.workshopProposal(proposal.id)}
-                      className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                      className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"
                     >
                       <Eye className="w-4 h-4 mr-1" /> Details
                     </Link>
@@ -256,7 +256,7 @@ export default function AdminWorkshopsPage() {
                       </Button>
                       <button
                         onClick={cancelReject}
-                        className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                        className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"
                       >
                         Abbrechen
                       </button>
@@ -269,11 +269,11 @@ export default function AdminWorkshopsPage() {
 
           {proposals.length === 0 && (
             <div className="px-6 py-12 text-center">
-              <GraduationCap className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-              <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+              <GraduationCap className="w-12 h-12 text-text-muted mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
                 Keine Workshop-Vorschläge gefunden
               </Heading>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-text-secondary mb-4">
                 {searchTerm.trim()
                   ? STRINGS.EMPTY_SEARCH(searchTerm)
                   : filters.status === PROPOSAL_STATUS.PENDING

@@ -100,7 +100,7 @@ export function HelpRequestsPageClient({
             disabled={loading}
             variant="ghost"
             size="icon"
-            className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-200"
+            className="text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200"
             title="Aktualisieren"
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -110,8 +110,8 @@ export function HelpRequestsPageClient({
             onClick={() => setShowFilters(!showFilters)}
             className={`p-2 rounded-lg ${
               hasActiveFilters
-                ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/30'
-                : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
+                ? 'text-action bg-primary-50 dark:bg-primary-900/30'
+                : 'text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
             }`}
             title="Filter"
           >
@@ -119,7 +119,7 @@ export function HelpRequestsPageClient({
           </button>
 
           {!loading && (
-            <span className="text-sm text-neutral-500 dark:text-neutral-400">
+            <span className="text-sm text-text-tertiary">
               {total} Anfrage{total !== 1 ? 'n' : ''}
             </span>
           )}
@@ -133,7 +133,7 @@ export function HelpRequestsPageClient({
 
       {/* Filter Panel */}
       {showFilters && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
+        <div className="bg-surface-base rounded-xl border border p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Status Filter */}
             <FormField label="Status" className="flex-1">
@@ -207,7 +207,7 @@ export function HelpRequestsPageClient({
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4 animate-pulse"
+              className="bg-surface-base rounded-xl border border p-4 animate-pulse"
             >
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
@@ -224,8 +224,8 @@ export function HelpRequestsPageClient({
 
       {/* Empty State */}
       {!loading && !error && requests.length === 0 && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-8 text-center">
-          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
+        <div className="bg-surface-base rounded-xl border border p-8 text-center">
+          <p className="text-text-tertiary mb-4">
             {hasActiveFilters
               ? 'Keine Hilfsanfragen mit diesen Filtern gefunden.'
               : 'Noch keine Hilfsanfragen vorhanden.'}
@@ -249,7 +249,7 @@ export function HelpRequestsPageClient({
           {/* Open Requests */}
           {openRequests.length > 0 && (
             <div>
-              <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-text-primary dark:text-neutral-100 mb-3">
                 Offene Anfragen ({openRequests.length})
               </Heading>
               <div className="space-y-4">
@@ -270,7 +270,7 @@ export function HelpRequestsPageClient({
           {/* In Progress Requests */}
           {inProgressRequests.length > 0 && (
             <div>
-              <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-text-primary dark:text-neutral-100 mb-3">
                 In Bearbeitung ({inProgressRequests.length})
               </Heading>
               <div className="space-y-4">
@@ -290,7 +290,7 @@ export function HelpRequestsPageClient({
           {/* Resolved Requests */}
           {resolvedRequests.length > 0 && (
             <div>
-              <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-text-primary dark:text-neutral-100 mb-3">
                 Abgeschlossen ({resolvedRequests.length})
               </Heading>
               <div className="space-y-4">

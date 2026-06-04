@@ -48,57 +48,57 @@ function getDonorDisplay(donation: Donation): string {
 
 export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow overflow-x-auto">
+    <div className="bg-surface-base rounded-lg shadow overflow-x-auto">
       <table className="min-w-full divide-y divide-neutral-200">
-        <thead className="bg-neutral-50">
+        <thead className="bg-surface-raised">
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Typ</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Beschreibung</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Spender</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Wert</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Datum</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Status</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Aktionen</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Typ</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Beschreibung</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Spender</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Wert</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Datum</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Status</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Aktionen</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-neutral-200">
+        <tbody className="bg-surface-base divide-y divide-neutral-200">
           {donations.map((donation) => (
             <tr key={donation.id} className="hover:bg-neutral-50">
               <td className="px-4 py-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   donation.donation_type === DONATION_TYPES.MONETARY
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600'
-                    : 'bg-primary-100 dark:bg-primary-900/30 text-primary-600'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-action'
+                    : 'bg-primary-100 dark:bg-primary-900/30 text-action'
                 }`}>
                   {getDonationIcon(donation.donation_type)}
                 </div>
               </td>
               <td className="px-4 py-3">
-                <div className="text-sm font-medium text-neutral-900">
+                <div className="text-sm font-medium text-text-primary">
                   {donation.donation_type === DONATION_TYPES.MONETARY
                     ? 'Geldspende'
                     : getDeviceTitle(donation)
                   }
                 </div>
                 {donation.donation_type === DONATION_TYPES.DEVICE && donation.device_category && (
-                  <div className="text-xs text-neutral-500">
+                  <div className="text-xs text-text-tertiary">
                     {getDeviceCategoryLabel(donation.device_category)}
                   </div>
                 )}
               </td>
               <td className="px-4 py-3">
-                <div className="text-sm text-neutral-900">{getDonorDisplay(donation)}</div>
+                <div className="text-sm text-text-primary">{getDonorDisplay(donation)}</div>
                 {donation.donor_email && (
-                  <div className="text-xs text-neutral-500">{donation.donor_email}</div>
+                  <div className="text-xs text-text-tertiary">{donation.donor_email}</div>
                 )}
               </td>
               <td className="px-4 py-3">
-                <div className="text-sm font-medium text-neutral-900">
+                <div className="text-sm font-medium text-text-primary">
                   {getDonationValue(donation)}
                 </div>
               </td>
               <td className="px-4 py-3">
-                <div className="text-sm text-neutral-900">{formatDateNumeric(donation.created_at)}</div>
+                <div className="text-sm text-text-primary">{formatDateNumeric(donation.created_at)}</div>
               </td>
               <td className="px-4 py-3">
                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
@@ -106,7 +106,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                     ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
                     : donation.status === DONATION_STATUSES.THANKED
                     ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                    : 'bg-neutral-100 text-neutral-800'
+                    : 'bg-surface-raised text-neutral-800'
                 }`}>
                   {donation.status === DONATION_STATUSES.RECEIPT_SENT && <Receipt className="w-3 h-3" />}
                   {donation.status === DONATION_STATUSES.THANKED && <CheckCircle className="w-3 h-3" />}
@@ -149,7 +149,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
           ))}
           {donations.length === 0 && (
             <tr>
-              <td colSpan={7} className="px-4 py-8 text-center text-neutral-500">
+              <td colSpan={7} className="px-4 py-8 text-center text-text-tertiary">
                 Keine Spenden gefunden
               </td>
             </tr>

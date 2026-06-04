@@ -60,7 +60,7 @@ export function TeamListClient() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-5 animate-pulse"
+              className="bg-surface-base rounded-xl border border p-5 animate-pulse"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
@@ -70,7 +70,7 @@ export function TeamListClient() {
                   <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-full" />
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.06]">
+              <div className="mt-4 pt-4 border-t border-subtle dark:border-white/[0.06]">
                 <div className="flex gap-2">
                   <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded flex-1" />
                   <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded flex-1" />
@@ -83,12 +83,12 @@ export function TeamListClient() {
 
       {/* Empty State */}
       {!loading && !error && profiles.length === 0 && (
-        <div className="p-12 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] text-center">
-          <Users className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+        <div className="p-12 bg-surface-base rounded-xl border border text-center">
+          <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             Keine Team-Profile gefunden
           </Heading>
-          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
+          <p className="text-text-tertiary mb-4">
             {filters.search || filters.department || filters.employmentType
               ? 'Keine Profile entsprechen Ihren Filterkriterien.'
               : 'Erstelle ein Profil, um loszulegen.'}
@@ -103,7 +103,7 @@ export function TeamListClient() {
                   isActive: 'all',
                 })
               }
-              className="text-primary-600 hover:text-primary-700 text-sm"
+              className="text-action hover:text-primary-700 text-sm"
             >
               Filter zurücksetzen
             </button>
@@ -115,12 +115,12 @@ export function TeamListClient() {
       {!loading && !error && profiles.length > 0 && (
         <>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="text-sm text-text-tertiary">
               {profiles.length} {profiles.length === 1 ? 'Profil' : 'Profile'} gefunden
             </p>
             <button
               onClick={refetch}
-              className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+              className="flex items-center gap-1 text-sm text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren

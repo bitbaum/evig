@@ -123,13 +123,13 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href={ROUTES.admin.services} className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors">
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
+            <Heading level={1} className="text-2xl text-text-primary">
               {isEdit ? 'Dienstleistung bearbeiten' : 'Neue Dienstleistung'}
             </Heading>
-            {initialData?.slug && <p className="text-sm text-neutral-500 dark:text-neutral-400">/{initialData.slug}</p>}
+            {initialData?.slug && <p className="text-sm text-text-tertiary">/{initialData.slug}</p>}
           </div>
         </div>
         <Button type="submit" disabled={saving} className="gap-2 px-6">
@@ -254,9 +254,9 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
                 type="checkbox"
                 checked={!!formData[field]}
                 onChange={(e) => updateField(field, e.target.checked)}
-                className="w-4 h-4 text-primary-600 rounded"
+                className="w-4 h-4 text-action rounded"
               />
-              <span className="text-sm text-neutral-700 dark:text-neutral-300">{label}</span>
+              <span className="text-sm text-text-secondary">{label}</span>
             </label>
           ))}
         </div>

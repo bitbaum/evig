@@ -118,50 +118,50 @@ export default async function HelpRequestsPage() {
     >
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+        <div className="p-4 bg-surface-base rounded-xl border border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
               <HelpCircle className="w-5 h-5 text-warning-600 dark:text-warning-200" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.open}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Offen</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.open}</p>
+              <p className="text-sm text-text-secondary">Offen</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+        <div className="p-4 bg-surface-base rounded-xl border border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-neutral-600" />
+            <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
+              <Users className="w-5 h-5 text-text-secondary" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.in_progress}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">In Bearbeitung</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.in_progress}</p>
+              <p className="text-sm text-text-secondary">In Bearbeitung</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+        <div className="p-4 bg-surface-base rounded-xl border border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-300" />
+              <CheckCircle className="w-5 h-5 text-action dark:text-primary-300" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.resolved_this_week}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Diese Woche gelöst</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.resolved_this_week}</p>
+              <p className="text-sm text-text-secondary">Diese Woche gelöst</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+        <div className="p-4 bg-surface-base rounded-xl border border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-error-100 dark:bg-error-900/30 rounded-lg flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-error-600 dark:text-error-400" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.urgent_open}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Dringend</p>
+              <p className="text-2xl font-bold text-text-primary">{stats.urgent_open}</p>
+              <p className="text-sm text-text-secondary">Dringend</p>
             </div>
           </div>
         </div>

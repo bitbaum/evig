@@ -309,14 +309,14 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
 
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
+      <div className="rounded-lg border border bg-surface-base p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-2">
             <div>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-text-primary">
                 {`${monthLabel} ist vorbereitet`}
               </h2>
-              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{helperText}</p>
+              <p className="mt-1 text-sm text-text-tertiary">{helperText}</p>
             </div>
           </div>
 
@@ -333,7 +333,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             <button
               type="button"
               onClick={rebuildCurrentDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 <RotateCcw className="h-4 w-4" />
                 Vorlage zurücksetzen
@@ -342,7 +342,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               type="button"
               onClick={saveDraft}
               disabled={isSaving || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
             >
               <Check className="h-4 w-4" />
               {isSaving ? 'Speichere…' : 'Entwurf speichern'}
@@ -361,28 +361,28 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       </div>
 
       <div className="grid gap-3 md:grid-cols-3">
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
-          <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+        <div className="rounded-lg border border bg-surface-base p-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">
             Diesen Monat
           </p>
-          <p className="mt-2 text-2xl font-semibold text-neutral-900 dark:text-white">
+          <p className="mt-2 text-2xl font-semibold text-text-primary">
             {formatTimecardDuration(totalMinutes)}
           </p>
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-text-tertiary">
             {periodEntries.length} vorbereitete Tage aus Schedule und Ausnahmen.
           </p>
         </div>
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
-          <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Status</p>
-          <p className="mt-2 flex items-center gap-2 text-2xl font-semibold text-neutral-900 dark:text-white">
-            {draft.status === TIMECARD_STATUSES.SUBMITTED ? <UserCheck className="h-5 w-5 text-success-600" /> : <Clock className="h-5 w-5 text-neutral-500" />}
+        <div className="rounded-lg border border bg-surface-base p-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Status</p>
+          <p className="mt-2 flex items-center gap-2 text-2xl font-semibold text-text-primary">
+            {draft.status === TIMECARD_STATUSES.SUBMITTED ? <UserCheck className="h-5 w-5 text-success-600" /> : <Clock className="h-5 w-5 text-text-tertiary" />}
             {draft.status === TIMECARD_STATUSES.SUBMITTED ? 'Bereit' : 'Entwurf'}
           </p>
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Einreichen heisst: von dir geprüft und bereit für Freigabe.</p>
+          <p className="mt-1 text-sm text-text-tertiary">Einreichen heisst: von dir geprüft und bereit für Freigabe.</p>
         </div>
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
-          <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Schedule</p>
-          <p className="mt-2 text-lg font-semibold text-neutral-900 dark:text-white">{scheduleSummary}</p>
+        <div className="rounded-lg border border bg-surface-base p-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Schedule</p>
+          <p className="mt-2 text-lg font-semibold text-text-primary">{scheduleSummary}</p>
           {!hasSchedule && (
             <p className="mt-1 text-sm text-warning-600 dark:text-warning-400">Ohne Standardschedule kannst du nur manuell arbeiten.</p>
           )}
@@ -397,7 +397,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           </p>
           <Link
             href={ROUTES.admin.team}
-            className="mt-3 inline-flex items-center rounded-lg bg-white px-3 py-2 text-sm font-medium text-warning-900 transition-colors hover:bg-warning-100 dark:bg-warning-950/40 dark:text-warning-100 dark:hover:bg-warning-900/40"
+            className="mt-3 inline-flex items-center rounded-lg bg-surface-base px-3 py-2 text-sm font-medium text-warning-900 transition-colors hover:bg-warning-100 dark:bg-warning-950/40 dark:text-warning-100 dark:hover:bg-warning-900/40"
           >
             Team-Profil öffnen
           </Link>
@@ -414,17 +414,17 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       />
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
+        <div className="rounded-lg border border bg-surface-base p-4">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-text-primary">
                 {monthLabel}
               </h2>
-              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="mt-1 text-sm text-text-tertiary">
                 Normale Tage bleiben unverändert. Wähle nur einen Tag aus, wenn etwas anders war.
               </p>
             </div>
-            <div className="text-sm text-neutral-500 dark:text-neutral-400">
+            <div className="text-sm text-text-tertiary">
               Monatsübersicht
             </div>
           </div>
@@ -442,18 +442,18 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
                   className={`min-h-28 rounded-lg border p-3 text-left transition-colors ${
                     active
                       ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 dark:border-primary-400 dark:bg-primary-900/20'
-                      : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:bg-white dark:border-white/[0.06] dark:bg-neutral-900/40 dark:hover:bg-neutral-800'
+                      : 'border bg-surface-raised hover:border-neutral-300 hover:bg-white dark:bg-neutral-900/40 dark:hover:bg-neutral-800'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold text-neutral-900 dark:text-white">{weekdayLabel}</p>
+                    <p className="text-sm font-semibold text-text-primary">{weekdayLabel}</p>
                     {entry && <Check className="h-4 w-4 text-success-600" />}
                   </div>
-                  <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{date.slice(5)}</p>
-                  <p className="mt-4 text-lg font-semibold text-neutral-900 dark:text-white">
+                  <p className="mt-1 text-xs text-text-tertiary">{date.slice(5)}</p>
+                  <p className="mt-4 text-lg font-semibold text-text-primary">
                     {formatTimecardDuration(entry?.duration_minutes ?? 0)}
                   </p>
-                  <p className="mt-1 truncate text-xs text-neutral-500 dark:text-neutral-400">
+                  <p className="mt-1 truncate text-xs text-text-tertiary">
                     {entry ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory] : 'Vorgefüllt aus Schedule'}
                   </p>
                 </button>
@@ -462,30 +462,30 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           </div>
         </div>
 
-        <aside className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Ausnahme</h2>
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{getDisplayDate(draft.selectedDate)}</p>
+        <aside className="rounded-lg border border bg-surface-base p-4">
+          <h2 className="text-lg font-semibold text-text-primary">Ausnahme</h2>
+          <p className="mt-1 text-sm text-text-tertiary">{getDisplayDate(draft.selectedDate)}</p>
 
           <div className="mt-4 space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('frei')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 Frei
               </button>
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('krank')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 Krank
               </button>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <label className="block text-sm font-medium text-text-secondary">
                 Start
                 <Input
                   variant="elevated"
@@ -495,7 +495,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
                   className="mt-1"
                 />
               </label>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              <label className="block text-sm font-medium text-text-secondary">
                 Ende
                 <Input
                   variant="elevated"
@@ -507,7 +507,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               </label>
             </div>
 
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label className="block text-sm font-medium text-text-secondary">
               Pause in Minuten
               <Input
                 variant="elevated"
@@ -521,11 +521,11 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               />
             </label>
 
-            <div className="rounded-lg bg-neutral-50 px-3 py-2 text-sm text-neutral-600 dark:bg-neutral-900/50 dark:text-neutral-300">
-              Berechnete Dauer: <span className="font-semibold text-neutral-900 dark:text-white">{formatTimecardDuration(selectedEntry?.duration_minutes ?? 0)}</span>
+            <div className="rounded-lg bg-surface-raised px-3 py-2 text-sm text-text-secondary dark:bg-neutral-900/50 dark:text-neutral-300">
+              Berechnete Dauer: <span className="font-semibold text-text-primary">{formatTimecardDuration(selectedEntry?.duration_minutes ?? 0)}</span>
             </div>
 
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label className="block text-sm font-medium text-text-secondary">
               Kategorie
               <Select
                 variant="elevated"
@@ -541,7 +541,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               </Select>
             </label>
 
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <label className="block text-sm font-medium text-text-secondary">
               Notiz
               <Textarea
                 variant="elevated"
@@ -557,7 +557,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={restoreSelectedDateFromSchedule}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 Tag aus Vorlage wiederherstellen
               </button>
@@ -566,9 +566,9 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         </aside>
       </section>
 
-      <label className="block rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
-        <span className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-white">
-          <Sparkles className="h-4 w-4 text-primary-600" />
+      <label className="block rounded-lg border border bg-surface-base p-4">
+        <span className="flex items-center gap-2 text-sm font-semibold text-text-primary">
+          <Sparkles className="h-4 w-4 text-action" />
           Wochen- oder Monatskommentar
         </span>
         <Textarea

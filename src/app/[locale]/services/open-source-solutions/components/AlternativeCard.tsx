@@ -18,7 +18,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
     <Link
       href={`/services/open-source-solutions/${alternative.id}`}
       className={cn(
-        'group block bg-white rounded-xl border-2 border-neutral-200',
+        'group block bg-surface-base rounded-xl border-2 border',
         'hover:border-primary-300 transition-all duration-200',
         'p-5 sm:p-6'
       )}
@@ -26,11 +26,11 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       {/* Header: Name + Category */}
       <div className="flex items-start justify-between mb-3">
         <div className="min-w-0 flex-1">
-          <Heading level={3} className="text-lg font-bold text-neutral-900 group-hover:text-primary-700 transition-colors truncate">
+          <Heading level={3} className="text-lg font-bold text-text-primary group-hover:text-primary-700 transition-colors truncate">
             {alternative.name}
           </Heading>
           {category && (
-            <span className="text-xs text-neutral-500">
+            <span className="text-xs text-text-tertiary">
               {category.icon} {category.label}
             </span>
           )}
@@ -39,7 +39,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       </div>
 
       {/* Tagline */}
-      <p className="text-sm text-neutral-600 mb-3 line-clamp-2">
+      <p className="text-sm text-text-secondary mb-3 line-clamp-2">
         {alternative.tagline}
       </p>
 
@@ -62,9 +62,9 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       )}
 
       {/* Footer: Platforms + License */}
-      <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
+      <div className="flex items-center justify-between pt-3 border-t border-subtle">
         <PlatformIcons platforms={alternative.platforms} />
-        <span className="text-xs text-neutral-500 font-medium">
+        <span className="text-xs text-text-tertiary font-medium">
           {alternative.license}
         </span>
       </div>

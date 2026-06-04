@@ -20,10 +20,10 @@ import { useAppointments, type ServiceAppointment } from '@/hooks/useAppointment
 function getStatusIcon(status: string) {
   switch (status) {
     case APPOINTMENT_STATUS.CONFIRMED: return <CheckCircle className="w-5 h-5 text-success-600" />
-    case APPOINTMENT_STATUS.COMPLETED: return <CheckCircle className="w-5 h-5 text-primary-600" />
+    case APPOINTMENT_STATUS.COMPLETED: return <CheckCircle className="w-5 h-5 text-action" />
     case APPOINTMENT_STATUS.REQUESTED: return <AlertCircle className="w-5 h-5 text-warning-600" />
     case APPOINTMENT_STATUS.CANCELLED: return <XCircle className="w-5 h-5 text-error-600" />
-    default: return <AlertCircle className="w-5 h-5 text-neutral-500" />
+    default: return <AlertCircle className="w-5 h-5 text-text-tertiary" />
   }
 }
 
@@ -33,7 +33,7 @@ function getUrgencyColor(urgency: string) {
     case URGENCY.HIGH: return 'text-error-700 dark:text-error-400 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30'
     case URGENCY.NORMAL: return 'text-warning-700 dark:text-warning-400 bg-warning-50 border border-warning-200'
     case URGENCY.LOW: return 'text-success-700 bg-success-50 border border-success-200'
-    default: return 'text-neutral-700 bg-neutral-50 border border-neutral-200'
+    default: return 'text-text-secondary bg-surface-raised border border'
   }
 }
 
@@ -76,9 +76,9 @@ export default function AppointmentsDashboard() {
 
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-4 sm:py-8">
+      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-4 sm:p-8">
+          <div className="bg-surface-base rounded-xl shadow-lg p-4 sm:p-8">
             <div className="animate-pulse">
               <div className="h-6 sm:h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-4 sm:mb-6"></div>
               <div className="space-y-4">
@@ -94,15 +94,15 @@ export default function AppointmentsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-neutral-600 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200 mb-4">
+          <Link href="/dashboard" className="inline-flex items-center text-text-secondary hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200 mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">{t('pageTitle')}</Heading>
-          <p className="text-neutral-600 dark:text-neutral-400">
+          <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">{t('pageTitle')}</Heading>
+          <p className="text-text-secondary">
             {isRepairerView ? t('pageSubtitleRepairer') : t('pageSubtitle')}
           </p>
         </div>
@@ -110,12 +110,12 @@ export default function AppointmentsDashboard() {
         {paymentSuccess && (
           <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
+              <CheckCircle className="w-5 h-5 text-action flex-shrink-0" />
               <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
             </div>
             <button
               onClick={() => setPaymentSuccess(false)}
-              className="text-primary-600 hover:text-primary-800 text-lg leading-none"
+              className="text-action hover:text-primary-800 text-lg leading-none"
               aria-label="Schliessen"
             >
               ×
@@ -132,17 +132,17 @@ export default function AppointmentsDashboard() {
         {appointments.length > 0 ? (
           <div className="space-y-4 sm:space-y-6">
             {appointments.map((appointment: ServiceAppointment) => (
-              <div key={appointment.id} className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-transparent dark:border-white/[0.06]">
+              <div key={appointment.id} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-transparent dark:border-white/[0.06]">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 sm:gap-4 flex-1">
-                    <div className="p-2 sm:p-3 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex-shrink-0">
-                      <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-600 dark:text-neutral-400" />
+                    <div className="p-2 sm:p-3 bg-surface-raised dark:bg-neutral-800 rounded-lg flex-shrink-0">
+                      <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-text-secondary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
+                      <Heading level={3} className="text-lg sm:text-xl font-semibold text-text-primary mb-2">
                         {appointment.service_name}
                       </Heading>
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-neutral-600 mb-3">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-text-secondary mb-3">
                         <div className="flex items-center">
                           {getStatusIcon(appointment.status)}
                           <span className="ml-2">{getStatusText(appointment.status)}</span>
@@ -157,7 +157,7 @@ export default function AppointmentsDashboard() {
                         </span>
                       </div>
                       {appointment.description && (
-                        <p className="text-neutral-700 mb-3 text-sm sm:text-base">{appointment.description}</p>
+                        <p className="text-text-secondary mb-3 text-sm sm:text-base">{appointment.description}</p>
                       )}
                     </div>
                   </div>

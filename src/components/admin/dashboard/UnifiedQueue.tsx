@@ -32,11 +32,11 @@ const URGENCY_CONFIG = {
 
 export function UnifiedQueue({ items }: UnifiedQueueProps) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
       {/* Card header */}
-      <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06] flex items-center gap-2">
+      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
         <Zap className="w-5 h-5 text-warning-500 flex-shrink-0" aria-hidden="true" />
-        <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-text-primary">
           Wartet auf Bearbeitung
         </Heading>
       </div>
@@ -44,7 +44,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
       {/* Body */}
       <div className="p-4">
         {items.length === 0 ? (
-          <div className="flex items-center gap-3 text-primary-600 dark:text-primary-400">
+          <div className="flex items-center gap-3 text-action">
             <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
@@ -62,7 +62,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                   <Link
                     href={item.href}
                     aria-label={ariaLabel}
-                    className="flex items-center justify-between gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
+                    className="flex items-center justify-between gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
                   >
                     {/* Left: dot + text */}
                     <div className="flex items-start gap-3 min-w-0">
@@ -71,7 +71,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                         aria-hidden="true"
                       />
                       <div className="min-w-0">
-                        <p className="font-medium text-neutral-900 dark:text-white leading-snug">
+                        <p className="font-medium text-text-primary leading-snug">
                           {item.label}
                         </p>
                         {age && (
@@ -98,7 +98,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                           {item.count > 99 ? '99+' : item.count}
                         </span>
                       )}
-                      <span className="flex items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      <span className="flex items-center gap-1 text-sm text-text-tertiary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                         {item.actionLabel}
                         <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </span>

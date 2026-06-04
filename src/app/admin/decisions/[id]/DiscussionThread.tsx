@@ -143,13 +143,13 @@ export default function DiscussionThread({
   );
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm">
-      <Heading level={2} className="mb-4 text-lg font-semibold text-neutral-900">Diskussion</Heading>
+    <div className="rounded-lg bg-surface-base p-6 shadow-sm">
+      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">Diskussion</Heading>
 
       {loading ? (
-        <p className="text-sm text-neutral-500">Laden...</p>
+        <p className="text-sm text-text-tertiary">Laden...</p>
       ) : comments.length === 0 ? (
-        <p className="text-sm text-neutral-500">Noch keine Kommentare</p>
+        <p className="text-sm text-text-tertiary">Noch keine Kommentare</p>
       ) : (
         <div className="space-y-4">
           {COMMENT_POSITIONS.map((pos) => {
@@ -173,10 +173,10 @@ export default function DiscussionThread({
                     return (
                       <div
                         key={c.id}
-                        className="rounded-md border border-neutral-100 bg-neutral-50 p-3"
+                        className="rounded-md border border-subtle bg-surface-raised p-3"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-xs text-neutral-500">
+                          <div className="flex items-center gap-2 text-xs text-text-tertiary">
                             <span>{c.user.email}</span>
                             <span>&middot;</span>
                             <span>
@@ -190,14 +190,14 @@ export default function DiscussionThread({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => startEdit(c)}
-                                className="p-2 text-neutral-500 hover:text-primary-600 rounded"
+                                className="p-2 text-text-tertiary hover:text-primary-600 rounded"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => setDeleteId(c.id)}
-                                className="p-2 text-neutral-500 hover:text-error-600 rounded"
+                                className="p-2 text-text-tertiary hover:text-error-600 rounded"
                                 title="Löschen"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -224,7 +224,7 @@ export default function DiscussionThread({
                               </Button>
                               <button
                                 onClick={cancelEdit}
-                                className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-neutral-600 hover:bg-neutral-50"
+                                className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-text-secondary hover:bg-neutral-50"
                               >
                                 <X className="w-3 h-3" />
                                 Abbrechen
@@ -232,7 +232,7 @@ export default function DiscussionThread({
                             </div>
                           </div>
                         ) : (
-                          <p className="mt-1 text-sm text-neutral-700">{c.content}</p>
+                          <p className="mt-1 text-sm text-text-secondary">{c.content}</p>
                         )}
                       </div>
                     );
@@ -261,7 +261,7 @@ export default function DiscussionThread({
                   className={`rounded-full px-3 py-1 text-xs font-medium transition ${
                     position === pos
                       ? conf.color
-                      : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
+                      : 'bg-surface-raised text-text-tertiary hover:bg-neutral-200'
                   }`}
                 >
                   {conf.label}

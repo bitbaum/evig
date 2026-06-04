@@ -21,7 +21,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
 
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('title')}</Heading>
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('title')}</Heading>
       <div className="flex flex-wrap gap-3">
         {/* Mastodon */}
         <a
@@ -79,7 +79,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           Facebook
         </a>
       </div>
-      <p className="text-xs text-neutral-500 mt-3">
+      <p className="text-xs text-text-tertiary mt-3">
         💡 {t('mastodonHint')}
       </p>
     </div>

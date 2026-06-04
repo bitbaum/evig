@@ -45,7 +45,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       {/* Search bar */}
       <div className="max-w-2xl mx-auto mb-8">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
           <Input
             type="text"
             value={query}
@@ -57,7 +57,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-neutral-600"
               aria-label={t('clearAriaLabel')}
             >
               <X className="w-5 h-5" />
@@ -74,7 +74,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
               ? 'bg-primary-600 text-white'
-              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+              : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
           )}
         >
           {t('allCategories')}
@@ -87,7 +87,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
             )}
           >
             {cat.icon} {cat.label}
@@ -96,7 +96,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-neutral-500 mb-6">{resultCountLabel}</p>
+      <p className="text-sm text-text-tertiary mb-6">{resultCountLabel}</p>
 
       {/* Results grid or empty state */}
       {filtered.length > 0 ? (

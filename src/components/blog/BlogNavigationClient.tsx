@@ -62,12 +62,12 @@ export default function BlogNavigationClient({
   const isSelected = (slug: string) => selectedCategorySlugs.includes(slug)
 
   return (
-    <nav className="border-b border-neutral-200 bg-white sticky top-0 z-40">
+    <nav className="border-b border bg-surface-base sticky top-0 z-40">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Title */}
           <Link href={ROUTES.public.blog} className="flex items-center">
-            <Heading level={1} className="text-xl sm:text-2xl font-bold text-neutral-900">Blog</Heading>
+            <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary">Blog</Heading>
           </Link>
 
           {/* Desktop Categories */}
@@ -78,7 +78,7 @@ export default function BlogNavigationClient({
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                 selectedCategorySlugs.length === 0
                   ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  : "bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700"
               )}
             >
               {t('all')}
@@ -95,7 +95,7 @@ export default function BlogNavigationClient({
                       "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                       selected
                         ? "text-white"
-                        : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                        : "bg-surface-raised text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >
@@ -158,7 +158,7 @@ export default function BlogNavigationClient({
 
         {/* Mobile Categories Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t border-neutral-100">
+          <div className="md:hidden py-3 border-t border-subtle">
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={handleClearFilters}
@@ -166,7 +166,7 @@ export default function BlogNavigationClient({
                   "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                   selectedCategorySlugs.length === 0
                     ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                    : "bg-neutral-100 text-neutral-700"
+                    : "bg-surface-raised text-text-secondary"
                 )}
               >
                 {t('all')}
@@ -183,7 +183,7 @@ export default function BlogNavigationClient({
                       "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                       selected
                         ? "text-white"
-                        : "bg-neutral-100 text-neutral-700"
+                        : "bg-surface-raised text-text-secondary"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >

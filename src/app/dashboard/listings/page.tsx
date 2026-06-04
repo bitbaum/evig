@@ -63,7 +63,7 @@ export default function MyListingsPage() {
   if (sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
     )
   }
@@ -72,8 +72,8 @@ export default function MyListingsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t('pageSubtitle')}</p>
+          <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
+          <p className="text-sm text-text-tertiary mt-1">{t('pageSubtitle')}</p>
         </div>
         <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
           <Plus className="w-4 h-4" />
@@ -81,15 +81,15 @@ export default function MyListingsPage() {
         </Button>
       </div>
 
-      <div className="flex gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
+      <div className="flex gap-1 bg-surface-raised dark:bg-neutral-800 rounded-lg p-1">
         {STATUS_TABS.map(tab => (
           <button
             key={tab.value}
             onClick={() => handleStatusFilterChange(tab.value)}
             className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               statusFilter === tab.value
-                ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-sm'
+                : 'text-text-secondary hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
             {tab.label}
@@ -99,8 +99,8 @@ export default function MyListingsPage() {
 
       {isLoading && (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
-          <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
+          <Loader2 className="w-8 h-8 text-action animate-spin" />
+          <span className="ml-3 text-text-secondary">{t('loading')}</span>
         </div>
       )}
 
@@ -139,7 +139,7 @@ export default function MyListingsPage() {
             return (
               <div
                 key={listing.id}
-                className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 flex items-center gap-4"
+                className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700 p-4 flex items-center gap-4"
               >
                 <Link href={`/marketplace/${listing.id}`} className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
                   <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
@@ -147,10 +147,10 @@ export default function MyListingsPage() {
 
                 <div className="flex-1 min-w-0">
                   <Link href={`/marketplace/${listing.id}`} className="hover:text-primary-600 transition-colors">
-                    <Heading level={3} className="font-medium text-neutral-900 dark:text-white truncate">{listing.title}</Heading>
+                    <Heading level={3} className="font-medium text-text-primary truncate">{listing.title}</Heading>
                   </Link>
-                  <div className="flex items-center gap-3 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                    <span className="font-semibold text-neutral-900 dark:text-white">
+                  <div className="flex items-center gap-3 mt-1 text-sm text-text-tertiary">
+                    <span className="font-semibold text-text-primary">
                       {formatCHF(Number(listing.price_chf))}
                     </span>
                     <span>{listing.category}</span>
@@ -158,7 +158,7 @@ export default function MyListingsPage() {
                       {conditionInfo.label}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-neutral-400">
+                  <div className="flex items-center gap-3 mt-1 text-xs text-text-muted">
                     <span className="inline-flex items-center gap-1">
                       <Eye className="w-3 h-3" />
                       {listing.view_count}
@@ -179,7 +179,7 @@ export default function MyListingsPage() {
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Link
                     href={`${ROUTES.public.marketplaceSell}?edit=${listing.id}`}
-                    className="p-2 rounded-lg text-neutral-500 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                    className="p-2 rounded-lg text-text-tertiary hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                     title={t('actionEdit')}
                   >
                     <Pencil className="w-4 h-4" />
@@ -187,7 +187,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => handleDuplicate(listing.id)}
                     disabled={duplicatingId === listing.id}
-                    className="p-2 rounded-lg text-neutral-500 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-text-tertiary hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
                     title={t('actionDuplicate')}
                   >
                     {duplicatingId === listing.id ? (
@@ -199,7 +199,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => setPendingDeleteId(listing.id)}
                     disabled={deletingId === listing.id}
-                    className="p-2 rounded-lg text-neutral-500 hover:text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-text-tertiary hover:text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
                     title={t('actionDelete')}
                   >
                     {deletingId === listing.id ? (
@@ -217,19 +217,19 @@ export default function MyListingsPage() {
 
       {!isLoading && !error && (hasNext || hasPrev) && (
         <div className="flex items-center justify-between pt-4">
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="text-sm text-text-tertiary">
             {t('totalCount', { count: total })}
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={goPrev}
               disabled={!hasPrev}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               {t('prevPage')}
             </button>
-            <span className="text-sm text-neutral-600 dark:text-neutral-400">
+            <span className="text-sm text-text-secondary">
               {/* Keyset doesn't know the total page count up front (total
                   divided by page size is close but doesn't always
                   match because of filter changes mid-scroll). Show just
@@ -240,7 +240,7 @@ export default function MyListingsPage() {
             <button
               onClick={goNext}
               disabled={!hasNext}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {t('nextPage')}
               <ChevronRight className="w-4 h-4" />

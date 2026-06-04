@@ -40,7 +40,7 @@ export default function OpenSourceSolutionsPage() {
       <CTASection />
 
       {/* Verification Note */}
-      <div className="bg-neutral-50 py-6 sm:py-8">
+      <div className="bg-surface-raised py-6 sm:py-8">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className={cn('text-sm', getTextColor('neutral', 'muted'))}>
             Alle bereitgestellten Informationen sind zum {new Date().toLocaleDateString('de-CH', { year: 'numeric', month: 'long' })} korrekt.
@@ -50,7 +50,7 @@ export default function OpenSourceSolutionsPage() {
       </div>
 
       {/* Comparison Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
             <h2 className={cn('text-3xl font-bold mb-6', getTextColor('white', 'primary'))}>

@@ -88,7 +88,7 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
           <Link href="/impressum" className="text-primary-700 underline">{t('section10.impressumLinkLabel')}</Link>.
         </p>
 
-        <p className="mt-12 text-sm text-neutral-500 dark:text-neutral-400">{t('asOf')}</p>
+        <p className="mt-12 text-sm text-text-tertiary">{t('asOf')}</p>
       </section>
     </main>
   )

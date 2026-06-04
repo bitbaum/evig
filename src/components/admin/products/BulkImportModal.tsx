@@ -25,17 +25,17 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white dark:border dark:border-white/[0.06] rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="bg-surface-base dark:border dark:border-white/[0.06] rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-neutral-200">
+            <div className="p-6 border-b border">
               <div className="flex items-center justify-between">
-                <Heading level={2} className="text-xl text-neutral-900">
+                <Heading level={2} className="text-xl text-text-primary">
                   Bulk-Import von Produkten
                 </Heading>
                 <button
                   onClick={onClose}
-                  className="text-neutral-500 hover:text-neutral-600"
+                  className="text-text-tertiary hover:text-neutral-600"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
@@ -45,11 +45,11 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             <div className="p-6 space-y-6">
               {/* File Upload */}
               <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
-                <Upload className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-                <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+                <Upload className="w-12 h-12 text-text-muted mx-auto mb-4" />
+                <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
                   CSV-Datei auswählen
                 </Heading>
-                <p className="text-neutral-600 mb-4">
+                <p className="text-text-secondary mb-4">
                   Lade eine CSV-Datei mit deinen Produkten hoch
                 </p>
                 <input
@@ -60,7 +60,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 />
                 <label
                   htmlFor="csv-upload"
-                  className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 cursor-pointer transition-colors"
+                  className="inline-flex items-center px-4 py-2 rounded-lg cursor-pointer transition-colors bg-action hover:bg-action-hover text-action-text"
                 >
                   Datei auswählen
                 </label>
@@ -68,10 +68,10 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
 
               {/* CSV Format Info */}
               <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4">
-                <Heading level={4} className="font-medium text-neutral-900 mb-2">
+                <Heading level={4} className="font-medium text-text-primary mb-2">
                   Erforderliches CSV-Format:
                 </Heading>
-                <div className="text-sm text-neutral-800 font-mono bg-neutral-100 p-3 rounded">
+                <div className="text-sm text-neutral-800 font-mono bg-surface-raised p-3 rounded">
                   Titel,Beschreibung,Preis (CHF),Kategorie,Marke,Bild-URL
                   <br />
                   &quot;Dell Latitude E7470&quot;,&quot;Professioneller Laptop&quot;,599.00,&quot;Laptops&quot;,&quot;Dell&quot;,&quot;https://...&quot;
@@ -84,7 +84,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
+              <div className="flex justify-end gap-3 pt-4 border-t border">
                 <Button onClick={onClose} variant="outline" size="sm">
                   Abbrechen
                 </Button>

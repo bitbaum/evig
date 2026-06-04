@@ -148,10 +148,10 @@ export default async function TeamProfileEditPage({ params }: PageProps) {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+        <Heading level={1} className="text-2xl font-bold text-text-primary">
           Profil bearbeiten
         </Heading>
-        <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+        <p className="text-text-secondary mt-1">
           {profile.user_name || profile.user_email}
         </p>
       </div>

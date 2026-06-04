@@ -15,11 +15,11 @@ interface Props {
 
 export function DonationFilters({ filters, onFiltersChange }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow p-4 mb-6">
+    <div className="bg-surface-base rounded-lg shadow p-4 mb-6">
       <div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-neutral-500" />
-          <span className="text-sm font-medium text-neutral-700">Filter:</span>
+          <Filter className="w-5 h-5 text-text-tertiary" />
+          <span className="text-sm font-medium text-text-secondary">Filter:</span>
         </div>
         <Select
           value={filters.donation_type}

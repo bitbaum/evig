@@ -126,7 +126,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       <div className="flex items-center justify-between">
         <Link
           href={ROUTES.admin.users}
-          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück zur Übersicht
@@ -134,7 +134,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+      <div className="bg-surface-base rounded-xl border border p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -150,7 +150,7 @@ export default async function UserDetailPage({ params }: PageProps) {
           {/* Info */}
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <Heading level={1} className="text-2xl font-bold text-text-primary">
                 {user.name || 'Kein Name'}
               </Heading>
               {userIsSuperAdmin && (
@@ -174,25 +174,25 @@ export default async function UserDetailPage({ params }: PageProps) {
             </div>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+              <div className="flex items-center gap-2 text-text-secondary">
                 <Mail className="w-4 h-4" />
                 <span>{user.email}</span>
               </div>
 
               {user.phone && (
-                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                <div className="flex items-center gap-2 text-text-secondary">
                   <Phone className="w-4 h-4" />
                   <span>{user.phone}</span>
                 </div>
               )}
 
-              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+              <div className="flex items-center gap-2 text-text-secondary">
                 <Calendar className="w-4 h-4" />
                 <span>Registriert: {formatDateShort(user.created_at)}</span>
               </div>
 
               {user.address && (
-                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+                <div className="flex items-center gap-2 text-text-secondary">
                   <MapPin className="w-4 h-4" />
                   <span>{user.address}</span>
                 </div>
@@ -204,15 +204,15 @@ export default async function UserDetailPage({ params }: PageProps) {
 
       {/* Team Profile Link */}
       {userIsStaff && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
-          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+        <div className="bg-surface-base rounded-xl border border p-6">
+          <Heading level={2} className="font-semibold text-text-primary mb-4 flex items-center gap-2">
             <User className="w-5 h-5" />
             Team-Profil
           </Heading>
 
           {user.team_profile_id ? (
             <div className="flex items-center justify-between">
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-text-secondary">
                 Dieses Mitglied hat ein Team-Profil.
               </p>
               <Link href={`/admin/team/${user.team_profile_id}`} className={buttonClass({ variant: 'primary', size: 'sm' })}>
@@ -222,7 +222,7 @@ export default async function UserDetailPage({ params }: PageProps) {
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-text-secondary">
                 Noch kein Team-Profil vorhanden.
               </p>
               <Link href={`/admin/team/new?user_id=${user.id}`} className={buttonClass({ variant: 'primary', size: 'sm' })}>
@@ -236,18 +236,18 @@ export default async function UserDetailPage({ params }: PageProps) {
 
       {/* Permissions */}
       {userIsStaff && (
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
-          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+        <div className="bg-surface-base rounded-xl border border p-6">
+          <Heading level={2} className="font-semibold text-text-primary mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             Berechtigungen
           </Heading>
 
           {userIsSuperAdmin ? (
-            <p className="text-primary-600 dark:text-primary-400 font-medium">
+            <p className="text-action font-medium">
               Super Admin - Voller Zugriff auf alle Bereiche
             </p>
           ) : hasFullAccess ? (
-            <p className="text-primary-600 dark:text-primary-400 font-medium">
+            <p className="text-action font-medium">
               Voller Zugriff auf alle Bereiche
             </p>
           ) : permissions.length > 0 ? (
@@ -255,14 +255,14 @@ export default async function UserDetailPage({ params }: PageProps) {
               {permissions.map(p => (
                 <span
                   key={p}
-                  className="px-3 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-sm rounded-full"
+                  className="px-3 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-sm rounded-full"
                 >
                   {p}
                 </span>
               ))}
             </div>
           ) : (
-            <p className="text-neutral-500 dark:text-neutral-400">
+            <p className="text-text-tertiary">
               Keine speziellen Berechtigungen zugewiesen
             </p>
           )}
@@ -270,7 +270,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       )}
 
       {/* Meta */}
-      <div className="text-xs text-neutral-500 flex gap-4">
+      <div className="text-xs text-text-tertiary flex gap-4">
         <span>Benutzer-ID: {user.id}</span>
         {user.email_verified && (
           <span>E-Mail verifiziert: {formatDateShort(user.email_verified)}</span>

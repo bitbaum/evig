@@ -13,33 +13,33 @@ interface AIDiagnosisCardProps {
 export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps) {
   const t = useTranslations('components.aiDiagnosisCard')
   return (
-    <div className="bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+    <div className="bg-surface-raised rounded-xl border p-6">
       <div className="flex items-center gap-2 mb-3">
-        <Stethoscope className="w-5 h-5 text-primary-600" />
-        <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('title')}</Heading>
+        <Stethoscope className="w-5 h-5 text-action" />
+        <Heading level={3} className="text-lg font-semibold text-text-primary">{t('title')}</Heading>
       </div>
 
       {deviceInfo && (
-        <p className="text-sm text-neutral-500 mb-2">{deviceInfo}</p>
+        <p className="text-sm text-text-tertiary mb-2">{deviceInfo}</p>
       )}
 
-      <p className="text-neutral-700 mb-4 whitespace-pre-wrap">{diagnosis}</p>
+      <p className="text-text-secondary mb-4 whitespace-pre-wrap">{diagnosis}</p>
 
       <div className="bg-white/60 rounded-lg p-4 mb-3">
         <div className="flex items-start gap-2">
-          <MapPin className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
+          <MapPin className="w-4 h-4 text-action mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-sm font-medium text-neutral-900">
+            <p className="text-sm font-medium text-text-primary">
               {t('bringIn')}
             </p>
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-text-secondary">
               {REVAMPIT_STORE.name} &ndash; {REVAMPIT_STORE.address}, {REVAMPIT_STORE.postalCode} {REVAMPIT_STORE.city}
             </p>
             <a
               href={REVAMPIT_STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 mt-1"
+              className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 mt-1"
             >
               {t('mapsLink')}
               <ExternalLink className="w-3 h-3" />
@@ -48,7 +48,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
         </div>
       </div>
 
-      <p className="text-xs text-neutral-500">
+      <p className="text-xs text-text-tertiary">
         {t('disclaimer')}
       </p>
     </div>

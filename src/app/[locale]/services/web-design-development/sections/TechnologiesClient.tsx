@@ -38,17 +38,17 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
     : t('showingFiltered', { count: filteredTechnologies.length, total: totalCount, category: selectedCategory })
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
           <Heading level={2} className="mb-6">{labels.title}</Heading>
-          <p className="text-lg text-neutral-600 mb-8">
+          <p className="text-lg text-text-secondary mb-8">
             {labels.subtitle}
           </p>
 
           {/* Technology Filter */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <div className="flex items-center text-neutral-500 mr-4 mb-2">
+            <div className="flex items-center text-text-tertiary mr-4 mb-2">
               <Filter className="w-4 h-4 mr-2" />
               <span className="text-sm font-medium">{labels.filterLabel}</span>
             </div>
@@ -59,7 +59,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
                     ? 'bg-primary-600 text-white transform scale-105'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200 hover:text-neutral-800'
                 }`}
               >
                 {category}
@@ -78,27 +78,27 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 href={tech.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
+                className="bg-surface-raised dark:bg-neutral-900 rounded-xl p-6 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-start mb-4">
                   <IconBadge icon={IconComponent} theme="services" size="lg" className="mr-4" />
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-primary-600 font-semibold mb-1 truncate">{tech.category}</div>
+                    <div className="text-sm text-action font-semibold mb-1 truncate">{tech.category}</div>
                     <Heading level={3} className="mb-2 line-clamp-2 group-hover:text-primary-700 transition-colors duration-300">{tech.name}</Heading>
                   </div>
                 </div>
-                <p className="text-neutral-600 mb-4 text-sm leading-relaxed">{tech.description}</p>
+                <p className="text-text-secondary mb-4 text-sm leading-relaxed">{tech.description}</p>
                 <div className="space-y-2">
                   {tech.benefits.map((benefit, i) => (
-                    <div key={i} className="flex items-center text-sm text-neutral-600">
+                    <div key={i} className="flex items-center text-sm text-text-secondary">
                       <CheckCircle2 className="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" />
                       <span className="truncate">{benefit}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-neutral-200 flex items-center text-sm text-primary-600 group-hover:text-primary-700 transition-colors duration-300">
+                <div className="mt-4 pt-3 border-t border flex items-center text-sm text-action group-hover:text-primary-700 transition-colors duration-300">
                   <ArrowRight className="w-4 h-4 mr-2 transform group-hover:translate-x-1 transition-transform duration-300" />
                   <span>{labels.visitWebsite}</span>
                 </div>
@@ -109,7 +109,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
 
         {/* Results count */}
         <div className="text-center mt-8">
-          <p className="text-neutral-500 text-sm">
+          <p className="text-text-tertiary text-sm">
             {showingText}
           </p>
         </div>

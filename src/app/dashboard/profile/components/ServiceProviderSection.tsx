@@ -15,24 +15,24 @@ interface ServiceProviderSectionProps {
 export function ServiceProviderSection({ profile, handleChange }: ServiceProviderSectionProps) {
   const t = useTranslations('dashboard.profile.serviceProvider')
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-          <Wrench className="w-5 h-5 text-primary-600" />
+          <Wrench className="w-5 h-5 text-action" />
         </div>
         <div>
-          <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
             {t('heading')}
           </Heading>
-          <p className="text-sm text-neutral-500">{t('subtitle')}</p>
+          <p className="text-sm text-text-tertiary">{t('subtitle')}</p>
         </div>
       </div>
 
       <div className="space-y-4">
         {/* Bio */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('bioLabel')} <span className="text-neutral-400">{t('optional')}</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('bioLabel')} <span className="text-text-muted">{t('optional')}</span>
           </label>
           <Textarea
             value={profile.bio || ''}
@@ -44,8 +44,8 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
 
         {/* Website */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('websiteLabel')} <span className="text-neutral-400">{t('optional')}</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('websiteLabel')} <span className="text-text-muted">{t('optional')}</span>
           </label>
           <Input
             type="url"
@@ -57,8 +57,8 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
 
         {/* Skills */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('skillsLabel')} <span className="text-neutral-400">{t('optional')}</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('skillsLabel')} <span className="text-text-muted">{t('optional')}</span>
           </label>
           <Input
             type="text"
@@ -66,13 +66,13 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
             onChange={(e) => handleChange('skills', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
             placeholder={t('skillsPlaceholder')}
           />
-          <p className="text-xs text-neutral-500 mt-1">{t('skillsHint')}</p>
+          <p className="text-xs text-text-tertiary mt-1">{t('skillsHint')}</p>
         </div>
 
         {/* Expertise Areas */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('expertiseLabel')} <span className="text-neutral-400">{t('optional')}</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('expertiseLabel')} <span className="text-text-muted">{t('optional')}</span>
           </label>
           <Input
             type="text"
@@ -80,13 +80,13 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
             onChange={(e) => handleChange('expertise_areas', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
             placeholder={t('expertisePlaceholder')}
           />
-          <p className="text-xs text-neutral-500 mt-1">{t('expertiseHint')}</p>
+          <p className="text-xs text-text-tertiary mt-1">{t('expertiseHint')}</p>
         </div>
 
         {/* Service Radius */}
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('radiusLabel')} <span className="text-neutral-400">{t('optional')}</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('radiusLabel')} <span className="text-text-muted">{t('optional')}</span>
           </label>
           <Input
             type="number"
@@ -95,7 +95,7 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
             value={profile.service_radius_km || 50}
             onChange={(e) => handleChange('service_radius_km', parseInt(e.target.value) || 50)}
           />
-          <p className="text-xs text-neutral-500 mt-1">{t('radiusHint')}</p>
+          <p className="text-xs text-text-tertiary mt-1">{t('radiusHint')}</p>
         </div>
       </div>
     </div>

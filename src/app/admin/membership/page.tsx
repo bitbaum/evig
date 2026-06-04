@@ -92,50 +92,50 @@ export default async function MembershipPage() {
       <AdminStatsGrid items={stats} columns={3} />
 
       {/* Members List */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl border border overflow-hidden">
         {members.length === 0 ? (
           <div className="p-8 text-center">
             <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-            <Heading level={3} className="text-lg text-neutral-900 dark:text-white mb-2">
+            <Heading level={3} className="text-lg text-text-primary mb-2">
               Noch keine Mitglieder
             </Heading>
-            <p className="text-neutral-500">Mitglieder erscheinen hier sobald jemand beitritt.</p>
+            <p className="text-text-tertiary">Mitglieder erscheinen hier sobald jemand beitritt.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-50 dark:bg-neutral-900/50 border-b border-neutral-200 dark:border-white/[0.06]">
+              <thead className="bg-surface-raised dark:bg-neutral-900/50 border-b border">
                 <tr>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Name</th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">E-Mail</th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Typ</th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Dabei seit</th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Bezahlt bis</th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Status</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Name</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">E-Mail</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Typ</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Dabei seit</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Bezahlt bis</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+              <tbody className="divide-y divide-subtle">
                 {members.map(member => {
                   const paid = isPaid(member)
                   const fee = member.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
                   return (
                     <tr key={member.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/30">
-                      <td className="px-4 py-3 font-medium text-neutral-900 dark:text-white">
+                      <td className="px-4 py-3 font-medium text-text-primary">
                         {member.name || '—'}
                       </td>
-                      <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                      <td className="px-4 py-3 text-text-secondary">
                         {member.email}
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-neutral-700 dark:text-neutral-300">
+                        <span className="text-text-secondary">
                           {MEMBERSHIP_TYPE_LABELS[(member.member_type || 'regular') as keyof typeof MEMBERSHIP_TYPE_LABELS] || member.member_type}
                         </span>
-                        <span className="text-neutral-400 ml-1 text-xs">CHF {fee}</span>
+                        <span className="text-text-muted ml-1 text-xs">CHF {fee}</span>
                       </td>
-                      <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                      <td className="px-4 py-3 text-text-secondary">
                         {member.member_since ? formatDateShort(member.member_since) : '—'}
                       </td>
-                      <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                      <td className="px-4 py-3 text-text-secondary">
                         {member.member_paid_until ? formatDateShort(member.member_paid_until) : '—'}
                       </td>
                       <td className="px-4 py-3">

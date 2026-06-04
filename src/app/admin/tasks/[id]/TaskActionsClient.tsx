@@ -53,8 +53,8 @@ export default function TaskActionsClient({
   } = useTaskActions(taskId)
 
   return (
-    <div className="bg-white rounded-lg border p-6">
-      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Aktionen</Heading>
+    <div className="bg-surface-base rounded-lg border p-6">
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Aktionen</Heading>
 
       {error && (
         <div className="mb-4 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300 text-sm">

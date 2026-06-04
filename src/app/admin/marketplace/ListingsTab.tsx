@@ -52,7 +52,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
           <option value="yes">Gemeldet</option>
         </Select>
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
           <Input
             type="text"
             placeholder="Suchen..."
@@ -64,17 +64,17 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
+      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 dark:border-white/[0.06] text-left">
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Titel</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Kategorie</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Preis</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Verkäufer</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Status</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Datum</th>
-              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Aktionen</th>
+            <tr className="border-b border text-left">
+              <th className="px-4 py-3 font-medium text-text-secondary">Titel</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Kategorie</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Preis</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Verkäufer</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Status</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Datum</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
@@ -82,8 +82,8 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
               <tr key={l.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-neutral-900 dark:text-white">{l.title}</span>
-                    {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-primary-600" />}
+                    <span className="font-medium text-text-primary">{l.title}</span>
+                    {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-action" />}
                     {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">RIT</span>}
                     {parseInt(l.report_count) > 0 && (
                       <span className="px-1.5 py-0.5 text-[10px] rounded bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
@@ -92,25 +92,25 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                     )}
                   </div>
                 </td>
-                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                <td className="px-4 py-3 text-text-secondary">
                   {getCategoryLabel(l.category)}
                   {l.condition && <span className="text-xs ml-1">· {getConditionLabel(l.condition)}</span>}
                 </td>
-                <td className="px-4 py-3 text-neutral-900 dark:text-white font-medium">{formatPrice(Number(l.price_chf))}</td>
+                <td className="px-4 py-3 text-text-primary font-medium">{formatPrice(Number(l.price_chf))}</td>
                 <td className="px-4 py-3">
-                  <Link href={`/admin/users/${l.seller_id}`} className="text-primary-600 hover:underline text-sm">
+                  <Link href={`/admin/users/${l.seller_id}`} className="text-action hover:underline text-sm">
                     {l.seller_name || l.seller_email}
                   </Link>
                 </td>
                 <td className="px-4 py-3"><StatusBadge status={l.status} config={LISTING_STATUS_CONFIG} /></td>
-                <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{formatDateShort(l.created_at)}</td>
+                <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(l.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]" title="Ansehen">
-                      <Eye className="w-4 h-4 text-neutral-500" />
+                      <Eye className="w-4 h-4 text-text-tertiary" />
                     </a>
                     <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]" title="Bearbeiten">
-                      <Edit3 className="w-4 h-4 text-neutral-500" />
+                      <Edit3 className="w-4 h-4 text-text-tertiary" />
                     </button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
@@ -125,14 +125,14 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
           </tbody>
         </table>
         {listings && listings.items.length === 0 && (
-          <div className="p-8 text-center text-neutral-500">Keine Inserate gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">Keine Inserate gefunden</div>
         )}
       </div>
 
       {/* Pagination */}
       {listings && listings.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-neutral-500">{listings.pagination.total} Inserate</span>
+          <span className="text-sm text-text-tertiary">{listings.pagination.total} Inserate</span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>Zurück</Button>
             <Button variant="outline" size="sm" disabled={!listings.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>Weiter</Button>

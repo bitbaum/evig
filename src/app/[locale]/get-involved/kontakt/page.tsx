@@ -36,13 +36,13 @@ export default async function KontaktPage({ params, searchParams }: KontaktPageP
   const topicLabel = topics[thema] ?? t('defaultTopic')
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-surface-base min-h-screen">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
 
         {/* Back link */}
         <Link
           href="/get-involved"
-          className="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-700 mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backLink')}
@@ -50,16 +50,16 @@ export default async function KontaktPage({ params, searchParams }: KontaktPageP
 
         {/* Header */}
         <div className="mb-8">
-          <Heading level={1} className="text-neutral-900 mb-2">
+          <Heading level={1} className="text-text-primary mb-2">
             {t('titlePrefix')} {topicLabel}
           </Heading>
-          <p className="text-neutral-600">
+          <p className="text-text-secondary">
             {t('body')}
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-neutral-50 rounded-2xl border border-neutral-200 p-6 sm:p-8">
+        <div className="bg-surface-raised rounded-2xl border p-6 sm:p-8">
           <InquiryForm defaultThema={thema} topicLabel={topicLabel} />
         </div>
 

@@ -104,10 +104,10 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
   if (myTasks.length === 0 && mySubmissions.length === 0) return null
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-      <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06] flex items-center gap-2">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
+      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
         <CheckSquare className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
-        <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-text-primary">
           {t('myTasks')}
         </Heading>
       </div>
@@ -116,7 +116,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         {/* My assigned tasks */}
         {myTasks.length > 0 && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-2">
               {t('assignedTasks')}
             </p>
             <ul className="space-y-2" role="list">
@@ -128,7 +128,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                   <li key={task.id}>
                     <Link
                       href={`${ROUTES.admin.tasks}?highlight=${task.id}`}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
+                      className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
                     >
                       {overdue ? (
                         <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
@@ -136,11 +136,11 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                         <Calendar className="w-4 h-4 text-primary-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       )}
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium text-neutral-900 dark:text-white leading-snug">
+                        <p className="font-medium text-text-primary leading-snug">
                           {task.title}
                         </p>
                         {dueDateText && (
-                          <p className={`text-sm mt-0.5 ${overdue ? 'text-error-600 dark:text-error-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
+                          <p className={`text-sm mt-0.5 ${overdue ? 'text-error-600 dark:text-error-400' : 'text-text-tertiary'}`}>
                             {dueDateText}
                           </p>
                         )}
@@ -153,7 +153,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             {myTasks.length === TASK_LIMIT && (
               <Link
                 href={ROUTES.admin.tasks}
-                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-action hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
               >
                 {t('viewAllTasks')}
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -165,7 +165,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         {/* My pending content submissions */}
         {mySubmissions.length > 0 && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted mb-2">
               {t('submittedContent')}
             </p>
             <ul className="space-y-2" role="list">
@@ -173,11 +173,11 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 <li key={sub.id}>
                   <Link
                     href={ROUTES.admin.approvals}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
+                    className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
                   >
                     <FileText className="w-4 h-4 text-warning-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <div className="min-w-0 flex-1">
-                      <p className="font-medium text-neutral-900 dark:text-white leading-snug">
+                      <p className="font-medium text-text-primary leading-snug">
                         {sub.title ?? contentTypeLabel(sub.content_type)}
                       </p>
                       <p className="text-sm text-warning-600 dark:text-warning-400 mt-0.5">

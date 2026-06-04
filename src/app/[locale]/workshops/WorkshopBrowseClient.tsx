@@ -52,12 +52,12 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   return (
     <>
       {/* Compact hero — workshops visible without scrolling */}
-      <div className="bg-white dark:bg-neutral-950 border-b border-neutral-100 dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('title')}</Heading>
-              <p className="text-sm text-neutral-600 mt-1">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">{t('title')}</Heading>
+              <p className="text-sm text-text-secondary mt-1">
                 {t('subtitle', { count: workshops.length, orgName: ORG.name })}
               </p>
             </div>
@@ -75,7 +75,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           <div className="flex flex-wrap items-center gap-4">
             {/* Category Dropdown */}
             <div>
-              <label htmlFor="filter-category" className="block text-xs font-medium text-neutral-700 mb-1">
+              <label htmlFor="filter-category" className="block text-xs font-medium text-text-secondary mb-1">
                 {t('filterCategory')}
               </label>
               <Select
@@ -92,7 +92,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
             {/* Level Dropdown */}
             <div>
-              <label htmlFor="filter-level" className="block text-xs font-medium text-neutral-700 mb-1">
+              <label htmlFor="filter-level" className="block text-xs font-medium text-text-secondary mb-1">
                 {t('filterLevel')}
               </label>
               <Select
@@ -114,14 +114,14 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   setCategoryFilter('all')
                   setLevelFilter('all')
                 }}
-                className="self-end px-3 py-2 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                className="self-end px-3 py-2 text-sm text-action hover:text-primary-700 font-medium"
               >
                 {t('clearFilters')}
               </button>
             )}
 
             {/* Results count */}
-            <div className="ml-auto self-end text-sm text-neutral-500">
+            <div className="ml-auto self-end text-sm text-text-tertiary">
               {t('resultCount', { count: filteredWorkshops.length })}
             </div>
           </div>
@@ -145,35 +145,35 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
               return (
                 <div key={workshop.id} className="card-shell overflow-hidden hover:border-neutral-300 transition-all flex flex-col">
                   {/* Workshop Header */}
-                  <div className="p-6 border-b border-neutral-100 flex-1">
+                  <div className="p-6 border-b border-subtle flex-1">
                     <div className="flex items-start justify-between mb-4">
                       <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-                        <IconComponent className="w-6 h-6 text-primary-600" />
+                        <IconComponent className="w-6 h-6 text-action" />
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
                         {workshop.level || t('allLevelsLabel')}
                       </span>
                     </div>
 
-                    <Heading level={3} className="text-xl font-semibold text-neutral-900 mb-2">
+                    <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
                       {workshop.title}
                     </Heading>
 
-                    <p className="text-neutral-600 text-sm mb-4 line-clamp-3">
+                    <p className="text-text-secondary text-sm mb-4 line-clamp-3">
                       {workshop.description}
                     </p>
 
                     {/* Category badge */}
                     {workshop.category && (
                       <div className="mb-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
                           <IconComponent className="w-3 h-3 mr-1" />
                           {WORKSHOP_CATEGORIES.find(c => c.id === workshop.category)?.name || workshop.category}
                         </span>
                       </div>
                     )}
 
-                    <div className="flex items-center gap-4 text-sm text-neutral-500">
+                    <div className="flex items-center gap-4 text-sm text-text-tertiary">
                       {workshop.duration && (
                         <div className="flex items-center">
                           <Clock className="w-4 h-4 mr-1" />
@@ -191,12 +191,12 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   <div className="p-6">
                     {nextInstance ? (
                       <div className="mb-4 space-y-2">
-                        <div className="flex items-center text-sm text-neutral-600">
+                        <div className="flex items-center text-sm text-text-secondary">
                           <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
                           <span>{t('nextDate', { date: formatDateShort(nextInstance.start_date) })}</span>
                         </div>
                         {nextInstance.location && (
-                          <div className="flex items-center text-sm text-neutral-600">
+                          <div className="flex items-center text-sm text-text-secondary">
                             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
                             <span className="truncate">{nextInstance.location}</span>
                           </div>
@@ -204,7 +204,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                         {spotsLeft !== null && (
                           <div className="flex items-center text-sm">
                             <Users className="w-4 h-4 mr-1 flex-shrink-0" />
-                            <span className={spotsLeft <= 3 ? 'text-warning-600 font-medium' : 'text-neutral-600'}>
+                            <span className={spotsLeft <= 3 ? 'text-warning-600 font-medium' : 'text-text-secondary'}>
                               {spotsLeft <= 0 ? t('soldOut') : t('spotsLeft', { count: spotsLeft })}
                             </span>
                           </div>
@@ -221,7 +221,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
                     {/* Price */}
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-2xl font-bold text-primary-600">
+                      <span className="text-2xl font-bold text-action">
                         {workshop.price_cents === 0
                           ? t('free')
                           : formatCentsToChf(workshop.price_cents)}
@@ -253,7 +253,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           {t('soldOut')}
                         </span>
                       ) : (
-                        <span className="flex-1 bg-neutral-300 dark:bg-neutral-700 text-neutral-500 px-4 py-2 rounded-lg text-center text-sm font-medium">
+                        <span className="flex-1 bg-neutral-300 dark:bg-neutral-700 text-text-tertiary px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('noDate')}
                         </span>
                       )}
@@ -266,12 +266,12 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         ) : (
           <div className="text-center py-12">
             <BookOpen className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
-            <Heading level={3} className="text-xl font-semibold text-neutral-900 mb-2">
+            <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? t('emptyFiltered.title')
                 : t('emptyAll.title')}
             </Heading>
-            <p className="text-neutral-600 mb-4">
+            <p className="text-text-secondary mb-4">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? t('emptyFiltered.subtitle')
                 : t('emptyAll.subtitle')}
@@ -282,7 +282,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   setCategoryFilter('all')
                   setLevelFilter('all')
                 }}
-                className="text-primary-600 hover:text-primary-700 font-medium"
+                className="text-action hover:text-primary-700 font-medium"
               >
                 {t('emptyFiltered.clearFilters')}
               </button>
@@ -301,7 +301,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           </p>
           <Link
             href="/workshops/propose"
-            className="inline-flex items-center gap-2 bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-neutral-50 transition-colors"
+            className="inline-flex items-center gap-2 bg-surface-base text-action px-6 py-3 rounded-lg font-semibold hover:bg-neutral-50 transition-colors"
           >
             {t('cta.button')}
             <ArrowRight className="w-5 h-5" />

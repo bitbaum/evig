@@ -174,12 +174,12 @@ export function ImageCapture({
             onDrop={handleDrop}
           >
             <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center">
-                <ImageIcon className="w-8 h-8 text-neutral-500" />
+              <div className="w-16 h-16 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center">
+                <ImageIcon className="w-8 h-8 text-text-tertiary" />
               </div>
 
               <div>
-                <p className="text-neutral-600 dark:text-neutral-400 mb-2">
+                <p className="text-text-secondary mb-2">
                   {t('dragOrText')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -206,7 +206,7 @@ export function ImageCapture({
                 </div>
               </div>
 
-              <p className="text-xs text-neutral-500 dark:text-neutral-500">
+              <p className="text-xs text-text-tertiary dark:text-neutral-500">
                 {t('fileHint')}
               </p>
             </div>
@@ -238,7 +238,7 @@ export function ImageCapture({
             <div className="space-y-4">
               {/* Image preview */}
               <div className="relative">
-                <div className="relative w-full aspect-video bg-neutral-100 dark:bg-neutral-700 rounded-lg overflow-hidden">
+                <div className="relative w-full aspect-video bg-surface-raised dark:bg-neutral-700 rounded-lg overflow-hidden">
                   <Image
                     src={imagePreview}
                     alt={t('imageAlt')}
@@ -281,14 +281,14 @@ export function ImageCapture({
                 )}
 
                 {state === 'analyzing' && (
-                  <div className="flex items-center gap-2 text-primary-600">
+                  <div className="flex items-center gap-2 text-action">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     <span>{t('analyzing')}</span>
                   </div>
                 )}
 
                 {state === 'success' && (
-                  <div className="flex items-center gap-2 text-primary-600">
+                  <div className="flex items-center gap-2 text-action">
                     <CheckCircle2 className="w-5 h-5" />
                     <span>{t('success')}</span>
                   </div>

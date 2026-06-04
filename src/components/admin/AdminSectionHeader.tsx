@@ -38,12 +38,12 @@ export function AdminSectionHeader({
     <div
       className={cn(
         'flex items-start justify-between gap-3',
-        divider && 'pb-3 border-b border-neutral-200 dark:border-white/[0.06]',
+        divider && 'pb-3 border-b border',
         className
       )}
     >
       <div className="flex items-center gap-2 min-w-0">
-        {Icon && <Icon className="w-4 h-4 text-neutral-400 flex-shrink-0" />}
+        {Icon && <Icon className="w-4 h-4 text-text-muted flex-shrink-0" />}
         <div className="min-w-0">
           <h2 className={adminType.sectionTitle}>{title}</h2>
           {description && (

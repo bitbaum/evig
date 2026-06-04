@@ -48,7 +48,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
   const platforms = t.raw('platforms') as Array<{ title: string; description: string; href: string }>
 
   return (
-    <div className="bg-white">
+    <div className="bg-surface-base">
       {/* Hero */}
       <PageHero
         theme="about"
@@ -62,11 +62,11 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
             <IconBadge icon={Target} theme="about" size="md" />
-            <Heading level={2} className="tracking-tight text-neutral-900">
+            <Heading level={2} className="tracking-tight text-text-primary">
               {t('mission.title')}
             </Heading>
           </div>
-          <p className="text-lg text-neutral-600 leading-8">
+          <p className="text-lg text-text-secondary leading-8">
             {ORG.description}{' '}
             {t('mission.body', { legalForm: ORG.legalForm, foundingYear: ORG.foundingYear })}
           </p>
@@ -74,22 +74,22 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       </div>
 
       {/* Section 2: Stats */}
-      <div className="bg-neutral-50 dark:bg-neutral-900 py-12 sm:py-16">
+      <div className="bg-surface-raised dark:bg-neutral-900 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-4">
               <IconBadge icon={BarChart3} theme="about" size="md" />
             </div>
-            <Heading level={2} className="tracking-tight text-neutral-900 dark:text-white">
+            <Heading level={2} className="tracking-tight text-text-primary">
               {t('stats.title')}
             </Heading>
           </div>
 
           <dl className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
             {compactMetrics.map((metric, index) => (
-              <div key={index} className="bg-white dark:bg-neutral-800 rounded-xl p-4 sm:p-6 text-center border border-neutral-100 dark:border-white/[0.06]">
-                <dd className="text-2xl sm:text-3xl font-bold text-primary-600 dark:text-primary-400">{metric.value}</dd>
-                <dt className="mt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">{metric.label}</dt>
+              <div key={index} className="bg-white dark:bg-neutral-800 rounded-xl p-4 sm:p-6 text-center border border-subtle">
+                <dd className="text-2xl sm:text-3xl font-bold text-action">{metric.value}</dd>
+                <dt className="mt-1 text-xs sm:text-sm text-text-secondary">{metric.label}</dt>
               </div>
             ))}
           </dl>
@@ -97,7 +97,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
           <div className="mt-8 text-center">
             <Link
               href="/about/impact"
-              className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
+              className="text-sm font-semibold text-action hover:text-primary-700 underline underline-offset-2"
             >
               {t('stats.moreLink')} <span aria-hidden="true">→</span>
             </Link>
@@ -110,14 +110,14 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100" aria-hidden="true">
-                <Briefcase className="h-5 w-5 text-neutral-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-raised" aria-hidden="true">
+                <Briefcase className="h-5 w-5 text-text-secondary" />
               </div>
             </div>
-            <Heading level={2} className="tracking-tight text-neutral-900">
+            <Heading level={2} className="tracking-tight text-text-primary">
               {t('howWeWork.title')}
             </Heading>
-            <p className="mt-4 text-lg text-neutral-600 max-w-2xl mx-auto">
+            <p className="mt-4 text-lg text-text-secondary max-w-2xl mx-auto">
               {t('howWeWork.subtitle')}
             </p>
           </div>
@@ -129,11 +129,11 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
                 href={platform.href}
                 className="card-shell-inset rounded-xl p-6 hover:border-neutral-300 transition-colors group"
               >
-                <Heading level={3} className="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                <Heading level={3} className="text-lg font-bold text-text-primary group-hover:text-primary-600 transition-colors">
                   {platform.title}
                 </Heading>
-                <p className="mt-2 text-sm text-neutral-600">{platform.description}</p>
-                <span className="mt-4 inline-block text-sm font-semibold text-primary-600">
+                <p className="mt-2 text-sm text-text-secondary">{platform.description}</p>
+                <span className="mt-4 inline-block text-sm font-semibold text-action">
                   {t('howWeWork.platformCta')} <span aria-hidden="true">→</span>
                 </span>
               </Link>
@@ -143,21 +143,21 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       </div>
 
       {/* Section 4: Finances */}
-      <div className="bg-neutral-50 py-12 sm:py-16">
+      <div className="bg-surface-raised py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
             <IconBadge icon={FileText} theme="marketplace" size="md" />
-            <Heading level={2} className="tracking-tight text-neutral-900">
+            <Heading level={2} className="tracking-tight text-text-primary">
               {t('finances.title')}
             </Heading>
           </div>
-          <p className="text-lg text-neutral-600 leading-8">
+          <p className="text-lg text-text-secondary leading-8">
             {t('finances.body')}
           </p>
           <div className="mt-6">
             <Link
               href="/mitglied-werden"
-              className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
+              className="text-sm font-semibold text-action hover:text-primary-700 underline underline-offset-2"
             >
               {t('finances.memberLink')} <span aria-hidden="true">→</span>
             </Link>
@@ -170,15 +170,15 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
             <IconBadge icon={Users} theme="about" size="md" />
-            <Heading level={2} className="tracking-tight text-neutral-900">
+            <Heading level={2} className="tracking-tight text-text-primary">
               {t('board.title')}
             </Heading>
           </div>
-          <p className="text-lg text-neutral-600 leading-8">
+          <p className="text-lg text-text-secondary leading-8">
             {t('board.body', { orgName: ORG.name })}{' '}
             <a
               href={`mailto:${CONTACT.email}`}
-              className="font-semibold text-primary-600 hover:text-primary-700 underline"
+              className="font-semibold text-action hover:text-primary-700 underline"
             >
               {CONTACT.email}
             </a>
@@ -190,7 +190,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
             </Link>
             <Link
               href="/get-involved/donate"
-              className="rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 border border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-center"
+              className="rounded-md bg-surface-base px-5 py-2.5 text-sm font-semibold text-action border border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-center"
             >
               {t('board.donateBtn')}
             </Link>

@@ -75,7 +75,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
       <TeamLeavePeriodsCard profileId={profile.id} />
 
       {/* Tab bar */}
-      <div className="flex items-center justify-between gap-3 border-b border-neutral-200 dark:border-white/[0.06]">
+      <div className="flex items-center justify-between gap-3 border-b border">
         <nav className="flex -mb-px overflow-x-auto" role="tablist" aria-label="Profilbereiche">
           {TABS.map(t => {
             const Icon = t.icon
@@ -90,7 +90,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
                   'inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                   isActive
                     ? 'border-primary-600 text-primary-700 dark:text-primary-300'
-                    : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-white/[0.1]',
+                    : 'border-transparent text-text-secondary hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-white/[0.1]',
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -101,7 +101,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
         </nav>
         <Link
           href={`/admin/team/${profile.id}/edit`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] whitespace-nowrap"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] whitespace-nowrap"
         >
           <Edit2 className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Bearbeiten</span>

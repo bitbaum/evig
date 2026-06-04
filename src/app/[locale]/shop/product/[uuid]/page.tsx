@@ -59,7 +59,7 @@ function mapConditionToSchema(condition: string): string {
 const CONDITION_COLORS: Record<string, string> = {
   'wie neu':    'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   'sehr gut':   'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
-  'gut':        'bg-neutral-100 text-neutral-800',
+  'gut':        'bg-surface-raised text-neutral-800',
   'akzeptabel': 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300',
 }
 
@@ -79,7 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const relatedProducts = similar.products.filter(p => p.id !== product.id).slice(0, 3)
 
   const conditionKey = product.condition.toLowerCase()
-  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-neutral-100 text-neutral-800'
+  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-surface-raised text-neutral-800'
   const CONDITION_LABEL_MAP: Record<string, string> = {
     'wie neu': t('product.conditionLabels.wieNeu'),
     'sehr gut': t('product.conditionLabels.sehrGut'),
@@ -114,9 +114,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     />
     <div>
       {/* Breadcrumbs */}
-      <div className="bg-white border-b border-neutral-100">
+      <div className="bg-surface-base border-b border-subtle">
         <PageShell py="py-3">
-          <nav className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <nav className="flex items-center gap-2 text-sm text-text-tertiary">
             <Link href="/" className="hover:text-primary-600 transition-colors">
               <Home className="w-4 h-4" />
             </Link>
@@ -125,11 +125,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {product.category && (
               <>
                 <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
-                <span className="text-neutral-900 dark:text-white font-medium truncate max-w-[200px]">{product.category}</span>
+                <span className="text-text-primary font-medium truncate max-w-[200px]">{product.category}</span>
               </>
             )}
             <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
-            <span className="text-neutral-900 dark:text-white font-medium truncate max-w-[200px]">{product.title}</span>
+            <span className="text-text-primary font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
         </PageShell>
       </div>
@@ -149,7 +149,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-neutral-50 dark:bg-neutral-900">
+                <div className="flex items-center justify-center h-full bg-surface-raised dark:bg-neutral-900">
                   <Package className="w-24 h-24 text-neutral-200 dark:text-neutral-700" />
                 </div>
               )}
@@ -159,21 +159,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Details */}
           <div className="flex flex-col gap-6">
             <div>
-              <p className="text-sm font-semibold text-primary-600 uppercase tracking-wider mb-1">
+              <p className="text-sm font-semibold text-action uppercase tracking-wider mb-1">
                 {product.brand}
               </p>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white leading-tight">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary leading-tight">
                 {product.title}
               </Heading>
               {product.description && (
-                <p className="mt-3 text-neutral-600 dark:text-neutral-400">{product.description}</p>
+                <p className="mt-3 text-text-secondary">{product.description}</p>
               )}
             </div>
 
             {/* Price & condition */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2">
-                <Tag className="w-5 h-5 text-primary-600" />
+                <Tag className="w-5 h-5 text-action" />
                 <span className="text-3xl font-bold text-primary-700">
                   {formatCHF(product.price)}
                 </span>
@@ -198,7 +198,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Customer profiles */}
             {product.customer_profiles.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 flex items-center gap-1.5">
+                <p className="text-sm font-medium text-text-secondary mb-2 flex items-center gap-1.5">
                   <Layers className="w-4 h-4" />
                   {t('product.suitableFor')}
                 </p>
@@ -218,7 +218,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Trust badge */}
             <div className="flex items-start gap-3 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-xl">
-              <Shield className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-action shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="font-semibold text-primary-900 dark:text-primary-100">{t('product.verifiedTitle')}</p>
                 <p className="text-primary-700 dark:text-primary-300 mt-0.5">
@@ -254,7 +254,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Related products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-6">
+            <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
               {t('product.similarProducts')}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -264,7 +264,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   href={`/shop/product/${p.item_uuid}`}
                   className="group card-shell hover:border-primary-300 transition-all overflow-hidden flex flex-col"
                 >
-                  <div className="relative aspect-[4/3] bg-neutral-50 dark:bg-neutral-900">
+                  <div className="relative aspect-[4/3] bg-surface-raised dark:bg-neutral-900">
                     {p.image_url ? (
                       <Image
                         src={p.image_url}
@@ -280,8 +280,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     )}
                   </div>
                   <div className="p-4">
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium uppercase tracking-wide">{p.brand}</p>
-                    <h3 className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors line-clamp-2 mt-0.5">
+                    <p className="text-xs text-text-tertiary font-medium uppercase tracking-wide">{p.brand}</p>
+                    <h3 className="font-medium text-text-primary group-hover:text-primary-600 transition-colors line-clamp-2 mt-0.5">
                       {p.title}
                     </h3>
                     <p className="mt-2 font-bold text-primary-700">CHF {p.price.toFixed(2)}</p>

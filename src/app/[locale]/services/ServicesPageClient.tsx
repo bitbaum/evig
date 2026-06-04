@@ -84,8 +84,8 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
             service.available
-              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 group-hover:bg-primary-600 group-hover:text-white'
-              : 'bg-neutral-100 text-neutral-400'
+              ? 'bg-primary-100 dark:bg-primary-900/30 text-action group-hover:bg-primary-600 group-hover:text-white'
+              : 'bg-surface-raised text-text-muted'
           }`}>
             <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
           </div>
@@ -99,41 +99,41 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               )}
             </div>
             <div className={`flex items-center font-semibold mb-4 ${
-              service.available ? 'text-primary-600' : 'text-neutral-400'
+              service.available ? 'text-action' : 'text-text-muted'
             }`}>
               <Zap className="w-4 h-4 mr-2" />
               <span>{service.highlight}</span>
             </div>
           </div>
         </div>
-        <p className="text-neutral-600 mb-6 flex-grow">{service.description}</p>
+        <p className="text-text-secondary mb-6 flex-grow">{service.description}</p>
         <div className="space-y-3 mb-6">
           {service.features.map((feature, i) => (
-            <div key={i} className="flex items-center text-neutral-600">
+            <div key={i} className="flex items-center text-text-secondary">
               <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${
-                service.available ? 'text-primary-500' : 'text-neutral-400'
+                service.available ? 'text-primary-500' : 'text-text-muted'
               }`} />
               <span>{feature}</span>
             </div>
           ))}
         </div>
-        <div className="mt-auto pt-6 border-t border-neutral-200">
+        <div className="mt-auto pt-6 border-t border">
           <div className="flex items-center justify-between mb-4">
             {service.pricing ? (
               <span className={`text-lg font-semibold ${
-                service.available ? 'text-primary-600' : 'text-neutral-400'
+                service.available ? 'text-action' : 'text-text-muted'
               }`}>
                 {service.pricing}
               </span>
             ) : (
-              <span className="text-neutral-500 text-sm">{t('pricingTbd')}</span>
+              <span className="text-text-tertiary text-sm">{t('pricingTbd')}</span>
             )}
             <Link
               href={service.href}
               className={`inline-flex items-center font-medium transition-colors duration-300 group text-sm ${
                 service.available
-                  ? 'text-neutral-600 hover:text-neutral-700'
-                  : 'text-neutral-500 hover:text-neutral-600'
+                  ? 'text-text-secondary hover:text-neutral-700'
+                  : 'text-text-tertiary hover:text-neutral-600'
               }`}
             >
               <span>{t('details')}</span>
@@ -144,19 +144,19 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
-                <div className="w-full inline-flex items-center justify-center text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-action font-semibold bg-primary-50 dark:bg-primary-900/20 px-4 py-2 rounded-lg">
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   {t('appointmentRequested')}
                 </div>
               ) : bookingStatus === 'booking' ? (
-                <div className="w-full inline-flex items-center justify-center text-neutral-600 font-semibold bg-neutral-50 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-text-secondary font-semibold bg-surface-raised px-4 py-2 rounded-lg">
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   {t('booking')}
                 </div>
               ) : !session?.user ? (
                 <button
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
-                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-action hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
@@ -173,7 +173,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : (
                 <Link
                   href={service.href}
-                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-action hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <ArrowRight className="w-4 h-4 mr-2" />
                   {t('learnMore')}
@@ -267,17 +267,17 @@ export default function ServicesPage() {
           showResultsCount={true}
         />
 
-        <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-neutral-200">
+        <section className="py-12 sm:py-16 md:py-20 bg-surface-base border-t border">
           <div className="container mx-auto px-4 sm:px-6 text-center">
-            <Heading level={2} className="mb-4 sm:mb-6 text-neutral-900">{t('ctaTitle')}</Heading>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-neutral-600">{t('ctaSubtitle')}</p>
+            <Heading level={2} className="mb-4 sm:mb-6 text-text-primary">{t('ctaTitle')}</Heading>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-text-secondary">{t('ctaSubtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button as={Link} href="/contact" variant="primary" size="lg">
                 {t('ctaContact')}
               </Button>
               <Link
                 href={ROUTES.public.shop}
-                className="inline-block border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
+                className="inline-block border-2 border-neutral-300 dark:border-neutral-600 text-text-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}
               </Link>

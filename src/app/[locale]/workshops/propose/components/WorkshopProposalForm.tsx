@@ -314,7 +314,7 @@ export function WorkshopProposalForm() {
           )}
         </Button>
 
-        <p className="text-sm text-neutral-600 mt-4">
+        <p className="text-sm text-text-secondary mt-4">
           {t('form.reviewNote')}
         </p>
       </div>

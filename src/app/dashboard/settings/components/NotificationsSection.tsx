@@ -47,10 +47,10 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
   return (
     <div className="space-y-6">
       <div>
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
           {labels.title}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">
+        <p className="text-sm text-text-secondary mb-6">
           {labels.description}
         </p>
       </div>
@@ -59,17 +59,17 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
         {notificationOptions.map((option) => (
           <div
             key={option.id}
-            className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600"
+            className="flex items-start gap-4 p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg border-2 border dark:border-neutral-600"
           >
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
-                <option.icon className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+              <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-lg flex items-center justify-center">
+                <option.icon className="w-5 h-5 text-text-secondary" />
               </div>
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <Heading level={4} className="text-sm font-medium text-neutral-900 dark:text-white">
+                <Heading level={4} className="text-sm font-medium text-text-primary">
                   {option.label}
                 </Heading>
                 <button
@@ -80,13 +80,13 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-surface-base shadow ring-0 transition duration-200 ease-in-out ${
                       option.value ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
                 </button>
               </div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-text-secondary">
                 {option.description}
               </p>
             </div>

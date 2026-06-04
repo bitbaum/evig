@@ -52,7 +52,7 @@ export function OfferForm({
         </Button>
       ) : (
         <form onSubmit={onSubmit}>
-          <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('heading')}</Heading>
 
           {error && (
             <div id="offer-error" className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400">
@@ -62,7 +62,7 @@ export function OfferForm({
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="offer-message" className="block text-sm font-medium text-neutral-700 mb-1">
+              <label htmlFor="offer-message" className="block text-sm font-medium text-text-secondary mb-1">
                 {t('messageLabel')} <span className="text-error-500">*</span>
               </label>
               <Textarea
@@ -82,7 +82,7 @@ export function OfferForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-text-secondary mb-1">
                   {t('estimatedTimeLabel')}
                 </label>
                 <Input
@@ -94,7 +94,7 @@ export function OfferForm({
                 />
               </div>
               <div>
-                <label htmlFor="offer-compensation" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label htmlFor="offer-compensation" className="block text-sm font-medium text-text-secondary mb-1">
                   {t('compensationLabel')}
                 </label>
                 <Input
@@ -108,7 +108,7 @@ export function OfferForm({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('skillsLabel')}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -120,7 +120,7 @@ export function OfferForm({
                     className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                       offerSkills.includes(skill.id)
                         ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 border-2 border-primary-500'
-                        : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
+                        : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
                     }`}
                   >
                     {skill.name}

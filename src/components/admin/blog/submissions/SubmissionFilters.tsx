@@ -13,7 +13,7 @@ interface SubmissionFiltersProps {
 
 export function SubmissionFilters({ filter, counts, onFilterChange }: SubmissionFiltersProps) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-4">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-4">
       <div className="flex flex-wrap gap-2">
         {FILTER_OPTIONS.map((status) => (
           <button
@@ -22,7 +22,7 @@ export function SubmissionFilters({ filter, counts, onFilterChange }: Submission
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               filter === status
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-600'
             }`}
           >
             {status === 'all'

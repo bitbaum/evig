@@ -84,12 +84,12 @@ export function AIFieldIndicator({
           />
 
           {/* Popover */}
-          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700 p-3">
+          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-surface-base dark:bg-neutral-800 rounded-lg shadow-lg border dark:border-neutral-700 p-3">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary-600" />
-                <span className="font-medium text-neutral-900 dark:text-white text-sm">
+                <Sparkles className="w-4 h-4 text-action" />
+                <span className="font-medium text-text-primary text-sm">
                   KI-Extraktion
                 </span>
               </div>
@@ -98,7 +98,7 @@ export function AIFieldIndicator({
                 onClick={() => setShowDetails(false)}
                 className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
               >
-                <X className="w-4 h-4 text-neutral-500" />
+                <X className="w-4 h-4 text-text-tertiary" />
               </button>
             </div>
 
@@ -106,7 +106,7 @@ export function AIFieldIndicator({
             <div className="space-y-2 text-sm">
               {/* Confidence */}
               <div className="flex items-center justify-between">
-                <span className="text-neutral-600 dark:text-neutral-400">Konfidenz:</span>
+                <span className="text-text-secondary">Konfidenz:</span>
                 <span className={`px-2 py-0.5 rounded ${colorClass}`}>
                   {confidencePercent}% ({confidenceLabel})
                 </span>
@@ -114,8 +114,8 @@ export function AIFieldIndicator({
 
               {/* Source type */}
               <div className="flex items-center justify-between">
-                <span className="text-neutral-600 dark:text-neutral-400">Quelle:</span>
-                <span className="flex items-center gap-1 text-neutral-900 dark:text-white">
+                <span className="text-text-secondary">Quelle:</span>
+                <span className="flex items-center gap-1 text-text-primary">
                   <Icon className="w-4 h-4" />
                   {SOURCE_LABELS[source.type]}
                 </span>
@@ -124,8 +124,8 @@ export function AIFieldIndicator({
               {/* Model */}
               {source.model && (
                 <div className="flex items-center justify-between">
-                  <span className="text-neutral-600 dark:text-neutral-400">Modell:</span>
-                  <code className="px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-700 rounded text-xs">
+                  <span className="text-text-secondary">Modell:</span>
+                  <code className="px-1.5 py-0.5 bg-surface-raised dark:bg-neutral-700 rounded text-xs">
                     {source.model}
                   </code>
                 </div>
@@ -133,11 +133,11 @@ export function AIFieldIndicator({
 
               {/* Source input */}
               {source.inputText && (
-                <div className="mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                  <span className="text-neutral-600 dark:text-neutral-400 block mb-1">
+                <div className="mt-2 pt-2 border-t border dark:border-neutral-700">
+                  <span className="text-text-secondary block mb-1">
                     Eingabe:
                   </span>
-                  <div className="bg-neutral-50 dark:bg-neutral-900 rounded p-2 text-xs text-neutral-700 dark:text-neutral-300 max-h-20 overflow-y-auto">
+                  <div className="bg-surface-raised dark:bg-neutral-900 rounded p-2 text-xs text-text-secondary max-h-20 overflow-y-auto">
                     &ldquo;{source.inputText}&rdquo;
                   </div>
                 </div>
@@ -145,8 +145,8 @@ export function AIFieldIndicator({
 
               {/* Verification sources */}
               {source.sources && source.sources.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-700">
-                  <span className="text-neutral-600 dark:text-neutral-400 block mb-1.5 flex items-center gap-1">
+                <div className="mt-2 pt-2 border-t border dark:border-neutral-700">
+                  <span className="text-text-secondary block mb-1.5 flex items-center gap-1">
                     <ExternalLink className="w-3 h-3" />
                     Quellen prüfen:
                   </span>
@@ -157,12 +157,12 @@ export function AIFieldIndicator({
                         href={verifySource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs text-primary-600 dark:text-primary-400 hover:underline bg-primary-50 dark:bg-primary-900/20 rounded px-2 py-1"
+                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-primary-50 dark:bg-primary-900/20 rounded px-2 py-1"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">{verifySource.title}</span>
-                        <span className="text-neutral-500 text-[10px] ml-auto flex-shrink-0">
+                        <span className="text-text-tertiary text-[10px] ml-auto flex-shrink-0">
                           {verifySource.type}
                         </span>
                       </a>
@@ -172,7 +172,7 @@ export function AIFieldIndicator({
               )}
 
               {/* Timestamp */}
-              <div className="text-xs text-neutral-500 mt-2">
+              <div className="text-xs text-text-tertiary mt-2">
                 Extrahiert: {formatTime(new Date(source.timestamp))}
               </div>
             </div>

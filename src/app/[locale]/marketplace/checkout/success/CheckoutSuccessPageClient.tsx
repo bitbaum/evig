@@ -49,7 +49,7 @@ function CheckoutSuccessContent() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
     )
   }
@@ -61,33 +61,33 @@ function CheckoutSuccessContent() {
       <div className="card-shell rounded-2xl p-8">
         <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
 
-        <Heading level={1} className="text-2xl text-neutral-900 dark:text-white mb-2">
+        <Heading level={1} className="text-2xl text-text-primary mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+        <p className="text-text-secondary mb-6">
           {t('description')}
         </p>
 
         {order && (
-          <div className="bg-neutral-50 dark:bg-neutral-700/50 rounded-xl p-4 mb-6 text-left">
+          <div className="bg-surface-raised dark:bg-neutral-700/50 rounded-xl p-4 mb-6 text-left">
             <div className="flex gap-3">
               <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-200 dark:bg-neutral-600">
                 {order.thumbnail ? (
                   <Image src={order.thumbnail} alt={order.listing_title || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Package className="w-5 h-5 text-neutral-400" />
+                    <Package className="w-5 h-5 text-text-muted" />
                   </div>
                 )}
               </div>
               <div>
-                <Heading level={3} className="text-neutral-900 dark:text-white text-sm">{order.listing_title}</Heading>
-                <p className="text-lg font-bold text-primary-600 mt-0.5">{formatCHF(Number(order.amount_chf))}</p>
+                <Heading level={3} className="text-text-primary text-sm">{order.listing_title}</Heading>
+                <p className="text-lg font-bold text-action mt-0.5">{formatCHF(Number(order.amount_chf))}</p>
               </div>
             </div>
             {statusConfig && (
               <div className="mt-3 flex items-center gap-2">
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">{t('statusLabel')}</span>
+                <span className="text-xs text-text-tertiary">{t('statusLabel')}</span>
                 <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}>
                   {statusConfig.label}
                 </span>
@@ -116,7 +116,7 @@ export default function CheckoutSuccessPage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
     }>
       <CheckoutSuccessContent />

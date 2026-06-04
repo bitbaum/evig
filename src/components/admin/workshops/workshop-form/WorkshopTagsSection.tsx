@@ -13,8 +13,8 @@ interface Props {
 
 export function WorkshopTagsSection({ tags, onAddTag, onRemoveTag }: Props) {
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
-      <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-6">
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+      <Heading level={2} className="text-lg text-text-primary mb-6">
         Tags (Optional)
       </Heading>
 

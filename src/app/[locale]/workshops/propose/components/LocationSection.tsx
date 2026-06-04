@@ -47,14 +47,14 @@ export function LocationSection({
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-neutral-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
         <MapPin className="w-5 h-5 mr-2" />
         {t('sections.location.title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.location.typeLabel')}
           </label>
           <div className="space-y-2">
@@ -64,9 +64,9 @@ export function LocationSection({
                 value="venue"
                 checked={locationType === 'venue'}
                 onChange={(e) => onChange('locationType', e.target.value)}
-                className="mr-3 text-primary-600 focus:ring-primary-500"
+                className="mr-3 text-action focus:ring-primary-500"
               />
-              <span className="text-sm text-neutral-700">{t('sections.location.typeVenue')}</span>
+              <span className="text-sm text-text-secondary">{t('sections.location.typeVenue')}</span>
             </label>
             <label className="flex items-center">
               <input
@@ -74,9 +74,9 @@ export function LocationSection({
                 value="online"
                 checked={locationType === 'online'}
                 onChange={(e) => onChange('locationType', e.target.value)}
-                className="mr-3 text-primary-600 focus:ring-primary-500"
+                className="mr-3 text-action focus:ring-primary-500"
               />
-              <span className="text-sm text-neutral-700">{t('sections.location.typeOnline')}</span>
+              <span className="text-sm text-text-secondary">{t('sections.location.typeOnline')}</span>
             </label>
             <label className="flex items-center">
               <input
@@ -84,9 +84,9 @@ export function LocationSection({
                 value="home"
                 checked={locationType === 'home'}
                 onChange={(e) => onChange('locationType', e.target.value)}
-                className="mr-3 text-primary-600 focus:ring-primary-500"
+                className="mr-3 text-action focus:ring-primary-500"
               />
-              <span className="text-sm text-neutral-700">{t('sections.location.typeHome')}</span>
+              <span className="text-sm text-text-secondary">{t('sections.location.typeHome')}</span>
             </label>
           </div>
         </div>
@@ -94,11 +94,11 @@ export function LocationSection({
         {locationType === 'venue' && (
           <>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.availableVenues')}
               </label>
               {loadingLocations ? (
-                <div className="flex items-center space-x-2 text-neutral-500">
+                <div className="flex items-center space-x-2 text-text-tertiary">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
                   <span>{t('sections.location.loading')}</span>
                 </div>
@@ -122,7 +122,7 @@ export function LocationSection({
                   ))}
                 </Select>
               ) : (
-                <div className="text-sm text-neutral-500 bg-warning-50 border border-warning-200 rounded-lg p-3">
+                <div className="text-sm text-text-tertiary bg-warning-50 border border-warning-200 rounded-lg p-3">
                   <p>{t('sections.location.noVenues')}</p>
                   <p className="mt-1">{t('sections.location.noVenuesSuggestion')}</p>
                 </div>
@@ -130,7 +130,7 @@ export function LocationSection({
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.alternativeVenue')}
               </label>
               <Input
@@ -139,13 +139,13 @@ export function LocationSection({
                 onChange={(e) => onChange('proposedLocation', e.target.value)}
                 placeholder={t('sections.location.alternativeVenuePlaceholder')}
               />
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className="text-xs text-text-tertiary mt-1">
                 {t('sections.location.alternativeVenueHint')}
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.proposedDate')}
               </label>
               <Input
@@ -156,7 +156,7 @@ export function LocationSection({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.proposedTime')}
               </label>
               <Input
@@ -171,7 +171,7 @@ export function LocationSection({
         {locationType === 'home' && (
           <>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.address')}
               </label>
               <Input
@@ -184,7 +184,7 @@ export function LocationSection({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.proposedDate')}
               </label>
               <Input
@@ -195,7 +195,7 @@ export function LocationSection({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 {t('sections.location.proposedTime')}
               </label>
               <Input
@@ -208,7 +208,7 @@ export function LocationSection({
         )}
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.location.specialRequirements')}
           </label>
           <Textarea

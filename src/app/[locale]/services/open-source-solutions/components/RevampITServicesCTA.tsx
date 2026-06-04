@@ -17,14 +17,14 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
   if (!services) return null
 
   return (
-    <div className="rounded-xl border-2 border-neutral-200 bg-neutral-50 p-5">
-      <Heading level={3} className="text-base font-bold text-neutral-900 mb-3">
+    <div className="rounded-xl border-2 border bg-surface-raised p-5">
+      <Heading level={3} className="text-base font-bold text-text-primary mb-3">
         {t('title')}
       </Heading>
 
       {services.itHilfeNote && (
         <div className="flex items-start gap-3 mb-3">
-          <Wrench className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
+          <Wrench className="w-5 h-5 text-action shrink-0 mt-0.5" />
           <div>
             <p className="text-sm text-neutral-800">{services.itHilfeNote}</p>
             <Link
@@ -39,7 +39,7 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
 
       {services.workshopSlug && (
         <div className="flex items-start gap-3">
-          <GraduationCap className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
+          <GraduationCap className="w-5 h-5 text-action shrink-0 mt-0.5" />
           <div>
             <p className="text-sm text-neutral-800">{t('workshopAvailable')}</p>
             <Link

@@ -61,15 +61,15 @@ export function ListingFormFields({ formData, setFormData }: Props) {
   return (
     <>
       {/* Section header: Basic info */}
-      <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">{t('sectionBasicInfo')}</h2>
+      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest">{t('sectionBasicInfo')}</h2>
 
       {/* Title */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label htmlFor="listing-title" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <label htmlFor="listing-title" className="block text-sm font-medium text-text-secondary">
             {t('title')} <span className="text-error-500">*</span>
           </label>
-          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-error-500' : 'text-neutral-400'}`}>
+          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-error-500' : 'text-text-muted'}`}>
             {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           </span>
         </div>
@@ -86,10 +86,10 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Description */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label htmlFor="listing-description" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <label htmlFor="listing-description" className="block text-sm font-medium text-text-secondary">
             {t('description')} <span className="text-error-500">*</span>
           </label>
-          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-error-500' : 'text-neutral-400'}`}>
+          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-error-500' : 'text-text-muted'}`}>
             {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           </span>
         </div>
@@ -105,12 +105,12 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       </div>
 
       {/* Section header: Category & condition */}
-      <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest pt-2">{t('sectionCategoryCondition')}</h2>
+      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">{t('sectionCategoryCondition')}</h2>
 
       {/* Price + Category + Condition */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label htmlFor="listing-price" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label htmlFor="listing-price" className="block text-sm font-medium text-text-secondary mb-1">
             {t('price')}
           </label>
           <Input
@@ -127,7 +127,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           )}
         </div>
         <div>
-          <label htmlFor="listing-category" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label htmlFor="listing-category" className="block text-sm font-medium text-text-secondary mb-1">
             {t('category')} <span className="text-error-500">*</span>
           </label>
           <Select
@@ -144,7 +144,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </Select>
         </div>
         <div>
-          <label htmlFor="listing-condition" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label htmlFor="listing-condition" className="block text-sm font-medium text-text-secondary mb-1">
             {t('condition')}
           </label>
           <Select
@@ -173,9 +173,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
                   type="checkbox"
                   checked={check.checked}
                   onChange={() => handleConditionCheckToggle(check.key)}
-                  className="mt-0.5 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                  className="mt-0.5 rounded border-neutral-300 text-action focus:ring-primary-500"
                 />
-                <span className="text-sm text-neutral-700 dark:text-neutral-300">{check.label}</span>
+                <span className="text-sm text-text-secondary">{check.label}</span>
               </label>
             ))}
           </div>
@@ -185,8 +185,8 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Brand + Model */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('brand')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('brand')} <span className="text-xs text-text-tertiary">({tCommon('optional')})</span>
           </label>
           <Input
             type="text"
@@ -196,8 +196,8 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('model')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
+          <label className="block text-sm font-medium text-text-secondary mb-1">
+            {t('model')} <span className="text-xs text-text-tertiary">({tCommon('optional')})</span>
           </label>
           <Input
             type="text"
@@ -218,12 +218,12 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       )}
 
       {/* Section header: Delivery & payment */}
-      <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest pt-2">{t('sectionDelivery')}</h2>
+      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">{t('sectionDelivery')}</h2>
 
       {/* Delivery + Payment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('delivery')}
           </label>
           <Select
@@ -236,7 +236,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </Select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('payment')}
           </label>
           <Select
@@ -253,7 +253,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Shipping cost (conditional) */}
       {formData.deliveryOptions !== 'pickup' && (
         <div className="max-w-xs">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('shippingCost')}
           </label>
           <Input
@@ -269,8 +269,8 @@ export function ListingFormFields({ formData, setFormData }: Props) {
 
       {/* Pickup location */}
       <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          {t('pickupLocation')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
+        <label className="block text-sm font-medium text-text-secondary mb-1">
+          {t('pickupLocation')} <span className="text-xs text-text-tertiary">({tCommon('optional')})</span>
         </label>
         <Input
           type="text"

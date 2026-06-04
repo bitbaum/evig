@@ -25,17 +25,17 @@ export function ProductProfileFields({
 
   return (
     <div className="card-shell p-4 sm:p-6">
-      <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+      <Heading level={2} className="text-base sm:text-lg font-semibold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
         <Users className="w-5 h-5" />
         {t('title')}
       </Heading>
-      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3 sm:mb-4 hidden sm:block">
+      <p className="text-sm text-text-secondary mb-3 sm:mb-4 hidden sm:block">
         {t('hint')}
       </p>
 
       {Object.entries(getProfilesByCategory()).map(([categoryName, profiles]) => (
         <div key={categoryName} className="mb-4 last:mb-0">
-          <Heading level={3} className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2">
+          <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">
             {categoryName}
           </Heading>
           <div className="flex flex-wrap gap-2 sm:gap-2">

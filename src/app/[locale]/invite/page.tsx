@@ -78,10 +78,10 @@ export default function InvitePage() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-14 h-14 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
-            <Users className="w-7 h-7 text-primary-600 dark:text-primary-400" />
+            <Users className="w-7 h-7 text-action" />
           </div>
           <Heading level={1} className="text-3xl sm:text-4xl mb-3">Freunde einladen</Heading>
-          <p className="text-neutral-600 text-lg">
+          <p className="text-text-secondary text-lg">
             Lade Freunde zu {ORG.name} ein — und ihr beide profitiert.
           </p>
         </div>
@@ -90,30 +90,30 @@ export default function InvitePage() {
         <div className="grid sm:grid-cols-2 gap-4 mb-8">
           <div className="card-shell p-5">
             <div className="flex items-center gap-3 mb-2">
-              <Gift className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-              <span className="font-semibold text-neutral-900">Dein Freund erhält</span>
+              <Gift className="w-5 h-5 text-action" />
+              <span className="font-semibold text-text-primary">Dein Freund erhält</span>
             </div>
-            <p className="text-2xl font-bold text-primary-600 mb-1">CHF {inviteeCHF}</p>
-            <p className="text-sm text-neutral-500">Rabatt auf den ersten Einkauf im Shop</p>
+            <p className="text-2xl font-bold text-action mb-1">CHF {inviteeCHF}</p>
+            <p className="text-sm text-text-tertiary">Rabatt auf den ersten Einkauf im Shop</p>
           </div>
           <div className="card-shell p-5">
             <div className="flex items-center gap-3 mb-2">
-              <Gift className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-              <span className="font-semibold text-neutral-900">Du erhältst</span>
+              <Gift className="w-5 h-5 text-action" />
+              <span className="font-semibold text-text-primary">Du erhältst</span>
             </div>
-            <p className="text-2xl font-bold text-primary-600 mb-1">CHF {rewardCHF}</p>
-            <p className="text-sm text-neutral-500">Gutschein, wenn dein Freund seinen ersten Kauf abschliesst</p>
+            <p className="text-2xl font-bold text-action mb-1">CHF {rewardCHF}</p>
+            <p className="text-sm text-text-tertiary">Gutschein, wenn dein Freund seinen ersten Kauf abschliesst</p>
           </div>
         </div>
 
         {/* Referral link */}
         <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
-            <Link2 className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm font-medium text-neutral-700">Dein persönlicher Einladungslink</span>
+            <Link2 className="w-4 h-4 text-text-tertiary" />
+            <span className="text-sm font-medium text-text-secondary">Dein persönlicher Einladungslink</span>
           </div>
           {loading ? (
-            <div className="h-10 bg-neutral-100 rounded-lg animate-pulse" />
+            <div className="h-10 bg-surface-raised rounded-lg animate-pulse" />
           ) : (
             <div className="flex gap-2">
               <Input
@@ -147,7 +147,7 @@ export default function InvitePage() {
             </Button>
           </form>
           {feedback && (
-            <p className={`mt-3 text-sm ${feedback.type === 'success' ? 'text-primary-600' : 'text-red-600'}`}>
+            <p className={`mt-3 text-sm ${feedback.type === 'success' ? 'text-action' : 'text-red-600'}`}>
               {feedback.message}
             </p>
           )}
@@ -157,12 +157,12 @@ export default function InvitePage() {
         {data && (
           <div className="flex gap-6 text-center">
             <div className="flex-1 card-shell p-4">
-              <p className="text-2xl font-bold text-neutral-900">{data.totalInvites}</p>
-              <p className="text-sm text-neutral-500">Einladungen gesendet</p>
+              <p className="text-2xl font-bold text-text-primary">{data.totalInvites}</p>
+              <p className="text-sm text-text-tertiary">Einladungen gesendet</p>
             </div>
             <div className="flex-1 card-shell p-4">
-              <p className="text-2xl font-bold text-primary-600">{data.registrations}</p>
-              <p className="text-sm text-neutral-500">Registrierungen</p>
+              <p className="text-2xl font-bold text-action">{data.registrations}</p>
+              <p className="text-sm text-text-tertiary">Registrierungen</p>
             </div>
           </div>
         )}

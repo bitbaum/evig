@@ -54,7 +54,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white dark:border dark:border-white/[0.06] rounded-2xl shadow-2xl w-full max-w-lg p-6">
+      <div className="bg-surface-base dark:border dark:border-white/[0.06] rounded-2xl shadow-2xl w-full max-w-lg p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-semibold">{t('modal.title')}</h2>
           <Button onClick={onClose} variant="ghost" size="icon">
@@ -68,7 +68,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.serviceName')}</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.serviceName')}</label>
             <Input
               variant="elevated"
               required
@@ -80,7 +80,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.category')}</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.category')}</label>
               <Select
                 variant="elevated"
                 value={form.serviceCategory}
@@ -93,7 +93,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               </Select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.maxMembers')}</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.maxMembers')}</label>
               <Input
                 variant="elevated"
                 required
@@ -107,7 +107,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.monthlyCost')}</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.monthlyCost')}</label>
             <Input
               variant="elevated"
               required
@@ -119,14 +119,14 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               placeholder={t('modal.monthlyCostPlaceholder')}
             />
             {form.monthlyCostChf && form.maxMembers > 0 && (
-              <p className="text-xs text-primary-600 mt-1">
+              <p className="text-xs text-action mt-1">
                 {t('modal.perPersonCalc', { amount: (Number(form.monthlyCostChf) / form.maxMembers).toFixed(2) })}
               </p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.description')}</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.description')}</label>
             <Textarea
               variant="elevated"
               value={form.description}
@@ -138,7 +138,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.rules')}</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.rules')}</label>
             <Textarea
               variant="elevated"
               value={form.rules}

@@ -62,7 +62,7 @@ export function CurrentFocusInput({
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <Target className="w-4 h-4 text-neutral-500 flex-shrink-0" />
+        <Target className="w-4 h-4 text-text-tertiary flex-shrink-0" />
         {isEditing ? (
           <div className="flex items-center gap-2 flex-1">
             <Input
@@ -81,7 +81,7 @@ export function CurrentFocusInput({
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="p-1 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded disabled:opacity-50"
+              className="p-1 text-action hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -89,14 +89,14 @@ export function CurrentFocusInput({
                 <Check className="w-4 h-4" />
               )}
             </button>
-            <Button onClick={handleCancel} variant="ghost" size="icon" className="p-1 text-neutral-500">
+            <Button onClick={handleCancel} variant="ghost" size="icon" className="p-1 text-text-tertiary">
               <X className="w-4 h-4" />
             </Button>
           </div>
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex-1 text-left text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 truncate"
+            className="flex-1 text-left text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 truncate"
           >
             {focus || 'Fokus setzen...'}
           </button>
@@ -106,10 +106,10 @@ export function CurrentFocusInput({
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
+    <div className="bg-surface-base rounded-xl border border p-4">
       <div className="flex items-center gap-2 mb-3">
-        <Target className="w-5 h-5 text-neutral-500" />
-        <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktueller Fokus</Heading>
+        <Target className="w-5 h-5 text-text-tertiary" />
+        <Heading level={3} className="text-text-primary dark:text-neutral-100">Aktueller Fokus</Heading>
       </div>
 
       {error && (
@@ -130,14 +130,14 @@ export function CurrentFocusInput({
             placeholder="Woran arbeitest du gerade?"
             maxLength={200}
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-muted">
             {focus.length}/200
           </span>
         </div>
 
         {isEditing && (
           <div className="flex items-center justify-between">
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+            <p className="text-xs text-text-tertiary">
               Teile deinem Team mit, woran du arbeitest
             </p>
             <div className="flex gap-2">

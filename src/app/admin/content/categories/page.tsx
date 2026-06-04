@@ -118,13 +118,13 @@ export default async function AdminCategoriesPage() {
             href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
               Blog-Kategorien
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-text-secondary mt-1">
               Kategorien für Blog-Artikel verwalten
             </p>
           </div>
@@ -137,42 +137,42 @@ export default async function AdminCategoriesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Tag className="w-8 h-8 text-primary-600" />
+            <Tag className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Gesamt Kategorien
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.totalCategories}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-primary-600" />
+            <CheckCircle className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Aktive Kategorien
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.activeCategories}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Tag className="w-8 h-8 text-neutral-600" />
+            <Tag className="w-8 h-8 text-text-secondary" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Artikel gesamt
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.totalPosts}
               </p>
             </div>
@@ -181,30 +181,30 @@ export default async function AdminCategoriesPage() {
       </div>
 
       {/* Categories Table */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
         {categories.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-neutral-50 dark:bg-neutral-700">
+              <thead className="bg-surface-raised dark:bg-neutral-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Kategorie
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Farbe
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Artikel
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary dark:text-neutral-300 uppercase tracking-wider">
                     Aktionen
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
+              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
                 {categories.map((category) => (
                   <tr
                     key={category.id}
@@ -212,15 +212,15 @@ export default async function AdminCategoriesPage() {
                   >
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                        <div className="text-sm font-medium text-text-primary">
                           {category.name}
                         </div>
                         {category.description && (
-                          <div className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-1">
+                          <div className="text-sm text-text-tertiary line-clamp-1">
                             {category.description}
                           </div>
                         )}
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                        <div className="text-xs text-text-tertiary mt-1">
                           /{category.slug}
                         </div>
                       </div>
@@ -229,19 +229,19 @@ export default async function AdminCategoriesPage() {
                       {category.color ? (
                         <div className="flex items-center gap-2">
                           <div
-                            className="w-6 h-6 rounded-full border border-neutral-200 dark:border-neutral-600"
+                            className="w-6 h-6 rounded-full border border dark:border-neutral-600"
                             style={{ backgroundColor: category.color }}
                           />
-                          <span className="text-sm text-neutral-600 dark:text-neutral-400 font-mono">
+                          <span className="text-sm text-text-secondary font-mono">
                             {category.color}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-sm text-neutral-400">-</span>
+                        <span className="text-sm text-text-muted">-</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-neutral-900 dark:text-white">
+                      <span className="text-sm text-text-primary">
                         {category.post_count}
                       </span>
                     </td>
@@ -250,7 +250,7 @@ export default async function AdminCategoriesPage() {
                         className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${
                           category.is_active
                             ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
-                            : 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
+                            : 'bg-surface-raised text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
                         }`}
                       >
                         {category.is_active ? (
@@ -270,7 +270,7 @@ export default async function AdminCategoriesPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/admin/content/categories/${category.id}`}
-                          className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                          className="text-action hover:text-primary-900 dark:hover:text-primary-300"
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
@@ -294,11 +294,11 @@ export default async function AdminCategoriesPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Tag className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+            <Tag className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               Noch keine Kategorien
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+            <p className="text-text-secondary mb-6">
               Erstelle Kategorien, um deine Blog-Artikel zu organisieren.
             </p>
             <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
@@ -310,16 +310,16 @@ export default async function AdminCategoriesPage() {
       </div>
 
       {/* Info Banner */}
-      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
+      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Tag className="w-5 h-5 text-neutral-600" />
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Tag className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
+            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
               Kategorien-Verwaltung
             </Heading>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               Kategorien helfen beim Organisieren Ihrer Blog-Artikel. Jede
               Kategorie kann eine eigene Farbe und Beschreibung haben. Aktive
               Kategorien erscheinen in der Auswahl beim Erstellen neuer Artikel.

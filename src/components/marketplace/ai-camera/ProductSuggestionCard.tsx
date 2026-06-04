@@ -25,21 +25,21 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
   return (
     <div
       onClick={() => onSelect(suggestion)}
-      className="p-4 border border-neutral-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 cursor-pointer transition-colors"
+      className="p-4 border rounded-lg hover:border-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 cursor-pointer transition-colors"
     >
       <div className="flex items-start gap-4">
-        <CategoryIcon category={suggestion.category} className="w-8 h-8 text-primary-600 mt-1" />
+        <CategoryIcon category={suggestion.category} className="w-8 h-8 text-action mt-1" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <Heading level={4} className="font-medium text-neutral-900">{suggestion.name}</Heading>
+            <Heading level={4} className="font-medium text-text-primary">{suggestion.name}</Heading>
             <ConfidenceBadge confidence={suggestion.confidence} />
           </div>
-          <p className="text-sm text-neutral-600 mb-2">
+          <p className="text-sm text-text-secondary mb-2">
             {suggestion.brand} • {getConditionLabel(suggestion.condition)} • CHF {suggestion.estimatedPrice}
           </p>
           <FeatureTags features={suggestion.features} />
         </div>
-        <CheckCircle className="w-5 h-5 text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <CheckCircle className="w-5 h-5 text-action opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
     </div>
   )
@@ -62,7 +62,7 @@ function FeatureTags({ features }: { features: string[] }) {
   return (
     <div className="flex flex-wrap gap-1">
       {features.slice(0, 3).map((feature, index) => (
-        <span key={index} className="text-xs bg-neutral-100 text-neutral-700 px-2 py-1 rounded">
+        <span key={index} className="text-xs bg-surface-raised text-text-secondary px-2 py-1 rounded">
           {feature}
         </span>
       ))}

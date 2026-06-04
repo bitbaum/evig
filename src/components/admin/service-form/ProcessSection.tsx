@@ -20,14 +20,14 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
         {steps.map((step, index) => (
           <div
             key={index}
-            className="p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg space-y-3"
+            className="p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg space-y-3"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                   {step.step}
                 </div>
-                <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                <span className="text-sm font-medium text-text-secondary">
                   Schritt {step.step}
                 </span>
               </div>
@@ -56,7 +56,7 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
         <button
           type="button"
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Schritt hinzufügen

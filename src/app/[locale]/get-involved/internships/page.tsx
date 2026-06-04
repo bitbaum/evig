@@ -60,7 +60,7 @@ export default async function InternshipsPage({ params }: InternshipsPageProps) 
 
         {/* Benefits Section */}
         <section className="space-y-8">
-          <Heading level={2} className={`${responsiveTypography.section} text-neutral-900`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-text-primary`}>
             {t('internships.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>

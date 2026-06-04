@@ -21,10 +21,10 @@ export default function ContentPage() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
           href={ROUTES.admin.contentSubmissions}
-          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-warning-500 transition-colors relative group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-warning-500 transition-colors relative group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
+          <p className="text-sm text-text-secondary">
             Benutzer-Einreichungen prüfen und veröffentlichen
           </p>
           <span className="absolute top-4 right-4 w-2 h-2 bg-warning-500 rounded-full animate-pulse" />
@@ -32,47 +32,47 @@ export default function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentBlog}
-          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Blog-Artikel</Heading>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Blog-Artikel</Heading>
+          <p className="text-sm text-text-secondary">
             News, Tutorials und Ankündigungen
           </p>
         </Link>
 
         <Link
           href={ROUTES.admin.categories}
-          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Kategorien</Heading>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Kategorien</Heading>
+          <p className="text-sm text-text-secondary">
             Blog-Kategorien verwalten
           </p>
         </Link>
 
         <Link
           href={ROUTES.admin.contentPages}
-          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Seiten</Heading>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Seiten</Heading>
+          <p className="text-sm text-text-secondary">
             Statische Seiten wie Über uns, Kontakt, etc.
           </p>
         </Link>
 
         <Link
           href={ROUTES.admin.contentMedia}
-          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
+          className="p-6 bg-surface-base rounded-xl border border hover:border-primary-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Medien</Heading>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Medien</Heading>
+          <p className="text-sm text-text-secondary">
             Bilder, Videos und Dokumente
           </p>
         </Link>
       </div>
 
-      <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl">
-        <p className="text-sm text-neutral-700 dark:text-neutral-300">
+      <div className="p-6 bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl">
+        <p className="text-sm text-text-secondary">
           <strong>In Entwicklung:</strong> Die Inhaltsverwaltung wird mit dem AI-CMS verbunden.
         </p>
       </div>

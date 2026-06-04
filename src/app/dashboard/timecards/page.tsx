@@ -75,10 +75,10 @@ export default async function DashboardTimecardsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
         <div>
-          <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
+          <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
             Meine Zeiterfassung
           </Heading>
-          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-text-secondary">
             Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein.
           </p>
         </div>

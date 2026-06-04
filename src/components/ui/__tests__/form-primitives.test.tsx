@@ -50,16 +50,18 @@ describe('Input', () => {
   it('applies the elevated form primitive class when variant="elevated"', () => {
     render(<Input variant="elevated" data-testid="elev" />)
     const el = screen.getByTestId('elev')
-    // The elevated bg is what differentiates the two — neutral-700 vs neutral-900
-    expect(el).toHaveClass('dark:bg-neutral-700')
-    expect(el).not.toHaveClass('dark:bg-neutral-900')
+    // The elevated bg is what differentiates the two — `bg-surface-raised`
+    // sits a layer above the default `bg-surface-base` so inputs inside
+    // a modal/aside stay visible against the panel's own bg.
+    expect(el).toHaveClass('bg-surface-raised')
+    expect(el).not.toHaveClass('bg-surface-base')
   })
 
   it('defaults to the regular form primitive when variant is omitted', () => {
     render(<Input data-testid="def" />)
     const el = screen.getByTestId('def')
-    expect(el).toHaveClass('dark:bg-neutral-900')
-    expect(el).not.toHaveClass('dark:bg-neutral-700')
+    expect(el).toHaveClass('bg-surface-base')
+    expect(el).not.toHaveClass('bg-surface-raised')
   })
 })
 
@@ -88,8 +90,8 @@ describe('Textarea', () => {
   it('applies the elevated form primitive class when variant="elevated"', () => {
     render(<Textarea variant="elevated" data-testid="elev" />)
     const el = screen.getByTestId('elev')
-    expect(el).toHaveClass('dark:bg-neutral-700')
-    expect(el).not.toHaveClass('dark:bg-neutral-900')
+    expect(el).toHaveClass('bg-surface-raised')
+    expect(el).not.toHaveClass('bg-surface-base')
   })
 })
 
@@ -136,8 +138,8 @@ describe('Select', () => {
       </Select>
     )
     const el = screen.getByTestId('elev')
-    expect(el).toHaveClass('dark:bg-neutral-700')
-    expect(el).not.toHaveClass('dark:bg-neutral-900')
+    expect(el).toHaveClass('bg-surface-raised')
+    expect(el).not.toHaveClass('bg-surface-base')
   })
 })
 
@@ -155,15 +157,18 @@ describe('designPrimitive.form variants', () => {
     expect(typeof designPrimitive.form.selectElevated).toBe('string')
   })
 
-  it('elevated variants use neutral-700 dark bg, default variants use neutral-900', () => {
-    expect(designPrimitive.form.inputElevated).toContain('dark:bg-neutral-700')
-    expect(designPrimitive.form.input).toContain('dark:bg-neutral-900')
+  it('elevated variants sit on surface-raised, default variants on surface-base', () => {
+    // Semantic tokens flip light/dark via CSS vars in globals.css — no
+    // explicit `dark:` variant needed. The differentiator is which
+    // surface tier the control sits on.
+    expect(designPrimitive.form.inputElevated).toContain('bg-surface-raised')
+    expect(designPrimitive.form.input).toContain('bg-surface-base')
 
-    expect(designPrimitive.form.textareaElevated).toContain('dark:bg-neutral-700')
-    expect(designPrimitive.form.textarea).toContain('dark:bg-neutral-900')
+    expect(designPrimitive.form.textareaElevated).toContain('bg-surface-raised')
+    expect(designPrimitive.form.textarea).toContain('bg-surface-base')
 
-    expect(designPrimitive.form.selectElevated).toContain('dark:bg-neutral-700')
-    expect(designPrimitive.form.select).toContain('dark:bg-neutral-900')
+    expect(designPrimitive.form.selectElevated).toContain('bg-surface-raised')
+    expect(designPrimitive.form.select).toContain('bg-surface-base')
   })
 })
 

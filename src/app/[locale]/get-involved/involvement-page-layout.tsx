@@ -44,12 +44,12 @@ export async function InvolvementPageLayout({
       </section>
 
       {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-neutral-50 dark:bg-neutral-900`}>
+      <section className={`${responsiveSpacing.section} bg-surface-raised dark:bg-neutral-900`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
           <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbMedium}`}>
             {t('readyHeading')}
           </Heading>
-          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-neutral-600 dark:text-neutral-400`}>
+          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-text-secondary`}>
             {t('readyBody')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
@@ -58,7 +58,7 @@ export async function InvolvementPageLayout({
             </Link>
             <Link
               href="/get-involved"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20`}
+              className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-action hover:bg-primary-50 dark:hover:bg-primary-900/20`}
             >
               {t('exploreOptionsBtn')}
             </Link>

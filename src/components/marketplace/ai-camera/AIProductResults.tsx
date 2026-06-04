@@ -26,10 +26,10 @@ export function AIProductResults({
   return (
     <div className="space-y-4">
       <div className="text-center mb-6">
-        <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+        <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
           Produkt-Erkennung abgeschlossen!
         </Heading>
-        <p className="text-neutral-600">
+        <p className="text-text-secondary">
           Wähle das erkannte Produkt aus oder versuche es mit einem besseren Foto erneut
         </p>
       </div>
@@ -39,7 +39,7 @@ export function AIProductResults({
         <img
           src={capturedImage}
           alt="Captured product"
-          className="w-32 h-32 object-cover rounded-lg border border-neutral-200"
+          className="w-32 h-32 object-cover rounded-lg border"
         />
       </div>
 
@@ -55,16 +55,16 @@ export function AIProductResults({
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3 pt-4 border-t border-neutral-200">
+      <div className="flex gap-3 pt-4 border-t border">
         <button
           onClick={onRetry}
-          className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
+          className="flex-1 px-4 py-2 border border-neutral-300 text-text-secondary rounded-lg hover:bg-neutral-50 transition-colors"
         >
           Neues Foto
         </button>
         <button
           onClick={onClose}
-          className="px-4 py-2 text-neutral-600 hover:text-neutral-800 transition-colors"
+          className="px-4 py-2 text-text-secondary hover:text-neutral-800 transition-colors"
         >
           Manueller Eintrag
         </button>

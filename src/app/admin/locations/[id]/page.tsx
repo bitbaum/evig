@@ -36,7 +36,7 @@ const STATUS_ICONS: Record<string, typeof CheckCircle> = {
 
 function getStatusBadge(status: string) {
   const Icon = STATUS_ICONS[status] ?? AlertCircle
-  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'
+  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-neutral-800'
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}>
       <Icon className="w-4 h-4" />
@@ -50,7 +50,7 @@ function getTypeLabel(type: string) {
   const Icon = found?.icon ?? MapPin
   const label = found?.label ?? type
   return (
-    <span className="inline-flex items-center gap-1.5 text-sm text-neutral-600">
+    <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary">
       <Icon className="w-4 h-4" />
       {label}
     </span>
@@ -77,9 +77,9 @@ export default function LocationDetailPage() {
 
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-8">
+      <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg dark:shadow-black/30 p-8">
+          <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
             <div className="animate-pulse">
               <div className="h-8 bg-neutral-200 rounded w-1/3 mb-4"></div>
               <div className="h-4 bg-neutral-200 rounded w-1/2 mb-8"></div>
@@ -102,14 +102,14 @@ export default function LocationDetailPage() {
 
   if (error && !location) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-8">
+      <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg dark:shadow-black/30 p-8 text-center">
+          <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8 text-center">
             <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
-            <Heading level={2} className="text-lg font-medium text-neutral-900 mb-2">{error}</Heading>
+            <Heading level={2} className="text-lg font-medium text-text-primary mb-2">{error}</Heading>
             <Link
               href={ROUTES.admin.locations}
-              className="inline-flex items-center text-primary-600 hover:text-primary-700 mt-4"
+              className="inline-flex items-center text-action hover:text-primary-700 mt-4"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
               Zurück zur Ortsverwaltung
@@ -127,26 +127,26 @@ export default function LocationDetailPage() {
     : location.accessibility_info
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-surface-raised">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-surface-base shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <Link
                   href={ROUTES.admin.locations}
-                  className="text-neutral-500 hover:text-neutral-600 transition-colors"
+                  className="text-text-tertiary hover:text-neutral-600 transition-colors"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
-                <Heading level={1} className="text-2xl font-bold text-neutral-900">{location.name}</Heading>
+                <Heading level={1} className="text-2xl font-bold text-text-primary">{location.name}</Heading>
                 {getStatusBadge(location.approval_status)}
               </div>
               <div className="flex items-center gap-4 ml-8">
                 {getTypeLabel(location.type)}
                 {location.city && (
-                  <span className="text-sm text-neutral-500">
+                  <span className="text-sm text-text-tertiary">
                     {location.city}{location.canton ? `, ${location.canton}` : ''}
                   </span>
                 )}
@@ -188,50 +188,50 @@ export default function LocationDetailPage() {
         )}
 
         {/* Basic Info */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Grundinformationen</Heading>
+        <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Grundinformationen</Heading>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {location.description && (
               <div className="sm:col-span-2">
-                <dt className="text-sm font-medium text-neutral-500">Beschreibung</dt>
-                <dd className="mt-1 text-sm text-neutral-900">{location.description}</dd>
+                <dt className="text-sm font-medium text-text-tertiary">Beschreibung</dt>
+                <dd className="mt-1 text-sm text-text-primary">{location.description}</dd>
               </div>
             )}
             {location.max_capacity && (
               <div>
-                <dt className="text-sm font-medium text-neutral-500">Kapazität</dt>
-                <dd className="mt-1 text-sm text-neutral-900 flex items-center gap-1">
-                  <Users className="w-4 h-4 text-neutral-400" />
+                <dt className="text-sm font-medium text-text-tertiary">Kapazität</dt>
+                <dd className="mt-1 text-sm text-text-primary flex items-center gap-1">
+                  <Users className="w-4 h-4 text-text-muted" />
                   Max. {location.max_capacity} Personen
                 </dd>
               </div>
             )}
             <div>
-              <dt className="text-sm font-medium text-neutral-500">Buchungen</dt>
-              <dd className="mt-1 text-sm text-neutral-900 flex items-center gap-1">
-                <Calendar className="w-4 h-4 text-neutral-400" />
+              <dt className="text-sm font-medium text-text-tertiary">Buchungen</dt>
+              <dd className="mt-1 text-sm text-text-primary flex items-center gap-1">
+                <Calendar className="w-4 h-4 text-text-muted" />
                 {location.total_bookings} gesamt, {location.upcoming_bookings} bevorstehend
               </dd>
             </div>
             <div>
-              <dt className="text-sm font-medium text-neutral-500">Erstellt am</dt>
-              <dd className="mt-1 text-sm text-neutral-900">{formatDateShort(location.created_at)}</dd>
+              <dt className="text-sm font-medium text-text-tertiary">Erstellt am</dt>
+              <dd className="mt-1 text-sm text-text-primary">{formatDateShort(location.created_at)}</dd>
             </div>
             <div>
-              <dt className="text-sm font-medium text-neutral-500">Aktualisiert am</dt>
-              <dd className="mt-1 text-sm text-neutral-900">{formatDateShort(location.updated_at)}</dd>
+              <dt className="text-sm font-medium text-text-tertiary">Aktualisiert am</dt>
+              <dd className="mt-1 text-sm text-text-primary">{formatDateShort(location.updated_at)}</dd>
             </div>
           </dl>
         </div>
 
         {/* Address */}
         {(location.address_line1 || location.city) && (
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-neutral-400" />
+          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-text-muted" />
               Adresse
             </Heading>
-            <div className="text-sm text-neutral-900 space-y-1">
+            <div className="text-sm text-text-primary space-y-1">
               {location.address_line1 && <p>{location.address_line1}</p>}
               {location.address_line2 && <p>{location.address_line2}</p>}
               <p>
@@ -246,11 +246,11 @@ export default function LocationDetailPage() {
 
         {/* Facilities */}
         {location.facilities && location.facilities.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Ausstattung</Heading>
+          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Ausstattung</Heading>
             <div className="flex flex-wrap gap-2">
               {location.facilities.map((facility, i) => (
-                <span key={i} className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-sm">
+                <span key={i} className="px-3 py-1 bg-surface-raised text-text-secondary rounded-full text-sm">
                   {facility}
                 </span>
               ))}
@@ -260,31 +260,31 @@ export default function LocationDetailPage() {
 
         {/* Accessibility */}
         {accessibilityInfo && (
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Barrierefreiheit</Heading>
+          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Barrierefreiheit</Heading>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <dt className="text-sm font-medium text-neutral-500">Rollstuhlgerecht</dt>
-                <dd className="mt-1 text-sm text-neutral-900">
+                <dt className="text-sm font-medium text-text-tertiary">Rollstuhlgerecht</dt>
+                <dd className="mt-1 text-sm text-text-primary">
                   {accessibilityInfo.wheelchairAccessible ? 'Ja' : 'Nein'}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-neutral-500">Parkplätze</dt>
-                <dd className="mt-1 text-sm text-neutral-900">
+                <dt className="text-sm font-medium text-text-tertiary">Parkplätze</dt>
+                <dd className="mt-1 text-sm text-text-primary">
                   {accessibilityInfo.parkingAvailable ? 'Vorhanden' : 'Keine'}
                 </dd>
               </div>
               {accessibilityInfo.publicTransport && (
                 <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-neutral-500">Öffentlicher Verkehr</dt>
-                  <dd className="mt-1 text-sm text-neutral-900">{accessibilityInfo.publicTransport}</dd>
+                  <dt className="text-sm font-medium text-text-tertiary">Öffentlicher Verkehr</dt>
+                  <dd className="mt-1 text-sm text-text-primary">{accessibilityInfo.publicTransport}</dd>
                 </div>
               )}
               {accessibilityInfo.additionalInfo && (
                 <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-neutral-500">Zusätzliche Informationen</dt>
-                  <dd className="mt-1 text-sm text-neutral-900">{accessibilityInfo.additionalInfo}</dd>
+                  <dt className="text-sm font-medium text-text-tertiary">Zusätzliche Informationen</dt>
+                  <dd className="mt-1 text-sm text-text-primary">{accessibilityInfo.additionalInfo}</dd>
                 </div>
               )}
             </dl>
@@ -293,25 +293,25 @@ export default function LocationDetailPage() {
 
         {/* Contact */}
         {(location.contact_name || location.contact_phone || location.contact_email) && (
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Kontakt</Heading>
+          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Kontakt</Heading>
             <dl className="space-y-3">
               {location.contact_name && (
                 <div className="flex items-center gap-2 text-sm">
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">{location.contact_name}</span>
+                  <User className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary">{location.contact_name}</span>
                 </div>
               )}
               {location.contact_phone && (
                 <div className="flex items-center gap-2 text-sm">
-                  <Phone className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">{location.contact_phone}</span>
+                  <Phone className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary">{location.contact_phone}</span>
                 </div>
               )}
               {location.contact_email && (
                 <div className="flex items-center gap-2 text-sm">
-                  <Mail className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">{location.contact_email}</span>
+                  <Mail className="w-4 h-4 text-text-muted" />
+                  <span className="text-text-primary">{location.contact_email}</span>
                 </div>
               )}
             </dl>
@@ -319,24 +319,24 @@ export default function LocationDetailPage() {
         )}
 
         {/* Creator Info */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Erstellt von</Heading>
+        <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Erstellt von</Heading>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-neutral-500" />
+            <div className="w-10 h-10 bg-surface-raised rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-text-tertiary" />
             </div>
             <div>
-              <p className="text-sm font-medium text-neutral-900">{location.creator_name || 'Unbekannt'}</p>
-              <p className="text-sm text-neutral-500">{location.creator_email}</p>
+              <p className="text-sm font-medium text-text-primary">{location.creator_name || 'Unbekannt'}</p>
+              <p className="text-sm text-text-tertiary">{location.creator_email}</p>
             </div>
           </div>
         </div>
 
         {/* Review History */}
         {location.last_approval_action && (
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Letzte Prüfung</Heading>
-            <div className="text-sm text-neutral-600 space-y-2">
+          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Letzte Prüfung</Heading>
+            <div className="text-sm text-text-secondary space-y-2">
               <p>
                 <span className="font-medium">Aktion:</span>{' '}
                 {location.last_approval_action === 'approve' ? 'Genehmigt' : 'Abgelehnt'}
@@ -359,20 +359,20 @@ export default function LocationDetailPage() {
 
         {/* Upcoming Bookings */}
         {bookings.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Bevorstehende Buchungen</Heading>
+          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Bevorstehende Buchungen</Heading>
             <div className="divide-y divide-neutral-200">
               {bookings.map((booking) => (
                 <div key={booking.id} className="py-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-neutral-900">
+                    <p className="text-sm font-medium text-text-primary">
                       {formatDateShort(booking.start_time)} - {formatDateShort(booking.end_time)}
                     </p>
                     {booking.purpose && (
-                      <p className="text-sm text-neutral-500">{booking.purpose}</p>
+                      <p className="text-sm text-text-tertiary">{booking.purpose}</p>
                     )}
                     {booking.booked_by_name && (
-                      <p className="text-xs text-neutral-500">{booking.booked_by_name}</p>
+                      <p className="text-xs text-text-tertiary">{booking.booked_by_name}</p>
                     )}
                   </div>
                   {(() => {

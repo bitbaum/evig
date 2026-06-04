@@ -111,9 +111,9 @@ export default function DonationsDashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 border-2 border-neutral-200 dark:border-white/[0.06]">
+          <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
             <div className="animate-pulse">
               <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-6"></div>
               <div className="space-y-4">
@@ -130,7 +130,7 @@ export default function DonationsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+      <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <EmptyState
             icon={LogIn}
@@ -148,21 +148,21 @@ export default function DonationsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
+    <div className="min-h-screen bg-surface-raised dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center mb-4 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
+            className="inline-flex items-center mb-4 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold mb-2 text-neutral-900 dark:text-white">
+          <Heading level={1} className="text-3xl font-bold mb-2 text-text-primary">
             {t('pageTitle')}
           </Heading>
-          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
+          <p className="text-sm sm:text-base text-text-secondary">
             {t('pageSubtitle')}
           </p>
         </div>
@@ -180,7 +180,7 @@ export default function DonationsDashboard() {
             {donations.map((donation) => (
               <div
                 key={donation.id}
-                className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border-neutral-200 dark:border-white/[0.06]"
+                className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border"
               >
                 <div className="flex items-start gap-4">
                   {/* Type Icon */}
@@ -188,7 +188,7 @@ export default function DonationsDashboard() {
                     'w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0',
                     donation.donation_type === DONATION_TYPES.MONETARY
                       ? 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'
-                      : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
+                      : 'bg-surface-raised dark:bg-neutral-800 text-text-secondary'
                   )}>
                     {getDonationIcon(donation.donation_type)}
                   </div>
@@ -197,18 +197,18 @@ export default function DonationsDashboard() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
+                        <Heading level={3} className="text-lg font-semibold text-text-primary">
                           {donation.donation_type === DONATION_TYPES.MONETARY
                             ? t('monetaryDonation')
                             : getDeviceTitle(donation)
                           }
                         </Heading>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                        <p className="text-sm text-text-secondary">
                           {getDonationTypeLabel(donation.donation_type)} • {formatDate(donation.created_at)}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-semibold text-neutral-900 dark:text-white">
+                        <p className="text-lg font-semibold text-text-primary">
                           {getDonationValue(donation)}
                         </p>
                       </div>
@@ -216,7 +216,7 @@ export default function DonationsDashboard() {
 
                     {/* Device Description */}
                     {donation.donation_type === DONATION_TYPES.DEVICE && donation.device_description && (
-                      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                      <p className="mt-2 text-sm text-text-secondary">
                         {donation.device_description}
                       </p>
                     )}
@@ -224,7 +224,7 @@ export default function DonationsDashboard() {
                     {/* Status */}
                     <div className="mt-3 flex items-center gap-2">
                       {getStatusIcon(donation)}
-                      <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                      <span className="text-sm text-text-secondary">
                         {getDonationStatusLabel(donation.status)}
                         {donation.receipt_requested && !donation.receipt_sent && ` • ${t('receiptRequested')}`}
                         {donation.receipt_sent && ` • ${t('receiptSent')}`}
@@ -259,11 +259,11 @@ export default function DonationsDashboard() {
         )}
 
         {/* Info Box */}
-        <div className="mt-8 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4">
+        <div className="mt-8 bg-surface-raised dark:bg-neutral-800 border border dark:border-neutral-700 rounded-lg p-4">
           <Heading level={4} className="font-medium mb-2 text-neutral-800 dark:text-neutral-200">
             {t('receiptInfoTitle')}
           </Heading>
-          <p className="text-sm text-neutral-700 dark:text-neutral-300">
+          <p className="text-sm text-text-secondary">
             {t('receiptInfoText')}{' '}
             <a href={`mailto:${CONTACT.email}`} className="underline text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white">{CONTACT.email}</a>.
           </p>

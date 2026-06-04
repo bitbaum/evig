@@ -22,7 +22,7 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
         <Camera className="w-5 h-5" />
         {t('title')}
       </Heading>
@@ -47,9 +47,9 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
           </div>
         ) : (
           <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
-            <Camera className="w-8 h-8 text-neutral-500 mb-2" />
-            <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('upload')}</span>
-            <span className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">{t('drag')}</span>
+            <Camera className="w-8 h-8 text-text-tertiary mb-2" />
+            <span className="text-sm text-text-secondary">{t('upload')}</span>
+            <span className="text-xs text-text-tertiary dark:text-neutral-500 mt-1">{t('drag')}</span>
             <input
               type="file"
               accept="image/*"
@@ -69,7 +69,7 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
           </label>
         )}
       </div>
-      <p className="mt-2 text-xs text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-xs text-text-secondary">
         {t('hint')}
       </p>
     </div>

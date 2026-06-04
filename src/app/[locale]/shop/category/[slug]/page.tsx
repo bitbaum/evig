@@ -95,7 +95,7 @@ function Breadcrumbs({
 }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center gap-2 text-sm text-neutral-500">
+      <ol className="flex items-center gap-2 text-sm text-text-tertiary">
         <li>
           <Link
             href="/"
@@ -126,7 +126,7 @@ function Breadcrumbs({
         )}
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <span className="text-neutral-900 font-medium">{category.name}</span>
+          <span className="text-text-primary font-medium">{category.name}</span>
         </li>
       </ol>
     </nav>
@@ -149,15 +149,15 @@ function SubcategoryCard({
       className="group block p-4 card-shell hover:border-primary-300 transition-all"
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
+        <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-action flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
           <Package className="w-5 h-5" />
         </div>
         <div>
-          <Heading level={3} className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors">
+          <Heading level={3} className="font-medium text-text-primary group-hover:text-primary-600 transition-colors">
             {category.name}
           </Heading>
           {category.count !== undefined && (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">{productCountLabel(category.count)}</p>
+            <p className="text-sm text-text-tertiary">{productCountLabel(category.count)}</p>
           )}
         </div>
       </div>
@@ -215,7 +215,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Subcategories */}
         {hasSubcategories && (
           <div className="mb-12">
-            <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+            <Heading level={2} className="text-xl font-semibold text-text-primary mb-4">
               {t("category.subcategories")}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -234,12 +234,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {inventoryResult.products.length > 0 ? (
           <div>
             <div className="flex items-center justify-between mb-6">
-              <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white">
+              <Heading level={2} className="text-xl font-semibold text-text-primary">
                 {t("category.categoryProductCount", { count: inventoryResult.total })}
               </Heading>
               <Link
                 href={ROUTES.public.shop}
-                className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+                className="text-sm text-action hover:text-primary-700 font-medium flex items-center gap-1"
               >
                 {t("category.allShopOptions")}
                 <ChevronRight className="w-4 h-4" />
@@ -265,13 +265,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         ) : (
           <div className="card-shell p-8 text-center">
             <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-action flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />
               </div>
-              <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+              <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">
                 {t("category.productsLoading")}
               </Heading>
-              <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+              <p className="text-text-secondary mb-6">
                 {t("category.productsComingSoon", { categoryName: category.name })}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -289,7 +289,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Related categories */}
         {parent && (
           <div className="mt-12">
-            <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+            <Heading level={2} className="text-xl font-semibold text-text-primary mb-4">
               {t("category.relatedIn", { parentName: parent.name })}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

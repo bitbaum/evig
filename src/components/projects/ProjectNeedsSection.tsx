@@ -78,19 +78,19 @@ export function ProjectNeedsSection({ slug, labels }: Props) {
   if (needs && needs.length === 0 && !error) return null
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-3">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mb-3">
             {labels.title}
           </h2>
-          <p className="text-base sm:text-lg text-neutral-500 dark:text-neutral-400 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-text-tertiary max-w-3xl mx-auto">
             {labels.intro}
           </p>
         </div>
 
         {needs === null && !error && (
-          <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">{labels.loading}</p>
+          <p className="text-center text-sm text-text-tertiary">{labels.loading}</p>
         )}
 
         {error && (
@@ -105,26 +105,26 @@ export function ProjectNeedsSection({ slug, labels }: Props) {
                 <div key={need.id} className={cn(designPrimitive.surface.card, 'p-5 sm:p-6 flex flex-col')}>
                   <div className="flex items-start gap-3 mb-3">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
-                      <Icon className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                      <Icon className="h-5 w-5 text-action" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-0.5">
+                      <p className="text-xs font-medium uppercase tracking-wider text-text-muted mb-0.5">
                         {labels.typeLabels[need.type] ?? need.type}
                       </p>
-                      <h3 className="text-base font-semibold text-neutral-900 dark:text-white break-words">
+                      <h3 className="text-base font-semibold text-text-primary break-words">
                         {need.title}
                       </h3>
                     </div>
                   </div>
 
                   {need.description && (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-4 flex-grow">
+                    <p className="text-sm text-text-secondary mb-4 flex-grow">
                       {need.description}
                     </p>
                   )}
 
                   {need.targetQuantity != null && (
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+                    <p className="text-xs text-text-tertiary mb-4">
                       <span className="font-semibold">{need.targetQuantity}</span>
                       {need.targetUnit ? ` ${need.targetUnit}` : ''}
                     </p>

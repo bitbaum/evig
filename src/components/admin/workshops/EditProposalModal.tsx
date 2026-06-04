@@ -170,13 +170,13 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white dark:border dark:border-white/[0.06] rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-surface-base dark:border dark:border-white/[0.06] rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-surface-base border-b px-6 py-4 flex items-center justify-between">
           <Heading level={2} className="text-2xl">Vorschlag bearbeiten</Heading>
           <button
             onClick={onClose}
-            className="text-neutral-500 hover:text-neutral-600 transition-colors"
+            className="text-text-tertiary hover:text-neutral-600 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -208,7 +208,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-neutral-50 border-t px-6 py-4 flex justify-end gap-3">
+        <div className="sticky bottom-0 bg-surface-raised border-t px-6 py-4 flex justify-end gap-3">
           <Button onClick={onClose} variant="outline" disabled={isSaving}>
             Abbrechen
           </Button>

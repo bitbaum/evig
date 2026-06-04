@@ -57,8 +57,8 @@ export default function MyOffersPage() {
     <PageShell maxWidth="5xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
-            <p className="text-neutral-600 mt-1">{t('description')}</p>
+            <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
+            <p className="text-text-secondary mt-1">{t('description')}</p>
           </div>
           <div className="flex gap-3">
             <Button as={Link} href={ROUTES.public.itHilfeMy} variant="outline">
@@ -79,7 +79,7 @@ export default function MyOffersPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
                   ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
               }`}
             >
               {t('filterAll', { total })}
@@ -91,7 +91,7 @@ export default function MyOffersPage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
                     ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
-                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
                 {s.name}
@@ -109,10 +109,10 @@ export default function MyOffersPage() {
         {offers.length === 0 ? (
           <div className="card-shell p-12 text-center">
             <Heart className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <Heading level={3} className="text-xl text-neutral-900 mb-2">
+            <Heading level={3} className="text-xl text-text-primary mb-2">
               {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
             </Heading>
-            <p className="text-neutral-600 mb-6">
+            <p className="text-text-secondary mb-6">
               {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
             </p>
             {!statusFilter && (
@@ -152,10 +152,10 @@ export default function MyOffersPage() {
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
                             {t('offerLabel')} {offerStatusConfig?.name || offer.status}
                           </span>
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
                             {t('requestLabel')} {requestStatusConfig?.name || offer.request.status}
                           </span>
                           {requestExpired && (
@@ -165,17 +165,17 @@ export default function MyOffersPage() {
                           )}
                         </div>
 
-                        <Heading level={3} className="font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+                        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-primary-600 transition-colors">
                           {offer.request.title}
                         </Heading>
 
-                        <p className="text-sm text-neutral-600 mb-3">
+                        <p className="text-sm text-text-secondary mb-3">
                           <span className="font-medium">{t('yourOffer')}</span>{' '}
                           {offer.message.slice(0, 150)}
                           {offer.message.length > 150 && '...'}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-500">
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-text-tertiary">
                           <div className="flex items-center gap-1">
                             <MapPin className="w-4 h-4" />
                             <span>{offer.request.city}, {offer.request.canton}</span>
@@ -187,17 +187,17 @@ export default function MyOffersPage() {
                             </div>
                           )}
                           {offer.proposedCompensation && (
-                            <span className="text-primary-600 font-medium">
+                            <span className="text-action font-medium">
                               {offer.proposedCompensation}
                             </span>
                           )}
-                          <span className="text-neutral-400">
+                          <span className="text-text-muted">
                             {t('requestedBy', { name: offer.request.requesterName })}
                           </span>
                         </div>
                       </div>
 
-                      <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-primary-600 transition-colors" />
+                      <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary-600 transition-colors" />
                     </div>
                   </Link>
 

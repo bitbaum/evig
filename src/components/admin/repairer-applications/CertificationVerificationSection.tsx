@@ -22,12 +22,12 @@ export function CertificationVerificationSection({
   onOpenDialog,
 }: Props) {
   return (
-    <div className="mt-6 pt-6 border-t border-neutral-200">
+    <div className="mt-6 pt-6 border-t border">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={4} className="text-neutral-900">Zertifizierungsverifizierung</Heading>
+        <Heading level={4} className="text-text-primary">Zertifizierungsverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
-          className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+          className="text-sm text-action hover:text-primary-700 font-medium"
         >
           Zertifizierungen prüfen
         </button>
@@ -37,14 +37,14 @@ export function CertificationVerificationSection({
         <div className="space-y-4">
           {certifications.length > 0 && (
             <div>
-              <h5 className="text-sm font-medium text-neutral-700 mb-2">Eingereichte Zertifizierungen</h5>
+              <h5 className="text-sm font-medium text-text-secondary mb-2">Eingereichte Zertifizierungen</h5>
               <div className="space-y-3">
                 {certifications.map((cert) => (
-                  <div key={cert.id} className="p-4 bg-neutral-50 rounded-lg">
+                  <div key={cert.id} className="p-4 bg-surface-raised rounded-lg">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h6 className="font-medium text-neutral-900">
+                          <h6 className="font-medium text-text-primary">
                             {cert.certificationTypeName || cert.customName}
                           </h6>
                           {cert.category && (
@@ -64,7 +64,7 @@ export function CertificationVerificationSection({
                           )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 text-sm text-neutral-600">
+                        <div className="grid grid-cols-2 gap-4 text-sm text-text-secondary">
                           {cert.issuingAuthority && (
                             <div>
                               <span className="font-medium">Ausstellende Stelle:</span><br />
@@ -136,7 +136,7 @@ export function CertificationVerificationSection({
           )}
 
           {certifications.length === 0 && (
-            <p className="text-sm text-neutral-600">Keine Zertifizierungen eingereicht</p>
+            <p className="text-sm text-text-secondary">Keine Zertifizierungen eingereicht</p>
           )}
         </div>
       )}

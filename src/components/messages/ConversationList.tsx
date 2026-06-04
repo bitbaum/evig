@@ -43,8 +43,8 @@ export default function ConversationList({ conversations, selectedId, onSelect }
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
         <MessageSquare className="w-12 h-12 text-neutral-300 dark:text-neutral-600 mb-3" aria-hidden="true" />
-        <p className="text-neutral-500 dark:text-neutral-400 font-medium">{t('emptyTitle')}</p>
-        <p className="text-sm text-neutral-400 dark:text-neutral-500 mt-1">
+        <p className="text-text-tertiary font-medium">{t('emptyTitle')}</p>
+        <p className="text-sm text-text-muted mt-1">
           {t('emptyDesc')}
         </p>
       </div>
@@ -64,19 +64,19 @@ export default function ConversationList({ conversations, selectedId, onSelect }
           }`}
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-neutral-400" aria-hidden="true" />
+            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-5 h-5 text-text-muted" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className={`text-sm truncate ${
                   conv.unread_count > 0
-                    ? 'font-bold text-neutral-900 dark:text-white'
-                    : 'font-medium text-neutral-700 dark:text-neutral-300'
+                    ? 'font-bold text-text-primary'
+                    : 'font-medium text-text-secondary'
                 }`}>
                   {conv.other_user_name || t('unknownUser')}
                 </span>
-                <span className="text-xs text-neutral-400 dark:text-neutral-500 flex-shrink-0 ml-2">
+                <span className="text-xs text-text-muted flex-shrink-0 ml-2">
                   {timeAgo(conv.last_message_at)}
                 </span>
               </div>
@@ -84,7 +84,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                 <p className={`text-sm truncate ${
                   conv.unread_count > 0
                     ? 'text-neutral-800 dark:text-neutral-200'
-                    : 'text-neutral-500 dark:text-neutral-400'
+                    : 'text-text-tertiary'
                 }`}>
                   {conv.last_message_preview || t('noMessage')}
                 </p>
@@ -95,7 +95,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                 )}
               </div>
               {conv.type === 'marketplace' && (
-                <span className="text-xs text-primary-600 dark:text-primary-400 mt-0.5 inline-block">
+                <span className="text-xs text-action mt-0.5 inline-block">
                   Marketplace
                 </span>
               )}

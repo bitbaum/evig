@@ -8,25 +8,25 @@ interface Props {
 export function DonationStatsCards({ stats }: Props) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-primary-500">
-        <div className="text-2xl font-bold text-neutral-900">{stats.total}</div>
-        <div className="text-sm text-neutral-600">Total Spenden</div>
+      <div className="bg-surface-base rounded-lg shadow p-4 border-l-4 border-primary-500">
+        <div className="text-2xl font-bold text-text-primary">{stats.total}</div>
+        <div className="text-sm text-text-secondary">Total Spenden</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-neutral-400">
-        <div className="text-2xl font-bold text-neutral-900">{stats.monetary}</div>
-        <div className="text-sm text-neutral-600">Geldspenden</div>
+      <div className="bg-surface-base rounded-lg shadow p-4 border-l-4 border-neutral-400">
+        <div className="text-2xl font-bold text-text-primary">{stats.monetary}</div>
+        <div className="text-sm text-text-secondary">Geldspenden</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-primary-500">
-        <div className="text-2xl font-bold text-neutral-900">{stats.device}</div>
-        <div className="text-sm text-neutral-600">Sachspenden</div>
+      <div className="bg-surface-base rounded-lg shadow p-4 border-l-4 border-primary-500">
+        <div className="text-2xl font-bold text-text-primary">{stats.device}</div>
+        <div className="text-sm text-text-secondary">Sachspenden</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-warning-500">
-        <div className="text-2xl font-bold text-neutral-900">{stats.pendingThanks}</div>
-        <div className="text-sm text-neutral-600">Dank ausstehend</div>
+      <div className="bg-surface-base rounded-lg shadow p-4 border-l-4 border-warning-500">
+        <div className="text-2xl font-bold text-text-primary">{stats.pendingThanks}</div>
+        <div className="text-sm text-text-secondary">Dank ausstehend</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-secondary-500">
-        <div className="text-2xl font-bold text-neutral-900">{formatAmountCHF(stats.totalValueCents)}</div>
-        <div className="text-sm text-neutral-600">Gesamtwert</div>
+      <div className="bg-surface-base rounded-lg shadow p-4 border-l-4 border-secondary-500">
+        <div className="text-2xl font-bold text-text-primary">{formatAmountCHF(stats.totalValueCents)}</div>
+        <div className="text-sm text-text-secondary">Gesamtwert</div>
       </div>
     </div>
   )

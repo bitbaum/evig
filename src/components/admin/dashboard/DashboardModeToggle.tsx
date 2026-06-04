@@ -31,7 +31,7 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
   }
 
   return (
-    <div className="flex items-center gap-1 p-0.5 bg-neutral-100 dark:bg-neutral-700 rounded-lg">
+    <div className="flex items-center gap-1 p-0.5 bg-surface-raised dark:bg-neutral-700 rounded-lg">
       {MODES.map(({ id, label }) => (
         <button
           key={id}
@@ -39,8 +39,8 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
           disabled={isPending}
           className={`px-3 py-1 rounded-md text-xs font-medium transition-colors min-h-[28px] ${
             active === id
-              ? 'bg-white dark:bg-neutral-600 text-neutral-900 dark:text-white shadow-sm'
-              : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+              ? 'bg-surface-base dark:bg-neutral-600 text-text-primary shadow-sm'
+              : 'text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300'
           }`}
           aria-pressed={active === id}
         >

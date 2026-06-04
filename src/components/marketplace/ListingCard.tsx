@@ -116,11 +116,11 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
       {/* Info */}
       <div className={isCompact ? 'p-2 md:p-3' : 'p-3 md:p-4'}>
-        <Heading level={3} className={`font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-primary-600 transition-colors`}>
+        <Heading level={3} className={`font-semibold text-text-primary mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-primary-600 transition-colors`}>
           {listing.title}
         </Heading>
 
-        <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold mb-1 ${isGratis ? 'text-teal-600' : 'text-neutral-900 dark:text-white'}`}>
+        <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold mb-1 ${isGratis ? 'text-teal-600' : 'text-text-primary'}`}>
           {formatCHF(Number(listing.price_chf))}
         </p>
 
@@ -128,7 +128,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {specTags.length > 0 && !isCompact && (
           <div className="flex flex-wrap gap-1 mb-2">
             {specTags.map((tag, idx) => (
-              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
+              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded bg-surface-raised dark:bg-neutral-700 text-text-secondary">
                 {tag}
               </span>
             ))}
@@ -143,7 +143,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         )}
 
         {/* Seller Info */}
-        <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+        <div className="flex items-center gap-2 text-xs text-text-tertiary">
           <span className="truncate">{sellerName}</span>
           {listing.seller_rating && Number(listing.seller_rating) > 0 && (
             <span className="inline-flex items-center gap-0.5 flex-shrink-0">
@@ -155,7 +155,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
         {/* Location */}
         {(listing.pickup_location || listing.seller_city) && (
-          <div className="flex items-center gap-1 mt-1 text-xs text-neutral-500">
+          <div className="flex items-center gap-1 mt-1 text-xs text-text-tertiary">
             <MapPin className="w-3 h-3 flex-shrink-0" />
             <span className="truncate">{listing.pickup_location || listing.seller_city}</span>
           </div>
@@ -163,7 +163,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
         {/* Stats */}
         {!isCompact && (
-          <div className="flex items-center gap-3 mt-2 text-xs text-neutral-500">
+          <div className="flex items-center gap-3 mt-2 text-xs text-text-tertiary">
             <span>{listing.view_count} {t('views')}</span>
             {listing.favorite_count > 0 && (
               <span className="inline-flex items-center gap-0.5">

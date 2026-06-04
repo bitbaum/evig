@@ -90,7 +90,7 @@ export function OrderStatusTimeline({
               <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                 reached
                   ? 'bg-primary-500 text-white'
-                  : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-400'
+                  : 'bg-neutral-200 dark:bg-neutral-700 text-text-muted'
               }`}>
                 {reached
                   ? <CheckCircle className="w-4 h-4" />
@@ -98,15 +98,15 @@ export function OrderStatusTimeline({
               </div>
               <span className={`text-xs mt-1 text-center ${
                 isCurrent
-                  ? 'font-semibold text-primary-600'
+                  ? 'font-semibold text-action'
                   : reached
-                    ? 'text-neutral-700 dark:text-neutral-300'
-                    : 'text-neutral-400'
+                    ? 'text-text-secondary'
+                    : 'text-text-muted'
               }`}>
                 {step.label}
               </span>
               {reached && date && (
-                <span className="text-[10px] text-neutral-400 mt-0.5">
+                <span className="text-[10px] text-text-muted mt-0.5">
                   {formatDateShort(date)}
                 </span>
               )}

@@ -52,8 +52,8 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" aria-hidden="true" />
-        <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('listing.loading')}</span>
+        <Loader2 className="w-8 h-8 text-action animate-spin" aria-hidden="true" />
+        <span className="ml-3 text-text-secondary">{t('listing.loading')}</span>
       </div>
     )
   }
@@ -61,11 +61,11 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   if (error || !listing) {
     return (
       <div className="max-w-4xl mx-auto py-12 text-center">
-        <AlertCircle className="w-16 h-16 text-neutral-400 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+        <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" aria-hidden="true" />
+        <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {error || t('listing.notFound')}
         </Heading>
-        <Link href={ROUTES.public.marketplace} className="text-primary-600 hover:text-primary-700 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">
+        <Link href={ROUTES.public.marketplace} className="text-action hover:text-primary-700 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">
           {t('listing.backToMarketplace')}
         </Link>
       </div>
@@ -85,7 +85,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
       {/* Back navigation */}
       <Link
         href={ROUTES.public.marketplace}
-        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1 min-h-[44px]"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1 min-h-[44px]"
       >
         <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         {t('listing.backToMarketplace')}
@@ -126,7 +126,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           <ListingSellerCard listing={listing} sellerName={sellerName} />
 
           {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-neutral-400">
+          <div className="flex items-center gap-4 text-xs text-text-muted">
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" aria-hidden="true" />
               {formatDateShort(listing.created_at)}

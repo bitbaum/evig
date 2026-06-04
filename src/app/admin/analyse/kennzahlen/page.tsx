@@ -134,7 +134,7 @@ export default async function KennzahlenPage() {
         </Link>
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-            <TrendingUp className="w-6 h-6 text-primary-600" />
+            <TrendingUp className="w-6 h-6 text-action" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Kennzahlen</Heading>
@@ -155,7 +155,7 @@ export default async function KennzahlenPage() {
 
       {/* Year Context */}
       {latestYear && (
-        <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-lg text-sm text-neutral-700 dark:text-neutral-300">
+        <div className="p-3 bg-surface-raised dark:bg-neutral-800/50 border border rounded-lg text-sm text-text-secondary">
           Finanzielle Kennzahlen für <strong>{latestYear}</strong>
           {previousYear && (
             <span> (Vergleich mit {previousYear})</span>
@@ -233,8 +233,8 @@ export default async function KennzahlenPage() {
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
-              <div className="font-medium text-primary-600">Automatisch</div>
+            <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+              <div className="font-medium text-action">Automatisch</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Kivitendo-Export (Finanzen)
               </div>
@@ -242,8 +242,8 @@ export default async function KennzahlenPage() {
                 Monatlich aktualisiert
               </div>
             </div>
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
-              <div className="font-medium text-neutral-700 dark:text-neutral-300">Berechnet</div>
+            <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
+              <div className="font-medium text-text-secondary">Berechnet</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Abgeleitet aus anderen Metriken
               </div>
@@ -251,7 +251,7 @@ export default async function KennzahlenPage() {
                 Bei Datenänderung neu berechnet
               </div>
             </div>
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
+            <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
               <div className="font-medium text-warning-600">Manuell</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Manuelle Dateneingabe erforderlich

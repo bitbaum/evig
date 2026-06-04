@@ -26,7 +26,7 @@ export function ComparisonSection({ title, comparisons }: ComparisonSectionProps
       </h3>
       <div className="space-y-8 sm:space-y-12">
         {comparisons.map((comparison, index) => (
-          <div key={index} className="bg-neutral-50 rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border-neutral-200">
+          <div key={index} className="bg-surface-raised rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border">
             <h4 className={cn('text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-center', getTextColor('neutral', 'primary'))}>
               {comparison.category}
             </h4>

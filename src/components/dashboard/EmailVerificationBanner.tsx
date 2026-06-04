@@ -64,7 +64,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
           </div>
           <div className="mt-4">
             {isSent ? (
-              <div className="flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400">
+              <div className="flex items-center gap-2 text-sm text-action">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>{t('sent')}</span>
               </div>

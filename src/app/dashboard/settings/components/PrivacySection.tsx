@@ -51,19 +51,19 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
     <div className="space-y-8">
       {/* Profile Visibility */}
       <div>
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
           {labels.title}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">
+        <p className="text-sm text-text-secondary mb-6">
           {labels.description}
         </p>
 
         <div className="space-y-4">
           <div>
-            <Heading level={4} className="text-base font-medium text-neutral-900 dark:text-white mb-3">
+            <Heading level={4} className="text-base font-medium text-text-primary mb-3">
               {labels.profileVisibility}
             </Heading>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            <p className="text-sm text-text-secondary mb-4">
               {labels.profileVisibilityDescription}
             </p>
 
@@ -74,7 +74,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                   profile.profile_visibility === 'public'
                     ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                    : 'border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-500'
+                    : 'border dark:border-neutral-600 bg-surface-base dark:bg-neutral-700 text-text-secondary hover:border-neutral-300 dark:hover:border-neutral-500'
                 }`}
               >
                 <Globe className="w-5 h-5" />
@@ -86,8 +86,8 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 onClick={() => handleChange('profile_visibility', 'private')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                   profile.profile_visibility === 'private'
-                    ? 'border-neutral-500 bg-neutral-50 dark:bg-neutral-900/20 text-neutral-700 dark:text-neutral-300'
-                    : 'border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-500'
+                    ? 'border-neutral-500 bg-surface-raised dark:bg-neutral-900/20 text-text-secondary'
+                    : 'border dark:border-neutral-600 bg-surface-base dark:bg-neutral-700 text-text-secondary hover:border-neutral-300 dark:hover:border-neutral-500'
                 }`}
               >
                 <Lock className="w-5 h-5" />
@@ -99,30 +99,30 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
       </div>
 
       {/* Contact Visibility */}
-      <div className="border-t-2 border-neutral-200 dark:border-neutral-700 pt-6">
-        <Heading level={4} className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+      <div className="border-t-2 border dark:border-neutral-700 pt-6">
+        <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {labels.contactVisibility}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">
+        <p className="text-sm text-text-secondary mb-6">
           {labels.contactVisibilityDescription}
         </p>
 
         <div className="space-y-4">
           {/* Show Email */}
-          <div className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
+          <div className="flex items-start gap-4 p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg border-2 border dark:border-neutral-600">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
                 {profile.show_email ? (
-                  <Eye className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <Eye className="w-5 h-5 text-action" />
                 ) : (
-                  <EyeOff className="w-5 h-5 text-neutral-400" />
+                  <EyeOff className="w-5 h-5 text-text-muted" />
                 )}
               </div>
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <h5 className="text-sm font-medium text-neutral-900 dark:text-white">
+                <h5 className="text-sm font-medium text-text-primary">
                   {labels.showEmail}
                 </h5>
                 <button
@@ -133,33 +133,33 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-surface-base shadow ring-0 transition duration-200 ease-in-out ${
                       profile.show_email ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
                 </button>
               </div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-text-secondary">
                 {labels.showEmailDescription}
               </p>
             </div>
           </div>
 
           {/* Show Phone */}
-          <div className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
+          <div className="flex items-start gap-4 p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg border-2 border dark:border-neutral-600">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
                 {profile.show_phone ? (
-                  <Eye className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <Eye className="w-5 h-5 text-action" />
                 ) : (
-                  <EyeOff className="w-5 h-5 text-neutral-400" />
+                  <EyeOff className="w-5 h-5 text-text-muted" />
                 )}
               </div>
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <h5 className="text-sm font-medium text-neutral-900 dark:text-white">
+                <h5 className="text-sm font-medium text-text-primary">
                   {labels.showPhone}
                 </h5>
                 <button
@@ -170,13 +170,13 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                   }`}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-surface-base shadow ring-0 transition duration-200 ease-in-out ${
                       profile.show_phone ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
                 </button>
               </div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-text-secondary">
                 {labels.showPhoneDescription}
               </p>
             </div>
@@ -185,11 +185,11 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
       </div>
 
       {/* Data Export (GDPR / Swiss DSG) */}
-      <div className="border-t-2 border-neutral-200 dark:border-neutral-700 pt-6">
-        <Heading level={4} className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+      <div className="border-t-2 border dark:border-neutral-700 pt-6">
+        <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {t('dataExportTitle')}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+        <p className="text-sm text-text-secondary mb-4">
           {t('dataExportDescription')}
         </p>
 

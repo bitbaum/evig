@@ -58,8 +58,8 @@ export default function NewWorkshopPage() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">Workshop erstellen</Heading>
-          <p className="text-neutral-600 dark:text-neutral-400 mt-1">Plane und veröffentliche einen neuen Workshop</p>
+          <Heading level={1} className="text-2xl font-bold text-text-primary">Workshop erstellen</Heading>
+          <p className="text-text-secondary mt-1">Plane und veröffentliche einen neuen Workshop</p>
         </div>
       </div>
 
@@ -90,7 +90,7 @@ export default function NewWorkshopPage() {
         <div className="flex justify-end gap-4">
           <Link
             href={ROUTES.admin.workshops}
-            className="px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] font-medium"
+            className="px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] font-medium"
           >
             Abbrechen
           </Link>

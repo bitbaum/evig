@@ -39,8 +39,8 @@ const STATE_CONFIG = {
   },
   pending: {
     icon: Circle,
-    dotClass: 'bg-neutral-100 border border-neutral-300 text-neutral-400',
-    labelClass: 'text-neutral-400',
+    dotClass: 'bg-surface-raised border border-neutral-300 text-text-muted',
+    labelClass: 'text-text-muted',
     lineClass: 'bg-neutral-200',
   },
 }
@@ -49,7 +49,7 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
   const activeItem = items.find(i => i.state === 'active' || i.state === 'blocked')
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-4">
+    <div className="bg-surface-base rounded-lg border border p-4">
       {/* Step dots row */}
       <div className="flex items-center">
         {items.map((item, idx) => {
@@ -86,7 +86,7 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
       {/* Active step hint */}
       {activeItem && (
         <div className={cn(
-          'mt-3 pt-3 border-t border-neutral-100 dark:border-white/[0.06] text-xs',
+          'mt-3 pt-3 border-t border-subtle dark:border-white/[0.06] text-xs',
           activeItem.state === 'blocked' ? 'text-error-600' : 'text-warning-700 dark:text-warning-400'
         )}>
           <span className="font-medium">{activeItem.label}: </span>

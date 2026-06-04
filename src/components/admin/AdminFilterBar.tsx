@@ -35,7 +35,7 @@ export function AdminFilterBar({
   children,
 }: AdminFilterBarProps) {
   return (
-    <div className="bg-white rounded-lg border border-neutral-200 p-4">
+    <div className="bg-surface-base rounded-lg border border p-4">
       {/* Stack vertically on mobile, row on sm+ — each field is max 240px on desktop to prevent
           dropdowns stretching absurdly wide in wide containers */}
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
@@ -43,7 +43,7 @@ export function AdminFilterBar({
           <div className="w-full sm:flex-[0_1_240px]">
             <FormField label="Suche" htmlFor="admin-filter-search">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
                 <Input
                   id="admin-filter-search"
                   type="text"

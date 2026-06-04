@@ -13,8 +13,8 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
   const t = useTranslations('components.skillsSection')
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-2">{t('title')}</Heading>
-      <p className="text-sm text-neutral-600 mb-4">
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-2">{t('title')}</Heading>
+      <p className="text-sm text-text-secondary mb-4">
         {t('hint')}
       </p>
 
@@ -23,7 +23,7 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
         if (skills.length === 0) return null
         return (
           <div key={serviceCategory.id} className="mb-4">
-            <Heading level={3} className="text-sm font-medium text-neutral-700 mb-2">
+            <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">
               {serviceCategory.name}
             </Heading>
             <div className="flex flex-wrap gap-2">
@@ -35,7 +35,7 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
                   className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                     skillsNeeded.includes(skill.id)
                       ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 border-2 border-primary-500'
-                      : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
+                      : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
                   }`}
                 >
                   {skill.name}

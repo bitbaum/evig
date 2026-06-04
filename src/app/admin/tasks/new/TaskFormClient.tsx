@@ -61,7 +61,7 @@ export default function TaskFormClient({ task }: Props) {
         </div>
       )}
 
-      <div className="bg-white rounded-lg border p-6 space-y-6">
+      <div className="bg-surface-base rounded-lg border p-6 space-y-6">
         {!isEdit && (
           <AIFormAssist
             formType="task"

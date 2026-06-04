@@ -21,7 +21,7 @@ export function HandleReportModal({ reportAction, setReportAction, reportNotes, 
     <Modal isOpen={true} onClose={onClose} title="Meldung bearbeiten" size="sm">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Aktion</label>
+          <label className="block text-sm font-medium text-text-secondary mb-1">Aktion</label>
           <Select variant="elevated" value={reportAction} onChange={e => setReportAction(e.target.value)}>
             <option value="dismiss">Abweisen</option>
             <option value="warn_seller">Verkäufer verwarnen</option>
@@ -29,7 +29,7 @@ export function HandleReportModal({ reportAction, setReportAction, reportNotes, 
           </Select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Notizen</label>
+          <label className="block text-sm font-medium text-text-secondary mb-1">Notizen</label>
           <Textarea
             variant="elevated"
             value={reportNotes}

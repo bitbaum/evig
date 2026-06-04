@@ -24,7 +24,7 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
-        <CheckCircle className="w-16 h-16 text-primary-600 mx-auto mb-4" />
+        <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
         <CardTitle className="text-primary-800">{t('successTitle')}</CardTitle>
         <CardDescription>
           {t('successDesc')}

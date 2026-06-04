@@ -34,9 +34,9 @@ export function InstanceList({
   getStatusBadge,
 }: InstanceListProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border">
-      <div className="px-6 py-4 border-b border-neutral-200">
-        <Heading level={2} className="text-lg text-neutral-900">
+    <div className="bg-surface-base rounded-xl shadow-sm border">
+      <div className="px-6 py-4 border-b border">
+        <Heading level={2} className="text-lg text-text-primary">
           Termine ({instances.length})
         </Heading>
       </div>
@@ -49,8 +49,8 @@ export function InstanceList({
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <GraduationCap className="w-5 h-5 text-primary-600" />
-                    <Heading level={3} className="text-lg text-neutral-900 truncate">
+                    <GraduationCap className="w-5 h-5 text-action" />
+                    <Heading level={3} className="text-lg text-text-primary truncate">
                       {instance.workshop_title}
                     </Heading>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.className}`}>
@@ -58,7 +58,7 @@ export function InstanceList({
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary mb-3">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
                       {formatDateTime(instance.start_date)}
@@ -82,14 +82,14 @@ export function InstanceList({
                     )}
 
                     {instance.instructor && (
-                      <div className="text-neutral-500">
+                      <div className="text-text-tertiary">
                         Leitung: {instance.instructor}
                       </div>
                     )}
                   </div>
 
                   {instance.notes && (
-                    <p className="text-sm text-neutral-500">{instance.notes}</p>
+                    <p className="text-sm text-text-tertiary">{instance.notes}</p>
                   )}
                 </div>
 
@@ -121,9 +121,9 @@ export function InstanceList({
 
         {instances.length === 0 && !loading && (
           <div className="px-6 py-12 text-center">
-            <Calendar className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg text-neutral-900 mb-2">Keine Termine gefunden</Heading>
-            <p className="text-neutral-600 mb-4">
+            <Calendar className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <Heading level={3} className="text-lg text-text-primary mb-2">Keine Termine gefunden</Heading>
+            <p className="text-text-secondary mb-4">
               Erstelle einen neuen Termin für einen Workshop.
             </p>
             <Button onClick={onCreateNew} variant="primary" size="sm" className="gap-2">

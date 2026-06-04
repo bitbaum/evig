@@ -26,10 +26,10 @@ export default function ListingDetailError({
     <div className="flex items-center justify-center py-24">
       <div className="card-shell max-w-md w-full p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={1} className="text-lg font-medium text-neutral-900">
+        <Heading level={1} className="text-lg font-medium text-text-primary">
           {t('listingDetail.title')}
         </Heading>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-2 text-sm text-text-secondary">
           {t('listingDetail.description')}
         </p>
         <div className="mt-6 flex flex-col gap-3">
@@ -38,7 +38,7 @@ export default function ListingDetailError({
           </Button>
           <Link
             href={ROUTES.public.marketplace}
-            className="text-sm text-neutral-600 hover:text-neutral-900 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
+            className="text-sm text-text-secondary hover:text-neutral-900 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
           >
             {t('listingDetail.back')}
           </Link>

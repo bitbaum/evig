@@ -26,7 +26,7 @@ function ImpactCard({ metric }: { metric: MetricDefinition }) {
   const needsData = metric.status === 'needs_data'
 
   return (
-    <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
+    <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg">
       <div className="flex justify-between items-start mb-2">
         <div className="text-sm text-muted-foreground">{metric.name}</div>
         {needsData && (
@@ -117,7 +117,7 @@ export default async function WirkungPage() {
         </Link>
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-            <Target className="w-6 h-6 text-primary-600" />
+            <Target className="w-6 h-6 text-action" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Wirkung</Heading>
@@ -154,9 +154,9 @@ export default async function WirkungPage() {
       <div className="grid md:grid-cols-3 gap-6">
         {impactAreas.map(area => {
           const bgColor = {
-            green: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600',
-            blue: 'bg-neutral-100 text-neutral-600',
-            purple: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600',
+            green: 'bg-primary-100 dark:bg-primary-900/30 text-action',
+            blue: 'bg-surface-raised text-text-secondary',
+            purple: 'bg-primary-100 dark:bg-primary-900/30 text-action',
           }[area.color]
 
           const pendingCount = area.metrics.filter(m => m.status === 'needs_data').length
@@ -203,7 +203,7 @@ export default async function WirkungPage() {
                 Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong> eingespart.
                 Diese Zahl basiert auf Studien zur Herstellungsenergie von Elektronikgeräten.
               </p>
-              <code className="text-xs bg-neutral-100 dark:bg-neutral-900 p-2 rounded block">
+              <code className="text-xs bg-surface-raised dark:bg-neutral-900 p-2 rounded block">
                 CO2 = Geräte × 285 kg
               </code>
             </div>
@@ -213,7 +213,7 @@ export default async function WirkungPage() {
                 Die Wiederverwendung von Hardware spart wertvolle Rohstoffe wie Seltene Erden,
                 Kupfer und andere Metalle, die sonst neu abgebaut werden müssten.
               </p>
-              <code className="text-xs bg-neutral-100 dark:bg-neutral-900 p-2 rounded block">
+              <code className="text-xs bg-surface-raised dark:bg-neutral-900 p-2 rounded block">
                 Rohstoffe = Gewichtsmessung Geräte
               </code>
             </div>
@@ -239,7 +239,7 @@ export default async function WirkungPage() {
             ].map(sdg => (
               <div
                 key={sdg.number}
-                className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg text-center"
+                className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg text-center"
               >
                 <div className="text-2xl font-bold text-primary">SDG {sdg.number}</div>
                 <div className="text-sm font-medium mt-1">{sdg.name}</div>

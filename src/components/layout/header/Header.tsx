@@ -69,7 +69,7 @@ export function Header() {
           // Scrolled state: border-only (no shadow). Double-cueing scroll
           // with both shadow + border was a calmer-than-x.com signal.
           isScrolled || anyDropdownOpen
-            ? "bg-white/95 backdrop-blur-xl border-b border-neutral-200 dark:bg-neutral-950/95 dark:border-white/[0.06]"
+            ? "bg-white/95 backdrop-blur-xl border-b border dark:bg-neutral-950/95 dark:border-white/[0.06]"
             : "bg-white/80 backdrop-blur-md dark:bg-neutral-950/80"
         )}
       >
@@ -101,7 +101,7 @@ export function Header() {
                 <Link
                   href={contactItem.href}
                   className={cn(
-                    "px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
+                    "px-4 py-2 text-sm font-medium text-text-secondary",
                     "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
                   )}
@@ -135,7 +135,7 @@ export function Header() {
                 type="button"
                 className={cn(
                   "relative p-2 rounded-lg",
-                  "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-white/[0.06]",
+                  "text-text-secondary hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-white/[0.06]",
                   "transition-colors duration-200",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 )}

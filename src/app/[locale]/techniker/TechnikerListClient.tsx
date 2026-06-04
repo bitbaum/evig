@@ -41,14 +41,14 @@ function TechnicianCard({ technician }: { technician: Technician }) {
     >
       {/* Name + tier badge */}
       <div className="flex items-start justify-between gap-2 mb-3">
-        <Heading level={3} className="text-base font-semibold text-neutral-900 line-clamp-1">
+        <Heading level={3} className="text-base font-semibold text-text-primary line-clamp-1">
           {technician.name}
         </Heading>
         <span
           className={`flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
             technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
               ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
-              : 'bg-neutral-100 text-neutral-700'
+              : 'bg-surface-raised text-text-secondary'
           }`}
         >
           {technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL ? t('list.professional') : t('list.community')}
@@ -57,12 +57,12 @@ function TechnicianCard({ technician }: { technician: Technician }) {
 
       {/* Bio */}
       {technician.bio && (
-        <p className="text-sm text-neutral-600 line-clamp-2 mb-3">{technician.bio}</p>
+        <p className="text-sm text-text-secondary line-clamp-2 mb-3">{technician.bio}</p>
       )}
 
       {/* Rating + jobs */}
       {(technician.averageRating || technician.totalJobsCompleted > 0) && (
-        <div className="flex items-center gap-3 text-sm text-neutral-600 mb-3">
+        <div className="flex items-center gap-3 text-sm text-text-secondary mb-3">
           {technician.averageRating && (
             <span className="flex items-center gap-1">
               <Star className="w-3.5 h-3.5 fill-warning-400 text-warning-400" />
@@ -73,14 +73,14 @@ function TechnicianCard({ technician }: { technician: Technician }) {
             <span>{t('list.jobs', { count: technician.totalJobsCompleted })}</span>
           )}
           {technician.isVerified && (
-            <span className="text-primary-600 font-medium">✓ {t('list.verified')}</span>
+            <span className="text-action font-medium">✓ {t('list.verified')}</span>
           )}
         </div>
       )}
 
       {/* Location */}
       {technician.city && (
-        <div className="flex items-center gap-1.5 text-sm text-neutral-500 mb-3">
+        <div className="flex items-center gap-1.5 text-sm text-text-tertiary mb-3">
           <MapPin className="w-3.5 h-3.5" />
           <span>{technician.city}</span>
         </div>
@@ -95,14 +95,14 @@ function TechnicianCard({ technician }: { technician: Technician }) {
             return (
               <span
                 key={skillId}
-                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"
+                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary"
               >
                 {skill.name}
               </span>
             )
           })}
           {remaining > 0 && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">
               +{remaining}
             </span>
           )}
@@ -168,14 +168,14 @@ export default function TechnikerListClient() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact header */}
-      <div className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
                 {t('list.title')}
               </Heading>
-              <p className="text-sm text-neutral-600 mt-1">
+              <p className="text-sm text-text-secondary mt-1">
                 {t('list.available', { count: pagination.total })}
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function TechnikerListClient() {
           {/* Search */}
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
               <Input
                 type="text"
                 value={searchInput}
@@ -218,7 +218,7 @@ export default function TechnikerListClient() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                  : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
               }`}
               aria-pressed={tier === tab.value}
             >
@@ -250,7 +250,7 @@ export default function TechnikerListClient() {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="ml-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="ml-3 text-sm text-action hover:text-primary-700 font-medium"
             >
               {t('list.resetFilters')}
             </button>
@@ -308,7 +308,7 @@ export default function TechnikerListClient() {
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm text-neutral-600 px-4" aria-current="page">
+            <span className="text-sm text-text-secondary px-4" aria-current="page">
               {t('list.pageOf', { current: currentPage, total: totalPages })}
             </span>
             <button
@@ -328,10 +328,10 @@ export default function TechnikerListClient() {
             <div className="flex justify-center mb-4">
               <IconBadge icon={Wrench} theme="repairers" size="lg" />
             </div>
-            <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2">
+            <Heading level={3} className="text-xl font-bold text-text-primary mb-2">
               {t('list.ctaTitle')}
             </Heading>
-            <p className="text-base text-neutral-600 mb-6 max-w-md mx-auto">
+            <p className="text-base text-text-secondary mb-6 max-w-md mx-auto">
               {t('list.ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -340,7 +340,7 @@ export default function TechnikerListClient() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-white hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 border border-primary-600 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 bg-surface-base hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaToITHelp')}
               </Link>

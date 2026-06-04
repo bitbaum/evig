@@ -48,13 +48,13 @@ export default async function AdminMediaPage() {
             href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
               Medienbibliothek
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-text-secondary mt-1">
               Bilder, Videos und Dokumente verwalten
             </p>
           </div>
@@ -67,56 +67,56 @@ export default async function AdminMediaPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <ImageIcon className="w-8 h-8 text-neutral-600" />
+            <ImageIcon className="w-8 h-8 text-text-secondary" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Bilder
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 0
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Video className="w-8 h-8 text-primary-600" />
+            <Video className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Videos
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 0
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <FileText className="w-8 h-8 text-secondary-600" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Dokumente
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 0
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <FolderOpen className="w-8 h-8 text-primary-600" />
+            <FolderOpen className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Speicher
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 0 MB
               </p>
             </div>
@@ -125,11 +125,11 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-4">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-4">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
             <Input
               type="text"
               placeholder="Medien suchen..."
@@ -139,18 +139,18 @@ export default async function AdminMediaPage() {
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-3 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors">
-              <Filter className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
-              <span className="text-sm text-neutral-700 dark:text-neutral-300">
+            <button className="flex items-center gap-2 px-3 py-2 border border dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors">
+              <Filter className="w-4 h-4 text-text-secondary" />
+              <span className="text-sm text-text-secondary">
                 Filter
               </span>
             </button>
 
-            <div className="flex border border-neutral-200 dark:border-neutral-600 rounded-lg overflow-hidden">
-              <button className="p-2 bg-primary-50 dark:bg-primary-900/30 text-primary-600">
+            <div className="flex border border dark:border-neutral-600 rounded-lg overflow-hidden">
+              <button className="p-2 bg-primary-50 dark:bg-primary-900/30 text-action">
                 <Grid className="w-4 h-4" />
               </button>
-              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-white/[0.06] text-neutral-600 dark:text-neutral-400">
+              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-white/[0.06] text-text-secondary">
                 <List className="w-4 h-4" />
               </button>
             </div>
@@ -159,15 +159,15 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Empty State */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
         <div className="text-center py-16">
-          <div className="w-20 h-20 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6">
-            <ImageIcon className="w-10 h-10 text-neutral-400" />
+          <div className="w-20 h-20 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ImageIcon className="w-10 h-10 text-text-muted" />
           </div>
-          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             Noch keine Medien hochgeladen
           </Heading>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
+          <p className="text-text-secondary mb-6 max-w-md mx-auto">
             Lade Bilder, Videos und Dokumente hoch, um sie in Ihren
             Blog-Artikeln und Seiten zu verwenden.
           </p>
@@ -175,14 +175,14 @@ export default async function AdminMediaPage() {
           {/* Upload Area */}
           <div className="max-w-lg mx-auto">
             <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-8 hover:border-primary-500 dark:hover:border-primary-400 transition-colors cursor-pointer">
-              <Upload className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
-                <span className="text-primary-600 dark:text-primary-400 font-medium">
+              <Upload className="w-8 h-8 text-text-muted mx-auto mb-3" />
+              <p className="text-sm text-text-secondary mb-2">
+                <span className="text-action font-medium">
                   Klicken zum Hochladen
                 </span>{' '}
                 oder Dateien hierher ziehen
               </p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-500">
+              <p className="text-xs text-text-tertiary dark:text-neutral-500">
                 PNG, JPG, GIF, PDF, MP4 bis zu 50MB
               </p>
             </div>
@@ -192,24 +192,24 @@ export default async function AdminMediaPage() {
 
       {/* Supported Formats Info */}
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-5">
+        <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
-            <ImageIcon className="w-6 h-6 text-neutral-600" />
-            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
+            <ImageIcon className="w-6 h-6 text-text-secondary" />
+            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
               Bilder
             </Heading>
           </div>
-          <p className="text-sm text-neutral-700 dark:text-neutral-300">
+          <p className="text-sm text-text-secondary">
             JPG, PNG, GIF, WebP, SVG
           </p>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             Max. 10 MB pro Datei
           </p>
         </div>
 
         <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
-            <Video className="w-6 h-6 text-primary-600" />
+            <Video className="w-6 h-6 text-action" />
             <Heading level={3} className="font-medium text-primary-900 dark:text-primary-200">
               Videos
             </Heading>
@@ -217,7 +217,7 @@ export default async function AdminMediaPage() {
           <p className="text-sm text-primary-700 dark:text-primary-300">
             MP4, WebM, MOV
           </p>
-          <p className="text-xs text-primary-600 dark:text-primary-400 mt-1">
+          <p className="text-xs text-action mt-1">
             Max. 50 MB pro Datei
           </p>
         </div>

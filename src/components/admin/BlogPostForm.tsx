@@ -52,13 +52,13 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             href={ROUTES.admin.contentBlog}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
+            <Heading level={1} className="text-2xl text-text-primary">
               {isEdit ? 'Artikel bearbeiten' : 'Neuer Artikel'}
             </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-text-secondary mt-1">
               {isEdit ? 'Änderungen am Artikel vornehmen' : 'Erstelle einen neuen Blog-Artikel'}
             </p>
           </div>
@@ -70,7 +70,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               <Link
                 href={ROUTES.public.blogPost(formData.slug)}
                 target="_blank"
-                className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-text-secondary hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
                 title="Veröffentlichten Artikel ansehen"
               >
                 <Eye className="w-4 h-4" />
@@ -78,7 +78,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               </Link>
             ) : (
               <span
-                className="inline-flex items-center gap-2 px-4 py-2 text-neutral-400 dark:text-neutral-500 cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-4 py-2 text-text-muted cursor-not-allowed"
                 title="Artikel muss zuerst veröffentlicht werden"
               >
                 <Eye className="w-4 h-4" />

@@ -42,7 +42,7 @@ export default function SubmitPostPage() {
       <div className="absolute top-4 left-4 sm:left-8">
         <Link
           href={ROUTES.public.blog}
-          className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg"
+          className="inline-flex items-center text-text-secondary hover:text-neutral-900 transition-colors bg-surface-base px-4 py-2 rounded-lg"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t('backToBlog')}
@@ -58,13 +58,13 @@ export default function SubmitPostPage() {
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="card-shell rounded-lg p-12">
             <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-6" />
-            <Heading level={2} className="text-2xl text-neutral-900 mb-3">{t('successTitle')}</Heading>
-            <p className="text-neutral-700 text-lg mb-2">{t('successMessage')}</p>
-            <p className="text-neutral-500 text-sm mb-8">{t('successEmailNote')}</p>
+            <Heading level={2} className="text-2xl text-text-primary mb-3">{t('successTitle')}</Heading>
+            <p className="text-text-secondary text-lg mb-2">{t('successMessage')}</p>
+            <p className="text-text-tertiary text-sm mb-8">{t('successEmailNote')}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center justify-center px-6 py-3 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors font-medium"
+                className="inline-flex items-center justify-center px-6 py-3 border border-primary-600 text-action rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors font-medium"
               >
                 {t('submitAnotherButton')}
               </button>
@@ -85,7 +85,7 @@ export default function SubmitPostPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
         <div className="card-shell rounded-lg p-8 mb-8">
-          <Heading level={2} className="text-2xl text-neutral-900 mb-6">{t('whatToSubmit')}</Heading>
+          <Heading level={2} className="text-2xl text-text-primary mb-6">{t('whatToSubmit')}</Heading>
           <div className="grid md:grid-cols-2 gap-4">
             {([BLOG_SUBMISSION_TYPE.IDEA, BLOG_SUBMISSION_TYPE.DRAFT] as const).map((type) => {
               const isIdea = type === BLOG_SUBMISSION_TYPE.IDEA
@@ -95,16 +95,16 @@ export default function SubmitPostPage() {
                   key={type}
                   type="button"
                   onClick={() => setSubmissionType(type)}
-                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200 hover:border-primary-300'}`}
+                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border hover:border-primary-300'}`}
                 >
                   {isIdea
-                    ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-primary-600' : 'text-neutral-400'}`} />
-                    : <FileText className={`w-8 h-8 mb-3 ${isActive ? 'text-primary-600' : 'text-neutral-400'}`} />
+                    ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-action' : 'text-text-muted'}`} />
+                    : <FileText className={`w-8 h-8 mb-3 ${isActive ? 'text-action' : 'text-text-muted'}`} />
                   }
-                  <Heading level={3} className="text-lg text-neutral-900 mb-2">
+                  <Heading level={3} className="text-lg text-text-primary mb-2">
                     {isIdea ? t('typeIdea') : t('typeDraft')}
                   </Heading>
-                  <p className="text-sm text-neutral-600">
+                  <p className="text-sm text-text-secondary">
                     {isIdea ? t('typeIdeaDesc') : t('typeDraftDesc')}
                   </p>
                 </button>
@@ -115,7 +115,7 @@ export default function SubmitPostPage() {
 
         {/* Submission Form */}
         <form onSubmit={handleSubmit} className="card-shell rounded-lg p-8">
-          <Heading level={2} className="text-2xl text-neutral-900 mb-6">
+          <Heading level={2} className="text-2xl text-text-primary mb-6">
             {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('formHeadingIdea') : t('formHeadingDraft')}
           </Heading>
 
@@ -133,7 +133,7 @@ export default function SubmitPostPage() {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             {(['name', 'email'] as const).map((field) => (
               <div key={field}>
-                <label htmlFor={field} className="block text-sm font-medium text-neutral-700 mb-2">
+                <label htmlFor={field} className="block text-sm font-medium text-text-secondary mb-2">
                   {field === 'name' ? t('labelName') : t('labelEmail')}
                 </label>
                 <Input
@@ -145,7 +145,7 @@ export default function SubmitPostPage() {
                   required
                   aria-required="true"
                   readOnly={isLoggedIn}
-                  className={isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}
+                  className={isLoggedIn ? 'bg-surface-raised text-text-secondary cursor-default' : ''}
                   placeholder={field === 'name' ? t('placeholderName') : t('placeholderEmail')}
                 />
               </div>
@@ -154,7 +154,7 @@ export default function SubmitPostPage() {
 
           {/* Title */}
           <div className="mb-6">
-            <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium text-text-secondary mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelTitleIdea') : t('labelTitleDraft')}
             </label>
             <Input
@@ -172,7 +172,7 @@ export default function SubmitPostPage() {
           {/* Category + Tags */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-2">
+              <label htmlFor="category" className="block text-sm font-medium text-text-secondary mb-2">
                 {t('labelCategory')}
               </label>
               <Select
@@ -188,7 +188,7 @@ export default function SubmitPostPage() {
               </Select>
             </div>
             <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-2">
+              <label htmlFor="tags" className="block text-sm font-medium text-text-secondary mb-2">
                 {t('labelTags')}
               </label>
               <Input
@@ -204,7 +204,7 @@ export default function SubmitPostPage() {
 
           {/* Content */}
           <div className="mb-6">
-            <label htmlFor="content" className="block text-sm font-medium text-neutral-700 mb-2">
+            <label htmlFor="content" className="block text-sm font-medium text-text-secondary mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelContentIdea') : t('labelContentDraft')}
             </label>
             <Textarea
@@ -219,13 +219,13 @@ export default function SubmitPostPage() {
               placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderContentIdea') : t('placeholderContentDraft')}
             />
             {submissionType === BLOG_SUBMISSION_TYPE.DRAFT && (
-              <p className="mt-2 text-sm text-neutral-500">{t('markdownHint')}</p>
+              <p className="mt-2 text-sm text-text-tertiary">{t('markdownHint')}</p>
             )}
           </div>
 
           {/* Guidelines */}
-          <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-6">
-            <Heading level={3} className="text-sm font-semibold text-neutral-900 mb-2">📋 {t('guidelinesTitle')}</Heading>
+          <div className="bg-surface-raised border rounded-lg p-4 mb-6">
+            <Heading level={3} className="text-sm font-semibold text-text-primary mb-2">📋 {t('guidelinesTitle')}</Heading>
             <ul className="text-sm text-neutral-800 space-y-1">
               <li>• {t('guidelineOriginal')}</li>
               <li>• {t('guidelineLanguage')}</li>
@@ -237,7 +237,7 @@ export default function SubmitPostPage() {
 
           {/* Submit */}
           <div className="flex items-center justify-between">
-            <div className="text-sm text-neutral-500">{t('requiredFields')}</div>
+            <div className="text-sm text-text-tertiary">{t('requiredFields')}</div>
             <Button
               type="submit"
               variant="primary"

@@ -20,7 +20,7 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
   },
   active: {
     icon: LoaderCircle,
-    className: 'bg-neutral-50 text-neutral-800 border-neutral-200',
+    className: 'bg-surface-raised text-neutral-800 border',
     label: 'Prüfen',
   },
   blocked: {
@@ -30,7 +30,7 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
   },
   pending: {
     icon: Circle,
-    className: 'bg-neutral-50 text-neutral-700 border-neutral-200',
+    className: 'bg-surface-raised text-text-secondary border',
     label: 'Offen',
   },
 }

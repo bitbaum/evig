@@ -129,10 +129,10 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-primary-600" />
-          <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('searchingTechnicians')}</Heading>
+          <Sparkles className="w-5 h-5 text-action" />
+          <Heading level={3} className="text-lg font-semibold text-text-primary">{t('searchingTechnicians')}</Heading>
         </div>
-        <div className="animate-pulse bg-neutral-100 rounded-lg min-h-[300px]" />
+        <div className="animate-pulse bg-surface-raised rounded-lg min-h-[300px]" />
       </div>
     )
   }
@@ -149,8 +149,8 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Sparkles className="w-5 h-5 text-primary-600" />
-        <Heading level={3} className="text-lg font-semibold text-neutral-900">
+        <Sparkles className="w-5 h-5 text-action" />
+        <Heading level={3} className="text-lg font-semibold text-text-primary">
           {t('technicianSection')}
         </Heading>
       </div>
@@ -160,15 +160,15 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
         {/* Left: List */}
         <div className="space-y-4 order-1 lg:order-1">
           {/* RevampIT Store Card - Always visible */}
-          <div className="bg-neutral-50 dark:bg-neutral-800 border-2 border-primary-300 dark:border-primary-500/30 rounded-xl p-5">
+          <div className="bg-surface-raised border-2 border-primary-300 dark:border-primary-500/30 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-2">
-              <Store className="w-5 h-5 text-primary-600" />
-              <Heading level={4} className="font-semibold text-neutral-900">{REVAMPIT_STORE.name}</Heading>
+              <Store className="w-5 h-5 text-action" />
+              <Heading level={4} className="font-semibold text-text-primary">{REVAMPIT_STORE.name}</Heading>
             </div>
-            <p className="text-sm text-neutral-600 mb-2">
+            <p className="text-sm text-text-secondary mb-2">
               {REVAMPIT_STORE.description}
             </p>
-            <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
+            <div className="flex items-center gap-2 text-sm text-text-secondary mb-3">
               <MapPin className="w-4 h-4" />
               <span>{REVAMPIT_STORE.address}, {REVAMPIT_STORE.postalCode} {REVAMPIT_STORE.city}</span>
             </div>
@@ -176,7 +176,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               href={REVAMPIT_STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 font-medium"
             >
               {t('planRoute')}
               <ExternalLink className="w-3 h-3" />
@@ -187,8 +187,8 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
           {topMatches.length > 0 ? (
             <>
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-primary-600" />
-                <p className="text-sm font-medium text-neutral-700">
+                <TrendingUp className="w-4 h-4 text-action" />
+                <p className="text-sm font-medium text-text-secondary">
                   {t('matchCount', { count: topMatches.length })}
                 </p>
               </div>
@@ -226,7 +226,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     )}
 
                     <div className="mb-2">
-                      <div className="flex items-center justify-between text-xs text-neutral-600 mb-1">
+                      <div className="flex items-center justify-between text-xs text-text-secondary mb-1">
                         <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
                       </div>
                       <div className="w-full bg-neutral-200 rounded-full h-1.5">
@@ -263,7 +263,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                 <div className="text-center">
                   <Link
                     href={ROUTES.public.techniker}
-                    className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium text-sm"
+                    className="inline-flex items-center gap-2 text-action hover:text-primary-700 font-medium text-sm"
                   >
                     {t('showAllTechnicians', { count: matches.length })}
                     <TrendingUp className="w-4 h-4" />
@@ -273,7 +273,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
             </>
           ) : (
             <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6 text-center">
-              <p className="text-sm text-neutral-600">
+              <p className="text-sm text-text-secondary">
                 {t('noMatchesYet')}
               </p>
             </div>

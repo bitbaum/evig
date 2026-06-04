@@ -20,12 +20,12 @@ export default function OrderDetailError({
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
-      <div className="max-w-md w-full bg-white dark:bg-neutral-800 shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
+      <div className="max-w-md w-full bg-surface-base dark:bg-neutral-800 shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={1} className="text-lg font-medium text-neutral-900 dark:text-white" role="alert">
+        <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           Fehler beim Laden der Bestellung
         </Heading>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 text-sm text-text-secondary">
           Die Bestelldetails konnten nicht geladen werden.
         </p>
         <div className="mt-6 flex flex-col gap-3">
@@ -34,7 +34,7 @@ export default function OrderDetailError({
           </Button>
           <Link
             href="/dashboard/orders"
-            className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
+            className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
           >
             Zurück zu Bestellungen
           </Link>

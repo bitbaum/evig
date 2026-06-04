@@ -25,7 +25,7 @@ import { ROUTES } from '@/config/routes'
 function getStatusLabel(status: string) {
   const config = LISTING_STATUS_CONFIG[status as ListingStatus]
   if (config) return { label: config.label, className: config.color }
-  return { label: status, className: 'bg-neutral-100 text-neutral-800' }
+  return { label: status, className: 'bg-surface-raised text-neutral-800' }
 }
 
 export default function SellerDashboard() {
@@ -44,8 +44,8 @@ export default function SellerDashboard() {
   if (sessionStatus === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
-        <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
+        <Loader2 className="w-8 h-8 text-action animate-spin" />
+        <span className="ml-3 text-text-secondary">{t('loading')}</span>
       </div>
     )
   }
@@ -92,64 +92,64 @@ export default function SellerDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsProducts')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalProducts}</p>
-              <p className="text-sm text-primary-600">{t('statsActive', { count: stats.activeProducts })}</p>
+              <p className="text-sm font-medium text-text-secondary">{t('statsProducts')}</p>
+              <p className="text-3xl font-bold text-text-primary">{stats.totalProducts}</p>
+              <p className="text-sm text-action">{t('statsActive', { count: stats.activeProducts })}</p>
             </div>
-            <Package className="w-8 h-8 text-neutral-600 dark:text-neutral-400" />
+            <Package className="w-8 h-8 text-text-secondary" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsRevenue')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-sm font-medium text-text-secondary">{t('statsRevenue')}</p>
+              <p className="text-3xl font-bold text-text-primary">
                 {formatCHF(stats.totalRevenue)}
               </p>
-              <p className="text-sm text-primary-600 flex items-center gap-1">
+              <p className="text-sm text-action flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
                 {t('statsTotalRevenue')}
               </p>
             </div>
-            <DollarSign className="w-8 h-8 text-primary-600" />
+            <DollarSign className="w-8 h-8 text-action" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsViews')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('statsFavorites', { count: stats.totalFavorites })}</p>
+              <p className="text-sm font-medium text-text-secondary">{t('statsViews')}</p>
+              <p className="text-3xl font-bold text-text-primary">{stats.totalViews.toLocaleString()}</p>
+              <p className="text-sm text-text-secondary">{t('statsFavorites', { count: stats.totalFavorites })}</p>
             </div>
-            <Eye className="w-8 h-8 text-neutral-600 dark:text-neutral-400" />
+            <Eye className="w-8 h-8 text-text-secondary" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsOrders')}</p>
-              <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalOrders}</p>
+              <p className="text-sm font-medium text-text-secondary">{t('statsOrders')}</p>
+              <p className="text-3xl font-bold text-text-primary">{stats.totalOrders}</p>
               <p className="text-sm text-warning-600 dark:text-warning-400">{t('statsPending', { count: stats.pendingOrders })}</p>
             </div>
-            <Users className="w-8 h-8 text-neutral-600 dark:text-neutral-400" />
+            <Users className="w-8 h-8 text-text-secondary" />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Products */}
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
-          <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700">
+          <div className="p-6 border-b border-subtle dark:border-neutral-700">
+            <h2 className="text-lg font-semibold text-text-primary">
               {t('recentTitle')}
             </h2>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               {t('recentSubtitle')}
             </p>
           </div>
@@ -157,8 +157,8 @@ export default function SellerDashboard() {
           <div className="p-6">
             {products.length === 0 ? (
               <div className="text-center py-8">
-                <Package className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-                <p className="text-neutral-600 dark:text-neutral-400 mb-4">
+                <Package className="w-12 h-12 text-text-muted mx-auto mb-3" />
+                <p className="text-text-secondary mb-4">
                   {t('noProducts')}
                 </p>
                 <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
@@ -171,15 +171,15 @@ export default function SellerDashboard() {
                 {products.map((product) => {
                   const statusInfo = getStatusLabel(product.status)
                   return (
-                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-neutral-100 dark:border-neutral-700">
+                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-subtle dark:border-neutral-700">
                       <div className="w-12 h-12 rounded-lg overflow-hidden">
                         <ListingImage src={product.image} alt={product.title} fallbackIconSize="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-neutral-900 dark:text-white truncate">
+                        <h3 className="font-medium text-text-primary truncate">
                           {product.title}
                         </h3>
-                        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                        <p className="text-sm text-text-tertiary">
                           CHF {product.price} • {t('viewCount', { count: product.viewsCount })}
                         </p>
                       </div>
@@ -195,10 +195,10 @@ export default function SellerDashboard() {
             )}
 
             {products.length > 0 && (
-              <div className="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-700">
+              <div className="mt-6 pt-4 border-t border-subtle dark:border-neutral-700">
                 <Link
                   href="/dashboard/listings"
-                  className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium flex items-center gap-1"
+                  className="text-sm text-action hover:text-primary-700 dark:text-primary-400 font-medium flex items-center gap-1"
                 >
                   {t('manageAll')}
                   <ArrowRight className="w-4 h-4" />
@@ -209,12 +209,12 @@ export default function SellerDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
-          <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
-            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700">
+          <div className="p-6 border-b border-subtle dark:border-neutral-700">
+            <h2 className="text-lg font-semibold text-text-primary">
               {t('quickActionsTitle')}
             </h2>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               {t('quickActionsSubtitle')}
             </p>
           </div>
@@ -225,17 +225,17 @@ export default function SellerDashboard() {
                 <Link
                   key={action.href}
                   href={action.href}
-                  className="group p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="group p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center`}>
                       <action.icon className="w-4 h-4 text-white" />
                     </div>
-                    <h3 className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors">
+                    <h3 className="font-medium text-text-primary group-hover:text-primary-600 transition-colors">
                       {action.title}
                     </h3>
                   </div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  <p className="text-sm text-text-secondary">
                     {action.description}
                   </p>
                 </Link>
@@ -246,16 +246,16 @@ export default function SellerDashboard() {
       </div>
 
       {/* Marketplace Info */}
-      <div className="bg-neutral-50 dark:bg-neutral-900/20 border border-neutral-200 dark:border-neutral-700 rounded-xl p-6">
+      <div className="bg-surface-raised dark:bg-neutral-900/20 border dark:border-neutral-700 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Package className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Package className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <h3 className="font-medium text-neutral-900 dark:text-neutral-200">
+            <h3 className="font-medium text-text-primary dark:text-neutral-200">
               {t('infoTitle')}
             </h3>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1">
+            <p className="text-sm text-text-secondary mt-1">
               {t('infoDesc')}
             </p>
             <div className="mt-3 flex gap-3">

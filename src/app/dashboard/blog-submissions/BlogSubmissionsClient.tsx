@@ -51,9 +51,9 @@ export default function BlogSubmissionsClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-8">
+      <div className="min-h-screen bg-surface-raised dark:bg-neutral-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-black/30 p-8 border-2 border-neutral-200 dark:border-neutral-700">
+          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-black/30 p-8 border-2 border dark:border-neutral-700">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3" />
               <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full" />
@@ -66,21 +66,21 @@ export default function BlogSubmissionsClient() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-8">
+    <div className="min-h-screen bg-surface-raised dark:bg-neutral-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center mb-4 text-neutral-600 dark:text-neutral-400 hover:text-primary-600"
+            className="inline-flex items-center mb-4 text-text-secondary hover:text-primary-600"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
+          <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">
             {t('pageTitle')}
           </Heading>
-          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
+          <p className="text-sm sm:text-base text-text-secondary">
             {t('pageSubtitle')}
           </p>
         </div>
@@ -173,14 +173,14 @@ function SubmissionCard({
 }) {
   const t = useTranslations('dashboard.blogSubmissions')
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-4 sm:p-6 border-2 border-neutral-200 dark:border-neutral-700">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm p-4 sm:p-6 border-2 border dark:border-neutral-700">
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-1 break-words">
+          <Heading level={3} className="text-lg sm:text-xl font-semibold text-text-primary mb-1 break-words">
             {submission.title}
           </Heading>
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs sm:text-sm text-text-tertiary">
             {t('submittedOn', { date: formatDate(submission.submittedAt || submission.createdAt || '') })}
           </p>
         </div>
@@ -191,7 +191,7 @@ function SubmissionCard({
 
       {/* Next action hint */}
       {submission.nextAction && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-3">
+        <p className="text-sm text-text-secondary dark:text-neutral-300 mb-3">
           {submission.nextAction}
         </p>
       )}
@@ -200,7 +200,7 @@ function SubmissionCard({
       {submission.status === APPROVAL_STATUS.PUBLISHED && submission.publishedPostSlug && (
         <Link
           href={`/blog/${submission.publishedPostSlug}`}
-          className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
+          className="inline-flex items-center text-action hover:text-primary-700 font-medium text-sm"
         >
           <ExternalLink className="w-4 h-4 mr-2" />
           {t('viewPublished')}
@@ -248,7 +248,7 @@ function SubmissionCard({
           ) : (
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                <label className="block text-sm font-medium text-text-secondary mb-1">
                   {t('titleLabel')}
                 </label>
                 <Input
@@ -258,7 +258,7 @@ function SubmissionCard({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                <label className="block text-sm font-medium text-text-secondary mb-1">
                   {t('contentLabel')}
                 </label>
                 <Textarea
@@ -280,7 +280,7 @@ function SubmissionCard({
                 <button
                   onClick={onCancelEditing}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
+                  className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-text-secondary dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
                 >
                   {t('cancel')}
                 </button>
@@ -324,12 +324,12 @@ function StatCard({
 function EmptyState() {
   const t = useTranslations('dashboard.blogSubmissions')
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-8 text-center border-2 border-neutral-200 dark:border-neutral-700">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm p-8 text-center border-2 border dark:border-neutral-700">
       <FileText className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
-      <Heading level={3} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
+      <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
         {t('emptyTitle')}
       </Heading>
-      <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+      <p className="text-text-secondary mb-6">
         {t('emptyDesc')}
       </p>
       <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary">

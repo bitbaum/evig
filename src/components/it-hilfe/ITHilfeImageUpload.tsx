@@ -83,7 +83,7 @@ export function ITHilfeImageUpload({
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">{t('heading')}</Heading>
 
       {error && (
         <p className="text-sm text-error-600 mb-3">{error}</p>
@@ -92,12 +92,12 @@ export function ITHilfeImageUpload({
       {imageUrls.length < maxImages && (
         <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center mb-4">
           {uploading ? (
-            <Loader2 className="w-10 h-10 text-neutral-400 mx-auto mb-2 animate-spin" />
+            <Loader2 className="w-10 h-10 text-text-muted mx-auto mb-2 animate-spin" />
           ) : (
-            <Camera className="w-10 h-10 text-neutral-400 mx-auto mb-2" />
+            <Camera className="w-10 h-10 text-text-muted mx-auto mb-2" />
           )}
           <label htmlFor="it-hilfe-image-upload" className="cursor-pointer">
-            <span className="text-sm font-medium text-primary-600 hover:text-primary-500">
+            <span className="text-sm font-medium text-action hover:text-primary-500">
               {uploading ? t('uploading') : t('selectPhotos')}
             </span>
           </label>
@@ -110,7 +110,7 @@ export function ITHilfeImageUpload({
             disabled={uploading}
             className="hidden"
           />
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-xs text-text-tertiary mt-1">
             PNG, JPG, GIF bis 10MB ({imageUrls.length}/{maxImages})
           </p>
         </div>

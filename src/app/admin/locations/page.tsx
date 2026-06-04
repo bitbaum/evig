@@ -114,7 +114,7 @@ export default function AdminLocationsPage() {
         ]}
       >
         <div className="flex-1 min-w-48">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Stadt</label>
+          <label className="block text-sm font-medium text-text-secondary mb-1">Stadt</label>
           <Input
             type="text"
             value={filters.city}
@@ -130,9 +130,9 @@ export default function AdminLocationsPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border">
-        <div className="px-6 py-4 border-b border-neutral-200">
-          <Heading level={2} className="text-lg font-semibold text-neutral-900">
+      <div className="bg-surface-base rounded-xl shadow-sm border">
+        <div className="px-6 py-4 border-b border">
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
             Orte ({filteredLocations.length})
           </Heading>
         </div>
@@ -144,13 +144,13 @@ export default function AdminLocationsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     {getTypeIcon(location.type)}
-                    <Heading level={3} className="text-lg font-semibold text-neutral-900 truncate">
+                    <Heading level={3} className="text-lg font-semibold text-text-primary truncate">
                       {location.name}
                     </Heading>
                     <AdminStatusBadge status={location.approvalStatus} config={LOCATION_STATUS_CONFIG} />
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary mb-3">
                     <div className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
                       {location.city}, {location.canton}
@@ -167,7 +167,7 @@ export default function AdminLocationsPage() {
                     </div>
                   </div>
 
-                  <div className="text-sm text-neutral-500">
+                  <div className="text-sm text-text-tertiary">
                     {location.createdAt && formatDateShort(location.createdAt)}
                   </div>
                 </div>
@@ -175,7 +175,7 @@ export default function AdminLocationsPage() {
                 <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
                   <Link
                     href={ROUTES.admin.location(location.id)}
-                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     Details
@@ -218,11 +218,11 @@ export default function AdminLocationsPage() {
 
           {filteredLocations.length === 0 && (
             <div className="px-6 py-12 text-center">
-              <MapPin className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-              <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+              <MapPin className="w-12 h-12 text-text-muted mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
                 {ADMIN_CONTENT.locations.emptyTitle}
               </Heading>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-text-secondary mb-4">
                 {searchName.trim()
                   ? `Keine Orte für "${searchName}" gefunden.`
                   : filters.status !== 'all'

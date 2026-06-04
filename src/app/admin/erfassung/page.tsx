@@ -140,8 +140,8 @@ function ErfassungContent() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-4" />
-          <p className="text-neutral-600 dark:text-neutral-400">Produkt wird geladen...</p>
+          <Loader2 className="w-8 h-8 text-action animate-spin mx-auto mb-4" />
+          <p className="text-text-secondary">Produkt wird geladen...</p>
         </div>
       </div>
     )
@@ -177,7 +177,7 @@ function ErfassungContent() {
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
       {/* Pipeline progress — shown when entering from Geräte-Eingang */}
       {isIntakePipeline && (
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] rounded-lg px-4 py-3">
+        <div className="bg-surface-base border border rounded-lg px-4 py-3">
           <Stepper
             steps={INTAKE_PIPELINE_STEPS}
             currentStep={1}
@@ -195,10 +195,10 @@ function ErfassungContent() {
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>
         <div className="flex-1 min-w-0">
-          <Heading level={1} className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white truncate">
+          <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary truncate">
             {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : 'Produkt Erfassung'}
           </Heading>
-          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 hidden sm:block">
+          <p className="text-sm sm:text-base text-text-secondary hidden sm:block">
             {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : 'Neues Produkt ins Inventar aufnehmen'}
           </p>
         </div>
@@ -206,7 +206,7 @@ function ErfassungContent() {
           <button
             type="button"
             onClick={handleBulkReset}
-            className="text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+            className="text-sm text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200"
           >
             Zurück zur Einzelerfassung
           </button>
@@ -215,7 +215,7 @@ function ErfassungContent() {
 
       {/* Intake cross-link banner */}
       {!form.isEditMode && (
-        <div className="flex items-center gap-3 bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-3 text-sm">
+        <div className="flex items-center gap-3 bg-surface-raised border border rounded-lg px-4 py-3 text-sm">
           <span className="text-neutral-800">
             Für Geräte-Eingang mit Checkliste und Spenden-Erfassung →{' '}
             <Link href="/admin/intake" className="font-medium underline hover:text-neutral-900">
@@ -330,8 +330,8 @@ function ErfassungFallback() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-4" />
-        <p className="text-neutral-600 dark:text-neutral-400">Erfassung wird geladen...</p>
+        <Loader2 className="w-8 h-8 text-action animate-spin mx-auto mb-4" />
+        <p className="text-text-secondary">Erfassung wird geladen...</p>
       </div>
     </div>
   )

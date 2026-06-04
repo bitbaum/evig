@@ -30,7 +30,7 @@ export function OffersList({
 
   return (
     <div className="card-shell p-6">
-      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
         {t('incomingOffers', { count: offers.length })}
       </Heading>
       <div className="space-y-4">
@@ -42,55 +42,55 @@ export function OffersList({
             <div
               key={offer.id}
               className={`p-4 rounded-lg border ${
-                isAccepted ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200'
+                isAccepted ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20' : 'border'
               }`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-primary-100 dark:bg-primary-900/30' : 'bg-neutral-200'}`}>
                     {offer.repairerProfile ? (
-                      <Wrench className="w-5 h-5 text-primary-600" aria-hidden="true" />
+                      <Wrench className="w-5 h-5 text-action" aria-hidden="true" />
                     ) : (
-                      <User className="w-5 h-5 text-neutral-500" aria-hidden="true" />
+                      <User className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
                     )}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-neutral-900">{offer.helperName}</p>
+                      <p className="font-medium text-text-primary">{offer.helperName}</p>
                       {offer.repairerProfile?.isVerified && (
-                        <CheckCircle className="w-4 h-4 text-primary-600" aria-label={t('verifiedTechnicianLabel')} />
+                        <CheckCircle className="w-4 h-4 text-action" aria-label={t('verifiedTechnicianLabel')} />
                       )}
                     </div>
                     {offer.repairerProfile ? (
                       <div className="flex items-center gap-2 text-sm">
                         <Link
                           href={`/techniker/${offer.repairerProfile.id}`}
-                          className="text-primary-600 hover:text-primary-700 font-medium"
+                          className="text-action hover:text-primary-700 font-medium"
                         >
                           {offer.repairerProfile.businessName || t('technicianProfileFallback')}
                         </Link>
                         {Number(offer.repairerProfile.averageRating) > 0 && (
-                          <span className="flex items-center gap-0.5 text-neutral-500">
+                          <span className="flex items-center gap-0.5 text-text-tertiary">
                             <Star className="w-3 h-3 text-warning-400 fill-warning-400" aria-hidden="true" />
                             {Number(offer.repairerProfile.averageRating).toFixed(1)}
-                            <span className="text-neutral-400">({offer.repairerProfile.totalReviews})</span>
+                            <span className="text-text-muted">({offer.repairerProfile.totalReviews})</span>
                           </span>
                         )}
                       </div>
                     ) : (
-                      <p className="text-sm text-neutral-500">{offer.helperEmail}</p>
+                      <p className="text-sm text-text-tertiary">{offer.helperEmail}</p>
                     )}
                   </div>
                 </div>
-                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
                   {offerStatusConfig?.name || offer.status}
                 </span>
               </div>
 
-              <p className="text-neutral-700 mb-3">{offer.message}</p>
+              <p className="text-text-secondary mb-3">{offer.message}</p>
 
               {(offer.estimatedTime || offer.proposedCompensation) && (
-                <div className="flex flex-wrap gap-4 text-sm text-neutral-600 mb-3">
+                <div className="flex flex-wrap gap-4 text-sm text-text-secondary mb-3">
                   {offer.estimatedTime && (
                     <span className="flex items-center gap-1">
                       <Clock className="w-4 h-4" aria-hidden="true" />
@@ -110,7 +110,7 @@ export function OffersList({
                     return (
                       <span
                         key={skillId}
-                        className="px-2 py-0.5 bg-neutral-100 text-neutral-600 rounded text-xs"
+                        className="px-2 py-0.5 bg-surface-raised text-text-secondary rounded text-xs"
                       >
                         {skill?.name || skillId}
                       </span>

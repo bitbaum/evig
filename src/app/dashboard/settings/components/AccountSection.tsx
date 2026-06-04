@@ -21,16 +21,16 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
     <div className="space-y-8">
       {/* Name Fields */}
       <div>
-        <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
+        <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
           {labels.title}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">
+        <p className="text-sm text-text-secondary mb-6">
           {labels.description}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="first_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            <label htmlFor="first_name" className="block text-sm font-medium text-text-secondary mb-2">
               {labels.firstName}
             </label>
             <Input
@@ -43,7 +43,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
           </div>
 
           <div>
-            <label htmlFor="last_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            <label htmlFor="last_name" className="block text-sm font-medium text-text-secondary mb-2">
               {labels.lastName}
             </label>
             <Input
@@ -59,12 +59,12 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
 
       {/* Email (Read-only) */}
       <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+        <label className="block text-sm font-medium text-text-secondary mb-2">
           {labels.email}
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Mail className="h-5 w-5 text-neutral-400" />
+            <Mail className="h-5 w-5 text-text-muted" />
           </div>
           <Input
             type="email"
@@ -73,20 +73,20 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
             className="pl-10 cursor-not-allowed"
           />
         </div>
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="mt-2 text-sm text-text-tertiary">
           {labels.emailDescription}
         </p>
       </div>
 
       {/* Password Change Link */}
-      <div className="border-t-2 border-neutral-200 dark:border-neutral-700 pt-6">
-        <Heading level={4} className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+      <div className="border-t-2 border dark:border-neutral-700 pt-6">
+        <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {labels.password}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+        <p className="text-sm text-text-secondary mb-4">
           {labels.passwordDescription}
         </p>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-text-secondary">
           {t('passwordNote')}
         </p>
       </div>
@@ -96,7 +96,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         <Heading level={4} className="text-base font-semibold text-error-600 dark:text-error-400 mb-2">
           {labels.deleteAccount}
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+        <p className="text-sm text-text-secondary mb-4">
           {labels.deleteAccountWarning}
         </p>
         <button

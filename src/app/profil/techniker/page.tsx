@@ -47,29 +47,29 @@ export default function TechnikerProfilPage() {
 
   if (authStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+      <div className="min-h-screen bg-surface-raised flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-3xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-4"
+            className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             {t('backToDashboard')}
           </Link>
 
-          <Heading level={1} className="text-2xl text-neutral-900">
+          <Heading level={1} className="text-2xl text-text-primary">
             {t('pageTitle')}
           </Heading>
-          <p className="text-neutral-600 mt-1">
+          <p className="text-text-secondary mt-1">
             {t('pageDesc')}
           </p>
         </div>
@@ -89,12 +89,12 @@ export default function TechnikerProfilPage() {
         )}
 
         {/* Skills Selection */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
-          <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-primary-600" />
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+          <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-action" />
             {t('skills.heading')}
           </Heading>
-          <p className="text-sm text-neutral-600 mb-6">
+          <p className="text-sm text-text-secondary mb-6">
             {t('skills.desc')}
           </p>
 
@@ -110,7 +110,7 @@ export default function TechnikerProfilPage() {
                   <div className={`w-8 h-8 rounded-lg ${category.color} flex items-center justify-center`}>
                     <CategoryIcon className="w-4 h-4 text-white" />
                   </div>
-                  <Heading level={3} className="font-medium text-neutral-900">{category.name}</Heading>
+                  <Heading level={3} className="font-medium text-text-primary">{category.name}</Heading>
                 </div>
                 <div className="flex flex-wrap gap-2 ml-10">
                   {skills.map((skill: ITSkill) => (
@@ -121,7 +121,7 @@ export default function TechnikerProfilPage() {
                       className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                         profile.skills.includes(skill.id)
                           ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-2 border-primary-500'
-                          : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
+                          : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
                       }`}
                       title={skill.description}
                     >
@@ -135,12 +135,12 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Service Type */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
-          <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <Clock className="w-5 h-5 text-primary-600" />
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+          <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
+            <Clock className="w-5 h-5 text-action" />
             {t('serviceType.heading')}
           </Heading>
-          <p className="text-sm text-neutral-600 mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             {t('serviceType.desc')}
           </p>
 
@@ -153,7 +153,7 @@ export default function TechnikerProfilPage() {
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${
                   profile.serviceTypes.includes(type.id)
                     ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-2 border-primary-500'
-                    : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'
                 }`}
               >
                 {type.name}
@@ -164,18 +164,18 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Location */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
-          <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary-600" />
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+          <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-action" />
             {t('location.heading')}
           </Heading>
-          <p className="text-sm text-neutral-600 mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             {t('location.desc')}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('location.postalCode')}
               </label>
               <Input
@@ -190,7 +190,7 @@ export default function TechnikerProfilPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('location.city')}
               </label>
               <Input
@@ -204,7 +204,7 @@ export default function TechnikerProfilPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('location.canton')}
               </label>
               <Select
@@ -223,7 +223,7 @@ export default function TechnikerProfilPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('location.maxTravel')}
               </label>
               <Input
@@ -243,18 +243,18 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Pricing */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
-          <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <Euro className="w-5 h-5 text-primary-600" />
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+          <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
+            <Euro className="w-5 h-5 text-action" />
             {t('pricing.heading')}
           </Heading>
-          <p className="text-sm text-neutral-600 mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             {t('pricing.desc')}
           </p>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 {t('pricing.hourlyRate')}
               </label>
               <Input
@@ -272,7 +272,7 @@ export default function TechnikerProfilPage() {
                 min={0}
                 step={5}
               />
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className="text-xs text-text-tertiary mt-1">
                 {t('pricing.hourlyRateHint')}
               </p>
             </div>
@@ -288,9 +288,9 @@ export default function TechnikerProfilPage() {
                       acceptsGratis: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-action border-neutral-300 rounded focus:ring-primary-500"
                 />
-                <span className="text-sm text-neutral-700">
+                <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon} {t('pricing.acceptsGratis')}
                 </span>
               </label>
@@ -305,9 +305,9 @@ export default function TechnikerProfilPage() {
                       acceptsKulturlegi: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-action border-neutral-300 rounded focus:ring-primary-500"
                 />
-                <span className="text-sm text-neutral-700">
+                <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon} {t('pricing.acceptsKulturlegi')}
                 </span>
               </label>
@@ -316,11 +316,11 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Bio */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
-          <Heading level={2} className="text-lg text-neutral-900 mb-4">
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+          <Heading level={2} className="text-lg text-text-primary mb-4">
             {t('bio.heading')}
           </Heading>
-          <p className="text-sm text-neutral-600 mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             {t('bio.desc')}
           </p>
 
@@ -333,19 +333,19 @@ export default function TechnikerProfilPage() {
             rows={4}
             maxLength={1000}
           />
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-xs text-text-tertiary mt-1">
             {t('bio.charCount', { count: profile.bio.length })}
           </p>
         </div>
 
         {/* Active Toggle */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
           <label className="flex items-center justify-between cursor-pointer">
             <div>
-              <Heading level={2} className="text-lg text-neutral-900">
+              <Heading level={2} className="text-lg text-text-primary">
                 {t('activate.heading')}
               </Heading>
-              <p className="text-sm text-neutral-600">
+              <p className="text-sm text-text-secondary">
                 {t('activate.desc')}
               </p>
             </div>
@@ -370,7 +370,7 @@ export default function TechnikerProfilPage() {
         <div className="flex justify-end gap-4">
           <Link
             href={IT_HILFE.routes.browse}
-            className="px-6 py-3 text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
+            className="px-6 py-3 text-text-secondary border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
           >
             {t('cancel')}
           </Link>

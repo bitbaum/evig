@@ -21,14 +21,14 @@ export function MaterialsSection({
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-neutral-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
         <Users className="w-5 h-5 mr-2" />
         {t('sections.materials.title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.materials.provided')}
           </label>
           <Textarea
@@ -40,7 +40,7 @@ export function MaterialsSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.materials.required')}
           </label>
           <Textarea

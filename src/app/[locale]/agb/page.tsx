@@ -78,7 +78,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
           </Link>.
         </p>
 
-        <p className="mt-12 text-sm text-neutral-500 dark:text-neutral-400">{t('asOf')}</p>
+        <p className="mt-12 text-sm text-text-tertiary">{t('asOf')}</p>
       </section>
     </main>
   )

@@ -33,23 +33,23 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         onClick={(e) => e.stopPropagation()}
       >
         <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
-        <Heading level={2} className="text-2xl font-bold text-neutral-900 mb-2">
+        <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">
           {t('title')}
         </Heading>
-        <p className="text-neutral-600 mb-6">
+        <p className="text-text-secondary mb-6">
           {t('identified', { name: suggestion.name })}
         </p>
-        <div className="bg-neutral-50 rounded-lg p-4 mb-6">
+        <div className="bg-surface-raised rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
             {IconComponent ? (
-              <IconComponent className="w-6 h-6 text-primary-600" />
+              <IconComponent className="w-6 h-6 text-action" />
             ) : (
-              <CheckCircle className="w-6 h-6 text-primary-600" />
+              <CheckCircle className="w-6 h-6 text-action" />
             )}
-            <span className="font-medium text-neutral-900">{suggestion.name}</span>
+            <span className="font-medium text-text-primary">{suggestion.name}</span>
           </div>
-          <p className="text-sm text-neutral-600">CHF {suggestion.estimatedPrice}</p>
-          <p className="text-xs text-primary-600 mt-1">
+          <p className="text-sm text-text-secondary">CHF {suggestion.estimatedPrice}</p>
+          <p className="text-xs text-action mt-1">
             {t('confidence', { percent: Math.round(suggestion.confidence * 100) })}
           </p>
         </div>

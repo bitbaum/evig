@@ -14,15 +14,15 @@ export async function PhilosophySection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-white">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <Heading level={2} className="mb-6">{t('title')}</Heading>
-            <p className="text-lg text-neutral-600 mb-4"
+            <p className="text-lg text-text-secondary mb-4"
               dangerouslySetInnerHTML={{ __html: t.raw('intro') as string }}
             />
-            <p className="text-base text-neutral-500">
+            <p className="text-base text-text-tertiary">
               {t('automation')}
             </p>
           </div>
@@ -30,7 +30,7 @@ export async function PhilosophySection() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <Heading level={3} className="mb-6 text-neutral-800">{t('effortTitle')}</Heading>
-              <div className="space-y-6 text-neutral-600">
+              <div className="space-y-6 text-text-secondary">
                 <div className="border-l-4 border-primary-500 pl-4">
                   <p className="font-semibold text-primary-800 mb-2">{t('freedomPrinciple.label')}</p>
                   <p dangerouslySetInnerHTML={{ __html: t.raw('freedomPrinciple.text') as string }} />
@@ -46,15 +46,15 @@ export async function PhilosophySection() {
                   <p>{t('choiceNotCoercion.text')}</p>
                 </div>
 
-                <p className="italic text-neutral-500 text-sm mt-6">
+                <p className="italic text-text-tertiary text-sm mt-6">
                   &ldquo;{t('quote')}&rdquo;
                 </p>
               </div>
             </div>
 
-            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06]">
+            <div className="bg-surface-raised rounded-xl p-8 border">
               <Heading level={4} className="mb-4 text-neutral-800">{t('ratingTitle')}</Heading>
-              <p className="text-neutral-600 mb-4">
+              <p className="text-text-secondary mb-4">
                 {t('ratingIntro')}
               </p>
               <div className="space-y-3">
@@ -62,16 +62,16 @@ export async function PhilosophySection() {
                   <div key={index} className="group">
                     <div className="flex items-center space-x-3 mb-1">
                       <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-                      <span className="text-sm font-medium text-neutral-700">{item.label}</span>
+                      <span className="text-sm font-medium text-text-secondary">{item.label}</span>
                       <div className="flex-1 bg-neutral-200 rounded-full h-2">
                         <div className={`${item.color} h-2 rounded-full transition-all duration-500`} style={{width: '95%'}}></div>
                       </div>
                     </div>
-                    <p className="text-xs text-neutral-500 ml-6 mb-2">{item.desc}</p>
+                    <p className="text-xs text-text-tertiary ml-6 mb-2">{item.desc}</p>
                   </div>
                 ))}
               </div>
-              <div className="mt-6 p-4 bg-white rounded-lg border border-primary-200">
+              <div className="mt-6 p-4 bg-surface-base rounded-lg border border-primary-200">
                 <p className="text-sm text-primary-800 font-semibold mb-1">{t('commitment.label')}</p>
                 <p className="text-xs text-primary-700">
                   {t('commitment.text')}

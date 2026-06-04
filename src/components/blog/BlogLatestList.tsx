@@ -32,8 +32,8 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
                   />
                 </div>
               ) : (
-                <div className="w-32 h-32 flex-shrink-0 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-white/[0.06] rounded-lg flex items-center justify-center">
-                  <span className="text-neutral-400 text-2xl font-bold">R</span>
+                <div className="w-32 h-32 flex-shrink-0 bg-surface-raised border rounded-lg flex items-center justify-center">
+                  <span className="text-text-muted text-2xl font-bold">R</span>
                 </div>
               )}
 
@@ -41,19 +41,19 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
               <div className="flex-1 min-w-0">
                 {/* Category */}
                 {post.category && (
-                  <span className="inline-block px-2 py-1 bg-neutral-100 text-neutral-600 text-xs font-semibold rounded mb-2 uppercase tracking-wide">
+                  <span className="inline-block px-2 py-1 bg-surface-raised text-text-secondary text-xs font-semibold rounded mb-2 uppercase tracking-wide">
                     {post.category}
                   </span>
                 )}
 
                 {/* Title */}
-                <Heading level={3} className="text-lg font-bold text-neutral-900 mb-2 leading-snug group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                <Heading level={3} className="text-lg font-bold text-text-primary mb-2 leading-snug group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                   {post.title}
                 </Heading>
 
                 {/* Meta */}
-                <div className="flex items-center gap-3 text-xs text-neutral-500">
-                  <span className="font-semibold text-neutral-700">{post.author}</span>
+                <div className="flex items-center gap-3 text-xs text-text-tertiary">
+                  <span className="font-semibold text-text-secondary">{post.author}</span>
                   <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
                   <time>{formatDate(post.publishedAt || post.createdAt)}</time>
                   <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>

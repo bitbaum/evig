@@ -16,22 +16,22 @@ export async function BenefitsSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
-          <p className="text-lg text-neutral-600">
+          <p className="text-lg text-text-secondary">
             {t('subtitle')}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {benefits.map((benefit, index) => (
-            <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300">
+            <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300">
               <div className="flex items-start">
                 <IconBadge icon={benefit.icon} theme="services" size="lg" className="mr-4" />
                 <div>
                   <Heading level={3} className="mb-3">{benefit.title}</Heading>
-                  <p className="text-neutral-600">{benefit.description}</p>
+                  <p className="text-text-secondary">{benefit.description}</p>
                 </div>
               </div>
             </div>

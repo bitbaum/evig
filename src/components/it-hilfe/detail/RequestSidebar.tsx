@@ -60,29 +60,29 @@ export function RequestSidebar({
     <div className="space-y-6">
       {/* Request Info */}
       <div className="card-shell p-6">
-        <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
+        <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
           {t('sidebarDetails')}
         </Heading>
 
         <div className="space-y-4">
           {/* Location */}
           <div className="flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
+            <MapPin className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-neutral-500">{t('locationLabel')}</p>
-              <p className="font-medium text-neutral-900">
+              <p className="text-sm text-text-tertiary">{t('locationLabel')}</p>
+              <p className="font-medium text-text-primary">
                 {request.postalCode} {request.city}
               </p>
-              <p className="text-sm text-neutral-600">{request.canton}</p>
+              <p className="text-sm text-text-secondary">{request.canton}</p>
             </div>
           </div>
 
           {/* Budget */}
           <div className="flex items-start gap-3">
-            <Wrench className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
+            <Wrench className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-neutral-500">{t('budgetLabel')}</p>
-              <p className="font-medium text-primary-600">
+              <p className="text-sm text-text-tertiary">{t('budgetLabel')}</p>
+              <p className="font-medium text-action">
                 {formatBudget(request.budgetAmountCents)}
               </p>
             </div>
@@ -90,10 +90,10 @@ export function RequestSidebar({
 
           {/* Service Type */}
           <div className="flex items-start gap-3">
-            <User className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
+            <User className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-neutral-500">{t('serviceTypeLabel')}</p>
-              <p className="font-medium text-neutral-900">
+              <p className="text-sm text-text-tertiary">{t('serviceTypeLabel')}</p>
+              <p className="font-medium text-text-primary">
                 {serviceConfig?.name || request.serviceType}
               </p>
             </div>
@@ -101,10 +101,10 @@ export function RequestSidebar({
 
           {/* Offers */}
           <div className="flex items-start gap-3">
-            <Users className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
+            <Users className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-neutral-500">{t('offersLabel')}</p>
-              <p className="font-medium text-neutral-900">
+              <p className="text-sm text-text-tertiary">{t('offersLabel')}</p>
+              <p className="font-medium text-text-primary">
                 {t('offersCount', { count: request.offerCount })}
               </p>
             </div>
@@ -112,10 +112,10 @@ export function RequestSidebar({
 
           {/* Created */}
           <div className="flex items-start gap-3">
-            <Calendar className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
+            <Calendar className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-neutral-500">{t('createdLabel')}</p>
-              <p className="font-medium text-neutral-900">
+              <p className="text-sm text-text-tertiary">{t('createdLabel')}</p>
+              <p className="font-medium text-text-primary">
                 {formatDate(request.createdAt)}
               </p>
             </div>
@@ -123,10 +123,10 @@ export function RequestSidebar({
 
           {/* Expires */}
           <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
+            <Clock className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-neutral-500">{t('expiresLabel')}</p>
-              <p className="font-medium text-neutral-900">
+              <p className="text-sm text-text-tertiary">{t('expiresLabel')}</p>
+              <p className="font-medium text-text-primary">
                 {formatDate(request.expiresAt)}
               </p>
               {timeRemaining && (
@@ -141,17 +141,17 @@ export function RequestSidebar({
 
       {/* Requester Info */}
       <div className="card-shell p-6">
-        <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
+        <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
           {t('requesterSection')}
         </Heading>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-neutral-200 rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-neutral-500" aria-hidden="true" />
+            <User className="w-6 h-6 text-text-tertiary" aria-hidden="true" />
           </div>
           <div>
-            <p className="font-medium text-neutral-900">{request.requesterName}</p>
+            <p className="font-medium text-text-primary">{request.requesterName}</p>
             {request.isOwner && request.requesterEmail && (
-              <p className="text-sm text-neutral-500">{request.requesterEmail}</p>
+              <p className="text-sm text-text-tertiary">{request.requesterEmail}</p>
             )}
           </div>
         </div>
@@ -170,7 +170,7 @@ export function RequestSidebar({
       {/* Owner Actions */}
       {request.isOwner && (
         <div className="card-shell p-6">
-          <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
+          <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
             {t('actionsSection')}
           </Heading>
           <div className="space-y-2">

@@ -21,10 +21,10 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
         {features.map((feature, index) => (
           <div
             key={index}
-            className="p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg space-y-3"
+            className="p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg space-y-3"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-neutral-400">
+              <div className="flex items-center gap-2 text-text-muted">
                 <GripVertical className="w-4 h-4" />
                 <span className="text-sm font-medium">Feature {index + 1}</span>
               </div>
@@ -59,7 +59,7 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
         <button
           type="button"
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Feature hinzufügen

@@ -69,8 +69,8 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
 
   return (
     <div className="card-shell p-6">
-      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">{t('heading')}</Heading>
-      <p className="text-sm text-neutral-600 mb-4">
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">{t('heading')}</Heading>
+      <p className="text-sm text-text-secondary mb-4">
         {t('experienceWith', { title: requestTitle })}
       </p>
 
@@ -104,7 +104,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
         </div>
 
         <div>
-          <label htmlFor="review-comment" className="block text-sm font-medium text-neutral-700 mb-1">
+          <label htmlFor="review-comment" className="block text-sm font-medium text-text-secondary mb-1">
             {t('reviewTextLabel')}
           </label>
           <Textarea
@@ -116,7 +116,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
             minLength={10}
             maxLength={5000}
           />
-          <p className="text-xs text-neutral-500 mt-1">{content.length}/5000</p>
+          <p className="text-xs text-text-tertiary mt-1">{content.length}/5000</p>
         </div>
 
         <Button

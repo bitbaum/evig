@@ -42,7 +42,7 @@ function FilterSection({
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-b border-neutral-200 py-3">
+    <div className="border-b border py-3">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -51,9 +51,9 @@ function FilterSection({
       >
         {title}
         {open ? (
-          <ChevronUp className="h-3.5 w-3.5 text-neutral-400 flex-shrink-0" />
+          <ChevronUp className="h-3.5 w-3.5 text-text-muted flex-shrink-0" />
         ) : (
-          <ChevronDown className="h-3.5 w-3.5 text-neutral-400 flex-shrink-0" />
+          <ChevronDown className="h-3.5 w-3.5 text-text-muted flex-shrink-0" />
         )}
       </button>
       {open && <div className="mt-2.5 space-y-1.5">{children}</div>}
@@ -81,7 +81,7 @@ function RadioOption({
         onChange={onChange}
         className="h-3.5 w-3.5 text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 flex-shrink-0"
       />
-      <span className="text-sm text-neutral-700 group-hover:text-neutral-900 leading-snug">
+      <span className="text-sm text-text-secondary group-hover:text-neutral-900 leading-snug">
         {label}
       </span>
     </label>
@@ -105,7 +105,7 @@ function CheckOption({
         onChange={onChange}
         className="h-3.5 w-3.5 rounded text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 flex-shrink-0"
       />
-      <span className="text-sm text-neutral-700 group-hover:text-neutral-900 leading-snug">
+      <span className="text-sm text-text-secondary group-hover:text-neutral-900 leading-snug">
         {label}
       </span>
     </label>
@@ -136,8 +136,8 @@ export function MarketplaceFilterSidebar({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-1 pb-3 border-b border-neutral-200">
-        <span className="text-sm font-bold text-neutral-900">{t('filters.label')}</span>
+      <div className="flex items-center justify-between mb-1 pb-3 border-b border">
+        <span className="text-sm font-bold text-text-primary">{t('filters.label')}</span>
         {hasActiveFilters && (
           <button
             type="button"
@@ -326,7 +326,7 @@ export function MarketplaceFilterSidebar({
             if (!setFilter) return null
             return (
               <div key={spec.key} className="mb-3">
-                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-1.5">
+                <p className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-1.5">
                   {spec.label}
                 </p>
                 <RadioOption

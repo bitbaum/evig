@@ -20,8 +20,8 @@ export default function AdminWorkshopInstancesPage() {
 
   if (hook.loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+      <div className="min-h-screen bg-surface-raised flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
     )
   }
@@ -32,20 +32,20 @@ export default function AdminWorkshopInstancesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-surface-raised">
+      <div className="bg-surface-base shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <Heading level={1} className="text-2xl font-bold text-neutral-900">Workshop-Termine</Heading>
-              <p className="mt-1 text-sm text-neutral-600">
+              <Heading level={1} className="text-2xl font-bold text-text-primary">Workshop-Termine</Heading>
+              <p className="mt-1 text-sm text-text-secondary">
                 Verwalte Termine für Workshops
               </p>
             </div>
             <div className="flex gap-3">
               <Link
                 href={ROUTES.admin.workshops}
-                className="inline-flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition-colors"
+                className="inline-flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-text-secondary hover:bg-neutral-50 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Workshop-Vorschläge

@@ -135,17 +135,17 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
-      <div className="px-5 py-3.5 border-b border-neutral-200 dark:border-white/[0.06] flex items-center justify-between gap-2">
+    <div className="rounded-xl border border bg-surface-base overflow-hidden">
+      <div className="px-5 py-3.5 border-b border flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-neutral-500" />
-          <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">Urlaub & Abwesenheit</h2>
+          <Calendar className="w-4 h-4 text-text-tertiary" />
+          <h2 className="text-sm font-semibold text-text-primary">Urlaub & Abwesenheit</h2>
         </div>
         <div className="flex items-center gap-1">
           <button
             onClick={load}
             disabled={isLoading}
-            className="w-11 h-11 inline-flex items-center justify-center rounded-md text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="w-11 h-11 inline-flex items-center justify-center rounded-md text-text-tertiary hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] disabled:opacity-60"
             aria-label="Aktualisieren"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -153,7 +153,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-1.5 px-3 min-h-11 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold"
+              className="inline-flex items-center gap-1.5 px-3 min-h-11 rounded-md text-xs font-semibold bg-action hover:bg-action-hover text-action-text"
             >
               <Plus className="w-4 h-4" />
               Urlaub erfassen
@@ -169,18 +169,18 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
       )}
 
       {showForm && (
-        <div className="px-5 py-4 border-b border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-800/40">
+        <div className="px-5 py-4 border-b border bg-surface-raised dark:bg-neutral-800/40">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">Von</span>
+              <span className="text-xs font-medium text-text-secondary mb-1 block">Von</span>
               <Input type="date" value={formStartsOn} onChange={e => setFormStartsOn(e.target.value)} />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">Bis</span>
+              <span className="text-xs font-medium text-text-secondary mb-1 block">Bis</span>
               <Input type="date" value={formEndsOn} onChange={e => setFormEndsOn(e.target.value)} />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">Art</span>
+              <span className="text-xs font-medium text-text-secondary mb-1 block">Art</span>
               <Select value={formKind} onChange={e => setFormKind(e.target.value as LeavePeriodKind)}>
                 {leavePeriodKindOptions.map(k => (
                   <option key={k} value={k}>{LEAVE_PERIOD_KIND_LABELS[k]}</option>
@@ -189,7 +189,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             </label>
           </div>
           <label className="block mt-3">
-            <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">Notiz (optional)</span>
+            <span className="text-xs font-medium text-text-secondary mb-1 block">Notiz (optional)</span>
             <Textarea
               value={formNotes}
               onChange={e => setFormNotes(e.target.value)}
@@ -202,14 +202,14 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             <button
               onClick={resetForm}
               disabled={submitting}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
             >
               <X className="w-3.5 h-3.5" /> Abbrechen
             </button>
             <button
               onClick={submit}
               disabled={submitting}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold disabled:opacity-60"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-semibold disabled:opacity-60 bg-action hover:bg-action-hover text-action-text"
             >
               <Plus className="w-3.5 h-3.5" />
               Speichern
@@ -219,11 +219,11 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
       )}
 
       {rows.length === 0 && !isLoading && !showForm ? (
-        <div className="px-5 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
+        <div className="px-5 py-6 text-center text-sm text-text-tertiary">
           Keine Urlaubs- oder Abwesenheitsdaten erfasst.
         </div>
       ) : (
-        <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+        <ul className="divide-y divide-subtle">
           {rows.map(row => {
             const kind = row.kind as LeavePeriodKind
             const active = isActiveToday(row)
@@ -239,7 +239,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${getLeavePeriodKindColor(kind)}`}>
                         {getLeavePeriodKindLabel(kind)}
                       </span>
-                      <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                      <span className="text-sm font-medium text-text-primary">
                         {formatDateShort(row.starts_on)} – {formatDateShort(row.ends_on)}
                       </span>
                       {active && (
@@ -249,12 +249,12 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                       )}
                     </div>
                     {row.notes && (
-                      <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{row.notes}</p>
+                      <p className="mt-1 text-xs text-text-secondary">{row.notes}</p>
                     )}
                   </div>
                   <button
                     onClick={() => remove(row.id)}
-                    className="w-11 h-11 inline-flex items-center justify-center rounded-md text-neutral-400 hover:text-error-600 dark:hover:text-error-400 hover:bg-error-50 dark:hover:bg-error-500/10"
+                    className="w-11 h-11 inline-flex items-center justify-center rounded-md text-text-muted hover:text-error-600 dark:hover:text-error-400 hover:bg-error-50 dark:hover:bg-error-500/10"
                     aria-label="Eintrag löschen"
                   >
                     <Trash2 className="w-4 h-4" />

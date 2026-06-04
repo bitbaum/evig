@@ -58,8 +58,8 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
       )}
 
       {/* Step 1: Setup */}
-      <div className="bg-white rounded-lg border p-6 space-y-4">
-        <Heading level={2} className="text-lg font-semibold text-neutral-900">Sitzungsdetails</Heading>
+      <div className="bg-surface-base rounded-lg border p-6 space-y-4">
+        <Heading level={2} className="text-lg font-semibold text-text-primary">Sitzungsdetails</Heading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField label="Sitzungstyp" htmlFor="meeting_type">
@@ -114,7 +114,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           <button
             type="button"
             onClick={() => setShowAttendees(!showAttendees)}
-            className="flex items-center gap-2 text-sm font-medium text-neutral-700 hover:text-neutral-900"
+            className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-neutral-900"
           >
             <Users className="w-4 h-4" />
             Teilnehmer ({selectedAttendees.length}/{teamMembers.length})
@@ -122,7 +122,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           </button>
 
           {showAttendees && (
-            <div className="mt-2 p-3 bg-neutral-50 rounded-lg border space-y-2">
+            <div className="mt-2 p-3 bg-surface-raised rounded-lg border space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <Input
                   type="text"
@@ -134,7 +134,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 <button
                   type="button"
                   onClick={selectAllAttendees}
-                  className="text-xs text-primary-600 hover:text-primary-800 font-medium whitespace-nowrap"
+                  className="text-xs text-action hover:text-primary-800 font-medium whitespace-nowrap"
                 >
                   {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
                 </button>
@@ -149,13 +149,13 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                      className="rounded border-neutral-300 text-action focus:ring-primary-500"
                     />
                     {member.name}
                   </label>
                 ))}
                 {filteredTeamMembers.length === 0 && (
-                  <p className="text-sm text-neutral-500 px-2 py-1">Keine Teilnehmer gefunden</p>
+                  <p className="text-sm text-text-tertiary px-2 py-1">Keine Teilnehmer gefunden</p>
                 )}
               </div>
             </div>
@@ -165,9 +165,9 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
       {/* Inhalt — always visible (collapsed wizard per Z.5). canSubmit still
           enforces that meeting details + content are filled before submission. */}
-      <div className="bg-white rounded-lg border p-6 space-y-4">
-          <Heading level={2} className="text-lg font-semibold text-neutral-900">Inhalt</Heading>
-          <p className="text-sm text-neutral-600">
+      <div className="bg-surface-base rounded-lg border p-6 space-y-4">
+          <Heading level={2} className="text-lg font-semibold text-text-primary">Inhalt</Heading>
+          <p className="text-sm text-text-secondary">
             Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
           </p>
 
@@ -184,22 +184,22 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">
                 {contentFormat && (
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-neutral-100 text-neutral-600'}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-surface-raised text-text-secondary'}`}>
                     {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
                   </span>
                 )}
               </div>
-              <span className="text-xs text-neutral-500">{content.length} Zeichen</span>
+              <span className="text-xs text-text-tertiary">{content.length} Zeichen</span>
             </div>
           </FormField>
 
           {/* File Upload */}
           <div className="border-t pt-4">
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Oder Datei hochladen
             </label>
             <div className="flex items-center gap-3">
-              <label className="inline-flex items-center gap-2 px-4 min-h-11 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 cursor-pointer transition-colors text-sm">
+              <label className="inline-flex items-center gap-2 px-4 min-h-11 bg-surface-raised text-text-secondary rounded-lg hover:bg-neutral-200 cursor-pointer transition-colors text-sm">
                 <Upload className="w-4 h-4" />
                 Datei wählen
                 <input
@@ -209,20 +209,20 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   className="hidden"
                 />
               </label>
-              <span className="text-xs text-neutral-500">.txt, .json, .mp3, .wav, .m4a, .webm</span>
+              <span className="text-xs text-text-tertiary">.txt, .json, .mp3, .wav, .m4a, .webm</span>
             </div>
 
             {audioFile && (
-              <div className="mt-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
+              <div className="mt-3 p-3 bg-surface-raised border border rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Mic className="w-4 h-4 text-primary-600" />
+                    <Mic className="w-4 h-4 text-action" />
                     <span className="text-sm font-medium text-neutral-800">{audioFile.name}</span>
-                    <span className="text-xs text-primary-600">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
+                    <span className="text-xs text-action">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
                   </div>
                   <button
                     onClick={() => setAudioFile(null)}
-                    className="text-xs text-primary-600 hover:text-primary-800"
+                    className="text-xs text-action hover:text-primary-800"
                   >
                     Entfernen
                   </button>
@@ -230,7 +230,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
                 {/* Whisper model selector — compact inline styling inside audio panel */}
                 <div className="mt-2">
-                  <label htmlFor="whisper_model" className="block text-xs font-medium text-neutral-700 mb-1">
+                  <label htmlFor="whisper_model" className="block text-xs font-medium text-text-secondary mb-1">
                     Whisper-Modell
                   </label>
                   <Select
@@ -250,7 +250,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
           {/* Submit */}
           <div className="flex items-center justify-between pt-4 border-t">
-            <div className="text-sm text-neutral-500">
+            <div className="text-sm text-text-tertiary">
               {audioFile ? (
                 <span className="flex items-center gap-1"><Mic className="w-3 h-3" /> Audio wird transkribiert und strukturiert</span>
               ) : content.trim() ? (

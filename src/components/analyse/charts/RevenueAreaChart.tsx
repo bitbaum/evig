@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload, label }: {
   const total = payload.reduce((sum, entry) => sum + entry.value, 0)
 
   return (
-    <div className="bg-white dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
+    <div className="bg-surface-base dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
       <p className="font-semibold mb-2">{label}</p>
       {payload.map((entry) => (
         <div key={entry.name} className="flex justify-between gap-4 text-sm">

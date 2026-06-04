@@ -53,9 +53,9 @@ export function Pagination({
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] rounded-xl">
+    <div className="flex items-center justify-between px-4 py-3 bg-surface-base border border rounded-xl">
       {/* Info */}
-      <div className="text-sm text-neutral-700 dark:text-neutral-300">
+      <div className="text-sm text-text-secondary">
         <span className="font-medium">{start}</span> bis{' '}
         <span className="font-medium">{end}</span> von{' '}
         <span className="font-medium">{total}</span> Einträgen
@@ -81,13 +81,13 @@ export function Pagination({
               className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium transition-colors ${
                 page === p
                   ? 'bg-primary-600 text-white'
-                  : 'hover:bg-neutral-100 dark:hover:bg-white/[0.06] text-neutral-700 dark:text-neutral-300'
+                  : 'hover:bg-neutral-100 dark:hover:bg-white/[0.06] text-text-secondary'
               }`}
             >
               {p}
             </button>
           ) : (
-            <span key={i} className="px-2 text-neutral-400">
+            <span key={i} className="px-2 text-text-muted">
               {p}
             </span>
           )

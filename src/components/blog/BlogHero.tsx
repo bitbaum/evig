@@ -29,7 +29,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
             />
           </div>
         ) : (
-          <div className="aspect-[16/10] lg:aspect-[4/3] bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-white/[0.06] rounded-lg flex items-center justify-center order-2 lg:order-1">
+          <div className="aspect-[16/10] lg:aspect-[4/3] bg-surface-raised dark:bg-neutral-800 border rounded-lg flex items-center justify-center order-2 lg:order-1">
             <span className="text-primary-700 text-6xl font-bold">R</span>
           </div>
         )}
@@ -44,20 +44,20 @@ export default function BlogHero({ post }: BlogHeroProps) {
           )}
 
           {/* Title */}
-          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 leading-tight group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors">
+          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-text-primary mb-4 leading-tight group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors">
             {post.title}
           </Heading>
 
           {/* Excerpt */}
           {post.excerpt && (
-            <p className="text-xl text-neutral-600 mb-6 leading-relaxed line-clamp-3">
+            <p className="text-xl text-text-secondary mb-6 leading-relaxed line-clamp-3">
               {post.excerpt}
             </p>
           )}
 
           {/* Meta */}
-          <div className="flex items-center gap-4 text-sm text-neutral-500">
-            <span className="font-semibold text-neutral-900">{post.author}</span>
+          <div className="flex items-center gap-4 text-sm text-text-tertiary">
+            <span className="font-semibold text-text-primary">{post.author}</span>
             <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
             <time>{formatDate(post.publishedAt || post.createdAt)}</time>
             <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>

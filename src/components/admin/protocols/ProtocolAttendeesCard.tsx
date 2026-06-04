@@ -60,18 +60,18 @@ export function ProtocolAttendeesCard({
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-4">
+    <div className="bg-surface-base rounded-lg border border p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-neutral-400" />
-          <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
+          <Users className="w-4 h-4 text-text-muted" />
+          <h3 className="text-sm font-semibold text-text-primary">
             Teilnehmer ({attendees.length})
           </h3>
         </div>
         {isReview && !editing && (
           <button
             onClick={() => { setSelected(attendees); setSearch(''); setEditing(true) }}
-            className="flex items-center gap-1 text-xs text-primary-600 hover:text-primary-800 dark:text-primary-400"
+            className="flex items-center gap-1 text-xs text-action hover:text-primary-800"
           >
             <Pencil className="w-3 h-3" />
             Bearbeiten
@@ -81,7 +81,7 @@ export function ProtocolAttendeesCard({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setEditing(false)}
-              className="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-700"
+              className="flex items-center gap-1 text-xs text-text-tertiary hover:text-neutral-700"
             >
               <X className="w-3 h-3" />
               Abbrechen
@@ -100,12 +100,12 @@ export function ProtocolAttendeesCard({
             ? attendees.map((uid) => (
                 <span
                   key={uid}
-                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-neutral-100 dark:bg-white/[0.06] text-neutral-700 dark:text-neutral-300"
+                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-white/[0.06] text-text-secondary"
                 >
                   {attendeeNames[uid] || 'Unbekannt'}
                 </span>
               ))
-            : <p className="text-xs text-neutral-400">Keine Teilnehmer eingetragen</p>
+            : <p className="text-xs text-text-muted">Keine Teilnehmer eingetragen</p>
           }
         </div>
       )}
@@ -122,7 +122,7 @@ export function ProtocolAttendeesCard({
             {filtered.map((member) => (
               <label
                 key={member.id}
-                className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-50 dark:hover:bg-white/[0.04] cursor-pointer text-sm text-neutral-700 dark:text-neutral-300"
+                className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-50 dark:hover:bg-white/[0.04] cursor-pointer text-sm text-text-secondary"
               >
                 <input
                   type="checkbox"
@@ -134,13 +134,13 @@ export function ProtocolAttendeesCard({
                         : [...prev, member.id]
                     )
                   }
-                  className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                  className="rounded border-neutral-300 text-action focus:ring-primary-500"
                 />
                 {member.name}
               </label>
             ))}
             {filtered.length === 0 && (
-              <p className="text-xs text-neutral-400 px-2 py-1">Keine Treffer</p>
+              <p className="text-xs text-text-muted px-2 py-1">Keine Treffer</p>
             )}
           </div>
           {error && <p className="text-xs text-error-600">{error}</p>}

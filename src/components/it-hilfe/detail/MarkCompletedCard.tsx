@@ -17,14 +17,14 @@ interface MarkCompletedCardProps {
 export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompletedCardProps) {
   const t = useTranslations('itHelp.detail')
   return (
-    <div className="rounded-xl border border-primary-200 bg-white dark:bg-neutral-900 p-6">
+    <div className="rounded-xl border border-primary-200 bg-surface-base p-6">
       <div className="flex items-start gap-3">
-        <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <CheckCircle className="w-6 h-6 text-action flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">
-          <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-1">
+          <Heading level={3} className="text-lg font-semibold text-text-primary mb-1">
             {t('markCompletedTitle')}
           </Heading>
-          <p className="text-sm text-neutral-600 mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             {t('markCompletedDesc')}
           </p>
           <Button type="button" onClick={onMarkCompleted} disabled={submitting} variant="primary">

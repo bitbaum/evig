@@ -57,15 +57,15 @@ export default async function DonatePage({ params }: DonatePageProps) {
   const deviceItems = t.raw('devices.items') as string[]
 
   return (
-    <div className="bg-white">
+    <div className="bg-surface-base">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
 
         {/* Hero */}
         <div className="text-center mb-10">
-          <Heading level={1} className="text-neutral-900 mb-4">
+          <Heading level={1} className="text-text-primary mb-4">
             {t('hero.title')}
           </Heading>
-          <p className="text-lg text-neutral-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-text-secondary max-w-2xl mx-auto mb-8">
             {t('hero.body')}
           </p>
           <Button as="a" href="#bankueberweisung" variant="primary">
@@ -74,29 +74,29 @@ export default async function DonatePage({ params }: DonatePageProps) {
         </div>
 
         {/* Transparency row */}
-        <section className="mb-12 rounded-xl bg-neutral-50 border border-neutral-200 px-6 py-5">
-          <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide text-center mb-4">
+        <section className="mb-12 rounded-xl bg-surface-raised border px-6 py-5">
+          <p className="text-xs font-semibold text-text-muted uppercase tracking-wide text-center mb-4">
             {t('transparency.label')}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold text-neutral-900">{t('transparency.budgetValue')}</p>
-              <p className="text-xs text-neutral-500 mt-1">{t('transparency.budgetLabel')}</p>
+              <p className="text-2xl font-bold text-text-primary">{t('transparency.budgetValue')}</p>
+              <p className="text-xs text-text-tertiary mt-1">{t('transparency.budgetLabel')}</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900">{env.devicesSaved}+</p>
-              <p className="text-xs text-neutral-500 mt-1">{t('transparency.devicesLabel')}</p>
+              <p className="text-2xl font-bold text-text-primary">{env.devicesSaved}+</p>
+              <p className="text-xs text-text-tertiary mt-1">{t('transparency.devicesLabel')}</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-neutral-900">{env.co2SavedTons} t CO₂</p>
-              <p className="text-xs text-neutral-500 mt-1">{t('transparency.co2Label')}</p>
+              <p className="text-2xl font-bold text-text-primary">{env.co2SavedTons} t CO₂</p>
+              <p className="text-xs text-text-tertiary mt-1">{t('transparency.co2Label')}</p>
             </div>
           </div>
         </section>
 
         {/* Impact tiers */}
         <section className="mb-4">
-          <Heading level={2} className="text-neutral-900 mb-6 text-center">{t('tiers.heading')}</Heading>
+          <Heading level={2} className="text-text-primary mb-6 text-center">{t('tiers.heading')}</Heading>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {tierItems.map((tier, index) => {
               const Icon = TIER_ICONS[index]
@@ -105,7 +105,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 <div
                   key={index}
                   className={`relative rounded-xl border-2 p-6 ${
-                    highlight ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200 bg-neutral-50'
+                    highlight ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20' : 'border bg-surface-raised'
                   }`}
                 >
                   {highlight && (
@@ -115,12 +115,12 @@ export default async function DonatePage({ params }: DonatePageProps) {
                   )}
                   <div className="flex items-center gap-3 mb-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-900/30">
-                      <Icon className="h-5 w-5 text-primary-600" />
+                      <Icon className="h-5 w-5 text-action" />
                     </div>
-                    <span className="text-2xl font-bold text-neutral-900">CHF {TIER_AMOUNTS[index]}</span>
+                    <span className="text-2xl font-bold text-text-primary">CHF {TIER_AMOUNTS[index]}</span>
                   </div>
-                  <p className="text-sm font-semibold text-neutral-900 mb-1">{tier.title}</p>
-                  <p className="text-sm text-neutral-600">{tier.description}</p>
+                  <p className="text-sm font-semibold text-text-primary mb-1">{tier.title}</p>
+                  <p className="text-sm text-text-secondary">{tier.description}</p>
                 </div>
               )
             })}
@@ -140,34 +140,34 @@ export default async function DonatePage({ params }: DonatePageProps) {
         {/* Bank transfer box */}
         <section id="bankueberweisung" className="mb-12 scroll-mt-8">
           <div className="rounded-xl border-2 border-primary-200 dark:border-primary-800/30 bg-primary-50 dark:bg-primary-900/20 p-6 sm:p-8">
-            <Heading level={2} className="text-neutral-900 mb-2">{t('transfer.heading')}</Heading>
-            <p className="text-sm text-neutral-500 mb-6">{t('transfer.intro')}</p>
+            <Heading level={2} className="text-text-primary mb-2">{t('transfer.heading')}</Heading>
+            <p className="text-sm text-text-tertiary mb-6">{t('transfer.intro')}</p>
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-0.5">{t('transfer.recipientLabel')}</p>
-                  <p className="text-sm font-semibold text-neutral-900">{BANK.accountHolder}</p>
+                  <p className="text-xs font-medium text-text-tertiary uppercase tracking-wide mb-0.5">{t('transfer.recipientLabel')}</p>
+                  <p className="text-sm font-semibold text-text-primary">{BANK.accountHolder}</p>
                 </div>
                 <CopyButton value={BANK.accountHolder} label={t('transfer.copyBtn')} />
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-0.5">{t('transfer.ibanLabel')}</p>
-                  <p className="text-sm font-mono font-semibold text-neutral-900">{BANK.iban}</p>
+                  <p className="text-xs font-medium text-text-tertiary uppercase tracking-wide mb-0.5">{t('transfer.ibanLabel')}</p>
+                  <p className="text-sm font-mono font-semibold text-text-primary">{BANK.iban}</p>
                 </div>
                 <CopyButton value={BANK.iban} label={t('transfer.copyIbanBtn')} />
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-0.5">{t('transfer.bankLabel')}</p>
-                  <p className="text-sm text-neutral-700">{BANK.name}</p>
+                  <p className="text-xs font-medium text-text-tertiary uppercase tracking-wide mb-0.5">{t('transfer.bankLabel')}</p>
+                  <p className="text-sm text-text-secondary">{BANK.name}</p>
                 </div>
                 <CopyButton value={BANK.bic} label={`BIC ${BANK.bic}`} />
               </div>
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-0.5">{t('transfer.purposeLabel')}</p>
-                  <p className="text-sm text-neutral-700">{verwendungszweck}</p>
+                  <p className="text-xs font-medium text-text-tertiary uppercase tracking-wide mb-0.5">{t('transfer.purposeLabel')}</p>
+                  <p className="text-sm text-text-secondary">{verwendungszweck}</p>
                 </div>
                 <CopyButton value={verwendungszweck} label={t('transfer.copyBtn')} />
               </div>
@@ -177,8 +177,8 @@ export default async function DonatePage({ params }: DonatePageProps) {
 
         {/* Device donation */}
         <section id="geraete" className="mb-12 scroll-mt-8">
-          <Heading level={2} className="text-neutral-900 mb-2">{t('devices.heading')}</Heading>
-          <p className="text-sm text-neutral-500 mb-6">{t('devices.intro')}</p>
+          <Heading level={2} className="text-text-primary mb-2">{t('devices.heading')}</Heading>
+          <p className="text-sm text-text-tertiary mb-6">{t('devices.intro')}</p>
           <div className="rounded-xl border-2 border-secondary-200 bg-secondary-50 p-6 sm:p-8">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
               {DEVICE_ICONS.map(({ icon: Icon }, index) => (
@@ -186,20 +186,20 @@ export default async function DonatePage({ params }: DonatePageProps) {
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-100">
                     <Icon className="h-5 w-5 text-secondary-600" />
                   </div>
-                  <span className="text-xs font-medium text-neutral-700">{deviceItems[index]}</span>
+                  <span className="text-xs font-medium text-text-secondary">{deviceItems[index]}</span>
                 </div>
               ))}
             </div>
-            <div className="space-y-3 text-sm text-neutral-700 mb-6">
+            <div className="space-y-3 text-sm text-text-secondary mb-6">
               <p><span className="font-semibold">{t('devices.acceptLabel')}</span> {t('devices.acceptText')}</p>
               <p><span className="font-semibold">{t('devices.notAcceptLabel')}</span> {t('devices.notAcceptText')}</p>
               <p><span className="font-semibold">{t('devices.prepLabel')}</span> {t('devices.prepText')}</p>
             </div>
-            <div className="rounded-lg bg-white border border-secondary-200 p-4">
-              <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">{t('devices.addressLabel')}</p>
-              <p className="text-sm font-semibold text-neutral-900">{ORG.name} {LOCATIONS.store.name}</p>
-              <p className="text-sm text-neutral-600">{LOCATIONS.store.full}</p>
-              <p className="text-xs text-neutral-500 mt-2">{OPENING_HOURS.compact}</p>
+            <div className="rounded-lg bg-surface-base border border-secondary-200 p-4">
+              <p className="text-xs font-semibold text-text-tertiary uppercase tracking-wide mb-2">{t('devices.addressLabel')}</p>
+              <p className="text-sm font-semibold text-text-primary">{ORG.name} {LOCATIONS.store.name}</p>
+              <p className="text-sm text-text-secondary">{LOCATIONS.store.full}</p>
+              <p className="text-xs text-text-tertiary mt-2">{OPENING_HOURS.compact}</p>
               <a
                 href={`mailto:${CONTACT.email}`}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-700 hover:text-secondary-600"
@@ -212,15 +212,15 @@ export default async function DonatePage({ params }: DonatePageProps) {
 
         {/* Drop-off announcement form */}
         <section id="anmeldung" className="mb-12 scroll-mt-8">
-          <Heading level={2} className="text-neutral-900 mb-2">{t('dropoff.heading')}</Heading>
-          <p className="text-sm text-neutral-500 mb-6">{t('dropoff.intro')}</p>
-          <div className="rounded-xl border border-neutral-200 bg-white p-6 sm:p-8">
+          <Heading level={2} className="text-text-primary mb-2">{t('dropoff.heading')}</Heading>
+          <p className="text-sm text-text-tertiary mb-6">{t('dropoff.intro')}</p>
+          <div className="rounded-xl border bg-surface-base p-6 sm:p-8">
             <DropoffForm />
           </div>
         </section>
 
         {/* Newsletter signup */}
-        <section className="mb-0 rounded-xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
+        <section className="mb-0 rounded-xl border bg-surface-raised p-6 sm:p-8">
           <NewsletterSignup
             title={t('newsletter.title')}
             description={t('newsletter.description')}

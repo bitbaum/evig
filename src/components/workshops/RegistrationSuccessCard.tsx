@@ -21,7 +21,7 @@ export function RegistrationSuccessCard({
 
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('successHeading')}</Heading>
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('successHeading')}</Heading>
 
       <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-4">
         <div className="flex items-center text-primary-800 dark:text-primary-300 mb-2">
@@ -38,8 +38,8 @@ export function RegistrationSuccessCard({
       </div>
 
       {invoiceNumber && (
-        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3 mb-4">
-          <div className="flex items-center text-neutral-700 text-sm">
+        <div className="bg-surface-raised border rounded-lg p-3 mb-4">
+          <div className="flex items-center text-text-secondary text-sm">
             <FileText className="w-4 h-4 mr-2" />
             <span>{t('invoiceNumber', { number: invoiceNumber })}</span>
           </div>

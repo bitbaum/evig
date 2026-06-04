@@ -30,14 +30,14 @@ export function BasicInfoSection({
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-neutral-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
         <BookOpen className="w-5 h-5 mr-2" />
         {t('sections.basicInfo.title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.basicInfo.titleField')}
           </label>
           <Input
@@ -51,7 +51,7 @@ export function BasicInfoSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.basicInfo.category')}
           </label>
           <Select
@@ -68,7 +68,7 @@ export function BasicInfoSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.basicInfo.level')}
           </label>
           <Select
@@ -84,7 +84,7 @@ export function BasicInfoSection({
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.basicInfo.shortDescription')}
           </label>
           <Textarea
@@ -98,7 +98,7 @@ export function BasicInfoSection({
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
+          <label className="block text-sm font-medium text-text-secondary mb-2">
             {t('sections.basicInfo.detailedDescription')}
           </label>
           <Textarea

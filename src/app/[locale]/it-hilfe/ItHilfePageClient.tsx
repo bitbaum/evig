@@ -63,12 +63,12 @@ export default function ITHilfePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact hero — requests visible without scrolling */}
-      <div className="bg-white dark:bg-neutral-950 border-b border-neutral-100 dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl text-neutral-900">{t('title')}</Heading>
-              <p className="text-sm text-neutral-600 mt-1">
+              <Heading level={1} className="text-2xl sm:text-3xl text-text-primary">{t('title')}</Heading>
+              <p className="text-sm text-text-secondary mt-1">
                 {t('requestCount', { count: total })} · {t('tagline')}
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={IT_HILFE.routes.helpers}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 dark:border-primary-500 rounded-lg text-base font-semibold transition-colors"
               >
                 <Users className="w-4 h-4" />
                 {t('findTechnician')}
@@ -88,7 +88,7 @@ export default function ITHilfePage() {
           </div>
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
               <Input
                 type="text"
                 value={searchInput}
@@ -117,20 +117,20 @@ export default function ITHilfePage() {
           <div className="mb-6 flex flex-wrap gap-2">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-500/40 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-200 dark:border-primary-500/40 rounded-lg text-sm font-medium transition-colors"
             >
               <Wrench className="w-4 h-4" />
               {t('becomeTechnician')}
             </Link>
             <Link
               href={IT_HILFE.routes.my}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neutral-50 text-neutral-700 border border-neutral-200 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-neutral-50 text-text-secondary border rounded-lg text-sm font-medium transition-colors"
             >
               {t('myRequests')}
             </Link>
             <Link
               href={IT_HILFE.routes.myOffers}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neutral-50 text-neutral-700 border border-neutral-200 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-neutral-50 text-text-secondary border rounded-lg text-sm font-medium transition-colors"
             >
               <Heart className="w-4 h-4" />
               {t('myOffers')}
@@ -143,7 +143,7 @@ export default function ITHilfePage() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-text-secondary hover:bg-neutral-50 transition-colors"
               aria-expanded={showFilters}
               aria-controls="filter-panel"
             >
@@ -170,7 +170,7 @@ export default function ITHilfePage() {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-action hover:text-primary-700 font-medium"
               >
                 <X className="w-4 h-4" />
                 {t('resetFilters')}
@@ -180,10 +180,10 @@ export default function ITHilfePage() {
 
           {/* Expanded Filters */}
           {showFilters && (
-            <div id="filter-panel" className="mt-4 pt-4 border-t border-neutral-200">
+            <div id="filter-panel" className="mt-4 pt-4 border-t border">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label htmlFor="filter-category" className="block text-xs font-medium text-neutral-700 mb-2">
+                  <label htmlFor="filter-category" className="block text-xs font-medium text-text-secondary mb-2">
                     {t('filterCategory')}
                   </label>
                   <Select
@@ -201,7 +201,7 @@ export default function ITHilfePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="filter-canton" className="block text-xs font-medium text-neutral-700 mb-2">
+                  <label htmlFor="filter-canton" className="block text-xs font-medium text-text-secondary mb-2">
                     {t('filterCanton')}
                   </label>
                   <Select
@@ -219,7 +219,7 @@ export default function ITHilfePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="filter-urgency" className="block text-xs font-medium text-neutral-700 mb-2">
+                  <label htmlFor="filter-urgency" className="block text-xs font-medium text-text-secondary mb-2">
                     {t('filterUrgency')}
                   </label>
                   <Select
@@ -237,7 +237,7 @@ export default function ITHilfePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="filter-budget" className="block text-xs font-medium text-neutral-700 mb-2">
+                  <label htmlFor="filter-budget" className="block text-xs font-medium text-text-secondary mb-2">
                     {t('filterBudget')}
                   </label>
                   <Select
@@ -302,7 +302,7 @@ export default function ITHilfePage() {
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm text-neutral-600 px-4" aria-current="page">
+            <span className="text-sm text-text-secondary px-4" aria-current="page">
               {t('pageOf', { current: currentPage, total: totalPages })}
             </span>
             <button
@@ -322,10 +322,10 @@ export default function ITHilfePage() {
             <div className="flex justify-center mb-4">
               <IconBadge icon={Wrench} theme="itHilfe" size="lg" />
             </div>
-            <Heading level={3} className="text-xl text-neutral-900 mb-2">
+            <Heading level={3} className="text-xl text-text-primary mb-2">
               {t('ctaTitle')}
             </Heading>
-            <p className="text-base text-neutral-600 mb-6 max-w-md mx-auto">
+            <p className="text-base text-text-secondary mb-6 max-w-md mx-auto">
               {t('ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -334,7 +334,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaMoreInfo')}
               </Link>

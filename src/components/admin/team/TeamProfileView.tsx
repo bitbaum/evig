@@ -61,7 +61,7 @@ export function TeamProfileView({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           {t('backToTeam')}
@@ -69,7 +69,7 @@ export function TeamProfileView({
       </div>
 
       {/* Profile Header Card */}
-      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+      <div className="bg-surface-base rounded-xl border border p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -83,18 +83,18 @@ export function TeamProfileView({
           {/* Info */}
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
+              <Heading level={1} className="text-2xl text-text-primary">
                 {displayName}
               </Heading>
               {!profile.is_active && (
-                <span className="px-2 py-1 text-sm rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
+                <span className="px-2 py-1 text-sm rounded bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
                   {t('inactive')}
                 </span>
               )}
             </div>
 
             {profile.position && (
-              <p className="text-lg text-neutral-600 dark:text-neutral-400 mt-1">
+              <p className="text-lg text-text-secondary mt-1">
                 {profile.position}
               </p>
             )}
@@ -112,7 +112,7 @@ export function TeamProfileView({
               )}
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-4 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className="flex flex-wrap gap-4 mt-4 text-sm text-text-tertiary">
               <div className="flex items-center gap-1">
                 <Mail className="w-4 h-4" />
                 {profile.user_email}
@@ -144,20 +144,20 @@ export function TeamProfileView({
         />
 
         {/* Activity Link */}
-        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
+        <div className="bg-surface-base rounded-xl border border p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-primary-500" />
-              <Heading level={3} className="text-neutral-900 dark:text-neutral-100">{t('activities')}</Heading>
+              <Heading level={3} className="text-text-primary dark:text-neutral-100">{t('activities')}</Heading>
             </div>
             <Link
               href={ROUTES.admin.teamActivity}
-              className="px-3 py-1.5 text-sm text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-lg"
+              className="px-3 py-1.5 text-sm text-action hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-lg"
             >
               {t('viewTeamActivities')}
             </Link>
           </div>
-          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="mt-2 text-sm text-text-secondary">
             {t('activitiesDescription')}
           </p>
         </div>
@@ -168,15 +168,15 @@ export function TeamProfileView({
         {/* Left Column */}
         <div className="space-y-6">
           {/* Skills & Interests */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
-            <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-surface-base rounded-xl border border p-6">
+            <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
               <Star className="w-5 h-5 text-warning-500" />
               {t('skillsAndInterests')}
             </Heading>
 
             {profile.skills && profile.skills.length > 0 ? (
               <div className="mb-4">
-                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-2">
+                <Heading level={3} className="text-sm text-text-secondary mb-2">
                   {t('skills')}
                 </Heading>
                 <div className="flex flex-wrap gap-2">
@@ -191,12 +191,12 @@ export function TeamProfileView({
                 </div>
               </div>
             ) : (
-              <p className="text-neutral-400 text-sm mb-4">{t('noSkills')}</p>
+              <p className="text-text-muted text-sm mb-4">{t('noSkills')}</p>
             )}
 
             {profile.interests && profile.interests.length > 0 && (
               <div>
-                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-2">
+                <Heading level={3} className="text-sm text-text-secondary mb-2">
                   {t('interests')}
                 </Heading>
                 <div className="flex flex-wrap gap-2">
@@ -214,18 +214,18 @@ export function TeamProfileView({
           </div>
 
           {/* Development Areas */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
-            <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-surface-base rounded-xl border border p-6">
+            <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-primary-500" />
               {t('development')}
             </Heading>
 
             {profile.goals && (
               <div className="mb-4">
-                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
+                <Heading level={3} className="text-sm text-text-secondary mb-1">
                   {t('goals')}
                 </Heading>
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
+                <p className="text-text-secondary text-sm whitespace-pre-wrap">
                   {profile.goals}
                 </p>
               </div>
@@ -233,10 +233,10 @@ export function TeamProfileView({
 
             {profile.strengths && (
               <div className="mb-4">
-                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
+                <Heading level={3} className="text-sm text-text-secondary mb-1">
                   {t('strengths')}
                 </Heading>
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
+                <p className="text-text-secondary text-sm whitespace-pre-wrap">
                   {profile.strengths}
                 </p>
               </div>
@@ -244,17 +244,17 @@ export function TeamProfileView({
 
             {profile.development_areas && (
               <div>
-                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
+                <Heading level={3} className="text-sm text-text-secondary mb-1">
                   {t('developmentAreas')}
                 </Heading>
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
+                <p className="text-text-secondary text-sm whitespace-pre-wrap">
                   {profile.development_areas}
                 </p>
               </div>
             )}
 
             {!profile.goals && !profile.strengths && !profile.development_areas && (
-              <p className="text-neutral-400 text-sm">{t('noDevelopmentData')}</p>
+              <p className="text-text-muted text-sm">{t('noDevelopmentData')}</p>
             )}
           </div>
         </div>
@@ -262,8 +262,8 @@ export function TeamProfileView({
         {/* Right Column */}
         <div className="space-y-6">
           {/* Availability */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
-            <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-surface-base rounded-xl border border p-6">
+            <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary-500" />
               {t('availability')}
             </Heading>
@@ -271,10 +271,10 @@ export function TeamProfileView({
             <div className="space-y-3">
               {profile.working_hours && (
                 <div>
-                  <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
+                  <Heading level={3} className="text-sm text-text-secondary">
                     {t('workingHours')}
                   </Heading>
-                  <p className="text-neutral-600 dark:text-neutral-400 text-sm">
+                  <p className="text-text-secondary text-sm">
                     {profile.working_hours}
                   </p>
                 </div>
@@ -282,10 +282,10 @@ export function TeamProfileView({
 
               {profile.contract_hours && (
                 <div>
-                  <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
+                  <Heading level={3} className="text-sm text-text-secondary">
                     {t('contractHours')}
                   </Heading>
-                  <p className="text-neutral-600 dark:text-neutral-400 text-sm">
+                  <p className="text-text-secondary text-sm">
                     {profile.contract_hours} {t('hoursPerWeek')}
                   </p>
                 </div>
@@ -293,20 +293,20 @@ export function TeamProfileView({
 
               {profile.availability && (
                 <div>
-                  <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
+                  <Heading level={3} className="text-sm text-text-secondary">
                     {t('generalAvailability')}
                   </Heading>
-                  <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
+                  <p className="text-text-secondary text-sm whitespace-pre-wrap">
                     {profile.availability}
                   </p>
                 </div>
               )}
 
               <div>
-                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
+                <Heading level={3} className="text-sm text-text-secondary">
                   {t('preferredContact')}
                 </Heading>
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm">
+                <p className="text-text-secondary text-sm">
                   {CONTACT_METHOD_LABELS[profile.preferred_contact as ContactMethod] || profile.preferred_contact}
                 </p>
               </div>
@@ -315,8 +315,8 @@ export function TeamProfileView({
 
           {/* Emergency Contact */}
           {(profile.emergency_contact_name || profile.emergency_contact_phone) && (
-            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
-              <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+            <div className="bg-surface-base rounded-xl border border p-6">
+              <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-error-500" />
                 {t('emergencyContact')}
               </Heading>
@@ -324,11 +324,11 @@ export function TeamProfileView({
               <div className="space-y-2">
                 {profile.emergency_contact_name && (
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-400">
+                    <User className="w-4 h-4 text-text-muted" />
+                    <span className="text-text-secondary">
                       {profile.emergency_contact_name}
                       {profile.emergency_contact_relation && (
-                        <span className="text-neutral-400 ml-2">
+                        <span className="text-text-muted ml-2">
                           ({EMERGENCY_RELATION_LABELS[profile.emergency_contact_relation as EmergencyRelation] || profile.emergency_contact_relation})
                         </span>
                       )}
@@ -337,8 +337,8 @@ export function TeamProfileView({
                 )}
                 {profile.emergency_contact_phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-neutral-400" />
-                    <span className="text-neutral-600 dark:text-neutral-400">
+                    <Phone className="w-4 h-4 text-text-muted" />
+                    <span className="text-text-secondary">
                       {profile.emergency_contact_phone}
                     </span>
                   </div>
@@ -363,7 +363,7 @@ export function TeamProfileView({
       </div>
 
       {/* Meta Info */}
-      <div className="text-xs text-neutral-400 flex gap-4">
+      <div className="text-xs text-text-muted flex gap-4">
         <span>{t('createdAt')}: {formatDateShort(profile.created_at)}</span>
         <span>{t('updatedAt')}: {formatDateShort(profile.updated_at)}</span>
       </div>

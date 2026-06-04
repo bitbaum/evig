@@ -66,10 +66,10 @@ export default async function MembershipPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
+        <Heading level={1} className="text-2xl font-bold text-text-primary">
           {t('pageTitle')}
         </Heading>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+        <p className="text-sm text-text-tertiary mt-1">
           {t('pageSubtitle', { orgName: ORG.legalName })}
         </p>
       </div>
@@ -77,14 +77,14 @@ export default async function MembershipPage() {
       {isMember ? (
         <div className="space-y-4">
           {/* Status card */}
-          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl border dark:border-neutral-700 p-6">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
-                <BadgeCheck className="w-6 h-6 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+                <BadgeCheck className="w-6 h-6 text-action" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
+                  <Heading level={2} className="text-lg font-semibold text-text-primary">
                     {membership?.member_type
                       ? (MEMBERSHIP_TYPE_LABELS[membership.member_type as keyof typeof MEMBERSHIP_TYPE_LABELS] ?? t('memberLabel'))
                       : t('memberLabel')}
@@ -102,7 +102,7 @@ export default async function MembershipPage() {
                   )}
                 </div>
                 {membership?.member_since && (
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 flex items-center gap-1.5">
+                  <p className="text-sm text-text-tertiary mt-1 flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
                     {t('memberSince', { date: formatDate(membership.member_since) })}
                   </p>
@@ -112,21 +112,21 @@ export default async function MembershipPage() {
           </div>
 
           {/* Payment details */}
-          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
-            <Heading level={3} className="text-base font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-neutral-500" aria-hidden="true" />
+          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl border dark:border-neutral-700 p-6">
+            <Heading level={3} className="text-base font-semibold text-text-primary mb-4 flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-text-tertiary" aria-hidden="true" />
               {t('annualFee')}
             </Heading>
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-700">
-                <span className="text-neutral-600 dark:text-neutral-400">{t('amountLabel')}</span>
-                <span className="font-semibold text-neutral-900 dark:text-white">
+              <div className="flex justify-between items-center py-2 border-b border-subtle dark:border-neutral-700">
+                <span className="text-text-secondary">{t('amountLabel')}</span>
+                <span className="font-semibold text-text-primary">
                   {t('amountValue', { currency: MEMBERSHIP.currency, fee })}
                 </span>
               </div>
               {membership?.member_paid_until && (
-                <div className="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-700">
-                  <span className="text-neutral-600 dark:text-neutral-400">{t('paidUntilLabel')}</span>
+                <div className="flex justify-between items-center py-2 border-b border-subtle dark:border-neutral-700">
+                  <span className="text-text-secondary">{t('paidUntilLabel')}</span>
                   <span className={`font-medium ${paid ? 'text-primary-700 dark:text-primary-400' : 'text-warning-700 dark:text-warning-400'}`}>
                     {formatDate(membership.member_paid_until)}
                   </span>
@@ -150,11 +150,11 @@ export default async function MembershipPage() {
           </div>
 
           {/* What membership means */}
-          <div className="bg-neutral-50 dark:bg-neutral-900/50 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
-            <Heading level={3} className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-3">
+          <div className="bg-surface-raised dark:bg-neutral-900/50 rounded-xl p-6 border dark:border-neutral-700">
+            <Heading level={3} className="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">
               {t('benefitsTitle')}
             </Heading>
-            <ul className="space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <ul className="space-y-2 text-sm text-text-secondary">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit1')}
@@ -174,7 +174,7 @@ export default async function MembershipPage() {
         <EmptyState
           icon={BadgeCheck}
           iconBg="bg-primary-50 dark:bg-primary-900/20"
-          iconColor="text-primary-600 dark:text-primary-400"
+          iconColor="text-action"
           title={t('notMemberTitle')}
           description={t('notMemberDesc', { orgName: ORG.legalName, currency: MEMBERSHIP.currency, fee: MEMBERSHIP.fees.regular })}
           action={

@@ -93,7 +93,7 @@ export function UserPermissionsEditor({
 
   return (
     <Modal isOpen={true} onClose={onClose} title="Berechtigungen bearbeiten" size="lg">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 -mt-3 mb-4">
+        <p className="text-sm text-text-secondary -mt-3 mb-4">
           {userName || userEmail}
         </p>
 
@@ -103,7 +103,7 @@ export function UserPermissionsEditor({
           <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Crown className="w-5 h-5 text-primary-600" />
+                <Crown className="w-5 h-5 text-action" />
                 <div>
                   <p className="font-medium text-primary-900 dark:text-primary-200">
                     Super Admin Status
@@ -122,13 +122,13 @@ export function UserPermissionsEditor({
                     : 'bg-neutral-300 dark:bg-neutral-600'
                 } ${isInHardcodedList && superAdminStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+                <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface-base rounded-full transition-transform ${
                   superAdminStatus ? 'translate-x-6' : ''
                 }`} />
               </button>
             </div>
             {isInHardcodedList && (
-              <p className="mt-2 text-xs text-primary-600">
+              <p className="mt-2 text-xs text-action">
                 Dieser Benutzer ist in der Kern-Super-Admin-Liste und kann nicht herabgestuft werden.
               </p>
             )}
@@ -139,7 +139,7 @@ export function UserPermissionsEditor({
             <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Shield className="w-5 h-5 text-primary-600" />
+                  <Shield className="w-5 h-5 text-action" />
                   <div>
                     <p className="font-medium text-primary-900 dark:text-primary-200">
                       Voller Zugriff
@@ -157,7 +157,7 @@ export function UserPermissionsEditor({
                       : 'bg-neutral-300 dark:bg-neutral-600'
                   }`}
                 >
-                  <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+                  <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface-base rounded-full transition-transform ${
                     grantFullAccess ? 'translate-x-6' : ''
                   }`} />
                 </button>
@@ -168,7 +168,7 @@ export function UserPermissionsEditor({
           {/* Individual Permissions */}
           {!superAdminStatus && !grantFullAccess && (
             <div>
-              <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-3">
+              <Heading level={3} className="font-medium text-text-primary mb-3">
                 Einzelne Bereiche
               </Heading>
               <div className="grid grid-cols-2 gap-2">
@@ -179,7 +179,7 @@ export function UserPermissionsEditor({
                     className={`p-3 text-left rounded-lg border transition-colors ${
                       selectedPermissions.includes(section.id)
                         ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300'
+                        : 'border hover:border-neutral-300'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -195,7 +195,7 @@ export function UserPermissionsEditor({
                       <span className={`font-medium ${
                         section.sensitive
                           ? 'text-error-700 dark:text-error-400'
-                          : 'text-neutral-900 dark:text-white'
+                          : 'text-text-primary'
                       }`}>
                         {section.label}
                       </span>
@@ -218,7 +218,7 @@ export function UserPermissionsEditor({
         </div>
 
         {/* Footer */}
-        <div className="pt-6 border-t border-neutral-200 dark:border-white/[0.06] flex justify-end gap-3 mt-6">
+        <div className="pt-6 border-t border flex justify-end gap-3 mt-6">
           <Button
             onClick={onClose}
             variant="ghost"

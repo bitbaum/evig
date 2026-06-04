@@ -24,7 +24,7 @@ export function LearningObjectivesSection({
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-neutral-900 mb-4 flex items-center`}>
+      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
         <Target className="w-5 h-5 mr-2" />
         {t('sections.learningObjectives.title')}
       </Heading>
@@ -53,7 +53,7 @@ export function LearningObjectivesSection({
         <button
           type="button"
           onClick={onAdd}
-          className="w-full py-2 border-2 border-dashed border-neutral-300 text-neutral-600 hover:border-neutral-400 hover:text-neutral-700 rounded-lg transition-colors"
+          className="w-full py-2 border-2 border-dashed border-neutral-300 text-text-secondary hover:border-neutral-400 hover:text-neutral-700 rounded-lg transition-colors"
         >
           {t('sections.learningObjectives.add')}
         </button>

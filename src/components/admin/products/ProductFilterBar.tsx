@@ -33,12 +33,12 @@ export function ProductFilterBar({
   activeTab,
 }: ProductFilterBarProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4 md:p-6">
+    <div className="bg-surface-base rounded-xl shadow-sm border border p-4 md:p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex flex-col sm:flex-row gap-4 flex-1">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <Search className="w-5 h-5 text-text-muted absolute left-3 top-1/2 transform -translate-y-1/2" />
             <Input
               type="text"
               placeholder="Produkte suchen..."

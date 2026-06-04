@@ -25,10 +25,10 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
         <div
           key={submission.id}
           onClick={() => onSelect(submission)}
-          className={`bg-white dark:bg-neutral-900 rounded-xl shadow-sm border p-5 cursor-pointer transition-all ${
+          className={`bg-surface-base rounded-xl shadow-sm border p-5 cursor-pointer transition-all ${
             selectedId === submission.id
               ? 'border-primary-500 ring-2 ring-primary-500/20'
-              : 'border-neutral-100 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-neutral-600'
+              : 'border-subtle dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-neutral-600'
           }`}
         >
           <div className="flex items-start justify-between mb-3">
@@ -37,7 +37,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                 <span
                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full font-medium ${
                     submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
-                      ? 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
+                      ? 'bg-surface-raised text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
                       : 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
                   }`}
                 >
@@ -59,15 +59,15 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                     submission.status}
                 </span>
                 {submission.last_edited_at && (
-                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300 rounded">
+                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300 rounded">
                     Von Admin bearbeitet
                   </span>
                 )}
               </div>
-              <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2">
+              <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2">
                 {submission.title}
               </Heading>
-              <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+              <div className="flex items-center gap-3 text-sm text-text-tertiary">
                 <span className="flex items-center gap-1">
                   <User className="w-3 h-3" />
                   {submission.submitter_name}
@@ -80,7 +80,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
             </div>
           </div>
           {(submission.category_label || submission.category_name) && (
-            <span className="inline-flex items-center px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs rounded">
+            <span className="inline-flex items-center px-2 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded">
               <Folder className="w-3 h-3 mr-1" />
               {submission.category_label || submission.category_name}
             </span>

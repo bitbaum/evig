@@ -178,7 +178,7 @@ export function TimecardApprovalsClient() {
       {/* Filter strip */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-neutral-600 dark:text-neutral-400">Zeitraum:</span>
+          <span className="text-sm text-text-secondary">Zeitraum:</span>
           {(['all', 'week', 'month'] as PeriodFilter[]).map(opt => (
             <button
               key={opt}
@@ -186,7 +186,7 @@ export function TimecardApprovalsClient() {
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 periodFilter === opt
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                  : 'bg-surface-raised dark:bg-neutral-800 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-700'
               }`}
             >
               {opt === 'all' ? 'Alle' : opt === 'week' ? 'Wochen' : 'Monate'}
@@ -197,7 +197,7 @@ export function TimecardApprovalsClient() {
           <button
             onClick={loadQueue}
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -257,26 +257,26 @@ export function TimecardApprovalsClient() {
       )}
 
       {/* Queue */}
-      <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
+      <div className="rounded-xl border border bg-surface-base overflow-hidden">
         {items.length === 0 && !isLoading ? (
-          <div className="px-6 py-12 text-center text-sm text-neutral-500 dark:text-neutral-400">
+          <div className="px-6 py-12 text-center text-sm text-text-tertiary">
             Keine offenen Zeitkarten. Stand: {new Date().toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' })}
           </div>
         ) : (
           <>
-            <div className="px-4 sm:px-6 py-2.5 border-b border-neutral-200 dark:border-white/[0.06] flex items-center gap-3 bg-neutral-50 dark:bg-neutral-800/40">
+            <div className="px-4 sm:px-6 py-2.5 border-b border flex items-center gap-3 bg-surface-raised dark:bg-neutral-800/40">
               <input
                 type="checkbox"
                 checked={allSelected}
                 onChange={toggleAll}
                 aria-label="Alle auswählen"
-                className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-600 text-primary-600 focus:ring-primary-500"
+                className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500"
               />
-              <span className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+              <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
                 {items.length} eingereicht
               </span>
             </div>
-            <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+            <ul className="divide-y divide-subtle">
               {items.map(row => {
                 const isSelected = selected.has(row.id)
                 const status = row.status as TimecardStatus
@@ -299,21 +299,21 @@ export function TimecardApprovalsClient() {
                       checked={isSelected}
                       onChange={() => toggle(row.id)}
                       aria-label={`Zeitkarte von ${row.user_name || row.user_email} auswählen`}
-                      className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-600 text-primary-600 focus:ring-primary-500 shrink-0"
+                      className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500 shrink-0"
                     />
-                    <div className="w-9 h-9 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-xs font-semibold text-neutral-700 dark:text-neutral-200 shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-xs font-semibold text-text-secondary dark:text-neutral-200 shrink-0">
                       {initials(row.user_name || row.user_email)}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-neutral-900 dark:text-white truncate">
+                        <span className="font-medium text-text-primary truncate">
                           {row.user_name || row.user_email}
                         </span>
                         {row.team_profile_id && (
                           <Link
                             href={`/admin/team/${row.team_profile_id}`}
                             target="_blank"
-                            className="text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
+                            className="text-text-muted hover:text-primary-600 dark:hover:text-primary-400"
                             aria-label="Profil in neuem Tab öffnen"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -321,15 +321,15 @@ export function TimecardApprovalsClient() {
                         )}
                       </div>
                       {subtitleParts && (
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                        <div className="text-xs text-text-tertiary truncate">
                           {subtitleParts}
                         </div>
                       )}
                     </div>
-                    <div className="hidden sm:block min-w-0 text-sm text-neutral-600 dark:text-neutral-400 truncate text-right">
+                    <div className="hidden sm:block min-w-0 text-sm text-text-secondary truncate text-right">
                       {formatTimecardPeriod(row.period_type, row.period_start, row.period_end)}
                     </div>
-                    <div className="font-semibold text-neutral-900 dark:text-white text-right whitespace-nowrap text-sm">
+                    <div className="font-semibold text-text-primary text-right whitespace-nowrap text-sm">
                       {formatTimecardDuration(Number(row.total_minutes) || 0)}
                     </div>
                     <span className={`hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>

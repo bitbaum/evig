@@ -61,7 +61,7 @@ export default function EditRequestPage() {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-24">
         <p className="text-error-600">{error}</p>
-        <Link href={`/it-hilfe/${id}`} className="text-primary-600 hover:underline">
+        <Link href={`/it-hilfe/${id}`} className="text-action hover:underline">
           {t('backToRequest')}
         </Link>
       </div>
@@ -73,8 +73,8 @@ export default function EditRequestPage() {
       <div className="flex items-center justify-center py-24">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
-          <Heading level={2} className="text-2xl text-neutral-900 mb-2">{t('savedTitle')}</Heading>
-          <p className="text-neutral-600">{t('savedRedirect')}</p>
+          <Heading level={2} className="text-2xl text-text-primary mb-2">{t('savedTitle')}</Heading>
+          <p className="text-text-secondary">{t('savedRedirect')}</p>
         </div>
       </div>
     )
@@ -86,7 +86,7 @@ export default function EditRequestPage() {
     <PageShell maxWidth="3xl">
         <Link
           href={`/it-hilfe/${id}`}
-          className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backToRequest')}
@@ -95,11 +95,11 @@ export default function EditRequestPage() {
         <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-              <Wrench className="w-6 h-6 text-primary-600" />
+              <Wrench className="w-6 h-6 text-action" />
             </div>
-            <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
+            <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
           </div>
-          <p className="text-neutral-600">{t('description')}</p>
+          <p className="text-text-secondary">{t('description')}</p>
         </div>
 
         {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
@@ -107,7 +107,7 @@ export default function EditRequestPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Device Category */}
           <div className="card-shell p-6">
-            <Heading level={2} className="text-lg text-neutral-900 mb-4">{t('sectionCategory')}</Heading>
+            <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionCategory')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
@@ -119,13 +119,13 @@ export default function EditRequestPage() {
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
                         ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-neutral-200 hover:border-neutral-300'
+                        : 'border hover:border-neutral-300'
                     }`}
                   >
                     <div className={`w-10 h-10 mx-auto mb-2 rounded-lg ${cat.color} flex items-center justify-center`}>
                       <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-sm font-medium text-neutral-900">{cat.name}</span>
+                    <span className="text-sm font-medium text-text-primary">{cat.name}</span>
                   </button>
                 )
               })}
@@ -162,10 +162,10 @@ export default function EditRequestPage() {
 
               {/* Budget */}
               <div className="card-shell p-6">
-                <Heading level={2} className="text-lg text-neutral-900 mb-2">{t('sectionBudget')}</Heading>
-                <p className="text-sm text-neutral-600 mb-4">{t('budgetDescription')}</p>
+                <Heading level={2} className="text-lg text-text-primary mb-2">{t('sectionBudget')}</Heading>
+                <p className="text-sm text-text-secondary mb-4">{t('budgetDescription')}</p>
                 <div className="flex items-center gap-3">
-                  <span className="text-neutral-500">CHF</span>
+                  <span className="text-text-tertiary">CHF</span>
                   <Input
                     type="number"
                     value={formData.maxBudget}
@@ -175,7 +175,7 @@ export default function EditRequestPage() {
                     step="5"
                     className="w-32"
                   />
-                  <span className="text-sm text-neutral-500">
+                  <span className="text-sm text-text-tertiary">
                     {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
                   </span>
                 </div>
@@ -183,10 +183,10 @@ export default function EditRequestPage() {
 
               {/* Service Type & Urgency */}
               <div className="card-shell p-6">
-                <Heading level={2} className="text-lg text-neutral-900 mb-4">{t('sectionOptions')}</Heading>
+                <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    <label className="block text-sm font-medium text-text-secondary mb-1">
                       {t('serviceTypeLabel')}
                     </label>
                     <Select
@@ -199,7 +199,7 @@ export default function EditRequestPage() {
                     </Select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    <label className="block text-sm font-medium text-text-secondary mb-1">
                       {t('urgencyLabel')}
                     </label>
                     <Select

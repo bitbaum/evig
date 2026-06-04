@@ -52,7 +52,7 @@ function StarRow({ rating, onChange }: { rating: number; onChange?: (r: number) 
   return (
     <div className="flex items-center gap-1">
       <StarRating value={rating} onChange={onChange} />
-      <span className="ml-2 text-sm text-neutral-600">{rating}/5</span>
+      <span className="ml-2 text-sm text-text-secondary">{rating}/5</span>
     </div>
   )
 }
@@ -67,7 +67,7 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-neutral-700 mb-1">{t('editOverallRating')}</label>
+        <label className="block text-sm font-medium text-text-secondary mb-1">{t('editOverallRating')}</label>
         <StarRow rating={editForm.overallRating} onChange={(r) => setEditForm({...editForm, overallRating: r})} />
       </div>
 
@@ -79,7 +79,7 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
           { labelKey: 'editTimeliness', key: 'timelinessRating' as const },
         ] as const).map(({ labelKey, key }) => (
           <div key={key}>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t(labelKey)}</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1">{t(labelKey)}</label>
             <StarRow rating={editForm[key]} onChange={(r) => setEditForm({...editForm, [key]: r})} />
           </div>
         ))}
@@ -127,12 +127,12 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   const t = useTranslations('dashboard.reviews')
   const tDates = useTranslations('dashboard.dates')
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-white/[0.06] overflow-hidden">
-      <div className="p-6 border-b border-neutral-200 dark:border-white/[0.06]">
+    <div className="bg-surface-base rounded-lg shadow-sm border overflow-hidden">
+      <div className="p-6 border-b border">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
-              <Heading level={3} className="text-lg font-semibold text-neutral-900">
+              <Heading level={3} className="text-lg font-semibold text-text-primary">
                 {t('reviewFor', { name: review.targetName })}
               </Heading>
               <StatusBadge status={review.status} />
@@ -158,15 +158,15 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
             ) : (
               <>
                 {review.title && (
-                  <Heading level={4} className="font-medium text-neutral-900 mb-2">{review.title}</Heading>
+                  <Heading level={4} className="font-medium text-text-primary mb-2">{review.title}</Heading>
                 )}
-                <p className="text-neutral-700 mb-3 leading-relaxed">{review.content}</p>
+                <p className="text-text-secondary mb-3 leading-relaxed">{review.content}</p>
 
                 {review.response && (
-                  <div className="mt-4 p-4 bg-neutral-50 rounded-lg">
+                  <div className="mt-4 p-4 bg-surface-raised rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <MessageSquare className="w-4 h-4 text-neutral-600" />
-                      <span className="text-sm font-medium text-neutral-900">
+                      <MessageSquare className="w-4 h-4 text-text-secondary" />
+                      <span className="text-sm font-medium text-text-primary">
                         {t('responseFrom', { name: review.response.responderName })}
                       </span>
                     </div>
@@ -198,8 +198,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
         </div>
 
         {/* Review Stats */}
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.04]">
-          <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-subtle">
+          <div className="flex items-center gap-4 text-sm text-text-tertiary">
             <span>{t('helpfulVotes', { count: review.helpfulVotes })}</span>
             <span>{tDates('createdOn', { date: formatDateShort(review.createdAt) })}</span>
             {review.updatedAt !== review.createdAt && (
@@ -215,7 +215,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'helpful'
                     ? 'bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-400'
-                    : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                    : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-600'
                 }`}
               >
                 <ThumbsUp className="w-3 h-3" />
@@ -226,7 +226,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'unhelpful'
                     ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
-                    : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                    : 'bg-surface-raised dark:bg-neutral-700 text-text-secondary hover:bg-neutral-200 dark:hover:bg-neutral-600'
                 }`}
               >
                 <ThumbsDown className="w-3 h-3" />
@@ -284,9 +284,9 @@ export default function UserReviewsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-white/[0.06] p-6">
-        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">{t('pageTitle')}</Heading>
-        <p className="text-neutral-600 dark:text-neutral-400">
+      <div className="bg-surface-base rounded-lg shadow-sm border p-6">
+        <Heading level={1} className="text-2xl font-bold text-text-primary mb-2">{t('pageTitle')}</Heading>
+        <p className="text-text-secondary">
           {t('pageDescription')}
         </p>
       </div>

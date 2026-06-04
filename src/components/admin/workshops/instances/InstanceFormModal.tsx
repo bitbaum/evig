@@ -33,12 +33,12 @@ export function InstanceFormModal({
 }: InstanceFormModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white dark:border dark:border-white/[0.06] rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
-          <Heading level={2} className="text-xl text-neutral-900">
+      <div className="bg-surface-base dark:border dark:border-white/[0.06] rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="px-6 py-4 border-b border flex items-center justify-between">
+          <Heading level={2} className="text-xl text-text-primary">
             {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}
           </Heading>
-          <button onClick={onClose} className="text-neutral-500 hover:text-neutral-600">
+          <button onClick={onClose} className="text-text-tertiary hover:text-neutral-600">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -138,7 +138,7 @@ export function InstanceFormModal({
           </FormField>
         </div>
 
-        <div className="px-6 py-4 border-t border-neutral-200 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border flex justify-end gap-3">
           <Button onClick={onClose} variant="outline">
             Abbrechen
           </Button>

@@ -18,10 +18,10 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
   return (
     <section className="py-12 sm:py-16 md:py-20">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto bg-white rounded-xl p-6 sm:p-8 border border-neutral-200">
+        <div className="max-w-2xl mx-auto bg-surface-base rounded-xl p-6 sm:p-8 border">
           <h2 className={cn('text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center', getTextColor('white', 'primary'))}>Preise</h2>
           <div className="text-center mb-6 sm:mb-8">
-            <p className="text-xl sm:text-2xl font-bold text-primary-600">{pricing.base}</p>
+            <p className="text-xl sm:text-2xl font-bold text-action">{pricing.base}</p>
           </div>
           <div className="space-y-3 sm:space-y-4">
             {pricing.details.map((detail, index) => (
@@ -33,7 +33,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
           </div>
           
           {pricing.mediaPrices && pricing.mediaPrices.length > 0 && (
-            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border-neutral-200">
+            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border">
               <h3 className={cn('text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center', getTextColor('white', 'primary'))}>Medienkosten</h3>
               <div className="space-y-2 sm:space-y-3">
                 {pricing.mediaPrices.map((price, index) => (

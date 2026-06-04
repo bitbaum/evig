@@ -77,7 +77,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
     <div className="space-y-3">
       {/* Header bar — totals + reload */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <div className="text-sm text-neutral-600 dark:text-neutral-400">
+        <div className="text-sm text-text-secondary">
           {rows.length === 0 && !isLoading
             ? 'Noch keine Zeiterfassungen.'
             : `${rows.length} Karten · ${formatTimecardDuration(totalMinutes)} insgesamt`}
@@ -95,7 +95,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
           <button
             onClick={load}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -110,8 +110,8 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
       )}
 
       {rows.length > 0 && (
-        <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
-          <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+        <div className="rounded-xl border border bg-surface-base overflow-hidden">
+          <ul className="divide-y divide-subtle">
             {rows.map(row => {
               const status = row.status as TimecardStatus
               const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock
@@ -121,14 +121,14 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
               return (
                 <li key={row.id} className="px-4 sm:px-5 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors">
                   <div className="flex items-start gap-3">
-                    <Icon className="w-4 h-4 mt-0.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
+                    <Icon className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                        <span className="text-sm font-medium text-text-primary">
                           {formatTimecardPeriod(row.period_type, row.period_start, row.period_end)}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-neutral-900 dark:text-white tabular-nums">
+                          <span className="text-sm font-semibold text-text-primary tabular-nums">
                             {formatTimecardDuration(Number(row.total_minutes) || 0)}
                           </span>
                           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
@@ -137,7 +137,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
                         </div>
                       </div>
                       {dateRef && (
-                        <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                        <p className="mt-0.5 text-xs text-text-tertiary">
                           {row.reviewed_at ? 'Geprüft' : 'Eingereicht'} {formatDateShort(dateRef)}
                         </p>
                       )}

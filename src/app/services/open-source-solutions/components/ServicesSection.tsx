@@ -18,7 +18,7 @@ interface ServicesSectionProps {
 
 export function ServicesSection({ features }: ServicesSectionProps) {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
       <div className="container mx-auto px-4 sm:px-6">
         <h2 className={cn('text-3xl font-bold mb-8 sm:mb-12 text-center', getTextColor('neutral', 'primary'))}>
           Unsere Dienstleistungen
@@ -27,7 +27,7 @@ export function ServicesSection({ features }: ServicesSectionProps) {
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
-              <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border-neutral-200">
+              <div key={index} className="bg-surface-base rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border">
                 <div className="flex items-start mb-6">
                   <div className="p-3 bg-success-100 rounded-lg text-success-600 mr-4">
                     <Icon className="w-8 h-8" />

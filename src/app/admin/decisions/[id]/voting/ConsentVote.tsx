@@ -23,9 +23,7 @@ export function ConsentVote({ response, rationale, onResponseChange, onRationale
               onClick={() => onResponseChange(r)}
               className={`rounded-md border-2 px-4 py-3 text-sm font-medium transition min-h-[44px] touch-manipulation ${
                 response === r
-                  ? `border-current ${conf.color}`
-                  : 'border-neutral-200 text-neutral-600 hover:border-neutral-300'
-              }`}
+                  ? `border-current ${conf.color}` : 'border text-text-secondary hover:border-neutral-300' }`}
             >
               {conf.label}
             </button>

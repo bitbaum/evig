@@ -128,7 +128,7 @@ export function NotificationBell() {
         className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
         aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
       >
-        <Bell className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+        <Bell className="w-5 h-5 text-text-secondary" />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-4 px-0.5 rounded-full bg-error-500 text-white text-[10px] font-bold leading-none">
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -137,10 +137,10 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-2xl dark:border-white/[0.08] dark:bg-neutral-900">
+        <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border bg-surface-base shadow-2xl">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3 dark:border-white/[0.06]">
-            <span className="font-semibold text-sm text-neutral-900 dark:text-white">
+          <div className="flex items-center justify-between border-b border-subtle px-4 py-3 dark:border-white/[0.06]">
+            <span className="font-semibold text-sm text-text-primary">
               Benachrichtigungen
               {unreadCount > 0 && (
                 <span className="ml-2 px-1.5 py-0.5 text-xs bg-error-100 text-error-600 rounded-full">
@@ -153,7 +153,7 @@ export function NotificationBell() {
                 <button
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-200"
+                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-white/[0.06] dark:hover:text-neutral-200"
                   title="Alle als gelesen markieren"
                 >
                   <Check className="w-3 h-3" />
@@ -164,13 +164,13 @@ export function NotificationBell() {
                 onClick={() => setOpen(false)}
                 className="rounded-md p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
               >
-                <X className="w-4 h-4 text-neutral-500" />
+                <X className="w-4 h-4 text-text-tertiary" />
               </button>
             </div>
           </div>
 
           {/* List */}
-          <div className="max-h-[400px] divide-y divide-neutral-100 overflow-y-auto dark:divide-white/[0.04]">
+          <div className="max-h-[400px] divide-y overflow-y-auto divide-subtle">
             {error && notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
@@ -182,13 +182,13 @@ export function NotificationBell() {
                 </button>
               </div>
             ) : loading && notifications.length === 0 ? (
-              <div className="py-8 text-center text-sm text-neutral-500">
+              <div className="py-8 text-center text-sm text-text-tertiary">
                 Laden…
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <Bell className="w-8 h-8 text-neutral-200 dark:text-neutral-600 mx-auto mb-2" />
-                <p className="text-sm text-neutral-500">Keine Benachrichtigungen</p>
+                <p className="text-sm text-text-tertiary">Keine Benachrichtigungen</p>
               </div>
             ) : (
               notifications.map(n => {
@@ -208,16 +208,16 @@ export function NotificationBell() {
                       <div className={!n.is_read ? '' : 'pl-4'}>
                         <p className={`text-sm leading-snug ${
                           !n.is_read
-                            ? 'font-semibold text-neutral-900 dark:text-white'
-                            : 'font-medium text-neutral-700 dark:text-neutral-300'
+                            ? 'font-semibold text-text-primary'
+                            : 'font-medium text-text-secondary'
                         }`}>
                           {n.title}
                         </p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 line-clamp-2">
+                        <p className="text-xs text-text-tertiary mt-0.5 line-clamp-2">
                           {n.content}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-neutral-500">
+                          <span className="text-xs text-text-tertiary">
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (

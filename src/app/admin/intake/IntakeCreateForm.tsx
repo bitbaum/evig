@@ -64,7 +64,7 @@ export function IntakeCreateForm({
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <Heading level={2} className="text-lg font-semibold">Neues Gerät erfassen</Heading>
-        <button onClick={onCancel} className="text-neutral-500 hover:text-neutral-700">
+        <button onClick={onCancel} className="text-text-tertiary hover:text-neutral-700">
           <X className="w-5 h-5" />
         </button>
       </div>
@@ -81,12 +81,12 @@ export function IntakeCreateForm({
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                  : 'border-neutral-200 dark:border-white/[0.08] hover:border-neutral-300'
+                  : 'border hover:border-neutral-300'
               }`}
             >
               <div className="text-2xl mb-1">{opt.icon}</div>
               <div className="text-sm font-medium">{opt.label}</div>
-              <div className="text-xs text-neutral-500">{opt.description}</div>
+              <div className="text-xs text-text-tertiary">{opt.description}</div>
             </button>
           ))}
         </div>
@@ -103,11 +103,11 @@ export function IntakeCreateForm({
             <Loader2 className="w-4 h-4" />
             KI-Schnelleingabe
           </span>
-          {aiOpen ? <ChevronDown className="w-4 h-4 text-primary-600" /> : <ChevronRight className="w-4 h-4 text-primary-600" />}
+          {aiOpen ? <ChevronDown className="w-4 h-4 text-action" /> : <ChevronRight className="w-4 h-4 text-action" />}
         </button>
 
         {aiOpen && (
-          <div className="p-4 space-y-3 bg-white">
+          <div className="p-4 space-y-3 bg-surface-base">
             {/* Tabs */}
             <div className="flex gap-1 border-b">
               {([
@@ -122,7 +122,7 @@ export function IntakeCreateForm({
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px transition-colors ${
                     aiTab === tab.key
                       ? 'border-primary-600 text-primary-700 font-medium'
-                      : 'border-transparent text-neutral-500 hover:text-neutral-700'
+                      : 'border-transparent text-text-tertiary hover:text-neutral-700'
                   }`}
                 >
                   <tab.icon className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStartVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-primary-400 w-full justify-center text-sm text-neutral-600"
+                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-primary-400 w-full justify-center text-sm text-text-secondary"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme starten
@@ -183,7 +183,7 @@ export function IntakeCreateForm({
                   </div>
                 )}
                 {aiText && voiceState === 'idle' && (
-                  <p className="text-xs text-neutral-500 bg-neutral-50 p-2 rounded">Transkription: {aiText}</p>
+                  <p className="text-xs text-text-tertiary bg-surface-raised p-2 rounded">Transkription: {aiText}</p>
                 )}
               </div>
             )}

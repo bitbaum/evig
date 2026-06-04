@@ -153,7 +153,7 @@ export default async function FinanzenPage() {
         </Link>
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
-            <PiggyBank className="w-6 h-6 text-primary-600" />
+            <PiggyBank className="w-6 h-6 text-action" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Finanzen</Heading>
@@ -243,14 +243,14 @@ export default async function FinanzenPage() {
                         </div>
                       )}
                       {insight.recommendation && (
-                        <div className="text-sm font-medium mt-2 text-neutral-700 dark:text-neutral-300">
+                        <div className="text-sm font-medium mt-2 text-text-secondary">
                           → {insight.recommendation}
                         </div>
                       )}
                     </div>
                     {insight.valueFormatted && (
                       <span className={`text-lg font-bold ${
-                        insight.type === 'positive' ? 'text-primary-600' :
+                        insight.type === 'positive' ? 'text-action' :
                         insight.type === 'warning' ? 'text-warning-600' : ''
                       }`}>
                         {insight.valueFormatted}
@@ -321,7 +321,7 @@ export default async function FinanzenPage() {
       </div>
 
       {/* Data Source Info */}
-      <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-surface-raised dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
         <strong>Datenquelle:</strong> Kivitendo-Export • {yearsData.length} Jahre verfügbar ({availableYears[availableYears.length - 1]} - {availableYears[0]})
       </div>
     </div>

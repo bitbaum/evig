@@ -24,13 +24,13 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
-      <div className="p-6 border-b border-neutral-100 dark:border-white/[0.06]">
-        <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-          <Shield className="w-5 h-5 text-neutral-500" />
+    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
+      <div className="p-6 border-b border-subtle dark:border-white/[0.06]">
+        <Heading level={2} className="text-lg font-semibold text-text-primary flex items-center gap-2">
+          <Shield className="w-5 h-5 text-text-tertiary" />
           Weitere Bereiche verfügbar
         </Heading>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+        <p className="text-sm text-text-secondary mt-1">
           Zugriff auf zusätzliche Admin-Bereiche anfordern
         </p>
       </div>
@@ -43,7 +43,7 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
           />
         ) : (
           <div>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            <p className="text-sm text-text-secondary mb-4">
               Es gibt {inaccessibleSections.length} Bereiche, auf die du keinen Zugriff hast.
               Du kannst bei einem Super Admin Zugriff anfordern.
             </p>
@@ -51,13 +51,13 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
               {inaccessibleSections.slice(0, 6).map(section => (
                 <span
                   key={section.id}
-                  className="px-3 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 text-sm rounded-lg"
+                  className="px-3 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-sm rounded-lg"
                 >
                   {section.label}
                 </span>
               ))}
               {inaccessibleSections.length > 6 && (
-                <span className="px-3 py-1 text-neutral-500 text-sm">
+                <span className="px-3 py-1 text-text-tertiary text-sm">
                   +{inaccessibleSections.length - 6} mehr
                 </span>
               )}

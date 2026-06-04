@@ -38,13 +38,13 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
   }
 
   return (
-    <div className="bg-white rounded-lg border p-4">
+    <div className="bg-surface-base rounded-lg border p-4">
       <div className="flex items-center gap-4 flex-wrap">
-        <Filter className="w-5 h-5 text-neutral-500" />
+        <Filter className="w-5 h-5 text-text-tertiary" />
 
         {/* Search */}
         <div className="flex items-center gap-2">
-          <Search className="w-4 h-4 text-neutral-500" />
+          <Search className="w-4 h-4 text-text-tertiary" />
           <Input
             type="text"
             placeholder="Suchen..."
@@ -66,7 +66,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Meeting type filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600 dark:text-neutral-400">Typ:</label>
+          <label className="text-sm text-text-secondary">Typ:</label>
           <Select
             className="w-auto"
             value={searchParams.get('meeting_type') || ''}
@@ -83,7 +83,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Status filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600 dark:text-neutral-400">Status:</label>
+          <label className="text-sm text-text-secondary">Status:</label>
           <Select
             className="w-auto"
             value={searchParams.get('status') || ''}
@@ -100,7 +100,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Workflow step filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600 dark:text-neutral-400">Schritt:</label>
+          <label className="text-sm text-text-secondary">Schritt:</label>
           <Select
             className="w-auto"
             value={searchParams.get('step') || ''}
@@ -117,7 +117,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Attendee filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600 dark:text-neutral-400">Teilnehmer:</label>
+          <label className="text-sm text-text-secondary">Teilnehmer:</label>
           <Select
             className="w-auto"
             value={searchParams.get('attendee') || ''}

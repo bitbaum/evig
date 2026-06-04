@@ -137,7 +137,7 @@ export function ListingActionButtons({
               </p>
               <Link
                 href="/dashboard/messages"
-                className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1"
+                className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 font-medium underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1"
               >
                 {t('goToMessages')}
               </Link>
@@ -202,7 +202,7 @@ export function ListingActionButtons({
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
               isFavorited
                 ? 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-600'
-                : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                : 'border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800'
             }`}
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-error-500 text-error-500' : ''}`} aria-hidden="true" />
@@ -211,11 +211,11 @@ export function ListingActionButtons({
         )}
         <button
           onClick={onShare}
-          className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           title={t('share')}
         >
           {shareConfirm ? (
-            <Check className="w-4 h-4 text-primary-600" aria-hidden="true" />
+            <Check className="w-4 h-4 text-action" aria-hidden="true" />
           ) : (
             <Share2 className="w-4 h-4" aria-hidden="true" />
           )}
@@ -224,7 +224,7 @@ export function ListingActionButtons({
         {isOwner && (
           <Link
             href={`/marketplace/sell?edit=${listing.id}`}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             {t('edit')}
           </Link>
@@ -232,7 +232,7 @@ export function ListingActionButtons({
         {sessionUserId && !isOwner && (
           <button
             onClick={onShowReportModal}
-            className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             title={t('report')}
           >
             <Flag className="w-4 h-4" aria-hidden="true" />

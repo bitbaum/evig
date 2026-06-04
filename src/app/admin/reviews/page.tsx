@@ -40,7 +40,7 @@ function renderStars(rating: number) {
           className={`w-4 h-4 ${star <= rating ? 'text-warning-400 fill-current' : 'text-neutral-300'}`}
         />
       ))}
-      <span className="ml-2 text-sm text-neutral-600">{rating}/5</span>
+      <span className="ml-2 text-sm text-text-secondary">{rating}/5</span>
     </div>
   )
 }
@@ -89,8 +89,8 @@ export default function AdminReviewsPage() {
       >
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-neutral-500" />
-            <span className="text-sm font-medium text-neutral-700">Status:</span>
+            <Filter className="w-5 h-5 text-text-tertiary" />
+            <span className="text-sm font-medium text-text-secondary">Status:</span>
           </div>
           <div className="flex gap-2">
             {(Object.values(REVIEW_STATUS) as ReviewStatus[]).map((status) => (
@@ -100,7 +100,7 @@ export default function AdminReviewsPage() {
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
                     ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                    : 'bg-surface-raised text-text-secondary hover:bg-neutral-200'
                 }`}
               >
                 {getReviewFilterLabel(status)}
@@ -124,12 +124,12 @@ export default function AdminReviewsPage() {
 
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-12 text-center">
-            <MessageSquare className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+          <div className="bg-surface-base rounded-lg shadow-sm border border p-12 text-center">
+            <MessageSquare className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               {ADMIN_CONTENT.reviews.emptyTitle}
             </Heading>
-            <p className="text-neutral-600">
+            <p className="text-text-secondary">
               {searchQuery
                 ? 'Keine Bewertungen entsprechen Ihrer Suchanfrage.'
                 : `Keine Bewertungen mit Status "${getReviewFilterLabel(selectedStatus)}".`}
@@ -137,22 +137,22 @@ export default function AdminReviewsPage() {
           </div>
         ) : (
           filteredReviews.map((review) => (
-            <div key={review.id} className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
-              <div className="p-6 border-b border-neutral-200">
+            <div key={review.id} className="bg-surface-base rounded-lg shadow-sm border border overflow-hidden">
+              <div className="p-6 border-b border">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Heading level={3} className="text-lg font-semibold text-neutral-900">
+                      <Heading level={3} className="text-lg font-semibold text-text-primary">
                         Bewertung für {review.targetName}
                       </Heading>
                       <AdminStatusBadge status={review.status} config={REVIEW_STATUS_CONFIG} />
                       {review.isVerifiedPurchase && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-neutral-800">
                           Verifizierter Kauf
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-neutral-600 mb-2">
+                    <div className="flex items-center gap-4 text-sm text-text-secondary mb-2">
                       {renderStars(review.overallRating)}
                       <span>•</span>
                       <span>{review.reviewerName}</span>
@@ -160,18 +160,18 @@ export default function AdminReviewsPage() {
                       <span>{formatDateShort(review.createdAt)}</span>
                     </div>
                     {review.title && (
-                      <Heading level={4} className="font-medium text-neutral-900 mb-2">{review.title}</Heading>
+                      <Heading level={4} className="font-medium text-text-primary mb-2">{review.title}</Heading>
                     )}
-                    <p className="text-neutral-700 text-sm leading-relaxed">{review.content}</p>
+                    <p className="text-text-secondary text-sm leading-relaxed">{review.content}</p>
 
                     {review.response && (
-                      <div className="mt-4 p-4 bg-neutral-50 rounded-lg">
+                      <div className="mt-4 p-4 bg-surface-raised rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
-                          <MessageSquare className="w-4 h-4 text-neutral-600" />
-                          <span className="text-sm font-medium text-neutral-900">
+                          <MessageSquare className="w-4 h-4 text-text-secondary" />
+                          <span className="text-sm font-medium text-text-primary">
                             Antwort von {review.response.responderName}
                           </span>
-                          <span className="text-xs text-neutral-600">{formatDateShort(review.response.createdAt)}</span>
+                          <span className="text-xs text-text-secondary">{formatDateShort(review.response.createdAt)}</span>
                         </div>
                         <p className="text-neutral-800 text-sm">{review.response.content}</p>
                       </div>
@@ -246,7 +246,7 @@ export default function AdminReviewsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 mt-4 text-sm text-neutral-500">
+                <div className="flex items-center gap-4 mt-4 text-sm text-text-tertiary">
                   <span>{review.helpfulVotes} hilfreiche Stimmen</span>
                   {review.moderationReason && (
                     <span className="text-error-600">Moderationsgrund: {review.moderationReason}</span>

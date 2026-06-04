@@ -23,10 +23,10 @@ export default function WorkshopProposalPage() {
       <PageShell maxWidth="2xl" py="py-12">
           <div className="card-shell p-8 text-center">
             <AlertCircle className="w-16 h-16 text-warning-500 mx-auto mb-4" />
-            <Heading level={1} className={`${responsiveTypography.subsection} text-neutral-900 mb-4`}>
+            <Heading level={1} className={`${responsiveTypography.subsection} text-text-primary mb-4`}>
               {t('loginRequired')}
             </Heading>
-            <p className="text-neutral-600 mb-6">
+            <p className="text-text-secondary mb-6">
               {t('loginPrompt')}
             </p>
             <Button as={Link} href={ROUTES.public.login} variant="primary" size="lg">
@@ -43,7 +43,7 @@ export default function WorkshopProposalPage() {
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
+            className="inline-flex items-center text-text-secondary hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
@@ -51,12 +51,12 @@ export default function WorkshopProposalPage() {
 
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6">
-              <GraduationCap className="w-8 h-8 text-primary-600" />
+              <GraduationCap className="w-8 h-8 text-action" />
             </div>
-            <Heading level={1} className={`${responsiveTypography.section} text-neutral-900 mb-2`}>
+            <Heading level={1} className={`${responsiveTypography.section} text-text-primary mb-2`}>
               {t('title')}
             </Heading>
-            <p className="text-neutral-600">
+            <p className="text-text-secondary">
               {t('subtitle')}
             </p>
           </div>

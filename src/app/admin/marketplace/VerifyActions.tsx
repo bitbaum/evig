@@ -56,7 +56,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   if (loading) {
     return (
       <div className="flex items-center gap-2 px-3 py-2">
-        <Loader2 className="w-4 h-4 animate-spin text-neutral-500" />
+        <Loader2 className="w-4 h-4 animate-spin text-text-tertiary" />
       </div>
     )
   }
@@ -108,7 +108,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
         </Button>
         <button
           onClick={() => { setShowNotes(false); setNotes('') }}
-          className="px-2 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+          className="px-2 py-1.5 text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           Abbrechen
         </button>

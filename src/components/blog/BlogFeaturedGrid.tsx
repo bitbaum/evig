@@ -32,33 +32,33 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
                   />
                 </div>
               ) : (
-                <div className="aspect-[16/10] bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-white/[0.06] rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-neutral-400 text-4xl font-bold">R</span>
+                <div className="aspect-[16/10] bg-surface-raised dark:bg-neutral-800 border rounded-lg flex items-center justify-center mb-4">
+                  <span className="text-text-muted text-4xl font-bold">R</span>
                 </div>
               )}
 
               {/* Category */}
               {post.category && (
-                <span className="inline-block px-2 py-1 bg-neutral-100 text-neutral-700 text-xs font-semibold rounded mb-3 uppercase tracking-wide">
+                <span className="inline-block px-2 py-1 bg-surface-raised text-text-secondary text-xs font-semibold rounded mb-3 uppercase tracking-wide">
                   {post.category}
                 </span>
               )}
 
               {/* Title */}
-              <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2 leading-snug group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-3">
+              <Heading level={3} className="text-xl font-bold text-text-primary mb-2 leading-snug group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-3">
                 {post.title}
               </Heading>
 
               {/* Excerpt */}
               {post.excerpt && (
-                <p className="text-neutral-600 mb-3 line-clamp-2 text-sm">
+                <p className="text-text-secondary mb-3 line-clamp-2 text-sm">
                   {post.excerpt}
                 </p>
               )}
 
               {/* Meta */}
-              <div className="flex items-center gap-3 text-xs text-neutral-500">
-                <span className="font-semibold text-neutral-700">{post.author}</span>
+              <div className="flex items-center gap-3 text-xs text-text-tertiary">
+                <span className="font-semibold text-text-secondary">{post.author}</span>
                 <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />

@@ -275,7 +275,7 @@ export function CommandBar() {
       {/* Trigger button in top bar (Search icon) */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border-neutral-200 bg-neutral-100 px-3 h-8 text-xs text-neutral-500 transition-colors hover:bg-neutral-200 dark:border-white/[0.06] dark:bg-white/[0.04] dark:text-neutral-400 dark:hover:bg-white/[0.08] sm:flex"
+        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-neutral-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] sm:flex"
         aria-label="Suche öffnen (⌘K)"
       >
         <Search className="w-3.5 h-3.5" />
@@ -288,25 +288,25 @@ export function CommandBar() {
       {/* Native dialog */}
       <dialog
         ref={dialogRef}
-        className="w-full max-w-xl rounded-xl border border-neutral-200 bg-white p-0 shadow-2xl dark:border-white/[0.08] dark:bg-neutral-900 backdrop:bg-black/60"
+        className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-2xl backdrop:bg-black/60"
         onKeyDown={handleKeyDown}
         onClose={close}
         aria-label="Befehlspalette"
       >
         {/* Search input */}
-        <div className="flex items-center gap-3 border-b border-neutral-200 px-4 py-3 dark:border-white/[0.06]">
-          <Search className="w-4 h-4 text-neutral-400 flex-shrink-0" aria-hidden="true" />
+        <div className="flex items-center gap-3 border-b border px-4 py-3">
+          <Search className="w-4 h-4 text-text-muted flex-shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}
             type="search"
             placeholder="Suche oder Befehl..."
             value={query}
             onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
-            className="flex-1 bg-transparent outline-none text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-sm"
+            className="flex-1 bg-transparent outline-none text-text-primary placeholder-neutral-400 dark:placeholder-neutral-500 text-sm"
             autoComplete="off"
             spellCheck={false}
           />
-          <kbd className="flex-shrink-0 rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs leading-none text-neutral-500 dark:bg-white/[0.06] dark:text-neutral-400">
+          <kbd className="flex-shrink-0 rounded bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-white/[0.06]">
             Esc
           </kbd>
         </div>
@@ -314,13 +314,13 @@ export function CommandBar() {
         {/* Results */}
         <div className="overflow-y-auto max-h-96 py-2">
           {results.length === 0 ? (
-            <p className="px-4 py-8 text-center text-sm text-neutral-400 dark:text-neutral-500">
+            <p className="px-4 py-8 text-center text-sm text-text-muted">
               Keine Ergebnisse für &ldquo;{query}&rdquo;
             </p>
           ) : (
             Array.from(groups.entries()).map(([groupLabel, items]) => (
               <div key={groupLabel}>
-                <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+                <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
                   {groupLabel}
                 </p>
                 {items.map(item => {
@@ -335,10 +335,10 @@ export function CommandBar() {
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                         isCurrent
                           ? 'bg-primary-50 text-primary-700 dark:bg-primary-500/[0.08] dark:text-primary-300'
-                          : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.03]'
+                          : 'text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/[0.03]'
                       }`}
                     >
-                      <span className={`flex-shrink-0 ${isCurrent ? 'text-primary-500' : 'text-neutral-400 dark:text-neutral-500'}`}>
+                      <span className={`flex-shrink-0 ${isCurrent ? 'text-primary-500' : 'text-text-muted'}`}>
                         {item.icon}
                       </span>
                       <span className="flex-1 min-w-0">
@@ -346,7 +346,7 @@ export function CommandBar() {
                           {item.label}
                         </span>
                         {item.sub && (
-                          <span className="block text-xs text-neutral-400 dark:text-neutral-500 truncate mt-0.5">
+                          <span className="block text-xs text-text-muted truncate mt-0.5">
                             {item.sub}
                           </span>
                         )}
@@ -363,17 +363,17 @@ export function CommandBar() {
         </div>
 
         {/* Footer hint */}
-        <div className="flex items-center gap-4 border-t border-neutral-100 px-4 py-2 text-xs text-neutral-400 dark:border-white/[0.04] dark:text-neutral-500">
+        <div className="flex items-center gap-4 border-t border-subtle px-4 py-2 text-xs text-text-muted">
           <span className="flex items-center gap-1">
-            <kbd className="rounded bg-neutral-100 px-1 py-0.5 font-mono dark:bg-white/[0.06]">↑↓</kbd>
+            <kbd className="rounded bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/[0.06]">↑↓</kbd>
             Navigieren
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded bg-neutral-100 px-1 py-0.5 font-mono dark:bg-white/[0.06]">↵</kbd>
+            <kbd className="rounded bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/[0.06]">↵</kbd>
             Öffnen
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded bg-neutral-100 px-1 py-0.5 font-mono dark:bg-white/[0.06]">Esc</kbd>
+            <kbd className="rounded bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/[0.06]">Esc</kbd>
             Schliessen
           </span>
         </div>

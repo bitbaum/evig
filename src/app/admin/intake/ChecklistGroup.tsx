@@ -33,7 +33,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-3 bg-neutral-50 hover:bg-neutral-100 text-left"
+        className="w-full flex items-center justify-between p-3 bg-surface-raised hover:bg-neutral-100 text-left"
       >
         <div className="flex items-center gap-2">
           {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -42,7 +42,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         <span className={`text-xs px-2 py-0.5 rounded-full ${
           completedCount === group.items.length
             ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-            : 'bg-neutral-200 text-neutral-600'
+            : 'bg-neutral-200 text-text-secondary'
         }`}>
           {completedCount}/{group.items.length}
         </span>
@@ -73,7 +73,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                 <div className="flex-1 min-w-0">
                   {/* Label + required marker */}
                   <div className="flex items-center gap-1.5">
-                    <span className={`text-sm ${item.state.completed ? 'line-through text-neutral-400' : 'font-medium text-neutral-900'}`}>
+                    <span className={`text-sm ${item.state.completed ? 'line-through text-text-muted' : 'font-medium text-text-primary'}`}>
                       {item.label}
                     </span>
                     {item.required && (
@@ -82,14 +82,14 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-neutral-500 mt-0.5">{item.description}</p>
+                  <p className="text-xs text-text-tertiary mt-0.5">{item.description}</p>
 
                   {/* Completed metadata + notes */}
                   {item.state.completed && (
                     <div className="mt-1.5 space-y-1">
                       <div className="flex items-center gap-3 flex-wrap">
                         {item.state.completedAt && (
-                          <span className="text-xs text-primary-600">
+                          <span className="text-xs text-action">
                             Erledigt am {formatDateShort(item.state.completedAt)}
                           </span>
                         )}
@@ -97,7 +97,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           <button
                             type="button"
                             onClick={() => openNotes(item.id, item.state.notes)}
-                            className="text-xs text-neutral-400 hover:text-primary-600 flex items-center gap-0.5 transition-colors"
+                            className="text-xs text-text-muted hover:text-primary-600 flex items-center gap-0.5 transition-colors"
                           >
                             <StickyNote className="w-3 h-3" />
                             {item.state.notes ? 'Notiz bearbeiten' : 'Notiz hinzufügen'}
@@ -107,7 +107,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
 
                       {/* Existing note preview (when textarea not open) */}
                       {item.state.notes && !notesOpen[item.id] && (
-                        <p className="text-xs text-neutral-500 italic pl-0.5">„{item.state.notes}"</p>
+                        <p className="text-xs text-text-tertiary italic pl-0.5">„{item.state.notes}"</p>
                       )}
                     </div>
                   )}

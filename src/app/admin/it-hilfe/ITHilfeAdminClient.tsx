@@ -27,14 +27,14 @@ export default function ITHilfeAdminClient() {
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatsCard label="Offene Anfragen" value={stats.byStatus.open ?? 0} icon={HelpCircle} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
-          <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-white/[0.06] text-neutral-800 dark:text-neutral-200" />
+          <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-surface-raised dark:bg-neutral-800/50 border text-neutral-800 dark:text-neutral-200" />
           <StatsCard label="Dringend" value={stats.byUrgency.urgent ?? 0} icon={Clock} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
           <StatsCard label="Lösungsrate" value={`${stats.resolutionRate}%`} icon={ShieldCheck} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
         </div>
       )}
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 border-b border-neutral-200 dark:border-white/[0.06]">
+      <div className="flex gap-1 border-b border">
         {TABS.map(t => (
           <button
             key={t.id}
@@ -42,7 +42,7 @@ export default function ITHilfeAdminClient() {
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               tab === t.id
                 ? 'border-primary-600 text-primary-700 dark:text-primary-400'
-                : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
+                : 'border-transparent text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
           >
             <t.icon className="w-4 h-4" />
@@ -54,7 +54,7 @@ export default function ITHilfeAdminClient() {
       {/* Tab Content */}
       {loading && !requests && !helpers ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-neutral-500" />
+          <Loader2 className="w-6 h-6 animate-spin text-text-tertiary" />
         </div>
       ) : (
         <>

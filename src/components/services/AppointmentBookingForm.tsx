@@ -103,12 +103,12 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
       <div className="bg-white dark:border dark:border-white/[0.06] rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h3 className="text-lg sm:text-xl font-bold text-neutral-900">
+            <h3 className="text-lg sm:text-xl font-bold text-text-primary">
               Termin für {serviceTitle} buchen
             </h3>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-neutral-500 hover:text-neutral-700 min-w-[touch] min-h-[touch] touch-target p-2 -mr-2"
+              className="text-text-tertiary hover:text-neutral-700 min-w-[touch] min-h-[touch] touch-target p-2 -mr-2"
               aria-label="Schliessen"
             >
               ✕
@@ -116,7 +116,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           </div>
 
           {pricing && (
-            <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+            <div className="bg-surface-raised border rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center text-neutral-800">
                 <Wrench className="w-5 h-5 mr-2 flex-shrink-0" />
                 <span className="font-medium text-sm sm:text-base">Preis: {pricing}</span>
@@ -144,10 +144,10 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           {!session?.user ? (
             <div className="text-center py-6 sm:py-8">
               <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-warning-500 mx-auto mb-4" />
-              <h4 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">
+              <h4 className="text-base sm:text-lg font-semibold text-text-primary mb-2">
                 Anmeldung erforderlich
               </h4>
-              <p className="text-neutral-600 mb-6 text-sm sm:text-base">
+              <p className="text-text-secondary mb-6 text-sm sm:text-base">
                 Bitte melden Sie sich an, um einen Termin zu buchen.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -162,7 +162,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                <label className="block text-sm font-medium text-text-secondary mb-2">
                   Problembeschreibung *
                 </label>
                 <Textarea
@@ -178,7 +178,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                <label className="block text-sm font-medium text-text-secondary mb-2">
                   Dringlichkeit
                 </label>
                 <Select
@@ -193,7 +193,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  <label className="block text-sm font-medium text-text-secondary mb-2">
                     Bevorzugtes Datum
                   </label>
                   <Input
@@ -204,7 +204,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  <label className="block text-sm font-medium text-text-secondary mb-2">
                     Bevorzugte Zeit
                   </label>
                   <Input
@@ -215,10 +215,10 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 </div>
               </div>
 
-              <div className="bg-neutral-50 border-2 border-neutral-200 rounded-lg p-3 sm:p-4">
+              <div className="bg-surface-raised border-2 border rounded-lg p-3 sm:p-4">
                 <div className="flex items-start">
-                  <Clock className="w-5 h-5 text-neutral-500 mt-0.5 mr-3 flex-shrink-0" />
-                  <div className="text-sm text-neutral-700">
+                  <Clock className="w-5 h-5 text-text-tertiary mt-0.5 mr-3 flex-shrink-0" />
+                  <div className="text-sm text-text-secondary">
                     <p className="font-medium mb-1">Was passiert als nächstes?</p>
                     <ul className="space-y-1 list-disc list-inside">
                       <li>Ihre Anfrage wird von unserem Team geprüft</li>

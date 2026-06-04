@@ -81,7 +81,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           </Button>
           <a
             href="#learn-more"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-primary-600 hover:bg-neutral-50 border-2 border-primary-600 transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-surface-base text-action hover:bg-neutral-50 border-2 border-primary-600 transition-colors"
           >
             {t('hero.learnBtn')}
           </a>
@@ -89,7 +89,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </PageHero>
 
       {/* Core Values Section */}
-      <section id="learn-more" className={`${responsiveSpacing.section} bg-neutral-50 dark:bg-neutral-900`}>
+      <section id="learn-more" className={`${responsiveSpacing.section} bg-surface-raised dark:bg-neutral-900`}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
           <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             {t('coreValues.heading')}
@@ -99,13 +99,13 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
               const Icon = CORE_VALUE_ICONS[index]
               return (
                 <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-neutral-300 transition-all duration-300`}>
-                  <div className={`text-primary-600 dark:text-primary-400 ${responsiveSpacing.mbMedium}`}>
+                  <div className={`text-action ${responsiveSpacing.mbMedium}`}>
                     <Icon className="w-10 h-10 sm:w-12 sm:h-12" />
                   </div>
                   <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
                     {value.title}
                   </Heading>
-                  <p className={`${responsiveTypography.body} text-neutral-600 dark:text-neutral-400`}>
+                  <p className={`${responsiveTypography.body} text-text-secondary`}>
                     {value.description}
                   </p>
                 </div>
@@ -124,18 +124,18 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           <div className={responsiveGrid.cards}>
             {optionItems.map((option, index) => (
               <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-neutral-300 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}>
-                <div className={`text-primary-600 dark:text-primary-400 ${responsiveSpacing.mbMedium}`}>
+                <div className={`text-action ${responsiveSpacing.mbMedium}`}>
                   <Users className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
                 <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
                   {option.title}
                 </Heading>
-                <p className={`${responsiveTypography.body} text-neutral-600 dark:text-neutral-400 ${responsiveSpacing.mbMedium} flex-grow`}>
+                <p className={`${responsiveTypography.body} text-text-secondary ${responsiveSpacing.mbMedium} flex-grow`}>
                   {option.description}
                 </p>
                 <ul className={`space-y-2 sm:space-y-3 ${responsiveSpacing.mbMedium}`}>
                   {option.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start text-neutral-600 dark:text-neutral-400">
+                    <li key={featureIndex} className="flex items-start text-text-secondary">
                       <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-primary-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
@@ -153,7 +153,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* Testimonials Section */}
-      <section className={`${responsiveSpacing.section} bg-neutral-50 dark:bg-neutral-900`}>
+      <section className={`${responsiveSpacing.section} bg-surface-raised dark:bg-neutral-900`}>
         <div className={`${responsiveSpacing.container} mx-auto`}>
           <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
             {t('testimonials.heading')}
@@ -161,14 +161,14 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           <div className="max-w-3xl mx-auto">
             {testimonialItems.map((testimonial, index) => (
               <div key={index} className={`card-shell ${responsiveSpacing.cardPadding}`}>
-                <div className={`text-primary-600 dark:text-primary-400 ${responsiveSpacing.mbSmall}`}>
+                <div className={`text-action ${responsiveSpacing.mbSmall}`}>
                   <Heart className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <blockquote className={`${responsiveTypography.lead} text-neutral-600 dark:text-neutral-400 ${responsiveSpacing.mbMedium} italic`}>
+                <blockquote className={`${responsiveTypography.lead} text-text-secondary ${responsiveSpacing.mbMedium} italic`}>
                   &ldquo;{testimonial.quote}&rdquo;
                 </blockquote>
                 <div className={`${responsiveTypography.cardTitle} font-semibold`}>{testimonial.author}</div>
-                <div className={`${responsiveTypography.body} text-neutral-500 dark:text-neutral-400`}>{testimonial.role}</div>
+                <div className={`${responsiveTypography.body} text-text-tertiary`}>{testimonial.role}</div>
               </div>
             ))}
           </div>
@@ -194,7 +194,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className={`${responsiveTypography.body} text-neutral-700 dark:text-neutral-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300`}>
+                  <span className={`${responsiveTypography.body} text-text-secondary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300`}>
                     {name}
                   </span>
                 </a>

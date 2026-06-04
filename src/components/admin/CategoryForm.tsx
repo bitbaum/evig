@@ -83,7 +83,7 @@ export default function CategoryForm({
             href={ROUTES.admin.categories}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div className="flex items-center gap-3">
             <div
@@ -93,10 +93,10 @@ export default function CategoryForm({
               <Tag className="w-5 h-5" style={{ color: formData.color }} />
             </div>
             <div>
-              <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
+              <Heading level={1} className="text-2xl text-text-primary">
                 {isEdit ? t('titleEdit') : t('titleNew')}
               </Heading>
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-text-secondary">
                 {isEdit ? t('subtitleEdit') : t('subtitleNew')}
               </p>
             </div>
@@ -140,7 +140,7 @@ export default function CategoryForm({
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* Name */}
             <FormField label="Name" required htmlFor="category-name">
@@ -194,7 +194,7 @@ export default function CategoryForm({
 
             {/* Color */}
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 Farbe
               </label>
               <div className="space-y-3">
@@ -266,11 +266,11 @@ export default function CategoryForm({
                       is_active: e.target.checked,
                     }))
                   }
-                  className="w-5 h-5 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+                  className="w-5 h-5 rounded border-neutral-300 text-action focus:ring-primary-500"
                 />
                 <label
                   htmlFor="is_active"
-                  className="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                  className="text-sm font-medium text-text-secondary"
                 >
                   Aktiv (in Kategorie-Auswahl sichtbar)
                 </label>
@@ -280,8 +280,8 @@ export default function CategoryForm({
         </div>
 
         {/* Preview */}
-        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
-          <Heading level={3} className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-4">
+        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+          <Heading level={3} className="text-sm font-medium text-text-secondary mb-4">
             {t('preview')}
           </Heading>
           <div className="flex items-center gap-3">
@@ -295,7 +295,7 @@ export default function CategoryForm({
               <Tag className="w-4 h-4" />
               {formData.name || t('defaultName')}
             </span>
-            <span className="text-sm text-neutral-500 dark:text-neutral-400">
+            <span className="text-sm text-text-tertiary">
               /blog/kategorie/{formData.slug || 'slug'}
             </span>
           </div>

@@ -133,56 +133,56 @@ export default async function AdminBlogPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <FileText className="w-8 h-8 text-primary-600" />
+            <FileText className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Gesamt Artikel
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.totalPosts}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-primary-600" />
+            <CheckCircle className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Veröffentlicht
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.publishedPosts}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Clock className="w-8 h-8 text-secondary-600" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Entwürfe
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.draftPosts}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Tag className="w-8 h-8 text-primary-600" />
+            <Tag className="w-8 h-8 text-action" />
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm font-medium text-text-secondary">
                 Kategorien
               </p>
-              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <p className="text-2xl font-bold text-text-primary">
                 {stats.categoriesCount}
               </p>
             </div>
@@ -194,16 +194,16 @@ export default async function AdminBlogPage() {
       <BlogListClient posts={posts} />
 
       {/* Info Banner */}
-      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
+      <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
-            <FileText className="w-5 h-5 text-neutral-600" />
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <FileText className="w-5 h-5 text-text-secondary" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
+            <Heading level={3} className="font-medium text-text-primary dark:text-neutral-200">
               Blog-Verwaltung
             </Heading>
-            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1 mb-3">
+            <p className="text-sm text-text-secondary mt-1 mb-3">
               Blog-Artikel sind ein wichtiger Kommunikationskanal. Teile
               News über {ORG.name}, schreibe Tutorials zur
               Computeraufarbeitung oder kündige Workshops und Events an.

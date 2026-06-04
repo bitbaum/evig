@@ -26,10 +26,10 @@ export default function ShopError({
     <div className="flex items-center justify-center py-24">
       <div className="card-shell max-w-md w-full p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={1} className="text-lg font-medium text-neutral-900 dark:text-white" role="alert">
+        <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           {t('error.title')}
         </Heading>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 text-sm text-text-secondary">
           {t('error.body')}
         </p>
         <div className="mt-6 flex flex-col gap-3">
@@ -38,7 +38,7 @@ export default function ShopError({
           </Button>
           <Link
             href={ROUTES.public.shop}
-            className="inline-flex items-center justify-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
+            className="inline-flex items-center justify-center gap-2 text-text-secondary hover:text-neutral-900 dark:hover:text-white min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             {t('error.backToShop')}

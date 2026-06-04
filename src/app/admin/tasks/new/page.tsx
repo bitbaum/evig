@@ -24,7 +24,7 @@ export default function NewTaskPage() {
       <div className="flex items-center gap-4">
         <Link
           href={ROUTES.admin.tasks}
-          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-neutral-900 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück
@@ -32,11 +32,11 @@ export default function NewTaskPage() {
         <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-            <ClipboardList className="w-5 h-5 text-primary-600 dark:text-primary-300" />
+            <ClipboardList className="w-5 h-5 text-action dark:text-primary-300" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900">Neue Aufgabe</Heading>
-            <p className="text-neutral-600">Erstelle eine neue Teamaufgabe</p>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">Neue Aufgabe</Heading>
+            <p className="text-text-secondary">Erstelle eine neue Teamaufgabe</p>
           </div>
         </div>
       </div>
