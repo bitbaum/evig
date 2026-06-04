@@ -172,6 +172,14 @@ export const rankedChoiceVoteSchema = z.object({
 
 export type RankedChoiceVoteInput = z.infer<typeof rankedChoiceVoteSchema>;
 
+// Thumbs up/down — lightweight protocol-embedded quick vote on action items.
+// No abstain (use consent or simple_majority if you need that).
+export const thumbsUpDownVoteSchema = z.object({
+  choice: z.enum(['up', 'down']),
+});
+
+export type ThumbsUpDownVoteInput = z.infer<typeof thumbsUpDownVoteSchema>;
+
 // Union type for all vote data
 export type VoteData =
   | ConsentVoteInput
@@ -179,7 +187,8 @@ export type VoteData =
   | DotVoteInput
   | ScoreVoteInput
   | SimpleMajorityVoteInput
-  | RankedChoiceVoteInput;
+  | RankedChoiceVoteInput
+  | ThumbsUpDownVoteInput;
 
 // ─── Comments ─────────────────────────────────────────────────────────────
 

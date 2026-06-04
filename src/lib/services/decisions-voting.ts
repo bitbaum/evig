@@ -20,6 +20,7 @@ import {
   scoreVoteSchema,
   simpleMajorityVoteSchema,
   rankedChoiceVoteSchema,
+  thumbsUpDownVoteSchema,
   type VoteData,
   type ConsentVoteInput,
   type ApprovalVoteInput,
@@ -27,6 +28,7 @@ import {
   type ScoreVoteInput,
   type SimpleMajorityVoteInput,
   type RankedChoiceVoteInput,
+  type ThumbsUpDownVoteInput,
   type DecisionOption,
   type QuorumConfig,
 } from '@/lib/schemas/decisions';
@@ -142,6 +144,8 @@ export function validateVoteData(
       if (invalid.length > 0) return { success: false, error: 'Ungültige Kandidaten in der Rangfolge' };
       return parsed;
     }
+    case 'thumbs_up_down':
+      return parseSchema(thumbsUpDownVoteSchema, data);
     default:
       return { success: false, error: 'Unbekannte Abstimmungsmethode' };
   }
@@ -459,6 +463,19 @@ export function computeTallies(
         winner: ranked[0] ?? null,
         totalVotes: votes.length,
         maxPossiblePoints: maxPossible,
+      };
+    }
+    case 'thumbs_up_down': {
+      const counts = { up: 0, down: 0 };
+      for (const vote of votes) {
+        const v = vote as ThumbsUpDownVoteInput;
+        if (v.choice in counts) counts[v.choice]++;
+      }
+      return {
+        method: 'thumbs_up_down',
+        counts,
+        passed: counts.up > counts.down,
+        totalVotes: votes.length,
       };
     }
     default:

@@ -93,6 +93,9 @@ export const VOTING_METHODS = [
   'score',
   'simple_majority',
   'ranked_choice',
+  // Lightweight: thumbs up/down only — used by protocol-embedded
+  // "quick vote on this action item" flow (ARCHITECTURE_DEBT.md #1).
+  'thumbs_up_down',
 ] as const;
 
 export type VotingMethod = (typeof VOTING_METHODS)[number];
@@ -125,6 +128,10 @@ export const VOTING_METHOD_CONFIG: Record<
   ranked_choice: {
     label: 'Rangwahl',
     description: 'Kandidaten in Rangfolge ordnen. Borda-Zählmethode bestimmt den Gewinner.',
+  },
+  thumbs_up_down: {
+    label: 'Daumen hoch / runter',
+    description: 'Schnelle Abstimmung: Dafür oder Dagegen. Mehr Dafür = angenommen.',
   },
 };
 
