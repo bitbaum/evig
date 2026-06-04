@@ -24,6 +24,13 @@ import {
   decisionDeadlineReminder,
   decisionClosed,
 } from '@/lib/email/templates/decisions'
+import {
+  itHilfeNewOfferReceived,
+  itHilfeOfferAccepted,
+  itHilfeOfferRejected,
+  itHilfeCompleted,
+  itHilfeReviewReceived,
+} from '@/lib/email/templates/it-hilfe'
 import type { EmailContent } from '@/lib/email/types'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
 
@@ -60,6 +67,53 @@ function getEmailContent(payload: NotificationPayload): EmailContent {
   }
   if (type === NOTIFICATION_TYPES.DECISION_DEADLINE) {
     return decisionDeadlineReminder(title, deadline ?? '', id)
+  }
+
+  // IT-Hilfe templates — keyed by NOTIFICATION_TYPES.IT_HILFE_* with
+  // template-specific args carried in metadata. Callers that want the
+  // rich HTML email path pass `metadata.requestUrl` (+ template-specific
+  // fields). Missing metadata fields fall back to the generic
+  // notificationEmail() — graceful degradation, not a runtime error.
+  if (type === NOTIFICATION_TYPES.IT_HILFE_NEW_OFFER && metadata?.requestUrl) {
+    return itHilfeNewOfferReceived(
+      metadata.requesterName ?? title,
+      metadata.requestTitle ?? title,
+      metadata.helperName ?? 'Techniker',
+      metadata.offerMessage ?? content,
+      metadata.requestUrl,
+      metadata.acceptUrl,
+    )
+  }
+  if (type === NOTIFICATION_TYPES.IT_HILFE_OFFER_ACCEPTED && metadata?.requestUrl) {
+    return itHilfeOfferAccepted(
+      metadata.helperName ?? title,
+      metadata.requestTitle ?? title,
+      metadata.requesterName ?? 'Anfragender',
+      metadata.requestUrl,
+    )
+  }
+  if (type === NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED && metadata?.requestUrl) {
+    return itHilfeOfferRejected(
+      metadata.helperName ?? title,
+      metadata.requestTitle ?? title,
+      metadata.requestUrl,
+    )
+  }
+  if (type === NOTIFICATION_TYPES.IT_HILFE_REQUEST_COMPLETED && metadata?.requestUrl) {
+    return itHilfeCompleted(
+      metadata.requesterName ?? title,
+      metadata.requestTitle ?? title,
+      metadata.requestUrl,
+    )
+  }
+  if (type === 'it_hilfe_review_received' && metadata?.requestUrl) {
+    return itHilfeReviewReceived(
+      metadata.helperName ?? title,
+      metadata.requestTitle ?? title,
+      Number(metadata.rating ?? 5),
+      metadata.reviewText ?? '',
+      metadata.requestUrl,
+    )
   }
 
   return notificationEmail(title, content)
