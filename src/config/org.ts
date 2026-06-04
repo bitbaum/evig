@@ -37,6 +37,14 @@ export const ORG = {
   website: 'https://revamp-it.ch',
   /** Email domain */
   emailDomain: 'revamp-it.ch',
+  /**
+   * IANA timezone for the organization. Used in cron schedules,
+   * tax-report date boundaries, and any "local time" formatting that
+   * isn't user-personal. All cron expressions and SQL `AT TIME ZONE`
+   * conversions in the codebase MUST reference this constant — never
+   * hardcode 'Europe/Zurich'.
+   */
+  timezone: 'Europe/Zurich',
 } as const
 
 // ============================================================================

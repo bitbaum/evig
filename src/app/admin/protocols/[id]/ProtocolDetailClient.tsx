@@ -33,6 +33,7 @@ import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
 import Heading from '@/components/admin/AdminHeading'
 import { getProtocolReviewChecklist, getProtocolReviewCounts } from '@/lib/protocols/review'
+import { pluralDe } from '@/lib/i18n/plural-de'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
@@ -351,13 +352,13 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             <p className="font-medium mb-1.5">Offen vor dem Abschluss:</p>
             <ul className="list-disc pl-5 space-y-0.5">
               {finalizeBlockers.unlinkedTasks > 0 && (
-                <li>{finalizeBlockers.unlinkedTasks} Aktionspunkt{finalizeBlockers.unlinkedTasks === 1 ? '' : 'e'} noch nicht in Aufgaben umgewandelt — nach Abschluss nicht mehr möglich.</li>
+                <li>{finalizeBlockers.unlinkedTasks} {pluralDe(finalizeBlockers.unlinkedTasks, 'Aktionspunkt', 'Aktionspunkte')} noch nicht in Aufgaben umgewandelt — nach Abschluss nicht mehr möglich.</li>
               )}
               {finalizeBlockers.openDecisions > 0 && (
-                <li>{finalizeBlockers.openDecisions} Entscheidung{finalizeBlockers.openDecisions === 1 ? '' : 'en'} offen — Abstimmung oder Abschluss fehlt.</li>
+                <li>{finalizeBlockers.openDecisions} {pluralDe(finalizeBlockers.openDecisions, 'Entscheidung', 'Entscheidungen')} offen — Abstimmung oder Abschluss fehlt.</li>
               )}
               {finalizeBlockers.unresolvedAssignees > 0 && (
-                <li>{finalizeBlockers.unresolvedAssignees} Personen-Zuordnung{finalizeBlockers.unresolvedAssignees === 1 ? '' : 'en'} ungeklärt — Aufgaben werden ohne Team-Verknüpfung erstellt.</li>
+                <li>{finalizeBlockers.unresolvedAssignees} {pluralDe(finalizeBlockers.unresolvedAssignees, 'Personen-Zuordnung', 'Personen-Zuordnungen')} ungeklärt — Aufgaben werden ohne Team-Verknüpfung erstellt.</li>
               )}
             </ul>
           </div>

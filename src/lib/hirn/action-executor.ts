@@ -3,6 +3,7 @@ import { tasks } from '@/db/schema'
 import { TASK_TYPES, TASK_CATEGORIES, TASK_PRIORITIES } from '@/config/tasks'
 import { DECISION_TYPES, VOTING_METHODS, DECISION_STATUS } from '@/config/decisions'
 import { MEETING_TYPES, PROTOCOL_VISIBILITY } from '@/config/protocols'
+import { ORG } from '@/config/org'
 import { createTaskSchema } from '@/lib/schemas/tasks'
 import { createDecisionSchema } from '@/lib/schemas/decisions'
 import { createProtocolSchema } from '@/lib/schemas/protocols'
@@ -71,7 +72,7 @@ function coerceProtocolPayload(payload: Record<string, unknown>): Record<string,
   // browser tz) doesn't apply; instead use Intl.DateTimeFormat with the
   // explicit Europe/Zurich timeZone. en-CA returns YYYY-MM-DD.
   const meetingDate = payload.meeting_date || new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Europe/Zurich',
+    timeZone: ORG.timezone,
   }).format(new Date())
 
   // LLM may send "participants" instead of "attendees", and names instead of UUIDs.

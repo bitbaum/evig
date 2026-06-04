@@ -14,8 +14,8 @@ import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 import { ROUTES } from '@/config/routes'
 import { TABLE_NAMES } from '@/config/database'
-import { listAppointments } from '@/lib/services/appointments'
-import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications'
+import { listAppointments, notifyRepairerOfAssignment } from '@/lib/services/appointments'
+import { notifyAllStaff } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 // GET /api/appointments - Get appointments for current user (as customer or repairer)
@@ -122,13 +122,7 @@ export const POST = withAuth(async (
         repairer_id,
       )
       if (repairer_id && createdAppointment?.id) {
-        notifyUsers([repairer_id], {
-          type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
-          title: 'Neuer Termin zugewiesen',
-          content: `Dir wurde ein neuer Reparaturtermin zugewiesen: ${description?.slice(0, 100)}`,
-          related_type: RELATED_TYPES.APPOINTMENT,
-          related_id: createdAppointment.id as string,
-        }).catch(() => {})
+        notifyRepairerOfAssignment(repairer_id, createdAppointment.id as string, description).catch(() => {})
       }
 
       return apiSuccess({ message: 'Termin erfolgreich erstellt', appointment: createdAppointment }, 201)
@@ -160,13 +154,7 @@ export const POST = withAuth(async (
 
     notifyAdminsOfNewBooking(createdAppointment?.id, session, description, urgency, repairer_id)
     if (repairer_id && createdAppointment?.id) {
-      notifyUsers([repairer_id], {
-        type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
-        title: 'Neuer Termin zugewiesen',
-        content: `Dir wurde ein neuer Reparaturtermin zugewiesen: ${description?.slice(0, 100)}`,
-        related_type: RELATED_TYPES.APPOINTMENT,
-        related_id: createdAppointment.id,
-      }).catch(() => {})
+      notifyRepairerOfAssignment(repairer_id, createdAppointment.id, description).catch(() => {})
     }
 
     return apiSuccess({

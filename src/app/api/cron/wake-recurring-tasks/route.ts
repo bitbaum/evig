@@ -30,11 +30,10 @@ import { db } from '@/db'
 import { tasks } from '@/db/schema'
 import { eq, and, isNotNull, sql } from 'drizzle-orm'
 import { TASK_STATUSES, TASK_TYPES } from '@/config/tasks'
+import { ORG } from '@/config/org'
 import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
-
-const CRON_TZ = 'Europe/Zurich'
 
 function authorized(request: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET
@@ -74,7 +73,7 @@ export async function GET(request: NextRequest) {
     for (const task of candidates) {
       if (!task.scheduleCron) continue
       try {
-        const expr = CronExpressionParser.parse(task.scheduleCron, { tz: CRON_TZ })
+        const expr = CronExpressionParser.parse(task.scheduleCron, { tz: ORG.timezone })
         const prevFire = expr.prev().toDate()
 
         // Already pending — don't pile up.
@@ -110,7 +109,7 @@ export async function GET(request: NextRequest) {
         const notifyPayload = {
           type: NOTIFICATION_TYPES.TASK_ATTENTION,
           title: `Wiederkehrende Aufgabe fällig: ${task.title}`,
-          content: `Geplant für ${prevFire.toLocaleString('de-CH', { timeZone: CRON_TZ })}.`,
+          content: `Geplant für ${prevFire.toLocaleString('de-CH', { timeZone: ORG.timezone })}.`,
           related_type: RELATED_TYPES.TASK,
           related_id: task.id,
         }

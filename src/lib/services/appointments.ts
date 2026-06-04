@@ -19,6 +19,8 @@ import {
 } from '@/db/schema'
 import { eq, and, asc, desc, sql, type SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+import { notifyUsers } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 const customer = alias(users, 'customer')
 const repairer = alias(users, 'repairer')
@@ -121,6 +123,33 @@ export interface AssignableRepairer {
   email: string
   city: string | null
   canton: string | null
+}
+
+/**
+ * Notify a repairer that they've been assigned to a booking.
+ *
+ * Three callers (auto-assignment in the user POST flow with a
+ * pre-selected repairer, admin manual assignment, and any future
+ * re-assignment path) used to inline the same title + content +
+ * type + related_type — duplicated string copy. Extracting here
+ * means changing the wording happens in one place.
+ *
+ * Fire-and-forget by design — a failed notification must never
+ * break the assignment action. Caller can `.catch()` if they want
+ * to log, but the function itself swallows nothing.
+ */
+export function notifyRepairerOfAssignment(
+  repairerId: string,
+  appointmentId: string,
+  description: string | null | undefined,
+): Promise<unknown> {
+  return notifyUsers([repairerId], {
+    type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
+    title: 'Neuer Termin zugewiesen',
+    content: `Dir wurde ein neuer Reparaturtermin zugewiesen: ${description?.slice(0, 100) ?? ''}`,
+    related_type: RELATED_TYPES.APPOINTMENT,
+    related_id: appointmentId,
+  })
 }
 
 /**

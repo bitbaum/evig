@@ -7,7 +7,14 @@ import { users, userProfiles } from '@/db/schema/auth'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { generateTaxReport, TaxTransaction } from '@/lib/payments/tax-compliance'
 import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
+import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger'
+
+// Postgres `AT TIME ZONE` accepts a string literal. We can't parameterize
+// it via Drizzle's `sql` tag (would become $1 and break syntax), so we
+// inject the SSOT timezone via `sql.raw` — safe because ORG.timezone is
+// a hardcoded constant in our config, never user input.
+const TZ = sql.raw(`'${ORG.timezone}'`)
 
 // Extended transaction type with joined data from query
 interface TaxTransactionWithJoins {
@@ -16,7 +23,7 @@ interface TaxTransactionWithJoins {
   currency: 'CHF' | 'EUR'
   created_at: Date
   // Swiss-local YYYY-MM-DD date of the transaction, computed in Postgres
-  // via (pt.created_at AT TIME ZONE 'Europe/Zurich')::date. Use this for
+  // via (pt.created_at AT TIME ZONE ${TZ})::date. Use this for
   // any per-transaction date display so a 00:30 Zurich transaction shows
   // up on its actual local date, not the UTC date (which would be the
   // prior day).
@@ -53,7 +60,7 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     // Calculate date range in Swiss-local time (Europe/Zurich)
     const { start: startDate, end: endDate, nextStart } = calculatePeriodDates(period, year, month)
 
-    // Get transactions for the period. AT TIME ZONE 'Europe/Zurich' converts
+    // Get transactions for the period. AT TIME ZONE ${TZ} converts
     // the Swiss-local naive date to a timestamp instant for comparison with
     // pt.created_at (timestamp with time zone, stored as UTC). Using < on
     // nextStart gives a clean exclusive upper bound — captures all of the
@@ -71,12 +78,12 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
           'subtotalCents', (pt.metadata->>'subtotalCents')::int,
           'vatCents', (pt.metadata->>'vatCents')::int
         ) as tax_data,
-        ((pt.created_at AT TIME ZONE 'Europe/Zurich')::date)::text as zurich_date
+        ((pt.created_at AT TIME ZONE ${TZ})::date)::text as zurich_date
       FROM ${sql.raw(ptTable)} pt
       JOIN ${sql.raw(uTable)} u ON pt.user_id = u.id
       LEFT JOIN ${sql.raw(upTable)} up ON u.id = up.user_id
-      WHERE pt.created_at >= ${startDate}::date AT TIME ZONE 'Europe/Zurich'
-        AND pt.created_at < ${nextStart}::date AT TIME ZONE 'Europe/Zurich'
+      WHERE pt.created_at >= ${startDate}::date AT TIME ZONE ${TZ}
+        AND pt.created_at < ${nextStart}::date AT TIME ZONE ${TZ}
         AND pt.status = ${PAYMENT_STATUS.SUCCEEDED}
         AND pt.type = ${PAYMENT_TRANSACTION_TYPE.PAYMENT}
       ORDER BY pt.created_at DESC
@@ -217,7 +224,7 @@ function calculatePeriodDates(period: string, year: number, month: number): {
     default:
       // Default to current month (in Zurich local time)
       const nowParts = new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'Europe/Zurich',
+        timeZone: ORG.timezone,
         year: 'numeric', month: '2-digit',
       }).formatToParts(new Date())
       const nowY = Number(nowParts.find(p => p.type === 'year')?.value ?? new Date().getUTCFullYear())
@@ -242,7 +249,7 @@ interface CountRow {
 
 // Swiss-local period boundaries match the main transactions query: pass
 // the period start (inclusive YYYY-MM-DD in Zurich tz) and the day AFTER
-// the period end (exclusive YYYY-MM-DD), then AT TIME ZONE 'Europe/Zurich'
+// the period end (exclusive YYYY-MM-DD), then AT TIME ZONE ${TZ}
 // converts each to the corresponding UTC instant for comparison with
 // created_at. Display reuses the start string + computes endDay = nextStart
 // minus one day (the inclusive last day).
@@ -251,18 +258,18 @@ async function generateComplianceReport(transactions: TaxTransactionWithJoins[],
   const [refundCount, escrowCount, disputeCount] = await Promise.all([
     db.execute(sql`
       SELECT COUNT(*) as count FROM ${sql.raw(rTable)}
-      WHERE created_at >= ${startDate}::date AT TIME ZONE 'Europe/Zurich'
-        AND created_at < ${nextStart}::date AT TIME ZONE 'Europe/Zurich'
+      WHERE created_at >= ${startDate}::date AT TIME ZONE ${TZ}
+        AND created_at < ${nextStart}::date AT TIME ZONE ${TZ}
     `),
     db.execute(sql`
       SELECT COUNT(*) as count FROM ${sql.raw(eaTable)}
-      WHERE created_at >= ${startDate}::date AT TIME ZONE 'Europe/Zurich'
-        AND created_at < ${nextStart}::date AT TIME ZONE 'Europe/Zurich'
+      WHERE created_at >= ${startDate}::date AT TIME ZONE ${TZ}
+        AND created_at < ${nextStart}::date AT TIME ZONE ${TZ}
     `),
     db.execute(sql`
       SELECT COUNT(*) as count FROM ${sql.raw(pdTable)}
-      WHERE created_at >= ${startDate}::date AT TIME ZONE 'Europe/Zurich'
-        AND created_at < ${nextStart}::date AT TIME ZONE 'Europe/Zurich'
+      WHERE created_at >= ${startDate}::date AT TIME ZONE ${TZ}
+        AND created_at < ${nextStart}::date AT TIME ZONE ${TZ}
     `),
   ])
 
