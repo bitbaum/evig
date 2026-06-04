@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
@@ -34,21 +37,15 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
   } | null>(null)
   // Populate the date-input min after mount. Computing today client-side
   // gives the browser's local-tz today (correct for the user) instead of
-  // UTC's today — without the deferral, SSR would render UTC's today
-  // into the HTML and the client would re-render with browser-tz today,
-  // producing a hydration mismatch at the UTC-midnight boundary.
-  // Empty string before mount means no min constraint is enforced for
-  // the brief window between SSR and client mount — fine, the user can't
-  // interact with the input that fast anyway. The `if (!minDate)` guard
-  // is what the React Compiler `set-state-in-effect` rule accepts as a
-  // legitimate one-shot init.
+  // UTC's today — without the deferral, SSR would render UTC's today and
+  // the client would re-render with browser-tz today, producing a
+  // hydration mismatch at the UTC-midnight boundary. Empty string before
+  // mount means no min constraint is enforced for the brief window
+  // between SSR and client mount — fine, the user can't interact that
+  // fast anyway.
   const [minDate, setMinDate] = useState<string>('')
-  useEffect(() => {
-    if (!minDate) setMinDate(todayLocalIso())
-  // Only populate on initial mount — depending on minDate would re-fire
-  // every time it changes, which is exactly what we don't want.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMinDate(todayLocalIso()) }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -168,11 +165,10 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Problembeschreibung *
                 </label>
-                <textarea
+                <Textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   rows={4}
-                  className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
                   placeholder="Beschreiben Sie Ihr Problem oder Ihren Bedarf so genau wie möglich..."
                   required
                   aria-required="true"
@@ -185,15 +181,14 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Dringlichkeit
                 </label>
-                <select
+                <Select
                   value={formData.urgency}
                   onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value as 'normal' | 'high' | 'urgent' }))}
-                  className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                 >
                   <option value="normal">Normal - Innerhalb 1-2 Wochen</option>
                   <option value="high">Hoch - Innerhalb weniger Tage</option>
                   <option value="urgent">Dringend - So schnell wie möglich</option>
-                </select>
+                </Select>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -201,23 +196,21 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Bevorzugtes Datum
                   </label>
-                  <input
+                  <Input
                     type="date"
                     value={formData.preferredDate}
                     onChange={(e) => setFormData(prev => ({ ...prev, preferredDate: e.target.value }))}
                     min={minDate || undefined}
-                    className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
                     Bevorzugte Zeit
                   </label>
-                  <input
+                  <Input
                     type="time"
                     value={formData.preferredTime}
                     onChange={(e) => setFormData(prev => ({ ...prev, preferredTime: e.target.value }))}
-                    className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                   />
                 </div>
               </div>
