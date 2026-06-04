@@ -39,8 +39,10 @@ import {
   Edit,
 } from 'lucide-react'
 import TaskActionsClient from './TaskActionsClient'
+import { TaskRequestResponseButtons } from './TaskRequestResponseButtons'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
+import { auth } from '@/auth'
 
 export const metadata: Metadata = {
   title: 'Aufgabe Details',
@@ -141,7 +143,8 @@ export default async function TaskDetailPage({
     notFound()
   }
 
-  const [completions, flags, requests] = await Promise.all([
+  const [session, completions, flags, requests] = await Promise.all([
+    auth(),
     getCompletions(id),
     getAttentionFlags(id),
     getRequests(id),
@@ -149,6 +152,20 @@ export default async function TaskDetailPage({
 
   const activeFlags = flags.filter((f) => !f.is_resolved)
   const pendingRequests = requests.filter((r) => r.status === REQUEST_STATUSES.PENDING)
+  const viewerId = session?.user?.id
+
+  /**
+   * Can the current viewer respond to this request?
+   * - Targeted: only the requested user
+   * - Broadcast (requested_user_id is null): any viewer except the requester
+   * - Requester themselves: never (server enforces; we hide the UI too)
+   */
+  const canViewerRespond = (req: TaskRequestRecord): boolean => {
+    if (!viewerId) return false
+    if (req.requested_by === viewerId) return false
+    if (req.is_broadcast) return true
+    return req.requested_user_id === viewerId
+  }
 
   return (
     <div className="space-y-6">
@@ -240,21 +257,27 @@ export default async function TaskDetailPage({
       {/* Pending Requests */}
       {pendingRequests.length > 0 && (
         <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <Send className="w-5 h-5 text-warning-600 mt-0.5" />
-            <div>
+          <div className="flex items-start gap-3 w-full">
+            <Send className="w-5 h-5 text-warning-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1 space-y-3">
               <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">Offene Anfragen</Heading>
               {pendingRequests.map((req) => (
-                <p key={req.id} className="text-sm text-warning-700 dark:text-warning-300 mt-1">
-                  {req.requested_by_name || 'Jemand'} fragt{' '}
-                  {req.is_broadcast
-                    ? 'alle Teammitglieder'
-                    : req.requested_user_name || 'jemanden'}
-                  {req.message && `: "${req.message}"`}
-                  <span className="text-warning-500 ml-2">
-                    ({formatDateTimeNumeric(req.created_at)})
-                  </span>
-                </p>
+                <div key={req.id} className="text-sm text-warning-700 dark:text-warning-300">
+                  <p>
+                    {req.requested_by_name || 'Jemand'} fragt{' '}
+                    {req.is_broadcast
+                      ? 'alle Teammitglieder'
+                      : req.requested_user_name || 'jemanden'}
+                    {req.message && `: "${req.message}"`}
+                    <span className="text-warning-500 ml-2">
+                      ({formatDateTimeNumeric(req.created_at)})
+                    </span>
+                  </p>
+                  <TaskRequestResponseButtons
+                    requestId={req.id}
+                    canRespond={canViewerRespond(req)}
+                  />
+                </div>
               ))}
             </div>
           </div>
