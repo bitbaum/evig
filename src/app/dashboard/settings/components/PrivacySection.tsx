@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { Globe, Lock, Eye, EyeOff, Download, Loader2 } from 'lucide-react'
 import { SETTINGS_CONFIG } from '@/config/profile'
@@ -199,11 +200,11 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           </div>
         )}
 
-        <button
+        <Button
           type="button"
           onClick={handleExportData}
           disabled={isExporting}
-          className="inline-flex items-center gap-2 rounded-lg border-2 border-action bg-surface-base px-4 py-2 text-sm font-semibold text-action transition-colors hover:bg-action-muted disabled:cursor-not-allowed disabled:opacity-60-muted"
+          variant="outline"
         >
           {isExporting ? (
             <>
@@ -216,7 +217,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
               {t('downloadButton')}
             </>
           )}
-        </button>
+        </Button>
       </div>
     </div>
   )

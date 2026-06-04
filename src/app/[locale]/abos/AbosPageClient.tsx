@@ -56,19 +56,21 @@ export default function AbosPageClient() {
         {/* Category filter */}
         {categories.length > 1 && (
           <div className="flex flex-wrap gap-2 mb-6">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setActiveCategory(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 !activeCategory ? 'bg-action text-white' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
               }`}
             >
               {t('filterAll')}
-            </button>
+            </Button>
             {categories.map(cat => {
               const emoji = CATEGORY_EMOJIS[cat] ?? CATEGORY_EMOJIS.other
               return (
-                <button
+                <Button
                   key={cat}
+                  variant="ghost"
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                     activeCategory === cat ? 'bg-action text-white' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
@@ -76,7 +78,7 @@ export default function AbosPageClient() {
                 >
                   {/* @ts-expect-error — dynamic category key */}
                   {emoji} {t(`categories.${cat}`)}
-                </button>
+                </Button>
               )
             })}
           </div>

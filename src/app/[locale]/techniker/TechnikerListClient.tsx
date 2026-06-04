@@ -212,7 +212,7 @@ export default function TechnikerListClient() {
         {/* Tier filter tabs */}
         <div className="mb-5 flex gap-2" role="group" aria-label={t('list.tierFilterLabel')}>
           {tierTabs.map((tab) => (
-            <button
+            <Button
               key={tab.value}
               onClick={() => setTierFilter(tab.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -223,7 +223,7 @@ export default function TechnikerListClient() {
               aria-pressed={tier === tab.value}
             >
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -248,12 +248,14 @@ export default function TechnikerListClient() {
           </Select>
 
           {hasActiveFilters && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={clearFilters}
               className="ml-3 text-sm text-action hover:text-action font-medium"
             >
               {t('list.resetFilters')}
-            </button>
+            </Button>
           )}
         </div>
 
@@ -300,25 +302,29 @@ export default function TechnikerListClient() {
         {/* Pagination */}
         {totalPages > 1 && (
           <nav className="flex items-center justify-center gap-2 pt-8" aria-label={t('list.pagination')}>
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
               className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('list.prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
-            </button>
+            </Button>
             <span className="text-sm text-text-secondary px-4" aria-current="page">
               {t('list.pageOf', { current: currentPage, total: totalPages })}
             </span>
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
               className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('list.nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
-            </button>
+            </Button>
           </nav>
         )}
 

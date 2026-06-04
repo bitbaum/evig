@@ -116,13 +116,15 @@ export default function SellerProfileEditPage() {
                     alt={t('avatarAlt')}
                     className="w-16 h-16 rounded-full object-cover border-2 border"
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setAvatarUrl('')}
-                    className="absolute -top-1 -right-1 w-5 h-5 bg-error-500 text-white rounded-full flex items-center justify-center hover:bg-error-600"
+                    variant="destructive"
+                    size="icon"
+                    className="absolute -top-1 -right-1 min-h-0 min-w-0 w-5 h-5 p-0 rounded-full"
                   >
                     <X className="w-3 h-3" />
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <div className="w-16 h-16 rounded-full bg-surface-raised flex items-center justify-center border">

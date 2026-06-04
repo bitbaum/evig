@@ -1,6 +1,7 @@
 'use client'
 
 import { Mail, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
 import { SETTINGS_CONFIG } from '@/config/profile'
@@ -99,13 +100,13 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         <p className="text-sm text-text-secondary mb-4">
           {labels.deleteAccountWarning}
         </p>
-        <button
+        <Button
           type="button"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-error-50 hover:bg-error-100 dark:bg-error-900/20 dark:hover:bg-error-900/30 text-error-600 dark:text-error-400 border-2 border-error-200 dark:border-error-800 rounded-lg transition-colors"
+          variant="destructive-outline"
         >
           <Trash2 className="w-4 h-4" />
           {labels.deleteAccountButton}
-        </button>
+        </Button>
       </div>
     </div>
   )

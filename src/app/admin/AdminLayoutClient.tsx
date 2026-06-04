@@ -11,6 +11,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { NotificationBell } from '@/components/admin/NotificationBell'
 import { CommandBar } from '@/components/admin/CommandBar'
 import { MobileBottomNav } from '@/components/admin/MobileBottomNav'
+import { Button } from '@/components/ui/button'
 import { getHirnSection } from '@/config/sections'
 
 interface AdminLayoutClientProps {
@@ -78,20 +79,24 @@ export function AdminLayoutClient({
         <div className="sticky top-0 z-40 border-b border bg-surface-base/90 backdrop-blur-xs">
           <div className="flex h-14 items-center justify-between px-4 lg:px-6">
             <div className="flex min-w-0 items-center gap-3">
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setMobileMenuOpen(true)}
                 className="shrink-0 rounded-lg p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:hidden"
               >
                 <Menu className="h-5 w-5" />
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:flex"
                 title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
               >
                 <Menu className="h-4 w-4 text-text-tertiary" />
-              </button>
+              </Button>
 
               {/* Breadcrumbs in top bar — saves a full content line */}
               <Breadcrumbs className="mb-0 hidden sm:flex" />

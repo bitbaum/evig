@@ -52,13 +52,14 @@ export default function CustomerBookings() {
             <p className="text-text-secondary">{t('pageSubtitle')}</p>
           </div>
           <div className="flex gap-2">
-            <button
+            <Button
               onClick={fetchAppointments}
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-surface-base border border rounded-lg hover:bg-surface-raised text-text-secondary text-sm md:text-base"
+              variant="outline"
+              size="sm"
             >
               <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">{t('refresh')}</span>
-            </button>
+            </Button>
             <Button as={Link} href={ROUTES.public.techniker} variant="primary" size="sm">
               <Wrench className="h-4 w-4" />
               {t('newOrder')}
@@ -70,7 +71,7 @@ export default function CustomerBookings() {
           <div className="mb-6 p-4 bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg flex items-center gap-2 text-error-700 dark:text-error-400">
             <AlertCircle className="h-5 w-5 shrink-0" />
             {error}
-            <button onClick={() => setError(null)} className="ml-auto text-error-500 hover:text-error-700 dark:hover:text-error-300">×</button>
+            <Button onClick={() => setError(null)} variant="destructive-ghost" size="icon" className="ml-auto">×</Button>
           </div>
         )}
 
@@ -82,29 +83,29 @@ export default function CustomerBookings() {
         )}
 
         <div className="flex gap-2 mb-6">
-          <button
+          <Button
             onClick={() => setActiveTab('active')}
-            className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'active'
-                ? 'bg-action-muted text-action'
-                : 'bg-surface-base text-text-secondary hover:bg-surface-raised')}
+            variant="ghost"
+            className={activeTab === 'active'
+              ? 'bg-action-muted text-action'
+              : 'bg-surface-base text-text-secondary hover:bg-surface-raised'}
           >
             <Clock className="h-4 w-4" />
             {t('tabActive')}
             {activeCount > 0 && (
               <span className="bg-action text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
             )}
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setActiveTab('completed')}
-            className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'completed'
-                ? 'bg-action-muted text-action'
-                : 'bg-surface-base text-text-secondary hover:bg-surface-raised')}
+            variant="ghost"
+            className={activeTab === 'completed'
+              ? 'bg-action-muted text-action'
+              : 'bg-surface-base text-text-secondary hover:bg-surface-raised'}
           >
             <CheckCircle className="h-4 w-4" />
             {t('tabCompleted')}
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-4">
@@ -243,15 +244,16 @@ export default function CustomerBookings() {
               <label className="block text-sm font-medium text-text-secondary mb-2">{t('ratingLabel')}</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(star => (
-                  <button
+                  <Button
                     key={star}
                     onClick={() => setRating(star)}
-                    className="p-1"
+                    variant="ghost"
+                    size="icon"
                   >
                     <Star
                       className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-text-muted dark:text-text-secondary')}
                     />
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>

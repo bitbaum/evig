@@ -188,20 +188,24 @@ export default function DiscussionThread({
                           </div>
                           {isOwn && !readOnly && !isEditing && (
                             <div className="flex items-center gap-1">
-                              <button
+                              <Button
+                                variant="ghost"
+                                size="icon"
                                 onClick={() => startEdit(c)}
                                 className="p-2 text-text-tertiary hover:text-action rounded-sm"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
-                              </button>
-                              <button
+                              </Button>
+                              <Button
+                                variant="destructive-ghost"
+                                size="icon"
                                 onClick={() => setDeleteId(c.id)}
                                 className="p-2 text-text-tertiary hover:text-error-600 rounded-sm"
                                 title="Löschen"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              </Button>
                             </div>
                           )}
                         </div>
@@ -222,13 +226,15 @@ export default function DiscussionThread({
                                 <Check className="w-3 h-3" />
                                 Speichern
                               </Button>
-                              <button
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={cancelEdit}
                                 className="flex items-center gap-1 rounded-md border border-default px-3 py-1 text-xs text-text-secondary hover:bg-surface-raised"
                               >
                                 <X className="w-3 h-3" />
                                 Abbrechen
-                              </button>
+                              </Button>
                             </div>
                           </div>
                         ) : (
@@ -254,9 +260,11 @@ export default function DiscussionThread({
             {COMMENT_POSITIONS.map((pos) => {
               const conf = COMMENT_POSITION_CONFIG[pos];
               return (
-                <button
+                <Button
                   key={pos}
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setPosition(pos)}
                   className={`rounded-full px-3 py-1 text-xs font-medium transition ${
                     position === pos
@@ -265,7 +273,7 @@ export default function DiscussionThread({
                   }`}
                 >
                   {conf.label}
-                </button>
+                </Button>
               );
             })}
           </div>

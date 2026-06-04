@@ -158,13 +158,15 @@ export default function EditStaticPagePage() {
                 className="flex-1 rounded-l-none"
                 required
               />
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
                 className="px-3 py-2 text-sm border border-default rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary"
               >
                 Generieren
-              </button>
+              </Button>
             </div>
           </FormField>
 

@@ -13,6 +13,7 @@ import {
   User,
   Brain,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ORG, ORG_IMAGES } from '@/config/org'
 import {
   getSidebarGroupsWithSections,
@@ -105,7 +106,9 @@ export function AdminSidebar({
           </Link>
         )}
 
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:flex"
         >
@@ -114,16 +117,18 @@ export function AdminSidebar({
           ) : (
             <ChevronLeft className="h-4 w-4 text-text-muted" />
           )}
-        </button>
+        </Button>
 
         {/* Mobile close — 44×44 to meet thumb-tap minimum on phones */}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setMobileMenuOpen(false)}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:hidden"
           aria-label="Seitenleiste schliessen"
         >
           <ChevronLeft className="w-5 h-5 text-text-secondary" />
-        </button>
+        </Button>
       </div>
 
       {/* Navigation */}
@@ -138,7 +143,8 @@ export function AdminSidebar({
           return (
             <div key={group.id} className="mb-2">
               {!sidebarCollapsed && (
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => toggleGroup(group.id)}
                   aria-expanded={isExpanded}
                   className={`flex w-full items-center justify-between rounded-lg px-2 py-3 lg:py-1.5 text-xs font-medium uppercase tracking-widest transition-colors ${
@@ -151,7 +157,7 @@ export function AdminSidebar({
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
                   />
-                </button>
+                </Button>
               )}
 
               {(isExpanded || sidebarCollapsed) && (

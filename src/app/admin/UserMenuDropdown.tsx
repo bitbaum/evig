@@ -8,8 +8,9 @@ import {
   ExternalLink,
   LogOut,
 } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
+import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { ROUTES } from '@/config/routes'
 
 interface UserMenuDropdownProps {
   user: {
@@ -44,7 +45,8 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
 
   return (
     <div className="relative" ref={userMenuRef}>
-      <button
+      <Button
+        variant="ghost"
         onClick={() => setUserMenuOpen(!userMenuOpen)}
         className={`flex items-center gap-3 p-1.5 pr-3 rounded-full transition-all duration-200 ${
           userMenuOpen
@@ -72,7 +74,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             userMenuOpen ? 'rotate-180' : ''
           }`}
         />
-      </button>
+      </Button>
 
       <div
         className={`absolute right-0 mt-2 w-64 transition-all duration-200 ease-out origin-top-right ${
@@ -108,7 +110,8 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
           </div>
 
           <div className="border-t border py-2">
-            <button
+            <Button
+              variant="destructive-ghost"
               onClick={() => {
                 setUserMenuOpen(false)
                 signOut({ callbackUrl: '/' })
@@ -117,7 +120,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             >
               <LogOut className="w-4 h-4" />
               Abmelden
-            </button>
+            </Button>
           </div>
         </div>
       </div>

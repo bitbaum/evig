@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { CheckCircle2, ArrowRight, Filter, Globe, Code, Palette, Shield, Database, Cloud, Layers } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
 import type { TechItem } from './TechnologiesSection'
@@ -53,8 +54,9 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
               <span className="text-sm font-medium">{labels.filterLabel}</span>
             </div>
             {categories.map((category) => (
-              <button
+              <Button
                 key={category}
+                variant="ghost"
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
@@ -63,7 +65,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 }`}
               >
                 {category}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

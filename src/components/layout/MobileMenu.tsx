@@ -8,6 +8,7 @@ import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { NavigationItem } from '@/config/navigation'
 import { ORG } from '@/config/org'
+import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -124,22 +125,23 @@ export function MobileMenu({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-subtle dark:border-white/6">
-          <button type="button" onClick={onClose} className="cursor-pointer bg-transparent border-none p-0">
+          <Button type="button" variant="ghost" onClick={onClose} className="cursor-pointer bg-transparent border-none p-0 h-auto">
             <Logo />
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             className={cn(
-              "p-2 -mr-2 rounded-lg",
+              "-mr-2 rounded-lg",
               "text-text-tertiary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/6",
-              "transition-colors duration-200",
-              "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action"
+              "transition-colors duration-200"
             )}
             onClick={onClose}
             aria-label={tAccessibility('closeMenu')}
           >
             <X className="h-5 w-5" aria-hidden="true" />
-          </button>
+          </Button>
         </div>
 
         {/* Experimental Site Banner */}
@@ -171,10 +173,11 @@ export function MobileMenu({
                   {item.subItems ? (
                     // Expandable menu item
                     <div>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
                         className={cn(
-                          "flex w-full items-center justify-between py-3 px-4 -mx-4",
+                          "flex w-full items-center justify-between py-3 px-4 -mx-4 h-auto",
                           "text-base font-medium text-text-primary",
                           "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                         )}
@@ -188,7 +191,7 @@ export function MobileMenu({
                             openDropdown === item.name && "rotate-180 text-action"
                           )}
                         />
-                      </button>
+                      </Button>
 
                       {/* Sub-items */}
                       <div
@@ -225,10 +228,11 @@ export function MobileMenu({
                                     <ExternalLink className="w-3 h-3 text-text-tertiary" />
                                   </a>
                                 ) : (
-                                  <button
+                                  <Button
                                     type="button"
+                                    variant="ghost"
                                     className={cn(
-                                      "group flex items-center gap-2 py-2.5 w-full text-left",
+                                      "group flex items-center gap-2 py-2.5 w-full text-left justify-start h-auto",
                                       "text-sm text-text-secondary hover:text-text-primary dark:text-text-muted",
                                       "transition-colors duration-200"
                                     )}
@@ -240,7 +244,7 @@ export function MobileMenu({
                                         {subItem.badge}
                                       </span>
                                     )}
-                                  </button>
+                                  </Button>
                                 )}
                               </li>
                             )
@@ -264,17 +268,18 @@ export function MobileMenu({
                       <ExternalLink className="w-4 h-4 text-text-tertiary dark:text-text-tertiary" />
                     </a>
                   ) : (
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
                       className={cn(
-                        "block w-full text-left py-3 px-4 -mx-4",
+                        "block w-full text-left py-3 px-4 -mx-4 h-auto justify-start",
                         "text-base font-medium text-text-primary",
                         "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                       )}
                       onClick={() => handleNavigation(item.href)}
                     >
                       {itemLabel}
-                    </button>
+                    </Button>
                   )}
                 </li>
               )
@@ -289,17 +294,18 @@ export function MobileMenu({
                   const actionLabel = item.nameKey ? t(item.nameKey as never) : item.name
                   return (
                     <li key={item.name}>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
                         className={cn(
-                          "block w-full text-left py-3 px-4 -mx-4",
+                          "block w-full text-left py-3 px-4 -mx-4 h-auto justify-start",
                           "text-base font-medium text-text-primary",
                           "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                         )}
                         onClick={() => handleNavigation(item.href)}
                       >
                         {actionLabel}
-                      </button>
+                      </Button>
                     </li>
                   )
                 })}

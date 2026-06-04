@@ -125,13 +125,15 @@ export default function WorkshopsDashboard() {
               <CheckCircle className="w-5 h-5 text-action shrink-0" />
               <p className="text-action font-medium">{t('paymentSuccess')}</p>
             </div>
-            <button
+            <Button
               onClick={() => setPaymentSuccess(false)}
+              variant="ghost"
+              size="icon"
               className="text-action hover:text-action text-lg leading-none"
               aria-label={t('cancel')}
             >
               ×
-            </button>
+            </Button>
           </div>
         )}
 

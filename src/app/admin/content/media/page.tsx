@@ -139,20 +139,20 @@ export default async function AdminMediaPage() {
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-3 py-2 border border rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors">
+            <Button variant="outline" size="sm" className="flex items-center gap-2 px-3 py-2 border border rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors">
               <Filter className="w-4 h-4 text-text-secondary" />
               <span className="text-sm text-text-secondary">
                 Filter
               </span>
-            </button>
+            </Button>
 
             <div className="flex border border rounded-lg overflow-hidden">
-              <button className="p-2 bg-action-muted text-action">
+              <Button variant="ghost" size="icon" className="p-2 bg-action-muted text-action">
                 <Grid className="w-4 h-4" />
-              </button>
-              <button className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary">
+              </Button>
+              <Button variant="ghost" size="icon" className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary">
                 <List className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>

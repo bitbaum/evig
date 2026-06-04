@@ -116,10 +116,11 @@ export function HirnSidebar({
         ) : (
           <div className="space-y-1">
             {sessions.map(session => (
-              <button
+              <Button
                 key={session.sessionId}
+                variant="ghost"
                 onClick={() => onSelectSession(session.sessionId)}
-                className={`w-full flex items-center gap-2 p-2 rounded-lg text-left transition-colors ${
+                className={`w-full flex items-center gap-2 p-2 rounded-lg text-left h-auto justify-start ${
                   currentSessionId === session.sessionId
                     ? 'bg-action-muted text-action-text'
                     : 'hover:bg-surface-raised text-text-secondary'
@@ -136,7 +137,7 @@ export function HirnSidebar({
                   </p>
                 </div>
                 <ChevronRight className="w-4 h-4 shrink-0 opacity-50" />
-              </button>
+              </Button>
             ))}
           </div>
         )}

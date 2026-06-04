@@ -77,10 +77,11 @@ export default function SettingsPage() {
         <div className="bg-surface-base rounded-xl shadow-xs border-2 border mb-6 overflow-x-auto">
           <nav className="flex">
             {tabs.map((tab) => (
-              <button
+              <Button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                variant="ghost"
+                className={`flex-1 rounded-none border-b-2 py-4 ${
                   activeTab === tab.id
                     ? 'border-action text-action bg-action-muted/50'
                     : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-raised'
@@ -88,7 +89,7 @@ export default function SettingsPage() {
               >
                 <tab.icon className="w-5 h-5" />
                 <span className="hidden sm:inline">{tab.label}</span>
-              </button>
+              </Button>
             ))}
           </nav>
         </div>

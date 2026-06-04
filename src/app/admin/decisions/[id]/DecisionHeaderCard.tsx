@@ -16,8 +16,9 @@ import {
 import { Link2, Check, Mail } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
-import { adminSurface, adminType } from '@/lib/admin-ui';
+import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { adminSurface, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import { formatDateShort } from '@/lib/date-formats';
 import BeschlussPdfExport from '@/components/decisions/BeschlussPdfExport';
@@ -99,7 +100,9 @@ export default function DecisionHeaderCard({
               Bearbeiten
             </AdminButton>
           )}
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleCopyLink}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
@@ -113,9 +116,11 @@ export default function DecisionHeaderCard({
             ) : (
               <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
             )}
-          </button>
+          </Button>
           {decision.status === DECISION_STATUS.VOTING && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={handleSendInvitations}
               disabled={sendingInvitations}
               className={cn(
@@ -131,7 +136,7 @@ export default function DecisionHeaderCard({
                 : invitationsResult
                   ? `${invitationsResult.sent} gesendet`
                   : 'Einladungen senden'}
-            </button>
+            </Button>
           )}
           {validTargets.includes(DECISION_STATUS.DISCUSSION) && (
             <AdminButton variant="action" onClick={() => onTransition(DECISION_STATUS.DISCUSSION)}>

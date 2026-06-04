@@ -75,7 +75,8 @@ export default function MyOffersPage() {
 
         <div className="card-shell p-4 mb-6">
           <div className="flex flex-wrap gap-2">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
@@ -84,10 +85,11 @@ export default function MyOffersPage() {
               }`}
             >
               {t('filterAll', { total })}
-            </button>
+            </Button>
             {OFFER_STATUSES.map((s) => (
-              <button
+              <Button
                 key={s.id}
+                variant="ghost"
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
@@ -96,7 +98,7 @@ export default function MyOffersPage() {
                 }`}
               >
                 {s.name}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -202,13 +204,14 @@ export default function MyOffersPage() {
 
                   {offer.status === OFFER_STATUS.PENDING && (
                     <div className="px-6 pb-4">
-                      <button
+                      <Button
+                        variant="destructive-ghost"
                         onClick={() => setPendingWithdraw(offer)}
                         disabled={withdrawingId === offer.id}
                         className="px-4 py-2 min-h-touch bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-sm font-medium hover:bg-error-100 dark:hover:bg-error-900/30 transition-colors disabled:opacity-50 focus:outline-hidden focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
                       >
                         {withdrawingId === offer.id ? t('withdrawingButton') : t('withdrawButton')}
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>

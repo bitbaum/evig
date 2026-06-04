@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Users, ChevronRight, RefreshCw, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { Pool } from './types'
 import { CATEGORY_EMOJIS } from './types'
 
@@ -78,7 +79,8 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
       <div className="flex items-center justify-between pt-2 border-t border-subtle">
         <span className="text-xs text-text-muted">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
         {userId ? (
-          <button
+          <Button
+            variant={isMember ? 'destructive-ghost' : 'primary'}
             onClick={handleAction}
             disabled={loading || (isFull && !isMember)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
@@ -94,7 +96,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             ) : (
               <><ChevronRight className="w-3.5 h-3.5" />{t('join')}</>
             )}
-          </button>
+          </Button>
         ) : (
           <span className="text-xs text-text-muted">{t('loginToJoin')}</span>
         )}

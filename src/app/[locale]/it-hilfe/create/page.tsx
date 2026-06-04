@@ -199,11 +199,12 @@ export default function CreatePeerRepairPage() {
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
                 return (
-                  <button
+                  <Button
                     key={cat.id}
                     type="button"
+                    variant="ghost"
                     onClick={() => handleCategorySelect(cat.id)}
-                    className={`p-4 rounded-xl border-2 transition-all ${
+                    className={`flex-col h-auto p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
                         ? 'border-action bg-action-muted'
                         : 'border hover:border-strong'
@@ -213,7 +214,7 @@ export default function CreatePeerRepairPage() {
                       <Icon className="w-5 h-5 text-white" />
                     </div>
                     <span className="text-sm font-medium text-text-primary">{cat.name}</span>
-                  </button>
+                  </Button>
                 )
               })}
             </div>

@@ -10,6 +10,7 @@ import {
 } from '@/config/open-source-registry'
 import { AlternativeCard } from './AlternativeCard'
 import { EmptyState } from '@/components/common/EmptyState'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTranslations } from 'next-intl'
 
@@ -55,20 +56,23 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             className="pl-12 pr-10 py-3 sm:py-4 text-sm sm:text-base"
           />
           {query && (
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setQuery('')}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
               aria-label={t('clearAriaLabel')}
             >
               <X className="w-5 h-5" />
-            </button>
+            </Button>
           )}
         </div>
       </div>
 
       {/* Category pills */}
       <div className="flex gap-2 overflow-x-auto pb-2 mb-8 scrollbar-hide">
-        <button
+        <Button
+          variant="ghost"
           onClick={() => setActiveCategoryId(null)}
           className={cn(
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
@@ -78,10 +82,11 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           )}
         >
           {t('allCategories')}
-        </button>
+        </Button>
         {categories.map(cat => (
-          <button
+          <Button
             key={cat.id}
+            variant="ghost"
             onClick={() => setActiveCategoryId(activeCategoryId === cat.id ? null : cat.id)}
             className={cn(
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
@@ -91,7 +96,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             )}
           >
             {cat.icon} {cat.label}
-          </button>
+          </Button>
         ))}
       </div>
 

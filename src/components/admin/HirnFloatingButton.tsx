@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Brain } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { HirnSlideOver } from './HirnSlideOver'
 
 interface HirnFloatingButtonProps {
@@ -23,9 +24,11 @@ export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
   return (
     <>
       {/* Floating Button */}
-      <button
+      <Button
+        variant="primary"
+        size="icon"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-action hover:bg-action shadow-lg transition-all hover:scale-105 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full shadow-lg hover:scale-105 group"
         title="Hirn AI öffnen"
       >
         <Brain className="w-6 h-6 text-white" />
@@ -34,7 +37,7 @@ export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
         <span className="absolute right-full mr-3 px-3 py-1.5 bg-surface-overlay text-white text-sm rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
           Hirn AI
         </span>
-      </button>
+      </Button>
 
       {/* Slide Over Panel */}
       <HirnSlideOver isOpen={isOpen} onClose={() => setIsOpen(false)} />

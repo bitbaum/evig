@@ -181,10 +181,11 @@ export default function BuildYourComputerPage() {
                     <Heading level={4} className="mb-4">{t('buildTool.performanceHeading')}</Heading>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {performanceOptions.map((perf) => (
-                        <button
+                        <Button
                           key={perf.id}
+                          variant="ghost"
                           onClick={() => setFormData({...formData, performance: perf.id})}
-                          className={`p-3 text-center border-2 rounded-lg transition-all ${
+                          className={`flex-col h-auto p-3 text-center border-2 rounded-lg transition-all ${
                             formData.performance === perf.id
                               ? 'border-action bg-action-muted'
                               : 'border hover:border-strong'
@@ -192,7 +193,7 @@ export default function BuildYourComputerPage() {
                         >
                           <div className="font-semibold">{perf.name}</div>
                           <div className="text-xs text-text-secondary">{perf.description}</div>
-                        </button>
+                        </Button>
                       ))}
                     </div>
                   </div>

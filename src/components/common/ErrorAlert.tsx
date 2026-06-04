@@ -41,12 +41,13 @@ export function ErrorAlert({
           <p className={`${TYPOGRAPHY.body} text-error-800 dark:text-error-200`}>{message}</p>
         </div>
         {onRetry && (
-          <button
+          <Button
+            variant="destructive-ghost"
             onClick={onRetry}
-            className={`${TYPOGRAPHY.buttonSmall} text-error-600 dark:text-error-400 hover:text-error-700 dark:hover:text-error-300 underline`}
+            className={`${TYPOGRAPHY.buttonSmall} underline`}
           >
             {effectiveRetryLabel}
-          </button>
+          </Button>
         )}
       </div>
     )

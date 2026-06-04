@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { X, Brain, Maximize2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { HirnChat } from './HirnChat'
@@ -88,12 +89,14 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
             </Link>
 
             {/* Close button */}
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={onClose}
-              className="p-2 text-white/80 hover:text-white hover:bg-surface-base/10 rounded-lg transition-colors"
+              className="text-white/80 hover:text-white hover:bg-surface-base/10 rounded-lg"
             >
               <X className="w-5 h-5" />
-            </button>
+            </Button>
           </div>
         </div>
 

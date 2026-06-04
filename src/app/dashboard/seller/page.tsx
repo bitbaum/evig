@@ -79,14 +79,16 @@ export default function SellerDashboard() {
               {t('pageSubtitle')}
             </p>
           </div>
-          <button
+          <Button
             onClick={fetchDashboardData}
-            className="p-2 rounded-lg bg-surface-base/10 hover:bg-surface-base/20 transition-colors"
+            variant="ghost"
+            size="icon"
+            className="bg-surface-base/10 hover:bg-surface-base/20 text-white"
             title={t('refresh')}
             aria-label={t('refresh')}
           >
             <RefreshCw className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
       </div>
 

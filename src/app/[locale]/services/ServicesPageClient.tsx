@@ -154,13 +154,14 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                   {t('booking')}
                 </div>
               ) : !session?.user ? (
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
                   className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted hover:bg-action-muted px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
-                </button>
+                </Button>
               ) : service.slug ? (
                 <Button
                   onClick={handleBooking}

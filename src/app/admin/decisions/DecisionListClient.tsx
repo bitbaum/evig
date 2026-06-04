@@ -15,6 +15,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Pagination } from '@/components/ui/Pagination';
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
 import { AdminButton } from '@/components/admin/AdminButton';
+import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { adminSurface, adminTable, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
@@ -146,13 +147,15 @@ export default function DecisionListClient({
                     <td className={cn(adminTable.td, 'hidden lg:table-cell')}>{d.creator.email}</td>
                     <td className={adminTable.td}>
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
-                        <button
+                        <Button
+                          variant="destructive-ghost"
+                          size="icon"
                           onClick={() => setDeleteTarget(d)}
                           className="text-text-muted hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded-sm"
                           title="Löschen"
                         >
                           <Trash2 className="w-4 h-4" />
-                        </button>
+                        </Button>
                       )}
                     </td>
                   </tr>

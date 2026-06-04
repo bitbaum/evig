@@ -183,10 +183,12 @@ export default function FavoritesPage() {
                   </div>
                 </Link>
                 <div className="px-3 pb-3">
-                  <button
+                  <Button
                     onClick={() => removeFavorite(listing.id)}
                     disabled={removingId === listing.id}
-                    className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
+                    variant="destructive-ghost"
+                    size="sm"
+                    className="w-full gap-1"
                   >
                     {removingId === listing.id ? (
                       <Loader2 className="w-3 h-3 animate-spin" />
@@ -194,7 +196,7 @@ export default function FavoritesPage() {
                       <Heart className="w-3 h-3 fill-error-500" />
                     )}
                     {t('removeButton')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             )

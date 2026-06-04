@@ -210,13 +210,15 @@ function SubmissionCard({
       {/* Rejected feedback */}
       {submission.status === APPROVAL_STATUS.REJECTED && submission.adminFeedback && (
         <div className="mt-2">
-          <button
+          <Button
             onClick={onToggleFeedback}
-            className="text-sm text-error-700 dark:text-error-400 hover:underline inline-flex items-center"
+            variant="destructive-ghost"
+            size="sm"
+            className="text-sm text-error-700 dark:text-error-400 hover:underline"
           >
             <AlertCircle className="w-4 h-4 mr-1" />
             {feedbackShown ? t('hideRejection') : t('showRejection')}
-          </button>
+          </Button>
           {feedbackShown && (
             <div className="mt-2 rounded-lg border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-800 dark:text-error-300 whitespace-pre-wrap">
               {submission.adminFeedback}
@@ -277,13 +279,14 @@ function SubmissionCard({
                 >
                   {saving ? t('submitting') : t('resubmit')}
                 </Button>
-                <button
+                <Button
                   onClick={onCancelEditing}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg border border-default text-text-secondary hover:bg-surface-raised text-sm"
+                  variant="outline"
+                  size="sm"
                 >
                   {t('cancel')}
-                </button>
+                </Button>
               </div>
             </div>
           )}

@@ -112,7 +112,8 @@ export default function MyRequestsPage() {
         {/* Status Filter */}
         <div className="card-shell p-4 mb-6">
           <div className="flex flex-wrap gap-2">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
@@ -121,10 +122,11 @@ export default function MyRequestsPage() {
               }`}
             >
               {t('filterAll', { total })}
-            </button>
+            </Button>
             {REQUEST_STATUSES.map((s) => (
-              <button
+              <Button
                 key={s.id}
+                variant="ghost"
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
@@ -133,7 +135,7 @@ export default function MyRequestsPage() {
                 }`}
               >
                 {s.name}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

@@ -218,7 +218,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
           <div className="bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             {error}
-            <button onClick={() => setError(null)} className="ml-auto text-error-500">×</button>
+            <Button onClick={() => setError(null)} variant="destructive-ghost" size="icon" className="ml-auto">×</Button>
           </div>
         )}
 
@@ -310,9 +310,9 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
               </label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(s => (
-                  <button key={s} onClick={() => setRating(s)} className="p-1">
+                  <Button key={s} onClick={() => setRating(s)} variant="ghost" size="icon">
                     <Star className={`w-8 h-8 ${s <= rating ? 'fill-warning-400 text-warning-400' : 'text-text-muted dark:text-text-secondary'}`} />
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>

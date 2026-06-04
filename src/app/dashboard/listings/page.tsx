@@ -83,17 +83,19 @@ export default function MyListingsPage() {
 
       <div className="flex gap-1 bg-surface-raised rounded-lg p-1">
         {STATUS_TABS.map(tab => (
-          <button
+          <Button
             key={tab.value}
             onClick={() => handleStatusFilterChange(tab.value)}
-            className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            variant="ghost"
+            size="sm"
+            className={`flex-1 ${
               statusFilter === tab.value
                 ? 'bg-surface-base text-text-primary shadow-xs'
                 : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -184,10 +186,12 @@ export default function MyListingsPage() {
                   >
                     <Pencil className="w-4 h-4" />
                   </Link>
-                  <button
+                  <Button
                     onClick={() => handleDuplicate(listing.id)}
                     disabled={duplicatingId === listing.id}
-                    className="p-2 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-surface-raised transition-colors disabled:opacity-50"
+                    variant="ghost"
+                    size="icon"
+                    className="text-text-tertiary hover:text-text-secondary"
                     title={t('actionDuplicate')}
                   >
                     {duplicatingId === listing.id ? (
@@ -195,11 +199,13 @@ export default function MyListingsPage() {
                     ) : (
                       <Copy className="w-4 h-4" />
                     )}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setPendingDeleteId(listing.id)}
                     disabled={deletingId === listing.id}
-                    className="p-2 rounded-lg text-text-tertiary hover:text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
+                    variant="destructive-ghost"
+                    size="icon"
+                    className="text-text-tertiary"
                     title={t('actionDelete')}
                   >
                     {deletingId === listing.id ? (
@@ -207,7 +213,7 @@ export default function MyListingsPage() {
                     ) : (
                       <Trash2 className="w-4 h-4" />
                     )}
-                  </button>
+                  </Button>
                 </div>
               </div>
             )
@@ -221,14 +227,15 @@ export default function MyListingsPage() {
             {t('totalCount', { count: total })}
           </p>
           <div className="flex items-center gap-2">
-            <button
+            <Button
               onClick={goPrev}
               disabled={!hasPrev}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-default text-text-secondary hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              variant="outline"
+              size="sm"
             >
               <ChevronLeft className="w-4 h-4" />
               {t('prevPage')}
-            </button>
+            </Button>
             <span className="text-sm text-text-secondary">
               {/* Keyset doesn't know the total page count up front (total
                   divided by page size is close but doesn't always
@@ -237,14 +244,15 @@ export default function MyListingsPage() {
                   enabled-state of the Next button. */}
               {t('paginationCurrentPage', { page })}
             </span>
-            <button
+            <Button
               onClick={goNext}
               disabled={!hasNext}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-default text-text-secondary hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              variant="outline"
+              size="sm"
             >
               {t('nextPage')}
               <ChevronRight className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
       )}

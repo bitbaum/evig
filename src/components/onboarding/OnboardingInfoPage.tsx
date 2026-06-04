@@ -11,6 +11,7 @@ import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
 import type { OnboardingConfig } from '@/config/onboarding'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 
 interface OnboardingInfoPageProps {
@@ -150,9 +151,10 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
           <div className="space-y-4">
             {config.faq.items.map((item, index) => (
               <div key={index} className="border-b border-subtle last:border-0 pb-4 last:pb-0">
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => toggleFaq(index)}
-                  className="flex items-center justify-between w-full text-left"
+                  className="flex items-center justify-between w-full text-left h-auto px-0"
                 >
                   <span className="font-medium text-text-primary">{item.question}</span>
                   {expandedFaq === index ? (
@@ -160,7 +162,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
                   ) : (
                     <ChevronDown className="w-5 h-5 text-text-tertiary" />
                   )}
-                </button>
+                </Button>
                 {expandedFaq === index && (
                   <p className="mt-2 text-text-secondary text-sm">{item.answer}</p>
                 )}

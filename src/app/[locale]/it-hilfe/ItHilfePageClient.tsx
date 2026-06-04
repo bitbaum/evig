@@ -141,7 +141,8 @@ export default function ITHilfePage() {
         {/* Filter Bar */}
         <div className="mb-6 card-shell rounded-2xl p-4">
           <div className="flex flex-wrap items-center gap-3">
-            <button
+            <Button
+              variant="outline"
               onClick={() => setShowFilters(!showFilters)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
               aria-expanded={showFilters}
@@ -152,7 +153,7 @@ export default function ITHilfePage() {
               {hasActiveFilters && (
                 <span className="w-2 h-2 rounded-full bg-action" aria-label={t('activeFiltersIndicator')} />
               )}
-            </button>
+            </Button>
 
             <Select
               value={sort}
@@ -168,13 +169,14 @@ export default function ITHilfePage() {
             </Select>
 
             {hasActiveFilters && (
-              <button
+              <Button
+                variant="ghost"
                 onClick={clearFilters}
                 className="inline-flex items-center gap-1 px-3 py-2 text-sm text-action hover:text-action font-medium"
               >
                 <X className="w-4 h-4" />
                 {t('resetFilters')}
-              </button>
+              </Button>
             )}
           </div>
 
@@ -294,25 +296,29 @@ export default function ITHilfePage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <nav className="flex items-center justify-center gap-2 pt-8" aria-label={t('pagination')}>
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
               className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
-            </button>
+            </Button>
             <span className="text-sm text-text-secondary px-4" aria-current="page">
               {t('pageOf', { current: currentPage, total: totalPages })}
             </span>
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
               className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
               aria-label={t('nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
-            </button>
+            </Button>
           </nav>
         )}
 
