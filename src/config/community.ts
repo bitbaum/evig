@@ -10,6 +10,7 @@ import {
   Leaf, Heart, Globe, Wrench, BookOpen, Briefcase,
   Lightbulb, Cpu, Share2, Target, Vote, Calendar, LucideIcon
 } from 'lucide-react'
+import { MEMBERSHIP } from '@/config/org'
 
 // Types
 export interface InvolvementOption {
@@ -145,7 +146,7 @@ export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
     features: [
       'Stimmrecht bei Vereinsentscheiden',
       'Teil der offiziellen Mitgliederliste',
-      'Jahresbeitrag CHF 50 (ermässigt CHF 20)',
+      `Jahresbeitrag ${MEMBERSHIP.currency} ${MEMBERSHIP.fees.regular} (ermässigt ${MEMBERSHIP.currency} ${MEMBERSHIP.fees.reduced})`,
       'Finanzielle Unterstützung der Mission'
     ],
     cta: 'Mitglied werden',

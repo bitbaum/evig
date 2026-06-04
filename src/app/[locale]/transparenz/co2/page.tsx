@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Leaf, ExternalLink, Calculator, FileText } from 'lucide-react'
-import { ORG } from '@/config/org'
+import { ORG, CONTACT } from '@/config/org'
 import { ORG_NUMBERS_DEFAULTS } from '@/lib/org-numbers.defaults'
 import { CATEGORY_WEIGHT_KG, CATEGORY_CO2_KG_OVERRIDE, estimateCO2Savings, estimateCO2Source } from '@/config/co2-impact'
 import { cn } from '@/lib/utils'
@@ -263,8 +263,8 @@ export default function Co2MethodologyPage() {
           </Link>
           <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-4">
             Fehler entdeckt oder bessere Quelle bekannt? Eine kurze Mail an{' '}
-            <a href="mailto:empfang@revamp-it.ch" className="text-primary-600 dark:text-primary-400 hover:underline">
-              empfang@revamp-it.ch
+            <a href={`mailto:${CONTACT.email}`} className="text-primary-600 dark:text-primary-400 hover:underline">
+              {CONTACT.email}
             </a>{' '}
             reicht.
           </p>
