@@ -54,7 +54,7 @@
     },
     {
       "path": "/api/cron/wake-recurring-tasks",
-      "schedule": "0 * * * *"
+      "schedule": "0 7 * * *"
     }
   ]
 }
