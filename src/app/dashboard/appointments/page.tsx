@@ -80,11 +80,11 @@ export default function AppointmentsDashboard() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg p-4 sm:p-8">
             <div className="animate-pulse">
-              <div className="h-6 sm:h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-4 sm:mb-6"></div>
+              <div className="h-6 sm:h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3 mb-4 sm:mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/2"></div>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function AppointmentsDashboard() {
         {paymentSuccess && (
           <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-action flex-shrink-0" />
+              <CheckCircle className="w-5 h-5 text-action shrink-0" />
               <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
             </div>
             <button
@@ -132,10 +132,10 @@ export default function AppointmentsDashboard() {
         {appointments.length > 0 ? (
           <div className="space-y-4 sm:space-y-6">
             {appointments.map((appointment: ServiceAppointment) => (
-              <div key={appointment.id} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-transparent dark:border-white/[0.06]">
+              <div key={appointment.id} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-transparent dark:border-white/6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 sm:gap-4 flex-1">
-                    <div className="p-2 sm:p-3 bg-surface-raised dark:bg-neutral-800 rounded-lg flex-shrink-0">
+                    <div className="p-2 sm:p-3 bg-surface-raised dark:bg-neutral-800 rounded-lg shrink-0">
                       <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-text-secondary" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -166,7 +166,7 @@ export default function AppointmentsDashboard() {
                 {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
                   <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-warning-800 dark:text-warning-300">
-                      <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                      <AlertCircle className="w-5 h-5 mr-2 shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('requestedTitle')}</span>
                     </div>
                     <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">{t('requestedDesc')}</p>
@@ -176,7 +176,7 @@ export default function AppointmentsDashboard() {
                 {appointment.status === APPOINTMENT_STATUS.CONFIRMED && (
                   <div className="bg-success-50 dark:bg-success-500/10 border-2 border-success-200 dark:border-success-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-success-800 dark:text-success-300">
-                      <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                      <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('confirmedTitle')}</span>
                     </div>
                     <p className="text-success-700 dark:text-success-400 text-xs sm:text-sm mt-1 ml-7">{t('confirmedDesc')}</p>
@@ -186,7 +186,7 @@ export default function AppointmentsDashboard() {
                 {appointment.status === APPOINTMENT_STATUS.COMPLETED && (
                   <div className="bg-primary-50 dark:bg-primary-500/10 border-2 border-primary-200 dark:border-primary-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-primary-800 dark:text-primary-300">
-                      <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                      <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('completedTitle')}</span>
                     </div>
                     {appointment.outcome_notes && (
@@ -198,7 +198,7 @@ export default function AppointmentsDashboard() {
                 {appointment.status === APPOINTMENT_STATUS.CANCELLED && (
                   <div className="bg-error-50 dark:bg-error-500/10 border-2 border-error-200 dark:border-error-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-error-800 dark:text-error-300">
-                      <XCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                      <XCircle className="w-5 h-5 mr-2 shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('cancelledTitle')}</span>
                     </div>
                   </div>

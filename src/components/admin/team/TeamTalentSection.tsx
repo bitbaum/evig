@@ -84,7 +84,7 @@ export function TeamTalentSection({
                   key={skill}
                   type="button"
                   onClick={() => onAddSkill(skill)}
-                  className="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-white/[0.06] text-sm"
+                  className="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-white/6 text-sm"
                 >
                   {skill}
                 </button>

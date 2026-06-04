@@ -160,7 +160,7 @@ export default function Co2MethodologyPage() {
           </p>
           <div className={cn(designPrimitive.surface.card, 'overflow-hidden')}>
             <table className="w-full text-sm">
-              <thead className="bg-surface-raised dark:bg-white/[0.03] text-xs uppercase tracking-wider text-text-tertiary">
+              <thead className="bg-surface-raised dark:bg-white/3 text-xs uppercase tracking-wider text-text-tertiary">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">Kategorie</th>
                   <th className="px-4 py-3 text-right font-medium">Gewicht</th>
@@ -210,7 +210,7 @@ export default function Co2MethodologyPage() {
           </h2>
           <ul className="space-y-3 text-sm text-text-secondary">
             <li className="flex gap-3">
-              <span className="text-action flex-shrink-0">•</span>
+              <span className="text-action shrink-0">•</span>
               <span>
                 Die Zahlen umfassen die <strong>Herstellungs-Phase</strong> des Neugeräts
                 abzüglich Aufbereitungs-Aufwand. Energie­verbrauch während der Nutzung, Versand
@@ -218,7 +218,7 @@ export default function Co2MethodologyPage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-action flex-shrink-0">•</span>
+              <span className="text-action shrink-0">•</span>
               <span>
                 Die tatsächliche Einsparung hängt vom <strong>kontrafaktischen Szenario</strong>
                 ab: Hätte die Person sonst wirklich ein Neugerät gekauft? Wir gehen davon aus,
@@ -226,14 +226,14 @@ export default function Co2MethodologyPage() {
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-action flex-shrink-0">•</span>
+              <span className="text-action shrink-0">•</span>
               <span>
                 Strommix­annahme: <strong>Schweizer Stromnetz</strong> (~12 g CO₂e/kWh). In
                 Ländern mit kohlelastigem Mix wären die Aufbereitungs-Emissionen höher.
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-action flex-shrink-0">•</span>
+              <span className="text-action shrink-0">•</span>
               <span>
                 Wir runden Anzeige-Werte auf 5 kg (unter 100 kg) bzw. 10 kg (darüber) — spurious
                 Präzision wie „287,4 kg" suggeriert Genauigkeit, die wir nicht haben.

@@ -186,7 +186,7 @@ export default function FactSheetPage() {
             {/* Product Hero Section */}
             <div className="flex gap-6 mb-6">
               {/* Product Image */}
-              <div className="w-48 h-48 bg-surface-raised rounded-xl flex items-center justify-center flex-shrink-0 border-2 border overflow-hidden">
+              <div className="w-48 h-48 bg-surface-raised rounded-xl flex items-center justify-center shrink-0 border-2 border overflow-hidden">
                 {product.image_url ? (
                   <img
                     src={product.image_url}
@@ -221,7 +221,7 @@ export default function FactSheetPage() {
               </div>
 
               {/* Price Box */}
-              <div className="w-44 flex-shrink-0">
+              <div className="w-44 shrink-0">
                 <div className="bg-primary-50 border-2 border-primary-500 rounded-xl p-4 text-center">
                   <div className="text-primary-700 text-sm font-medium mb-1">Ihr Preis</div>
                   <div className="text-4xl font-bold text-action mb-1">
@@ -288,7 +288,7 @@ export default function FactSheetPage() {
                 </Heading>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center shrink-0">
                       <Shield className="w-5 h-5 text-action" />
                     </div>
                     <div>
@@ -297,7 +297,7 @@ export default function FactSheetPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center shrink-0">
                       <Leaf className="w-5 h-5 text-action" />
                     </div>
                     <div>
@@ -309,7 +309,7 @@ export default function FactSheetPage() {
               </div>
 
               {/* QR Code */}
-              <div className="w-48 flex-shrink-0 text-center">
+              <div className="w-48 shrink-0 text-center">
                 <div className="bg-surface-base border-2 border rounded-xl p-3 inline-block">
                   <img
                     src={qrCodeUrl}

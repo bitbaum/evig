@@ -68,7 +68,7 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
   }
 
   return (
-    <div className="rounded-lg border border-info-200 bg-info-50 dark:border-info-500/20 dark:bg-info-500/[0.06]">
+    <div className="rounded-lg border border-info-200 bg-info-50 dark:border-info-500/20 dark:bg-info-500/6">
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
@@ -76,12 +76,12 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
         aria-expanded={expanded}
       >
         <span className="flex items-center gap-2 text-sm font-semibold text-info-900 dark:text-info-200">
-          <Sparkles className="w-4 h-4 text-info-600 dark:text-info-400 flex-shrink-0" />
+          <Sparkles className="w-4 h-4 text-info-600 dark:text-info-400 shrink-0" />
           KI-Assistent — Frag die KI zu diesem Protokoll
         </span>
         {expanded
-          ? <ChevronUp className="w-4 h-4 text-info-500 flex-shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-info-500 flex-shrink-0" />
+          ? <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
+          : <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
         }
       </button>
 
@@ -94,7 +94,7 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
                 type="button"
                 onClick={() => ask(q.question)}
                 disabled={loading}
-                className="px-2.5 py-1.5 rounded-full bg-info-100 dark:bg-info-500/[0.12] text-info-700 dark:text-info-300 text-xs font-medium hover:bg-info-200 dark:hover:bg-info-500/[0.18] disabled:opacity-50 transition-colors touch-manipulation"
+                className="px-2.5 py-1.5 rounded-full bg-info-100 dark:bg-info-500/12 text-info-700 dark:text-info-300 text-xs font-medium hover:bg-info-200 dark:hover:bg-info-500/18 disabled:opacity-50 transition-colors touch-manipulation"
               >
                 {q.label}
               </button>
@@ -127,7 +127,7 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
 
           {error && (
             <div className="flex items-start gap-2 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-400 px-3 py-2 rounded-lg text-sm">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}

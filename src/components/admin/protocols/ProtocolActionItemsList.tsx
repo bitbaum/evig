@@ -95,7 +95,7 @@ export function ProtocolActionItemsList({
     <div id="protocol-step-tasks" className="bg-surface-base rounded-lg border border overflow-hidden">
 
       {/* Header */}
-      <div className="px-4 py-3 border-b border-subtle dark:border-white/[0.06] flex items-center justify-between gap-3">
+      <div className="px-4 py-3 border-b border-subtle dark:border-white/6 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <ListChecks className="w-4 h-4 text-text-muted" />
           <Heading level={2} className="text-text-primary">
@@ -291,7 +291,7 @@ function ActionRow({
         </div>
       </div>
 
-      <div className="flex-shrink-0 pt-0.5">
+      <div className="shrink-0 pt-0.5">
         {isLinked && link ? (
           <Link
             href={`/admin/tasks/${link.linked_task_id}`}

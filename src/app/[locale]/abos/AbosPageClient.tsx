@@ -87,9 +87,9 @@ export default function AbosPageClient() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="bg-surface-base rounded-2xl border border-subtle p-6 h-48 animate-pulse">
-                <div className="h-4 bg-surface-raised rounded w-2/3 mb-3" />
-                <div className="h-3 bg-surface-raised rounded w-full mb-2" />
-                <div className="h-3 bg-surface-raised rounded w-4/5" />
+                <div className="h-4 bg-surface-raised rounded-sm w-2/3 mb-3" />
+                <div className="h-3 bg-surface-raised rounded-sm w-full mb-2" />
+                <div className="h-3 bg-surface-raised rounded-sm w-4/5" />
               </div>
             ))}
           </div>

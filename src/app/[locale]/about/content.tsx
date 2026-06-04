@@ -53,7 +53,7 @@ export default async function AboutContent() {
                 />
               </div>
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-primary-600 text-white p-4 rounded-xl shadow-sm hidden md:block">
+              <div className="absolute -bottom-6 -right-6 bg-primary-600 text-white p-4 rounded-xl shadow-xs hidden md:block">
                 <p className="text-3xl font-bold">{yearsActive}+</p>
                 <p className="text-sm">{t('mission.yearsExperience')}</p>
               </div>
@@ -96,7 +96,7 @@ export default async function AboutContent() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1 - Hardware Recycling */}
-            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300">
+            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300">
               <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
                 <Recycle className="h-7 w-7 text-action group-hover:text-white transition-colors" />
               </div>
@@ -107,7 +107,7 @@ export default async function AboutContent() {
             </div>
 
             {/* Card 2 - Open Source */}
-            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300">
+            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300">
               <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
                 <Code className="h-7 w-7 text-action group-hover:text-white transition-colors" />
               </div>
@@ -118,7 +118,7 @@ export default async function AboutContent() {
             </div>
 
             {/* Card 3 - Community */}
-            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300">
+            <div className="group bg-surface-base rounded-2xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300">
               <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
                 <Users className="h-7 w-7 text-action group-hover:text-white transition-colors" />
               </div>

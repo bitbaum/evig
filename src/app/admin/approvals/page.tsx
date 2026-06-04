@@ -224,7 +224,7 @@ export default async function ApprovalsPage() {
         <div className="p-4 border-b border">
           <Heading level={2} className="font-semibold text-text-primary">Übersicht</Heading>
         </div>
-        <div className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
+        <div className="divide-y divide-neutral-200 dark:divide-white/4">
           {approvalSources.map(source => (
             <Link
               key={source.href}
@@ -267,7 +267,7 @@ export default async function ApprovalsPage() {
         </div>
 
         {pendingItems.length > 0 ? (
-          <div className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
+          <div className="divide-y divide-neutral-200 dark:divide-white/4">
             {pendingItems.map(item => (
               <div key={item.id} className="p-4 flex items-center justify-between">
                 <div>

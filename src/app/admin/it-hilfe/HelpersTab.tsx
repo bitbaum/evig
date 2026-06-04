@@ -65,7 +65,7 @@ export function HelpersTab({
               <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {helpers?.items.map(h => (
               <tr key={h.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
@@ -73,8 +73,8 @@ export function HelpersTab({
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Gratis</span>}
-                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-surface-raised text-text-secondary">KulturLegi</span>}
+                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Gratis</span>}
+                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">KulturLegi</span>}
                   </div>
                 </td>
                 <td className="px-4 py-3">
@@ -106,7 +106,7 @@ export function HelpersTab({
                     {!h.is_verified && !h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'verify')}
-                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
+                        className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
                         title="Verifizieren"
                       >
                         <ShieldCheck className="w-4 h-4 text-primary-500" />
@@ -115,7 +115,7 @@ export function HelpersTab({
                     {!h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'suspend')}
-                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
+                        className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
                         title="Sperren"
                       >
                         <Ban className="w-4 h-4 text-error-500" />
@@ -124,7 +124,7 @@ export function HelpersTab({
                     {h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'reactivate')}
-                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
+                        className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-white/6"
                         title="Reaktivieren"
                       >
                         <UserCheck className="w-4 h-4 text-primary-500" />

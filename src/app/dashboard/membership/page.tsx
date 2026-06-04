@@ -79,7 +79,7 @@ export default async function MembershipPage() {
           {/* Status card */}
           <div className="bg-surface-base dark:bg-neutral-800 rounded-xl border dark:border-neutral-700 p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center shrink-0">
                 <BadgeCheck className="w-6 h-6 text-action" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
@@ -156,15 +156,15 @@ export default async function MembershipPage() {
             </Heading>
             <ul className="space-y-2 text-sm text-text-secondary">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit1')}
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit2')}
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit3')}
               </li>
             </ul>

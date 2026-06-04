@@ -86,7 +86,7 @@ export function OrderStatusTimeline({
         const date = stepDate(step.key)
         return (
           <div key={step.key} className="flex-1 flex items-center">
-            <div className="flex flex-col items-center flex-shrink-0 min-w-[60px]">
+            <div className="flex flex-col items-center shrink-0 min-w-[60px]">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                 reached
                   ? 'bg-primary-500 text-white'

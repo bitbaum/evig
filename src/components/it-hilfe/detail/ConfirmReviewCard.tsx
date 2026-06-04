@@ -53,7 +53,7 @@ export function ConfirmReviewCard({
   return (
     <div className="bg-primary-50 dark:bg-primary-900/20 rounded-xl border-2 border-primary-300 dark:border-primary-800/30 p-6">
       <div className="flex items-start gap-3 mb-4">
-        <CheckCircle className="w-6 h-6 text-action flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <CheckCircle className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
         <div>
           <Heading level={3} className="text-lg font-semibold text-text-primary">
             {t('confirmHeading')}
@@ -84,7 +84,7 @@ export function ConfirmReviewCard({
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHover(star)}
                 onMouseLeave={() => setHover(0)}
-                className="p-2 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
+                className="p-2 focus:outline-hidden focus:ring-2 focus:ring-primary-500 rounded-sm"
                 aria-label={t('starAriaLabel', { count: star })}
               >
                 <Star
@@ -124,7 +124,7 @@ export function ConfirmReviewCard({
             <button
               type="button"
               onClick={() => setRecommended(true)}
-              className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+              className={`flex-1 py-3 px-4 min-h-touch rounded-lg font-medium border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                 recommended === true
                   ? 'bg-primary-600 text-white border-primary-600'
                   : 'bg-surface-base text-text-secondary border-neutral-300 hover:border-primary-400'
@@ -135,7 +135,7 @@ export function ConfirmReviewCard({
             <button
               type="button"
               onClick={() => setRecommended(false)}
-              className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2 ${
+              className={`flex-1 py-3 px-4 min-h-touch rounded-lg font-medium border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-error-500 focus:ring-offset-2 ${
                 recommended === false
                   ? 'bg-error-600 text-white border-error-600'
                   : 'bg-surface-base text-text-secondary border-neutral-300 hover:border-error-400'

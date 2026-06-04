@@ -39,7 +39,7 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
           disabled={isPending}
           className={`px-3 py-1 rounded-md text-xs font-medium transition-colors min-h-[28px] ${
             active === id
-              ? 'bg-surface-base dark:bg-neutral-600 text-text-primary shadow-sm'
+              ? 'bg-surface-base dark:bg-neutral-600 text-text-primary shadow-xs'
               : 'text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-300'
           }`}
           aria-pressed={active === id}

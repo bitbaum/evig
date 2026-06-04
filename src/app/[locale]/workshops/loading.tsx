@@ -4,13 +4,13 @@ export default function WorkshopsLoading() {
   return (
     <>
       {/* Hero skeleton */}
-      <div className="bg-warning-50 dark:bg-neutral-900 border-b border-warning-100 dark:border-white/[0.06] py-12 sm:py-16 lg:py-20">
+      <div className="bg-warning-50 dark:bg-neutral-900 border-b border-warning-100 dark:border-white/6 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center mb-6">
             <div className="h-16 w-16 rounded-2xl bg-warning-200 animate-pulse" />
           </div>
-          <div className="h-10 bg-warning-200 rounded w-64 mx-auto mb-6 animate-pulse" />
-          <div className="h-5 bg-neutral-200 dark:bg-neutral-700 rounded w-96 mx-auto animate-pulse" />
+          <div className="h-10 bg-warning-200 rounded-sm w-64 mx-auto mb-6 animate-pulse" />
+          <div className="h-5 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-96 mx-auto animate-pulse" />
         </div>
       </div>
 
@@ -32,14 +32,14 @@ export default function WorkshopsLoading() {
                   <div className="h-12 w-12 bg-neutral-200 rounded-lg animate-pulse" />
                   <div className="h-6 w-20 bg-neutral-200 rounded-full animate-pulse" />
                 </div>
-                <div className="h-6 bg-neutral-200 rounded w-3/4 mb-4 animate-pulse" />
-                <div className="h-4 bg-neutral-200 rounded w-full mb-2 animate-pulse" />
-                <div className="h-4 bg-neutral-200 rounded w-2/3 animate-pulse" />
+                <div className="h-6 bg-neutral-200 rounded-sm w-3/4 mb-4 animate-pulse" />
+                <div className="h-4 bg-neutral-200 rounded-sm w-full mb-2 animate-pulse" />
+                <div className="h-4 bg-neutral-200 rounded-sm w-2/3 animate-pulse" />
               </div>
               <div className="p-6">
-                <div className="h-4 bg-neutral-200 rounded w-1/2 mb-2 animate-pulse" />
-                <div className="h-4 bg-neutral-200 rounded w-1/3 mb-4 animate-pulse" />
-                <div className="h-8 bg-neutral-200 rounded w-1/4 mb-4 animate-pulse" />
+                <div className="h-4 bg-neutral-200 rounded-sm w-1/2 mb-2 animate-pulse" />
+                <div className="h-4 bg-neutral-200 rounded-sm w-1/3 mb-4 animate-pulse" />
+                <div className="h-8 bg-neutral-200 rounded-sm w-1/4 mb-4 animate-pulse" />
                 <div className="flex gap-2">
                   <div className="flex-1 h-10 bg-neutral-200 rounded-lg animate-pulse" />
                   <div className="flex-1 h-10 bg-neutral-200 rounded-lg animate-pulse" />

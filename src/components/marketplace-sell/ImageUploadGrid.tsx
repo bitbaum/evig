@@ -32,7 +32,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
               <X className="w-4 h-4" />
             </button>
             {idx === 0 && (
-              <span className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/50 text-white text-xs rounded">
+              <span className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/50 text-white text-xs rounded-sm">
                 {t('mainImage')}
               </span>
             )}

@@ -33,7 +33,7 @@ export function ProjectCallToAction({ cta }: ProjectCallToActionProps) {
               <h3 className="text-base font-semibold text-white mb-2">
                 {action.title}
               </h3>
-              <p className="text-sm text-primary-100 flex-grow mb-5">
+              <p className="text-sm text-primary-100 grow mb-5">
                 {action.description}
               </p>
               {action.href.startsWith('http') ? (

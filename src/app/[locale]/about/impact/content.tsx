@@ -199,15 +199,15 @@ export default function ImpactPageContent() {
                       <Heading level={4} className="mb-3">{t('environmental.title')}</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('environmental.co2PerDevice', { value: envSummary.co2PerDevice })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('environmental.ewasteAvoided', { value: envSummary.ewastePreventedTons.toFixed(1) })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('environmental.reuseRate', { value: Math.round(envSummary.reuseRate * 100) })}</span>
                         </li>
                       </ul>
@@ -238,15 +238,15 @@ export default function ImpactPageContent() {
                       <Heading level={4} className="mb-3">{t('social.title')}</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('social.internshipSuccess', { value: Math.round(socialSummary.internshipSuccessRate * 100) })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('social.careerReentries', { value: socialSummary.careerReentries })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('social.peopleHelped', { value: getDefaultValue('people_helped_total') })}</span>
                         </li>
                       </ul>
@@ -267,15 +267,15 @@ export default function ImpactPageContent() {
                       <Heading level={4} className="mb-3">{t('economic.title')}</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('economic.customerSavings', { value: getDefaultNumeric('customer_savings_chf') })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('economic.smeOpenSource')}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                           <span>{t('economic.jobs', { value: getDefaultValue('team_size_community') })}</span>
                         </li>
                       </ul>
@@ -343,7 +343,7 @@ export default function ImpactPageContent() {
                   <ul className="space-y-2 mb-4">
                     {method.benefits.map((benefit, index) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
-                        <CheckCircle className="h-4 w-4 text-action mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-action mt-0.5 shrink-0" />
                         <span>{benefit}</span>
                       </li>
                     ))}

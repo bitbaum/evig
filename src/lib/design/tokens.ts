@@ -15,7 +15,7 @@ const PRIMARY_BTN =
   'bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400'
 
 const SECONDARY_BTN =
-  'border-neutral-300 dark:border-white/[0.1] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.06]'
+  'border-neutral-300 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/6'
 
 const FOCUS_GREEN = 'focus-visible:outline-primary-600'
 
@@ -121,7 +121,7 @@ export const DESIGN_TOKENS = {
       home:        GREEN_HOVER,
     },
     border: {
-      default:  'border-neutral-200 dark:border-white/[0.06]',
+      default:  'border-neutral-200 dark:border-white/6',
       featured: 'border-primary-300 dark:border-primary-500/30 ring-1 ring-primary-200 dark:ring-primary-500/20',
     },
   },

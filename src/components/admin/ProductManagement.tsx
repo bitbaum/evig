@@ -30,7 +30,7 @@ export default function ProductManagement() {
   // Loading state
   if (actions.isLoading) {
     return (
-      <div className="bg-surface-base rounded-xl shadow-sm border border p-8">
+      <div className="bg-surface-base rounded-xl shadow-xs border border p-8">
         <div className="flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-action animate-spin" />
           <span className="ml-3 text-text-secondary">Produkte werden geladen...</span>
@@ -42,7 +42,7 @@ export default function ProductManagement() {
   // Error state
   if (actions.error) {
     return (
-      <div className="bg-surface-base rounded-xl shadow-sm border border p-8">
+      <div className="bg-surface-base rounded-xl shadow-xs border border p-8">
         <div className="text-center">
           <AlertTriangle className="w-12 h-12 text-error-500 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-text-primary mb-2">

@@ -69,7 +69,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
   return (
     <div className="bg-canvas">
       {/* Compact header */}
-      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/[0.06] py-8 sm:py-12">
+      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/6 py-8 sm:py-12">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <Award className="w-10 h-10 text-action mx-auto mb-4" />
           <Heading level={1} className="text-2xl sm:text-3xl text-text-primary mb-3">

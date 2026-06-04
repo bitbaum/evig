@@ -91,7 +91,7 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
               designPrimitive.buttonBase,
               designPrimitive.buttonSize.default,
               designPrimitive.button.primary,
-              'min-h-[44px]',
+              'min-h-touch',
             )}
           >
             {labels.cancel}
@@ -99,8 +99,8 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="rounded-lg border bg-surface-raised dark:bg-white/[0.03] p-3 text-sm">
-            <p className="font-medium text-text-primary break-words">{need.title}</p>
+          <div className="rounded-lg border bg-surface-raised dark:bg-white/3 p-3 text-sm">
+            <p className="font-medium text-text-primary wrap-break-word">{need.title}</p>
             <p className="text-xs text-text-tertiary mt-0.5">{typeLabel}</p>
           </div>
 
@@ -149,7 +149,7 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
                 designPrimitive.buttonBase,
                 designPrimitive.buttonSize.default,
                 designPrimitive.button.ghost,
-                'min-h-[44px]',
+                'min-h-touch',
               )}
             >
               {labels.cancel}
@@ -161,7 +161,7 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
                 designPrimitive.buttonBase,
                 designPrimitive.buttonSize.default,
                 designPrimitive.button.primary,
-                'min-h-[44px]',
+                'min-h-touch',
               )}
             >
               {submitting ? labels.submitting : labels.submit}

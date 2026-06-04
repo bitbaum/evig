@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 }
 
 const STATUS_COLORS: Record<ProjectStatus, string> = {
-  planning:  'bg-surface-raised text-text-secondary dark:bg-white/[0.06]',
+  planning:  'bg-surface-raised text-text-secondary dark:bg-white/6',
   active:    'bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
@@ -158,13 +158,13 @@ export default async function TaskProjectsPage() {
                 href={ROUTES.admin.taskProject(project.id)}
                 className={cn(
                   designPrimitive.surface.card,
-                  'group flex flex-col p-5 transition-colors hover:border-neutral-300 dark:hover:border-white/[0.12]'
+                  'group flex flex-col p-5 transition-colors hover:border-neutral-300 dark:hover:border-white/12'
                 )}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <FolderKanban className="h-4 w-4 flex-shrink-0 text-text-muted group-hover:text-primary-500 transition-colors" />
+                    <FolderKanban className="h-4 w-4 shrink-0 text-text-muted group-hover:text-primary-500 transition-colors" />
                     <span className="text-sm font-semibold text-text-primary truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                       {project.title}
                     </span>
@@ -196,7 +196,7 @@ export default async function TaskProjectsPage() {
                         {progress}%
                       </span>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-surface-raised dark:bg-white/[0.06]">
+                    <div className="h-1.5 w-full rounded-full bg-surface-raised dark:bg-white/6">
                       <div
                         className="h-1.5 rounded-full bg-primary-500 transition-all"
                         style={{ width: `${progress}%` }}

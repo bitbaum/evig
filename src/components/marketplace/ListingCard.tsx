@@ -71,7 +71,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
       className={`group card-shell overflow-hidden hover:border-neutral-300 transition-all ${className}`}
     >
       {/* Image */}
-      <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-[4/3]'}`}>
+      <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-4/3'}`}>
         <ListingImage
           src={listing.thumbnail}
           alt={listing.title}
@@ -128,7 +128,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {specTags.length > 0 && !isCompact && (
           <div className="flex flex-wrap gap-1 mb-2">
             {specTags.map((tag, idx) => (
-              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded bg-surface-raised dark:bg-neutral-700 text-text-secondary">
+              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded-sm bg-surface-raised dark:bg-neutral-700 text-text-secondary">
                 {tag}
               </span>
             ))}
@@ -146,7 +146,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         <div className="flex items-center gap-2 text-xs text-text-tertiary">
           <span className="truncate">{sellerName}</span>
           {listing.seller_rating && Number(listing.seller_rating) > 0 && (
-            <span className="inline-flex items-center gap-0.5 flex-shrink-0">
+            <span className="inline-flex items-center gap-0.5 shrink-0">
               <Star className="w-3 h-3 text-warning-400 fill-warning-400" />
               {Number(listing.seller_rating).toFixed(1)}
             </span>
@@ -156,7 +156,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {/* Location */}
         {(listing.pickup_location || listing.seller_city) && (
           <div className="flex items-center gap-1 mt-1 text-xs text-text-tertiary">
-            <MapPin className="w-3 h-3 flex-shrink-0" />
+            <MapPin className="w-3 h-3 shrink-0" />
             <span className="truncate">{listing.pickup_location || listing.seller_city}</span>
           </div>
         )}

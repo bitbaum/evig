@@ -213,7 +213,7 @@ describe('getButtonVariant', () => {
     expect(result.text).toBe('text-white')
   })
 
-  it('returns outline button classes (transparent bg)', () => {
+  it('returns outline-solid button classes (transparent bg)', () => {
     const result = getButtonVariant('outline')
     expect(result.bg).toBe('bg-transparent')
     expect(result.text).toBe('text-neutral-700')
@@ -269,6 +269,6 @@ describe('designPrimitive', () => {
   })
 
   it('keeps default button touch target at least 44px (WCAG 2.1 SC 2.5.5)', () => {
-    expect(designPrimitive.buttonSize.default).toContain('min-h-[44px]')
+    expect(designPrimitive.buttonSize.default).toContain('min-h-touch')
   })
 })

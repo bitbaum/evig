@@ -153,7 +153,7 @@ export function TeamProfileForm({
           </button>
 
           {openSections.has(section.id) && (
-            <div className="p-6 pt-2 border-t border-subtle dark:border-white/[0.06]">
+            <div className="p-6 pt-2 border-t border-subtle dark:border-white/6">
               {section.id === 'talent' ? (
                 <TeamTalentSection
                   form={form}

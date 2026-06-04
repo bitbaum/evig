@@ -125,7 +125,7 @@ export function HirnSidebar({
                     : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-text-secondary'
                 }`}
               >
-                <MessageSquare className="w-4 h-4 flex-shrink-0" />
+                <MessageSquare className="w-4 h-4 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">
                     {session.firstMessage.slice(0, 40)}
@@ -135,7 +135,7 @@ export function HirnSidebar({
                     {formatRelativeTime(session.lastActivity.toISOString())} · {session.messageCount} Nachrichten
                   </p>
                 </div>
-                <ChevronRight className="w-4 h-4 flex-shrink-0 opacity-50" />
+                <ChevronRight className="w-4 h-4 shrink-0 opacity-50" />
               </button>
             ))}
           </div>

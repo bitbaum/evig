@@ -30,7 +30,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
     <div className="bg-surface-base rounded-xl border border p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start gap-4">
         {/* Avatar */}
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
           member.is_active
             ? 'bg-primary-500'
             : 'bg-neutral-500'
@@ -45,7 +45,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
               {displayName}
             </Heading>
             {!member.is_active && (
-              <span className="px-2 py-0.5 text-xs rounded bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
+              <span className="px-2 py-0.5 text-xs rounded-sm bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
                 Inaktiv
               </span>
             )}
@@ -65,12 +65,12 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
           {/* Badges */}
           <div className="flex flex-wrap gap-1.5 mt-3">
             {member.department && (
-              <span className={`px-2 py-0.5 text-xs rounded ${getDepartmentColor(member.department)}`}>
+              <span className={`px-2 py-0.5 text-xs rounded-sm ${getDepartmentColor(member.department)}`}>
                 {getDepartmentLabel(member.department)}
               </span>
             )}
             {member.employment_type && (
-              <span className={`px-2 py-0.5 text-xs rounded ${getEmploymentTypeColor(member.employment_type)}`}>
+              <span className={`px-2 py-0.5 text-xs rounded-sm ${getEmploymentTypeColor(member.employment_type)}`}>
                 {getEmploymentTypeLabel(member.employment_type)}
               </span>
             )}
@@ -82,7 +82,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
               {member.skills.slice(0, 3).map((skill) => (
                 <span
                   key={skill}
-                  className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary dark:text-neutral-300 text-xs rounded"
+                  className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary dark:text-neutral-300 text-xs rounded-sm"
                 >
                   {skill}
                 </span>
@@ -108,7 +108,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 mt-4 pt-4 border-t border-subtle dark:border-white/[0.06]">
+      <div className="flex gap-2 mt-4 pt-4 border-t border-subtle dark:border-white/6">
         <Link
           href={`/admin/team/${member.id}`}
           className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-text-secondary bg-surface-raised dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"

@@ -28,7 +28,7 @@ export function OptionCard({
       } ${
         selected
           ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md'
-          : 'border bg-surface-base hover:border-neutral-300 hover:shadow-sm'
+          : 'border bg-surface-base hover:border-neutral-300 hover:shadow-xs'
       }`}
     >
       {/* Image */}
@@ -42,7 +42,7 @@ export function OptionCard({
             unoptimized
           />
           {selected && (
-            <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary-500 text-white shadow">
+            <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary-500 text-white shadow-sm">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>

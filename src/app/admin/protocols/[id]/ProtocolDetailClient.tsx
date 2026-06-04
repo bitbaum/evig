@@ -127,7 +127,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       {/* Error Banner */}
       {error && (
         <div className="flex items-start gap-3 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-400">
-          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
           <div>
             <p>{error}</p>
             {initialProcessingError?.retryable && (
@@ -194,7 +194,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           {isReview && notes.detected_attendees && notes.detected_attendees.length > 0 && (
             <div className="rounded-lg border border bg-surface-base p-4">
               <div className="flex items-start gap-3">
-                <UserCheck className="w-5 h-5 flex-shrink-0 mt-0.5 text-text-tertiary" />
+                <UserCheck className="w-5 h-5 shrink-0 mt-0.5 text-text-tertiary" />
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-semibold mb-1 text-text-primary">
                     {allMapped

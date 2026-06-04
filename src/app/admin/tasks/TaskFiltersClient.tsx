@@ -44,7 +44,7 @@ export default function TaskFiltersClient() {
   }
 
   return (
-    <div className="bg-surface-base rounded-lg border dark:border-white/[0.08] p-4">
+    <div className="bg-surface-base rounded-lg border dark:border-white/8 p-4">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
         {/* Search */}
         <div className="relative flex-1 w-full md:w-auto">

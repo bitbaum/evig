@@ -37,7 +37,7 @@ export async function ServicesSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="bg-surface-raised dark:bg-neutral-900 rounded-xl p-8 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300">
+            <div key={index} className="bg-surface-raised dark:bg-neutral-900 rounded-xl p-8 border hover:border-neutral-300 dark:hover:border-white/12 transition-colors duration-300">
               <div className="flex items-start mb-6">
                 <IconBadge icon={service.icon} theme="services" size="lg" className="mr-4" />
                 <div>
@@ -48,7 +48,7 @@ export async function ServicesSection() {
               <div className="space-y-2">
                 {service.features.map((feature, i) => (
                   <div key={i} className="flex items-center text-text-secondary">
-                    <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3 shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}

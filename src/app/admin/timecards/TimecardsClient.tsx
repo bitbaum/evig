@@ -333,7 +333,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             <button
               type="button"
               onClick={rebuildCurrentDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
               >
                 <RotateCcw className="h-4 w-4" />
                 Vorlage zurücksetzen
@@ -342,7 +342,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               type="button"
               onClick={saveDraft}
               disabled={isSaving || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
             >
               <Check className="h-4 w-4" />
               {isSaving ? 'Speichere…' : 'Entwurf speichern'}
@@ -351,7 +351,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         </div>
         {errorMessage && (
           <div className="mt-3 flex items-start gap-2 rounded-lg border border-error-200 bg-error-50 px-3 py-2 text-sm text-error-800 dark:border-error-800 dark:bg-error-900/20 dark:text-error-200">
-            <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -471,14 +471,14 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('frei')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
               >
                 Frei
               </button>
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('krank')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
               >
                 Krank
               </button>
@@ -557,7 +557,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={restoreSelectedDateFromSchedule}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
               >
                 Tag aus Vorlage wiederherstellen
               </button>

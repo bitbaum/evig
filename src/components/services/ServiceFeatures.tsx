@@ -21,7 +21,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
           {features.map((feature, index) => (
             <div key={index} className="bg-surface-base rounded-xl p-6 sm:p-8 border">
               <div className="flex items-start mb-4 sm:mb-6">
-                <div className="p-2 sm:p-3 bg-success-100 rounded-lg text-success-600 mr-3 sm:mr-4 flex-shrink-0">
+                <div className="p-2 sm:p-3 bg-success-100 rounded-lg text-success-600 mr-3 sm:mr-4 shrink-0">
                   <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
                 <div className="flex-1 min-w-0">

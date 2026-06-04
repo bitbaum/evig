@@ -36,7 +36,7 @@ export function ErrorAlert({
   if (variant === 'inline') {
     return (
       <div className={`flex items-start gap-3 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg ${className}`}>
-        <AlertCircle className="w-5 h-5 text-error-600 dark:text-error-400 flex-shrink-0 mt-0.5" />
+        <AlertCircle className="w-5 h-5 text-error-600 dark:text-error-400 shrink-0 mt-0.5" />
         <div className="flex-1">
           <p className={`${TYPOGRAPHY.body} text-error-800 dark:text-error-200`}>{message}</p>
         </div>

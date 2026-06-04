@@ -49,7 +49,7 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {mergedSpecs.map(spec => (
           <div key={spec.key} className="flex items-center gap-2">
-            <label htmlFor={`spec-${spec.key}`} className="text-xs font-medium text-text-tertiary w-24 flex-shrink-0 text-right">
+            <label htmlFor={`spec-${spec.key}`} className="text-xs font-medium text-text-tertiary w-24 shrink-0 text-right">
               {spec.key}
             </label>
             <Input

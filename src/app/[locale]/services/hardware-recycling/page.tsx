@@ -136,7 +136,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                   {pricingFeatures.map((feature, index) => (
                     <div key={index} className="flex items-center">
-                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-action mr-2 sm:mr-3 flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-action mr-2 sm:mr-3 shrink-0" />
                       <span className="text-sm sm:text-base text-text-secondary">{feature}</span>
                     </div>
                   ))}

@@ -62,7 +62,7 @@ function FeatureTags({ features }: { features: string[] }) {
   return (
     <div className="flex flex-wrap gap-1">
       {features.slice(0, 3).map((feature, index) => (
-        <span key={index} className="text-xs bg-surface-raised text-text-secondary px-2 py-1 rounded">
+        <span key={index} className="text-xs bg-surface-raised text-text-secondary px-2 py-1 rounded-sm">
           {feature}
         </span>
       ))}

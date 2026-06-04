@@ -193,7 +193,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
       </Link>
 
       {/* Header card */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
             <Heading level={1} className="text-xl font-bold text-text-primary mb-1">
@@ -203,7 +203,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
               {td('bookingId')}{appointment.id.slice(0, 8).toUpperCase()} · {formatDateShort(appointment.created_at)}
             </p>
           </div>
-          <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full flex-shrink-0 ${statusBadge.color}`}>
+          <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full shrink-0 ${statusBadge.color}`}>
             {statusBadge.label}
           </span>
         </div>
@@ -216,7 +216,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
         {/* Error banner */}
         {error && (
           <div className="bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 shrink-0" />
             {error}
             <button onClick={() => setError(null)} className="ml-auto text-error-500">×</button>
           </div>
@@ -300,7 +300,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
         {/* Rating form */}
         {showRating && (
-          <div className="mt-4 pt-4 border-t border-subtle dark:border-white/[0.06] space-y-4">
+          <div className="mt-4 pt-4 border-t border-subtle dark:border-white/6 space-y-4">
             <Heading level={3} className="text-sm font-semibold text-text-primary">
               {t('ratingModalTitle')}
             </Heading>
@@ -343,24 +343,24 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
       </div>
 
       {/* Service details */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6 space-y-4">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-4">
         <Heading level={2} className="text-sm font-semibold text-text-tertiary uppercase tracking-widest">
           {td('sectionService')}
         </Heading>
 
         <div className="flex items-start gap-3">
-          <Wrench className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" />
+          <Wrench className="w-5 h-5 text-text-muted shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-text-secondary">{td('service')}</p>
             <p className="text-text-primary">{appointment.service_name || t('repairLabel')}</p>
           </div>
-          <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0 ${urgencyBadge.color}`}>
+          <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full shrink-0 ${urgencyBadge.color}`}>
             {urgencyBadge.label}
           </span>
         </div>
 
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-text-muted shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-text-secondary mb-0.5">{td('problem')}</p>
             <p className="text-text-primary text-sm leading-relaxed">{appointment.description}</p>
@@ -369,7 +369,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
         {appointment.device_info && (
           <div className="flex items-start gap-3">
-            <div className="w-5 h-5 flex-shrink-0 mt-0.5 text-center text-text-muted text-xs font-bold">💻</div>
+            <div className="w-5 h-5 shrink-0 mt-0.5 text-center text-text-muted text-xs font-bold">💻</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-text-secondary mb-0.5">{td('deviceInfo')}</p>
               <p className="text-text-primary text-sm">{appointment.device_info}</p>
@@ -379,7 +379,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
         {appointment.parts_needed && (
           <div className="flex items-start gap-3">
-            <div className="w-5 h-5 flex-shrink-0 mt-0.5 text-text-muted text-xs">🔩</div>
+            <div className="w-5 h-5 shrink-0 mt-0.5 text-text-muted text-xs">🔩</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-text-secondary mb-0.5">{td('partsNeeded')}</p>
               <p className="text-text-primary text-sm">{appointment.parts_needed}</p>
@@ -389,7 +389,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
         {appointment.outcome_notes && (
           <div className="flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-text-secondary mb-0.5">{td('outcomeNotes')}</p>
               <p className="text-text-primary text-sm">{appointment.outcome_notes}</p>
@@ -400,12 +400,12 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
       {/* Technician */}
       {(appointment.repairer_name || appointment.business_name) && (
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6 space-y-4">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-4">
           <Heading level={2} className="text-sm font-semibold text-text-tertiary uppercase tracking-widest">
             {td('sectionTechnician')}
           </Heading>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-full flex items-center justify-center shrink-0">
               <User className="w-5 h-5 text-text-tertiary" />
             </div>
             <div>
@@ -419,7 +419,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
           </div>
           {appointment.repairer_phone && (
             <div className="flex items-center gap-3">
-              <Phone className="w-5 h-5 text-text-muted flex-shrink-0" />
+              <Phone className="w-5 h-5 text-text-muted shrink-0" />
               <a
                 href={`tel:${appointment.repairer_phone}`}
                 className="text-action hover:underline text-sm"
@@ -432,33 +432,33 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
       )}
 
       {/* Dates */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6 space-y-3">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-3">
         <Heading level={2} className="text-sm font-semibold text-text-tertiary uppercase tracking-widest mb-4">
           {td('sectionDates')}
         </Heading>
         <div className="flex items-center gap-3 text-sm">
-          <Clock className="w-4 h-4 text-text-muted flex-shrink-0" />
-          <span className="text-text-tertiary w-36 flex-shrink-0">{td('requestedOn')}</span>
+          <Clock className="w-4 h-4 text-text-muted shrink-0" />
+          <span className="text-text-tertiary w-36 shrink-0">{td('requestedOn')}</span>
           <span className="text-text-primary">{formatDateTime(appointment.created_at)}</span>
         </div>
         {appointment.preferred_date && (
           <div className="flex items-center gap-3 text-sm">
-            <Calendar className="w-4 h-4 text-text-muted flex-shrink-0" />
-            <span className="text-text-tertiary w-36 flex-shrink-0">{td('preferredDate')}</span>
+            <Calendar className="w-4 h-4 text-text-muted shrink-0" />
+            <span className="text-text-tertiary w-36 shrink-0">{td('preferredDate')}</span>
             <span className="text-text-primary">{formatDateTime(appointment.preferred_date)}</span>
           </div>
         )}
         {appointment.confirmed_date && (
           <div className="flex items-center gap-3 text-sm">
-            <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
-            <span className="text-text-tertiary w-36 flex-shrink-0">{td('confirmedDate')}</span>
+            <CheckCircle className="w-4 h-4 text-primary-500 shrink-0" />
+            <span className="text-text-tertiary w-36 shrink-0">{td('confirmedDate')}</span>
             <span className="text-text-primary">{formatDateTime(appointment.confirmed_date)}</span>
           </div>
         )}
         {appointment.completed_at && (
           <div className="flex items-center gap-3 text-sm">
-            <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
-            <span className="text-text-tertiary w-36 flex-shrink-0">{td('completedAt')}</span>
+            <CheckCircle className="w-4 h-4 text-primary-500 shrink-0" />
+            <span className="text-text-tertiary w-36 shrink-0">{td('completedAt')}</span>
             <span className="text-text-primary">{formatDateShort(appointment.completed_at)}</span>
           </div>
         )}
@@ -466,12 +466,12 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
       {/* Location (home visit) */}
       {appointment.is_home_visit && appointment.visit_address && (
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
           <Heading level={2} className="text-sm font-semibold text-text-tertiary uppercase tracking-widest mb-4">
             {td('sectionLocation')}
           </Heading>
           <div className="flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-text-muted flex-shrink-0 mt-0.5" />
+            <MapPin className="w-5 h-5 text-text-muted shrink-0 mt-0.5" />
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Home className="w-4 h-4 text-text-muted" />
@@ -490,7 +490,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
       {/* Rating (if already rated) */}
       {appointment.customer_rating && (
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
           <Heading level={2} className="text-sm font-semibold text-text-tertiary uppercase tracking-widest mb-4">
             {td('yourRating')}
           </Heading>

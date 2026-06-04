@@ -150,7 +150,7 @@ export default async function AdminServicesPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-action" />
             <div>
@@ -160,7 +160,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -170,7 +170,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-action" />
             <div>
@@ -180,7 +180,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-secondary-600" />
             <div>
@@ -192,7 +192,7 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Services Table */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
         {services.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -215,9 +215,9 @@ export default async function AdminServicesPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
+              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
                 {services.map((service) => (
-                  <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]">
+                  <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-white/6">
                     <td className="px-6 py-4">
                       <div>
                         <div className="text-sm font-medium text-text-primary">
@@ -268,7 +268,7 @@ export default async function AdminServicesPage() {
                           <Link
                             href={`/services/${service.slug}`}
                             target="_blank"
-                            className="p-2.5 text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 rounded"
+                            className="p-2.5 text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 rounded-sm"
                             title="Auf Website ansehen"
                           >
                             <Eye className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default async function AdminServicesPage() {
                         )}
                         <Link
                           href={`/admin/services/${service.id}/edit`}
-                          className="p-2.5 text-action hover:text-primary-900 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded"
+                          className="p-2.5 text-action hover:text-primary-900 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-sm"
                           title="Bearbeiten"
                         >
                           <Edit className="w-4 h-4" />
@@ -308,7 +308,7 @@ export default async function AdminServicesPage() {
       {/* Quick Actions */}
       <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
             <Wrench className="w-5 h-5 text-text-secondary" />
           </div>
           <div>

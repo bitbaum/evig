@@ -311,7 +311,7 @@ export default function BuildYourComputerPage() {
                     {componentRows.map((item, index) => (
                       <div key={index} className="flex items-center p-4 border rounded-lg">
                         <item.icon className="w-8 h-8 text-action mr-4" />
-                        <div className="flex-grow">
+                        <div className="grow">
                           <div className="flex items-center gap-2 mb-1">
                             <Heading level={4} className="">{item.component.name}</Heading>
                             <span className={`px-2 py-1 text-xs rounded-full ${getConditionClass(item.component.condition)}`}>

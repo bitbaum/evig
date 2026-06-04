@@ -92,7 +92,7 @@ function EditHistoryEntryView({
         <summary className="text-xs text-action cursor-pointer hover:text-primary-700">
           Änderungen anzeigen
         </summary>
-        <div className="mt-2 text-xs bg-surface-base p-3 rounded border border">
+        <div className="mt-2 text-xs bg-surface-base p-3 rounded-sm border border">
           {entry.fields_changed.length === 0 ? (
             <p className="text-text-tertiary italic">Keine Änderungen</p>
           ) : (

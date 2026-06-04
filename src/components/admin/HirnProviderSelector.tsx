@@ -153,7 +153,7 @@ export function HirnProviderSelector() {
       {/* Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 text-sm bg-surface-base border border hover:border-primary-300 dark:hover:border-primary-600 rounded-xl transition-all shadow-sm"
+        className="flex items-center gap-2 px-3 py-2 text-sm bg-surface-base border border hover:border-primary-300 dark:hover:border-primary-600 rounded-xl transition-all shadow-xs"
       >
         {currentMeta ? (
           <>
@@ -179,7 +179,7 @@ export function HirnProviderSelector() {
           <div className="fixed inset-0 z-40" aria-hidden="true" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-full mt-2 w-96 bg-surface-base rounded-2xl shadow-2xl border border z-50 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-subtle dark:border-white/[0.06]">
+            <div className="flex items-center justify-between p-4 border-b border-subtle dark:border-white/6">
               <div>
                 <Heading level={3} className="font-semibold text-text-primary">Wähle dein Gehirn</Heading>
                 <p className="text-xs text-text-tertiary mt-0.5">Welche KI soll antworten?</p>
@@ -289,7 +289,7 @@ export function HirnProviderSelector() {
               </div>
             )}
 
-            <div className="p-3 bg-surface-raised dark:bg-neutral-900/50 border-t border-subtle dark:border-white/[0.06]">
+            <div className="p-3 bg-surface-raised dark:bg-neutral-900/50 border-t border-subtle dark:border-white/6">
               <p className="text-xs text-text-tertiary text-center">
                 Wähle einen Provider mit aktivem API-Key
               </p>

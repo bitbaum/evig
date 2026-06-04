@@ -51,9 +51,9 @@ function FilterSection({
       >
         {title}
         {open ? (
-          <ChevronUp className="h-3.5 w-3.5 text-text-muted flex-shrink-0" />
+          <ChevronUp className="h-3.5 w-3.5 text-text-muted shrink-0" />
         ) : (
-          <ChevronDown className="h-3.5 w-3.5 text-text-muted flex-shrink-0" />
+          <ChevronDown className="h-3.5 w-3.5 text-text-muted shrink-0" />
         )}
       </button>
       {open && <div className="mt-2.5 space-y-1.5">{children}</div>}
@@ -79,7 +79,7 @@ function RadioOption({
         name={name}
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 flex-shrink-0"
+        className="h-3.5 w-3.5 text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
       />
       <span className="text-sm text-text-secondary group-hover:text-neutral-900 leading-snug">
         {label}
@@ -103,7 +103,7 @@ function CheckOption({
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 rounded text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 flex-shrink-0"
+        className="h-3.5 w-3.5 rounded-sm text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
       />
       <span className="text-sm text-text-secondary group-hover:text-neutral-900 leading-snug">
         {label}

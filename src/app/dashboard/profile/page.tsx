@@ -65,7 +65,7 @@ export default function ProfilePage() {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Account Status */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border-2 border dark:border-neutral-700 p-6 mb-6">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
               <Shield className="w-5 h-5 text-action" />
@@ -135,7 +135,7 @@ export default function ProfilePage() {
           )}
 
           {/* Avatar Section */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border-2 border dark:border-neutral-700 p-6">
+          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 p-6">
             <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
               {t('avatarSectionTitle')}
             </Heading>

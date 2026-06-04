@@ -84,7 +84,7 @@ export default async function AdminProjectsPage() {
               href={ROUTES.admin.project(p.slug)}
               className={cn(
                 designPrimitive.surface.card,
-                'group flex flex-col p-5 transition-colors hover:border-neutral-300 dark:hover:border-white/[0.12]',
+                'group flex flex-col p-5 transition-colors hover:border-neutral-300 dark:hover:border-white/12',
               )}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -97,7 +97,7 @@ export default async function AdminProjectsPage() {
                   </h3>
                 </div>
                 {!p.isActive && (
-                  <span className={cn(designPrimitive.badgeBase, 'bg-surface-raised text-text-secondary dark:bg-white/[0.06] flex-shrink-0')}>
+                  <span className={cn(designPrimitive.badgeBase, 'bg-surface-raised text-text-secondary dark:bg-white/6 shrink-0')}>
                     {t('card.inactive')}
                   </span>
                 )}

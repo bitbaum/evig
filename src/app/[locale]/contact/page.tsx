@@ -120,7 +120,7 @@ export default async function ContactPage() {
                   href={STORE_GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-solid focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
                 >
                   <MapPin className="w-4 h-4 mr-2" /> {t('map.openGoogleMaps')}
                 </a>
@@ -128,7 +128,7 @@ export default async function ContactPage() {
                   href={STORE_OSM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-solid focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
                 >
                   <MapIcon className="w-4 h-4 mr-2" /> {t('map.openOSM')}
                 </a>
@@ -137,7 +137,7 @@ export default async function ContactPage() {
               {/* Explanation about map choices */}
               <div className="mt-6 rounded-lg border dark:border-neutral-700 bg-surface-raised p-4 text-sm text-text-secondary max-w-2xl mx-auto">
                 <div className="flex items-start gap-3">
-                  <Shield className="mt-0.5 w-4 h-4 text-primary-700 flex-shrink-0" />
+                  <Shield className="mt-0.5 w-4 h-4 text-primary-700 shrink-0" />
                   <div>
                     <p className="font-medium text-text-primary mb-1">{t('map.mapChoiceTitle')}</p>
                     <p>

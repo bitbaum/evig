@@ -60,7 +60,7 @@ export default function DecisionFormClient() {
           <button
             type="button"
             onClick={() => form.setAiRecommendationReason('')}
-            className="flex-shrink-0 text-text-muted hover:text-primary-600"
+            className="shrink-0 text-text-muted hover:text-primary-600"
           >
             ×
           </button>
@@ -210,7 +210,7 @@ export default function DecisionFormClient() {
           type="checkbox"
           checked={form.allowPublicVoting}
           onChange={(e) => form.setAllowPublicVoting(e.target.checked)}
-          className="mt-0.5 rounded border-primary-400 text-action focus:ring-primary-500"
+          className="mt-0.5 rounded-sm border-primary-400 text-action focus:ring-primary-500"
         />
         <div>
           <span className="text-sm font-medium text-primary-900 dark:text-primary-200">Mit Link teilen — kein Konto nötig</span>

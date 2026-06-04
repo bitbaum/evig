@@ -105,7 +105,7 @@ export default function AdminWorkshopInstanceDetailPage({
 
   return (
     <div className="min-h-screen bg-surface-raised">
-      <div className="bg-surface-base shadow-sm border-b">
+      <div className="bg-surface-base shadow-xs border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href={ROUTES.admin.workshopsInstances}
@@ -156,7 +156,7 @@ export default function AdminWorkshopInstanceDetailPage({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-surface-base rounded-xl shadow-sm border p-4">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
                 <CheckCircle className="w-5 h-5 text-action" />
@@ -168,7 +168,7 @@ export default function AdminWorkshopInstanceDetailPage({
             </div>
           </div>
 
-          <div className="bg-surface-base rounded-xl shadow-sm border p-4">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-warning-100 dark:bg-warning-900/30 rounded-lg">
                 <Clock className="w-5 h-5 text-warning-600" />
@@ -180,7 +180,7 @@ export default function AdminWorkshopInstanceDetailPage({
             </div>
           </div>
 
-          <div className="bg-surface-base rounded-xl shadow-sm border p-4">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-error-100 dark:bg-error-900/30 rounded-lg">
                 <XCircle className="w-5 h-5 text-error-600" />
@@ -192,7 +192,7 @@ export default function AdminWorkshopInstanceDetailPage({
             </div>
           </div>
 
-          <div className="bg-surface-base rounded-xl shadow-sm border p-4">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-surface-raised rounded-lg">
                 <DollarSign className="w-5 h-5 text-text-secondary" />
@@ -205,7 +205,7 @@ export default function AdminWorkshopInstanceDetailPage({
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl shadow-sm border">
+        <div className="bg-surface-base rounded-xl shadow-xs border">
           <div className="px-6 py-4 border-b border">
             <Heading level={2} className="text-lg font-semibold text-text-primary">
               Anmeldungen ({registrations.length})
@@ -236,7 +236,7 @@ export default function AdminWorkshopInstanceDetailPage({
                     <tr key={reg.id} className="hover:bg-neutral-50">
                       <td className="px-6 py-4">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 bg-neutral-200 rounded-full flex items-center justify-center">
+                          <div className="shrink-0 h-10 w-10 bg-neutral-200 rounded-full flex items-center justify-center">
                             <User className="w-5 h-5 text-text-secondary" />
                           </div>
                           <div className="ml-4">
@@ -321,7 +321,7 @@ export default function AdminWorkshopInstanceDetailPage({
         </div>
 
         {instance.notes && (
-          <div className="mt-8 bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="mt-8 bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">Interne Notizen</Heading>
             <p className="text-text-secondary">{instance.notes}</p>
           </div>

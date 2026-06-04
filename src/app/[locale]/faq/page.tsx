@@ -87,14 +87,14 @@ export default async function FAQPage({ params }: FAQPageProps) {
                   <Heading level={2} className="text-lg sm:text-xl text-neutral-800 mb-3 sm:mb-4">
                     {group.category}
                   </Heading>
-                  <div className="divide-y divide-neutral-200 dark:divide-white/[0.06] rounded-xl border bg-surface-base">
+                  <div className="divide-y divide-neutral-200 dark:divide-white/6 rounded-xl border bg-surface-base">
                     {group.items.map((item, idx) => (
                       <details key={idx} className="group p-4 sm:p-5 open:bg-neutral-50/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
                           <span className="text-sm sm:text-base text-text-primary font-medium pr-2">
                             {item.q}
                           </span>
-                          <span className="ml-4 text-text-muted group-open:rotate-180 transition-transform flex-shrink-0">
+                          <span className="ml-4 text-text-muted group-open:rotate-180 transition-transform shrink-0">
                             ▾
                           </span>
                         </summary>

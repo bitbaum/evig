@@ -39,9 +39,9 @@ export default function WorkshopProposalDetailPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
             <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-neutral-200 rounded w-1/3"></div>
-              <div className="h-4 bg-neutral-200 rounded w-full"></div>
-              <div className="h-4 bg-neutral-200 rounded w-2/3"></div>
+              <div className="h-8 bg-neutral-200 rounded-sm w-1/3"></div>
+              <div className="h-4 bg-neutral-200 rounded-sm w-full"></div>
+              <div className="h-4 bg-neutral-200 rounded-sm w-2/3"></div>
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function WorkshopProposalDetailPage() {
   return (
     <main className="min-h-screen bg-surface-raised">
       {/* Header */}
-      <div className="bg-surface-base shadow-sm border-b">
+      <div className="bg-surface-base shadow-xs border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href={ROUTES.admin.workshops}
@@ -117,20 +117,20 @@ export default function WorkshopProposalDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+            <section className="bg-surface-base rounded-lg shadow-xs border p-6">
               <Heading level={2} className="text-xl font-semibold mb-4">Beschreibung</Heading>
               <p className="text-text-secondary whitespace-pre-wrap">{proposal.description}</p>
             </section>
 
             {proposal.short_description && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Kurzbeschreibung</Heading>
                 <p className="text-text-secondary">{proposal.short_description}</p>
               </section>
             )}
 
             {proposal.learning_objectives && proposal.learning_objectives.length > 0 && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Lernziele</Heading>
                 <ul className="list-disc list-inside space-y-2">
                   {proposal.learning_objectives.map((obj: string, idx: number) => (
@@ -141,14 +141,14 @@ export default function WorkshopProposalDetailPage() {
             )}
 
             {proposal.prerequisites && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Voraussetzungen</Heading>
                 <p className="text-text-secondary">{proposal.prerequisites}</p>
               </section>
             )}
 
             {(proposal.materials_provided || proposal.materials_required) && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Materialien</Heading>
                 {proposal.materials_provided && (
                   <div className="mb-4">
@@ -170,7 +170,7 @@ export default function WorkshopProposalDetailPage() {
             )}
 
             {proposal.edit_history && proposal.edit_history.length > 0 && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Bearbeitungsverlauf</Heading>
                 <EditHistoryView history={proposal.edit_history} fieldLabels={fieldLabels} />
               </section>
@@ -179,7 +179,7 @@ export default function WorkshopProposalDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+            <section className="bg-surface-base rounded-lg shadow-xs border p-6">
               <Heading level={3} className="font-semibold mb-4">Status</Heading>
               <div className="flex items-center gap-2">
                 {proposal.status === APPROVAL_STATUS.APPROVED && (
@@ -194,7 +194,7 @@ export default function WorkshopProposalDetailPage() {
               </div>
             </section>
 
-            <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+            <section className="bg-surface-base rounded-lg shadow-xs border p-6">
               <Heading level={3} className="font-semibold mb-4">Details</Heading>
               <dl className="space-y-3 text-sm">
                 <div>
@@ -240,7 +240,7 @@ export default function WorkshopProposalDetailPage() {
               </dl>
             </section>
 
-            <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+            <section className="bg-surface-base rounded-lg shadow-xs border p-6">
               <Heading level={3} className="font-semibold mb-4 flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
                 Standort
@@ -255,20 +255,20 @@ export default function WorkshopProposalDetailPage() {
             </section>
 
             {proposal.created_workshop && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={3} className="font-semibold mb-3">Erstellter Workshop</Heading>
                 <Link
                   href={`/admin/workshops/${proposal.created_workshop.id}`}
                   className="flex items-center gap-2 text-sm text-action hover:text-primary-700 font-medium"
                 >
-                  <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                  <ExternalLink className="w-4 h-4 shrink-0" />
                   {proposal.created_workshop.title}
                 </Link>
               </section>
             )}
 
             {proposal.reviewed_by && (
-              <section className="bg-surface-base rounded-lg shadow-sm border p-6">
+              <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={3} className="font-semibold mb-4">Reviewer</Heading>
                 <p className="text-sm text-text-secondary">
                   {proposal.reviewer_name || 'Admin'}

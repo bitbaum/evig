@@ -84,7 +84,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     className={`
                       flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${isSelected
                         ? 'bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-500'
-                        : 'hover:bg-neutral-100 dark:hover:bg-white/[0.06] border-2 border-transparent'
+                        : 'hover:bg-neutral-100 dark:hover:bg-white/6 border-2 border-transparent'
                       }
                     `}
                   >

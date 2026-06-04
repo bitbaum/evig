@@ -86,7 +86,7 @@ export function AdminSidebar({
               alt={ORG.name}
               width={28}
               height={28}
-              className="w-7 h-7 object-contain flex-shrink-0"
+              className="w-7 h-7 object-contain shrink-0"
             />
             <span className="text-sm font-bold text-text-primary tracking-tight">
               {ORG.name} Admin
@@ -107,7 +107,7 @@ export function AdminSidebar({
 
         <button
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="hidden h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:flex"
+          className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-white/6 lg:flex"
         >
           {sidebarCollapsed ? (
             <ChevronRight className="h-4 w-4 text-text-muted" />
@@ -119,7 +119,7 @@ export function AdminSidebar({
         {/* Mobile close — 44×44 to meet thumb-tap minimum on phones */}
         <button
           onClick={() => setMobileMenuOpen(false)}
-          className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:hidden"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/6 lg:hidden"
           aria-label="Seitenleiste schliessen"
         >
           <ChevronLeft className="w-5 h-5 text-text-secondary" />
@@ -171,13 +171,13 @@ export function AdminSidebar({
                           sidebarCollapsed ? 'justify-center' : ''
                         } ${
                           active
-                            ? 'bg-primary-500/10 text-action dark:bg-primary-500/[0.08]'
-                            : 'text-text-tertiary hover:bg-neutral-100 dark:hover:bg-white/[0.04] hover:text-neutral-900 dark:hover:text-white'
+                            ? 'bg-primary-500/10 text-action dark:bg-primary-500/8'
+                            : 'text-text-tertiary hover:bg-neutral-100 dark:hover:bg-white/4 hover:text-neutral-900 dark:hover:text-white'
                         }`}
                         title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
-                        <Icon className={`flex-shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-primary-500 dark:text-primary-400' : 'text-text-muted dark:text-neutral-600'}`} />
+                        <Icon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-primary-500 dark:text-primary-400' : 'text-text-muted dark:text-neutral-600'}`} />
                         {!sidebarCollapsed && (
                           <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
                             {section.ui.label}
@@ -213,7 +213,7 @@ export function AdminSidebar({
               }`}
               title={sidebarCollapsed ? 'Hirn AI' : undefined}
             >
-              <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center shrink-0">
                 <Brain className="w-4 h-4 text-white" />
               </div>
               {!sidebarCollapsed && (
@@ -243,12 +243,12 @@ export function AdminSidebar({
                 key={href}
                 href={href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-text-muted transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-600 dark:hover:bg-white/[0.04] dark:hover:text-white ${
+                className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-text-muted transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-600 dark:hover:bg-white/4 dark:hover:text-white ${
                   sidebarCollapsed ? 'justify-center' : ''
                 }`}
                 title={sidebarCollapsed ? label : undefined}
               >
-                <Icon className="w-4 h-4 flex-shrink-0" />
+                <Icon className="w-4 h-4 shrink-0" />
                 {!sidebarCollapsed && <span className="text-sm">{label}</span>}
               </Link>
             ))}

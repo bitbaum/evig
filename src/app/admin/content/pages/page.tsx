@@ -109,7 +109,7 @@ export default async function AdminPagesPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -137,7 +137,7 @@ export default async function AdminPagesPage() {
           fix — until then, this banner prevents wasted admin effort. */}
       <div className="rounded-xl border border-warning-200 dark:border-warning-800/40 bg-warning-50 dark:bg-warning-900/20 p-4">
         <div className="flex gap-3">
-          <AlertTriangle className="w-5 h-5 text-warning-700 dark:text-warning-400 flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="w-5 h-5 text-warning-700 dark:text-warning-400 shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="font-semibold text-warning-900 dark:text-warning-200 mb-1">
               Hinweis: Diese Seiten sind aktuell nicht öffentlich verknüpft
@@ -155,7 +155,7 @@ export default async function AdminPagesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Globe className="w-8 h-8 text-action" />
             <div>
@@ -169,7 +169,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -183,7 +183,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Clock className="w-8 h-8 text-secondary-600" />
             <div>
@@ -199,7 +199,7 @@ export default async function AdminPagesPage() {
       </div>
 
       {/* Pages Table */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
         {pages.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -222,11 +222,11 @@ export default async function AdminPagesPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
+              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
                 {pages.map((page) => (
                   <tr
                     key={page.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
+                    className="hover:bg-neutral-50 dark:hover:bg-white/6"
                   >
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-text-primary">
@@ -234,7 +234,7 @@ export default async function AdminPagesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <code className="text-sm text-text-secondary bg-surface-raised dark:bg-neutral-700 px-2 py-1 rounded">
+                      <code className="text-sm text-text-secondary bg-surface-raised dark:bg-neutral-700 px-2 py-1 rounded-sm">
                         /{page.slug}
                       </code>
                     </td>
@@ -328,7 +328,7 @@ export default async function AdminPagesPage() {
       {/* Info Banner */}
       <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
             <Globe className="w-5 h-5 text-text-secondary" />
           </div>
           <div>

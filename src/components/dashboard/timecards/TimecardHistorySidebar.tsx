@@ -56,7 +56,7 @@ export function TimecardHistorySidebar({ history }: Props) {
           const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
           const dateRef = row.reviewedAt || row.submittedAt
           return (
-            <li key={row.id} className="px-5 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors">
+            <li key={row.id} className="px-5 py-3 hover:bg-neutral-50 dark:hover:bg-white/2 transition-colors">
               <div className="flex items-start gap-3">
                 <Icon className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                 <div className="min-w-0 flex-1">

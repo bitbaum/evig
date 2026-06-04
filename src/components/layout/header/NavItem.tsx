@@ -127,7 +127,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         className={cn(
           "relative px-4 py-2 text-sm font-medium text-text-secondary whitespace-nowrap",
           "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
+          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
         )}
       >
         {label}
@@ -156,9 +156,9 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
           "group inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap",
           "transition-all duration-200",
           isOpen
-            ? "text-text-primary bg-surface-raised dark:bg-white/[0.06]"
+            ? "text-text-primary bg-surface-raised dark:bg-white/6"
             : "text-text-secondary hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950"
+          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"

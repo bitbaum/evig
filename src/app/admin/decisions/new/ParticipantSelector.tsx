@@ -70,7 +70,7 @@ export function ParticipantSelector({
                     type="checkbox"
                     checked={selectedParticipants.has(m.id)}
                     onChange={() => onToggle(m.id)}
-                    className="rounded"
+                    className="rounded-sm"
                   />
                   <span className="text-sm text-text-secondary">{m.name || m.email}</span>
                   {m.name && <span className="text-xs text-text-muted">{m.email}</span>}

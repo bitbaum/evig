@@ -85,7 +85,7 @@ export default function ProjectsPage() {
                 'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                 selectedCategory === null
                   ? 'bg-primary-600 text-white'
-                  : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/[0.16]'
+                  : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/16'
               )}
             >
               {t('filter.all')}
@@ -98,7 +98,7 @@ export default function ProjectsPage() {
                   'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                   selectedCategory === key
                     ? 'bg-primary-600 text-white'
-                    : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/[0.16]'
+                    : 'bg-white dark:bg-neutral-800 text-text-secondary border hover:border-neutral-300 dark:hover:border-white/16'
                 )}
               >
                 {t(`categories.${key}`)}
@@ -123,7 +123,7 @@ export default function ProjectsPage() {
                     {/* Card header */}
                     <div className="flex items-start gap-4 mb-4">
                       <div className={cn(
-                        'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg transition-colors',
+                        'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors',
                         iconBadge.bg,
                         'group-hover:bg-primary-600'
                       )}>
@@ -153,7 +153,7 @@ export default function ProjectsPage() {
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-text-secondary mb-4 flex-grow leading-relaxed">
+                    <p className="text-sm text-text-secondary mb-4 grow leading-relaxed">
                       {project.description}
                     </p>
 
@@ -162,7 +162,7 @@ export default function ProjectsPage() {
                       <ul className="space-y-2 mb-5">
                         {project.features.map((feat, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-text-tertiary">
-                            <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5 text-primary-500" />
+                            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-primary-500" />
                             <span>{feat}</span>
                           </li>
                         ))}

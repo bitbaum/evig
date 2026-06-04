@@ -115,11 +115,11 @@ export default function DonationsDashboard() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/2"></div>
               </div>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function DonationsDashboard() {
                 <div className="flex items-start gap-4">
                   {/* Type Icon */}
                   <div className={cn(
-                    'w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0',
+                    'w-12 h-12 rounded-lg flex items-center justify-center shrink-0',
                     donation.donation_type === DONATION_TYPES.MONETARY
                       ? 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'
                       : 'bg-surface-raised dark:bg-neutral-800 text-text-secondary'

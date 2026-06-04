@@ -24,7 +24,7 @@ export function DecisionOptionsEditor({
             type="checkbox"
             checked={showImageUrls}
             onChange={(e) => onShowImageUrlsChange(e.target.checked)}
-            className="rounded"
+            className="rounded-sm"
           />
           Bild-URLs hinzufügen (für visuelle Abstimmung)
         </label>
@@ -69,7 +69,7 @@ export function DecisionOptionsEditor({
                   <img
                     src={opt.imageUrl}
                     alt=""
-                    className="h-8 w-8 rounded object-contain border border"
+                    className="h-8 w-8 rounded-sm object-contain border border"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                   />
                 )}

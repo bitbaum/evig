@@ -234,7 +234,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                       <p className="text-xs text-text-muted mt-1">{t('detail.estimatedDuration', { hours: service.estimatedHours })}</p>
                     )}
                   </div>
-                  <div className="text-right flex-shrink-0">
+                  <div className="text-right shrink-0">
                     {service.basePriceCents && (
                       <p className="font-semibold text-text-primary">
                         {t('detail.priceFrom', { price: Math.round(service.basePriceCents / 100) })}

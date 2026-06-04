@@ -365,7 +365,7 @@ export default async function TasksAdminPage({
                     <div className="flex items-center gap-2 min-w-0">
                       <Link
                         href={ROUTES.admin.task(task.id)}
-                        className="font-medium text-text-primary hover:text-primary-600 truncate min-w-0 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
+                        className="font-medium text-text-primary hover:text-primary-600 truncate min-w-0 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-sm"
                       >
                         {task.title}
                       </Link>
@@ -374,13 +374,13 @@ export default async function TasksAdminPage({
                           surfaces "what's pending input?" without a click. */}
                       {task.has_open_broadcast ? (
                         <span
-                          className="inline-flex flex-shrink-0 items-center text-xs"
+                          className="inline-flex shrink-0 items-center text-xs"
                           aria-label={`${task.open_request_count} offene Broadcast-Anfrage(n)`}
                           title={`${task.open_request_count} offene Anfrage(n) — Broadcast`}
                         >📢</span>
                       ) : task.open_request_count > 0 ? (
                         <span
-                          className="inline-flex flex-shrink-0 items-center text-xs"
+                          className="inline-flex shrink-0 items-center text-xs"
                           aria-label={`${task.open_request_count} offene gezielte Anfrage(n)`}
                           title={`${task.open_request_count} offene Anfrage(n) — gezielt`}
                         >👤</span>

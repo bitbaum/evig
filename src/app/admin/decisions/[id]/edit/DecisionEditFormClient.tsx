@@ -115,7 +115,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
                 type="checkbox"
                 checked={allowPublicVoting}
                 onChange={(e) => setAllowPublicVoting(e.target.checked)}
-                className="mt-0.5 rounded border-primary-400 text-action focus:ring-primary-500"
+                className="mt-0.5 rounded-sm border-primary-400 text-action focus:ring-primary-500"
               />
               <div>
                 <span className="text-sm font-medium text-primary-900 dark:text-primary-300">Mit Link teilen — kein Konto nötig</span>
@@ -134,7 +134,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         </Button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-neutral-300 dark:border-white/[0.08] px-4 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800"
+          className="rounded-lg border border-neutral-300 dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           Abbrechen
         </Link>

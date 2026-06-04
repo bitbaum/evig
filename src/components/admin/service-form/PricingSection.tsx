@@ -59,7 +59,7 @@ export function PricingSection({
               <button
                 type="button"
                 onClick={() => onDetailRemove(index)}
-                className="p-2 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded"
+                className="p-2 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -93,7 +93,7 @@ export function PricingSection({
               <button
                 type="button"
                 onClick={() => onMediaPriceRemove(index)}
-                className="p-2 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded"
+                className="p-2 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

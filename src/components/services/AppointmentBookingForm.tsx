@@ -99,8 +99,8 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
   }
 
   return (
-    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:border dark:border-white/[0.06] rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+      <div className="bg-white dark:border dark:border-white/6 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h3 className="text-lg sm:text-xl font-bold text-text-primary">
@@ -118,7 +118,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           {pricing && (
             <div className="bg-surface-raised border rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center text-neutral-800">
-                <Wrench className="w-5 h-5 mr-2 flex-shrink-0" />
+                <Wrench className="w-5 h-5 mr-2 shrink-0" />
                 <span className="font-medium text-sm sm:text-base">Preis: {pricing}</span>
               </div>
             </div>
@@ -132,9 +132,9 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
             }`}>
               <div className="flex items-start">
                 {submitResult.success ? (
-                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 mr-2 shrink-0 mt-0.5" />
                 ) : (
-                  <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="w-5 h-5 mr-2 shrink-0 mt-0.5" />
                 )}
                 <span className="text-sm sm:text-base">{submitResult.message}</span>
               </div>
@@ -217,7 +217,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
 
               <div className="bg-surface-raised border-2 border rounded-lg p-3 sm:p-4">
                 <div className="flex items-start">
-                  <Clock className="w-5 h-5 text-text-tertiary mt-0.5 mr-3 flex-shrink-0" />
+                  <Clock className="w-5 h-5 text-text-tertiary mt-0.5 mr-3 shrink-0" />
                   <div className="text-sm text-text-secondary">
                     <p className="font-medium mb-1">Was passiert als nächstes?</p>
                     <ul className="space-y-1 list-disc list-inside">

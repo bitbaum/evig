@@ -130,7 +130,7 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
       {adding && (
         <form
           onSubmit={handleAdd}
-          className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border border bg-surface-raised dark:bg-white/[0.03]"
+          className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border border bg-surface-raised dark:bg-white/3"
         >
           <Select name="type" variant="elevated">
             {Object.values(NEED_TYPES).map(v => (

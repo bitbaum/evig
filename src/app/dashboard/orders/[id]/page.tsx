@@ -112,7 +112,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       {/* Pending payment info banner */}
       {order.status === ORDER_STATUS.PENDING_PAYMENT && (
         <div className="mb-6 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl p-4 flex items-start gap-3">
-          <Clock className="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" />
+          <Clock className="w-5 h-5 text-warning-600 shrink-0 mt-0.5" />
           <div className="flex-1">
             <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">
               {t('pendingPaymentTitle')}
@@ -138,7 +138,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Status timeline */}
       {!isCancelled && (
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm mb-6">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs mb-6">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('orderTimeline')}</Heading>
           <OrderStatusTimeline
             status={order.status}
@@ -155,13 +155,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Listing info */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('articleSection')}</Heading>
           <Link
             href={`/marketplace/${order.listingId}`}
             className="flex gap-3 hover:opacity-80 transition-opacity"
           >
-            <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-raised dark:bg-neutral-700">
+            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised dark:bg-neutral-700">
               {order.thumbnail ? (
                 <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={64} height={64} className="w-full h-full object-cover" />
               ) : (
@@ -200,7 +200,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         </div>
 
         {/* Price breakdown */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('priceSection')}</Heading>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -231,7 +231,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         </div>
 
         {/* Counterparty info */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">
             {order.role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}
           </Heading>
@@ -255,7 +255,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
         {/* Shipping address */}
         {order.deliveryMethod === 'shipping' && order.shippingAddress && (
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
             <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('shippingAddress')}</Heading>
             <div className="text-sm text-text-secondary space-y-1">
               {order.shippingAddress.name && <p className="font-medium">{order.shippingAddress.name}</p>}
@@ -269,7 +269,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       </div>
 
       {/* Action buttons */}
-      <div className="mt-6 bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+      <div className="mt-6 bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
         <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">{t('actionsSection')}</Heading>
 
         <div className="space-y-3">
@@ -356,7 +356,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Review section — only for buyer once order is completed */}
       {order.role === 'buyer' && order.status === ORDER_STATUS.COMPLETED && (
-        <div className="mt-6 bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+        <div className="mt-6 bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs">
           <Heading level={2} className="text-sm font-semibold text-text-primary mb-4">
             {hasReview ? t('reviewSectionHasReview') : t('reviewSectionNoReview')}
           </Heading>

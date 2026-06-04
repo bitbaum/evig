@@ -92,12 +92,12 @@ export function VoteAIAdvisor({
         aria-expanded={expanded}
       >
         <span className="flex items-center gap-2 text-sm font-semibold text-info-900">
-          <Sparkles className="w-4 h-4 text-info-600 flex-shrink-0" />
+          <Sparkles className="w-4 h-4 text-info-600 shrink-0" />
           KI-Beratung — Frag die KI zu dieser Abstimmung
         </span>
         {expanded
-          ? <ChevronUp className="w-4 h-4 text-info-500 flex-shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-info-500 flex-shrink-0" />
+          ? <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
+          : <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
         }
       </button>
 
@@ -146,7 +146,7 @@ export function VoteAIAdvisor({
           {/* Error */}
           {error && (
             <div className="flex items-start gap-2 bg-error-50 dark:bg-error-900/20 border border-error-200 text-error-700 dark:text-error-400 px-3 py-2 rounded-lg text-sm">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}

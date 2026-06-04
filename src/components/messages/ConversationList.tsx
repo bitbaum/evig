@@ -57,14 +57,14 @@ export default function ConversationList({ conversations, selectedId, onSelect }
         <button
           key={conv.id}
           onClick={() => onSelect(conv.id)}
-          className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 ${
+          className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-primary-500 ${
             selectedId === conv.id
               ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-primary-500'
               : ''
           }`}
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center shrink-0">
               <User className="w-5 h-5 text-text-muted" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
@@ -76,7 +76,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                 }`}>
                   {conv.other_user_name || t('unknownUser')}
                 </span>
-                <span className="text-xs text-text-muted flex-shrink-0 ml-2">
+                <span className="text-xs text-text-muted shrink-0 ml-2">
                   {timeAgo(conv.last_message_at)}
                 </span>
               </div>
@@ -89,7 +89,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                   {conv.last_message_preview || t('noMessage')}
                 </p>
                 {conv.unread_count > 0 && (
-                  <span className="ml-2 flex-shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-primary-500 rounded-full">
+                  <span className="ml-2 shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-primary-500 rounded-full">
                     {conv.unread_count}
                   </span>
                 )}

@@ -24,7 +24,7 @@ export function IconBadge({
   return (
     <div
       className={cn(
-        'flex items-center justify-center flex-shrink-0',
+        'flex items-center justify-center shrink-0',
         SIZE[size],
         SHAPE[shape],
         badge.bg,

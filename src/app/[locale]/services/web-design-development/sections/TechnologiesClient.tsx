@@ -78,7 +78,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 href={tech.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-surface-raised dark:bg-neutral-900 rounded-xl p-6 border hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
+                className="bg-surface-raised dark:bg-neutral-900 rounded-xl p-6 border hover:border-neutral-300 dark:hover:border-white/12 transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-start mb-4">
@@ -92,7 +92,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 <div className="space-y-2">
                   {tech.benefits.map((benefit, i) => (
                     <div key={i} className="flex items-center text-sm text-text-secondary">
-                      <CheckCircle2 className="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-primary-500 mr-2 shrink-0" />
                       <span className="truncate">{benefit}</span>
                     </div>
                   ))}

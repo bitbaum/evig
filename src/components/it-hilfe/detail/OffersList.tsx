@@ -110,7 +110,7 @@ export function OffersList({
                     return (
                       <span
                         key={skillId}
-                        className="px-2 py-0.5 bg-surface-raised text-text-secondary rounded text-xs"
+                        className="px-2 py-0.5 bg-surface-raised text-text-secondary rounded-sm text-xs"
                       >
                         {skill?.name || skillId}
                       </span>

@@ -246,7 +246,7 @@ function EscrowToggle({
         id="escrow"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="rounded"
+        className="rounded-sm"
       />
       <label htmlFor="escrow" className="text-sm">
         <strong>{t('escrowCheckLabel')}</strong> - {t('escrowCheckDescription')}

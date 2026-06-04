@@ -61,7 +61,7 @@ export function InventoryProductsTable({
   const allSelected = selectable && filteredIds.length > 0 && filteredIds.every(id => selectedIds.has(id))
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border overflow-hidden">
+    <div className="bg-surface-base rounded-xl shadow-xs border border overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px]">
           <thead className="bg-surface-raised border-b border">
@@ -72,7 +72,7 @@ export function InventoryProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded border-neutral-300 text-action focus:ring-primary-500"
+                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                   />
                 </th>
               )}
@@ -113,18 +113,18 @@ export function InventoryProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded border-neutral-300 text-action focus:ring-primary-500"
+                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                     />
                   </td>
                 )}
                 <td className="px-6 py-4">
-                  <code className="text-sm font-mono bg-surface-raised px-2 py-1 rounded">
+                  <code className="text-sm font-mono bg-surface-raised px-2 py-1 rounded-sm">
                     {product.item_uuid}
                   </code>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center">
-                    <div className="w-12 h-12 bg-surface-raised rounded-lg flex items-center justify-center mr-3 flex-shrink-0 overflow-hidden">
+                    <div className="w-12 h-12 bg-surface-raised rounded-lg flex items-center justify-center mr-3 shrink-0 overflow-hidden">
                       {product.image_url ? (
                         <img
                           src={product.image_url}

@@ -43,7 +43,7 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
                   onToggle(opt.id);
                   void e; // consumed by onToggle
                 }}
-                className="rounded"
+                className="rounded-sm"
               />
               <div>
                 <span className="font-medium text-neutral-800">{opt.label}</span>

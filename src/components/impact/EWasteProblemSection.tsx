@@ -23,7 +23,7 @@ const getStatIcon = (id: string) => {
 
 function StatCard({ stat }: { stat: EWasteStat }) {
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+    <div className="bg-white/10 backdrop-blur-xs rounded-xl p-6 border border-white/20">
       <div className="flex items-start gap-4">
         <div className="p-3 bg-white/20 rounded-lg text-white">
           {getStatIcon(stat.id)}
@@ -85,7 +85,7 @@ export default async function EWasteProblemSection() {
         </div>
 
         {/* Key Message */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center">
+        <div className="bg-white/10 backdrop-blur-xs rounded-2xl p-8 border border-white/20 text-center">
           <p className="text-2xl md:text-3xl font-semibold text-white mb-4">
             {t('keyMessage')}
           </p>

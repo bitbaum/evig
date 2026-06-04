@@ -21,7 +21,7 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
             <article>
               {/* Image */}
               {post.featuredImage ? (
-                <div className="aspect-[16/10] overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 mb-4 relative">
+                <div className="aspect-16/10 overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 mb-4 relative">
                   <Image
                     src={post.featuredImage}
                     alt={post.title}
@@ -32,14 +32,14 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
                   />
                 </div>
               ) : (
-                <div className="aspect-[16/10] bg-surface-raised dark:bg-neutral-800 border rounded-lg flex items-center justify-center mb-4">
+                <div className="aspect-16/10 bg-surface-raised dark:bg-neutral-800 border rounded-lg flex items-center justify-center mb-4">
                   <span className="text-text-muted text-4xl font-bold">R</span>
                 </div>
               )}
 
               {/* Category */}
               {post.category && (
-                <span className="inline-block px-2 py-1 bg-surface-raised text-text-secondary text-xs font-semibold rounded mb-3 uppercase tracking-wide">
+                <span className="inline-block px-2 py-1 bg-surface-raised text-text-secondary text-xs font-semibold rounded-sm mb-3 uppercase tracking-wide">
                   {post.category}
                 </span>
               )}

@@ -46,7 +46,7 @@ function MediaCard({ mention, tierLabel, readArticleLabel }: { mention: MediaMen
             {mention.title}
           </Heading>
         </div>
-        <ExternalLink className="h-4 w-4 text-neutral-500 group-hover:text-primary-500 flex-shrink-0 transition-colors" />
+        <ExternalLink className="h-4 w-4 text-neutral-500 group-hover:text-primary-500 shrink-0 transition-colors" />
       </div>
 
       {/* Source and Date */}
@@ -101,7 +101,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
         </p>
         <p className="text-xs text-neutral-500 truncate">{mention.date}</p>
       </div>
-      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors flex-shrink-0" />
+      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors shrink-0" />
     </a>
   )
 }
@@ -213,7 +213,7 @@ export default function MediaCoverageSection() {
                   </p>
                   <p className="text-xs text-neutral-500 truncate">{mention.title}</p>
                 </div>
-                <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors flex-shrink-0" />
+                <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors shrink-0" />
               </a>
             ))}
           </div>

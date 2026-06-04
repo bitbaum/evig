@@ -183,7 +183,7 @@ export function IntakeCreateForm({
                   </div>
                 )}
                 {aiText && voiceState === 'idle' && (
-                  <p className="text-xs text-text-tertiary bg-surface-raised p-2 rounded">Transkription: {aiText}</p>
+                  <p className="text-xs text-text-tertiary bg-surface-raised p-2 rounded-sm">Transkription: {aiText}</p>
                 )}
               </div>
             )}
@@ -198,7 +198,7 @@ export function IntakeCreateForm({
 
             {/* Error */}
             {aiError && (
-              <div className="flex items-center gap-2 text-sm text-error-600 dark:text-error-400 bg-error-50 dark:bg-error-900/20 p-2 rounded">
+              <div className="flex items-center gap-2 text-sm text-error-600 dark:text-error-400 bg-error-50 dark:bg-error-900/20 p-2 rounded-sm">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 {aiError}
               </div>
@@ -291,7 +291,7 @@ export function IntakeCreateForm({
             type="checkbox"
             checked={formData.is_donation}
             onChange={(e) => setFormData(f => ({ ...f, is_donation: e.target.checked }))}
-            className="rounded"
+            className="rounded-sm"
           />
           <span className="text-sm font-medium">Dies ist eine Spende</span>
         </label>

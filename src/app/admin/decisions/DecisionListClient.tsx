@@ -148,7 +148,7 @@ export default function DecisionListClient({
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
                         <button
                           onClick={() => setDeleteTarget(d)}
-                          className="text-text-muted hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded"
+                          className="text-text-muted hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded-sm"
                           title="Löschen"
                         >
                           <Trash2 className="w-4 h-4" />

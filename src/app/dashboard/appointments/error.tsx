@@ -29,12 +29,12 @@ export default function AppointmentsError({
           Die Terminübersicht konnte nicht geladen werden.
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          <Button onClick={reset} variant="primary" className="w-full min-h-[44px]">
+          <Button onClick={reset} variant="primary" className="w-full min-h-touch">
             Erneut versuchen
           </Button>
           <Link
             href="/dashboard"
-            className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
+            className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-neutral-200 min-h-touch inline-flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm"
           >
             Zurück zum Dashboard
           </Link>

@@ -81,7 +81,7 @@ export default function CategoryForm({
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.categories}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -140,7 +140,7 @@ export default function CategoryForm({
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* Name */}
             <FormField label="Name" required htmlFor="category-name">
@@ -205,7 +205,7 @@ export default function CategoryForm({
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, color: e.target.value }))
                     }
-                    className="w-10 h-10 rounded cursor-pointer border-0"
+                    className="w-10 h-10 rounded-sm cursor-pointer border-0"
                   />
                   <Input
                     type="text"
@@ -266,7 +266,7 @@ export default function CategoryForm({
                       is_active: e.target.checked,
                     }))
                   }
-                  className="w-5 h-5 rounded border-neutral-300 text-action focus:ring-primary-500"
+                  className="w-5 h-5 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                 />
                 <label
                   htmlFor="is_active"
@@ -280,7 +280,7 @@ export default function CategoryForm({
         </div>
 
         {/* Preview */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
           <Heading level={3} className="text-sm font-medium text-text-secondary mb-4">
             {t('preview')}
           </Heading>

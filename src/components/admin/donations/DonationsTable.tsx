@@ -48,7 +48,7 @@ function getDonorDisplay(donation: Donation): string {
 
 export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: Props) {
   return (
-    <div className="bg-surface-base rounded-lg shadow overflow-x-auto">
+    <div className="bg-surface-base rounded-lg shadow-sm overflow-x-auto">
       <table className="min-w-full divide-y divide-neutral-200">
         <thead className="bg-surface-raised">
           <tr>
@@ -119,7 +119,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {!donation.thank_you_sent && (
                     <button
                       onClick={() => onMarkThanked(donation.id)}
-                      className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded hover:bg-primary-200"
+                      className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-sm hover:bg-primary-200"
                       title="Als bedankt markieren"
                     >
                       Bedanken
@@ -128,7 +128,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {donation.receipt_requested && !donation.receipt_sent && (
                     <button
                       onClick={() => onMarkReceiptSent(donation.id)}
-                      className="text-xs px-2 py-1 bg-secondary-100 text-secondary-700 rounded hover:bg-secondary-200"
+                      className="text-xs px-2 py-1 bg-secondary-100 text-secondary-700 rounded-sm hover:bg-secondary-200"
                       title="Quittung als gesendet markieren"
                     >
                       Quittung
@@ -137,7 +137,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {donation.donation_type === DONATION_TYPES.DEVICE && (
                     <Link
                       href={`/admin/intake?donation_id=${donation.id}&donor_name=${encodeURIComponent(donation.donor_name || '')}&donor_email=${encodeURIComponent(donation.donor_email || '')}`}
-                      className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded hover:bg-primary-200 inline-flex items-center gap-1"
+                      className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-sm hover:bg-primary-200 inline-flex items-center gap-1"
                       title="Im Geräte-Eingang erfassen"
                     >
                       Eingang <ArrowRight className="w-3 h-3" />

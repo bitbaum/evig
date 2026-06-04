@@ -31,7 +31,7 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
               <button
                 type="button"
                 onClick={() => onRemove(index)}
-                className="p-1 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded"
+                className="p-1 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

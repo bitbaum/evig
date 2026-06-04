@@ -125,7 +125,7 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         onClick={handleOpen}
-        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
+        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors"
         aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
       >
         <Bell className="w-5 h-5 text-text-secondary" />
@@ -139,7 +139,7 @@ export function NotificationBell() {
       {open && (
         <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border bg-surface-base shadow-2xl">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-subtle px-4 py-3 dark:border-white/[0.06]">
+          <div className="flex items-center justify-between border-b border-subtle px-4 py-3 dark:border-white/6">
             <span className="font-semibold text-sm text-text-primary">
               Benachrichtigungen
               {unreadCount > 0 && (
@@ -153,7 +153,7 @@ export function NotificationBell() {
                 <button
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-white/[0.06] dark:hover:text-neutral-200"
+                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-white/6 dark:hover:text-neutral-200"
                   title="Alle als gelesen markieren"
                 >
                   <Check className="w-3 h-3" />
@@ -162,7 +162,7 @@ export function NotificationBell() {
               )}
               <button
                 onClick={() => setOpen(false)}
-                className="rounded-md p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
+                className="rounded-md p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-white/6"
               >
                 <X className="w-4 h-4 text-text-tertiary" />
               </button>
@@ -203,7 +203,7 @@ export function NotificationBell() {
                   >
                     <div className="flex items-start gap-2">
                       {!n.is_read && (
-                        <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-primary-500" />
+                        <span className="mt-1.5 shrink-0 w-2 h-2 rounded-full bg-primary-500" />
                       )}
                       <div className={!n.is_read ? '' : 'pl-4'}>
                         <p className={`text-sm leading-snug ${

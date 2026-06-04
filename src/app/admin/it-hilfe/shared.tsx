@@ -48,7 +48,7 @@ export function CategoryIcon({ categoryId }: { categoryId: string }) {
 export function SkillTag({ skillId }: { skillId: string }) {
   const skill = getSkillById(skillId)
   return (
-    <span className="px-1.5 py-0.5 text-[10px] rounded bg-surface-raised text-text-secondary dark:bg-neutral-700">
+    <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary dark:bg-neutral-700">
       {skill?.name ?? skillId}
     </span>
   )

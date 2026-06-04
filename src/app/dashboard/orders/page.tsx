@@ -103,7 +103,7 @@ export default function DashboardOrdersPage() {
             onClick={() => setRole('buyer')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
               role === 'buyer'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-sm'
+                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
                 : 'text-text-tertiary hover:text-neutral-700'
             }`}
           >
@@ -113,7 +113,7 @@ export default function DashboardOrdersPage() {
             onClick={() => setRole('seller')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
               role === 'seller'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-sm'
+                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
                 : 'text-text-tertiary hover:text-neutral-700'
             }`}
           >
@@ -167,9 +167,9 @@ export default function DashboardOrdersPage() {
               <Link
                 key={order.id}
                 href={`/dashboard/orders/${order.id}`}
-                className="flex items-center gap-4 bg-surface-base dark:bg-neutral-800 rounded-xl p-4 shadow-sm hover:shadow-md hover:ring-1 hover:ring-primary-200 dark:hover:ring-primary-800 transition-all"
+                className="flex items-center gap-4 bg-surface-base dark:bg-neutral-800 rounded-xl p-4 shadow-xs hover:shadow-md hover:ring-1 hover:ring-primary-200 dark:hover:ring-primary-800 transition-all"
               >
-                <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-surface-raised dark:bg-neutral-700">
+                <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-raised dark:bg-neutral-700">
                   {order.thumbnail ? (
                     <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={56} height={56} className="w-full h-full object-cover" />
                   ) : (
@@ -187,7 +187,7 @@ export default function DashboardOrdersPage() {
                   </div>
                 </div>
 
-                <div className="text-right flex-shrink-0">
+                <div className="text-right shrink-0">
                   <p className="font-bold text-text-primary">{formatCHF(Number(order.amountChf))}</p>
                   {statusConfig && (
                     <span className={`inline-flex mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}>
@@ -196,7 +196,7 @@ export default function DashboardOrdersPage() {
                   )}
                 </div>
 
-                <ChevronRight className="w-5 h-5 text-text-muted flex-shrink-0" />
+                <ChevronRight className="w-5 h-5 text-text-muted shrink-0" />
               </Link>
             )
           })}

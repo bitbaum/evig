@@ -80,7 +80,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               const isInline = !className
               if (isInline) {
                 return (
-                  <code className="bg-surface-raised text-neutral-800 px-2 py-0.5 rounded text-[18px] font-mono">
+                  <code className="bg-surface-raised text-neutral-800 px-2 py-0.5 rounded-sm text-[18px] font-mono">
                     {children}
                   </code>
                 )

@@ -52,7 +52,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   return (
     <>
       {/* Compact hero — workshops visible without scrolling */}
-      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -192,18 +192,18 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                     {nextInstance ? (
                       <div className="mb-4 space-y-2">
                         <div className="flex items-center text-sm text-text-secondary">
-                          <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
+                          <Calendar className="w-4 h-4 mr-1 shrink-0" />
                           <span>{t('nextDate', { date: formatDateShort(nextInstance.start_date) })}</span>
                         </div>
                         {nextInstance.location && (
                           <div className="flex items-center text-sm text-text-secondary">
-                            <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+                            <MapPin className="w-4 h-4 mr-1 shrink-0" />
                             <span className="truncate">{nextInstance.location}</span>
                           </div>
                         )}
                         {spotsLeft !== null && (
                           <div className="flex items-center text-sm">
-                            <Users className="w-4 h-4 mr-1 flex-shrink-0" />
+                            <Users className="w-4 h-4 mr-1 shrink-0" />
                             <span className={spotsLeft <= 3 ? 'text-warning-600 font-medium' : 'text-text-secondary'}>
                               {spotsLeft <= 0 ? t('soldOut') : t('spotsLeft', { count: spotsLeft })}
                             </span>

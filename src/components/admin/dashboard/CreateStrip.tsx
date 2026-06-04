@@ -11,9 +11,9 @@ export function CreateStrip({ actions }: CreateStripProps) {
   if (actions.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
-      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
-        <Plus className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
+      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
+        <Plus className="w-5 h-5 text-primary-500 shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           Erstellen
         </Heading>
@@ -27,7 +27,7 @@ export function CreateStrip({ actions }: CreateStripProps) {
               <Link
                 key={action.href}
                 href={action.href}
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${action.color}`}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-touch ${action.color}`}
               >
                 <Icon className="w-4 h-4" aria-hidden="true" />
                 {action.label}

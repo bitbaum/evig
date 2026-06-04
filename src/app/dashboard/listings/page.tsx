@@ -88,7 +88,7 @@ export default function MyListingsPage() {
             onClick={() => handleStatusFilterChange(tab.value)}
             className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               statusFilter === tab.value
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-sm'
+                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
                 : 'text-text-secondary hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
@@ -139,9 +139,9 @@ export default function MyListingsPage() {
             return (
               <div
                 key={listing.id}
-                className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700 p-4 flex items-center gap-4"
+                className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700 p-4 flex items-center gap-4"
               >
-                <Link href={`/marketplace/${listing.id}`} className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
+                <Link href={`/marketplace/${listing.id}`} className="shrink-0 w-16 h-16 rounded-lg overflow-hidden">
                   <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
                 </Link>
 
@@ -154,7 +154,7 @@ export default function MyListingsPage() {
                       {formatCHF(Number(listing.price_chf))}
                     </span>
                     <span>{listing.category}</span>
-                    <span className={`inline-flex px-1.5 py-0.5 text-xs rounded ${conditionInfo.color}`}>
+                    <span className={`inline-flex px-1.5 py-0.5 text-xs rounded-sm ${conditionInfo.color}`}>
                       {conditionInfo.label}
                     </span>
                   </div>
@@ -176,7 +176,7 @@ export default function MyListingsPage() {
                   </span>
                 )}
 
-                <div className="flex items-center gap-1 flex-shrink-0">
+                <div className="flex items-center gap-1 shrink-0">
                   <Link
                     href={`${ROUTES.public.marketplaceSell}?edit=${listing.id}`}
                     className="p-2 rounded-lg text-text-tertiary hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"

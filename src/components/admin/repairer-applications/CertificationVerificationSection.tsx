@@ -92,7 +92,7 @@ export function CertificationVerificationSection({
                         </div>
 
                         {cert.adminNotes && (
-                          <div className="mt-2 p-2 bg-primary-50 dark:bg-primary-900/20 rounded text-sm text-primary-800 dark:text-primary-300">
+                          <div className="mt-2 p-2 bg-primary-50 dark:bg-primary-900/20 rounded-sm text-sm text-primary-800 dark:text-primary-300">
                             <strong>Admin-Notiz:</strong> {cert.adminNotes}
                           </div>
                         )}
@@ -122,7 +122,7 @@ export function CertificationVerificationSection({
                         {cert.verificationStatus !== CERTIFICATION_STATUS.PENDING && (() => {
                           const badge = getCertificationStatusBadge(cert.verificationStatus)
                           return (
-                            <span className={`px-3 py-1.5 ${badge.bg} ${badge.color} rounded text-xs font-medium`}>
+                            <span className={`px-3 py-1.5 ${badge.bg} ${badge.color} rounded-sm text-xs font-medium`}>
                               {badge.label}
                             </span>
                           )

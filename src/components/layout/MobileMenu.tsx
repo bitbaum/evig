@@ -92,7 +92,7 @@ export function MobileMenu({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] lg:hidden"
+      className="fixed inset-0 z-100 lg:hidden"
       role="dialog"
       aria-modal="true"
       aria-label="Mobile Navigation"
@@ -100,7 +100,7 @@ export function MobileMenu({
       {/* Backdrop */}
       <div
         className={cn(
-          "fixed inset-0 bg-black/40 backdrop-blur-sm",
+          "fixed inset-0 bg-black/40 backdrop-blur-xs",
           "transition-opacity duration-300",
           isOpen ? "opacity-100" : "opacity-0"
         )}
@@ -113,7 +113,7 @@ export function MobileMenu({
         ref={menuPanelRef}
         tabIndex={-1}
         className={cn(
-          "fixed inset-y-0 right-0 z-[101] w-full sm:max-w-md",
+          "fixed inset-y-0 right-0 z-101 w-full sm:max-w-md",
           // Border-only separation matches the rest of the design system —
           // the translucent backdrop already provides the plane lift.
           "bg-surface-base border-l border",
@@ -123,7 +123,7 @@ export function MobileMenu({
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-subtle dark:border-white/[0.06]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-subtle dark:border-white/6">
           <button type="button" onClick={onClose} className="cursor-pointer bg-transparent border-none p-0">
             <Logo />
           </button>
@@ -131,9 +131,9 @@ export function MobileMenu({
             type="button"
             className={cn(
               "p-2 -mr-2 rounded-lg",
-              "text-text-tertiary hover:text-neutral-900 hover:bg-neutral-100 dark:hover:text-white dark:hover:bg-white/[0.06]",
+              "text-text-tertiary hover:text-neutral-900 hover:bg-neutral-100 dark:hover:text-white dark:hover:bg-white/6",
               "transition-colors duration-200",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500"
             )}
             onClick={onClose}
             aria-label={tAccessibility('closeMenu')}
@@ -145,7 +145,7 @@ export function MobileMenu({
         {/* Experimental Site Banner */}
         <div className="mx-6 mt-4">
           <div className="flex items-center gap-2 px-4 py-3 bg-warning-50 dark:bg-warning-500/10 border border-warning-100 dark:border-warning-500/20 rounded-xl text-sm text-warning-700 dark:text-warning-400">
-            <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse flex-shrink-0" />
+            <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse shrink-0" />
             <span>
               {t('experimentalBanner')} –
               <a
@@ -176,7 +176,7 @@ export function MobileMenu({
                         className={cn(
                           "flex w-full items-center justify-between py-3 px-4 -mx-4",
                           "text-base font-medium text-text-primary",
-                          "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors duration-200"
+                          "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
                         )}
                         onClick={() => handleDropdownToggle(item.name)}
                         aria-expanded={openDropdown === item.name}
@@ -199,7 +199,7 @@ export function MobileMenu({
                             : "max-h-0 opacity-0"
                         )}
                       >
-                        <ul className="mt-1 ml-4 space-y-1 border-l-2 border-subtle dark:border-white/[0.06] pl-4">
+                        <ul className="mt-1 ml-4 space-y-1 border-l-2 border-subtle dark:border-white/6 pl-4">
                           {item.subItems.filter(sub => !sub.isSection).map((subItem) => {
                             const subLabel = subItem.nameKey ? t(subItem.nameKey as never) : subItem.name
                             return (
@@ -218,7 +218,7 @@ export function MobileMenu({
                                   >
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded">
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded-sm">
                                         {subItem.badge}
                                       </span>
                                     )}
@@ -236,7 +236,7 @@ export function MobileMenu({
                                   >
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded">
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-primary-50 text-primary-700 dark:bg-primary-500/10 dark:text-primary-400 rounded-sm">
                                         {subItem.badge}
                                       </span>
                                     )}
@@ -256,7 +256,7 @@ export function MobileMenu({
                       className={cn(
                         "flex items-center gap-2 py-3 px-4 -mx-4",
                         "text-base font-medium text-text-primary",
-                        "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors duration-200"
+                        "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
                       )}
                       onClick={onClose}
                     >
@@ -269,7 +269,7 @@ export function MobileMenu({
                       className={cn(
                         "block w-full text-left py-3 px-4 -mx-4",
                         "text-base font-medium text-text-primary",
-                        "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors duration-200"
+                        "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
                       )}
                       onClick={() => handleNavigation(item.href)}
                     >
@@ -283,7 +283,7 @@ export function MobileMenu({
 
           {/* Action Items (Contact) */}
           {actionItems.length > 0 && (
-            <div className="mt-6 pt-6 border-t border-subtle dark:border-white/[0.06]">
+            <div className="mt-6 pt-6 border-t border-subtle dark:border-white/6">
               <ul className="space-y-1">
                 {actionItems.map((item) => {
                   const actionLabel = item.nameKey ? t(item.nameKey as never) : item.name
@@ -294,7 +294,7 @@ export function MobileMenu({
                         className={cn(
                           "block w-full text-left py-3 px-4 -mx-4",
                           "text-base font-medium text-text-primary",
-                          "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors duration-200"
+                          "rounded-xl hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-200"
                         )}
                         onClick={() => handleNavigation(item.href)}
                       >
@@ -309,7 +309,7 @@ export function MobileMenu({
         </nav>
 
         {/* Footer - Locale Switcher + Theme Toggle + Auth Actions */}
-        <div className="border-t border-subtle dark:border-white/[0.06] px-6 pt-3 pb-1 flex items-center justify-between">
+        <div className="border-t border-subtle dark:border-white/6 px-6 pt-3 pb-1 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ThemeToggle />
           </div>
@@ -319,8 +319,8 @@ export function MobileMenu({
           {session?.user ? (
             <div className="space-y-3">
               {/* User Info */}
-              <div className="flex items-center gap-3 p-3 bg-primary-50 dark:bg-primary-500/[0.08] rounded-xl border border-primary-100 dark:border-primary-500/20">
-                <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+              <div className="flex items-center gap-3 p-3 bg-primary-50 dark:bg-primary-500/8 rounded-xl border border-primary-100 dark:border-primary-500/20">
+                <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold shrink-0">
                   {session.user.name
                     ?.split(' ')
                     .map((n) => n[0])
@@ -361,8 +361,8 @@ export function MobileMenu({
                 className={cn(
                   "flex-1 py-3 text-center",
                   "text-sm font-medium text-text-secondary",
-                  "border dark:border-white/[0.1] rounded-xl",
-                  "hover:bg-neutral-50 dark:hover:bg-white/[0.06] hover:text-neutral-900 dark:hover:text-white transition-colors duration-200"
+                  "border dark:border-white/10 rounded-xl",
+                  "hover:bg-neutral-50 dark:hover:bg-white/6 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200"
                 )}
               >
                 {t('login')}

@@ -80,7 +80,7 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
         </li>
         {items.map(({ path, label, isLast }) => (
           <li key={path} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 text-neutral-300 flex-shrink-0" />
+            <ChevronRight className="h-3.5 w-3.5 text-neutral-300 shrink-0" />
             {isLast ? (
               <span className="font-medium text-neutral-800 dark:text-neutral-200 truncate max-w-[200px]" aria-current="page">
                 {label}

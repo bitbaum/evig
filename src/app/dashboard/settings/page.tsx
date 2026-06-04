@@ -74,7 +74,7 @@ export default function SettingsPage() {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border-2 border dark:border-neutral-700 mb-6 overflow-x-auto">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 mb-6 overflow-x-auto">
           <nav className="flex">
             {tabs.map((tab) => (
               <button
@@ -113,7 +113,7 @@ export default function SettingsPage() {
           )}
 
           {/* Tab Content */}
-          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border-2 border dark:border-neutral-700 p-6">
+          <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border-2 border dark:border-neutral-700 p-6">
             {activeTab === 'account' && (
               <AccountSection
                 profile={profile}

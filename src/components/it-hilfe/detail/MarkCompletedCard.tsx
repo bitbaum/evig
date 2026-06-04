@@ -19,7 +19,7 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
   return (
     <div className="rounded-xl border border-primary-200 bg-surface-base p-6">
       <div className="flex items-start gap-3">
-        <CheckCircle className="w-6 h-6 text-action flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <CheckCircle className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">
           <Heading level={3} className="text-lg font-semibold text-text-primary mb-1">
             {t('markCompletedTitle')}

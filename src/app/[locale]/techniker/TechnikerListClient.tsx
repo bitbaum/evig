@@ -45,7 +45,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
           {technician.name}
         </Heading>
         <span
-          className={`flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+          className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
             technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
               ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
               : 'bg-surface-raised text-text-secondary'
@@ -168,7 +168,7 @@ export default function TechnikerListClient() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact header */}
-      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-surface-raised dark:bg-neutral-900 border-b border-subtle dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>

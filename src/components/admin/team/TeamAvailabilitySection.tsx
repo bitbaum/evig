@@ -73,7 +73,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
           <button
             type="button"
             onClick={() => onChange('working_hours', applyStandardSchedule())}
-            className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
+            className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/6"
           >
             Mo-Fr 09-17
           </button>
@@ -92,7 +92,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
                     type="checkbox"
                     checked={daySchedule.enabled}
                     onChange={(e) => updateScheduleDay(day, 'enabled', e.target.checked)}
-                    className="h-4 w-4 rounded border-neutral-300 text-action focus:ring-primary-500"
+                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                   />
                   {WEEKDAY_LABELS[day]}
                 </label>

@@ -110,7 +110,7 @@ export default async function WissenPage() {
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-action" />
                     <Heading level={2} className="text-xl sm:text-2xl">{t(section.titleKey as Parameters<typeof t>[0])}</Heading>
                   </div>
-                  <p className="text-sm sm:text-base mb-4 sm:mb-6 flex-grow text-text-secondary">{t(section.descriptionKey as Parameters<typeof t>[0])}</p>
+                  <p className="text-sm sm:text-base mb-4 sm:mb-6 grow text-text-secondary">{t(section.descriptionKey as Parameters<typeof t>[0])}</p>
                   <Link
                     href={section.href}
                     className={`inline-flex items-center justify-center px-4 py-2 rounded-lg text-white font-semibold text-sm sm:text-base ${buttonClass} transition-colors`}

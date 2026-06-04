@@ -194,7 +194,7 @@ export function IntakeDetailView({
           </Heading>
 
           {!detail.checklist_complete && (
-            <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 dark:text-warning-200 bg-warning-50 dark:bg-warning-900/20 p-2 rounded">
+            <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 dark:text-warning-200 bg-warning-50 dark:bg-warning-900/20 p-2 rounded-sm">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <span>Alle Pflichtpunkte der Checkliste müssen abgehakt sein, bevor das Gerät publiziert werden kann.</span>
             </div>
@@ -251,7 +251,7 @@ export function IntakeDetailView({
           <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800 dark:text-warning-200">
             <ArrowDownUp className="w-4 h-4" /> Stufe ändern
           </Heading>
-          <div className="flex items-start gap-2 text-sm text-warning-700 dark:text-warning-200 bg-warning-100 dark:bg-warning-900/30 p-2 rounded">
+          <div className="flex items-start gap-2 text-sm text-warning-700 dark:text-warning-200 bg-warning-100 dark:bg-warning-900/30 p-2 rounded-sm">
             <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
             <span>Alle Checklisten-Fortschritte werden zurückgesetzt.</span>
           </div>

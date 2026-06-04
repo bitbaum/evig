@@ -36,7 +36,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                   type="button"
                   onClick={() => onMoveUp(index)}
                   disabled={index === 0}
-                  className="flex h-7 w-7 items-center justify-center rounded border border text-text-tertiary hover:bg-neutral-100 disabled:opacity-30"
+                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-neutral-100 disabled:opacity-30"
                   title="Höher"
                 >
                   ↑
@@ -45,7 +45,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                   type="button"
                   onClick={() => onMoveDown(index)}
                   disabled={index === ranking.length - 1}
-                  className="flex h-7 w-7 items-center justify-center rounded border border text-text-tertiary hover:bg-neutral-100 disabled:opacity-30"
+                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-neutral-100 disabled:opacity-30"
                   title="Tiefer"
                 >
                   ↓

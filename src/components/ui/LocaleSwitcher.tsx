@@ -47,8 +47,8 @@ export function LocaleSwitcher({ className }: Props) {
         aria-expanded={open}
         className={cn(
           'flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium uppercase tracking-wide',
-          'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-white/[0.06] transition-colors',
-          'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500',
+          'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-white/6 transition-colors',
+          'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500',
           isPending && 'opacity-50 cursor-wait'
         )}
       >
@@ -61,7 +61,7 @@ export function LocaleSwitcher({ className }: Props) {
           role="listbox"
           className={cn(
             'absolute right-0 top-full mt-1 z-50',
-            'min-w-[7rem] rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 shadow-lg dark:shadow-black/30 py-1',
+            'min-w-28 rounded-lg border border-neutral-200 dark:border-white/6 bg-white dark:bg-neutral-900 shadow-lg dark:shadow-black/30 py-1',
           )}
         >
           {locales.map((loc) => (
@@ -72,9 +72,9 @@ export function LocaleSwitcher({ className }: Props) {
               onClick={() => switchLocale(loc)}
               className={cn(
                 'w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left',
-                'hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors',
+                'hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors',
                 loc === locale
-                  ? 'text-primary-700 dark:text-primary-400 font-semibold bg-primary-50 dark:bg-primary-500/[0.08]'
+                  ? 'text-primary-700 dark:text-primary-400 font-semibold bg-primary-50 dark:bg-primary-500/8'
                   : 'text-neutral-700 dark:text-neutral-300'
               )}
             >

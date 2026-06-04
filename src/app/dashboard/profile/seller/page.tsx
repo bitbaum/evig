@@ -67,7 +67,7 @@ export default function SellerProfileEditPage() {
         {t('backToDashboard')}
       </Link>
 
-      <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700">
+      <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700">
         <div className="p-6 border-b border-subtle dark:border-neutral-700">
           <Heading level={1} className="text-xl font-bold text-text-primary flex items-center gap-2">
             <User className="w-5 h-5 text-action" />
@@ -183,13 +183,13 @@ export default function SellerProfileEditPage() {
         <div className="p-6 border-t border-subtle dark:border-neutral-700">
           {error && (
             <div className="mb-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-3 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-error-500 shrink-0" />
               <p className="text-sm text-error-800 dark:text-error-200">{error}</p>
             </div>
           )}
           {success && (
             <div className="mb-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-3 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-action flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 text-action shrink-0" />
               <p className="text-sm text-primary-800 dark:text-primary-200">{success}</p>
             </div>
           )}

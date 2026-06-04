@@ -74,7 +74,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
         </div>
 
         {/* Decision context */}
-        <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] p-6 mb-6 shadow-sm dark:shadow-none">
+        <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/6 p-6 mb-6 shadow-xs dark:shadow-none">
           <h2 className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3">
             {t('contextHeading')}
           </h2>
@@ -83,7 +83,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
           </p>
 
           {decision.background && (
-            <details className="mt-4 rounded-lg border border-warning-200 dark:border-yellow-500/20 bg-warning-50 dark:bg-yellow-500/[0.06]">
+            <details className="mt-4 rounded-lg border border-warning-200 dark:border-yellow-500/20 bg-warning-50 dark:bg-yellow-500/6">
               <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium text-warning-800 dark:text-yellow-300 select-none">
                 📄 {t('backgroundTitle')}
               </summary>
@@ -105,7 +105,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
                 {hasImages ? (
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                     {decision.options.map((opt) => (
-                      <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-800 overflow-hidden">
+                      <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-white/6 bg-neutral-50 dark:bg-neutral-800 overflow-hidden">
                         {opt.imageUrl && (
                           <div className="relative aspect-square bg-white dark:bg-neutral-900">
                             <Image
@@ -126,7 +126,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
                     {decision.options.map((opt) => (
                       <div
                         key={opt.id}
-                        className="rounded-md border border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm"
+                        className="rounded-md border border-neutral-200 dark:border-white/6 bg-neutral-50 dark:bg-neutral-800 px-3 py-2 text-sm"
                       >
                         <span className="font-medium text-neutral-800 dark:text-neutral-200">{opt.label}</span>
                         {opt.description && (

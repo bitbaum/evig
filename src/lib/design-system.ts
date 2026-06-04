@@ -310,7 +310,7 @@ export const responsive = {
  * Touch target utilities (minimum 44x44px for accessibility)
  */
 export const touchTarget = {
-  base: 'min-h-[44px] min-w-[44px]',
+  base: 'min-h-touch min-w-touch',
   sm: 'min-h-[36px] min-w-[36px]',
   lg: 'min-h-[48px] min-w-[48px]',
 } as const
@@ -326,7 +326,7 @@ export const touchTarget = {
 export const designPrimitive = {
   // Focus ring — primary green, consistent with brand
   focus:
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950',
+    'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950',
 
   // ── Typography ────────────────────────────────────────────────────────────
   // x.ai style: tight tracking, high contrast, scale discipline
@@ -346,7 +346,7 @@ export const designPrimitive = {
   // They use CSS custom properties so dark mode is automatic — no dark: needed.
   surface: {
     card:        'card-shell',
-    cardElevated:'card-shell shadow-sm',
+    cardElevated:'card-shell shadow-xs',
     inset:       'card-shell-inset',
     table:       'card-shell overflow-hidden',
   },
@@ -359,10 +359,10 @@ export const designPrimitive = {
   button: {
     default:     'bg-primary-600 text-white hover:bg-primary-700',
     primary:     'bg-primary-600 text-white hover:bg-primary-700',
-    outline:     'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-white/[0.08] dark:bg-transparent dark:text-white dark:hover:bg-white/[0.04]',
+    outline:     'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-white/8 dark:bg-transparent dark:text-white dark:hover:bg-white/4',
     outlineLight:'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
-    secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-white/[0.06] dark:text-white dark:hover:bg-white/[0.1]',
-    ghost:       'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/[0.04] dark:hover:text-white',
+    secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-white/6 dark:text-white dark:hover:bg-white/10',
+    ghost:       'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/4 dark:hover:text-white',
     destructive:         'bg-error-600 text-white hover:bg-error-700',
     'destructive-ghost': 'bg-transparent text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-900/20',
     'destructive-outline':'border border-error-200 text-error-700 hover:bg-error-50 dark:border-error-800 dark:text-error-400 dark:hover:bg-error-900/20',
@@ -370,10 +370,10 @@ export const designPrimitive = {
   },
 
   buttonSize: {
-    default: 'min-h-[44px] px-4 py-2 text-sm',
+    default: 'min-h-touch px-4 py-2 text-sm',
     sm:      'min-h-[36px] px-3 py-1.5 text-sm',
-    lg:      'min-h-[44px] px-6 py-2.5 text-sm',
-    icon:    'min-h-[44px] min-w-[44px] p-2',
+    lg:      'min-h-touch px-6 py-2.5 text-sm',
+    icon:    'min-h-touch min-w-touch p-2',
   },
 
   // ── Badges ────────────────────────────────────────────────────────────────
@@ -382,9 +382,9 @@ export const designPrimitive = {
 
   badge: {
     default:     'border-transparent bg-primary-600 text-white',
-    secondary:   'border-transparent bg-neutral-100 text-neutral-700 dark:bg-white/[0.08] dark:text-neutral-300',
+    secondary:   'border-transparent bg-neutral-100 text-neutral-700 dark:bg-white/8 dark:text-neutral-300',
     destructive: 'border-transparent bg-error-600 text-white',
-    outline:     'border-neutral-300 text-neutral-700 dark:border-white/[0.12] dark:text-neutral-400',
+    outline:     'border-neutral-300 text-neutral-700 dark:border-white/12 dark:text-neutral-400',
     success:     'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/10 dark:text-primary-400',
     warning:     'border-warning-200 bg-warning-50 text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-400',
     info:        'border-neutral-200 bg-neutral-50 text-neutral-800 dark:border-neutral-500/30 dark:bg-neutral-500/10 dark:text-neutral-400',
@@ -400,12 +400,12 @@ export const designPrimitive = {
   // `elevated` variant: sits inside a surface-base panel (e.g. a modal)
   //   — bg lifts to surface-raised so it stays visible against the panel.
   form: {
-    input:            'w-full rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    inputElevated:    'w-full rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    textarea:         'w-full rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    textareaElevated: 'w-full rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    select:           'rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
-    selectElevated:   'rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
+    input:            'w-full rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    inputElevated:    'w-full rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    textarea:         'w-full rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    textareaElevated: 'w-full rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    select:           'rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent',
+    selectElevated:   'rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent',
     label:    'block text-xs font-medium uppercase tracking-wide text-text-tertiary mb-1',
     hint:     'mt-1 text-xs text-text-muted',
     error:    'mt-1 text-xs text-error-600 dark:text-error-400',
@@ -414,9 +414,9 @@ export const designPrimitive = {
   // ── Tables ────────────────────────────────────────────────────────────────
   // x.ai: very subtle row separators, no heavy borders
   table: {
-    thead: 'border-b border-neutral-200 bg-neutral-50 dark:border-white/[0.06] dark:bg-transparent',
+    thead: 'border-b border-neutral-200 bg-neutral-50 dark:border-white/6 dark:bg-transparent',
     th:    'px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500',
-    tr:    'border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-white/[0.04] dark:hover:bg-white/[0.02]',
+    tr:    'border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-white/4 dark:hover:bg-white/2',
     td:    'px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300',
     empty: 'py-12 text-center text-sm text-neutral-500 dark:text-neutral-400',
   },

@@ -275,12 +275,12 @@ export function CommandBar() {
       {/* Trigger button in top bar (Search icon) */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-neutral-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] sm:flex"
+        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-neutral-200 dark:bg-white/4 dark:hover:bg-white/8 sm:flex"
         aria-label="Suche öffnen (⌘K)"
       >
         <Search className="w-3.5 h-3.5" />
         <span className="text-xs">Suche</span>
-        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-neutral-200 dark:bg-neutral-600 rounded text-xs font-mono leading-none">
+        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-neutral-200 dark:bg-neutral-600 rounded-sm text-xs font-mono leading-none">
           ⌘K
         </kbd>
       </button>
@@ -295,18 +295,18 @@ export function CommandBar() {
       >
         {/* Search input */}
         <div className="flex items-center gap-3 border-b border px-4 py-3">
-          <Search className="w-4 h-4 text-text-muted flex-shrink-0" aria-hidden="true" />
+          <Search className="w-4 h-4 text-text-muted shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}
             type="search"
             placeholder="Suche oder Befehl..."
             value={query}
             onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
-            className="flex-1 bg-transparent outline-none text-text-primary placeholder-neutral-400 dark:placeholder-neutral-500 text-sm"
+            className="flex-1 bg-transparent outline-hidden text-text-primary placeholder-neutral-400 dark:placeholder-neutral-500 text-sm"
             autoComplete="off"
             spellCheck={false}
           />
-          <kbd className="flex-shrink-0 rounded bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-white/[0.06]">
+          <kbd className="shrink-0 rounded-sm bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-white/6">
             Esc
           </kbd>
         </div>
@@ -334,11 +334,11 @@ export function CommandBar() {
                       onMouseEnter={() => setActiveIdx(currentFlatIdx)}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                         isCurrent
-                          ? 'bg-primary-50 text-primary-700 dark:bg-primary-500/[0.08] dark:text-primary-300'
-                          : 'text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/[0.03]'
+                          ? 'bg-primary-50 text-primary-700 dark:bg-primary-500/8 dark:text-primary-300'
+                          : 'text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/3'
                       }`}
                     >
-                      <span className={`flex-shrink-0 ${isCurrent ? 'text-primary-500' : 'text-text-muted'}`}>
+                      <span className={`shrink-0 ${isCurrent ? 'text-primary-500' : 'text-text-muted'}`}>
                         {item.icon}
                       </span>
                       <span className="flex-1 min-w-0">
@@ -352,7 +352,7 @@ export function CommandBar() {
                         )}
                       </span>
                       {isCurrent && (
-                        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-primary-400" aria-hidden="true" />
+                        <ChevronRight className="w-3.5 h-3.5 shrink-0 text-primary-400" aria-hidden="true" />
                       )}
                     </button>
                   )
@@ -365,15 +365,15 @@ export function CommandBar() {
         {/* Footer hint */}
         <div className="flex items-center gap-4 border-t border-subtle px-4 py-2 text-xs text-text-muted">
           <span className="flex items-center gap-1">
-            <kbd className="rounded bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/[0.06]">↑↓</kbd>
+            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/6">↑↓</kbd>
             Navigieren
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/[0.06]">↵</kbd>
+            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/6">↵</kbd>
             Öffnen
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/[0.06]">Esc</kbd>
+            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-white/6">Esc</kbd>
             Schliessen
           </span>
         </div>

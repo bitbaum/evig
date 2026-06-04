@@ -43,7 +43,7 @@ export function AdminSectionHeader({
       )}
     >
       <div className="flex items-center gap-2 min-w-0">
-        {Icon && <Icon className="w-4 h-4 text-text-muted flex-shrink-0" />}
+        {Icon && <Icon className="w-4 h-4 text-text-muted shrink-0" />}
         <div className="min-w-0">
           <h2 className={adminType.sectionTitle}>{title}</h2>
           {description && (
@@ -53,7 +53,7 @@ export function AdminSectionHeader({
       </div>
 
       {actions && (
-        <div className="flex items-center gap-2 flex-shrink-0">{actions}</div>
+        <div className="flex items-center gap-2 shrink-0">{actions}</div>
       )}
     </div>
   )

@@ -97,7 +97,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, valueColor = 'text-text-primary', icon }: StatCardProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border p-4">
+    <div className="bg-surface-base rounded-xl shadow-xs border border p-4">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs text-text-secondary">{label}</p>

@@ -105,13 +105,13 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
 
       {success && (
         <div className="mt-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-4 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-action flex-shrink-0" />
+          <CheckCircle className="w-5 h-5 text-action shrink-0" />
           <p className="text-primary-800 dark:text-primary-200 font-medium">{success}</p>
         </div>
       )}
       {error && (
         <div className="mt-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-4 flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-error-500 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-error-500 shrink-0" />
           <p className="text-error-800 dark:text-error-200">{error}</p>
         </div>
       )}

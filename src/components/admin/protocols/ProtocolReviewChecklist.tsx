@@ -50,7 +50,7 @@ export function ProtocolReviewChecklist({ items }: ProtocolReviewChecklistProps)
           return (
             <div key={item.id} className={cn('rounded-lg border p-4', config.className)}>
               <div className="flex items-start gap-3">
-                <Icon className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                <Icon className="mt-0.5 h-5 w-5 shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className={cn(adminType.body, 'font-semibold text-inherit')}>{item.label}</h3>

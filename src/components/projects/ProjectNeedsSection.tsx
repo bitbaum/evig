@@ -104,21 +104,21 @@ export function ProjectNeedsSection({ slug, labels }: Props) {
               return (
                 <div key={need.id} className={cn(designPrimitive.surface.card, 'p-5 sm:p-6 flex flex-col')}>
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
                       <Icon className="h-5 w-5 text-action" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-medium uppercase tracking-wider text-text-muted mb-0.5">
                         {labels.typeLabels[need.type] ?? need.type}
                       </p>
-                      <h3 className="text-base font-semibold text-text-primary break-words">
+                      <h3 className="text-base font-semibold text-text-primary wrap-break-word">
                         {need.title}
                       </h3>
                     </div>
                   </div>
 
                   {need.description && (
-                    <p className="text-sm text-text-secondary mb-4 flex-grow">
+                    <p className="text-sm text-text-secondary mb-4 grow">
                       {need.description}
                     </p>
                   )}
@@ -137,7 +137,7 @@ export function ProjectNeedsSection({ slug, labels }: Props) {
                       designPrimitive.buttonBase,
                       designPrimitive.buttonSize.default,
                       designPrimitive.button.primary,
-                      'mt-auto w-full justify-center min-h-[44px]',
+                      'mt-auto w-full justify-center min-h-touch',
                     )}
                   >
                     {labels.helpCta}

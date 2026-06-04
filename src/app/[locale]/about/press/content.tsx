@@ -56,7 +56,7 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
             {mention.title}
           </Heading>
         </div>
-        <ExternalLink className="h-4 w-4 text-text-tertiary group-hover:text-primary-500 flex-shrink-0 transition-colors" />
+        <ExternalLink className="h-4 w-4 text-text-tertiary group-hover:text-primary-500 shrink-0 transition-colors" />
       </div>
 
       {/* Source and Date */}
@@ -111,7 +111,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
         </p>
         <p className="text-xs text-text-tertiary truncate">{mention.date}</p>
       </div>
-      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors flex-shrink-0" />
+      <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors shrink-0" />
     </a>
   )
 }
@@ -214,7 +214,7 @@ export default function PressPageContent() {
                     </p>
                     <p className="text-xs text-text-tertiary truncate">{mention.title}</p>
                   </div>
-                  <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors flex-shrink-0" />
+                  <ExternalLink className="h-4 w-4 text-neutral-300 group-hover:text-primary-500 transition-colors shrink-0" />
                 </a>
               ))}
             </div>

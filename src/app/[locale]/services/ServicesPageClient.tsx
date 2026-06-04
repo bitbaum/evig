@@ -106,11 +106,11 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             </div>
           </div>
         </div>
-        <p className="text-text-secondary mb-6 flex-grow">{service.description}</p>
+        <p className="text-text-secondary mb-6 grow">{service.description}</p>
         <div className="space-y-3 mb-6">
           {service.features.map((feature, i) => (
             <div key={i} className="flex items-center text-text-secondary">
-              <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${
+              <CheckCircle2 className={`w-5 h-5 mr-3 shrink-0 ${
                 service.available ? 'text-primary-500' : 'text-text-muted'
               }`} />
               <span>{feature}</span>
@@ -183,7 +183,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           )}
 
           {bookingStatus === 'error' && errorMessage && (
-            <div className="mt-2 text-xs text-error-600 dark:text-error-300 bg-error-50 dark:bg-error-900/20 p-2 rounded">
+            <div className="mt-2 text-xs text-error-600 dark:text-error-300 bg-error-50 dark:bg-error-900/20 p-2 rounded-sm">
               {errorMessage}
             </div>
           )}

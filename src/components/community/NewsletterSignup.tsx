@@ -60,7 +60,7 @@ export function NewsletterSignup({
     )
   }
 
-  const inputClass = 'flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/[0.1] dark:bg-neutral-800 dark:placeholder:text-neutral-500'
+  const inputClass = 'flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-neutral-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/10 dark:bg-neutral-800 dark:placeholder:text-neutral-500'
 
   return (
     <div>

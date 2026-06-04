@@ -26,7 +26,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
           {t('title')}
         </Heading>
         <p className="text-text-secondary mb-4">
-          {t('itemUUIDLabel')} <code className="bg-surface-raised px-2 py-1 rounded">{itemUUID}</code>
+          {t('itemUUIDLabel')} <code className="bg-surface-raised px-2 py-1 rounded-sm">{itemUUID}</code>
         </p>
 
         {/* Action buttons */}

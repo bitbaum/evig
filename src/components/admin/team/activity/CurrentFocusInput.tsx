@@ -62,7 +62,7 @@ export function CurrentFocusInput({
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <Target className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+        <Target className="w-4 h-4 text-text-tertiary shrink-0" />
         {isEditing ? (
           <div className="flex items-center gap-2 flex-1">
             <Input
@@ -81,7 +81,7 @@ export function CurrentFocusInput({
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="p-1 text-action hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded disabled:opacity-50"
+              className="p-1 text-action hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-sm disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

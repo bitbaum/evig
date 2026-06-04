@@ -69,9 +69,9 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
   if (loading) {
     return (
       <div className="animate-pulse">
-        <div className="h-6 bg-neutral-200 rounded w-1/2 mb-4"></div>
-        <div className="h-20 bg-neutral-200 rounded mb-2"></div>
-        <div className="h-20 bg-neutral-200 rounded"></div>
+        <div className="h-6 bg-neutral-200 rounded-sm w-1/2 mb-4"></div>
+        <div className="h-20 bg-neutral-200 rounded-sm mb-2"></div>
+        <div className="h-20 bg-neutral-200 rounded-sm"></div>
       </div>
     )
   }
@@ -118,7 +118,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
         {reviews.slice(0, 5).map((review) => (
           <div key={review.id} className="border-b border-subtle pb-4 last:border-0">
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
+              <div className="shrink-0 w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center">
                 <User className="w-4 h-4 text-text-secondary" />
               </div>
               <div className="flex-1 min-w-0">

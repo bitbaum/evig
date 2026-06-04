@@ -66,7 +66,7 @@ export function AIFieldIndicator({
       <button
         type="button"
         onClick={() => setShowDetails(!showDetails)}
-        className={`inline-flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded border text-xs font-medium transition-all hover:opacity-80 ${colorClass}`}
+        className={`inline-flex items-center gap-1 px-2 py-1 min-h-touch min-w-touch rounded-sm border text-xs font-medium transition-all hover:opacity-80 ${colorClass}`}
         title={`KI-Extraktion: ${confidencePercent}% Konfidenz`}
       >
         <Sparkles className="w-3 h-3" />
@@ -96,7 +96,7 @@ export function AIFieldIndicator({
               <button
                 type="button"
                 onClick={() => setShowDetails(false)}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
+                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-sm"
               >
                 <X className="w-4 h-4 text-text-tertiary" />
               </button>
@@ -107,7 +107,7 @@ export function AIFieldIndicator({
               {/* Confidence */}
               <div className="flex items-center justify-between">
                 <span className="text-text-secondary">Konfidenz:</span>
-                <span className={`px-2 py-0.5 rounded ${colorClass}`}>
+                <span className={`px-2 py-0.5 rounded-sm ${colorClass}`}>
                   {confidencePercent}% ({confidenceLabel})
                 </span>
               </div>
@@ -125,7 +125,7 @@ export function AIFieldIndicator({
               {source.model && (
                 <div className="flex items-center justify-between">
                   <span className="text-text-secondary">Modell:</span>
-                  <code className="px-1.5 py-0.5 bg-surface-raised dark:bg-neutral-700 rounded text-xs">
+                  <code className="px-1.5 py-0.5 bg-surface-raised dark:bg-neutral-700 rounded-sm text-xs">
                     {source.model}
                   </code>
                 </div>
@@ -137,7 +137,7 @@ export function AIFieldIndicator({
                   <span className="text-text-secondary block mb-1">
                     Eingabe:
                   </span>
-                  <div className="bg-surface-raised dark:bg-neutral-900 rounded p-2 text-xs text-text-secondary max-h-20 overflow-y-auto">
+                  <div className="bg-surface-raised dark:bg-neutral-900 rounded-sm p-2 text-xs text-text-secondary max-h-20 overflow-y-auto">
                     &ldquo;{source.inputText}&rdquo;
                   </div>
                 </div>
@@ -157,12 +157,12 @@ export function AIFieldIndicator({
                         href={verifySource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-primary-50 dark:bg-primary-900/20 rounded px-2 py-1"
+                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-primary-50 dark:bg-primary-900/20 rounded-sm px-2 py-1"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                        <ExternalLink className="w-3 h-3 shrink-0" />
                         <span className="truncate">{verifySource.title}</span>
-                        <span className="text-text-tertiary text-[10px] ml-auto flex-shrink-0">
+                        <span className="text-text-tertiary text-[10px] ml-auto shrink-0">
                           {verifySource.type}
                         </span>
                       </a>
@@ -199,7 +199,7 @@ export function AIFieldBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[10px] font-medium ${colorClass} ${className}`}
+      className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded-sm text-[10px] font-medium ${colorClass} ${className}`}
       title={`KI: ${confidencePercent}% (${SOURCE_LABELS[source.type]})`}
     >
       <Sparkles className="w-2.5 h-2.5" />

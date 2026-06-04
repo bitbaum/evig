@@ -46,7 +46,7 @@ export function SubmissionDetail({
 
   if (!submission) {
     return (
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-12 text-center">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-12 text-center">
         <Eye className="w-12 h-12 text-text-muted mx-auto mb-4" />
         <p className="text-text-secondary">
           Wähle eine Einreichung aus, um Details anzuzeigen
@@ -56,7 +56,7 @@ export function SubmissionDetail({
   }
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
       {/* Header */}
       <div className="border-b border pb-4 mb-4">
         <Heading level={2} className="text-xl text-text-primary mb-3">
@@ -97,7 +97,7 @@ export function SubmissionDetail({
                 {submission.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded"
+                    className="px-2 py-0.5 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded-sm"
                   >
                     {tag}
                   </span>
@@ -234,7 +234,7 @@ export function SubmissionDetail({
           {submission.published_post_id && (
             <Link
               href={`/admin/content/blog/${submission.published_post_id}`}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-text-secondary rounded-lg hover:bg-neutral-50 dark:hover:bg-white/6 transition-colors text-sm"
             >
               <Edit className="w-4 h-4" />
               Im Admin bearbeiten

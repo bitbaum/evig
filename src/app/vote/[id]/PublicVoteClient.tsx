@@ -94,14 +94,14 @@ export default function PublicVoteClient({
   if (success) {
     return (
       <div className="space-y-4">
-        <div className="rounded-xl bg-primary-50 dark:bg-primary-500/[0.08] border border-primary-200 dark:border-primary-500/20 p-6 text-center">
+        <div className="rounded-xl bg-primary-50 dark:bg-primary-500/8 border border-primary-200 dark:border-primary-500/20 p-6 text-center">
           <CheckCircle className="mx-auto h-10 w-10 text-primary-500 mb-3" />
           <p className="text-lg font-semibold text-primary-800 dark:text-primary-300">{t('successHeading')}</p>
           <p className="mt-1 text-sm text-primary-700 dark:text-primary-400">{t('successDesc')}</p>
         </div>
 
         {/* Registration gate — results require an account */}
-        <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-6 shadow-sm dark:shadow-none">
+        <div className="rounded-xl border border-neutral-200 dark:border-white/6 bg-white dark:bg-neutral-900 p-6 shadow-xs dark:shadow-none">
           <div className="flex items-start gap-3">
             <UserPlus className="h-5 w-5 text-neutral-500 dark:text-neutral-400 mt-0.5 shrink-0" />
             <div className="flex-1">
@@ -125,7 +125,7 @@ export default function PublicVoteClient({
 
   if (!isVotingPhase) {
     return (
-      <div className="rounded-xl bg-warning-50 dark:bg-yellow-500/[0.08] border border-warning-200 dark:border-yellow-500/20 p-6 text-center">
+      <div className="rounded-xl bg-warning-50 dark:bg-yellow-500/8 border border-warning-200 dark:border-yellow-500/20 p-6 text-center">
         <p className="text-warning-800 dark:text-yellow-300 font-medium">{t('notStartedHeading')}</p>
         <p className="mt-1 text-sm text-warning-700 dark:text-yellow-400">
           {t('notStartedDesc')}
@@ -150,7 +150,7 @@ export default function PublicVoteClient({
       />
 
       {/* Email identification */}
-      <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] p-5">
+      <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/6 p-5">
         <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
           {t('emailLabel')}
         </label>
@@ -160,7 +160,7 @@ export default function PublicVoteClient({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-neutral-300 dark:border-white/[0.08] bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+          className="w-full rounded-lg border border-neutral-300 dark:border-white/8 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
         />
         <p className="mt-1.5 text-xs text-neutral-700 dark:text-neutral-400">
           {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}
@@ -168,7 +168,7 @@ export default function PublicVoteClient({
       </div>
 
       {/* Ballot */}
-      <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] p-5 shadow-sm dark:shadow-none">
+      <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/6 p-5 shadow-xs dark:shadow-none">
         <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-4">{t('yourVote')}</p>
 
         {votingMethod === 'consent' && (
@@ -222,7 +222,7 @@ export default function PublicVoteClient({
       </div>
 
       {error && (
-        <div className="rounded-lg bg-error-50 dark:bg-red-500/[0.08] border border-error-200 dark:border-red-500/20 p-3 text-sm text-error-700 dark:text-red-300">
+        <div className="rounded-lg bg-error-50 dark:bg-red-500/8 border border-error-200 dark:border-red-500/20 p-3 text-sm text-error-700 dark:text-red-300">
           {error}
         </div>
       )}

@@ -17,7 +17,7 @@ export function WorkflowSection() {
           <div className="space-y-8">
             {steps.map((s) => (
               <div key={s.step} className="flex gap-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold z-10">
+                <div className="shrink-0 w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold z-10">
                   {s.step}
                 </div>
                 <div className="pt-3">

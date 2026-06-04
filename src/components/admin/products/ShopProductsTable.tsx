@@ -59,7 +59,7 @@ export function ShopProductsTable({
   const allSelected = selectable && filteredIds.length > 0 && filteredIds.every(id => selectedIds.has(id))
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border overflow-hidden">
+    <div className="bg-surface-base rounded-xl shadow-xs border border overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px]">
           <thead className="bg-surface-raised border-b border">
@@ -70,7 +70,7 @@ export function ShopProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded border-neutral-300 text-action focus:ring-primary-500"
+                    className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                   />
                 </th>
               )}
@@ -108,7 +108,7 @@ export function ShopProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded border-neutral-300 text-action focus:ring-primary-500"
+                      className="h-4 w-4 rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                     />
                   </td>
                 )}
@@ -132,7 +132,7 @@ export function ShopProductsTable({
                       <div className="font-medium text-text-primary">{product.title}</div>
                       <div className="text-sm text-text-tertiary truncate max-w-xs">
                         {product.category && (
-                          <span className="text-xs bg-surface-raised text-text-secondary px-2 py-0.5 rounded mr-2">
+                          <span className="text-xs bg-surface-raised text-text-secondary px-2 py-0.5 rounded-sm mr-2">
                             {product.category}
                           </span>
                         )}

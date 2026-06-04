@@ -89,7 +89,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
     <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl overflow-hidden">
       <div className="flex items-start gap-4 p-4">
         {/* Icon */}
-        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-800/50 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-800/50 rounded-lg flex items-center justify-center shrink-0">
           <Vote className="w-5 h-5 text-action" aria-hidden="true" />
         </div>
 
@@ -103,7 +103,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
           </Heading>
           {deadline && (
             <p className="flex items-center gap-1.5 text-sm text-teal-700 dark:text-teal-300 mt-1">
-              <Clock className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+              <Clock className="w-4 h-4 shrink-0" aria-hidden="true" />
               {deadline}
             </p>
           )}
@@ -114,8 +114,8 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
           )}
         </div>
 
-        {/* CTA — min-h-[44px] ensures touch target */}
-        <Link href={`/admin/decisions/${first.id}`} className={buttonClass({ variant: 'primary', className: 'flex-shrink-0 self-center' })}>
+        {/* CTA — min-h-touch ensures touch target */}
+        <Link href={`/admin/decisions/${first.id}`} className={buttonClass({ variant: 'primary', className: 'shrink-0 self-center' })}>
           Abstimmen
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Link>

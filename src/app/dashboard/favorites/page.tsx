@@ -146,10 +146,10 @@ export default function FavoritesPage() {
             return (
               <div
                 key={listing.id}
-                className="group bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700 overflow-hidden"
+                className="group bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700 overflow-hidden"
               >
                 <Link href={`/marketplace/${listing.id}`}>
-                  <div className="relative aspect-[4/3]">
+                  <div className="relative aspect-4/3">
                     <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-12 h-12" />
                     <div className="absolute top-2 left-2">
                       <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${conditionInfo.color}`}>
@@ -174,7 +174,7 @@ export default function FavoritesPage() {
                     <div className="flex items-center gap-2 text-xs text-text-tertiary">
                       <span className="truncate">{sellerName}</span>
                       {listing.seller_city && (
-                        <span className="flex items-center gap-0.5 flex-shrink-0">
+                        <span className="flex items-center gap-0.5 shrink-0">
                           <MapPin className="w-3 h-3" />
                           {listing.seller_city}
                         </span>

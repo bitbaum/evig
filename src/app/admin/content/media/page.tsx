@@ -46,7 +46,7 @@ export default async function AdminMediaPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -67,7 +67,7 @@ export default async function AdminMediaPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <ImageIcon className="w-8 h-8 text-text-secondary" />
             <div>
@@ -81,7 +81,7 @@ export default async function AdminMediaPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Video className="w-8 h-8 text-action" />
             <div>
@@ -95,7 +95,7 @@ export default async function AdminMediaPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <FileText className="w-8 h-8 text-secondary-600" />
             <div>
@@ -109,7 +109,7 @@ export default async function AdminMediaPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <FolderOpen className="w-8 h-8 text-action" />
             <div>
@@ -125,7 +125,7 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-4">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
@@ -139,7 +139,7 @@ export default async function AdminMediaPage() {
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-3 py-2 border border dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 border border dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/6 transition-colors">
               <Filter className="w-4 h-4 text-text-secondary" />
               <span className="text-sm text-text-secondary">
                 Filter
@@ -150,7 +150,7 @@ export default async function AdminMediaPage() {
               <button className="p-2 bg-primary-50 dark:bg-primary-900/30 text-action">
                 <Grid className="w-4 h-4" />
               </button>
-              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-white/[0.06] text-text-secondary">
+              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-white/6 text-text-secondary">
                 <List className="w-4 h-4" />
               </button>
             </div>
@@ -159,7 +159,7 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Empty State */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
         <div className="text-center py-16">
           <div className="w-20 h-20 bg-surface-raised dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6">
             <ImageIcon className="w-10 h-10 text-text-muted" />
@@ -241,7 +241,7 @@ export default async function AdminMediaPage() {
       {/* Development Notice */}
       <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center shrink-0">
             <FolderOpen className="w-5 h-5 text-warning-600" />
           </div>
           <div>

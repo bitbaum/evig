@@ -93,7 +93,7 @@ export default function DecisionHeaderCard({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2 flex-shrink-0">
+        <div className="flex flex-wrap gap-2 shrink-0">
           {(EDITABLE_STATUSES as readonly string[]).includes(decision.status) && (
             <AdminButton variant="secondary" href={`/admin/decisions/${decision.id}/edit`}>
               Bearbeiten

@@ -38,7 +38,7 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
               <th className="px-4 py-3 font-medium text-text-secondary">Datum</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {orders?.items.map(o => (
               <tr key={o.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3 font-mono text-xs text-text-secondary">{o.id.slice(0, 8)}</td>

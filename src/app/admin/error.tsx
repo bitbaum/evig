@@ -27,7 +27,7 @@ export default function AdminError({
         <p className="mt-2 text-sm text-text-secondary">
           Beim Laden der Admin-Seite ist ein Fehler aufgetreten.
         </p>
-        <Button onClick={reset} variant="primary" className="mt-6 w-full min-h-[44px]">
+        <Button onClick={reset} variant="primary" className="mt-6 w-full min-h-touch">
           Erneut versuchen
         </Button>
       </div>

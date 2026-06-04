@@ -55,9 +55,9 @@ export default function BlogSubmissionsClient() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-black/30 p-8 border-2 border dark:border-neutral-700">
             <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3" />
-              <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full" />
-              <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4" />
+              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3" />
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full" />
+              <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4" />
             </div>
           </div>
         </div>
@@ -173,11 +173,11 @@ function SubmissionCard({
 }) {
   const t = useTranslations('dashboard.blogSubmissions')
   return (
-    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm p-4 sm:p-6 border-2 border dark:border-neutral-700">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs p-4 sm:p-6 border-2 border dark:border-neutral-700">
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <Heading level={3} className="text-lg sm:text-xl font-semibold text-text-primary mb-1 break-words">
+          <Heading level={3} className="text-lg sm:text-xl font-semibold text-text-primary mb-1 wrap-break-word">
             {submission.title}
           </Heading>
           <p className="text-xs sm:text-sm text-text-tertiary">
@@ -324,7 +324,7 @@ function StatCard({
 function EmptyState() {
   const t = useTranslations('dashboard.blogSubmissions')
   return (
-    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm p-8 text-center border-2 border dark:border-neutral-700">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs p-8 text-center border-2 border dark:border-neutral-700">
       <FileText className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
       <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
         {t('emptyTitle')}

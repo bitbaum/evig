@@ -170,7 +170,7 @@ export default async function WirkungPage() {
                 <CardTitle className="flex items-center gap-2">
                   {area.title}
                   {pendingCount > 0 && (
-                    <span className="text-xs font-normal px-2 py-0.5 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded">
+                    <span className="text-xs font-normal px-2 py-0.5 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded-sm">
                       {pendingCount} ausstehend
                     </span>
                   )}
@@ -203,7 +203,7 @@ export default async function WirkungPage() {
                 Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong> eingespart.
                 Diese Zahl basiert auf Studien zur Herstellungsenergie von Elektronikgeräten.
               </p>
-              <code className="text-xs bg-surface-raised dark:bg-neutral-900 p-2 rounded block">
+              <code className="text-xs bg-surface-raised dark:bg-neutral-900 p-2 rounded-sm block">
                 CO2 = Geräte × 285 kg
               </code>
             </div>
@@ -213,7 +213,7 @@ export default async function WirkungPage() {
                 Die Wiederverwendung von Hardware spart wertvolle Rohstoffe wie Seltene Erden,
                 Kupfer und andere Metalle, die sonst neu abgebaut werden müssten.
               </p>
-              <code className="text-xs bg-surface-raised dark:bg-neutral-900 p-2 rounded block">
+              <code className="text-xs bg-surface-raised dark:bg-neutral-900 p-2 rounded-sm block">
                 Rohstoffe = Gewichtsmessung Geräte
               </code>
             </div>

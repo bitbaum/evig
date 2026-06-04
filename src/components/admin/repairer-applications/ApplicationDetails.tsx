@@ -103,7 +103,7 @@ export function ApplicationDetails({ application }: Props) {
         {application.adminNotes && (
           <div>
             <Heading level={4} className="text-text-primary mb-2">Admin-Notizen</Heading>
-            <p className="text-text-secondary text-sm bg-surface-raised p-2 rounded">{application.adminNotes}</p>
+            <p className="text-text-secondary text-sm bg-surface-raised p-2 rounded-sm">{application.adminNotes}</p>
           </div>
         )}
       </div>

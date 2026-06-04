@@ -104,9 +104,9 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
   if (myTasks.length === 0 && mySubmissions.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
-      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
-        <CheckSquare className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
+      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
+        <CheckSquare className="w-5 h-5 text-primary-500 shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           {t('myTasks')}
         </Heading>
@@ -128,12 +128,12 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                   <li key={task.id}>
                     <Link
                       href={`${ROUTES.admin.tasks}?highlight=${task.id}`}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
+                      className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors group"
                     >
                       {overdue ? (
-                        <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                        <AlertCircle className="w-4 h-4 text-error-500 shrink-0 mt-0.5" aria-hidden="true" />
                       ) : (
-                        <Calendar className="w-4 h-4 text-primary-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                        <Calendar className="w-4 h-4 text-primary-400 shrink-0 mt-0.5" aria-hidden="true" />
                       )}
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-text-primary leading-snug">
@@ -173,9 +173,9 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 <li key={sub.id}>
                   <Link
                     href={ROUTES.admin.approvals}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
+                    className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors"
                   >
-                    <FileText className="w-4 h-4 text-warning-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <FileText className="w-4 h-4 text-warning-400 shrink-0 mt-0.5" aria-hidden="true" />
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-text-primary leading-snug">
                         {sub.title ?? contentTypeLabel(sub.content_type)}

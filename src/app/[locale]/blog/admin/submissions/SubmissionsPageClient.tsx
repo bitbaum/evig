@@ -59,7 +59,7 @@ export default function SubmissionsAdminPage() {
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="bg-white rounded-lg shadow-xs p-4 mb-6">
           <div className="flex gap-2">
             {[
               { key: 'all', label: t('filterAll', { count: submissions.length }) },
@@ -88,7 +88,7 @@ export default function SubmissionsAdminPage() {
             <p className="text-neutral-600 mt-4">{t('loading')}</p>
           </div>
         ) : filteredSubmissions.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+          <div className="bg-white rounded-lg shadow-xs p-12 text-center">
             <p className="text-neutral-600">{t('noResults')}</p>
           </div>
         ) : (
@@ -99,7 +99,7 @@ export default function SubmissionsAdminPage() {
                 <div
                   key={submission.id}
                   onClick={() => setSelectedSubmission(submission)}
-                  className={`bg-white rounded-lg shadow-sm p-6 cursor-pointer transition-all ${
+                  className={`bg-white rounded-lg shadow-xs p-6 cursor-pointer transition-all ${
                     selectedSubmission?.id === submission.id
                       ? 'ring-2 ring-primary-600'
                       : 'hover:shadow-md'
@@ -140,7 +140,7 @@ export default function SubmissionsAdminPage() {
                   </div>
                   {submission.category && (
                     <div className="mt-2">
-                      <span className="inline-flex items-center px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded">
+                      <span className="inline-flex items-center px-2 py-1 bg-neutral-100 text-neutral-700 text-xs rounded-sm">
                         <Folder className="w-3 h-3 mr-1" />
                         {submission.category}
                       </span>
@@ -153,7 +153,7 @@ export default function SubmissionsAdminPage() {
             {/* Detail View */}
             <div className="lg:sticky lg:top-4 lg:h-fit">
               {selectedSubmission ? (
-                <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="bg-white rounded-lg shadow-xs p-6">
                   <div className="border-b border-neutral-200 pb-4 mb-4">
                     <Heading level={2} className="text-2xl font-bold text-neutral-900 mb-3">
                       {selectedSubmission.title}
@@ -184,7 +184,7 @@ export default function SubmissionsAdminPage() {
                           <Tag className="w-4 h-4 mt-0.5" />
                           <div className="flex flex-wrap gap-1">
                             {selectedSubmission.tags.map((tag, idx) => (
-                              <span key={idx} className="px-2 py-0.5 bg-neutral-100 text-neutral-700 text-xs rounded">
+                              <span key={idx} className="px-2 py-0.5 bg-neutral-100 text-neutral-700 text-xs rounded-sm">
                                 {tag}
                               </span>
                             ))}
@@ -217,7 +217,7 @@ export default function SubmissionsAdminPage() {
                     </Button>
                   </div>
 
-                  <p className="mt-4 text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded p-3">
+                  <p className="mt-4 text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded-sm p-3">
                     💡 {t.rich('tipText', {
                       strong: (chunks) => <strong>{chunks}</strong>,
                       code: (chunks) => <code>{chunks}</code>,
@@ -225,7 +225,7 @@ export default function SubmissionsAdminPage() {
                   </p>
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+                <div className="bg-white rounded-lg shadow-xs p-12 text-center">
                   <Eye className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
                   <p className="text-neutral-600">
                     {t('selectPrompt')}

@@ -101,12 +101,12 @@ export default async function ProtocolDetailPage({
         <div className="flex items-center gap-4 min-w-0">
           <Link
             href={ROUTES.admin.protocols}
-            className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors flex-shrink-0"
+            className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
             Zurück
           </Link>
-          <div className="w-px h-5 bg-neutral-200 dark:bg-white/[0.08] flex-shrink-0" />
+          <div className="w-px h-5 bg-neutral-200 dark:bg-white/8 shrink-0" />
           <div className="flex items-center gap-3 min-w-0">
             <div className={`${adminIconBox.sm} ${adminIconColor.green}`}>
               <MeetingIcon className={adminIconBox.icon} />
@@ -123,7 +123,7 @@ export default async function ProtocolDetailPage({
         </div>
 
         {/* Status badge */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <span
             className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
               PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-surface-raised text-neutral-800'

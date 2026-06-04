@@ -64,19 +64,19 @@ export function ResponsiveHero({
     primary: cn(
       'bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20',
       responsiveButtons.primary,
-      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
+      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),
     secondary: cn(
       getButtonVariant('primary').bg,
       getButtonVariant('primary').text,
       getButtonVariant('primary').hover,
       responsiveButtons.secondary,
-      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
+      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),
     outline: cn(
       'bg-transparent border-2 border-white text-white hover:bg-white/20',
       responsiveButtons.secondary,
-      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
+      'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),
   }
 
@@ -98,7 +98,7 @@ export function ResponsiveHero({
               backgroundSize: '20px 20px',
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-black/50 to-transparent" />
         </>
       )}
       

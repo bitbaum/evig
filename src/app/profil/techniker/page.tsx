@@ -89,7 +89,7 @@ export default function TechnikerProfilPage() {
         )}
 
         {/* Skills Selection */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-action" />
             {t('skills.heading')}
@@ -135,7 +135,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Service Type */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <Clock className="w-5 h-5 text-action" />
             {t('serviceType.heading')}
@@ -164,7 +164,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Location */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-action" />
             {t('location.heading')}
@@ -243,7 +243,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Pricing */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <Euro className="w-5 h-5 text-action" />
             {t('pricing.heading')}
@@ -288,7 +288,7 @@ export default function TechnikerProfilPage() {
                       acceptsGratis: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-action border-neutral-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-primary-500"
                 />
                 <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon} {t('pricing.acceptsGratis')}
@@ -305,7 +305,7 @@ export default function TechnikerProfilPage() {
                       acceptsKulturlegi: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-action border-neutral-300 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-action border-neutral-300 rounded-sm focus:ring-primary-500"
                 />
                 <span className="text-sm text-text-secondary">
                   {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon} {t('pricing.acceptsKulturlegi')}
@@ -316,7 +316,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Bio */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
           <Heading level={2} className="text-lg text-text-primary mb-4">
             {t('bio.heading')}
           </Heading>
@@ -339,7 +339,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Active Toggle */}
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle p-6 mb-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
           <label className="flex items-center justify-between cursor-pointer">
             <div>
               <Heading level={2} className="text-lg text-text-primary">
@@ -361,7 +361,7 @@ export default function TechnikerProfilPage() {
                 }
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
             </div>
           </label>
         </div>

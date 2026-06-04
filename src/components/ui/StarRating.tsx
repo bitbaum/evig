@@ -50,7 +50,7 @@ export function StarRating({ value, onChange, label, size = 'md' }: StarRatingPr
         onClick={() => onChange?.(star)}
         onMouseEnter={() => setHover(star)}
         onMouseLeave={() => setHover(0)}
-        className="p-1 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded hover:scale-110 transition-transform"
+        className="p-1 focus:outline-hidden focus:ring-2 focus:ring-primary-500 rounded-sm hover:scale-110 transition-transform"
       >
         {starEl}
       </button>

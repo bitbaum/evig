@@ -116,7 +116,7 @@ export default async function AdminCategoriesPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -137,7 +137,7 @@ export default async function AdminCategoriesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-action" />
             <div>
@@ -151,7 +151,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -165,7 +165,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-text-secondary" />
             <div>
@@ -181,7 +181,7 @@ export default async function AdminCategoriesPage() {
       </div>
 
       {/* Categories Table */}
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
         {categories.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -204,11 +204,11 @@ export default async function AdminCategoriesPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
+              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
                 {categories.map((category) => (
                   <tr
                     key={category.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
+                    className="hover:bg-neutral-50 dark:hover:bg-white/6"
                   >
                     <td className="px-6 py-4">
                       <div>
@@ -312,7 +312,7 @@ export default async function AdminCategoriesPage() {
       {/* Info Banner */}
       <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
             <Tag className="w-5 h-5 text-text-secondary" />
           </div>
           <div>

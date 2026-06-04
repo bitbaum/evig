@@ -68,7 +68,7 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
                   onStepClick ? 'cursor-pointer hover:opacity-80' : 'cursor-default'
                 )}
               >
-                <div className={cn('w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0', config.dotClass)}>
+                <div className={cn('w-7 h-7 rounded-full flex items-center justify-center shrink-0', config.dotClass)}>
                   <Icon className="w-3.5 h-3.5" />
                 </div>
                 <span className={cn('text-xs truncate max-w-[56px]', config.labelClass)}>
@@ -86,7 +86,7 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
       {/* Active step hint */}
       {activeItem && (
         <div className={cn(
-          'mt-3 pt-3 border-t border-subtle dark:border-white/[0.06] text-xs',
+          'mt-3 pt-3 border-t border-subtle dark:border-white/6 text-xs',
           activeItem.state === 'blocked' ? 'text-error-600' : 'text-warning-700 dark:text-warning-400'
         )}>
           <span className="font-medium">{activeItem.label}: </span>

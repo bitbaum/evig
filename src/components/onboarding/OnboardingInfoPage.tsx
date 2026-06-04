@@ -52,7 +52,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
                 className="card-shell rounded-lg p-6"
               >
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <BenefitIcon className={`w-6 h-6 ${benefit.iconColor}`} />
                   </div>
                   <div>
@@ -77,7 +77,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
           <ul className="space-y-4">
             {config.requirements.items.map((item, index) => (
               <li key={index} className="flex items-start space-x-3">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center text-sm font-medium">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center text-sm font-medium">
                   {index + 1}
                 </span>
                 <div>
@@ -90,7 +90,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         </div>
 
         {/* Pricing Info Box */}
-        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-white/[0.06] mb-8">
+        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-white/6 mb-8">
           <div className="flex items-center space-x-3 mb-4">
             <config.pricing.icon className={`w-6 h-6 ${config.pricing.iconColor}`} />
             <Heading level={2} className="text-xl font-semibold text-neutral-900">

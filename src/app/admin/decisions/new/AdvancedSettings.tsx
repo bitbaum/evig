@@ -87,7 +87,7 @@ export function AdvancedSettings({
           type="checkbox"
           checked={blindVoting}
           onChange={(e) => onBlindVotingChange(e.target.checked)}
-          className="rounded"
+          className="rounded-sm"
         />
         Geheime Abstimmung (Stimmen erst nach eigener Abgabe sichtbar)
       </label>

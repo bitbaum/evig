@@ -76,7 +76,7 @@ export function UserMenu() {
           className={cn(
             "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
             "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
+            "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
           )}
         >
           {t('login')}
@@ -135,7 +135,7 @@ export function UserMenu() {
           isOpen
             ? "bg-primary-50 dark:bg-primary-500/10 ring-primary-200 dark:ring-primary-500/30"
             : "hover:bg-primary-50 dark:hover:bg-primary-500/10 hover:ring-primary-200 dark:hover:ring-primary-500/30",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -173,9 +173,9 @@ export function UserMenu() {
             : "opacity-0 scale-95 pointer-events-none"
         )}
       >
-        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-neutral-100 dark:border-white/6 overflow-hidden">
           {/* User Info Header */}
-          <div className="px-5 py-4 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-100 dark:border-white/[0.06]">
+          <div className="px-5 py-4 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-100 dark:border-white/6">
             <div className="flex items-center gap-3">
               {session.user.image ? (
                 <Image
@@ -207,7 +207,7 @@ export function UserMenu() {
             {menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 {groupIndex > 0 && (
-                  <div className="my-1 mx-3 border-t border-neutral-100 dark:border-white/[0.06]" />
+                  <div className="my-1 mx-3 border-t border-neutral-100 dark:border-white/6" />
                 )}
                 {group.map((item) => (
                   <Link
@@ -219,7 +219,7 @@ export function UserMenu() {
                       "text-sm transition-colors duration-150",
                       'highlight' in item && item.highlight
                         ? "text-warning-700 dark:text-warning-400 bg-warning-50 dark:bg-warning-500/10 hover:bg-warning-100 dark:hover:bg-warning-500/20 font-medium"
-                        : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/[0.04]"
+                        : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/4"
                     )}
                   >
                     <item.icon className={cn(
@@ -236,14 +236,14 @@ export function UserMenu() {
           </div>
 
           {/* Settings & Logout */}
-          <div className="py-2 border-t border-neutral-100 dark:border-white/[0.06]">
+          <div className="py-2 border-t border-neutral-100 dark:border-white/6">
             <Link
               href="/dashboard/settings"
               onClick={() => setIsOpen(false)}
               className={cn(
                 "group flex items-center gap-3 px-5 py-2.5",
                 "text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white",
-                "hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors duration-150"
+                "hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors duration-150"
               )}
             >
               <Settings className="w-4 h-4 text-neutral-500 dark:text-neutral-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />

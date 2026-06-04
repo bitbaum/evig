@@ -81,11 +81,11 @@ export default function LocationDetailPage() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 rounded w-1/3 mb-4"></div>
-              <div className="h-4 bg-neutral-200 rounded w-1/2 mb-8"></div>
+              <div className="h-8 bg-neutral-200 rounded-sm w-1/3 mb-4"></div>
+              <div className="h-4 bg-neutral-200 rounded-sm w-1/2 mb-8"></div>
               <div className="space-y-4">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-16 bg-neutral-200 rounded"></div>
+                  <div key={i} className="h-16 bg-neutral-200 rounded-sm"></div>
                 ))}
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function LocationDetailPage() {
   return (
     <div className="min-h-screen bg-surface-raised">
       {/* Header */}
-      <div className="bg-surface-base shadow-sm border-b">
+      <div className="bg-surface-base shadow-xs border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -188,7 +188,7 @@ export default function LocationDetailPage() {
         )}
 
         {/* Basic Info */}
-        <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border p-6">
           <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Grundinformationen</Heading>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {location.description && (
@@ -226,7 +226,7 @@ export default function LocationDetailPage() {
 
         {/* Address */}
         {(location.address_line1 || location.city) && (
-          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={2} className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-text-muted" />
               Adresse
@@ -246,7 +246,7 @@ export default function LocationDetailPage() {
 
         {/* Facilities */}
         {location.facilities && location.facilities.length > 0 && (
-          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Ausstattung</Heading>
             <div className="flex flex-wrap gap-2">
               {location.facilities.map((facility, i) => (
@@ -260,7 +260,7 @@ export default function LocationDetailPage() {
 
         {/* Accessibility */}
         {accessibilityInfo && (
-          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Barrierefreiheit</Heading>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -293,7 +293,7 @@ export default function LocationDetailPage() {
 
         {/* Contact */}
         {(location.contact_name || location.contact_phone || location.contact_email) && (
-          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Kontakt</Heading>
             <dl className="space-y-3">
               {location.contact_name && (
@@ -319,7 +319,7 @@ export default function LocationDetailPage() {
         )}
 
         {/* Creator Info */}
-        <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border p-6">
           <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Erstellt von</Heading>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-surface-raised rounded-full flex items-center justify-center">
@@ -334,7 +334,7 @@ export default function LocationDetailPage() {
 
         {/* Review History */}
         {location.last_approval_action && (
-          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Letzte Prüfung</Heading>
             <div className="text-sm text-text-secondary space-y-2">
               <p>
@@ -359,7 +359,7 @@ export default function LocationDetailPage() {
 
         {/* Upcoming Bookings */}
         {bookings.length > 0 && (
-          <div className="bg-surface-base rounded-xl shadow-sm border p-6">
+          <div className="bg-surface-base rounded-xl shadow-xs border p-6">
             <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Bevorstehende Buchungen</Heading>
             <div className="divide-y divide-neutral-200">
               {bookings.map((booking) => (

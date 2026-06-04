@@ -236,7 +236,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             <Heading level={2} className="text-lg text-text-primary mb-4">{t('summary.title')}</Heading>
 
             <div className="flex gap-3 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-raised dark:bg-neutral-700">
+              <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised dark:bg-neutral-700">
                 <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
               </div>
               <div className="min-w-0">

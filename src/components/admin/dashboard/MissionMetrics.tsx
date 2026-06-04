@@ -86,10 +86,10 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
             <Link
               key={card.href}
               href={card.href}
-              className="bg-surface-base rounded-lg p-4 shadow-sm border border-subtle dark:border-white/[0.06] hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+              className="bg-surface-base rounded-lg p-4 shadow-xs border border-subtle dark:border-white/6 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center shrink-0`}>
                   <Icon className={`w-5 h-5 ${card.iconColor}`} aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
@@ -113,7 +113,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       </div>
 
       {/* Reference stats — collapsed into a single compact row */}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-subtle dark:border-white/[0.06] bg-surface-raised dark:bg-neutral-900/50 px-4 py-2.5 text-xs text-text-tertiary">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-subtle dark:border-white/6 bg-surface-raised dark:bg-neutral-900/50 px-4 py-2.5 text-xs text-text-tertiary">
         <Link href={ROUTES.admin.users} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-text-secondary dark:text-neutral-200">{stats.totalUsers}</strong> Benutzer</span>

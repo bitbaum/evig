@@ -42,7 +42,7 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
 
   return (
     <>
-      <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-surface-raised dark:bg-neutral-700">
@@ -66,7 +66,7 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
                 )}
               </tr>
             </thead>
-            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
+            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
               {users.map((user) => (
                 <UserTableRow
                   key={user.id}

@@ -123,7 +123,7 @@ export function Modal({
           aria-modal="true"
           aria-labelledby="modal-title"
           tabIndex={-1}
-          className={`relative bg-white dark:bg-neutral-800 rounded-xl shadow-xl ${SIZE_CLASSES[size]} w-full p-4 sm:p-6 focus:outline-none ${className}`}
+          className={`relative bg-white dark:bg-neutral-800 rounded-xl shadow-xl ${SIZE_CLASSES[size]} w-full p-4 sm:p-6 focus:outline-hidden ${className}`}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">

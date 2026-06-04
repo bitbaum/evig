@@ -250,7 +250,7 @@ export function PayrollClient() {
           <button
             onClick={loadBatches}
             disabled={batchesLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-xs font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-xs font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${batchesLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -264,7 +264,7 @@ export function PayrollClient() {
         ) : (
           <ul className="divide-y divide-subtle">
             {batches.map(batch => (
-              <li key={batch.id} className="px-5 py-4 flex items-start gap-3 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors">
+              <li key={batch.id} className="px-5 py-4 flex items-start gap-3 hover:bg-neutral-50 dark:hover:bg-white/2 transition-colors">
                 <FileText className="w-4 h-4 mt-1 text-text-muted shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">

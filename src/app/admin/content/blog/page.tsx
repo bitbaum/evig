@@ -133,7 +133,7 @@ export default async function AdminBlogPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <FileText className="w-8 h-8 text-action" />
             <div>
@@ -147,7 +147,7 @@ export default async function AdminBlogPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -161,7 +161,7 @@ export default async function AdminBlogPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Clock className="w-8 h-8 text-secondary-600" />
             <div>
@@ -175,7 +175,7 @@ export default async function AdminBlogPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-sm border border-subtle dark:border-white/[0.06]">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-action" />
             <div>
@@ -196,7 +196,7 @@ export default async function AdminBlogPage() {
       {/* Info Banner */}
       <div className="bg-surface-raised dark:bg-neutral-800/50 border border rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700/50 rounded-lg flex items-center justify-center shrink-0">
             <FileText className="w-5 h-5 text-text-secondary" />
           </div>
           <div>

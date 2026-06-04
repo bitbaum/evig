@@ -79,7 +79,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
                       <ul className="space-y-2">
                         {card.features.map((feature, i) => (
                           <li key={i} className="flex items-start">
-                            <CheckCircle className="w-5 h-5 mr-3 flex-shrink-0 text-primary-500 mt-0.5" />
+                            <CheckCircle className="w-5 h-5 mr-3 shrink-0 text-primary-500 mt-0.5" />
                             <span className={textSecondaryClass}>{feature}</span>
                           </li>
                         ))}

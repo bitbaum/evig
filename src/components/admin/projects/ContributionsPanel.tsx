@@ -45,7 +45,7 @@ const STATUS_BADGE: Record<ContributionStatus, string> = {
   new:       'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   contacted: 'bg-info-100 text-info-800 dark:bg-info-500/15 dark:text-info-400',
   accepted:  'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
-  declined:  'bg-surface-raised text-text-secondary dark:bg-white/[0.06] dark:text-neutral-400',
+  declined:  'bg-surface-raised text-text-secondary dark:bg-white/6 dark:text-neutral-400',
 }
 
 export function ContributionsPanel({ slug, initialContributions, needs }: Props) {
@@ -112,7 +112,7 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                 <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="text-sm font-semibold text-text-primary break-words">
+                      <h3 className="text-sm font-semibold text-text-primary wrap-break-word">
                         {c.name}
                       </h3>
                       <span className={cn(designPrimitive.badgeBase, STATUS_BADGE[c.status as ContributionStatus] ?? STATUS_BADGE.new)}>
@@ -126,7 +126,7 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                   </div>
                   <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-tertiary w-full sm:w-auto">
                     <a href={`mailto:${c.email}`} className="inline-flex items-center gap-1 hover:text-primary-600 break-all">
-                      <Mail className="h-3.5 w-3.5 flex-shrink-0" /> {c.email}
+                      <Mail className="h-3.5 w-3.5 shrink-0" /> {c.email}
                     </a>
                     {c.phone && (
                       <span className="inline-flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> {c.phone}</span>
@@ -137,7 +137,7 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                   </div>
                 </div>
 
-                <div className="rounded bg-surface-raised dark:bg-white/[0.03] border border-subtle p-3 text-sm text-text-secondary whitespace-pre-wrap mb-3 break-words">
+                <div className="rounded-sm bg-surface-raised dark:bg-white/3 border border-subtle p-3 text-sm text-text-secondary whitespace-pre-wrap mb-3 wrap-break-word">
                   {c.message}
                 </div>
 

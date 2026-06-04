@@ -32,10 +32,10 @@ const URGENCY_CONFIG = {
 
 export function UnifiedQueue({ items }: UnifiedQueueProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
       {/* Card header */}
-      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
-        <Zap className="w-5 h-5 text-warning-500 flex-shrink-0" aria-hidden="true" />
+      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
+        <Zap className="w-5 h-5 text-warning-500 shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           Wartet auf Bearbeitung
         </Heading>
@@ -45,7 +45,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
       <div className="p-4">
         {items.length === 0 ? (
           <div className="flex items-center gap-3 text-action">
-            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center shrink-0">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
             <span className="font-medium">Alles erledigt — keine offenen Aufgaben.</span>
@@ -62,12 +62,12 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                   <Link
                     href={item.href}
                     aria-label={ariaLabel}
-                    className="flex items-center justify-between gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
+                    className="flex items-center justify-between gap-3 p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors group"
                   >
                     {/* Left: dot + text */}
                     <div className="flex items-start gap-3 min-w-0">
                       <span
-                        className={`mt-[5px] flex-shrink-0 w-2.5 h-2.5 rounded-full ${urgency.dot}`}
+                        className={`mt-[5px] shrink-0 w-2.5 h-2.5 rounded-full ${urgency.dot}`}
                         aria-hidden="true"
                       />
                       <div className="min-w-0">
@@ -83,7 +83,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                     </div>
 
                     {/* Right: inline action button (if set) + count badge + arrow */}
-                    <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="flex items-center gap-2 shrink-0">
                       {item.inlineAction && (
                         <InlineActionButton
                           itemId={item.inlineAction.itemId}

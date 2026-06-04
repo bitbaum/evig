@@ -143,7 +143,7 @@ export default function DiscussionThread({
   );
 
   return (
-    <div className="rounded-lg bg-surface-base p-6 shadow-sm">
+    <div className="rounded-lg bg-surface-base p-6 shadow-xs">
       <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">Diskussion</Heading>
 
       {loading ? (
@@ -190,14 +190,14 @@ export default function DiscussionThread({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => startEdit(c)}
-                                className="p-2 text-text-tertiary hover:text-primary-600 rounded"
+                                className="p-2 text-text-tertiary hover:text-primary-600 rounded-sm"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => setDeleteId(c.id)}
-                                className="p-2 text-text-tertiary hover:text-error-600 rounded"
+                                className="p-2 text-text-tertiary hover:text-error-600 rounded-sm"
                                 title="Löschen"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />

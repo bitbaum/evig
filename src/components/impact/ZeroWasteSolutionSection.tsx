@@ -33,7 +33,7 @@ const getPriorityColor = (priority: number) => {
 function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWastePrinciple; isLast: boolean; priorityLabel: string }) {
   return (
     <div className="relative">
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/6 hover:border-neutral-300 dark:hover:border-white/12 transition-colors">
         <div className="flex items-start gap-4">
           <div className={`p-3 rounded-lg ${getPriorityColor(principle.priority)}`}>
             {getIcon(principle.icon)}
@@ -102,7 +102,7 @@ export default async function ZeroWasteSolutionSection() {
 
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
                     <span className="text-2xl font-bold">{envSummary.devicesSaved}+</span>
                   </div>
                   <div>
@@ -112,7 +112,7 @@ export default async function ZeroWasteSolutionSection() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
                     <span className="text-2xl font-bold">{Math.round(envSummary.reuseRate * 100)}%</span>
                   </div>
                   <div>
@@ -122,7 +122,7 @@ export default async function ZeroWasteSolutionSection() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
                     <span className="text-2xl font-bold">{envSummary.co2SavedTons}</span>
                   </div>
                   <div>
@@ -134,7 +134,7 @@ export default async function ZeroWasteSolutionSection() {
             </div>
 
             {/* Key Insight */}
-            <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/6">
               <Heading level={4} className="font-bold text-neutral-900 mb-3">{t('whyRepairTitle')}</Heading>
               <p className="text-neutral-600 text-sm mb-4">
                 {t('whyRepairText')}

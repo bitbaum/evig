@@ -143,13 +143,13 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 {filteredTeamMembers.map((member) => (
                   <label
                     key={member.id}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-100 cursor-pointer text-sm"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-neutral-100 cursor-pointer text-sm"
                   >
                     <input
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded border-neutral-300 text-action focus:ring-primary-500"
+                      className="rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                     />
                     {member.name}
                   </label>
@@ -179,7 +179,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               placeholder="Sitzungsnotizen hier einfügen..."
               rows={10}
               disabled={!!audioFile}
-              className="font-mono text-sm disabled:!opacity-100 disabled:bg-neutral-100 disabled:text-neutral-500"
+              className="font-mono text-sm disabled:opacity-100! disabled:bg-neutral-100 disabled:text-neutral-500"
             />
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">

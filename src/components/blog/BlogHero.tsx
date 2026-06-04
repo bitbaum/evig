@@ -18,7 +18,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
       <article className="grid lg:grid-cols-2 gap-8 items-center">
         {/* Image */}
         {post.featuredImage ? (
-          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 order-2 lg:order-1 relative">
+          <div className="aspect-16/10 lg:aspect-4/3 overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 order-2 lg:order-1 relative">
             <Image
               src={post.featuredImage}
               alt={post.title}
@@ -29,7 +29,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
             />
           </div>
         ) : (
-          <div className="aspect-[16/10] lg:aspect-[4/3] bg-surface-raised dark:bg-neutral-800 border rounded-lg flex items-center justify-center order-2 lg:order-1">
+          <div className="aspect-16/10 lg:aspect-4/3 bg-surface-raised dark:bg-neutral-800 border rounded-lg flex items-center justify-center order-2 lg:order-1">
             <span className="text-primary-700 text-6xl font-bold">R</span>
           </div>
         )}
@@ -38,7 +38,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
         <div className="order-1 lg:order-2">
           {/* Category Badge */}
           {post.category && (
-            <span className="inline-block px-3 py-1 bg-primary-600 text-white text-sm font-semibold rounded mb-4 uppercase tracking-wide">
+            <span className="inline-block px-3 py-1 bg-primary-600 text-white text-sm font-semibold rounded-sm mb-4 uppercase tracking-wide">
               {post.category}
             </span>
           )}

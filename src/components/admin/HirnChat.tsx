@@ -219,7 +219,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
             >
               {message.role === 'assistant' && (
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
                   <Bot className="w-4 h-4 text-action" />
                 </div>
               )}
@@ -267,7 +267,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               </div>
 
               {message.role === 'user' && (
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -277,7 +277,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
         {loading && (
           <div className="flex gap-3">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+            <div className="shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
               <Bot className="w-4 h-4 text-action" />
             </div>
             <div className="bg-surface-raised dark:bg-neutral-900 rounded-2xl rounded-bl-sm px-4 py-3">

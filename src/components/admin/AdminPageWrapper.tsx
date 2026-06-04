@@ -63,7 +63,7 @@ export default function AdminPageWrapper({
 
         {/* Actions slot */}
         {actions && (
-          <div className="flex items-center gap-2 flex-shrink-0 sm:mt-0.5">
+          <div className="flex items-center gap-2 shrink-0 sm:mt-0.5">
             {actions}
           </div>
         )}

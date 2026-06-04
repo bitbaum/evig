@@ -73,7 +73,7 @@ export default function Footer() {
             <address className="space-y-4 not-italic">
               {footerLocations.map((location) => (
                 <div className="flex items-start" key={location.key}>
-                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-text-tertiary" />
+                  <MapPin className="w-4 h-4 mt-0.5 mr-3 shrink-0 text-text-tertiary" />
                   <div>
                     <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{location.name}</p>
                     {location.addressLines.map((line) => (
@@ -86,13 +86,13 @@ export default function Footer() {
                 </div>
               ))}
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+                <Phone className="w-4 h-4 text-text-tertiary shrink-0" />
                 <a href={`tel:${CONTACT.phone}`} className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors">
                   {CONTACT.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+                <Mail className="w-4 h-4 text-text-tertiary shrink-0" />
                 <a href={`mailto:${CONTACT.email}`} className="text-sm text-text-secondary hover:text-neutral-900 dark:hover:text-white transition-colors">
                   {CONTACT.email}
                 </a>
@@ -126,7 +126,7 @@ export default function Footer() {
             <a
               key={social.name}
               href={social.href}
-              className="p-2 text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors rounded-md hover:bg-neutral-100 dark:hover:bg-white/[0.04]"
+              className="p-2 text-text-tertiary hover:text-neutral-900 dark:hover:text-white transition-colors rounded-md hover:bg-neutral-100 dark:hover:bg-white/4"
               target="_blank"
               rel="noopener noreferrer"
             >

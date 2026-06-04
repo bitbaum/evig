@@ -124,9 +124,9 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
   // Happy path: render confirmation card with the client-island button.
   return (
     <PageShell maxWidth="2xl" py="py-12">
-      <div className="rounded-2xl border bg-surface-base p-8 shadow-sm">
+      <div className="rounded-2xl border bg-surface-base p-8 shadow-xs">
         <div className="flex items-start gap-4 mb-6">
-          <CheckCircle className="w-10 h-10 text-action flex-shrink-0" aria-hidden="true" />
+          <CheckCircle className="w-10 h-10 text-action shrink-0" aria-hidden="true" />
           <div>
             <Heading level={1} className="text-2xl font-semibold text-text-primary">
               Angebot annehmen?

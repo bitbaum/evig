@@ -80,7 +80,7 @@ export default function ITHilfeDetailPage() {
         {/* Back link */}
         <Link
           href={ROUTES.public.itHilfe}
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-neutral-900 mb-6 px-2 py-1 min-h-touch rounded-sm focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           {t('backToList')}
@@ -96,7 +96,7 @@ export default function ITHilfeDetailPage() {
         {(request.status === REQUEST_STATUS.EXPIRED ||
           (detail.isExpired && request.status === REQUEST_STATUS.OPEN)) && (
           <div className="bg-warning-50 border border-warning-200 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0" aria-hidden="true" />
+            <AlertCircle className="w-5 h-5 text-warning-600 shrink-0" aria-hidden="true" />
             <p className="text-warning-800 text-sm font-medium">
               {t('expiredBanner', { date: formatDate(request.expiresAt) })}
             </p>
@@ -106,7 +106,7 @@ export default function ITHilfeDetailPage() {
         {/* Just-Accepted Banner — landed here via ?accepted=1 from email link */}
         {showAcceptedBanner && request.status === REQUEST_STATUS.MATCHED && (
           <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-action flex-shrink-0" aria-hidden="true" />
+            <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
             <p className="text-primary-800 dark:text-primary-300 text-sm font-medium">
               {t('acceptedBanner')}
             </p>
@@ -157,7 +157,7 @@ export default function ITHilfeDetailPage() {
             {/* Completion badge (status completed, visible to everyone) */}
             {request.status === REQUEST_STATUS.COMPLETED && request.completedAt && (
               <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-4 flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-action flex-shrink-0" aria-hidden="true" />
+                <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
                 <p className="text-primary-800 dark:text-primary-300 text-sm font-medium">
                   {t('completedAt', { date: formatDate(request.completedAt) })}
                 </p>

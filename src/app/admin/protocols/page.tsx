@@ -255,7 +255,7 @@ export default async function ProtocolsAdminPage({
                     <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
                         href={ROUTES.admin.protocol(protocol.id)}
-                        className="font-medium text-text-primary hover:text-primary-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
+                        className="font-medium text-text-primary hover:text-primary-600 underline-offset-2 hover:underline truncate block focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-sm"
                       >
                         {protocol.title}
                       </Link>
@@ -286,7 +286,7 @@ export default async function ProtocolsAdminPage({
                           {protocol.attendee_names.slice(0, 3).map((name, i) => (
                             <span
                               key={i}
-                              className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-surface-raised text-text-secondary"
+                              className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded-sm bg-surface-raised text-text-secondary"
                             >
                               {name.split(' ')[0]}
                             </span>
@@ -336,7 +336,7 @@ export default async function ProtocolsAdminPage({
                         )}
                         <Link
                           href={ROUTES.admin.protocol(protocol.id)}
-                          className="text-sm text-action hover:text-primary-800 underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
+                          className="text-sm text-action hover:text-primary-800 underline focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-sm"
                         >
                           Öffnen
                         </Link>

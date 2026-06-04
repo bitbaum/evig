@@ -137,7 +137,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       <div className="bg-surface-base rounded-xl border border p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
-          <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
             userIsSuperAdmin
               ? 'bg-primary-600'
               : userIsStaff

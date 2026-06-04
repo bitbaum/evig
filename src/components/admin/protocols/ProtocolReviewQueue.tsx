@@ -44,7 +44,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
 
       {!hasItems ? (
         <div className="mt-5 flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 dark:bg-primary-900/20 p-4 text-primary-900 dark:text-primary-300">
-          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-action" />
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-action" />
           <div>
             <p className={cn(adminType.body, 'font-medium text-primary-900 dark:text-primary-300')}>{t('noPendingReviews')}</p>
             <p className="mt-1 text-base text-primary-800 dark:text-primary-300">

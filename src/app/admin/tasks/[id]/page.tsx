@@ -258,7 +258,7 @@ export default async function TaskDetailPage({
       {pendingRequests.length > 0 && (
         <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 rounded-lg p-4">
           <div className="flex items-start gap-3 w-full">
-            <Send className="w-5 h-5 text-warning-600 mt-0.5 flex-shrink-0" />
+            <Send className="w-5 h-5 text-warning-600 mt-0.5 shrink-0" />
             <div className="flex-1 space-y-3">
               <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">Offene Anfragen</Heading>
               {pendingRequests.map((req) => (

@@ -105,7 +105,7 @@ export default function RepairerApplicationsAdmin() {
       {/* Applications List */}
       <div className="space-y-4">
         {applications.length === 0 ? (
-          <div className="bg-surface-base rounded-lg shadow-sm border border p-12 text-center">
+          <div className="bg-surface-base rounded-lg shadow-xs border border p-12 text-center">
             <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-text-primary mb-2">Keine Bewerbungen gefunden</Heading>
             <p className="text-text-secondary">
@@ -117,7 +117,7 @@ export default function RepairerApplicationsAdmin() {
           </div>
         ) : (
           applications.map((application) => (
-            <div key={application.id} className="bg-surface-base rounded-lg shadow-sm border border overflow-hidden">
+            <div key={application.id} className="bg-surface-base rounded-lg shadow-xs border border overflow-hidden">
               <ApplicationCard
                 application={application}
                 isPending={selectedStatus === APPROVAL_STATUS.PENDING}

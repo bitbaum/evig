@@ -127,7 +127,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   const t = useTranslations('dashboard.reviews')
   const tDates = useTranslations('dashboard.dates')
   return (
-    <div className="bg-surface-base rounded-lg shadow-sm border overflow-hidden">
+    <div className="bg-surface-base rounded-lg shadow-xs border overflow-hidden">
       <div className="p-6 border-b border">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -188,7 +188,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               )}
               <button
                 onClick={() => onDelete(review.id)}
-                className="px-3 py-1.5 bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400 rounded text-sm hover:bg-error-200 dark:hover:bg-error-500/30 flex items-center gap-1"
+                className="px-3 py-1.5 bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400 rounded-sm text-sm hover:bg-error-200 dark:hover:bg-error-500/30 flex items-center gap-1"
               >
                 <Trash2 className="w-3 h-3" />
                 {t('delete')}
@@ -284,7 +284,7 @@ export default function UserReviewsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-surface-base rounded-lg shadow-sm border p-6">
+      <div className="bg-surface-base rounded-lg shadow-xs border p-6">
         <Heading level={1} className="text-2xl font-bold text-text-primary mb-2">{t('pageTitle')}</Heading>
         <p className="text-text-secondary">
           {t('pageDescription')}

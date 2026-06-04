@@ -65,7 +65,7 @@ export function DropoffForm() {
     return (
       <div className="rounded-lg bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 p-6">
         <div className="flex items-start gap-3">
-          <CheckCircle2 className="w-6 h-6 text-action flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <CheckCircle2 className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
           <div>
             <p className="text-sm font-semibold text-primary-800 dark:text-primary-300 mb-1">
               {t('successTitle')}
@@ -79,7 +79,7 @@ export function DropoffForm() {
     )
   }
 
-  const inputClass = 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/[0.1] dark:bg-neutral-800 dark:placeholder:text-neutral-500'
+  const inputClass = 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-neutral-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/10 dark:bg-neutral-800 dark:placeholder:text-neutral-500'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

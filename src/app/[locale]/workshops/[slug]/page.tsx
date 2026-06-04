@@ -281,7 +281,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
                   <ul className="space-y-2">
                     {workshop.learning_objectives.map((objective, index) => (
                       <li key={index} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-primary-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-primary-500 mr-3 mt-0.5 shrink-0" />
                         <span className="text-text-secondary">{objective}</span>
                       </li>
                     ))}

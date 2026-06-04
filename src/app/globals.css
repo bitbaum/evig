@@ -1,6 +1,352 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-surface-page: var(--surface-page);
+  --color-surface-base: var(--surface-base);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverted: var(--text-inverted);
+
+  --color-action: var(--accent-action);
+  --color-action-hover: var(--accent-action-hover);
+  --color-action-muted: var(--accent-action-muted);
+  --color-action-text: var(--accent-action-text);
+
+  --color-canvas: var(--surface-page);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-muted);
+
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+
+  --color-secondary-50: #fff7ed;
+  --color-secondary-100: #ffedd5;
+  --color-secondary-200: #fed7aa;
+  --color-secondary-300: #fdba74;
+  --color-secondary-400: #fb923c;
+  --color-secondary-500: #f7931a;
+  --color-secondary-600: #ea580c;
+  --color-secondary-700: #c2410c;
+  --color-secondary-800: #9a3412;
+  --color-secondary-900: #7c2d12;
+
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0a0a0a;
+
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+  --color-success-950: #052e16;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+  --color-warning-950: #451a03;
+
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+  --color-error-950: #450a0a;
+
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-200: #bfdbfe;
+  --color-info-300: #93c5fd;
+  --color-info-400: #60a5fa;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-700: #1d4ed8;
+  --color-info-800: #1e40af;
+  --color-info-900: #1e3a8a;
+  --color-info-950: #172554;
+
+  --color-brand-mastodon: #6364ff;
+  --color-brand-mastodon-hover: #563acc;
+  --color-brand-linkedin: #0a66c2;
+  --color-brand-linkedin-hover: #004182;
+  --color-brand-facebook: #1877f2;
+  --color-brand-facebook-hover: #0c63d4;
+
+  --border-color-subtle: var(--border-subtle);
+  --border-color-strong: var(--border-strong);
+  --border-color-interactive: var(--border-strong);
+
+  --divide-color-subtle: var(--border-subtle);
+  --divide-color: var(--border-default);
+  --divide-color-strong: var(--border-strong);
+
+  --ring-color-action: var(--accent-action);
+
+  --spacing-touch: 44px;
+
+  --text-xs-mobile: 0.75rem;
+  --text-xs-mobile--line-height: 1.5;
+  --text-sm-mobile: 0.875rem;
+  --text-sm-mobile--line-height: 1.5;
+  --text-base-mobile: 1rem;
+  --text-base-mobile--line-height: 1.6;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border-default);
+  }
+}
+
+@utility animate-in {
+  /* Smooth dropdown animations */
+  animation-duration: 200ms;
+  animation-fill-mode: both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility fade-in-0 {
+  animation-name: fadeIn;
+}
+
+@utility zoom-in-95 {
+  animation-name: zoomIn;
+}
+
+@utility line-clamp-2 {
+  /* Text truncation */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@utility line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@utility backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+@utility touch-target {
+  /* WCAG 2.5.5 minimum touch target */
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@utility grid-cols-responsive {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+@utility fix-text-rendering {
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@utility dropdown-menu {
+  @media (prefers-contrast: high) {
+    border: 2px solid;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+}
+@utility card-shell {
+  /* Standard content card — border + surface bg, no shadow */
+  border-radius: 0.75rem; /* rounded-xl */
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+@utility card-shell-inset {
+  /* Inset / nested card — slightly raised bg for contrast */
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-raised);
+}
+@utility section-tint {
+  /* Page section with neutral tint */
+  background-color: var(--color-surface-raised);
+}
+@utility ui-public-hero-fold {
+  /* ─── Public surface primitives (fleetcrown / x.ai-inspired) ──────────────
+   * SSOT for landing / marketing / public-info pages. JSX consumes semantic
+   * class names — never hardcodes typography, color, or surface chrome.
+   * Mobile-first: the hero-fold IS one viewport — actionable above-the-fold
+   * is the default, not an afterthought.
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  /* Hero fold — fills viewport on every screen so CTAs land above the fold.
+     min-h:88vh (mobile chrome safe) leaving room for nav above + safe-area
+     below. JSX renders: badge → title → lede → sublede → CTA row, centered. */
+  @apply relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 text-center;
+  min-height: 88vh;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+@utility ui-public-eyebrow {
+  /* Eyebrow / kicker — small caps label above a title. */
+  @apply text-xs uppercase tracking-[0.18em];
+  color: var(--text-tertiary);
+}
+@utility ui-public-hero-badge {
+  /* Hero badge — pill above the title (positioning, mission anchor). */
+  @apply mb-6 inline-block rounded-full px-4 py-1 text-xs uppercase tracking-[0.15em];
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+@utility ui-public-hero-title {
+  /* Hero display title — fluid clamp() type, brand display weight + tracking. */
+  font-size: clamp(
+    var(--hero-title-min),
+    var(--hero-title-fluid),
+    var(--hero-title-max)
+  );
+  line-height: 0.95;
+  letter-spacing: var(--display-tracking);
+  @apply font-bold;
+  color: var(--text-primary);
+}
+@utility ui-public-hero-lede {
+  /* Hero lede — primary subtitle, comfortable reading line-length. */
+  @apply mx-auto mt-6 sm:mt-8 max-w-2xl text-xl sm:text-2xl leading-tight tracking-tight;
+  color: var(--text-secondary);
+}
+@utility ui-public-hero-sublede {
+  /* Hero sublede — secondary subtitle / micro-context. */
+  @apply mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg;
+  color: var(--text-tertiary);
+}
+@utility ui-public-cta {
+  /* CTA primary — RevampIT green; large tap target; opacity hover. */
+  @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
+  background: var(--color-accent);
+  color: #ffffff;
+  min-height: 48px;
+}
+@utility ui-public-cta-ghost {
+  /* CTA ghost — bordered, secondary action. */
+  @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-colors;
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  min-height: 48px;
+  &:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+}
+@utility ui-public-cta-row {
+  /* CTA row container — wraps gracefully on mobile (stacks), aligns on sm+. */
+  @apply mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto;
+}
+@utility ui-public-band {
+  /* Section band — tinted page-wide band for narrative beats. */
+  background: var(--surface-raised);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+@utility ui-public-display-lg {
+  /* Display headings for sections below the hero. */
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  @apply font-bold;
+  color: var(--text-primary);
+}
+@utility ui-public-display-md {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  @apply font-bold;
+  color: var(--text-primary);
+}
+@utility ui-public-section-lede {
+  /* Section lede — text alongside a section title. */
+  @apply max-w-2xl text-lg sm:text-xl leading-relaxed;
+  color: var(--text-secondary);
+}
+@utility ui-public-card {
+  /* Surface card — fleetcrown-style content card for sections. */
+  @apply flex flex-col rounded-2xl p-6 text-left;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-base);
+  transition: border-color 200ms ease;
+  &:hover {
+    border-color: var(--border-default);
+  }
+}
+@utility ui-public-card-label {
+  @apply mb-6 font-mono text-xs uppercase tracking-[0.18em];
+  color: var(--text-muted);
+}
+@utility ui-public-card-title {
+  @apply text-lg sm:text-xl font-semibold leading-tight;
+  color: var(--text-primary);
+}
+@utility ui-public-card-body {
+  @apply mt-3 text-sm leading-relaxed;
+  color: var(--text-secondary);
+}
 
 /* ─── Design Token SSOT ────────────────────────────────────────────────────────
  * CSS custom properties are the canonical source of truth for all design
@@ -144,238 +490,8 @@
 }
 
 @layer utilities {
-  /* Smooth dropdown animations */
-  .animate-in {
-    animation-duration: 200ms;
-    animation-fill-mode: both;
-  }
-
-  .fade-in-0 {
-    animation-name: fadeIn;
-  }
-
-  .zoom-in-95 {
-    animation-name: zoomIn;
-  }
-
-  /* Text truncation */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .backdrop-blur-sm {
-    backdrop-filter: blur(4px);
-  }
-
-  /* WCAG 2.5.5 minimum touch target */
-  .touch-target {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  .grid-cols-responsive {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
-  .fix-text-rendering {
-    font-kerning: normal;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* ─── Global Dark Mode SSOT ───────────────────────────────────────────────
-   * Makes standard Tailwind light-mode utility classes dark-mode aware globally.
-   * Values align with the CSS vars in :root/.dark above — one place to retheme.
-   * Components need zero dark: variants for these common patterns.
-   * Note: this block is placed after @tailwind utilities in source order,
-   * so it wins over same-specificity Tailwind dark: classes when values differ.
-   * All values here align exactly with explicit dark: entries in the codebase,
-   * so there are no visual conflicts.
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  /* Default border — Tailwind's plain `border` without a color class defaults to
-   * neutral-200 in light mode. In dark mode we want ultra-subtle instead. */
-  .dark .border { border-color: var(--color-border); }
-  /* border-t, border-b, border-l, border-r — same fix */
-  .dark .border-t { border-top-color: var(--color-border); }
-  .dark .border-b { border-bottom-color: var(--color-border); }
-  .dark .border-l { border-left-color: var(--color-border); }
-  .dark .border-r { border-right-color: var(--color-border); }
-
-  /* Neutral backgrounds */
-  .dark .bg-white           { background-color: var(--color-surface); }
-  .dark .bg-neutral-50      { background-color: var(--color-surface-raised); }
-  .dark .bg-neutral-100     { background-color: var(--color-surface-raised); }
-  /* Higher neutral shades used for progress bars, dividers — subtle in dark */
-  .dark .bg-neutral-200     { background-color: rgba(255, 255, 255, 0.06); }
-  .dark .bg-neutral-300     { background-color: rgba(255, 255, 255, 0.08); }
-
-  /* Brand-tint backgrounds — light pastel fills become subtle dark surfaces */
-  .dark .bg-primary-50      { background-color: rgba(22, 163, 74, 0.08); }
-  .dark .bg-primary-100     { background-color: rgba(22, 163, 74, 0.12); }
-  .dark .bg-emerald-50      { background-color: rgba(22, 163, 74, 0.08); }
-  .dark .bg-emerald-100     { background-color: rgba(22, 163, 74, 0.12); }
-  .dark .bg-info-50         { background-color: rgba(59, 130, 246, 0.08); }
-  .dark .bg-info-100        { background-color: rgba(59, 130, 246, 0.12); }
-  .dark .bg-warning-50      { background-color: rgba(245, 158, 11, 0.08); }
-  .dark .bg-warning-100     { background-color: rgba(245, 158, 11, 0.12); }
-  .dark .bg-error-50        { background-color: rgba(239, 68, 68, 0.08); }
-  .dark .bg-error-100       { background-color: rgba(239, 68, 68, 0.12); }
-  .dark .bg-success-50      { background-color: rgba(22, 163, 74, 0.08); }
-  .dark .bg-success-100     { background-color: rgba(22, 163, 74, 0.12); }
-  .dark .bg-sky-50          { background-color: rgba(14, 165, 233, 0.08); }
-  .dark .bg-teal-50         { background-color: rgba(20, 184, 166, 0.08); }
-  .dark .bg-purple-50       { background-color: rgba(168, 85, 247, 0.08); }
-  .dark .bg-rose-50         { background-color: rgba(244, 63, 94, 0.08); }
-  .dark .bg-orange-50       { background-color: rgba(249, 115, 22, 0.08); }
-
-  /* Brand-tint text — readable on near-black surfaces */
-  .dark .text-primary-900   { color: rgba(74, 222, 128, 1.0); }   /* green-400 */
-  .dark .text-primary-800   { color: rgba(74, 222, 128, 0.95); }
-  .dark .text-primary-700   { color: rgba(74, 222, 128, 0.9); }
-  .dark .text-primary-600   { color: var(--primitive-green-500); } /* #22c55e — brand green */
-  .dark .text-emerald-900   { color: rgba(74, 222, 128, 1.0); }
-  .dark .text-emerald-800   { color: rgba(74, 222, 128, 0.95); }
-  .dark .text-emerald-700   { color: rgba(74, 222, 128, 0.9); }
-
-  /* Status text — dark shades that are unreadable on dark bg → lighter variants */
-  .dark .text-error-900     { color: rgba(252, 165, 165, 1.0); }   /* red-300 */
-  .dark .text-error-800     { color: rgba(252, 165, 165, 0.95); }
-  .dark .text-error-700     { color: rgba(248, 113, 113, 0.9); }   /* red-400 */
-  .dark .text-error-600     { color: rgba(248, 113, 113, 0.85); }
-  .dark .text-warning-900   { color: rgba(253, 230, 138, 1.0); }   /* amber-200 */
-  .dark .text-warning-800   { color: rgba(253, 186, 36, 0.95); }   /* amber-400 */
-  .dark .text-warning-700   { color: rgba(251, 191, 36, 0.9); }
-  .dark .text-warning-600   { color: rgba(245, 158, 11, 0.9); }
-  .dark .text-success-800   { color: rgba(74, 222, 128, 0.95); }   /* green-400 */
-  .dark .text-success-700   { color: rgba(74, 222, 128, 0.9); }
-  .dark .text-info-900      { color: rgba(186, 230, 253, 1.0); }   /* blue-200 */
-  .dark .text-info-800      { color: rgba(147, 197, 253, 0.95); }  /* blue-300 */
-  .dark .text-info-700      { color: rgba(96, 165, 250, 0.9); }    /* blue-400 */
-  .dark .text-info-600      { color: rgba(96, 165, 250, 0.85); }   /* blue-400 */
-  .dark .text-info-500      { color: rgba(147, 197, 253, 0.65); }  /* blue-300 muted */
-
-  /* Status borders — light pastel shades → semi-transparent in dark */
-  .dark .border-primary-100 { border-color: rgba(22, 163, 74, 0.15); }
-  .dark .border-primary-200 { border-color: rgba(22, 163, 74, 0.25); }
-  .dark .border-error-100   { border-color: rgba(239, 68, 68, 0.12); }
-  .dark .border-error-200   { border-color: rgba(239, 68, 68, 0.2); }
-  .dark .border-error-300   { border-color: rgba(239, 68, 68, 0.3); }
-  .dark .border-warning-100 { border-color: rgba(245, 158, 11, 0.12); }
-  .dark .border-warning-200 { border-color: rgba(245, 158, 11, 0.2); }
-  .dark .border-warning-300 { border-color: rgba(245, 158, 11, 0.3); }
-  .dark .border-success-100 { border-color: rgba(22, 163, 74, 0.12); }
-  .dark .border-success-200 { border-color: rgba(22, 163, 74, 0.2); }
-  .dark .border-info-200    { border-color: rgba(59, 130, 246, 0.2); }
-  .dark .border-info-300    { border-color: rgba(59, 130, 246, 0.3); }
-  .dark .border-info-500    { border-color: rgba(59, 130, 246, 0.5); }
-
-  /* Neutral text */
-  .dark .text-neutral-900   { color: var(--color-text); }
-  .dark .text-neutral-800   { color: var(--color-text); }
-  .dark .text-neutral-700   { color: var(--color-text-muted); }
-  .dark .text-neutral-600   { color: var(--color-text-muted); }
-  .dark .text-neutral-500   { color: var(--color-text-faint); }
-
-  /* Neutral borders */
-  .dark .border-neutral-200 { border-color: var(--color-border); }
-  .dark .border-neutral-100 { border-color: var(--color-border-subtle); }
-  /* border-neutral-300 used for form controls — keep slightly more visible than others */
-  .dark .border-neutral-300 { border-color: rgba(255, 255, 255, 0.10); }
-  /* border-neutral-400/500 used for selected/active states */
-  .dark .border-neutral-400 { border-color: rgba(255, 255, 255, 0.15); }
-  .dark .border-neutral-500 { border-color: rgba(255, 255, 255, 0.20); }
-
-  /* Hover backgrounds — hover: variants are different CSS classes, must override separately */
-  .dark .hover\:bg-neutral-50:hover  { background-color: var(--color-surface-raised); }
-  .dark .hover\:bg-neutral-100:hover { background-color: var(--color-surface-raised); }
-  .dark .hover\:bg-neutral-200:hover { background-color: rgba(255, 255, 255, 0.08); }
-  .dark .hover\:bg-neutral-300:hover { background-color: rgba(255, 255, 255, 0.10); }
-  .dark .hover\:bg-white:hover       { background-color: var(--color-surface); }
-  .dark .hover\:bg-primary-50:hover  { background-color: rgba(22, 163, 74, 0.12); }
-  .dark .hover\:bg-emerald-50:hover  { background-color: rgba(22, 163, 74, 0.12); }
-  .dark .hover\:bg-info-200:hover    { background-color: rgba(59, 130, 246, 0.18); }
-  .dark .hover\:bg-warning-200:hover { background-color: rgba(245, 158, 11, 0.16); }
-  .dark .hover\:bg-error-100:hover   { background-color: rgba(239, 68, 68, 0.12); }
-  .dark .hover\:bg-error-50:hover    { background-color: rgba(239, 68, 68, 0.08); }
-
-  /* Hover text — neutrals */
-  .dark .hover\:text-neutral-900:hover { color: var(--color-text); }
-  .dark .group:hover .group-hover\:text-neutral-900 { color: var(--color-text); }
-
-  /* Hover text — primary (blog link hovers, project "learn more", etc.) */
-  .dark .hover\:text-primary-600:hover        { color: var(--primitive-green-500); }
-  .dark .hover\:text-primary-700:hover        { color: rgba(74, 222, 128, 0.9); }
-  .dark .group:hover .group-hover\:text-primary-600 { color: var(--primitive-green-500); }
-  .dark .group:hover .group-hover\:text-primary-700 { color: rgba(74, 222, 128, 0.9); }
-
-  /* Hover borders — primary (resource card hovers on knowhow page) */
-  .dark .hover\:border-primary-200:hover { border-color: rgba(22, 163, 74, 0.2); }
-  .dark .hover\:border-primary-500:hover { border-color: rgba(22, 163, 74, 0.5); }
-
-  /* bg-neutral-400 — separator dots in blog post meta */
-  .dark .bg-neutral-400 { background-color: rgba(255, 255, 255, 0.20); }
-
-  /* ─── Dark-mode explicit variant overrides ────────────────────────────────
-   * Override Tailwind's dark: prefix classes so all dark-mode neutrals resolve
-   * through CSS vars. This lets us retheme by editing :root/.dark vars only.
-   *
-   * Specificity: [0,2,0] — same as Tailwind's .dark .dark\:* generated rules,
-   * but these appear after @tailwind utilities in source, so they win.
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  /* Backgrounds — dark: variant neutrals → semantic CSS vars */
-  .dark .dark\:bg-neutral-950 { background-color: var(--color-bg); }
-  .dark .dark\:bg-neutral-900 { background-color: var(--color-surface); }
-  .dark .dark\:bg-neutral-800 { background-color: var(--color-surface-raised); }
-  .dark .dark\:bg-neutral-700 { background-color: var(--color-surface-raised); }
-  /* neutral-600 used for interactive highlights (hover targets, selected rows) */
-  .dark .dark\:bg-neutral-600 { background-color: rgba(255, 255, 255, 0.08); }
-
-  /* Hover backgrounds */
-  .dark .dark\:hover\:bg-neutral-800:hover { background-color: var(--color-surface-raised); }
-  .dark .dark\:hover\:bg-neutral-700:hover { background-color: var(--color-surface-raised); }
-  .dark .dark\:hover\:bg-neutral-600:hover { background-color: rgba(255, 255, 255, 0.08); }
-
-  /* Borders — x.ai aesthetic: ultra-subtle, rgba-based */
-  .dark .dark\:border-neutral-700 { border-color: var(--color-border-subtle); }
-  .dark .dark\:border-neutral-600 { border-color: var(--color-border); }
-  .dark .dark\:border-neutral-500 { border-color: var(--color-border); }
-
-  /* Hover border neutrals in dark mode */
-  .dark .hover\:border-neutral-300:hover { border-color: rgba(255, 255, 255, 0.12); }
-  .dark .hover\:border-neutral-400:hover { border-color: rgba(255, 255, 255, 0.18); }
-
-  /* Text — dark: variant neutrals → semantic CSS vars */
-  .dark .dark\:text-white       { color: var(--color-text); }
-  .dark .dark\:text-neutral-100 { color: var(--color-text); }
-  .dark .dark\:text-neutral-200 { color: rgba(255, 255, 255, 0.90); }
-  .dark .dark\:text-neutral-300 { color: rgba(255, 255, 255, 0.75); }
-  .dark .dark\:text-neutral-400 { color: var(--color-text-muted); }
-  .dark .dark\:text-neutral-500 { color: var(--color-text-faint); }
-
-  @media (prefers-contrast: high) {
-    .dropdown-menu {
-      border: 2px solid;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    }
-  }
 
   @media (prefers-reduced-motion: reduce) {
-    .animate-in {
-      animation: none;
-    }
     * {
       transition-duration: 0ms !important;
       animation-duration: 0ms !important;
@@ -383,197 +499,482 @@
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+@layer utilities {
+  /* ─── Global Dark Mode SSOT (plain CSS — outside @layer utilities) ─────────
+   Tailwind 4's upgrade tool wraps @layer utilities { .dark .X { ... } } into
+   @utility dark { ... } blocks which fails on selectors with colons
+   (.dark .hover\:bg-X). Keeping these as plain CSS at top level dodges the
+   wrap. Specificity (.dark .X = 0,2,0) still beats Tailwind's .X (0,1,0)
+   without the @layer cascade boost. */
+  /* ─── Global Dark Mode SSOT ───────────────────────────────────────────────
+ * Makes standard Tailwind light-mode utility classes dark-mode aware globally.
+ * Values align with the CSS vars in :root/.dark above — one place to retheme.
+ * Components need zero dark: variants for these common patterns.
+ * Note: this block is placed after @tailwind utilities in source order,
+ * so it wins over same-specificity Tailwind dark: classes when values differ.
+ * All values here align exactly with explicit dark: entries in the codebase,
+ * so there are no visual conflicts.
+ * ───────────────────────────────────────────────────────────────────────── */
 
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
+  /* Default border — Tailwind's plain `border` without a color class defaults to
+ * neutral-200 in light mode. In dark mode we want ultra-subtle instead. */
+  .dark .border {
+    border-color: var(--color-border);
+  }
+  /* border-t, border-b, border-l, border-r — same fix */
+  .dark .border-t {
+    border-top-color: var(--color-border);
+  }
+  .dark .border-b {
+    border-bottom-color: var(--color-border);
+  }
+  .dark .border-l {
+    border-left-color: var(--color-border);
+  }
+  .dark .border-r {
+    border-right-color: var(--color-border);
+  }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+  /* Neutral backgrounds */
+  .dark .bg-white {
+    background-color: var(--color-surface);
+  }
+  .dark .bg-neutral-50 {
+    background-color: var(--color-surface-raised);
+  }
+  .dark .bg-neutral-100 {
+    background-color: var(--color-surface-raised);
+  }
+  /* Higher neutral shades used for progress bars, dividers — subtle in dark */
+  .dark .bg-neutral-200 {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+  .dark .bg-neutral-300 {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
 
-.animate-slideUp {
-  animation: slideUp 0.3s ease-out;
-}
+  /* Brand-tint backgrounds — light pastel fills become subtle dark surfaces */
+  .dark .bg-primary-50 {
+    background-color: rgba(22, 163, 74, 0.08);
+  }
+  .dark .bg-primary-100 {
+    background-color: rgba(22, 163, 74, 0.12);
+  }
+  .dark .bg-emerald-50 {
+    background-color: rgba(22, 163, 74, 0.08);
+  }
+  .dark .bg-emerald-100 {
+    background-color: rgba(22, 163, 74, 0.12);
+  }
+  .dark .bg-info-50 {
+    background-color: rgba(59, 130, 246, 0.08);
+  }
+  .dark .bg-info-100 {
+    background-color: rgba(59, 130, 246, 0.12);
+  }
+  .dark .bg-warning-50 {
+    background-color: rgba(245, 158, 11, 0.08);
+  }
+  .dark .bg-warning-100 {
+    background-color: rgba(245, 158, 11, 0.12);
+  }
+  .dark .bg-error-50 {
+    background-color: rgba(239, 68, 68, 0.08);
+  }
+  .dark .bg-error-100 {
+    background-color: rgba(239, 68, 68, 0.12);
+  }
+  .dark .bg-success-50 {
+    background-color: rgba(22, 163, 74, 0.08);
+  }
+  .dark .bg-success-100 {
+    background-color: rgba(22, 163, 74, 0.12);
+  }
+  .dark .bg-sky-50 {
+    background-color: rgba(14, 165, 233, 0.08);
+  }
+  .dark .bg-teal-50 {
+    background-color: rgba(20, 184, 166, 0.08);
+  }
+  .dark .bg-purple-50 {
+    background-color: rgba(168, 85, 247, 0.08);
+  }
+  .dark .bg-rose-50 {
+    background-color: rgba(244, 63, 94, 0.08);
+  }
+  .dark .bg-orange-50 {
+    background-color: rgba(249, 115, 22, 0.08);
+  }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+  /* Brand-tint text — readable on near-black surfaces */
+  .dark .text-primary-900 {
+    color: rgba(74, 222, 128, 1);
+  } /* green-400 */
+  .dark .text-primary-800 {
+    color: rgba(74, 222, 128, 0.95);
+  }
+  .dark .text-primary-700 {
+    color: rgba(74, 222, 128, 0.9);
+  }
+  .dark .text-primary-600 {
+    color: var(--primitive-green-500);
+  } /* #22c55e — brand green */
+  .dark .text-emerald-900 {
+    color: rgba(74, 222, 128, 1);
+  }
+  .dark .text-emerald-800 {
+    color: rgba(74, 222, 128, 0.95);
+  }
+  .dark .text-emerald-700 {
+    color: rgba(74, 222, 128, 0.9);
+  }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s ease-out both;
-}
+  /* Status text — dark shades that are unreadable on dark bg → lighter variants */
+  .dark .text-error-900 {
+    color: rgba(252, 165, 165, 1);
+  } /* red-300 */
+  .dark .text-error-800 {
+    color: rgba(252, 165, 165, 0.95);
+  }
+  .dark .text-error-700 {
+    color: rgba(248, 113, 113, 0.9);
+  } /* red-400 */
+  .dark .text-error-600 {
+    color: rgba(248, 113, 113, 0.85);
+  }
+  .dark .text-warning-900 {
+    color: rgba(253, 230, 138, 1);
+  } /* amber-200 */
+  .dark .text-warning-800 {
+    color: rgba(253, 186, 36, 0.95);
+  } /* amber-400 */
+  .dark .text-warning-700 {
+    color: rgba(251, 191, 36, 0.9);
+  }
+  .dark .text-warning-600 {
+    color: rgba(245, 158, 11, 0.9);
+  }
+  .dark .text-success-800 {
+    color: rgba(74, 222, 128, 0.95);
+  } /* green-400 */
+  .dark .text-success-700 {
+    color: rgba(74, 222, 128, 0.9);
+  }
+  .dark .text-info-900 {
+    color: rgba(186, 230, 253, 1);
+  } /* blue-200 */
+  .dark .text-info-800 {
+    color: rgba(147, 197, 253, 0.95);
+  } /* blue-300 */
+  .dark .text-info-700 {
+    color: rgba(96, 165, 250, 0.9);
+  } /* blue-400 */
+  .dark .text-info-600 {
+    color: rgba(96, 165, 250, 0.85);
+  } /* blue-400 */
+  .dark .text-info-500 {
+    color: rgba(147, 197, 253, 0.65);
+  } /* blue-300 muted */
 
-/* Custom scrollbar for dropdown content */
-.dropdown-scroll::-webkit-scrollbar       { width: 6px; }
-.dropdown-scroll::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 3px; }
-.dropdown-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
-.dropdown-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+  /* Status borders — light pastel shades → semi-transparent in dark */
+  .dark .border-primary-100 {
+    border-color: rgba(22, 163, 74, 0.15);
+  }
+  .dark .border-primary-200 {
+    border-color: rgba(22, 163, 74, 0.25);
+  }
+  .dark .border-error-100 {
+    border-color: rgba(239, 68, 68, 0.12);
+  }
+  .dark .border-error-200 {
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+  .dark .border-error-300 {
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  .dark .border-warning-100 {
+    border-color: rgba(245, 158, 11, 0.12);
+  }
+  .dark .border-warning-200 {
+    border-color: rgba(245, 158, 11, 0.2);
+  }
+  .dark .border-warning-300 {
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+  .dark .border-success-100 {
+    border-color: rgba(22, 163, 74, 0.12);
+  }
+  .dark .border-success-200 {
+    border-color: rgba(22, 163, 74, 0.2);
+  }
+  .dark .border-info-200 {
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+  .dark .border-info-300 {
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+  .dark .border-info-500 {
+    border-color: rgba(59, 130, 246, 0.5);
+  }
 
-/* ─── Card / surface primitives (@layer components) ────────────────────────
+  /* Neutral text */
+  .dark .text-neutral-900 {
+    color: var(--color-text);
+  }
+  .dark .text-neutral-800 {
+    color: var(--color-text);
+  }
+  .dark .text-neutral-700 {
+    color: var(--color-text-muted);
+  }
+  .dark .text-neutral-600 {
+    color: var(--color-text-muted);
+  }
+  .dark .text-neutral-500 {
+    color: var(--color-text-faint);
+  }
+
+  /* Neutral borders */
+  .dark .border-neutral-200 {
+    border-color: var(--color-border);
+  }
+  .dark .border-neutral-100 {
+    border-color: var(--color-border-subtle);
+  }
+  /* border-neutral-300 used for form controls — keep slightly more visible than others */
+  .dark .border-neutral-300 {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  /* border-neutral-400/500 used for selected/active states */
+  .dark .border-neutral-400 {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  .dark .border-neutral-500 {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Hover backgrounds — hover: variants are different CSS classes, must override separately */
+  .dark .hover\:bg-neutral-50:hover {
+    background-color: var(--color-surface-raised);
+  }
+  .dark .hover\:bg-neutral-100:hover {
+    background-color: var(--color-surface-raised);
+  }
+  .dark .hover\:bg-neutral-200:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  .dark .hover\:bg-neutral-300:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .dark .hover\:bg-white:hover {
+    background-color: var(--color-surface);
+  }
+  .dark .hover\:bg-primary-50:hover {
+    background-color: rgba(22, 163, 74, 0.12);
+  }
+  .dark .hover\:bg-emerald-50:hover {
+    background-color: rgba(22, 163, 74, 0.12);
+  }
+  .dark .hover\:bg-info-200:hover {
+    background-color: rgba(59, 130, 246, 0.18);
+  }
+  .dark .hover\:bg-warning-200:hover {
+    background-color: rgba(245, 158, 11, 0.16);
+  }
+  .dark .hover\:bg-error-100:hover {
+    background-color: rgba(239, 68, 68, 0.12);
+  }
+  .dark .hover\:bg-error-50:hover {
+    background-color: rgba(239, 68, 68, 0.08);
+  }
+
+  /* Hover text — neutrals */
+  .dark .hover\:text-neutral-900:hover {
+    color: var(--color-text);
+  }
+  .dark .group:hover .group-hover\:text-neutral-900 {
+    color: var(--color-text);
+  }
+
+  /* Hover text — primary (blog link hovers, project "learn more", etc.) */
+  .dark .hover\:text-primary-600:hover {
+    color: var(--primitive-green-500);
+  }
+  .dark .hover\:text-primary-700:hover {
+    color: rgba(74, 222, 128, 0.9);
+  }
+  .dark .group:hover .group-hover\:text-primary-600 {
+    color: var(--primitive-green-500);
+  }
+  .dark .group:hover .group-hover\:text-primary-700 {
+    color: rgba(74, 222, 128, 0.9);
+  }
+
+  /* Hover borders — primary (resource card hovers on knowhow page) */
+  .dark .hover\:border-primary-200:hover {
+    border-color: rgba(22, 163, 74, 0.2);
+  }
+  .dark .hover\:border-primary-500:hover {
+    border-color: rgba(22, 163, 74, 0.5);
+  }
+
+  /* bg-neutral-400 — separator dots in blog post meta */
+  .dark .bg-neutral-400 {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ─── Dark-mode explicit variant overrides ────────────────────────────────
+ * Override Tailwind's dark: prefix classes so all dark-mode neutrals resolve
+ * through CSS vars. This lets us retheme by editing :root/.dark vars only.
+ *
+ * Specificity: [0,2,0] — same as Tailwind's .dark .dark\:* generated rules,
+ * but these appear after @tailwind utilities in source, so they win.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+  /* Backgrounds — dark: variant neutrals → semantic CSS vars */
+  .dark .dark\:bg-neutral-950 {
+    background-color: var(--color-bg);
+  }
+  .dark .dark\:bg-neutral-900 {
+    background-color: var(--color-surface);
+  }
+  .dark .dark\:bg-neutral-800 {
+    background-color: var(--color-surface-raised);
+  }
+  .dark .dark\:bg-neutral-700 {
+    background-color: var(--color-surface-raised);
+  }
+  /* neutral-600 used for interactive highlights (hover targets, selected rows) */
+  .dark .dark\:bg-neutral-600 {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Hover backgrounds */
+  .dark .dark\:hover\:bg-neutral-800:hover {
+    background-color: var(--color-surface-raised);
+  }
+  .dark .dark\:hover\:bg-neutral-700:hover {
+    background-color: var(--color-surface-raised);
+  }
+  .dark .dark\:hover\:bg-neutral-600:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Borders — x.ai aesthetic: ultra-subtle, rgba-based */
+  .dark .dark\:border-neutral-700 {
+    border-color: var(--color-border-subtle);
+  }
+  .dark .dark\:border-neutral-600 {
+    border-color: var(--color-border);
+  }
+  .dark .dark\:border-neutral-500 {
+    border-color: var(--color-border);
+  }
+
+  /* Hover border neutrals in dark mode */
+  .dark .hover\:border-neutral-300:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .dark .hover\:border-neutral-400:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  /* Text — dark: variant neutrals → semantic CSS vars */
+  .dark .dark\:text-white {
+    color: var(--color-text);
+  }
+  .dark .dark\:text-neutral-100 {
+    color: var(--color-text);
+  }
+  .dark .dark\:text-neutral-200 {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .dark .dark\:text-neutral-300 {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .dark .dark\:text-neutral-400 {
+    color: var(--color-text-muted);
+  }
+  .dark .dark\:text-neutral-500 {
+    color: var(--color-text-faint);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out both;
+  }
+
+  /* Custom scrollbar for dropdown content */
+  .dropdown-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .dropdown-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+  }
+  .dropdown-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  .dropdown-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ─── Card / surface primitives (@layer components) ────────────────────────
  * Single source of truth for all card/panel surfaces.
  * Uses CSS custom properties directly — dark mode is automatic, zero dark:
  * variants needed in any component that uses these classes.
  * ─────────────────────────────────────────────────────────────────────────── */
-@layer components {
-  /* Standard content card — border + surface bg, no shadow */
-  .card-shell {
-    border-radius: 0.75rem;                    /* rounded-xl */
-    border: 1px solid var(--color-border);
-    background-color: var(--color-surface);
-  }
-
-  /* Inset / nested card — slightly raised bg for contrast */
-  .card-shell-inset {
-    border-radius: 0.75rem;
-    border: 1px solid var(--color-border);
-    background-color: var(--color-surface-raised);
-  }
-
-  /* Page section with neutral tint */
-  .section-tint {
-    background-color: var(--color-surface-raised);
-  }
-
-  /* ─── Public surface primitives (fleetcrown / x.ai-inspired) ──────────────
-   * SSOT for landing / marketing / public-info pages. JSX consumes semantic
-   * class names — never hardcodes typography, color, or surface chrome.
-   * Mobile-first: the hero-fold IS one viewport — actionable above-the-fold
-   * is the default, not an afterthought.
-   * ─────────────────────────────────────────────────────────────────────── */
-
-  /* Hero fold — fills viewport on every screen so CTAs land above the fold.
-     min-h:88vh (mobile chrome safe) leaving room for nav above + safe-area
-     below. JSX renders: badge → title → lede → sublede → CTA row, centered. */
-  .ui-public-hero-fold {
-    @apply relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 text-center;
-    min-height: 88vh;
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-
-  /* Eyebrow / kicker — small caps label above a title. */
-  .ui-public-eyebrow {
-    @apply text-xs uppercase tracking-[0.18em];
-    color: var(--text-tertiary);
-  }
-
-  /* Hero badge — pill above the title (positioning, mission anchor). */
-  .ui-public-hero-badge {
-    @apply mb-6 inline-block rounded-full px-4 py-1 text-xs uppercase tracking-[0.15em];
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-  }
-
-  /* Hero display title — fluid clamp() type, brand display weight + tracking. */
-  .ui-public-hero-title {
-    font-size: clamp(var(--hero-title-min), var(--hero-title-fluid), var(--hero-title-max));
-    line-height: 0.95;
-    letter-spacing: var(--display-tracking);
-    @apply font-bold;
-    color: var(--text-primary);
-  }
-
-  /* Hero lede — primary subtitle, comfortable reading line-length. */
-  .ui-public-hero-lede {
-    @apply mx-auto mt-6 sm:mt-8 max-w-2xl text-xl sm:text-2xl leading-tight tracking-tight;
-    color: var(--text-secondary);
-  }
-
-  /* Hero sublede — secondary subtitle / micro-context. */
-  .ui-public-hero-sublede {
-    @apply mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg;
-    color: var(--text-tertiary);
-  }
-
-  /* CTA primary — RevampIT green; large tap target; opacity hover. */
-  .ui-public-cta {
-    @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
-    background: var(--color-accent);
-    color: #ffffff;
-    min-height: 48px;
-  }
-
-  /* CTA ghost — bordered, secondary action. */
-  .ui-public-cta-ghost {
-    @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-colors;
-    border: 1px solid var(--border-default);
-    color: var(--text-secondary);
-    min-height: 48px;
-  }
-  .ui-public-cta-ghost:hover {
-    border-color: var(--border-strong);
-    color: var(--text-primary);
-  }
-
-  /* CTA row container — wraps gracefully on mobile (stacks), aligns on sm+. */
-  .ui-public-cta-row {
-    @apply mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto;
-  }
-
-  /* Section band — tinted page-wide band for narrative beats. */
-  .ui-public-band {
-    background: var(--surface-raised);
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  /* Display headings for sections below the hero. */
-  .ui-public-display-lg {
-    font-size: clamp(2rem, 5vw, 3.25rem);
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-    @apply font-bold;
-    color: var(--text-primary);
-  }
-  .ui-public-display-md {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    @apply font-bold;
-    color: var(--text-primary);
-  }
-
-  /* Section lede — text alongside a section title. */
-  .ui-public-section-lede {
-    @apply max-w-2xl text-lg sm:text-xl leading-relaxed;
-    color: var(--text-secondary);
-  }
-
-  /* Surface card — fleetcrown-style content card for sections. */
-  .ui-public-card {
-    @apply flex flex-col rounded-2xl p-6 text-left;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-base);
-    transition: border-color 200ms ease;
-  }
-  .ui-public-card:hover {
-    border-color: var(--border-default);
-  }
-  .ui-public-card-label {
-    @apply mb-6 font-mono text-xs uppercase tracking-[0.18em];
-    color: var(--text-muted);
-  }
-  .ui-public-card-title {
-    @apply text-lg sm:text-xl font-semibold leading-tight;
-    color: var(--text-primary);
-  }
-  .ui-public-card-body {
-    @apply mt-3 text-sm leading-relaxed;
-    color: var(--text-secondary);
-  }
 }
 
 /* Focus ring — keyboard navigation */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  @apply focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
 }
 
 @media print {

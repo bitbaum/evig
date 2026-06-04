@@ -21,7 +21,7 @@ import { designPrimitive } from '@/lib/design-system'
 import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react'
 
 const STATUS_BADGE: Record<ProjectStatus, string> = {
-  planning:  'bg-surface-raised text-text-secondary dark:bg-white/[0.06]',
+  planning:  'bg-surface-raised text-text-secondary dark:bg-white/6',
   active:    'bg-primary-100 text-primary-800 dark:bg-primary-500/15 dark:text-primary-400',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
@@ -152,7 +152,7 @@ export default async function TaskProjectDetailPage({
                 {progress}%
               </span>
             </div>
-            <div className="h-2 w-full rounded-full bg-surface-raised dark:bg-white/[0.06]">
+            <div className="h-2 w-full rounded-full bg-surface-raised dark:bg-white/6">
               <div
                 className="h-2 rounded-full bg-primary-500 transition-all"
                 style={{ width: `${progress}%` }}

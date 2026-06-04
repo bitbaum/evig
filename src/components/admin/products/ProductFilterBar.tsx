@@ -33,7 +33,7 @@ export function ProductFilterBar({
   activeTab,
 }: ProductFilterBarProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border p-4 md:p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border p-4 md:p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex flex-col sm:flex-row gap-4 flex-1">
           {/* Search */}

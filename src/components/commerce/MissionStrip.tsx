@@ -42,7 +42,7 @@ export async function MissionStrip({ className }: MissionStripProps) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {/* Mission anchor */}
           <div className="flex items-start sm:items-center gap-3 min-w-0">
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
               <Recycle className="h-4 w-4 text-primary-600 dark:text-primary-400" />
             </div>
             <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-snug">

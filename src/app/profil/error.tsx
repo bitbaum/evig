@@ -29,12 +29,12 @@ export default function ProfilError({
           Beim Laden deines Profils ist ein Fehler aufgetreten.
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          <Button onClick={reset} variant="primary" className="w-full min-h-[44px]">
+          <Button onClick={reset} variant="primary" className="w-full min-h-touch">
             Erneut versuchen
           </Button>
           <Link
             href="/dashboard"
-            className="inline-flex items-center justify-center gap-2 text-text-secondary hover:text-neutral-900 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
+            className="inline-flex items-center justify-center gap-2 text-text-secondary hover:text-neutral-900 min-h-touch focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             Zurück zum Dashboard

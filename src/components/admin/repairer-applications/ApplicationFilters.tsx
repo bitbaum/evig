@@ -19,7 +19,7 @@ const STATUS_OPTIONS: ApplicationStatus[] = [
 
 export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange, onSearchChange }: Props) {
   return (
-    <div className="bg-surface-base rounded-lg shadow-sm border border p-6">
+    <div className="bg-surface-base rounded-lg shadow-xs border border p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">

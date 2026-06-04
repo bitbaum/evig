@@ -183,7 +183,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
           <ul className="space-y-1.5">
             {decision.options.map((opt) => (
               <li key={opt.id} className="flex items-start gap-2 text-sm text-text-secondary">
-                <span className="mt-0.5 flex-shrink-0 text-neutral-300 dark:text-neutral-600">—</span>
+                <span className="mt-0.5 shrink-0 text-neutral-300 dark:text-neutral-600">—</span>
                 <span>
                   <span className="font-medium">{opt.label}</span>
                   {opt.description && (

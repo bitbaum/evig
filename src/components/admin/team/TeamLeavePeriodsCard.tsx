@@ -145,7 +145,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
           <button
             onClick={load}
             disabled={isLoading}
-            className="w-11 h-11 inline-flex items-center justify-center rounded-md text-text-tertiary hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="w-11 h-11 inline-flex items-center justify-center rounded-md text-text-tertiary hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/4 disabled:opacity-60"
             aria-label="Aktualisieren"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -202,7 +202,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             <button
               onClick={resetForm}
               disabled={submitting}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 disabled:opacity-60"
             >
               <X className="w-3.5 h-3.5" /> Abbrechen
             </button>

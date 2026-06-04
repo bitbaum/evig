@@ -48,7 +48,7 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                 <div key={i} className={cn(designPrimitive.surface.card, 'p-6 sm:p-8')}>
                   {CardIcon && (
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
                         <CardIcon className="h-5 w-5 text-action" />
                       </div>
                       <h3 className="text-lg font-semibold text-text-primary">
@@ -73,7 +73,7 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                     <ul className="space-y-2.5">
                       {card.features.map((feat, fi) => (
                         <li key={fi} className="flex items-start gap-2.5 text-sm text-text-secondary">
-                          <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary-500" />
+                          <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary-500" />
                           <span>{feat}</span>
                         </li>
                       ))}

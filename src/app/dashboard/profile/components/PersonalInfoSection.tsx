@@ -16,7 +16,7 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
   const tAddr = useTranslations('dashboard.profile.address')
 
   return (
-    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700 p-6">
+    <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-700 rounded-lg flex items-center justify-center">
           <User className="w-5 h-5 text-text-secondary" />

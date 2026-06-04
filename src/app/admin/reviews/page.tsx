@@ -124,7 +124,7 @@ export default function AdminReviewsPage() {
 
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
-          <div className="bg-surface-base rounded-lg shadow-sm border border p-12 text-center">
+          <div className="bg-surface-base rounded-lg shadow-xs border border p-12 text-center">
             <MessageSquare className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
               {ADMIN_CONTENT.reviews.emptyTitle}
@@ -137,7 +137,7 @@ export default function AdminReviewsPage() {
           </div>
         ) : (
           filteredReviews.map((review) => (
-            <div key={review.id} className="bg-surface-base rounded-lg shadow-sm border border overflow-hidden">
+            <div key={review.id} className="bg-surface-base rounded-lg shadow-xs border border overflow-hidden">
               <div className="p-6 border-b border">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -230,7 +230,7 @@ export default function AdminReviewsPage() {
                         onClick={() => startModeration(review.id, 'flag_spam')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als Spam markieren"
-                        className="min-h-[2.75rem] px-2 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded text-xs hover:bg-warning-200 dark:hover:bg-warning-900/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="min-h-11 px-2 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded-sm text-xs hover:bg-warning-200 dark:hover:bg-warning-900/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <Flag className="w-3 h-3" /> Spam
                       </button>
@@ -238,7 +238,7 @@ export default function AdminReviewsPage() {
                         onClick={() => startModeration(review.id, 'flag_inappropriate')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als unangemessen markieren"
-                        className="min-h-[2.75rem] px-2 py-1 bg-secondary-100 text-secondary-700 rounded text-xs hover:bg-secondary-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="min-h-11 px-2 py-1 bg-secondary-100 text-secondary-700 rounded-sm text-xs hover:bg-secondary-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <AlertTriangle className="w-3 h-3" /> Unangemessen
                       </button>

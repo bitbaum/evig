@@ -26,7 +26,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
       <div className="p-6 border-b border-neutral-100">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center shrink-0">
               <User className="w-6 h-6 text-neutral-500" />
             </div>
             <div>
@@ -44,7 +44,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
           </div>
 
           {technician.isVerified && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 flex-shrink-0">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 shrink-0">
               <CheckCircle className="w-3 h-3" />
               {t('verified')}
             </span>
@@ -115,7 +115,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {/* Location */}
         {(technician.city || technician.postalCode) && (
           <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
-            <MapPin className="w-4 h-4 flex-shrink-0" />
+            <MapPin className="w-4 h-4 shrink-0" />
             <span>
               {[technician.postalCode, technician.city].filter(Boolean).join(' ')}
             </span>

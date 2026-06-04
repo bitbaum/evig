@@ -74,14 +74,14 @@ export function DocumentVerificationSection({
                           <button
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded text-xs hover:bg-primary-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-sm text-xs hover:bg-primary-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
                           </button>
                           <button
                             onClick={() => onOpenDialog('reject_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400 rounded text-xs hover:bg-error-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400 rounded-sm text-xs hover:bg-error-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Ablehnen'}
                           </button>

@@ -110,7 +110,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
         <div className="space-y-4">
           {/* Show Email */}
           <div className="flex items-start gap-4 p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg border-2 border dark:border-neutral-600">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
                 {profile.show_email ? (
                   <Eye className="w-5 h-5 text-action" />
@@ -128,7 +128,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 <button
                   type="button"
                   onClick={() => handleChange('show_email', !profile.show_email)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                     profile.show_email ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-600'
                   }`}
                 >
@@ -147,7 +147,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
 
           {/* Show Phone */}
           <div className="flex items-start gap-4 p-4 bg-surface-raised dark:bg-neutral-700/50 rounded-lg border-2 border dark:border-neutral-600">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
                 {profile.show_phone ? (
                   <Eye className="w-5 h-5 text-action" />
@@ -165,7 +165,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 <button
                   type="button"
                   onClick={() => handleChange('show_phone', !profile.show_phone)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                     profile.show_phone ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-600'
                   }`}
                 >

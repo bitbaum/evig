@@ -130,13 +130,13 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                 <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
                   {option.title}
                 </Heading>
-                <p className={`${responsiveTypography.body} text-text-secondary ${responsiveSpacing.mbMedium} flex-grow`}>
+                <p className={`${responsiveTypography.body} text-text-secondary ${responsiveSpacing.mbMedium} grow`}>
                   {option.description}
                 </p>
                 <ul className={`space-y-2 sm:space-y-3 ${responsiveSpacing.mbMedium}`}>
                   {option.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start text-text-secondary">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-primary-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-primary-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className={responsiveTypography.small}>{feature}</span>
@@ -191,7 +191,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                   rel="noopener noreferrer"
                   className={`flex items-center ${responsiveSpacing.cardPadding} card-shell hover:border-primary-300 transition-all duration-300 group`}
                 >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-primary-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span className={`${responsiveTypography.body} text-text-secondary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300`}>

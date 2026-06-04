@@ -85,7 +85,7 @@ export function HelpRequestCard({
       <div className="flex items-start gap-3">
         {/* Icon */}
         <div
-          className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+          className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
             request.is_broadcast
               ? 'bg-warning-100 dark:bg-warning-900/30'
               : 'bg-primary-100 dark:bg-primary-900/30'

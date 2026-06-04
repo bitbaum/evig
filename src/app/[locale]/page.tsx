@@ -254,13 +254,13 @@ export default async function Home() {
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <Link
                       href={card.primaryHref}
-                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
+                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
                     >
                       {card.primaryLabel}
                     </Link>
                     <Link
                       href={card.secondaryHref}
-                      className={`flex-1 rounded-md px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
+                      className={`flex-1 rounded-md px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
                     >
                       {card.secondaryLabel}
                     </Link>

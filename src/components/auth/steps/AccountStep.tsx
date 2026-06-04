@@ -219,7 +219,7 @@ export function AccountStep({
           checked={acceptTerms}
           onChange={(e) => onAcceptTermsChange(e.target.checked)}
           aria-required="true"
-          className="mt-1 w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
+          className="mt-1 w-4 h-4 rounded-sm border-neutral-300 text-primary-600 focus:ring-primary-500"
         />
         <label htmlFor="terms" className="text-sm text-neutral-600 dark:text-neutral-400">
           {t('termsI')}{' '}

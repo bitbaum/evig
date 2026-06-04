@@ -126,7 +126,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
 
       {error && (
         <div className="flex items-center gap-2 text-sm text-error-600">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <AlertCircle className="w-4 h-4 shrink-0" />
           {error}
         </div>
       )}

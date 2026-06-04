@@ -115,7 +115,7 @@ export default function CommunitySpaceSection() {
             <ul className="space-y-2 mb-6">
               {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
                 <li key={index} className="flex items-center gap-2 text-neutral-300">
-                  <ArrowRight className="h-4 w-4 text-primary-400 flex-shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-primary-400 shrink-0" />
                   {topic}
                 </li>
               ))}
@@ -149,7 +149,7 @@ export default function CommunitySpaceSection() {
                 key={index}
                 className="bg-neutral-900/50 rounded-xl p-4 flex items-start gap-3 border border-neutral-700/50"
               >
-                <div className="p-2 bg-primary-500/10 rounded-lg text-primary-500 flex-shrink-0">
+                <div className="p-2 bg-primary-500/10 rounded-lg text-primary-500 shrink-0">
                   {visionIcons[index] || <Sparkles className="h-5 w-5" />}
                 </div>
                 <span className="text-neutral-300 text-sm">{feature}</span>

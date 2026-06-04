@@ -122,7 +122,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={ROUTES.admin.services} className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors">
+          <Link href={ROUTES.admin.services} className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors">
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
@@ -254,7 +254,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
                 type="checkbox"
                 checked={!!formData[field]}
                 onChange={(e) => updateField(field, e.target.checked)}
-                className="w-4 h-4 text-action rounded"
+                className="w-4 h-4 text-action rounded-sm"
               />
               <span className="text-sm text-text-secondary">{label}</span>
             </label>

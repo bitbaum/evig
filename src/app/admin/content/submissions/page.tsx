@@ -31,7 +31,7 @@ export default function SubmissionsAdminPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -77,7 +77,7 @@ export default function SubmissionsAdminPage() {
           <Loader2 className="w-8 h-8 animate-spin text-action" />
         </div>
       ) : s.filteredSubmissions.length === 0 ? (
-        <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] p-12 text-center">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-12 text-center">
           <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <p className="text-text-secondary">
             Keine Einreichungen gefunden.

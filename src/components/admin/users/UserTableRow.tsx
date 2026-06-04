@@ -30,7 +30,7 @@ export function UserTableRow({
   const hasFullAccess = permissions.includes('*')
 
   return (
-    <tr className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]">
+    <tr className="hover:bg-neutral-50 dark:hover:bg-white/6">
       <UserInfoCell user={user} userIsSuperAdmin={userIsSuperAdmin} userIsStaff={userIsStaff} />
       <StatusCell
         userIsSuperAdmin={userIsSuperAdmin}
@@ -79,7 +79,7 @@ function UserInfoCell({
   return (
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex items-center">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${avatarClass}`}>
             <span className="text-white font-medium text-sm">{initials}</span>
           </div>
@@ -177,7 +177,7 @@ function PermissionsCell({
     <td className="px-6 py-4">
       <div className="flex flex-wrap gap-1 max-w-xs">
         {permissions.slice(0, 3).map(p => (
-          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-surface-raised dark:bg-neutral-700 rounded">
+          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-surface-raised dark:bg-neutral-700 rounded-sm">
             {p}
           </span>
         ))}

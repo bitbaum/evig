@@ -78,10 +78,10 @@ export default function AdminWorkshopsPage() {
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-neutral-200 rounded w-1/4"></div>
+        <div className="h-8 bg-neutral-200 rounded-sm w-1/4"></div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 bg-neutral-200 rounded"></div>
+            <div key={i} className="h-16 bg-neutral-200 rounded-sm"></div>
           ))}
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function AdminWorkshopsPage() {
         </div>
       )}
 
-      <div className="bg-surface-base rounded-xl shadow-sm border">
+      <div className="bg-surface-base rounded-xl shadow-xs border">
         <div className="px-6 py-4 border-b border">
           <Heading level={2} className="text-lg font-semibold text-text-primary">
             Workshop-Vorschläge ({proposals.length})
@@ -165,7 +165,7 @@ export default function AdminWorkshopsPage() {
                       {statusIcon}
                       <span className="text-sm text-text-secondary">{statusLabel}</span>
                       {proposal.last_edited_at && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 rounded">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 rounded-sm">
                           Von Admin bearbeitet
                         </span>
                       )}
@@ -196,7 +196,7 @@ export default function AdminWorkshopsPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
+                  <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:shrink-0">
                     <Link
                       href={ROUTES.admin.workshopProposal(proposal.id)}
                       className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50"

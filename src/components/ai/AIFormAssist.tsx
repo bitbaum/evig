@@ -123,7 +123,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
           {/* Error feedback */}
           {error && (
             <div className="flex items-start gap-2 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 text-error-700 dark:text-error-400 px-3 py-2 rounded-lg text-sm">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
@@ -131,7 +131,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
           {/* Success feedback — persistent until next action, shows field count */}
           {success && !error && (
             <div className="flex items-center gap-2 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 text-primary-700 dark:text-primary-400 px-3 py-2 rounded-lg text-sm">
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
               <span>
                 {filledCount > 0
                   ? t('successCount', { count: filledCount })

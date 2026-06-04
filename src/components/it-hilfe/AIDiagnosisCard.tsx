@@ -27,7 +27,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
 
       <div className="bg-white/60 rounded-lg p-4 mb-3">
         <div className="flex items-start gap-2">
-          <MapPin className="w-4 h-4 text-action mt-0.5 flex-shrink-0" />
+          <MapPin className="w-4 h-4 text-action mt-0.5 shrink-0" />
           <div>
             <p className="text-sm font-medium text-text-primary">
               {t('bringIn')}

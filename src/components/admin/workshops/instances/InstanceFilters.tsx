@@ -13,7 +13,7 @@ interface InstanceFiltersProps {
 
 export function InstanceFilters({ filters, setFilters, workshops }: InstanceFiltersProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border p-6 mb-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border p-6 mb-6">
       <div className="flex flex-wrap gap-4">
         <div className="flex-1 min-w-48">
           <FormField label="Workshop">

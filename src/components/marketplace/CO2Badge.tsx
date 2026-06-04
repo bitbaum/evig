@@ -41,7 +41,7 @@ export function CO2Badge({ category, className = '' }: CO2BadgeProps) {
       title={t('tooltip')}
     >
       <span className="inline-flex items-center gap-1.5">
-        <Leaf className="w-4 h-4 text-action flex-shrink-0" aria-hidden="true" />
+        <Leaf className="w-4 h-4 text-action shrink-0" aria-hidden="true" />
         <span className="text-primary-700 dark:text-primary-300 font-medium">
           {t('saved', { amount: co2Saved })}
         </span>

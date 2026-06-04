@@ -48,7 +48,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   }, [posts, search, statusFilter])
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06] overflow-hidden">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
       {/* Filters */}
       <div className="px-6 py-4 border-b border">
         <div className="flex flex-wrap gap-3">
@@ -96,11 +96,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/[0.04]">
+            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
               {filtered.map((post) => (
                 <tr
                   key={post.id}
-                  className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
+                  className="hover:bg-neutral-50 dark:hover:bg-white/6"
                 >
                   <td className="px-6 py-4">
                     <div>

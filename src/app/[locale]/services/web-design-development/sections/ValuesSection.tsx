@@ -47,7 +47,7 @@ export async function ValuesSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {coreValues.map((value, index) => (
-            <div key={index} className={`bg-surface-base rounded-xl p-6 border border-l-4 ${value.borderColor} hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300`}>
+            <div key={index} className={`bg-surface-base rounded-xl p-6 border border-l-4 ${value.borderColor} hover:border-neutral-300 dark:hover:border-white/12 transition-colors duration-300`}>
               <div className="text-center">
                 <div className={`w-14 h-14 ${value.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}>
                   <value.icon className={`w-7 h-7 ${value.iconColor}`} />

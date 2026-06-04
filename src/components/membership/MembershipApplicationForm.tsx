@@ -147,7 +147,7 @@ export function MembershipApplicationForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
         <div className="flex items-start gap-2 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 text-error-700 dark:text-error-400 px-4 py-3 rounded-lg text-sm">
-          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}

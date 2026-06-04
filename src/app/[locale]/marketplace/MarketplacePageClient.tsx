@@ -75,7 +75,7 @@ export default function MarketplacePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact search hero — orange accents maintained for marketplace identity */}
-      <div className="bg-secondary-50 dark:bg-neutral-900 border-b border-secondary-100 dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-secondary-50 dark:bg-neutral-900 border-b border-secondary-100 dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -92,7 +92,7 @@ export default function MarketplacePage() {
                   ? '/marketplace/sell'
                   : '/auth/login?callbackUrl=/marketplace/sell'
               }
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-secondary-500 hover:bg-secondary-600 dark:bg-secondary-500 dark:hover:bg-secondary-400 text-white rounded-lg text-sm font-semibold transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-secondary-500 hover:bg-secondary-600 dark:bg-secondary-500 dark:hover:bg-secondary-400 text-white rounded-lg text-sm font-semibold transition-colors shrink-0"
             >
               <Plus className="w-4 h-4" />
               {t('sell.label')}
@@ -127,7 +127,7 @@ export default function MarketplacePage() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/[0.1] rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 dark:border-white/10 rounded-lg text-sm font-medium text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors"
             aria-expanded={mobileFiltersOpen}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -162,7 +162,7 @@ export default function MarketplacePage() {
         {/* 2-column layout: sidebar + results */}
         <div className="flex gap-8 items-start">
           {/* Sidebar — desktop only */}
-          <aside className="hidden lg:block w-56 flex-shrink-0 sticky top-20 pb-4">
+          <aside className="hidden lg:block w-56 shrink-0 sticky top-20 pb-4">
             <MarketplaceFilterSidebar {...sharedSidebarProps} />
           </aside>
 
@@ -238,7 +238,7 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/[0.1] text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
+                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors"
                   aria-label={t('pagination.previousPage')}
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -249,7 +249,7 @@ export default function MarketplacePage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
-                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/[0.1] text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors"
+                  className="p-2 rounded-lg border border-neutral-300 dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 dark:hover:bg-white/4 transition-colors"
                   aria-label={t('pagination.nextPage')}
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -279,7 +279,7 @@ export default function MarketplacePage() {
               </Button>
               <Link
                 href={ROUTES.public.register}
-                className="px-6 py-2.5 border border-neutral-300 dark:border-white/[0.1] text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/[0.04] rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 border border-neutral-300 dark:border-white/10 text-text-secondary hover:bg-neutral-50 dark:hover:bg-white/4 rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.register')}
               </Link>
@@ -297,12 +297,12 @@ export default function MarketplacePage() {
             aria-hidden="true"
           />
           <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-surface-base shadow-xl dark:shadow-black/40 flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b border flex-shrink-0">
+            <div className="flex items-center justify-between p-4 border-b border shrink-0">
               <span className="font-semibold text-text-primary">{t('filters.label')}</span>
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
-                className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
+                className="p-1.5 rounded-md hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors"
                 aria-label={t('filters.closeLabel')}
               >
                 <X className="w-5 h-5 text-text-secondary" />
@@ -314,7 +314,7 @@ export default function MarketplacePage() {
                 clearFilters={() => { clearFilters(); setMobileFiltersOpen(false) }}
               />
             </div>
-            <div className="p-4 border-t border flex-shrink-0">
+            <div className="p-4 border-t border shrink-0">
               <Button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}

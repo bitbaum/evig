@@ -135,7 +135,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         <button
                           type="button"
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}
-                          className="text-xs px-2.5 py-1 border rounded hover:bg-neutral-50 transition-colors"
+                          className="text-xs px-2.5 py-1 border rounded-sm hover:bg-neutral-50 transition-colors"
                         >
                           Abbrechen
                         </button>

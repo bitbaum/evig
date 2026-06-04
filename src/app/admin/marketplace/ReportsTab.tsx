@@ -44,7 +44,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
               <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {reports?.items.map(r => (
               <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
@@ -70,7 +70,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                   {r.status === REPORT_STATUS.PENDING && (
                     <button
                       onClick={() => onHandle(r.id)}
-                      className="px-3 py-1.5 text-sm rounded-lg border border dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
+                      className="px-3 py-1.5 text-sm rounded-lg border border dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-white/6"
                     >
                       Bearbeiten
                     </button>

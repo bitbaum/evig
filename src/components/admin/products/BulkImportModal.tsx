@@ -25,7 +25,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-surface-base dark:border dark:border-white/[0.06] rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border">
@@ -71,7 +71,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 <Heading level={4} className="font-medium text-text-primary mb-2">
                   Erforderliches CSV-Format:
                 </Heading>
-                <div className="text-sm text-neutral-800 font-mono bg-surface-raised p-3 rounded">
+                <div className="text-sm text-neutral-800 font-mono bg-surface-raised p-3 rounded-sm">
                   Titel,Beschreibung,Preis (CHF),Kategorie,Marke,Bild-URL
                   <br />
                   &quot;Dell Latitude E7470&quot;,&quot;Professioneller Laptop&quot;,599.00,&quot;Laptops&quot;,&quot;Dell&quot;,&quot;https://...&quot;

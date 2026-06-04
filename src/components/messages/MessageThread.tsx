@@ -174,7 +174,7 @@ export default function MessageThread({
                       {msg.sender_name}
                     </p>
                   )}
-                  <p className="text-sm whitespace-pre-line break-words">{msg.content}</p>
+                  <p className="text-sm whitespace-pre-line wrap-break-word">{msg.content}</p>
                   <p className={`text-xs mt-1 ${
                     isMine ? 'text-primary-200' : 'text-text-muted'
                   }`}>
@@ -207,7 +207,7 @@ export default function MessageThread({
             disabled={!reply.trim() || sending}
             variant="primary"
             aria-label={t('send')}
-            className="flex-shrink-0 w-10 h-10 rounded-xl"
+            className="shrink-0 w-10 h-10 rounded-xl"
           >
             {sending ? (
               <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />

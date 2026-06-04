@@ -100,7 +100,7 @@ export function ProtocolAttendeesCard({
             ? attendees.map((uid) => (
                 <span
                   key={uid}
-                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-white/[0.06] text-text-secondary"
+                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-white/6 text-text-secondary"
                 >
                   {attendeeNames[uid] || 'Unbekannt'}
                 </span>
@@ -122,7 +122,7 @@ export function ProtocolAttendeesCard({
             {filtered.map((member) => (
               <label
                 key={member.id}
-                className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-50 dark:hover:bg-white/[0.04] cursor-pointer text-sm text-text-secondary"
+                className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-neutral-50 dark:hover:bg-white/4 cursor-pointer text-sm text-text-secondary"
               >
                 <input
                   type="checkbox"
@@ -134,7 +134,7 @@ export function ProtocolAttendeesCard({
                         : [...prev, member.id]
                     )
                   }
-                  className="rounded border-neutral-300 text-action focus:ring-primary-500"
+                  className="rounded-sm border-neutral-300 text-action focus:ring-primary-500"
                 />
                 {member.name}
               </label>

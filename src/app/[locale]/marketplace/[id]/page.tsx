@@ -65,7 +65,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {error || t('listing.notFound')}
         </Heading>
-        <Link href={ROUTES.public.marketplace} className="text-action hover:text-primary-700 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">
+        <Link href={ROUTES.public.marketplace} className="text-action hover:text-primary-700 font-medium focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-2 py-1">
           {t('listing.backToMarketplace')}
         </Link>
       </div>
@@ -85,7 +85,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
       {/* Back navigation */}
       <Link
         href={ROUTES.public.marketplace}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1 min-h-[44px]"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-2 py-1 min-h-touch"
       >
         <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         {t('listing.backToMarketplace')}

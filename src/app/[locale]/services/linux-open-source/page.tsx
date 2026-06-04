@@ -126,7 +126,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                   <ul className="space-y-3">
                     {adv.points.map((point, i) => (
                       <li key={i} className="flex items-start">
-                        <CheckCircle2 className="w-5 h-5 text-action mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="w-5 h-5 text-action mr-3 mt-0.5 shrink-0" />
                         <span>{point}</span>
                       </li>
                     ))}

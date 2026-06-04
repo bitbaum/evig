@@ -92,7 +92,7 @@ export default function SellerDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsProducts')}</p>
@@ -103,7 +103,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsRevenue')}</p>
@@ -119,7 +119,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsViews')}</p>
@@ -130,7 +130,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl p-6 shadow-xs border border-subtle dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsOrders')}</p>
@@ -144,7 +144,7 @@ export default function SellerDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Products */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700">
           <div className="p-6 border-b border-subtle dark:border-neutral-700">
             <h2 className="text-lg font-semibold text-text-primary">
               {t('recentTitle')}
@@ -209,7 +209,7 @@ export default function SellerDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-sm border border-subtle dark:border-neutral-700">
+        <div className="bg-surface-base dark:bg-neutral-800 rounded-xl shadow-xs border border-subtle dark:border-neutral-700">
           <div className="p-6 border-b border-subtle dark:border-neutral-700">
             <h2 className="text-lg font-semibold text-text-primary">
               {t('quickActionsTitle')}
@@ -248,7 +248,7 @@ export default function SellerDashboard() {
       {/* Marketplace Info */}
       <div className="bg-surface-raised dark:bg-neutral-900/20 border dark:border-neutral-700 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-surface-raised dark:bg-neutral-800 rounded-lg flex items-center justify-center shrink-0">
             <Package className="w-5 h-5 text-text-secondary" />
           </div>
           <div>

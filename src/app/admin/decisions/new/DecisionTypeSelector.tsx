@@ -36,7 +36,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               </div>
               <p className="mt-1.5 text-xs text-text-tertiary">{conf.description}</p>
               {isSelected && (
-                <p className="mt-1.5 rounded bg-primary-100 dark:bg-primary-900/30 px-2 py-1 text-xs text-primary-700 dark:text-primary-300">
+                <p className="mt-1.5 rounded-sm bg-primary-100 dark:bg-primary-900/30 px-2 py-1 text-xs text-primary-700 dark:text-primary-300">
                   {conf.mechanic}
                 </p>
               )}

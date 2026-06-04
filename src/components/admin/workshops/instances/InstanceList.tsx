@@ -34,7 +34,7 @@ export function InstanceList({
   getStatusBadge,
 }: InstanceListProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border">
+    <div className="bg-surface-base rounded-xl shadow-xs border">
       <div className="px-6 py-4 border-b border">
         <Heading level={2} className="text-lg text-text-primary">
           Termine ({instances.length})

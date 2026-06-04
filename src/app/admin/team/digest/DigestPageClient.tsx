@@ -45,7 +45,7 @@ export function DigestPageClient() {
             onClick={() => setDateRange('week')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'week'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-sm'
+                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
                 : 'text-text-secondary hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
@@ -55,7 +55,7 @@ export function DigestPageClient() {
             onClick={() => setDateRange('month')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'month'
-                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-sm'
+                ? 'bg-surface-base dark:bg-neutral-700 text-text-primary shadow-xs'
                 : 'text-text-secondary hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
@@ -66,7 +66,7 @@ export function DigestPageClient() {
         <button
           onClick={() => refetch()}
           disabled={loading}
-          className="p-2 text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
+          className="p-2 text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/6 rounded-lg"
           title="Aktualisieren"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -89,16 +89,16 @@ export function DigestPageClient() {
                 key={i}
                 className="bg-surface-base rounded-xl border border p-4 animate-pulse"
               >
-                <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-16 mb-2" />
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-24" />
+                <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-16 mb-2" />
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-24" />
               </div>
             ))}
           </div>
           <div className="bg-surface-base rounded-xl border border p-6 animate-pulse">
-            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-40 mb-4" />
+            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-40 mb-4" />
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded" />
+                <div key={i} className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded-sm" />
               ))}
             </div>
           </div>
@@ -262,7 +262,7 @@ export function DigestPageClient() {
                       key={milestone.id}
                       className="flex items-start gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50"
                     >
-                      <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center shrink-0">
                         <Flag className="w-4 h-4 text-action dark:text-primary-300" />
                       </div>
                       <div className="flex-1 min-w-0">

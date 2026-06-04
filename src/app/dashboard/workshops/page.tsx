@@ -75,11 +75,11 @@ export default function WorkshopsDashboard() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-3/4"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/2"></div>
               </div>
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function WorkshopsDashboard() {
         {paymentSuccess && (
           <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-action flex-shrink-0" />
+              <CheckCircle className="w-5 h-5 text-action shrink-0" />
               <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
             </div>
             <button

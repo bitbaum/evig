@@ -89,7 +89,7 @@ export function BulkTable({
                   type="checkbox"
                   checked={allSelected}
                   onChange={onSelectAll}
-                  className="w-4 h-4 text-action rounded border-neutral-300 focus:ring-primary-500"
+                  className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-primary-500"
                 />
               </th>
               {/* Row number */}
@@ -129,7 +129,7 @@ export function BulkTable({
                       type="checkbox"
                       checked={product._selected}
                       onChange={() => onProductSelect(product._tempId)}
-                      className="w-4 h-4 text-action rounded border-neutral-300 focus:ring-primary-500"
+                      className="w-4 h-4 text-action rounded-sm border-neutral-300 focus:ring-primary-500"
                     />
                   </td>
                   {/* Row number */}

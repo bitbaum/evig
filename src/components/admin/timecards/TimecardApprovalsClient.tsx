@@ -197,7 +197,7 @@ export function TimecardApprovalsClient() {
           <button
             onClick={loadQueue}
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-text-secondary dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/4 disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
@@ -270,7 +270,7 @@ export function TimecardApprovalsClient() {
                 checked={allSelected}
                 onChange={toggleAll}
                 aria-label="Alle auswählen"
-                className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500"
+                className="w-4 h-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500"
               />
               <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
                 {items.length} eingereicht
@@ -292,14 +292,14 @@ export function TimecardApprovalsClient() {
                     key={row.id}
                     className={`flex items-center gap-3 px-4 sm:px-6 py-3 transition-colors ${
                       isSelected ? 'bg-primary-50/50 dark:bg-primary-500/5' : ''
-                    } hover:bg-neutral-50 dark:hover:bg-white/[0.02]`}
+                    } hover:bg-neutral-50 dark:hover:bg-white/2`}
                   >
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggle(row.id)}
                       aria-label={`Zeitkarte von ${row.user_name || row.user_email} auswählen`}
-                      className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500 shrink-0"
+                      className="w-4 h-4 rounded-sm border-neutral-300 dark:border-neutral-600 text-action focus:ring-primary-500 shrink-0"
                     />
                     <div className="w-9 h-9 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-xs font-semibold text-text-secondary dark:text-neutral-200 shrink-0">
                       {initials(row.user_name || row.user_email)}

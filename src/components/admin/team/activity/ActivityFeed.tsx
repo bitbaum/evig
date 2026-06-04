@@ -100,7 +100,7 @@ export function ActivityFeed({
               className={`p-2 rounded-lg ${
                 hasActiveFilters
                   ? 'text-action bg-primary-50 dark:bg-primary-900/30'
-                  : 'text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
+                  : 'text-text-tertiary hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/6'
               }`}
               title="Filter"
             >
@@ -208,9 +208,9 @@ export function ActivityFeed({
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3" />
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-2/3" />
-                  <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-1/4" />
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/3" />
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-2/3" />
+                  <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded-sm w-1/4" />
                 </div>
               </div>
             </div>

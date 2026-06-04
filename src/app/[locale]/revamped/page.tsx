@@ -114,7 +114,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
 
               {/* Right Column - Image */}
               <div className="relative">
-                <div className="relative rounded-2xl overflow-hidden border aspect-[4/3]">
+                <div className="relative rounded-2xl overflow-hidden border aspect-4/3">
                   <Image
                     src="/images/certification/revamped-laptop-user.webp"
                     alt="Woman with pink hair using a laptop with REVAMPED certification sticker"
@@ -123,7 +123,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                   />
-                  <div className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-sm">
+                  <div className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-xs">
                     <div className="flex items-center">
                       <Award className="w-4 h-4 mr-2" />
                       REVAMPED

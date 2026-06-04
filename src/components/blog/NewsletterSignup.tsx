@@ -59,21 +59,21 @@ export default function NewsletterSignup() {
         <div className="bg-surface-raised rounded-lg p-6 mb-8">
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
             <div className="flex items-start gap-2">
-              <Check className="w-5 h-5 text-action flex-shrink-0 mt-0.5" />
+              <Check className="w-5 h-5 text-action shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-text-primary">{t('free')}</p>
                 <p className="text-text-secondary">{t('freeDesc')}</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <Check className="w-5 h-5 text-action flex-shrink-0 mt-0.5" />
+              <Check className="w-5 h-5 text-action shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-text-primary">{t('noAds')}</p>
                 <p className="text-text-secondary">{t('noAdsDesc')}</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <Check className="w-5 h-5 text-action flex-shrink-0 mt-0.5" />
+              <Check className="w-5 h-5 text-action shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-text-primary">{t('unsubscribe')}</p>
                 <p className="text-text-secondary">{t('unsubscribeDesc')}</p>

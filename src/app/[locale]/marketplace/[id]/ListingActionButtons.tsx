@@ -108,7 +108,7 @@ export function ListingActionButtons({
           </div>
           <Link
             href={`/marketplace/checkout/${listing.id}`}
-            className="w-full flex items-center justify-center gap-2 bg-secondary-500 hover:bg-secondary-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2"
+            className="w-full flex items-center justify-center gap-2 bg-secondary-500 hover:bg-secondary-600 text-white py-3 px-6 min-h-touch rounded-lg font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2"
           >
             <ShoppingCart className="w-5 h-5" aria-hidden="true" />
             {t('buyNow')} — {formatCHF(Number(listing.price_chf))}
@@ -137,7 +137,7 @@ export function ListingActionButtons({
               </p>
               <Link
                 href="/dashboard/messages"
-                className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 font-medium underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1"
+                className="inline-flex items-center gap-1 text-sm text-action hover:text-primary-700 font-medium underline focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-1"
               >
                 {t('goToMessages')}
               </Link>
@@ -199,7 +199,7 @@ export function ListingActionButtons({
           <button
             onClick={onToggleFavorite}
             disabled={togglingFav}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
               isFavorited
                 ? 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-600'
                 : 'border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800'
@@ -211,7 +211,7 @@ export function ListingActionButtons({
         )}
         <button
           onClick={onShare}
-          className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           title={t('share')}
         >
           {shareConfirm ? (
@@ -224,7 +224,7 @@ export function ListingActionButtons({
         {isOwner && (
           <Link
             href={`/marketplace/sell?edit=${listing.id}`}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             {t('edit')}
           </Link>
@@ -232,7 +232,7 @@ export function ListingActionButtons({
         {sessionUserId && !isOwner && (
           <button
             onClick={onShowReportModal}
-            className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-text-secondary hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             title={t('report')}
           >
             <Flag className="w-4 h-4" aria-hidden="true" />

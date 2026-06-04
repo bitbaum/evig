@@ -63,7 +63,7 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
     >
       <div className="flex items-center">
         <div className={cn(
-          'w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0',
+          'w-12 h-12 rounded-lg flex items-center justify-center shrink-0',
           colorClass.bg
         )}>
           <span className={cn('text-xl', colorClass.text)}>
@@ -80,7 +80,7 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
               {card.title}
             </Heading>
             {card.badge && (
-              <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded">
+              <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-sm">
                 {card.badge}
               </span>
             )}

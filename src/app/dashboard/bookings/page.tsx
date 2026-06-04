@@ -68,7 +68,7 @@ export default function CustomerBookings() {
 
         {error && (
           <div className="mb-6 p-4 bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg flex items-center gap-2 text-error-700 dark:text-error-400">
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+            <AlertCircle className="h-5 w-5 shrink-0" />
             {error}
             <button onClick={() => setError(null)} className="ml-auto text-error-500 hover:text-error-700 dark:hover:text-error-300">×</button>
           </div>
@@ -76,7 +76,7 @@ export default function CustomerBookings() {
 
         {needsAction > 0 && (
           <div className="mb-6 p-4 bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 rounded-lg flex items-center gap-2 text-warning-800 dark:text-warning-300">
-            <Euro className="h-5 w-5 flex-shrink-0" />
+            <Euro className="h-5 w-5 shrink-0" />
             {t('pendingQuotes', { count: needsAction })}
           </div>
         )}
@@ -122,7 +122,7 @@ export default function CustomerBookings() {
             />
           ) : (
             filteredAppointments.map(apt => (
-              <div key={apt.id} className="bg-surface-base rounded-lg shadow-sm border border p-4 md:p-6">
+              <div key={apt.id} className="bg-surface-base rounded-lg shadow-xs border border p-4 md:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
@@ -177,7 +177,7 @@ export default function CustomerBookings() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-subtle dark:border-white/[0.06]">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-subtle dark:border-white/6">
                   {apt.status === BOOKING_STATUS.QUOTED && (
                     <>
                       <Button

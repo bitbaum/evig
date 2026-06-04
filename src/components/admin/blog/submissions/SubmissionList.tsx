@@ -25,10 +25,10 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
         <div
           key={submission.id}
           onClick={() => onSelect(submission)}
-          className={`bg-surface-base rounded-xl shadow-sm border p-5 cursor-pointer transition-all ${
+          className={`bg-surface-base rounded-xl shadow-xs border p-5 cursor-pointer transition-all ${
             selectedId === submission.id
               ? 'border-primary-500 ring-2 ring-primary-500/20'
-              : 'border-subtle dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-neutral-600'
+              : 'border-subtle dark:border-white/6 hover:border-neutral-300 dark:hover:border-neutral-600'
           }`}
         >
           <div className="flex items-start justify-between mb-3">
@@ -59,7 +59,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                     submission.status}
                 </span>
                 {submission.last_edited_at && (
-                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300 rounded">
+                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300 rounded-sm">
                     Von Admin bearbeitet
                   </span>
                 )}
@@ -80,7 +80,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
             </div>
           </div>
           {(submission.category_label || submission.category_name) && (
-            <span className="inline-flex items-center px-2 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded">
+            <span className="inline-flex items-center px-2 py-1 bg-surface-raised dark:bg-neutral-700 text-text-secondary text-xs rounded-sm">
               <Folder className="w-3 h-3 mr-1" />
               {submission.category_label || submission.category_name}
             </span>

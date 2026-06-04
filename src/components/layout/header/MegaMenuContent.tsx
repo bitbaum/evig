@@ -31,7 +31,7 @@ export function MegaMenuContent({
     <div
       className={cn(
         "mt-2 bg-surface-base rounded-2xl shadow-2xl shadow-neutral-200/50 dark:shadow-black/40",
-        "border border-subtle dark:border-white/[0.06]",
+        "border border-subtle dark:border-white/6",
         "overflow-hidden",
         "animate-in fade-in slide-in-from-top-2 duration-200",
         hasMultipleGroups ? "p-0" : "p-2"
@@ -65,7 +65,7 @@ function MultiColumnLayout({
   const gridCols = groups.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
 
   return (
-    <div className={cn("grid divide-x divide-neutral-100 dark:divide-white/[0.06]", gridCols)}>
+    <div className={cn("grid divide-x divide-neutral-100 dark:divide-white/6", gridCols)}>
       {groups.map((group, idx) => (
         <div key={idx} className="p-6">
           {group.section && (
@@ -105,7 +105,7 @@ function SingleColumnLayout({
           className={cn(
             "group flex items-center gap-3 px-4 py-3 rounded-xl",
             "transition-all duration-200",
-            "hover:bg-neutral-50 dark:hover:bg-white/[0.04]"
+            "hover:bg-neutral-50 dark:hover:bg-white/4"
           )}
           {...(subItem.external && { target: "_blank", rel: "noopener noreferrer" })}
         >
@@ -146,7 +146,7 @@ function MenuLink({
       className={cn(
         "group flex items-start gap-3 p-3 -mx-3 rounded-xl",
         "transition-all duration-200",
-        "hover:bg-neutral-50 dark:hover:bg-white/[0.04]"
+        "hover:bg-neutral-50 dark:hover:bg-white/4"
       )}
       {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
     >
@@ -164,7 +164,7 @@ function MenuLink({
           </p>
         )}
       </div>
-      <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 flex-shrink-0" />
+      <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 dark:group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 shrink-0" />
     </Link>
   )
 }

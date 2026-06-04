@@ -37,7 +37,7 @@ export default function ServicesError({
           </Button>
           <Link
             href="/services"
-            className="inline-flex items-center justify-center gap-2 text-text-secondary hover:text-neutral-900 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
+            className="inline-flex items-center justify-center gap-2 text-text-secondary hover:text-neutral-900 min-h-touch focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             {t('services.back')}

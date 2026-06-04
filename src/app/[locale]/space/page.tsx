@@ -121,7 +121,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                   return (
                     <div key={index} className="relative flex gap-6 md:gap-8">
                       {/* Timeline dot */}
-                      <div className={`hidden md:flex w-16 h-16 rounded-full items-center justify-center flex-shrink-0 z-10 ${
+                      <div className={`hidden md:flex w-16 h-16 rounded-full items-center justify-center shrink-0 z-10 ${
                         isCurrent
                           ? 'bg-primary-600 text-white'
                           : 'bg-white border-2 border-primary-300 text-primary-700 dark:text-primary-300'

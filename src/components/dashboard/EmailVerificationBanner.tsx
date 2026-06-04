@@ -50,7 +50,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
       className
     )}>
       <div className="flex items-start">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <AlertTriangle className="h-5 w-5 text-warning-400" aria-hidden="true" />
         </div>
         <div className="ml-3 flex-1">
@@ -78,7 +78,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
                     'inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md',
                     'bg-warning-100 dark:bg-warning-800 text-warning-800 dark:text-warning-100',
                     'hover:bg-warning-200 dark:hover:bg-warning-700',
-                    'focus:outline-none focus:ring-2 focus:ring-warning-500 focus:ring-offset-2',
+                    'focus:outline-hidden focus:ring-2 focus:ring-warning-500 focus:ring-offset-2',
                     'disabled:opacity-50 disabled:cursor-not-allowed',
                     'transition-colors'
                   )}
@@ -97,11 +97,11 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
             )}
           </div>
         </div>
-        <div className="ml-4 flex-shrink-0">
+        <div className="ml-4 shrink-0">
           <button
             type="button"
             onClick={() => setIsVisible(false)}
-            className="inline-flex rounded-md text-warning-500 hover:text-warning-600 focus:outline-none focus:ring-2 focus:ring-warning-500 focus:ring-offset-2"
+            className="inline-flex rounded-md text-warning-500 hover:text-warning-600 focus:outline-hidden focus:ring-2 focus:ring-warning-500 focus:ring-offset-2"
           >
             <span className="sr-only">{t('close')}</span>
             <X className="h-5 w-5" aria-hidden="true" />

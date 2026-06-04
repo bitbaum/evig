@@ -96,7 +96,7 @@ export function LoginForm() {
         {/* Success Messages */}
         {verified && (
           <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
-            <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
+            <CheckCircle2 className={cn('w-5 h-5 shrink-0 mt-0.5', getStatusColors('success').icon)} />
             <p className={cn('text-sm', getStatusColors('success').text)}>
               {t('emailVerifiedSuccess')}
             </p>
@@ -105,7 +105,7 @@ export function LoginForm() {
 
         {reset === 'success' && (
           <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
-            <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
+            <CheckCircle2 className={cn('w-5 h-5 shrink-0 mt-0.5', getStatusColors('success').icon)} />
             <p className={cn('text-sm', getStatusColors('success').text)}>
               {t('passwordResetSuccess')}
             </p>
@@ -120,7 +120,7 @@ export function LoginForm() {
             aria-live="assertive"
             className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('error').bg, getStatusColors('error').border)}
           >
-            <AlertCircle className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('error').icon)} />
+            <AlertCircle className={cn('w-5 h-5 shrink-0 mt-0.5', getStatusColors('error').icon)} />
             <p className={cn('text-sm', getStatusColors('error').text)}>
               {getErrorMessage(formError || error)}
             </p>

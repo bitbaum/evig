@@ -71,7 +71,7 @@ function CheckoutSuccessContent() {
         {order && (
           <div className="bg-surface-raised dark:bg-neutral-700/50 rounded-xl p-4 mb-6 text-left">
             <div className="flex gap-3">
-              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-200 dark:bg-neutral-600">
+              <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-neutral-200 dark:bg-neutral-600">
                 {order.thumbnail ? (
                   <Image src={order.thumbnail} alt={order.listing_title || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
                 ) : (

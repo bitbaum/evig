@@ -30,8 +30,8 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
   const hasNoActionItems = actionItems.length === 0
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
-      <div className="p-4 border-b border-subtle dark:border-white/[0.06] flex items-center gap-2">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
+      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
         <Zap className="w-5 h-5 text-warning-500" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           Was gibt es zu tun?
@@ -55,12 +55,12 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                 <li key={index}>
                   <Link
                     href={item.href}
-                    className="flex items-center justify-between p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
+                    className="flex items-center justify-between p-3 rounded-lg bg-surface-raised dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/6 transition-colors group"
                     aria-label={`${urgency.label}: ${item.label}${age ? ` (${age})` : ''}`}
                   >
                     <div className="flex items-start gap-3">
                       <span
-                        className={`mt-1 w-3 h-3 flex-shrink-0 rounded-full ${urgency.dot}`}
+                        className={`mt-1 w-3 h-3 shrink-0 rounded-full ${urgency.dot}`}
                         aria-hidden="true"
                       />
                       <div>
@@ -74,7 +74,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                         )}
                       </div>
                     </div>
-                    <span className="flex items-center gap-1 text-sm text-text-secondary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors flex-shrink-0 ml-3">
+                    <span className="flex items-center gap-1 text-sm text-text-secondary group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors shrink-0 ml-3">
                       {item.actionLabel}
                       <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </span>

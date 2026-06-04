@@ -57,7 +57,7 @@ function Bar({
   return (
     <div className="flex items-center gap-3">
       {imageUrl ? (
-        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border bg-surface-base">
+        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md border border bg-surface-base">
           <Image src={imageUrl} alt={label} fill className="object-contain p-0.5" unoptimized />
         </div>
       ) : (
@@ -80,11 +80,11 @@ function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
   return (
     <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-warning-400 bg-warning-50 dark:bg-warning-900/20 p-4">
       {opt.imageUrl ? (
-        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-warning-200 bg-surface-base shadow">
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-warning-200 bg-surface-base shadow-sm">
           <Image src={opt.imageUrl} alt={opt.label} fill className="object-contain p-1" unoptimized />
         </div>
       ) : (
-        <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-900/30 text-3xl font-bold text-warning-600 dark:text-warning-400">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-900/30 text-3xl font-bold text-warning-600 dark:text-warning-400">
           {opt.label.charAt(0).toUpperCase()}
         </div>
       )}
@@ -103,7 +103,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
   if (!data) return null;
 
   return (
-    <div className="rounded-lg bg-surface-base p-6 shadow-sm">
+    <div className="rounded-lg bg-surface-base p-6 shadow-xs">
       <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">Ergebnis</Heading>
 
       {/* AI Outcome Narrative — Beschluss hero */}

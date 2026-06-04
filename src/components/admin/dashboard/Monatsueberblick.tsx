@@ -39,7 +39,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   }
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-sm border border-subtle dark:border-white/[0.06]">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
       {/* Toggle header — same structure as card headers, but interactive */}
       <button
         onClick={toggle}
@@ -48,7 +48,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
         aria-controls="monatsueberblick-content"
       >
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
+          <TrendingUp className="w-5 h-5 text-primary-500 shrink-0" aria-hidden="true" />
           <Heading level={2} className="font-semibold text-text-primary">
             Monatsüberblick
           </Heading>
@@ -63,7 +63,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       {hydrated && open && (
         <div
           id="monatsueberblick-content"
-          className="border-t border-subtle dark:border-white/[0.06] p-4 space-y-4"
+          className="border-t border-subtle dark:border-white/6 p-4 space-y-4"
         >
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />

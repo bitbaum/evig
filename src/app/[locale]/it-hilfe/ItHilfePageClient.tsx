@@ -63,7 +63,7 @@ export default function ITHilfePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact hero — requests visible without scrolling */}
-      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-white dark:bg-neutral-950 border-b border-subtle dark:border-white/6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -334,7 +334,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-action border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaMoreInfo')}
               </Link>

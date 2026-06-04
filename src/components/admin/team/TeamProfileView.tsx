@@ -72,7 +72,7 @@ export function TeamProfileView({
       <div className="bg-surface-base rounded-xl border border p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
-          <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
             profile.is_active
               ? 'bg-primary-500'
               : 'bg-neutral-500'
@@ -87,7 +87,7 @@ export function TeamProfileView({
                 {displayName}
               </Heading>
               {!profile.is_active && (
-                <span className="px-2 py-1 text-sm rounded bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
+                <span className="px-2 py-1 text-sm rounded-sm bg-neutral-200 dark:bg-neutral-700 text-text-secondary">
                   {t('inactive')}
                 </span>
               )}

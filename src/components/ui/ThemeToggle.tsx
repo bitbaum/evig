@@ -30,7 +30,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         'p-2 rounded-lg transition-colors',
         'text-neutral-500 dark:text-neutral-400',
         'hover:text-neutral-700 dark:hover:text-neutral-200',
-        'hover:bg-neutral-100 dark:hover:bg-white/[0.06]',
+        'hover:bg-neutral-100 dark:hover:bg-white/6',
         className,
       )}
     >

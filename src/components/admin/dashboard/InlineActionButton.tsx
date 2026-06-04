@@ -40,7 +40,7 @@ export function InlineActionButton({ itemId, actionType }: InlineActionButtonPro
         startTransition(() => fn(itemId))
       }}
       disabled={isPending}
-      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold disabled:bg-primary-400 transition-colors min-h-[28px] flex-shrink-0 bg-action hover:bg-action-hover text-action-text"
+      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold disabled:bg-primary-400 transition-colors min-h-[28px] shrink-0 bg-action hover:bg-action-hover text-action-text"
       aria-label={`${label} (erstes Element in dieser Kategorie)`}
     >
       {isPending ? (

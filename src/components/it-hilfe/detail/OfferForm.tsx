@@ -117,7 +117,7 @@ export function OfferForm({
                     key={skill.id}
                     type="button"
                     onClick={() => onSkillToggle(skill.id)}
-                    className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                    className={`px-3 py-3 min-h-touch rounded-full text-sm transition-all focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                       offerSkills.includes(skill.id)
                         ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 border-2 border-primary-500'
                         : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-neutral-200'

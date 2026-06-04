@@ -98,7 +98,7 @@ export default async function TechnikerDashboardPage() {
               {t('pageSubtitle')}
               {profile.city ? ` · ${profile.city}` : ''}
               {!profile.isActive && (
-                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-warning-100 text-warning-700 dark:bg-warning-900/30 dark:text-warning-400">
+                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-medium bg-warning-100 text-warning-700 dark:bg-warning-900/30 dark:text-warning-400">
                   {t('profileInactive')}
                 </span>
               )}
