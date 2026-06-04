@@ -32,7 +32,7 @@ import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
 import Heading from '@/components/admin/AdminHeading'
-import { getProtocolReviewChecklist } from '@/lib/protocols/review'
+import { getProtocolReviewChecklist, getProtocolReviewCounts } from '@/lib/protocols/review'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
@@ -86,6 +86,24 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     decisionVotes,
     decisionOutcomes,
   }), [protocol.status, protocol.raw_transcript, notes, actionLinks, decisionVotes, decisionOutcomes])
+
+  /**
+   * Finalize blockers — enumerate the open prerequisites so the confirm
+   * dialog can show specific counts instead of just "kann nicht mehr
+   * bearbeitet werden". Per the BB audit: admins were finalizing
+   * protocols with open decisions / unconverted task items, then losing
+   * the ability to convert them after finalize. Naming the consequence
+   * up-front lets them act intentionally rather than by surprise.
+   */
+  const finalizeBlockers = useMemo(() => {
+    const counts = getProtocolReviewCounts(notes, actionLinks, decisionVotes, decisionOutcomes)
+    return {
+      unlinkedTasks: counts.unlinkedTasks,
+      openDecisions: counts.openDecisions,
+      unresolvedAssignees: counts.unresolvedAssignees,
+      hasAny: counts.unlinkedTasks > 0 || counts.openDecisions > 0 || counts.unresolvedAssignees > 0,
+    }
+  }, [notes, actionLinks, decisionVotes, decisionOutcomes])
 
   // Detected attendees that aren't yet mapped to a team member.
   // Dep on `notes` directly (not `notes?.detected_attendees`) — the
@@ -328,7 +346,23 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         isOpen={showFinalizeDialog}
         title="Protokoll abschliessen"
         message="Nach dem Abschliessen kann das Protokoll nicht mehr bearbeitet werden."
-        confirmLabel="Abschliessen"
+        details={finalizeBlockers.hasAny ? (
+          <div className="rounded-lg border border-warning-300 bg-warning-50 dark:bg-warning-900/20 dark:border-warning-700/50 p-3 text-sm text-warning-800 dark:text-warning-200">
+            <p className="font-medium mb-1.5">Offen vor dem Abschluss:</p>
+            <ul className="list-disc pl-5 space-y-0.5">
+              {finalizeBlockers.unlinkedTasks > 0 && (
+                <li>{finalizeBlockers.unlinkedTasks} Aktionspunkt{finalizeBlockers.unlinkedTasks === 1 ? '' : 'e'} noch nicht in Aufgaben umgewandelt — nach Abschluss nicht mehr möglich.</li>
+              )}
+              {finalizeBlockers.openDecisions > 0 && (
+                <li>{finalizeBlockers.openDecisions} Entscheidung{finalizeBlockers.openDecisions === 1 ? '' : 'en'} offen — Abstimmung oder Abschluss fehlt.</li>
+              )}
+              {finalizeBlockers.unresolvedAssignees > 0 && (
+                <li>{finalizeBlockers.unresolvedAssignees} Personen-Zuordnung{finalizeBlockers.unresolvedAssignees === 1 ? '' : 'en'} ungeklärt — Aufgaben werden ohne Team-Verknüpfung erstellt.</li>
+              )}
+            </ul>
+          </div>
+        ) : undefined}
+        confirmLabel={finalizeBlockers.hasAny ? 'Trotzdem abschliessen' : 'Abschliessen'}
         cancelLabel="Abbrechen"
         variant="warning"
         isLoading={finalizing}

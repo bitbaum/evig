@@ -17,6 +17,13 @@ interface ConfirmDialogProps {
   title: string
   message: string
   itemName?: string
+  /**
+   * Optional rich content rendered below the message. Use this when the
+   * confirm needs a list of consequences, a checklist of prerequisites,
+   * or any other non-string detail (e.g. "12 action items will become
+   * uneditable; 3 attendees still unmapped").
+   */
+  details?: React.ReactNode
   confirmLabel?: string
   cancelLabel?: string
   isLoading?: boolean
@@ -54,6 +61,7 @@ export function ConfirmDialog({
   title,
   message,
   itemName,
+  details,
   confirmLabel,
   cancelLabel,
   isLoading = false,
@@ -99,6 +107,11 @@ export function ConfirmDialog({
             <p className="font-medium text-neutral-900 dark:text-white">
               {itemName}
             </p>
+          </div>
+        )}
+        {details && (
+          <div className="mt-3">
+            {details}
           </div>
         )}
         {variant === 'danger' && (
