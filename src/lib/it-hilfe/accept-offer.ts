@@ -25,10 +25,9 @@ import { users } from '@/db/schema/auth'
 import { conversations } from '@/db/schema/messaging'
 import { CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { sendCustomEmail } from '@/lib/email'
-import { itHilfeOfferAccepted, itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
-import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
+import { notifyUsers } from '@/lib/services/notifications'
 import { APP_URL } from '@/config/urls'
 
 export type AcceptOfferReason =
@@ -55,12 +54,6 @@ interface OfferRow {
   helper_name: string | null
   helper_email: string
   status: string
-}
-
-interface RejectedOfferRow {
-  helper_id: string
-  helper_name: string | null
-  helper_email: string
 }
 
 const reqTable = getTableName(itHilfeRequests)
@@ -244,7 +237,11 @@ export async function acceptOffer(params: {
 }
 
 /**
- * Fire-and-forget notification fan-out. Errors are logged, never thrown.
+ * Fire-and-forget notification fan-out via the central notification service.
+ * Single source of truth: notifyUsers handles in-app row + email dispatch
+ * (template chosen by NOTIFICATION_TYPES.IT_HILFE_OFFER_* in
+ * services/notifications.ts getEmailContent) + sent_email tracking +
+ * email-preference checks. Errors are logged, never thrown.
  */
 function fireNotifications(params: {
   requestId: string
@@ -254,16 +251,24 @@ function fireNotifications(params: {
   acceptedHelper: { id: string; name: string; email: string }
 }) {
   const { requestId, offerId, requestTitle, requesterName, acceptedHelper } = params
+  const requestUrl = `${APP_URL}/it-hilfe/${requestId}`
 
-  // In-app: accepted helper
-  sendItHilfeNotification({
-    recipientIds: [acceptedHelper.id],
+  // Accepted helper — single call: in-app row + rich HTML email
+  notifyUsers([acceptedHelper.id], {
+    type: NOTIFICATION_TYPES.IT_HILFE_OFFER_ACCEPTED,
     title: 'Dein Angebot wurde angenommen!',
     content: `Dein Angebot für "${requestTitle}" wurde angenommen. Eine Unterhaltung wurde erstellt.`,
-    requestId,
-  })
+    related_type: RELATED_TYPES.IT_HILFE,
+    related_id: requestId,
+    metadata: {
+      helperName: acceptedHelper.name,
+      requestTitle,
+      requesterName,
+      requestUrl,
+    },
+  }).catch(err => logger.error('Failed to send accept notification', { err, helperId: acceptedHelper.id }))
 
-  // In-app: auto-rejected helpers (sibling offers that were just rejected)
+  // Rejected helpers — discover from DB, then single notifyUsers call
   db.execute(sql`
     SELECT o.helper_id
     FROM ${sql.raw(offTable)} o
@@ -271,35 +276,18 @@ function fireNotifications(params: {
   `).then(result => {
     const rejectedIds = (result.rows as unknown as { helper_id: string }[]).map(r => r.helper_id)
     if (rejectedIds.length > 0) {
-      sendItHilfeNotification({
-        recipientIds: rejectedIds,
+      notifyUsers(rejectedIds, {
+        type: NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED,
         title: `Anfrage "${requestTitle}" vergeben`,
         content: 'Die Anfrage wurde an einen anderen Techniker vergeben. Danke für dein Angebot!',
-        requestId,
-      })
-    }
-  }).catch(err => logger.error('Failed to send rejected in-app notifications', { err }))
-
-  const requestUrl = `${APP_URL}/it-hilfe/${requestId}`
-
-  // Email: accepted helper
-  sendCustomEmail(
-    acceptedHelper.email,
-    itHilfeOfferAccepted(acceptedHelper.name, requestTitle, requesterName, requestUrl)
-  ).catch(err => logger.error('Failed to send offer accepted email', { err, helperId: acceptedHelper.id }))
-
-  // Email: rejected helpers
-  db.execute(sql`
-    SELECT o.helper_id, u.name as helper_name, u.email as helper_email
-    FROM ${sql.raw(offTable)} o
-    JOIN ${sql.raw(uTable)} u ON o.helper_id = u.id
-    WHERE o.request_id = ${requestId} AND o.status = ${OFFER_STATUS.REJECTED} AND o.id != ${offerId}
-  `).then(result => {
-    for (const row of result.rows as unknown as RejectedOfferRow[]) {
-      sendCustomEmail(
-        row.helper_email,
-        itHilfeOfferRejected(row.helper_name || 'Techniker', requestTitle, requestUrl)
-      ).catch(err => logger.error('Failed to send offer rejected email', { err, helperId: row.helper_id }))
+        related_type: RELATED_TYPES.IT_HILFE,
+        related_id: requestId,
+        metadata: {
+          helperName: 'Techniker',  // per-user names not fetched; template falls back
+          requestTitle,
+          requestUrl,
+        },
+      }).catch(err => logger.error('Failed to send reject notifications', { err }))
     }
   }).catch(err => logger.error('Failed to fetch rejected offers for notification', { err }))
 }
