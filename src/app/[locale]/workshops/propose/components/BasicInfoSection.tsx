@@ -5,6 +5,9 @@ import { useTranslations } from 'next-intl'
 import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 
 interface BasicInfoSectionProps {
   title: string
@@ -37,11 +40,10 @@ export function BasicInfoSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.basicInfo.titleField')}
           </label>
-          <input
+          <Input
             type="text"
             value={title}
             onChange={(e) => onChange('title', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.basicInfo.titlePlaceholder')}
             required
             aria-required="true"
@@ -52,10 +54,9 @@ export function BasicInfoSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.basicInfo.category')}
           </label>
-          <select
+          <Select
             value={category}
             onChange={(e) => onChange('category', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             required
             aria-required="true"
           >
@@ -63,35 +64,33 @@ export function BasicInfoSection({
             {WORKSHOP_CATEGORIES.map(cat => (
               <option key={cat.id} value={cat.name}>{cat.name}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.basicInfo.level')}
           </label>
-          <select
+          <Select
             value={level}
             onChange={(e) => onChange('level', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             required
             aria-required="true"
           >
             {WORKSHOP_LEVELS.filter(l => l.id !== 'all').map(lvl => (
               <option key={lvl.id} value={lvl.id}>{lvl.name}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.basicInfo.shortDescription')}
           </label>
-          <textarea
+          <Textarea
             value={shortDescription}
             onChange={(e) => onChange('shortDescription', e.target.value)}
             rows={2}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.basicInfo.shortDescriptionPlaceholder')}
             required
             aria-required="true"
@@ -102,11 +101,10 @@ export function BasicInfoSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.basicInfo.detailedDescription')}
           </label>
-          <textarea
+          <Textarea
             value={description}
             onChange={(e) => onChange('description', e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.basicInfo.detailedDescriptionPlaceholder')}
             required
             aria-required="true"

@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl'
 import type { BulkProduct, BulkProductStatus } from '@/types/erfassung'
 import { BULK_TABLE_COLUMNS, BULK_LIMITS } from '@/config/erfassung'
 import { KATEGORIEN, getConditionLabel } from '@/config/erfassung'
+import { Input } from '@/components/ui/input'
 
 interface BulkTableProps {
   products: BulkProduct[]
@@ -170,7 +171,7 @@ export function BulkTable({
                     if (isEditing(col.key)) {
                       return (
                         <td key={col.key} className="px-1 py-1" onClick={(e) => e.stopPropagation()}>
-                          <input
+                          <Input
                             type="text"
                             value={editValue}
                             onChange={(e) => setEditValue(e.target.value)}
@@ -179,7 +180,6 @@ export function BulkTable({
                               if (e.key === 'Enter') commitEdit()
                               if (e.key === 'Escape') setEditingCell(null)
                             }}
-                            className="w-full px-2 py-1 border border-primary-400 rounded bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-sm"
                             autoFocus
                           />
                         </td>

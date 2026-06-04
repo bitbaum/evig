@@ -19,6 +19,8 @@ import {
   PenSquare,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { useBlogSubmissions, type MySubmission } from '@/hooks/useBlogSubmissions'
 import { ROUTES } from '@/config/routes'
 
@@ -249,23 +251,21 @@ function SubmissionCard({
                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                   {t('titleLabel')}
                 </label>
-                <input
+                <Input
                   type="text"
                   value={editTitle}
                   onChange={(e) => onEditTitleChange(e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                   {t('contentLabel')}
                 </label>
-                <textarea
+                <Textarea
                   value={editContent}
                   onChange={(e) => onEditContentChange(e.target.value)}
                   rows={10}
                   placeholder={t('contentPlaceholder')}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
                 />
               </div>
               <div className="flex gap-2">

@@ -8,6 +8,7 @@ import { formatTime as fmtTime, formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 export interface Message {
   id: string
@@ -190,14 +191,15 @@ export default function MessageThread({
       {/* Reply input */}
       <div className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-3">
         <div className="flex items-end gap-2">
-          <textarea
+          <Textarea
             ref={textareaRef}
             value={reply}
             onChange={e => setReply(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={t('placeholder')}
             rows={1}
-            className="flex-1 resize-none rounded-xl border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent max-h-32"
+            variant="elevated"
+            className="flex-1 resize-none max-h-32"
             style={{ minHeight: '42px' }}
           />
           <Button

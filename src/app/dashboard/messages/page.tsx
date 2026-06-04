@@ -48,6 +48,9 @@ function MessagesContent() {
     }
   }, [searchParams])
 
+  // Auth-gated data load. setState happens inside fetchConversations —
+  // legitimate "subscribe to external system on session change" pattern.
+   
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (!session?.user) {

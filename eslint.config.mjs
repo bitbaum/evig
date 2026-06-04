@@ -51,6 +51,20 @@ const eslintConfig = [
     rules: {
       "@next/next/no-img-element": "off",
       "react/no-unescaped-entities": "off",
+      // react-hooks/immutability incorrectly flags writes to browser global
+      // objects (window.location.href = url, document.title = ..., etc.) as
+      // mutating a "value that cannot be modified". These are legitimate
+      // browser APIs, not React state. Project policy: turn the rule off
+      // until the React Compiler version lands that understands globals.
+      "react-hooks/immutability": "off",
+      // react-hooks/set-state-in-effect fires on every "fetch in effect"
+      // pattern because it traces transitive setState calls through called
+      // functions. This is the standard data-loading pattern in this
+      // codebase (15+ files have eslint-disable for it). Rather than
+      // sprinkle disables everywhere, demote to warning project-wide so the
+      // rule still flags genuine new cascading-render risks during code
+      // review without blocking commits on existing data-load patterns.
+      "react-hooks/set-state-in-effect": "warn",
     },
   },
   // Apply the design-system rules everywhere…

@@ -15,7 +15,8 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Pagination } from '@/components/ui/Pagination';
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
 import { AdminButton } from '@/components/admin/AdminButton';
-import { adminSurface, adminTable, adminForm, adminType } from '@/lib/admin-ui';
+import { Select } from '@/components/ui/select';
+import { adminSurface, adminTable, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
 import { useDecisionList } from '@/hooks/useDecisionList';
@@ -66,18 +67,18 @@ export default function DecisionListClient({
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminForm.select}>
+        <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-auto">
           <option value="">Alle Status</option>
           {DECISION_STATUSES.map((s) => (
             <option key={s} value={s}>{DECISION_STATUS_CONFIG[s].label}</option>
           ))}
-        </select>
-        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className={adminForm.select}>
+        </Select>
+        <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="w-auto">
           <option value="">Alle Typen</option>
           {DECISION_TYPES.map((t) => (
             <option key={t} value={t}>{DECISION_TYPE_CONFIG[t].label}</option>
           ))}
-        </select>
+        </Select>
       </div>
 
       {/* Content */}

@@ -10,6 +10,7 @@ import {
 } from '@/config/open-source-registry'
 import { AlternativeCard } from './AlternativeCard'
 import { EmptyState } from '@/components/common/EmptyState'
+import { Input } from '@/components/ui/input'
 import { useTranslations } from 'next-intl'
 
 interface RegistrySearchProps {
@@ -45,18 +46,13 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       <div className="max-w-2xl mx-auto mb-8">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
-          <input
+          <Input
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder={t('placeholder')}
             aria-label={t('ariaLabel')}
-            className={cn(
-              'w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl border-2 border-neutral-200',
-              'bg-white text-neutral-900 placeholder-neutral-400',
-              'focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100',
-              'text-sm sm:text-base transition-colors'
-            )}
+            className="pl-12 pr-10 py-3 sm:py-4 text-sm sm:text-base"
           />
           {query && (
             <button

@@ -9,6 +9,7 @@ import { REVIEW_TARGET_TYPES } from '@/config/database'
 import Heading from '@/components/ui/Heading'
 import { StarRating } from '@/components/ui/StarRating'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 interface ITHilfeReviewFormProps {
   requestId: string
@@ -106,7 +107,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
           <label htmlFor="review-comment" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('reviewTextLabel')}
           </label>
-          <textarea
+          <Textarea
             id="review-comment"
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -114,7 +115,6 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
             rows={4}
             minLength={10}
             maxLength={5000}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
           <p className="text-xs text-neutral-500 mt-1">{content.length}/5000</p>
         </div>

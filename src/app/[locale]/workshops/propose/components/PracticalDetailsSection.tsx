@@ -4,6 +4,9 @@ import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { WORKSHOP_MAX_PARTICIPANTS_OPTIONS, WORKSHOP_DURATION_OPTIONS } from '@/config/workshops'
 
 interface PracticalDetailsSectionProps {
@@ -39,13 +42,12 @@ export function PracticalDetailsSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.practicalDetails.duration')}
           </label>
-          <input
+          <Input
             type="number"
             min="1"
             max="8"
             value={durationHours}
             onChange={(e) => onChange('durationHours', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             required
             aria-required="true"
           />
@@ -55,13 +57,12 @@ export function PracticalDetailsSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.practicalDetails.price')}
           </label>
-          <input
+          <Input
             type="number"
             min="0"
             step="0.01"
             value={pricePerPerson}
             onChange={(e) => onChange('pricePerPerson', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.practicalDetails.pricePlaceholder')}
             required
             aria-required="true"
@@ -72,45 +73,42 @@ export function PracticalDetailsSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.practicalDetails.maxParticipants')}
           </label>
-          <select
+          <Select
             value={maxParticipants}
             onChange={(e) => onChange('maxParticipants', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             required
             aria-required="true"
           >
             {WORKSHOP_MAX_PARTICIPANTS_OPTIONS.map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.practicalDetails.minParticipants')}
           </label>
-          <select
+          <Select
             value={minParticipants}
             onChange={(e) => onChange('minParticipants', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             required
             aria-required="true"
           >
             {WORKSHOP_DURATION_OPTIONS.map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.practicalDetails.targetAudience')}
           </label>
-          <input
+          <Input
             type="text"
             value={targetAudience}
             onChange={(e) => onChange('targetAudience', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.practicalDetails.targetAudiencePlaceholder')}
           />
         </div>
@@ -119,11 +117,10 @@ export function PracticalDetailsSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.practicalDetails.prerequisites')}
           </label>
-          <textarea
+          <Textarea
             value={prerequisites}
             onChange={(e) => onChange('prerequisites', e.target.value)}
             rows={2}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.practicalDetails.prerequisitesPlaceholder')}
           />
         </div>

@@ -96,23 +96,23 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
                   />
                   {WEEKDAY_LABELS[day]}
                 </label>
-                <input
+                <Input
                   type="time"
                   value={daySchedule.start}
                   onChange={(e) => updateScheduleDay(day, 'start', e.target.value)}
                   disabled={!daySchedule.enabled}
                   aria-label={`${WEEKDAY_LABELS[day]} Startzeit`}
-                  className="min-w-0 rounded-md border border-neutral-300 px-2 py-1.5 text-sm disabled:bg-neutral-100 disabled:text-neutral-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:disabled:bg-neutral-900"
+                  className="min-w-0"
                 />
-                <input
+                <Input
                   type="time"
                   value={daySchedule.end}
                   onChange={(e) => updateScheduleDay(day, 'end', e.target.value)}
                   disabled={!daySchedule.enabled}
                   aria-label={`${WEEKDAY_LABELS[day]} Endzeit`}
-                  className="min-w-0 rounded-md border border-neutral-300 px-2 py-1.5 text-sm disabled:bg-neutral-100 disabled:text-neutral-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:disabled:bg-neutral-900"
+                  className="min-w-0"
                 />
-                <input
+                <Input
                   type="number"
                   min={0}
                   max={240}
@@ -120,21 +120,21 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
                   onChange={(e) => updateScheduleDay(day, 'break_minutes', Number(e.target.value))}
                   disabled={!daySchedule.enabled}
                   aria-label={`${WEEKDAY_LABELS[day]} Pause in Minuten`}
-                  className="min-w-0 rounded-md border border-neutral-300 px-2 py-1.5 text-sm disabled:bg-neutral-100 disabled:text-neutral-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:disabled:bg-neutral-900"
+                  className="min-w-0"
                 />
-                <select
+                <Select
                   value={daySchedule.category}
                   onChange={(e) => updateScheduleDay(day, 'category', e.target.value)}
                   disabled={!daySchedule.enabled}
                   aria-label={`${WEEKDAY_LABELS[day]} Kategorie`}
-                  className="min-w-0 rounded-md border border-neutral-300 px-2 py-1.5 text-sm disabled:bg-neutral-100 disabled:text-neutral-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:disabled:bg-neutral-900"
+                  className="min-w-0"
                 >
                   {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
                     <option key={category} value={category}>
                       {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             )
           })}

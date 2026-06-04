@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import { getSection } from '@/config/sections'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
@@ -48,9 +49,10 @@ export function PermissionRequestsManager() {
     }
   }
 
-  useEffect(() => {
-    fetchRequests()
-  }, [])
+  // Fetch on mount. setState happens inside fetchRequests via setItems/setError —
+  // legitimate "subscribe for updates from external system" pattern.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchRequests() }, [])
 
   const handleApprove = async (requestId: string) => {
     setProcessingId(requestId)
@@ -211,13 +213,12 @@ export function PermissionRequestsManager() {
                 <label htmlFor={`rejection-notes-${request.id}`} className="block text-sm font-medium text-error-800 dark:text-error-300 mb-1">
                   Grund für Ablehnung (optional):
                 </label>
-                <textarea
+                <Textarea
                   id={`rejection-notes-${request.id}`}
                   value={rejectionNotes}
                   onChange={(e) => setRejectionNotes(e.target.value)}
                   placeholder="Optionaler Ablehnungsgrund..."
                   rows={2}
-                  className="w-full px-3 py-2 border border-error-300 rounded-lg focus:ring-2 focus:ring-error-500 text-sm"
                   autoFocus
                 />
                 <div className="flex gap-2 mt-2">

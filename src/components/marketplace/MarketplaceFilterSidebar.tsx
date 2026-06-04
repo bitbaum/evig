@@ -19,6 +19,7 @@ import {
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ORG } from '@/config/org'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
+import { Input } from '@/components/ui/input'
 
 export type FiltersObj = ReturnType<typeof useMarketplaceListings>['filters']
 
@@ -223,7 +224,7 @@ export function MarketplaceFilterSidebar({
           label={t('filters.gratisOnly')}
         />
         <div className="flex gap-2 mt-2">
-          <input
+          <Input
             type="number"
             min="0"
             max={MARKETPLACE_LIMITS.MAX_PRICE_CHF}
@@ -240,11 +241,9 @@ export function MarketplaceFilterSidebar({
             }}
             aria-label={t('filters.priceMinAriaLabel')}
             aria-invalid={!!filters.priceError}
-            className={`w-1/2 px-2.5 py-1.5 border rounded-md bg-white text-sm text-neutral-900 focus:ring-1 focus:ring-secondary-500 focus:border-secondary-500 outline-none ${
-              filters.priceError ? 'border-red-400' : 'border-neutral-300'
-            }`}
+            className={`w-1/2 ${filters.priceError ? 'border-red-400' : ''}`}
           />
-          <input
+          <Input
             type="number"
             min="0"
             max={MARKETPLACE_LIMITS.MAX_PRICE_CHF}
@@ -261,9 +260,7 @@ export function MarketplaceFilterSidebar({
             }}
             aria-label={t('filters.priceMaxAriaLabel')}
             aria-invalid={!!filters.priceError}
-            className={`w-1/2 px-2.5 py-1.5 border rounded-md bg-white text-sm text-neutral-900 focus:ring-1 focus:ring-secondary-500 focus:border-secondary-500 outline-none ${
-              filters.priceError ? 'border-red-400' : 'border-neutral-300'
-            }`}
+            className={`w-1/2 ${filters.priceError ? 'border-red-400' : ''}`}
           />
         </div>
         {filters.priceError && (

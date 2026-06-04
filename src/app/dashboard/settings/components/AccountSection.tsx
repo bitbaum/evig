@@ -2,6 +2,7 @@
 
 import { Mail, Trash2 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import { SETTINGS_CONFIG } from '@/config/profile'
 import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
@@ -32,13 +33,12 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
             <label htmlFor="first_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {labels.firstName}
             </label>
-            <input
+            <Input
               type="text"
               id="first_name"
               value={profile.first_name || ''}
               onChange={(e) => handleChange('first_name', e.target.value)}
               placeholder={labels.firstNamePlaceholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
 
@@ -46,13 +46,12 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
             <label htmlFor="last_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               {labels.lastName}
             </label>
-            <input
+            <Input
               type="text"
               id="last_name"
               value={profile.last_name || ''}
               onChange={(e) => handleChange('last_name', e.target.value)}
               placeholder={labels.lastNamePlaceholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -67,11 +66,11 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Mail className="h-5 w-5 text-neutral-400" />
           </div>
-          <input
+          <Input
             type="email"
             value={email}
             readOnly
-            className="w-full pl-10 pr-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 cursor-not-allowed"
+            className="pl-10 cursor-not-allowed"
           />
         </div>
         <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">

@@ -3,6 +3,8 @@
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -81,12 +83,11 @@ export default function SellerProfileEditPage() {
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('displayNameLabel')}
             </label>
-            <input
+            <Input
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder={t('displayNamePlaceholder')}
-              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             />
           </div>
 
@@ -94,12 +95,12 @@ export default function SellerProfileEditPage() {
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('bioLabel')}
             </label>
-            <textarea
+            <Textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={3}
               placeholder={t('bioPlaceholder')}
-              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white resize-y"
+              className="resize-y"
             />
           </div>
 
@@ -144,12 +145,12 @@ export default function SellerProfileEditPage() {
                 />
               </label>
             </div>
-            <input
+            <Input
               type="url"
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder={t('avatarUrlPlaceholder')}
-              className="mt-2 w-full px-4 py-2 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
+              className="mt-2"
             />
           </div>
 
@@ -158,24 +159,22 @@ export default function SellerProfileEditPage() {
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 {t('cityLabel')}
               </label>
-              <input
+              <Input
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder={t('cityPlaceholder')}
-                className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 {t('cantonLabel')}
               </label>
-              <input
+              <Input
                 type="text"
                 value={canton}
                 onChange={(e) => setCanton(e.target.value)}
                 placeholder={t('cantonPlaceholder')}
-                className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
               />
             </div>
           </div>

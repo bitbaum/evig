@@ -4,6 +4,7 @@ import { Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { Textarea } from '@/components/ui/textarea'
 
 interface MaterialsSectionProps {
   materialsProvided: string
@@ -30,11 +31,10 @@ export function MaterialsSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.materials.provided')}
           </label>
-          <textarea
+          <Textarea
             value={materialsProvided}
             onChange={(e) => onChange('materialsProvided', e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.materials.providedPlaceholder')}
           />
         </div>
@@ -43,11 +43,10 @@ export function MaterialsSection({
           <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('sections.materials.required')}
           </label>
-          <textarea
+          <Textarea
             value={materialsRequired}
             onChange={(e) => onChange('materialsRequired', e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('sections.materials.requiredPlaceholder')}
           />
         </div>

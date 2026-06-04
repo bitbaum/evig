@@ -8,6 +8,7 @@ import {
 import { REPORT_REASONS } from '@/config/marketplace'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
 
 interface ReportModalProps {
@@ -64,12 +65,13 @@ export function ReportModal({
               </label>
             ))}
           </div>
-          <textarea
+          <Textarea
+            variant="elevated"
             value={reportDetails}
             onChange={e => onReportDetailsChange(e.target.value)}
             placeholder={t('detailsPlaceholder')}
             rows={3}
-            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none mb-4"
+            className="resize-none mb-4"
           />
           <Button
             onClick={onReport}

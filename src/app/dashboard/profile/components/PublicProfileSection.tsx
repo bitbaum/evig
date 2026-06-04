@@ -2,6 +2,8 @@
 
 import { Globe, Lock } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../hooks/useProfileData'
 
@@ -25,7 +27,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
           <label htmlFor="display_name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
             {t('displayName')}
           </label>
-          <input
+          <Input
             type="text"
             id="display_name"
             value={profile.display_name || ''}
@@ -33,7 +35,6 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             placeholder={t('displayNamePlaceholder')}
             minLength={2}
             maxLength={50}
-            className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {t('displayNameDescription')}
@@ -45,14 +46,14 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
           <label htmlFor="bio" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
             {t('bio')}
           </label>
-          <textarea
+          <Textarea
             id="bio"
             value={profile.bio || ''}
             onChange={(e) => handleChange('bio', e.target.value)}
             placeholder={t('bioPlaceholder')}
             maxLength={500}
             rows={4}
-            className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+            className="resize-none"
           />
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {t('bioDescription')}

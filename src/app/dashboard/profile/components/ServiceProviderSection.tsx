@@ -2,6 +2,8 @@
 
 import { Wrench } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../hooks/useProfileData'
 
@@ -32,11 +34,10 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('bioLabel')} <span className="text-neutral-400">{t('optional')}</span>
           </label>
-          <textarea
+          <Textarea
             value={profile.bio || ''}
             onChange={(e) => handleChange('bio', e.target.value)}
             rows={4}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('bioPlaceholder')}
           />
         </div>
@@ -46,11 +47,10 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('websiteLabel')} <span className="text-neutral-400">{t('optional')}</span>
           </label>
-          <input
+          <Input
             type="url"
             value={profile.website || ''}
             onChange={(e) => handleChange('website', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('websitePlaceholder')}
           />
         </div>
@@ -60,11 +60,10 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('skillsLabel')} <span className="text-neutral-400">{t('optional')}</span>
           </label>
-          <input
+          <Input
             type="text"
             value={(profile.skills || []).join(', ')}
             onChange={(e) => handleChange('skills', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('skillsPlaceholder')}
           />
           <p className="text-xs text-neutral-500 mt-1">{t('skillsHint')}</p>
@@ -75,11 +74,10 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('expertiseLabel')} <span className="text-neutral-400">{t('optional')}</span>
           </label>
-          <input
+          <Input
             type="text"
             value={(profile.expertise_areas || []).join(', ')}
             onChange={(e) => handleChange('expertise_areas', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('expertisePlaceholder')}
           />
           <p className="text-xs text-neutral-500 mt-1">{t('expertiseHint')}</p>
@@ -90,13 +88,12 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('radiusLabel')} <span className="text-neutral-400">{t('optional')}</span>
           </label>
-          <input
+          <Input
             type="number"
             min="1"
             max="500"
             value={profile.service_radius_km || 50}
             onChange={(e) => handleChange('service_radius_km', parseInt(e.target.value) || 50)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
           <p className="text-xs text-neutral-500 mt-1">{t('radiusHint')}</p>
         </div>

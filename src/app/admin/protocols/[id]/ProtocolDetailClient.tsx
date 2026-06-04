@@ -17,6 +17,7 @@ import { useState, useMemo } from 'react'
 import { Loader2, CheckCircle2, FileText, Trash2, AlertCircle, UserCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { Select } from '@/components/ui/select'
 import {
   useProtocolDetail,
   ProtocolReprocessSection,
@@ -191,13 +192,13 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                     {notes.detected_attendees.map((name) => (
                       <div key={name} className="flex items-center gap-3">
                         <span className="text-sm text-neutral-700 dark:text-neutral-300 min-w-[120px] font-medium">{name}</span>
-                        <select
+                        <Select
                           value={attendeeMapping[name] || ''}
                           onChange={(e) => {
                             setAttendeeMapping(prev => ({ ...prev, [name]: e.target.value }))
                             setMappingDirty(true)
                           }}
-                          className="text-sm border border-neutral-300 dark:border-white/[0.12] rounded-lg px-2.5 py-1.5 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                          className="w-auto"
                         >
                           <option value="">— Nicht zugeordnet —</option>
                           {teamMembers.map(m => (
@@ -205,7 +206,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                               {m.name}{m.open_task_count > 0 ? ` (${m.open_task_count} Aufgaben)` : ''}
                             </option>
                           ))}
-                        </select>
+                        </Select>
                       </div>
                     ))}
                   </div>

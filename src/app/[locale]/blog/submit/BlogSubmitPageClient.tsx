@@ -6,6 +6,9 @@ import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
 import { BLOG_SUBMISSION_TYPE } from '@/config/approval-status'
 import { useBlogSubmitForm } from '@/hooks/useBlogSubmitForm'
@@ -133,7 +136,7 @@ export default function SubmitPostPage() {
                 <label htmlFor={field} className="block text-sm font-medium text-neutral-700 mb-2">
                   {field === 'name' ? t('labelName') : t('labelEmail')}
                 </label>
-                <input
+                <Input
                   type={field === 'email' ? 'email' : 'text'}
                   id={field}
                   name={field}
@@ -142,7 +145,7 @@ export default function SubmitPostPage() {
                   required
                   aria-required="true"
                   readOnly={isLoggedIn}
-                  className={`w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}`}
+                  className={isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}
                   placeholder={field === 'name' ? t('placeholderName') : t('placeholderEmail')}
                 />
               </div>
@@ -154,7 +157,7 @@ export default function SubmitPostPage() {
             <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelTitleIdea') : t('labelTitleDraft')}
             </label>
-            <input
+            <Input
               type="text"
               id="title"
               name="title"
@@ -162,7 +165,6 @@ export default function SubmitPostPage() {
               onChange={handleChange}
               required
               aria-required="true"
-              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderTitleIdea') : t('placeholderTitleDraft')}
             />
           </div>
@@ -173,30 +175,28 @@ export default function SubmitPostPage() {
               <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelCategory')}
               </label>
-              <select
+              <Select
                 id="category"
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">{t('categoryPlaceholder')}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.name}>{cat.name}</option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div>
               <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelTags')}
               </label>
-              <input
+              <Input
                 type="text"
                 id="tags"
                 name="tags"
                 value={formData.tags}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder={t('placeholderTags')}
               />
             </div>
@@ -207,7 +207,7 @@ export default function SubmitPostPage() {
             <label htmlFor="content" className="block text-sm font-medium text-neutral-700 mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelContentIdea') : t('labelContentDraft')}
             </label>
-            <textarea
+            <Textarea
               id="content"
               name="content"
               value={formData.content}
@@ -215,7 +215,7 @@ export default function SubmitPostPage() {
               required
               aria-required="true"
               rows={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 6 : 16}
-              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm"
+              className="font-mono text-sm"
               placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderContentIdea') : t('placeholderContentDraft')}
             />
             {submissionType === BLOG_SUBMISSION_TYPE.DRAFT && (

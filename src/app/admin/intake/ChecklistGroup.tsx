@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ChevronDown, ChevronRight, Check, StickyNote } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import type { ChecklistGroup as ChecklistGroupType } from './types'
 
 interface ChecklistGroupProps {
@@ -114,14 +115,13 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   {/* Notes editor */}
                   {notesOpen[item.id] && (
                     <div className="mt-2 space-y-1.5">
-                      <textarea
-                         
+                      <Textarea
                         autoFocus
                         value={notesText[item.id] ?? ''}
                         onChange={(e) => setNotesText(t => ({ ...t, [item.id]: e.target.value }))}
                         placeholder="z.B. CPU-Stresstest bestanden, max. 75 °C ..."
                         rows={2}
-                        className="w-full text-xs border border-neutral-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-primary-400 focus:border-primary-400 resize-none"
+                        className="text-xs resize-none"
                       />
                       <div className="flex gap-2">
                         <Button

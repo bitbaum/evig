@@ -22,6 +22,7 @@ import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { useCreateITHilfeForm } from '@/hooks/useCreateITHilfeForm'
 import { PageShell } from '@/components/layout/PageShell'
@@ -275,29 +276,27 @@ export default function CreatePeerRepairPage() {
                     <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {t('serviceTypeLabel')}
                     </label>
-                    <select
+                    <Select
                       value={formData.serviceType}
                       onChange={(e) => updateField('serviceType', e.target.value)}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       {SERVICE_TYPES.map((s) => (
                         <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {t('urgencyLabel')}
                     </label>
-                    <select
+                    <Select
                       value={formData.urgency}
                       onChange={(e) => updateField('urgency', e.target.value)}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       {URGENCY_LEVELS.map((u) => (
                         <option key={u.id} value={u.id}>{u.name}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                 </div>
               </div>

@@ -9,6 +9,9 @@ import { PROJECT_STATUSES, PROJECT_STATUS_LABELS } from '@/config/tasks'
 import { ROUTES } from '@/config/routes'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 
 export default function NewTaskProjectPage() {
   const router = useRouter()
@@ -71,14 +74,13 @@ export default function NewTaskProjectPage() {
             <label htmlFor="title" className={designPrimitive.form.label}>
               Titel *
             </label>
-            <input
+            <Input
               id="title"
               name="title"
               value={form.title}
               onChange={handleChange}
               required
               placeholder="z.B. Shop-Redesign Q3"
-              className={designPrimitive.form.input}
             />
           </div>
 
@@ -86,14 +88,13 @@ export default function NewTaskProjectPage() {
             <label htmlFor="description" className={designPrimitive.form.label}>
               Beschreibung
             </label>
-            <textarea
+            <Textarea
               id="description"
               name="description"
               value={form.description}
               onChange={handleChange}
               rows={3}
               placeholder="Kurze Beschreibung des Projekts (optional)"
-              className={designPrimitive.form.textarea}
             />
           </div>
 
@@ -102,30 +103,28 @@ export default function NewTaskProjectPage() {
               <label htmlFor="status" className={designPrimitive.form.label}>
                 Status
               </label>
-              <select
+              <Select
                 id="status"
                 name="status"
                 value={form.status}
                 onChange={handleChange}
-                className={designPrimitive.form.select}
               >
                 {Object.entries(PROJECT_STATUS_LABELS).map(([val, label]) => (
                   <option key={val} value={val}>{label}</option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             <div>
               <label htmlFor="target_date" className={designPrimitive.form.label}>
                 Zieldatum
               </label>
-              <input
+              <Input
                 id="target_date"
                 name="target_date"
                 type="date"
                 value={form.target_date}
                 onChange={handleChange}
-                className={designPrimitive.form.input}
               />
             </div>
           </div>

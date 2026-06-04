@@ -19,6 +19,7 @@ import { useTranslations } from 'next-intl'
 import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 interface AIFormAssistProps<T = Record<string, unknown>> {
   formType: string
@@ -141,7 +142,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
           {/* Text input — the primary interaction */}
           <div className="flex gap-2">
-            <textarea
+            <Textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -151,7 +152,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
               }
               rows={2}
               disabled={isExtracting}
-              className="flex-1 px-3 py-2 text-sm border border-primary-300 dark:border-primary-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
+              className="flex-1 border-primary-300 dark:border-primary-700 resize-none"
             />
             <Button
               type="button"

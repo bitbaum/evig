@@ -3,6 +3,7 @@
 import { User, Building2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface PersonalInfoSectionProps {
@@ -33,11 +34,10 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('firstName')}
           </label>
-          <input
+          <Input
             type="text"
             value={profile.first_name}
             onChange={(e) => handleChange('first_name', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="Max"
           />
         </div>
@@ -45,11 +45,10 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('lastName')}
           </label>
-          <input
+          <Input
             type="text"
             value={profile.last_name}
             onChange={(e) => handleChange('last_name', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="Muster"
           />
         </div>
@@ -59,11 +58,11 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
           </label>
           <div className="relative">
             <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
-            <input
+            <Input
               type="text"
               value={profile.company_name}
               onChange={(e) => handleChange('company_name', e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="pl-11"
               placeholder="Firma AG"
             />
           </div>

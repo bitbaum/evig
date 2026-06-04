@@ -29,6 +29,8 @@ import {
 import { toISODate } from '@/lib/team/schedule'
 import { startOfWeek, getWeekDates } from '@/lib/team/timecard-utils'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 
 interface TodayEntry {
   id: string
@@ -244,12 +246,11 @@ export function ShiftClient({
               <span className="block text-xs font-medium text-primary-900 dark:text-primary-200 mb-1">
                 Optional: Was machst du?
               </span>
-              <input
+              <Input
                 type="text"
                 value={description}
                 onChange={e => setDescription(e.target.value)}
                 placeholder="z. B. Linux-Installfest, Geräteannahme..."
-                className="w-full px-3 py-2.5 rounded-lg border border-primary-300 dark:border-primary-500/40 bg-white dark:bg-neutral-900 text-base focus:outline-none focus:ring-2 focus:ring-primary-500"
                 maxLength={500}
               />
             </label>
@@ -305,17 +306,16 @@ export function ShiftClient({
             <span className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1">
               Kategorie
             </span>
-            <select
+            <Select
               value={category}
               onChange={e => setCategory(e.target.value as TimecardEntryCategory)}
-              className="w-full px-3 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-base focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(c => (
                 <option key={c} value={c}>
                   {TIMECARD_ENTRY_CATEGORY_LABELS[c]}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
 
           <button

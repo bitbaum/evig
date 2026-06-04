@@ -5,6 +5,9 @@ import { useTranslations } from 'next-intl'
 import { Plus, RefreshCw, X } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import type { Pool } from './types'
 import { CATEGORY_EMOJIS } from './types'
 
@@ -66,46 +69,47 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.serviceName')}</label>
-            <input
+            <Input
+              variant="elevated"
               required
               value={form.serviceName}
               onChange={e => setForm(f => ({ ...f, serviceName: e.target.value }))}
               placeholder={t('modal.serviceNamePlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.category')}</label>
-              <select
+              <Select
+                variant="elevated"
                 value={form.serviceCategory}
                 onChange={e => setForm(f => ({ ...f, serviceCategory: e.target.value }))}
-                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {Object.keys(CATEGORY_EMOJIS).map(val => (
                   // @ts-expect-error — dynamic category key
                   <option key={val} value={val}>{CATEGORY_EMOJIS[val]} {t(`categories.${val}`)}</option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.maxMembers')}</label>
-              <input
+              <Input
+                variant="elevated"
                 required
                 type="number"
                 min={2}
                 max={20}
                 value={form.maxMembers}
                 onChange={e => setForm(f => ({ ...f, maxMembers: Number(e.target.value) }))}
-                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.monthlyCost')}</label>
-            <input
+            <Input
+              variant="elevated"
               required
               type="number"
               min={1}
@@ -113,7 +117,6 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               value={form.monthlyCostChf}
               onChange={e => setForm(f => ({ ...f, monthlyCostChf: e.target.value }))}
               placeholder={t('modal.monthlyCostPlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             {form.monthlyCostChf && form.maxMembers > 0 && (
               <p className="text-xs text-primary-600 mt-1">
@@ -124,23 +127,25 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.description')}</label>
-            <textarea
+            <Textarea
+              variant="elevated"
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={2}
               placeholder={t('modal.descriptionPlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+              className="resize-none"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.rules')}</label>
-            <textarea
+            <Textarea
+              variant="elevated"
               value={form.rules}
               onChange={e => setForm(f => ({ ...f, rules: e.target.value }))}
               rows={2}
               placeholder={t('modal.rulesPlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+              className="resize-none"
             />
           </div>
 

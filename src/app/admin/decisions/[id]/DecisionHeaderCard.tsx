@@ -14,7 +14,8 @@ import {
 import { Link2, Check, Mail } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
-import { adminSurface, adminType, adminForm } from '@/lib/admin-ui';
+import { adminSurface, adminType } from '@/lib/admin-ui';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { formatDateShort } from '@/lib/date-formats';
 import BeschlussPdfExport from '@/components/decisions/BeschlussPdfExport';
@@ -178,11 +179,11 @@ export default function DecisionHeaderCard({
           <label className={cn('mb-1 block', adminType.subTitle)}>
             Zusammenfassung (optional)
           </label>
-          <textarea
+          <Textarea
             value={closeSummary}
             onChange={(e) => setCloseSummary(e.target.value)}
             rows={2}
-            className={cn(adminForm.textarea, 'mb-2')}
+            className="mb-2"
             placeholder="Zusammenfassung des Ergebnisses..."
           />
           <div className="flex gap-2">
@@ -208,11 +209,11 @@ export default function DecisionHeaderCard({
           <label className={cn('mb-1 block', adminType.subTitle)}>
             Grund für Abbruch
           </label>
-          <textarea
+          <Textarea
             value={cancelReason}
             onChange={(e) => setCancelReason(e.target.value)}
             rows={2}
-            className={cn(adminForm.textarea, 'mb-2')}
+            className="mb-2"
             placeholder="Warum wird abgebrochen?"
           />
           <div className="flex gap-2">

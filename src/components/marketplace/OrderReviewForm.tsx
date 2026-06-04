@@ -15,6 +15,7 @@ import { Star, Loader2, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 
 interface OrderReviewFormProps {
@@ -124,13 +125,12 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
         >
           {t('yourCommentLabel')} <span className="text-neutral-400 font-normal">{t('titleOptional')}</span>
         </label>
-        <textarea
+        <Textarea
           id="review-content"
           rows={4}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={t('orderContentPlaceholder')}
-          className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           maxLength={5000}
         />
         <p className="text-xs text-neutral-400 mt-1">{t('contentHint')}</p>

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface LearningObjectivesSectionProps {
   objectives: string[]
@@ -31,11 +32,11 @@ export function LearningObjectivesSection({
       <div className="space-y-3">
         {objectives.map((objective, index) => (
           <div key={index} className="flex gap-3">
-            <input
+            <Input
               type="text"
               value={objective}
               onChange={(e) => onUpdate(index, e.target.value)}
-              className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="flex-1"
               placeholder={t('sections.learningObjectives.placeholder')}
             />
             <Button

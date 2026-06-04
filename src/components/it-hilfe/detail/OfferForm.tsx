@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl'
 import { getAllSkills } from '@/config/it-hilfe'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 interface OfferFormProps {
   showForm: boolean
@@ -63,7 +65,7 @@ export function OfferForm({
               <label htmlFor="offer-message" className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('messageLabel')} <span className="text-error-500">*</span>
               </label>
-              <textarea
+              <Textarea
                 id="offer-message"
                 value={offerMessage}
                 onChange={(e) => onMessageChange(e.target.value)}
@@ -75,7 +77,6 @@ export function OfferForm({
                 minLength={20}
                 maxLength={2000}
                 rows={4}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               />
             </div>
 
@@ -84,26 +85,24 @@ export function OfferForm({
                 <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-neutral-700 mb-1">
                   {t('estimatedTimeLabel')}
                 </label>
-                <input
+                <Input
                   id="offer-estimated-time"
                   type="text"
                   value={offerEstimatedTime}
                   onChange={(e) => onEstimatedTimeChange(e.target.value)}
                   placeholder={t('estimatedTimePlaceholder')}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 />
               </div>
               <div>
                 <label htmlFor="offer-compensation" className="block text-sm font-medium text-neutral-700 mb-1">
                   {t('compensationLabel')}
                 </label>
-                <input
+                <Input
                   id="offer-compensation"
                   type="text"
                   value={offerCompensation}
                   onChange={(e) => onCompensationChange(e.target.value)}
                   placeholder={t('compensationPlaceholder')}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 />
               </div>
             </div>

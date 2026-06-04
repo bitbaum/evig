@@ -13,6 +13,7 @@ import { ADMIN_CONTENT } from '@/config/admin-content'
 import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { Modal } from '@/components/ui/Modal'
+import { Textarea } from '@/components/ui/textarea'
 import {
   EyeOff,
   Trash2,
@@ -267,12 +268,12 @@ export default function AdminReviewsPage() {
         size="md"
       >
         <div className="space-y-4">
-          <textarea
+          <Textarea
             value={moderationReason}
             onChange={(e) => setModerationReason(e.target.value)}
             placeholder="Bitte gib einen Grund an..."
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-400 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+            variant="elevated"
             autoFocus
           />
           <div className="flex justify-end gap-3">

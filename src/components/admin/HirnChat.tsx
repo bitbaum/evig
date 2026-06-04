@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { ORG } from '@/config/org'
@@ -301,7 +302,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       {/* Input */}
       <form onSubmit={sendMessage} className={`border-t border-neutral-200 dark:border-white/[0.06] ${compact ? 'p-3' : 'p-4'}`}>
         <div className="flex gap-2">
-          <input
+          <Input
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -310,7 +311,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'hirn-chat-error' : undefined}
-            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
+            className="flex-1"
           />
           <Button
             type="submit"

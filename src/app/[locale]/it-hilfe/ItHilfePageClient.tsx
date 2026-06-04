@@ -29,6 +29,8 @@ import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
 import { ROUTES } from '@/config/routes'
 
@@ -87,13 +89,13 @@ export default function ITHilfePage() {
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-              <input
+              <Input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="pl-12 pr-24 py-3"
               />
               <Button
                 type="submit"
@@ -152,10 +154,10 @@ export default function ITHilfePage() {
               )}
             </button>
 
-            <select
+            <Select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-auto"
               aria-label={t('sortLabel')}
             >
               {SORT_OPTIONS.map((option) => (
@@ -163,7 +165,7 @@ export default function ITHilfePage() {
                   {option.label}
                 </option>
               ))}
-            </select>
+            </Select>
 
             {hasActiveFilters && (
               <button
@@ -184,11 +186,10 @@ export default function ITHilfePage() {
                   <label htmlFor="filter-category" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterCategory')}
                   </label>
-                  <select
+                  <Select
                     id="filter-category"
                     value={filters.category}
                     onChange={(e) => setFilter('category', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCategoryAll')}</option>
                     {DEVICE_CATEGORIES.map((cat) => (
@@ -196,18 +197,17 @@ export default function ITHilfePage() {
                         {cat.name}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
 
                 <div>
                   <label htmlFor="filter-canton" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterCanton')}
                   </label>
-                  <select
+                  <Select
                     id="filter-canton"
                     value={filters.canton}
                     onChange={(e) => setFilter('canton', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCantonAll')}</option>
                     {SWISS_CANTONS.map((c) => (
@@ -215,18 +215,17 @@ export default function ITHilfePage() {
                         {c}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
 
                 <div>
                   <label htmlFor="filter-urgency" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterUrgency')}
                   </label>
-                  <select
+                  <Select
                     id="filter-urgency"
                     value={filters.urgency}
                     onChange={(e) => setFilter('urgency', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterUrgencyAll')}</option>
                     {URGENCY_LEVELS.map((u) => (
@@ -234,23 +233,22 @@ export default function ITHilfePage() {
                         {u.name}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
 
                 <div>
                   <label htmlFor="filter-budget" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterBudget')}
                   </label>
-                  <select
+                  <Select
                     id="filter-budget"
                     value={filters.budgetType}
                     onChange={(e) => setFilter('budgetType', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterBudgetAll')}</option>
                     <option value="free">{t('filterBudgetFree')}</option>
                     <option value="paid">{t('filterBudgetPaid')}</option>
-                  </select>
+                  </Select>
                 </div>
               </div>
             </div>

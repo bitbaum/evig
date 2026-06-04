@@ -1,3 +1,5 @@
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import type { BlogPostData } from './types'
 
 interface Props {
@@ -16,11 +18,11 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
               Titel *
             </label>
-            <input
+            <Input
               type="text"
               value={formData.title}
               onChange={(e) => onTitleChange(e.target.value)}
-              className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-lg font-medium focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="text-lg font-medium"
               placeholder="Titel des Artikels"
             />
           </div>
@@ -31,11 +33,11 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
             </label>
             <div className="flex items-center">
               <span className="text-neutral-500 dark:text-neutral-400 text-sm mr-2">/blog/</span>
-              <input
+              <Input
                 type="text"
                 value={formData.slug}
                 onChange={(e) => onFormDataChange({ ...formData, slug: e.target.value })}
-                className="flex-1 px-4 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="flex-1"
                 placeholder="url-slug"
               />
             </div>
@@ -48,11 +50,10 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Kurzbeschreibung
         </label>
-        <textarea
+        <Textarea
           value={formData.excerpt}
           onChange={(e) => onFormDataChange({ ...formData, excerpt: e.target.value })}
           rows={3}
-          className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           placeholder="Kurze Beschreibung für Vorschau und SEO (max. 160 Zeichen)"
           maxLength={160}
         />
@@ -64,11 +65,11 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Inhalt * (Markdown)
         </label>
-        <textarea
+        <Textarea
           value={formData.content}
           onChange={(e) => onFormDataChange({ ...formData, content: e.target.value })}
           rows={20}
-          className="w-full px-4 py-3 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="font-mono text-sm"
           placeholder="# Überschrift&#10;&#10;Schreibe hier deinen Artikel in Markdown..."
         />
       </div>

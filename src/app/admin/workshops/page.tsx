@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { useRouter } from 'next/navigation'
 import {
   GraduationCap,
@@ -235,12 +236,11 @@ export default function AdminWorkshopsPage() {
                     <label className="block text-sm font-medium text-error-800 dark:text-error-400 mb-2">
                       Ablehnungsgrund:
                     </label>
-                    <textarea
+                    <Textarea
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
                       placeholder="Bitte gib einen Ablehnungsgrund an..."
                       rows={3}
-                      className="w-full px-3 py-2 border border-error-300 rounded-lg focus:ring-2 focus:ring-error-500 text-sm"
                       autoFocus
                     />
                     {rejectError && <p className="mt-1 text-sm text-error-700">{rejectError}</p>}

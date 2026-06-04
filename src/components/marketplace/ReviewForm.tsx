@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Star, Loader2, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 
@@ -98,13 +100,12 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
         <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
           {t('titleLabel')} <span className="text-xs text-neutral-500">{t('titleOptional')}</span>
         </label>
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder={t('titlePlaceholder')}
           maxLength={120}
-          className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-sm text-neutral-900 dark:text-white"
         />
       </div>
 
@@ -113,13 +114,13 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
         <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
           {t('contentLabel')} <span className="text-error-500">*</span>
         </label>
-        <textarea
+        <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={3}
           placeholder={t('contentPlaceholder')}
           maxLength={2000}
-          className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-sm text-neutral-900 dark:text-white resize-y"
+          className="resize-y"
         />
       </div>
 

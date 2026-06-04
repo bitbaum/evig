@@ -1,6 +1,7 @@
 import { Loader2, CheckCircle2, MessageSquare } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface Props {
@@ -42,10 +43,10 @@ export function ProtocolSummarySection({
               {notes.detected_attendees.map((name) => (
                 <div key={name} className="flex items-center gap-3">
                   <span className="text-sm text-neutral-700 min-w-[120px]">{name}</span>
-                  <select
+                  <Select
                     value={attendeeMapping[name] || ''}
                     onChange={(e) => onMappingChange(name, e.target.value)}
-                    className="text-sm border rounded px-2 py-1 text-neutral-600"
+                    className="w-auto"
                   >
                     <option value="">— Nicht zugeordnet —</option>
                     {teamMembers.map(m => (
@@ -53,7 +54,7 @@ export function ProtocolSummarySection({
                         {m.name}{m.open_task_count > 0 ? ` (${m.open_task_count} Aufgaben)` : ''}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
               ))}
               {mappingDirty && (

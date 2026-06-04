@@ -24,6 +24,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { OrderStatusTimeline } from '@/components/marketplace/OrderStatusTimeline'
 import { OrderReviewForm } from '@/components/marketplace/OrderReviewForm'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { useOrderDetail } from '@/hooks/useOrderDetail'
 
@@ -279,12 +280,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                   {t('trackingOptional')}
                 </label>
-                <input
+                <Input
                   type="text"
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
                   placeholder="z.B. 99.12.345678.90123456"
-                  className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
               <Button

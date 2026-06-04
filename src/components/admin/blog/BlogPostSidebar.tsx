@@ -1,5 +1,8 @@
 import { Image as ImageIcon, Tag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import Heading from '@/components/admin/AdminHeading'
 import type { BlogPostData, Category } from './types'
 
@@ -46,16 +49,15 @@ export function BlogPostSidebar({
       {/* Category */}
       <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Kategorie</Heading>
-        <select
+        <Select
           value={formData.categoryId}
           onChange={(e) => onFormDataChange({ ...formData, categoryId: e.target.value })}
-          className="w-full px-4 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         >
           <option value="">Keine Kategorie</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
-        </select>
+        </Select>
       </div>
 
       {/* Featured Image */}
@@ -64,11 +66,10 @@ export function BlogPostSidebar({
           <ImageIcon className="w-4 h-4" />
           Beitragsbild
         </Heading>
-        <input
+        <Input
           type="text"
           value={formData.featuredImage}
           onChange={(e) => onFormDataChange({ ...formData, featuredImage: e.target.value })}
-          className="w-full px-4 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           placeholder="https://..."
         />
         {formData.featuredImage && (
@@ -87,12 +88,12 @@ export function BlogPostSidebar({
           Tags
         </Heading>
         <div className="flex gap-2 mb-3">
-          <input
+          <Input
             type="text"
             value={tagInput}
             onChange={(e) => onTagInputChange(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), onAddTag())}
-            className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="flex-1"
             placeholder="Tag hinzufügen"
           />
           <Button type="button" onClick={onAddTag} variant="secondary" size="sm">
@@ -124,21 +125,19 @@ export function BlogPostSidebar({
         <div className="space-y-4">
           <div>
             <label className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">Meta-Titel</label>
-            <input
+            <Input
               type="text"
               value={formData.seoTitle}
               onChange={(e) => onFormDataChange({ ...formData, seoTitle: e.target.value })}
-              className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={formData.title || 'SEO Titel'}
             />
           </div>
           <div>
             <label className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">Meta-Beschreibung</label>
-            <textarea
+            <Textarea
               value={formData.seoDescription}
               onChange={(e) => onFormDataChange({ ...formData, seoDescription: e.target.value })}
               rows={2}
-              className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={formData.excerpt || 'SEO Beschreibung'}
             />
           </div>

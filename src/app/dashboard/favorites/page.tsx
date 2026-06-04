@@ -61,6 +61,9 @@ export default function FavoritesPage() {
     setIsLoading(false)
   }, [t])
 
+  // Auth-gated data load. setState happens inside fetchFavorites — this is
+  // the legitimate "subscribe to external system on session change" pattern.
+   
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (!session?.user) {

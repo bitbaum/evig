@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import { useCheckout } from '@/hooks/useCheckout'
@@ -159,37 +160,31 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.name')}</label>
-                  <input
+                  <Input
                     type="text"
                     value={shippingAddress.name}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder={t('address.namePlaceholder')}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.street')}</label>
-                  <input
+                  <Input
                     type="text"
                     value={shippingAddress.street}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
-                    className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder={t('address.streetPlaceholder')}
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.postalCode')}</label>
-                    <input
+                    <Input
                       type="text"
                       value={shippingAddress.postal_code}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value }))}
                       maxLength={4}
-                      className={`w-full rounded-lg border bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                        shippingAddress.postal_code && !postalCodeValid
-                          ? 'border-error-500'
-                          : 'border-neutral-300 dark:border-neutral-600'
-                      }`}
+                      className={shippingAddress.postal_code && !postalCodeValid ? 'border-error-500' : ''}
                       placeholder="8000"
                     />
                     {shippingAddress.postal_code && !postalCodeValid && (

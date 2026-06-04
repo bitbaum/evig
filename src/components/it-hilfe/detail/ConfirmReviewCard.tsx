@@ -5,6 +5,7 @@ import { Star, Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 interface ConfirmReviewCardProps {
   requestTitle: string
@@ -103,14 +104,13 @@ export function ConfirmReviewCard({
           <label htmlFor="confirm-review-text" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('reviewTextOptionalLabel')}
           </label>
-          <textarea
+          <Textarea
             id="confirm-review-text"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
             placeholder={t('reviewTextOptionalPlaceholder')}
             rows={4}
             maxLength={5000}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
           />
           <p className="text-xs text-neutral-500 mt-1">{reviewText.length}/5000</p>
         </div>

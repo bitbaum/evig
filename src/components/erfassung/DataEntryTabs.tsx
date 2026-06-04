@@ -17,6 +17,7 @@ import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, Chev
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { detectMultipleProducts } from '@/lib/erfassung/detect-multi'
@@ -97,9 +98,11 @@ export function DataEntryTabs({
   const [isUploading, setIsUploading] = useState(false)
   const [unmappedColumns, setUnmappedColumns] = useState<string[]>([])
 
-  useEffect(() => {
-    setIsCollapsed(collapsed)
-  }, [collapsed])
+  // Sync prop → local state when parent changes the collapsed prop.
+  // This is the legitimate "mirror external value" pattern; setState in
+  // effect is unavoidable here.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setIsCollapsed(collapsed) }, [collapsed])
 
   // Handle voice transcription complete
   const handleVoiceData = useCallback(
@@ -313,7 +316,7 @@ export function DataEntryTabs({
             </div>
 
             <div className="flex flex-col gap-3">
-              <textarea
+              <Textarea
                 value={quickText}
                 onChange={(e) => setQuickText(e.target.value)}
                 onKeyDown={(e) => {
@@ -325,7 +328,7 @@ export function DataEntryTabs({
                 placeholder={"Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"}
                 disabled={quickEntryState === 'loading'}
                 rows={4}
-                className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 text-base resize-none"
+                className="resize-none"
               />
               <Button
                 type="button"

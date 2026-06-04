@@ -6,6 +6,8 @@ import { ORG } from '@/config/org'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
 
 export default function ContactForm() {
@@ -75,13 +77,13 @@ export default function ContactForm() {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User className="h-5 w-5 text-neutral-500" />
               </div>
-              <input
+              <Input
                 type="text"
                 id="name"
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                className="pl-10"
                 placeholder={t('namePlaceholder')}
               />
             </div>
@@ -94,13 +96,13 @@ export default function ContactForm() {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="h-5 w-5 text-neutral-500" />
               </div>
-              <input
+              <Input
                 type="email"
                 id="email"
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+                className="pl-10"
                 placeholder={t('emailPlaceholder')}
               />
             </div>
@@ -110,13 +112,12 @@ export default function ContactForm() {
           <label htmlFor="subject" className="block text-sm font-medium text-neutral-700 mb-2">
             {t('subject')}
           </label>
-          <input
+          <Input
             type="text"
             id="subject"
             name="subject"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="block w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
             placeholder={t('subjectPlaceholder')}
           />
         </div>
@@ -128,7 +129,7 @@ export default function ContactForm() {
             <div className="absolute top-3 left-3 pointer-events-none">
               <MessageSquare className="h-5 w-5 text-neutral-500" />
             </div>
-            <textarea
+            <Textarea
               id="message"
               name="message"
               rows={4}
@@ -138,7 +139,7 @@ export default function ContactForm() {
               aria-required="true"
               aria-invalid={status === 'error'}
               aria-describedby={status === 'error' ? 'contact-error' : undefined}
-              className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+              className="pl-10"
               placeholder={t('messagePlaceholder')}
             />
           </div>

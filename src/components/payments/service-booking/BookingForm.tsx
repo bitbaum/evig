@@ -13,6 +13,9 @@ import { CreditCard, Shield } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import CurrencySelector from '../CurrencySelector'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import type { ServiceInfo, BookingData, DisplayPricing, SupportedCurrency, ServicePricing, UrgencyLevel } from './types'
 
 interface BookingFormProps {
@@ -162,12 +165,11 @@ function DescriptionField({
       <label htmlFor="booking-description" className="block text-sm font-medium mb-2">
         {t('descriptionLabel')}
       </label>
-      <textarea
+      <Textarea
         id="booking-description"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={t('descriptionPlaceholder')}
-        className="w-full p-3 border rounded-lg"
         rows={4}
         required
       />
@@ -189,17 +191,16 @@ function UrgencyField({
       <label htmlFor="booking-urgency" className="block text-sm font-medium mb-2">
         {t('urgencyLabel')}
       </label>
-      <select
+      <Select
         id="booking-urgency"
         value={value}
         onChange={(e) => onChange(e.target.value as UrgencyLevel)}
-        className="w-full p-3 border rounded-lg"
       >
         <option value="low">{t('urgencyLow')}</option>
         <option value="normal">{t('urgencyNormal')}</option>
         <option value="high">{t('urgencyHigh')}</option>
         <option value="urgent">{t('urgencyUrgent')}</option>
-      </select>
+      </Select>
     </div>
   )
 }
@@ -218,13 +219,12 @@ function DeviceInfoField({
       <label htmlFor="booking-device-info" className="block text-sm font-medium mb-2">
         {t('deviceInfoLabel')}
       </label>
-      <input
+      <Input
         id="booking-device-info"
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={t('deviceInfoPlaceholder')}
-        className="w-full p-3 border rounded-lg"
       />
     </div>
   )

@@ -11,6 +11,9 @@ import { useState, useTransition, type FormEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { NEED_TYPES, NEED_STATUSES, type NeedType, type NeedStatus } from '@/config/projects'
 import { Plus, Trash2, Save } from 'lucide-react'
 
@@ -129,15 +132,15 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           onSubmit={handleAdd}
           className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border border-neutral-200 dark:border-white/[0.08] bg-neutral-50 dark:bg-white/[0.03]"
         >
-          <select name="type" className={designPrimitive.form.input}>
+          <Select name="type" variant="elevated">
             {Object.values(NEED_TYPES).map(v => (
               <option key={v} value={v}>{t(`typeLabels.${v}`)}</option>
             ))}
-          </select>
-          <input name="title" required placeholder={t('needs.placeholderTitle')} className={designPrimitive.form.input} />
-          <textarea name="description" placeholder={t('needs.placeholderDescription')} rows={2} className={cn(designPrimitive.form.textarea, 'sm:col-span-2')} />
-          <input name="targetQuantity" type="number" min="1" placeholder={t('needs.placeholderQuantity')} className={designPrimitive.form.input} />
-          <input name="targetUnit" placeholder={t('needs.placeholderUnit')} className={designPrimitive.form.input} />
+          </Select>
+          <Input name="title" required placeholder={t('needs.placeholderTitle')} variant="elevated" />
+          <Textarea name="description" placeholder={t('needs.placeholderDescription')} rows={2} variant="elevated" className="sm:col-span-2" />
+          <Input name="targetQuantity" type="number" min="1" placeholder={t('needs.placeholderQuantity')} variant="elevated" />
+          <Input name="targetUnit" placeholder={t('needs.placeholderUnit')} variant="elevated" />
           <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row justify-end gap-2">
             <button
               type="button"
@@ -167,49 +170,49 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
             >
               {/* Row 1 — main editable line. Stacks on mobile, lays out responsively on larger screens */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
-                <select
+                <Select
                   value={need.type}
                   onChange={e => patch(need.id, { type: e.target.value })}
-                  className={cn(designPrimitive.form.input, 'text-xs sm:col-span-3 lg:col-span-2')}
+                  className="text-xs sm:col-span-3 lg:col-span-2"
                   aria-label={t('needs.fieldType')}
                 >
                   {Object.values(NEED_TYPES).map(v => (
                     <option key={v} value={v}>{t(`typeLabels.${v}`)}</option>
                   ))}
-                </select>
+                </Select>
 
-                <input
+                <Input
                   value={need.title}
                   onChange={e => patch(need.id, { title: e.target.value })}
-                  className={cn(designPrimitive.form.input, 'text-sm sm:col-span-9 lg:col-span-4')}
+                  className="text-sm sm:col-span-9 lg:col-span-4"
                   aria-label={t('needs.fieldTitle')}
                 />
 
-                <input
+                <Input
                   value={need.targetQuantity ?? ''}
                   onChange={e => patch(need.id, { targetQuantity: e.target.value ? Number(e.target.value) : null })}
                   type="number"
                   placeholder={t('needs.placeholderQuantityShort')}
-                  className={cn(designPrimitive.form.input, 'text-xs sm:col-span-3 lg:col-span-1')}
+                  className="text-xs sm:col-span-3 lg:col-span-1"
                 />
 
-                <input
+                <Input
                   value={need.targetUnit ?? ''}
                   onChange={e => patch(need.id, { targetUnit: e.target.value })}
                   placeholder={t('needs.placeholderUnitShort')}
-                  className={cn(designPrimitive.form.input, 'text-xs sm:col-span-3 lg:col-span-2')}
+                  className="text-xs sm:col-span-3 lg:col-span-2"
                 />
 
-                <select
+                <Select
                   value={need.status}
                   onChange={e => patch(need.id, { status: e.target.value })}
-                  className={cn(designPrimitive.form.input, 'text-xs sm:col-span-4 lg:col-span-2')}
+                  className="text-xs sm:col-span-4 lg:col-span-2"
                   aria-label={t('needs.fieldStatus')}
                 >
                   {Object.values(NEED_STATUSES).map(v => (
                     <option key={v} value={v}>{t(`needStatusLabels.${v}`)}</option>
                   ))}
-                </select>
+                </Select>
 
                 <div className="sm:col-span-2 lg:col-span-1 flex justify-end gap-1">
                   <button
@@ -233,12 +236,12 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
                 </div>
               </div>
 
-              <textarea
+              <Textarea
                 value={need.description ?? ''}
                 onChange={e => patch(need.id, { description: e.target.value })}
                 rows={2}
                 placeholder={t('needs.placeholderDescription')}
-                className={cn(designPrimitive.form.textarea, 'text-xs w-full')}
+                className="text-xs"
               />
             </div>
           ))}

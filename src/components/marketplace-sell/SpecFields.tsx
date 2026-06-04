@@ -9,6 +9,7 @@
  */
 
 import { getSpecTemplate, type SpecTemplate } from '@/config/erfassung/spec-templates'
+import { Input } from '@/components/ui/input'
 import type { SpecFieldData } from './types'
 
 interface SpecFieldsProps {
@@ -51,13 +52,13 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
             <label htmlFor={`spec-${spec.key}`} className="text-xs font-medium text-neutral-500 dark:text-neutral-400 w-24 flex-shrink-0 text-right">
               {spec.key}
             </label>
-            <input
+            <Input
               id={`spec-${spec.key}`}
               type="text"
               value={spec.value}
               onChange={(e) => handleChange(spec.key, e.target.value)}
               placeholder={spec.placeholder || ''}
-              className="flex-1 px-3 py-1.5 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
+              className="flex-1"
             />
           </div>
         ))}

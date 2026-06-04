@@ -27,6 +27,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Input } from '@/components/ui/input'
 import {
   TIMECARD_STATUSES,
   TIMECARD_STATUS_LABELS,
@@ -211,12 +212,12 @@ export function TimecardApprovalsClient() {
             <div className="text-sm font-medium text-primary-900 dark:text-primary-100">
               {selected.size} ausgewählt · {formatTimecardDuration(totalSelectedMinutes)}
             </div>
-            <input
+            <Input
               type="text"
               value={sharedNote}
               onChange={e => setSharedNote(e.target.value)}
               placeholder="Notiz (optional bei Genehmigung, Pflicht bei Rückweisung)"
-              className="flex-1 min-w-0 px-3 py-2 rounded-md border border-primary-300 dark:border-primary-500/40 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 min-w-0"
               maxLength={1000}
             />
             <div className="flex gap-2 shrink-0">

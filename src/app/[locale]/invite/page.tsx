@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Link2, Gift, Users, Send, Copy, Check } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { ORG } from '@/config/org'
 import { PageShell } from '@/components/layout/PageShell'
 
@@ -115,10 +116,10 @@ export default function InvitePage() {
             <div className="h-10 bg-neutral-100 rounded-lg animate-pulse" />
           ) : (
             <div className="flex gap-2">
-              <input
+              <Input
                 readOnly
                 value={data?.url ?? ''}
-                className="flex-1 text-sm bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-2 text-neutral-700 font-mono truncate"
+                className="flex-1 font-mono truncate"
               />
               <Button onClick={copyLink} variant="primary" size="sm" className="whitespace-nowrap">
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -132,13 +133,13 @@ export default function InvitePage() {
         <div className="card-shell p-6 mb-6">
           <Heading level={2} className="text-lg font-semibold mb-4">Per E-Mail einladen</Heading>
           <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-2">
-            <input
+            <Input
               type="email"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="email@beispiel.ch"
-              className="flex-1 text-base sm:text-sm border border-neutral-200 rounded-lg px-3 py-2.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1"
             />
             <Button type="submit" variant="primary" size="sm" disabled={sending} className="whitespace-nowrap">
               <Send className="w-4 h-4" />

@@ -2,6 +2,7 @@
 
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { useRouter } from 'next/navigation'
 import {
   Heart,
@@ -143,12 +144,12 @@ export function ListingActionButtons({
             </div>
           ) : showMessageForm ? (
             <div className="w-full space-y-3">
-              <textarea
+              <Textarea
                 value={contactMessage}
                 onChange={(e) => onContactMessageChange(e.target.value)}
                 placeholder={t('messagePlaceholder', { sellerName })}
                 rows={4}
-                className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 resize-none"
+                className="resize-none"
               />
               <div className="flex gap-2">
                 <Button

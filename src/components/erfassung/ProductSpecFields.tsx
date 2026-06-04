@@ -11,6 +11,7 @@ import { Plus, Trash2, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import type { AIFieldMetadata, SpecField } from '@/types/erfassung'
 
@@ -54,18 +55,18 @@ export function ProductSpecFields({
       <div className="space-y-3">
         {specs.map((spec, index) => (
           <div key={index} className="flex gap-2 sm:gap-3">
-            <input
+            <Input
               type="text"
               value={spec.key}
               onChange={(e) => onSpecChange(index, 'key', e.target.value)}
-              className="w-1/3 px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-sm touch-manipulation"
+              className="w-1/3"
               placeholder={t('keyPlaceholder')}
             />
-            <input
+            <Input
               type="text"
               value={spec.value}
               onChange={(e) => onSpecChange(index, 'value', e.target.value)}
-              className="flex-1 px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-sm touch-manipulation"
+              className="flex-1"
               placeholder={t('valuePlaceholder')}
             />
             <Button

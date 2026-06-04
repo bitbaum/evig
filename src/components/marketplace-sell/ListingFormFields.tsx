@@ -14,6 +14,9 @@ import {
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { SpecFields } from './SpecFields'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import type { ListingFormData, ListingFormUpdater, SpecFieldData, ConditionCheckData } from './types'
 
 interface Props {
@@ -70,14 +73,13 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           </span>
         </div>
-        <input
+        <Input
           id="listing-title"
           type="text"
           value={formData.title}
           onChange={(e) => update('title', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           placeholder={t('titlePlaceholder')}
-          className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
@@ -91,14 +93,14 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           </span>
         </div>
-        <textarea
+        <Textarea
           id="listing-description"
           value={formData.description}
           onChange={(e) => update('description', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           rows={5}
           placeholder={t('descriptionPlaceholder')}
-          className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white resize-y"
+          className="resize-y"
         />
       </div>
 
@@ -111,7 +113,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           <label htmlFor="listing-price" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('price')}
           </label>
-          <input
+          <Input
             id="listing-price"
             type="number"
             step="0.01"
@@ -119,7 +121,6 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             value={formData.price}
             onChange={(e) => update('price', e.target.value)}
             placeholder={t('pricePlaceholder')}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
           {formData.price === '0' && (
             <p className="text-xs text-teal-600 mt-1">{t('freeNotice')}</p>
@@ -129,11 +130,10 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           <label htmlFor="listing-category" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('category')} <span className="text-error-500">*</span>
           </label>
-          <select
+          <Select
             id="listing-category"
             value={formData.category}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             <option value="">{t('selectPlaceholder')}</option>
             {MARKETPLACE_CATEGORY_VALUES.map(val => (
@@ -141,23 +141,22 @@ export function ListingFormFields({ formData, setFormData }: Props) {
                 {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{MARKETPLACE_CATEGORY_LABELS[val] || val}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div>
           <label htmlFor="listing-condition" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('condition')}
           </label>
-          <select
+          <Select
             id="listing-condition"
             value={formData.condition}
             onChange={(e) => handleConditionChange(e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             <option value="">{t('selectPlaceholder')}</option>
             {ZUSTAND_OPTIONS.map(opt => (
               <option key={opt.value} value={opt.value}>{opt.label} — {opt.description}</option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
 
@@ -189,24 +188,22 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('brand')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
           </label>
-          <input
+          <Input
             type="text"
             value={formData.brand}
             onChange={(e) => update('brand', e.target.value)}
             placeholder={t('brandPlaceholder')}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('model')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
           </label>
-          <input
+          <Input
             type="text"
             value={formData.model}
             onChange={(e) => update('model', e.target.value)}
             placeholder={t('modelPlaceholder')}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
         </div>
       </div>
@@ -229,29 +226,27 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('delivery')}
           </label>
-          <select
+          <Select
             value={formData.deliveryOptions}
             onChange={(e) => update('deliveryOptions', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             {DELIVERY_OPTIONS.map(opt => (
               <option key={opt} value={opt}>{DELIVERY_LABELS[opt]}</option>
             ))}
-          </select>
+          </Select>
         </div>
         <div>
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('payment')}
           </label>
-          <select
+          <Select
             value={formData.paymentMode}
             onChange={(e) => update('paymentMode', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             {PAYMENT_MODES.map(opt => (
               <option key={opt} value={opt}>{PAYMENT_MODE_LABELS[opt]}</option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
 
@@ -261,14 +256,13 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('shippingCost')}
           </label>
-          <input
+          <Input
             type="number"
             step="0.01"
             min="0"
             value={formData.shippingCost}
             onChange={(e) => update('shippingCost', e.target.value)}
             placeholder="0.00"
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
         </div>
       )}
@@ -278,12 +272,11 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           {t('pickupLocation')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
         </label>
-        <input
+        <Input
           type="text"
           value={formData.pickupLocation}
           onChange={(e) => update('pickupLocation', e.target.value)}
           placeholder={t('locationPlaceholder')}
-          className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
     </>

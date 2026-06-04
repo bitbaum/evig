@@ -10,6 +10,8 @@ import { useMemo, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { CONTRIBUTION_STATUSES, type ContributionStatus } from '@/config/projects'
 import { Mail, Building2, Phone, Save } from 'lucide-react'
 
@@ -83,16 +85,16 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
           <h2 className="text-base font-semibold text-neutral-900 dark:text-white">{t('contributions.title')}</h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{t('contributions.subtitle')}</p>
         </div>
-        <select
+        <Select
           value={filter}
           onChange={e => setFilter(e.target.value as ContributionStatus | 'all')}
-          className={cn(designPrimitive.form.input, 'text-xs w-auto min-h-[40px]')}
+          className="text-xs w-auto"
         >
           <option value="all">{t('contributions.filterAll')}</option>
           {Object.values(CONTRIBUTION_STATUSES).map(s => (
             <option key={s} value={s}>{t(`contributionStatusLabels.${s}`)}</option>
           ))}
-        </select>
+        </Select>
       </div>
 
       {filtered.length === 0 ? (
@@ -140,21 +142,21 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                 </div>
 
                 <div className="grid gap-2 grid-cols-1 sm:grid-cols-12">
-                  <select
+                  <Select
                     value={c.status}
                     onChange={e => patch(c.id, { status: e.target.value })}
-                    className={cn(designPrimitive.form.input, 'text-xs sm:col-span-4 lg:col-span-3 min-h-[40px]')}
+                    className="text-xs sm:col-span-4 lg:col-span-3"
                   >
                     {Object.values(CONTRIBUTION_STATUSES).map(s => (
                       <option key={s} value={s}>{t(`contributionStatusLabels.${s}`)}</option>
                     ))}
-                  </select>
-                  <textarea
+                  </Select>
+                  <Textarea
                     value={c.internalNotes ?? ''}
                     onChange={e => patch(c.id, { internalNotes: e.target.value })}
                     placeholder={t('contributions.notesPlaceholder')}
                     rows={2}
-                    className={cn(designPrimitive.form.textarea, 'text-xs sm:col-span-7 lg:col-span-8')}
+                    className="text-xs sm:col-span-7 lg:col-span-8"
                   />
                   <button
                     type="button"

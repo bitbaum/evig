@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 export default function NewsletterSignup() {
   const t = useTranslations('components.newsletterSignup')
@@ -95,7 +96,7 @@ export default function NewsletterSignup() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
-              <input
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -105,7 +106,7 @@ export default function NewsletterSignup() {
                 aria-invalid={status === 'error'}
                 aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
                 disabled={status === 'loading'}
-                className="flex-1 px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-neutral-100 disabled:cursor-not-allowed text-base"
+                className="flex-1"
               />
               <Button
                 type="submit"

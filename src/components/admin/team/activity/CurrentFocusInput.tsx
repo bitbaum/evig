@@ -65,13 +65,13 @@ export function CurrentFocusInput({
         <Target className="w-4 h-4 text-neutral-500 flex-shrink-0" />
         {isEditing ? (
           <div className="flex items-center gap-2 flex-1">
-            <input
+            <Input
               type="text"
               value={focus}
               onChange={(e) => setFocus(e.target.value)}
               placeholder="Woran arbeitest du?"
               maxLength={200}
-              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="flex-1"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave()
