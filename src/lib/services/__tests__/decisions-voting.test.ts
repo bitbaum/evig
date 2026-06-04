@@ -616,38 +616,30 @@ describe('computeTallies', () => {
   describe('thumbs_up_down', () => {
     it('counts up votes', () => {
       const votes = [{ choice: 'up' }, { choice: 'up' }, { choice: 'up' }];
-      const result = computeTallies('thumbs_up_down', votes as never, []);
-      // @ts-expect-error
+      const result = computeTallies('thumbs_up_down', votes as never, []) as { counts: { up: number; down: number }; passed: boolean; totalVotes: number };
       expect(result.counts.up).toBe(3);
-      // @ts-expect-error
       expect(result.counts.down).toBe(0);
-      // @ts-expect-error
       expect(result.passed).toBe(true);
       expect(result.totalVotes).toBe(3);
     });
 
     it('counts down votes', () => {
       const votes = [{ choice: 'down' }, { choice: 'down' }];
-      const result = computeTallies('thumbs_up_down', votes as never, []);
-      // @ts-expect-error
+      const result = computeTallies('thumbs_up_down', votes as never, []) as { counts: { up: number; down: number }; passed: boolean };
       expect(result.counts.down).toBe(2);
-      // @ts-expect-error
       expect(result.passed).toBe(false);
     });
 
-    it('passed=false on tie (equal up and down)', () => {
+    it('passed=false on tie (equal up and down) — strict majority required', () => {
       const votes = [{ choice: 'up' }, { choice: 'down' }];
-      const result = computeTallies('thumbs_up_down', votes as never, []);
-      // @ts-expect-error — strict "more up than down" rule means a tie doesn't pass
+      const result = computeTallies('thumbs_up_down', votes as never, []) as { passed: boolean };
       expect(result.passed).toBe(false);
     });
 
     it('handles zero votes', () => {
-      const result = computeTallies('thumbs_up_down', [], []);
+      const result = computeTallies('thumbs_up_down', [], []) as { counts: { up: number; down: number }; passed: boolean; totalVotes: number };
       expect(result.totalVotes).toBe(0);
-      // @ts-expect-error
       expect(result.counts.up).toBe(0);
-      // @ts-expect-error
       expect(result.passed).toBe(false);
     });
 
@@ -657,12 +649,9 @@ describe('computeTallies', () => {
         { choice: 'up' }, { choice: 'up' },
         { choice: 'down' }, { choice: 'down' },
       ];
-      const result = computeTallies('thumbs_up_down', votes as never, []);
-      // @ts-expect-error
+      const result = computeTallies('thumbs_up_down', votes as never, []) as { counts: { up: number; down: number }; passed: boolean; totalVotes: number };
       expect(result.counts.up).toBe(5);
-      // @ts-expect-error
       expect(result.counts.down).toBe(2);
-      // @ts-expect-error
       expect(result.passed).toBe(true);
       expect(result.totalVotes).toBe(7);
     });
