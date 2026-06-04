@@ -17,7 +17,7 @@ import {
   users,
   repairerProfiles,
 } from '@/db/schema'
-import { eq, and, desc, sql, type SQL } from 'drizzle-orm'
+import { eq, and, asc, desc, sql, type SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const customer = alias(users, 'customer')
@@ -113,6 +113,38 @@ export interface AppointmentStats {
   requested: number
   in_progress: number
   completed_today: number
+}
+
+export interface AssignableRepairer {
+  user_id: string
+  name: string | null
+  email: string
+  city: string | null
+  canton: string | null
+}
+
+/**
+ * Active, verified repairers eligible to be assigned to a booking.
+ * Used by the admin appointment-assign UI.
+ */
+export async function listActiveRepairers(): Promise<AssignableRepairer[]> {
+  return db
+    .select({
+      user_id: repairerProfiles.userId,
+      name: users.name,
+      email: users.email,
+      city: repairerProfiles.city,
+      canton: repairerProfiles.canton,
+    })
+    .from(repairerProfiles)
+    .innerJoin(users, eq(repairerProfiles.userId, users.id))
+    .where(
+      and(
+        eq(repairerProfiles.isActive, true),
+        eq(repairerProfiles.isVerified, true),
+      ),
+    )
+    .orderBy(asc(users.name))
 }
 
 /**

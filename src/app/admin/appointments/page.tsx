@@ -23,7 +23,8 @@ import {
 } from '@/config/booking-status'
 import { ROUTES } from '@/config/routes'
 import { formatDateShort } from '@/lib/date-formats'
-import { listAppointments, getAppointmentStats } from '@/lib/services/appointments'
+import { listAppointments, getAppointmentStats, listActiveRepairers } from '@/lib/services/appointments'
+import { AssignRepairerSelect } from './AssignRepairerSelect'
 
 export const metadata: Metadata = {
   title: 'Termine',
@@ -43,9 +44,10 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
   const params = await searchParams
   const status = params.status || undefined
 
-  const [stats, { appointments }] = await Promise.all([
+  const [stats, { appointments }, repairers] = await Promise.all([
     getAppointmentStats(),
     listAppointments({ status, limit: 100 }),
+    listActiveRepairers(),
   ])
 
   const statCards: StatCardItem[] = [
@@ -133,6 +135,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                   <th className="px-4 py-3 font-medium">Beschreibung</th>
                   <th className="px-4 py-3 font-medium">Dringlichkeit</th>
                   <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium">Repairer</th>
                   <th className="px-4 py-3 font-medium">Erstellt</th>
                 </tr>
               </thead>
@@ -167,6 +170,17 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge.color}`}>
                           {statusBadge.label}
                         </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {row.repairer_name ? (
+                          <span className="text-text-secondary">{row.repairer_name}</span>
+                        ) : (
+                          <AssignRepairerSelect
+                            appointmentId={row.id}
+                            alreadyAssigned={!!row.repairer_id}
+                            repairers={repairers}
+                          />
+                        )}
                       </td>
                       <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">
                         {row.created_at ? formatDateShort(row.created_at) : '—'}
