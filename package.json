@@ -69,6 +69,7 @@
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",
+    "cron-parser": "^5.5.0",
     "csv-parse": "^6.1.0",
     "drizzle-orm": "^0.45.1",
     "exceljs": "^4.4.0",

@@ -51,6 +51,10 @@
     {
       "path": "/api/cron/prune-audit-log",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/wake-recurring-tasks",
+      "schedule": "0 * * * *"
     }
   ]
 }
