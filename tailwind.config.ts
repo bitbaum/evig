@@ -15,13 +15,48 @@ const config: Config = {
         sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Semantic tokens — backed by CSS custom properties in globals.css.
-        // These flip automatically with the .dark class on <html>.
-        canvas: 'var(--color-bg)',
-        surface: 'var(--color-surface)',
-        'surface-raised': 'var(--color-surface-raised)',
-        muted: 'var(--color-text-muted)',
-        faint: 'var(--color-text-faint)',
+        // ─── Semantic token layer — FINAL DESIGN SYSTEM ──────────────────────
+        // All backed by CSS custom properties in globals.css (light + dark
+        // values defined once). Component authors should use ONLY these
+        // tokens — never palette scales (primary-100, neutral-700, etc.).
+        // Palette scales remain below for legacy code during migration.
+        //
+        // Naming follows role, not appearance: a button is `bg-action`, not
+        // `bg-green-600`. A card is `bg-surface-base`, not `bg-white`.
+        // ───────────────────────────────────────────────────────────────────
+        surface: {
+          page:    'var(--surface-page)',    // body background
+          base:    'var(--surface-base)',    // cards, panels, modals
+          raised:  'var(--surface-raised)',  // section backgrounds, secondary fills
+          overlay: 'var(--surface-overlay)', // dropdowns, tooltips, popovers
+        },
+        text: {
+          primary:   'var(--text-primary)',   // headings, primary body text
+          secondary: 'var(--text-secondary)', // body text, descriptions
+          tertiary:  'var(--text-tertiary)',  // meta, labels, secondary info
+          muted:     'var(--text-muted)',     // placeholders, disabled state
+          inverted:  'var(--text-inverted)',  // text on dark/action surfaces
+        },
+        border: {
+          subtle:      'var(--border-subtle)',      // divider lines, table rows
+          DEFAULT:     'var(--border-default)',     // input borders, card edges
+          strong:      'var(--border-strong)',      // focus rings, emphasis
+          interactive: 'var(--border-strong)',      // alias — borders on hover/focus
+        },
+        // The brand. Used ONLY on action surfaces (primary buttons, links,
+        // focus rings, key icons) — everything else stays achromatic.
+        action: {
+          DEFAULT: 'var(--accent-action)',
+          hover:   'var(--accent-action-hover)',
+          muted:   'var(--accent-action-muted)',  // subtle fills (badges, hover bg)
+          text:    'var(--accent-action-text)',   // text color of action elements
+        },
+        // ─── Legacy aliases (kept for migration; do NOT use in new code) ───
+        canvas: 'var(--surface-page)',
+        muted: 'var(--text-muted)',
+        faint: 'var(--text-muted)',
+        // 'surface' DEFAULT alias points to surface-base for backward compat
+        // with `bg-surface` callers — surface.base is the preferred form.
 
         // Primary brand color (Green - Sustainability)
         primary: {

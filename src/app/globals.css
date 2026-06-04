@@ -29,26 +29,48 @@
     --color-text-muted:     #525252;
     --color-text-faint:     #a3a3a3;
 
-    /* Accent — RevampIT green stays as the brand accent */
-    --color-accent:         var(--primitive-green-600);
-    --color-accent-hover:   var(--primitive-green-700);
+    /* ─── FINAL DESIGN SYSTEM — semantic tokens (light) ──────────────────
+     * Architecture: achromatic surfaces + green ONLY on action surfaces.
+     * RevampIT brand identity preserved via --accent-action; everything
+     * else (text, surfaces, borders) is neutral.
+     *
+     * Component code should reference these via Tailwind utility classes
+     * (bg-surface-base, text-text-primary, bg-action, etc.) — NEVER via
+     * palette scales (bg-primary-100, text-neutral-700, ...). Lint
+     * enforces this in feature code.
+     * ───────────────────────────────────────────────────────────────── */
 
-    /* ─── Public-surface SSOT (fleetcrown / x.ai-inspired) ─────────────────
-     * Achromatic surfaces, RevampIT green as the only chromatic accent.
-     * Used by .ui-public-* classes below for landing / marketing pages.
-     * Light-mode values track foreground; .dark below flips them. */
-    --text-primary:          #0a0a0a;       /* near-black */
-    --text-secondary:        #404040;       /* neutral-700 */
-    --text-tertiary:         #737373;       /* neutral-500 */
-    --text-muted:            #a3a3a3;       /* neutral-400 */
-    --text-inverted:         #fafafa;       /* page bg, used on dark CTAs */
-    --surface-page:          #fafafa;
-    --surface-base:          #ffffff;
-    --surface-raised:        #f5f5f5;
-    --surface-overlay:       #ededed;
+    /* Text — role-based */
+    --text-primary:          #0a0a0a;       /* headings, primary body */
+    --text-secondary:        #404040;       /* body, descriptions */
+    --text-tertiary:         #737373;       /* meta, labels */
+    --text-muted:            #a3a3a3;       /* placeholders, disabled */
+    --text-inverted:         #fafafa;       /* text on dark/action surfaces */
+
+    /* Surfaces — role-based */
+    --surface-page:          #fafafa;       /* body bg */
+    --surface-base:          #ffffff;       /* cards, panels, modals */
+    --surface-raised:        #f5f5f5;       /* sections, secondary fills */
+    --surface-overlay:       #ededed;       /* dropdowns, tooltips */
+
+    /* Borders — role-based */
     --border-subtle:         rgba(0, 0, 0, 0.06);
     --border-default:        rgba(0, 0, 0, 0.10);
     --border-strong:         rgba(0, 0, 0, 0.20);
+
+    /* Action accent — RevampIT brand green. The ONLY chromatic color
+     * outside status badges. Used for primary buttons, links, focus
+     * rings, key icons. Everything else stays achromatic. */
+    --accent-action:         var(--primitive-green-600);    /* #16a34a */
+    --accent-action-hover:   var(--primitive-green-700);    /* #15803d — darker on hover */
+    --accent-action-muted:   rgba(22, 163, 74, 0.10);        /* subtle fills */
+    --accent-action-text:    #ffffff;                        /* text ON action surfaces */
+
+    /* ─── Legacy aliases (kept for migration; do NOT use in new code) ──
+     * --color-* names predate the role-based naming above. They map to
+     * the same values; will be removed once all callers migrate. */
+    --color-accent:          var(--accent-action);
+    --color-accent-hover:    var(--accent-action-hover);
     /* Fluid display type — single SSOT, used by .ui-public-hero-title */
     --hero-title-min:        2.75rem;        /* 44px — fits iPhone SE */
     --hero-title-fluid:      8.5vw;
@@ -73,22 +95,38 @@
     --color-text:           #ffffff;
     --color-text-muted:     #a3a3a3;  /* neutral-400 */
     --color-text-faint:     #737373;  /* neutral-500 */
-    --color-accent:         var(--primitive-green-500);
-    --color-accent-hover:   var(--primitive-green-600);
+    /* ─── FINAL DESIGN SYSTEM — semantic tokens (dark) ───────────────────
+     * Same token names as light mode — only values flip. Component code
+     * never references light/dark specifically; tokens handle the switch. */
 
-    /* Public-surface SSOT — dark flips text + surfaces; accent stays brand-green */
+    /* Text — role-based */
     --text-primary:          #ffffff;
     --text-secondary:        #a3a3a3;
     --text-tertiary:         #737373;
     --text-muted:            #525252;
     --text-inverted:         #0a0a0a;
+
+    /* Surfaces — role-based */
     --surface-page:          #0a0a0a;
     --surface-base:          #131313;
     --surface-raised:        #1f1f1f;
     --surface-overlay:       #2a2a2a;
+
+    /* Borders — role-based */
     --border-subtle:         rgba(255, 255, 255, 0.06);
     --border-default:        rgba(255, 255, 255, 0.10);
     --border-strong:         rgba(255, 255, 255, 0.24);
+
+    /* Action — green stays the brand pulse in dark too, slightly brighter
+     * so it pops against the near-black surfaces. */
+    --accent-action:         var(--primitive-green-500);    /* #22c55e */
+    --accent-action-hover:   var(--primitive-green-600);    /* #16a34a */
+    --accent-action-muted:   rgba(34, 197, 94, 0.12);
+    --accent-action-text:    #0a0a0a;                        /* dark text on bright action */
+
+    /* Legacy aliases */
+    --color-accent:          var(--accent-action);
+    --color-accent-hover:    var(--accent-action-hover);
   }
 
   html {

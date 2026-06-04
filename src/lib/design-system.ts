@@ -392,17 +392,22 @@ export const designPrimitive = {
 
   // ── Forms ─────────────────────────────────────────────────────────────────
   // `default` variants: page-level (page bg #0a0a0a, container surface neutral-900).
-  // `elevated` variants: inside Modal / aside / toolbar (container surface
-  // neutral-800 or above) — input bg lifts to neutral-700 so it stays visible.
+  // Form controls — semantic tokens only. The tokens (--surface-base,
+  // --text-primary, --border-default, --accent-action) flip automatically
+  // between light and dark via globals.css, so no `dark:` variants needed.
+  //
+  // `default` variant: sits on surface-page (the body background).
+  // `elevated` variant: sits inside a surface-base panel (e.g. a modal)
+  //   — bg lifts to surface-raised so it stays visible against the panel.
   form: {
-    input:            'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 dark:border-white/[0.08] dark:bg-neutral-900 dark:text-white dark:placeholder:text-neutral-600',
-    inputElevated:    'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 dark:border-white/[0.08] dark:bg-neutral-700 dark:text-white dark:placeholder:text-neutral-500',
-    textarea:         'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 dark:border-white/[0.08] dark:bg-neutral-900 dark:text-white dark:placeholder:text-neutral-600',
-    textareaElevated: 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 dark:border-white/[0.08] dark:bg-neutral-700 dark:text-white dark:placeholder:text-neutral-500',
-    select:           'rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:border-white/[0.08] dark:bg-neutral-900 dark:text-white',
-    selectElevated:   'rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:border-white/[0.08] dark:bg-neutral-700 dark:text-white',
-    label:    'block text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1',
-    hint:     'mt-1 text-xs text-neutral-400 dark:text-neutral-500',
+    input:            'w-full rounded-md border border-border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    inputElevated:    'w-full rounded-md border border-border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    textarea:         'w-full rounded-md border border-border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    textareaElevated: 'w-full rounded-md border border-border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    select:           'rounded-md border border-border bg-surface-base px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
+    selectElevated:   'rounded-md border border-border bg-surface-raised px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
+    label:    'block text-xs font-medium uppercase tracking-wide text-text-tertiary mb-1',
+    hint:     'mt-1 text-xs text-text-muted',
     error:    'mt-1 text-xs text-error-600 dark:text-error-400',
   },
 
