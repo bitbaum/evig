@@ -6612,7 +6612,21 @@
       "edit": "편집",
       "create": "만들기",
       "home": "홈",
-      "detail": "세부 정보"
+      "detail": "세부 정보",
+      "protocols": "회의록",
+      "tasks": "작업",
+      "decisions": "결정",
+      "projects": "프로젝트",
+      "timecards": "근무카드",
+      "payroll": "급여",
+      "donations": "기부",
+      "membership": "멤버십",
+      "intake": "입고",
+      "reviews": "리뷰",
+      "analytics": "분석",
+      "kennzahlen": "지표",
+      "wirkung": "영향",
+      "transparenz": "투명성"
     },
     "currencySelector": {
       "selectCurrency": "통화 선택",

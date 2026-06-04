@@ -22,6 +22,7 @@ import {
   TASK_PRIORITY_COLORS,
   TASK_STATUSES,
   TASK_PRIORITIES,
+  REQUEST_STATUSES,
 } from '@/config/tasks'
 import type { TaskListItem } from '@/lib/schemas/tasks'
 import {
@@ -160,11 +161,11 @@ async function getTasks(
       (
         SELECT COUNT(*)::int
         FROM ${TABLE_NAMES.TASK_REQUESTS} tr
-        WHERE tr.task_id = t.id AND tr.status = 'pending'
+        WHERE tr.task_id = t.id AND tr.status = '${REQUEST_STATUSES.PENDING}'
       ) as open_request_count,
       EXISTS (
         SELECT 1 FROM ${TABLE_NAMES.TASK_REQUESTS} tr
-        WHERE tr.task_id = t.id AND tr.status = 'pending' AND tr.requested_user_id IS NULL
+        WHERE tr.task_id = t.id AND tr.status = '${REQUEST_STATUSES.PENDING}' AND tr.requested_user_id IS NULL
       ) as has_open_broadcast
     FROM ${TABLE_NAMES.TASKS} t
     LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id

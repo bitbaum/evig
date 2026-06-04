@@ -6675,7 +6675,21 @@
       "edit": "Edit",
       "create": "Create",
       "home": "Home",
-      "detail": "Detail"
+      "detail": "Detail",
+      "protocols": "Protocols",
+      "tasks": "Tasks",
+      "decisions": "Decisions",
+      "projects": "Projects",
+      "timecards": "Timecards",
+      "payroll": "Payroll",
+      "donations": "Donations",
+      "membership": "Membership",
+      "intake": "Intake",
+      "reviews": "Reviews",
+      "analytics": "Analytics",
+      "kennzahlen": "Metrics",
+      "wirkung": "Impact",
+      "transparenz": "Transparency"
     },
     "currencySelector": {
       "selectCurrency": "Select currency",

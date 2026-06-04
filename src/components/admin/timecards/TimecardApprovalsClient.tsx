@@ -39,6 +39,7 @@ import { formatTimecardPeriod } from '@/lib/team/timecard-display'
 interface ApprovalRow {
   id: string
   user_id: string
+  team_profile_id: string | null
   user_name: string | null
   user_email: string
   department: string | null
@@ -307,14 +308,16 @@ export function TimecardApprovalsClient() {
                         <span className="font-medium text-neutral-900 dark:text-white truncate">
                           {row.user_name || row.user_email}
                         </span>
-                        <Link
-                          href={`/admin/team/${row.user_id}`}
-                          target="_blank"
-                          className="text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
-                          aria-label="Profil in neuem Tab öffnen"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </Link>
+                        {row.team_profile_id && (
+                          <Link
+                            href={`/admin/team/${row.team_profile_id}`}
+                            target="_blank"
+                            className="text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
+                            aria-label="Profil in neuem Tab öffnen"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </Link>
+                        )}
                       </div>
                       {subtitleParts && (
                         <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">

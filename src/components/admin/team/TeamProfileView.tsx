@@ -10,7 +10,6 @@
 import { useState } from 'react'
 import {
   ArrowLeft,
-  Edit2,
   Mail,
   Phone,
   Calendar,
@@ -24,7 +23,6 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import {
   getEmploymentTypeLabel,
@@ -44,7 +42,6 @@ import { ROUTES } from '@/config/routes'
 export function TeamProfileView({
   profile,
   isSuperAdmin,
-  onEdit,
   onBack,
 }: TeamProfileViewProps) {
   const [currentFocus, setCurrentFocus] = useState(profile.current_focus)
@@ -58,7 +55,9 @@ export function TeamProfileView({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header — the "Bearbeiten" action lives on the TeamProfileTabs strip
+          above this view (always visible across tabs). Showing a second one
+          inside the overview tab was redundant; only the back link stays. */}
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
@@ -67,14 +66,6 @@ export function TeamProfileView({
           <ArrowLeft className="w-5 h-5" />
           {t('backToTeam')}
         </button>
-        <Button
-          onClick={onEdit}
-          variant="primary"
-          className="flex items-center gap-2"
-        >
-          <Edit2 className="w-4 h-4" />
-          {t('edit')}
-        </Button>
       </div>
 
       {/* Profile Header Card */}

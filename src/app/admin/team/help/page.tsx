@@ -51,8 +51,8 @@ async function getHelpStats(): Promise<HelpStats> {
         [HELP_REQUEST_STATUS.RESOLVED, weekAgo]
       ),
       query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1 AND urgency = '${URGENCY.URGENT}'`,
-        [HELP_REQUEST_STATUS.OPEN]
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1 AND urgency = $2`,
+        [HELP_REQUEST_STATUS.OPEN, URGENCY.URGENT]
       ),
     ])
 

@@ -29,18 +29,14 @@ export default async function DecisionDetailPage({
 
   const { id } = await params
 
-  const [userResult, decisionResult] = await Promise.all([
-    query<{ id: string }>(
-      `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [session.user.email]
-    ),
-    query<{ title: string; decision_type: string }>(
-      `SELECT title, decision_type FROM decisions WHERE id = $1`,
-      [id]
-    ),
-  ])
+  // session.user.id is populated by Auth.js — no need for an extra users-by-email
+  // lookup. We only fetch the decision for the page header (title + type).
+  const decisionResult = await query<{ title: string; decision_type: string }>(
+    `SELECT title, decision_type FROM ${TABLE_NAMES.DECISIONS} WHERE id = $1`,
+    [id]
+  )
 
-  const currentUserId = userResult.rows[0]?.id || ''
+  const currentUserId = session.user.id
   const isAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
   const decision = decisionResult.rows[0]
   const decisionTitle = decision?.title || 'Entscheidung'

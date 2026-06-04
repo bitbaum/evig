@@ -7,8 +7,7 @@
  * single most-important thing to surface, since the user has to act on them.
  */
 
-import { formatTimecardDuration } from '@/config/timecards'
-import { TIMECARD_STATUS_LABELS, TIMECARD_STATUS_COLORS } from '@/config/timecards'
+import { formatTimecardDuration, TIMECARD_STATUS_LABELS, TIMECARD_STATUS_COLORS, TIMECARD_STATUSES } from '@/config/timecards'
 import type { TimecardStatus } from '@/config/timecards'
 import { formatDateShort } from '@/lib/date-formats'
 import { Clock } from 'lucide-react'
@@ -76,7 +75,7 @@ export function TimecardHistorySidebar({ history }: Props) {
                       {row.reviewedAt ? 'Geprüft' : 'Eingereicht'} {formatDateShort(dateRef)}
                     </p>
                   )}
-                  {row.status === 'rejected' && row.reviewNotes && (
+                  {row.status === TIMECARD_STATUSES.REJECTED && row.reviewNotes && (
                     <p className="mt-2 text-xs text-error-700 dark:text-error-300 bg-error-50 dark:bg-error-500/10 rounded-md px-2 py-1.5">
                       {row.reviewNotes}
                     </p>

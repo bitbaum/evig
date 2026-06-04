@@ -8,8 +8,6 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
 import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
 import { Plus, Vote } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -28,11 +26,8 @@ export default async function DecisionsAdminPage() {
     return null
   }
 
-  const userResult = await query<{ id: string }>(
-    `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-    [session.user.email]
-  )
-  const currentUserId = userResult.rows[0]?.id || ''
+  // session.user.id is populated by Auth.js — no need for an extra users lookup.
+  const currentUserId = session.user.id
   const isAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
   const stats = currentUserId

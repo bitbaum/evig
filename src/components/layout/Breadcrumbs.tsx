@@ -11,7 +11,10 @@ interface BreadcrumbsProps {
   className?: string
 }
 
-// Segments that map directly to a breadcrumb translation key
+// Segments that map directly to a breadcrumb translation key.
+// If a route exists in src/config/routes.ts that produces a URL segment not in
+// this map, the breadcrumb falls back to a Title-Cased English label — which
+// is wrong on every non-English locale. Keep this in sync with admin routes.
 const SEGMENT_KEYS: Record<string, string> = {
   admin: 'admin', products: 'products', workshops: 'workshops',
   services: 'services', users: 'users', team: 'team',
@@ -24,6 +27,12 @@ const SEGMENT_KEYS: Record<string, string> = {
   category: 'category', orders: 'orders', blog: 'blog',
   marketplace: 'marketplace', 'it-hilfe': 'itHilfe',
   new: 'new', edit: 'edit', create: 'create',
+  // Admin routes added since the SSOT was last touched
+  protocols: 'protocols', tasks: 'tasks', decisions: 'decisions',
+  projects: 'projects', timecards: 'timecards', payroll: 'payroll',
+  donations: 'donations', membership: 'membership', intake: 'intake',
+  reviews: 'reviews', analytics: 'analytics', kennzahlen: 'kennzahlen',
+  wirkung: 'wirkung', transparenz: 'transparenz',
 }
 
 export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {

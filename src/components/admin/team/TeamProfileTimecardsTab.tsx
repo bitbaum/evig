@@ -19,6 +19,7 @@ import { apiFetch } from '@/lib/api/client'
 import {
   TIMECARD_STATUS_LABELS,
   TIMECARD_STATUS_COLORS,
+  TIMECARD_STATUSES,
   formatTimecardDuration,
   type TimecardStatus,
 } from '@/config/timecards'
@@ -70,7 +71,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const totalMinutes = rows.reduce((sum, r) => sum + (Number(r.total_minutes) || 0), 0)
-  const submittedCount = rows.filter(r => r.status === 'submitted').length
+  const submittedCount = rows.filter(r => r.status === TIMECARD_STATUSES.SUBMITTED).length
 
   return (
     <div className="space-y-3">
@@ -140,7 +141,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
                           {row.reviewed_at ? 'Geprüft' : 'Eingereicht'} {formatDateShort(dateRef)}
                         </p>
                       )}
-                      {row.status === 'rejected' && row.review_notes && (
+                      {row.status === TIMECARD_STATUSES.REJECTED && row.review_notes && (
                         <p className="mt-2 text-xs text-error-700 dark:text-error-300 bg-error-50 dark:bg-error-500/10 rounded-md px-2 py-1.5">
                           {row.review_notes}
                         </p>

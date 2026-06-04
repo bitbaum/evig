@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { db } from '@/db'
 import { taskProjects, tasks, users } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -63,7 +64,7 @@ async function getProjectTasks(id: string) {
         dueDate: tasks.dueDate,
         assignedToName: users.name,
         completionCount: sql<number>`(
-          SELECT COUNT(*)::int FROM task_completions tc WHERE tc.task_id = ${tasks.id}
+          SELECT COUNT(*)::int FROM ${sql.raw(TABLE_NAMES.TASK_COMPLETIONS)} tc WHERE tc.task_id = ${tasks.id}
         )`,
       })
       .from(tasks)

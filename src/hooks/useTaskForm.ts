@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { TASK_PRIORITIES } from '@/config/tasks'
+import { TASK_PRIORITIES, TASK_TYPES, TASK_CATEGORIES } from '@/config/tasks'
 import type { TaskEditItem } from '@/lib/schemas/tasks'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
@@ -37,8 +37,8 @@ export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>
     title: task?.title ?? prefill?.title ?? '',
     description: task?.description ?? prefill?.description ?? '',
     instructions: task?.instructions ?? prefill?.instructions ?? '',
-    task_type: task?.task_type ?? 'recurring_as_needed',
-    category: task?.category ?? 'other',
+    task_type: task?.task_type ?? TASK_TYPES.RECURRING_AS_NEEDED,
+    category: task?.category ?? TASK_CATEGORIES.OTHER,
     priority: task?.priority ?? prefill?.priority ?? TASK_PRIORITIES.NORMAL,
     schedule_human: task?.schedule_human ?? '',
     estimated_minutes: task?.estimated_minutes?.toString() ?? '',

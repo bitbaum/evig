@@ -24,7 +24,8 @@ export function validateAudioUpload(file: AudioFileLike): string | null {
   }
 
   if (file.size > FILE_SIZE_LIMITS.AUDIO_MAX) {
-    return 'Die Audiodatei ist zu gross (maximal 25 MB).'
+    const maxMb = Math.round(FILE_SIZE_LIMITS.AUDIO_MAX / (1024 * 1024))
+    return `Die Audiodatei ist zu gross (maximal ${maxMb} MB).`
   }
 
   if (file.type && !ALLOWED_AUDIO_MIME_TYPES.has(file.type)) {

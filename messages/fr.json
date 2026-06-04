@@ -6617,7 +6617,21 @@
       "edit": "Modifier",
       "create": "Créer",
       "home": "Accueil",
-      "detail": "Détail"
+      "detail": "Détail",
+      "protocols": "Protocoles",
+      "tasks": "Tâches",
+      "decisions": "Décisions",
+      "projects": "Projets",
+      "timecards": "Feuilles de temps",
+      "payroll": "Paie",
+      "donations": "Dons",
+      "membership": "Adhésion",
+      "intake": "Réception",
+      "reviews": "Avis",
+      "analytics": "Analyses",
+      "kennzahlen": "Indicateurs",
+      "wirkung": "Impact",
+      "transparenz": "Transparence"
     },
     "currencySelector": {
       "selectCurrency": "Choisir la devise",

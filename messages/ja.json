@@ -6612,7 +6612,21 @@
       "edit": "編集",
       "create": "作成",
       "home": "ホーム",
-      "detail": "詳細"
+      "detail": "詳細",
+      "protocols": "議事録",
+      "tasks": "タスク",
+      "decisions": "決定",
+      "projects": "プロジェクト",
+      "timecards": "タイムカード",
+      "payroll": "給与",
+      "donations": "寄付",
+      "membership": "メンバーシップ",
+      "intake": "受け入れ",
+      "reviews": "レビュー",
+      "analytics": "分析",
+      "kennzahlen": "指標",
+      "wirkung": "インパクト",
+      "transparenz": "透明性"
     },
     "currencySelector": {
       "selectCurrency": "通貨を選択",

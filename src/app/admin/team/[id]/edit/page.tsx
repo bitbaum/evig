@@ -54,11 +54,31 @@ interface ProfileData {
   emergency_contact_relation: string | null
   hr_notes: string | null
   is_active: boolean
+  // Lifecycle (visible to any team admin)
+  end_date: string | null
+  exit_reason: string | null
+  work_state: string
+  // Sensitive (super-admin only; null otherwise)
+  hourly_rate_cents: number | null
+  salary_chf: string | number | null
+  salary_effective_date: string | null
+  ahv_number: string | null
+  canton_tax_code: string | null
 }
 
-async function getProfile(id: string, includeHrNotes = false): Promise<ProfileData | null> {
+async function getProfile(id: string, includeSensitive = false): Promise<ProfileData | null> {
   try {
-    const hrNotesColumn = includeHrNotes ? ', tp.hr_notes' : ''
+    // hr_notes + compensation + AHV/canton are all super-admin-only.
+    // Lifecycle (end_date / exit_reason / work_state) is admin-level.
+    const sensitiveColumns = includeSensitive
+      ? `,
+        tp.hr_notes,
+        tp.hourly_rate_cents,
+        tp.salary_chf,
+        tp.salary_effective_date,
+        tp.ahv_number,
+        tp.canton_tax_code`
+      : ''
 
     const result = await query<ProfileData>(
       `SELECT
@@ -82,9 +102,11 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
         tp.phone,
         tp.emergency_contact_name,
         tp.emergency_contact_phone,
-        tp.emergency_contact_relation
-        ${hrNotesColumn},
-        tp.is_active
+        tp.emergency_contact_relation,
+        tp.end_date,
+        tp.exit_reason,
+        tp.work_state,
+        tp.is_active${sensitiveColumns}
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp
        JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
        WHERE tp.id = $1`,

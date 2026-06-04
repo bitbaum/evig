@@ -126,9 +126,18 @@ export const POST = withAdmin('team', async (request, session) => {
     const data = validation.data
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
-    // Only super admins can set hr_notes
-    if (data.hr_notes && !isSuperAdminUser) {
-      delete (data as { hr_notes?: string }).hr_notes
+    // Sensitive fields are super-admin-only: hr_notes, compensation (hourly/salary),
+    // AHV/canton. Strip them from the payload if the requester is not super admin
+    // (rather than failing, since the form may surface these conditionally and we
+    // don't want to bounce the whole insert for one disallowed field).
+    if (!isSuperAdminUser) {
+      const d = data as Record<string, unknown>
+      delete d.hr_notes
+      delete d.hourly_rate_cents
+      delete d.salary_chf
+      delete d.salary_effective_date
+      delete d.ahv_number
+      delete d.canton_tax_code
     }
 
     // Check if user exists
@@ -175,6 +184,17 @@ export const POST = withAdmin('team', async (request, session) => {
         emergencyContactRelation: data.emergency_contact_relation || null,
         hrNotes: data.hr_notes || null,
         isActive: data.is_active ?? true,
+        // Lifecycle fields — admin-level
+        endDate: data.end_date || null,
+        exitReason: data.exit_reason || null,
+        workState: data.work_state || 'active',
+        // Sensitive fields — already stripped above for non-super-admin,
+        // so these are no-ops in that path
+        hourlyRateCents: data.hourly_rate_cents ?? null,
+        salaryChf: data.salary_chf != null ? String(data.salary_chf) : null,
+        salaryEffectiveDate: data.salary_effective_date || null,
+        ahvNumber: data.ahv_number || null,
+        cantonTaxCode: data.canton_tax_code || null,
       })
       .returning({ id: teamProfiles.id })
 

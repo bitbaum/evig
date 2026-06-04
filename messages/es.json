@@ -6638,7 +6638,21 @@
       "edit": "Editar",
       "create": "Crear",
       "home": "Inicio",
-      "detail": "Detalle"
+      "detail": "Detalle",
+      "protocols": "Protocolos",
+      "tasks": "Tareas",
+      "decisions": "Decisiones",
+      "projects": "Proyectos",
+      "timecards": "Hojas de horas",
+      "payroll": "Nómina",
+      "donations": "Donaciones",
+      "membership": "Membresía",
+      "intake": "Recepción",
+      "reviews": "Reseñas",
+      "analytics": "Analítica",
+      "kennzahlen": "Indicadores",
+      "wirkung": "Impacto",
+      "transparenz": "Transparencia"
     },
     "currencySelector": {
       "selectCurrency": "Seleccionar moneda",

@@ -97,9 +97,9 @@ export default function TaskFormClient({ task }: Props) {
           required
           htmlFor="task_type"
           hint={
-            formData.task_type === 'one_time' ? 'Wird nach Erledigung als abgeschlossen markiert'
-            : formData.task_type === 'recurring_scheduled' ? 'Wiederholt sich nach einem festen Zeitplan'
-            : formData.task_type === 'recurring_as_needed' ? 'Wird bei Bedarf erledigt, kein fester Zeitplan'
+            formData.task_type === TASK_TYPES.ONE_TIME ? 'Wird nach Erledigung als abgeschlossen markiert'
+            : formData.task_type === TASK_TYPES.RECURRING_SCHEDULED ? 'Wiederholt sich nach einem festen Zeitplan'
+            : formData.task_type === TASK_TYPES.RECURRING_AS_NEEDED ? 'Wird bei Bedarf erledigt, kein fester Zeitplan'
             : undefined
           }
         >
@@ -169,7 +169,7 @@ export default function TaskFormClient({ task }: Props) {
           />
         </FormField>
 
-        {formData.task_type === 'recurring_scheduled' && (
+        {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED && (
           <FormField label="Zeitplan" htmlFor="schedule_human">
             <Input
               type="text"

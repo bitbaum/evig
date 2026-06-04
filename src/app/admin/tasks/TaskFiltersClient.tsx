@@ -58,10 +58,10 @@ export default function TaskFiltersClient() {
           />
         </div>
 
-        <div className="flex items-center gap-4">
-          <Filter className="w-5 h-5 text-neutral-500" />
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-neutral-600 dark:text-neutral-400">Kategorie:</label>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full md:w-auto">
+          <Filter className="w-5 h-5 text-neutral-500 shrink-0" />
+          <div className="flex items-center gap-2 min-w-0">
+            <label className="text-sm text-neutral-600 dark:text-neutral-400 shrink-0">Kategorie:</label>
             <Select
               className="py-1 text-sm"
               value={searchParams.get('category') || ''}
@@ -73,8 +73,8 @@ export default function TaskFiltersClient() {
               ))}
             </Select>
           </div>
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-neutral-600 dark:text-neutral-400">Status:</label>
+          <div className="flex items-center gap-2 min-w-0">
+            <label className="text-sm text-neutral-600 dark:text-neutral-400 shrink-0">Status:</label>
             <Select
               className="py-1 text-sm"
               value={searchParams.get('status') || ''}
@@ -86,8 +86,8 @@ export default function TaskFiltersClient() {
               ))}
             </Select>
           </div>
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-neutral-600 dark:text-neutral-400">Priorität:</label>
+          <div className="flex items-center gap-2 min-w-0">
+            <label className="text-sm text-neutral-600 dark:text-neutral-400 shrink-0">Priorität:</label>
             <Select
               className="py-1 text-sm"
               value={searchParams.get('priority') || ''}

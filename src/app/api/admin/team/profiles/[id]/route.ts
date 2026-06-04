@@ -32,7 +32,7 @@ export const GET = withAdmin<{ id: string }>('team', async (request, session, co
     const { id } = context!.params!
     const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
-    // Build select columns - conditionally include hrNotes for super admins
+    // Build select columns - conditionally include sensitive fields for super admins
     const selectCols = {
       id: teamProfiles.id,
       user_id: teamProfiles.userId,
@@ -56,14 +56,26 @@ export const GET = withAdmin<{ id: string }>('team', async (request, session, co
       emergency_contact_name: teamProfiles.emergencyContactName,
       emergency_contact_phone: teamProfiles.emergencyContactPhone,
       emergency_contact_relation: teamProfiles.emergencyContactRelation,
+      // Lifecycle fields visible to any team admin
+      end_date: teamProfiles.endDate,
+      exit_reason: teamProfiles.exitReason,
+      work_state: teamProfiles.workState,
       is_active: teamProfiles.isActive,
       created_at: teamProfiles.createdAt,
       updated_at: teamProfiles.updatedAt,
     }
 
-    // Conditionally add hr_notes for super admins
+    // Conditionally add sensitive fields for super admins:
+    // compensation (hourly_rate / salary), AHV/canton, hr_notes.
     if (isSuperAdminUser) {
-      (selectCols as Record<string, unknown>).hr_notes = teamProfiles.hrNotes
+      Object.assign(selectCols, {
+        hr_notes: teamProfiles.hrNotes,
+        hourly_rate_cents: teamProfiles.hourlyRateCents,
+        salary_chf: teamProfiles.salaryChf,
+        salary_effective_date: teamProfiles.salaryEffectiveDate,
+        ahv_number: teamProfiles.ahvNumber,
+        canton_tax_code: teamProfiles.cantonTaxCode,
+      })
     }
 
     const [profile] = await db
@@ -135,9 +147,19 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
     if (data.emergency_contact_relation !== undefined) update.emergencyContactRelation = data.emergency_contact_relation
     if (data.is_active !== undefined) update.isActive = data.is_active
 
-    // Add hr_notes only for super admins
-    if (isSuperAdminUser && data.hr_notes !== undefined) {
-      update.hrNotes = data.hr_notes
+    // Lifecycle fields — admin-level (not just super admin)
+    if (data.end_date !== undefined) update.endDate = data.end_date
+    if (data.exit_reason !== undefined) update.exitReason = data.exit_reason
+    if (data.work_state !== undefined) update.workState = data.work_state
+
+    // Sensitive fields — super admin only (compensation, AHV, hr_notes)
+    if (isSuperAdminUser) {
+      if (data.hr_notes !== undefined) update.hrNotes = data.hr_notes
+      if (data.hourly_rate_cents !== undefined) update.hourlyRateCents = data.hourly_rate_cents
+      if (data.salary_chf !== undefined) update.salaryChf = data.salary_chf
+      if (data.salary_effective_date !== undefined) update.salaryEffectiveDate = data.salary_effective_date
+      if (data.ahv_number !== undefined) update.ahvNumber = data.ahv_number
+      if (data.canton_tax_code !== undefined) update.cantonTaxCode = data.canton_tax_code
     }
 
     if (Object.keys(update).length === 0) {

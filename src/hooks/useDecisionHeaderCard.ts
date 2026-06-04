@@ -19,12 +19,45 @@ export function useDecisionHeaderCard(
   const [sendingInvitations, setSendingInvitations] = useState(false)
   const [invitationsResult, setInvitationsResult] = useState<{ sent: number; skipped: number } | null>(null)
 
-  function handleCopyLink() {
+  async function handleCopyLink() {
     const url = `${window.location.origin}/vote/${decisionId}`
-    navigator.clipboard.writeText(url).then(() => {
+
+    // navigator.clipboard requires HTTPS and a focused document. In Safari
+    // before 13 and inside some embedded contexts it's also undefined, so
+    // fall back to a hidden textarea + execCommand. "Link teilen" is the
+    // only way staff spread a vote — failing silently here breaks the flow.
+    const copyViaTextarea = () => {
+      const ta = document.createElement('textarea')
+      ta.value = url
+      ta.setAttribute('readonly', '')
+      ta.style.position = 'absolute'
+      ta.style.left = '-9999px'
+      document.body.appendChild(ta)
+      ta.select()
+      try {
+        document.execCommand('copy')
+        return true
+      } catch {
+        return false
+      } finally {
+        document.body.removeChild(ta)
+      }
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url)
+      } else if (!copyViaTextarea()) {
+        return
+      }
       setLinkCopied(true)
       setTimeout(() => setLinkCopied(false), UI_FEEDBACK_MS.LINK_COPY)
-    })
+    } catch {
+      if (copyViaTextarea()) {
+        setLinkCopied(true)
+        setTimeout(() => setLinkCopied(false), UI_FEEDBACK_MS.LINK_COPY)
+      }
+    }
   }
 
   async function handleSendInvitations() {

@@ -114,7 +114,6 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
           <TeamProfileView
             profile={profile}
             isSuperAdmin={isSuperAdmin}
-            onEdit={() => router.push(`/admin/team/${profile.id}/edit`)}
             onBack={() => router.push('/admin/team')}
           />
         )}
