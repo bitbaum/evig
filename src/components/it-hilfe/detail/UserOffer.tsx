@@ -4,6 +4,7 @@ import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { Offer } from './types'
 import Heading from '@/components/ui/Heading'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 interface UserOfferProps {
   offer: Offer
@@ -18,9 +19,7 @@ export function UserOffer({ offer, withdrawing, onWithdraw }: UserOfferProps) {
     <div className="rounded-xl border border-strong bg-surface-base p-6">
       <div className="flex items-center justify-between mb-3">
         <Heading level={3} className="text-lg font-semibold text-text-primary">{t('heading')}</Heading>
-        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400">
-          {t('yourOfferBadge')}
-        </span>
+        <StatusBadge variant="warning">{t('yourOfferBadge')}</StatusBadge>
       </div>
       <p className="text-text-secondary mb-3">{offer.message}</p>
       {(offer.estimatedTime || offer.proposedCompensation) && (

@@ -28,6 +28,7 @@ import {
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { StatusBadge } from '@/components/ui/status-badge'
 import { ROUTES } from '@/config/routes'
 import { PageShell } from '@/components/layout/PageShell'
 
@@ -195,12 +196,9 @@ export default function MyRequestsPage() {
                           {statusConfig?.name || req.status}
                         </span>
                         {isExpired && (
-                          <span
-                            className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200"
-                            title={`Abgelaufen am ${formatDateShort(req.expiresAt)}`}
-                          >
+                          <StatusBadge variant="warning" title={`Abgelaufen am ${formatDateShort(req.expiresAt)}`}>
                             Abgelaufen
-                          </span>
+                          </StatusBadge>
                         )}
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
                           {urgencyConfig?.name || req.urgency}

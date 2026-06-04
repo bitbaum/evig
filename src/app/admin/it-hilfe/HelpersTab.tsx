@@ -12,6 +12,7 @@ import { SWISS_CANTONS } from '@/config/swiss-cantons'
 import { HELPER_STATUS, HELPER_STATUS_LABELS } from '@/config/helper-status'
 import type { HelperRow, PaginatedResponse, HelperFilter, Stats } from './types'
 import { StatsCard, SkillTag } from './shared'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 interface HelpersTabProps {
   helpers: PaginatedResponse<HelperRow> | null
@@ -90,7 +91,7 @@ export function HelpersTab({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {h.suspended_at ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400">Gesperrt</span>
+                      <StatusBadge variant="error">Gesperrt</StatusBadge>
                     ) : h.is_verified ? (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">Verifiziert</span>
                     ) : h.is_active ? (

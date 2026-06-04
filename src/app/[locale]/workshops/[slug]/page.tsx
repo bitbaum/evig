@@ -30,6 +30,7 @@ import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 import { PageShell } from '@/components/layout/PageShell'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 // Extended Workshop type to include fields from migration 038
 interface WorkshopDetail {
@@ -343,9 +344,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
 
                           <div className="text-right">
                             {isFull ? (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-100 text-error-800">
-                                {t('detail.soldOut')}
-                              </span>
+                              <StatusBadge variant="error">{t('detail.soldOut')}</StatusBadge>
                             ) : (
                               <>
                                 <div className="text-sm text-text-secondary mb-1">

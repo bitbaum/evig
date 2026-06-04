@@ -16,6 +16,7 @@ import { INTAKE_STATUS, INTAKE_STATUS_LABELS } from '@/config/intake-status'
 import { Pagination } from '@/components/ui/Pagination'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 interface IntakePipelineViewProps {
   items: PipelineItem[]
@@ -200,9 +201,7 @@ export function IntakePipelineView({
                             Bereit
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200">
-                            In Bearbeitung
-                          </span>
+                          <StatusBadge variant="warning">In Bearbeitung</StatusBadge>
                         )}
                       </td>
                       <td className="py-2.5">

@@ -12,6 +12,7 @@ import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { ORG } from '@/config/org'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -86,18 +87,18 @@ export default async function DashboardDecisionsPage() {
                         {methodConf.label}
                       </span>
                       {deadlineInfo && (
-                        <span className="rounded-full bg-warning-50 dark:bg-warning-900/30 px-2 py-0.5 text-xs text-warning-700 dark:text-warning-300">
+                        <StatusBadge variant="warning" tone="subtle">
                           {deadlineInfo}
-                        </span>
+                        </StatusBadge>
                       )}
                       {d.hasUserVoted ? (
                         <span className="rounded-full bg-action-muted-muted px-2 py-0.5 text-xs text-action">
                           {t('voted')}
                         </span>
                       ) : (
-                        <span className="rounded-full bg-warning-100 dark:bg-warning-900/30 px-2 py-0.5 text-xs text-warning-700 dark:text-warning-300 font-medium">
+                        <StatusBadge variant="warning">
                           {t('votePending')}
-                        </span>
+                        </StatusBadge>
                       )}
                     </div>
                   </div>

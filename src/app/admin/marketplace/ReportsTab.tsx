@@ -7,6 +7,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { REPORT_REASONS } from '@/config/marketplace'
 import { REPORT_STATUS, REPORT_STATUS_LABELS } from '@/config/report-status'
 import type { ReportRow, PaginatedResponse } from './types'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 function getReportReasonLabel(reason: string): string {
   return REPORT_REASONS.find(r => r.value === reason)?.label ?? reason
@@ -61,7 +62,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                 <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(r.created_at)}</td>
                 <td className="px-4 py-3">
                   {r.status === REPORT_STATUS.PENDING ? (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200">Offen</span>
+                    <StatusBadge variant="warning">Offen</StatusBadge>
                   ) : (
                     <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">{r.resolution_action ?? 'Bearbeitet'}</span>
                   )}

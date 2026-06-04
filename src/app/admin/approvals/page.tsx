@@ -20,6 +20,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 const APPROVAL_CONTENT_TYPES = [SUBMISSION_CONTENT_TYPE.WORKSHOP, SUBMISSION_CONTENT_TYPE.BLOG_POST]
 
@@ -234,14 +235,14 @@ export default async function ApprovalsPage() {
               <span className="text-text-primary">{source.label}</span>
               <span className="flex items-center gap-2">
                 {source.oldestPendingDays !== null && source.oldestPendingDays >= 7 && (
-                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-400">
+                  <StatusBadge variant="error">
                     {source.oldestPendingDays}+ Tage
-                  </span>
+                  </StatusBadge>
                 )}
                 {source.oldestPendingDays !== null && source.oldestPendingDays >= 3 && source.oldestPendingDays < 7 && (
-                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-warning-100 text-warning-700 dark:bg-warning-900/30 dark:text-warning-400">
+                  <StatusBadge variant="warning">
                     {source.oldestPendingDays}+ Tage
-                  </span>
+                  </StatusBadge>
                 )}
                 <span className={`text-sm font-medium ${source.count > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-text-muted'}`}>
                   {source.count} ausstehend

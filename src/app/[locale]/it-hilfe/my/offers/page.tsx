@@ -24,6 +24,7 @@ import {
 import { useMyOffers } from '@/hooks/useMyOffers'
 import { ROUTES } from '@/config/routes'
 import { PageShell } from '@/components/layout/PageShell'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 export default function MyOffersPage() {
   const t = useTranslations('itHelp.myOffers')
@@ -159,9 +160,7 @@ export default function MyOffersPage() {
                             {t('requestLabel')} {requestStatusConfig?.name || offer.request.status}
                           </span>
                           {requestExpired && (
-                            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200">
-                              Anfrage abgelaufen
-                            </span>
+                            <StatusBadge variant="warning">Anfrage abgelaufen</StatusBadge>
                           )}
                         </div>
 
