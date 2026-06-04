@@ -15,10 +15,9 @@ import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection } from '@/lib/permissions'
 import { HELP_REQUEST_STATUS } from '@/config/activity'
 import { URGENCY } from '@/config/it-hilfe'
-import { HelpCircle, ArrowLeft, Users, AlertTriangle, CheckCircle } from 'lucide-react'
-import Link from 'next/link'
+import { HelpCircle, Users, AlertTriangle, CheckCircle } from 'lucide-react'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
-import Heading from '@/components/admin/AdminHeading'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
@@ -110,30 +109,13 @@ export default async function HelpRequestsPage() {
   ])
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link
-            href={ROUTES.admin.team}
-            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
-            <HelpCircle className="w-6 h-6 text-warning-600 dark:text-warning-200" />
-          </div>
-          <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
-              Hilfsanfragen
-            </Heading>
-            <p className="text-neutral-600 dark:text-neutral-400">
-              Hilfe anfordern und Kollegen unterstützen
-            </p>
-          </div>
-        </div>
-      </div>
-
+    <AdminPageWrapper
+      title="Hilfsanfragen"
+      description="Hilfe anfordern und Kollegen unterstützen"
+      icon={HelpCircle}
+      iconColor="amber"
+      backButton={{ href: ROUTES.admin.team, label: 'Zurück zum Team' }}
+    >
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4">
         <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
@@ -190,6 +172,6 @@ export default async function HelpRequestsPage() {
         teamMembers={teamMembers}
         currentUserEmail={session.user.email}
       />
-    </div>
+    </AdminPageWrapper>
   )
 }
