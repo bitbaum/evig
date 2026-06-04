@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import { ROUTES } from '@/config/routes';
+import { ClipboardPlus } from 'lucide-react';
 import {
   DECISION_STATUS,
   DECISION_STATUS_CONFIG,
@@ -152,18 +154,39 @@ export default function DecisionHeaderCard({
             </AdminButton>
           )}
           {decision.status === DECISION_STATUS.CLOSED && (
-            <BeschlussPdfExport
-              decision={{
-                id: decision.id,
-                title: decision.title,
-                description: decision.description,
-                votingMethod: decision.votingMethod,
-                category: decision.category,
-                outcome: decision.outcome,
-                outcomeSummary: decision.outcomeSummary,
-                aiOutcomeNarrative: decision.aiOutcomeNarrative,
-              }}
-            />
+            <>
+              <BeschlussPdfExport
+                decision={{
+                  id: decision.id,
+                  title: decision.title,
+                  description: decision.description,
+                  votingMethod: decision.votingMethod,
+                  category: decision.category,
+                  outcome: decision.outcome,
+                  outcomeSummary: decision.outcomeSummary,
+                  aiOutcomeNarrative: decision.aiOutcomeNarrative,
+                }}
+              />
+              {/* Spawn a follow-up task pre-filled from the decision outcome.
+                  Closed decisions used to be a dead-end — the bridge to the
+                  task system existed only inside the protocol-embedded
+                  decision flow. This Link reuses TaskFormClient's existing
+                  ?title=&description= prefill so no new endpoint is needed. */}
+              <AdminButton
+                href={`${ROUTES.admin.taskNew}?${new URLSearchParams({
+                  title: `Folge aus: ${decision.title}`,
+                  description: [
+                    decision.outcomeSummary,
+                    decision.outcomeSummary ? '' : null,
+                    `(Aus Entscheid: ${decision.title})`,
+                  ].filter(Boolean).join('\n'),
+                }).toString()}`}
+                variant="secondary"
+              >
+                <ClipboardPlus className="w-4 h-4" />
+                Aufgabe erstellen
+              </AdminButton>
+            </>
           )}
           {canDelete && (
             <AdminButton variant="dangerOutline" onClick={() => setShowDeleteDialog(true)}>
