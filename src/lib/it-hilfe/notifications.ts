@@ -1,10 +1,21 @@
 /**
  * IT-Hilfe Notification Service
  *
- * Sends fire-and-forget emails after request creation:
- * - Confirmation to requester
- * - Notification to RevampIT staff
- * - Notification to matching helpers
+ * Partially centralized via @/lib/services/notifications — see
+ * ARCHITECTURE_DEBT.md #2. accept-offer and offers POST have migrated
+ * to notifyUsers(). The request-created flow below still uses
+ * sendCustomEmail directly because:
+ *
+ *   - Requester confirmation: itHilfeRequestConfirmation template isn't
+ *     yet wired into getEmailContent — needs a new NOTIFICATION_TYPES
+ *     entry (deferred).
+ *   - Admin notification: REVAMPIT_NOTIFICATION_EMAIL is a shared inbox
+ *     (info@…), not a per-user recipient — stays on sendCustomEmail.
+ *   - Helper fan-out: helperNewMatchingRequest template isn't yet wired
+ *     into getEmailContent (deferred).
+ *
+ * sendItHilfeNotification (in-app only) remains for the few callers
+ * that have not yet been migrated to notifyUsers().
  */
 
 import { db } from '@/db'
