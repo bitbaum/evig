@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { CheckCircle, Vote, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { type VotingMethod } from '@/config/decisions'
@@ -154,13 +155,12 @@ export default function PublicVoteClient({
         <label className="block text-sm font-semibold text-text-primary mb-2">
           {t('emailLabel')}
         </label>
-        <input
+        <Input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-default dark:border-white/8 bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted dark:placeholder:text-text-tertiary focus:outline-hidden focus:ring-2 focus:ring-action dark:focus:ring-primary-400"
         />
         <p className="mt-1.5 text-xs text-text-secondary dark:text-text-muted">
           {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}

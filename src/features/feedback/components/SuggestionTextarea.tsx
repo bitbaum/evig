@@ -5,6 +5,7 @@
 
 import { forwardRef } from 'react'
 import { cn } from '@/lib/utils'
+import { Textarea } from '@/components/ui/textarea'
 import { FeedbackScope, SelectedElement } from '../types'
 
 interface SuggestionTextareaProps {
@@ -22,18 +23,14 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
 
     return (
       <div className="space-y-1">
-        <textarea
+        <Textarea
           ref={ref}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={isDisabled}
           className={cn(
-            "w-full px-3 py-2 border rounded-lg resize-none focus:outline-none focus:ring-2 transition-colors",
-            "min-h-[80px] text-sm",
-            isDisabled && "bg-neutral-100 cursor-not-allowed opacity-50",
-            error
-              ? "border-error-300 focus:ring-error-500 focus:border-error-500"
-              : "border-neutral-300 focus:ring-primary-500 focus:border-primary-500"
+            "resize-none min-h-[80px]",
+            error && "border-error-300 focus:ring-error-500 focus:border-error-500"
           )}
           placeholder={
             feedbackScope === 'element'
@@ -49,7 +46,7 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
         {error && (
           <p className="text-error-600 text-xs">{error}</p>
         )}
-        <div className="flex justify-between text-xs text-neutral-500">
+        <div className="flex justify-between text-xs text-text-tertiary">
           <span>{value.length}/1000 Zeichen</span>
           {feedbackScope === 'element' && selectedElements.length > 0 && (
             <span>{selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt</span>
