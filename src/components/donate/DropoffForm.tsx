@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { CheckCircle2 } from 'lucide-react'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
@@ -128,7 +129,7 @@ export function DropoffForm() {
 
       <label className="block">
         <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('devicesLabel')}</span>
-        <textarea
+        <Textarea
           value={devices}
           onChange={e => setDevices(e.target.value)}
           required
@@ -136,19 +137,19 @@ export function DropoffForm() {
           maxLength={1000}
           rows={3}
           placeholder={t('devicesPlaceholder')}
-          className={`${inputClass} resize-y`}
+          className="resize-y"
         />
       </label>
 
       <label className="block">
         <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('notesLabel')}</span>
-        <textarea
+        <Textarea
           value={notes}
           onChange={e => setNotes(e.target.value)}
           maxLength={2000}
           rows={2}
           placeholder={t('notesPlaceholder')}
-          className={`${inputClass} resize-y`}
+          className="resize-y"
         />
       </label>
 

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { AIFieldBadge } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
   deviceBrand: string
@@ -91,12 +92,11 @@ export function ProblemDetailsSection({
             <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.description.confidence, model: aiFieldMeta.description.model, timestamp: aiFieldMeta.description.timestamp, inputText: '', sources: [] }} />
           )}
         </label>
-        <textarea
+        <Textarea
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder={t('problemDescriptionPlaceholder')}
           rows={5}
-          className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         />
         <span className="text-xs text-neutral-400">{description.length}/5000</span>
       </div>

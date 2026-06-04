@@ -11,6 +11,7 @@
 import { useState } from 'react'
 import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Textarea } from '@/components/ui/textarea'
 import { VOTING_ADVISOR_PROMPTS } from '@/lib/ai/config/prompts'
 
 interface Option {
@@ -119,14 +120,14 @@ export function VoteAIAdvisor({
 
           {/* Custom question input */}
           <div className="flex gap-2">
-            <textarea
+            <Textarea
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Stelle eine eigene Frage zu dieser Abstimmung..."
               rows={2}
               disabled={loading}
-              className="flex-1 px-3 py-2 text-sm border border-info-300 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 resize-none focus:outline-none focus:ring-2 focus:ring-info-500 disabled:opacity-50"
+              className="flex-1 resize-none"
             />
             <button
               type="button"

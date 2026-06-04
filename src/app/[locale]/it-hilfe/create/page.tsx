@@ -253,14 +253,14 @@ export default function CreatePeerRepairPage() {
                 <p className="text-sm text-neutral-600 mb-4">{t('budgetDescription')}</p>
                 <div className="flex items-center gap-3">
                   <span className="text-neutral-500">CHF</span>
-                  <input
+                  <Input
                     type="number"
                     value={formData.maxBudget}
                     onChange={(e) => updateField('maxBudget', e.target.value)}
                     placeholder={t('budgetPlaceholder')}
                     min="0"
                     step="5"
-                    className="w-32 px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-32"
                   />
                   <span className="text-sm text-neutral-500">
                     {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}

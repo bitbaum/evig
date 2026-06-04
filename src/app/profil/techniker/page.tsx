@@ -14,6 +14,9 @@ import {
   Users,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import {
   IT_HILFE,
   SERVICE_CATEGORIES,
@@ -175,14 +178,13 @@ export default function TechnikerProfilPage() {
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('location.postalCode')}
               </label>
-              <input
+              <Input
                 type="text"
                 value={profile.postalCode}
                 onChange={(e) =>
                   setProfile((prev) => ({ ...prev, postalCode: e.target.value }))
                 }
                 placeholder="8000"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 maxLength={4}
               />
             </div>
@@ -191,14 +193,13 @@ export default function TechnikerProfilPage() {
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('location.city')}
               </label>
-              <input
+              <Input
                 type="text"
                 value={profile.city}
                 onChange={(e) =>
                   setProfile((prev) => ({ ...prev, city: e.target.value }))
                 }
                 placeholder="Zürich"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
 
@@ -206,12 +207,11 @@ export default function TechnikerProfilPage() {
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('location.canton')}
               </label>
-              <select
+              <Select
                 value={profile.canton}
                 onChange={(e) =>
                   setProfile((prev) => ({ ...prev, canton: e.target.value }))
                 }
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 <option value="">{t('location.cantonPlaceholder')}</option>
                 {SWISS_CANTONS.map((canton) => (
@@ -219,14 +219,14 @@ export default function TechnikerProfilPage() {
                     {canton}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('location.maxTravel')}
               </label>
-              <input
+              <Input
                 type="number"
                 value={profile.maxTravelKm}
                 onChange={(e) =>
@@ -237,7 +237,6 @@ export default function TechnikerProfilPage() {
                 }
                 min={0}
                 max={100}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
           </div>
@@ -258,7 +257,7 @@ export default function TechnikerProfilPage() {
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('pricing.hourlyRate')}
               </label>
-              <input
+              <Input
                 type="number"
                 value={profile.hourlyRateCents ? profile.hourlyRateCents / 100 : ''}
                 onChange={(e) =>
@@ -272,7 +271,6 @@ export default function TechnikerProfilPage() {
                 placeholder="z.B. 40"
                 min={0}
                 step={5}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
               <p className="text-xs text-neutral-500 mt-1">
                 {t('pricing.hourlyRateHint')}
@@ -326,14 +324,13 @@ export default function TechnikerProfilPage() {
             {t('bio.desc')}
           </p>
 
-          <textarea
+          <Textarea
             value={profile.bio}
             onChange={(e) =>
               setProfile((prev) => ({ ...prev, bio: e.target.value }))
             }
             placeholder={t('bio.placeholder')}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             maxLength={1000}
           />
           <p className="text-xs text-neutral-500 mt-1">

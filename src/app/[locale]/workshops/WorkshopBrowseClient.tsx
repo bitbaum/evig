@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import {
   Calendar,
   Clock,
@@ -77,17 +78,16 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
               <label htmlFor="filter-category" className="block text-xs font-medium text-neutral-700 mb-1">
                 {t('filterCategory')}
               </label>
-              <select
+              <Select
                 id="filter-category"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-700 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="all">{t('allCategories')}</option>
                 {WORKSHOP_CATEGORIES.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             {/* Level Dropdown */}
@@ -95,17 +95,16 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
               <label htmlFor="filter-level" className="block text-xs font-medium text-neutral-700 mb-1">
                 {t('filterLevel')}
               </label>
-              <select
+              <Select
                 id="filter-level"
                 value={levelFilter}
                 onChange={(e) => setLevelFilter(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-700 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="all">{t('allLevels')}</option>
                 {WORKSHOP_LEVELS.map(level => (
                   <option key={level.id} value={level.id}>{level.name}</option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             {/* Clear filters */}

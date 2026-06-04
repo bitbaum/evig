@@ -5,6 +5,7 @@ import { CheckCircle, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { Link } from '@/i18n/navigation'
+import { Textarea } from '@/components/ui/textarea'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 
@@ -111,14 +112,14 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         <label htmlFor="inquiry-message" className="block text-sm font-medium text-neutral-700 mb-1">
           {t('messageLabel')} <span className="text-error-500">*</span>
         </label>
-        <textarea
+        <Textarea
           id="inquiry-message"
           value={message}
           onChange={e => setMessage(e.target.value)}
           required
           minLength={20}
           rows={5}
-          className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+          className="resize-none"
           placeholder={t('messagePlaceholder')}
         />
         <p className="text-xs text-neutral-400 mt-1">{t('charCount', { count: message.length })}</p>

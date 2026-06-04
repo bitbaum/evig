@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Computer,
   Cpu,
@@ -197,25 +199,24 @@ export default function BuildYourComputerPage() {
 
                   <div>
                     <label className="block font-semibold mb-2">{t('buildTool.budgetLabel')}</label>
-                    <select
+                    <Select
                       value={formData.budget}
                       onChange={(e) => setFormData({...formData, budget: e.target.value as BudgetValue | ''})}
-                      className="w-full p-3 border border-neutral-300 rounded-lg"
                     >
                       <option value="">{t('buildTool.budgetPlaceholder')}</option>
                       {budgetOptions.map(opt => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
 
                   <div>
                     <label className="block font-semibold mb-2">{t('buildTool.specificLabel')}</label>
-                    <textarea
+                    <Textarea
                       value={formData.specific}
                       onChange={(e) => setFormData({...formData, specific: e.target.value})}
                       placeholder={t('buildTool.specificPlaceholder')}
-                      className="w-full p-3 border border-neutral-300 rounded-lg h-20"
+                      className="h-20"
                     />
                   </div>
 

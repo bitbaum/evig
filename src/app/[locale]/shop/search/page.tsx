@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { buttonClass } from "@/components/ui/button-class";
 import { Search, Package, ChevronRight, Home, ArrowLeft, Tag } from "lucide-react";
 import Heading from "@/components/ui/Heading";
+import { Input } from "@/components/ui/input";
 import {
   SHOP_CATEGORIES,
   POPULAR_SEARCHES,
@@ -61,12 +62,12 @@ function SearchForm({
     <form action="/shop/search" method="GET" className="max-w-2xl mx-auto">
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-        <input
+        <Input
           type="search"
           name="q"
           defaultValue={initialQuery}
           placeholder={placeholder}
-          className="w-full pl-12 pr-4 py-4 text-lg border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 rounded-xl focus:border-primary-500 dark:focus:border-primary-400 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-800 transition-all outline-none"
+          className="pl-12 pr-4 py-4 text-lg"
           autoFocus
         />
         <Button

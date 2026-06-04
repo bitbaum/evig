@@ -21,6 +21,8 @@ import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
 import { formatCentsToChf } from '@/lib/pricing'
@@ -189,13 +191,13 @@ export default function TechnikerListClient() {
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-              <input
+              <Input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('list.searchPlaceholder')}
                 aria-label={t('list.searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="pl-12 pr-24 py-3"
               />
               <Button type="submit" variant="primary" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2">
                 {t('list.searchButton')}
@@ -227,10 +229,10 @@ export default function TechnikerListClient() {
 
         {/* Skills filter */}
         <div className="mb-6">
-          <select
+          <Select
             value={selectedSkill}
             onChange={(e) => setSkillFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-auto"
             aria-label={t('list.skillsFilterLabel')}
           >
             <option value="">{t('list.skillsFilterAll')}</option>
@@ -243,7 +245,7 @@ export default function TechnikerListClient() {
                 ))}
               </optgroup>
             ))}
-          </select>
+          </Select>
 
           {hasActiveFilters && (
             <button

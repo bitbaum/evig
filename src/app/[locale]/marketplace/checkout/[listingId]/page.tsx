@@ -193,11 +193,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                   </div>
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.city')}</label>
-                    <input
+                    <Input
                       type="text"
                       value={shippingAddress.city}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
-                      className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder={t('address.cityPlaceholder')}
                     />
                   </div>
