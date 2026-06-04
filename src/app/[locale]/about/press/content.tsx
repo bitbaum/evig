@@ -26,7 +26,7 @@ import {
 const TIER_STYLES = {
   1: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-400 border-warning-200 dark:border-warning-800/30',
   2: 'bg-surface-raised text-text-primary border',
-  3: 'bg-action-muted-muted text-action border-strong',
+  3: 'bg-action-muted text-action border-strong',
   4: 'bg-surface-raised text-text-primary border'
 } as const
 
@@ -203,7 +203,7 @@ export default function PressPageContent() {
                   className="group flex items-center gap-3 p-4 rounded-lg bg-surface-base hover:bg-surface-raised transition-all"
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${
-                    mention.tier === 3 ? 'bg-action-muted-muted text-action' :
+                    mention.tier === 3 ? 'bg-action-muted text-action' :
                     'bg-surface-raised text-text-secondary'
                   }`}>
                     {mention.sourceShort.charAt(0)}

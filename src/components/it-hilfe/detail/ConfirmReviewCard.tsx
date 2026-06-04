@@ -51,7 +51,7 @@ export function ConfirmReviewCard({
   }
 
   return (
-    <div className="bg-action-muted-muted rounded-xl border-2 border-strong p-6">
+    <div className="bg-action-muted rounded-xl border-2 border-strong p-6">
       <div className="flex items-start gap-3 mb-4">
         <CheckCircle className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
         <div>

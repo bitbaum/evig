@@ -152,7 +152,7 @@ export function TeamProfileView({
             </div>
             <Link
               href={ROUTES.admin.teamActivity}
-              className="px-3 py-1.5 text-sm text-action hover:bg-action-muted-muted rounded-lg"
+              className="px-3 py-1.5 text-sm text-action hover:bg-action-muted rounded-lg"
             >
               {t('viewTeamActivities')}
             </Link>
@@ -183,7 +183,7 @@ export function TeamProfileView({
                   {profile.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 bg-action-muted-muted text-action text-sm rounded-full"
+                      className="px-3 py-1 bg-action-muted text-action text-sm rounded-full"
                     >
                       {skill}
                     </span>
@@ -203,7 +203,7 @@ export function TeamProfileView({
                   {profile.interests.map((interest) => (
                     <span
                       key={interest}
-                      className="px-3 py-1 bg-action-muted-muted text-action text-sm rounded-full"
+                      className="px-3 py-1 bg-action-muted text-action text-sm rounded-full"
                     >
                       {interest}
                     </span>

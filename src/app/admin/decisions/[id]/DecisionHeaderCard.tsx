@@ -198,7 +198,7 @@ export default function DecisionHeaderCard({
 
       {/* Close confirmation */}
       {showCloseInput && (
-        <div className="mt-3 rounded-md border border-strong bg-action-muted-muted p-3">
+        <div className="mt-3 rounded-md border border-strong bg-action-muted p-3">
           <label className={cn('mb-1 block', adminType.subTitle)}>
             Zusammenfassung (optional)
           </label>

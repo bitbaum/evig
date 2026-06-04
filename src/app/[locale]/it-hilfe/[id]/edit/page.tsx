@@ -94,7 +94,7 @@ export default function EditRequestPage() {
 
         <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-action-muted-muted rounded-lg">
+            <div className="p-2 bg-action-muted rounded-lg">
               <Wrench className="w-6 h-6 text-action" />
             </div>
             <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
@@ -118,7 +118,7 @@ export default function EditRequestPage() {
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
-                        ? 'border-action bg-action-muted-muted'
+                        ? 'border-action bg-action-muted'
                         : 'border hover:border-strong'
                     }`}
                   >

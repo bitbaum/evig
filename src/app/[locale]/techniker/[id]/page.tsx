@@ -87,7 +87,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   {technician.name}
                 </Heading>
                 {technician.isVerified && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">
                     <CheckCircle className="w-3.5 h-3.5" />
                     {t('detail.verified')}
                   </span>
@@ -95,7 +95,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     isProfessional
-                      ? 'bg-action-muted-muted text-action'
+                      ? 'bg-action-muted text-action'
                       : 'bg-surface-raised text-text-secondary'
                   }`}
                 >
@@ -174,7 +174,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               </span>
             )}
             {technician.hourlyRateCents && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-action-muted-muted text-action">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-action-muted text-action">
                 <Euro className="w-3.5 h-3.5" />
                 {t('detail.hourlyRate', { rate: Math.round(technician.hourlyRateCents / 100) })}
               </span>

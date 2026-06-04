@@ -15,7 +15,7 @@ export function CTASection() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href={ROUTES.public.register}
-            className="inline-flex items-center justify-center px-8 py-3 bg-surface-base text-action font-semibold rounded-lg hover:bg-action-muted-muted transition-colors"
+            className="inline-flex items-center justify-center px-8 py-3 bg-surface-base text-action font-semibold rounded-lg hover:bg-action-muted transition-colors"
           >
             Kostenlos registrieren
           </Link>

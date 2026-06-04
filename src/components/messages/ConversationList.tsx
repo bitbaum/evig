@@ -59,7 +59,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
           onClick={() => onSelect(conv.id)}
           className={`w-full text-left px-4 py-3 hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-action ${
             selectedId === conv.id
-              ? 'bg-action-muted-muted border-l-2 border-action'
+              ? 'bg-action-muted border-l-2 border-action'
               : ''
           }`}
         >

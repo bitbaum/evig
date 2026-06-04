@@ -116,7 +116,7 @@ export default function MyRequestsPage() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
-                  ? 'bg-action-muted-muted text-action'
+                  ? 'bg-action-muted text-action'
                   : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
               }`}
             >
@@ -128,7 +128,7 @@ export default function MyRequestsPage() {
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
-                    ? 'bg-action-muted-muted text-action'
+                    ? 'bg-action-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >

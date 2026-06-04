@@ -45,7 +45,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
       <div className="p-4">
         {items.length === 0 ? (
           <div className="flex items-center gap-3 text-action">
-            <div className="w-8 h-8 rounded-full bg-action-muted-muted flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-action-muted flex items-center justify-center shrink-0">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
             <span className="font-medium">Alles erledigt — keine offenen Aufgaben.</span>

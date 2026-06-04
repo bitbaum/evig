@@ -120,7 +120,7 @@ export function DigestPageClient() {
           <div className="grid md:grid-cols-5 gap-4">
             <div className="p-4 bg-surface-base rounded-xl border border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-action" />
                 </div>
                 <div>
@@ -162,7 +162,7 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-surface-base rounded-xl border border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-action" />
                 </div>
                 <div>
@@ -262,7 +262,7 @@ export function DigestPageClient() {
                       key={milestone.id}
                       className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50"
                     >
-                      <div className="w-8 h-8 bg-action-muted-muted rounded-lg flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 bg-action-muted rounded-lg flex items-center justify-center shrink-0">
                         <Flag className="w-4 h-4 text-action" />
                       </div>
                       <div className="flex-1 min-w-0">

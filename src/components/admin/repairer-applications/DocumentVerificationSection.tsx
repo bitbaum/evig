@@ -74,7 +74,7 @@ export function DocumentVerificationSection({
                           <button
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-action-muted-muted text-action rounded-sm text-xs hover:bg-action-muted disabled:opacity-50"
+                            className="px-2 py-1 bg-action-muted text-action rounded-sm text-xs hover:bg-action-muted disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
                           </button>

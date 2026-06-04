@@ -86,7 +86,7 @@ export default function CustomerBookings() {
             onClick={() => setActiveTab('active')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
               (activeTab === 'active'
-                ? 'bg-action-muted-muted text-action'
+                ? 'bg-action-muted text-action'
                 : 'bg-surface-base text-text-secondary hover:bg-surface-raised')}
           >
             <Clock className="h-4 w-4" />
@@ -99,7 +99,7 @@ export default function CustomerBookings() {
             onClick={() => setActiveTab('completed')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
               (activeTab === 'completed'
-                ? 'bg-action-muted-muted text-action'
+                ? 'bg-action-muted text-action'
                 : 'bg-surface-base text-text-secondary hover:bg-surface-raised')}
           >
             <CheckCircle className="h-4 w-4" />
@@ -111,7 +111,7 @@ export default function CustomerBookings() {
           {filteredAppointments.length === 0 ? (
             <EmptyState
               icon={Wrench}
-              iconBg="bg-action-muted-muted"
+              iconBg="bg-action-muted"
               iconColor="text-action"
               title={t('emptyTitle')}
               action={

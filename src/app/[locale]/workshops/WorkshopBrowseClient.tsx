@@ -147,7 +147,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   {/* Workshop Header */}
                   <div className="p-6 border-b border-subtle flex-1">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="p-3 bg-action-muted-muted rounded-lg">
+                      <div className="p-3 bg-action-muted rounded-lg">
                         <IconComponent className="w-6 h-6 text-action" />
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
@@ -227,7 +227,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           : formatCentsToChf(workshop.price_cents)}
                       </span>
                       {workshop.user_registered && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted text-action">
                           <CheckCircle className="w-3 h-3 mr-1" />
                           {t('registered')}
                         </span>

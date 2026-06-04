@@ -96,8 +96,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
   // Styles
   const containerClass = variant === 'section'
-    ? 'bg-action-muted-muted rounded-xl border border-strong'
-    : 'rounded-lg border border-strong bg-action-muted-muted'
+    ? 'bg-action-muted rounded-xl border border-strong'
+    : 'rounded-lg border border-strong bg-action-muted'
 
   const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4'
 
@@ -130,7 +130,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
           {/* Success feedback — persistent until next action, shows field count */}
           {success && !error && (
-            <div className="flex items-center gap-2 bg-action-muted-muted border border-strong text-action px-3 py-2 rounded-lg text-sm">
+            <div className="flex items-center gap-2 bg-action-muted border border-strong text-action px-3 py-2 rounded-lg text-sm">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               <span>
                 {filledCount > 0

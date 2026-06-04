@@ -235,8 +235,8 @@ export default function DecisionActions({
               disabled={loading === 'vote'}
               className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'up'
-                  ? 'bg-action-muted-muted border-strong text-action'
-                  : 'bg-surface-base border text-text-secondary hover:bg-action-muted-muted hover:border-strong'
+                  ? 'bg-action-muted border-strong text-action'
+                  : 'bg-surface-base border text-text-secondary hover:bg-action-muted hover:border-strong'
               } disabled:opacity-50`}
             >
               {loading === 'vote' ? (
@@ -307,7 +307,7 @@ export default function DecisionActions({
               <button
                 onClick={handlePropose}
                 disabled={loading === 'propose'}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-action-muted-muted text-action border border-strong rounded-md hover:bg-action-muted-muted disabled:opacity-50"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-action-muted text-action border border-strong rounded-md hover:bg-action-muted disabled:opacity-50"
               >
                 {loading === 'propose' ? (
                   <Loader2 className="w-3 h-3 animate-spin" />

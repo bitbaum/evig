@@ -18,7 +18,7 @@ export function SimpleMajorityVote({ response, onChange }: Props) {
           className={`flex-1 rounded-md border-2 px-4 py-3 text-sm font-medium transition ${
             response === r
               ? r === 'yes'
-                ? 'border-action bg-action-muted-muted text-action'
+                ? 'border-action bg-action-muted text-action'
                 : r === 'no'
                   ? 'border-error-500 bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-300'
                   : 'border-strong bg-surface-raised text-text-secondary'

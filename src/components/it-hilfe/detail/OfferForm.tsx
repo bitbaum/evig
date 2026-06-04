@@ -119,7 +119,7 @@ export function OfferForm({
                     onClick={() => onSkillToggle(skill.id)}
                     className={`px-3 py-3 min-h-touch rounded-full text-sm transition-all focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
                       offerSkills.includes(skill.id)
-                        ? 'bg-action-muted-muted text-action border-2 border-action'
+                        ? 'bg-action-muted text-action border-2 border-action'
                         : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
                     }`}
                   >

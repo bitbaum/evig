@@ -20,10 +20,10 @@ export default function MarketplaceAdminClient() {
       {/* Stats Row */}
       {m.stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatsCard label="Aktive Inserate" value={m.stats.byStatus.active ?? 0} icon={Package} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Aktive Inserate" value={m.stats.byStatus.active ?? 0} icon={Package} color="bg-action-muted border-strong text-action-text" />
           <StatsCard label="Ungeprüft" value={m.stats.unverified} icon={Clock} color="bg-warning-50 dark:bg-warning-900/20 border-warning-200 dark:border-warning-800 text-warning-800 dark:text-warning-200" />
           <StatsCard label="Offene Meldungen" value={m.stats.openReports} icon={AlertTriangle} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
-          <StatsCard label={ORG.name} value={m.stats.revampit} icon={Store} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label={ORG.name} value={m.stats.revampit} icon={Store} color="bg-action-muted border-strong text-action-text" />
         </div>
       )}
 

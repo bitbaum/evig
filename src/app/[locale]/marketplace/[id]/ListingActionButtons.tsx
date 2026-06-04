@@ -97,7 +97,7 @@ export function ListingActionButtons({
       {/* RevampIT direct purchase — only when ACTIVE */}
       {!isOwner && isRevampit && isAvailable && (
         <>
-          <div className="bg-action-muted-muted border border-strong rounded-lg p-4 space-y-2">
+          <div className="bg-action-muted border border-strong rounded-lg p-4 space-y-2">
             <div className="flex items-center gap-2 text-action font-medium text-sm">
               <Shield className="w-4 h-4" aria-hidden="true" />
               {t('revampitTrustTitle')}
@@ -118,7 +118,7 @@ export function ListingActionButtons({
 
       {/* P2P payment info */}
       {!isOwner && !isRevampit && isAvailable && (
-        <div className="bg-action-muted-muted border border-strong rounded-lg p-4 space-y-2">
+        <div className="bg-action-muted border border-strong rounded-lg p-4 space-y-2">
           <div className="flex items-center gap-2 text-action font-medium text-sm">
             <Shield className="w-4 h-4" aria-hidden="true" />
             {t('payment_info')}
@@ -131,7 +131,7 @@ export function ListingActionButtons({
       {!isOwner && !isRevampit && isAvailable && (
         <>
           {messageSent ? (
-            <div className="w-full bg-action-muted-muted border border-strong rounded-lg p-4 text-center space-y-2">
+            <div className="w-full bg-action-muted border border-strong rounded-lg p-4 text-center space-y-2">
               <p className="text-action font-medium">
                 {t('messageSent')}
               </p>

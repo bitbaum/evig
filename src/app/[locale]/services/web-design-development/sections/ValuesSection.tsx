@@ -14,8 +14,8 @@ import {
 const VALUE_ICONS = [Code, Globe, Shield, Database, Heart, Zap, Users, Monitor]
 
 const VALUE_STYLES = [
-  { borderColor: 'border-action', bgColor: 'bg-action-muted-muted', iconColor: 'text-action', titleColor: 'text-action' },
-  { borderColor: 'border-action', bgColor: 'bg-action-muted-muted', iconColor: 'text-action', titleColor: 'text-action' },
+  { borderColor: 'border-action', bgColor: 'bg-action-muted', iconColor: 'text-action', titleColor: 'text-action' },
+  { borderColor: 'border-action', bgColor: 'bg-action-muted', iconColor: 'text-action', titleColor: 'text-action' },
   { borderColor: 'border-info-500', bgColor: 'bg-info-100', iconColor: 'text-info-600', titleColor: 'text-info-800' },
   { borderColor: 'border-secondary-500', bgColor: 'bg-secondary-100', iconColor: 'text-secondary-600', titleColor: 'text-secondary-800' },
   { borderColor: 'border-warning-500', bgColor: 'bg-warning-100 dark:bg-warning-900/30', iconColor: 'text-warning-600', titleColor: 'text-warning-800 dark:text-warning-400' },

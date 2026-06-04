@@ -69,7 +69,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400'
             : pool.spotsLeft <= 2
             ? 'bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-400'
-            : 'bg-action-muted-muted text-action'
+            : 'bg-action-muted text-action'
         }`}>
           {isFull ? t('full') : spotsText}
         </div>

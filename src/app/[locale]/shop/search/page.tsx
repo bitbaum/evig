@@ -154,7 +154,7 @@ function SearchResults({
     return (
       <div className="card-shell p-8 text-center">
         <div className="max-w-md mx-auto">
-          <div className="w-16 h-16 rounded-full bg-action-muted-muted text-action flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-full bg-action-muted text-action flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8" />
           </div>
           <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">
@@ -214,7 +214,7 @@ function NoQueryState({
             <Link
               key={search.slug}
               href={getSearchUrl(search.name)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base border rounded-full text-sm font-medium text-text-secondary hover:bg-action-muted-muted hover:border-strong dark:hover:border-action hover:text-action transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base border rounded-full text-sm font-medium text-text-secondary hover:bg-action-muted hover:border-strong dark:hover:border-action hover:text-action transition-colors"
             >
               <Search className="w-4 h-4" />
               {search.name}

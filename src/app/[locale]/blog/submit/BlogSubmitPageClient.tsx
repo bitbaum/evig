@@ -64,7 +64,7 @@ export default function SubmitPostPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center justify-center px-6 py-3 border border-action text-action rounded-lg hover:bg-action-muted-muted transition-colors font-medium"
+                className="inline-flex items-center justify-center px-6 py-3 border border-action text-action rounded-lg hover:bg-action-muted transition-colors font-medium"
               >
                 {t('submitAnotherButton')}
               </button>
@@ -95,7 +95,7 @@ export default function SubmitPostPage() {
                   key={type}
                   type="button"
                   onClick={() => setSubmissionType(type)}
-                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-action bg-action-muted-muted' : 'border hover:border-strong'}`}
+                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-action bg-action-muted' : 'border hover:border-strong'}`}
                 >
                   {isIdea
                     ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-action' : 'text-text-muted'}`} />

@@ -112,7 +112,7 @@ export function IntakeDetailView({
 
         <div className="flex items-center gap-2">
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted-muted text-action">
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
               <Check className="w-4 h-4" /> Im Shop
             </span>
           ) : (
@@ -185,7 +185,7 @@ export function IntakeDetailView({
       {detail.intake_tier === INTAKE_TIERS.REFURBISH && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
-            ? 'border-strong bg-action-muted-muted'
+            ? 'border-strong bg-action-muted'
             : 'border bg-surface-raised'
         }`}>
           <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
@@ -236,7 +236,7 @@ export function IntakeDetailView({
 
       {/* Published confirmation */}
       {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
-        <div className="border-2 border-strong bg-action-muted-muted rounded-lg p-4 text-center">
+        <div className="border-2 border-strong bg-action-muted rounded-lg p-4 text-center">
           <Check className="w-8 h-8 text-action mx-auto mb-2" />
           <p className="font-medium text-action">Dieses Gerät ist im Shop veröffentlicht</p>
           {detail.selling_price_chf && (

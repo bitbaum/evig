@@ -79,7 +79,7 @@ export default async function MembershipPage() {
           {/* Status card */}
           <div className="bg-surface-base rounded-xl border p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-action-muted-muted flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-full bg-action-muted flex items-center justify-center shrink-0">
                 <BadgeCheck className="w-6 h-6 text-action" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
@@ -90,7 +90,7 @@ export default async function MembershipPage() {
                       : t('memberLabel')}
                   </Heading>
                   {paid ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-action-muted-muted text-action rounded-full text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-action-muted text-action rounded-full text-xs font-medium">
                       <CheckCircle className="w-3 h-3" aria-hidden="true" />
                       {t('paidBadge')}
                     </span>
@@ -173,7 +173,7 @@ export default async function MembershipPage() {
       ) : (
         <EmptyState
           icon={BadgeCheck}
-          iconBg="bg-action-muted-muted"
+          iconBg="bg-action-muted"
           iconColor="text-action"
           title={t('notMemberTitle')}
           description={t('notMemberDesc', { orgName: ORG.legalName, currency: MEMBERSHIP.currency, fee: MEMBERSHIP.fees.regular })}

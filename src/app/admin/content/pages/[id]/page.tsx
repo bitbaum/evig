@@ -127,7 +127,7 @@ export default function EditStaticPagePage() {
         </div>
       )}
       {success && (
-        <div className="bg-action-muted-muted border border-strong rounded-lg p-4 flex items-center gap-2">
+        <div className="bg-action-muted border border-strong rounded-lg p-4 flex items-center gap-2">
           <CheckCircle className="w-5 h-5 text-action shrink-0" />
           <p className="text-action">{success}</p>
         </div>

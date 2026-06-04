@@ -188,7 +188,7 @@ export default function SellerProfileEditPage() {
             </div>
           )}
           {success && (
-            <div className="mb-4 bg-action-muted-muted border border-strong rounded-lg p-3 flex items-center gap-2">
+            <div className="mb-4 bg-action-muted border border-strong rounded-lg p-3 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-action shrink-0" />
               <p className="text-sm text-action-text">{success}</p>
             </div>

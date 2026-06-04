@@ -159,7 +159,7 @@ export function BulkTable({
                       return (
                         <td
                           key={col.key}
-                          className={`px-3 py-2 font-medium ${col.editable ? 'hover:bg-action-muted-muted' : ''}`}
+                          className={`px-3 py-2 font-medium ${col.editable ? 'hover:bg-action-muted' : ''}`}
                           onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         >
                           {value ? `${value} CHF` : '-'}
@@ -190,7 +190,7 @@ export function BulkTable({
                     return (
                       <td
                         key={col.key}
-                        className={`px-3 py-2 ${col.editable ? 'hover:bg-action-muted-muted' : ''} truncate max-w-[200px]`}
+                        className={`px-3 py-2 ${col.editable ? 'hover:bg-action-muted' : ''} truncate max-w-[200px]`}
                         onClick={col.editable ? (e) => { e.stopPropagation(); startEditing(product._tempId, col.key, value) } : undefined}
                         title={value}
                       >

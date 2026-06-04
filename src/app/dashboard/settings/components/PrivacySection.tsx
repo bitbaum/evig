@@ -73,7 +73,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 onClick={() => handleChange('profile_visibility', 'public')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                   profile.profile_visibility === 'public'
-                    ? 'border-action bg-action-muted-muted text-action'
+                    ? 'border-action bg-action-muted text-action'
                     : 'border bg-surface-base text-text-secondary hover:border-strong'
                 }`}
               >
@@ -111,7 +111,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           {/* Show Email */}
           <div className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border-2 border">
             <div className="shrink-0">
-              <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                 {profile.show_email ? (
                   <Eye className="w-5 h-5 text-action" />
                 ) : (
@@ -148,7 +148,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           {/* Show Phone */}
           <div className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border-2 border">
             <div className="shrink-0">
-              <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                 {profile.show_phone ? (
                   <Eye className="w-5 h-5 text-action" />
                 ) : (

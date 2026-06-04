@@ -62,7 +62,7 @@ export function ResponsiveHero({
 
   const buttonClasses = {
     primary: cn(
-      'bg-surface-base text-action hover:bg-action-muted-muted',
+      'bg-surface-base text-action hover:bg-action-muted',
       responsiveButtons.primary,
       'rounded-lg font-semibold transition-colors duration-300 text-center min-h-touch'
     ),

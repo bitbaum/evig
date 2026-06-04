@@ -71,7 +71,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
 
   if (success) {
     return (
-      <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
+      <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
         <CheckCircle className="w-10 h-10 text-action mx-auto mb-2" />
         <Heading level={3} className="font-semibold text-action-text">{t('successHeading')}</Heading>
         <p className="text-sm text-action mt-1">

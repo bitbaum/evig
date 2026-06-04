@@ -48,7 +48,7 @@ export function CertificationVerificationSection({
                             {cert.certificationTypeName || cert.customName}
                           </h6>
                           {cert.category && (
-                            <span className="px-2 py-1 bg-action-muted-muted text-action rounded-full text-xs">
+                            <span className="px-2 py-1 bg-action-muted text-action rounded-full text-xs">
                               {cert.category}
                             </span>
                           )}
@@ -92,7 +92,7 @@ export function CertificationVerificationSection({
                         </div>
 
                         {cert.adminNotes && (
-                          <div className="mt-2 p-2 bg-action-muted-muted rounded-sm text-sm text-action">
+                          <div className="mt-2 p-2 bg-action-muted rounded-sm text-sm text-action">
                             <strong>Admin-Notiz:</strong> {cert.adminNotes}
                           </div>
                         )}

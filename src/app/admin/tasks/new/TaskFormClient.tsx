@@ -50,7 +50,7 @@ export default function TaskFormClient({ task }: Props) {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
       {source === 'it_hilfe' && (
-        <div className="mb-4 p-3 bg-action-muted-muted border border-strong rounded-lg flex items-center gap-2 text-sm text-action-text">
+        <div className="mb-4 p-3 bg-action-muted border border-strong rounded-lg flex items-center gap-2 text-sm text-action-text">
           <Info className="w-4 h-4 shrink-0" />
           Aus IT-Hilfe-Anfrage erstellt — Felder wurden vorausgefüllt.
         </div>

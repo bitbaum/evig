@@ -124,7 +124,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
 
               <div className="card-shell rounded-2xl p-6 sm:p-8 md:p-12">
                 <div className="text-center mb-6 sm:mb-8">
-                  <div className="inline-block bg-action-muted-muted text-action px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
+                  <div className="inline-block bg-action-muted text-action px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     {t('pricing.badge')}
                   </div>
                   <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-text-primary mb-2">
@@ -235,7 +235,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center bg-surface-base text-action px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-sm sm:text-base md:text-lg"
+                className="inline-flex items-center justify-center bg-surface-base text-action px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-action-muted transition-colors duration-300 text-sm sm:text-base md:text-lg"
               >
                 {t('cta.contact')}
                 <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />

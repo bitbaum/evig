@@ -147,7 +147,7 @@ export default function DashboardOrdersPage() {
       ) : orders.length === 0 ? (
         <EmptyState
           icon={ShoppingBag}
-          iconBg="bg-action-muted-muted"
+          iconBg="bg-action-muted"
           iconColor="text-action"
           title={t('emptyTitle')}
           description={role === 'buyer' ? t('emptyBuyerDesc') : t('emptySellerDesc')}

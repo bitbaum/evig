@@ -88,7 +88,7 @@ export default function BuildYourComputerPage() {
   }
 
   const getConditionClass = (condition: string) => {
-    if (condition === 'used') return 'bg-action-muted-muted text-action'
+    if (condition === 'used') return 'bg-action-muted text-action'
     if (condition === 'refurbished') return 'bg-surface-raised text-text-primary'
     return 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-400'
   }
@@ -107,15 +107,15 @@ export default function BuildYourComputerPage() {
           <strong>{t('hero.strong')}</strong>
         </p>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted text-action px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted text-action px-4 py-2 rounded-full">
             <Globe className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted text-action px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -167,7 +167,7 @@ export default function BuildYourComputerPage() {
                         onClick={() => setFormData({...formData, useCase: category.id})}
                         className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                           formData.useCase === category.id
-                            ? 'border-action bg-action-muted-muted'
+                            ? 'border-action bg-action-muted'
                             : 'border hover:border-strong'
                         }`}
                       >
@@ -186,7 +186,7 @@ export default function BuildYourComputerPage() {
                           onClick={() => setFormData({...formData, performance: perf.id})}
                           className={`p-3 text-center border-2 rounded-lg transition-all ${
                             formData.performance === perf.id
-                              ? 'border-action bg-action-muted-muted'
+                              ? 'border-action bg-action-muted'
                               : 'border hover:border-strong'
                           }`}
                         >
@@ -408,7 +408,7 @@ export default function BuildYourComputerPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-surface-raised rounded-2xl border p-8 md:p-12 text-center">
-              <div className="inline-flex items-center bg-action-muted-muted px-6 py-3 rounded-full mb-6">
+              <div className="inline-flex items-center bg-action-muted px-6 py-3 rounded-full mb-6">
                 <Award className="w-8 h-8 text-action mr-3" />
                 <span className="text-2xl font-bold text-action">Revamped</span>
                 <Sparkles className="w-6 h-6 text-action ml-2" />
@@ -455,7 +455,7 @@ export default function BuildYourComputerPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-lg"
+              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted transition-colors duration-300 text-lg"
             >
               {t('cta.startBuild')}
             </Link>

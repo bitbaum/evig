@@ -32,7 +32,7 @@ export function ApplicationDetails({ application }: Props) {
           <Heading level={4} className="text-text-primary mb-2">Spezialisierungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.specializations.map((spec, index) => (
-              <span key={index} className="px-2 py-1 bg-action-muted-muted text-action rounded-full text-xs">
+              <span key={index} className="px-2 py-1 bg-action-muted text-action rounded-full text-xs">
                 {spec}
               </span>
             ))}

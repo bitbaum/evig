@@ -100,7 +100,7 @@ export function TeamTalentSection({
           {form.interests.map(interest => (
             <span
               key={interest}
-              className="flex items-center gap-1 px-3 py-1 bg-action-muted-muted text-action text-sm rounded-full"
+              className="flex items-center gap-1 px-3 py-1 bg-action-muted text-action text-sm rounded-full"
             >
               {interest}
               <button type="button" onClick={() => onRemoveInterest(interest)} className="hover:text-error-500">

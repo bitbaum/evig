@@ -52,21 +52,21 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <div className="inline-flex items-center gap-2 bg-action-muted-muted px-6 py-3 rounded-full mb-6 mt-6">
+        <div className="inline-flex items-center gap-2 bg-action-muted px-6 py-3 rounded-full mb-6 mt-6">
           <Award className="w-6 h-6 text-action" />
           <span className="text-xl font-bold text-action">REVAMPED</span>
           <Sparkles className="w-5 h-5 text-action" />
         </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted text-action px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted text-action px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-action-muted-muted text-action px-4 py-2 rounded-full">
+          <div className="flex items-center bg-action-muted text-action px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -105,7 +105,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   </Link>
                   <a
                     href="#certificate"
-                    className="inline-block border-2 border-action text-action px-6 py-3 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors"
+                    className="inline-block border-2 border-action text-action px-6 py-3 rounded-lg font-semibold hover:bg-action-muted transition-colors"
                   >
                     {t('heroSection.learnBtn')}
                   </a>
@@ -285,7 +285,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               </Link>
               <Link
                 href="/contact"
-                className="inline-block border-2 border-action text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted-muted transition-colors duration-300 text-lg"
+                className="inline-block border-2 border-action text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted transition-colors duration-300 text-lg"
               >
                 {t('cta.learnBtn')}
               </Link>

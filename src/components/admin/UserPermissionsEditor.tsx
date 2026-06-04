@@ -100,7 +100,7 @@ export function UserPermissionsEditor({
         {/* Content */}
         <div className="overflow-y-auto max-h-[60vh]">
           {/* Super Admin Toggle */}
-          <div className="mb-6 p-4 bg-action-muted-muted rounded-lg">
+          <div className="mb-6 p-4 bg-action-muted rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Crown className="w-5 h-5 text-action" />
@@ -136,7 +136,7 @@ export function UserPermissionsEditor({
 
           {/* Full Access Toggle */}
           {!superAdminStatus && (
-            <div className="mb-6 p-4 bg-action-muted-muted rounded-lg">
+            <div className="mb-6 p-4 bg-action-muted rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Shield className="w-5 h-5 text-action" />
@@ -178,7 +178,7 @@ export function UserPermissionsEditor({
                     onClick={() => togglePermission(section.id)}
                     className={`p-3 text-left rounded-lg border transition-colors ${
                       selectedPermissions.includes(section.id)
-                        ? 'border-action bg-action-muted-muted'
+                        ? 'border-action bg-action-muted'
                         : 'border hover:border-strong'
                     }`}
                   >

@@ -83,7 +83,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     title={label}
                     className={`
                       flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${isSelected
-                        ? 'bg-action-muted-muted border-2 border-action'
+                        ? 'bg-action-muted border-2 border-action'
                         : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 border-2 border-transparent'
                       }
                     `}

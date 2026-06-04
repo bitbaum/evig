@@ -34,7 +34,7 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     label: 'Ollama',
     icon: Cpu,
     color: 'text-action',
-    bgColor: 'bg-action-muted-muted',
+    bgColor: 'bg-action-muted',
     category: 'local',
     description: 'Lokal, kostenlos, privat',
     keyName: '',
@@ -55,7 +55,7 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     label: 'OpenRouter',
     icon: Cloud,
     color: 'text-action',
-    bgColor: 'bg-action-muted-muted',
+    bgColor: 'bg-action-muted',
     category: 'free',
     description: 'Viele Modelle, pay-per-use',
     keyName: 'OPENROUTER_API_KEY',
@@ -220,7 +220,7 @@ export function HirnProviderSelector() {
                             disabled={changing || !canSelect}
                             className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
                               isSelected
-                                ? 'bg-action-muted-muted border-2 border-strong'
+                                ? 'bg-action-muted border-2 border-strong'
                                 : canSelect
                                 ? 'hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 border-2 border-transparent'
                                 : 'opacity-50 cursor-not-allowed border-2 border-transparent'
@@ -255,7 +255,7 @@ export function HirnProviderSelector() {
                                     e.stopPropagation()
                                     void saveApiKey(provider.provider)
                                   }}
-                                  className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted-muted rounded-lg"
+                                  className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted rounded-lg"
                                 >
                                   <Key className="w-3 h-3" />
                                   Key speichern
@@ -266,7 +266,7 @@ export function HirnProviderSelector() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={e => e.stopPropagation()}
-                                    className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted-muted rounded-lg"
+                                    className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted rounded-lg"
                                   >
                                     <ExternalLink className="w-3 h-3" />
                                   </a>

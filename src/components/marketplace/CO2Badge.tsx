@@ -34,7 +34,7 @@ export function CO2Badge({ category, className = '' }: CO2BadgeProps) {
     <div
       className={cn(
         'inline-flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-1.5',
-        'bg-action-muted-muted',
+        'bg-action-muted',
         'border border-strong rounded-full text-sm',
         className,
       )}

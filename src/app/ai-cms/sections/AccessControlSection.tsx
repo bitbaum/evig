@@ -6,9 +6,9 @@ export function AccessControlSection() {
   ]
 
   const colorMap: Record<string, string> = {
-    blue: 'bg-action-muted-muted border-subtle text-action',
-    green: 'bg-action-muted-muted border-subtle text-action',
-    purple: 'bg-action-muted-muted border-subtle text-action',
+    blue: 'bg-action-muted border-subtle text-action',
+    green: 'bg-action-muted border-subtle text-action',
+    purple: 'bg-action-muted border-subtle text-action',
   }
 
   return (

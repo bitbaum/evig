@@ -162,7 +162,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
 
       {/* Condition Criteria Checklist */}
       {formData.conditionChecks.length > 0 && (
-        <div className="rounded-lg border border-strong bg-action-muted-muted p-4">
+        <div className="rounded-lg border border-strong bg-action-muted p-4">
           <p className="text-sm font-medium text-action mb-3">
             {t('conditionHeader', { condition: ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label ?? '' })}
           </p>

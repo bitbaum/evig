@@ -60,8 +60,8 @@ export function IntakePipelineView({
         {[
           { label: 'Total', value: statusCounts.total, color: 'bg-surface-raised text-text-primary' },
           { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200' },
-          { label: 'Bereit', value: statusCounts.ready, color: 'bg-action-muted-muted text-action' },
-          { label: 'Publiziert', value: statusCounts.published, color: 'bg-action-muted-muted text-action' },
+          { label: 'Bereit', value: statusCounts.ready, color: 'bg-action-muted text-action' },
+          { label: 'Publiziert', value: statusCounts.published, color: 'bg-action-muted text-action' },
         ].map((stat) => (
           <div key={stat.label} className={`rounded-lg p-3 ${stat.color}`}>
             <div className="text-2xl font-bold">{stat.value}</div>
@@ -193,11 +193,11 @@ export function IntakePipelineView({
                       </td>
                       <td className="py-2.5">
                         {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted-muted text-action">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
                             <Check className="w-3 h-3" /> Publiziert
                           </span>
                         ) : item.checklist_complete ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted-muted text-action">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
                             Bereit
                           </span>
                         ) : (

@@ -99,7 +99,7 @@ export default function AdminReviewsPage() {
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-action-muted-muted text-action'
+                    ? 'bg-action-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >

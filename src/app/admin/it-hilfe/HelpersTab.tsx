@@ -32,9 +32,9 @@ export function HelpersTab({
       {/* Helper stats */}
       {stats && (
         <div className="grid grid-cols-3 gap-4">
-          <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-action-muted border-strong text-action-text" />
           <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-surface-raised border text-text-primary" />
-          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-action-muted border-strong text-action-text" />
         </div>
       )}
 
@@ -74,7 +74,7 @@ export function HelpersTab({
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted-muted text-action">Gratis</span>}
+                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted text-action">Gratis</span>}
                     {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">KulturLegi</span>}
                   </div>
                 </td>
@@ -93,9 +93,9 @@ export function HelpersTab({
                     {h.suspended_at ? (
                       <StatusBadge variant="error">Gesperrt</StatusBadge>
                     ) : h.is_verified ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">Verifiziert</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">Verifiziert</span>
                     ) : h.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">Aktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">Aktiv</span>
                     ) : (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">Inaktiv</span>
                     )}

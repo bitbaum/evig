@@ -26,10 +26,10 @@ export default function ITHilfeAdminClient() {
       {/* Stats Row */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatsCard label="Offene Anfragen" value={stats.byStatus.open ?? 0} icon={HelpCircle} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Offene Anfragen" value={stats.byStatus.open ?? 0} icon={HelpCircle} color="bg-action-muted border-strong text-action-text" />
           <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-surface-raised border text-text-primary" />
           <StatsCard label="Dringend" value={stats.byUrgency.urgent ?? 0} icon={Clock} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
-          <StatsCard label="Lösungsrate" value={`${stats.resolutionRate}%`} icon={ShieldCheck} color="bg-action-muted-muted border-strong text-action-text" />
+          <StatsCard label="Lösungsrate" value={`${stats.resolutionRate}%`} icon={ShieldCheck} color="bg-action-muted border-strong text-action-text" />
         </div>
       )}
 

@@ -141,7 +141,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border hover:border-action hover:bg-action-muted-muted transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border hover:border-action hover:bg-action-muted transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-text-primary mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-text-secondary">{resource.description}</p>
@@ -160,7 +160,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border hover:border-action hover:bg-action-muted-muted transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border hover:border-action hover:bg-action-muted transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-text-primary mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-text-secondary">{resource.description}</p>
@@ -179,7 +179,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border hover:border-action hover:bg-action-muted-muted transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border hover:border-action hover:bg-action-muted transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-text-primary mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-text-secondary">{resource.description}</p>

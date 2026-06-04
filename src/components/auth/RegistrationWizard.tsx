@@ -191,7 +191,7 @@ export function RegistrationWizard() {
       <div className="w-full max-w-md mx-auto">
         <div className="card-shell rounded-2xl p-6 sm:p-8">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-action" />
             </div>
             <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
@@ -214,7 +214,7 @@ export function RegistrationWizard() {
               href={ROUTES.public.itHilfe}
               className="flex items-center gap-3 p-4 rounded-lg border border-strong hover:bg-surface-raised transition-colors"
             >
-              <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
                 <Search className="w-5 h-5 text-action" />
               </div>
               <div className="flex-1">
@@ -232,7 +232,7 @@ export function RegistrationWizard() {
               href={ROUTES.public.profilTechniker}
               className="flex items-center gap-3 p-4 rounded-lg border border-strong hover:bg-surface-raised transition-colors"
             >
-              <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
                 <Wrench className="w-5 h-5 text-action" />
               </div>
               <div className="flex-1">
@@ -250,7 +250,7 @@ export function RegistrationWizard() {
               href={ROUTES.public.shop}
               className="flex items-center gap-3 p-4 rounded-lg border border-strong hover:bg-surface-raised transition-colors"
             >
-              <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
                 <ShoppingBag className="w-5 h-5 text-action" />
               </div>
               <div className="flex-1">

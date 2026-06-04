@@ -81,7 +81,7 @@ export function CurrentFocusInput({
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="p-1 text-action hover:bg-action-muted-muted rounded-sm disabled:opacity-50"
+              className="p-1 text-action hover:bg-action-muted rounded-sm disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

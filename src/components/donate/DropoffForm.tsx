@@ -63,7 +63,7 @@ export function DropoffForm() {
 
   if (status === 'success') {
     return (
-      <div className="rounded-lg bg-action-muted-muted border border-strong p-6">
+      <div className="rounded-lg bg-action-muted border border-strong p-6">
         <div className="flex items-start gap-3">
           <CheckCircle2 className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
           <div>

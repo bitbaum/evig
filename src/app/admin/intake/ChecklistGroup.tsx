@@ -41,7 +41,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         </div>
         <span className={`text-xs px-2 py-0.5 rounded-full ${
           completedCount === group.items.length
-            ? 'bg-action-muted-muted text-action'
+            ? 'bg-action-muted text-action'
             : 'bg-surface-overlay text-text-secondary'
         }`}>
           {completedCount}/{group.items.length}
@@ -53,7 +53,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
           {group.items.map((item) => (
             <div
               key={item.id}
-              className={`p-3 transition-colors ${item.state.completed ? 'bg-action-muted-muted' : ''}`}
+              className={`p-3 transition-colors ${item.state.completed ? 'bg-action-muted' : ''}`}
             >
               <div className="flex items-start gap-3">
                 {/* Checkbox */}

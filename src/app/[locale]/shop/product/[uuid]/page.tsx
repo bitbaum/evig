@@ -57,8 +57,8 @@ function mapConditionToSchema(condition: string): string {
 
 // Condition badge colors (labels come from translations)
 const CONDITION_COLORS: Record<string, string> = {
-  'wie neu':    'bg-action-muted-muted text-action',
-  'sehr gut':   'bg-action-muted-muted text-action',
+  'wie neu':    'bg-action-muted text-action',
+  'sehr gut':   'bg-action-muted text-action',
   'gut':        'bg-surface-raised text-text-primary',
   'akzeptabel': 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300',
 }
@@ -217,7 +217,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
 
             {/* Trust badge */}
-            <div className="flex items-start gap-3 p-4 bg-action-muted-muted rounded-xl">
+            <div className="flex items-start gap-3 p-4 bg-action-muted rounded-xl">
               <Shield className="w-5 h-5 text-action shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="font-semibold text-action-text">{t('product.verifiedTitle')}</p>

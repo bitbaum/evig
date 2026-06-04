@@ -41,7 +41,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
       <div className="p-4">
         {hasNoActionItems ? (
           <div className="flex items-center gap-3 text-action">
-            <div className="w-8 h-8 rounded-full bg-action-muted-muted flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-action-muted flex items-center justify-center">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
             <span className="font-medium">Alles erledigt! Keine offenen Aufgaben.</span>

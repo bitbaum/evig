@@ -242,7 +242,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                         {helper.matchReasons.slice(0, 3).map((reason, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action"
                           >
                             {reason}
                           </span>
@@ -272,7 +272,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               )}
             </>
           ) : (
-            <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
+            <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
               <p className="text-sm text-text-secondary">
                 {t('noMatchesYet')}
               </p>

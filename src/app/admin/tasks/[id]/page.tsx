@@ -181,7 +181,7 @@ export default async function TaskDetailPage({
           </Link>
           <div className="w-px h-6 bg-surface-overlay" />
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
               <ClipboardList className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -322,7 +322,7 @@ export default async function TaskDetailPage({
                     key={completion.id}
                     className="flex items-start gap-3 pb-4 border-b last:border-0"
                   >
-                    <div className="w-8 h-8 bg-action-muted-muted rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 bg-action-muted rounded-full flex items-center justify-center">
                       <CheckCircle2 className="w-4 h-4 text-action" />
                     </div>
                     <div className="flex-1">

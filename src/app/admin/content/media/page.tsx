@@ -147,7 +147,7 @@ export default async function AdminMediaPage() {
             </button>
 
             <div className="flex border border rounded-lg overflow-hidden">
-              <button className="p-2 bg-action-muted-muted text-action">
+              <button className="p-2 bg-action-muted text-action">
                 <Grid className="w-4 h-4" />
               </button>
               <button className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary">
@@ -207,7 +207,7 @@ export default async function AdminMediaPage() {
           </p>
         </div>
 
-        <div className="bg-action-muted-muted border border-strong rounded-xl p-5">
+        <div className="bg-action-muted border border-strong rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
             <Video className="w-6 h-6 text-action" />
             <Heading level={3} className="font-medium text-action-text">

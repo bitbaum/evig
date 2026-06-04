@@ -21,7 +21,7 @@ export function StatusSection() {
             { phase: 'Phase 2', label: 'Aktiv', detail: 'Frontend-Widget auf ausgewählten Seiten', done: false },
             { phase: 'Phase 3', label: 'Geplant', detail: 'KI-Gruppierung, öffentliche Übersicht', done: false },
           ].map((p) => (
-            <div key={p.phase} className={`rounded-lg border p-4 ${p.done ? 'bg-action-muted-muted border-strong' : 'bg-surface-raised border-strong'}`}>
+            <div key={p.phase} className={`rounded-lg border p-4 ${p.done ? 'bg-action-muted border-strong' : 'bg-surface-raised border-strong'}`}>
               <div className="text-xs font-medium text-text-tertiary uppercase tracking-wide mb-1">{p.phase}</div>
               <div className={`font-semibold mb-1 ${p.done ? 'text-action' : 'text-text-secondary'}`}>{p.label}</div>
               <div className="text-xs text-text-secondary">{p.detail}</div>

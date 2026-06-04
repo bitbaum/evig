@@ -108,7 +108,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
 
       {/* AI Outcome Narrative — Beschluss hero */}
       {aiOutcomeNarrative && (
-        <div className="mb-6 rounded-lg border-2 border-strong bg-action-muted-muted p-4">
+        <div className="mb-6 rounded-lg border-2 border-strong bg-action-muted p-4">
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-action">
             Beschluss
           </p>
@@ -123,7 +123,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
         <div className="mb-4">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              data.passed ? 'bg-action-muted-muted text-action' : 'bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-300'
+              data.passed ? 'bg-action-muted text-action' : 'bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-300'
             }`}
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
@@ -279,7 +279,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
 
       {/* Outcome Summary */}
       {outcomeSummary && (
-        <div className="mt-4 rounded-md bg-action-muted-muted p-3">
+        <div className="mt-4 rounded-md bg-action-muted p-3">
           <p className="text-sm font-medium text-action">Zusammenfassung</p>
           <p className="mt-1 text-sm text-action">{outcomeSummary}</p>
         </div>

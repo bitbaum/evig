@@ -157,7 +157,7 @@ export function AIFieldIndicator({
                         href={verifySource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-action-muted-muted rounded-sm px-2 py-1"
+                        className="flex items-center gap-1.5 text-xs text-action hover:underline bg-action-muted rounded-sm px-2 py-1"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink className="w-3 h-3 shrink-0" />

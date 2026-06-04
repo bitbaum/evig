@@ -39,7 +39,7 @@ export default function NewLocationPage() {
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted-muted rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted rounded-full mb-6">
               <MapPin className="w-8 h-8 text-action" />
             </div>
             <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">
@@ -56,7 +56,7 @@ export default function NewLocationPage() {
             id={submitResult.success ? undefined : 'location-form-error'}
             className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
-              ? 'bg-action-muted-muted border-strong text-action'
+              ? 'bg-action-muted border-strong text-action'
               : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-400'
           }`}>
             <div className="flex items-center">

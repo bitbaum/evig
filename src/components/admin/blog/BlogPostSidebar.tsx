@@ -104,7 +104,7 @@ export function BlogPostSidebar({
           {formData.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-action-muted-muted text-action rounded-sm text-sm"
+              className="inline-flex items-center gap-1 px-2 py-1 bg-action-muted text-action rounded-sm text-sm"
             >
               {tag}
               <button

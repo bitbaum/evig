@@ -81,8 +81,8 @@ export function MembershipApplicationForm() {
     return (
       <div className="space-y-6">
         {/* Confirmation */}
-        <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-action-muted-muted rounded-full mb-4">
+        <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-action-muted rounded-full mb-4">
             <CheckCircle className="w-7 h-7 text-action" />
           </div>
           <Heading level={3} className="text-xl text-action mb-2">
@@ -158,7 +158,7 @@ export function MembershipApplicationForm() {
           type="button"
           onClick={() => setMemberType('regular')}
           className={`px-4 py-3 rounded-lg border-2 text-left transition-colors ${
-            memberType === 'regular' ? 'border-action bg-action-muted-muted' : 'border-strong hover:border-strong'
+            memberType === 'regular' ? 'border-action bg-action-muted' : 'border-strong hover:border-strong'
           }`}
         >
           <div className="font-semibold text-text-primary">{t('regularLabel')}</div>
@@ -168,7 +168,7 @@ export function MembershipApplicationForm() {
           type="button"
           onClick={() => setMemberType('reduced')}
           className={`px-4 py-3 rounded-lg border-2 text-left transition-colors ${
-            memberType === 'reduced' ? 'border-action bg-action-muted-muted' : 'border-strong hover:border-strong'
+            memberType === 'reduced' ? 'border-action bg-action-muted' : 'border-strong hover:border-strong'
           }`}
         >
           <div className="font-semibold text-text-primary">{t('reducedLabel')}</div>

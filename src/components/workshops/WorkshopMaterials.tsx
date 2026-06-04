@@ -143,9 +143,9 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
         >
           <div className={`p-2 rounded-lg ${
             material.material_type === 'pdf' ? 'bg-error-100 dark:bg-error-900/20 text-error-600' :
-            material.material_type === 'video' ? 'bg-action-muted-muted text-action' :
+            material.material_type === 'video' ? 'bg-action-muted text-action' :
             material.material_type === 'archive' ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-600' :
-            'bg-action-muted-muted text-action'
+            'bg-action-muted text-action'
           }`}>
             {getMaterialIcon(material.material_type)}
           </div>
@@ -158,8 +158,8 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
               {material.access_type !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
                 <span className={`text-xs px-1.5 py-0.5 rounded ${
                   material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
-                    ? 'bg-action-muted-muted text-action'
-                    : 'bg-action-muted-muted text-action'
+                    ? 'bg-action-muted text-action'
+                    : 'bg-action-muted text-action'
                 }`}>
                   {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? t('badgeAttended') : t('badgeRegistered')}
                 </span>

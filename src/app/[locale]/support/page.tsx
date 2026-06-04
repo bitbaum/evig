@@ -47,7 +47,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
         {/* Three pillars */}
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted-muted rounded-full mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted rounded-full mb-3 sm:mb-4">
               <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
             </div>
             <Heading level={3} className="text-base sm:text-lg text-text-primary mb-2">
@@ -56,7 +56,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             <p className="text-text-secondary">{t('pillars.noAds.description')}</p>
           </div>
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted-muted rounded-full mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted rounded-full mb-3 sm:mb-4">
               <Users className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
             </div>
             <Heading level={3} className="text-base sm:text-lg text-text-primary mb-2">
@@ -65,7 +65,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             <p className="text-text-secondary">{t('pillars.communityDriven.description')}</p>
           </div>
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted-muted rounded-full mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted rounded-full mb-3 sm:mb-4">
               <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
             </div>
             <Heading level={3} className="text-base sm:text-lg text-text-primary mb-2">
@@ -106,7 +106,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             </Button>
           </div>
 
-          <div className="border-2 border-action rounded-lg p-6 sm:p-8 bg-action-muted-muted">
+          <div className="border-2 border-action rounded-lg p-6 sm:p-8 bg-action-muted">
             <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
               <Heading level={3} className="text-xl sm:text-2xl text-text-primary">

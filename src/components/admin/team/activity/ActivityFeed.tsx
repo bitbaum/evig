@@ -99,7 +99,7 @@ export function ActivityFeed({
               onClick={() => setShowFilterPanel(!showFilterPanel)}
               className={`p-2 rounded-lg ${
                 hasActiveFilters
-                  ? 'text-action bg-action-muted-muted'
+                  ? 'text-action bg-action-muted'
                   : 'text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6'
               }`}
               title="Filter"
@@ -254,7 +254,7 @@ export function ActivityFeed({
         <div className="flex justify-center pt-4">
           <button
             onClick={() => setFilters({ offset: filters.offset + filters.limit })}
-            className="px-4 py-2 text-sm text-action hover:bg-action-muted-muted rounded-lg"
+            className="px-4 py-2 text-sm text-action hover:bg-action-muted rounded-lg"
           >
             Mehr laden
           </button>

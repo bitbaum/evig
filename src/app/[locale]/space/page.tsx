@@ -138,7 +138,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                             </div>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                               isCurrent
-                                ? 'bg-action-muted-muted text-action'
+                                ? 'bg-action-muted text-action'
                                 : 'bg-surface-raised text-text-secondary'
                             }`}>
                               {location.highlight}
@@ -359,7 +359,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Link href="/get-involved/donate">
-                    <Button size="lg" className="bg-surface-base text-action hover:bg-action-muted-muted">
+                    <Button size="lg" className="bg-surface-base text-action hover:bg-action-muted">
                       <Heart className="w-5 h-5 mr-2" />
                       {t('impact.donateCard.donateBtn')}
                     </Button>

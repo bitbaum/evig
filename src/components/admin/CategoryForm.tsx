@@ -133,7 +133,7 @@ export default function CategoryForm({
         </div>
       )}
       {success && (
-        <div className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
+        <div className="bg-action-muted border border-strong text-action px-4 py-3 rounded-lg">
           {success}
         </div>
       )}

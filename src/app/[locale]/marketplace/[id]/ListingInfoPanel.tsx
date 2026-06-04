@@ -41,7 +41,7 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
           </span>
         )}
         {listing.is_revampit && !isVerified && (
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-action-muted text-action">
             {ORG.name}
           </span>
         )}

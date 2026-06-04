@@ -46,7 +46,7 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-default rounded-lg cursor-pointer hover:border-action hover:bg-action-muted-muted transition-colors">
+          <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-default rounded-lg cursor-pointer hover:border-action hover:bg-action-muted transition-colors">
             <Camera className="w-8 h-8 text-text-tertiary mb-2" />
             <span className="text-sm text-text-secondary">{t('upload')}</span>
             <span className="text-xs text-text-tertiary dark:text-text-tertiary mt-1">{t('drag')}</span>

@@ -101,7 +101,7 @@ export function RequestsTab({
                 <td className="px-4 py-3 text-text-tertiary">{r.canton}</td>
                 <td className="px-4 py-3 text-text-secondary whitespace-nowrap">{formatBudget(r.budget_amount_cents, r.budget_type)}</td>
                 <td className="px-4 py-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-action-muted-muted text-action' : 'bg-surface-raised text-text-tertiary'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-tertiary'}`}>
                     {r.offer_count}
                   </span>
                 </td>

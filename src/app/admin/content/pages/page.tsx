@@ -295,7 +295,7 @@ export default async function AdminPagesPage() {
 
       {/* Common Pages Suggestion */}
       {pages.length === 0 && (
-        <div className="bg-action-muted-muted border border-strong rounded-xl p-6">
+        <div className="bg-action-muted border border-strong rounded-xl p-6">
           <Heading level={3} className="font-medium text-action-text mb-3">
             Empfohlene Seiten
           </Heading>
@@ -313,7 +313,7 @@ export default async function AdminPagesPage() {
               <Link
                 key={suggestion.slug}
                 href={`${ROUTES.admin.contentPageNew}?title=${encodeURIComponent(suggestion.title)}&slug=${suggestion.slug}`}
-                className="flex items-center gap-2 p-3 bg-surface-base rounded-lg hover:bg-action-muted-muted transition-colors"
+                className="flex items-center gap-2 p-3 bg-surface-base rounded-lg hover:bg-action-muted transition-colors"
               >
                 <Plus className="w-4 h-4 text-action" />
                 <span className="text-sm font-medium text-text-primary">

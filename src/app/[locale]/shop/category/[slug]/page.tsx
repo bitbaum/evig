@@ -149,7 +149,7 @@ function SubcategoryCard({
       className="group block p-4 card-shell hover:border-strong transition-all"
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-action-muted-muted text-action flex items-center justify-center group-hover:bg-action group-hover:text-white transition-colors">
+        <div className="w-10 h-10 rounded-lg bg-action-muted text-action flex items-center justify-center group-hover:bg-action group-hover:text-white transition-colors">
           <Package className="w-5 h-5" />
         </div>
         <div>
@@ -265,7 +265,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         ) : (
           <div className="card-shell p-8 text-center">
             <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-action-muted-muted text-action flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-action-muted text-action flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />
               </div>
               <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">

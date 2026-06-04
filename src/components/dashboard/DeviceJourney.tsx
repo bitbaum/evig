@@ -112,7 +112,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                 <div
                   className={
                     reached
-                      ? 'w-8 h-8 rounded-full flex items-center justify-center bg-action-muted-muted text-action'
+                      ? 'w-8 h-8 rounded-full flex items-center justify-center bg-action-muted text-action'
                       : 'w-8 h-8 rounded-full flex items-center justify-center bg-surface-raised text-text-muted dark:text-text-secondary'
                   }
                   aria-current={reached ? 'step' : undefined}

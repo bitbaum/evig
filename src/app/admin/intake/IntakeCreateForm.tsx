@@ -80,7 +80,7 @@ export function IntakeCreateForm({
               onClick={() => setFormData(f => ({ ...f, intake_tier: opt.value }))}
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
-                  ? 'border-action bg-action-muted-muted'
+                  ? 'border-action bg-action-muted'
                   : 'border hover:border-strong'
               }`}
             >
@@ -97,7 +97,7 @@ export function IntakeCreateForm({
         <button
           type="button"
           onClick={() => setAiOpen(!aiOpen)}
-          className="w-full flex items-center justify-between p-3 bg-action-muted-muted hover:bg-action-muted-muted text-left"
+          className="w-full flex items-center justify-between p-3 bg-action-muted hover:bg-action-muted text-left"
         >
           <span className="text-sm font-medium text-action flex items-center gap-2">
             <Loader2 className="w-4 h-4" />
@@ -177,7 +177,7 @@ export function IntakeCreateForm({
                   </button>
                 )}
                 {voiceState === 'processing' && (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-action-muted-muted rounded-lg justify-center text-sm text-action">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-action-muted rounded-lg justify-center text-sm text-action">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Verarbeite Sprache...
                   </div>
@@ -285,7 +285,7 @@ export function IntakeCreateForm({
       )}
 
       {/* Donation Toggle */}
-      <div className="border rounded-lg p-4 bg-action-muted-muted">
+      <div className="border rounded-lg p-4 bg-action-muted">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"

@@ -86,7 +86,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
   const deadline = formatDeadline(first.voting_deadline)
 
   return (
-    <div className="bg-action-muted-muted border border-strong rounded-xl overflow-hidden">
+    <div className="bg-action-muted border border-strong rounded-xl overflow-hidden">
       <div className="flex items-start gap-4 p-4">
         {/* Icon */}
         <div className="w-10 h-10 bg-action-muted-hover/50 rounded-lg flex items-center justify-center shrink-0">

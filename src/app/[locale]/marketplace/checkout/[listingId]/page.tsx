@@ -107,7 +107,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               <div className="space-y-3">
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'pickup'
-                    ? 'border-action bg-action-muted-muted'
+                    ? 'border-action bg-action-muted'
                     : 'border hover:border-strong'
                 }`}>
                   <input
@@ -130,7 +130,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'shipping'
-                    ? 'border-action bg-action-muted-muted'
+                    ? 'border-action bg-action-muted'
                     : 'border hover:border-strong'
                 }`}>
                   <input

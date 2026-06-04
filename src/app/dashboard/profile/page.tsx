@@ -67,7 +67,7 @@ export default function ProfilePage() {
         {/* Account Status */}
         <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
               <Shield className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -83,7 +83,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Email Verified */}
             <div className="flex items-center gap-3 p-4 bg-surface-raised rounded-lg border-2 border">
-              <div className="w-8 h-8 bg-action-muted-muted rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-action-muted rounded-full flex items-center justify-center">
                 <CheckCircle2 className="w-4 h-4 text-action" />
               </div>
               <div>
@@ -119,7 +119,7 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Success Message */}
           {saveSuccess && (
-            <div className="bg-action-muted-muted border-2 border-strong rounded-lg p-4 flex items-center gap-3">
+            <div className="bg-action-muted border-2 border-strong rounded-lg p-4 flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-action" />
               <p className="text-action">
                 {t('saveSuccess')}

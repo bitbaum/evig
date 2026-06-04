@@ -79,7 +79,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={IT_HILFE.routes.helpers}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted-muted text-action border border-action dark:border-action rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted text-action border border-action dark:border-action rounded-lg text-base font-semibold transition-colors"
               >
                 <Users className="w-4 h-4" />
                 {t('findTechnician')}
@@ -117,7 +117,7 @@ export default function ITHilfePage() {
           <div className="mb-6 flex flex-wrap gap-2">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base dark:bg-transparent hover:bg-action-muted-muted text-action border border-strong dark:border-action/40 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base dark:bg-transparent hover:bg-action-muted text-action border border-strong dark:border-action/40 rounded-lg text-sm font-medium transition-colors"
             >
               <Wrench className="w-4 h-4" />
               {t('becomeTechnician')}
@@ -334,7 +334,7 @@ export default function ITHilfePage() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted-muted text-action border border-action dark:border-action rounded-lg font-semibold transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="px-6 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted text-action border border-action dark:border-action rounded-lg font-semibold transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaMoreInfo')}
               </Link>

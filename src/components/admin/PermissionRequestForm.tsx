@@ -54,9 +54,9 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
   if (form.success) {
     return (
-      <div className="p-6 bg-action-muted-muted border border-strong rounded-xl">
+      <div className="p-6 bg-action-muted border border-strong rounded-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
             <Check className="w-5 h-5 text-action" />
           </div>
           <div>
@@ -83,7 +83,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
           <Shield className="w-5 h-5 text-action" />
         </div>
         <div>
@@ -118,7 +118,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               onClick={() => toggleSection(section.id)}
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
-                  ? 'border-action bg-action-muted-muted'
+                  ? 'border-action bg-action-muted'
                   : 'border hover:border-strong'
               }`}
             >

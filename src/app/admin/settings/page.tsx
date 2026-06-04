@@ -66,9 +66,9 @@ export default async function SettingsPage() {
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
       blue: 'bg-surface-raised text-text-secondary',
-      green: 'bg-action-muted-muted text-action',
+      green: 'bg-action-muted text-action',
       red: 'bg-error-100 dark:bg-error-900/30 text-error-600 dark:text-error-400',
-      purple: 'bg-action-muted-muted text-action',
+      purple: 'bg-action-muted text-action',
       orange: 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-600',
     }
     return colors[color] || colors.blue

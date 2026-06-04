@@ -153,7 +153,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             {myTasks.length === TASK_LIMIT && (
               <Link
                 href={ROUTES.admin.tasks}
-                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-action hover:text-action hover:bg-action-muted-muted rounded-lg transition-colors"
+                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-action hover:text-action hover:bg-action-muted rounded-lg transition-colors"
               >
                 {t('viewAllTasks')}
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />

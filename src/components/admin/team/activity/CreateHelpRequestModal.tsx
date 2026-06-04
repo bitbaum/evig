@@ -121,7 +121,7 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(true)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 isBroadcast
-                  ? 'border-action bg-action-muted-muted text-action'
+                  ? 'border-action bg-action-muted text-action'
                   : 'border hover:border-strong'
               }`}
             >
@@ -133,7 +133,7 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(false)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 !isBroadcast
-                  ? 'border-action bg-action-muted-muted text-action'
+                  ? 'border-action bg-action-muted text-action'
                   : 'border hover:border-strong'
               }`}
             >

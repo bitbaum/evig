@@ -54,7 +54,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Physical Store */}
             <Card className="overflow-hidden border">
-              <CardHeader className="bg-action-muted-muted">
+              <CardHeader className="bg-action-muted">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-action text-white flex items-center justify-center">
                     <Store className="w-5 h-5" />

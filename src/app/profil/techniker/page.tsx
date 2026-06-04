@@ -82,7 +82,7 @@ export default function TechnikerProfilPage() {
         )}
 
         {success && (
-          <div className="mb-6 p-4 bg-action-muted-muted border border-strong rounded-lg text-action flex items-center gap-2">
+          <div className="mb-6 p-4 bg-action-muted border border-strong rounded-lg text-action flex items-center gap-2">
             <CheckCircle className="w-5 h-5" />
             {t('saveSuccess')}
           </div>
@@ -120,7 +120,7 @@ export default function TechnikerProfilPage() {
                       onClick={() => handleSkillToggle(skill.id)}
                       className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                         profile.skills.includes(skill.id)
-                          ? 'bg-action-muted-muted text-action border-2 border-action'
+                          ? 'bg-action-muted text-action border-2 border-action'
                           : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
                       }`}
                       title={skill.description}
@@ -152,7 +152,7 @@ export default function TechnikerProfilPage() {
                 onClick={() => handleServiceTypeToggle(type.id)}
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${
                   profile.serviceTypes.includes(type.id)
-                    ? 'bg-action-muted-muted text-action border-2 border-action'
+                    ? 'bg-action-muted text-action border-2 border-action'
                     : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
                 }`}
               >

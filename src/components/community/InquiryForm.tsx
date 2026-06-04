@@ -55,7 +55,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
   if (success) {
     return (
       <div className="text-center py-12 px-4">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-action-muted-muted mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-action-muted mb-4">
           <CheckCircle className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-text-primary mb-2">{t('successHeading', { name })}</Heading>

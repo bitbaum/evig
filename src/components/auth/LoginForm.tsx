@@ -248,7 +248,7 @@ export function LoginForm() {
         {/* Register Link */}
         <Link
           href={ROUTES.public.register}
-          className="w-full flex items-center justify-center gap-2 border-2 border-action text-action hover:bg-action-muted-muted font-semibold py-3 px-4 rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-2 border-2 border-action text-action hover:bg-action-muted font-semibold py-3 px-4 rounded-lg transition-colors"
         >
           {t('createAccount')}
         </Link>

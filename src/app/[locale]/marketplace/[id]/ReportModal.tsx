@@ -49,7 +49,7 @@ export function ReportModal({
                 key={r.value}
                 className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                   reportReason === r.value
-                    ? 'border-action bg-action-muted-muted'
+                    ? 'border-action bg-action-muted'
                     : 'border hover:bg-surface-raised'
                 }`}
               >

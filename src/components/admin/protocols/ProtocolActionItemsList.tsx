@@ -109,7 +109,7 @@ export function ProtocolActionItemsList({
           <button
             onClick={onCreateAllTasks}
             disabled={bulkCreatingTasks}
-            className="text-xs px-3 py-1.5 rounded-lg border border-strong text-action hover:bg-action-muted-muted disabled:opacity-50 transition-colors"
+            className="text-xs px-3 py-1.5 rounded-lg border border-strong text-action hover:bg-action-muted disabled:opacity-50 transition-colors"
           >
             {bulkCreatingTasks
               ? <><Loader2 className="w-3 h-3 animate-spin inline mr-1" />Erstellt…</>

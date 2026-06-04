@@ -47,7 +47,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         <span
           className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
             technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
-              ? 'bg-action-muted-muted text-action'
+              ? 'bg-action-muted text-action'
               : 'bg-surface-raised text-text-secondary'
           }`}
         >
@@ -124,7 +124,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
           </span>
         )}
         {technician.hourlyRateCents && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted-muted text-action">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">
             <Euro className="w-3 h-3" />
             {formatCentsToChf(technician.hourlyRateCents)}/h
           </span>
@@ -340,7 +340,7 @@ export default function TechnikerListClient() {
               </Button>
               <Link
                 href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-surface-base hover:bg-action-muted-muted text-action border border-action rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 bg-surface-base hover:bg-action-muted text-action border border-action rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaToITHelp')}
               </Link>

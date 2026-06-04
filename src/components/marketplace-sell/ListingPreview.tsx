@@ -104,7 +104,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
       </div>
 
       {success && (
-        <div className="mt-4 bg-action-muted-muted border border-strong rounded-xl p-4 flex items-center gap-3">
+        <div className="mt-4 bg-action-muted border border-strong rounded-xl p-4 flex items-center gap-3">
           <CheckCircle className="w-5 h-5 text-action shrink-0" />
           <p className="text-action-text font-medium">{success}</p>
         </div>

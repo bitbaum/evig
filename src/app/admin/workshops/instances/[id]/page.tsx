@@ -158,7 +158,7 @@ export default function AdminWorkshopInstanceDetailPage({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-surface-base rounded-xl shadow-xs border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-action-muted-muted rounded-lg">
+              <div className="p-2 bg-action-muted rounded-lg">
                 <CheckCircle className="w-5 h-5 text-action" />
               </div>
               <div>

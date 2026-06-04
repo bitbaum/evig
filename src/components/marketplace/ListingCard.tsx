@@ -98,7 +98,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {/* RevampIT Badge (top right, only if not verified — avoid overlap) */}
         {listing.is_revampit && !isVerified && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-action-muted-muted text-action">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-action-muted text-action">
               {!isCompact && ORG.name}
             </span>
           </div>

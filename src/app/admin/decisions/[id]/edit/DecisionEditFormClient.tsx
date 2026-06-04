@@ -110,7 +110,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
               blindVoting={blindVoting}
               onBlindVotingChange={setBlindVoting}
             />
-            <label className="flex items-start gap-3 rounded-lg border border-strong bg-action-muted-muted px-4 py-3 cursor-pointer">
+            <label className="flex items-start gap-3 rounded-lg border border-strong bg-action-muted px-4 py-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={allowPublicVoting}

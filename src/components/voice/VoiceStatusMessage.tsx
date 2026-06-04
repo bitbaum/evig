@@ -39,7 +39,7 @@ export function VoiceStatusMessage({
 
       {/* Transcription result */}
       {transcribedText && state === 'success' && (
-        <div className="text-sm text-action bg-action-muted-muted px-4 py-3 rounded-lg mt-4">
+        <div className="text-sm text-action bg-action-muted px-4 py-3 rounded-lg mt-4">
           <span className="font-medium">{t('recognized')}</span> {transcribedText}
         </div>
       )}

@@ -60,7 +60,7 @@ export default async function ImpactStatsSection() {
         </Heading>
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
           {/* Environmental Impact */}
-          <div className="bg-action-muted-muted p-6 sm:p-8 rounded-lg shadow-md">
+          <div className="bg-action-muted p-6 sm:p-8 rounded-lg shadow-md">
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-action p-2 rounded-lg">
                 <Leaf className="h-5 w-5 text-white" />
@@ -92,7 +92,7 @@ export default async function ImpactStatsSection() {
           </div>
 
           {/* Social Impact */}
-          <div className="bg-action-muted-muted p-6 sm:p-8 rounded-lg shadow-md">
+          <div className="bg-action-muted p-6 sm:p-8 rounded-lg shadow-md">
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-action p-2 rounded-lg">
                 <Users className="h-5 w-5 text-white" />

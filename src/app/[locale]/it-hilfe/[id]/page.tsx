@@ -105,7 +105,7 @@ export default function ITHilfeDetailPage() {
 
         {/* Just-Accepted Banner — landed here via ?accepted=1 from email link */}
         {showAcceptedBanner && request.status === REQUEST_STATUS.MATCHED && (
-          <div className="bg-action-muted-muted border border-strong rounded-xl p-4 mb-6 flex items-center gap-3">
+          <div className="bg-action-muted border border-strong rounded-xl p-4 mb-6 flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
             <p className="text-action text-sm font-medium">
               {t('acceptedBanner')}
@@ -156,7 +156,7 @@ export default function ITHilfeDetailPage() {
 
             {/* Completion badge (status completed, visible to everyone) */}
             {request.status === REQUEST_STATUS.COMPLETED && request.completedAt && (
-              <div className="bg-action-muted-muted border border-strong rounded-xl p-4 flex items-center gap-3">
+              <div className="bg-action-muted border border-strong rounded-xl p-4 flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
                 <p className="text-action text-sm font-medium">
                   {t('completedAt', { date: formatDate(request.completedAt) })}
@@ -216,7 +216,7 @@ export default function ITHilfeDetailPage() {
 
             {/* Review submitted confirmation */}
             {detail.reviewSubmitted && (
-              <div className="bg-action-muted-muted border border-strong rounded-xl p-6 text-center">
+              <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
                 <CheckCircle className="w-8 h-8 text-action mx-auto mb-2" aria-hidden="true" />
                 <p className="text-action font-medium">{t('reviewSubmittedTitle')}</p>
                 <p className="text-sm text-action mt-1">{t('reviewSubmittedMessage')}</p>

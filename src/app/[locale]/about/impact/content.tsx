@@ -117,9 +117,9 @@ export default function ImpactPageContent() {
   }
 
   const CATEGORY_COLOR: Record<ImpactMetric['category'], string> = {
-    environmental: 'bg-action-muted-muted border-strong',
+    environmental: 'bg-action-muted border-strong',
     social: 'bg-surface-raised border',
-    economic: 'bg-action-muted-muted border-strong',
+    economic: 'bg-action-muted border-strong',
   }
 
   return (
@@ -159,7 +159,7 @@ export default function ImpactPageContent() {
                 <div className="flex items-center justify-between">
                   {getCategoryIcon(metric.category)}
                   {metric.verified && (
-                    <Badge className="bg-action-muted-muted text-action">
+                    <Badge className="bg-action-muted text-action">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       {t('verified')}
                     </Badge>
@@ -320,7 +320,7 @@ export default function ImpactPageContent() {
               <Card
                 key={method.id}
                 className={`cursor-pointer transition-all hover:border-strong ${
-                  method.popular ? 'ring-2 ring-action bg-action-muted-muted' : ''
+                  method.popular ? 'ring-2 ring-action bg-action-muted' : ''
                 }`}
                 onClick={() => setSelectedDonationMethod(method.id)}
               >

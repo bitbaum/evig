@@ -92,7 +92,7 @@ export default async function DashboardDecisionsPage() {
                         </StatusBadge>
                       )}
                       {d.hasUserVoted ? (
-                        <span className="rounded-full bg-action-muted-muted px-2 py-0.5 text-xs text-action">
+                        <span className="rounded-full bg-action-muted px-2 py-0.5 text-xs text-action">
                           {t('voted')}
                         </span>
                       ) : (

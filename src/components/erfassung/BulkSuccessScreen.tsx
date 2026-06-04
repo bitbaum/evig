@@ -57,7 +57,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
               <AlertCircle className="w-10 h-10 text-warning-600 dark:text-warning-400" />
             </div>
           ) : (
-            <div className="w-20 h-20 rounded-full bg-action-muted-muted flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-action-muted flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-action" />
             </div>
           )}

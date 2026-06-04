@@ -89,7 +89,7 @@ interface CalloutProps {
 
 export function Callout({ title, content, className = '' }: CalloutProps) {
   return (
-    <section className={`bg-action-muted-muted rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}>
+    <section className={`bg-action-muted rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}>
       <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold text-text-primary`}>
         {title}
       </Heading>

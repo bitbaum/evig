@@ -119,7 +119,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         </Link>
         <Link
           href={`/admin/team/${member.id}/edit`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-action bg-action-muted-muted hover:bg-action-muted rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-action bg-action-muted hover:bg-action-muted rounded-lg transition-colors"
           onClick={() => onEdit?.(member.id)}
         >
           <Edit2 className="w-4 h-4" />

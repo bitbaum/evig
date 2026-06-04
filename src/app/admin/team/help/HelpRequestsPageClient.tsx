@@ -110,7 +110,7 @@ export function HelpRequestsPageClient({
             onClick={() => setShowFilters(!showFilters)}
             className={`p-2 rounded-lg ${
               hasActiveFilters
-                ? 'text-action bg-action-muted-muted'
+                ? 'text-action bg-action-muted'
                 : 'text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6'
             }`}
             title="Filter"

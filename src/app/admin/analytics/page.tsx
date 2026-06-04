@@ -336,21 +336,21 @@ export default async function AnalyticsPage() {
         <div className="p-6 bg-surface-base rounded-xl border border">
           <Heading level={3} className="font-semibold text-text-primary mb-4">Aktivitäts-Übersicht</Heading>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-action-muted-muted rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-action-muted rounded-lg">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-action" />
                 <span className="text-sm text-text-secondary">Aufgaben erledigt (diese Woche)</span>
               </div>
               <span className="text-lg font-bold text-action">{activity.taskCompletionsThisWeek}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-action-muted-muted rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-action-muted rounded-lg">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-action" />
                 <span className="text-sm text-text-secondary">Aufgaben erledigt (diesen Monat)</span>
               </div>
               <span className="text-lg font-bold text-action">{activity.taskCompletionsThisMonth}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-action-muted-muted rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-action-muted rounded-lg">
               <div className="flex items-center gap-2">
                 <Package className="w-5 h-5 text-action" />
                 <span className="text-sm text-text-secondary">Neue Einreichungen (diesen Monat)</span>
@@ -375,7 +375,7 @@ export default async function AnalyticsPage() {
           className="flex items-center justify-between p-4 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-action" />
             </div>
             <div>
@@ -391,7 +391,7 @@ export default async function AnalyticsPage() {
           className="flex items-center justify-between p-4 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
               <ClipboardList className="w-5 h-5 text-action" />
             </div>
             <div>

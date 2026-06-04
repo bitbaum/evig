@@ -100,7 +100,7 @@ export function ShopProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-surface-raised", selectable && selectedIds.has(product.id) && "bg-action-muted-muted")}
+                className={cn("hover:bg-surface-raised", selectable && selectedIds.has(product.id) && "bg-action-muted")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">

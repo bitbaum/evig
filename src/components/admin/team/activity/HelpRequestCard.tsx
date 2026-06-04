@@ -88,7 +88,7 @@ export function HelpRequestCard({
           className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
             request.is_broadcast
               ? 'bg-warning-100 dark:bg-warning-900/30'
-              : 'bg-action-muted-muted'
+              : 'bg-action-muted'
           }`}
         >
           {request.is_broadcast ? (
@@ -146,7 +146,7 @@ export function HelpRequestCard({
 
           {/* Resolution info */}
           {isResolved && request.resolved_by_name && (
-            <div className="mt-3 p-2 bg-action-muted-muted rounded-lg">
+            <div className="mt-3 p-2 bg-action-muted rounded-lg">
               <p className="text-sm text-action flex items-center gap-1">
                 <CheckCircle className="w-4 h-4" />
                 Gelöst von {request.resolved_by_name}
@@ -174,7 +174,7 @@ export function HelpRequestCard({
             <button
               onClick={() => onTakeOn?.(request.id)}
               disabled={isTakingOn}
-              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isTakingOn ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -188,7 +188,7 @@ export function HelpRequestCard({
             <button
               onClick={() => onResolve?.(request.id)}
               disabled={isResolving}
-              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isResolving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

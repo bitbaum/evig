@@ -34,7 +34,7 @@ export default function AboutSubNav() {
                 href={item.href}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'bg-action-muted-muted text-action'
+                    ? 'bg-action-muted text-action'
                     : 'text-text-secondary hover:bg-surface-raised hover:text-text-primary'
                 }`}
               >

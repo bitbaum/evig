@@ -68,7 +68,7 @@ export default async function ContactPage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {contactInfo.map((info, index) => (
-              <div key={index} className="bg-action-muted-muted rounded-xl p-4 sm:p-6 text-center">
+              <div key={index} className="bg-action-muted rounded-xl p-4 sm:p-6 text-center">
                 <div className="flex justify-center mb-3 sm:mb-4">
                   <info.icon className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
                 </div>

@@ -32,7 +32,7 @@ export function QuickActionsSection({ quickActions, fulfillActions }: QuickActio
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="relative flex flex-col items-center gap-2 p-3 rounded-lg bg-action-muted-muted text-action hover:bg-action-muted transition-colors"
+                    className="relative flex flex-col items-center gap-2 p-3 rounded-lg bg-action-muted text-action hover:bg-action-muted transition-colors"
                   >
                     {/* Badge */}
                     <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-action px-1 text-xs font-bold text-white">

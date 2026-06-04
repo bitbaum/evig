@@ -190,7 +190,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
             </Link>
             <Link
               href="/get-involved/donate"
-              className="rounded-md bg-surface-base px-5 py-2.5 text-sm font-semibold text-action border border-action hover:bg-action-muted-muted text-center"
+              className="rounded-md bg-surface-base px-5 py-2.5 text-sm font-semibold text-action border border-action hover:bg-action-muted text-center"
             >
               {t('board.donateBtn')}
             </Link>

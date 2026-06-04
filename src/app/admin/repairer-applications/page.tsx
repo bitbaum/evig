@@ -80,7 +80,7 @@ export default function RepairerApplicationsAdmin() {
 
       {/* Success Message */}
       {successMessage && (
-        <div className="bg-action-muted-muted border border-strong rounded-lg p-4">
+        <div className="bg-action-muted border border-strong rounded-lg p-4">
           <p className="text-action">{successMessage}</p>
         </div>
       )}

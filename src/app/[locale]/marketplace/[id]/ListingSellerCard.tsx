@@ -26,7 +26,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
     >
       <Heading level={3} className="text-sm text-text-primary mb-3">{t('seller')}</Heading>
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
           {listing.seller_avatar_url ? (
             <Image src={listing.seller_avatar_url} alt={t('seller')} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
           ) : (

@@ -8,7 +8,7 @@ export function HeroSection() {
   return (
     <section className="bg-surface-raised py-20 px-4">
       <div className="max-w-4xl mx-auto text-center">
-        <span className="inline-block bg-action-muted-muted text-action text-sm font-medium px-3 py-1 rounded-full mb-6">
+        <span className="inline-block bg-action-muted text-action text-sm font-medium px-3 py-1 rounded-full mb-6">
           Kontextuelles Feedback-System
         </span>
         <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">

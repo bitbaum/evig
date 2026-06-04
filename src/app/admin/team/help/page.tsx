@@ -144,7 +144,7 @@ export default async function HelpRequestsPage() {
 
         <div className="p-4 bg-surface-base rounded-xl border border">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-action-muted-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
               <CheckCircle className="w-5 h-5 text-action" />
             </div>
             <div>

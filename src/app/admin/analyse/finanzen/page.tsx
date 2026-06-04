@@ -152,7 +152,7 @@ export default async function FinanzenPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-action-muted-muted rounded-lg">
+          <div className="p-2 bg-action-muted rounded-lg">
             <PiggyBank className="w-6 h-6 text-action" />
           </div>
           <div>
@@ -278,7 +278,7 @@ export default async function FinanzenPage() {
                     <span>{year}</span>
                     <span className={`text-sm px-2 py-1 rounded ${
                       selfFinancingPct >= 50
-                        ? 'bg-action-muted-muted text-action'
+                        ? 'bg-action-muted text-action'
                         : 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200'
                     }`}>
                       {selfFinancingPct.toFixed(1)}% Eigenfinanzierung

@@ -200,7 +200,7 @@ export default async function ApprovalsPage() {
             </div>
           </div>
         </div>
-        <div className="p-4 bg-action-muted-muted rounded-lg border border-strong">
+        <div className="p-4 bg-action-muted rounded-lg border border-strong">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-action" />
             <div>

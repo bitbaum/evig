@@ -306,7 +306,7 @@ function StatCard({
 }) {
   const tones: Record<string, string> = {
     yellow: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
-    blue: 'bg-action-muted-muted text-action border-strong',
+    blue: 'bg-action-muted text-action border-strong',
     orange: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
     red: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-300 border-error-200 dark:border-error-800',
   }

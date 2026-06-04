@@ -27,7 +27,7 @@ export async function WhyOpenSourceSection() {
           {reasons.map((reason, index) => (
             <div key={index} className="bg-surface-base rounded-xl p-6 border hover:border-strong transition-all duration-300">
               <div className="flex items-center mb-4">
-                <div className="p-3 bg-action-muted-muted rounded-lg text-action mr-4">
+                <div className="p-3 bg-action-muted rounded-lg text-action mr-4">
                   <reason.icon className="w-6 h-6" />
                 </div>
                 <Heading level={3} className="">{reason.title}</Heading>

@@ -236,7 +236,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             {order.role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}
           </Heading>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-action-muted-muted rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-action" />
             </div>
             <div>

@@ -88,7 +88,7 @@ export default function VotingPanel({
         {votingDeadline && status === DECISION_STATUS.VOTING && (
           <DeadlineCountdown deadline={votingDeadline} />
         )}
-        <div className="rounded-lg bg-action-muted-muted p-6 text-center shadow-xs">
+        <div className="rounded-lg bg-action-muted p-6 text-center shadow-xs">
           <p className="font-medium text-action">Deine Stimme wurde abgegeben</p>
           <p className="mt-1 text-sm text-action">
             Du kannst deine Stimme ändern, solange die Abstimmung läuft.

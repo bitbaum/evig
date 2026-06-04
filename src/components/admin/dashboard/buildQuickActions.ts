@@ -18,7 +18,7 @@ export function buildQuickActions(
       label: 'Neuer Blogartikel',
       href: '/admin/content/blog/new',
       icon: FileText,
-      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
+      color: 'bg-action-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -27,7 +27,7 @@ export function buildQuickActions(
       label: 'Gerät annehmen',
       href: '/admin/intake',
       icon: PackageCheck,
-      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
+      color: 'bg-action-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -36,7 +36,7 @@ export function buildQuickActions(
       label: 'Gerät erfassen',
       href: '/admin/erfassung',
       icon: ScanLine,
-      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
+      color: 'bg-action-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -45,7 +45,7 @@ export function buildQuickActions(
       label: 'Neuer Workshop',
       href: '/admin/workshops/new',
       icon: GraduationCap,
-      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
+      color: 'bg-action-muted text-action hover:bg-action-muted',
     })
   }
 
@@ -63,7 +63,7 @@ export function buildQuickActions(
       label: 'Neuer Standort',
       href: '/admin/locations/new',
       icon: MapPin,
-      color: 'bg-action-muted-muted text-action hover:bg-action-muted',
+      color: 'bg-action-muted text-action hover:bg-action-muted',
     })
   }
 

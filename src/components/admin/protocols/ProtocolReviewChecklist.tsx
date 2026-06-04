@@ -15,7 +15,7 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
 }> = {
   done: {
     icon: CheckCircle2,
-    className: 'bg-action-muted-muted text-action border-strong',
+    className: 'bg-action-muted text-action border-strong',
     label: 'Erledigt',
   },
   active: {

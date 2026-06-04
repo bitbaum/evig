@@ -36,7 +36,7 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
               <div className="mt-3 ml-6 space-y-2">
                 <p className="text-text-secondary text-sm">{topic.discussion}</p>
                 {topic.outcome && (
-                  <div className="bg-action-muted-muted border border-strong rounded-sm p-2">
+                  <div className="bg-action-muted border border-strong rounded-sm p-2">
                     <p className="text-sm text-action">
                       <CheckCircle2 className="w-3 h-3 inline mr-1" />
                       Ergebnis: {topic.outcome}

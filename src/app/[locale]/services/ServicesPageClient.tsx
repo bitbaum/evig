@@ -84,7 +84,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
             service.available
-              ? 'bg-action-muted-muted text-action group-hover:bg-action group-hover:text-white'
+              ? 'bg-action-muted text-action group-hover:bg-action group-hover:text-white'
               : 'bg-surface-raised text-text-muted'
           }`}>
             <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -93,7 +93,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             <div className="flex items-center gap-2 mb-2">
               <Heading level={3} className="text-xl sm:text-2xl font-bold">{service.title}</Heading>
               {service.badge && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted-muted text-action">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted text-action">
                   {service.badge}
                 </span>
               )}
@@ -144,7 +144,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
-                <div className="w-full inline-flex items-center justify-center text-action font-semibold bg-action-muted-muted px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-action font-semibold bg-action-muted px-4 py-2 rounded-lg">
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   {t('appointmentRequested')}
                 </div>
@@ -156,7 +156,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : !session?.user ? (
                 <button
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
-                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted-muted hover:bg-action-muted-muted px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted hover:bg-action-muted px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
@@ -173,7 +173,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : (
                 <Link
                   href={service.href}
-                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted-muted hover:bg-action-muted-muted px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted hover:bg-action-muted px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <ArrowRight className="w-4 h-4 mr-2" />
                   {t('learnMore')}

@@ -49,7 +49,7 @@ export default function SubmissionsAdminPage() {
             <div className="text-2xl font-bold">{s.counts.pending}</div>
             <div className="text-xs">Ausstehend</div>
           </div>
-          <div className="bg-action-muted-muted text-action px-4 py-2 rounded-lg text-center">
+          <div className="bg-action-muted text-action px-4 py-2 rounded-lg text-center">
             <div className="text-2xl font-bold">{s.counts.published}</div>
             <div className="text-xs">Veröffentlicht</div>
           </div>
@@ -63,7 +63,7 @@ export default function SubmissionsAdminPage() {
         </div>
       )}
       {s.success && (
-        <div className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
+        <div className="bg-action-muted border border-strong text-action px-4 py-3 rounded-lg">
           {s.success}
         </div>
       )}

@@ -74,7 +74,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               onClick={() => handleChange('profile_visibility', 'public')}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                 profile.profile_visibility === 'public'
-                  ? 'border-action bg-action-muted-muted text-action'
+                  ? 'border-action bg-action-muted text-action'
                   : 'border bg-surface-base text-text-secondary hover:border-strong'
               }`}
             >

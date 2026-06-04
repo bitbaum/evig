@@ -67,7 +67,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
               </div>
 
               {/* CSV Format Info */}
-              <div className="bg-action-muted-muted rounded-lg p-4">
+              <div className="bg-action-muted rounded-lg p-4">
                 <Heading level={4} className="font-medium text-text-primary mb-2">
                   Erforderliches CSV-Format:
                 </Heading>

@@ -110,7 +110,7 @@ export function VerifyStep({
   if (verified) {
     return (
       <div className="text-center py-8">
-        <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
@@ -126,7 +126,7 @@ export function VerifyStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <Mail className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
@@ -173,7 +173,7 @@ export function VerifyStep({
             className={cn(
               'w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border-2 transition-colors',
               'focus:ring-2 focus:ring-action focus:border-action',
-              digit ? 'border-action bg-action-muted-muted' : 'border-default',
+              digit ? 'border-action bg-action-muted' : 'border-default',
               (isVerifying || isLoading) && 'opacity-50'
             )}
           />

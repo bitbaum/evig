@@ -192,7 +192,7 @@ export default function FinancesContent() {
             </div>
 
             {/* Methodology Note */}
-            <div className="bg-action-muted-muted border border-strong rounded-xl p-6">
+            <div className="bg-action-muted border border-strong rounded-xl p-6">
               <Heading level={3} className="text-action-text mb-2">{t('methodology.title')}</Heading>
               <ul className="text-sm text-action space-y-1">
                 <li>{t('methodology.point1')}</li>

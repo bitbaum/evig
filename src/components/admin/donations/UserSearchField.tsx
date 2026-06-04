@@ -27,7 +27,7 @@ export function UserSearchField({
         Benutzer verknüpfen (optional)
       </label>
       {selectedUser ? (
-        <div className="flex items-center gap-2 p-3 bg-action-muted-muted border border-strong rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-action-muted border border-strong rounded-lg">
           <User className="w-5 h-5 text-action" />
           <div className="flex-1">
             <div className="text-sm font-medium text-text-primary">

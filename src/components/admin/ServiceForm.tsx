@@ -145,7 +145,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
         </div>
       )}
       {success && (
-        <div role="status" className="bg-action-muted-muted border border-strong text-action px-4 py-3 rounded-lg">
+        <div role="status" className="bg-action-muted border border-strong text-action px-4 py-3 rounded-lg">
           {success}
         </div>
       )}

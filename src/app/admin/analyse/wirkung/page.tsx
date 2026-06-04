@@ -116,7 +116,7 @@ export default async function WirkungPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-action-muted-muted rounded-lg">
+          <div className="p-2 bg-action-muted rounded-lg">
             <Target className="w-6 h-6 text-action" />
           </div>
           <div>
@@ -137,7 +137,7 @@ export default async function WirkungPage() {
       )}
 
       {/* Info Banner */}
-      <div className="p-4 bg-action-muted-muted border border-strong rounded-lg">
+      <div className="p-4 bg-action-muted border border-strong rounded-lg">
         <p className="text-sm text-action">
           <strong>Wirkungsbericht:</strong> Diese Seite zeigt die messbare Wirkung von Revamp-IT.
           Die Daten werden aus verschiedenen Quellen aggregiert und regelmässig aktualisiert.
@@ -154,9 +154,9 @@ export default async function WirkungPage() {
       <div className="grid md:grid-cols-3 gap-6">
         {impactAreas.map(area => {
           const bgColor = {
-            green: 'bg-action-muted-muted text-action',
+            green: 'bg-action-muted text-action',
             blue: 'bg-surface-raised text-text-secondary',
-            purple: 'bg-action-muted-muted text-action',
+            purple: 'bg-action-muted text-action',
           }[area.color]
 
           const pendingCount = area.metrics.filter(m => m.status === 'needs_data').length

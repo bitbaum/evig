@@ -202,7 +202,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             <RevampITServicesCTA alternative={alternative} />
 
             {/* General CTA */}
-            <div className="rounded-xl border-2 border-strong bg-action-muted-muted p-5">
+            <div className="rounded-xl border-2 border-strong bg-action-muted p-5">
               <Heading level={3} className="text-base font-bold text-action mb-2">
                 {t('detail.helpWithMigration')}
               </Heading>

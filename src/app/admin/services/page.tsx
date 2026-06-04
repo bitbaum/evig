@@ -276,7 +276,7 @@ export default async function AdminServicesPage() {
                         )}
                         <Link
                           href={`/admin/services/${service.id}/edit`}
-                          className="p-2.5 text-action hover:text-action hover:bg-action-muted-muted rounded-sm"
+                          className="p-2.5 text-action hover:text-action hover:bg-action-muted rounded-sm"
                           title="Bearbeiten"
                         >
                           <Edit className="w-4 h-4" />

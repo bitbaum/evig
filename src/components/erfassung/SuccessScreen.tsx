@@ -19,7 +19,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <div className="w-16 h-16 bg-action-muted-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <Package className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">

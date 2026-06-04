@@ -55,7 +55,7 @@ export default function DecisionFormClient() {
 
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
-        <div className="flex items-start justify-between gap-3 rounded-md border border-strong bg-action-muted-muted px-4 py-3 text-sm text-action">
+        <div className="flex items-start justify-between gap-3 rounded-md border border-strong bg-action-muted px-4 py-3 text-sm text-action">
           <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
           <button
             type="button"
@@ -205,7 +205,7 @@ export default function DecisionFormClient() {
       </div>
 
       {/* Public voting — surfaced prominently so sharing is easy */}
-      <label className="flex items-start gap-3 rounded-lg border border-strong bg-action-muted-muted px-4 py-3 cursor-pointer">
+      <label className="flex items-start gap-3 rounded-lg border border-strong bg-action-muted px-4 py-3 cursor-pointer">
         <input
           type="checkbox"
           checked={form.allowPublicVoting}

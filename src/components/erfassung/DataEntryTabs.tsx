@@ -240,7 +240,7 @@ export function DataEntryTabs({
 
   return (
     <div
-      className={`bg-action-muted-muted rounded-xl border border-strong overflow-hidden ${className}`}
+      className={`bg-action-muted rounded-xl border border-strong overflow-hidden ${className}`}
     >
       {/* Collapsible header */}
       <button
@@ -353,7 +353,7 @@ export function DataEntryTabs({
 
             {/* Status feedback */}
             {quickEntryState === 'success' && (
-              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-action-muted-muted rounded-lg text-action">
+              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-action-muted rounded-lg text-action">
                 <CheckCircle2 className="w-5 h-5" />
                 <span className="font-medium">{t('dataFilled')}</span>
               </div>
@@ -379,7 +379,7 @@ export function DataEntryTabs({
               </p>
             </div>
 
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-strong dark:border-action rounded-xl cursor-pointer hover:border-action hover:bg-action-muted-muted transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-strong dark:border-action rounded-xl cursor-pointer hover:border-action hover:bg-action-muted transition-colors">
               {isUploading ? (
                 <>
                   <Loader2 className="w-10 h-10 text-action mb-2 animate-spin" />

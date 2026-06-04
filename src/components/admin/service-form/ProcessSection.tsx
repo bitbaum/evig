@@ -56,7 +56,7 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
         <button
           type="button"
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-action-muted-muted rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-action-muted rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Schritt hinzufügen
