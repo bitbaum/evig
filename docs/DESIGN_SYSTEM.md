@@ -1,253 +1,176 @@
-# Design System Documentation
+# Design System — The Final Solution
 
-**Created**: 2025-01-27  
-**Last Modified**: 2025-01-27  
-**Last Modified Summary**: Initial design system documentation
+**Last updated:** 2026-06-04 (commits `0c62f5c7`, `48fb78a0`)
 
-## Overview
+## TL;DR
 
-This document outlines the design system, color palette, and CSS best practices for the RevampIT project.
+The codebase had a bug class — "white text on grey dropdown" (BB.6) and
+its siblings — that kept reappearing because components bypassed the
+design primitives. The fix:
 
-## Technology Stack
+1. **Semantic tokens** replaced palette scales as the API. Components use
+   `bg-surface-base`, `text-text-primary`, `bg-action` — not
+   `bg-white dark:bg-neutral-900`, `text-neutral-700 dark:text-neutral-300`,
+   `bg-primary-600`.
+2. **Primitives** (`<Input>`, `<Select>`, `<Textarea>`, `<Button>`,
+   `<Card>`) consume semantic tokens internally. Callers get correct
+   theming without writing a single `dark:` variant.
+3. **Lint** warns on raw `<select>`, `<textarea>`, and text `<input>` in
+   feature code so the bug class can't return.
 
-### CSS Framework: Tailwind CSS
-- **Version**: 3.4.1
-- **Approach**: Utility-first CSS framework
-- **Configuration**: Custom color system with CSS variables
+The colour direction: **achromatic surfaces + RevampIT green only on
+action elements** (primary buttons, links, focus rings, key icons).
+Everything else neutral. This preserves the brand pulse without making
+the whole UI green.
 
-### Utility Libraries
-- **tailwind-merge**: Merges Tailwind classes intelligently
-- **clsx**: Conditional className composition
-- **Usage**: Combined in `src/lib/utils.ts` via `cn()` helper
+## The token system
 
-### Component Library: Custom Components
-**Decision**: Not using shadcn/ui
+Every visual decision is one of these tokens. Component code references
+them via Tailwind utility classes; the values live in `globals.css` and
+flip automatically with `.dark` on `<html>`.
 
-**Rationale**:
-- Already have custom components built
-- Components follow similar patterns to shadcn
-- Better control over styling and behavior
-- No need for additional dependencies
-- Components are modular and maintainable
+### Text — role-based
 
-## Color System
+| Token | Tailwind class | Role |
+|---|---|---|
+| `--text-primary` | `text-text-primary` | Headings, primary body |
+| `--text-secondary` | `text-text-secondary` | Body, descriptions |
+| `--text-tertiary` | `text-text-tertiary` | Meta, labels, secondary info |
+| `--text-muted` | `text-text-muted` | Placeholders, disabled |
+| `--text-inverted` | `text-text-inverted` | Text on dark/action surfaces |
 
-### Primary Color: Green (Sustainability)
-```typescript
-primary: {
-  50: '#f0fdf4',   // Very light green
-  100: '#dcfce7',  // Light green
-  200: '#bbf7d0',  // Lighter green
-  300: '#86efac',  // Light-medium green
-  400: '#4ade80',  // Medium green
-  500: '#22c55e',  // Base green
-  600: '#16a34a',  // Medium-dark green
-  700: '#15803d',  // Dark green
-  800: '#166534',  // Darker green
-  900: '#14532d',  // Very dark green
-}
-```
+### Surfaces — role-based
 
-**Usage**: Primary brand color for buttons, links, and important UI elements.
+| Token | Tailwind class | Role |
+|---|---|---|
+| `--surface-page` | `bg-surface-page` | Body background |
+| `--surface-base` | `bg-surface-base` | Cards, panels, modals |
+| `--surface-raised` | `bg-surface-raised` | Sections, secondary fills |
+| `--surface-overlay` | `bg-surface-overlay` | Dropdowns, tooltips, popovers |
 
-### Secondary Color: Bitcoin Orange
-```typescript
-secondary: {
-  50: '#fff7ed',   // Very light orange
-  100: '#ffedd5',  // Light orange
-  200: '#fed7aa',  // Lighter orange
-  300: '#fdba74',  // Light-medium orange
-  400: '#fb923c',  // Medium orange
-  500: '#F7931A',  // Bitcoin orange (base)
-  600: '#ea580c',  // Medium-dark orange
-  700: '#c2410c',  // Dark orange
-  800: '#9a3412',  // Darker orange
-  900: '#7c2d12',  // Very dark orange
-}
-```
+### Borders — role-based
 
-**Usage**: Secondary actions, highlights, and accents.
+| Token | Tailwind class | Role |
+|---|---|---|
+| `--border-subtle` | `border-subtle`, `divide-subtle` | Divider lines, table rows |
+| `--border-default` | `border` (alone) | Input borders, card edges |
+| `--border-strong` | `border-strong` | Focus rings, emphasis |
 
-## CSS Variables (Theming Support)
+### Action — the only chromatic colour
 
-The design system includes CSS variables for proper theming support:
+| Token | Tailwind class | Role |
+|---|---|---|
+| `--accent-action` | `bg-action`, `text-action`, `border-action`, `ring-action` | Primary buttons, links, focus rings |
+| `--accent-action-hover` | `bg-action-hover` | Hover state |
+| `--accent-action-muted` | `bg-action-muted` | Subtle fills (badges, hover bg) |
+| `--accent-action-text` | `text-action-text` | Text colour ON action surfaces |
 
-```css
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --primary: 142.1 76.2% 36.3%;
-  --primary-foreground: 355.7 100% 97.3%;
-  --secondary: 24.6 95% 53.1%;
-  --secondary-foreground: 355.7 100% 97.3%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 142.1 76.2% 36.3%;
-}
-```
+### Status — minimum chromatic palette
 
-**Dark mode** support is also included with `.dark` class.
+For semantic states (error/warning/info/success) the existing `error-X`,
+`warning-X`, `info-X`, `success-X` scales remain valid. These are NOT
+arbitrary brand colours — they're conventional semantic signals (red =
+problem, amber = caution, green = success). Keep using them for badges,
+alerts, and validation states.
 
-## Component Patterns
+## Authoring rule of thumb
 
-### Button Component
-**Location**: `src/components/ui/button.tsx`
+When writing or reviewing component code:
 
-**Variants**:
-- `default` / `primary`: Green background (primary brand color)
-- `secondary`: Bitcoin orange background
-- `outline`: Border with transparent background
-- `ghost`: Transparent background with hover effect
+| Goal | Use | Don't use |
+|---|---|---|
+| Card / panel background | `bg-surface-base` | `bg-white dark:bg-neutral-900` |
+| Section / sub-panel background | `bg-surface-raised` | `bg-neutral-50 dark:bg-neutral-800` |
+| Headline text | `text-text-primary` | `text-neutral-900 dark:text-white` |
+| Body text | `text-text-secondary` | `text-neutral-700 dark:text-neutral-300` |
+| Meta / label text | `text-text-tertiary` | `text-neutral-500 dark:text-neutral-400` |
+| Placeholder | `text-text-muted` | `text-neutral-400 dark:text-neutral-500` |
+| Divider lines | `divide-subtle`, `border-subtle` | `divide-neutral-100 dark:divide-white/[0.04]` |
+| Input border | (just `border`) | `border-neutral-300 dark:border-white/[0.08]` |
+| Focus ring | `ring-action` | `ring-primary-500` |
+| Primary button bg | `bg-action hover:bg-action-hover text-text-inverted` | `bg-primary-600 dark:bg-primary-500 ...` |
+| Subtle "active" chip | `bg-action-muted text-action` | `bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-300` |
 
-**Sizes**:
-- `sm`: Compact size
-- `default`: Standard size
-- `lg`: Large size
+**Form controls (`<input>`, `<select>`, `<textarea>`):** never write raw
+HTML — always use the primitives from `@/components/ui/`. ESLint warns
+when you don't.
 
-**Best Practices**:
-- Uses `forwardRef` for proper ref forwarding
-- Supports `as` prop for element polymorphism
-- Includes focus-visible states for accessibility
-- Proper disabled states
+## Migrating a surface
 
-### Logo Component
-**Location**: `src/components/ui/Logo.tsx`
+The mechanical pattern (no thinking required):
 
-**Current Implementation**: Stylized "R" letter with gradient background
-
-**Props**:
-- `variant`: 'light' | 'dark' (for text color)
-- `showText`: boolean (shows/hides "RevampIT" text)
-- `href`: string (defaults to '/')
-
-**Status**: Ready for new logo image integration
-
-## Accessibility Features
-
-### Included in globals.css:
-
-1. **Reduced Motion Support**
-   ```css
-   @media (prefers-reduced-motion: reduce) {
-     .animate-in { animation: none; }
-     * { transition-duration: 0ms !important; }
-   }
-   ```
-
-2. **High Contrast Mode**
-   ```css
-   @media (prefers-contrast: high) {
-     .dropdown-menu {
-       border: 2px solid;
-       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-     }
-   }
-   ```
-
-3. **Touch Targets**
-   - Minimum 44x44px for mobile interaction
-   - Applied via `.touch-target` utility class
-
-4. **Focus States**
-   - All interactive elements have visible focus rings
-   - Uses `focus-visible` for keyboard navigation
-
-## Icon System
-
-### Current Icons: Lucide React
-- **Package**: `lucide-react`
-- **Benefits**: Tree-shakeable, consistent, high-quality
-- **Usage**: Import individual icons as needed
-
-## Responsive Design
-
-### Breakpoints (Tailwind Default)
-- `sm`: 640px
-- `md`: 768px
-- `lg`: 1024px
-- `xl`: 1280px
-- `2xl`: 1536px
-
-### Mobile-First Approach
-All components are designed mobile-first with progressive enhancement.
-
-## Custom Utilities
-
-### Defined in globals.css:
-
-1. **Animations**
-   - `.animate-in`: Fade in animation
-   - `.zoom-in-95`: Zoom animation
-   - `.animate-slideUp`: Slide up animation
-
-2. **Text Truncation**
-   - `.line-clamp-2`: Clamp to 2 lines
-   - `.line-clamp-3`: Clamp to 3 lines
-
-3. **Scrollbars**
-   - `.scrollbar-hide`: Hide scrollbar
-   - `.dropdown-scroll`: Custom scrollbar styling
-
-4. **Focus States**
-   - `.focus-ring`: Standardized focus ring
-
-## Next Steps
-
-### TODO: Logo Integration
-When the new logo is ready:
-1. Add logo files to `public/images/branding/`
-2. Update `Logo.tsx` to use `<Image>` component
-3. Add multiple sizes for different use cases
-4. Update favicon and app icons
-
-### TODO: App Icons
-Modern apps require multiple icon formats:
-- `icon.svg` - SVG favicon
-- `apple-icon.png` - Apple touch icon
-- `icon.png` - Android icon
-- Various sizes: 16x16, 32x32, 180x180, 512x512
-
-## Migration from Hardcoded Colors
-
-When updating components to use the new color system:
-
-### Before:
 ```tsx
-className="bg-green-600 text-white hover:bg-green-700"
+// BEFORE — palette scales + dark variants everywhere
+<div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.06]">
+  <h2 className="text-neutral-900 dark:text-white">Title</h2>
+  <p className="text-neutral-600 dark:text-neutral-400">Description</p>
+  <button className="bg-primary-600 hover:bg-primary-700 text-white">Action</button>
+</div>
+
+// AFTER — semantic tokens, no dark: needed
+<div className="bg-surface-base rounded-lg border">
+  <h2 className="text-text-primary">Title</h2>
+  <p className="text-text-secondary">Description</p>
+  <button className="bg-action hover:bg-action-hover text-text-inverted">Action</button>
+</div>
 ```
 
-### After:
-```tsx
-className="bg-primary-600 text-white hover:bg-primary-700"
-```
+Reference migrated file: `src/app/admin/appointments/page.tsx`.
 
-This provides:
-- Better consistency
-- Easier theming
-- Dark mode support
-- Easier maintenance
+## Migration backlog
 
-## Best Practices
+Counted via grep at the time of writing:
 
-1. **Always use the `cn()` utility** for className composition
-2. **Use semantic color names** (primary, secondary) instead of hardcoded colors
-3. **Include hover and focus states** for all interactive elements
-4. **Test with keyboard navigation** (Tab key)
-5. **Consider dark mode** in component design
-6. **Use Tailwind utilities** instead of custom CSS when possible
-7. **Mobile-first** responsive design
-8. **Accessibility first** - ensure sufficient contrast and proper ARIA labels
+| Pattern | Count | Priority |
+|---|---|---|
+| Raw `<select>` in feature code | 44 | High — covered by lint warning |
+| Raw `<textarea>` in feature code | 49 | High — covered by lint warning |
+| `bg-white` (palette) | hundreds | Medium — auto-handled by global override; visual works but tokens are cleaner |
+| `text-neutral-X` (palette) | hundreds | Medium |
+| `bg-primary-X` (palette) | hundreds | Medium |
+| Explicit `dark:` variants | hundreds | Low — they work, just verbose; remove during routine refactors |
 
-## References
+Run `npm run lint` to see current warning count.
 
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
-- [Dark Mode Best Practices](https://uxdesign.cc/how-to-design-for-dark-mode-effb8d8e7d73)
+## Tailwind 4 + shadcn — the deferred upgrades
 
+These were on the table for this session but deferred for safety:
 
+- **Tailwind 3 → 4** is a build-tool migration (CSS-first `@theme`,
+  removed utilities like `bg-opacity-X`, changed shadow defaults). The
+  upgrade tool `npx @tailwindcss/upgrade` automates ~80% of it. Worth
+  doing as a dedicated session AFTER the token migration is at >50%
+  coverage, so the upgrade doesn't mask design drift.
+- **shadcn/ui** would replace the custom primitives with Radix-based
+  accessible components. Worth doing if the team welcomes the Radix
+  peer-dep weight. Lower priority — the existing primitives already
+  consume semantic tokens correctly, so the bug-prevention goal is met
+  without shadcn.
+
+Order of operations when ready:
+
+1. Run `npx @tailwindcss/upgrade` on a branch.
+2. Fix breakage (typecheck + dev compile).
+3. Visual smoke-test the migrated surfaces (the ones already on semantic
+   tokens — they should look identical).
+4. Roll out shadcn primitive-by-primitive (Input first, then Select,
+   etc.). Keep the existing public API of each primitive so callers
+   don't break.
+
+## Why this works
+
+The BB.6 dropdown bug was structurally enabled by:
+
+1. The design system had primitives but didn't enforce their use.
+2. The token system existed (partially) but wasn't wired into Tailwind
+   utility classes, so authoring with semantic tokens was awkward.
+3. There was no lint guardrail.
+
+All three are fixed now. New components can't ship the bug. Existing
+components migrate one surface at a time without breaking siblings,
+because legacy palette scales still work. When the count of palette-scale
+classes hits zero, we can delete the legacy aliases and the rules graduate
+from warning to error.
+
+Nothing more should be needed for the "never worry about design bugs
+again" goal. Tailwind 4 + shadcn are polish, not structure.
