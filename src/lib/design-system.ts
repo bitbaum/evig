@@ -400,12 +400,12 @@ export const designPrimitive = {
   // `elevated` variant: sits inside a surface-base panel (e.g. a modal)
   //   — bg lifts to surface-raised so it stays visible against the panel.
   form: {
-    input:            'w-full rounded-md border border-border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    inputElevated:    'w-full rounded-md border border-border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    textarea:         'w-full rounded-md border border-border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    textareaElevated: 'w-full rounded-md border border-border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
-    select:           'rounded-md border border-border bg-surface-base px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
-    selectElevated:   'rounded-md border border-border bg-surface-raised px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
+    input:            'w-full rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    inputElevated:    'w-full rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    textarea:         'w-full rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    textareaElevated: 'w-full rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent disabled:opacity-50',
+    select:           'rounded-md border bg-surface-base px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
+    selectElevated:   'rounded-md border bg-surface-raised px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-action focus:border-transparent',
     label:    'block text-xs font-medium uppercase tracking-wide text-text-tertiary mb-1',
     hint:     'mt-1 text-xs text-text-muted',
     error:    'mt-1 text-xs text-error-600 dark:text-error-400',

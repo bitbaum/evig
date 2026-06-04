@@ -92,7 +92,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
 
       {/* Status filter chips — server-rendered Links, no client component */}
       <div className="flex flex-wrap items-center gap-2 text-sm">
-        <span className="text-neutral-500 dark:text-neutral-400">Status:</span>
+        <span className="text-text-tertiary">Status:</span>
         {FILTER_OPTIONS.map(opt => {
           const isActive = (status ?? '') === opt.value
           const href = opt.value
@@ -105,8 +105,8 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
               className={
                 'px-3 min-h-9 inline-flex items-center rounded-full border transition-colors ' +
                 (isActive
-                  ? 'border-primary-300 bg-primary-50 text-primary-700 dark:border-primary-500/40 dark:bg-primary-500/10 dark:text-primary-300'
-                  : 'border-neutral-200 text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50 dark:border-white/[0.08] dark:text-neutral-400 dark:hover:bg-white/[0.04]')
+                  ? 'border-action bg-action-muted text-action'
+                  : 'text-text-secondary hover:border-strong hover:bg-surface-raised')
               }
             >
               {opt.label}
@@ -115,18 +115,18 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
         })}
       </div>
 
-      <div className="rounded-lg border border-neutral-200 bg-white dark:border-white/[0.06] dark:bg-neutral-900 overflow-hidden">
+      <div className="rounded-lg border bg-surface-base overflow-hidden">
         {appointments.length === 0 ? (
           <div className="p-12 text-center">
-            <Calendar className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-            <p className="text-neutral-600 dark:text-neutral-300">
+            <Calendar className="w-12 h-12 text-text-muted mx-auto mb-4" />
+            <p className="text-text-secondary">
               Keine Termine in dieser Ansicht.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-50 dark:bg-white/[0.02] text-left text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+              <thead className="bg-surface-raised text-left text-xs uppercase tracking-wide text-text-tertiary">
                 <tr>
                   <th className="px-4 py-3 font-medium">Kunde</th>
                   <th className="px-4 py-3 font-medium">Service</th>
@@ -136,26 +136,26 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                   <th className="px-4 py-3 font-medium">Erstellt</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+              <tbody className="divide-y divide-subtle">
                 {appointments.map(row => {
                   const statusBadge = getBookingStatusBadge(row.status ?? '')
                   const urgencyBadge = getUrgencyBadge(row.urgency ?? '')
                   return (
-                    <tr key={row.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.02]">
+                    <tr key={row.id} className="hover:bg-surface-raised">
                       <td className="px-4 py-3">
-                        <div className="font-medium text-neutral-900 dark:text-white">
+                        <div className="font-medium text-text-primary">
                           {row.customer_name || row.customer_email}
                         </div>
                         {row.customer_name && (
-                          <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                          <div className="text-xs text-text-tertiary">
                             {row.customer_email}
                           </div>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-neutral-700 dark:text-neutral-300">
+                      <td className="px-4 py-3 text-text-secondary">
                         {row.service_name || '—'}
                       </td>
-                      <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 max-w-md">
+                      <td className="px-4 py-3 text-text-tertiary max-w-md">
                         <p className="line-clamp-2">{row.description || '—'}</p>
                       </td>
                       <td className="px-4 py-3">
@@ -168,7 +168,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                           {statusBadge.label}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
+                      <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">
                         {row.created_at ? formatDateShort(row.created_at) : '—'}
                       </td>
                     </tr>

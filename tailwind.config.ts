@@ -37,12 +37,6 @@ const config: Config = {
           muted:     'var(--text-muted)',     // placeholders, disabled state
           inverted:  'var(--text-inverted)',  // text on dark/action surfaces
         },
-        border: {
-          subtle:      'var(--border-subtle)',      // divider lines, table rows
-          DEFAULT:     'var(--border-default)',     // input borders, card edges
-          strong:      'var(--border-strong)',      // focus rings, emphasis
-          interactive: 'var(--border-strong)',      // alias — borders on hover/focus
-        },
         // The brand. Used ONLY on action surfaces (primary buttons, links,
         // focus rings, key icons) — everything else stays achromatic.
         action: {
@@ -160,6 +154,25 @@ const config: Config = {
           facebook: '#1877F2',
           'facebook-hover': '#0C63D4',
         },
+      },
+      // Border/divide colors — semantic tokens for borders. Lives in its own
+      // namespace (not `colors`) so it doesn't conflict with the `border`
+      // (width=1px) utility and so `border` alone still works to mean
+      // "1px border using --border-default".
+      borderColor: {
+        subtle:      'var(--border-subtle)',
+        DEFAULT:     'var(--border-default)',
+        strong:      'var(--border-strong)',
+        interactive: 'var(--border-strong)',
+      },
+      divideColor: {
+        subtle:      'var(--border-subtle)',
+        DEFAULT:     'var(--border-default)',
+        strong:      'var(--border-strong)',
+      },
+      // Ring color follows the action accent so focus states are consistent
+      ringColor: {
+        action: 'var(--accent-action)',
       },
       // Mobile-first spacing and sizing
       spacing: {
