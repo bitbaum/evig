@@ -89,6 +89,10 @@ jest.mock('@/lib/it-hilfe/notifications', () => ({
   sendItHilfeNotification: jest.fn().mockResolvedValue(undefined),
 }))
 
+jest.mock('@/lib/services/notifications', () => ({
+  notifyUsers: jest.fn().mockResolvedValue(undefined),
+}))
+
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
@@ -440,14 +444,17 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
       const res = await POST(makeRequest(VALID_UUID, 'POST', { message: 'I can help' }), routeParams(VALID_UUID))
       expect(res.status).toBe(201)
 
-      // Inspect the captured email-template args
-      const templateMock = jest.requireMock('@/lib/email/templates/it-hilfe') as {
-        itHilfeNewOfferReceived: jest.Mock
+      // Inspect the central notifyUsers call — acceptUrl is now carried in
+      // metadata (the offers route post-QQ.4.3 routes through notifyUsers,
+      // which dispatches to itHilfeNewOfferReceived via getEmailContent).
+      const notifMock = jest.requireMock('@/lib/services/notifications') as {
+        notifyUsers: jest.Mock
       }
-      expect(templateMock.itHilfeNewOfferReceived).toHaveBeenCalledTimes(1)
-      const args = templateMock.itHilfeNewOfferReceived.mock.calls[0]
-      // signature: (requesterName, requestTitle, helperName, offerMessage, requestUrl, acceptUrl)
-      const acceptUrl = args[5] as string | undefined
+      expect(notifMock.notifyUsers).toHaveBeenCalledTimes(1)
+      const payload = notifMock.notifyUsers.mock.calls[0][1] as {
+        metadata?: { acceptUrl?: string }
+      }
+      const acceptUrl = payload?.metadata?.acceptUrl
       expect(typeof acceptUrl).toBe('string')
       expect(acceptUrl).toMatch(/^https:\/\/example\.com\/it-hilfe\/accept\?token=/)
 

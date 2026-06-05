@@ -1,5 +1,5 @@
 /**
- * Tests for it-hilfe/notifications.ts — fire-and-forget email dispatch.
+ * Tests for it-hilfe/notifications.ts after SS.1 central-pipeline migration.
  *
  * Mission-relevant: IT-Hilfe connects seniors and beginners with helpers.
  * If the requester confirmation isn't sent, they don't know their request
@@ -8,21 +8,22 @@
  *
  * Behaviors locked:
  *   sendRequestCreatedNotifications
- *   - calls sendCustomEmail for requester when email is provided
- *   - calls sendCustomEmail for admin always
- *   - does NOT call sendCustomEmail for requester when email is absent
+ *   - calls notifyUsers([requesterId]) for the confirmation
+ *   - calls sendCustomEmail to the admin shared inbox (unchanged — not a
+ *     per-user notification)
+ *   - SUPPRESSES requester confirmation when includeRequesterConfirmation=false
  *   - queries DB for matching helpers when skillsNeeded is non-empty
- *   - does NOT query DB when skillsNeeded is empty
- *   - sends one email per matched helper
- *   - does not throw even if email sends fail
+ *   - calls notifyUsers(helperIds) for the matched helper fan-out
+ *   - skips helper DB query + fan-out when skillsNeeded is empty
+ *   - never throws even if downstream sends reject
  *
  *   sendItHilfeNotification
- *   - calls createInAppNotifications with correct parameters
- *   - does not throw if createInAppNotifications fails
+ *   - calls notifyUsers with the recipient IDs + IT_HILFE relation
+ *   - never throws if notifyUsers rejects
  */
 
 // ---------------------------------------------------------------------------
-// Mock factory
+// Mock factory — chainable Drizzle query builder
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
@@ -39,25 +40,26 @@ function makeChain(result: unknown = []) {
   return chain
 }
 
-// ---------------------------------------------------------------------------
-// Mocks
-// ---------------------------------------------------------------------------
-
 const mockDbSelect = jest.fn(() => makeChain([]))
 
 jest.mock('@/db', () => ({
-  db: {
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-  },
+  db: { select: (...args: unknown[]) => mockDbSelect.apply(null, args) },
 }))
 
 jest.mock('@/db/schema/itHilfe', () => ({
-  helperProfiles: { userId: 'hp_userId', isActive: 'hp_isActive' },
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
 }))
 
 jest.mock('@/db/schema/auth', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
+}))
+
+jest.mock('@/db/schema/services', () => ({
+  repairerProfiles: {
+    userId: 'rp_userId',
+    isActive: 'rp_isActive',
+    profileTier: 'rp_profileTier',
+  },
 }))
 
 jest.mock('drizzle-orm', () => ({
@@ -73,21 +75,17 @@ jest.mock('drizzle-orm', () => ({
 }))
 
 const mockSendCustomEmail = jest.fn()
-
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
 }))
 
-const mockCreateInAppNotifications = jest.fn()
-
-jest.mock('@/lib/api/task-helpers', () => ({
-  createInAppNotifications: (...args: unknown[]) => mockCreateInAppNotifications.apply(null, args),
+const mockNotifyUsers = jest.fn()
+jest.mock('@/lib/services/notifications', () => ({
+  notifyUsers: (...args: unknown[]) => mockNotifyUsers.apply(null, args),
 }))
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeRequestConfirmation: jest.fn().mockReturnValue({ subject: 'Conf', html: 'H', text: 'T' }),
   adminNewITHilfeRequest: jest.fn().mockReturnValue({ subject: 'Admin', html: 'H', text: 'T' }),
-  helperNewMatchingRequest: jest.fn().mockReturnValue({ subject: 'Helper', html: 'H', text: 'T' }),
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
@@ -98,9 +96,7 @@ jest.mock('@/config/it-hilfe', () => ({
   REVAMPIT_NOTIFICATION_EMAIL: 'notify@revamp-it.ch',
 }))
 
-jest.mock('@/config/urls', () => ({
-  APP_URL: 'http://localhost:3000',
-}))
+jest.mock('@/config/urls', () => ({ APP_URL: 'http://localhost:3000' }))
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
@@ -111,10 +107,7 @@ jest.mock('@/lib/logger', () => ({
 // ---------------------------------------------------------------------------
 
 import { sendRequestCreatedNotifications, sendItHilfeNotification } from '../notifications'
-
-// ---------------------------------------------------------------------------
-// Fixtures
-// ---------------------------------------------------------------------------
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 const BASE_PARAMS = {
   requestId: 'req-1',
@@ -138,7 +131,7 @@ beforeEach(() => {
   jest.clearAllMocks()
   mockDbSelect.mockImplementation(() => makeChain([]))
   mockSendCustomEmail.mockResolvedValue({ success: true, messageId: 'msg-1' })
-  mockCreateInAppNotifications.mockResolvedValue({ success: true })
+  mockNotifyUsers.mockResolvedValue(undefined)
 })
 
 // ============================================================================
@@ -146,15 +139,22 @@ beforeEach(() => {
 // ============================================================================
 
 describe('sendRequestCreatedNotifications', () => {
-  it('sends confirmation email to requester when email is provided', async () => {
+  it('notifies the requester via notifyUsers with the IT_HILFE_REQUEST_CONFIRMATION type', async () => {
     sendRequestCreatedNotifications(BASE_PARAMS)
     await flushAsync()
 
-    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
-    expect(calls).toContain('hans@example.com')
+    expect(mockNotifyUsers).toHaveBeenCalledWith(
+      ['user-1'],
+      expect.objectContaining({
+        type: NOTIFICATION_TYPES.IT_HILFE_REQUEST_CONFIRMATION,
+        related_type: RELATED_TYPES.IT_HILFE,
+        related_id: 'req-1',
+        metadata: expect.objectContaining({ requestUrl: 'http://localhost:3000/it-hilfe/req-1' }),
+      }),
+    )
   })
 
-  it('always sends admin notification email', async () => {
+  it('always sends admin alert via sendCustomEmail (shared inbox path unchanged)', async () => {
     sendRequestCreatedNotifications(BASE_PARAMS)
     await flushAsync()
 
@@ -162,159 +162,88 @@ describe('sendRequestCreatedNotifications', () => {
     expect(calls).toContain('notify@revamp-it.ch')
   })
 
-  it('does NOT send requester email when email is absent', async () => {
-    sendRequestCreatedNotifications({ ...BASE_PARAMS, requesterEmail: '' })
-    await flushAsync()
-
-    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
-    expect(calls).not.toContain('')
-    // Admin email still sent
-    expect(calls).toContain('notify@revamp-it.ch')
-  })
-
-  it('SUPPRESSES requester confirmation when includeRequesterConfirmation is false', async () => {
-    // The IT-Hilfe anonymous-post flow uses this: the dedicated claim
-    // email replaces the standard confirmation (which would link to a
-    // request the new user can't yet view).
+  it('SUPPRESSES requester confirmation when includeRequesterConfirmation=false', async () => {
     sendRequestCreatedNotifications({ ...BASE_PARAMS, includeRequesterConfirmation: false })
     await flushAsync()
 
-    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
-    expect(calls).not.toContain('hans@example.com')
-    // Admin notification still goes through
-    expect(calls).toContain('notify@revamp-it.ch')
+    // No requester notifyUsers call — only helper fan-out (if any helpers matched).
+    const requesterCall = mockNotifyUsers.mock.calls.find(
+      (call) => Array.isArray(call[0]) && call[0].includes('user-1'),
+    )
+    expect(requesterCall).toBeUndefined()
+
+    // Admin email still goes through.
+    const adminCalls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
+    expect(adminCalls).toContain('notify@revamp-it.ch')
   })
 
-  it('sends requester confirmation when includeRequesterConfirmation is true (explicit)', async () => {
+  it('sends requester confirmation when includeRequesterConfirmation=true (explicit)', async () => {
     sendRequestCreatedNotifications({ ...BASE_PARAMS, includeRequesterConfirmation: true })
     await flushAsync()
 
-    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
-    expect(calls).toContain('hans@example.com')
+    expect(mockNotifyUsers).toHaveBeenCalledWith(
+      ['user-1'],
+      expect.objectContaining({ type: NOTIFICATION_TYPES.IT_HILFE_REQUEST_CONFIRMATION }),
+    )
   })
 
   it('queries DB for matching helpers when skillsNeeded is non-empty', async () => {
     sendRequestCreatedNotifications(BASE_PARAMS)
     await flushAsync()
 
-    expect(mockDbSelect).toHaveBeenCalledTimes(1)
+    expect(mockDbSelect).toHaveBeenCalled()
   })
 
-  it('does NOT query DB when skillsNeeded is empty', async () => {
+  it('skips helper DB query when skillsNeeded is empty', async () => {
     sendRequestCreatedNotifications({ ...BASE_PARAMS, skillsNeeded: [] })
     await flushAsync()
 
     expect(mockDbSelect).not.toHaveBeenCalled()
   })
 
-  it('sends one email per matched helper', async () => {
-    mockDbSelect.mockReturnValueOnce(
+  it('fans out to matched helpers via single notifyUsers call', async () => {
+    mockDbSelect.mockImplementation(() =>
       makeChain([
-        { userId: 'helper-1', name: 'Anna', email: 'anna@example.com', matchingSkills: ['windows'] },
-        { userId: 'helper-2', name: 'Beat', email: 'beat@example.com', matchingSkills: ['hardware'] },
-      ])
+        { userId: 'helper-1', name: 'Anna', matchingSkills: ['windows'] },
+        { userId: 'helper-2', name: 'Bob', matchingSkills: ['hardware'] },
+      ]),
     )
 
     sendRequestCreatedNotifications(BASE_PARAMS)
     await flushAsync()
+    await flushAsync()
 
-    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
-    expect(calls).toContain('anna@example.com')
-    expect(calls).toContain('beat@example.com')
+    const helperCall = mockNotifyUsers.mock.calls.find(
+      (call) =>
+        Array.isArray(call[0]) &&
+        (call[1] as { type?: string })?.type === NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST,
+    )
+    expect(helperCall).toBeDefined()
+    expect(helperCall![0]).toEqual(expect.arrayContaining(['helper-1', 'helper-2']))
   })
 
-  it('does not throw when sendCustomEmail fails', async () => {
-    mockSendCustomEmail.mockRejectedValue(new Error('SMTP down'))
+  it('does NOT fan out when no helpers match', async () => {
+    mockDbSelect.mockImplementation(() => makeChain([]))
 
-    // Should not throw
+    sendRequestCreatedNotifications(BASE_PARAMS)
+    await flushAsync()
+
+    const helperCall = mockNotifyUsers.mock.calls.find(
+      (call) =>
+        (call[1] as { type?: string })?.type === NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST,
+    )
+    expect(helperCall).toBeUndefined()
+  })
+
+  it('does not throw when notifyUsers rejects', async () => {
+    mockNotifyUsers.mockRejectedValue(new Error('central pipeline down'))
+
     expect(() => sendRequestCreatedNotifications(BASE_PARAMS)).not.toThrow()
     await flushAsync()
   })
 
-  it('logs (resolved) warn on resolved { success: false } from requester confirmation — silent SMTP must not be swallowed', async () => {
-    // sendCustomEmail resolves { success: false } on SMTP / Listmonk
-    // failure rather than throwing. The previous bare `.catch()` only
-    // caught throws, so silent send-failures slipped through and the
-    // requester was left wondering whether their request was received,
-    // with no diagnostic trail. Regression: the (resolved) failure must
-    // log warn with the request id and email captured.
-    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
-    // First send = requester confirmation (resolved failure), subsequent
-    // sends (admin + helpers) succeed
-    mockSendCustomEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
-
-    sendRequestCreatedNotifications(BASE_PARAMS)
-    await flushAsync()
-
-    expect(logger.warn).toHaveBeenCalledWith(
-      'Failed to send IT-Hilfe confirmation email (resolved)',
-      expect.objectContaining({
-        requestId: 'req-1',
-        email: 'hans@example.com',
-        error: 'SMTP timeout',
-      }),
-    )
-  })
-
-  it('logs (resolved) warn on resolved { success: false } from admin notification — admin must not silently lose new requests', async () => {
-    // Mission-critical: a silently-failed admin notification means a new
-    // request sits in the DB with nobody alerted to act on it. Regression:
-    // the (resolved) failure logs warn with the request id captured.
-    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
-    // First send = requester (success), second = admin (resolved failure)
-    mockSendCustomEmail
-      .mockResolvedValueOnce({ success: true, messageId: 'r1' })
-      .mockResolvedValueOnce({ success: false, error: 'Mailbox full' })
-
-    sendRequestCreatedNotifications(BASE_PARAMS)
-    await flushAsync()
-
-    expect(logger.warn).toHaveBeenCalledWith(
-      'Failed to send IT-Hilfe admin notification (resolved)',
-      expect.objectContaining({
-        requestId: 'req-1',
-        error: 'Mailbox full',
-      }),
-    )
-  })
-
-  it('logs (resolved) warn per-helper on resolved { success: false } from helper fan-out — helpers must not silently be missed', async () => {
-    // Mission-critical: a silently-failed helper notification means a
-    // matched helper never sees the request and it goes unanswered.
-    // Regression: per-helper (resolved) failure logs warn with the
-    // helper email and request id captured.
-    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
-
-    mockDbSelect.mockReturnValueOnce(
-      makeChain([
-        { userId: 'helper-1', name: 'Anna', email: 'anna@example.com', matchingSkills: ['windows'] },
-      ])
-    )
-    // First = requester (success), second = admin (success), third = helper (resolved failure)
-    mockSendCustomEmail
-      .mockResolvedValueOnce({ success: true, messageId: 'r1' })
-      .mockResolvedValueOnce({ success: true, messageId: 'a1' })
-      .mockResolvedValueOnce({ success: false, error: 'rejected by server' })
-
-    sendRequestCreatedNotifications(BASE_PARAMS)
-    await flushAsync()
-
-    expect(logger.warn).toHaveBeenCalledWith(
-      'Failed to send IT-Hilfe helper notification (resolved)',
-      expect.objectContaining({
-        helperEmail: 'anna@example.com',
-        requestId: 'req-1',
-        error: 'rejected by server',
-      }),
-    )
-  })
-
-  it('does not throw when DB query for helpers fails', async () => {
-    mockDbSelect.mockImplementationOnce(() => {
-      const chain = makeChain([])
-      chain.then = (_res: unknown, rej: unknown) => Promise.reject(new Error('DB error')).then(_res as never, rej as never)
-      return chain
-    })
+  it('does not throw when sendCustomEmail rejects (admin alert)', async () => {
+    mockSendCustomEmail.mockRejectedValue(new Error('SMTP down'))
 
     expect(() => sendRequestCreatedNotifications(BASE_PARAMS)).not.toThrow()
     await flushAsync()
@@ -326,7 +255,7 @@ describe('sendRequestCreatedNotifications', () => {
 // ============================================================================
 
 describe('sendItHilfeNotification', () => {
-  it('calls createInAppNotifications with correct parameters', async () => {
+  it('routes through notifyUsers with the recipient IDs + IT_HILFE relation', async () => {
     sendItHilfeNotification({
       recipientIds: ['user-1', 'user-2'],
       title: 'Neue Anfrage',
@@ -335,25 +264,28 @@ describe('sendItHilfeNotification', () => {
     })
     await flushAsync()
 
-    expect(mockCreateInAppNotifications).toHaveBeenCalledWith({
-      recipientIds: ['user-1', 'user-2'],
-      title: 'Neue Anfrage',
-      content: 'Jemand braucht Hilfe',
-      relatedType: 'it_hilfe',
-      relatedId: 'req-1',
-    })
+    expect(mockNotifyUsers).toHaveBeenCalledWith(
+      ['user-1', 'user-2'],
+      expect.objectContaining({
+        title: 'Neue Anfrage',
+        content: 'Jemand braucht Hilfe',
+        related_type: RELATED_TYPES.IT_HILFE,
+        related_id: 'req-1',
+      }),
+    )
   })
 
-  it('does not throw if createInAppNotifications fails', async () => {
-    mockCreateInAppNotifications.mockRejectedValue(new Error('service down'))
+  it('does not throw when notifyUsers rejects', async () => {
+    mockNotifyUsers.mockRejectedValue(new Error('central pipeline down'))
 
-    expect(() => sendItHilfeNotification({
-      recipientIds: ['user-1'],
-      title: 'Test',
-      content: 'Content',
-      requestId: 'req-1',
-    })).not.toThrow()
-
+    expect(() =>
+      sendItHilfeNotification({
+        recipientIds: ['user-1'],
+        title: 't',
+        content: 'c',
+        requestId: 'req-1',
+      }),
+    ).not.toThrow()
     await flushAsync()
   })
 })

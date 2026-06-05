@@ -22,10 +22,13 @@ export const NOTIFICATION_TYPES = {
   TASK_BROADCAST: 'task_broadcast',
 
   // IT-Hilfe
+  IT_HILFE_REQUEST_CONFIRMATION: 'it_hilfe_request_confirmation',
+  IT_HILFE_MATCHING_REQUEST: 'it_hilfe_matching_request',
   IT_HILFE_NEW_OFFER: 'it_hilfe_new_offer',
   IT_HILFE_OFFER_ACCEPTED: 'it_hilfe_offer_accepted',
   IT_HILFE_OFFER_REJECTED: 'it_hilfe_offer_rejected',
   IT_HILFE_REQUEST_COMPLETED: 'it_hilfe_request_completed',
+  IT_HILFE_REVIEW_RECEIVED: 'it_hilfe_review_received',
 
   // Blog submissions
   BLOG_SUBMISSION_STATUS: 'blog_submission_status',

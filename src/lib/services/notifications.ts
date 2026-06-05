@@ -25,6 +25,8 @@ import {
   decisionClosed,
 } from '@/lib/email/templates/decisions'
 import {
+  itHilfeRequestConfirmation,
+  helperNewMatchingRequest,
   itHilfeNewOfferReceived,
   itHilfeOfferAccepted,
   itHilfeOfferRejected,
@@ -74,6 +76,29 @@ function getEmailContent(payload: NotificationPayload): EmailContent {
   // rich HTML email path pass `metadata.requestUrl` (+ template-specific
   // fields). Missing metadata fields fall back to the generic
   // notificationEmail() — graceful degradation, not a runtime error.
+  if (type === NOTIFICATION_TYPES.IT_HILFE_REQUEST_CONFIRMATION && metadata?.requestUrl) {
+    return itHilfeRequestConfirmation(
+      metadata.requesterName ?? title,
+      metadata.requestTitle ?? title,
+      metadata.requestId ?? payload.related_id ?? '',
+      metadata.categoryName ?? '',
+      metadata.aiDiagnosis ?? null,
+      metadata.requestUrl,
+    )
+  }
+  if (type === NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST && metadata?.requestUrl) {
+    const matchingSkills = metadata.matchingSkills ? metadata.matchingSkills.split('|') : []
+    return helperNewMatchingRequest(
+      metadata.helperName ?? title,
+      metadata.requestTitle ?? title,
+      metadata.categoryName ?? '',
+      metadata.urgencyName ?? '',
+      metadata.canton ?? '',
+      metadata.serviceTypeName ?? '',
+      matchingSkills,
+      metadata.requestUrl,
+    )
+  }
   if (type === NOTIFICATION_TYPES.IT_HILFE_NEW_OFFER && metadata?.requestUrl) {
     return itHilfeNewOfferReceived(
       metadata.requesterName ?? title,
@@ -106,7 +131,7 @@ function getEmailContent(payload: NotificationPayload): EmailContent {
       metadata.requestUrl,
     )
   }
-  if (type === 'it_hilfe_review_received' && metadata?.requestUrl) {
+  if (type === NOTIFICATION_TYPES.IT_HILFE_REVIEW_RECEIVED && metadata?.requestUrl) {
     return itHilfeReviewReceived(
       metadata.helperName ?? title,
       metadata.requestTitle ?? title,
