@@ -348,6 +348,83 @@
   @apply mt-3 text-sm leading-relaxed;
   color: var(--text-secondary);
 }
+@utility ui-public-card-meta {
+  /* Bottom-anchored monospace meta line on surface cards (fleetcrown pattern) */
+  @apply mt-auto pt-8 font-mono text-xs;
+  color: var(--text-tertiary);
+}
+
+/* ─── Public-surface typography helpers ────────────────────────────────────
+ * Used in long-form prose blocks below display headings. Pair `prose-strong`
+ * for the line that opens a paragraph, `prose-muted` for the elaboration.
+ * ─────────────────────────────────────────────────────────────────────── */
+@utility ui-public-prose-strong {
+  @apply font-medium;
+  color: var(--text-primary);
+}
+@utility ui-public-prose-muted {
+  @apply leading-relaxed;
+  color: var(--text-secondary);
+}
+@utility ui-public-body-lg {
+  @apply text-lg leading-relaxed;
+  color: var(--text-secondary);
+}
+@utility ui-public-meta {
+  @apply text-sm;
+  color: var(--text-tertiary);
+}
+
+/* Numbered step indicator — used in "how it works" sections. Monospaced,
+ * fixed width so 01/02/03 line up visually. */
+@utility ui-public-step-num {
+  @apply w-8 shrink-0 font-mono text-sm;
+  color: var(--text-muted);
+}
+
+/* Large final-CTA — RevampIT brand green (accent action), sized for the
+ * page-end "decide now" moment. Larger than the standard hero CTA. */
+@utility ui-public-cta-lg {
+  @apply inline-flex items-center justify-center rounded-2xl px-12 py-4 text-xl font-semibold transition-opacity hover:opacity-90 active:opacity-80;
+  background: var(--color-accent);
+  color: #ffffff;
+  min-height: 56px;
+}
+
+/* Entry-point cards — bottom of homepage / nav landings. Same shape as
+ * ui-public-card but tuned for "click here to start" affordance: title,
+ * body, and an underlined link at the bottom. No icons. */
+@utility ui-public-start-card {
+  @apply flex min-h-[260px] flex-col rounded-2xl p-6 text-left transition-colors;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-base);
+  &:hover { border-color: var(--border-default); }
+}
+@utility ui-public-start-card-title {
+  @apply text-xl font-semibold leading-tight;
+  color: var(--text-primary);
+}
+@utility ui-public-start-card-body {
+  @apply mt-4 text-sm leading-relaxed;
+  color: var(--text-secondary);
+}
+@utility ui-public-start-card-link {
+  @apply mt-auto pt-8 text-sm font-medium underline underline-offset-4;
+  color: var(--text-primary);
+}
+
+/* Hero stat display — the single biggest number on the page (e.g. "73'412
+ * Geräte gerettet"). Fluid sized so it dominates the viewport without
+ * overflowing on small screens. Tabular numerals so digits don't wobble. */
+@utility ui-public-stat-display {
+  @apply font-semibold leading-none tracking-tight tabular-nums;
+  color: var(--text-primary);
+  font-size: clamp(3.5rem, 12vw, 8rem);
+}
+@utility ui-public-stat-caption {
+  @apply mt-3 max-w-md text-lg sm:text-xl leading-snug;
+  color: var(--text-secondary);
+}
 
 /* ─── Design Token SSOT ────────────────────────────────────────────────────────
  * CSS custom properties are the canonical source of truth for all design

@@ -1,15 +1,11 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
-import { Store, Wrench, BookOpen, Heart, Users, Award, Gift } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import AsSeenInLogos from '@/components/about/AsSeenInLogos'
-import Heading from '@/components/ui/Heading'
-import { CommunityStats } from '@/components/community/CommunityStats'
-import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
@@ -49,9 +45,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
+/**
+ * Public homepage — RevampIT.
+ *
+ * Design discipline (fleetcrown / x.ai pattern):
+ *   - One eyebrow + one display heading + one lede per section
+ *   - Text-only surface cards (no icons-in-colored-circles template)
+ *   - Alternating bands (ui-public-band tinted vs bare canvas)
+ *   - Monospace eyebrows + meta lines for "system" feel
+ *   - Single accent color (RevampIT green) reserved for primary CTAs only
+ *   - All numbers tabular-nums and sourced from org-numbers SSOT
+ *     (no hardcoded stats per CLAUDE.md)
+ */
 export default async function Home() {
   const t = await getTranslations('home')
-  const session = await auth()
+  await auth()
   const compactMetrics = getCompactMetrics({
     devicesRescued: t('impact.compactMetrics.devicesRescued'),
     peopleTrained: t('impact.compactMetrics.peopleTrained'),
@@ -61,83 +69,70 @@ export default async function Home() {
     careerReentries: t('impact.compactMetrics.careerReentries'),
   })
 
-  // Action cards — colors sourced from DESIGN_TOKENS (SSOT)
+  // Hero stat — pull the most credible single number from the SSOT.
+  // First entry is devices rescued/year (org-numbers config); display
+  // it huge in the hero so visitors see scale before reading copy.
+  const heroStat = compactMetrics[0]
+
+  // Three top actions — text-only cards. Each carries an eyebrow label
+  // identifying the surface, a title with the user-question framing, a
+  // body explaining what happens, and a single text link below (no
+  // double-CTA-button clutter).
   const actionCards = [
     {
-      icon: Store,
-      theme: 'marketplace' as const,
+      label: t('actions.sell.label'),
       title: t('actions.sell.title'),
-      subtitle: t('actions.sell.subtitle'),
-      primaryLabel: t('actions.sell.primaryLabel'),
-      primaryHref: ROUTES.public.marketplace,
-      secondaryLabel: t('actions.sell.secondaryLabel'),
-      secondaryHref: '/marketplace/sell',
+      body: t('actions.sell.subtitle'),
+      ctaLabel: t('actions.sell.primaryLabel'),
+      ctaHref: ROUTES.public.marketplace,
     },
     {
-      icon: Wrench,
-      theme: 'itHilfe' as const,
+      label: t('actions.repair.label'),
       title: t('actions.repair.title'),
-      subtitle: t('actions.repair.subtitle'),
-      primaryLabel: t('actions.repair.primaryLabel'),
-      primaryHref: '/it-hilfe',
-      secondaryLabel: t('actions.repair.secondaryLabel'),
-      secondaryHref: '/profil/techniker',
+      body: t('actions.repair.subtitle'),
+      ctaLabel: t('actions.repair.primaryLabel'),
+      ctaHref: ROUTES.public.itHilfe,
     },
     {
-      icon: BookOpen,
-      theme: 'workshops' as const,
+      label: t('actions.learn.label'),
       title: t('actions.learn.title'),
-      subtitle: t('actions.learn.subtitle'),
-      primaryLabel: t('actions.learn.primaryLabel'),
-      primaryHref: '/workshops',
-      secondaryLabel: t('actions.learn.secondaryLabel'),
-      secondaryHref: '/knowhow',
+      body: t('actions.learn.subtitle'),
+      ctaLabel: t('actions.learn.primaryLabel'),
+      ctaHref: '/workshops',
     },
   ]
 
-  // Community cards — all colors sourced from DESIGN_TOKENS (SSOT)
+  // Community entry points — text-only start cards. For the visitor
+  // who's thinking "how can I be part of this?".
   const communityCards = [
     {
-      icon: Users,
-      badge: DESIGN_TOKENS.iconBadges.about,
-      hoverColor: DESIGN_TOKENS.cards.hoverText.about,
-      title: t('community.use.title'),
-      desc: t('community.use.desc'),
-      href: session ? ROUTES.public.shop : ROUTES.public.register,
-      border: DESIGN_TOKENS.cards.border.default,
-    },
-    {
-      icon: Heart,
-      badge: DESIGN_TOKENS.iconBadges.services,
-      hoverColor: DESIGN_TOKENS.cards.hoverText.services,
-      title: t('community.volunteer.title'),
-      desc: t('community.volunteer.desc'),
-      href: '/get-involved/volunteer',
-      border: DESIGN_TOKENS.cards.border.default,
-    },
-    {
-      icon: Gift,
-      badge: DESIGN_TOKENS.iconBadges.marketplace,
-      hoverColor: DESIGN_TOKENS.cards.hoverText.marketplace,
       title: t('community.donate.title'),
-      desc: t('community.donate.desc'),
-      href: '/get-involved/donate',
-      border: DESIGN_TOKENS.cards.border.default,
+      body: t('community.donate.desc'),
+      href: ROUTES.public.donate,
+      ctaLabel: t('community.donate.cta'),
     },
     {
-      icon: Award,
-      badge: DESIGN_TOKENS.iconBadges.getInvolved,
-      hoverColor: DESIGN_TOKENS.cards.hoverText.getInvolved,
+      title: t('community.volunteer.title'),
+      body: t('community.volunteer.desc'),
+      href: '/get-involved/volunteer',
+      ctaLabel: t('community.volunteer.cta'),
+    },
+    {
+      title: t('community.use.title'),
+      body: t('community.use.desc'),
+      href: ROUTES.public.shop,
+      ctaLabel: t('community.use.cta'),
+    },
+    {
       title: t('community.membership.title'),
-      desc: t('community.membership.desc'),
-      href: '/mitglied-werden',
-      border: DESIGN_TOKENS.cards.border.featured,
+      body: t('community.membership.desc'),
+      href: ROUTES.public.mitgliedWerden,
+      ctaLabel: t('community.membership.cta'),
     },
   ]
 
   return (
     <div className="bg-canvas">
-      {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -197,18 +192,20 @@ export default async function Home() {
         }}
       />
 
-      {/* Section 1: Hero fold — fleetcrown/x.ai pattern.
-          One viewport (min-h:88vh), centered. Everything actionable —
-          badge, title, lede, sublede, CTAs — fits above the fold on
-          every screen size. Mobile users see the same call-to-action
-          as desktop without scrolling first. */}
+      {/* ── Hero ─────────────────────────────────────────────────────────
+          Stat-first hero: the most credible single number sits above
+          the brand line. 88vh fills the viewport so CTAs land above the
+          fold on every screen. ───────────────────────────────────────── */}
       <section className="ui-public-hero-fold">
         <div className="max-w-5xl">
           <div className="ui-public-hero-badge">
             {t('hero.positioning')}
           </div>
 
-          <h1 className="ui-public-hero-title">
+          <div className="ui-public-stat-display mt-4">{heroStat.value}</div>
+          <p className="ui-public-stat-caption mx-auto">{heroStat.label}</p>
+
+          <h1 className="ui-public-hero-title mt-12">
             {t('hero.title')}
           </h1>
 
@@ -217,140 +214,130 @@ export default async function Home() {
           </p>
 
           <div className="ui-public-cta-row">
-            <Link href={ROUTES.public.marketplace} className="ui-public-cta">
-              {t('hero.ctaDiscover')}
+            <Link href={ROUTES.public.donate} className="ui-public-cta">
+              {t('hero.ctaDonate')}
             </Link>
-            <Link href="/about" className="ui-public-cta-ghost">
-              {t('hero.ctaAbout')}
+            <Link href={ROUTES.public.marketplace} className="ui-public-cta-ghost">
+              {t('hero.ctaDiscover')}
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Section 2: Three Action Cards */}
-      <div id="actions" className="bg-canvas py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-text-primary">
-              {t('actions.heading')}
-            </Heading>
-          </div>
-
-          <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {actionCards.map((card) => {
-              const badge = DESIGN_TOKENS.iconBadges[card.theme]
-              const primaryBtn = DESIGN_TOKENS.buttons.primary[card.theme]
-              const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
-              const focusOutline = DESIGN_TOKENS.focusOutline[card.theme]
-              return (
-                <div key={card.title} className="card-shell rounded-2xl p-6 sm:p-8 hover:border-strong transition-all flex flex-col">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
-                    <card.icon className={`h-6 w-6 ${badge.text}`} />
-                  </div>
-                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-text-primary">{card.title}</Heading>
-                  <p className="mt-2 text-base text-text-secondary flex-1">
-                    {card.subtitle}
-                  </p>
-                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href={card.primaryHref}
-                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
-                    >
-                      {card.primaryLabel}
-                    </Link>
-                    <Link
-                      href={card.secondaryHref}
-                      className={`flex-1 rounded-md px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
-                    >
-                      {card.secondaryLabel}
-                    </Link>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Section 2b: Professional Services (brief mention) */}
-      <div className="bg-canvas py-8 sm:py-12 border-t border-subtle">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-base text-text-secondary">
-            {t('proServices.text')}
-          </p>
-        </div>
-      </div>
-
-      {/* Section 3: Social Proof */}
-      <div className="bg-surface-raised py-8 sm:py-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <Heading level={2} variant="site" className="tracking-tight text-text-primary">
-              {t('impact.title')}
-            </Heading>
-            <p className="mt-2 text-base text-text-secondary">{t('impact.subtitle')}</p>
-          </div>
-          {/* Media Logos */}
-          <AsSeenInLogos />
-
-          {/* Community Stats */}
-          <CommunityStats className="mt-6" />
-
-          {/* Impact Metrics (compact) */}
-          <div className="mt-8 pt-8 border-t border">
-            <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3">
-              {compactMetrics.map((metric, index) => (
-                <div key={index} className="text-center">
-                  <dd className="text-2xl sm:text-3xl font-bold text-text-primary">{metric.value}</dd>
-                  <dt className="mt-1 text-xs sm:text-sm text-text-secondary">{metric.label}</dt>
-                </div>
-              ))}
-            </dl>
-            <div className="mt-6 text-center">
-              <Link
-                href="/about/impact"
-                className="text-sm font-medium text-text-tertiary hover:text-text-primary transition-colors"
-              >
-                {t('impact.moreLink')} →
-              </Link>
+      {/* ── Three primary actions ──────────────────────────────────────
+          Text-only cards. Same shape across all three (label / title /
+          body / single CTA link) — discipline > variety. ─────────────── */}
+      <section className="ui-public-band py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+            <div>
+              <div className="ui-public-eyebrow">{t('actions.eyebrow')}</div>
+              <h2 className="ui-public-display-lg mt-4">{t('actions.heading')}</h2>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Section 4: How to Get Involved */}
-      <div className="bg-surface-raised py-12 sm:py-16 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-text-primary">
-              {t('community.heading')}
-            </Heading>
-            <p className="mt-4 text-base sm:text-lg text-text-secondary max-w-2xl mx-auto">
-              {t('community.subtitle')}
+            <p className="ui-public-section-lede md:justify-self-end">
+              {t('actions.subtitle')}
             </p>
           </div>
 
-          <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {communityCards.map((item) => (
-              <Link
-                key={item.title}
-                href={item.href}
-                className={`card-shell p-6 border ${item.border} hover:border-strong transition-all group`}
-              >
-                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
-                  <item.icon className={`h-5 w-5 ${item.badge.text}`} />
-                </div>
-                <Heading level={3} className={`text-lg font-bold text-text-primary ${item.hoverColor} transition-colors`}>{item.title}</Heading>
-                <p className="mt-2 text-sm text-text-secondary">{item.desc}</p>
-              </Link>
+          <div className="mt-14 grid gap-4 md:grid-cols-3">
+            {actionCards.map((card) => (
+              <article key={card.title} className="ui-public-card min-h-[280px]">
+                <div className="ui-public-card-label">{card.label}</div>
+                <h3 className="ui-public-card-title">{card.title}</h3>
+                <p className="ui-public-card-body">{card.body}</p>
+                <Link
+                  href={card.ctaHref}
+                  className="ui-public-card-meta inline-flex items-center gap-1 hover:text-text-primary transition-colors"
+                >
+                  {card.ctaLabel} →
+                </Link>
+              </article>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Newsletter signup intentionally lives only in the global Footer
-          (see src/components/layout/Footer.tsx). Rendering it again on
-          this page was a DRY/UX duplication. */}
+      {/* ── Impact — single tight strip, no card wrapping ─────────────── */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+            <div>
+              <div className="ui-public-eyebrow">{t('impact.eyebrow')}</div>
+              <h2 className="ui-public-display-lg mt-4">{t('impact.title')}</h2>
+            </div>
+            <p className="ui-public-section-lede md:justify-self-end">
+              {t('impact.subtitle')}
+            </p>
+          </div>
+
+          <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6 border-t border-subtle pt-10">
+            {compactMetrics.map((metric) => (
+              <div key={metric.label}>
+                <dd className="text-3xl sm:text-4xl font-semibold text-text-primary tabular-nums tracking-tight">
+                  {metric.value}
+                </dd>
+                <dt className="mt-2 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+                  {metric.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-10">
+            <Link href="/about/impact" className="ui-public-meta hover:text-text-primary transition-colors">
+              {t('impact.moreLink')} →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Press strip — desaturated, low-chrome ──────────────────── */}
+      <section className="ui-public-band py-16">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow text-center">{t('press.eyebrow')}</div>
+          <div className="mt-8">
+            <AsSeenInLogos />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Community entry points ─────────────────────────────────── */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto">
+            <div className="ui-public-eyebrow">{t('community.eyebrow')}</div>
+            <h2 className="ui-public-display-lg mt-4">{t('community.heading')}</h2>
+            <p className="ui-public-section-lede mt-6 mx-auto">{t('community.subtitle')}</p>
+          </div>
+
+          <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {communityCards.map((card) => (
+              <article key={card.title} className="ui-public-start-card">
+                <h3 className="ui-public-start-card-title">{card.title}</h3>
+                <p className="ui-public-start-card-body">{card.body}</p>
+                <Link href={card.href} className="ui-public-start-card-link">
+                  {card.ctaLabel} →
+                </Link>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Final centered CTA band ─────────────────────────────────── */}
+      <section className="border-t border-subtle py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">{t('finalCta.eyebrow')}</div>
+          <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('finalCta.subtitle')}</p>
+          <div className="mt-10">
+            <Link href={ROUTES.public.donate} className="ui-public-cta-lg">
+              {t('finalCta.button')}
+            </Link>
+          </div>
+          <p className="ui-public-meta mt-6">{t('finalCta.note')}</p>
+        </div>
+      </section>
     </div>
   )
 }

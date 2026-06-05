@@ -262,28 +262,34 @@
     },
     "hero": {
       "title": "Alte Hardware. Neues Leben.",
-      "subtitle": "Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt.",
-      "ctaDiscover": "Jetzt entdecken",
+      "subtitle": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen. Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",
+      "ctaDonate": "Gerät spenden",
+      "ctaDiscover": "Geräte ansehen",
       "ctaAbout": "Über uns",
-      "positioning": "Schweizer Non-Profit für Kreislaufwirtschaft seit 2003"
+      "positioning": "Schweizer Non-Profit für Kreislaufwirtschaft · seit 2003"
     },
     "actions": {
-      "heading": "Was möchtest du tun?",
+      "eyebrow": "DREI WEGE",
+      "heading": "Such etwas? Hilf mit?",
+      "subtitle": "Egal ob du ein altes Gerät loswerden, ein günstiges kaufen, oder bei Reparaturen helfen willst — du landest am richtigen Ort.",
       "sell": {
+        "label": "01 / MARKTPLATZ",
         "title": "Altes Gerät übrig?",
-        "subtitle": "Verkaufe oder verschenke es in 2 Minuten — kostenlos und ohne Gebühren.",
+        "subtitle": "Verkaufe oder verschenke es in 2 Minuten. Kostenlos, ohne Gebühren, ohne Mittelsmann.",
         "primaryLabel": "Marktplatz entdecken",
         "secondaryLabel": "Jetzt verkaufen"
       },
       "repair": {
+        "label": "02 / IT-HILFE",
         "title": "Computer kaputt?",
-        "subtitle": "Techniker in deiner Nähe helfen — oder biete selbst Reparaturen an.",
+        "subtitle": "Techniker aus der Community helfen — schnell, fair, vor Ort. Oder bieten Sie selbst Reparaturen an.",
         "primaryLabel": "Hilfe finden",
         "secondaryLabel": "Techniker werden"
       },
       "learn": {
+        "label": "03 / WORKSHOPS",
         "title": "Etwas Neues lernen?",
-        "subtitle": "Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.",
+        "subtitle": "Praxis-Workshops zu Linux, Hardware-Reparatur, Programmierung und KI. Klein, persönlich, hands-on.",
         "primaryLabel": "Workshops ansehen",
         "secondaryLabel": "Knowhow entdecken"
       }
@@ -293,9 +299,10 @@
       "linkLabel": "IT-Dienstleistungen"
     },
     "impact": {
-      "title": "Unsere Wirkung",
-      "subtitle": "Was wir gemeinsam erreicht haben",
-      "moreLink": "Mehr über unsere Wirkung",
+      "eyebrow": "ZAHLEN",
+      "title": "Was wir bewegen.",
+      "subtitle": "Echte Werte aus unserer Buchhaltung, nicht Marketing-Schätzungen. Jede Zahl auf /transparenz nachvollziehbar.",
+      "moreLink": "Methodik & Quellen",
       "compactMetrics": {
         "devicesRescued": "Geräte jährlich gerettet",
         "peopleTrained": "Personen geschult",
@@ -305,25 +312,40 @@
         "careerReentries": "Berufliche Wiedereinstiege"
       }
     },
+    "press": {
+      "eyebrow": "ÜBER UNS BERICHTET"
+    },
     "community": {
-      "heading": "Werde Teil der Community",
-      "subtitle": "Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.",
+      "eyebrow": "MITMACHEN",
+      "heading": "Werde Teil der Community.",
+      "subtitle": "Ob nutzen, mithelfen, spenden oder Mitglied werden — jeder Beitrag zählt. Such dir den Weg, der zu dir passt.",
       "use": {
-        "title": "Nutzen",
-        "desc": "Kaufen, verkaufen, reparieren — kostenlos"
+        "title": "Geräte kaufen",
+        "desc": "Refurbished Laptops, Desktops, Komponenten — fair bepreist, sofort einsatzbereit.",
+        "cta": "Zum Shop"
       },
       "volunteer": {
         "title": "Mithelfen",
-        "desc": "Teile dein Wissen als freiwilliger Techniker"
+        "desc": "Teile dein Wissen als freiwilliger Techniker, Workshop-Geberin oder Helfer im Verein.",
+        "cta": "Mitmachen"
       },
       "donate": {
-        "title": "Unterstützen",
-        "desc": "Spende Geräte oder Geld für den Verein"
+        "title": "Gerät spenden",
+        "desc": "Dein alter Computer bekommt ein zweites Leben. Wir holen ab, Spendenquittung inklusive.",
+        "cta": "Jetzt spenden"
       },
       "membership": {
         "title": "Mitglied werden",
-        "desc": "Stimme mit und gestalte den Verein aktiv"
+        "desc": "Stimme mit, gestalte den Verein, erhalte exklusive Updates und Einladungen.",
+        "cta": "Mitglied werden"
       }
+    },
+    "finalCta": {
+      "eyebrow": "BEREIT?",
+      "heading": "Schenk deinem Computer ein zweites Leben.",
+      "subtitle": "5 Minuten Aufwand. Wir holen ab. Du bekommst eine Spendenquittung. Dein Gerät landet bei jemandem, der es braucht.",
+      "button": "Gerät spenden",
+      "note": "Oder kontaktiere uns direkt — info@revamp-it.ch"
     },
     "newsletter": {
       "title": "Bleib auf dem Laufenden",
