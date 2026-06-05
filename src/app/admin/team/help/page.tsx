@@ -15,9 +15,10 @@ import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection } from '@/lib/permissions'
 import { HELP_REQUEST_STATUS } from '@/config/activity'
 import { URGENCY } from '@/config/it-hilfe'
-import { HelpCircle, Users, AlertTriangle, CheckCircle } from 'lucide-react'
+import { HelpCircle, AlertTriangle, CheckCircle } from 'lucide-react'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { AdminHeroStatus, type HeroKpi } from '@/components/admin/AdminHeroStatus'
 import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
@@ -86,6 +87,53 @@ async function getTeamMembers() {
   }
 }
 
+/**
+ * Hero status for the team help-requests page. Severity ladder:
+ *   urgent open > regular open > healthy.
+ * The "in_progress" count isn't a CTA target — someone's already on it.
+ * "resolved this week" is purely informational, kept in the KPI strip.
+ */
+function HelpRequestsHero({ stats }: { stats: HelpStats }) {
+  const kpis: HeroKpi[] = [
+    { label: 'Offen', value: stats.open },
+    { label: 'In Bearbeitung', value: stats.in_progress },
+    { label: 'Dringend', value: stats.urgent_open },
+    { label: 'Diese Woche gelöst', value: stats.resolved_this_week },
+  ]
+
+  if (stats.urgent_open > 0) {
+    return (
+      <AdminHeroStatus
+        tone="urgent"
+        icon={AlertTriangle}
+        headline={`${stats.urgent_open} dringende Anfrage${stats.urgent_open === 1 ? '' : 'n'} im Team`}
+        sub="Kollege/Kollegin braucht jetzt Hilfe — übernimm oder vermittle."
+        kpis={kpis}
+      />
+    )
+  }
+  if (stats.open > 0) {
+    return (
+      <AdminHeroStatus
+        tone="attention"
+        icon={HelpCircle}
+        headline={`${stats.open} offene Anfrage${stats.open === 1 ? '' : 'n'}`}
+        sub="Niemand hat sie übernommen. Auch wenn nicht dringend: jemand wartet."
+        kpis={kpis}
+      />
+    )
+  }
+  return (
+    <AdminHeroStatus
+      tone="healthy"
+      icon={CheckCircle}
+      headline="Keine offenen Hilfsanfragen."
+      sub={`${stats.resolved_this_week} Anfrage${stats.resolved_this_week === 1 ? '' : 'n'} diese Woche gelöst.`}
+      kpis={kpis}
+    />
+  )
+}
+
 export default async function HelpRequestsPage() {
   const session = await auth()
 
@@ -116,56 +164,7 @@ export default async function HelpRequestsPage() {
       iconColor="amber"
       backButton={{ href: ROUTES.admin.team, label: 'Zurück zum Team' }}
     >
-      {/* Stats */}
-      <div className="grid md:grid-cols-4 gap-4">
-        <div className="p-4 bg-surface-base rounded-xl border border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-warning-600 dark:text-warning-200" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-text-primary">{stats.open}</p>
-              <p className="text-sm text-text-secondary">Offen</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 bg-surface-base rounded-xl border border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-text-secondary" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-text-primary">{stats.in_progress}</p>
-              <p className="text-sm text-text-secondary">In Bearbeitung</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 bg-surface-base rounded-xl border border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-action" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-text-primary">{stats.resolved_this_week}</p>
-              <p className="text-sm text-text-secondary">Diese Woche gelöst</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 bg-surface-base rounded-xl border border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-error-100 dark:bg-error-900/30 rounded-lg flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-error-600 dark:text-error-400" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-text-primary">{stats.urgent_open}</p>
-              <p className="text-sm text-text-secondary">Dringend</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <HelpRequestsHero stats={stats} />
 
       {/* Help Requests (Client Component) */}
       <HelpRequestsPageClient

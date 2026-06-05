@@ -1,7 +1,7 @@
 'use client'
 
 import {
-  Plus, Search, Filter, Check, Package,
+  Plus, Search, Filter, Check, Package, Wrench, Send,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -17,6 +17,7 @@ import { Pagination } from '@/components/ui/Pagination'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
 
 interface IntakePipelineViewProps {
   items: PipelineItem[]
@@ -55,20 +56,7 @@ export function IntakePipelineView({
 }: IntakePipelineViewProps) {
   return (
     <div className="space-y-4">
-      {/* Stats — sourced from server aggregate counts, not current-page items */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Total', value: statusCounts.total, color: 'bg-surface-raised text-text-primary' },
-          { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200' },
-          { label: 'Bereit', value: statusCounts.ready, color: 'bg-action-muted text-action' },
-          { label: 'Publiziert', value: statusCounts.published, color: 'bg-action-muted text-action' },
-        ].map((stat) => (
-          <div key={stat.label} className={`rounded-lg p-3 ${stat.color}`}>
-            <div className="text-2xl font-bold">{stat.value}</div>
-            <div className="text-sm">{stat.label}</div>
-          </div>
-        ))}
-      </div>
+      <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} onCreateNew={onCreateNew} />
 
       {/* Filters + Actions */}
       <div className="flex flex-wrap gap-2 items-center">
@@ -233,5 +221,105 @@ export function IntakePipelineView({
         </>
       )}
     </div>
+  )
+}
+
+// ─── IntakeHero ─────────────────────────────────────────────────────────────
+// Severity ladder: ready-to-publish > in-progress > empty > healthy.
+// Why "ready" beats "inProgress": work-in-progress is doing fine on its
+// own. "Ready" means a device is finished but stuck in the pipeline —
+// the admin's bottleneck to clear.
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface IntakeStatusCounts {
+  inProgress: number
+  ready: number
+  published: number
+  total: number
+}
+
+export function deriveIntakeHeroState(
+  counts: IntakeStatusCounts,
+  onStatusFilter: (v: string) => void,
+  onCreateNew: () => void,
+): {
+  tone: HeroTone
+  icon: typeof Package
+  headline: string
+  sub: string
+  cta?: HeroCta
+  kpis: HeroKpi[]
+} {
+  const kpis: HeroKpi[] = [
+    { label: 'Total', value: counts.total },
+    { label: 'In Bearbeitung', value: counts.inProgress },
+    { label: 'Bereit', value: counts.ready },
+    { label: 'Publiziert', value: counts.published },
+  ]
+
+  if (counts.ready > 0) {
+    return {
+      tone: 'attention',
+      icon: Send,
+      headline: `${counts.ready} Gerät${counts.ready === 1 ? '' : 'e'} bereit zum Publizieren`,
+      sub: 'Bereit-Geräte stehen fertig in der Pipeline. Publizieren macht sie öffentlich.',
+      cta: {
+        label: 'Bereit anzeigen',
+        onClick: () => onStatusFilter(INTAKE_STATUS.READY),
+      },
+      kpis,
+    }
+  }
+  if (counts.inProgress > 0) {
+    return {
+      tone: 'attention',
+      icon: Wrench,
+      headline: `${counts.inProgress} Gerät${counts.inProgress === 1 ? '' : 'e'} in Bearbeitung`,
+      sub: 'Diagnose, Test oder Aufbereitung läuft. Status aktuell halten.',
+      cta: {
+        label: 'In Bearbeitung anzeigen',
+        onClick: () => onStatusFilter(INTAKE_STATUS.IN_PROGRESS),
+      },
+      kpis,
+    }
+  }
+  if (counts.total === 0) {
+    return {
+      tone: 'empty',
+      icon: Package,
+      headline: 'Pipeline ist leer',
+      sub: 'Sobald ein Gerät reinkommt, taucht es hier auf. Erfasse das erste.',
+      cta: { label: 'Neues Gerät erfassen', onClick: onCreateNew },
+      kpis,
+    }
+  }
+  return {
+    tone: 'healthy',
+    icon: Check,
+    headline: 'Pipeline im grünen Bereich.',
+    sub: `${counts.published} Geräte publiziert, nichts wartet auf Bearbeitung.`,
+    kpis,
+  }
+}
+
+function IntakeHero({
+  statusCounts,
+  onStatusFilter,
+  onCreateNew,
+}: {
+  statusCounts: IntakeStatusCounts
+  onStatusFilter: (v: string) => void
+  onCreateNew: () => void
+}) {
+  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, onCreateNew)
+  return (
+    <AdminHeroStatus
+      tone={s.tone}
+      icon={s.icon}
+      headline={s.headline}
+      sub={s.sub}
+      cta={s.cta}
+      kpis={s.kpis}
+    />
   )
 }
