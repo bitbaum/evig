@@ -5,14 +5,14 @@ import ITHilfeAdminClient from './ITHilfeAdminClient'
 
 export const metadata: Metadata = {
   title: 'IT-Hilfe',
-  description: 'Hilfsanfragen und Helfer verwalten.',
+  description: 'Hilfsanfragen und Techniker verwalten.',
 }
 
 export default function ITHilfePage() {
   return (
     <AdminPageWrapper
       title="IT-Hilfe"
-      description="Hilfsanfragen und Helfer verwalten"
+      description="Hilfsanfragen und Techniker verwalten"
       icon={HelpCircle}
       iconColor="blue"
     >

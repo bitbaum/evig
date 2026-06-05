@@ -122,7 +122,7 @@ export function HirnSidebar({
                 onClick={() => onSelectSession(session.sessionId)}
                 className={`w-full flex items-center gap-2 p-2 rounded-lg text-left h-auto justify-start ${
                   currentSessionId === session.sessionId
-                    ? 'bg-action-muted text-action-text'
+                    ? 'bg-action-muted text-action'
                     : 'hover:bg-surface-raised text-text-secondary'
                 }`}
               >

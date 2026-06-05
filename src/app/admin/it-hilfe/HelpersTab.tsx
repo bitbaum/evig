@@ -29,19 +29,10 @@ export function HelpersTab({
 }: HelpersTabProps) {
   return (
     <div className="space-y-4">
-      {/* Helper stats */}
-      {stats && (
-        <div className="grid grid-cols-3 gap-4">
-          <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-action-muted border-strong text-action-text" />
-          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-surface-raised border text-text-primary" />
-          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-action-muted border-strong text-action-text" />
-        </div>
-      )}
-
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <Select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="w-auto">
-          <option value="all">Alle Helfer</option>
+          <option value="all">Alle Techniker</option>
           <option value={HELPER_STATUS.ACTIVE}>{HELPER_STATUS_LABELS[HELPER_STATUS.ACTIVE]}</option>
           <option value={HELPER_STATUS.VERIFIED}>{HELPER_STATUS_LABELS[HELPER_STATUS.VERIFIED]}</option>
           <option value={HELPER_STATUS.SUSPENDED}>{HELPER_STATUS_LABELS[HELPER_STATUS.SUSPENDED]}</option>
@@ -144,13 +135,13 @@ export function HelpersTab({
           </tbody>
         </table>
         {helpers && helpers.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">Keine Helfer gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">Keine Techniker gefunden</div>
         )}
       </div>
 
       {helpers && helpers.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-text-tertiary">{helpers.pagination.total} Helfer</span>
+          <span className="text-sm text-text-tertiary">{helpers.pagination.total} Techniker</span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={helpOffset === 0} onClick={() => setHelpOffset(o => Math.max(0, o - 50))}>Zurück</Button>
             <Button variant="outline" size="sm" disabled={!helpers.pagination.hasMore} onClick={() => setHelpOffset(o => o + 50)}>Weiter</Button>

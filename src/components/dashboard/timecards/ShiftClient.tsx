@@ -270,7 +270,7 @@ export function ShiftClient({
                 variant="outline"
                 onClick={handleCancel}
                 disabled={submitting}
-                className="text-action-text text-base font-medium hover:bg-action-muted/20 border-strong dark:border-action/40"
+                className="text-action text-base font-medium hover:bg-action-muted/20 border-strong dark:border-action/40"
               >
                 Abbrechen
               </Button>
