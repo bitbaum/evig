@@ -33,15 +33,12 @@ export default function AuthError({
           {t('message')}
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          <Button onClick={reset} variant="primary" className="w-full min-h-touch">
+          <Button onClick={reset} variant="primary" className="w-full">
             {t('retry')}
           </Button>
-          <Link
-            href={ROUTES.public.login}
-            className="text-sm text-text-secondary hover:text-text-primary min-h-touch inline-flex items-center justify-center focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm"
-          >
+          <Button as={Link} href={ROUTES.public.login} variant="ghost" size="sm">
             {t('goToLogin')}
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

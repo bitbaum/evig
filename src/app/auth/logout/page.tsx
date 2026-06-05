@@ -71,9 +71,9 @@ export default function LogoutPage() {
 
         {/* Logout Card */}
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-surface-base rounded-2xl shadow-xl p-8 border border-subtle text-center">
+          <div className="card-shell rounded-2xl p-8 text-center">
             {!error ? (
-              <>
+              <div role="status" aria-live="polite">
                 <div className="w-16 h-16 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-4">
                   <Loader2 className="w-8 h-8 text-action animate-spin" />
                 </div>
@@ -81,7 +81,7 @@ export default function LogoutPage() {
                   {t('heading')}
                 </Heading>
                 <p className="text-text-secondary dark:text-text-muted">{t('wait')}</p>
-              </>
+              </div>
             ) : (
               <>
                 <div className="w-16 h-16 bg-error-100 dark:bg-error-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -99,23 +99,20 @@ export default function LogoutPage() {
                         .then(() => {
                           window.location.replace(LOGOUT_CALLBACK)
                         })
-                        .catch((error) => {
-                          logger.error('Logout failed', { error })
+                        .catch((retryError) => {
+                          logger.error('Logout retry failed', { error: retryError })
                           setError(t('errorMessage'))
                         })
                     }}
                     variant="destructive"
-                    className="w-full gap-2 px-6 py-3"
+                    className="w-full gap-2"
                   >
                     <LogOut className="w-4 h-4" />
                     {t('retry')}
                   </Button>
-                  <Link
-                    href="/dashboard"
-                    className="inline-flex items-center justify-center gap-2 bg-surface-raised hover:bg-surface-overlay text-text-primary font-medium px-6 py-3 rounded-lg transition-colors w-full"
-                  >
+                  <Button as={Link} href="/dashboard" variant="outline" className="w-full">
                     {t('backToDashboard')}
-                  </Link>
+                  </Button>
                 </div>
               </>
             )}
