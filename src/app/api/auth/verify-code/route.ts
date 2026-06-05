@@ -14,6 +14,7 @@ import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { validateBody, VerifyCodeSchema } from '@/lib/schemas'
 import { sendCustomEmail, staffWelcome, welcome } from '@/lib/email'
 import { isStaffEmail } from '@/lib/permissions'
+import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui'
 import { db } from '@/db'
 import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
       .from(users)
       .where(eq(users.email, email.toLowerCase()))
 
-    const userName = userRows[0]?.name || 'Benutzer'
+    const userName = userRows[0]?.name || DEFAULT_USER_NAME_FALLBACK
     const emailContent = isStaffEmail(email)
       ? staffWelcome(userName)
       : welcome(userName)

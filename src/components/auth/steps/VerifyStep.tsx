@@ -2,45 +2,63 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Mail, ArrowRight, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react'
+import { Mail, ArrowRight, ArrowLeft, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { RESEND_CODE_COOLDOWN_SECONDS, VERIFICATION_CODE_LENGTH } from '@/config/auth-ui'
 
 export interface VerifyStepProps {
   email: string
   onVerify: (code: string) => Promise<boolean>
   onResend: () => Promise<boolean>
   onSkip: () => void
+  /**
+   * Optional "wrong email?" affordance. When provided, VerifyStep shows
+   * a small "E-Mail ändern" button under the email line that returns
+   * to the account step. Wizard owns the back-navigation; this component
+   * just signals user intent.
+   */
+  onEditEmail?: () => void
   isLoading?: boolean
   error?: string
   emailSendFailed?: boolean
 }
 
+/**
+ * Email verification step.
+ *
+ * Code input is ONE field with `autoComplete="one-time-code"` — iOS and
+ * Android both surface SMS one-time codes via this attribute, but only
+ * if it's a single input. The previous 6-separate-inputs pattern
+ * disabled autofill and reinvented paste handling without benefit.
+ *
+ * Auto-submits when the user reaches the configured code length
+ * (typed or pasted).
+ */
 export function VerifyStep({
   email,
   onVerify,
   onResend,
   onSkip,
+  onEditEmail,
   isLoading = false,
   error,
   emailSendFailed = false,
 }: VerifyStepProps) {
   const t = useTranslations('auth.verify')
-  const [code, setCode] = useState(['', '', '', '', '', ''])
+  const [code, setCode] = useState('')
   const [resendCooldown, setResendCooldown] = useState(0)
   const [isResending, setIsResending] = useState(false)
   const [isVerifying, setIsVerifying] = useState(false)
   const [verified, setVerified] = useState(false)
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // Focus first input on mount
   useEffect(() => {
-    inputRefs.current[0]?.focus()
+    inputRef.current?.focus()
   }, [])
 
-  // Resend cooldown timer
   useEffect(() => {
     if (resendCooldown > 0) {
       const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000)
@@ -48,51 +66,25 @@ export function VerifyStep({
     }
   }, [resendCooldown])
 
-  const handleChange = (index: number, value: string) => {
-    // Only allow digits
-    const digit = value.replace(/\D/g, '').slice(-1)
+  const handleChange = (raw: string) => {
+    const digits = raw.replace(/\D/g, '').slice(0, VERIFICATION_CODE_LENGTH)
+    setCode(digits)
 
-    const newCode = [...code]
-    newCode[index] = digit
-    setCode(newCode)
-
-    // Auto-advance to next input
-    if (digit && index < 5) {
-      inputRefs.current[index + 1]?.focus()
-    }
-
-    // Auto-submit when complete
-    if (digit && index === 5 && newCode.every(d => d)) {
-      handleVerify(newCode.join(''))
-    }
-  }
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === 'Backspace' && !code[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus()
-    }
-  }
-
-  const handlePaste = (e: React.ClipboardEvent) => {
-    e.preventDefault()
-    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
-    if (pastedData.length === 6) {
-      const newCode = pastedData.split('')
-      setCode(newCode)
-      handleVerify(pastedData)
+    if (digits.length === VERIFICATION_CODE_LENGTH) {
+      void handleVerify(digits)
     }
   }
 
   const handleVerify = async (fullCode: string) => {
-    if (isVerifying || fullCode.length !== 6) return
+    if (isVerifying || fullCode.length !== VERIFICATION_CODE_LENGTH) return
 
     setIsVerifying(true)
     const success = await onVerify(fullCode)
     if (success) {
       setVerified(true)
     } else {
-      setCode(['', '', '', '', '', ''])
-      inputRefs.current[0]?.focus()
+      setCode('')
+      inputRef.current?.focus()
     }
     setIsVerifying(false)
   }
@@ -103,14 +95,14 @@ export function VerifyStep({
     setIsResending(true)
     const success = await onResend()
     if (success) {
-      setResendCooldown(60)
+      setResendCooldown(RESEND_CODE_COOLDOWN_SECONDS)
     }
     setIsResending(false)
   }
 
   if (verified) {
     return (
-      <div className="text-center py-8">
+      <div role="status" aria-live="polite" className="text-center py-8">
         <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-action" />
         </div>
@@ -136,11 +128,22 @@ export function VerifyStep({
         <p className="text-text-secondary dark:text-text-muted">
           {t('description', { email })}
         </p>
+        {onEditEmail && (
+          <Button
+            type="button"
+            onClick={onEditEmail}
+            variant="ghost"
+            size="sm"
+            className="mt-1 inline-flex items-center gap-1 text-action hover:text-action"
+          >
+            <ArrowLeft className="w-3 h-3" />
+            {t('editEmail')}
+          </Button>
+        )}
       </div>
 
-      {/* Email send failure warning */}
       {emailSendFailed && (
-        <div className="p-4 rounded-lg bg-warning-50 border border-warning-200">
+        <div className="p-4 rounded-lg bg-warning-50 border border-warning-200" role="alert">
           <p className="text-sm text-warning-800 font-medium">
             {t('emailSendFailed')}
           </p>
@@ -150,41 +153,45 @@ export function VerifyStep({
         </div>
       )}
 
-      {/* Error Message */}
       {error && (
-        <div className="p-4 rounded-lg bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30">
+        <div id="verify-error" className="p-4 rounded-lg bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30" role="alert">
           <p className="text-sm text-error-700 dark:text-error-400">{error}</p>
         </div>
       )}
 
-      {/* Code Input */}
-      <div className="flex justify-center gap-2 sm:gap-3">
-        {code.map((digit, index) => (
-          <Input
-            key={index}
-            ref={el => { inputRefs.current[index] = el }}
-            type="text"
-            inputMode="numeric"
-            maxLength={1}
-            value={digit}
-            onChange={(e) => handleChange(index, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(index, e)}
-            onPaste={handlePaste}
-            disabled={isVerifying || isLoading}
-            className={cn(
-              'w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border-2 transition-colors',
-              digit ? 'border-action bg-action-muted' : 'border-default',
-              (isVerifying || isLoading) && 'opacity-50'
-            )}
-          />
-        ))}
+      {/* Single input with autoComplete one-time-code lets iOS/Android
+          autofill the SMS code. The visual segmentation comes from
+          tracking + tabular-nums; no JS reinvention. */}
+      <div>
+        <label htmlFor="verification-code" className="sr-only">
+          {t('codeLabel')}
+        </label>
+        <Input
+          ref={inputRef}
+          id="verification-code"
+          name="code"
+          type="text"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          pattern="\d{6}"
+          maxLength={VERIFICATION_CODE_LENGTH}
+          value={code}
+          onChange={(e) => handleChange(e.target.value)}
+          disabled={isVerifying || isLoading}
+          placeholder="••••••"
+          aria-invalid={!!error}
+          aria-describedby={error ? 'verify-error' : undefined}
+          className={cn(
+            'w-full text-center text-3xl font-bold tracking-[0.5em] py-4 tabular-nums',
+            (isVerifying || isLoading) && 'opacity-50',
+          )}
+        />
       </div>
 
-      {/* Verify Button */}
       <Button
         type="button"
-        onClick={() => handleVerify(code.join(''))}
-        disabled={code.some(d => !d) || isVerifying || isLoading}
+        onClick={() => handleVerify(code)}
+        disabled={code.length !== VERIFICATION_CODE_LENGTH || isVerifying || isLoading}
         variant="primary"
         size="lg"
         className="w-full gap-2 font-semibold"
@@ -202,7 +209,6 @@ export function VerifyStep({
         )}
       </Button>
 
-      {/* Resend */}
       <div className="text-center">
         <p className="text-sm text-text-secondary dark:text-text-muted mb-2">
           {t('noCode')}
@@ -228,7 +234,6 @@ export function VerifyStep({
         </Button>
       </div>
 
-      {/* Skip Option */}
       <div className="pt-4 border-t border-strong">
         <Button
           type="button"

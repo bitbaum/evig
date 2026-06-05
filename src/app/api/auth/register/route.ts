@@ -37,10 +37,10 @@ export async function POST(request: NextRequest) {
       return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, validationResult.error.flatten().fieldErrors)
     }
 
-    const { email, password, name, role, referralCode } = validationResult.data
+    const { email, password, name, referralCode } = validationResult.data
 
     try {
-      const result = await registerUser({ email, password, name, role })
+      const result = await registerUser({ email, password, name })
 
       if (!result.success) {
         return apiBadRequest(

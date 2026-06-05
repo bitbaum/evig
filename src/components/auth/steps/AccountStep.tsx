@@ -5,10 +5,18 @@ import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getTextColor } from '@/lib/design-system'
+import { AUTH_CONFIG } from '@/lib/auth/config'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+
+// Single source: same config the server's RegisterSchema derives from
+// (lib/schemas/auth.ts:createPasswordSchema). If the policy changes —
+// minLength becomes 10, complexity is added — the client UI updates
+// automatically. Note: we deliberately don't surface complexity hints
+// even if AUTH_CONFIG grows them, because forced complexity makes
+// password creation worse, not safer. See bcrypt + zxcvbn literature.
+const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength
 
 interface AccountStepProps {
   name: string
@@ -47,10 +55,10 @@ export function AccountStep({
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  // Password strength indicators - derived from AUTH_CONFIG (SSOT)
-  // AUTH_CONFIG: minLength=8, no complexity requirements
+  // Derived from AUTH_CONFIG (SSOT). One check by design — RevampIT's
+  // password policy is intentionally simple (8 chars, no complexity rules).
   const passwordChecks = {
-    length: password.length >= 8,
+    length: password.length >= PASSWORD_MIN_LENGTH,
   }
   const passwordValid = passwordChecks.length
   const passwordsMatch = password === confirmPassword
@@ -87,7 +95,7 @@ export function AccountStep({
 
       {/* Name */}
       <div>
-        <label htmlFor="name" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
+        <label htmlFor="name" className="block text-sm font-medium mb-1.5 text-text-secondary">
           {t('nameLabel')} <span className="text-text-muted">{t('nameOptional')}</span>
         </label>
         <div className="relative">
@@ -106,7 +114,7 @@ export function AccountStep({
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
+        <label htmlFor="email" className="block text-sm font-medium mb-1.5 text-text-secondary">
           {t('email')} *
         </label>
         <div className="relative">
@@ -129,7 +137,7 @@ export function AccountStep({
 
       {/* Password */}
       <div>
-        <label htmlFor="password" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
+        <label htmlFor="password" className="block text-sm font-medium mb-1.5 text-text-secondary">
           {t('password')} *
         </label>
         <div className="relative">
@@ -180,7 +188,7 @@ export function AccountStep({
 
       {/* Confirm Password */}
       <div>
-        <label htmlFor="confirmPassword" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
+        <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1.5 text-text-secondary">
           {t('confirmPassword')} *
         </label>
         <div className="relative">

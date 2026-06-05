@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { AUTH_CONFIG } from '@/lib/auth/config';
-import { REGISTRATION_ROLES } from '@/config/registration';
 
 // Email validation (RFC 5322 compliant)
 const emailSchema = z.string()
@@ -42,22 +41,16 @@ function createPasswordSchema() {
 
 const passwordSchema = createPasswordSchema();
 
-// ============================================================================
-// ROLE SCHEMA - Derived from REGISTRATION_ROLES (SSOT)
-// ============================================================================
-
-/**
- * Registration role schema - derived from config
- * Used for validating role during registration
- */
-export const RegistrationRoleSchema = z.enum(REGISTRATION_ROLES);
-export type RegistrationRoleType = z.infer<typeof RegistrationRoleSchema>;
-
 // Legacy user role schema for backward compatibility
+// (still used by some admin-facing flows; not by registration anymore)
 export const UserRoleSchema = z.enum(['customer', 'seller', 'repairer', 'staff']);
 export type UserRole = z.infer<typeof UserRoleSchema>;
 
 // Registration schema
+// Note: no `role` field. Roles are derived server-side from the email
+// domain (@revamp-it.ch → staff, else customer) inside registerUser.
+// The dropped field was always overwritten anyway; carrying it through
+// the request was confusing and YAGNI.
 export const RegisterSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
@@ -65,7 +58,6 @@ export const RegisterSchema = z.object({
     .min(2, 'Name muss mindestens 2 Zeichen lang sein')
     .max(100, 'Name darf maximal 100 Zeichen lang sein')
     .optional(),
-  role: RegistrationRoleSchema.optional().default('customer'),
   referralCode: z.string().optional(),
 });
 

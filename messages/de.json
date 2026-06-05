@@ -3069,6 +3069,9 @@
       "offerHelpDesc": "Deine Skills erfassen und anderen helfen",
       "browseShop": "Shop durchstöbern",
       "browseShopDesc": "Refurbished IT-Geräte entdecken",
+      "donateHardware": "Gerät spenden",
+      "donateHardwareDesc": "Schenke deinem alten Computer ein zweites Leben",
+      "featuredBadge": "Unsere Mission",
       "signInNow": "Jetzt anmelden",
       "alreadyRegistered": "Bereits registriert?",
       "nameLabel": "Name",
@@ -3123,6 +3126,8 @@
     "verify": {
       "heading": "Bestätige deine E-Mail",
       "description": "Wir haben einen 6-stelligen Code an {email} gesendet",
+      "editEmail": "E-Mail ändern",
+      "codeLabel": "6-stelliger Bestätigungscode",
       "emailSendFailed": "Der Bestätigungscode konnte nicht gesendet werden.",
       "emailSendFailedAction": "Bitte klicke unten auf «Code erneut senden».",
       "noCode": "Keinen Code erhalten?",

@@ -18,11 +18,7 @@ import {
   ResetPasswordSchema,
   ChangePasswordSchema,
   VerifyCodeSchema,
-  VerifyEmailTokenSchema,
-  RegistrationRoleSchema,
 } from '../auth'
-
-import { REGISTRATION_ROLES } from '@/config/registration'
 
 // ============================================================================
 // RegisterSchema
@@ -37,11 +33,6 @@ describe('RegisterSchema', () => {
   it('accepts minimal valid registration', () => {
     const result = RegisterSchema.safeParse(valid)
     expect(result.success).toBe(true)
-  })
-
-  it('defaults role to "customer"', () => {
-    const result = RegisterSchema.safeParse(valid)
-    if (result.success) expect(result.data.role).toBe('customer')
   })
 
   it('normalizes email to lowercase', () => {
@@ -84,17 +75,6 @@ describe('RegisterSchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts all valid registration roles', () => {
-    for (const role of REGISTRATION_ROLES) {
-      const result = RegisterSchema.safeParse({ ...valid, role })
-      expect(result.success).toBe(true)
-    }
-  })
-
-  it('rejects invalid role', () => {
-    const result = RegisterSchema.safeParse({ ...valid, role: 'admin' })
-    expect(result.success).toBe(false)
-  })
 })
 
 // ============================================================================
@@ -278,46 +258,8 @@ describe('VerifyCodeSchema', () => {
   })
 })
 
-// ============================================================================
-// VerifyEmailTokenSchema
-// ============================================================================
-
-describe('VerifyEmailTokenSchema', () => {
-  it('accepts non-empty token', () => {
-    const result = VerifyEmailTokenSchema.safeParse({ token: 'abc123def456' })
-    expect(result.success).toBe(true)
-  })
-
-  it('rejects empty token', () => {
-    const result = VerifyEmailTokenSchema.safeParse({ token: '' })
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects missing token', () => {
-    const result = VerifyEmailTokenSchema.safeParse({})
-    expect(result.success).toBe(false)
-  })
-})
-
-// ============================================================================
-// RegistrationRoleSchema
-// ============================================================================
-
-describe('RegistrationRoleSchema', () => {
-  it('accepts all valid registration roles', () => {
-    for (const role of REGISTRATION_ROLES) {
-      const result = RegistrationRoleSchema.safeParse(role)
-      expect(result.success).toBe(true)
-    }
-  })
-
-  it('rejects admin (not a registration role)', () => {
-    const result = RegistrationRoleSchema.safeParse('admin')
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects staff (not a registration role)', () => {
-    const result = RegistrationRoleSchema.safeParse('staff')
-    expect(result.success).toBe(false)
-  })
-})
+// VerifyEmailTokenSchema + RegistrationRoleSchema tests removed (VV.2)
+// — both schemas deleted as dead code. Token-based verify-email page
+// was unused (wizard uses the 6-digit code flow). Role was always
+// derived server-side from email domain; carrying it in the request
+// was YAGNI.

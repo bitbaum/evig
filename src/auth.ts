@@ -10,13 +10,14 @@ import Credentials from 'next-auth/providers/credentials'
 import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
-import { hashPassword, verifyPassword, validatePasswordStrength } from '@/lib/auth/password'
+import { hashPassword, verifyPassword } from '@/lib/auth/password'
 import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@/lib/constants'
 import { recordFailedAttempt, isAccountLocked, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/rate-limiter'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui'
 
 // Database pool: uses the shared pool from @/lib/auth/db (single pool for the entire app)
 // The Auth.js adapter is currently disabled (JWT strategy doesn't need it).
@@ -379,7 +380,6 @@ export async function registerUser(data: {
   email: string
   password: string
   name?: string
-  role?: string  // Legacy - ignored in new system
 }): Promise<RegisterResult> {
   const { email, password, name } = data
 
@@ -387,20 +387,16 @@ export async function registerUser(data: {
   const is_staff = isStaffEmail(email)
   const staff_permissions = is_staff ? getInitialStaffPermissions(email) : []
 
-  // Legacy role - set based on staff status for backward compatibility
+  // Legacy role column — still written so pre-permissions-v2 code paths
+  // (admin queries, audit logs) keep working. New code reads is_staff
+  // + staff_permissions instead. Per permissions-v2 migration plan, the
+  // role column will be dropped once the last legacy reader is gone.
   const role = is_staff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER
 
-  // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(email)) {
-    return { success: false, error: 'Ungültige E-Mail-Adresse' }
-  }
-
-  // Validate password strength
-  const passwordCheck = validatePasswordStrength(password)
-  if (!passwordCheck.isValid) {
-    return { success: false, errors: passwordCheck.errors }
-  }
+  // Email + password format are already validated by RegisterSchema at
+  // the API boundary (lib/schemas/auth.ts, derived from AUTH_CONFIG).
+  // No need to re-validate here — the Zod parse rejects bad input before
+  // we ever reach this function.
 
   // Check if user already exists
   const existingUser = await getUserByEmail(email)
@@ -438,7 +434,7 @@ export async function registerUser(data: {
     try {
       const verificationCode = await createVerificationCode(email)
       const templateName = is_staff ? 'staffVerificationCode' : 'verificationCode'
-      const emailResult = await sendEmail(email, templateName, name || 'Benutzer', verificationCode)
+      const emailResult = await sendEmail(email, templateName, name || DEFAULT_USER_NAME_FALLBACK, verificationCode)
       if (!emailResult.success) {
         logger.error('Email send returned failure', { error: emailResult.error, email, userId: user.id })
       } else {

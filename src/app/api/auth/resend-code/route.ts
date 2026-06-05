@@ -11,6 +11,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { getUserByEmail, createVerificationCode } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
+import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { validateBody, ResendCodeSchema } from '@/lib/schemas'
 
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
     // Generate new code and send email
     try {
       const verificationCode = await createVerificationCode(email)
-      const emailResult = await sendEmail(email, 'verificationCode', user.name || 'Benutzer', verificationCode)
+      const emailResult = await sendEmail(email, 'verificationCode', user.name || DEFAULT_USER_NAME_FALLBACK, verificationCode)
       if (!emailResult.success) {
         logger.error('Resend verification email returned failure', { error: emailResult.error, email, userId: user.id })
         return apiError(new Error(emailResult.error || 'Email send failed'), 'E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut.')

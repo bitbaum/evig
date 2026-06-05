@@ -91,7 +91,10 @@ export const ROUTES = {
     login:                    '/auth/login',
     register:                 '/auth/register',
     forgotPassword:           '/auth/forgot-password',
-    verifyEmail:              '/auth/verify-email',
+    // Donate hardware — the mission inflow. RevampIT exists because
+    // people donate working computers; surface this from anywhere via
+    // ROUTES.public.donate rather than the deeper /get-involved/donate.
+    donate:                   '/get-involved/donate',
     // Legal + membership pages — surface in the footer SSOT instead of
     // being hardcoded across components. Add new public pages here.
     impressum:                '/impressum',
