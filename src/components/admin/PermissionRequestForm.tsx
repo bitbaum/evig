@@ -69,12 +69,15 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           </div>
         </div>
         {onClose && (
-          <button
+          <Button
+            type="button"
             onClick={onClose}
+            variant="ghost"
+            size="sm"
             className="text-sm text-action hover:text-action"
           >
             Schliessen
-          </button>
+          </Button>
         )}
       </div>
     )
@@ -95,13 +98,15 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           </p>
         </div>
         {onClose && (
-          <button
+          <Button
             type="button"
             onClick={onClose}
+            variant="ghost"
+            size="icon"
             className="ml-auto text-text-tertiary hover:text-text-secondary"
           >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
         )}
       </div>
 
@@ -112,10 +117,11 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         </label>
         <div className="grid grid-cols-2 gap-2">
           {availableSections.map(section => (
-            <button
+            <Button
               key={section.id}
               type="button"
               onClick={() => toggleSection(section.id)}
+              variant="ghost"
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
                   ? 'border-action bg-action-muted'
@@ -128,7 +134,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               <span className="block text-xs text-text-tertiary mt-1">
                 {section.description}
               </span>
-            </button>
+            </Button>
           ))}
         </div>
       </div>

@@ -4,8 +4,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Mail, ArrowRight, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getButtonVariant } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 export interface VerifyStepProps {
   email: string
@@ -181,17 +181,13 @@ export function VerifyStep({
       </div>
 
       {/* Verify Button */}
-      <button
+      <Button
         type="button"
         onClick={() => handleVerify(code.join(''))}
         disabled={code.some(d => !d) || isVerifying || isLoading}
-        className={cn(
-          'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg transition-colors',
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          getButtonVariant('primary').bg,
-          getButtonVariant('primary').text,
-          getButtonVariant('primary').hover
-        )}
+        variant="primary"
+        size="lg"
+        className="w-full gap-2 font-semibold"
       >
         {isVerifying ? (
           <>
@@ -204,18 +200,20 @@ export function VerifyStep({
             <ArrowRight className="w-5 h-5" />
           </>
         )}
-      </button>
+      </Button>
 
       {/* Resend */}
       <div className="text-center">
         <p className="text-sm text-text-secondary dark:text-text-muted mb-2">
           {t('noCode')}
         </p>
-        <button
+        <Button
           type="button"
           onClick={handleResend}
           disabled={resendCooldown > 0 || isResending}
-          className="inline-flex items-center gap-2 text-action hover:text-action font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="ghost"
+          size="sm"
+          className="inline-flex gap-2 text-action hover:text-action font-medium"
         >
           {isResending ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -227,18 +225,20 @@ export function VerifyStep({
           ) : (
             <span>{t('resend')}</span>
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Skip Option */}
       <div className="pt-4 border-t border-strong">
-        <button
+        <Button
           type="button"
           onClick={onSkip}
-          className="w-full text-center text-sm text-text-tertiary hover:text-text-secondary"
+          variant="ghost"
+          size="sm"
+          className="w-full text-center text-text-tertiary hover:text-text-secondary"
         >
           {t('skipVerify')}
-        </button>
+        </Button>
         <p className="text-xs text-text-tertiary text-center mt-2">
           {t('skipDescription')}
         </p>

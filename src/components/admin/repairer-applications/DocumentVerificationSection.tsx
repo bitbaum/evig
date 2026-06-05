@@ -1,5 +1,6 @@
 import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import type { RepairerApplication, VerificationDocument, DocumentType, ActionDialogState } from './types'
 
 interface Props {
@@ -25,12 +26,15 @@ export function DocumentVerificationSection({
     <div className="mt-6 pt-6 border-t border">
       <div className="flex items-center justify-between mb-4">
         <Heading level={4} className="text-text-primary">Dokumentenverifizierung</Heading>
-        <button
+        <Button
+          type="button"
           onClick={() => onSelect(application)}
+          variant="ghost"
+          size="sm"
           className="text-sm text-action hover:text-action font-medium"
         >
           Dokumente prüfen
-        </button>
+        </Button>
       </div>
 
       {isSelected && (
@@ -71,20 +75,26 @@ export function DocumentVerificationSection({
                       </a>
                       {doc.status === APPROVAL_STATUS.PENDING && (
                         <>
-                          <button
+                          <Button
+                            type="button"
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
+                            variant="primary"
+                            size="sm"
                             className="px-2 py-1 bg-action-muted text-action rounded-sm text-xs hover:bg-action-muted disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
-                          </button>
-                          <button
+                          </Button>
+                          <Button
+                            type="button"
                             onClick={() => onOpenDialog('reject_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
+                            variant="destructive-ghost"
+                            size="sm"
                             className="px-2 py-1 bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400 rounded-sm text-xs hover:bg-error-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Ablehnen'}
-                          </button>
+                          </Button>
                         </>
                       )}
                       {doc.status === APPROVAL_STATUS.APPROVED && (

@@ -151,9 +151,11 @@ export function HirnProviderSelector() {
   return (
     <div className="relative">
       {/* Trigger Button */}
-      <button
+      <Button
+        type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 text-sm bg-surface-base border border hover:border-strong dark:hover:border-action rounded-xl transition-all shadow-xs"
+        variant="outline"
+        className="flex items-center gap-2 px-3 py-2 text-sm rounded-xl transition-all shadow-xs"
       >
         {currentMeta ? (
           <>
@@ -171,7 +173,7 @@ export function HirnProviderSelector() {
           <span className="text-text-tertiary">Kein Provider</span>
         )}
         <Settings className="w-4 h-4 text-text-tertiary ml-1" />
-      </button>
+      </Button>
 
       {/* Dropdown */}
       {open && (
@@ -214,10 +216,12 @@ export function HirnProviderSelector() {
                         const canSelect = provider.isAvailable
 
                         return (
-                          <button
+                          <Button
                             key={provider.provider}
+                            type="button"
                             onClick={() => canSelect && setDefaultProvider(provider.provider)}
                             disabled={changing || !canSelect}
+                            variant="ghost"
                             className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
                               isSelected
                                 ? 'bg-action-muted border-2 border-strong'
@@ -249,17 +253,19 @@ export function HirnProviderSelector() {
 
                             {meta.keyName && (
                               <div className="flex items-center gap-1">
-                                <button
+                                <Button
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     void saveApiKey(provider.provider)
                                   }}
+                                  variant="ghost"
+                                  size="sm"
                                   className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted rounded-lg"
                                 >
                                   <Key className="w-3 h-3" />
                                   Key speichern
-                                </button>
+                                </Button>
                                 {meta.keyUrl && (
                                   <a
                                     href={meta.keyUrl}
@@ -273,7 +279,7 @@ export function HirnProviderSelector() {
                                 )}
                               </div>
                             )}
-                          </button>
+                          </Button>
                         )
                       })}
                     </div>

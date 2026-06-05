@@ -5,8 +5,9 @@ import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getTextColor, getButtonVariant } from '@/lib/design-system'
+import { getTextColor } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface AccountStepProps {
   name: string
@@ -145,14 +146,16 @@ export function AccountStep({
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
             className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
           />
-          <button
+          <Button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
+            variant="ghost"
+            size="icon"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
             aria-label={showPassword ? t('hidePassword') : t('showPassword')}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-          </button>
+          </Button>
         </div>
 
         {/* Password Strength */}
@@ -197,14 +200,16 @@ export function AccountStep({
               confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-default'
             )}
           />
-          <button
+          <Button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            variant="ghost"
+            size="icon"
             className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
             aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
           >
             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-          </button>
+          </Button>
         </div>
         {confirmPassword && !passwordsMatch && (
           <p id="confirmPassword-error" className="mt-1 text-xs text-error-500">{t('passwordMismatch')}</p>
@@ -236,26 +241,24 @@ export function AccountStep({
       {/* Buttons */}
       <div className="flex gap-3">
         {onBack && (
-          <button
+          <Button
             type="button"
             onClick={onBack}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+            variant="outline"
+            size="lg"
+            className="gap-2 border-2 border-default text-text-secondary hover:bg-surface-raised"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>{t('back')}</span>
-          </button>
+          </Button>
         )}
-        <button
+        <Button
           type="submit"
           disabled={!isValid || isLoading}
-          className={cn(
-            'flex-1 flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg transition-colors',
-            'disabled:opacity-50 disabled:cursor-not-allowed',
-            getButtonVariant('primary').bg,
-            getButtonVariant('primary').text,
-            getButtonVariant('primary').hover
-          )}
+          variant="primary"
+          size="lg"
+          className="flex-1 gap-2 font-semibold"
         >
           {isLoading ? (
             <>
@@ -268,7 +271,7 @@ export function AccountStep({
               <ArrowRight className="w-5 h-5" />
             </>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   )

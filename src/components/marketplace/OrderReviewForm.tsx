@@ -91,14 +91,16 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
           {[1, 2, 3, 4, 5].map((n) => {
             const filled = n <= (hoverRating || rating)
             return (
-              <button
+              <Button
                 key={n}
                 type="button"
+                variant="ghost"
+                size="icon"
                 aria-label={t('starAriaLabel', { stars: n })}
                 onMouseEnter={() => setHoverRating(n)}
                 onMouseLeave={() => setHoverRating(0)}
                 onClick={() => setRating(n)}
-                className="p-1 transition-transform hover:scale-110"
+                className="transition-transform hover:scale-110"
               >
                 <Star
                   className={`w-8 h-8 ${
@@ -107,7 +109,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
                       : 'text-text-muted dark:text-text-secondary'
                   }`}
                 />
-              </button>
+              </Button>
             )
           })}
           {rating > 0 && (
@@ -141,28 +143,30 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
           {t('recommendLabel')}
         </label>
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
+            variant={recommend ? 'primary' : 'ghost'}
             onClick={() => setRecommend(true)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={
               recommend
-                ? 'bg-action text-white'
+                ? ''
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-            }`}
+            }
           >
             <ThumbsUp className="w-4 h-4" /> {t('recommendYes')}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={!recommend ? 'destructive' : 'ghost'}
             onClick={() => setRecommend(false)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={
               !recommend
-                ? 'bg-error-600 text-white'
+                ? ''
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-            }`}
+            }
           >
             <ThumbsDown className="w-4 h-4" /> {t('recommendNo')}
-          </button>
+          </Button>
         </div>
       </div>
 

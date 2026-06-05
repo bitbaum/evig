@@ -9,12 +9,11 @@
  */
 
 import { useState, type FormEvent } from 'react'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
 import { Modal } from '@/components/ui/Modal'
 import { FormField } from '@/components/ui/form-field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
 import { CheckCircle2 } from 'lucide-react'
 import type { NeedsSectionLabels } from './ProjectNeedsSection'
 
@@ -84,18 +83,14 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
           <p className="text-sm text-text-secondary mb-6">
             {labels.successBody}
           </p>
-          <button
+          <Button
             type="button"
+            variant="primary"
             onClick={onClose}
-            className={cn(
-              designPrimitive.buttonBase,
-              designPrimitive.buttonSize.default,
-              designPrimitive.button.primary,
-              'min-h-touch',
-            )}
+            className="min-h-touch"
           >
             {labels.cancel}
-          </button>
+          </Button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -141,31 +136,23 @@ export function NeedContributionDialog({ slug, need, typeLabel, labels, onClose 
           )}
 
           <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center sm:justify-end gap-2 sm:gap-3 pt-2">
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={onClose}
               disabled={submitting}
-              className={cn(
-                designPrimitive.buttonBase,
-                designPrimitive.buttonSize.default,
-                designPrimitive.button.ghost,
-                'min-h-touch',
-              )}
+              className="min-h-touch"
             >
               {labels.cancel}
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
+              variant="primary"
               disabled={submitting}
-              className={cn(
-                designPrimitive.buttonBase,
-                designPrimitive.buttonSize.default,
-                designPrimitive.button.primary,
-                'min-h-touch',
-              )}
+              className="min-h-touch"
             >
               {submitting ? labels.submitting : labels.submit}
-            </button>
+            </Button>
           </div>
         </form>
       )}

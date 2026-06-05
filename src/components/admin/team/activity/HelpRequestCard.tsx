@@ -7,6 +7,7 @@
  */
 
 import { Users, User, CheckCircle, Clock, AlertTriangle, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import {
   getHelpRequestUrgencyLabel,
@@ -171,10 +172,12 @@ export function HelpRequestCard({
       {showActions && (canResolve || canTakeOn) && (
         <div className="flex gap-2 mt-4 pt-4 border-t border">
           {canTakeOn && (
-            <button
+            <Button
               onClick={() => onTakeOn?.(request.id)}
               disabled={isTakingOn}
-              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              variant="ghost"
+              size="sm"
+              className="flex-1 text-action bg-action-muted hover:bg-action-muted gap-2"
             >
               {isTakingOn ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -182,13 +185,15 @@ export function HelpRequestCard({
                 <User className="w-4 h-4" />
               )}
               Übernehmen
-            </button>
+            </Button>
           )}
           {canResolve && (
-            <button
+            <Button
               onClick={() => onResolve?.(request.id)}
               disabled={isResolving}
-              className="flex-1 px-3 py-2 text-sm text-action bg-action-muted hover:bg-action-muted rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              variant="ghost"
+              size="sm"
+              className="flex-1 text-action bg-action-muted hover:bg-action-muted gap-2"
             >
               {isResolving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -196,7 +201,7 @@ export function HelpRequestCard({
                 <CheckCircle className="w-4 h-4" />
               )}
               Als gelöst markieren
-            </button>
+            </Button>
           )}
         </div>
       )}

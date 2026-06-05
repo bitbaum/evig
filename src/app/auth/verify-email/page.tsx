@@ -108,12 +108,14 @@ function VerifyEmailContent() {
                     {t('errorLogin')}
                   </Button>
                   <div>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => window.location.reload()}
-                      className="text-action hover:text-action text-sm"
+                      className="text-action hover:text-action"
                     >
                       {t('errorRetry')}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

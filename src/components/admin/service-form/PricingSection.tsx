@@ -4,6 +4,7 @@ import { Plus, Trash2 } from 'lucide-react'
 import { CollapsibleSection } from './CollapsibleSection'
 import { Input } from '@/components/ui/input'
 import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 interface PricingSectionProps {
   pricingBase: string
@@ -56,23 +57,27 @@ export function PricingSection({
                 placeholder="Detail-Zeile"
                 className="flex-1"
               />
-              <button
+              <Button
                 type="button"
                 onClick={() => onDetailRemove(index)}
+                variant="destructive-ghost"
+                size="icon"
                 className="p-2 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
               >
                 <Trash2 className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           ))}
-          <button
+          <Button
             type="button"
             onClick={onDetailAdd}
+            variant="ghost"
+            size="sm"
             className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-action-muted rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Detail hinzufügen
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -90,23 +95,27 @@ export function PricingSection({
                 placeholder="z.B. Disketten: CHF 10 pro Stück"
                 className="flex-1"
               />
-              <button
+              <Button
                 type="button"
                 onClick={() => onMediaPriceRemove(index)}
+                variant="destructive-ghost"
+                size="icon"
                 className="p-2 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
               >
                 <Trash2 className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           ))}
-          <button
+          <Button
             type="button"
             onClick={onMediaPriceAdd}
+            variant="ghost"
+            size="sm"
             className="flex items-center gap-2 px-3 py-1.5 text-sm text-action hover:bg-action-muted rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Medienpreis hinzufügen
-          </button>
+          </Button>
         </div>
       </div>
     </CollapsibleSection>

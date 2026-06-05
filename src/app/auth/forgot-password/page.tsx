@@ -69,12 +69,14 @@ export default function ForgotPasswordPage() {
                   {t('successLoginLink')}
                 </Button>
                 <p className="text-sm text-text-tertiary">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => setSuccess(false)}
                     className="text-action hover:text-action"
                   >
                     {t('successOtherEmail')}
-                  </button>
+                  </Button>
                 </p>
               </div>
             </div>

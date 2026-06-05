@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface ProtocolAIChatProps {
@@ -69,9 +70,10 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
 
   return (
     <div className="rounded-lg border border-info-200 bg-info-50 dark:border-info-500/20 dark:bg-info-500/6">
-      <button
+      <Button
         type="button"
         onClick={() => setExpanded(!expanded)}
+        variant="ghost"
         className="w-full flex items-center justify-between px-4 py-3 text-left"
         aria-expanded={expanded}
       >
@@ -83,21 +85,23 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
           ? <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
           : <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
         }
-      </button>
+      </Button>
 
       {expanded && (
         <div className="px-4 pb-4 space-y-3">
           <div className="flex flex-wrap gap-1.5">
             {QUICK_QUESTIONS.map((q) => (
-              <button
+              <Button
                 key={q.label}
                 type="button"
                 onClick={() => ask(q.question)}
                 disabled={loading}
+                variant="ghost"
+                size="sm"
                 className="px-2.5 py-1.5 rounded-full bg-info-100 dark:bg-info-500/12 text-info-700 dark:text-info-300 text-xs font-medium hover:bg-info-200 dark:hover:bg-info-500/18 disabled:opacity-50 transition-colors touch-manipulation"
               >
                 {q.label}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -111,10 +115,11 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
               disabled={loading}
               className="flex-1 resize-none"
             />
-            <button
+            <Button
               type="button"
               onClick={() => ask(question)}
               disabled={loading || !question.trim()}
+              variant="primary"
               className="px-3 py-2 bg-info-600 hover:bg-info-700 disabled:bg-info-300 dark:disabled:bg-info-500/30 text-white rounded-lg transition-colors self-end touch-manipulation"
               aria-label="Frage stellen"
             >
@@ -122,7 +127,7 @@ export function ProtocolAIChat({ title, notes, defaultExpanded = false }: Protoc
                 ? <Loader2 className="w-4 h-4 animate-spin" />
                 : <Send className="w-4 h-4" />
               }
-            </button>
+            </Button>
           </div>
 
           {error && (

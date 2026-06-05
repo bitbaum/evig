@@ -78,28 +78,31 @@ export function CurrentFocusInput({
                 if (e.key === 'Escape') handleCancel()
               }}
             />
-            <button
+            <Button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="p-1 text-action hover:bg-action-muted rounded-sm disabled:opacity-50"
+              variant="ghost"
+              size="icon"
+              className="p-1 text-action hover:bg-action-muted rounded-sm"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <Check className="w-4 h-4" />
               )}
-            </button>
+            </Button>
             <Button onClick={handleCancel} variant="ghost" size="icon" className="p-1 text-text-tertiary">
               <X className="w-4 h-4" />
             </Button>
           </div>
         ) : (
-          <button
+          <Button
             onClick={() => setIsEditing(true)}
-            className="flex-1 text-left text-sm text-text-secondary hover:text-text-primary truncate"
+            variant="ghost"
+            className="flex-1 justify-start text-left text-sm text-text-secondary hover:text-text-primary truncate"
           >
             {focus || 'Fokus setzen...'}
-          </button>
+          </Button>
         )}
       </div>
     )

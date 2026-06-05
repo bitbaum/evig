@@ -206,13 +206,15 @@ function ResetPasswordContent() {
                   className="w-full pl-11 pr-11 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
                   placeholder={t('newPasswordPlaceholder')}
                 />
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -236,13 +238,15 @@ function ResetPasswordContent() {
                   className="w-full pl-11 pr-11 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
                   placeholder={t('confirmPasswordPlaceholder')}
                 />
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+                </Button>
               </div>
             </div>
 

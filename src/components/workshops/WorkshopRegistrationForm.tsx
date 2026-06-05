@@ -207,12 +207,13 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           </p>
         </div>
 
-        <button
+        <Button
+          type="button"
           disabled
-          className="w-full px-4 py-3 bg-surface-overlay text-text-tertiary rounded-lg cursor-not-allowed"
+          className="w-full bg-surface-overlay text-text-tertiary cursor-not-allowed"
         >
           {t('fullButton')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -231,12 +232,13 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           <p className="text-error-700 dark:text-error-400 text-sm">{error}</p>
         </div>
 
-        <button
+        <Button
+          type="button"
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full px-4 py-3 bg-surface-overlay text-white rounded-lg hover:bg-surface-overlay transition-colors"
+          className="w-full bg-surface-overlay text-white hover:bg-surface-overlay"
         >
           {t('retryButton')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -267,12 +269,15 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           amount={paymentData.amount}
         />
 
-        <button
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full mt-3 px-4 py-2 text-text-secondary text-sm hover:text-text-primary transition-colors"
+          className="w-full mt-3 text-text-secondary hover:text-text-primary"
         >
           {t('cancelButton')}
-        </button>
+        </Button>
       </div>
     )
   }

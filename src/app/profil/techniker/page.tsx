@@ -114,11 +114,13 @@ export default function TechnikerProfilPage() {
                 </div>
                 <div className="flex flex-wrap gap-2 ml-10">
                   {skills.map((skill: ITSkill) => (
-                    <button
+                    <Button
                       key={skill.id}
+                      variant="ghost"
+                      size="sm"
                       type="button"
                       onClick={() => handleSkillToggle(skill.id)}
-                      className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                      className={`rounded-full transition-all ${
                         profile.skills.includes(skill.id)
                           ? 'bg-action-muted text-action border-2 border-action'
                           : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
@@ -126,7 +128,7 @@ export default function TechnikerProfilPage() {
                       title={skill.description}
                     >
                       {skill.name}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -146,11 +148,12 @@ export default function TechnikerProfilPage() {
 
           <div className="flex flex-wrap gap-2">
             {SERVICE_TYPES.filter((t) => t.id !== SERVICE_TYPE.FLEXIBLE).map((type) => (
-              <button
+              <Button
                 key={type.id}
+                variant="ghost"
                 type="button"
                 onClick={() => handleServiceTypeToggle(type.id)}
-                className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                className={`flex-col items-start rounded-lg transition-all ${
                   profile.serviceTypes.includes(type.id)
                     ? 'bg-action-muted text-action border-2 border-action'
                     : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
@@ -158,7 +161,7 @@ export default function TechnikerProfilPage() {
               >
                 {type.name}
                 <span className="block text-xs opacity-75">{type.description}</span>
-              </button>
+              </Button>
             ))}
           </div>
         </div>

@@ -78,13 +78,15 @@ export function ConfirmReviewCard({
           </label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
-              <button
+              <Button
                 key={star}
                 type="button"
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHover(star)}
                 onMouseLeave={() => setHover(0)}
-                className="p-2 focus:outline-hidden focus:ring-2 focus:ring-action rounded-sm"
+                variant="ghost"
+                size="icon"
+                className="p-2 rounded-sm"
                 aria-label={t('starAriaLabel', { count: star })}
               >
                 <Star
@@ -94,7 +96,7 @@ export function ConfirmReviewCard({
                       : 'text-text-muted'
                   }`}
                 />
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -121,28 +123,30 @@ export function ConfirmReviewCard({
             {t('recommendLabel')}
           </label>
           <div className="flex gap-3">
-            <button
+            <Button
               type="button"
               onClick={() => setRecommended(true)}
-              className={`flex-1 py-3 px-4 min-h-touch rounded-lg font-medium border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
+              variant="outline"
+              className={`flex-1 py-3 px-4 min-h-touch font-medium border-2 ${
                 recommended === true
                   ? 'bg-action text-white border-action'
                   : 'bg-surface-base text-text-secondary border-default hover:border-action'
               }`}
             >
               {t('recommendYes')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => setRecommended(false)}
-              className={`flex-1 py-3 px-4 min-h-touch rounded-lg font-medium border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-error-500 focus:ring-offset-2 ${
+              variant="outline"
+              className={`flex-1 py-3 px-4 min-h-touch font-medium border-2 ${
                 recommended === false
                   ? 'bg-error-600 text-white border-error-600'
                   : 'bg-surface-base text-text-secondary border-default hover:border-error-400'
               }`}
             >
               {t('recommendNo')}
-            </button>
+            </Button>
           </div>
         </div>
 

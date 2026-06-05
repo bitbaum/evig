@@ -95,17 +95,19 @@ export function ActivityFeed({
           </Button>
 
           {showFilters && (
-            <button
+            <Button
               onClick={() => setShowFilterPanel(!showFilterPanel)}
-              className={`p-2 rounded-lg ${
+              variant="ghost"
+              size="icon"
+              className={
                 hasActiveFilters
                   ? 'text-action bg-action-muted'
                   : 'text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6'
-              }`}
+              }
               title="Filter"
             >
               <Filter className="w-5 h-5" />
-            </button>
+            </Button>
           )}
 
           {showAddButton && (
@@ -252,12 +254,14 @@ export function ActivityFeed({
       {/* Load More */}
       {!loading && !error && activities.length < total && !compact && (
         <div className="flex justify-center pt-4">
-          <button
+          <Button
             onClick={() => setFilters({ offset: filters.offset + filters.limit })}
-            className="px-4 py-2 text-sm text-action hover:bg-action-muted rounded-lg"
+            variant="ghost"
+            size="sm"
+            className="text-action hover:bg-action-muted"
           >
             Mehr laden
-          </button>
+          </Button>
         </div>
       )}
 

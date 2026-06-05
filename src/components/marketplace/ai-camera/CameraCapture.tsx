@@ -116,18 +116,22 @@ interface CameraOptionsProps {
 function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCamera, labelLivePhoto, labelUploadFile, labelUseExisting }: CameraOptionsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         onClick={onStartCamera}
-        className="p-6 border-2 border-dashed border-strong rounded-lg hover:border-action hover:bg-action-muted transition-colors text-center"
+        className="h-auto p-6 border-2 border-dashed border-strong rounded-lg hover:border-action hover:bg-action-muted text-center flex-col"
       >
         <Camera className="w-12 h-12 text-action mx-auto mb-3" />
         <div className="font-medium text-text-primary">{labelOpenCamera}</div>
         <div className="text-sm text-text-secondary mt-1">{labelLivePhoto}</div>
-      </button>
+      </Button>
 
-      <button
+      <Button
+        type="button"
+        variant="ghost"
         onClick={() => fileInputRef.current?.click()}
-        className="p-6 border-2 border-dashed border-strong rounded-lg hover:border-action hover:bg-action-muted transition-colors text-center"
+        className="h-auto p-6 border-2 border-dashed border-strong rounded-lg hover:border-action hover:bg-action-muted text-center flex-col"
       >
         <Upload className="w-12 h-12 text-action mx-auto mb-3" />
         <div className="font-medium text-text-primary">{labelUploadFile}</div>
@@ -139,7 +143,7 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
           onChange={onFileUpload}
           className="hidden"
         />
-      </button>
+      </Button>
     </div>
   )
 }

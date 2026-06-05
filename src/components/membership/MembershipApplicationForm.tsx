@@ -13,8 +13,10 @@ import { UI_FEEDBACK_MS } from '@/config/limits'
 function CopyButton({ value, label, copiedLabel }: { value: string; label: string; copiedLabel: string }) {
   const [copied, setCopied] = useState(false)
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="sm"
       onClick={() => {
         navigator.clipboard.writeText(value.replace(/\s/g, ''))
         setCopied(true)
@@ -24,7 +26,7 @@ function CopyButton({ value, label, copiedLabel }: { value: string; label: strin
     >
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
       {copied ? copiedLabel : label}
-    </button>
+    </Button>
   )
 }
 
@@ -154,27 +156,29 @@ export function MembershipApplicationForm() {
 
       {/* Membership type */}
       <div className="grid grid-cols-2 gap-3">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setMemberType('regular')}
-          className={`px-4 py-3 rounded-lg border-2 text-left transition-colors ${
+          className={`h-auto px-4 py-3 rounded-lg border-2 text-left flex-col items-start ${
             memberType === 'regular' ? 'border-action bg-action-muted' : 'border-strong hover:border-strong'
           }`}
         >
           <div className="font-semibold text-text-primary">{t('regularLabel')}</div>
           <div className="text-sm text-text-secondary">CHF {MEMBERSHIP.fees.regular} / Jahr</div>
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setMemberType('reduced')}
-          className={`px-4 py-3 rounded-lg border-2 text-left transition-colors ${
+          className={`h-auto px-4 py-3 rounded-lg border-2 text-left flex-col items-start ${
             memberType === 'reduced' ? 'border-action bg-action-muted' : 'border-strong hover:border-strong'
           }`}
         >
           <div className="font-semibold text-text-primary">{t('reducedLabel')}</div>
           <div className="text-sm text-text-secondary">CHF {MEMBERSHIP.fees.reduced} / Jahr</div>
           <div className="text-xs text-text-tertiary mt-0.5">{t('reducedSubLabel')}</div>
-        </button>
+        </Button>
       </div>
 
       {/* Name + Email */}

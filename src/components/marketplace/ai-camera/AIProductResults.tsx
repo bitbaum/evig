@@ -7,6 +7,7 @@
 import { ProductSuggestionCard } from './ProductSuggestionCard'
 import type { ProductSuggestion } from './types'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface AIProductResultsProps {
   capturedImage: string
@@ -56,18 +57,21 @@ export function AIProductResults({
 
       {/* Actions */}
       <div className="flex gap-3 pt-4 border-t border">
-        <button
+        <Button
+          type="button"
+          variant="outline"
           onClick={onRetry}
-          className="flex-1 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+          className="flex-1"
         >
           Neues Foto
-        </button>
-        <button
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
           onClick={onClose}
-          className="px-4 py-2 text-text-secondary hover:text-text-primary transition-colors"
         >
           Manueller Eintrag
-        </button>
+        </Button>
       </div>
     </div>
   )

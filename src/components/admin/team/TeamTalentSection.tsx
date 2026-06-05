@@ -6,6 +6,7 @@ import type { TeamProfileFormState } from './useTeamProfileForm'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   form: TeamProfileFormState
@@ -53,9 +54,9 @@ export function TeamTalentSection({
               className="flex items-center gap-1 px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full"
             >
               {skill}
-              <button type="button" onClick={() => onRemoveSkill(skill)} className="hover:text-error-500">
+              <Button type="button" onClick={() => onRemoveSkill(skill)} variant="ghost" size="icon" className="hover:text-error-500">
                 <X className="w-3 h-3" />
-              </button>
+              </Button>
             </span>
           ))}
         </div>
@@ -80,14 +81,16 @@ export function TeamTalentSection({
           {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-surface-base border border rounded-lg shadow-lg">
               {filteredSkillSuggestions.map(skill => (
-                <button
+                <Button
                   key={skill}
                   type="button"
                   onClick={() => onAddSkill(skill)}
+                  variant="ghost"
+                  size="sm"
                   className="w-full px-4 py-2 text-left hover:bg-surface-raised dark:hover:bg-surface-base/6 text-sm"
                 >
                   {skill}
-                </button>
+                </Button>
               ))}
             </div>
           )}
@@ -103,9 +106,9 @@ export function TeamTalentSection({
               className="flex items-center gap-1 px-3 py-1 bg-action-muted text-action text-sm rounded-full"
             >
               {interest}
-              <button type="button" onClick={() => onRemoveInterest(interest)} className="hover:text-error-500">
+              <Button type="button" onClick={() => onRemoveInterest(interest)} variant="ghost" size="icon" className="hover:text-error-500">
                 <X className="w-3 h-3" />
-              </button>
+              </Button>
             </span>
           ))}
         </div>
@@ -123,13 +126,15 @@ export function TeamTalentSection({
             placeholder="Interesse hinzufügen..."
             className="flex-1"
           />
-          <button
+          <Button
             type="button"
             onClick={() => onAddInterest(interestInput)}
+            variant="ghost"
+            size="icon"
             className="px-3 py-2 bg-surface-raised hover:bg-surface-overlay rounded-lg"
           >
             <Plus className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
       </FormField>
 
