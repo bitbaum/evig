@@ -14,6 +14,9 @@ function makeStats(overrides: Partial<Stats> = {}): Stats {
     verified: 30,
     openReports: 0,
     revampit: 5,
+    community: 25,
+    totalOrders: 0,
+    revenueCents: 0,
     ...overrides,
   }
 }

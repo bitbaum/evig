@@ -10,7 +10,8 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield, ExternalLink } from 'lucide-react'
+import { CheckSquare, Clock, CheckCircle2, FileText, Shield, ExternalLink } from 'lucide-react'
+import { AdminHeroStatus, type HeroTone, type HeroKpi } from '@/components/admin/AdminHeroStatus'
 import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE, SUBMISSION_CONTENT_TYPE_LABELS } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
@@ -165,6 +166,59 @@ async function getPendingSubmissions(): Promise<ContentSubmission[]> {
 
 const contentTypeLabels: Record<string, string> = SUBMISSION_CONTENT_TYPE_LABELS
 
+/**
+ * Hero status for the approvals landing. The Übersicht list directly
+ * below is the actual call-to-action surface — admin clicks a source
+ * to triage. The hero just names "how much is waiting" and how stale
+ * the oldest entry is, so urgency is signaled before scrolling.
+ */
+function ApprovalsHero({
+  pending,
+  approved,
+  rejected,
+  oldestPendingDays,
+}: {
+  pending: number
+  approved: number
+  rejected: number
+  oldestPendingDays: number | null
+}) {
+  const kpis: HeroKpi[] = [
+    { label: 'Ausstehend', value: pending },
+    { label: 'Genehmigt (30T)', value: approved },
+    { label: 'Abgelehnt (30T)', value: rejected },
+    { label: 'Ältestes', value: oldestPendingDays === null ? '—' : `${oldestPendingDays}T` },
+  ]
+
+  if (pending === 0) {
+    return (
+      <AdminHeroStatus
+        tone="healthy"
+        icon={CheckCircle2}
+        headline="Keine offenen Freigaben."
+        sub="Sobald jemand etwas einreicht, taucht es hier auf."
+        kpis={kpis}
+      />
+    )
+  }
+
+  const urgent = (oldestPendingDays ?? 0) >= 7
+  const tone: HeroTone = urgent ? 'urgent' : 'attention'
+  const sub = urgent
+    ? `Älteste Einreichung wartet seit ${oldestPendingDays} Tagen — Einreichende werden nervös.`
+    : 'Eingereichte Inhalte brauchen eine Entscheidung, damit sie öffentlich werden.'
+
+  return (
+    <AdminHeroStatus
+      tone={tone}
+      icon={Clock}
+      headline={`${pending} Inhalt${pending === 1 ? '' : 'e'} warten auf Freigabe`}
+      sub={sub}
+      kpis={kpis}
+    />
+  )
+}
+
 export default async function ApprovalsPage() {
   const session = await auth()
 
@@ -189,36 +243,18 @@ export default async function ApprovalsPage() {
       icon={CheckSquare}
       iconColor="orange"
     >
-      {/* Stats */}
-      <div className="grid md:grid-cols-3 gap-4">
-        <div className="p-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200 dark:border-warning-800">
-          <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-warning-600" />
-            <div>
-              <p className="text-2xl font-bold text-warning-800 dark:text-warning-200">{totalPendingAllSources}</p>
-              <p className="text-sm text-warning-600 dark:text-warning-400">Ausstehend (gesamt)</p>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 bg-action-muted rounded-lg border border-strong">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-action" />
-            <div>
-              <p className="text-2xl font-bold text-action-text">{stats.approved}</p>
-              <p className="text-sm text-action">Genehmigt (30 Tage)</p>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 bg-error-50 dark:bg-error-900/20 rounded-lg border border-error-200 dark:border-error-800">
-          <div className="flex items-center gap-3">
-            <XCircle className="w-5 h-5 text-error-600" />
-            <div>
-              <p className="text-2xl font-bold text-error-800 dark:text-error-200">{stats.rejected}</p>
-              <p className="text-sm text-error-600 dark:text-error-400">Abgelehnt (30 Tage)</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Hero status — surfaces the actual headline + actionable list below */}
+      <ApprovalsHero
+        pending={totalPendingAllSources}
+        approved={stats.approved}
+        rejected={stats.rejected}
+        oldestPendingDays={
+          approvalSources.reduce<number | null>((max, s) => {
+            if (s.oldestPendingDays === null) return max
+            return max === null ? s.oldestPendingDays : Math.max(max, s.oldestPendingDays)
+          }, null)
+        }
+      />
 
       {/* Übersicht — pending counts from all approval sources */}
       <div className="bg-surface-base rounded-xl border border">
