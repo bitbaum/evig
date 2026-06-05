@@ -7,6 +7,7 @@
  */
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface PaginationProps {
   page: number
@@ -64,28 +65,31 @@ export function Pagination({
       {/* Controls */}
       <div className="flex items-center gap-1">
         {/* Previous */}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
         >
           <ChevronLeft className="w-5 h-5" />
-        </button>
+        </Button>
 
         {/* Page Numbers */}
         {getPageNumbers().map((p, i) =>
           typeof p === 'number' ? (
-            <button
+            <Button
               key={i}
+              variant={page === p ? 'primary' : 'ghost'}
               onClick={() => onPageChange(p)}
-              className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium transition-colors ${
+              className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium ${
                 page === p
-                  ? 'bg-action text-white'
+                  ? ''
                   : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary'
               }`}
             >
               {p}
-            </button>
+            </Button>
           ) : (
             <span key={i} className="px-2 text-text-muted">
               {p}
@@ -94,13 +98,15 @@ export function Pagination({
         )}
 
         {/* Next */}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
         >
           <ChevronRight className="w-5 h-5" />
-        </button>
+        </Button>
       </div>
     </div>
   )

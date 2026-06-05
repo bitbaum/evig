@@ -10,6 +10,7 @@ import { ReportsTab } from './ReportsTab'
 import { OrdersTab } from './OrdersTab'
 import { EditListingModal } from './EditListingModal'
 import { HandleReportModal } from './HandleReportModal'
+import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 export default function MarketplaceAdminClient() {
@@ -30,8 +31,10 @@ export default function MarketplaceAdminClient() {
       {/* Tab Navigation */}
       <div className="flex gap-1 border-b border">
         {TABS.map(t => (
-          <button
+          <Button
             key={t.id}
+            variant="ghost"
+            size="sm"
             onClick={() => m.switchTab(t.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               m.tab === t.id
@@ -46,7 +49,7 @@ export default function MarketplaceAdminClient() {
                 {m.stats.openReports}
               </span>
             )}
-          </button>
+          </Button>
         ))}
       </div>
 

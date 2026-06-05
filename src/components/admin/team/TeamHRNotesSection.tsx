@@ -1,6 +1,7 @@
 'use client'
 
 import { FileText, ChevronDown, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
@@ -13,10 +14,11 @@ interface Props {
 export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Props) {
   return (
     <div className="bg-warning-50 dark:bg-warning-900/20 rounded-xl border border-warning-200 dark:border-warning-800 overflow-hidden">
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-4 hover:bg-warning-100 dark:hover:bg-warning-900/30 transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-warning-100 dark:hover:bg-warning-900/30 h-auto rounded-none"
       >
         <div className="flex items-center gap-3">
           <FileText className="w-5 h-5 text-warning-600" />
@@ -29,7 +31,7 @@ export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Prop
         ) : (
           <ChevronRight className="w-5 h-5 text-warning-600" />
         )}
-      </button>
+      </Button>
 
       {isOpen && (
         <div className="p-6 pt-2 border-t border-warning-200 dark:border-warning-800">

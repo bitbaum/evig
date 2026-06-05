@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl'
 import type { BulkProduct, BulkProductStatus } from '@/types/erfassung'
 import { BULK_TABLE_COLUMNS, BULK_LIMITS } from '@/config/erfassung'
 import { KATEGORIEN, getConditionLabel } from '@/config/erfassung'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 interface BulkTableProps {
@@ -218,25 +219,29 @@ export function BulkTable({
             {page * pageSize + 1}-{Math.min((page + 1) * pageSize, products.length)} {t('ofText')} {products.length} {t('productsText')}
           </span>
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="icon"
               onClick={() => onPageChange(page - 1)}
               disabled={page === 0}
-              className="p-2 rounded-lg border border-default disabled:opacity-30 hover:bg-surface-raised"
+              className="p-2 rounded-lg h-auto w-auto"
             >
               <ChevronLeft className="w-4 h-4" />
-            </button>
+            </Button>
             <span className="flex items-center text-sm text-text-secondary px-2">
               {page + 1} / {totalPages}
             </span>
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="icon"
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages - 1}
-              className="p-2 rounded-lg border border-default disabled:opacity-30 hover:bg-surface-raised"
+              className="p-2 rounded-lg h-auto w-auto"
             >
               <ChevronRight className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
       )}

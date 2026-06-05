@@ -186,13 +186,15 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                   {t('edit')}
                 </Button>
               )}
-              <button
+              <Button
                 onClick={() => onDelete(review.id)}
-                className="px-3 py-1.5 bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400 rounded-sm text-sm hover:bg-error-200 dark:hover:bg-error-500/30 flex items-center gap-1"
+                variant="destructive-ghost"
+                size="sm"
+                className="bg-error-100 dark:bg-error-500/20 hover:bg-error-200 dark:hover:bg-error-500/30 gap-1"
               >
                 <Trash2 className="w-3 h-3" />
                 {t('delete')}
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -210,28 +212,28 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           {/* Vote Buttons */}
           {review.status === REVIEW_STATUS.PUBLISHED && (
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 onClick={() => onVote(review.id, 'helpful')}
-                className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
-                  getUserVote(review.id) === 'helpful'
-                    ? 'bg-action-muted/20 text-action'
-                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-                }`}
+                variant="ghost"
+                size="sm"
+                className={getUserVote(review.id) === 'helpful'
+                  ? 'bg-action-muted/20 text-action'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'}
               >
                 <ThumbsUp className="w-3 h-3" />
                 {t('helpful', { count: review.helpfulVotes })}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => onVote(review.id, 'unhelpful')}
-                className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
-                  getUserVote(review.id) === 'unhelpful'
-                    ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
-                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-                }`}
+                variant="ghost"
+                size="sm"
+                className={getUserVote(review.id) === 'unhelpful'
+                  ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'}
               >
                 <ThumbsDown className="w-3 h-3" />
                 {t('notHelpful')}
-              </button>
+              </Button>
             </div>
           )}
         </div>

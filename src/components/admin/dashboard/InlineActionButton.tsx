@@ -3,6 +3,7 @@
 import { useTransition } from 'react'
 import { Check, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import {
   approveBlogSubmissionAction,
   verifyListingAction,
@@ -34,13 +35,15 @@ export function InlineActionButton({ itemId, actionType }: InlineActionButtonPro
   const fn = ACTION_FNS[actionType]
 
   return (
-    <button
+    <Button
+      variant="primary"
+      size="sm"
       onClick={(e) => {
         e.preventDefault() // don't follow the parent link
         startTransition(() => fn(itemId))
       }}
       disabled={isPending}
-      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold disabled:bg-action transition-colors min-h-[28px] shrink-0 bg-action hover:bg-action-hover text-action-text"
+      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold min-h-[28px] h-auto shrink-0"
       aria-label={`${label} (erstes Element in dieser Kategorie)`}
     >
       {isPending ? (
@@ -49,6 +52,6 @@ export function InlineActionButton({ itemId, actionType }: InlineActionButtonPro
         <Check className="w-3 h-3" aria-hidden="true" />
       )}
       {label}
-    </button>
+    </Button>
   )
 }

@@ -19,6 +19,7 @@ import {
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ORG } from '@/config/org'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 export type FiltersObj = ReturnType<typeof useMarketplaceListings>['filters']
@@ -43,10 +44,11 @@ function FilterSection({
   const [open, setOpen] = useState(defaultOpen)
   return (
     <div className="border-b border py-3">
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between text-sm font-semibold text-text-primary hover:text-text-secondary py-0.5"
+        className="flex w-full items-center justify-between text-sm font-semibold text-text-primary hover:text-text-secondary py-0.5 h-auto px-0 bg-transparent hover:bg-transparent"
         aria-expanded={open}
       >
         {title}
@@ -55,7 +57,7 @@ function FilterSection({
         ) : (
           <ChevronDown className="h-3.5 w-3.5 text-text-muted shrink-0" />
         )}
-      </button>
+      </Button>
       {open && <div className="mt-2.5 space-y-1.5">{children}</div>}
     </div>
   )
@@ -139,13 +141,15 @@ export function MarketplaceFilterSidebar({
       <div className="flex items-center justify-between mb-1 pb-3 border-b border">
         <span className="text-sm font-bold text-text-primary">{t('filters.label')}</span>
         {hasActiveFilters && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={clearFilters}
-            className="text-xs text-secondary-600 hover:text-secondary-700 font-medium"
+            className="text-xs text-secondary-600 hover:text-secondary-700 font-medium h-auto px-0 bg-transparent hover:bg-transparent"
           >
             {t('filters.clearFilters')}
-          </button>
+          </Button>
         )}
       </div>
 

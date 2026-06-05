@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import {
   MARKETPLACE_CATEGORY_LABELS,
   CATEGORY_ICONS,
@@ -172,24 +173,28 @@ export function ActiveFilterChips({
           className="inline-flex items-center gap-1 rounded-full bg-secondary-50 border border-secondary-200 pl-3 pr-2 py-1 text-sm text-secondary-800 font-medium"
         >
           {chip.label}
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={chip.onRemove}
             aria-label={`${chip.label} entfernen`}
-            className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full hover:bg-secondary-200 text-secondary-500 hover:text-secondary-700 transition-colors"
+            className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full hover:bg-secondary-200 text-secondary-500 hover:text-secondary-700 h-auto p-0 bg-transparent"
           >
             <X className="w-2.5 h-2.5" />
-          </button>
+          </Button>
         </span>
       ))}
       {chips.length > 1 && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={clearFilters}
-          className="text-sm text-text-tertiary hover:text-text-secondary font-medium underline underline-offset-2"
+          className="text-sm text-text-tertiary hover:text-text-secondary font-medium underline underline-offset-2 h-auto px-0 bg-transparent hover:bg-transparent"
         >
           {t('filters.clearFilters')}
-        </button>
+        </Button>
       )}
     </div>
   )

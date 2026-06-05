@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import {
   getEmploymentTypeLabel,
@@ -59,13 +60,14 @@ export function TeamProfileView({
           above this view (always visible across tabs). Showing a second one
           inside the overview tab was redundant; only the back link stays. */}
       <div className="flex items-center justify-between">
-        <button
+        <Button
+          variant="ghost"
           onClick={onBack}
-          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary h-auto px-0 hover:bg-transparent"
         >
           <ArrowLeft className="w-5 h-5" />
           {t('backToTeam')}
-        </button>
+        </Button>
       </div>
 
       {/* Profile Header Card */}

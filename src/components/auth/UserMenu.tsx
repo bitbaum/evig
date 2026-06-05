@@ -126,16 +126,15 @@ export function UserMenu() {
 
   return (
     <div className="relative" ref={menuRef}>
-      <button
+      <Button
+        variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex items-center gap-2 p-1.5 rounded-full",
-          "transition-all duration-200",
+          "flex items-center gap-2 p-1.5 rounded-full h-auto",
           "ring-2 ring-primary-100 dark:ring-action/20",
           isOpen
             ? "bg-action-muted/10 ring-action/20 dark:ring-action/30"
-            : "hover:bg-action-muted/10 hover:ring-action/20 dark:hover:ring-action/30",
-          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2"
+            : "hover:bg-action-muted/10 hover:ring-action/20 dark:hover:ring-action/30"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -161,7 +160,7 @@ export function UserMenu() {
             isOpen && "rotate-180 text-action"
           )}
         />
-      </button>
+      </Button>
 
       {/* Dropdown Menu */}
       <div
@@ -249,20 +248,21 @@ export function UserMenu() {
               <Settings className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action transition-colors" />
               {t('settings')}
             </Link>
-            <button
+            <Button
+              variant="ghost"
               onClick={() => {
                 setIsOpen(false)
                 signOut({ callbackUrl: '/' })
               }}
               className={cn(
-                "group flex items-center gap-3 w-full px-5 py-2.5",
+                "group flex items-center gap-3 w-full px-5 py-2.5 h-auto justify-start rounded-none",
                 "text-sm text-text-secondary hover:text-error-600 dark:hover:text-error-400",
-                "hover:bg-error-50 dark:hover:bg-error-500/10 transition-colors duration-150"
+                "hover:bg-error-50 dark:hover:bg-error-500/10"
               )}
             >
               <LogOut className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-error-500 dark:group-hover:text-error-400 transition-colors" />
               {t('logout')}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

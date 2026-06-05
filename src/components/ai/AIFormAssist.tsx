@@ -104,10 +104,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
   return (
     <div className={`${containerClass} ${className}`}>
       {/* Header */}
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setIsExpanded(!isExpanded)}
-        className={`w-full flex items-center justify-between ${padding} py-2.5 text-left`}
+        className={`w-full flex items-center justify-between ${padding} py-2.5 text-left h-auto rounded-none`}
       >
         <span className="text-sm font-semibold text-action-text flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-action" />
@@ -116,7 +117,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
         <svg className={`w-4 h-4 text-action transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
-      </button>
+      </Button>
 
       {isExpanded && (
         <div className={`${padding} pb-4 space-y-3`}>
@@ -174,27 +175,31 @@ export function AIFormAssist<T = Record<string, unknown>>({
             <div className="flex flex-wrap gap-1.5">
               {suggestedActions.length > 0
                 ? suggestedActions.map((action, i) => (
-                    <button
+                    <Button
                       key={i}
                       type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => handleSuggestedAction(action.prompt)}
                       disabled={isExtracting}
-                      className="px-2.5 py-1 bg-action-muted-hover/40 text-action rounded-md text-xs font-medium hover:bg-action-muted/50 disabled:opacity-50 transition-colors touch-manipulation"
+                      className="px-2.5 py-1 bg-action-muted-hover/40 text-action rounded-md text-xs font-medium hover:bg-action-muted/50 touch-manipulation h-auto"
                     >
                       {action.label}
-                    </button>
+                    </Button>
                   ))
                 : quickActions.map((action) => (
-                    <button
+                    <Button
                       key={action.key}
                       type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => handleQuickAction(action.key)}
                       disabled={isExtracting || !hasContent}
                       title={!hasContent ? t('quickActionDisabled') : undefined}
-                      className="px-2.5 py-1 bg-action-muted-hover/40 text-action rounded-md text-xs font-medium hover:bg-action-muted/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
+                      className="px-2.5 py-1 bg-action-muted-hover/40 text-action rounded-md text-xs font-medium hover:bg-action-muted/50 touch-manipulation h-auto"
                     >
                       {action.label}
-                    </button>
+                    </Button>
                   ))
               }
             </div>

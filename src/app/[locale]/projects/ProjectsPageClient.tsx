@@ -6,6 +6,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import { ArrowRight, Filter, CheckCircle2, Calendar, Code, Globe, Users, Wrench, Rocket, Layers, Server, Lightbulb } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
@@ -79,7 +80,8 @@ export default function ProjectsPage() {
               <Filter className="h-3.5 w-3.5" />
               {t('filter.label')}
             </span>
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setSelectedCategory(null)}
               className={cn(
                 'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
@@ -89,10 +91,11 @@ export default function ProjectsPage() {
               )}
             >
               {t('filter.all')}
-            </button>
+            </Button>
             {categoryKeys.map((key) => (
-              <button
+              <Button
                 key={key}
+                variant="ghost"
                 onClick={() => handleToggle(key)}
                 className={cn(
                   'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
@@ -102,7 +105,7 @@ export default function ProjectsPage() {
                 )}
               >
                 {t(`categories.${key}`)}
-              </button>
+              </Button>
             ))}
           </div>
 

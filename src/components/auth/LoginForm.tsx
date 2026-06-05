@@ -10,6 +10,7 @@ import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-sy
 import { cn } from '@/lib/utils'
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 
@@ -196,24 +197,26 @@ export function LoginForm() {
                   'focus:ring-2 focus:ring-action focus:border-action'
                 )}
               />
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
                 aria-label={showPassword ? t('hidePassword') : t('showPassword')}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Submit Button */}
-          <button
+          <Button
             type="submit"
+            variant="primary"
             disabled={isLoading}
             className={cn(
-              'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg transition-colors min-h-[touch] touch-target',
-              'disabled:opacity-50 disabled:cursor-not-allowed',
+              'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg min-h-[touch] touch-target h-auto',
               getButtonVariant('primary').bg,
               getButtonVariant('primary').text,
               getButtonVariant('primary').hover
@@ -230,7 +233,7 @@ export function LoginForm() {
                 <ArrowRight className="w-5 h-5" />
               </>
             )}
-          </button>
+          </Button>
         </form>
 
         {/* Divider */}

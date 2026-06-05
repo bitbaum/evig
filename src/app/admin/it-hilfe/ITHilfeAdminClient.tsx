@@ -1,6 +1,7 @@
 'use client'
 
 import { HelpCircle, Users, Loader2, Clock, ShieldCheck } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { TABS } from './types'
 import { StatsCard } from './shared'
 import { useITHilfeAdmin } from './useITHilfeAdmin'
@@ -36,8 +37,10 @@ export default function ITHilfeAdminClient() {
       {/* Tab Navigation */}
       <div className="flex gap-1 border-b border">
         {TABS.map(t => (
-          <button
+          <Button
             key={t.id}
+            variant="ghost"
+            size="sm"
             onClick={() => switchTab(t.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               tab === t.id
@@ -47,7 +50,7 @@ export default function ITHilfeAdminClient() {
           >
             <t.icon className="w-4 h-4" />
             {t.label}
-          </button>
+          </Button>
         ))}
       </div>
 

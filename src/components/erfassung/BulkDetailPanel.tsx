@@ -103,13 +103,15 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
               {t('sourcePrefix')}{localData._source}
             </p>
           </div>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-surface-raised"
+            className="rounded-lg hover:bg-surface-raised"
           >
             <X className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {/* Form */}

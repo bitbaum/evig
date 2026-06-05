@@ -59,30 +59,32 @@ export function DonationFormModal({
 
           {/* Type Toggle */}
           <div className="flex gap-2 mb-6">
-            <button
+            <Button
               type="button"
+              variant={formType === DONATION_TYPES.MONETARY ? 'primary' : 'ghost'}
               onClick={() => onFormTypeChange(DONATION_TYPES.MONETARY)}
-              className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 h-auto ${
                 formType === DONATION_TYPES.MONETARY
-                  ? 'bg-action text-white'
+                  ? ''
                   : 'bg-surface-raised text-text-secondary'
               }`}
             >
               <Heart className="w-5 h-5" />
               Geldspende
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant={formType === DONATION_TYPES.DEVICE ? 'primary' : 'ghost'}
               onClick={() => onFormTypeChange(DONATION_TYPES.DEVICE)}
-              className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 h-auto ${
                 formType === DONATION_TYPES.DEVICE
-                  ? 'bg-action text-white'
+                  ? ''
                   : 'bg-surface-raised text-text-secondary'
               }`}
             >
               <Package className="w-5 h-5" />
               Sachspende
-            </button>
+            </Button>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-4">

@@ -19,6 +19,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Plus, Trash2, Calendar, X, RefreshCw } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -142,22 +143,26 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
           <h2 className="text-sm font-semibold text-text-primary">Urlaub & Abwesenheit</h2>
         </div>
         <div className="flex items-center gap-1">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={load}
             disabled={isLoading}
-            className="w-11 h-11 inline-flex items-center justify-center rounded-md text-text-tertiary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+            className="w-11 h-11 text-text-tertiary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/4"
             aria-label="Aktualisieren"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          </button>
+          </Button>
           {!showForm && (
-            <button
+            <Button
+              variant="primary"
+              size="sm"
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-1.5 px-3 min-h-11 rounded-md text-xs font-semibold bg-action hover:bg-action-hover text-action-text"
+              className="inline-flex items-center gap-1.5 px-3 min-h-11 text-xs font-semibold h-auto"
             >
               <Plus className="w-4 h-4" />
               Urlaub erfassen
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -199,21 +204,25 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             />
           </label>
           <div className="mt-3 flex justify-end gap-2">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={resetForm}
               disabled={submitting}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+              className="inline-flex items-center gap-1"
             >
               <X className="w-3.5 h-3.5" /> Abbrechen
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
               onClick={submit}
               disabled={submitting}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-semibold disabled:opacity-60 bg-action hover:bg-action-hover text-action-text"
+              className="inline-flex items-center gap-1"
             >
               <Plus className="w-3.5 h-3.5" />
               Speichern
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -252,13 +261,15 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                       <p className="mt-1 text-xs text-text-secondary">{row.notes}</p>
                     )}
                   </div>
-                  <button
+                  <Button
+                    variant="destructive-ghost"
+                    size="icon"
                     onClick={() => remove(row.id)}
-                    className="w-11 h-11 inline-flex items-center justify-center rounded-md text-text-muted hover:text-error-600 dark:hover:text-error-400 hover:bg-error-50 dark:hover:bg-error-500/10"
+                    className="w-11 h-11 text-text-muted hover:text-error-600 dark:hover:text-error-400 hover:bg-error-50 dark:hover:bg-error-500/10"
                     aria-label="Eintrag löschen"
                   >
                     <Trash2 className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
               </li>
             )

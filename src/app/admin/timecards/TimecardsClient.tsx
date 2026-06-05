@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { AlertCircle, Check, Clock, RotateCcw, Send, Sparkles, UserCheck } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -321,32 +322,35 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <button
+            <Button
               type="button"
+              variant="primary"
               onClick={submitDraft}
               disabled={isSubmitting || periodEntries.length === 0 || isLoadingDraft}
               className="inline-flex items-center gap-2 rounded-lg bg-success-600 px-3 py-2 text-sm font-medium text-white hover:bg-success-700 disabled:bg-surface-overlay disabled:text-text-tertiary"
             >
               <Send className="h-4 w-4" />
               {isSubmitting ? 'Sende…' : 'Zur Prüfung einreichen'}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="outline"
               onClick={rebuildCurrentDraft}
               className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 <RotateCcw className="h-4 w-4" />
                 Vorlage zurücksetzen
-              </button>
-            <button
+              </Button>
+            <Button
               type="button"
+              variant="outline"
               onClick={saveDraft}
               disabled={isSaving || isLoadingDraft}
               className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-surface-base/6"
             >
               <Check className="h-4 w-4" />
               {isSaving ? 'Speichere…' : 'Entwurf speichern'}
-            </button>
+            </Button>
           </div>
         </div>
         {errorMessage && (
@@ -435,9 +439,10 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               const active = draft.selectedDate === date
               const weekdayLabel = new Intl.DateTimeFormat('de-CH', { weekday: 'short' }).format(new Date(`${date}T00:00:00.000Z`))
               return (
-                <button
+                <Button
                   key={date}
                   type="button"
+                  variant="outline"
                   onClick={() => updateCurrentDraft(current => ({ ...current, selectedDate: date }))}
                   className={`min-h-28 rounded-lg border p-3 text-left transition-colors ${
                     active
@@ -456,7 +461,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
                   <p className="mt-1 truncate text-xs text-text-tertiary">
                     {entry ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory] : 'Vorgefüllt aus Schedule'}
                   </p>
-                </button>
+                </Button>
               )
             })}
           </div>
@@ -468,20 +473,22 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
 
           <div className="mt-4 space-y-3">
             <div className="grid grid-cols-2 gap-2">
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => markSelectedDateOff('frei')}
                 className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 Frei
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => markSelectedDateOff('krank')}
                 className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 Krank
-              </button>
+              </Button>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -554,13 +561,14 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             </label>
 
             <div className="flex gap-2">
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={restoreSelectedDateFromSchedule}
                 className="w-full rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
               >
                 Tag aus Vorlage wiederherstellen
-              </button>
+              </Button>
             </div>
           </div>
         </aside>

@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight, CheckCircle2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
@@ -21,9 +22,10 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
       <div className="divide-y">
         {topics.map((topic) => (
           <div key={topic.id} className="p-4">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => onToggleTopic(topic.id)}
-              className="flex items-center gap-2 w-full text-left"
+              className="flex items-center gap-2 w-full text-left h-auto p-0 hover:bg-transparent justify-start"
             >
               {expandedTopics.has(topic.id) ? (
                 <ChevronDown className="w-4 h-4 text-text-muted" />
@@ -31,7 +33,7 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
                 <ChevronRight className="w-4 h-4 text-text-muted" />
               )}
               <span className="font-medium text-text-primary">{topic.title}</span>
-            </button>
+            </Button>
             {expandedTopics.has(topic.id) && (
               <div className="mt-3 ml-6 space-y-2">
                 <p className="text-text-secondary text-sm">{topic.discussion}</p>

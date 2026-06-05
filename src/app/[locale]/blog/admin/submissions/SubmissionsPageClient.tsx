@@ -67,8 +67,9 @@ export default function SubmissionsAdminPage() {
               { key: APPROVAL_STATUS.APPROVED, label: t('filterApproved', { count: approvedCount }) },
               { key: APPROVAL_STATUS.REJECTED, label: t('filterRejected', { count: rejectedCount }) },
             ].map(({ key, label }) => (
-              <button
+              <Button
                 key={key}
+                variant="ghost"
                 onClick={() => setFilter(key)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   filter === key
@@ -77,7 +78,7 @@ export default function SubmissionsAdminPage() {
                 }`}
               >
                 {label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

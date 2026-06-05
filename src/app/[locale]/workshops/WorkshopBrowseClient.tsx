@@ -109,7 +109,9 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
             {/* Clear filters */}
             {(categoryFilter !== 'all' || levelFilter !== 'all') && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => {
                   setCategoryFilter('all')
                   setLevelFilter('all')
@@ -117,7 +119,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 className="self-end px-3 py-2 text-sm text-action hover:text-action font-medium"
               >
                 {t('clearFilters')}
-              </button>
+              </Button>
             )}
 
             {/* Results count */}
@@ -277,7 +279,8 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 : t('emptyAll.subtitle')}
             </p>
             {(categoryFilter !== 'all' || levelFilter !== 'all') && (
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => {
                   setCategoryFilter('all')
                   setLevelFilter('all')
@@ -285,7 +288,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 className="text-action hover:text-action font-medium"
               >
                 {t('emptyFiltered.clearFilters')}
-              </button>
+              </Button>
             )}
           </div>
         )}

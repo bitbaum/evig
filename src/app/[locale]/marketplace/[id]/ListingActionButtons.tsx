@@ -196,7 +196,8 @@ export function ListingActionButtons({
       )}
       <div className="flex gap-3">
         {sessionUserId && (
-          <button
+          <Button
+            variant="outline"
             onClick={onToggleFavorite}
             disabled={togglingFav}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
@@ -207,9 +208,10 @@ export function ListingActionButtons({
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-error-500 text-error-500' : ''}`} aria-hidden="true" />
             {favoriteCount > 0 ? favoriteCount : t('save')}
-          </button>
+          </Button>
         )}
-        <button
+        <Button
+          variant="outline"
           onClick={onShare}
           className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-default text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
           title={t('share')}
@@ -220,7 +222,7 @@ export function ListingActionButtons({
             <Share2 className="w-4 h-4" aria-hidden="true" />
           )}
           {shareConfirm ? t('copied') : t('share')}
-        </button>
+        </Button>
         {isOwner && (
           <Link
             href={`/marketplace/sell?edit=${listing.id}`}
@@ -230,13 +232,15 @@ export function ListingActionButtons({
           </Link>
         )}
         {sessionUserId && !isOwner && (
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={onShowReportModal}
             className="flex items-center justify-center gap-2 py-3 px-4 min-h-touch rounded-lg font-medium border border-default text-text-secondary hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
             title={t('report')}
           >
             <Flag className="w-4 h-4" aria-hidden="true" />
-          </button>
+          </Button>
         )}
       </div>
     </div>

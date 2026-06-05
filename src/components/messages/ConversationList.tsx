@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { MessageSquare, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/date-formats'
 
 export interface Conversation {
@@ -54,10 +55,11 @@ export default function ConversationList({ conversations, selectedId, onSelect }
   return (
     <div className="divide-y divide-neutral-100 dark:divide-neutral-700">
       {conversations.map(conv => (
-        <button
+        <Button
           key={conv.id}
+          variant="ghost"
           onClick={() => onSelect(conv.id)}
-          className={`w-full text-left px-4 py-3 hover:bg-surface-raised transition-colors focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-action ${
+          className={`w-full text-left px-4 py-3 hover:bg-surface-raised h-auto justify-start rounded-none ${
             selectedId === conv.id
               ? 'bg-action-muted border-l-2 border-action'
               : ''
@@ -101,7 +103,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
               )}
             </div>
           </div>
-        </button>
+        </Button>
       ))}
     </div>
   )

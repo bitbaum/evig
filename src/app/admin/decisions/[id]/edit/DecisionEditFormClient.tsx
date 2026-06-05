@@ -88,14 +88,16 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
       )}
 
       <div>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => setShowAdvanced((v) => !v)}
           className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary"
         >
           <span className="text-xs">{showAdvanced ? '▼' : '▶'}</span>
           Erweiterte Einstellungen
-        </button>
+        </Button>
         {showAdvanced && (
           <div className="mt-3 rounded-lg border border bg-surface-raised p-4 space-y-4">
             <AdvancedSettings

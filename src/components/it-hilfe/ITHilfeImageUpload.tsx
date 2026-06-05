@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { FILE_SIZE_LIMITS } from '@/config/limits'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 
 interface ITHilfeImageUploadProps {
@@ -125,13 +126,15 @@ export function ITHilfeImageUpload({
                 alt={t('imageAlt', { index: index + 1 })}
                 className="w-full h-24 object-cover rounded-lg"
               />
-              <button
+              <Button
                 type="button"
+                variant="destructive"
+                size="icon"
                 onClick={() => handleRemove(index)}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-error-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute -top-2 -right-2 w-6 h-6 rounded-full opacity-0 group-hover:opacity-100"
               >
                 <X className="w-3 h-3" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

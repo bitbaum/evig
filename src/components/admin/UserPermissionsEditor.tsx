@@ -113,19 +113,20 @@ export function UserPermissionsEditor({
                   </p>
                 </div>
               </div>
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => setSuperAdminStatus(!superAdminStatus)}
                 disabled={isInHardcodedList && superAdminStatus}
-                className={`relative w-12 h-6 rounded-full transition-colors ${
+                className={`relative w-12 h-6 rounded-full p-0 ${
                   superAdminStatus
-                    ? 'bg-action'
-                    : 'bg-surface-overlay'
-                } ${isInHardcodedList && superAdminStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    ? 'bg-action hover:bg-action'
+                    : 'bg-surface-overlay hover:bg-surface-overlay'
+                }`}
               >
                 <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface-base rounded-full transition-transform ${
                   superAdminStatus ? 'translate-x-6' : ''
                 }`} />
-              </button>
+              </Button>
             </div>
             {isInHardcodedList && (
               <p className="mt-2 text-xs text-action">
@@ -149,18 +150,19 @@ export function UserPermissionsEditor({
                     </p>
                   </div>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => setGrantFullAccess(!grantFullAccess)}
-                  className={`relative w-12 h-6 rounded-full transition-colors ${
+                  className={`relative w-12 h-6 rounded-full p-0 ${
                     grantFullAccess
-                      ? 'bg-action'
-                      : 'bg-surface-overlay'
+                      ? 'bg-action hover:bg-action'
+                      : 'bg-surface-overlay hover:bg-surface-overlay'
                   }`}
                 >
                   <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-surface-base rounded-full transition-transform ${
                     grantFullAccess ? 'translate-x-6' : ''
                   }`} />
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -173,10 +175,11 @@ export function UserPermissionsEditor({
               </Heading>
               <div className="grid grid-cols-2 gap-2">
                 {SECTIONS.map(section => (
-                  <button
+                  <Button
                     key={section.id}
+                    variant="ghost"
                     onClick={() => togglePermission(section.id)}
-                    className={`p-3 text-left rounded-lg border transition-colors ${
+                    className={`p-3 text-left rounded-lg border h-auto justify-start ${
                       selectedPermissions.includes(section.id)
                         ? 'border-action bg-action-muted'
                         : 'border hover:border-strong'
@@ -203,7 +206,7 @@ export function UserPermissionsEditor({
                         <span className="text-xs text-error-500">Sensibel</span>
                       )}
                     </div>
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>

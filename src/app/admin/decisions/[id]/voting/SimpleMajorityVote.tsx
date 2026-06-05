@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { SIMPLE_MAJORITY_RESPONSE_CONFIG, SIMPLE_MAJORITY_RESPONSES, type SimpleMajorityResponse } from '@/config/decisions';
 
 interface Props {
@@ -11,9 +12,10 @@ export function SimpleMajorityVote({ response, onChange }: Props) {
   return (
     <div className="flex gap-3">
       {SIMPLE_MAJORITY_RESPONSES.map((r) => (
-        <button
+        <Button
           key={r}
           type="button"
+          variant="outline"
           onClick={() => onChange(r)}
           className={`flex-1 rounded-md border-2 px-4 py-3 text-sm font-medium transition ${
             response === r
@@ -26,7 +28,7 @@ export function SimpleMajorityVote({ response, onChange }: Props) {
           }`}
         >
           {SIMPLE_MAJORITY_RESPONSE_CONFIG[r].label}
-        </button>
+        </Button>
       ))}
     </div>
   );

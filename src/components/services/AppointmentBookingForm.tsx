@@ -106,13 +106,15 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
             <h3 className="text-lg sm:text-xl font-bold text-text-primary">
               Termin für {serviceTitle} buchen
             </h3>
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setIsOpen(false)}
-              className="text-text-tertiary hover:text-text-secondary min-w-[touch] min-h-[touch] touch-target p-2 -mr-2"
+              className="text-text-tertiary hover:text-text-secondary min-w-[touch] min-h-[touch] touch-target -mr-2"
               aria-label="Schliessen"
             >
               ✕
-            </button>
+            </Button>
           </div>
 
           {pricing && (

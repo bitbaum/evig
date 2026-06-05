@@ -79,14 +79,15 @@ export function TeamProfileForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={onCancel || (() => history.back())}
-          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary h-auto px-0 bg-transparent hover:bg-transparent"
         >
           <ArrowLeft className="w-5 h-5" />
           Abbrechen
-        </button>
+        </Button>
         <Button
           type="submit"
           disabled={saving || (!isEdit && !form.user_id)}
@@ -136,10 +137,11 @@ export function TeamProfileForm({
           key={section.id}
           className="bg-surface-base rounded-xl border border overflow-hidden"
         >
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={() => toggleSection(section.id)}
-            className="w-full flex items-center justify-between p-4 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 h-auto rounded-none"
           >
             <div className="flex items-center gap-3">
               <span className="text-text-tertiary">{section.icon}</span>
@@ -150,7 +152,7 @@ export function TeamProfileForm({
             ) : (
               <ChevronRight className="w-5 h-5 text-text-muted" />
             )}
-          </button>
+          </Button>
 
           {openSections.has(section.id) && (
             <div className="p-6 pt-2 border-t border-subtle dark:border-white/6">

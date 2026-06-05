@@ -29,6 +29,7 @@ import {
 import { toISODate } from '@/lib/team/schedule'
 import { startOfWeek, getWeekDates } from '@/lib/team/timecard-utils'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 
@@ -256,21 +257,23 @@ export function ShiftClient({
             </label>
 
             <div className="flex flex-col sm:flex-row gap-2">
-              <button
+              <Button
+                variant="primary"
                 onClick={handleStop}
                 disabled={submitting}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-action hover:bg-action-hover text-action-text text-base font-semibold transition-colors disabled:opacity-60"
+                className="flex-1 inline-flex items-center justify-center gap-2 text-base font-semibold"
               >
                 <Square className="w-4 h-4" />
                 {submitting ? 'Speichern...' : 'Schicht beenden'}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
                 onClick={handleCancel}
                 disabled={submitting}
-                className="px-4 py-3 rounded-lg border border-strong dark:border-action/40 text-action-text text-base font-medium hover:bg-action-muted/20 transition-colors disabled:opacity-60"
+                className="text-action-text text-base font-medium hover:bg-action-muted/20 border-strong dark:border-action/40"
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -286,12 +289,13 @@ export function ShiftClient({
             Eintrag wurde zur aktuellen Wochen-Zeiterfassung hinzugefügt.
           </p>
           <div className="mt-6 flex flex-col sm:flex-row gap-2">
-            <button
+            <Button
+              variant="primary"
               onClick={() => setJustSubmitted(null)}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-success-600 hover:bg-success-700 text-white text-base font-semibold transition-colors"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-success-600 hover:bg-success-700 text-white text-base font-semibold"
             >
               <Play className="w-4 h-4" /> Neue Schicht starten
-            </button>
+            </Button>
             <Link
               href="/dashboard/timecards"
               className="px-4 py-3 rounded-lg border border-success-300 dark:border-success-500/40 text-success-700 dark:text-success-200 text-base font-medium hover:bg-success-100 dark:hover:bg-success-500/20 transition-colors text-center"
@@ -318,13 +322,15 @@ export function ShiftClient({
             </Select>
           </label>
 
-          <button
+          <Button
+            variant="primary"
+            size="lg"
             onClick={handleStart}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-4 sm:py-5 rounded-lg bg-action hover:bg-action-hover text-action-text text-lg font-semibold transition-colors"
+            className="w-full inline-flex items-center justify-center gap-2 py-4 sm:py-5 text-lg font-semibold"
           >
             <Play className="w-5 h-5" />
             Schicht starten
-          </button>
+          </Button>
           <p className="mt-3 text-xs text-text-tertiary text-center">
             Wird auf deinem Gerät gespeichert, bis du sie beendest.
           </p>

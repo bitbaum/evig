@@ -3,6 +3,7 @@
 import { Link } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { buttonClass } from '@/components/ui/button-class'
 import {
   Package,
@@ -192,13 +193,15 @@ export function InventoryProductsTable({
                   <div className="flex items-center justify-end gap-2">
                     {/* Quick publish button for unpublished products */}
                     {product.marketplace_status !== MARKETPLACE_STATUS.PUBLISHED && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => onPublish?.(product)}
-                        className="p-1 text-action hover:text-action"
+                        className="p-1 text-action hover:text-action h-auto w-auto bg-transparent hover:bg-transparent"
                         title="Im Shop veröffentlichen"
                       >
                         <Upload className="w-4 h-4" />
-                      </button>
+                      </Button>
                     )}
                     <Link
                       href={ROUTES.admin.productFactsheet(product.id)}
@@ -207,27 +210,33 @@ export function InventoryProductsTable({
                     >
                       <Printer className="w-4 h-4" />
                     </Link>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={() => onView?.(product)}
-                      className="p-1 text-text-tertiary hover:text-text-secondary"
+                      className="p-1 text-text-tertiary hover:text-text-secondary h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Ansehen"
                     >
                       <Eye className="w-4 h-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={() => onEdit?.(product)}
-                      className="p-1 text-text-tertiary hover:text-text-secondary"
+                      className="p-1 text-text-tertiary hover:text-text-secondary h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Bearbeiten"
                     >
                       <Edit className="w-4 h-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="destructive-ghost"
+                      size="icon"
                       onClick={() => onDelete?.(product)}
-                      className="p-1 text-error-400 hover:text-error-600"
+                      className="p-1 text-error-400 hover:text-error-600 h-auto w-auto bg-transparent"
                       title="Löschen"
                     >
                       <Trash2 className="w-4 h-4" />
-                    </button>
+                    </Button>
                   </div>
                 </td>
               </motion.tr>

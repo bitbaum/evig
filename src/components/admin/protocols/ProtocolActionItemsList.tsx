@@ -7,6 +7,7 @@ import {
   Vote,
   HelpCircle,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import {
   PRIORITY_HINT_LABELS,
@@ -106,16 +107,18 @@ export function ProtocolActionItemsList({
           </span>
         </div>
         {unlinkedTaskItems.length > 0 && canAct && (
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={onCreateAllTasks}
             disabled={bulkCreatingTasks}
-            className="text-xs px-3 py-1.5 rounded-lg border border-strong text-action hover:bg-action-muted disabled:opacity-50 transition-colors"
+            className="text-xs text-action hover:bg-action-muted border-strong"
           >
             {bulkCreatingTasks
               ? <><Loader2 className="w-3 h-3 animate-spin inline mr-1" />Erstellt…</>
               : `${unlinkedTaskItems.length} Aufgaben erstellen`
             }
-          </button>
+          </Button>
         )}
       </div>
 
@@ -302,17 +305,19 @@ function ActionRow({
             <ExternalLink className="w-3 h-3" />
           </Link>
         ) : item.item_type === 'task' && canAct ? (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => onCreateTask(item)}
             disabled={creatingTask === item.id}
-            className="inline-flex items-center gap-1 text-xs text-action hover:text-action disabled:opacity-50"
+            className="inline-flex items-center gap-1 text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
           >
             {creatingTask === item.id
               ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
               : <ListChecks className="w-3.5 h-3.5" />
             }
             Aufgabe erstellen
-          </button>
+          </Button>
         ) : item.item_type === 'decision' && canAct ? (
           <DecisionActions
             protocolId={protocolId}

@@ -107,13 +107,14 @@ export function BlogPostSidebar({
               className="inline-flex items-center gap-1 px-2 py-1 bg-action-muted text-action rounded-sm text-sm"
             >
               {tag}
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={() => onRemoveTag(tag)}
-                className="hover:text-action-text"
+                className="h-auto p-0 text-inherit hover:text-action-text hover:bg-transparent"
               >
                 ×
-              </button>
+              </Button>
             </span>
           ))}
         </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { APPROVAL_STATUS, APPROVAL_STATUS_BADGES } from '@/config/approval-status'
 import type { FilterStatus, StatusCounts } from './types'
 
@@ -16,20 +17,21 @@ export function SubmissionFilters({ filter, counts, onFilterChange }: Submission
     <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4">
       <div className="flex flex-wrap gap-2">
         {FILTER_OPTIONS.map((status) => (
-          <button
+          <Button
             key={status}
+            variant={filter === status ? 'primary' : 'ghost'}
             onClick={() => onFilterChange(status)}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={
               filter === status
-                ? 'bg-action text-white'
+                ? ''
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-            }`}
+            }
           >
             {status === 'all'
               ? 'Alle'
               : APPROVAL_STATUS_BADGES[status]?.label || status}{' '}
             ({counts[status]})
-          </button>
+          </Button>
         ))}
       </div>
     </div>

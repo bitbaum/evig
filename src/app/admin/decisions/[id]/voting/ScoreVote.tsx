@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { SCORE_RANGE } from '@/config/decisions';
 import { OptionCard, type VotingOption } from './OptionCard';
 
@@ -23,9 +24,11 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
               <OptionCard key={opt.id} opt={opt} selected={(scores[opt.id] || 0) > 3}>
                 <div className="mt-2 flex justify-center gap-0.5">
                   {Array.from({ length: SCORE_RANGE.max }, (_, i) => i + 1).map((n) => (
-                    <button
+                    <Button
                       key={n}
                       type="button"
+                      variant="ghost"
+                      size="icon"
                       onClick={(e) => {
                         e.stopPropagation();
                         onSet(opt.id, n);
@@ -35,7 +38,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                       }`}
                     >
                       ★
-                    </button>
+                    </Button>
                   ))}
                 </div>
                 {(scores[opt.id] || 0) > 0 && (
@@ -65,9 +68,11 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                   { length: SCORE_RANGE.max - SCORE_RANGE.min + 1 },
                   (_, i) => SCORE_RANGE.min + i
                 ).map((n) => (
-                  <button
+                  <Button
                     key={n}
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => onSet(opt.id, n)}
                     className={`h-9 w-9 rounded-md text-sm font-bold transition ${
                       (scores[opt.id] || 0) >= n
@@ -76,7 +81,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                     }`}
                   >
                     {n}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>

@@ -69,23 +69,27 @@ export function ProtocolAttendeesCard({
           </h3>
         </div>
         {isReview && !editing && (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => { setSelected(attendees); setSearch(''); setEditing(true) }}
-            className="flex items-center gap-1 text-xs text-action hover:text-action"
+            className="flex items-center gap-1 text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
           >
             <Pencil className="w-3 h-3" />
             Bearbeiten
-          </button>
+          </Button>
         )}
         {editing && (
           <div className="flex items-center gap-2">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setEditing(false)}
-              className="flex items-center gap-1 text-xs text-text-tertiary hover:text-text-secondary"
+              className="flex items-center gap-1 text-xs text-text-tertiary hover:text-text-secondary h-auto px-0 bg-transparent hover:bg-transparent"
             >
               <X className="w-3 h-3" />
               Abbrechen
-            </button>
+            </Button>
             <Button onClick={save} disabled={saving} size="sm" className="gap-1 text-xs h-7 px-2">
               {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
               Speichern

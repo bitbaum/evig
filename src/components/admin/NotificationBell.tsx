@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Bell, X, Check } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { RELATED_TYPE_HREFS } from '@/config/notifications'
 
@@ -123,9 +124,11 @@ export function NotificationBell() {
 
   return (
     <div className="relative" ref={panelRef}>
-      <button
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={handleOpen}
-        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors"
+        className="relative w-9 h-9 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
         aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
       >
         <Bell className="w-5 h-5 text-text-secondary" />
@@ -134,7 +137,7 @@ export function NotificationBell() {
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
-      </button>
+      </Button>
 
       {open && (
         <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border bg-surface-base shadow-2xl">
@@ -150,22 +153,26 @@ export function NotificationBell() {
             </span>
             <div className="flex items-center gap-1">
               {unreadCount > 0 && (
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary transition-colors hover:bg-surface-raised hover:text-text-secondary dark:hover:bg-surface-base/6"
+                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary hover:bg-surface-raised hover:text-text-secondary dark:hover:bg-surface-base/6 h-auto"
                   title="Alle als gelesen markieren"
                 >
                   <Check className="w-3 h-3" />
                   Alle gelesen
-                </button>
+                </Button>
               )}
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setOpen(false)}
-                className="rounded-md p-1 transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                className="rounded-md p-1 hover:bg-surface-raised dark:hover:bg-surface-base/6 h-auto w-auto"
               >
                 <X className="w-4 h-4 text-text-tertiary" />
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -174,12 +181,14 @@ export function NotificationBell() {
             {error && notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => void fetchNotifications()}
-                  className="text-xs text-action hover:text-action"
+                  className="text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
                 >
                   Erneut versuchen
-                </button>
+                </Button>
               </div>
             ) : loading && notifications.length === 0 ? (
               <div className="py-8 text-center text-sm text-text-tertiary">
@@ -194,10 +203,11 @@ export function NotificationBell() {
               notifications.map(n => {
                 const href = relatedHref(n)
                 return (
-                  <button
+                  <Button
                     key={n.id}
+                    variant="ghost"
                     onClick={() => void markOneRead(n)}
-                    className={`w-full text-left px-4 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors ${
+                    className={`w-full text-left px-4 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 h-auto rounded-none justify-start ${
                       !n.is_read ? 'bg-action-muted/50' : ''
                     }`}
                   >
@@ -226,7 +236,7 @@ export function NotificationBell() {
                         </div>
                       </div>
                     </div>
-                  </button>
+                  </Button>
                 )
               })
             )}

@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import { Heart, Package, CheckCircle, Clock, Receipt, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {
   DONATION_TYPES,
@@ -117,22 +118,26 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
               <td className="px-4 py-3">
                 <div className="flex gap-2">
                   {!donation.thank_you_sent && (
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => onMarkThanked(donation.id)}
-                      className="text-xs px-2 py-1 bg-action-muted text-action rounded-sm hover:bg-action-muted"
+                      className="text-xs px-2 py-1 bg-action-muted text-action rounded-sm hover:bg-action-muted h-auto"
                       title="Als bedankt markieren"
                     >
                       Bedanken
-                    </button>
+                    </Button>
                   )}
                   {donation.receipt_requested && !donation.receipt_sent && (
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => onMarkReceiptSent(donation.id)}
-                      className="text-xs px-2 py-1 bg-secondary-100 text-secondary-700 rounded-sm hover:bg-secondary-200"
+                      className="text-xs px-2 py-1 bg-secondary-100 text-secondary-700 rounded-sm hover:bg-secondary-200 h-auto"
                       title="Quittung als gesendet markieren"
                     >
                       Quittung
-                    </button>
+                    </Button>
                   )}
                   {donation.donation_type === DONATION_TYPES.DEVICE && (
                     <Link

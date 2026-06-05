@@ -169,10 +169,11 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                   </div>
                 ) : (
                   filteredConversations.map((conversation) => (
-                    <button
+                    <Button
                       key={conversation.id}
+                      variant="ghost"
                       onClick={() => setSelectedConversation(conversation.id)}
-                      className="w-full p-4 border-b border-subtle hover:bg-surface-raised text-left flex items-start gap-3"
+                      className="w-full p-4 border-b border-subtle hover:bg-surface-raised text-left flex items-start gap-3 h-auto rounded-none justify-start"
                     >
                       <div className="w-10 h-10 bg-surface-overlay rounded-full flex items-center justify-center shrink-0">
                         <User className="w-5 h-5 text-text-secondary" />
@@ -200,7 +201,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                           )}
                         </div>
                       </div>
-                    </button>
+                    </Button>
                   ))
                 )}
               </div>

@@ -105,31 +105,37 @@ export function HelpersTab({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {!h.is_verified && !h.suspended_at && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => onAction(h.id, 'verify')}
                         className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                         title="Verifizieren"
                       >
                         <ShieldCheck className="w-4 h-4 text-action" />
-                      </button>
+                      </Button>
                     )}
                     {!h.suspended_at && (
-                      <button
+                      <Button
+                        variant="destructive-ghost"
+                        size="icon"
                         onClick={() => onAction(h.id, 'suspend')}
                         className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                         title="Sperren"
                       >
                         <Ban className="w-4 h-4 text-error-500" />
-                      </button>
+                      </Button>
                     )}
                     {h.suspended_at && (
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => onAction(h.id, 'reactivate')}
                         className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                         title="Reaktivieren"
                       >
                         <UserCheck className="w-4 h-4 text-action" />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </td>

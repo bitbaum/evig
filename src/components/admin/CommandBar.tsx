@@ -12,6 +12,7 @@ import {
   User,
   ChevronRight,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
 
 // ---------------------------------------------------------------------------
@@ -273,9 +274,11 @@ export function CommandBar() {
   return (
     <>
       {/* Trigger button in top bar (Search icon) */}
-      <button
+      <Button
+        variant="ghost"
+        size="sm"
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary transition-colors hover:bg-surface-overlay dark:bg-surface-base/4 dark:hover:bg-surface-base/8 sm:flex"
+        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary hover:bg-surface-overlay dark:bg-surface-base/4 dark:hover:bg-surface-base/8 sm:flex"
         aria-label="Suche öffnen (⌘K)"
       >
         <Search className="w-3.5 h-3.5" />
@@ -283,7 +286,7 @@ export function CommandBar() {
         <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-surface-overlay rounded-sm text-xs font-mono leading-none">
           ⌘K
         </kbd>
-      </button>
+      </Button>
 
       {/* Native dialog */}
       <dialog
@@ -328,11 +331,12 @@ export function CommandBar() {
                   const currentFlatIdx = flatIdx
                   flatIdx++
                   return (
-                    <button
+                    <Button
                       key={item.key}
+                      variant="ghost"
                       onClick={() => { router.push(item.href); close() }}
                       onMouseEnter={() => setActiveIdx(currentFlatIdx)}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left h-auto rounded-none justify-start ${
                         isCurrent
                           ? 'bg-action-muted text-action/8'
                           : 'text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/3'
@@ -354,7 +358,7 @@ export function CommandBar() {
                       {isCurrent && (
                         <ChevronRight className="w-3.5 h-3.5 shrink-0 text-action" aria-hidden="true" />
                       )}
-                    </button>
+                    </Button>
                   )
                 })}
               </div>

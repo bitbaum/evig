@@ -15,6 +15,7 @@ import { Menu } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
+import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -130,21 +131,21 @@ export function Header() {
               {/* User Menu - Mobile */}
               <UserMenu />
               {/* Mobile Menu Button */}
-              <button
+              <Button
                 ref={mobileMenuTriggerRef}
                 type="button"
+                variant="ghost"
+                size="icon"
                 className={cn(
-                  "relative p-2 rounded-lg",
-                  "text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:text-text-muted dark:hover:bg-surface-base/6",
-                  "transition-colors duration-200",
-                  "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action"
+                  "relative rounded-lg",
+                  "text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:text-text-muted dark:hover:bg-surface-base/6"
                 )}
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label={tAccessibility('openMenu')}
                 aria-expanded={mobileMenuOpen}
               >
                 <Menu className="h-5 w-5" />
-              </button>
+              </Button>
             </div>
           </nav>
         </div>

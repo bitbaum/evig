@@ -12,6 +12,7 @@
 import { useState } from 'react'
 import { Mic, Type, Image, Sparkles, X, ExternalLink } from 'lucide-react'
 import type { AIFieldSource } from '@/types/erfassung'
+import { Button } from '@/components/ui/button'
 import { formatTime } from '@/lib/date-formats'
 
 interface AIFieldIndicatorProps {
@@ -63,16 +64,18 @@ export function AIFieldIndicator({
   return (
     <div className={`relative inline-flex items-center ${className}`}>
       {/* Badge button */}
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="sm"
         onClick={() => setShowDetails(!showDetails)}
-        className={`inline-flex items-center gap-1 px-2 py-1 min-h-touch min-w-touch rounded-sm border text-xs font-medium transition-all hover:opacity-80 ${colorClass}`}
+        className={`inline-flex items-center gap-1 px-2 py-1 min-h-touch min-w-touch rounded-sm border text-xs font-medium hover:opacity-80 h-auto ${colorClass}`}
         title={`KI-Extraktion: ${confidencePercent}% Konfidenz`}
       >
         <Sparkles className="w-3 h-3" />
         <span>{confidencePercent}%</span>
         <Icon className="w-3 h-3" />
-      </button>
+      </Button>
 
       {/* Details popover */}
       {showDetails && (
@@ -93,13 +96,15 @@ export function AIFieldIndicator({
                   KI-Extraktion
                 </span>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => setShowDetails(false)}
-                className="p-2 hover:bg-surface-raised rounded-sm"
+                className="p-2 hover:bg-surface-raised rounded-sm h-auto w-auto"
               >
                 <X className="w-4 h-4 text-text-tertiary" />
-              </button>
+              </Button>
             </div>
 
             {/* Content */}

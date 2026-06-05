@@ -16,6 +16,7 @@ import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
+import { Button } from '@/components/ui/button'
 import { Stepper } from '@/components/ui/Stepper'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
@@ -203,13 +204,15 @@ function ErfassungContent() {
           </p>
         </div>
         {viewMode === 'bulk' && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={handleBulkReset}
             className="text-sm text-text-tertiary hover:text-text-secondary"
           >
             Zurück zur Einzelerfassung
-          </button>
+          </Button>
         )}
       </div>
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import { Button } from '@/components/ui/button'
 import type { ListingImageData } from './types'
 import { useTranslations } from 'next-intl'
 
@@ -27,8 +28,9 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
       {images.length > 1 && (
         <div className="flex gap-2 overflow-x-auto">
           {images.map((img, idx) => (
-            <button
+            <Button
               key={img.id}
+              variant="ghost"
               onClick={() => onSelectImage(idx)}
               className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
                 idx === selectedImage ? 'border-action' : 'border-transparent hover:border-strong'
@@ -36,7 +38,7 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
               aria-label={t('imageAriaLabel', { n: idx + 1 })}
             >
               <ListingImage src={img.url} alt="" fallbackIconSize="w-4 h-4" />
-            </button>
+            </Button>
           ))}
         </div>
       )}

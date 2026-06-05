@@ -69,12 +69,14 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                 </td>
                 <td className="px-4 py-3">
                   {r.status === REPORT_STATUS.PENDING && (
-                    <button
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => onHandle(r.id)}
                       className="px-3 py-1.5 text-sm rounded-lg border border hover:bg-surface-raised dark:hover:bg-surface-base/6"
                     >
                       Bearbeiten
-                    </button>
+                    </Button>
                   )}
                 </td>
               </tr>

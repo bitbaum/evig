@@ -13,6 +13,7 @@ import {
   TeamMemberCard,
   useTeamProfiles,
 } from '@/components/admin/team'
+import { Button } from '@/components/ui/button'
 
 export function TeamListClient() {
   const {
@@ -43,13 +44,15 @@ export function TeamListClient() {
         <div className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl">
           <div className="flex items-center justify-between">
             <p className="text-error-700 dark:text-error-300">{error}</p>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={refetch}
               className="flex items-center gap-2 text-error-600 hover:text-error-700"
             >
               <RefreshCw className="w-4 h-4" />
               Erneut versuchen
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -94,7 +97,9 @@ export function TeamListClient() {
               : 'Erstelle ein Profil, um loszulegen.'}
           </p>
           {(filters.search || filters.department || filters.employmentType) && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() =>
                 setFilters({
                   search: '',
@@ -106,7 +111,7 @@ export function TeamListClient() {
               className="text-action hover:text-action text-sm"
             >
               Filter zurücksetzen
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -118,13 +123,15 @@ export function TeamListClient() {
             <p className="text-sm text-text-tertiary">
               {profiles.length} {profiles.length === 1 ? 'Profil' : 'Profile'} gefunden
             </p>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={refetch}
               className="flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren
-            </button>
+            </Button>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

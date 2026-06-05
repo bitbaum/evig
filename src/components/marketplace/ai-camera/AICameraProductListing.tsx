@@ -13,6 +13,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Zap } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { useAICamera } from '@/hooks/useAICamera'
 import { ProductSuccessModal } from './ProductSuccessModal'
@@ -136,12 +137,14 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
             </p>
           </div>
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onClose}
-          className="text-text-tertiary hover:text-text-secondary transition-colors"
+          className="text-text-tertiary hover:text-text-secondary"
         >
           <X className="w-6 h-6" />
-        </button>
+        </Button>
       </div>
     </div>
   )

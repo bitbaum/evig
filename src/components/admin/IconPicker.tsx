@@ -10,6 +10,7 @@
 import { useState } from 'react'
 import { SERVICE_ICONS } from '@/config/service-icons'
 import { Wrench } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface IconPickerProps {
   value: string | null
@@ -33,10 +34,11 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
   return (
     <div className={`relative ${className}`}>
       {/* Selected icon button */}
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-surface-base border border-default rounded-lg hover:border-strong transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-surface-base border border-default rounded-lg hover:border-strong h-auto justify-start"
       >
         <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
           <RenderIcon iconName={value} className="w-6 h-6 text-text-secondary" />
@@ -53,7 +55,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
-      </button>
+      </Button>
 
       {/* Dropdown grid */}
       {isOpen && (
@@ -73,20 +75,19 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                 const isSelected = value === iconName
 
                 return (
-                  <button
+                  <Button
                     key={iconName}
                     type="button"
+                    variant="ghost"
                     onClick={() => {
                       onChange(iconName)
                       setIsOpen(false)
                     }}
                     title={label}
-                    className={`
-                      flex flex-col items-center justify-center p-2 rounded-lg transition-colors ${isSelected
-                        ? 'bg-action-muted border-2 border-action'
-                        : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 border-2 border-transparent'
-                      }
-                    `}
+                    className={`flex flex-col items-center justify-center p-2 rounded-lg h-auto ${isSelected
+                      ? 'bg-action-muted border-2 border-action'
+                      : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 border-2 border-transparent'
+                    }`}
                   >
                     <IconComponent
                       className={`w-6 h-6 ${isSelected ? 'text-action' : 'text-text-secondary'}`}
@@ -94,7 +95,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     <span className="text-xs mt-1 text-text-tertiary truncate w-full text-center">
                       {label.split('/')[0]}
                     </span>
-                  </button>
+                  </Button>
                 )
               })}
             </div>

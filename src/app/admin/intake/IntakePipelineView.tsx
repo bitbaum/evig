@@ -132,12 +132,14 @@ export function IntakePipelineView({
         <div className="text-center py-12 bg-surface-raised rounded-lg">
           <Package className="w-12 h-12 mx-auto text-text-muted mb-3" />
           <p className="text-text-tertiary mb-2">Keine Geräte in der Pipeline</p>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={onCreateNew}
             className="text-action hover:underline text-sm"
           >
             Erstes Gerät erfassen
-          </button>
+          </Button>
         </div>
       ) : (
         <>

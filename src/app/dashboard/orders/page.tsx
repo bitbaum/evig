@@ -99,43 +99,45 @@ export default function DashboardOrdersPage() {
 
         {/* Role toggle */}
         <div className="flex bg-surface-raised rounded-lg p-1">
-          <button
+          <Button
             onClick={() => setRole('buyer')}
-            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
-              role === 'buyer'
-                ? 'bg-surface-base text-text-primary shadow-xs'
-                : 'text-text-tertiary hover:text-text-secondary'
-            }`}
+            variant="ghost"
+            size="sm"
+            className={role === 'buyer'
+              ? 'bg-surface-base text-text-primary shadow-xs'
+              : 'text-text-tertiary hover:text-text-secondary'}
           >
             {t('roleBuyer')}
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setRole('seller')}
-            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
-              role === 'seller'
-                ? 'bg-surface-base text-text-primary shadow-xs'
-                : 'text-text-tertiary hover:text-text-secondary'
-            }`}
+            variant="ghost"
+            size="sm"
+            className={role === 'seller'
+              ? 'bg-surface-base text-text-primary shadow-xs'
+              : 'text-text-tertiary hover:text-text-secondary'}
           >
             {t('roleSeller')}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Status tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto">
         {TABS.map(tab => (
-          <button
+          <Button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${
+            variant="ghost"
+            size="sm"
+            className={`rounded-full ${
               activeTab === tab.key
                 ? 'bg-action text-white'
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }`}
           >
             {tab.label}
-          </button>
+          </Button>
         ))}
       </div>
 

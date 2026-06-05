@@ -2,6 +2,7 @@
 
 import { Plus, Trash2 } from 'lucide-react'
 import { CollapsibleSection } from './CollapsibleSection'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import type { ProcessStep } from './types'
@@ -31,13 +32,15 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
                   Schritt {step.step}
                 </span>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="destructive-ghost"
+                size="icon"
                 onClick={() => onRemove(index)}
-                className="p-1 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
+                className="p-1 h-auto w-auto"
               >
                 <Trash2 className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
             <Input
               type="text"
@@ -53,14 +56,15 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
             />
           </div>
         ))}
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-action-muted rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-action-muted h-auto"
         >
           <Plus className="w-4 h-4" />
           Schritt hinzufügen
-        </button>
+        </Button>
       </div>
     </CollapsibleSection>
   )

@@ -94,8 +94,10 @@ export default function AdminReviewsPage() {
           </div>
           <div className="flex gap-2">
             {(Object.values(REVIEW_STATUS) as ReviewStatus[]).map((status) => (
-              <button
+              <Button
                 key={status}
+                variant="ghost"
+                size="sm"
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
@@ -104,7 +106,7 @@ export default function AdminReviewsPage() {
                 }`}
               >
                 {getReviewFilterLabel(status)}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -226,22 +228,26 @@ export default function AdminReviewsPage() {
                     )}
 
                     <div className="flex gap-1 mt-2">
-                      <button
+                      <Button
+                        variant="warning"
+                        size="sm"
                         onClick={() => startModeration(review.id, 'flag_spam')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als Spam markieren"
                         className="min-h-11 px-2 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded-sm text-xs hover:bg-warning-200 dark:hover:bg-warning-900/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <Flag className="w-3 h-3" /> Spam
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
                         onClick={() => startModeration(review.id, 'flag_inappropriate')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als unangemessen markieren"
                         className="min-h-11 px-2 py-1 bg-secondary-100 text-secondary-700 rounded-sm text-xs hover:bg-secondary-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <AlertTriangle className="w-3 h-3" /> Unangemessen
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

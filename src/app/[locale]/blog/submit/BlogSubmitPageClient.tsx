@@ -62,12 +62,13 @@ export default function SubmitPostPage() {
             <p className="text-text-secondary text-lg mb-2">{t('successMessage')}</p>
             <p className="text-text-tertiary text-sm mb-8">{t('successEmailNote')}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
+              <Button
+                variant="outline"
                 onClick={handleReset}
                 className="inline-flex items-center justify-center px-6 py-3 border border-action text-action rounded-lg hover:bg-action-muted transition-colors font-medium"
               >
                 {t('submitAnotherButton')}
-              </button>
+              </Button>
               <Button as={Link} href={ROUTES.public.blog} variant="primary">
                 {t('toBlogButton')}
               </Button>
@@ -91,11 +92,12 @@ export default function SubmitPostPage() {
               const isIdea = type === BLOG_SUBMISSION_TYPE.IDEA
               const isActive = submissionType === type
               return (
-                <button
+                <Button
                   key={type}
                   type="button"
+                  variant="ghost"
                   onClick={() => setSubmissionType(type)}
-                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-action bg-action-muted' : 'border hover:border-strong'}`}
+                  className={`flex-col items-start text-left h-auto p-6 rounded-lg border-2 transition-all ${isActive ? 'border-action bg-action-muted' : 'border hover:border-strong'}`}
                 >
                   {isIdea
                     ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-action' : 'text-text-muted'}`} />
@@ -107,7 +109,7 @@ export default function SubmitPostPage() {
                   <p className="text-sm text-text-secondary">
                     {isIdea ? t('typeIdeaDesc') : t('typeDraftDesc')}
                   </p>
-                </button>
+                </Button>
               )
             })}
           </div>

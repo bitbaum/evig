@@ -12,6 +12,7 @@
 
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
+import { Button } from '@/components/ui/button'
 import { KATEGORIEN } from '@/config/erfassung'
 import { ProductImageSection } from './ProductImageSection'
 import { ProductBasicFields } from './ProductBasicFields'
@@ -66,14 +67,15 @@ export function ProductForm({
       />
 
       {/* Mobile: Collapsible Advanced Section Toggle */}
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={onToggleAdvanced}
-        className="sm:hidden w-full flex items-center justify-between px-4 py-3 bg-surface-raised rounded-xl text-text-secondary touch-manipulation"
+        className="sm:hidden w-full flex items-center justify-between px-4 py-3 bg-surface-raised rounded-xl text-text-secondary touch-manipulation h-auto"
       >
         <span className="font-medium">Erweiterte Optionen</span>
         {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-      </button>
+      </Button>
 
       {/* Technical Specs */}
       <div className={`${showAdvanced ? 'block' : 'hidden'} sm:block`}>

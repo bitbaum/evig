@@ -109,14 +109,14 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                     <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Ansehen">
                       <Eye className="w-4 h-4 text-text-tertiary" />
                     </a>
-                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Bearbeiten">
+                    <Button variant="ghost" size="icon" onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Bearbeiten">
                       <Edit3 className="w-4 h-4 text-text-tertiary" />
-                    </button>
+                    </Button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
-                      <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Entfernen">
+                      <Button variant="destructive-ghost" size="icon" onClick={() => onRemove(l.id, l.title)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title="Entfernen">
                         <Trash2 className="w-4 h-4 text-error-500" />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </td>

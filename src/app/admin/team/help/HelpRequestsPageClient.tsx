@@ -106,7 +106,9 @@ export function HelpRequestsPageClient({
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
           </Button>
 
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setShowFilters(!showFilters)}
             className={`p-2 rounded-lg ${
               hasActiveFilters
@@ -116,7 +118,7 @@ export function HelpRequestsPageClient({
             title="Filter"
           >
             <Filter className="w-5 h-5" />
-          </button>
+          </Button>
 
           {!loading && (
             <span className="text-sm text-text-tertiary">

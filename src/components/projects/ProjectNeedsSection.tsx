@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { NeedContributionDialog } from './NeedContributionDialog'
@@ -130,18 +131,14 @@ export function ProjectNeedsSection({ slug, labels }: Props) {
                     </p>
                   )}
 
-                  <button
+                  <Button
                     type="button"
+                    variant="primary"
                     onClick={() => setActiveNeed(need)}
-                    className={cn(
-                      designPrimitive.buttonBase,
-                      designPrimitive.buttonSize.default,
-                      designPrimitive.button.primary,
-                      'mt-auto w-full justify-center min-h-touch',
-                    )}
+                    className="mt-auto w-full justify-center min-h-touch"
                   >
                     {labels.helpCta}
-                  </button>
+                  </Button>
                 </div>
               )
             })}

@@ -2,6 +2,7 @@
 
 import { Link, usePathname } from '@/i18n/navigation'
 import { Menu } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { getMobileBottomNavSections } from '@/config/sections'
 
 interface MobileBottomNavProps {
@@ -51,14 +52,15 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
       })}
 
       {/* Mehr — opens sidebar */}
-      <button
+      <Button
+        variant="ghost"
         onClick={onMenuClick}
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs text-text-tertiary hover:text-text-secondary transition-colors"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] h-auto text-xs text-text-tertiary hover:text-text-secondary rounded-none"
         aria-label="Seitenleiste öffnen"
       >
         <Menu className="w-5 h-5" aria-hidden="true" />
         <span>Mehr</span>
-      </button>
+      </Button>
     </nav>
   )
 }

@@ -254,12 +254,14 @@ export default function AdminWorkshopsPage() {
                         {rejectLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                         Ablehnung bestätigen
                       </Button>
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={cancelReject}
                         className="px-3 py-1.5 border border-default rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
                       >
                         Abbrechen
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}

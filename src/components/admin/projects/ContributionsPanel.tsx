@@ -10,6 +10,7 @@ import { useMemo, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { CONTRIBUTION_STATUSES, type ContributionStatus } from '@/config/projects'
@@ -158,15 +159,17 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
                     rows={2}
                     className="text-xs sm:col-span-7 lg:col-span-8"
                   />
-                  <button
+                  <Button
                     type="button"
+                    variant="primary"
+                    size="sm"
                     onClick={() => save(c)}
                     disabled={pending}
-                    className={cn(designPrimitive.buttonBase, designPrimitive.buttonSize.sm, designPrimitive.button.primary, 'sm:col-span-1 justify-center min-h-[40px]')}
+                    className="sm:col-span-1 justify-center min-h-[40px]"
                     title={t('contributions.tooltipSave')}
                   >
                     <Save className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </div>
 
                 {c.respondedAt && c.respondedByName && (

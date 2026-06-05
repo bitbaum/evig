@@ -9,6 +9,7 @@ import { PROJECT_STATUSES, PROJECT_STATUS_LABELS } from '@/config/tasks'
 import { ROUTES } from '@/config/routes'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -140,14 +141,10 @@ export default function NewTaskProjectPage() {
             >
               Abbrechen
             </Link>
-            <button
+            <Button
               type="submit"
+              variant="primary"
               disabled={loading || !form.title.trim()}
-              className={cn(
-                designPrimitive.buttonBase,
-                designPrimitive.buttonSize.default,
-                designPrimitive.button.primary
-              )}
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -155,7 +152,7 @@ export default function NewTaskProjectPage() {
                 <Save className="h-4 w-4" />
               )}
               Projekt erstellen
-            </button>
+            </Button>
           </div>
         </form>
       </div>

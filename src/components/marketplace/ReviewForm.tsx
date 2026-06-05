@@ -73,12 +73,15 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
         </label>
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => (
-            <button
+            <Button
               key={i}
+              variant="ghost"
+              size="icon"
+              type="button"
               onMouseEnter={() => setHoverRating(i + 1)}
               onMouseLeave={() => setHoverRating(0)}
               onClick={() => setRating(i + 1)}
-              className="p-2"
+              className="p-2 h-auto w-auto bg-transparent hover:bg-transparent"
             >
               <Star
                 className={`w-6 h-6 transition-colors ${
@@ -87,7 +90,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
                     : 'text-text-muted dark:text-text-secondary'
                 }`}
               />
-            </button>
+            </Button>
           ))}
           {rating > 0 && (
             <span className="ml-2 text-sm text-text-tertiary">{rating}/5</span>

@@ -84,20 +84,24 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
 
         {isPending && (
           <div className="flex gap-2">
-            <button
+            <Button
+              variant="warning"
+              size="sm"
               onClick={() => onOpenDialog('request_changes', application.id)}
               disabled={actionLoading === application.id}
-              className="px-3 py-1.5 bg-secondary-100 text-secondary-700 rounded-lg hover:bg-secondary-200 disabled:opacity-50 text-sm font-medium"
+              className="bg-secondary-100 text-secondary-700 hover:bg-secondary-200"
             >
               {actionLoading === application.id ? '...' : 'Änderungen anfordern'}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
               onClick={() => onOpenDialog('reject_app', application.id)}
               disabled={actionLoading === application.id}
-              className="px-3 py-1.5 bg-error-100 text-error-700 rounded-lg hover:bg-error-200 disabled:opacity-50 text-sm font-medium"
+              className="bg-error-100 text-error-700 hover:bg-error-200"
             >
               {actionLoading === application.id ? '...' : 'Ablehnen'}
-            </button>
+            </Button>
             <Button
               onClick={() => onOpenDialog('approve_app', application.id)}
               disabled={actionLoading === application.id}

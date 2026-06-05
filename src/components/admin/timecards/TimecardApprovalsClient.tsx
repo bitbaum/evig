@@ -27,6 +27,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   TIMECARD_STATUSES,
@@ -180,28 +181,32 @@ export function TimecardApprovalsClient() {
         <div className="flex items-center gap-2">
           <span className="text-sm text-text-secondary">Zeitraum:</span>
           {(['all', 'week', 'month'] as PeriodFilter[]).map(opt => (
-            <button
+            <Button
               key={opt}
+              variant={periodFilter === opt ? 'primary' : 'ghost'}
+              size="sm"
               onClick={() => setPeriodFilter(opt)}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md text-sm font-medium h-auto ${
                 periodFilter === opt
-                  ? 'bg-action text-white'
+                  ? ''
                   : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
               }`}
             >
               {opt === 'all' ? 'Alle' : opt === 'week' ? 'Wochen' : 'Monate'}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="sm:ml-auto flex items-center gap-2">
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={loadQueue}
             disabled={isLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+            className="inline-flex items-center gap-2"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -221,23 +226,25 @@ export function TimecardApprovalsClient() {
               maxLength={1000}
             />
             <div className="flex gap-2 shrink-0">
-              <button
+              <Button
+                variant="primary"
                 onClick={() => runBulk('approved')}
                 disabled={busy}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md bg-success-600 hover:bg-success-700 text-white text-sm font-semibold disabled:opacity-60"
+                className="inline-flex items-center gap-1.5 bg-success-600 hover:bg-success-700 text-white text-sm font-semibold"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 Genehmigen ({selected.size})
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="destructive-outline"
                 onClick={() => runBulk('rejected')}
                 disabled={busy || !sharedNote.trim()}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-error-300 dark:border-error-500/40 text-error-700 dark:text-error-300 hover:bg-error-50 dark:hover:bg-error-500/10 text-sm font-semibold disabled:opacity-60"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold"
                 title={!sharedNote.trim() ? 'Notiz erforderlich für Rückweisung' : undefined}
               >
                 <XCircle className="w-4 h-4" />
                 Zurückweisen
-              </button>
+              </Button>
             </div>
           </div>
         </div>

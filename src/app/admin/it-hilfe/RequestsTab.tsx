@@ -108,13 +108,15 @@ export function RequestsTab({
                 <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(r.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
                       className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
                       title="Bearbeiten"
                     >
                       <Edit3 className="w-4 h-4 text-action" />
-                    </button>
+                    </Button>
                     <Link
                       href={`/admin/tasks/new?source=it_hilfe&source_id=${r.id}&title=${encodeURIComponent(`IT-Hilfe: ${r.title}`)}&priority=${r.urgency === 'urgent' ? 'urgent' : 'normal'}`}
                       className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"

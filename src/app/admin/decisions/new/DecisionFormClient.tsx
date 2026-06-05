@@ -39,13 +39,15 @@ export default function DecisionFormClient() {
 
       {/* Template Selector */}
       <div>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => setShowTemplates(!showTemplates)}
           className="text-sm text-action hover:text-action hover:underline"
         >
           {showTemplates ? '▼' : '▶'} Vorlage wählen
-        </button>
+        </Button>
         {showTemplates && (
           <div className="mt-3">
             <DecisionTemplateSelector onSelect={(t) => { form.handleTemplateSelect(t); setShowTemplates(false); }} />
@@ -57,13 +59,15 @@ export default function DecisionFormClient() {
       {form.aiRecommendationReason && (
         <div className="flex items-start justify-between gap-3 rounded-md border border-strong bg-action-muted px-4 py-3 text-sm text-action">
           <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={() => form.setAiRecommendationReason('')}
             className="shrink-0 text-text-muted hover:text-action"
           >
             ×
-          </button>
+          </Button>
         </div>
       )}
 
@@ -122,15 +126,17 @@ export default function DecisionFormClient() {
 
       {/* Weitere Einstellungen (Fristen, Abstimmungsberechtigt, Methode) */}
       <div>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => setShowMore((v) => !v)}
           className="flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary"
         >
           <span className="text-xs">{showMore ? '▼' : '▶'}</span>
           Weitere Einstellungen
           <span className="text-xs text-text-muted">(Fristen, Kategorie, Abstimmungsmethode…)</span>
-        </button>
+        </Button>
 
         {showMore && (
           <div className="mt-4 space-y-6">

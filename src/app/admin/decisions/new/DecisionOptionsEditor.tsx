@@ -1,7 +1,8 @@
 'use client';
 
-import { type OptionItem } from './useDecisionForm';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { type OptionItem } from './useDecisionForm';
 
 interface Props {
   options: OptionItem[];
@@ -47,14 +48,16 @@ export function DecisionOptionsEditor({
                 placeholder="Beschreibung (optional)"
                 className="flex-1"
               />
-              <button
+              <Button
                 type="button"
+                variant="destructive-ghost"
+                size="icon"
                 onClick={() => onRemove(opt.id)}
                 disabled={options.length <= 2}
                 className="rounded-md px-2 text-text-tertiary hover:text-error-500 disabled:opacity-30"
               >
                 &times;
-              </button>
+              </Button>
             </div>
             {showImageUrls && (
               <div className="mt-1.5 flex gap-2">
@@ -78,13 +81,15 @@ export function DecisionOptionsEditor({
           </div>
         ))}
       </div>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="sm"
         onClick={onAdd}
         className="mt-2 text-sm text-action hover:underline"
       >
         + Option hinzufügen
-      </button>
+      </Button>
     </div>
   );
 }

@@ -9,6 +9,7 @@
 
 import { Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import { getProfilesByCategory } from '@/config/erfassung'
 import Heading from '@/components/ui/Heading'
 
@@ -40,12 +41,13 @@ export function ProductProfileFields({
           </Heading>
           <div className="flex flex-wrap gap-2 sm:gap-2">
             {profiles.map(profile => (
-              <button
+              <Button
                 key={profile.slug}
                 type="button"
+                variant="ghost"
                 onClick={() => onProfileToggle(profile.slug)}
                 title={profile.description}
-                className={`group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-2 rounded-full border-2 transition-colors touch-manipulation min-h-touch text-sm ${
+                className={`group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-2 rounded-full border-2 touch-manipulation min-h-touch text-sm h-auto ${
                   kundenprofile.includes(profile.slug)
                     ? 'border-action bg-action-muted text-action'
                     : 'border-default hover:border-strong active:bg-surface-raised dark:active:bg-surface-overlay'
@@ -58,7 +60,7 @@ export function ProductProfileFields({
                   {profile.description}
                   <span className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-neutral-900" />
                 </span>
-              </button>
+              </Button>
             ))}
           </div>
         </div>

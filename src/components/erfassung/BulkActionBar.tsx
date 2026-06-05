@@ -36,13 +36,14 @@ export function BulkActionBar({
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
         {/* Left: selection info */}
         <div className="flex items-center gap-3">
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={onSelectAll}
-            className="text-sm text-action hover:text-action font-medium"
+            className="text-sm text-action hover:text-action font-medium h-auto px-0 bg-transparent hover:bg-transparent"
           >
             {allSelected ? t('deselectAll') : t('selectAll')}
-          </button>
+          </Button>
           <span className="text-sm text-text-secondary">
             {selectedCount} {t('ofText')} {totalCount} {t('selectedText')}
           </span>

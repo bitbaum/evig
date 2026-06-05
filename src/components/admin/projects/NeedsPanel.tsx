@@ -11,6 +11,7 @@ import { useState, useTransition, type FormEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -112,19 +113,16 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           <h2 className="text-base font-semibold text-text-primary">{t('needs.title')}</h2>
           <p className="text-xs text-text-tertiary mt-0.5">{t('needs.subtitle')}</p>
         </div>
-        <button
+        <Button
           type="button"
+          variant="primary"
+          size="sm"
           onClick={() => setAdding(v => !v)}
-          className={cn(
-            designPrimitive.buttonBase,
-            designPrimitive.buttonSize.sm,
-            designPrimitive.button.primary,
-            'gap-1.5 min-h-[40px]',
-          )}
+          className="gap-1.5 min-h-[40px]"
         >
           <Plus className="h-3.5 w-3.5" />
           {t('needs.new')}
-        </button>
+        </Button>
       </div>
 
       {adding && (
@@ -142,19 +140,23 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           <Input name="targetQuantity" type="number" min="1" placeholder={t('needs.placeholderQuantity')} variant="elevated" />
           <Input name="targetUnit" placeholder={t('needs.placeholderUnit')} variant="elevated" />
           <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row justify-end gap-2">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setAdding(false)}
-              className={cn(designPrimitive.buttonBase, designPrimitive.buttonSize.sm, designPrimitive.button.ghost, 'min-h-[40px]')}
+              className="min-h-[40px]"
             >
               {t('needs.addCancel')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              className={cn(designPrimitive.buttonBase, designPrimitive.buttonSize.sm, designPrimitive.button.primary, 'min-h-[40px]')}
+              variant="primary"
+              size="sm"
+              className="min-h-[40px]"
             >
               {t('needs.addSubmit')}
-            </button>
+            </Button>
           </div>
         </form>
       )}
@@ -215,24 +217,26 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
                 </Select>
 
                 <div className="sm:col-span-2 lg:col-span-1 flex justify-end gap-1">
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => save(need)}
                     disabled={pending}
-                    className={cn(designPrimitive.buttonBase, designPrimitive.buttonSize.icon, designPrimitive.button.ghost)}
                     title={t('needs.tooltipSave')}
                   >
                     <Save className="h-4 w-4" />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
+                    variant="destructive-ghost"
+                    size="icon"
                     onClick={() => remove(need.id)}
                     disabled={pending}
-                    className={cn(designPrimitive.buttonBase, designPrimitive.buttonSize.icon, designPrimitive.button['destructive-ghost'])}
                     title={t('needs.tooltipDelete')}
                   >
                     <Trash2 className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </div>
               </div>
 

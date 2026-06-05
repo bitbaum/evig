@@ -21,6 +21,7 @@ import {
   type WeekdayId,
 } from '@/lib/team/schedule'
 import { CONTACT } from '@/config/org'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
@@ -70,13 +71,14 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
               {summarizeWeeklySchedule(schedule)}
             </p>
           </div>
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={() => onChange('working_hours', applyStandardSchedule())}
-            className="inline-flex items-center justify-center rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/6"
           >
             Mo-Fr 09-17
-          </button>
+          </Button>
         </div>
 
         <div className="mt-4 space-y-2">

@@ -9,6 +9,7 @@ import {
   DonationFormModal,
 } from '@/components/admin/donations'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { Button } from '@/components/ui/button'
 import { adminBtn } from '@/lib/admin-ui'
 
 export default function DonationsPageClient() {
@@ -59,10 +60,10 @@ export default function DonationsPageClient() {
       icon={Heart}
       iconColor="green"
       actions={
-        <button onClick={() => setShowForm(true)} className={adminBtn.primary}>
+        <Button variant="primary" onClick={() => setShowForm(true)} className={adminBtn.primary}>
           <Plus className="w-4 h-4" />
           Spende erfassen
-        </button>
+        </Button>
       }
     >
       {stats && <DonationStatsCards stats={stats} />}

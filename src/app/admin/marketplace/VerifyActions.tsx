@@ -106,24 +106,28 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
           <ShieldCheck className="w-4 h-4" />
           OK
         </Button>
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => { setShowNotes(false); setNotes('') }}
           className="px-2 py-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
         >
           Abbrechen
-        </button>
+        </Button>
       </div>
     )
   }
 
   return (
-    <button
+    <Button
+      variant="outline"
+      size="sm"
       onClick={() => setShowNotes(true)}
       className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-strong text-action hover:bg-action-muted transition-colors"
       title="Als geprüft markieren"
     >
       <ShieldCheck className="w-4 h-4" />
       <span className="hidden sm:inline">Verifizieren</span>
-    </button>
+    </Button>
   )
 }

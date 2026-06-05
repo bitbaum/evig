@@ -50,13 +50,14 @@ export function LearningObjectivesSection({
           </div>
         ))}
 
-        <button
+        <Button
           type="button"
+          variant="outline"
           onClick={onAdd}
           className="w-full py-2 border-2 border-dashed border-default text-text-secondary hover:border-strong hover:text-text-secondary rounded-lg transition-colors"
         >
           {t('sections.learningObjectives.add')}
-        </button>
+        </Button>
       </div>
     </div>
   )

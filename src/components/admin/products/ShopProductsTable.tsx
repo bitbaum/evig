@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import {
@@ -194,34 +195,42 @@ export function ShopProductsTable({
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={() => onView?.(product)}
-                      className="p-1 text-text-tertiary hover:text-text-secondary"
+                      className="p-1 text-text-tertiary hover:text-text-secondary h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Im Shop ansehen"
                     >
                       <Eye className="w-4 h-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={() => onEdit?.(product)}
-                      className="p-1 text-text-tertiary hover:text-text-secondary"
+                      className="p-1 text-text-tertiary hover:text-text-secondary h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Bearbeiten"
                     >
                       <Edit className="w-4 h-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="warning"
+                      size="icon"
                       onClick={() => onUnpublish?.(product)}
-                      className="p-1 text-warning-400 hover:text-warning-600"
+                      className="p-1 text-warning-400 hover:text-warning-600 h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Aus Shop entfernen"
                     >
                       <EyeOff className="w-4 h-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="destructive-ghost"
+                      size="icon"
                       onClick={() => onDelete?.(product)}
-                      className="p-1 text-error-400 hover:text-error-600"
+                      className="p-1 text-error-400 hover:text-error-600 h-auto w-auto bg-transparent"
                       title="Löschen"
                     >
                       <Trash2 className="w-4 h-4" />
-                    </button>
+                    </Button>
                   </div>
                 </td>
               </motion.tr>

@@ -114,14 +114,15 @@ function SellPageContent() {
             variant="section"
           />
           {!editId && (
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={() => setShowCamera(true)}
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-default text-text-tertiary hover:border-action hover:text-action transition-colors text-sm"
             >
               <Camera className="w-4 h-4" />
               {t('cameraButton')}
-            </button>
+            </Button>
           )}
         </div>
       )}

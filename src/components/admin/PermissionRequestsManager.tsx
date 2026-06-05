@@ -110,13 +110,14 @@ export function PermissionRequestsManager() {
     return (
       <div className="p-6 bg-error-50 dark:bg-error-900/20 rounded-xl border border-error-200 dark:border-error-800">
         <p className="text-error-700 dark:text-error-300">{error}</p>
-        <button
+        <Button
+          variant="destructive-ghost"
           onClick={fetchRequests}
-          className="mt-2 text-sm text-error-600 hover:text-error-700 flex items-center gap-1"
+          className="mt-2 text-sm text-error-600 hover:text-error-700 flex items-center gap-1 h-auto px-0 bg-transparent hover:bg-transparent"
         >
           <RefreshCw className="w-4 h-4" />
           Erneut versuchen
-        </button>
+        </Button>
       </div>
     )
   }
@@ -141,12 +142,14 @@ export function PermissionRequestsManager() {
             Berechtigungsanfragen ({requests.length})
           </Heading>
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={fetchRequests}
-          className="text-text-tertiary hover:text-text-secondary"
+          className="text-text-tertiary hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
         >
           <RefreshCw className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
 
       <div className="divide-y divide-neutral-200 dark:divide-white/4">

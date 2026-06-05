@@ -1,6 +1,7 @@
 'use client'
 
 import { Globe, Lock } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -69,10 +70,11 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             {t('visibility')}
           </label>
           <div className="flex gap-4">
-            <button
+            <Button
               type="button"
               onClick={() => handleChange('profile_visibility', 'public')}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+              variant="ghost"
+              className={`flex-1 rounded-lg border-2 py-3 ${
                 profile.profile_visibility === 'public'
                   ? 'border-action bg-action-muted text-action'
                   : 'border bg-surface-base text-text-secondary hover:border-strong'
@@ -80,12 +82,13 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             >
               <Globe className="w-5 h-5" />
               <span className="font-medium">{t('visibilityPublic')}</span>
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
               onClick={() => handleChange('profile_visibility', 'private')}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+              variant="ghost"
+              className={`flex-1 rounded-lg border-2 py-3 ${
                 profile.profile_visibility === 'private'
                   ? 'border-strong bg-surface-raised text-text-secondary'
                   : 'border bg-surface-base text-text-secondary hover:border-strong'
@@ -93,7 +96,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             >
               <Lock className="w-5 h-5" />
               <span className="font-medium">{t('visibilityPrivate')}</span>
-            </button>
+            </Button>
           </div>
           <p className="mt-2 text-sm text-text-tertiary">
             {t('visibilityDescription')}

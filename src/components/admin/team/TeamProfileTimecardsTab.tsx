@@ -15,6 +15,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { Clock, ExternalLink, RefreshCw } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import {
   TIMECARD_STATUS_LABELS,
@@ -92,14 +93,16 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
               {submittedCount} zu prüfen
             </Link>
           )}
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={load}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
-          </button>
+          </Button>
         </div>
       </div>
 

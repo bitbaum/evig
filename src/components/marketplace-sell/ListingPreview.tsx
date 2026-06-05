@@ -27,13 +27,14 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
 
   return (
     <div className="max-w-4xl mx-auto">
-      <button
+      <Button
+        variant="ghost"
         onClick={onEdit}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6"
+        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 h-auto px-0 bg-transparent hover:bg-transparent"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToEdit')}
-      </button>
+      </Button>
 
       <div className="card-shell overflow-hidden">
         <div className="p-6 border-b border-subtle">
@@ -80,12 +81,13 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
         </div>
 
         <div className="p-6 border-t border-subtle flex gap-3">
-          <button
+          <Button
+            variant="outline"
             onClick={onEdit}
-            className="px-6 py-2.5 rounded-lg border border-default font-medium text-text-secondary hover:bg-surface-raised"
+            className="px-6 py-2.5 rounded-lg font-medium text-text-secondary"
           >
             {tCommon('edit')}
-          </button>
+          </Button>
           <Button
             onClick={onSubmit}
             disabled={isSubmitting}

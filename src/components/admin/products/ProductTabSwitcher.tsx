@@ -1,6 +1,7 @@
 "use client"
 
 import { Database, Store } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { TabType, InventoryStats, ShopStats } from './types'
 
@@ -19,10 +20,11 @@ export function ProductTabSwitcher({
 }: ProductTabSwitcherProps) {
   return (
     <div className="flex items-center gap-2 border-b border">
-      <button
+      <Button
+        variant="ghost"
         onClick={() => onTabChange('inventory')}
         className={cn(
-          "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
+          "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 h-auto rounded-none bg-transparent hover:bg-transparent",
           activeTab === 'inventory'
             ? "border-action text-action"
             : "border-transparent text-text-tertiary hover:text-text-secondary"
@@ -35,11 +37,12 @@ export function ProductTabSwitcher({
             {inventoryStats.total}
           </span>
         )}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="ghost"
         onClick={() => onTabChange('shop')}
         className={cn(
-          "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
+          "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 h-auto rounded-none bg-transparent hover:bg-transparent",
           activeTab === 'shop'
             ? "border-action text-action"
             : "border-transparent text-text-tertiary hover:text-text-secondary"
@@ -52,7 +55,7 @@ export function ProductTabSwitcher({
             {shopStats.total}
           </span>
         )}
-      </button>
+      </Button>
     </div>
   )
 }

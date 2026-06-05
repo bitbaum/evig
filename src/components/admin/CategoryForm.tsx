@@ -219,13 +219,14 @@ export default function CategoryForm({
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {COLOR_PALETTE.map((color) => (
-                    <button
+                    <Button
                       key={color}
                       type="button"
+                      variant="ghost"
                       onClick={() =>
                         setFormData((prev) => ({ ...prev, color }))
                       }
-                      className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${
+                      className={`w-8 h-8 p-0 rounded-full border-2 hover:scale-110 ${
                         formData.color === color
                           ? 'border-strong dark:border-white scale-110'
                           : 'border-transparent'

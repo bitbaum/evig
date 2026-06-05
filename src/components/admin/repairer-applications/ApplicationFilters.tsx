@@ -1,5 +1,6 @@
 import { Filter, Search } from 'lucide-react'
 import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { ApplicationStatus } from './types'
 
@@ -28,17 +29,19 @@ export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange
           </div>
           <div className="flex gap-2">
             {STATUS_OPTIONS.map((status) => (
-              <button
+              <Button
                 key={status}
+                variant="ghost"
+                size="sm"
                 onClick={() => onStatusChange(status)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`px-3 py-1 rounded-full text-sm font-medium h-auto ${
                   selectedStatus === status
                     ? 'bg-action-muted text-action'
                     : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
                 }`}
               >
                 {getApprovalStatusLabel(status)}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

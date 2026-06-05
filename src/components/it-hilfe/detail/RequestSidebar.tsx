@@ -181,13 +181,14 @@ export function RequestSidebar({
               </Button>
             )}
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.MATCHED) && (
-              <button
+              <Button
+                variant="destructive-ghost"
                 onClick={() => onStatusChange(REQUEST_STATUS.CANCELLED)}
-                className="block w-full py-3 px-4 min-h-touch bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-center font-medium hover:bg-error-100 dark:hover:bg-error-900/30 transition-colors focus:outline-hidden focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
+                className="block w-full py-3 px-4 min-h-touch bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-center font-medium hover:bg-error-100 dark:hover:bg-error-900/30 h-auto"
               >
                 <XCircle className="w-4 h-4 inline-block mr-2" />
                 {t('cancelRequest')}
-              </button>
+              </Button>
             )}
             <Button as={Link} href={ROUTES.public.itHilfeMy} variant="secondary" className="w-full justify-center">
               {t('allMyRequests')}

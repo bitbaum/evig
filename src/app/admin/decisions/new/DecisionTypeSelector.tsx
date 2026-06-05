@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { DECISION_TYPES, DECISION_TYPE_CONFIG, type DecisionType } from '@/config/decisions';
 
 interface Props {
@@ -16,9 +17,10 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
           const conf = DECISION_TYPE_CONFIG[type];
           const isSelected = selected === type;
           return (
-            <button
+            <Button
               key={type}
               type="button"
+              variant="outline"
               onClick={() => onChange(type)}
               className={`rounded-lg border-2 p-3 text-left transition-all ${
                 isSelected
@@ -40,7 +42,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
                   {conf.mechanic}
                 </p>
               )}
-            </button>
+            </Button>
           );
         })}
       </div>

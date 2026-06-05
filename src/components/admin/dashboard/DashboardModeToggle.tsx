@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 
 type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
@@ -33,11 +34,13 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
   return (
     <div className="flex items-center gap-1 p-0.5 bg-surface-raised rounded-lg">
       {MODES.map(({ id, label }) => (
-        <button
+        <Button
           key={id}
+          variant="ghost"
+          size="sm"
           onClick={() => select(id)}
           disabled={isPending}
-          className={`px-3 py-1 rounded-md text-xs font-medium transition-colors min-h-[28px] ${
+          className={`px-3 py-1 rounded-md text-xs font-medium min-h-[28px] h-auto ${
             active === id
               ? 'bg-surface-base text-text-primary shadow-xs'
               : 'text-text-tertiary hover:text-text-secondary'
@@ -45,7 +48,7 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
           aria-pressed={active === id}
         >
           {label}
-        </button>
+        </Button>
       ))}
     </div>
   )

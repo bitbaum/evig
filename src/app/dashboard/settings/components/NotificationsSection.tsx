@@ -1,6 +1,7 @@
 'use client'
 
 import { Mail, Smartphone, ShoppingBag, Calendar } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { SETTINGS_CONFIG } from '@/config/profile'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
@@ -72,10 +73,13 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                 <Heading level={4} className="text-sm font-medium text-text-primary">
                   {option.label}
                 </Heading>
-                <button
+                <Button
                   type="button"
                   onClick={() => handleChange(option.id, !option.value)}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
+                  variant="ghost"
+                  role="switch"
+                  aria-checked={option.value}
+                  className={`relative h-6 w-11 min-h-0 min-w-0 shrink-0 cursor-pointer rounded-full border-2 border-transparent p-0 transition-colors duration-200 ease-in-out hover:bg-transparent ${
                     option.value ? 'bg-action' : 'bg-surface-overlay'
                   }`}
                 >
@@ -84,7 +88,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                       option.value ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
-                </button>
+                </Button>
               </div>
               <p className="text-sm text-text-secondary">
                 {option.description}

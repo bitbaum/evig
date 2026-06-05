@@ -42,14 +42,16 @@ export function ProductSpecFields({
             <AIFieldIndicator source={aiMetadata.specs} fieldName="specs" />
           )}
         </Heading>
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={onSpecAdd}
-          className="inline-flex items-center gap-1 text-sm text-action hover:text-action touch-manipulation p-2 -m-2"
+          className="inline-flex items-center gap-1 text-sm text-action hover:text-action touch-manipulation p-2 -m-2 h-auto bg-transparent hover:bg-transparent"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">{t('addField')}</span>
-        </button>
+        </Button>
       </div>
 
       <div className="space-y-3">

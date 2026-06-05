@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { AlertTriangle, Mail, X, CheckCircle2, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
@@ -70,17 +71,16 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="warning"
+                  size="sm"
                   onClick={handleResend}
                   disabled={isLoading}
                   className={cn(
-                    'inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md',
+                    'inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md h-auto',
                     'bg-warning-100 dark:bg-warning-800 text-warning-800 dark:text-warning-100',
-                    'hover:bg-warning-200 dark:hover:bg-warning-700',
-                    'focus:outline-hidden focus:ring-2 focus:ring-warning-500 focus:ring-offset-2',
-                    'disabled:opacity-50 disabled:cursor-not-allowed',
-                    'transition-colors'
+                    'hover:bg-warning-200 dark:hover:bg-warning-700'
                   )}
                 >
                   {isLoading ? (
@@ -89,7 +89,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
                     <Mail className="h-4 w-4" />
                   )}
                   {t('resend')}
-                </button>
+                </Button>
                 {error && (
                   <span className="text-sm text-error-600 dark:text-error-400">{error}</span>
                 )}
@@ -98,14 +98,16 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
           </div>
         </div>
         <div className="ml-4 shrink-0">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={() => setIsVisible(false)}
-            className="inline-flex rounded-md text-warning-500 hover:text-warning-600 focus:outline-hidden focus:ring-2 focus:ring-warning-500 focus:ring-offset-2"
+            className="inline-flex rounded-md text-warning-500 hover:text-warning-600 h-auto w-auto p-0 bg-transparent hover:bg-transparent"
           >
             <span className="sr-only">{t('close')}</span>
             <X className="h-5 w-5" aria-hidden="true" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

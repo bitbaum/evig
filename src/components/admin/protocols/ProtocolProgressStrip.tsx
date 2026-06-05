@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckCircle2, Circle, CircleAlert, Clock } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { ProtocolReviewChecklistItem } from '@/lib/protocols/review'
 
@@ -59,12 +60,13 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
 
           return (
             <div key={item.id} className="flex items-center flex-1 min-w-0">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={() => onStepClick?.(item.id)}
                 disabled={!onStepClick}
                 className={cn(
-                  'flex flex-col items-center gap-1 min-w-0',
+                  'flex flex-col items-center gap-1 min-w-0 h-auto p-0 bg-transparent hover:bg-transparent',
                   onStepClick ? 'cursor-pointer hover:opacity-80' : 'cursor-default'
                 )}
               >
@@ -74,7 +76,7 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
                 <span className={cn('text-xs truncate max-w-[56px]', config.labelClass)}>
                   {SHORT_LABELS[item.id] ?? item.label}
                 </span>
-              </button>
+              </Button>
               {!isLast && (
                 <div className={cn('flex-1 h-0.5 mx-1 mt-[-12px]', config.lineClass)} />
               )}

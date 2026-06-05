@@ -94,12 +94,14 @@ export function IntakeDetailView({
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={onBack}
             className="text-sm text-action hover:underline mb-2 flex items-center gap-1"
           >
             ← Zurück zur Pipeline
-          </button>
+          </Button>
           <Heading level={2} className="text-lg font-semibold">{detail.brand} {detail.product_name}</Heading>
           <div className="flex items-center gap-3 text-sm text-text-tertiary mt-1">
             <span className="font-mono">{detail.item_uuid}</span>
@@ -117,14 +119,16 @@ export function IntakeDetailView({
             </span>
           ) : (
             <>
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
                 className="flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg hover:bg-surface-raised"
                 title="Stufe ändern"
               >
                 <ArrowDownUp className="w-3.5 h-3.5" /> Stufe ändern
-              </button>
+              </Button>
               <Button onClick={onRefresh} variant="ghost" size="icon" title="Aktualisieren">
                 <RefreshCw className="w-4 h-4" />
               </Button>
@@ -286,13 +290,15 @@ export function IntakeDetailView({
             >
               {tierChanging ? 'Ändern...' : 'Stufe ändern'}
             </Button>
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={() => setShowTierChange(false)}
               className="px-3 py-1.5 border rounded-lg hover:bg-surface-raised text-sm"
             >
               Abbrechen
-            </button>
+            </Button>
           </div>
         </div>
       )}

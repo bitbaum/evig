@@ -246,14 +246,16 @@ export function ImageCapture({
                     className="object-contain"
                   />
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant="destructive"
+                  size="icon"
                   onClick={clearImage}
                   disabled={state === 'analyzing'}
-                  className="absolute -top-2 -right-2 w-8 h-8 bg-error-600 hover:bg-error-700 disabled:bg-error-400 text-white rounded-full flex items-center justify-center shadow-lg"
+                  className="absolute -top-2 -right-2 w-8 h-8 rounded-full shadow-lg"
                 >
                   <X className="w-4 h-4" />
-                </button>
+                </Button>
               </div>
 
               {/* Action buttons */}

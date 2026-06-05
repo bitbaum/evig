@@ -184,12 +184,14 @@ export function EditSubmissionModal({
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b px-6 py-4 flex items-center justify-between">
           <Heading level={2} className="text-2xl">Einreichung bearbeiten</Heading>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onClose}
-            className="text-text-tertiary hover:text-text-secondary transition-colors"
+            className="text-text-tertiary hover:text-text-secondary"
           >
             <X className="w-6 h-6" />
-          </button>
+          </Button>
         </div>
 
         {/* Form */}

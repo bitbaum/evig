@@ -33,12 +33,14 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 <Heading level={2} className="text-xl text-text-primary">
                   Bulk-Import von Produkten
                 </Heading>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={onClose}
                   className="text-text-tertiary hover:text-text-secondary"
                 >
                   <XCircle className="w-6 h-6" />
-                </button>
+                </Button>
               </div>
             </div>
 

@@ -230,14 +230,16 @@ export default function DecisionActions({
       {!isClosed && (
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-1">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => handleVote('up')}
               disabled={loading === 'vote'}
-              className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border h-auto ${
                 currentUserVote === 'up'
                   ? 'bg-action-muted border-strong text-action'
                   : 'bg-surface-base border text-text-secondary hover:bg-action-muted hover:border-strong'
-              } disabled:opacity-50`}
+              }`}
             >
               {loading === 'vote' ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -245,19 +247,21 @@ export default function DecisionActions({
                 <ThumbsUp className="w-4 h-4" />
               )}
               {votesUp}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => handleVote('down')}
               disabled={loading === 'vote'}
-              className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-3 min-h-11 text-sm rounded-md border h-auto ${
                 currentUserVote === 'down'
                   ? 'bg-error-100 dark:bg-error-900/30 border-error-300 text-error-800 dark:text-error-400'
                   : 'bg-surface-base border text-text-secondary hover:bg-error-50 dark:hover:bg-error-900/20 hover:border-error-200'
-              } disabled:opacity-50`}
+              }`}
             >
               <ThumbsDown className="w-4 h-4" />
               {votesDown}
-            </button>
+            </Button>
           </div>
 
           {attendeeCount > 0 && (
@@ -267,16 +271,18 @@ export default function DecisionActions({
           )}
 
           {isProtocolCreator && totalVoters > 0 && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={handleClose}
               disabled={loading === 'close'}
-              className="text-xs text-text-tertiary hover:text-text-secondary underline disabled:opacity-50"
+              className="text-xs text-text-tertiary hover:text-text-secondary underline h-auto px-0 bg-transparent hover:bg-transparent"
             >
               {loading === 'close' ? (
                 <Loader2 className="w-3 h-3 animate-spin inline mr-1" />
               ) : null}
               Abstimmung schliessen
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -304,10 +310,12 @@ export default function DecisionActions({
 
             {/* Stage 2: Approved, no proposals yet */}
             {result === DECISION_RESULTS.APPROVED && !hasProposals && !tasksCreated && isProtocolCreator && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handlePropose}
                 disabled={loading === 'propose'}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-action-muted text-action border border-strong rounded-md hover:bg-action-muted disabled:opacity-50"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-action-muted text-action border border-strong rounded-md hover:bg-action-muted h-auto"
               >
                 {loading === 'propose' ? (
                   <Loader2 className="w-3 h-3 animate-spin" />
@@ -315,7 +323,7 @@ export default function DecisionActions({
                   <Sparkles className="w-3 h-3" />
                 )}
                 Aufgaben vorschlagen lassen
-              </button>
+              </Button>
             )}
           </div>
 

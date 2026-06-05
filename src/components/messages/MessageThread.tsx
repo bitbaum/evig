@@ -129,13 +129,15 @@ export default function MessageThread({
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border bg-surface-base">
         {onBack && (
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onBack}
-            className="p-1 rounded-lg hover:bg-surface-raised transition-colors lg:hidden"
+            className="rounded-lg hover:bg-surface-raised lg:hidden h-auto w-auto p-1"
             aria-label={t('back')}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
-          </button>
+          </Button>
         )}
         <div className="flex-1 min-w-0">
           <Heading level={3} className="font-semibold text-text-primary truncate">

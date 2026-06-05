@@ -109,12 +109,12 @@ export default function MarketplacePage() {
                 aria-label={t('searchAriaLabel')}
                 className="pl-10 pr-24 text-sm"
               />
-              <button
+              <Button
                 type="submit"
                 className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-secondary-500 hover:bg-secondary-600 dark:hover:bg-secondary-400 text-white px-4 py-1.5 rounded-md transition-colors text-sm font-semibold"
               >
                 {t('searchButton')}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -124,8 +124,9 @@ export default function MarketplacePage() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Mobile: filter bar */}
         <div className="flex items-center justify-between gap-3 mb-4 lg:hidden">
-          <button
+          <Button
             type="button"
+            variant="outline"
             onClick={() => setMobileFiltersOpen(true)}
             className="inline-flex items-center gap-2 px-3.5 py-2 border border-default dark:border-white/10 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
             aria-expanded={mobileFiltersOpen}
@@ -137,7 +138,7 @@ export default function MarketplacePage() {
                 {activeFilterCount}
               </span>
             )}
-          </button>
+          </Button>
           <Select
             value={filters.sort}
             onChange={(e) => { filters.setSort(e.target.value); resetOffset() }}
@@ -235,25 +236,29 @@ export default function MarketplacePage() {
                 className="flex items-center justify-center gap-2 pt-8"
                 aria-label={t('pagination.navigation')}
               >
-                <button
+                <Button
+                  variant="outline"
+                  size="icon"
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
                   className="p-2 rounded-lg border border-default dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
                   aria-label={t('pagination.previousPage')}
                 >
                   <ChevronLeft className="w-4 h-4" />
-                </button>
+                </Button>
                 <span className="text-sm text-text-secondary px-4" aria-current="page">
                   {t('pagination.pageOf', { current: currentPage, total: totalPages })}
                 </span>
-                <button
+                <Button
+                  variant="outline"
+                  size="icon"
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
                   className="p-2 rounded-lg border border-default dark:border-white/10 text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors"
                   aria-label={t('pagination.nextPage')}
                 >
                   <ChevronRight className="w-4 h-4" />
-                </button>
+                </Button>
               </nav>
             )}
           </div>
@@ -299,14 +304,16 @@ export default function MarketplacePage() {
           <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-surface-base shadow-xl dark:shadow-black/40 flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border shrink-0">
               <span className="font-semibold text-text-primary">{t('filters.label')}</span>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => setMobileFiltersOpen(false)}
                 className="p-1.5 rounded-md hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors"
                 aria-label={t('filters.closeLabel')}
               >
                 <X className="w-5 h-5 text-text-secondary" />
-              </button>
+              </Button>
             </div>
             <div className="flex-1 overflow-y-auto p-4">
               <MarketplaceFilterSidebar

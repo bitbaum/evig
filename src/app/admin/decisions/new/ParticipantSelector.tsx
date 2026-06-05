@@ -1,8 +1,9 @@
 'use client';
 
-import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, PARTICIPANT_SCOPE, type ParticipantScope } from '@/config/decisions';
 import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, PARTICIPANT_SCOPE, type ParticipantScope } from '@/config/decisions';
 import { type TeamMember } from './useDecisionForm';
 
 interface Props {
@@ -32,9 +33,10 @@ export function ParticipantSelector({
         {PARTICIPANT_SCOPES.map((scope) => {
           const conf = PARTICIPANT_SCOPE_CONFIG[scope];
           return (
-            <button
+            <Button
               key={scope}
               type="button"
+              variant="outline"
               onClick={() => onScopeChange(scope)}
               className={`rounded-lg border-2 p-2.5 text-left transition ${
                 participantScope === scope
@@ -44,7 +46,7 @@ export function ParticipantSelector({
             >
               <div className="text-xs font-medium text-text-primary">{conf.label}</div>
               <div className="mt-0.5 text-xs text-text-muted leading-tight">{conf.description}</div>
-            </button>
+            </Button>
           );
         })}
       </div>

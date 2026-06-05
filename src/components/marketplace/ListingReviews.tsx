@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Star, Loader2, MessageSquare } from 'lucide-react'
 import ReviewForm from './ReviewForm'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
@@ -149,12 +150,13 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
       {/* Review Form Toggle */}
       {canReview && !hasReviewed && !showForm && (
-        <button
+        <Button
+          variant="outline"
           onClick={() => setShowForm(true)}
-          className="w-full py-2.5 px-4 rounded-lg border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
+          className="w-full py-2.5 px-4 rounded-lg text-sm font-medium"
         >
           {t('writeReview')}
-        </button>
+        </Button>
       )}
 
       {showForm && (

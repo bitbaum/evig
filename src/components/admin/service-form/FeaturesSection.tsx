@@ -3,6 +3,7 @@
 import { Plus, Trash2, GripVertical } from 'lucide-react'
 import { IconPicker } from '../IconPicker'
 import { CollapsibleSection } from './CollapsibleSection'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import type { Feature } from './types'
@@ -28,13 +29,15 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
                 <GripVertical className="w-4 h-4" />
                 <span className="text-sm font-medium">Feature {index + 1}</span>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="destructive-ghost"
+                size="icon"
                 onClick={() => onRemove(index)}
-                className="p-1 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded-sm"
+                className="p-1 h-auto w-auto"
               >
                 <Trash2 className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input
@@ -56,14 +59,15 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
             />
           </div>
         ))}
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-action-muted rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-action hover:bg-action-muted h-auto"
         >
           <Plus className="w-4 h-4" />
           Feature hinzufügen
-        </button>
+        </Button>
       </div>
     </CollapsibleSection>
   )

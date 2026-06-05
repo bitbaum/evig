@@ -3,6 +3,7 @@
 import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { Offer } from './types'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { StatusBadge } from '@/components/ui/status-badge'
 
@@ -35,13 +36,14 @@ export function UserOffer({ offer, withdrawing, onWithdraw }: UserOfferProps) {
           )}
         </div>
       )}
-      <button
+      <Button
+        variant="destructive-ghost"
         onClick={onWithdraw}
         disabled={withdrawing}
-        className="px-4 py-2.5 min-h-touch bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-sm font-medium hover:bg-error-100 dark:hover:bg-error-900/30 transition-colors disabled:opacity-50 focus:outline-hidden focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
+        className="px-4 py-2.5 min-h-touch bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-sm font-medium hover:bg-error-100 dark:hover:bg-error-900/30 h-auto"
       >
         {withdrawing ? t('withdrawing') : t('withdrawButton')}
-      </button>
+      </Button>
     </div>
   )
 }

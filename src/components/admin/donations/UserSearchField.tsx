@@ -1,4 +1,5 @@
 import { Search, User, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { UserResult } from './types'
 
@@ -37,13 +38,15 @@ export function UserSearchField({
               <div className="text-xs text-text-tertiary">{selectedUser.email}</div>
             )}
           </div>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={onClearUser}
-            className="text-text-tertiary hover:text-text-secondary"
+            className="text-text-tertiary hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
           >
             <X className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="relative">
@@ -65,11 +68,12 @@ export function UserSearchField({
           {userResults.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-surface-base border border rounded-lg shadow-lg max-h-48 overflow-y-auto">
               {userResults.map((user) => (
-                <button
+                <Button
                   key={user.id}
                   type="button"
+                  variant="ghost"
                   onClick={() => onSelectUser(user)}
-                  className="w-full px-3 py-2 text-left hover:bg-surface-raised flex items-center gap-2"
+                  className="w-full px-3 py-2 text-left hover:bg-surface-raised flex items-center gap-2 h-auto rounded-none justify-start"
                 >
                   <User className="w-4 h-4 text-text-muted" />
                   <div>
@@ -80,7 +84,7 @@ export function UserSearchField({
                       <div className="text-xs text-text-tertiary">{user.email}</div>
                     )}
                   </div>
-                </button>
+                </Button>
               ))}
             </div>
           )}

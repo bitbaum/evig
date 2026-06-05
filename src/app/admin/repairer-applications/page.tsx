@@ -13,6 +13,7 @@ import {
 } from '@/components/admin/repairer-applications'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 
 export default function RepairerApplicationsAdmin() {
   const router = useRouter()
@@ -67,13 +68,15 @@ export default function RepairerApplicationsAdmin() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => router.push('/admin')}
             className="flex items-center gap-2 text-text-secondary hover:text-text-primary"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück zum Admin-Bereich
-          </button>
+          </Button>
         </div>
         <Heading level={1} className="text-2xl font-bold text-text-primary">Techniker-Bewerbungen</Heading>
       </div>

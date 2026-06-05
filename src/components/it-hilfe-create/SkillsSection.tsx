@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 
 interface Props {
@@ -28,18 +29,20 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
             </Heading>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <button
+                <Button
                   key={skill.id}
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => onSkillToggle(skill.id)}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-sm h-auto ${
                     skillsNeeded.includes(skill.id)
                       ? 'bg-action-muted text-action border-2 border-action'
                       : 'bg-surface-raised text-text-secondary border-2 border-transparent hover:bg-surface-overlay'
                   }`}
                 >
                   {skill.name}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

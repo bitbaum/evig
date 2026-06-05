@@ -25,12 +25,13 @@ export function CertificationVerificationSection({
     <div className="mt-6 pt-6 border-t border">
       <div className="flex items-center justify-between mb-4">
         <Heading level={4} className="text-text-primary">Zertifizierungsverifizierung</Heading>
-        <button
+        <Button
+          variant="ghost"
           onClick={() => onSelect(application)}
-          className="text-sm text-action hover:text-action font-medium"
+          className="text-sm text-action hover:text-action font-medium h-auto px-0 bg-transparent hover:bg-transparent"
         >
           Zertifizierungen prüfen
-        </button>
+        </Button>
       </div>
 
       {isSelected && (

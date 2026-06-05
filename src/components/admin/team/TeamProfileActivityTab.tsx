@@ -12,6 +12,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { RefreshCw, AlertTriangle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateTime } from '@/lib/date-formats'
 
@@ -68,14 +69,16 @@ export function TeamProfileActivityTab({ userId }: Props) {
         <div className="text-sm text-text-secondary">
           {events.length === 0 && !isLoading ? 'Noch keine Aktivität.' : `${events.length} Ereignisse`}
         </div>
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={load}
           disabled={isLoading}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+          className="inline-flex items-center gap-1.5"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           Aktualisieren
-        </button>
+        </Button>
       </div>
 
       {error && (

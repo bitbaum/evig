@@ -111,15 +111,17 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
         {/* Attendees — compact panel, uses inline styling intentionally */}
         <div>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => setShowAttendees(!showAttendees)}
             className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary"
           >
             <Users className="w-4 h-4" />
             Teilnehmer ({selectedAttendees.length}/{teamMembers.length})
             {showAttendees ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+          </Button>
 
           {showAttendees && (
             <div className="mt-2 p-3 bg-surface-raised rounded-lg border space-y-2">
@@ -131,13 +133,15 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   placeholder="Teilnehmer suchen..."
                   className="flex-1 py-1"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={selectAllAttendees}
                   className="text-xs text-action hover:text-action font-medium whitespace-nowrap"
                 >
                   {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
-                </button>
+                </Button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-64 overflow-y-auto">
                 {filteredTeamMembers.map((member) => (
@@ -220,12 +224,14 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                     <span className="text-sm font-medium text-text-primary">{audioFile.name}</span>
                     <span className="text-xs text-action">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
                   </div>
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => setAudioFile(null)}
                     className="text-xs text-action hover:text-action"
                   >
                     Entfernen
-                  </button>
+                  </Button>
                 </div>
 
                 {/* Whisper model selector — compact inline styling inside audio panel */}

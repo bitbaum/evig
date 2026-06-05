@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { TrendingUp, ChevronDown } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import { MissionMetrics } from './MissionMetrics'
 import { WeeklyActivitySection } from './WeeklyActivitySection'
@@ -41,9 +42,10 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   return (
     <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
       {/* Toggle header — same structure as card headers, but interactive */}
-      <button
+      <Button
+        variant="ghost"
         onClick={toggle}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors rounded-xl"
+        className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 rounded-xl h-auto"
         aria-expanded={open}
         aria-controls="monatsueberblick-content"
       >
@@ -57,7 +59,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
           className={`w-5 h-5 text-text-muted transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
-      </button>
+      </Button>
 
       {/* Content — suppressed before localStorage hydrates to prevent flash */}
       {hydrated && open && (

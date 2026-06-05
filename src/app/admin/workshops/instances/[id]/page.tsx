@@ -29,6 +29,7 @@ import {
 } from '@/config/workshop-registration-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { useAdminWorkshopInstance } from '@/hooks/useAdminWorkshopInstance'
 import { ROUTES } from '@/config/routes'
 
@@ -280,34 +281,42 @@ export default function AdminWorkshopInstanceDetailPage({
                         <div className="flex gap-2">
                           {reg.status === WORKSHOP_REGISTRATION_STATUS.PENDING && (
                             <>
-                              <button
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CONFIRMED)}
                                 className="text-action hover:text-action text-sm"
                               >
                                 Bestätigen
-                              </button>
-                              <button
+                              </Button>
+                              <Button
+                                variant="destructive-ghost"
+                                size="sm"
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CANCELLED)}
                                 className="text-error-600 hover:text-error-800 text-sm"
                               >
                                 Absagen
-                              </button>
+                              </Button>
                             </>
                           )}
                           {reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED && isPast && (
                             <>
-                              <button
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.ATTENDED)}
                                 className="text-action hover:text-action text-sm"
                               >
                                 Teilgenommen
-                              </button>
-                              <button
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.NO_SHOW)}
                                 className="text-text-secondary hover:text-text-primary text-sm"
                               >
                                 Nicht erschienen
-                              </button>
+                              </Button>
                             </>
                           )}
                         </div>

@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormField } from '@/components/ui/form-field'
 
@@ -44,13 +45,15 @@ export function WorkshopTagsSection({ tags, onAddTag, onRemoveTag }: Props) {
                 className="inline-flex items-center gap-1 px-3 py-1 bg-action-muted text-action rounded-full text-sm"
               >
                 {tag}
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => onRemoveTag(tag)}
-                  className="hover:text-error-600"
+                  className="h-auto w-auto p-0 bg-transparent hover:bg-transparent hover:text-error-600"
                 >
                   <X className="w-3 h-3" />
-                </button>
+                </Button>
               </span>
             ))}
           </div>

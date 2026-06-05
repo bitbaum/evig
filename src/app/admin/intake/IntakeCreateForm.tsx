@@ -64,9 +64,9 @@ export function IntakeCreateForm({
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <Heading level={2} className="text-lg font-semibold">Neues Gerät erfassen</Heading>
-        <button onClick={onCancel} className="text-text-tertiary hover:text-text-secondary">
+        <Button variant="ghost" size="icon" onClick={onCancel} className="text-text-tertiary hover:text-text-secondary">
           <X className="w-5 h-5" />
-        </button>
+        </Button>
       </div>
 
       {/* Tier Selection */}
@@ -74,9 +74,10 @@ export function IntakeCreateForm({
         <label className="block text-sm font-medium mb-2">Verarbeitungsstufe</label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {tierOptions.map(opt => (
-            <button
+            <Button
               key={opt.value}
               type="button"
+              variant="outline"
               onClick={() => setFormData(f => ({ ...f, intake_tier: opt.value }))}
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
@@ -87,15 +88,16 @@ export function IntakeCreateForm({
               <div className="text-2xl mb-1">{opt.icon}</div>
               <div className="text-sm font-medium">{opt.label}</div>
               <div className="text-xs text-text-tertiary">{opt.description}</div>
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       {/* AI Quick Input */}
       <div className="border rounded-lg overflow-hidden">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setAiOpen(!aiOpen)}
           className="w-full flex items-center justify-between p-3 bg-action-muted hover:bg-action-muted text-left"
         >
@@ -104,7 +106,7 @@ export function IntakeCreateForm({
             KI-Schnelleingabe
           </span>
           {aiOpen ? <ChevronDown className="w-4 h-4 text-action" /> : <ChevronRight className="w-4 h-4 text-action" />}
-        </button>
+        </Button>
 
         {aiOpen && (
           <div className="p-4 space-y-3 bg-surface-base">
@@ -115,9 +117,11 @@ export function IntakeCreateForm({
                 { key: 'voice' as const, icon: Mic, label: 'Sprache' },
                 { key: 'photo' as const, icon: Camera, label: 'Foto' },
               ]).map(tab => (
-                <button
+                <Button
                   key={tab.key}
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setAiTab(tab.key)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px transition-colors ${
                     aiTab === tab.key
@@ -127,7 +131,7 @@ export function IntakeCreateForm({
                 >
                   <tab.icon className="w-3.5 h-3.5" />
                   {tab.label}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -157,24 +161,26 @@ export function IntakeCreateForm({
             {aiTab === 'voice' && (
               <div className="space-y-2">
                 {voiceState === 'idle' && (
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
                     onClick={onStartVoiceRecording}
                     className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-default rounded-lg hover:border-action w-full justify-center text-sm text-text-secondary"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme starten
-                  </button>
+                  </Button>
                 )}
                 {voiceState === 'recording' && (
-                  <button
+                  <Button
                     type="button"
+                    variant="destructive-outline"
                     onClick={onStopVoiceRecording}
                     className="flex items-center gap-2 px-4 py-3 bg-error-50 dark:bg-error-900/20 border-2 border-error-300 rounded-lg w-full justify-center text-sm text-error-700 dark:text-error-400 animate-pulse"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme stoppen
-                  </button>
+                  </Button>
                 )}
                 {voiceState === 'processing' && (
                   <div className="flex items-center gap-2 px-4 py-3 bg-action-muted rounded-lg justify-center text-sm text-action">

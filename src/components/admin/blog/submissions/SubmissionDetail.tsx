@@ -245,14 +245,15 @@ export function SubmissionDetail({
 
       {/* Delete */}
       <div className="mt-4 pt-4 border-t border">
-        <button
+        <Button
+          variant="destructive-ghost"
           onClick={() => setConfirmDelete(true)}
           disabled={actionLoading !== null}
-          className="flex items-center gap-2 text-sm text-error-600 dark:text-error-400 hover:text-error-800 dark:hover:text-error-300 disabled:opacity-50"
+          className="flex items-center gap-2 text-sm h-auto px-0"
         >
           <Trash2 className="w-4 h-4" />
           Einreichung löschen
-        </button>
+        </Button>
         <ConfirmDialog
           isOpen={confirmDelete}
           title="Einreichung löschen"

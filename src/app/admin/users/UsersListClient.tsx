@@ -7,6 +7,7 @@ import {
   Pagination,
 } from '@/components/admin/users'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { useUsersList } from '@/hooks/useUsersList'
 
 interface UsersListClientProps {
@@ -44,13 +45,15 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
         <div className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl">
           <div className="flex items-center justify-between">
             <p className="text-error-700 dark:text-error-300">{error}</p>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={fetchUsers}
               className="flex items-center gap-2 text-error-600 hover:text-error-700"
             >
               <RefreshCw className="w-4 h-4" />
               Erneut versuchen
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -76,12 +79,14 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
               : 'Keine Benutzer vorhanden.'}
           </p>
           {hasActiveFilters && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={resetFilters}
               className="text-action hover:text-action text-sm"
             >
               Filter zurücksetzen
-            </button>
+            </Button>
           )}
         </div>
       )}
@@ -93,13 +98,15 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
             <p className="text-sm text-text-tertiary">
               {pagination.total} Benutzer gefunden
             </p>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={fetchUsers}
               className="flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren
-            </button>
+            </Button>
           </div>
 
           <UsersTableClient

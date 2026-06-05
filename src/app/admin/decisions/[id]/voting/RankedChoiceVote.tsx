@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { type VotingOption } from './OptionCard';
 
 interface Props {
@@ -32,24 +33,28 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                 <span className="hidden text-xs text-text-muted sm:block">{opt.description}</span>
               )}
               <div className="flex gap-1">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={() => onMoveUp(index)}
                   disabled={index === 0}
                   className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-surface-raised disabled:opacity-30"
                   title="Höher"
                 >
                   ↑
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={() => onMoveDown(index)}
                   disabled={index === ranking.length - 1}
                   className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-surface-raised disabled:opacity-30"
                   title="Tiefer"
                 >
                   ↓
-                </button>
+                </Button>
               </div>
             </div>
           );

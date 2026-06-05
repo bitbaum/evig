@@ -243,10 +243,11 @@ export function DataEntryTabs({
       className={`bg-action-muted rounded-xl border border-strong overflow-hidden ${className}`}
     >
       {/* Collapsible header */}
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-action-muted/50-hover/30 transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-action-muted/50-hover/30 h-auto rounded-none"
       >
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-action" />
@@ -260,17 +261,18 @@ export function DataEntryTabs({
         ) : (
           <ChevronUp className="w-5 h-5 text-action" />
         )}
-      </button>
+      </Button>
 
       {/* Tab headers */}
       {!isCollapsed && tabs.length > 1 && (
         <div className="flex border-b border-t border-strong">
           {tabs.map((tab) => (
-            <button
+            <Button
               key={tab.id}
               type="button"
+              variant="ghost"
               onClick={() => setActiveMode(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium h-auto rounded-none ${
                 activeMode === tab.id
                   ? 'bg-surface-base text-action border-b-2 border-action -mb-px'
                   : 'text-text-secondary hover:text-action hover:bg-surface-base/50'
@@ -278,7 +280,7 @@ export function DataEntryTabs({
             >
               {tab.icon}
               <span>{tab.label}</span>
-            </button>
+            </Button>
           ))}
         </div>
       )}

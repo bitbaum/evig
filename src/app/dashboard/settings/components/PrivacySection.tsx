@@ -69,10 +69,11 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
             </p>
 
             <div className="flex gap-4">
-              <button
+              <Button
                 type="button"
                 onClick={() => handleChange('profile_visibility', 'public')}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+                variant="ghost"
+                className={`flex-1 rounded-lg border-2 py-3 ${
                   profile.profile_visibility === 'public'
                     ? 'border-action bg-action-muted text-action'
                     : 'border bg-surface-base text-text-secondary hover:border-strong'
@@ -80,12 +81,13 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
               >
                 <Globe className="w-5 h-5" />
                 <span className="font-medium">{labels.profilePublic}</span>
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={() => handleChange('profile_visibility', 'private')}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+                variant="ghost"
+                className={`flex-1 rounded-lg border-2 py-3 ${
                   profile.profile_visibility === 'private'
                     ? 'border-strong bg-surface-raised text-text-secondary'
                     : 'border bg-surface-base text-text-secondary hover:border-strong'
@@ -93,7 +95,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
               >
                 <Lock className="w-5 h-5" />
                 <span className="font-medium">{labels.profilePrivate}</span>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -126,10 +128,13 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 <h5 className="text-sm font-medium text-text-primary">
                   {labels.showEmail}
                 </h5>
-                <button
+                <Button
                   type="button"
                   onClick={() => handleChange('show_email', !profile.show_email)}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
+                  variant="ghost"
+                  role="switch"
+                  aria-checked={profile.show_email}
+                  className={`relative h-6 w-11 min-h-0 min-w-0 shrink-0 cursor-pointer rounded-full border-2 border-transparent p-0 transition-colors duration-200 ease-in-out hover:bg-transparent ${
                     profile.show_email ? 'bg-action' : 'bg-surface-overlay'
                   }`}
                 >
@@ -138,7 +143,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                       profile.show_email ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
-                </button>
+                </Button>
               </div>
               <p className="text-sm text-text-secondary">
                 {labels.showEmailDescription}
@@ -163,10 +168,13 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 <h5 className="text-sm font-medium text-text-primary">
                   {labels.showPhone}
                 </h5>
-                <button
+                <Button
                   type="button"
                   onClick={() => handleChange('show_phone', !profile.show_phone)}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 ${
+                  variant="ghost"
+                  role="switch"
+                  aria-checked={profile.show_phone}
+                  className={`relative h-6 w-11 min-h-0 min-w-0 shrink-0 cursor-pointer rounded-full border-2 border-transparent p-0 transition-colors duration-200 ease-in-out hover:bg-transparent ${
                     profile.show_phone ? 'bg-action' : 'bg-surface-overlay'
                   }`}
                 >
@@ -175,7 +183,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                       profile.show_phone ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
-                </button>
+                </Button>
               </div>
               <p className="text-sm text-text-secondary">
                 {labels.showPhoneDescription}

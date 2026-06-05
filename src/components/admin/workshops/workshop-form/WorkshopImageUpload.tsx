@@ -1,6 +1,7 @@
 'use client'
 
 import { Upload, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
@@ -50,13 +51,15 @@ export function WorkshopImageUpload({ imagePreviews, onImageUpload, onRemoveImag
                   alt={`Preview ${index + 1}`}
                   className="w-full h-24 object-cover rounded-lg"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="destructive"
+                  size="icon"
                   onClick={() => onRemoveImage(index)}
-                  className="absolute -top-2 -right-2 w-6 h-6 bg-error-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full opacity-0 group-hover:opacity-100"
                 >
                   <X className="w-3 h-3" />
-                </button>
+                </Button>
               </div>
             ))}
           </div>

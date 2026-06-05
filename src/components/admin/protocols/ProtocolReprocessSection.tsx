@@ -1,4 +1,5 @@
 import { Loader2, Wand2, Upload } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
@@ -87,14 +88,15 @@ export function ProtocolReprocessSection({
             </p>
           </>
         )}
-        <button
+        <Button
+          variant="warning"
           onClick={onProcess}
           disabled={processing || (inputMethod === 'audio' ? !audioFile : transcript.length < reprocessMinLength)}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-warning-800 dark:text-warning-200 border border-warning-300 rounded-lg hover:bg-warning-100 dark:hover:bg-warning-900/30 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 text-sm text-warning-800 dark:text-warning-200 border border-warning-300 rounded-lg hover:bg-warning-100 dark:hover:bg-warning-900/30 bg-transparent"
         >
           {processing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
           Erneut verarbeiten
-        </button>
+        </Button>
       </div>
     </details>
   )

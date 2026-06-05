@@ -10,6 +10,7 @@
 import Image from 'next/image'
 import { Camera, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 
 interface ProductImageSectionProps {
@@ -36,14 +37,16 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
               height={150}
               className="rounded-lg object-cover"
             />
-            <button
+            <Button
               type="button"
+              variant="destructive"
+              size="icon"
               onClick={() => onImageChange(null)}
               aria-label={t('remove')}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-error-600 text-white rounded-full flex items-center justify-center"
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full"
             >
               <X className="w-3 h-3" />
-            </button>
+            </Button>
           </div>
         ) : (
           <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-default rounded-lg cursor-pointer hover:border-action hover:bg-action-muted transition-colors">

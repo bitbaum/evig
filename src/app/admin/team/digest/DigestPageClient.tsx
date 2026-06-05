@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { useDigest } from '@/components/admin/team/activity'
+import { Button } from '@/components/ui/button'
 import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks'
 import { formatRelativeTime } from '@/lib/utils'
 
@@ -41,7 +42,9 @@ export function DigestPageClient() {
       {/* Period Selector */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 bg-surface-raised p-1 rounded-lg">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setDateRange('week')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'week'
@@ -50,8 +53,10 @@ export function DigestPageClient() {
             }`}
           >
             Diese Woche
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setDateRange('month')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'month'
@@ -60,17 +65,19 @@ export function DigestPageClient() {
             }`}
           >
             Dieser Monat
-          </button>
+          </Button>
         </div>
 
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => refetch()}
           disabled={loading}
           className="p-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg"
           title="Aktualisieren"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-        </button>
+        </Button>
       </div>
 
       {/* Error State */}

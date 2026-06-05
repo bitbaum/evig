@@ -30,8 +30,9 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
 
   return (
     <div className="border rounded-lg overflow-hidden">
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between p-3 bg-surface-raised hover:bg-surface-raised text-left"
       >
@@ -46,7 +47,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         }`}>
           {completedCount}/{group.items.length}
         </span>
-      </button>
+      </Button>
 
       {expanded && (
         <div className="divide-y">
@@ -57,8 +58,10 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
             >
               <div className="flex items-start gap-3">
                 {/* Checkbox */}
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => onToggle(item.id, !item.state.completed)}
                   className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                     item.state.completed
@@ -68,7 +71,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   aria-label={item.state.completed ? `${item.label} rückgängig machen` : `${item.label} abhaken`}
                 >
                   {item.state.completed && <Check className="w-3 h-3" />}
-                </button>
+                </Button>
 
                 <div className="flex-1 min-w-0">
                   {/* Label + required marker */}
@@ -94,14 +97,16 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           </span>
                         )}
                         {!notesOpen[item.id] && (
-                          <button
+                          <Button
                             type="button"
+                            variant="ghost"
+                            size="sm"
                             onClick={() => openNotes(item.id, item.state.notes)}
                             className="text-xs text-text-muted hover:text-action flex items-center gap-0.5 transition-colors"
                           >
                             <StickyNote className="w-3 h-3" />
                             {item.state.notes ? 'Notiz bearbeiten' : 'Notiz hinzufügen'}
-                          </button>
+                          </Button>
                         )}
                       </div>
 
@@ -132,13 +137,15 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         >
                           Speichern
                         </Button>
-                        <button
+                        <Button
                           type="button"
+                          variant="outline"
+                          size="sm"
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}
                           className="text-xs px-2.5 py-1 border rounded-sm hover:bg-surface-raised transition-colors"
                         >
                           Abbrechen
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   )}

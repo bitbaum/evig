@@ -8,6 +8,7 @@ import {
   DECISION_CATEGORY_LABELS,
   type DecisionTemplate,
 } from '@/config/decisions';
+import { Button } from '@/components/ui/button';
 import { adminSurface, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 
@@ -23,13 +24,14 @@ export default function DecisionTemplateSelector({ onSelect }: Props) {
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {DECISION_TEMPLATES.map((template) => (
-          <button
+          <Button
             key={template.id}
             type="button"
+            variant="ghost"
             onClick={() => onSelect(template)}
             className={cn(
               adminSurface.card,
-              'p-4 text-left hover:border-action dark:hover:border-action transition-colors cursor-pointer w-full'
+              'p-4 text-left hover:border-action dark:hover:border-action cursor-pointer w-full h-auto flex-col items-start'
             )}
           >
             <p className={cn(adminType.sectionTitle, 'mb-1')}>{template.label}</p>
@@ -48,7 +50,7 @@ export default function DecisionTemplateSelector({ onSelect }: Props) {
                 {DECISION_CATEGORY_LABELS[template.category]}
               </span>
             </div>
-          </button>
+          </Button>
         ))}
       </div>
     </div>

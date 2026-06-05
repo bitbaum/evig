@@ -72,27 +72,31 @@ export default function BlogNavigationClient({
 
           {/* Desktop Categories */}
           <div className="hidden md:flex items-center gap-2">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={handleClearFilters}
               className={cn(
-                "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
+                "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                 selectedCategorySlugs.length === 0
                   ? "bg-surface-overlay dark:bg-surface-raised text-white dark:text-text-primary"
                   : "bg-surface-raised text-text-secondary hover:bg-surface-overlay"
               )}
             >
               {t('all')}
-            </button>
+            </Button>
             {categories.map((category, index) => {
               const color = getCategoryColor(category, index)
               const selected = isSelected(category.slug)
 
               return (
                 <div key={category.slug} className="relative group">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleCategoryChange(category.slug)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
+                      "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                       selected
                         ? "text-white"
                         : "bg-surface-raised text-text-secondary hover:bg-surface-overlay"
@@ -107,7 +111,7 @@ export default function BlogNavigationClient({
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
                     {category.name}
-                  </button>
+                  </Button>
 
                   {/* Tooltip with description */}
                   {category.description && (
@@ -160,27 +164,31 @@ export default function BlogNavigationClient({
         {mobileMenuOpen && (
           <div className="md:hidden py-3 border-t border-subtle">
             <div className="flex flex-wrap gap-2">
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handleClearFilters}
                 className={cn(
-                  "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
+                  "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                   selectedCategorySlugs.length === 0
                     ? "bg-surface-overlay dark:bg-surface-raised text-white dark:text-text-primary"
                     : "bg-surface-raised text-text-secondary"
                 )}
               >
                 {t('all')}
-              </button>
+              </Button>
               {categories.map((category, index) => {
                 const color = getCategoryColor(category, index)
                 const selected = isSelected(category.slug)
 
                 return (
-                  <button
+                  <Button
                     key={category.slug}
+                    variant="ghost"
+                    size="sm"
                     onClick={() => handleCategoryChange(category.slug)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
+                      "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                       selected
                         ? "text-white"
                         : "bg-surface-raised text-text-secondary"
@@ -195,7 +203,7 @@ export default function BlogNavigationClient({
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
                     {category.name}
-                  </button>
+                  </Button>
                 )
               })}
             </div>

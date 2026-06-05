@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { OptionCard, type VotingOption } from './OptionCard';
 
 interface Props {
@@ -22,8 +23,10 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
           {options.map((opt) => (
             <OptionCard key={opt.id} opt={opt} selected={(allocations[opt.id] || 0) > 0}>
               <div className="mt-2 flex items-center justify-center gap-2">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={(e) => {
                     e.stopPropagation();
                     onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1));
@@ -32,12 +35,14 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                   className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
                 >
                   -
-                </button>
+                </Button>
                 <span className="w-5 text-center text-sm font-bold text-action">
                   {allocations[opt.id] || 0}
                 </span>
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={(e) => {
                     e.stopPropagation();
                     onSet(opt.id, (allocations[opt.id] || 0) + 1);
@@ -46,7 +51,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                   className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
                 >
                   +
-                </button>
+                </Button>
               </div>
             </OptionCard>
           ))}
@@ -61,25 +66,29 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
               <span className="font-medium text-text-primary">{opt.label}</span>
             </div>
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="icon"
                 onClick={() => onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1))}
                 disabled={(allocations[opt.id] || 0) <= 0}
                 className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
               >
                 -
-              </button>
+              </Button>
               <span className="w-8 text-center text-lg font-bold">
                 {allocations[opt.id] || 0}
               </span>
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="icon"
                 onClick={() => onSet(opt.id, (allocations[opt.id] || 0) + 1)}
                 disabled={usedDots >= maxDots}
                 className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
               >
                 +
-              </button>
+              </Button>
             </div>
           </div>
         ))

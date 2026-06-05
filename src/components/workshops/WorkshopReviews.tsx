@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Star, MessageSquare, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateMonth } from '@/lib/date-formats'
@@ -142,9 +143,9 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
 
       {reviews.length > 5 && (
         <div className="mt-4 text-center">
-          <button className="text-action hover:text-action text-sm font-medium">
+          <Button variant="ghost" className="text-action hover:text-action text-sm font-medium h-auto px-0 bg-transparent hover:bg-transparent">
             {t('showAll', { count: reviews.length })}
-          </button>
+          </Button>
         </div>
       )}
     </div>

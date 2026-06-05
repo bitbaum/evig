@@ -18,6 +18,7 @@ import {
   RefreshCw, FileText, Loader2,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { formatTimecardDuration } from '@/config/timecards'
@@ -228,14 +229,15 @@ export function PayrollClient() {
           </div>
         )}
 
-        <button
+        <Button
+          variant="primary"
           onClick={close}
           disabled={closing || !preview || preview.pending_count === 0}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold disabled:opacity-60 bg-action hover:bg-action-hover text-action-text"
+          className="inline-flex items-center gap-2 text-sm font-semibold"
         >
           {closing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
           Lohnlauf abschliessen
-        </button>
+        </Button>
       </div>
 
       {/* Past batches */}
@@ -247,14 +249,16 @@ export function PayrollClient() {
               Vergangene Lohnläufe
             </h2>
           </div>
-          <button
+          <Button
+            variant="outline"
+            size="sm"
             onClick={loadBatches}
             disabled={batchesLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-default text-xs font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 text-xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${batchesLoading ? 'animate-spin' : ''}`} />
             Aktualisieren
-          </button>
+          </Button>
         </div>
 
         {batches.length === 0 ? (

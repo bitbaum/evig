@@ -5,6 +5,7 @@
  */
 
 import { Edit, Crown, Shield, UserCheck, Mail, Trash2, Pencil } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import { formatDateShort } from '@/lib/date-formats'
 import type { UserRow } from './types'
@@ -219,30 +220,36 @@ function ActionsCell({
   return (
     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
       <div className="flex items-center gap-2">
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => onEditProfile(user)}
-          className="text-action hover:text-action"
+          className="text-action hover:text-action h-auto w-auto p-0 bg-transparent hover:bg-transparent"
           title="Profil bearbeiten"
         >
           <Pencil className="w-4 h-4" />
-        </button>
+        </Button>
         {userIsStaff && (
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => onEditPermissions(user)}
-            className="text-action hover:text-action"
+            className="text-action hover:text-action h-auto w-auto p-0 bg-transparent hover:bg-transparent"
             title="Berechtigungen bearbeiten"
           >
             <Edit className="w-4 h-4" />
-          </button>
+          </Button>
         )}
         {!userIsSuperAdmin && (
-          <button
+          <Button
+            variant="destructive-ghost"
+            size="icon"
             onClick={() => onDelete(user)}
-            className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
+            className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300 h-auto w-auto p-0 bg-transparent hover:bg-transparent"
             title="Benutzer löschen"
           >
             <Trash2 className="w-4 h-4" />
-          </button>
+          </Button>
         )}
       </div>
     </td>
