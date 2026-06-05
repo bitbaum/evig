@@ -125,7 +125,6 @@ export function AccountStep({
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
             required
-            aria-required="true"
             autoComplete="email"
             placeholder={t('emailPlaceholder')}
             aria-invalid={errors.length > 0}
@@ -148,7 +147,6 @@ export function AccountStep({
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
             required
-            aria-required="true"
             autoComplete="new-password"
             placeholder={t('passwordPlaceholder')}
             aria-invalid={errors.length > 0}
@@ -199,7 +197,6 @@ export function AccountStep({
             value={confirmPassword}
             onChange={(e) => onConfirmPasswordChange(e.target.value)}
             required
-            aria-required="true"
             autoComplete="new-password"
             placeholder={t('confirmPasswordPlaceholder')}
             aria-invalid={!!(confirmPassword && !passwordsMatch)}

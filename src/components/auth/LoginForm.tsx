@@ -5,22 +5,36 @@ import { signIn } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
-import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
+import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { StatusBanner } from '@/components/ui/status-banner'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
+
+/**
+ * NextAuth error codes that map to translation keys for the user.
+ * Anything not in this map shows the raw error string (server-formatted).
+ * Connection-style errors are detected by substring (server may localize).
+ */
+const AUTH_ERROR_I18N_KEY: Record<string, 'errorCredentials' | 'errorAccessDenied' | 'errorOAuthLinked' | 'errorInvalidToken' | 'errorVerificationFailed' | 'errorVerificationError'> = {
+  CredentialsSignin: 'errorCredentials',
+  Configuration: 'errorCredentials',
+  AccessDenied: 'errorAccessDenied',
+  OAuthAccountNotLinked: 'errorOAuthLinked',
+  invalid_token: 'errorInvalidToken',
+  verification_failed: 'errorVerificationFailed',
+  verification_error: 'errorVerificationError',
+}
 
 export function LoginForm() {
   const t = useTranslations('auth.login')
   const searchParams = useSearchParams()
-  // Prevent open redirect: only allow same-origin paths
+  // Open-redirect guard: only same-origin paths pass through.
   const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard')
-  const error = searchParams.get('error')
+  const queryError = searchParams.get('error')
   const verified = searchParams.get('verified')
   const reset = searchParams.get('reset')
 
@@ -55,85 +69,57 @@ export function LoginForm() {
       }
 
       window.location.assign(callbackUrl)
-    } catch (error) {
+    } catch {
       setFormError(t('errorUnexpected'))
     } finally {
       setIsLoading(false)
     }
   }
 
-  const getErrorMessage = (error: string | null) => {
+  const errorMessage = (() => {
+    const error = formError || queryError
     if (!error) return null
-    type AuthLoginKey = Parameters<typeof t>[0]
-    const AUTH_ERROR_I18N_KEY: Record<string, AuthLoginKey> = {
-      CredentialsSignin: 'errorCredentials',
-      Configuration: 'errorCredentials',
-      AccessDenied: 'errorAccessDenied',
-      OAuthAccountNotLinked: 'errorOAuthLinked',
-      invalid_token: 'errorInvalidToken',
-      verification_failed: 'errorVerificationFailed',
-      verification_error: 'errorVerificationError',
-    }
     const i18nKey = AUTH_ERROR_I18N_KEY[error]
     if (i18nKey) return t(i18nKey)
     if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
       return t('errorConnection')
     }
     return error
-  }
+  })()
 
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="card-shell rounded-2xl p-6 sm:p-8">
-        {/* Header */}
         <div className="text-center mb-8">
-          <Heading level={1} className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
+          <Heading level={1} className="text-2xl font-bold mb-2 text-text-primary">
             {t('heading')}
           </Heading>
-          <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-text-muted')}>
+          <p className="text-sm sm:text-base text-text-muted">
             {t('subtitle')}
           </p>
         </div>
 
-        {/* Success Messages */}
         {verified && (
-          <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
-            <CheckCircle2 className={cn('w-5 h-5 shrink-0 mt-0.5', getStatusColors('success').icon)} />
-            <p className={cn('text-sm', getStatusColors('success').text)}>
-              {t('emailVerifiedSuccess')}
-            </p>
+          <div className="mb-6">
+            <StatusBanner variant="success">{t('emailVerifiedSuccess')}</StatusBanner>
           </div>
         )}
 
         {reset === 'success' && (
-          <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
-            <CheckCircle2 className={cn('w-5 h-5 shrink-0 mt-0.5', getStatusColors('success').icon)} />
-            <p className={cn('text-sm', getStatusColors('success').text)}>
-              {t('passwordResetSuccess')}
-            </p>
+          <div className="mb-6">
+            <StatusBanner variant="success">{t('passwordResetSuccess')}</StatusBanner>
           </div>
         )}
 
-        {/* Error Messages */}
-        {(formError || error) && (
-          <div
-            id="login-error"
-            role="alert"
-            aria-live="assertive"
-            className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('error').bg, getStatusColors('error').border)}
-          >
-            <AlertCircle className={cn('w-5 h-5 shrink-0 mt-0.5', getStatusColors('error').icon)} />
-            <p className={cn('text-sm', getStatusColors('error').text)}>
-              {getErrorMessage(formError || error)}
-            </p>
+        {errorMessage && (
+          <div id="login-error" className="mb-6">
+            <StatusBanner variant="error">{errorMessage}</StatusBanner>
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email */}
           <div>
-            <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
+            <label htmlFor="email" className="block text-sm font-medium mb-1.5 text-text-secondary">
               {t('email')}
             </label>
             <div className="relative">
@@ -144,24 +130,18 @@ export function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                aria-required="true"
                 autoComplete="email"
                 placeholder={t('emailPlaceholder')}
-                aria-invalid={!!(formError || error)}
-                aria-describedby={(formError || error) ? 'login-error' : undefined}
-                className={cn(
-                  'pl-11 pr-4 py-3 border-2 border-default rounded-lg transition-all min-h-[touch] touch-target',
-                  getTextColor('white', 'primary'),
-                  'dark:text-white'
-                )}
+                aria-invalid={!!errorMessage}
+                aria-describedby={errorMessage ? 'login-error' : undefined}
+                className="pl-11 pr-4 py-3 min-h-touch"
               />
             </div>
           </div>
 
-          {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="password" className={cn('block text-sm font-medium', getTextColor('white', 'secondary'), 'dark:text-text-muted')}>
+              <label htmlFor="password" className="block text-sm font-medium text-text-secondary">
                 {t('password')}
               </label>
               <Link
@@ -179,41 +159,32 @@ export function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                aria-required="true"
                 autoComplete="current-password"
                 placeholder="••••••••"
-                aria-invalid={!!(formError || error)}
-                aria-describedby={(formError || error) ? 'login-error' : undefined}
-                className={cn(
-                  'pl-11 pr-12 py-3 border-2 border-default rounded-lg transition-all min-h-[touch] touch-target',
-                  getTextColor('white', 'primary'),
-                  'dark:text-white'
-                )}
+                aria-invalid={!!errorMessage}
+                aria-describedby={errorMessage ? 'login-error' : undefined}
+                className="pl-11 pr-12 py-3 min-h-touch"
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
+                aria-pressed={showPassword}
                 aria-label={showPassword ? t('hidePassword') : t('showPassword')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary h-auto w-auto p-0 bg-transparent hover:bg-transparent"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </Button>
             </div>
           </div>
 
-          {/* Submit Button */}
           <Button
             type="submit"
             variant="primary"
+            size="lg"
             disabled={isLoading}
-            className={cn(
-              'w-full flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-lg min-h-[touch] touch-target h-auto',
-              getButtonVariant('primary').bg,
-              getButtonVariant('primary').text,
-              getButtonVariant('primary').hover
-            )}
+            className="w-full gap-2 font-semibold"
           >
             {isLoading ? (
               <>
@@ -229,10 +200,9 @@ export function LoginForm() {
           </Button>
         </form>
 
-        {/* Divider */}
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-strong"></div>
+            <div className="w-full border-t border-strong" />
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-4 bg-surface-base text-text-tertiary">
@@ -241,16 +211,17 @@ export function LoginForm() {
           </div>
         </div>
 
-        {/* Register Link */}
-        <Link
+        <Button
+          as={Link}
           href={ROUTES.public.register}
-          className="w-full flex items-center justify-center gap-2 border-2 border-action text-action hover:bg-action-muted font-semibold py-3 px-4 rounded-lg transition-colors"
+          variant="outline"
+          size="lg"
+          className="w-full font-semibold border-2 border-action text-action hover:bg-action-muted"
         >
           {t('createAccount')}
-        </Link>
+        </Button>
       </div>
 
-      {/* Benefits */}
       <div className="mt-8 text-center">
         <p className="text-sm text-text-secondary dark:text-text-muted mb-3">
           {t('benefits')}

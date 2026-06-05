@@ -5,10 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { StatusBanner } from '@/components/ui/status-banner'
 import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
+import { AUTH_CONFIG } from '@/lib/auth/config'
 import { ROUTES } from '@/config/routes'
+
+const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength
 
 function ResetPasswordContent() {
   const t = useTranslations('auth.resetPassword')
@@ -46,8 +51,9 @@ function ResetPasswordContent() {
     setIsLoading(true)
     setError(null)
 
-    // Validate passwords - matches AUTH_CONFIG (SSOT: minLength=8, no complexity)
-    if (password.length < 8) {
+    // Derives from AUTH_CONFIG (SSOT). Server-side schema enforces the
+    // same rule — this client check is just for fast feedback.
+    if (password.length < PASSWORD_MIN_LENGTH) {
       setError(t('errorTooShort'))
       setIsLoading(false)
       return
@@ -177,11 +183,9 @@ function ResetPasswordContent() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-surface-base py-8 px-4 rounded-xl border border-strong sm:px-10">
-          {/* Error Message */}
           {error && (
-            <div id="reset-password-error" className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-error-600 shrink-0 mt-0.5" />
-              <p className="text-sm text-error-700 dark:text-error-400">{error}</p>
+            <div id="reset-password-error" className="mb-6">
+              <StatusBanner variant="error">{error}</StatusBanner>
             </div>
           )}
 
@@ -192,18 +196,17 @@ function ResetPasswordContent() {
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-                <input
+                <Input
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   required
-                  aria-required="true"
                   aria-invalid={!!error}
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
+                  className="pl-11 pr-11"
                   placeholder={t('newPasswordPlaceholder')}
                 />
                 <Button
@@ -211,6 +214,8 @@ function ResetPasswordContent() {
                   size="icon"
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-pressed={showPassword}
+                  aria-label={showPassword ? t('hidePassword') : t('showPassword')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -224,18 +229,17 @@ function ResetPasswordContent() {
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-                <input
+                <Input
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   required
-                  aria-required="true"
                   aria-invalid={!!error}
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-default rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-transparent"
+                  className="pl-11 pr-11"
                   placeholder={t('confirmPasswordPlaceholder')}
                 />
                 <Button
@@ -243,6 +247,8 @@ function ResetPasswordContent() {
                   size="icon"
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-pressed={showConfirmPassword}
+                  aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -253,7 +259,7 @@ function ResetPasswordContent() {
             <div className="text-sm text-text-secondary space-y-1">
               <p className="font-medium">{t('requirementsTitle')}</p>
               <ul className="ml-4 space-y-0.5">
-                <li className={password.length >= 8 ? 'text-action' : 'text-text-tertiary'}>
+                <li className={password.length >= PASSWORD_MIN_LENGTH ? 'text-action' : 'text-text-tertiary'}>
                   ✓ {t('requirementLength')}
                 </li>
                 <li className={password === confirmPassword && password ? 'text-action' : 'text-text-tertiary'}>

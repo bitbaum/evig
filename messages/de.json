@@ -3186,7 +3186,9 @@
       "errorMismatch": "Die Passwörter stimmen nicht überein",
       "errorResetFailed": "Passwort-Reset fehlgeschlagen",
       "genericError": "Ein Fehler ist aufgetreten",
-      "title": "Passwort zurücksetzen"
+      "title": "Passwort zurücksetzen",
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort verbergen"
     },
     "accountTitle": "Konto",
     "accountDesc": "Melde dich bei RevampIT an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen."

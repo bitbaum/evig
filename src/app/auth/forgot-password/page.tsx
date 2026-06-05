@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Mail, ArrowLeft, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
+import { Mail, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { StatusBanner } from '@/components/ui/status-banner'
 import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
@@ -112,11 +113,9 @@ export default function ForgotPasswordPage() {
             {t('backToLogin')}
           </Link>
 
-          {/* Error Message */}
           {error && (
-            <div id="email-error" className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-error-600 shrink-0 mt-0.5" />
-              <p className="text-sm text-error-700 dark:text-error-400">{error}</p>
+            <div id="email-error" className="mb-6">
+              <StatusBanner variant="error">{error}</StatusBanner>
             </div>
           )}
 
@@ -133,7 +132,6 @@ export default function ForgotPasswordPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  aria-required="true"
                   aria-invalid={!!error}
                   aria-describedby={error ? 'email-error' : undefined}
                   value={email}
