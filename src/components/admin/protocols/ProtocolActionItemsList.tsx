@@ -12,8 +12,9 @@ import Heading from '@/components/admin/AdminHeading'
 import {
   PRIORITY_HINT_LABELS,
 } from '@/config/protocols'
-import type { StructuredNotes, ActionLinkRecord, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
-import DecisionActions from '@/components/admin/protocols/DecisionActions'
+import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols'
+import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
+import DecisionBridge from '@/components/admin/protocols/DecisionBridge'
 
 interface Props {
   notes: StructuredNotes
@@ -29,8 +30,8 @@ interface Props {
   creatingTask: string | null
   bulkCreatingTasks: boolean
   bulkTaskErrors: string[]
-  decisionVotes: DecisionVoteRecord[]
-  decisionOutcomes: DecisionOutcomeRecord[]
+  // QQ.6 — standalone decisions linked to this protocol's action items.
+  protocolDecisions: ProtocolDecisionSummary[]
   currentUserId: string
   isProtocolCreator: boolean
   onCreateTask: (actionItem: StructuredNotes['action_items'][0]) => void
@@ -67,14 +68,17 @@ export function ProtocolActionItemsList({
   creatingTask,
   bulkCreatingTasks,
   bulkTaskErrors,
-  decisionVotes,
-  decisionOutcomes,
+  protocolDecisions,
   currentUserId,
   isProtocolCreator,
   onCreateTask,
   onCreateAllTasks,
   onRefresh,
 }: Props) {
+  // Quick lookup: actionItemId → linked standalone decision (if any).
+  const decisionsByActionItem = new Map(
+    protocolDecisions.map((d) => [d.actionItemId, d])
+  )
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
       <div id="protocol-step-tasks" className="bg-surface-raised border border rounded-lg p-4">
@@ -153,8 +157,8 @@ export function ProtocolActionItemsList({
                 creatingTask={creatingTask}
                 protocolId={protocolId}
                 attendeeCount={attendeeCount}
-                decisionVotes={decisionVotes}
-                decisionOutcomes={decisionOutcomes}
+                linkedDecision={decisionsByActionItem.get(item.id)}
+                
                 currentUserId={currentUserId}
                 isProtocolCreator={isProtocolCreator}
                 onCreateTask={onCreateTask}
@@ -185,8 +189,8 @@ export function ProtocolActionItemsList({
                 creatingTask={creatingTask}
                 protocolId={protocolId}
                 attendeeCount={attendeeCount}
-                decisionVotes={decisionVotes}
-                decisionOutcomes={decisionOutcomes}
+                linkedDecision={decisionsByActionItem.get(item.id)}
+                
                 currentUserId={currentUserId}
                 isProtocolCreator={isProtocolCreator}
                 onCreateTask={onCreateTask}
@@ -217,8 +221,8 @@ export function ProtocolActionItemsList({
                 creatingTask={creatingTask}
                 protocolId={protocolId}
                 attendeeCount={attendeeCount}
-                decisionVotes={decisionVotes}
-                decisionOutcomes={decisionOutcomes}
+                linkedDecision={decisionsByActionItem.get(item.id)}
+                
                 currentUserId={currentUserId}
                 isProtocolCreator={isProtocolCreator}
                 onCreateTask={onCreateTask}
@@ -244,8 +248,7 @@ interface ActionRowProps {
   creatingTask: string | null
   protocolId: string
   attendeeCount: number
-  decisionVotes: DecisionVoteRecord[]
-  decisionOutcomes: DecisionOutcomeRecord[]
+  linkedDecision: ProtocolDecisionSummary | undefined
   currentUserId: string
   isProtocolCreator: boolean
   onCreateTask: (item: StructuredNotes['action_items'][0]) => void
@@ -259,13 +262,9 @@ function ActionRow({
   canAct,
   creatingTask,
   protocolId,
-  attendeeCount,
-  decisionVotes,
-  decisionOutcomes,
-  currentUserId,
+  linkedDecision,
   isProtocolCreator,
   onCreateTask,
-  onRefresh,
 }: ActionRowProps) {
   return (
     <div className="px-4 py-3 flex items-start justify-between gap-4">
@@ -319,15 +318,12 @@ function ActionRow({
             Aufgabe erstellen
           </Button>
         ) : item.item_type === 'decision' && canAct ? (
-          <DecisionActions
+          <DecisionBridge
             protocolId={protocolId}
             actionItemId={item.id}
-            votes={decisionVotes.filter(v => v.action_item_id === item.id)}
-            outcome={decisionOutcomes.find(o => o.action_item_id === item.id)}
-            currentUserId={currentUserId}
+            actionItemDescription={item.description}
+            linkedDecision={linkedDecision}
             isProtocolCreator={isProtocolCreator}
-            attendeeCount={attendeeCount}
-            onRefresh={onRefresh}
           />
         ) : null}
       </div>

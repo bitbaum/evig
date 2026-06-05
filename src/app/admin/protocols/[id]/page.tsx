@@ -13,7 +13,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
 import { adminIconBox, adminIconColor } from '@/lib/admin-ui'
-import { getProtocolById, getActionLinks, getTeamMembers, getDecisionData } from '@/lib/services/protocols'
+import { getProtocolById, getActionLinks, getTeamMembers, getDecisionsByProtocolId } from '@/lib/services/protocols'
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
@@ -75,10 +75,10 @@ export default async function ProtocolDetailPage({
     notFound()
   }
 
-  const [actionLinks, teamMembers, decisionData] = await Promise.all([
+  const [actionLinks, teamMembers, protocolDecisions] = await Promise.all([
     getActionLinks(id),
     getTeamMembers(),
-    getDecisionData(id),
+    getDecisionsByProtocolId(id),
   ])
 
   // Resolve attendee UUIDs to display names
@@ -149,8 +149,7 @@ export default async function ProtocolDetailPage({
             protocol={protocol}
             actionLinks={actionLinks}
             teamMembers={teamMembers}
-            decisionVotes={decisionData.votes}
-            decisionOutcomes={decisionData.outcomes}
+            protocolDecisions={protocolDecisions}
             currentUserId={dbUserId}
             isProtocolCreator={protocol.created_by === dbUserId}
             isSuperAdmin={isAdmin}

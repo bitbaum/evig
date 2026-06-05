@@ -34,7 +34,11 @@ export {
   linkActionItemToDecision,
 } from './protocols-linking'
 
-// Decision voting & task proposals
+// Decision voting & task proposals — legacy (deprecated post-QQ.6 cutover).
+// New code uses the standalone decisions system; protocol action items are
+// promoted to standalone decisions via the bridge (see DecisionBridge.tsx).
+// Exports retained until the api routes + tables are removed in a later
+// cleanup migration.
 export {
   castDecisionVote,
   closeDecision,
@@ -42,3 +46,6 @@ export {
   generateTaskProposals,
   createProposedTasks,
 } from './protocols-voting'
+
+// QQ.6 — standalone decisions linked back to a protocol action item.
+export { getDecisionsByProtocolId, type ProtocolDecisionSummary } from './decisions-crud'

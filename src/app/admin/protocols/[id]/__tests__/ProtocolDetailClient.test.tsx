@@ -55,8 +55,8 @@ describe('ProtocolDetailClient', () => {
         protocol={baseProtocol}
         actionLinks={[]}
         teamMembers={[]}
-        decisionVotes={[]}
-        decisionOutcomes={[]}
+        protocolDecisions={[]}
+        
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
@@ -109,8 +109,8 @@ describe('ProtocolDetailClient', () => {
         protocol={protocolWithTasks}
         actionLinks={[]}
         teamMembers={[]}
-        decisionVotes={[]}
-        decisionOutcomes={[]}
+        protocolDecisions={[]}
+        
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
@@ -133,8 +133,8 @@ describe('ProtocolDetailClient', () => {
         protocol={baseProtocol}
         actionLinks={[]}
         teamMembers={[]}
-        decisionVotes={[]}
-        decisionOutcomes={[]}
+        protocolDecisions={[]}
+        
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
@@ -151,8 +151,8 @@ describe('ProtocolDetailClient', () => {
         protocol={baseProtocol}
         actionLinks={[]}
         teamMembers={[]}
-        decisionVotes={[]}
-        decisionOutcomes={[]}
+        protocolDecisions={[]}
+        
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
@@ -169,8 +169,8 @@ describe('ProtocolDetailClient', () => {
         protocol={baseProtocol}
         actionLinks={[]}
         teamMembers={[]}
-        decisionVotes={[]}
-        decisionOutcomes={[]}
+        protocolDecisions={[]}
+        
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}

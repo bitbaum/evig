@@ -68,8 +68,7 @@ describe('protocol review helpers', () => {
       hasRawInput: true,
       notes,
       actionLinks: [taskLink],
-      decisionVotes: [],
-      decisionOutcomes: [],
+      protocolDecisions: [],
     })
 
     expect(checklist.find((item) => item.id === 'people')?.state).toBe('active')

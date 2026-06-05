@@ -261,6 +261,12 @@ interface CreateDecisionData {
   discussionDeadline?: string | null;
   votingDeadline?: string | null;
   initialStatus?: string;
+  // Protocol bridge (QQ.6) — links the decision back to a meeting-protocol
+  // action item it was promoted from. Both nullable; both must be set
+  // together (UNIQUE INDEX in migration 086 enforces one decision per
+  // (protocol_id, action_item_id) pair when present).
+  protocolId?: string | null;
+  actionItemId?: string | null;
 }
 
 export async function createDecision(
@@ -278,7 +284,8 @@ export async function createDecision(
       INSERT INTO ${sql.raw(dTable)}
         (title, description, background, category, decision_type, voting_method, options, quorum,
          blind_voting, allow_public_voting, dot_count, invited_participants, participant_scope,
-         discussion_deadline, voting_deadline, status, created_by)
+         discussion_deadline, voting_deadline, status, created_by,
+         protocol_id, action_item_id)
       VALUES (
         ${data.title},
         ${data.description},
@@ -296,7 +303,9 @@ export async function createDecision(
         ${data.discussionDeadline ? new Date(data.discussionDeadline) : null},
         ${data.votingDeadline ? new Date(data.votingDeadline) : null},
         ${data.initialStatus || DECISION_STATUS.DRAFT},
-        ${createdBy}
+        ${createdBy},
+        ${data.protocolId ?? null},
+        ${data.actionItemId ?? null}
       )
       RETURNING *
     )
@@ -317,6 +326,65 @@ export async function createDecision(
     createdAt: row.created_at,
     creator: { id: createdBy, email: row.creator_email, name: row.creator_name },
   };
+}
+
+/**
+ * Look up decisions FK-linked to a meeting protocol — used by the
+ * protocol UI bridge (QQ.6) to render existing standalone decisions
+ * inline next to each action item. Returns minimal shape (id, status,
+ * action_item_id, vote counts) — enough for the bridge to:
+ *   - know which action items already have a decision
+ *   - render a thumbs_up_down tally without fetching the full decision
+ *
+ * Migration 086 added the columns + unique index on (protocol_id,
+ * action_item_id), so at most one row per action item.
+ */
+export interface ProtocolDecisionSummary {
+  id: string;
+  actionItemId: string;
+  status: string;
+  votingMethod: string;
+  votesUp: number;
+  votesDown: number;
+  isClosed: boolean;
+}
+
+export async function getDecisionsByProtocolId(
+  protocolId: string,
+): Promise<ProtocolDecisionSummary[]> {
+  const result = await db.execute(sql`
+    SELECT
+      d.id,
+      d.action_item_id,
+      d.status,
+      d.voting_method,
+      COUNT(*) FILTER (WHERE dv.vote_data->>'choice' = 'up')   AS up,
+      COUNT(*) FILTER (WHERE dv.vote_data->>'choice' = 'down') AS down
+    FROM ${sql.raw(dTable)} d
+    LEFT JOIN decision_votes dv ON dv.decision_id = d.id
+    WHERE d.protocol_id = ${protocolId}
+      AND d.action_item_id IS NOT NULL
+    GROUP BY d.id
+  `);
+  return result.rows.map((r) => {
+    const row = r as unknown as {
+      id: string;
+      action_item_id: string;
+      status: string;
+      voting_method: string;
+      up: string | number;
+      down: string | number;
+    };
+    return {
+      id: row.id,
+      actionItemId: row.action_item_id,
+      status: row.status,
+      votingMethod: row.voting_method,
+      votesUp: Number(row.up || 0),
+      votesDown: Number(row.down || 0),
+      isClosed: row.status === DECISION_STATUS.CLOSED || row.status === DECISION_STATUS.CANCELLED,
+    };
+  });
 }
 
 interface UpdateDecisionData {

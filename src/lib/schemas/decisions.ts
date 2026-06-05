@@ -59,6 +59,12 @@ export const createDecisionSchema = z
       .enum(['draft', 'discussion', 'voting'] as const)
       .optional()
       .default('draft'),
+    // Protocol bridge — when this decision is created from an action item
+    // in a meeting protocol, both fields are set (FKs added in migration 086).
+    // The (protocol_id, action_item_id) pair is uniquely indexed so the
+    // bridge UI can find/dedupe linked decisions per action item.
+    protocolId: z.string().uuid().optional().nullable(),
+    actionItemId: z.string().optional().nullable(),
   })
   .refine(
     (data) => {

@@ -1,6 +1,7 @@
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import type { ProtocolStatus } from '@/config/protocols'
-import type { ActionLinkRecord, DecisionOutcomeRecord, DecisionVoteRecord, StructuredNotes } from '@/lib/schemas/protocols'
+import type { ActionLinkRecord, StructuredNotes } from '@/lib/schemas/protocols'
+import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
 
 export interface ProtocolReviewCounts {
   topics: number
@@ -29,19 +30,18 @@ function getLinkedActionIds(actionLinks: ActionLinkRecord[]): Set<string> {
 export function getProtocolReviewCounts(
   notes: StructuredNotes | null,
   actionLinks: ActionLinkRecord[] = [],
-  decisionVotes: DecisionVoteRecord[] = [],
-  decisionOutcomes: DecisionOutcomeRecord[] = [],
+  protocolDecisions: ProtocolDecisionSummary[] = [],
 ): ProtocolReviewCounts {
   const actionItems = notes?.action_items ?? []
   const linkedActionIds = getLinkedActionIds(actionLinks)
 
   const tasks = actionItems.filter((item) => item.item_type === 'task')
   const decisions = actionItems.filter((item) => item.item_type === 'decision')
-  const decisionIdsWithVotes = new Set(decisionVotes.map((vote) => vote.action_item_id))
-  const closedDecisionIds = new Set(
-    decisionOutcomes
-      .filter((outcome) => outcome.is_closed || outcome.result !== 'pending')
-      .map((outcome) => outcome.action_item_id)
+  // QQ.6: decisions now live in the standalone `decisions` table, linked by
+  // (protocol_id, action_item_id). An action item is "open" if no standalone
+  // decision exists OR the linked decision is still in voting/discussion.
+  const decisionsByActionItem = new Map(
+    protocolDecisions.map((d) => [d.actionItemId, d])
   )
 
   return {
@@ -51,11 +51,14 @@ export function getProtocolReviewCounts(
     linkedTasks: tasks.filter((item) => linkedActionIds.has(item.id)).length,
     unlinkedTasks: tasks.filter((item) => !linkedActionIds.has(item.id)).length,
     decisions: decisions.length,
-    openDecisions: decisions.filter((item) => (
-      !linkedActionIds.has(item.id) &&
-      !decisionIdsWithVotes.has(item.id) &&
-      !closedDecisionIds.has(item.id)
-    )).length,
+    openDecisions: decisions.filter((item) => {
+      if (linkedActionIds.has(item.id)) return false
+      const linkedDecision = decisionsByActionItem.get(item.id)
+      // No standalone decision yet → counts as open (needs proposing)
+      if (!linkedDecision) return true
+      // Standalone decision exists but isn't closed/cancelled → still open
+      return !linkedDecision.isClosed
+    }).length,
     infos: actionItems.filter((item) => item.item_type === 'info').length,
     unresolvedAssignees: tasks.filter((item) => item.assigned_to_name && !item.assigned_to_id).length,
     followUps: notes?.follow_ups.length ?? 0,
@@ -67,14 +70,12 @@ export function getProtocolReviewChecklist(input: {
   hasRawInput: boolean
   notes: StructuredNotes | null
   actionLinks: ActionLinkRecord[]
-  decisionVotes: DecisionVoteRecord[]
-  decisionOutcomes: DecisionOutcomeRecord[]
+  protocolDecisions: ProtocolDecisionSummary[]
 }): ProtocolReviewChecklistItem[] {
   const counts = getProtocolReviewCounts(
     input.notes,
     input.actionLinks,
-    input.decisionVotes,
-    input.decisionOutcomes,
+    input.protocolDecisions,
   )
   const hasNotes = Boolean(input.notes)
   const isFinalized = input.status === PROTOCOL_STATUSES.FINALIZED

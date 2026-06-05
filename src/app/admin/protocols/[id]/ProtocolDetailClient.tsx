@@ -37,7 +37,7 @@ import { pluralDe } from '@/lib/i18n/plural-de'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
-  const { protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator, isSuperAdmin } = props
+  const { protocol, actionLinks, teamMembers, protocolDecisions, currentUserId, isProtocolCreator, isSuperAdmin } = props
 
   const {
     notes,
@@ -84,9 +84,8 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     hasRawInput: Boolean(protocol.raw_transcript),
     notes,
     actionLinks,
-    decisionVotes,
-    decisionOutcomes,
-  }), [protocol.status, protocol.raw_transcript, notes, actionLinks, decisionVotes, decisionOutcomes])
+    protocolDecisions,
+  }), [protocol.status, protocol.raw_transcript, notes, actionLinks, protocolDecisions])
 
   /**
    * Finalize blockers — enumerate the open prerequisites so the confirm
@@ -97,14 +96,14 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
    * up-front lets them act intentionally rather than by surprise.
    */
   const finalizeBlockers = useMemo(() => {
-    const counts = getProtocolReviewCounts(notes, actionLinks, decisionVotes, decisionOutcomes)
+    const counts = getProtocolReviewCounts(notes, actionLinks, protocolDecisions)
     return {
       unlinkedTasks: counts.unlinkedTasks,
       openDecisions: counts.openDecisions,
       unresolvedAssignees: counts.unresolvedAssignees,
       hasAny: counts.unlinkedTasks > 0 || counts.openDecisions > 0 || counts.unresolvedAssignees > 0,
     }
-  }, [notes, actionLinks, decisionVotes, decisionOutcomes])
+  }, [notes, actionLinks, protocolDecisions])
 
   // Detected attendees that aren't yet mapped to a team member.
   // Dep on `notes` directly (not `notes?.detected_attendees`) — the
@@ -271,8 +270,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             creatingTask={creatingTask}
             bulkCreatingTasks={bulkCreatingTasks}
             bulkTaskErrors={bulkTaskErrors}
-            decisionVotes={decisionVotes}
-            decisionOutcomes={decisionOutcomes}
+            protocolDecisions={protocolDecisions}
             currentUserId={currentUserId}
             isProtocolCreator={isProtocolCreator}
             onCreateTask={handleCreateTask}

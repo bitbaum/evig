@@ -29,6 +29,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS decisions_protocol_action_item_uniq
   WHERE protocol_id IS NOT NULL AND action_item_id IS NOT NULL;
 
 -- Record in the migration tracking table (per scripts/db/migrations/083 bootstrap).
-INSERT INTO schema_migrations (version, applied_at)
-VALUES ('086_decisions_protocol_link', NOW())
-ON CONFLICT (version) DO NOTHING;
+-- The schema_migrations table tracks by filename (not version) — same shape the
+-- run-migration.sh runner uses, so this file applies correctly via direct psql
+-- OR via the runner without double-insert.
+INSERT INTO schema_migrations (filename)
+VALUES ('086_decisions_protocol_link.sql')
+ON CONFLICT (filename) DO NOTHING;
