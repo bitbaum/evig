@@ -6,6 +6,7 @@ import { Mail, ArrowRight, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 export interface VerifyStepProps {
   email: string
@@ -159,7 +160,7 @@ export function VerifyStep({
       {/* Code Input */}
       <div className="flex justify-center gap-2 sm:gap-3">
         {code.map((digit, index) => (
-          <input
+          <Input
             key={index}
             ref={el => { inputRefs.current[index] = el }}
             type="text"
@@ -172,7 +173,6 @@ export function VerifyStep({
             disabled={isVerifying || isLoading}
             className={cn(
               'w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border-2 transition-colors',
-              'focus:ring-2 focus:ring-action focus:border-action',
               digit ? 'border-action bg-action-muted' : 'border-default',
               (isVerifying || isLoading) && 'opacity-50'
             )}

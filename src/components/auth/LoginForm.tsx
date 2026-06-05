@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 
@@ -137,7 +138,7 @@ export function LoginForm() {
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-              <input
+              <Input
                 id="email"
                 type="email"
                 value={email}
@@ -149,13 +150,9 @@ export function LoginForm() {
                 aria-invalid={!!(formError || error)}
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
-                  'w-full pl-11 pr-4 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
-                  'border-default',
-                  'bg-surface-base',
+                  'pl-11 pr-4 py-3 border-2 border-default rounded-lg transition-all min-h-[touch] touch-target',
                   getTextColor('white', 'primary'),
-                  'dark:text-white',
-                  'placeholder-neutral-400',
-                  'focus:ring-2 focus:ring-action focus:border-action'
+                  'dark:text-white'
                 )}
               />
             </div>
@@ -176,7 +173,7 @@ export function LoginForm() {
             </div>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-              <input
+              <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -188,13 +185,9 @@ export function LoginForm() {
                 aria-invalid={!!(formError || error)}
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
-                  'w-full pl-11 pr-12 py-3 border-2 rounded-lg transition-all min-h-[touch] touch-target',
-                  'border-default',
-                  'bg-surface-base',
+                  'pl-11 pr-12 py-3 border-2 border-default rounded-lg transition-all min-h-[touch] touch-target',
                   getTextColor('white', 'primary'),
-                  'dark:text-white',
-                  'placeholder-neutral-400',
-                  'focus:ring-2 focus:ring-action focus:border-action'
+                  'dark:text-white'
                 )}
               />
               <Button

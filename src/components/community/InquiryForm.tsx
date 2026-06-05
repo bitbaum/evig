@@ -8,6 +8,7 @@ import { Link } from '@/i18n/navigation'
 import { Textarea } from '@/components/ui/textarea'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface InquiryFormProps {
   defaultThema?: string
@@ -81,14 +82,14 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         <label htmlFor="inquiry-name" className="block text-sm font-medium text-text-secondary mb-1">
           {t('nameLabel')} <span className="text-error-500">*</span>
         </label>
-        <input
+        <Input
           id="inquiry-name"
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
           required
           minLength={2}
-          className="w-full rounded-lg border border-default px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent"
+          className="rounded-lg border-default"
           placeholder={t('namePlaceholder')}
         />
       </div>
@@ -97,13 +98,13 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         <label htmlFor="inquiry-email" className="block text-sm font-medium text-text-secondary mb-1">
           {t('emailLabel')} <span className="text-error-500">*</span>
         </label>
-        <input
+        <Input
           id="inquiry-email"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
-          className="w-full rounded-lg border border-default px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-action focus:border-transparent"
+          className="rounded-lg border-default"
           placeholder={t('emailPlaceholder')}
         />
       </div>

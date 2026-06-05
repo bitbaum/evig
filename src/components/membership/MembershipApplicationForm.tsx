@@ -7,6 +7,7 @@ import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 
@@ -185,24 +186,24 @@ export function MembershipApplicationForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-1">{t('nameLabel')} *</label>
-          <input
+          <Input
             id="name"
             type="text"
             required
             value={formData.applicantName}
             onChange={(e) => setFormData({ ...formData, applicantName: e.target.value })}
-            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="border-default rounded-lg"
           />
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1">{t('emailLabel')} *</label>
-          <input
+          <Input
             id="email"
             type="email"
             required
             value={formData.applicantEmail}
             onChange={(e) => setFormData({ ...formData, applicantEmail: e.target.value })}
-            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="border-default rounded-lg"
           />
         </div>
       </div>
@@ -210,20 +211,20 @@ export function MembershipApplicationForm() {
       {/* Address */}
       <div>
         <label htmlFor="street" className="block text-sm font-medium text-text-secondary mb-1">{t('streetLabel')} *</label>
-        <input
+        <Input
           id="street"
           type="text"
           required
           value={formData.addressStreet}
           onChange={(e) => setFormData({ ...formData, addressStreet: e.target.value })}
-          className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+          className="border-default rounded-lg"
         />
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         <div>
           <label htmlFor="plz" className="block text-sm font-medium text-text-secondary mb-1">{t('plzLabel')} *</label>
-          <input
+          <Input
             id="plz"
             type="text"
             inputMode="numeric"
@@ -231,18 +232,18 @@ export function MembershipApplicationForm() {
             required
             value={formData.addressPostalCode}
             onChange={(e) => setFormData({ ...formData, addressPostalCode: e.target.value })}
-            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="border-default rounded-lg"
           />
         </div>
         <div className="col-span-2">
           <label htmlFor="city" className="block text-sm font-medium text-text-secondary mb-1">{t('cityLabel')} *</label>
-          <input
+          <Input
             id="city"
             type="text"
             required
             value={formData.addressCity}
             onChange={(e) => setFormData({ ...formData, addressCity: e.target.value })}
-            className="w-full px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="border-default rounded-lg"
           />
         </div>
       </div>

@@ -55,6 +55,11 @@ const eslintConfig = [
     ignores: [
       ".next/**",
       "node_modules/**",
+      // Standalone example apps + extracted packages aren't in the
+      // RevampIT design system — the primitives we enforce live in
+      // src/components/ui/ and aren't published with these.
+      "examples/**",
+      "packages/**",
     ],
   },
   ...nextConfig,

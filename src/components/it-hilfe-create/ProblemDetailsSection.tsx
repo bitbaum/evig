@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { AIFieldBadge } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
@@ -43,12 +44,12 @@ export function ProblemDetailsSection({
               <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceBrand.confidence, model: aiFieldMeta.deviceBrand.model, timestamp: aiFieldMeta.deviceBrand.timestamp, inputText: '', sources: [] }} />
             )}
           </label>
-          <input
+          <Input
             type="text"
             value={deviceBrand}
             onChange={(e) => onDeviceBrandChange(e.target.value)}
             placeholder={t('deviceBrandPlaceholder')}
-            className="w-full px-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="px-4 border-default rounded-lg"
           />
         </div>
         <div>
@@ -58,12 +59,12 @@ export function ProblemDetailsSection({
               <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceModel.confidence, model: aiFieldMeta.deviceModel.model, timestamp: aiFieldMeta.deviceModel.timestamp, inputText: '', sources: [] }} />
             )}
           </label>
-          <input
+          <Input
             type="text"
             value={deviceModel}
             onChange={(e) => onDeviceModelChange(e.target.value)}
             placeholder={t('deviceModelPlaceholder')}
-            className="w-full px-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+            className="px-4 border-default rounded-lg"
           />
         </div>
       </div>
@@ -75,12 +76,12 @@ export function ProblemDetailsSection({
             <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.title.confidence, model: aiFieldMeta.title.model, timestamp: aiFieldMeta.title.timestamp, inputText: '', sources: [] }} />
           )}
         </label>
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           placeholder={t('problemTitlePlaceholder')}
-          className="w-full px-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+          className="px-4 border-default rounded-lg"
         />
         <span className="text-xs text-text-muted">{title.length}/200</span>
       </div>

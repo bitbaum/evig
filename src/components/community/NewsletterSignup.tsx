@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface NewsletterSignupProps {
   title?: string
@@ -60,7 +61,7 @@ export function NewsletterSignup({
     )
   }
 
-  const inputClass = 'flex h-10 w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action dark:border-white/10 dark:placeholder:text-text-tertiary'
+  const inputClass = 'h-10 border-default dark:border-white/10 dark:placeholder:text-text-tertiary'
 
   return (
     <div>
@@ -81,7 +82,7 @@ export function NewsletterSignup({
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row sm:items-start">
         <label htmlFor="newsletter-name" className="sr-only">{t('namePlaceholder')}</label>
-        <input
+        <Input
           id="newsletter-name"
           type="text"
           value={name}
@@ -90,7 +91,7 @@ export function NewsletterSignup({
           className={`${inputClass} sm:max-w-[140px]`}
         />
         <label htmlFor="newsletter-email" className="sr-only">{t('emailPlaceholder')}</label>
-        <input
+        <Input
           id="newsletter-email"
           type="email"
           value={email}

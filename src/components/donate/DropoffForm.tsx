@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { CheckCircle2 } from 'lucide-react'
 
@@ -79,14 +80,14 @@ export function DropoffForm() {
     )
   }
 
-  const inputClass = 'w-full rounded-md border border-default bg-surface-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action dark:border-white/10 dark:placeholder:text-text-tertiary'
+  const inputClass = 'border-default dark:border-white/10 dark:placeholder:text-text-tertiary'
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="block">
           <span className="block text-sm font-medium text-text-secondary mb-1">{t('nameLabel')}</span>
-          <input
+          <Input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
@@ -98,7 +99,7 @@ export function DropoffForm() {
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-text-secondary mb-1">{t('emailLabel')}</span>
-          <input
+          <Input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -108,7 +109,7 @@ export function DropoffForm() {
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-text-secondary mb-1">{t('phoneLabel')}</span>
-          <input
+          <Input
             type="tel"
             value={phone}
             onChange={e => setPhone(e.target.value)}
@@ -118,7 +119,7 @@ export function DropoffForm() {
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-text-secondary mb-1">{t('preferredDateLabel')}</span>
-          <input
+          <Input
             type="date"
             value={preferredDate}
             onChange={e => setPreferredDate(e.target.value)}

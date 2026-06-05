@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface AccountStepProps {
   name: string
@@ -91,14 +92,14 @@ export function AccountStep({
         </label>
         <div className="relative">
           <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-          <input
+          <Input
             id="name"
             type="text"
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
             autoComplete="name"
             placeholder={t('namePlaceholder')}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
+            className="pl-11 pr-4 py-3 border-2 border-default rounded-lg"
           />
         </div>
       </div>
@@ -110,7 +111,7 @@ export function AccountStep({
         </label>
         <div className="relative">
           <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-          <input
+          <Input
             id="email"
             type="email"
             value={email}
@@ -121,7 +122,7 @@ export function AccountStep({
             placeholder={t('emailPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
+            className="pl-11 pr-4 py-3 border-2 border-default rounded-lg"
           />
         </div>
       </div>
@@ -133,7 +134,7 @@ export function AccountStep({
         </label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-          <input
+          <Input
             id="password"
             type={showPassword ? 'text' : 'password'}
             value={password}
@@ -144,7 +145,7 @@ export function AccountStep({
             placeholder={t('passwordPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-default bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action"
+            className="pl-11 pr-12 py-3 border-2 border-default rounded-lg"
           />
           <Button
             type="button"
@@ -184,7 +185,7 @@ export function AccountStep({
         </label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
-          <input
+          <Input
             id="confirmPassword"
             type={showConfirmPassword ? 'text' : 'password'}
             value={confirmPassword}
@@ -196,7 +197,7 @@ export function AccountStep({
             aria-invalid={!!(confirmPassword && !passwordsMatch)}
             aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
             className={cn(
-              'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-surface-base text-text-primary placeholder-neutral-400 focus:ring-2 focus:ring-action focus:border-action',
+              'pl-11 pr-12 py-3 border-2 rounded-lg',
               confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-default'
             )}
           />
