@@ -4,6 +4,9 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { Edit3, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { uiEvents } from '@/lib/ui/uiEvents'
 import { ELEMENT_SELECTION_COLORS } from '@/config/ui-colors'
 
@@ -134,14 +137,16 @@ export default function SuggestionButton() {
             </div>
 
             <div className="absolute top-4 left-4 right-4 sm:right-4 sm:left-auto flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2" style={{ pointerEvents: 'auto' }}>
-              <button
+              <Button
+                variant="primary"
                 onClick={() => setIsElementSelectionMode(false)}
                 className="bg-primary-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-primary-700 active:bg-primary-800 transition-colors touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 Fertig ({selectedElements.length})
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="secondary"
                 onClick={() => {
                   setIsElementSelectionMode(false)
                   resetToPageScope()
@@ -150,7 +155,7 @@ export default function SuggestionButton() {
                 style={{ pointerEvents: 'auto' }}
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -182,13 +187,15 @@ export default function SuggestionButton() {
                     Verbesserungen vorschlagen
                   </Heading>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={closePanelAndReset}
                   className="text-neutral-500 hover:text-neutral-600 active:bg-neutral-200 transition-colors p-2 sm:p-1 hover:bg-neutral-100 rounded-full touch-manipulation"
                   aria-label="Panel schliessen"
                 >
                   <X className="w-5 h-5 sm:w-4 sm:h-4" />
-                </button>
+                </Button>
               </div>
               <div className="mt-2 text-xs text-neutral-600">
                 Aktuelle Seite: <span className="font-medium text-neutral-900">
@@ -223,7 +230,7 @@ export default function SuggestionButton() {
                       <label htmlFor="suggestion" className="block text-xs font-medium text-neutral-700 mb-1">
                         Ihr Verbesserungsvorschlag *
                       </label>
-                      <textarea
+                      <Textarea
                         ref={textareaRef}
                         id="suggestion"
                         className={cn(
@@ -262,7 +269,7 @@ export default function SuggestionButton() {
                     </div>
 
                     <div>
-                      <input
+                      <Input
                         ref={contactRef}
                         type="text"
                         id="contact"
@@ -273,8 +280,10 @@ export default function SuggestionButton() {
                     </div>
 
                     <div className="flex space-x-1.5">
-                      <button
+                      <Button
                         type="submit"
+                        variant="primary"
+                        size="sm"
                         disabled={isSubmitting || !textValue.trim() || (feedbackScope === 'element' && selectedElements.length === 0)}
                         className={cn(
                           "flex-1 py-1 px-2 rounded text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
@@ -283,16 +292,18 @@ export default function SuggestionButton() {
                         )}
                       >
                         {isSubmitting ? 'Sendet...' : 'Senden'}
-                      </button>
+                      </Button>
 
-                      <button
+                      <Button
                         type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={closePanelAndReset}
                         disabled={isSubmitting}
                         className="px-2 py-1 text-xs rounded border-neutral-300 hover:bg-neutral-50 border"
                       >
                         Abbrechen
-                      </button>
+                      </Button>
                     </div>
 
                     <div className="text-xs text-neutral-400 text-center">
@@ -315,7 +326,9 @@ export default function SuggestionButton() {
   // Floating Button (collapsed state)
   return (
     <div className="fixed z-[75] sm:right-4 sm:top-1/2 sm:-translate-y-1/2 right-4 top-20">
-      <button
+      <Button
+        variant="primary"
+        size="icon"
         onClick={() => { setIsExpanded(true); uiEvents.emit('openSuggestion') }}
         className={cn(
           "group relative",
@@ -331,11 +344,10 @@ export default function SuggestionButton() {
         aria-label="Verbesserungen vorschlagen öffnen"
         aria-expanded={isExpanded}
         aria-haspopup="dialog"
-        role="button"
         tabIndex={0}
       >
         <Edit3 className="w-5 h-5" />
-      </button>
+      </Button>
     </div>
   )
 }

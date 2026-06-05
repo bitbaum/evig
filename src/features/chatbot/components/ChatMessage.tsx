@@ -2,6 +2,7 @@
 
 import { ArrowRight, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import type { NavigationSuggestion } from '@/lib/suggestion-utils'
 
 export interface ChatMessage {
@@ -36,8 +37,9 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
         {message.type === 'assistant' && message.suggestions && message.suggestions.length > 0 && (
           <div className="mt-3 space-y-1.5">
             {message.suggestions.map((suggestion, idx) => (
-              <button
+              <Button
                 key={idx}
+                variant="ghost"
                 onClick={() => onSuggestionClick(suggestion)}
                 className="flex items-center justify-between w-full text-left p-2.5 text-xs bg-gradient-to-r from-neutral-50 to-neutral-50/30 hover:from-primary-50 hover:to-primary-50 rounded-lg border border-neutral-200/50 hover:border-primary-300/50 text-neutral-700 hover:text-neutral-900 transition-all duration-200 group"
               >
@@ -56,7 +58,7 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
                     <ArrowRight className="w-3 h-3 text-neutral-500 group-hover:text-primary-600 transition-colors" />
                   )}
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         )}

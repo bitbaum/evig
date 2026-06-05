@@ -28,8 +28,10 @@ export function FeedbackScopeSelector({
         {(Object.keys(SCOPE_CONFIG) as FeedbackScope[]).map((scopeKey) => {
           const config = SCOPE_CONFIG[scopeKey]
           return (
-            <button
+            <Button
               key={scopeKey}
+              variant="ghost"
+              size="sm"
               onClick={() => {
                 if (scopeKey === 'element' && !isElementSelectionMode) {
                   onElementSelectionToggle()
@@ -49,7 +51,7 @@ export function FeedbackScopeSelector({
             >
               <span className="text-sm">{config.emoji}</span>
               <span className="truncate">{config.name}</span>
-            </button>
+            </Button>
           )
         })}
       </div>

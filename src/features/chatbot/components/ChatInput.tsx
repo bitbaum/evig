@@ -2,6 +2,8 @@
 
 import { Send } from 'lucide-react'
 import { forwardRef } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface ChatInputProps {
   value: string
@@ -16,7 +18,7 @@ export const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
   ({ value, onChange, onSubmit, onKeyDown, disabled = false, placeholder = "Type here..." }, ref) => {
     return (
       <div className="flex space-x-2">
-        <input
+        <Input
           ref={ref}
           type="text"
           value={value}
@@ -26,13 +28,14 @@ export const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
           disabled={disabled}
           className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
         />
-        <button
+        <Button
+          variant="primary"
           onClick={onSubmit}
           disabled={disabled || !value.trim()}
           className="px-4 py-2 bg-primary-700 hover:bg-primary-600 dark:bg-primary-600 dark:hover:bg-primary-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >
           <Send className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
     )
   }

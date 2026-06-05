@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { SCOPE_CONFIG, getQuickSuggestions } from '../config/scope-config'
 import type { FeedbackScope, SelectedElement } from '../types'
 
@@ -21,9 +22,11 @@ export function QuickSuggestions({ feedbackScope, selectedElements, onSuggestion
       </label>
       <div className="grid grid-cols-2 gap-1">
         {suggestions.map((suggestion, index) => (
-          <button
+          <Button
             key={index}
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => onSuggestionClick(suggestion)}
             className={cn(
               "px-2 py-1 text-xs rounded border transition-colors text-left",
@@ -32,7 +35,7 @@ export function QuickSuggestions({ feedbackScope, selectedElements, onSuggestion
             disabled={feedbackScope === 'element' && selectedElements.length === 0 && suggestion !== "Element auswählen"}
           >
             {suggestion}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

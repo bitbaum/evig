@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { SCOPE_CONFIG } from '../config/scope-config'
 import type { FeedbackScope, SelectedElement } from '../types'
 
@@ -34,9 +35,10 @@ export function FeedbackScopeSelector({
           const isActive = feedbackScope === scope
 
           return (
-            <button
+            <Button
               key={scope}
               type="button"
+              variant="ghost"
               onClick={() => {
                 setFeedbackScope(scope)
                 if (scope !== 'element') {
@@ -67,15 +69,16 @@ export function FeedbackScopeSelector({
                   </div>
                 )}
               </div>
-            </button>
+            </Button>
           )
         })}
       </div>
 
       {feedbackScope === 'element' && (
         <div className="mt-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
-          <button
+          <Button
             type="button"
+            variant={isElementSelectionMode ? 'primary' : 'outline'}
             onClick={toggleElementSelection}
             className={cn(
               "w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200",
@@ -92,7 +95,7 @@ export function FeedbackScopeSelector({
                   : "Elemente auswählen"}
               </span>
             </div>
-          </button>
+          </Button>
 
           {selectedElements.length > 0 && !isElementSelectionMode && (
             <div className="mt-2 p-2 bg-white rounded border border-neutral-200">

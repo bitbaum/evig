@@ -2,6 +2,7 @@
 
 import { Bot, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import type { Language } from '@/lib/suggestion-utils'
 import { uiEvents } from '@/lib/ui/uiEvents'
 
@@ -15,7 +16,8 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
   if (isOpen) return null
 
   return (
-    <button
+    <Button
+      variant="primary"
       onClick={() => { uiEvents.emit('closeSuggestion'); onClick() }}
       className={cn(
         "fixed z-[600] pointer-events-auto",
@@ -37,6 +39,6 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
           <Sparkles className="w-2 h-2 text-white absolute top-0.5 left-0.5" />
         </div>
       </div>
-    </button>
+    </Button>
   )
 }

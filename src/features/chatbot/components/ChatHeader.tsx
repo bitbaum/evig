@@ -2,6 +2,7 @@
 
 import { Bot, ChevronDown, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { getMessage } from '@/lib/chatbot-language'
 import type { Language } from '@/lib/suggestion-utils'
 
@@ -37,20 +38,24 @@ export function ChatHeader({
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onToggleMinimize}
           className="p-2 sm:p-1.5 hover:bg-neutral-100 active:bg-neutral-200 rounded-full text-neutral-500 hover:text-neutral-700 transition-colors touch-manipulation"
           aria-label={isMinimized ? getMessage('buttons', currentLanguage).maximize : getMessage('buttons', currentLanguage).minimize}
         >
           <ChevronDown className={cn("w-5 h-5 sm:w-4 sm:h-4 transition-transform", isMinimized && "rotate-180")} />
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onClose}
           className="p-2 sm:p-1.5 hover:bg-neutral-100 active:bg-neutral-200 rounded-full text-neutral-500 hover:text-neutral-700 transition-colors touch-manipulation"
           aria-label={getMessage('buttons', currentLanguage).close}
         >
           <X className="w-5 h-5 sm:w-4 sm:h-4" />
-        </button>
+        </Button>
       </div>
     </div>
   )
