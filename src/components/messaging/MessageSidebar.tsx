@@ -18,6 +18,7 @@ import { logger } from '@/lib/logger'
 import { formatDateShort, formatTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface Conversation {
   id: string
@@ -150,12 +151,12 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               <div className="p-4 border-b border-strong">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-                  <input
+                  <Input
                     type="text"
                     placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+                    className="pl-10"
                   />
                 </div>
               </div>
@@ -273,13 +274,13 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Message Input */}
               <div className="p-4 border-t border-strong">
                 <div className="flex gap-2">
-                  <input
+                  <Input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder={t('messagePlaceholder')}
-                    className="flex-1 px-3 py-2 border border-default rounded-lg focus:ring-2 focus:ring-action focus:border-transparent"
+                    className="flex-1"
                   />
                   <Button
                     onClick={sendMessage}

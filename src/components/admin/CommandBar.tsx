@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/config/routes'
 
 // ---------------------------------------------------------------------------
@@ -299,13 +300,13 @@ export function CommandBar() {
         {/* Search input */}
         <div className="flex items-center gap-3 border-b border px-4 py-3">
           <Search className="w-4 h-4 text-text-muted shrink-0" aria-hidden="true" />
-          <input
+          <Input
             ref={inputRef}
             type="search"
             placeholder="Suche oder Befehl..."
             value={query}
             onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
-            className="flex-1 bg-transparent outline-hidden text-text-primary placeholder-neutral-400 dark:placeholder-neutral-500 text-sm"
+            className="flex-1 bg-transparent border-0 focus:ring-0 focus-visible:ring-0 px-0"
             autoComplete="off"
             spellCheck={false}
           />
