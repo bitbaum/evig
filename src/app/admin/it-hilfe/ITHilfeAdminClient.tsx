@@ -1,9 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { HelpCircle, Users, Loader2, AlertTriangle, UserPlus, ArrowRight } from 'lucide-react'
+import { HelpCircle, Loader2, AlertTriangle, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
 import { TABS } from './types'
+import type { Stats } from './types'
 import { useITHilfeAdmin } from './useITHilfeAdmin'
 import { RequestsTab } from './RequestsTab'
 import { HelpersTab } from './HelpersTab'
@@ -133,122 +135,94 @@ export default function ITHilfeAdminClient() {
   )
 }
 
-// ─── HeroStatus ─────────────────────────────────────────────────────────────
-// Pick the one thing the admin should do next, based on system state.
-// Order matters — first matching condition wins. Each state has:
-//   - a primary CTA (clear next action)
-//   - secondary KPI strip (the numbers, but small + after the headline)
-// Never shows 4 dead-zero cards.
-// ─────────────────────────────────────────────────────────────────────────────
-
-interface HeroStatusProps {
-  stats: import('./types').Stats
-  onJumpToRequests: () => void
-}
-
-function HeroStatus({ stats, onJumpToRequests }: HeroStatusProps) {
+/**
+ * Compute the IT-Hilfe hero state from stats. Pure function — pulled
+ * out of the render path so the same logic can be unit-tested. Order
+ * matters: first matching condition wins.
+ */
+function deriveHeroState(stats: Stats, onJumpToRequests: () => void): {
+  tone: HeroTone
+  icon: typeof HelpCircle
+  headline: string
+  sub: string
+  cta?: HeroCta
+  kpis: HeroKpi[]
+} {
   const openRequests = stats.byStatus.open ?? 0
   const urgentRequests = stats.byUrgency.urgent ?? 0
   const activeTechniker = stats.activeHelpers
   const verifiedTechniker = stats.verifiedHelpers
   const resolutionPct = stats.resolutionRate
+  const REVIEW_APPLICATIONS_HREF = '/admin/repairer-applications'
 
-  // Decide the headline
-  let icon: typeof HelpCircle = HelpCircle
-  let tone: 'urgent' | 'attention' | 'empty' | 'healthy' = 'healthy'
-  let headline = 'Alles im grünen Bereich.'
-  let sub = `${stats.total} Anfragen insgesamt, ${resolutionPct}% gelöst.`
-  let ctaLabel: string | null = null
-  let ctaAction: (() => void) | null = null
+  const kpis: HeroKpi[] = [
+    { label: 'Offen', value: openRequests },
+    { label: 'Aktive Techniker', value: activeTechniker },
+    { label: 'Verifiziert', value: verifiedTechniker },
+    { label: 'Lösungsrate', value: `${resolutionPct}%` },
+  ]
 
   if (urgentRequests > 0) {
-    tone = 'urgent'
-    icon = AlertTriangle
-    headline = `${urgentRequests} dringende Anfrage${urgentRequests === 1 ? '' : 'n'} warten`
-    sub = `Schnelle Reaktion verhindert, dass Hilfesuchende abspringen.`
-    ctaLabel = 'Dringende anzeigen'
-    ctaAction = onJumpToRequests
-  } else if (openRequests > 0 && activeTechniker === 0) {
-    tone = 'attention'
-    icon = AlertTriangle
-    headline = `${openRequests} offene Anfrage${openRequests === 1 ? '' : 'n'}, aber keine aktiven Techniker`
-    sub = 'Bestätige Bewerbungen, damit jemand die Anfragen übernehmen kann.'
-    ctaLabel = 'Bewerbungen prüfen'
-    ctaAction = null  // Link via separate href below
-  } else if (openRequests > 0) {
-    tone = 'attention'
-    icon = HelpCircle
-    headline = `${openRequests} offene Anfrage${openRequests === 1 ? '' : 'n'}`
-    sub = `${activeTechniker} aktive Techniker können sie übernehmen.`
-    ctaLabel = 'Anfragen ansehen'
-    ctaAction = onJumpToRequests
-  } else if (activeTechniker === 0) {
-    tone = 'empty'
-    icon = UserPlus
-    headline = 'Noch keine aktiven Techniker'
-    sub = 'Aktiviere Bewerbungen, damit das System Anfragen entgegennehmen kann.'
-    ctaLabel = 'Bewerbungen prüfen'
-    ctaAction = null  // Link via separate href
+    return {
+      tone: 'urgent',
+      icon: AlertTriangle,
+      headline: `${urgentRequests} dringende Anfrage${urgentRequests === 1 ? '' : 'n'} warten`,
+      sub: 'Schnelle Reaktion verhindert, dass Hilfesuchende abspringen.',
+      cta: { label: 'Dringende anzeigen', onClick: onJumpToRequests },
+      kpis,
+    }
   }
-
-  const toneClasses: Record<typeof tone, string> = {
-    urgent: 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800',
-    attention: 'bg-warning-50 dark:bg-warning-900/20 border-warning-200 dark:border-warning-800',
-    empty: 'bg-surface-raised border-strong',
-    healthy: 'bg-surface-raised border-subtle',
+  if (openRequests > 0 && activeTechniker === 0) {
+    return {
+      tone: 'attention',
+      icon: AlertTriangle,
+      headline: `${openRequests} offene Anfrage${openRequests === 1 ? '' : 'n'}, aber keine aktiven Techniker`,
+      sub: 'Bestätige Bewerbungen, damit jemand die Anfragen übernehmen kann.',
+      cta: { label: 'Bewerbungen prüfen', href: REVIEW_APPLICATIONS_HREF },
+      kpis,
+    }
   }
-  const iconClasses: Record<typeof tone, string> = {
-    urgent: 'text-error-600 dark:text-error-400',
-    attention: 'text-warning-600 dark:text-warning-400',
-    empty: 'text-text-tertiary',
-    healthy: 'text-action',
+  if (openRequests > 0) {
+    return {
+      tone: 'attention',
+      icon: HelpCircle,
+      headline: `${openRequests} offene Anfrage${openRequests === 1 ? '' : 'n'}`,
+      sub: `${activeTechniker} aktive Techniker können sie übernehmen.`,
+      cta: { label: 'Anfragen ansehen', onClick: onJumpToRequests },
+      kpis,
+    }
   }
+  if (activeTechniker === 0) {
+    return {
+      tone: 'empty',
+      icon: UserPlus,
+      headline: 'Noch keine aktiven Techniker',
+      sub: 'Aktiviere Bewerbungen, damit das System Anfragen entgegennehmen kann.',
+      cta: { label: 'Bewerbungen prüfen', href: REVIEW_APPLICATIONS_HREF },
+      kpis,
+    }
+  }
+  return {
+    tone: 'healthy',
+    icon: HelpCircle,
+    headline: 'Alles im grünen Bereich.',
+    sub: `${stats.total} Anfragen insgesamt, ${resolutionPct}% gelöst.`,
+    kpis,
+  }
+}
 
-  const Icon = icon
-
+function HeroStatus({ stats, onJumpToRequests }: { stats: Stats; onJumpToRequests: () => void }) {
+  const s = deriveHeroState(stats, onJumpToRequests)
   return (
-    <div className={`rounded-xl border p-5 sm:p-6 ${toneClasses[tone]}`}>
-      <div className="flex items-start gap-4">
-        <div className={`shrink-0 rounded-lg p-2 bg-surface-base/60 dark:bg-surface-base/30 ${iconClasses[tone]}`}>
-          <Icon className="w-6 h-6" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h2 className="text-lg sm:text-xl font-semibold text-text-primary leading-tight">
-            {headline}
-          </h2>
-          <p className="mt-1 text-sm text-text-secondary">{sub}</p>
-        </div>
-        {ctaLabel && (
-          ctaAction ? (
-            <Button onClick={ctaAction} variant="primary" size="sm" className="shrink-0 inline-flex items-center gap-2">
-              {ctaLabel}
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          ) : (
-            <Button as={Link} href="/admin/repairer-applications" variant="primary" size="sm" className="shrink-0 inline-flex items-center gap-2">
-              {ctaLabel}
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          )
-        )}
-      </div>
-
-      {/* Secondary KPI strip — small, monospaced, contextual */}
-      <dl className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
-        <KpiCell label="Offen" value={openRequests} />
-        <KpiCell label="Aktive Techniker" value={activeTechniker} />
-        <KpiCell label="Verifiziert" value={verifiedTechniker} />
-        <KpiCell label="Lösungsrate" value={`${resolutionPct}%`} />
-      </dl>
-    </div>
+    <AdminHeroStatus
+      tone={s.tone}
+      icon={s.icon}
+      headline={s.headline}
+      sub={s.sub}
+      cta={s.cta}
+      kpis={s.kpis}
+    />
   )
 }
 
-function KpiCell({ label, value }: { label: string; value: number | string }) {
-  return (
-    <div className="flex flex-col">
-      <dt className="text-xs text-text-tertiary">{label}</dt>
-      <dd className="font-mono font-medium tabular-nums text-text-primary">{value}</dd>
-    </div>
-  )
-}
+export { deriveHeroState as __test__deriveHeroState }
