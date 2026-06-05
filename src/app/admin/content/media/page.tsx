@@ -25,6 +25,7 @@ import {
   Filter,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { AdminHeroStatus } from '@/components/admin/AdminHeroStatus'
 import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
@@ -65,64 +66,21 @@ export default async function AdminMediaPage() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <ImageIcon className="w-8 h-8 text-text-secondary" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Bilder
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                0
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <Video className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Videos
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                0
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <FileText className="w-8 h-8 text-secondary-600" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Dokumente
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                0
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <FolderOpen className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Speicher
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                0 MB
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/*
+        Media library is currently unimplemented — no DB-backed counts exist.
+        Per CLAUDE.md "NEVER hardcode numbers/stats in UI", the previous 4
+        hardcoded-zero stat cards are gone. Replaced with an honest empty-
+        state hero pointing at the Upload primary action.
+        When the library lands a real backend, swap this for an
+        AdminStatsGrid wired to actual counts.
+      */}
+      <AdminHeroStatus
+        tone="empty"
+        icon={ImageIcon}
+        headline="Medienbibliothek ist noch leer"
+        sub="Lade Bilder, Videos oder Dokumente hoch, um sie in Inhalten zu verwenden."
+        kpis={[]}
+      />
 
       {/* Toolbar */}
       <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4">
@@ -210,7 +168,7 @@ export default async function AdminMediaPage() {
         <div className="bg-action-muted border border-strong rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
             <Video className="w-6 h-6 text-action" />
-            <Heading level={3} className="font-medium text-action-text">
+            <Heading level={3} className="font-medium text-action">
               Videos
             </Heading>
           </div>
