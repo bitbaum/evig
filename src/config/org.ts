@@ -116,6 +116,31 @@ export function getLocationsDisplay(): LocationDisplay[] {
   })
 }
 
+/**
+ * Chronological history of physical locations. Single source of truth for
+ * the /space page timeline and any other "where we have been" display.
+ *
+ * `period.to === null` marks the current location.
+ * `name` is a place / building name — not a translation key; these are
+ * Swiss proper names.
+ */
+export interface LocationHistoryEntry {
+  period: { from: number; to: number | null }
+  name: string
+}
+
+export const LOCATION_HISTORY: LocationHistoryEntry[] = [
+  { period: { from: 2003, to: 2008 }, name: 'Toni Molkerei' },
+  { period: { from: 2008, to: 2012 }, name: 'Reformierte Kirche Wipkingen' },
+  { period: { from: 2012, to: 2015 }, name: 'Röschibachstrasse' },
+  { period: { from: 2015, to: null }, name: LOCATIONS.store.street },
+]
+
+/** "2003 — 2008" or "2015 —" for current. */
+export function formatLocationPeriod(period: LocationHistoryEntry['period']): string {
+  return period.to === null ? `${period.from} —` : `${period.from} — ${period.to}`
+}
+
 // ============================================================================
 // CONTACT
 // ============================================================================

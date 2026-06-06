@@ -3,32 +3,12 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import {
-  MapPin,
-  Clock,
-  Store,
-  Wrench,
-  Users,
-  BookOpen,
-  Coffee,
-  UtensilsCrossed,
-  Heart,
-  TrendingUp,
-  Calendar,
-  ChevronRight,
-  ExternalLink,
-  Building2,
-  Sparkles,
-  Target,
-  Leaf
-} from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Building2, ChevronRight, ExternalLink } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
+import { Button } from '@/components/ui/button'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
-import { ORG, LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { ORG, LOCATIONS, OPENING_HOURS, LOCATION_HISTORY, formatLocationPeriod } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { ROUTES } from '@/config/routes'
 
@@ -48,26 +28,6 @@ export async function generateMetadata({ params }: SpacePageProps): Promise<Meta
   }
 }
 
-// Icons for location history (positional — parallel to translations array)
-const locationIcons = [MapPin, MapPin, MapPin, MapPin]
-
-// current flags (positional — last one is current)
-const locationCurrentFlags = [false, false, false, true]
-
-// Periods (not translatable — they are dates)
-const locationPeriods = ['2003 - 2008', '2008 - 2012', '2012 - 2015', '2015 -']
-
-// Location proper names (not translatable)
-const locationNames = [
-  'Toni Molkerei',
-  'Reformierte Kirche Wipkingen',
-  'Röschibachstrasse',
-  LOCATIONS.store.street,
-]
-
-// Space feature icons (positional — parallel to translations array)
-const spaceFeatureIcons = [Store, Wrench, Users, Calendar, BookOpen, Coffee, UtensilsCrossed, Leaf]
-
 export default async function SpacePage({ params }: SpacePageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'space' })
@@ -84,321 +44,201 @@ export default async function SpacePage({ params }: SpacePageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
-          <Link href="#zukunft">
-            <Button size="lg" variant="primary">
-              <Sparkles className="w-5 h-5 mr-2" />
-              {t('hero.visionBtn')}
-            </Button>
-          </Link>
-          <Link href="/get-involved/donate">
-            <Button size="lg" variant="outline-light">
-              <Heart className="w-5 h-5 mr-2" />
-              {t('hero.donateBtn')}
-            </Button>
-          </Link>
+        <div className="ui-public-cta-row mt-8">
+          <Link href="#zukunft" className="ui-public-cta">{t('hero.visionBtn')}</Link>
+          <Link href="/get-involved/donate" className="ui-public-cta-ghost">{t('hero.donateBtn')}</Link>
         </div>
       </PageHero>
 
-      {/* Timeline / History */}
-      <section className="py-16 md:py-20 bg-surface-raised">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <Heading level={2} className="text-3xl md:text-4xl mb-4">{t('history.title')}</Heading>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              {t('history.subtitle')}
-            </p>
+      {/* ── Timeline — text-only, monochrome ──────────────────────── */}
+      <section className="ui-public-band py-20 sm:py-24">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="ui-public-eyebrow">CHRONIK</div>
+            <Heading level={2} className="ui-public-display-lg mt-4">{t('history.title')}</Heading>
+            <p className="ui-public-section-lede mt-6 mx-auto">{t('history.subtitle')}</p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-action-muted hidden md:block" />
-
-              <div className="space-y-8">
-                {historyLocations.map((location, index) => {
-                  const isCurrent = locationCurrentFlags[index]
-                  return (
-                    <div key={index} className="relative flex gap-6 md:gap-8">
-                      {/* Timeline dot */}
-                      <div className={`hidden md:flex w-16 h-16 rounded-full items-center justify-center shrink-0 z-10 ${
-                        isCurrent
-                          ? 'bg-action text-white'
-                          : 'bg-surface-base border-2 border-strong text-action'
-                      }`}>
-                        <MapPin className="w-6 h-6" />
-                      </div>
-
-                      <Card className={`flex-1 ${isCurrent ? 'ring-2 ring-action' : ''}`}>
-                        <CardHeader>
-                          <div className="flex items-center justify-between flex-wrap gap-2">
-                            <div>
-                              <p className="text-sm font-medium text-action mb-1">{locationPeriods[index]}</p>
-                              <CardTitle className="text-xl">{locationNames[index]}</CardTitle>
-                            </div>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              isCurrent
-                                ? 'bg-action-muted text-action'
-                                : 'bg-surface-raised text-text-secondary'
-                            }`}>
-                              {location.highlight}
-                            </span>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-text-secondary">
-                            {location.description.replace('{warehouseStreet}', LOCATIONS.warehouse.street)}
-                          </p>
-                          {isCurrent && (
-                            <div className="mt-4 pt-4 border-t border-subtle">
-                              <p className="text-sm font-medium text-text-primary mb-2">{STORE_ADDRESS}</p>
-                              <div className="flex flex-wrap gap-2">
-                                <a
-                                  href={STORE_GOOGLE_MAPS_URL}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-sm text-action hover:text-action inline-flex items-center"
-                                >
-                                  Google Maps <ExternalLink className="w-3 h-3 ml-1" />
-                                </a>
-                                <span className="text-text-muted">|</span>
-                                <a
-                                  href={STORE_OSM_URL}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-sm text-action hover:text-action inline-flex items-center"
-                                >
-                                  OpenStreetMap <ExternalLink className="w-3 h-3 ml-1" />
-                                </a>
-                              </div>
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
+          <ol className="ui-public-body-lg space-y-12 text-left">
+            {LOCATION_HISTORY.map((entry, index) => {
+              const location = historyLocations[index]
+              const isCurrent = entry.period.to === null
+              return (
+                <li key={index} className="flex gap-8">
+                  <div className="font-mono text-sm tabular-nums text-text-tertiary w-24 shrink-0 pt-1">
+                    {formatLocationPeriod(entry.period)}
+                  </div>
+                  <div className="grow">
+                    <div className="flex flex-wrap items-baseline gap-x-3">
+                      <div className="ui-public-prose-strong">{entry.name}</div>
+                      <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+                        {isCurrent ? '· AKTUELL · ' : '· '}{location?.highlight}
+                      </span>
                     </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
+                    <p className="ui-public-prose-muted mt-2">
+                      {location?.description.replace('{warehouseStreet}', LOCATIONS.warehouse.street)}
+                    </p>
+                    {isCurrent && (
+                      <div className="mt-4 border-t border-subtle pt-4">
+                        <p className="text-sm font-semibold text-text-primary">{STORE_ADDRESS}</p>
+                        <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mt-2 flex flex-wrap gap-x-3 gap-y-1">
+                          <a href={STORE_GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-text-primary transition-colors">
+                            Google Maps <ExternalLink className="w-3 h-3" />
+                          </a>
+                          <span>·</span>
+                          <a href={STORE_OSM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-text-primary transition-colors">
+                            OpenStreetMap <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
         </div>
       </section>
 
-      {/* Current Location Quick Info */}
-      <section className="py-12 bg-surface-base border-y border">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <IconBadge icon={Store} theme="space" size="lg" shape="circle" />
-              <div>
-                <p className="font-semibold text-text-primary">{t('currentLocation.label')}</p>
-                <p className="text-text-secondary">{STORE_ADDRESS}</p>
-              </div>
+      {/* ── Current Location Quick Info ───────────────────────────── */}
+      <section className="border-y border-subtle py-12">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div>
+              <div className="ui-public-eyebrow">{t('currentLocation.label').toUpperCase()}</div>
+              <p className="text-text-primary font-semibold mt-2">{STORE_ADDRESS}</p>
             </div>
-            <div className="flex items-center gap-4">
-              <IconBadge icon={Clock} theme="space" size="lg" shape="circle" />
-              <div>
-                <p className="font-semibold text-text-primary">{t('currentLocation.hoursLabel')}</p>
-                <p className="text-text-secondary">
-                  {t('currentLocation.hoursText', { monday: OPENING_HOURS.monday, tueFri: OPENING_HOURS.tuesdayToFriday })}
-                </p>
-              </div>
+            <div>
+              <div className="ui-public-eyebrow">{t('currentLocation.hoursLabel').toUpperCase()}</div>
+              <p className="text-text-secondary mt-2 font-mono tabular-nums text-sm">
+                {t('currentLocation.hoursText', { monday: OPENING_HOURS.monday, tueFri: OPENING_HOURS.tuesdayToFriday })}
+              </p>
             </div>
-            <Link href="/shop#ladenlokal">
-              <Button variant="outline">
+            <div className="md:justify-self-end">
+              <Button as={Link} href="/shop#ladenlokal" variant="outline">
                 {t('currentLocation.moreBtn')} <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Future Space Vision */}
-      <section id="zukunft" className="py-16 md:py-24 bg-surface-raised">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300 px-4 py-2 rounded-full mb-6">
-              <Calendar className="w-4 h-4" />
-              <span className="text-sm font-medium">{t('future.moveDeadline')}</span>
-            </div>
-            <Heading level={2} className="text-3xl md:text-4xl mb-4">{t('future.title')}</Heading>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              {t('future.subtitle')}
-            </p>
+      {/* ── Future Space Vision ───────────────────────────────────── */}
+      <section id="zukunft" className="py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="ui-public-eyebrow">{t('future.moveDeadline').toUpperCase()}</div>
+            <Heading level={2} className="ui-public-display-lg mt-4">{t('future.title')}</Heading>
+            <p className="ui-public-section-lede mt-6 mx-auto">{t('future.subtitle')}</p>
           </div>
 
-          {/* Vision Image Placeholder */}
-          <div className="max-w-4xl mx-auto mb-16">
-            <div className="relative aspect-video bg-surface-raised rounded-2xl overflow-hidden border">
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <Sparkles className="w-16 h-16 text-action mb-4" />
-                <p className="text-xl font-semibold text-action mb-2">
-                  {t('future.visionTagline', { orgName: ORG.name })}
-                </p>
-                <p className="text-action max-w-md">
-                  {t('future.visionDesc')}
-                </p>
-              </div>
-            </div>
-            <p className="text-sm text-text-tertiary text-center mt-3">
+          {/* Vision Statement */}
+          <div className="mx-auto max-w-3xl card-shell p-10 text-center">
+            <div className="ui-public-eyebrow">VISION</div>
+            <p className="ui-public-display-md mt-3">
+              {t('future.visionTagline', { orgName: ORG.name })}
+            </p>
+            <p className="ui-public-section-lede mt-6 mx-auto">{t('future.visionDesc')}</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mt-6">
               {t('future.visionCaption')}
             </p>
           </div>
 
-          {/* Space Features Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto mb-16">
-            {spaceFeatures.map((feature, index) => {
-              const Icon = spaceFeatureIcons[index]
-              return (
-                <Card key={index} className="text-center p-4 hover:border-strong transition-colors">
-                  {Icon && <IconBadge icon={Icon} theme="space" size="lg" shape="circle" className="mx-auto mb-3" />}
-                  <Heading level={3} className="font-semibold text-text-primary mb-1">{feature.name}</Heading>
-                  <p className="text-sm text-text-secondary">{feature.description}</p>
-                </Card>
-              )
-            })}
+          {/* Space Features — text-only cards */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {spaceFeatures.map((feature, index) => (
+              <article key={index} className="ui-public-card">
+                <div className="ui-public-card-label font-mono tabular-nums">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <h3 className="ui-public-card-title">{feature.name}</h3>
+                <p className="ui-public-card-body">{feature.description}</p>
+              </article>
+            ))}
           </div>
 
           {/* Parameters */}
-          <Card className="max-w-3xl mx-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-action" />
-                {t('future.params.title')}
-              </CardTitle>
-              <CardDescription>
-                {t('future.params.subtitle')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4 bg-surface-raised rounded-lg">
-                  <p className="text-3xl font-bold text-action mb-1">{t('future.params.areaValue')}</p>
-                  <p className="text-sm text-text-secondary">{t('future.params.areaLabel')}</p>
-                </div>
-                <div className="text-center p-4 bg-surface-raised rounded-lg">
-                  <p className="text-3xl font-bold text-action mb-1">{t('future.params.budgetValue')}</p>
-                  <p className="text-sm text-text-secondary">{t('future.params.budgetLabel')}</p>
-                </div>
-                <div className="text-center p-4 bg-surface-raised rounded-lg">
-                  <p className="text-3xl font-bold text-action mb-1">{t('future.params.locationValue')}</p>
-                  <p className="text-sm text-text-secondary">{t('future.params.locationLabel')}</p>
-                </div>
-              </div>
-              <div className="mt-6 p-4 bg-surface-raised/50 rounded-lg">
-                <p className="text-sm text-text-secondary">
-                  {t('future.params.ideal')}
-                </p>
-              </div>
-              <div className="mt-4 text-center">
-                <p className="text-text-secondary mb-4">
-                  {t('future.params.knowSpace')}
-                </p>
-                <Link href="/contact">
-                  <Button>
-                    {t('future.params.contactBtn')}
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+          <div className="mt-12 mx-auto max-w-3xl card-shell p-8">
+            <div className="ui-public-eyebrow">{t('future.params.title').toUpperCase()}</div>
+            <Heading level={3} className="ui-public-display-md mt-3">{t('future.params.title')}</Heading>
+            <p className="ui-public-section-lede mt-4">{t('future.params.subtitle')}</p>
 
-      {/* KPI Impact / Why Donate */}
-      <section className="py-16 md:py-20 bg-surface-base">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Heading level={2} className="text-3xl md:text-4xl mb-4">
-                {t('impact.title')}
-              </Heading>
-              <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-                {t('impact.subtitle')}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              {kpis.map((item, index) => (
-                <Card key={index}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <p className="text-sm font-medium text-text-tertiary uppercase tracking-wide">
-                          {item.metric}
-                        </p>
-                      </div>
-                      <TrendingUp className="w-5 h-5 text-action" />
-                    </div>
-                    <div className="flex items-end gap-4 mb-3">
-                      <div>
-                        <p className="text-sm text-text-tertiary">{t('impact.todayLabel')}</p>
-                        <p className="text-2xl font-bold text-text-muted">{item.current}</p>
-                      </div>
-                      <ChevronRight className="w-6 h-6 text-action mb-2" />
-                      <div>
-                        <p className="text-sm text-action">{t('impact.potentialLabel')}</p>
-                        <p className="text-2xl font-bold text-action">{item.potential}</p>
-                      </div>
-                    </div>
-                    <p className="text-sm text-text-secondary">{item.reason}</p>
-                  </CardContent>
-                </Card>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 border-t border-subtle pt-8">
+              {[
+                { value: t('future.params.areaValue'),     label: t('future.params.areaLabel') },
+                { value: t('future.params.budgetValue'),   label: t('future.params.budgetLabel') },
+                { value: t('future.params.locationValue'), label: t('future.params.locationLabel') },
+              ].map((param) => (
+                <div key={param.label} className="text-center">
+                  <div className="text-2xl font-semibold text-text-primary tabular-nums tracking-tight">{param.value}</div>
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mt-2">{param.label}</p>
+                </div>
               ))}
             </div>
 
-            {/* Donation CTA */}
-            <Card className="bg-action text-white">
-              <CardContent className="p-8 text-center">
-                <Heart className="w-12 h-12 mx-auto mb-4 opacity-90" />
-                <Heading level={3} className="text-2xl mb-3">
-                  {t('impact.donateCard.title')}
-                </Heading>
-                <p className="text-action-text max-w-xl mx-auto mb-6">
-                  {t('impact.donateCard.body')}
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <Link href="/get-involved/donate">
-                    <Button size="lg" className="bg-surface-base text-action hover:bg-action-muted">
-                      <Heart className="w-5 h-5 mr-2" />
-                      {t('impact.donateCard.donateBtn')}
-                    </Button>
-                  </Link>
-                  <Link href="/about/impact">
-                    <Button size="lg" variant="outline-light">
-                      {t('impact.donateCard.impactBtn')}
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="mt-8 border-t border-subtle pt-6">
+              <p className="text-sm text-text-secondary">{t('future.params.ideal')}</p>
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-text-secondary mb-4">{t('future.params.knowSpace')}</p>
+              <Button as={Link} href="/contact" variant="primary">{t('future.params.contactBtn')}</Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Links to Shop Options */}
-      <section className="py-12 bg-surface-raised border-t border">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-8">
-            <Heading level={3} className="text-xl mb-2">{t('shopLinks.title')}</Heading>
-            <p className="text-text-secondary">{t('shopLinks.subtitle')}</p>
+      {/* ── KPI Impact ────────────────────────────────────────────── */}
+      <section className="ui-public-band py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <div className="ui-public-eyebrow">POTENZIAL</div>
+            <Heading level={2} className="ui-public-display-lg mt-4">{t('impact.title')}</Heading>
+            <p className="ui-public-section-lede mt-6 mx-auto">{t('impact.subtitle')}</p>
           </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/shop#ladenlokal">
-              <Button variant="outline">
-                <Store className="w-4 h-4 mr-2" /> {t('shopLinks.currentStore')}
-              </Button>
-            </Link>
-            <Link href={ROUTES.public.shop}>
-              <Button variant="outline">
-                <Store className="w-4 h-4 mr-2" /> {t('shopLinks.shopOverview')}
-              </Button>
-            </Link>
-            <Link href={ROUTES.public.marketplace}>
-              <Button>
-                {t('shopLinks.onlineShop')} <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
-            </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {kpis.map((item, index) => (
+              <article key={index} className="ui-public-card">
+                <div className="ui-public-card-label">{item.metric}</div>
+                <div className="mt-4 flex items-end gap-6 font-mono tabular-nums">
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">{t('impact.todayLabel')}</p>
+                    <p className="text-2xl font-semibold text-text-tertiary mt-1">{item.current}</p>
+                  </div>
+                  <span className="text-text-tertiary mb-2">→</span>
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-action">{t('impact.potentialLabel')}</p>
+                    <p className="text-2xl font-semibold text-action mt-1">{item.potential}</p>
+                  </div>
+                </div>
+                <p className="ui-public-card-body mt-3">{item.reason}</p>
+              </article>
+            ))}
+          </div>
+
+          {/* Donation CTA */}
+          <div className="mt-16 border-t border-subtle pt-16 text-center">
+            <div className="ui-public-eyebrow">SPENDEN</div>
+            <Heading level={3} className="ui-public-display-md mt-3">{t('impact.donateCard.title')}</Heading>
+            <p className="ui-public-section-lede mt-4 mx-auto">{t('impact.donateCard.body')}</p>
+            <div className="ui-public-cta-row mt-8">
+              <Link href="/get-involved/donate" className="ui-public-cta">{t('impact.donateCard.donateBtn')}</Link>
+              <Link href="/about/impact" className="ui-public-cta-ghost">{t('impact.donateCard.impactBtn')}</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Shop links ────────────────────────────────────────────── */}
+      <section className="border-t border-subtle py-12 text-center">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">{t('shopLinks.title').toUpperCase()}</div>
+          <p className="ui-public-section-lede mt-4 mx-auto mb-8">{t('shopLinks.subtitle')}</p>
+          <div className="ui-public-cta-row">
+            <Link href="/shop#ladenlokal" className="ui-public-cta-ghost">{t('shopLinks.currentStore')}</Link>
+            <Link href={ROUTES.public.shop} className="ui-public-cta-ghost">{t('shopLinks.shopOverview')}</Link>
+            <Link href={ROUTES.public.marketplace} className="ui-public-cta">{t('shopLinks.onlineShop')}</Link>
           </div>
         </div>
       </section>
