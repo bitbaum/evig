@@ -118,11 +118,11 @@ export default async function DonatePage({ params }: DonatePageProps) {
 
           <div className="mt-10 rounded-lg border bg-surface-base p-6 sm:p-8 space-y-5">
             {([
-              { label: t('transfer.recipientLabel'), value: BANK.accountHolder, mono: false },
-              { label: t('transfer.ibanLabel'),      value: BANK.iban,          mono: true },
-              { label: t('transfer.bankLabel'),      value: BANK.name,          mono: false, extra: BANK.bic },
-              { label: t('transfer.purposeLabel'),   value: verwendungszweck,   mono: false },
-            ] as const).map((row) => (
+              { label: t('transfer.recipientLabel'), value: BANK.accountHolder, mono: false, extra: undefined as string | undefined },
+              { label: t('transfer.ibanLabel'),      value: BANK.iban,          mono: true,  extra: undefined as string | undefined },
+              { label: t('transfer.bankLabel'),      value: BANK.name,          mono: false, extra: BANK.bic as string | undefined },
+              { label: t('transfer.purposeLabel'),   value: verwendungszweck,   mono: false, extra: undefined as string | undefined },
+            ]).map((row) => (
               <div key={row.label} className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-1">
