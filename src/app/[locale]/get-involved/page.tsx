@@ -208,7 +208,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
           <div className="ui-public-cta-row mt-10">
-            <ContactLink variant="primary" size="lg" className="ui-public-cta">
+            <ContactLink className="ui-public-cta">
               {t('cta.contactBtn')}
             </ContactLink>
             <Link href="/workshops" className="ui-public-cta-ghost">
