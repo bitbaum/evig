@@ -408,13 +408,13 @@ export default function BuildYourComputerPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-surface-raised rounded-2xl border p-8 md:p-12 text-center">
-              <div className="inline-flex items-center bg-action-muted px-6 py-3 rounded-full mb-6">
-                <Award className="w-8 h-8 text-action mr-3" />
-                <span className="text-2xl font-bold text-action">Revamped</span>
-                <Sparkles className="w-6 h-6 text-action ml-2" />
+            <div className="card-shell p-8 md:p-12 text-center">
+              <div className="ui-public-eyebrow inline-flex items-center gap-2 text-action">
+                <Award className="w-4 h-4" />
+                <span>REVAMPED ZERTIFIZIERT</span>
+                <Sparkles className="w-4 h-4" />
               </div>
-              <Heading level={2} className="mb-4">{t('certification.heading')}</Heading>
+              <Heading level={2} className="ui-public-display-md mt-4">{t('certification.heading')}</Heading>
               <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
                 {t('certification.body')}
               </p>
@@ -447,23 +447,16 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-action text-white">
-        <div className="container mx-auto px-4 text-center">
-          <Heading level={2} className="mb-6">{t('cta.heading')}</Heading>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-action-text">
-            {t('cta.body')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted transition-colors duration-300 text-lg"
-            >
+      <section className="border-t border-subtle py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">BEREIT?</div>
+          <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
+          <div className="ui-public-cta-row mt-10">
+            <Link href="/contact" className="ui-public-cta">
               {t('cta.startBuild')}
             </Link>
-            <Link
-              href="/services"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-surface-base/10 transition-colors duration-300 text-lg"
-            >
+            <Link href="/services" className="ui-public-cta-ghost">
               {t('cta.explore')}
             </Link>
           </div>

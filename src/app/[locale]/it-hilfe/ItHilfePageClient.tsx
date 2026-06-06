@@ -62,75 +62,80 @@ export default function ITHilfePage() {
 
   return (
     <div className="bg-canvas min-h-screen">
-      {/* Compact hero — requests visible without scrolling */}
-      <div className="bg-surface-base border-b border-subtle dark:border-white/6 py-6 sm:py-8">
+      {/* ── Header — fleetcrown discipline ─────────────────────────── */}
+      <section className="border-b border-subtle py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl text-text-primary">{t('title')}</Heading>
-              <p className="text-sm text-text-secondary mt-1">
+              <div className="ui-public-eyebrow">IT-HILFE</div>
+              <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
+              <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {t('requestCount', { count: total })} · {t('tagline')}
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button as={Link} href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`} variant="primary">
+            <div className="flex flex-wrap gap-3 md:justify-self-end">
+              <Link
+                href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
+                className="ui-public-cta inline-flex items-center gap-2"
+              >
                 <Plus className="w-4 h-4" />
                 {t('getHelp')}
-              </Button>
+              </Link>
               <Link
                 href={IT_HILFE.routes.helpers}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-surface-base dark:bg-transparent hover:bg-action-muted text-action border border-action dark:border-action rounded-lg text-base font-semibold transition-colors"
+                className="ui-public-cta-ghost inline-flex items-center gap-2"
               >
                 <Users className="w-4 h-4" />
                 {t('findTechnician')}
               </Link>
             </div>
           </div>
-          <form onSubmit={handleSearch} className="max-w-2xl">
+
+          <form onSubmit={handleSearch} className="mt-8 max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               <Input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="pl-12 pr-24 py-3"
+                className="pl-10 pr-28 text-sm"
               />
               <Button
                 type="submit"
                 variant="primary"
                 size="sm"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2"
               >
                 {t('searchButton')}
               </Button>
             </div>
           </form>
         </div>
-      </div>
+      </section>
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Secondary actions for logged-in users */}
         {session?.user && (
-          <div className="mb-6 flex flex-wrap gap-2">
+          <div className="mb-6 flex flex-wrap gap-3">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base dark:bg-transparent hover:bg-action-muted text-action border border-strong dark:border-action/40 rounded-lg text-sm font-medium transition-colors"
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
             >
               <Wrench className="w-4 h-4" />
               {t('becomeTechnician')}
             </Link>
             <Link
               href={IT_HILFE.routes.my}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-surface-raised text-text-secondary border rounded-lg text-sm font-medium transition-colors"
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
             >
               {t('myRequests')}
             </Link>
             <Link
               href={IT_HILFE.routes.myOffers}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base hover:bg-surface-raised text-text-secondary border rounded-lg text-sm font-medium transition-colors"
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
             >
               <Heart className="w-4 h-4" />
               {t('myOffers')}

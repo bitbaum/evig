@@ -75,14 +75,11 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
-          <Button as="a" href="#get-started" variant="primary">
+        <div className="ui-public-cta-row mt-8">
+          <a href="#get-started" className="ui-public-cta">
             {t('hero.startBtn')}
-          </Button>
-          <a
-            href="#learn-more"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-surface-base text-action hover:bg-surface-raised border-2 border-action transition-colors"
-          >
+          </a>
+          <a href="#learn-more" className="ui-public-cta-ghost">
             {t('hero.learnBtn')}
           </a>
         </div>
@@ -205,22 +202,16 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-action text-white`}>
-        <div className={`${responsiveSpacing.container} mx-auto text-center`}>
-          <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbSmall}`}>
-            {t('cta.heading')}
-          </Heading>
-          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbMedium} max-w-2xl mx-auto text-action-text`}>
-            {t('cta.body')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <ContactLink variant="outline" size="lg" className="bg-surface-base text-action hover:bg-action-muted">
+      <section className="border-t border-subtle py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">BEREIT?</div>
+          <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
+          <div className="ui-public-cta-row mt-10">
+            <ContactLink variant="primary" size="lg" className="ui-public-cta">
               {t('cta.contactBtn')}
             </ContactLink>
-            <Link
-              href="/workshops"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-white text-white hover:bg-surface-base/10`}
-            >
+            <Link href="/workshops" className="ui-public-cta-ghost">
               {t('cta.workshopsBtn')}
             </Link>
           </div>

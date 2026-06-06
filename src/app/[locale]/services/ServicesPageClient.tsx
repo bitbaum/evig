@@ -79,31 +79,27 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   }
 
   return (
-    <div className="group card-shell hover:border-strong transition-all duration-300 overflow-hidden flex flex-col h-full">
-      <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
-        <div className="flex items-start mb-4 sm:mb-6">
-          <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
-            service.available
-              ? 'bg-action-muted text-action group-hover:bg-action group-hover:text-white'
-              : 'bg-surface-raised text-text-muted'
-          }`}>
-            <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+    <div className="group card-shell hover:border-strong transition-colors duration-300 overflow-hidden flex flex-col h-full">
+      <div className="p-6 sm:p-8 flex flex-col h-full">
+        <div className="mb-6">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+              {service.category}
+            </span>
+            {service.badge && (
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
+                · {service.badge}
+              </span>
+            )}
           </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Heading level={3} className="text-xl sm:text-2xl font-bold">{service.title}</Heading>
-              {service.badge && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-action-muted text-action">
-                  {service.badge}
-                </span>
-              )}
-            </div>
-            <div className={`flex items-center font-semibold mb-4 ${
-              service.available ? 'text-action' : 'text-text-muted'
-            }`}>
-              <Zap className="w-4 h-4 mr-2" />
-              <span>{service.highlight}</span>
-            </div>
+          <Heading level={3} className="text-xl sm:text-2xl font-semibold text-text-primary">
+            {service.title}
+          </Heading>
+          <div className={`mt-3 flex items-center text-sm font-semibold ${
+            service.available ? 'text-action' : 'text-text-muted'
+          }`}>
+            <Zap className="w-4 h-4 mr-2" />
+            <span>{service.highlight}</span>
           </div>
         </div>
         <p className="text-text-secondary mb-6 grow">{service.description}</p>
@@ -144,26 +140,27 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
-                <div className="w-full inline-flex items-center justify-center text-action font-semibold bg-action-muted px-4 py-2 rounded-lg">
+                <Button variant="ghost" disabled className="w-full">
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   {t('appointmentRequested')}
-                </div>
+                </Button>
               ) : bookingStatus === 'booking' ? (
-                <div className="w-full inline-flex items-center justify-center text-text-secondary font-semibold bg-surface-raised px-4 py-2 rounded-lg">
+                <Button variant="ghost" disabled className="w-full">
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   {t('booking')}
-                </div>
+                </Button>
               ) : !session?.user ? (
                 <Button
-                  variant="ghost"
+                  variant="primary"
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
-                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted hover:bg-action-muted px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
                 </Button>
               ) : service.slug ? (
                 <Button
+                  variant="primary"
                   onClick={handleBooking}
                   className="flex-1"
                   disabled={bookingStatus !== 'idle' && bookingStatus !== 'error'}
@@ -172,13 +169,10 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
                   {t('bookAppointment')}
                 </Button>
               ) : (
-                <Link
-                  href={service.href}
-                  className="flex-1 inline-flex items-center justify-center text-action hover:text-action font-semibold bg-action-muted hover:bg-action-muted px-4 py-2 rounded-lg transition-colors duration-300"
-                >
+                <Button as={Link} href={service.href} variant="primary" className="flex-1">
                   <ArrowRight className="w-4 h-4 mr-2" />
                   {t('learnMore')}
-                </Link>
+                </Button>
               )}
             </div>
           )}
@@ -268,18 +262,16 @@ export default function ServicesPage() {
           showResultsCount={true}
         />
 
-        <section className="py-12 sm:py-16 md:py-20 bg-surface-base border-t border">
-          <div className="container mx-auto px-4 sm:px-6 text-center">
-            <Heading level={2} className="mb-4 sm:mb-6 text-text-primary">{t('ctaTitle')}</Heading>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-text-secondary">{t('ctaSubtitle')}</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button as={Link} href="/contact" variant="primary" size="lg">
+        <section className="border-t border-subtle py-20 text-center">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <div className="ui-public-eyebrow">{t('ctaEyebrow')}</div>
+            <h2 className="ui-public-display-lg mt-4">{t('ctaTitle')}</h2>
+            <p className="ui-public-section-lede mt-6 mx-auto">{t('ctaSubtitle')}</p>
+            <div className="ui-public-cta-row mt-10">
+              <Link href="/contact" className="ui-public-cta">
                 {t('ctaContact')}
-              </Button>
-              <Link
-                href={ROUTES.public.shop}
-                className="inline-block border-2 border-default text-text-secondary px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors duration-300 text-base sm:text-lg"
-              >
+              </Link>
+              <Link href={ROUTES.public.shop} className="ui-public-cta-ghost">
                 {t('ctaInventory')}
               </Link>
             </div>

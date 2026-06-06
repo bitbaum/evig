@@ -125,25 +125,19 @@ export default async function SupportPage({ params }: SupportPageProps) {
           <Heading level={3} className="text-xl text-text-primary mb-4">
             {t('otherWays.title')}
           </Heading>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={ROUTES.public.blogSubmit}
-              className="px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
-            >
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link href={ROUTES.public.blogSubmit} className="ui-public-cta-ghost">
               {t('otherWays.submitPost')}
             </Link>
             <a
               href="https://github.com/revampit"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
+              className="ui-public-cta-ghost"
             >
               {t('otherWays.contributeCode')}
             </a>
-            <Link
-              href={ROUTES.public.blog}
-              className="px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
-            >
+            <Link href={ROUTES.public.blog} className="ui-public-cta-ghost">
               {t('otherWays.shareArticle')}
             </Link>
           </div>

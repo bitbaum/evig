@@ -82,8 +82,7 @@ export default async function WissenPage() {
     ],
   }
 
-  const cardClass = 'bg-surface-base border text-text-primary'
-  const buttonClass = 'bg-action hover:bg-action'
+  const cardClass = 'card-shell'
 
   return (
     <main>
@@ -104,17 +103,14 @@ export default async function WissenPage() {
               return (
                 <div
                   key={section.id}
-                  className={`${cardClass} rounded-xl p-6 sm:p-8 flex flex-col`}
+                  className={`${cardClass} p-6 sm:p-8 flex flex-col`}
                 >
                   <div className="flex items-center gap-3 mb-3 sm:mb-4">
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-action" />
                     <Heading level={2} className="text-xl sm:text-2xl">{t(section.titleKey as Parameters<typeof t>[0])}</Heading>
                   </div>
                   <p className="text-sm sm:text-base mb-4 sm:mb-6 grow text-text-secondary">{t(section.descriptionKey as Parameters<typeof t>[0])}</p>
-                  <Link
-                    href={section.href}
-                    className={`inline-flex items-center justify-center px-4 py-2 rounded-lg text-white font-semibold text-sm sm:text-base ${buttonClass} transition-colors`}
-                  >
+                  <Link href={section.href} className={btnClass({ variant: 'primary' })}>
                     {t(section.ctaKey as Parameters<typeof t>[0])}
                   </Link>
                 </div>

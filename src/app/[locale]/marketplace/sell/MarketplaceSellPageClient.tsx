@@ -159,12 +159,9 @@ function SellPageContent() {
         <div className="p-4 md:p-6 border-t border-subtle">
           {error && <ErrorAlert message={error} variant="inline" className="mb-4" />}
           <div className="flex flex-col-reverse sm:flex-row gap-3">
-            <Link
-              href={ROUTES.public.marketplace}
-              className="px-6 py-2.5 rounded-lg border border-default font-medium text-text-secondary hover:bg-surface-raised text-center"
-            >
+            <Button as={Link} href={ROUTES.public.marketplace} variant="outline">
               {t('cancelButton')}
-            </Link>
+            </Button>
             <Button
               onClick={handlePreview}
               disabled={!formData.title.trim() || !formData.description.trim() || !formData.category}

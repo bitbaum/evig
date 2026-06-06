@@ -103,10 +103,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                     {t('heroSection.buildBtn')}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
-                  <a
-                    href="#certificate"
-                    className="inline-block border-2 border-action text-action px-6 py-3 rounded-lg font-semibold hover:bg-action-muted transition-colors"
-                  >
+                  <a href="#certificate" className="ui-public-cta-ghost">
                     {t('heroSection.learnBtn')}
                   </a>
                 </div>
@@ -283,10 +280,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 {t('cta.buildBtn')}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
-              <Link
-                href="/contact"
-                className="inline-block border-2 border-action text-action px-8 py-4 rounded-lg font-semibold hover:bg-action-muted transition-colors duration-300 text-lg"
-              >
+              <Link href="/contact" className="ui-public-cta-ghost">
                 {t('cta.learnBtn')}
               </Link>
             </div>

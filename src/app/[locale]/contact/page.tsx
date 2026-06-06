@@ -115,22 +115,22 @@ export default async function ContactPage() {
               ></iframe>
             </div>
             <div className="mt-6 sm:mt-8 text-center space-y-3 sm:space-y-4">
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+              <div className="flex flex-wrap justify-center gap-3">
                 <a
                   href={STORE_GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-solid focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                  className="ui-public-cta inline-flex items-center gap-2"
                 >
-                  <MapPin className="w-4 h-4 mr-2" /> {t('map.openGoogleMaps')}
+                  <MapPin className="w-4 h-4" /> {t('map.openGoogleMaps')}
                 </a>
                 <a
                   href={STORE_OSM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-solid focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                  className="ui-public-cta-ghost inline-flex items-center gap-2"
                 >
-                  <MapIcon className="w-4 h-4 mr-2" /> {t('map.openOSM')}
+                  <MapIcon className="w-4 h-4" /> {t('map.openOSM')}
                 </a>
               </div>
 

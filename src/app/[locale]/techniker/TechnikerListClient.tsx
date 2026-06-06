@@ -344,10 +344,7 @@ export default function TechnikerListClient() {
               <Button as={Link} href="/auth/login?callbackUrl=/profil/techniker" variant="primary">
                 {t('list.ctaCreateProfile')}
               </Button>
-              <Link
-                href={ROUTES.public.itHilfe}
-                className="px-6 py-2.5 bg-surface-base hover:bg-action-muted text-action border border-action rounded-lg font-semibold transition-colors"
-              >
+              <Link href={ROUTES.public.itHilfe} className="ui-public-cta-ghost">
                 {t('list.ctaToITHelp')}
               </Link>
             </div>

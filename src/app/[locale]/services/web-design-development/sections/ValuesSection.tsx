@@ -1,61 +1,40 @@
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
-import {
-  Code,
-  Globe,
-  Shield,
-  Zap,
-  Users,
-  Monitor,
-  Heart,
-  Database,
-} from 'lucide-react'
 
-const VALUE_ICONS = [Code, Globe, Shield, Database, Heart, Zap, Users, Monitor]
-
-const VALUE_STYLES = [
-  { borderColor: 'border-action', bgColor: 'bg-action-muted', iconColor: 'text-action', titleColor: 'text-action' },
-  { borderColor: 'border-action', bgColor: 'bg-action-muted', iconColor: 'text-action', titleColor: 'text-action' },
-  { borderColor: 'border-info-500', bgColor: 'bg-info-100', iconColor: 'text-info-600', titleColor: 'text-info-800' },
-  { borderColor: 'border-secondary-500', bgColor: 'bg-secondary-100', iconColor: 'text-secondary-600', titleColor: 'text-secondary-800' },
-  { borderColor: 'border-warning-500', bgColor: 'bg-warning-100 dark:bg-warning-900/30', iconColor: 'text-warning-600', titleColor: 'text-warning-800 dark:text-warning-400' },
-  { borderColor: 'border-error-500', bgColor: 'bg-error-100', iconColor: 'text-error-600', titleColor: 'text-error-800' },
-  { borderColor: 'border-info-700', bgColor: 'bg-info-100', iconColor: 'text-info-700', titleColor: 'text-info-900' },
-  { borderColor: 'border-strong', bgColor: 'bg-surface-raised', iconColor: 'text-text-secondary', titleColor: 'text-text-primary' },
-]
-
-const VALUE_KEYS = ['openSource', 'decentralization', 'privacyFirst', 'ownYourData', 'ownYourCode', 'maxAutomation', 'userExperience', 'developerExperience'] as const
+const VALUE_KEYS = [
+  'openSource',
+  'decentralization',
+  'privacyFirst',
+  'ownYourData',
+  'ownYourCode',
+  'maxAutomation',
+  'userExperience',
+  'developerExperience',
+] as const
 
 export async function ValuesSection() {
   const t = await getTranslations('services.webDesign.values')
 
-  const coreValues = VALUE_KEYS.map((key, i) => ({
-    icon: VALUE_ICONS[i],
-    title: t(`${key}.title`),
-    description: t(`${key}.description`),
-    ...VALUE_STYLES[i],
-  }))
-
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <Heading level={2} className="mb-6 text-text-primary">{t('title')}</Heading>
-          <p className="text-xl text-text-secondary mb-8"
+    <section className="ui-public-band py-20 sm:py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto text-center mb-14">
+          <div className="ui-public-eyebrow">PRINZIPIEN</div>
+          <Heading level={2} className="ui-public-display-lg mt-4">{t('title')}</Heading>
+          <p
+            className="ui-public-section-lede mt-6 mx-auto"
             dangerouslySetInnerHTML={{ __html: t.raw('subtitle') as string }}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {coreValues.map((value, index) => (
-            <div key={index} className={`bg-surface-base rounded-xl p-6 border border-l-4 ${value.borderColor} hover:border-strong dark:hover:border-white/12 transition-colors duration-300`}>
-              <div className="text-center">
-                <div className={`w-14 h-14 ${value.bgColor} rounded-full flex items-center justify-center mx-auto mb-3`}>
-                  <value.icon className={`w-7 h-7 ${value.iconColor}`} />
-                </div>
-                <Heading level={3} className={`mb-3 ${value.titleColor}`}>{value.title}</Heading>
-                <p className="text-text-secondary text-sm">{value.description}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {VALUE_KEYS.map((key, index) => (
+            <article key={key} className="ui-public-card">
+              <div className="ui-public-card-label font-mono tabular-nums">
+                {String(index + 1).padStart(2, '0')}
               </div>
-            </div>
+              <Heading level={3} className="ui-public-card-title">{t(`${key}.title`)}</Heading>
+              <p className="ui-public-card-body">{t(`${key}.description`)}</p>
+            </article>
           ))}
         </div>
       </div>

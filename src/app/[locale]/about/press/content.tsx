@@ -223,23 +223,16 @@ export default function PressPageContent() {
       </section>
 
       {/* Press Contact CTA */}
-      <section className="py-20 bg-action text-white">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <Heading level={2} className="mb-6">{t('pressContact.title')}</Heading>
-          <p className="text-xl mb-8 text-action-text">
-            {t('pressContact.description')}
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors"
-            >
+      <section className="border-t border-subtle py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">PRESSE</div>
+          <h2 className="ui-public-display-lg mt-4">{t('pressContact.title')}</h2>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('pressContact.description')}</p>
+          <div className="ui-public-cta-row mt-10">
+            <a href={`mailto:${CONTACT.email}`} className="ui-public-cta">
               {CONTACT.email}
             </a>
-            <Link
-              href="/contact"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-surface-base/10 transition-colors"
-            >
+            <Link href="/contact" className="ui-public-cta-ghost">
               {t('pressContact.contactForm')}
             </Link>
           </div>

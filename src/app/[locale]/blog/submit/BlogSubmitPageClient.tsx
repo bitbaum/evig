@@ -62,11 +62,7 @@ export default function SubmitPostPage() {
             <p className="text-text-secondary text-lg mb-2">{t('successMessage')}</p>
             <p className="text-text-tertiary text-sm mb-8">{t('successEmailNote')}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                className="inline-flex items-center justify-center px-6 py-3 border border-action text-action rounded-lg hover:bg-action-muted transition-colors font-medium"
-              >
+              <Button variant="outline" onClick={handleReset}>
                 {t('submitAnotherButton')}
               </Button>
               <Button as={Link} href={ROUTES.public.blog} variant="primary">

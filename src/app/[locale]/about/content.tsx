@@ -138,18 +138,16 @@ export default async function AboutContent() {
       <GeschichteSection />
 
       {/* Call to Action */}
-      <section className="py-20 bg-action text-white">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <Heading level={2} className="mb-6">{t('cta.title')}</Heading>
-          <p className="text-xl mb-8">
-            {t('cta.description')}
-          </p>
-          <Link
-            href="/get-involved"
-            className="inline-block bg-surface-base text-action px-8 py-4 rounded-lg font-semibold hover:bg-surface-raised transition-colors"
-          >
-            {t('cta.button')}
-          </Link>
+      <section className="border-t border-subtle py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">BEREIT?</div>
+          <h2 className="ui-public-display-lg mt-4">{t('cta.title')}</h2>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.description')}</p>
+          <div className="mt-10">
+            <Link href="/get-involved" className="ui-public-cta-lg">
+              {t('cta.button')}
+            </Link>
+          </div>
         </div>
       </section>
     </main>

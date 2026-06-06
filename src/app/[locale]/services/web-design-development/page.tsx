@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import { buttonClass } from '@/components/ui/button-class'
 import { Code } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'
@@ -43,14 +42,11 @@ export default async function WebDesignDevelopmentPage() {
         title={t('title')}
         subtitle={t('subtitle')}
       >
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
-          <Link href="/contact" className={buttonClass({ variant: 'primary' })}>
+        <div className="ui-public-cta-row mt-8">
+          <Link href="/contact" className="ui-public-cta">
             {t('ctaStart')}
           </Link>
-          <Link
-            href="#services"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-surface-base text-action hover:bg-surface-raised border-2 border-action transition-colors"
-          >
+          <Link href="#services" className="ui-public-cta-ghost">
             {t('ctaDiscover')}
           </Link>
         </div>

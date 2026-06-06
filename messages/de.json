@@ -937,6 +937,7 @@
       "servicesTitle": "Unsere Dienstleistungen",
       "servicesDescription": "Die Reparaturdauer variiert je nach Teileverfügbarkeit und dauert in der Regel einige Wochen.",
       "noResults": "Keine Dienstleistungen gefunden, die den ausgewählten Filtern entsprechen.",
+      "ctaEyebrow": "BEREIT?",
       "ctaTitle": "Bereit, deine Technologie zu erneuern?",
       "ctaSubtitle": "Kontaktiere uns heute für eine kostenlose Beratung und entdecke, wie wir dir helfen können, das Beste aus deinen Geräten herauszuholen.",
       "ctaContact": "Kontaktiere uns",
@@ -5873,9 +5874,27 @@
       "description": "Direkt helfen. Jede Spende rettet Geräte vor dem Elektroschrott und macht Technologie für alle zugänglich."
     },
     "hero": {
+      "positioning": "Spenden · Schweizer Non-Profit · seit 2003",
       "title": "Direkt helfen.",
+      "titleSecondary": "Sofort wirksam.",
+      "lede": "Jede Spende rettet Geräte vor dem Elektroschrott und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
+      "sublede": "Geld an unser Konto oder ein Gerät an unsere Werkstatt — beides hilft direkt.",
+      "ctaMoney": "Geld spenden",
+      "ctaDevice": "Gerät abgeben",
       "body": "Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
       "cta": "Jetzt überweisen"
+    },
+    "paths": {
+      "money": {
+        "eyebrow": "GELD",
+        "title": "Banküberweisung in zwei Minuten.",
+        "body": "Empfänger, IBAN, Verwendungszweck — alles unten zum Kopieren. Spendenquittung auf Anfrage. Kein Drittanbieter, keine Transaktionsgebühr."
+      },
+      "device": {
+        "eyebrow": "GERÄT",
+        "title": "Laptop, Desktop oder Monitor abgeben.",
+        "body": "Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter. Persönliche Daten löschen wir auf Wunsch vor Ort."
+      }
     },
     "transparency": {
       "label": "Transparenz",
@@ -5885,7 +5904,9 @@
       "co2Label": "eingespart pro Jahr"
     },
     "tiers": {
+      "eyebrow": "WAS DEINE SPENDE BEWIRKT",
       "heading": "Was deine Spende bewirkt",
+      "cta": "Diesen Betrag überweisen",
       "recommended": "Empfohlen",
       "items": [
         {
@@ -5904,6 +5925,7 @@
     },
     "bridgeCta": "Betrag wählen und überweisen",
     "transfer": {
+      "eyebrow": "BANKÜBERWEISUNG",
       "heading": "Banküberweisung",
       "intro": "Überweise auf folgendes Konto:",
       "recipientLabel": "Empfänger",
@@ -5914,6 +5936,7 @@
       "copyIbanBtn": "IBAN kopieren"
     },
     "devices": {
+      "eyebrow": "GERÄT SPENDEN",
       "heading": "Geräte spenden",
       "intro": "Hardware, die du nicht mehr brauchst, kann einem anderen Menschen eine echte Chance geben. Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter.",
       "items": [
@@ -5932,6 +5955,7 @@
       "questionsLink": "Fragen? Schreib uns →"
     },
     "dropoff": {
+      "eyebrow": "TERMIN ANMELDEN",
       "heading": "Geräte-Abgabe anmelden",
       "intro": "Sag uns kurz, was du bringen möchtest — wir bestätigen den Termin per E-Mail und stellen sicher, dass jemand vor Ort ist.",
       "nameLabel": "Name",

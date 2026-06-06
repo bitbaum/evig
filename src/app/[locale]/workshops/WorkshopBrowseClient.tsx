@@ -294,21 +294,16 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         )}
 
         {/* Call to Action */}
-        <div className="mt-16 bg-action rounded-xl p-8 text-white text-center">
-          <Sparkles className="w-12 h-12 mx-auto mb-4" />
-          <Heading level={2} className="mb-4">
-            {t('cta.title')}
-          </Heading>
-          <p className="text-action-text mb-6 max-w-2xl mx-auto">
-            {t('cta.subtitle')}
-          </p>
-          <Link
-            href="/workshops/propose"
-            className="inline-flex items-center gap-2 bg-surface-base text-action px-6 py-3 rounded-lg font-semibold hover:bg-surface-raised transition-colors"
-          >
-            {t('cta.button')}
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+        <div className="mt-16 border-t border-subtle pt-16 text-center">
+          <div className="ui-public-eyebrow">VORSCHLAGEN</div>
+          <h2 className="ui-public-display-md mt-3">{t('cta.title')}</h2>
+          <p className="ui-public-section-lede mt-4 mx-auto max-w-2xl">{t('cta.subtitle')}</p>
+          <div className="mt-8">
+            <Link href="/workshops/propose" className="ui-public-cta inline-flex items-center gap-2">
+              {t('cta.button')}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </PageShell>
     </>
