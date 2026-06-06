@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic'
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { getCompactMetrics } from '@/data/impact-metrics'
 import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
@@ -45,39 +44,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-/**
- * Public homepage — RevampIT.
- *
- * Design discipline (fleetcrown / x.ai pattern):
- *   - One eyebrow + one display heading + one lede per section
- *   - Text-only surface cards (no icons-in-colored-circles template)
- *   - Alternating bands (ui-public-band tinted vs bare canvas)
- *   - Monospace eyebrows + meta lines for "system" feel
- *   - Single accent color (RevampIT green) reserved for primary CTAs only
- *   - All numbers tabular-nums and sourced from org-numbers SSOT
- *     (no hardcoded stats per CLAUDE.md)
- */
 export default async function Home() {
   const t = await getTranslations('home')
   await auth()
-  const compactMetrics = getCompactMetrics({
-    devicesRescued: t('impact.compactMetrics.devicesRescued'),
-    peopleTrained: t('impact.compactMetrics.peopleTrained'),
-    reuseRate: t('impact.compactMetrics.reuseRate'),
-    lifespanExtension: t('impact.compactMetrics.lifespanExtension'),
-    internshipSuccess: t('impact.compactMetrics.internshipSuccess'),
-    careerReentries: t('impact.compactMetrics.careerReentries'),
-  })
 
-  // Hero stat — pull the most credible single number from the SSOT.
-  // First entry is devices rescued/year (org-numbers config); display
-  // it huge in the hero so visitors see scale before reading copy.
-  const heroStat = compactMetrics[0]
-
-  // Three top actions — text-only cards. Each carries an eyebrow label
-  // identifying the surface, a title with the user-question framing, a
-  // body explaining what happens, and a single text link below (no
-  // double-CTA-button clutter).
   const actionCards = [
     {
       label: t('actions.sell.label'),
@@ -102,33 +72,17 @@ export default async function Home() {
     },
   ]
 
-  // Community entry points — text-only start cards. For the visitor
-  // who's thinking "how can I be part of this?".
+  const processSteps = [
+    { num: '01', title: t('process.step1.title'), body: t('process.step1.body') },
+    { num: '02', title: t('process.step2.title'), body: t('process.step2.body') },
+    { num: '03', title: t('process.step3.title'), body: t('process.step3.body') },
+  ]
+
   const communityCards = [
-    {
-      title: t('community.donate.title'),
-      body: t('community.donate.desc'),
-      href: ROUTES.public.donate,
-      ctaLabel: t('community.donate.cta'),
-    },
-    {
-      title: t('community.volunteer.title'),
-      body: t('community.volunteer.desc'),
-      href: '/get-involved/volunteer',
-      ctaLabel: t('community.volunteer.cta'),
-    },
-    {
-      title: t('community.use.title'),
-      body: t('community.use.desc'),
-      href: ROUTES.public.shop,
-      ctaLabel: t('community.use.cta'),
-    },
-    {
-      title: t('community.membership.title'),
-      body: t('community.membership.desc'),
-      href: ROUTES.public.mitgliedWerden,
-      ctaLabel: t('community.membership.cta'),
-    },
+    { title: t('community.donate.title'),     body: t('community.donate.desc'),     href: ROUTES.public.donate,         ctaLabel: t('community.donate.cta') },
+    { title: t('community.volunteer.title'),  body: t('community.volunteer.desc'),  href: '/get-involved/volunteer',    ctaLabel: t('community.volunteer.cta') },
+    { title: t('community.use.title'),        body: t('community.use.desc'),        href: ROUTES.public.shop,           ctaLabel: t('community.use.cta') },
+    { title: t('community.membership.title'), body: t('community.membership.desc'), href: ROUTES.public.mitgliedWerden, ctaLabel: t('community.membership.cta') },
   ]
 
   return (
@@ -162,56 +116,27 @@ export default async function Home() {
               "@type": "OfferCatalog",
               "name": "IT Services",
               "itemListElement": [
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": t('jsonld.service1Name'),
-                    "description": t('jsonld.service1Desc')
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": t('jsonld.service2Name'),
-                    "description": t('jsonld.service2Desc')
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": t('jsonld.service3Name'),
-                    "description": t('jsonld.service3Desc')
-                  }
-                }
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": t('jsonld.service1Name'), "description": t('jsonld.service1Desc') } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": t('jsonld.service2Name'), "description": t('jsonld.service2Desc') } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": t('jsonld.service3Name'), "description": t('jsonld.service3Desc') } }
               ]
             }
           })
         }}
       />
 
-      {/* ── Hero ─────────────────────────────────────────────────────────
-          Stat-first hero: the most credible single number sits above
-          the brand line. 88vh fills the viewport so CTAs land above the
-          fold on every screen. ───────────────────────────────────────── */}
+      {/* ── Hero — brand promise first, no numbers ─────────────────── */}
       <section className="ui-public-hero-fold">
         <div className="max-w-5xl">
-          <div className="ui-public-hero-badge">
-            {t('hero.positioning')}
-          </div>
+          <div className="ui-public-hero-badge">{t('hero.positioning')}</div>
 
-          <div className="ui-public-stat-display mt-4">{heroStat.value}</div>
-          <p className="ui-public-stat-caption mx-auto">{heroStat.label}</p>
-
-          <h1 className="ui-public-hero-title mt-12">
-            {t('hero.title')}
+          <h1 className="ui-public-hero-title">
+            {t('hero.title')}<br />
+            <span className="text-text-tertiary">{t('hero.titleSecondary')}</span>
           </h1>
 
-          <p className="ui-public-hero-lede">
-            {t('hero.subtitle')}
-          </p>
+          <p className="ui-public-hero-lede">{t('hero.lede')}</p>
+          <p className="ui-public-hero-sublede">{t('hero.sublede')}</p>
 
           <div className="ui-public-cta-row">
             <Link href={ROUTES.public.donate} className="ui-public-cta">
@@ -224,9 +149,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Three primary actions ──────────────────────────────────────
-          Text-only cards. Same shape across all three (label / title /
-          body / single CTA link) — discipline > variety. ─────────────── */}
+      {/* ── Three primary actions ──────────────────────────────────── */}
       <section className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
@@ -241,7 +164,7 @@ export default async function Home() {
 
           <div className="mt-14 grid gap-4 md:grid-cols-3">
             {actionCards.map((card) => (
-              <article key={card.title} className="ui-public-card min-h-[280px]">
+              <article key={card.title} className="ui-public-card">
                 <div className="ui-public-card-label">{card.label}</div>
                 <h3 className="ui-public-card-title">{card.title}</h3>
                 <p className="ui-public-card-body">{card.body}</p>
@@ -257,42 +180,46 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Impact — single tight strip, no card wrapping ─────────────── */}
-      <section className="py-20 sm:py-24">
+      {/* ── Two-column principle ribbon — pure typography, no chrome ── */}
+      <section className="py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+          <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
             <div>
-              <div className="ui-public-eyebrow">{t('impact.eyebrow')}</div>
-              <h2 className="ui-public-display-lg mt-4">{t('impact.title')}</h2>
+              <div className="ui-public-eyebrow">{t('ribbon.left.eyebrow')}</div>
+              <h3 className="ui-public-display-md mt-3">{t('ribbon.left.title')}</h3>
+              <p className="ui-public-section-lede mt-6">{t('ribbon.left.body')}</p>
             </div>
-            <p className="ui-public-section-lede md:justify-self-end">
-              {t('impact.subtitle')}
-            </p>
-          </div>
-
-          <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6 border-t border-subtle pt-10">
-            {compactMetrics.map((metric) => (
-              <div key={metric.label}>
-                <dd className="text-3xl sm:text-4xl font-semibold text-text-primary tabular-nums tracking-tight">
-                  {metric.value}
-                </dd>
-                <dt className="mt-2 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-                  {metric.label}
-                </dt>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-10">
-            <Link href="/about/impact" className="ui-public-meta hover:text-text-primary transition-colors">
-              {t('impact.moreLink')} →
-            </Link>
+            <div>
+              <div className="ui-public-eyebrow">{t('ribbon.right.eyebrow')}</div>
+              <h3 className="ui-public-display-md mt-3">{t('ribbon.right.title')}</h3>
+              <p className="ui-public-section-lede mt-6">{t('ribbon.right.body')}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Press strip — desaturated, low-chrome ──────────────────── */}
-      <section className="ui-public-band py-16">
+      {/* ── 01 / 02 / 03 — the cycle ────────────────────────────────── */}
+      <section className="ui-public-band py-20 sm:py-24">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <div className="ui-public-eyebrow">{t('process.eyebrow')}</div>
+          <h2 className="ui-public-display-lg mt-4">{t('process.heading')}</h2>
+
+          <div className="ui-public-body-lg mx-auto mt-16 max-w-3xl space-y-16 text-left">
+            {processSteps.map((step) => (
+              <div key={step.num} className="flex gap-8">
+                <div className="ui-public-step-num">{step.num}</div>
+                <div>
+                  <div className="ui-public-prose-strong">{step.title}</div>
+                  <div className="ui-public-prose-muted mt-2">{step.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Press strip — real coverage only ──────────────────────────── */}
+      <section className="py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="ui-public-eyebrow text-center">{t('press.eyebrow')}</div>
           <div className="mt-8">

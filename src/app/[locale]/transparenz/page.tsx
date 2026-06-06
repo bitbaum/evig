@@ -35,14 +35,13 @@ export async function generateMetadata({ params }: TransparenzPageProps): Promis
 export default async function TransparenzPage({ params }: TransparenzPageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'transparenz' })
-  const tHome = await getTranslations({ locale, namespace: 'home.impact' })
   const compactMetrics = getCompactMetrics({
-    devicesRescued: tHome('compactMetrics.devicesRescued'),
-    peopleTrained: tHome('compactMetrics.peopleTrained'),
-    reuseRate: tHome('compactMetrics.reuseRate'),
-    lifespanExtension: tHome('compactMetrics.lifespanExtension'),
-    internshipSuccess: tHome('compactMetrics.internshipSuccess'),
-    careerReentries: tHome('compactMetrics.careerReentries'),
+    devicesRescued: t('compactMetrics.devicesRescued'),
+    peopleTrained: t('compactMetrics.peopleTrained'),
+    reuseRate: t('compactMetrics.reuseRate'),
+    lifespanExtension: t('compactMetrics.lifespanExtension'),
+    internshipSuccess: t('compactMetrics.internshipSuccess'),
+    careerReentries: t('compactMetrics.careerReentries'),
   })
 
   const platforms = t.raw('platforms') as Array<{ title: string; description: string; href: string }>

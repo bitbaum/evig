@@ -261,7 +261,10 @@
       "description": "Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung."
     },
     "hero": {
-      "title": "Alte Hardware. Neues Leben.",
+      "title": "Alte Hardware.",
+      "titleSecondary": "Neues Leben.",
+      "lede": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen.",
+      "sublede": "Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",
       "subtitle": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen. Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",
       "ctaDonate": "Gerät spenden",
       "ctaDiscover": "Geräte ansehen",
@@ -298,18 +301,32 @@
       "text": "Wir bieten auch professionelle IT-Dienstleistungen an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
       "linkLabel": "IT-Dienstleistungen"
     },
-    "impact": {
-      "eyebrow": "ZAHLEN",
-      "title": "Was wir bewegen.",
-      "subtitle": "Echte Werte aus unserer Buchhaltung, nicht Marketing-Schätzungen. Jede Zahl auf /transparenz nachvollziehbar.",
-      "moreLink": "Methodik & Quellen",
-      "compactMetrics": {
-        "devicesRescued": "Geräte jährlich gerettet",
-        "peopleTrained": "Personen geschult",
-        "reuseRate": "Wiederverwendungsrate",
-        "lifespanExtension": "Jahre Lebensverlängerung",
-        "internshipSuccess": "Erfolgreiche Praktika",
-        "careerReentries": "Berufliche Wiedereinstiege"
+    "ribbon": {
+      "left": {
+        "eyebrow": "REPARIEREN",
+        "title": "Wir geben Geräten ein zweites Leben.",
+        "body": "Jeder Computer, jedes Laptop, jede Komponente verdient eine zweite Chance. Unsere Techniker und Freiwillige bringen sie wieder zum Laufen — ohne kommerziellen Aufpreis."
+      },
+      "right": {
+        "eyebrow": "WEITERGEBEN",
+        "title": "Wir bringen sie zu denen, die sie brauchen.",
+        "body": "Refurbished an Vereine, Schulen, Menschen mit knappem Budget. Marktplatz für direkte Weitergabe in der Community. Spendenbescheinigung für Geberinnen — kein Mittelsmann, keine Gebühr."
+      }
+    },
+    "process": {
+      "eyebrow": "SO FUNKTIONIERT ES",
+      "heading": "Drei Schritte. Ein Kreislauf.",
+      "step1": {
+        "title": "Spenden oder verkaufen",
+        "body": "Bring uns dein altes Gerät, lass es abholen oder stelle es selbst auf den Marktplatz. Keine Gebühr, keine Mittelsleute, Spendenquittung inklusive."
+      },
+      "step2": {
+        "title": "Reparieren statt entsorgen",
+        "body": "Unsere Werkstatt prüft, reinigt und repariert. Was nicht mehr zu retten ist, wird sortenrein zerlegt — nichts landet im Müll, solange es noch Sinn ergibt."
+      },
+      "step3": {
+        "title": "Weiterleben statt wegwerfen",
+        "body": "Im Shop, in der Community, oder direkt an Organisationen mit Bedarf. Faire Preise, transparente Herkunft, sofort einsatzbereit."
       }
     },
     "press": {
@@ -4256,6 +4273,14 @@
     "hero": {
       "title": "Transparenz",
       "subtitle": "Was wir tun und wie wir es tun"
+    },
+    "compactMetrics": {
+      "devicesRescued": "Geräte jährlich gerettet",
+      "peopleTrained": "Personen geschult",
+      "reuseRate": "Wiederverwendungsrate",
+      "lifespanExtension": "Jahre Lebensverlängerung",
+      "internshipSuccess": "Erfolgreiche Praktika",
+      "careerReentries": "Berufliche Wiedereinstiege"
     },
     "mission": {
       "title": "Unsere Mission",
