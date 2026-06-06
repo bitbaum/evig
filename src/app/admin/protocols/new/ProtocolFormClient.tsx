@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, Upload, Mic, FileText, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
+import { Loader2, FileText, Mic, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
 import { MEETING_TYPE_LABELS, PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
 import { WHISPER_MODELS } from '@/config/transcription'
@@ -12,6 +12,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { StatusBanner } from '@/components/ui/status-banner'
+import { SourceUploader } from '@/components/admin/protocols/SourceUploader'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -26,24 +28,25 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
     selectedAttendees,
     showAttendees, setShowAttendees,
     attendeeSearch, setAttendeeSearch,
-    content,
-    audioFile, setAudioFile,
+    content, setContent,
+    sources, setSources,
     whisperModel, setWhisperModel,
-    loading, processing, error,
+    loading, processing, error, setError,
     canSubmit,
     contentFormat,
     filteredTeamMembers,
     handleAIFieldsFilled,
-    handleContentChange,
     toggleAttendee,
     selectAllAttendees,
-    handleFileUpload,
     handleSubmit,
   } = useProtocolForm(teamMembers)
 
+  const hasAudio = sources.audio !== null
+  const hasTextFiles = sources.textFiles.length > 0
+  const hasTypedText = content.trim().length > 0
+
   return (
     <div className="max-w-3xl space-y-6">
-      {/* AI pre-fill for setup fields */}
       <AIFormAssist
         formType="protocol"
         variant="bar"
@@ -53,11 +56,9 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         onFieldsFilled={handleAIFieldsFilled}
       />
 
-      {error && (
-        <div className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300">{error}</div>
-      )}
+      {error && <StatusBanner variant="error">{error}</StatusBanner>}
 
-      {/* Step 1: Setup */}
+      {/* Sitzungsdetails */}
       <div className="bg-surface-base rounded-lg border p-6 space-y-4">
         <Heading level={2} className="text-lg font-semibold text-text-primary">Sitzungsdetails</Heading>
 
@@ -109,7 +110,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           </FormField>
         </div>
 
-        {/* Attendees — compact panel, uses inline styling intentionally */}
+        {/* Attendees */}
         <div>
           <Button
             type="button"
@@ -167,125 +168,99 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         </div>
       </div>
 
-      {/* Inhalt — always visible (collapsed wizard per Z.5). canSubmit still
-          enforces that meeting details + content are filled before submission. */}
-      <div className="bg-surface-base rounded-lg border p-6 space-y-4">
+      {/* Inhalt — multi-source upload (YY.1) */}
+      <div className="bg-surface-base rounded-lg border p-6 space-y-5">
+        <div>
           <Heading level={2} className="text-lg font-semibold text-text-primary">Inhalt</Heading>
-          <p className="text-sm text-text-secondary">
-            Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
+          <p className="text-sm text-text-secondary mt-1">
+            Lade Audio, Notizen oder Dateien hoch und tippe zusätzliche Hinweise.
+            Die KI strukturiert alles in einem Durchgang.
           </p>
+        </div>
 
-          <FormField label="Transkript oder Notizen" htmlFor="content">
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e) => handleContentChange(e.target.value)}
-              placeholder="Sitzungsnotizen hier einfügen..."
-              rows={10}
-              disabled={!!audioFile}
-              className="font-mono text-sm disabled:opacity-100! disabled:bg-surface-raised disabled:text-text-tertiary"
-            />
-            <div className="flex items-center justify-between mt-1">
-              <div className="flex items-center gap-2">
-                {contentFormat && (
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-secondary'}`}>
-                    {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
-                  </span>
-                )}
-              </div>
-              <span className="text-xs text-text-tertiary">{content.length} Zeichen</span>
-            </div>
+        <SourceUploader
+          value={sources}
+          onChange={setSources}
+          onError={setError}
+          disabled={loading || processing}
+        />
+
+        {hasAudio && (
+          <FormField label="Whisper-Modell" htmlFor="whisper_model">
+            <Select
+              id="whisper_model"
+              value={whisperModel}
+              onChange={(e) => setWhisperModel(e.target.value)}
+            >
+              {WHISPER_MODELS.map((model) => (
+                <option key={model.id} value={model.id}>{model.label}</option>
+              ))}
+            </Select>
           </FormField>
+        )}
 
-          {/* File Upload */}
-          <div className="border-t pt-4">
-            <label className="block text-sm font-medium text-text-secondary mb-2">
-              Oder Datei hochladen
-            </label>
-            <div className="flex items-center gap-3">
-              <label className="inline-flex items-center gap-2 px-4 min-h-11 bg-surface-raised text-text-secondary rounded-lg hover:bg-surface-overlay cursor-pointer transition-colors text-sm">
-                <Upload className="w-4 h-4" />
-                Datei wählen
-                <input
-                  type="file"
-                  accept=".txt,.md,.json,.mp3,.wav,.m4a,.webm,.ogg,.flac"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </label>
-              <span className="text-xs text-text-tertiary">.txt, .json, .mp3, .wav, .m4a, .webm</span>
-            </div>
+        <FormField label="Zusätzliche Notizen (optional)" htmlFor="content">
+          <Textarea
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Notizen, Stichpunkte oder Kontext für die KI..."
+            rows={8}
+            className="font-mono text-sm"
+          />
+          <div className="flex items-center justify-between mt-1">
+            {contentFormat ? (
+              <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-secondary'}`}>
+                {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
+              </span>
+            ) : <span />}
+            <span className="text-xs text-text-tertiary">{content.length} Zeichen</span>
+          </div>
+        </FormField>
 
-            {audioFile && (
-              <div className="mt-3 p-3 bg-surface-raised border border rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Mic className="w-4 h-4 text-action" />
-                    <span className="text-sm font-medium text-text-primary">{audioFile.name}</span>
-                    <span className="text-xs text-action">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setAudioFile(null)}
-                    className="text-xs text-action hover:text-action"
-                  >
-                    Entfernen
-                  </Button>
-                </div>
-
-                {/* Whisper model selector — compact inline styling inside audio panel */}
-                <div className="mt-2">
-                  <label htmlFor="whisper_model" className="block text-xs font-medium text-text-secondary mb-1">
-                    Whisper-Modell
-                  </label>
-                  <Select
-                    id="whisper_model"
-                    value={whisperModel}
-                    onChange={(e) => setWhisperModel(e.target.value)}
-                    className="py-1 text-xs"
-                  >
-                    {WHISPER_MODELS.map((model) => (
-                      <option key={model.id} value={model.id}>{model.label}</option>
-                    ))}
-                  </Select>
-                </div>
-              </div>
+        {/* Submit */}
+        <div className="flex items-center justify-between pt-4 border-t">
+          <div className="text-sm text-text-tertiary flex items-center gap-2">
+            {hasAudio && (
+              <span className="inline-flex items-center gap-1">
+                <Mic className="w-3 h-3" /> Audio
+              </span>
+            )}
+            {(hasTextFiles || hasTypedText) && (
+              <span className="inline-flex items-center gap-1">
+                <FileText className="w-3 h-3" />
+                {hasTextFiles && hasTypedText
+                  ? 'Notizen + Dateien'
+                  : hasTextFiles
+                    ? `${sources.textFiles.length} Datei${sources.textFiles.length === 1 ? '' : 'en'}`
+                    : 'Notizen'}
+              </span>
+            )}
+            {!hasAudio && !hasTextFiles && !hasTypedText && (
+              <span>Quellen hochladen oder Notizen eingeben</span>
             )}
           </div>
-
-          {/* Submit */}
-          <div className="flex items-center justify-between pt-4 border-t">
-            <div className="text-sm text-text-tertiary">
-              {audioFile ? (
-                <span className="flex items-center gap-1"><Mic className="w-3 h-3" /> Audio wird transkribiert und strukturiert</span>
-              ) : content.trim() ? (
-                <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> Text wird von KI strukturiert</span>
-              ) : (
-                <span>Inhalt eingeben oder Datei hochladen</span>
-              )}
-            </div>
-            <Button
-              onClick={handleSubmit}
-              disabled={!canSubmit}
-              variant="primary"
-              size="lg"
-              className="flex items-center gap-2"
-            >
-              {(loading || processing) ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  {processing ? 'KI verarbeitet...' : 'Erstellt...'}
-                </>
-              ) : (
-                <>
-                  <Check className="w-4 h-4" />
-                  Protokoll erstellen
-                </>
-              )}
-            </Button>
-          </div>
+          <Button
+            onClick={handleSubmit}
+            disabled={!canSubmit}
+            variant="primary"
+            size="lg"
+            className="flex items-center gap-2"
+          >
+            {(loading || processing) ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {processing ? 'KI verarbeitet...' : 'Erstellt...'}
+              </>
+            ) : (
+              <>
+                <Check className="w-4 h-4" />
+                Protokoll erstellen
+              </>
+            )}
+          </Button>
         </div>
+      </div>
     </div>
   )
 }

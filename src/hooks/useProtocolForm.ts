@@ -9,11 +9,11 @@ import {
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
-import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL } from '@/config/transcription'
 import { formatDateShort } from '@/lib/date-formats'
 import { todayLocalIso } from '@/lib/utils/date'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import type { SourceValue } from '@/components/admin/protocols/SourceUploader'
 
 export function useProtocolForm(
   teamMembers: Array<{ id: string; name: string }>
@@ -43,9 +43,14 @@ export function useProtocolForm(
   const [showAttendees, setShowAttendees] = useState(true)
   const [attendeeSearch, setAttendeeSearch] = useState('')
 
-  // Content state
+  // Content state (multi-source — YY.1):
+  //   content = manually typed text (textarea)
+  //   sources.audio = optional single recording
+  //   sources.textFiles = uploaded .txt/.md/.json files
+  // The textarea is independent of file uploads so the user can add
+  // typed notes alongside dropped files without one clobbering the other.
   const [content, setContent] = useState('')
-  const [audioFile, setAudioFile] = useState<File | null>(null)
+  const [sources, setSources] = useState<SourceValue>({ audio: null, textFiles: [] })
   const [whisperModel, setWhisperModel] = useState(DEFAULT_WHISPER_MODEL)
 
   // UI state
@@ -77,12 +82,6 @@ export function useProtocolForm(
     }
   }, [content])
 
-  const detectedInputMethod = useMemo(() => {
-    if (audioFile) return 'audio'
-    if (contentFormat === 'json') return 'notes'
-    return 'transcript'
-  }, [audioFile, contentFormat])
-
   const filteredTeamMembers = useMemo(() => {
     if (!attendeeSearch.trim()) return teamMembers
     const search = attendeeSearch.toLowerCase()
@@ -91,8 +90,22 @@ export function useProtocolForm(
 
   const setupComplete =
     meetingType !== '' && title.trim() !== '' && meetingDate !== ''
-  const hasContent = audioFile !== null || content.trim().length >= 20
+  const hasContent =
+    sources.audio !== null ||
+    sources.textFiles.length > 0 ||
+    content.trim().length >= 20
   const canSubmit = setupComplete && hasContent && !loading && !processing
+
+  // Used at protocol-creation time so the detail page knows which
+  // primary source drove the structuring (drives the reprocess UI label).
+  // Audio wins because Whisper is the most expensive step; if the AI is
+  // re-run later it should be re-run on the same audio rather than just
+  // re-structuring the same text.
+  const detectedInputMethod = useMemo<'audio' | 'notes' | 'transcript'>(() => {
+    if (sources.audio) return 'audio'
+    if (contentFormat === 'json') return 'notes'
+    return 'transcript'
+  }, [sources.audio, contentFormat])
 
   // Handlers
   const handleAIFieldsFilled = (
@@ -108,9 +121,12 @@ export function useProtocolForm(
       setVisibility(data.visibility as ProtocolVisibility)
   }
 
-  const handleContentChange = (text: string) => {
-    setContent(text)
-    setAudioFile(null)
+  // SourceUploader is the SSOT for which files exist — we just forward.
+  // Errors from validation come back via the `onError` callback wired
+  // in the form component.
+  const handleSourcesChange = (next: SourceValue) => {
+    setSources(next)
+    setError(null)
   }
 
   const toggleAttendee = (id: string) => {
@@ -125,36 +141,6 @@ export function useProtocolForm(
     } else {
       setSelectedAttendees(teamMembers.map((m) => m.id))
     }
-  }
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setError(null)
-
-    if (
-      file.type.startsWith('audio/') ||
-      file.name.match(/\.(mp3|wav|m4a|webm|ogg|flac)$/i)
-    ) {
-      const validationError = validateAudioUpload(file)
-      if (validationError) {
-        setError(validationError)
-        return
-      }
-      setAudioFile(file)
-      setContent('')
-      return
-    }
-
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      const text = event.target?.result
-      if (typeof text === 'string') {
-        setContent(text)
-        setAudioFile(null)
-      }
-    }
-    reader.readAsText(file)
   }
 
   const handleSubmit = async () => {
@@ -181,53 +167,31 @@ export function useProtocolForm(
       const protocolId = createResult.data.id
       setProcessing(true)
 
-      if (audioFile) {
-        const audioFormData = new FormData()
-        audioFormData.append('audio', audioFile)
-        audioFormData.append('model', whisperModel)
+      // Single unified upload — all sources go to /process-sources.
+      const formData = new FormData()
+      if (sources.audio) {
+        formData.append('audio', sources.audio)
+        formData.append('whisper_model', whisperModel)
+      }
+      if (content.trim()) formData.append('text', content)
+      for (const tf of sources.textFiles) formData.append('textFile', tf)
 
-        const processRes = await fetch(
-          `/api/protocols/${protocolId}/process-audio`,
-          { method: 'POST', body: audioFormData }
-        )
-        const processData = await processRes.json()
-        if (!processData.success) {
-          const params = new URLSearchParams({
-            processing: 'failed',
-            retryable: String(processData.retryable ?? true),
-          })
-          if (processData.error)
-            params.set('error', String(processData.error).slice(0, 250))
-          router.push(`/admin/protocols/${protocolId}?${params}`)
-          return
-        }
-      } else if (content.trim()) {
-        const endpoint =
-          detectedInputMethod === 'notes' ? 'process-notes' : 'process'
-        const body =
-          detectedInputMethod === 'transcript'
-            ? { raw_transcript: content }
-            : { content }
-
-        const processRes = await fetch(
-          `/api/protocols/${protocolId}/${endpoint}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-          }
-        )
-        const processData = await processRes.json()
-        if (!processData.success) {
-          const params = new URLSearchParams({
-            processing: 'failed',
-            retryable: String(processData.retryable ?? true),
-          })
-          if (processData.error)
-            params.set('error', String(processData.error).slice(0, 250))
-          router.push(`/admin/protocols/${protocolId}?${params}`)
-          return
-        }
+      // apiFetch isn't FormData-aware in a way that keeps the boundary
+      // simple; we use fetch directly and parse the JSON manually.
+      const processRes = await fetch(
+        `/api/protocols/${protocolId}/process-sources`,
+        { method: 'POST', body: formData },
+      )
+      const processData = await processRes.json()
+      if (!processData.success) {
+        const params = new URLSearchParams({
+          processing: 'failed',
+          retryable: String(processData.retryable ?? true),
+        })
+        if (processData.error)
+          params.set('error', String(processData.error).slice(0, 250))
+        router.push(`/admin/protocols/${protocolId}?${params}`)
+        return
       }
 
       router.push(`/admin/protocols/${protocolId}`)
@@ -256,14 +220,16 @@ export function useProtocolForm(
     setAttendeeSearch,
     // Content state
     content,
-    audioFile,
-    setAudioFile,
+    setContent,
+    sources,
+    setSources: handleSourcesChange,
     whisperModel,
     setWhisperModel,
     // UI state
     loading,
     processing,
     error,
+    setError,
     // Computed
     setupComplete,
     hasContent,
@@ -273,10 +239,8 @@ export function useProtocolForm(
     filteredTeamMembers,
     // Handlers
     handleAIFieldsFilled,
-    handleContentChange,
     toggleAttendee,
     selectAllAttendees,
-    handleFileUpload,
     handleSubmit,
   }
 }
