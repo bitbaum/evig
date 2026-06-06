@@ -219,7 +219,11 @@
       "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
       "ctaDiscover": "Explore now",
       "ctaAbout": "About us",
-      "positioning": "Swiss circular-economy nonprofit since 2003"
+      "positioning": "Swiss circular-economy nonprofit since 2003",
+      "titleSecondary": "A second life.",
+      "lede": "We repair second-hand computers and bring them to people who need them.",
+      "sublede": "Swiss non-profit since 2003 — sustained by a community that repairs, passes on, and learns from each other.",
+      "ctaDonate": "Donate a device"
     },
     "actions": {
       "heading": "What would you like to do?",
@@ -227,20 +231,25 @@
         "title": "Got an old device?",
         "subtitle": "Sell or give it away in 2 minutes — free with no fees.",
         "primaryLabel": "Browse marketplace",
-        "secondaryLabel": "Sell now"
+        "secondaryLabel": "Sell now",
+        "label": "01 / MARKETPLACE"
       },
       "repair": {
         "title": "Computer broken?",
         "subtitle": "Technicians near you can help — or offer repairs yourself.",
         "primaryLabel": "Get help",
-        "secondaryLabel": "Become a technician"
+        "secondaryLabel": "Become a technician",
+        "label": "02 / IT HELP"
       },
       "learn": {
         "title": "Want to learn something new?",
         "subtitle": "Hands-on workshops on Linux, hardware repair, programming and AI.",
         "primaryLabel": "View workshops",
-        "secondaryLabel": "Browse resources"
-      }
+        "secondaryLabel": "Browse resources",
+        "label": "03 / WORKSHOPS"
+      },
+      "eyebrow": "THREE WAYS",
+      "subtitle": "Whether you want to get rid of an old device, buy an affordable one, or help with repairs — you're in the right place."
     },
     "proServices": {
       "text": "We also offer professional IT services: computer repair, data recovery, Linux installation and web development.",
@@ -264,20 +273,25 @@
       "subtitle": "Use it, contribute, or support — every bit counts.",
       "use": {
         "title": "Use",
-        "desc": "Buy, sell, repair — for free"
+        "desc": "Buy, sell, repair — for free",
+        "cta": "To the shop"
       },
       "volunteer": {
         "title": "Volunteer",
-        "desc": "Share your knowledge as a volunteer technician"
+        "desc": "Share your knowledge as a volunteer technician",
+        "cta": "Get involved"
       },
       "donate": {
         "title": "Support",
-        "desc": "Donate devices or money to the association"
+        "desc": "Donate devices or money to the association",
+        "cta": "Donate now"
       },
       "membership": {
         "title": "Become a member",
-        "desc": "Vote and actively shape the association"
-      }
+        "desc": "Vote and actively shape the association",
+        "cta": "Become a member"
+      },
+      "eyebrow": "GET INVOLVED"
     },
     "newsletter": {
       "title": "Stay up to date",
@@ -308,6 +322,44 @@
       "service2Desc": "Recovery of data from damaged devices",
       "service3Name": "Computer Repair",
       "service3Desc": "Repair and restoration of vintage computers"
+    },
+    "ribbon": {
+      "left": {
+        "eyebrow": "REPAIR",
+        "title": "We give devices a second life.",
+        "body": "Every computer, every laptop, every component deserves a second chance. Our technicians and volunteers bring them back to life — no commercial markup."
+      },
+      "right": {
+        "eyebrow": "PASS ON",
+        "title": "We bring them to people who need them.",
+        "body": "Refurbished for associations, schools, people on tight budgets. Marketplace for direct community handover. Donation receipt for givers — no middleman, no fee."
+      }
+    },
+    "process": {
+      "eyebrow": "HOW IT WORKS",
+      "heading": "Three steps. One cycle.",
+      "step1": {
+        "title": "Donate or sell",
+        "body": "Bring us your old device, have it picked up, or list it yourself on the marketplace. No fee, no middleman, donation receipt included."
+      },
+      "step2": {
+        "title": "Repair instead of discard",
+        "body": "Our workshop checks, cleans and repairs. What can't be saved is taken apart by type — nothing goes to landfill as long as it still makes sense."
+      },
+      "step3": {
+        "title": "Live on instead of be thrown away",
+        "body": "In the shop, in the community, or directly to organizations in need. Fair prices, transparent origin, ready to use."
+      }
+    },
+    "press": {
+      "eyebrow": "AS REPORTED IN"
+    },
+    "finalCta": {
+      "eyebrow": "READY?",
+      "heading": "Give your computer a second life.",
+      "subtitle": "5 minutes of effort. We pick it up. You get a donation receipt. Your device ends up with someone who needs it.",
+      "button": "Donate a device",
+      "note": "Or contact us directly — info@revamp-it.ch"
     }
   },
   "shop": {
@@ -867,7 +919,8 @@
       "badges": {
         "soon": "Coming soon"
       },
-      "filterByCategory": "Filter by category"
+      "filterByCategory": "Filter by category",
+      "ctaEyebrow": "READY?"
     },
     "servicePage": {
       "comingSoonBanner": "This service is coming soon. Contact us to express your interest and be notified when it becomes available."
@@ -4486,6 +4539,14 @@
       "text": "{orgName} is run by a voluntary board. Contact:",
       "joinCta": "Become a Member",
       "donateCta": "Donate"
+    },
+    "compactMetrics": {
+      "devicesRescued": "Devices rescued per year",
+      "peopleTrained": "People trained",
+      "reuseRate": "Reuse rate",
+      "lifespanExtension": "Years of lifespan extension",
+      "internshipSuccess": "Successful internships",
+      "careerReentries": "Career re-entries"
     }
   },
   "notFound": {
@@ -5759,7 +5820,13 @@
     "hero": {
       "title": "Help directly.",
       "body": "Every donation rescues devices from e-waste, extends lifecycles and enables technology for people who couldn't otherwise afford it.",
-      "cta": "Transfer now"
+      "cta": "Transfer now",
+      "positioning": "Donate · Swiss non-profit · since 2003",
+      "titleSecondary": "Immediately effective.",
+      "lede": "Every donation rescues devices from e-waste and gives technology to people who otherwise could not afford it.",
+      "sublede": "Money to our account or a device to our workshop — both help directly.",
+      "ctaMoney": "Donate money",
+      "ctaDevice": "Donate a device"
     },
     "transparency": {
       "label": "Transparency",
@@ -5784,7 +5851,9 @@
           "title": "Corporate donation — 10 devices",
           "description": "10 devices for educational institutions, social projects or low-income households."
         }
-      ]
+      ],
+      "eyebrow": "WHAT YOUR DONATION DOES",
+      "cta": "Transfer this amount"
     },
     "bridgeCta": "Choose amount and transfer",
     "transfer": {
@@ -5795,7 +5864,8 @@
       "bankLabel": "Bank",
       "purposeLabel": "Payment reference",
       "copyBtn": "Copy",
-      "copyIbanBtn": "Copy IBAN"
+      "copyIbanBtn": "Copy IBAN",
+      "eyebrow": "BANK TRANSFER"
     },
     "devices": {
       "heading": "Donate devices",
@@ -5813,7 +5883,8 @@
       "prepLabel": "Preparation:",
       "prepText": "Please delete your personal data before drop-off (we can help if needed).",
       "addressLabel": "Drop-off address",
-      "questionsLink": "Questions? Write to us →"
+      "questionsLink": "Questions? Write to us →",
+      "eyebrow": "DONATE A DEVICE"
     },
     "dropoff": {
       "heading": "Schedule a drop-off",
@@ -5830,13 +5901,26 @@
       "submitting": "Sending …",
       "successTitle": "Thanks for your announcement!",
       "successBody": "We've sent you a confirmation by email and will be in touch shortly to fix a time.",
-      "errorGeneric": "The announcement couldn't be sent. Please try again later."
+      "errorGeneric": "The announcement couldn't be sent. Please try again later.",
+      "eyebrow": "BOOK A DROP-OFF"
     },
     "newsletter": {
       "title": "We'll keep you informed about the impact of your donation.",
       "description": "No ads. Just real updates on devices rescued, CO₂ saved and people supported."
     },
-    "purposeTemplate": "Donation {orgName} {month} {year}"
+    "purposeTemplate": "Donation {orgName} {month} {year}",
+    "paths": {
+      "money": {
+        "eyebrow": "MONEY",
+        "title": "Bank transfer in two minutes.",
+        "body": "Recipient, IBAN, reference — all below, ready to copy. Donation receipt on request. No third party, no transaction fee."
+      },
+      "device": {
+        "eyebrow": "DEVICE",
+        "title": "Drop off a laptop, desktop or monitor.",
+        "body": "We accept working or repairable devices, refurbish them and pass them on. We can erase your personal data on site."
+      }
+    }
   },
   "mitgliedWerden": {
     "meta": {

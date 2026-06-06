@@ -656,6 +656,14 @@
       "body": "{orgName}은 자원봉사 이사회가 운영합니다. 연락처:",
       "joinBtn": "회원 되기",
       "donateBtn": "기부하기"
+    },
+    "compactMetrics": {
+      "devicesRescued": "연간 구해낸 장치",
+      "peopleTrained": "교육 받은 사람",
+      "reuseRate": "재사용률",
+      "lifespanExtension": "수명 연장 년수",
+      "internshipSuccess": "성공한 인턴십",
+      "careerReentries": "직장 복귀"
     }
   },
   "notFound": {
@@ -2038,7 +2046,11 @@
       "subtitle": "매년 6,200만 톤의 전자 폐기물이 버려집니다. 저희는 수리하고, 나누고, 서로에게서 배우는 커뮤니티와 함께 이를 바꾸고 있습니다.",
       "ctaDiscover": "지금 둘러보기",
       "ctaAbout": "소개",
-      "positioning": "2003년부터 스위스 순환 경제 비영리 단체"
+      "positioning": "2003년부터 스위스 순환 경제 비영리 단체",
+      "titleSecondary": "새로운 생명을.",
+      "lede": "중고 컴퓨터를 수리하여 필요한 사람들에게 전달합니다.",
+      "sublede": "2003년부터 활동하는 스위스 비영리단체 — 수리하고, 전달하고, 서로 배우는 커뮤니티가 함께합니다.",
+      "ctaDonate": "장치 기부하기"
     },
     "actions": {
       "heading": "무엇을 하시겠어요?",
@@ -2046,20 +2058,25 @@
         "title": "오래된 기기가 있으신가요?",
         "subtitle": "2분 안에 판매하거나 나눠드리세요 — 무료, 수수료 없음.",
         "primaryLabel": "마켓플레이스 둘러보기",
-        "secondaryLabel": "지금 판매하기"
+        "secondaryLabel": "지금 판매하기",
+        "label": "01 / 마켓플레이스"
       },
       "repair": {
         "title": "컴퓨터가 고장났나요?",
         "subtitle": "가까운 기술자가 도움을 드립니다 — 또는 직접 수리를 제공해 보세요.",
         "primaryLabel": "도움 찾기",
-        "secondaryLabel": "기술자 되기"
+        "secondaryLabel": "기술자 되기",
+        "label": "02 / IT 지원"
       },
       "learn": {
         "title": "새로운 것을 배우고 싶으신가요?",
         "subtitle": "Linux, 하드웨어 수리, 프로그래밍, AI에 관한 실습 워크숍.",
         "primaryLabel": "워크숍 보기",
-        "secondaryLabel": "노하우 탐색"
-      }
+        "secondaryLabel": "노하우 탐색",
+        "label": "03 / 워크숍"
+      },
+      "eyebrow": "세 가지 길",
+      "subtitle": "오래된 장치를 처분하고 싶거나, 저렴한 장치를 사고 싶거나, 수리를 돕고 싶다면 — 제대로 찾아오셨습니다."
     },
     "proServices": {
       "text": "저희는 전문 {link}도 제공합니다: 컴퓨터 수리, 데이터 복구, Linux 설치, 웹 개발.",
@@ -2083,20 +2100,25 @@
       "subtitle": "이용하든, 돕든, 지원하든 — 모든 기여가 중요합니다.",
       "use": {
         "title": "이용하기",
-        "desc": "구매, 판매, 수리 — 무료"
+        "desc": "구매, 판매, 수리 — 무료",
+        "cta": "매장으로"
       },
       "volunteer": {
         "title": "자원봉사",
-        "desc": "자원봉사 기술자로 지식을 나눠주세요"
+        "desc": "자원봉사 기술자로 지식을 나눠주세요",
+        "cta": "참여하기"
       },
       "donate": {
         "title": "지원하기",
-        "desc": "단체를 위해 기기나 자금을 기부하세요"
+        "desc": "단체를 위해 기기나 자금을 기부하세요",
+        "cta": "지금 기부"
       },
       "membership": {
         "title": "회원 가입",
-        "desc": "투표하고 단체 운영에 적극 참여하세요"
-      }
+        "desc": "투표하고 단체 운영에 적극 참여하세요",
+        "cta": "회원 가입"
+      },
+      "eyebrow": "참여"
     },
     "newsletter": {
       "title": "최신 소식 받기",
@@ -2127,6 +2149,44 @@
       "service2Desc": "손상된 기기에서 데이터 복구",
       "service3Name": "컴퓨터 수리",
       "service3Desc": "빈티지 컴퓨터 수리 및 복원"
+    },
+    "ribbon": {
+      "left": {
+        "eyebrow": "수리",
+        "title": "장치에 두 번째 생명을 줍니다.",
+        "body": "모든 컴퓨터, 모든 노트북, 모든 부품은 두 번째 기회를 받을 자격이 있습니다. 우리 기술자들과 자원봉사자들이 상업적 마진 없이 다시 작동하게 만듭니다."
+      },
+      "right": {
+        "eyebrow": "전달",
+        "title": "필요한 사람들에게 전달합니다.",
+        "body": "단체, 학교, 예산이 부족한 사람들을 위해 재정비. 커뮤니티 내 직접 전달을 위한 마켓플레이스. 기부자에게는 기부 영수증 — 중개인 없음, 수수료 없음."
+      }
+    },
+    "process": {
+      "eyebrow": "작동 방식",
+      "heading": "세 단계. 하나의 순환.",
+      "step1": {
+        "title": "기부 또는 판매",
+        "body": "오래된 장치를 가져오시거나, 수거를 요청하시거나, 직접 마켓플레이스에 등록하세요. 수수료 없음, 중개인 없음, 기부 영수증 포함."
+      },
+      "step2": {
+        "title": "버리지 않고 수리",
+        "body": "저희 작업장에서 점검, 청소, 수리합니다. 살릴 수 없는 것은 종류별로 분해 — 의미가 있는 한 아무것도 매립지로 가지 않습니다."
+      },
+      "step3": {
+        "title": "버리지 않고 계속 사용",
+        "body": "매장에서, 커뮤니티에서, 또는 필요한 단체에 직접 전달. 공정한 가격, 투명한 출처, 즉시 사용 가능."
+      }
+    },
+    "press": {
+      "eyebrow": "언론 보도"
+    },
+    "finalCta": {
+      "eyebrow": "준비됐나요?",
+      "heading": "컴퓨터에 두 번째 생명을 주세요.",
+      "subtitle": "5분만 투자하세요. 저희가 수거합니다. 기부 영수증을 받습니다. 당신의 장치가 필요한 사람의 손에 들어갑니다.",
+      "button": "장치 기부하기",
+      "note": "또는 직접 연락주세요 — info@revamp-it.ch"
     }
   },
   "itHelp": {
@@ -3917,7 +3977,8 @@
         "software": "소프트웨어 솔루션",
         "soon": "출시 예정"
       },
-      "filterByCategory": "카테고리별 필터"
+      "filterByCategory": "카테고리별 필터",
+      "ctaEyebrow": "준비됐나요?"
     },
     "servicePage": {
       "comingSoonBanner": "이 서비스는 곧 제공됩니다. 관심을 알리고 이용 가능할 때 알림을 받으려면 저희에게 연락해 주세요."
@@ -5718,7 +5779,13 @@
     "hero": {
       "title": "직접 돕기.",
       "body": "모든 기부는 전자 폐기물에서 기기를 구하고, 수명을 연장하며, 그렇지 않으면 감당할 수 없는 사람들이 기술에 접근할 수 있게 합니다.",
-      "cta": "지금 이체하기"
+      "cta": "지금 이체하기",
+      "positioning": "기부 · 스위스 비영리단체 · 2003년부터",
+      "titleSecondary": "즉시 효과적.",
+      "lede": "모든 기부는 장치를 전자 폐기물에서 구해내고, 그렇지 않으면 살 수 없는 사람들에게 기술을 제공합니다.",
+      "sublede": "계좌로 송금하거나 작업장에 장치를 가져오시면 — 둘 다 직접적인 도움이 됩니다.",
+      "ctaMoney": "돈 기부하기",
+      "ctaDevice": "장치 기부하기"
     },
     "transparency": {
       "label": "투명성",
@@ -5743,7 +5810,9 @@
           "title": "기업 기부 — 기기 10대",
           "description": "교육 기관, 사회 프로젝트 또는 저소득 가정을 위한 기기 10대."
         }
-      ]
+      ],
+      "eyebrow": "당신의 기부가 만드는 것",
+      "cta": "이 금액 송금"
     },
     "bridgeCta": "금액 선택 및 이체",
     "transfer": {
@@ -5754,7 +5823,8 @@
       "bankLabel": "은행",
       "purposeLabel": "결제 목적",
       "copyBtn": "복사",
-      "copyIbanBtn": "IBAN 복사"
+      "copyIbanBtn": "IBAN 복사",
+      "eyebrow": "은행 송금"
     },
     "devices": {
       "heading": "기기 기부하기",
@@ -5772,7 +5842,8 @@
       "prepLabel": "준비:",
       "prepText": "인계 전 개인 데이터를 삭제해 주세요 (필요한 경우 도와드립니다).",
       "addressLabel": "반납 주소",
-      "questionsLink": "질문이 있으신가요? 문의하기 →"
+      "questionsLink": "질문이 있으신가요? 문의하기 →",
+      "eyebrow": "장치 기부"
     },
     "dropoff": {
       "heading": "기기 반납 신청",
@@ -5789,13 +5860,26 @@
       "submitting": "전송 중 …",
       "successTitle": "신청해 주셔서 감사합니다!",
       "successBody": "확인 이메일을 보내드렸으며, 일정 확정을 위해 곧 연락드리겠습니다.",
-      "errorGeneric": "신청을 보낼 수 없습니다. 나중에 다시 시도해 주세요."
+      "errorGeneric": "신청을 보낼 수 없습니다. 나중에 다시 시도해 주세요.",
+      "eyebrow": "방문 예약"
     },
     "newsletter": {
       "title": "기부의 영향에 대해 알려드리겠습니다.",
       "description": "광고 없음. 구조된 기기, 절감된 CO₂, 지원된 사람들에 대한 실제 업데이트만."
     },
-    "purposeTemplate": "{orgName} 기부 {month} {year}"
+    "purposeTemplate": "{orgName} 기부 {month} {year}",
+    "paths": {
+      "money": {
+        "eyebrow": "돈",
+        "title": "2분이면 끝나는 은행 송금.",
+        "body": "수령인, IBAN, 목적 — 모두 아래에 있어 복사할 수 있습니다. 요청 시 기부 영수증. 제3자 없음, 거래 수수료 없음."
+      },
+      "device": {
+        "eyebrow": "장치",
+        "title": "노트북, 데스크탑, 모니터를 가져오세요.",
+        "body": "작동하거나 수리 가능한 장치를 받고, 재정비하여 전달합니다. 개인 데이터는 현장에서 삭제해 드릴 수 있습니다."
+      }
+    }
   },
   "mitgliedWerden": {
     "meta": {

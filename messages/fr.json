@@ -220,7 +220,11 @@
       "subtitle": "Chaque année, 62 millions de tonnes d'appareils électroniques finissent à la poubelle. Nous changeons cela — avec une communauté qui répare, partage et apprend ensemble.",
       "ctaDiscover": "Découvrir maintenant",
       "ctaAbout": "Qui sommes-nous",
-      "positioning": "Association suisse à but non lucratif pour l'économie circulaire depuis 2003"
+      "positioning": "Association suisse à but non lucratif pour l'économie circulaire depuis 2003",
+      "titleSecondary": "Une seconde vie.",
+      "lede": "Nous réparons des ordinateurs d'occasion et les apportons aux personnes qui en ont besoin.",
+      "sublede": "Association suisse à but non lucratif depuis 2003 — portée par une communauté qui répare, transmet et apprend les uns des autres.",
+      "ctaDonate": "Faire don d'un appareil"
     },
     "actions": {
       "heading": "Que souhaitez-vous faire?",
@@ -228,20 +232,25 @@
         "title": "Un vieux appareil à donner?",
         "subtitle": "Vendez-le ou donnez-le en 2 minutes — gratuitement et sans frais.",
         "primaryLabel": "Découvrir la marketplace",
-        "secondaryLabel": "Vendre maintenant"
+        "secondaryLabel": "Vendre maintenant",
+        "label": "01 / MARCHÉ"
       },
       "repair": {
         "title": "Ordinateur en panne?",
         "subtitle": "Des techniciens près de chez vous aident — ou proposez vous-même des réparations.",
         "primaryLabel": "Trouver de l'aide",
-        "secondaryLabel": "Devenir technicien"
+        "secondaryLabel": "Devenir technicien",
+        "label": "02 / AIDE IT"
       },
       "learn": {
         "title": "Envie d'apprendre?",
         "subtitle": "Ateliers pratiques sur Linux, réparation hardware, programmation et IA.",
         "primaryLabel": "Voir les ateliers",
-        "secondaryLabel": "Explorer les ressources"
-      }
+        "secondaryLabel": "Explorer les ressources",
+        "label": "03 / ATELIERS"
+      },
+      "eyebrow": "TROIS VOIES",
+      "subtitle": "Que vous souhaitiez vous débarrasser d'un vieil appareil, en acheter un abordable ou aider aux réparations — vous êtes au bon endroit."
     },
     "proServices": {
       "text": "Nous proposons également des {link} professionnels: réparation informatique, récupération de données, installation Linux et développement web.",
@@ -265,20 +274,25 @@
       "subtitle": "Utiliser, contribuer ou soutenir — chaque geste compte.",
       "use": {
         "title": "Utiliser",
-        "desc": "Acheter, vendre, réparer — gratuitement"
+        "desc": "Acheter, vendre, réparer — gratuitement",
+        "cta": "Vers la boutique"
       },
       "volunteer": {
         "title": "Contribuer",
-        "desc": "Partagez vos connaissances en tant que technicien bénévole"
+        "desc": "Partagez vos connaissances en tant que technicien bénévole",
+        "cta": "Participer"
       },
       "donate": {
         "title": "Soutenir",
-        "desc": "Donnez du matériel ou faites un don à l'association"
+        "desc": "Donnez du matériel ou faites un don à l'association",
+        "cta": "Donner maintenant"
       },
       "membership": {
         "title": "Devenir membre",
-        "desc": "Votez et façonnez activement l'association"
-      }
+        "desc": "Votez et façonnez activement l'association",
+        "cta": "Devenir membre"
+      },
+      "eyebrow": "PARTICIPER"
     },
     "newsletter": {
       "title": "Restez informé",
@@ -309,6 +323,44 @@
       "service2Desc": "Récupération de données depuis des appareils endommagés",
       "service3Name": "Réparation d'ordinateurs",
       "service3Desc": "Réparation et restauration d'ordinateurs vintage"
+    },
+    "ribbon": {
+      "left": {
+        "eyebrow": "RÉPARER",
+        "title": "Nous donnons une seconde vie aux appareils.",
+        "body": "Chaque ordinateur, chaque portable, chaque composant mérite une seconde chance. Nos techniciens et bénévoles les remettent en marche — sans marge commerciale."
+      },
+      "right": {
+        "eyebrow": "TRANSMETTRE",
+        "title": "Nous les apportons à ceux qui en ont besoin.",
+        "body": "Reconditionnés pour associations, écoles, personnes à budget serré. Marché pour le don direct dans la communauté. Reçu fiscal pour les donateurs — pas d'intermédiaire, pas de frais."
+      }
+    },
+    "process": {
+      "eyebrow": "COMMENT ÇA MARCHE",
+      "heading": "Trois étapes. Un cycle.",
+      "step1": {
+        "title": "Donner ou vendre",
+        "body": "Apportez-nous votre vieil appareil, faites-le récupérer ou mettez-le vous-même sur le marché. Aucun frais, pas d'intermédiaire, reçu fiscal inclus."
+      },
+      "step2": {
+        "title": "Réparer plutôt que jeter",
+        "body": "Notre atelier vérifie, nettoie et répare. Ce qui n'est pas récupérable est démonté par catégorie — rien ne va à la décharge tant que cela a du sens."
+      },
+      "step3": {
+        "title": "Continuer à vivre plutôt qu'être jeté",
+        "body": "Au magasin, dans la communauté, ou directement à des organisations dans le besoin. Prix justes, origine transparente, prêt à l'emploi."
+      }
+    },
+    "press": {
+      "eyebrow": "TEL QUE RAPPORTÉ"
+    },
+    "finalCta": {
+      "eyebrow": "PRÊT ?",
+      "heading": "Donnez une seconde vie à votre ordinateur.",
+      "subtitle": "5 minutes d'effort. Nous le récupérons. Vous recevez un reçu fiscal. Votre appareil finit chez quelqu'un qui en a besoin.",
+      "button": "Faire don d'un appareil",
+      "note": "Ou contactez-nous directement — info@revamp-it.ch"
     }
   },
   "shop": {
@@ -847,7 +899,8 @@
         "software": "Solutions Logicielles",
         "soon": "Bientôt Disponible"
       },
-      "filterByCategory": "Filtrer par catégorie"
+      "filterByCategory": "Filtrer par catégorie",
+      "ctaEyebrow": "PRÊT ?"
     },
     "servicePage": {
       "comingSoonBanner": "Ce service arrive bientôt. Contactez-nous pour exprimer votre intérêt et être notifié lorsqu'il sera disponible."
@@ -4520,6 +4573,14 @@
       "text": "{orgName} est dirigé par un comité directeur bénévole. Contact :",
       "joinCta": "Devenir membre",
       "donateCta": "Faire un don"
+    },
+    "compactMetrics": {
+      "devicesRescued": "Appareils sauvés par an",
+      "peopleTrained": "Personnes formées",
+      "reuseRate": "Taux de réutilisation",
+      "lifespanExtension": "Années d'extension de durée de vie",
+      "internshipSuccess": "Stages réussis",
+      "careerReentries": "Retours à la vie active"
     }
   },
   "notFound": {
@@ -5723,7 +5784,13 @@
     "hero": {
       "title": "Aider directement.",
       "body": "Chaque don sauve des appareils des déchets électroniques, prolonge les cycles de vie et permet à des personnes qui ne pourraient autrement pas se le permettre d'accéder à la technologie.",
-      "cta": "Virer maintenant"
+      "cta": "Virer maintenant",
+      "positioning": "Dons · Association suisse à but non lucratif · depuis 2003",
+      "titleSecondary": "Immédiatement efficace.",
+      "lede": "Chaque don sauve des appareils du gaspillage électronique et offre la technologie à ceux qui ne pourraient pas se le permettre.",
+      "sublede": "Argent sur notre compte ou appareil à notre atelier — les deux aident directement.",
+      "ctaMoney": "Donner de l'argent",
+      "ctaDevice": "Donner un appareil"
     },
     "transparency": {
       "label": "Transparence",
@@ -5748,7 +5815,9 @@
           "title": "Don d'entreprise — 10 appareils",
           "description": "10 appareils pour des établissements d'enseignement, des projets sociaux ou des ménages à faibles revenus."
         }
-      ]
+      ],
+      "eyebrow": "CE QUE VOTRE DON ACCOMPLIT",
+      "cta": "Transférer ce montant"
     },
     "bridgeCta": "Choisir le montant et virer",
     "transfer": {
@@ -5759,7 +5828,8 @@
       "bankLabel": "Banque",
       "purposeLabel": "Motif de paiement",
       "copyBtn": "Copier",
-      "copyIbanBtn": "Copier IBAN"
+      "copyIbanBtn": "Copier IBAN",
+      "eyebrow": "VIREMENT BANCAIRE"
     },
     "devices": {
       "heading": "Donner des appareils",
@@ -5777,7 +5847,8 @@
       "prepLabel": "Préparation:",
       "prepText": "Veuillez supprimer vos données personnelles avant le dépôt (nous pouvons vous aider si nécessaire).",
       "addressLabel": "Adresse de dépôt",
-      "questionsLink": "Questions ? Écrivez-nous →"
+      "questionsLink": "Questions ? Écrivez-nous →",
+      "eyebrow": "DONNER UN APPAREIL"
     },
     "dropoff": {
       "heading": "Annoncer un dépôt d'appareils",
@@ -5794,13 +5865,26 @@
       "submitting": "Envoi en cours …",
       "successTitle": "Merci pour ton annonce !",
       "successBody": "Nous t'avons envoyé une confirmation par e-mail et reviendrons vers toi prochainement pour fixer un rendez-vous.",
-      "errorGeneric": "L'annonce n'a pas pu être envoyée. Merci de réessayer plus tard."
+      "errorGeneric": "L'annonce n'a pas pu être envoyée. Merci de réessayer plus tard.",
+      "eyebrow": "RÉSERVER UN DÉPÔT"
     },
     "newsletter": {
       "title": "Nous vous tiendrons informé de l'impact de votre don.",
       "description": "Pas de publicité. Seulement de vraies mises à jour."
     },
-    "purposeTemplate": "Don {orgName} {month} {year}"
+    "purposeTemplate": "Don {orgName} {month} {year}",
+    "paths": {
+      "money": {
+        "eyebrow": "ARGENT",
+        "title": "Virement bancaire en deux minutes.",
+        "body": "Bénéficiaire, IBAN, motif — tout en bas, prêt à copier. Reçu fiscal sur demande. Pas de tiers, pas de frais de transaction."
+      },
+      "device": {
+        "eyebrow": "APPAREIL",
+        "title": "Déposez un ordinateur portable, fixe ou écran.",
+        "body": "Nous acceptons les appareils fonctionnels ou réparables, les reconditionnons et les transmettons. Nous pouvons effacer vos données personnelles sur place."
+      }
+    }
   },
   "mitgliedWerden": {
     "meta": {
