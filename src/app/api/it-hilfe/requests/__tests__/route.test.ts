@@ -107,6 +107,12 @@ jest.mock('@/config/it-hilfe', () => ({
   SERVICE_TYPE_DEFAULT: 'flexible',
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
   deriveBudgetType: jest.fn().mockReturnValue('free'),
+  // Mirror SSOT constants added in MMM.1 — the route imports these
+  // for anonymous-user claim emails and list pagination respectively.
+  // Without them the route gets `undefined` and downstream calls receive
+  // wrong args (claim-token TTL became `undefined`, etc.).
+  CLAIM_TOKEN_TTL_MS: 7 * 24 * 60 * 60 * 1000,
+  IT_HILFE_PAGINATION: { defaultLimit: 20, maxLimit: 50 },
 }))
 
 jest.mock('@/lib/schemas/it-hilfe', () => ({
