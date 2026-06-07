@@ -2,6 +2,17 @@ import { LRUCache } from 'lru-cache';
 import { logger } from '@/lib/logger';
 
 /**
+ * Time-window constants for rate limiters.
+ *
+ * Keep these in milliseconds (the LRUCache `ttl` unit). One named constant
+ * per window means a single edit point if we want to widen or tighten the
+ * default protection — and stops the file from reading like a wall of
+ * unrelated `60 * 60 * 1000` literals.
+ */
+const ONE_HOUR_MS = 60 * 60 * 1000
+const FIFTEEN_MINUTES_MS = 15 * 60 * 1000
+
+/**
  * Creates a rate limiter using LRU cache
  *
  * @param interval - Time window in milliseconds
@@ -37,49 +48,49 @@ export function createRateLimiter(interval: number, maxRequests: number) {
  */
 export const rateLimiters = {
   // IT-Hilfe: 5 requests per hour per user
-  itHilfeCreate: createRateLimiter(60 * 60 * 1000, 5),
+  itHilfeCreate: createRateLimiter(ONE_HOUR_MS, 5),
 
   // Marketplace listings: 10 per hour per user
-  listingCreate: createRateLimiter(60 * 60 * 1000, 10),
+  listingCreate: createRateLimiter(ONE_HOUR_MS, 10),
 
   // Messages: 20 per hour per user
-  messageCreate: createRateLimiter(60 * 60 * 1000, 20),
+  messageCreate: createRateLimiter(ONE_HOUR_MS, 20),
 
   // CSV import: 5 per hour per user
-  csvImport: createRateLimiter(60 * 60 * 1000, 5),
+  csvImport: createRateLimiter(ONE_HOUR_MS, 5),
 
   // AI product analysis: 5 per hour per user (expensive inference)
-  aiAnalyze: createRateLimiter(60 * 60 * 1000, 5),
+  aiAnalyze: createRateLimiter(ONE_HOUR_MS, 5),
 
   // Reviews: 10 per hour per user
-  reviewCreate: createRateLimiter(60 * 60 * 1000, 10),
+  reviewCreate: createRateLimiter(ONE_HOUR_MS, 10),
 
   // Repairer bookings: 5 per hour per user
-  bookingCreate: createRateLimiter(60 * 60 * 1000, 5),
+  bookingCreate: createRateLimiter(ONE_HOUR_MS, 5),
 
   // IT-Hilfe offers: 10 per hour per user
-  offerCreate: createRateLimiter(60 * 60 * 1000, 10),
+  offerCreate: createRateLimiter(ONE_HOUR_MS, 10),
 
   // Marketplace browse: 200 per 15 minutes per IP (public, generous)
-  listingBrowse: createRateLimiter(15 * 60 * 1000, 200),
+  listingBrowse: createRateLimiter(FIFTEEN_MINUTES_MS, 200),
 
   // Contact seller: 10 per hour per user
-  contactSeller: createRateLimiter(60 * 60 * 1000, 10),
+  contactSeller: createRateLimiter(ONE_HOUR_MS, 10),
 
   // Public vote submit: 10 per hour per IP (unauthenticated, prevents vote spam)
-  voteSubmit: createRateLimiter(60 * 60 * 1000, 10),
+  voteSubmit: createRateLimiter(ONE_HOUR_MS, 10),
 
   // Project contributions: 5 per hour per IP (unauthenticated, prevents spam)
-  projectContribute: createRateLimiter(60 * 60 * 1000, 5),
+  projectContribute: createRateLimiter(ONE_HOUR_MS, 5),
 
   // Password change: 5 attempts per hour per user. Defends against current-
   // password brute-force via a hijacked session — the endpoint reveals
   // right/wrong on each attempt, so unlimited attempts let a session-thief
   // recover the user's actual password.
-  passwordChange: createRateLimiter(60 * 60 * 1000, 5),
+  passwordChange: createRateLimiter(ONE_HOUR_MS, 5),
 
   // General API: 100 requests per 15 minutes per IP
-  apiGeneral: createRateLimiter(15 * 60 * 1000, 100)
+  apiGeneral: createRateLimiter(FIFTEEN_MINUTES_MS, 100)
 };
 
 /**
