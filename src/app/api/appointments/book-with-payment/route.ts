@@ -1,3 +1,9 @@
+/**
+ * @deprecated Orphaned — the only caller (useServiceBooking.ts in
+ *   components/payments/service-booking) is itself orphaned and
+ *   deprecated. Tracked in docs/DEAD_CODE.md.
+ */
+
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'

@@ -4,7 +4,10 @@
  * OnboardingInfoPage - Shared component for onboarding info pages
  *
  * Renders onboarding page from config (SSOT pattern).
- * Used by both seller and repairer onboarding pages.
+ * Was intended to be used by seller and repairer onboarding pages.
+ *
+ * @deprecated Orphaned — zero importers. The only thing that points to
+ *   OnboardingConfig is this file itself. Tracked in docs/DEAD_CODE.md.
  */
 
 import { Link } from '@/i18n/navigation'

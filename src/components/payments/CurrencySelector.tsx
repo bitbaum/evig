@@ -1,5 +1,10 @@
 'use client'
 
+/**
+ * @deprecated Orphaned — only the orphaned service-booking BookingForm
+ *   imports it. Tracked in docs/DEAD_CODE.md.
+ */
+
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'

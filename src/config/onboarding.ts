@@ -2,7 +2,10 @@
  * Onboarding Configuration - Single Source of Truth
  *
  * Centralizes onboarding page content for repairers.
- * Used by OnboardingInfoPage component.
+ * Was intended for OnboardingInfoPage component.
+ *
+ * @deprecated Orphaned with OnboardingInfoPage. Tracked in
+ *   docs/DEAD_CODE.md.
  */
 
 import { LucideIcon, Shield, Wrench, Users, TrendingUp, Star, Clock, Award, CheckCircle } from 'lucide-react'
