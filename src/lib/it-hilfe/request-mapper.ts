@@ -32,6 +32,10 @@ export interface RequestRow {
   completed_by?: string | null
   reviewed_at?: string | null
   matched_helper_id?: string | null
+  /** Display name of the matched helper (auth users table). */
+  matched_helper_name?: string | null
+  /** Phone of the matched helper (repairer_profiles.phone). Gated to owner. */
+  matched_helper_phone?: string | null
   expires_at: string
   created_at: string
   updated_at: string
@@ -60,6 +64,18 @@ export function mapRequestListRow(row: RequestRow) {
     status: row.status,
     matchedOfferId: row.matched_offer_id,
     matchedHelperId: row.matched_helper_id ?? null,
+    /**
+     * Helper name is non-sensitive — same value already shows on the
+     * offer cards before acceptance, so we surface it on the list rows
+     * too for "matched with X" UI.
+     */
+    matchedHelperName: row.matched_helper_name ?? null,
+    /**
+     * Phone is omitted on list rows (only the detail mapper, gated to
+     * isOwner, ever exposes it). Default to null here so the list shape
+     * matches the detail shape and consumers don't need optional checks.
+     */
+    matchedHelperPhone: null as string | null,
     offerCount: row.offer_count,
     completedAt: row.completed_at ?? null,
     completedBy: row.completed_by ?? null,
@@ -70,11 +86,17 @@ export function mapRequestListRow(row: RequestRow) {
   }
 }
 
-/** Map a detail row (includes ownership-gated email and AI diagnosis) */
+/** Map a detail row (includes ownership-gated email, phone, and AI diagnosis) */
 export function mapRequestDetailRow(row: RequestRow, isOwner: boolean) {
   return {
     ...mapRequestListRow(row),
     requesterEmail: isOwner ? row.requester_email : undefined,
+    /**
+     * Helper phone is privacy-sensitive — only return it to the request
+     * owner. Without this gate any visitor browsing a public request
+     * page could harvest the matched helper's phone. PPP.2.
+     */
+    matchedHelperPhone: isOwner ? (row.matched_helper_phone ?? null) : null,
     aiDiagnosis: row.ai_diagnosis,
     isOwner,
   }

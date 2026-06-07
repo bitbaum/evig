@@ -29,8 +29,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
     }
 
-    // Use explicit snake_case aliases to match the RequestRow mapper interface
+    // Use explicit snake_case aliases to match the RequestRow mapper interface.
+    // helperUser + helperProfile aliases are used so the JOIN can read both
+    // the matched helper's display name (auth users table) and phone number
+    // (repairer profile). The mapper gates phone to isOwner so non-owners
+    // never see it in the response.
     const matchedOffer = alias(itHilfeOffers, 'matched_offer')
+    const helperUser = alias(users, 'matched_helper_user')
+    const helperProfile = alias(repairerProfiles, 'matched_helper_profile')
     const [row] = await db
       .select({
         id: itHilfeRequests.id,
@@ -54,6 +60,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         status: itHilfeRequests.status,
         matched_offer_id: itHilfeRequests.matchedOfferId,
         matched_helper_id: matchedOffer.helperId,
+        matched_helper_name: helperUser.name,
+        matched_helper_phone: helperProfile.phone,
         offer_count: itHilfeRequests.offerCount,
         ai_diagnosis: itHilfeRequests.aiDiagnosis,
         completed_at: itHilfeRequests.completedAt,
@@ -66,6 +74,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .from(itHilfeRequests)
       .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
       .leftJoin(matchedOffer, eq(itHilfeRequests.matchedOfferId, matchedOffer.id))
+      .leftJoin(helperUser, eq(matchedOffer.helperId, helperUser.id))
+      .leftJoin(helperProfile, eq(matchedOffer.helperId, helperProfile.userId))
       .where(eq(itHilfeRequests.id, id))
 
     if (!row) {

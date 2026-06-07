@@ -136,6 +136,11 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
     .where(
       and(
         eq(repairerProfiles.isActive, true),
+        // Only verified helpers receive skill-match fan-out. Unverified
+        // self-registered profiles must wait for admin approval before
+        // they get notified — same rule as the public /api/technicians
+        // list endpoint.
+        eq(repairerProfiles.isVerified, true),
         eq(repairerProfiles.profileTier, 'community'),
         ne(repairerProfiles.userId, params.requesterId),
         inArray(userSkills.skillId, params.skillsNeeded),

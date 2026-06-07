@@ -20,6 +20,18 @@ export interface ITHilfeRequest {
   status: string
   matchedOfferId: string | null
   matchedHelperId: string | null
+  /**
+   * Display name of the matched helper. Available to anyone viewing the
+   * request (it's already shown on the offer card before acceptance).
+   */
+  matchedHelperName: string | null
+  /**
+   * Phone number of the matched helper. ONLY returned to the request
+   * owner once an offer is accepted (status === 'matched'). Surfaced so
+   * the requester can coordinate logistics beyond async messaging — see
+   * PPP.2 audit gap.
+   */
+  matchedHelperPhone: string | null
   offerCount: number
   aiDiagnosis: string | null
   completedAt: string | null

@@ -56,7 +56,17 @@ export async function GET(request: NextRequest) {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
 
     // --- Build WHERE conditions ---
-    const conditions: SQL[] = [eq(repairerProfiles.isActive, true)]
+    //
+    // The public endpoint surfaces ONLY verified helpers. Anyone can
+    // register a profile via /profil/techniker, but an admin must
+    // approve them before they appear in /techniker, the IT-Hilfe
+    // helper map, /repairers, or skill-match notifications. Admin
+    // surfaces use /api/admin/it-hilfe/helpers (separate query) and
+    // can see unverified profiles by passing status filters there.
+    const conditions: SQL[] = [
+      eq(repairerProfiles.isActive, true),
+      eq(repairerProfiles.isVerified, true),
+    ]
 
     // Tier filter — 'professional' maps to status='active'; 'community' maps to profile_tier='community'
     if (tier === REPAIRER_PROFILE_TIER.COMMUNITY) {
