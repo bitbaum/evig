@@ -99,6 +99,9 @@ export async function GET(request: NextRequest) {
     const whereCondition = and(...conditions)
 
     // --- Main query: join users + aggregate skills ---
+    // Field shape must match @/types/technician::Technician — that's the
+    // canonical SSOT for the entity. If you add/remove a column here,
+    // update the type too.
     const rows = await db
       .select({
         id: repairerProfiles.id,
@@ -113,8 +116,10 @@ export async function GET(request: NextRequest) {
         city: repairerProfiles.city,
         postalCode: repairerProfiles.postalCode,
         canton: repairerProfiles.canton,
+        maxTravelKm: repairerProfiles.maxTravelKm,
         acceptsGratis: repairerProfiles.acceptsGratis,
         acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
+        isActive: repairerProfiles.isActive,
         isVerified: repairerProfiles.isVerified,
         serviceDeliveryTypes: repairerProfiles.serviceDeliveryTypes,
         skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
@@ -136,8 +141,10 @@ export async function GET(request: NextRequest) {
         repairerProfiles.city,
         repairerProfiles.postalCode,
         repairerProfiles.canton,
+        repairerProfiles.maxTravelKm,
         repairerProfiles.acceptsGratis,
         repairerProfiles.acceptsKulturlegi,
+        repairerProfiles.isActive,
         repairerProfiles.isVerified,
         repairerProfiles.serviceDeliveryTypes,
       )

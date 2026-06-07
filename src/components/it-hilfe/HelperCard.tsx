@@ -11,30 +11,28 @@ import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { formatCentsToChf } from '@/lib/pricing'
 import { CONVERSATION_TYPES } from '@/config/database'
+import type { Technician } from '@/types/technician'
 
-interface Helper {
-  userId: string
-  name: string
-  bio: string | null
-  hourlyRateCents: number | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  serviceTypes: string[]
-  postalCode: string | null
-  city: string | null
-  canton: string | null
-  maxTravelKm: number
-  skills: string[]
-  averageRating?: number | null
+/**
+ * @deprecated Wraps the canonical Technician for the IT-Hilfe map context.
+ * Pending QQQ.2: this whole component becomes a thin alias of TechnicianCard
+ * from `@/app/[locale]/techniker/TechnicianCard`. Until then it exposes the
+ * narrow prop subset that TechnicianMapList passes in.
+ */
+type Helper = Pick<Technician,
+  | 'userId' | 'name' | 'bio'
+  | 'hourlyRateCents' | 'acceptsGratis' | 'acceptsKulturlegi'
+  | 'postalCode' | 'city' | 'canton' | 'maxTravelKm'
+  | 'skills'
+> & {
   /**
-   * Field name mirrors the DB column (repairerProfiles.totalJobsCompleted)
-   * and the /api/technicians response. Was previously aliased here as
-   * `totalHelpsCompleted` which never populated because the API never
-   * sends that key — every helper card rendered without a job count
-   * even though the data was available. (OOO.1)
+   * Same shape as canonical Technician.serviceDeliveryTypes — the legacy
+   * IT-Hilfe map list still ships the data under the old `serviceTypes`
+   * alias. Pending QQQ.3 API cleanup, accept both.
    */
+  serviceTypes: string[]
+  averageRating?: number | null
   totalJobsCompleted?: number
-  /** Number of published reviews. Surfaced next to the rating. */
   totalReviews?: number
 }
 

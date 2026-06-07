@@ -4,26 +4,12 @@ import { useState, useEffect, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { PAGINATION } from '@/config/pagination'
+import type { Technician } from '@/types/technician'
 
-export interface Technician {
-  id: string
-  userId: string
-  name: string
-  bio: string | null
-  hourlyRateCents: number | null
-  averageRating: number | null
-  totalJobsCompleted: number
-  /** Published-review count (denormalized on repairerProfiles). */
-  totalReviews: number
-  profileTier: string
-  city: string | null
-  postalCode: string | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  isVerified: boolean
-  serviceDeliveryTypes: string[] | null
-  skills: string[]
-}
+// Re-export so existing `import { Technician } from '@/hooks/useTechnicianList'`
+// keeps working during the QQQ.1 transition. Long-term, callers should
+// import directly from '@/types/technician'.
+export type { Technician }
 
 export interface TechnicianPagination {
   total: number

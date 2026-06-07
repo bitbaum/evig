@@ -7,13 +7,23 @@ import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 // Types
 // ---------------------------------------------------------------------------
 
-export interface TechnicianProfile {
+/**
+ * Narrow projection used only by the dashboard summary header.
+ * NOT the canonical Technician type — see @/types/technician for that.
+ * Renamed from `TechnicianProfile` in QQQ.1 because the name collided
+ * with the canonical type and confused readers about what this is.
+ */
+export interface TechnicianDashboardSummary {
   id: string
   totalJobsCompleted: number
+  /** Comes back as a string from PG's decimal type — keep raw for display. */
   averageRating: string
   isActive: boolean
   city: string
 }
+
+/** @deprecated Use TechnicianDashboardSummary. Kept for one release. */
+export type TechnicianProfile = TechnicianDashboardSummary
 
 export interface MatchingRequest {
   id: string
@@ -45,7 +55,7 @@ export interface MyOffer {
 // Data fetching
 // ---------------------------------------------------------------------------
 
-export async function getTechnicianProfile(userId: string): Promise<TechnicianProfile | null> {
+export async function getTechnicianProfile(userId: string): Promise<TechnicianDashboardSummary | null> {
   try {
     const result = await query<{
       id: string
