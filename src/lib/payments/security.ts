@@ -3,12 +3,13 @@
 
 import crypto from 'crypto'
 import { logger } from '@/lib/logger'
+import { HSTS_MAX_AGE_SECONDS } from '@/config/security'
 
 // PCI DSS compliance constants
 export const PCI_COMPLIANCE = {
   // Required security headers
   SECURITY_HEADERS: {
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+    'Strict-Transport-Security': `max-age=${HSTS_MAX_AGE_SECONDS}; includeSubDomains`,
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',

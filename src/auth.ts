@@ -15,6 +15,7 @@ import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@
 import { recordFailedAttempt, isAccountLocked, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/rate-limiter'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
+import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security'
 import { sendEmail } from '@/lib/email'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui'
@@ -79,8 +80,8 @@ export const authConfig = {
   session: {
     // JWT strategy required for credentials provider
     strategy: 'jwt' as const,
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-    updateAge: 24 * 60 * 60, // Update session every 24 hours
+    maxAge: SESSION_MAX_AGE_SECONDS,
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
   },
 
   pages: {

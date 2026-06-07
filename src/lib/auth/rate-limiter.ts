@@ -16,6 +16,7 @@ import { eq, sql, getTableName } from 'drizzle-orm'
 import { getRedis } from './redis'
 import { logger } from '@/lib/logger'
 import { isRedisConfigured, REDIS_CONFIG } from '@/config/redis'
+import { RATE_LIMIT_LOCKOUT_CAP_MS } from '@/config/security'
 
 // Table name ref for raw SQL in complex upsert
 const lockoutsTable = getTableName(userLockouts)
@@ -57,7 +58,7 @@ setInterval(() => {
 
   for (const [key, entry] of lockoutStore.entries()) {
     // Keep lockout history for 24 hours
-    if (entry.lastAttempt < now - 24 * 60 * 60 * 1000) {
+    if (entry.lastAttempt < now - RATE_LIMIT_LOCKOUT_CAP_MS) {
       lockoutStore.delete(key)
     }
   }
@@ -206,7 +207,7 @@ export function recordFailedAttempt(identifier: string): LockoutResult {
     const lockoutDuration = config.lockoutDuration * multiplier
 
     // Cap at 24 hours
-    entry.lockedUntil = now + Math.min(lockoutDuration, 24 * 60 * 60 * 1000)
+    entry.lockedUntil = now + Math.min(lockoutDuration, RATE_LIMIT_LOCKOUT_CAP_MS)
 
     lockoutStore.set(key, entry)
 
@@ -322,7 +323,7 @@ export async function recordFailedAttemptDb(
     if (record.failed_attempts >= config.maxFailedAttempts) {
       const newLockoutCount = (record.lockout_count || 0) + 1
       const multiplier = config.progressiveLockout ? Math.pow(2, newLockoutCount - 1) : 1
-      const lockoutUntil = new Date(now.getTime() + Math.min(config.lockoutDuration * multiplier, 24 * 60 * 60 * 1000))
+      const lockoutUntil = new Date(now.getTime() + Math.min(config.lockoutDuration * multiplier, RATE_LIMIT_LOCKOUT_CAP_MS))
 
       await db
         .update(userLockouts)
@@ -522,7 +523,7 @@ export async function recordFailedAttemptRedis(identifier: string): Promise<Lock
   if (entry.failedAttempts >= config.maxFailedAttempts) {
     entry.lockoutCount++
     const multiplier = config.progressiveLockout ? Math.pow(2, entry.lockoutCount - 1) : 1
-    const lockoutDuration = Math.min(config.lockoutDuration * multiplier, 24 * 60 * 60 * 1000)
+    const lockoutDuration = Math.min(config.lockoutDuration * multiplier, RATE_LIMIT_LOCKOUT_CAP_MS)
     entry.lockedUntil = now + lockoutDuration
   }
 

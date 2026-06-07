@@ -5,6 +5,8 @@
  * Follows OWASP best practices and modern security standards.
  */
 
+import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security'
+
 // =============================================================================
 // Environment Variable Validators
 // =============================================================================
@@ -49,10 +51,10 @@ export const AUTH_CONFIG = {
     algorithm: 'HS256' as const,
   },
 
-  // Session settings
+  // Session settings — mirrors @/config/security
   session: {
-    maxAge: 30 * 24 * 60 * 60,     // 30 days
-    updateAge: 24 * 60 * 60,       // Refresh every 24 hours
+    maxAge: SESSION_MAX_AGE_SECONDS,
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
   },
 
   // Password policy - Simple and user-friendly
