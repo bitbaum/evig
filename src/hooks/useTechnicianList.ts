@@ -13,6 +13,8 @@ export interface Technician {
   hourlyRateCents: number | null
   averageRating: number | null
   totalJobsCompleted: number
+  /** Published-review count (denormalized on repairerProfiles). */
+  totalReviews: number
   profileTier: string
   city: string | null
   postalCode: string | null

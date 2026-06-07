@@ -26,7 +26,16 @@ interface Helper {
   maxTravelKm: number
   skills: string[]
   averageRating?: number | null
-  totalHelpsCompleted?: number
+  /**
+   * Field name mirrors the DB column (repairerProfiles.totalJobsCompleted)
+   * and the /api/technicians response. Was previously aliased here as
+   * `totalHelpsCompleted` which never populated because the API never
+   * sends that key — every helper card rendered without a job count
+   * even though the data was available. (OOO.1)
+   */
+  totalJobsCompleted?: number
+  /** Number of published reviews. Surfaced next to the rating. */
+  totalReviews?: number
 }
 
 interface HelperCardProps {
@@ -99,16 +108,19 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       </div>
 
       {/* Rating & Help Count */}
-      {(helper.averageRating || helper.totalHelpsCompleted) ? (
+      {(helper.averageRating || helper.totalJobsCompleted) ? (
         <div className="flex items-center gap-3 text-sm text-text-secondary mb-3">
-          {helper.averageRating && (
+          {helper.averageRating && Number(helper.averageRating) > 0 && (
             <span className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-warning-400 text-warning-400" />
-              {helper.averageRating.toFixed(1)}
+              {Number(helper.averageRating).toFixed(1)}
+              {helper.totalReviews ? (
+                <span className="text-text-muted">({helper.totalReviews})</span>
+              ) : null}
             </span>
           )}
-          {helper.totalHelpsCompleted ? (
-            <span>{t('helps', { count: helper.totalHelpsCompleted })}</span>
+          {helper.totalJobsCompleted ? (
+            <span>{t('helps', { count: helper.totalJobsCompleted })}</span>
           ) : null}
         </div>
       ) : null}

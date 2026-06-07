@@ -79,7 +79,10 @@ export function TechnicianCard({ technician }: { technician: Technician }) {
           {hasStats && (
             <div className="tabular-nums">
               {technician.averageRating != null && (
-                <span>★ {technician.averageRating.toFixed(1)}</span>
+                <span>
+                  ★ {technician.averageRating.toFixed(1)}
+                  {technician.totalReviews > 0 && ` (${technician.totalReviews})`}
+                </span>
               )}
               {technician.averageRating != null && technician.totalJobsCompleted > 0 && ' · '}
               {technician.totalJobsCompleted > 0 && (
