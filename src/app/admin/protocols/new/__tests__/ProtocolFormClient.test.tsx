@@ -28,14 +28,14 @@ describe('ProtocolFormClient', () => {
     pushMock.mockReset()
     jest.clearAllMocks()
     mockedApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'p-100' } })
-    // Process call uses native fetch — keep global.fetch mock for it
+    // /process-sources call uses native fetch — keep global.fetch mock for it
     global.fetch = jest.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, data: { processed: true } }),
     }) as jest.Mock
   })
 
-  it('creates protocol with transcript', async () => {
+  it('creates protocol with typed notes (multi-source flow, YY.1)', async () => {
     render(<ProtocolFormClient teamMembers={teamMembers} />)
 
     // Setup: select meeting type
@@ -43,8 +43,8 @@ describe('ProtocolFormClient', () => {
       target: { value: 'team_weekly' },
     })
 
-    // Content: enter transcript
-    const textarea = await screen.findByLabelText(/Transkript oder Notizen/i)
+    // Content: enter notes in the "Zusätzliche Notizen" textarea
+    const textarea = await screen.findByLabelText(/Zusätzliche Notizen/i)
     fireEvent.change(textarea, {
       target: { value: 'Dies ist ein genügend langes Transkript für die Verarbeitung mit mehr als fünfzig Zeichen.' },
     })
@@ -56,8 +56,9 @@ describe('ProtocolFormClient', () => {
         '/api/protocols',
         expect.objectContaining({ method: 'POST' })
       )
+      // YY.1 changed the structuring endpoint from /process to /process-sources
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/protocols/p-100/process',
+        '/api/protocols/p-100/process-sources',
         expect.objectContaining({ method: 'POST' })
       )
     })
