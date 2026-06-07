@@ -66,7 +66,12 @@ export default async function TasksAdminPage({
   }
 
   const totalPages = Math.ceil(totalTasks / TASKS_PAGE_SIZE)
-  const tasksHrefBase = buildTasksHrefBase(ROUTES.admin.tasks, params)
+  const tasksHrefBase = buildTasksHrefBase(ROUTES.admin.tasks, {
+    category: params.category,
+    status: params.status,
+    q: params.q,
+    priority: params.priority,
+  })
 
   return (
     <AdminPageWrapper
