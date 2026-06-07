@@ -16,6 +16,8 @@ import {
   SERVICE_TYPE_DEFAULT,
   REQUEST_STATUS,
   deriveBudgetType,
+  CLAIM_TOKEN_TTL_MS,
+  IT_HILFE_PAGINATION,
 } from '@/config/it-hilfe'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { sanitizeInput } from '@/lib/security/sanitize'
@@ -49,7 +51,7 @@ export async function GET(request: NextRequest) {
     const skill = searchParams.get('skill')
     const search = searchParams.get('search')
     const status = searchParams.get('status') || REQUEST_STATUS.OPEN
-    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
+    const { limit, offset } = parsePagination(request, IT_HILFE_PAGINATION)
 
     // Map frontend sort values to DB columns
     const sortMap: Record<string, string> = {
@@ -296,12 +298,11 @@ export async function POST(request: NextRequest) {
     // catches resolved-failure and a .catch() that catches throws, so ops
     // can grep logs for both modes.
     if (isNewAnonymousUser) {
-      // 7-day TTL: claim links go to people who may not read email for
-      // hours or days. Default password-reset TTL is 1 hour, which is
-      // appropriate for forgot-password (user is actively recovering)
-      // but functionally broken for this flow (user just walked away
-      // from a form).
-      const CLAIM_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000
+      // CLAIM_TOKEN_TTL_MS (7 days) is set in @/config/it-hilfe — claim
+      // links go to people who may not read email for hours or days.
+      // Default password-reset TTL is 1 hour, which is appropriate for
+      // forgot-password (user is actively recovering) but functionally
+      // broken for this flow (user just walked away from a form).
       createPasswordResetToken(requesterEmail, CLAIM_TOKEN_TTL_MS)
         .then(token => {
           const callbackUrl = `/it-hilfe/${requestId}`

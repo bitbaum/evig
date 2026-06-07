@@ -7,7 +7,7 @@ import { users } from '@/db/schema/auth'
 import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { getCategoryIds, URGENCY_LEVELS, REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
+import { getCategoryIds, URGENCY_LEVELS, REQUEST_STATUS, OFFER_STATUS, IT_HILFE_PAGINATION } from '@/config/it-hilfe'
 
 const rTable = getTableName(itHilfeRequests)
 const oTable = getTableName(itHilfeOffers)
@@ -21,7 +21,7 @@ const uTable = getTableName(users)
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     const { searchParams } = new URL(request.url)
-    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
+    const { limit, offset } = parsePagination(request, IT_HILFE_PAGINATION)
 
     // Optional filters
     const category = searchParams.get('category')

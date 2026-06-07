@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS peer_repair_requests (
   offer_count INTEGER DEFAULT 0,               -- Cached count of offers
 
   -- Timestamps
+  -- 30 days mirrors REQUEST_EXPIRY_DAYS in src/config/it-hilfe.ts.
+  -- If you change one, change both (and roll the daily expire-cron query).
   expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days'),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

@@ -6,7 +6,7 @@ import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
-import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
+import { getSkillById, getBudgetTierById, BUDGET_TIER } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { formatCentsToChf } from '@/lib/pricing'
@@ -151,13 +151,13 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       {/* Pricing Info */}
       <div className="flex flex-wrap gap-2 mb-4">
         {helper.acceptsGratis && (
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${BUDGET_TIERS[0].badgeClass}`}>
+          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${getBudgetTierById(BUDGET_TIER.GRATIS)?.badgeClass ?? ''}`}>
             <Users className="w-3 h-3" />
             {t('gratis')}
           </span>
         )}
         {helper.acceptsKulturlegi && (
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${BUDGET_TIERS[1].badgeClass}`}>
+          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${getBudgetTierById(BUDGET_TIER.KULTURLEGI)?.badgeClass ?? ''}`}>
             <Sparkles className="w-3 h-3" />
             KulturLegi
           </span>

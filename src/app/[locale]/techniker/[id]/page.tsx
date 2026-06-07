@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { Card } from '@/components/ui/card'
-import { getSkillById, BUDGET_TIERS, SERVICE_TYPE } from '@/config/it-hilfe'
+import { getSkillById, BUDGET_TIERS, SERVICE_TYPE, IT_HILFE } from '@/config/it-hilfe'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { getTechnicianById } from '@/lib/services/technician-service'
@@ -146,12 +146,12 @@ export default async function TechnikerDetailPage({ params }: Props) {
             {/* CTA */}
             <div className="flex flex-col gap-2 sm:min-w-[180px]">
               {isProfessional ? (
-                <Link href={`/it-hilfe/create?technician=${technician.id}`} className={buttonClass({ variant: 'primary' })}>
+                <Link href={IT_HILFE.routes.createForTechnician(technician.id)} className={buttonClass({ variant: 'primary' })}>
                   <Wrench className="w-4 h-4" />
                   {t('detail.submitRequest')}
                 </Link>
               ) : (
-                <Link href={`/it-hilfe/create?technician=${technician.id}`} className={buttonClass({ variant: 'primary' })}>
+                <Link href={IT_HILFE.routes.createForTechnician(technician.id)} className={buttonClass({ variant: 'primary' })}>
                   <Users className="w-4 h-4" />
                   {t('detail.contact')}
                 </Link>
@@ -250,7 +250,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               ))}
             </div>
             <div className="mt-6">
-              <Link href={`/it-hilfe/create?technician=${technician.id}`} className={buttonClass({ variant: 'primary' })}>
+              <Link href={IT_HILFE.routes.createForTechnician(technician.id)} className={buttonClass({ variant: 'primary' })}>
                 <Wrench className="w-4 h-4" />
                 {t('detail.requestBooking')}
               </Link>

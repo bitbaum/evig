@@ -41,6 +41,11 @@ export const IT_HILFE = {
   routes: {
     browse: '/it-hilfe',
     create: '/it-hilfe/create',
+    /**
+     * Pre-fill the create form with a specific technician's id so the
+     * request is offered to them first. Used from /techniker/[id] CTAs.
+     */
+    createForTechnician: (technicianId: string) => `/it-hilfe/create?technician=${technicianId}`,
     my: '/it-hilfe/my',
     myOffers: '/it-hilfe/my/offers',
     detail: (id: string) => `/it-hilfe/${id}`,
@@ -53,6 +58,37 @@ export const IT_HILFE = {
     myOffers: '/api/it-hilfe/my-offers',
     helpers: '/api/it-hilfe/helpers',
   },
+} as const
+
+// ============================================================================
+// REQUEST LIFECYCLE CONSTANTS (SSOT — referenced by API + migration comments)
+// ============================================================================
+
+/**
+ * How long a help request stays open before the daily cron expires it.
+ * Mirror this value in any new migration that touches
+ * `it_hilfe_requests.expires_at`. Current schema default is set in
+ * scripts/db/migrations/010_peer_repair_system.sql (NOW() + 30 days).
+ */
+export const REQUEST_EXPIRY_DAYS = 30
+
+/**
+ * How long the email-claim token stays valid when an anonymous user posts
+ * a help request without creating an account first. After this window the
+ * request is still publicly browsable but the user can no longer claim
+ * ownership via the magic-link email.
+ */
+export const CLAIM_TOKEN_TTL_DAYS = 7
+export const CLAIM_TOKEN_TTL_MS = CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000
+
+/**
+ * Pagination policy for every IT-Hilfe list endpoint
+ * (requests, my-requests, my-offers, helper/my-offers, helper/matching-requests).
+ * Centralised so a single edit changes every paged surface.
+ */
+export const IT_HILFE_PAGINATION = {
+  defaultLimit: 20,
+  maxLimit: 50,
 } as const
 
 // ============================================================================
@@ -216,6 +252,11 @@ export interface BudgetTier {
   requiresAmount: boolean
   multiplier: number
   badgeClass: string
+}
+
+/** Lookup a BudgetTier by id without depending on its array position. */
+export function getBudgetTierById(id: BudgetTierId): BudgetTier | undefined {
+  return BUDGET_TIERS.find((t) => t.id === id)
 }
 
 export const BUDGET_TIERS: BudgetTier[] = [

@@ -5,6 +5,7 @@ import { sql, getTableName } from 'drizzle-orm'
 import { itHilfeOffers, itHilfeRequests } from '@/db/schema'
 import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { IT_HILFE_PAGINATION } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 
 const oTable = getTableName(itHilfeOffers)
@@ -16,7 +17,7 @@ const rTable = getTableName(itHilfeRequests)
  */
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
+    const { limit, offset } = parsePagination(request, IT_HILFE_PAGINATION)
 
     const result = await db.execute(sql`
       SELECT
