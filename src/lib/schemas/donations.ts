@@ -12,6 +12,9 @@ import {
   DEVICE_CONDITIONS,
   PAYMENT_METHODS,
   DONATION_STATUSES,
+  DROPOFF_DEVICES_MIN_CHARS,
+  DROPOFF_DEVICES_MAX_CHARS,
+  DONATION_NOTES_MAX_CHARS,
 } from '@/config/donations'
 
 // =============================================================================
@@ -57,7 +60,7 @@ export const CreateMonetaryDonationSchema = z.object({
   receipt_requested: z.boolean().default(false),
 
   // Admin notes
-  notes: z.string().max(2000).optional().nullable(),
+  notes: z.string().max(DONATION_NOTES_MAX_CHARS).optional().nullable(),
 })
 
 /**
@@ -89,7 +92,7 @@ export const CreateDeviceDonationSchema = z.object({
   receipt_requested: z.boolean().default(false),
 
   // Admin notes
-  notes: z.string().max(2000).optional().nullable(),
+  notes: z.string().max(DONATION_NOTES_MAX_CHARS).optional().nullable(),
 })
 
 /**
@@ -117,8 +120,12 @@ export const DonationDropoffSchema = z.object({
   email: z.string().email('Ungültige E-Mail-Adresse'),
   phone: z.string().trim().min(3).max(30).optional(),
   preferredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Datum im Format YYYY-MM-DD').optional(),
-  devices: z.string().trim().min(10, 'Bitte beschreibe, welche Geräte du bringen möchtest (mind. 10 Zeichen)').max(1000),
-  notes: z.string().trim().max(2000).optional(),
+  devices: z
+    .string()
+    .trim()
+    .min(DROPOFF_DEVICES_MIN_CHARS, `Bitte beschreibe, welche Geräte du bringen möchtest (mind. ${DROPOFF_DEVICES_MIN_CHARS} Zeichen)`)
+    .max(DROPOFF_DEVICES_MAX_CHARS),
+  notes: z.string().trim().max(DONATION_NOTES_MAX_CHARS).optional(),
 })
 
 export type DonationDropoffInput = z.infer<typeof DonationDropoffSchema>
@@ -133,7 +140,7 @@ export const UpdateDonationSchema = z.object({
   receipt_sent: z.boolean().optional(),
 
   // Notes
-  notes: z.string().max(2000).optional().nullable(),
+  notes: z.string().max(DONATION_NOTES_MAX_CHARS).optional().nullable(),
 
   // For device donations - allow updating estimated value
   estimated_value_cents: z.number().int().min(0).optional().nullable(),

@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { CheckCircle2 } from 'lucide-react'
+import { DROPOFF_DEVICES_MIN_CHARS, DROPOFF_DEVICES_MAX_CHARS, DONATION_NOTES_MAX_CHARS } from '@/config/donations'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
@@ -134,8 +135,8 @@ export function DropoffForm() {
           value={devices}
           onChange={e => setDevices(e.target.value)}
           required
-          minLength={10}
-          maxLength={1000}
+          minLength={DROPOFF_DEVICES_MIN_CHARS}
+          maxLength={DROPOFF_DEVICES_MAX_CHARS}
           rows={3}
           placeholder={t('devicesPlaceholder')}
           className="resize-y"
@@ -147,7 +148,7 @@ export function DropoffForm() {
         <Textarea
           value={notes}
           onChange={e => setNotes(e.target.value)}
-          maxLength={2000}
+          maxLength={DONATION_NOTES_MAX_CHARS}
           rows={2}
           placeholder={t('notesPlaceholder')}
           className="resize-y"

@@ -18,15 +18,26 @@ import { isStaffEmail } from '@/lib/permissions'
 
 const VALID_FORM_TYPES = Object.keys(FORM_AI_REGISTRY)
 
+/**
+ * Char-limit policy for the AI extractor endpoint. Single edit-point if
+ * we want to raise the user-input ceiling or tighten quickAction.
+ * Local to this file because no other consumer needs these — adding
+ * them to a shared config would be premature abstraction.
+ */
+const AI_EXTRACT_TEXT_MIN_CHARS = 3
+const AI_EXTRACT_TEXT_MAX_CHARS = 5000
+const AI_EXTRACT_INSTRUCTION_MAX_CHARS = 2000
+const AI_EXTRACT_QUICK_ACTION_MAX_CHARS = 100
+
 const extractRequestSchema = z.object({
   formType: z.string().refine(v => VALID_FORM_TYPES.includes(v), {
     message: `Gültiger formType erforderlich: ${VALID_FORM_TYPES.join(', ')}`,
   }),
-  text: z.string().min(3, 'Text zu kurz').max(5000, 'Text zu lang'),
+  text: z.string().min(AI_EXTRACT_TEXT_MIN_CHARS, 'Text zu kurz').max(AI_EXTRACT_TEXT_MAX_CHARS, 'Text zu lang'),
   mode: z.enum(['extract', 'generate', 'refine']).optional(),
   currentData: z.record(z.string(), z.unknown()).optional(),
-  instruction: z.string().max(2000).optional(),
-  quickAction: z.string().max(100).optional(),
+  instruction: z.string().max(AI_EXTRACT_INSTRUCTION_MAX_CHARS).optional(),
+  quickAction: z.string().max(AI_EXTRACT_QUICK_ACTION_MAX_CHARS).optional(),
 })
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {

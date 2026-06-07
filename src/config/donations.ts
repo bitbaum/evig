@@ -9,6 +9,25 @@
  */
 
 // =============================================================================
+// CONTENT LIMITS (SSOT — used by both Zod schemas and form HTML attrs)
+// =============================================================================
+
+/**
+ * Drop-off device description: how broad a span the donor uses to describe
+ * what they're bringing. Mirrors what the donor sees in DropoffForm.tsx
+ * AND what the Zod schema enforces — keep both in sync via this constant.
+ */
+export const DROPOFF_DEVICES_MIN_CHARS = 10
+export const DROPOFF_DEVICES_MAX_CHARS = 1000
+
+/**
+ * Optional notes field shared by every donation surface (drop-off form,
+ * monetary donation admin notes, device donation admin notes). Single
+ * limit keeps all four schemas honest.
+ */
+export const DONATION_NOTES_MAX_CHARS = 2000
+
+// =============================================================================
 // DONATION TYPES
 // =============================================================================
 
