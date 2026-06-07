@@ -219,10 +219,11 @@ export async function POST(request: NextRequest) {
       skillsNeeded = [],
       budgetTier,
       submitterEmail,
+      deviceBrand = null,
+      deviceModel = null,
+      imageUrls = [],
+      aiDiagnosis = null,
     } = validatedData
-
-    // Additional body fields not in schema
-    const { deviceBrand, deviceModel, imageUrls = [], aiDiagnosis } = body
 
     // Resolve the requester: existing session OR find-or-create by email
     let requesterId: string

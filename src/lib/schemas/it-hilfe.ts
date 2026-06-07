@@ -12,12 +12,20 @@ import { paginationSchema } from './common';
 
 /**
  * IT-Hilfe Request Schema
- * SSOT for validating IT help requests
+ * SSOT for validating IT help requests.
+ *
+ * Field-shape mirrors src/db/schema/itHilfe.ts (Drizzle). Any field that
+ * the create route at /api/it-hilfe/requests writes to the DB MUST be
+ * declared here so it goes through Zod — never reach into the raw body.
  */
 export const itHilfeRequestSchema = z.object({
   categoryId: z.enum(getCategoryIds() as [string, ...string[]], {
     message: 'Ungültige Gerätekategorie',
   }).optional(),
+  /** Optional device brand string. Free text — max length mirrors DB. */
+  deviceBrand: z.string().max(100, 'Marke darf maximal 100 Zeichen lang sein').optional().nullable(),
+  /** Optional device model string. */
+  deviceModel: z.string().max(200, 'Modell darf maximal 200 Zeichen lang sein').optional().nullable(),
   title: z
     .string()
     .min(5, 'Titel muss mindestens 5 Zeichen lang sein')
@@ -74,6 +82,10 @@ export const itHilfeRequestSchema = z.object({
       }
     )
     .optional(),
+  /** Up to 10 image URLs. URLs validated as well-formed http(s). */
+  imageUrls: z.array(z.string().url('Ungültige Bild-URL')).max(10, 'Maximal 10 Bilder erlaubt').optional(),
+  /** AI-generated diagnosis text — optional companion to description. */
+  aiDiagnosis: z.string().max(5000, 'AI-Diagnose darf maximal 5000 Zeichen lang sein').optional().nullable(),
   // For anonymous submissions: a logged-out visitor supplies their email
   // and the backend either finds their account or provisions a new one.
   // Required when no session is present; the route enforces this since
