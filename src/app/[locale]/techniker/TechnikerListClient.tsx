@@ -9,130 +9,19 @@ import {
   ChevronLeft,
   ChevronRight,
   Wrench,
-  Star,
-  MapPin,
-  Euro,
-  Sparkles,
 } from 'lucide-react'
-import { SERVICE_CATEGORIES, IT_SKILLS, getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
+import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
-import { formatCentsToChf } from '@/lib/pricing'
-import { useTechnicianList, type Technician } from '@/hooks/useTechnicianList'
+import { useTechnicianList } from '@/hooks/useTechnicianList'
 import { ROUTES } from '@/config/routes'
-
-function TechnicianCard({ technician }: { technician: Technician }) {
-  const t = useTranslations('techniker')
-  const displayedSkills = technician.skills.slice(0, 4)
-  const remaining = technician.skills.length - 4
-
-  return (
-    <Link
-      href={ROUTES.public.technicianProfile(technician.id)}
-      className="block card-shell p-5 hover:border-strong transition-all"
-    >
-      {/* Name + tier badge */}
-      <div className="flex items-start justify-between gap-2 mb-3">
-        <Heading level={3} className="text-base font-semibold text-text-primary line-clamp-1">
-          {technician.name}
-        </Heading>
-        <span
-          className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-            technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
-              ? 'bg-action-muted text-action'
-              : 'bg-surface-raised text-text-secondary'
-          }`}
-        >
-          {technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL ? t('list.professional') : t('list.community')}
-        </span>
-      </div>
-
-      {/* Bio */}
-      {technician.bio && (
-        <p className="text-sm text-text-secondary line-clamp-2 mb-3">{technician.bio}</p>
-      )}
-
-      {/* Rating + jobs */}
-      {(technician.averageRating || technician.totalJobsCompleted > 0) && (
-        <div className="flex items-center gap-3 text-sm text-text-secondary mb-3">
-          {technician.averageRating && (
-            <span className="flex items-center gap-1">
-              <Star className="w-3.5 h-3.5 fill-warning-400 text-warning-400" />
-              {technician.averageRating.toFixed(1)}
-            </span>
-          )}
-          {technician.totalJobsCompleted > 0 && (
-            <span>{t('list.jobs', { count: technician.totalJobsCompleted })}</span>
-          )}
-          {technician.isVerified && (
-            <span className="text-action font-medium">✓ {t('list.verified')}</span>
-          )}
-        </div>
-      )}
-
-      {/* Location */}
-      {technician.city && (
-        <div className="flex items-center gap-1.5 text-sm text-text-tertiary mb-3">
-          <MapPin className="w-3.5 h-3.5" />
-          <span>{technician.city}</span>
-        </div>
-      )}
-
-      {/* Skills */}
-      {displayedSkills.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {displayedSkills.map((skillId) => {
-            const skill = getSkillById(skillId)
-            if (!skill) return null
-            return (
-              <span
-                key={skillId}
-                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary"
-              >
-                {skill.name}
-              </span>
-            )
-          })}
-          {remaining > 0 && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">
-              +{remaining}
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* Pricing badges */}
-      <div className="flex flex-wrap gap-1.5">
-        {technician.acceptsGratis && (
-          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${BUDGET_TIERS[0].badgeClass}`}>
-            <Users className="w-3 h-3" />
-            {t('list.gratis')}
-          </span>
-        )}
-        {technician.acceptsKulturlegi && (
-          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${BUDGET_TIERS[1].badgeClass}`}>
-            <Sparkles className="w-3 h-3" />
-            {t('list.kulturlegi')}
-          </span>
-        )}
-        {technician.hourlyRateCents && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">
-            <Euro className="w-3 h-3" />
-            {formatCentsToChf(technician.hourlyRateCents)}/h
-          </span>
-        )}
-      </div>
-    </Link>
-  )
-}
+import { TechnicianCard } from './TechnicianCard'
 
 export default function TechnikerListClient() {
   const t = useTranslations('techniker')
@@ -160,75 +49,75 @@ export default function TechnikerListClient() {
   } = useTechnicianList(t('list.loadingError'))
 
   const tierTabs = [
-    { value: '', label: t('list.tierAll') },
-    { value: REPAIRER_PROFILE_TIER.COMMUNITY, label: t('list.tierCommunity') },
-    { value: REPAIRER_PROFILE_TIER.PROFESSIONAL, label: t('list.tierProfessional') },
+    { value: '',                                        label: t('list.tierAll') },
+    { value: REPAIRER_PROFILE_TIER.COMMUNITY,           label: t('list.tierCommunity') },
+    { value: REPAIRER_PROFILE_TIER.PROFESSIONAL,        label: t('list.tierProfessional') },
   ]
 
   return (
     <div className="bg-canvas min-h-screen">
-      {/* Compact header */}
-      <div className="bg-surface-raised border-b border-subtle dark:border-white/6 py-6 sm:py-8">
+      {/* ── Header — fleetcrown discipline ─────────────────────────── */}
+      <section className="border-b border-subtle py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
-                {t('list.title')}
-              </Heading>
-              <p className="text-sm text-text-secondary mt-1">
+              <div className="ui-public-eyebrow">TECHNIKER</div>
+              <h1 className="ui-public-display-md mt-3">{t('list.title')}</h1>
+              <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {t('list.available', { count: pagination.total })}
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button as={Link} href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'} variant="primary">
-                <Wrench className="w-4 h-4" />
-                {t('list.becomeTechnician')}
-              </Button>
-            </div>
+            <Link
+              href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'}
+              className="ui-public-cta inline-flex items-center gap-2 md:justify-self-end"
+            >
+              <Wrench className="w-4 h-4" />
+              {t('list.becomeTechnician')}
+            </Link>
           </div>
 
-          {/* Search */}
-          <form onSubmit={handleSearch} className="max-w-2xl">
+          <form onSubmit={handleSearch} className="mt-8 max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               <Input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('list.searchPlaceholder')}
                 aria-label={t('list.searchAriaLabel')}
-                className="pl-12 pr-24 py-3"
+                className="pl-10 pr-28 text-sm"
               />
-              <Button type="submit" variant="primary" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2">
+              <Button type="submit" variant="primary" size="sm" className="absolute right-1.5 top-1/2 -translate-y-1/2">
                 {t('list.searchButton')}
               </Button>
             </div>
           </form>
         </div>
-      </div>
+      </section>
 
-      {/* Main content */}
+      {/* ── Main content ───────────────────────────────────────────── */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tier filter tabs */}
-        <div className="mb-5 flex gap-2" role="group" aria-label={t('list.tierFilterLabel')}>
+        {/* Tier filter — text-only tab pills (no bg-action white) */}
+        <div className="mb-5 flex flex-wrap gap-2 font-mono text-xs uppercase tracking-[0.14em]" role="group" aria-label={t('list.tierFilterLabel')}>
           {tierTabs.map((tab) => (
-            <Button
+            <button
               key={tab.value}
+              type="button"
               onClick={() => setTierFilter(tab.value)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md border transition-colors ${
                 tier === tab.value
-                  ? 'bg-action text-white'
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+                  ? 'border-strong bg-text-primary text-canvas'
+                  : 'border text-text-secondary hover:border-strong'
               }`}
               aria-pressed={tier === tab.value}
             >
               {tab.label}
-            </Button>
+            </button>
           ))}
         </div>
 
         {/* Skills filter */}
-        <div className="mb-6">
+        <div className="mb-6 flex items-center gap-3 flex-wrap">
           <Select
             value={selectedSkill}
             onChange={(e) => setSkillFilter(e.target.value)}
@@ -239,49 +128,30 @@ export default function TechnikerListClient() {
             {SERVICE_CATEGORIES.map((cat) => (
               <optgroup key={cat.id} label={cat.name}>
                 {(IT_SKILLS[cat.id] || []).map((skill: ITSkill) => (
-                  <option key={skill.id} value={skill.id}>
-                    {skill.name}
-                  </option>
+                  <option key={skill.id} value={skill.id}>{skill.name}</option>
                 ))}
               </optgroup>
             ))}
           </Select>
 
           {hasActiveFilters && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearFilters}
-              className="ml-3 text-sm text-action hover:text-action font-medium"
-            >
+            <Button variant="ghost" size="sm" onClick={clearFilters}>
               {t('list.resetFilters')}
             </Button>
           )}
         </div>
 
-        {/* Loading */}
         {loading && <LoadingSkeleton count={limit} />}
 
-        {/* Error */}
         {error && !loading && (
-          <ErrorAlert
-            message={error}
-            variant="card"
-            onRetry={retry}
-            retryLabel={t('list.retryButton')}
-          />
+          <ErrorAlert message={error} variant="card" onRetry={retry} retryLabel={t('list.retryButton')} />
         )}
 
-        {/* Empty */}
         {!loading && !error && technicians.length === 0 && (
           <EmptyState
             icon={Users}
             title={t('list.emptyTitle')}
-            message={
-              hasActiveFilters
-                ? t('list.emptyMessageFiltered')
-                : t('list.emptyMessageEmpty')
-            }
+            message={hasActiveFilters ? t('list.emptyMessageFiltered') : t('list.emptyMessageEmpty')}
             action={
               hasActiveFilters
                 ? { label: t('list.emptyActionFiltered'), onClick: clearFilters }
@@ -290,7 +160,6 @@ export default function TechnikerListClient() {
           />
         )}
 
-        {/* Grid */}
         {!loading && !error && technicians.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {technicians.map((tech) => (
@@ -299,30 +168,15 @@ export default function TechnikerListClient() {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-2 pt-8" aria-label={t('list.pagination')}>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
-              aria-label={t('list.prevPage')}
-            >
+          <nav className="flex items-center justify-center gap-2 pt-10" aria-label={t('list.pagination')}>
+            <Button variant="outline" size="icon" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1} aria-label={t('list.prevPage')}>
               <ChevronLeft className="w-4 h-4" />
             </Button>
-            <span className="text-sm text-text-secondary px-4" aria-current="page">
+            <span className="ui-public-meta font-mono tabular-nums px-4" aria-current="page">
               {t('list.pageOf', { current: currentPage, total: totalPages })}
             </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => goToPage(currentPage + 1)}
-              disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-default disabled:opacity-50 disabled:cursor-not-allowed hover:bg-surface-raised transition-colors"
-              aria-label={t('list.nextPage')}
-            >
+            <Button variant="outline" size="icon" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} aria-label={t('list.nextPage')}>
               <ChevronRight className="w-4 h-4" />
             </Button>
           </nav>
@@ -330,25 +184,19 @@ export default function TechnikerListClient() {
 
         {/* CTA for non-logged-in */}
         {!session?.user && (
-          <div className="mt-12 card-shell rounded-2xl p-8 text-center">
-            <div className="flex justify-center mb-4">
-              <IconBadge icon={Wrench} theme="repairers" size="lg" />
-            </div>
-            <Heading level={3} className="text-xl font-bold text-text-primary mb-2">
-              {t('list.ctaTitle')}
-            </Heading>
-            <p className="text-base text-text-secondary mb-6 max-w-md mx-auto">
-              {t('list.ctaDescription')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button as={Link} href="/auth/login?callbackUrl=/profil/techniker" variant="primary">
+          <section className="mt-16 border-t border-subtle pt-16 text-center">
+            <div className="ui-public-eyebrow">MITMACHEN</div>
+            <h2 className="ui-public-display-md mt-3">{t('list.ctaTitle')}</h2>
+            <p className="ui-public-section-lede mt-4 mx-auto">{t('list.ctaDescription')}</p>
+            <div className="ui-public-cta-row mt-8">
+              <Link href="/auth/login?callbackUrl=/profil/techniker" className="ui-public-cta">
                 {t('list.ctaCreateProfile')}
-              </Button>
+              </Link>
               <Link href={ROUTES.public.itHilfe} className="ui-public-cta-ghost">
                 {t('list.ctaToITHelp')}
               </Link>
             </div>
-          </div>
+          </section>
         )}
       </div>
     </div>
