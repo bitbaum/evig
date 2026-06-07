@@ -91,6 +91,22 @@ export const IT_HILFE_PAGINATION = {
   maxLimit: 50,
 } as const
 
+/**
+ * Content length policies for IT-Hilfe free-text fields.
+ *
+ * Single SSOT for the (min, max) pairs that show up in:
+ *   - the form's HTML <input/textarea> validation attrs
+ *   - the Zod schema's `.min(N, 'message')` / `.max(N, 'message')`
+ *   - any manual length checks in API routes
+ *
+ * Edit once, every surface updates. Error messages are templated from
+ * the constant so the human-readable copy never drifts from the limit.
+ */
+export const OFFER_MIN_CHARS = 20
+export const OFFER_MAX_CHARS = 2000
+export const REVIEW_MIN_CHARS = 10
+export const REVIEW_MAX_CHARS = 5000
+
 // ============================================================================
 // REVAMPIT STORE (Physical location - Werkstatt & Laden)
 // Derived from SSOT: @/config/org

@@ -15,7 +15,7 @@ import {
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REQUEST_STATUS, REVIEW_MIN_CHARS } from '@/config/it-hilfe'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeReviewReceived } from '@/lib/email/templates/it-hilfe'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
@@ -62,9 +62,9 @@ export const POST = withAuth<{ id: string }>(async (
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
       return apiBadRequest('Bewertung muss zwischen 1 und 5 liegen')
     }
-    if (reviewText && reviewText.length < 10) {
+    if (reviewText && reviewText.length < REVIEW_MIN_CHARS) {
       return apiBadRequest(
-        'Der Bewertungstext muss mindestens 10 Zeichen lang sein',
+        `Der Bewertungstext muss mindestens ${REVIEW_MIN_CHARS} Zeichen lang sein`,
       )
     }
 

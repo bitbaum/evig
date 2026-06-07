@@ -2,7 +2,7 @@
 
 import { Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { getAllSkills } from '@/config/it-hilfe'
+import { getAllSkills, OFFER_MIN_CHARS, OFFER_MAX_CHARS } from '@/config/it-hilfe'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -74,8 +74,8 @@ export function OfferForm({
                 aria-required="true"
                 aria-invalid={!!error}
                 aria-describedby={error ? 'offer-error' : undefined}
-                minLength={20}
-                maxLength={2000}
+                minLength={OFFER_MIN_CHARS}
+                maxLength={OFFER_MAX_CHARS}
                 rows={4}
               />
             </div>

@@ -7,6 +7,8 @@ import {
   SWISS_CANTONS,
   BUDGET_TIERS,
   REQUEST_STATUSES,
+  OFFER_MIN_CHARS,
+  OFFER_MAX_CHARS,
 } from '@/config/it-hilfe';
 import { paginationSchema } from './common';
 
@@ -103,8 +105,8 @@ export const itHilfeRequestSchema = z.object({
 export const CreateOfferSchema = z.object({
   message: z
     .string()
-    .min(20, 'Nachricht muss mindestens 20 Zeichen lang sein')
-    .max(2000, 'Nachricht darf maximal 2000 Zeichen lang sein'),
+    .min(OFFER_MIN_CHARS, `Nachricht muss mindestens ${OFFER_MIN_CHARS} Zeichen lang sein`)
+    .max(OFFER_MAX_CHARS, `Nachricht darf maximal ${OFFER_MAX_CHARS} Zeichen lang sein`),
   estimatedTime: z.string().max(200).optional().nullable(),
   proposedCompensation: z.string().max(200).optional().nullable(),
   relevantSkills: z

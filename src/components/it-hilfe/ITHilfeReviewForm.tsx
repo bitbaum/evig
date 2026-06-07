@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_MIN_CHARS, REVIEW_MAX_CHARS } from '@/config/it-hilfe'
 import Heading from '@/components/ui/Heading'
 import { StarRating } from '@/components/ui/StarRating'
 import { Button } from '@/components/ui/button'
@@ -32,7 +33,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
       setError(t('errorNoRating'))
       return
     }
-    if (content.length < 10) {
+    if (content.length < REVIEW_MIN_CHARS) {
       setError(t('errorTextTooShort'))
       return
     }
@@ -113,10 +114,10 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
             onChange={(e) => setContent(e.target.value)}
             placeholder={t('reviewTextPlaceholder')}
             rows={4}
-            minLength={10}
-            maxLength={5000}
+            minLength={REVIEW_MIN_CHARS}
+            maxLength={REVIEW_MAX_CHARS}
           />
-          <p className="text-xs text-text-tertiary mt-1">{content.length}/5000</p>
+          <p className="text-xs text-text-tertiary mt-1">{content.length}/{REVIEW_MAX_CHARS}</p>
         </div>
 
         <Button
