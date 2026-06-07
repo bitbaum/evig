@@ -270,10 +270,6 @@ export interface BudgetTier {
   badgeClass: string
 }
 
-/** Lookup a BudgetTier by id without depending on its array position. */
-export function getBudgetTierById(id: BudgetTierId): BudgetTier | undefined {
-  return BUDGET_TIERS.find((t) => t.id === id)
-}
 
 export const BUDGET_TIERS: BudgetTier[] = [
   {

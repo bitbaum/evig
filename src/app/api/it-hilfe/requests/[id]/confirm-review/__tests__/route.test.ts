@@ -79,6 +79,9 @@ jest.mock('@/config/database', () => ({
 
 jest.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
+  // Mirror the SSOT constant added in NNN.4 — the route's length-check
+  // guard would silently skip without it (NaN comparison always false).
+  REVIEW_MIN_CHARS: 10,
 }))
 
 jest.mock('@/lib/reviews/create-review', () => ({
