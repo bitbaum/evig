@@ -1,13 +1,19 @@
+'use client'
+
 /**
  * Zero-Waste Solution Section
  *
  * Displays RevampIT's approach to solving the e-waste problem.
  * Green/hopeful theme to show the positive path forward.
  * Presents the Repair > Refurbish > Recycle hierarchy.
+ *
+ * Client component for the same reason as EWasteProblemSection — its
+ * parent (about/impact/content.tsx) is `'use client'` so server-side
+ * `getTranslations` crashes during render.
  */
 
 import { Wrench, RefreshCw, Recycle, Heart, ArrowDown, CheckCircle } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { ZERO_WASTE_PRINCIPLES, getEnvironmentalSummary, type ZeroWastePrinciple } from '@/data/impact-metrics'
 
@@ -59,8 +65,8 @@ function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWa
   )
 }
 
-export default async function ZeroWasteSolutionSection() {
-  const t = await getTranslations('components.zeroWaste')
+export default function ZeroWasteSolutionSection() {
+  const t = useTranslations('components.zeroWaste')
   const envSummary = getEnvironmentalSummary()
   const sortedPrinciples = [...ZERO_WASTE_PRINCIPLES].sort((a, b) => a.priority - b.priority)
 

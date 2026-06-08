@@ -1,13 +1,20 @@
+'use client'
+
 /**
  * E-Waste Problem Section
  *
  * Displays the global e-waste crisis with verified statistics.
  * Red/urgent theme to convey the severity of the problem.
  * All statistics have verified sources displayed.
+ *
+ * Client component because its parent (about/impact/content.tsx) is
+ * `'use client'` for the donation-method useState. Server-side
+ * `getTranslations` crashes when rendered from a client tree —
+ * use `useTranslations` here.
  */
 
 import { AlertTriangle, ExternalLink, Globe, Recycle, Laptop, Scale } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EWASTE_GLOBAL_STATS, type EWasteStat } from '@/data/impact-metrics'
 
@@ -50,8 +57,8 @@ function StatCard({ stat }: { stat: EWasteStat }) {
   )
 }
 
-export default async function EWasteProblemSection() {
-  const t = await getTranslations('components.eWasteProblem')
+export default function EWasteProblemSection() {
+  const t = useTranslations('components.eWasteProblem')
 
   return (
     <section className="py-20 bg-error-700 relative overflow-hidden">
