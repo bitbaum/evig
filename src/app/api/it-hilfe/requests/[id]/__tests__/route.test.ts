@@ -34,12 +34,20 @@ jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', status: 'ihr_status', title: 'ihr_title', matchedOfferId: 'ihr_matchedOfferId', offerCount: 'ihr_offerCount', reviewedAt: 'ihr_reviewedAt', categoryId: 'ihr_categoryId', skillsNeeded: 'ihr_skillsNeeded', canton: 'ihr_canton', budgetAmountCents: 'ihr_budgetAmountCents', budgetType: 'ihr_budgetType', serviceType: 'ihr_serviceType', completedAt: 'ihr_completedAt', expiresAt: 'ihr_expiresAt', createdAt: 'ihr_createdAt', updatedAt: 'ihr_updatedAt', deviceBrand: 'ihr_deviceBrand', deviceModel: 'ihr_deviceModel', description: 'ihr_description', urgency: 'ihr_urgency', postalCode: 'ihr_postalCode', city: 'ihr_city', imageUrls: 'ihr_imageUrls', aiDiagnosis: 'ihr_aiDiagnosis', completedBy: 'ihr_completedBy' },
   itHilfeOffers: { id: 'iho_id', requestId: 'iho_requestId', helperId: 'iho_helperId', status: 'iho_status' },
   helperProfiles: { id: 'hp_id', userId: 'hp_userId', totalHelpsCompleted: 'hp_totalHelpsCompleted' },
+  // Added in PPP.2 for matched-helper join (name + phone reveal).
+  repairerProfiles: { id: 'rp_id', userId: 'rp_userId', phone: 'rp_phone' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }))
 
 jest.mock('drizzle-orm/pg-core', () => ({
+  // PPP.2 introduced helperUser + helperProfile aliases; widen the mock
+  // so any column the route reads through an alias resolves to a stable
+  // placeholder string instead of undefined.
   alias: (_table: unknown, name: string) => ({
     id: `${name}_id`,
+    userId: `${name}_userId`,
+    name: `${name}_name`,
+    phone: `${name}_phone`,
     helperId: `${name}_helperId`,
     status: `${name}_status`,
   }),
@@ -139,7 +147,10 @@ const routeParams = (id: string) => ({ params: Promise.resolve({ id }) })
 function setupSingleSelectChain(row: unknown | null) {
   const rows = row ? [row] : []
   mockWhere.mockResolvedValue(rows)
-  mockLeftJoin.mockReturnValue({ where: mockWhere })
+  // PPP.2 added two more leftJoin calls (matched helper user + profile)
+  // so the chain has three left joins now. Return self-referentially so
+  // the route can keep calling .leftJoin without the chain breaking.
+  mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
   mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
   mockSelect.mockReturnValue({ from: mockFrom })
