@@ -102,8 +102,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Match all paths except static files and Next.js internals
+  // Match all paths except static files and Next.js internals.
+  // Add new extensions here when /public/ starts serving them — without
+  // this, middleware intercepts the request and the file 404s through
+  // the next-intl router (it tries to route the extension as a page).
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|apple-icon|icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2)).*)',
+    '/((?!_next/static|_next/image|favicon.ico|apple-icon|icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|mp4|webm|mp3|m4a|m4v|pdf|txt|xml|json|webmanifest|html|md|map)).*)',
   ],
 }
