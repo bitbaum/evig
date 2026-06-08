@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Loader2, FileText, Mic, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
 import { MEETING_TYPE_LABELS, PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
@@ -14,6 +15,9 @@ import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
 import { StatusBanner } from '@/components/ui/status-banner'
 import { SourceUploader } from '@/components/admin/protocols/SourceUploader'
+import { RecordButton } from '@/components/admin/protocols/RecordButton'
+import { ProtocolConsent } from '@/components/admin/protocols/ProtocolConsent'
+import { CaptureAlternatives } from '@/components/admin/protocols/CaptureAlternatives'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -178,12 +182,18 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           </p>
         </div>
 
-        <SourceUploader
-          value={sources}
-          onChange={setSources}
-          onError={setError}
+        {/* Record + upload sit side-by-side — same data target. The
+            consent gate is browser-side legal (StGB Art. 179bis); audio
+            recorded without it is a CH criminal offence regardless of
+            our app's policy. */}
+        <CaptureControls
+          sources={sources}
+          setSources={setSources}
+          setError={setError}
           disabled={loading || processing}
         />
+
+        <CaptureAlternatives />
 
         {hasAudio && (
           <FormField label="Whisper-Modell" htmlFor="whisper_model">
@@ -261,6 +271,46 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           </Button>
         </div>
       </div>
+    </div>
+  )
+}
+
+/**
+ * CaptureControls — record button + upload zone + consent gate.
+ *
+ * Keeps consent state local (it's UX, not part of the submitted form),
+ * persists "remember me" via ProtocolConsent's localStorage handler.
+ */
+interface CaptureControlsProps {
+  sources: ReturnType<typeof useProtocolForm>['sources']
+  setSources: ReturnType<typeof useProtocolForm>['setSources']
+  setError: (msg: string | null) => void
+  disabled?: boolean
+}
+
+function CaptureControls({ sources, setSources, setError, disabled }: CaptureControlsProps) {
+  const [consented, setConsented] = useState(false)
+
+  const handleRecorded = (audioFile: File) => {
+    setSources({ ...sources, audio: audioFile })
+  }
+
+  return (
+    <div className="space-y-4">
+      <ProtocolConsent value={consented} onChange={setConsented} />
+
+      <div className="flex flex-wrap items-center gap-3">
+        <RecordButton onRecorded={handleRecorded} disabled={disabled || !consented} />
+        <span className="text-xs text-text-tertiary">oder</span>
+        <span className="text-xs text-text-tertiary">Datei hochladen / Notizen einfügen ↓</span>
+      </div>
+
+      <SourceUploader
+        value={sources}
+        onChange={setSources}
+        onError={setError}
+        disabled={disabled}
+      />
     </div>
   )
 }

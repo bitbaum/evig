@@ -7361,7 +7361,31 @@
       "readyToClose": "bereit zum Abschluss",
       "open": "offen",
       "by": "von",
-      "openReview": "Review öffnen"
+      "openReview": "Review öffnen",
+      "record": {
+        "start": "Aufnehmen",
+        "stop": "Stopp",
+        "stopAriaLabel": "Aufnahme stoppen",
+        "consentRequired": "Bitte zuerst Einwilligung bestätigen",
+        "errorPermission": "Mikrofon-Zugriff verweigert. Erlaube den Zugriff in den Browser-Einstellungen, oder lade stattdessen eine Datei hoch."
+      },
+      "consent": {
+        "label": "Alle Anwesenden haben der Aufnahme zugestimmt.",
+        "remember": "Diese Bestätigung speichern (nur in diesem Browser)"
+      },
+      "alternatives": {
+        "title": "Klappt etwas nicht? Andere Wege",
+        "subtitle": "Wir empfehlen Open-Source-Tools. Alle laufen lokal oder selbstgehostet — deine Sitzungsdaten verlassen nie deinen Rechner.",
+        "recordHeading": "Selbst aufnehmen",
+        "recordIntro": "Wenn die Aufnahme im Browser nicht klappt:",
+        "transcribeHeading": "Selbst transkribieren",
+        "transcribeIntro": "Wenn unser Transkriptions-Dienst gerade nicht verfügbar ist:",
+        "structureHeading": "Selbst strukturieren",
+        "structureIntro": "Wenn die KI hier nicht antwortet — diesen Prompt einem lokalen Modell (Ollama, llama.cpp) oder einem Chatbot deiner Wahl geben:",
+        "copyPrompt": "Prompt kopieren",
+        "copied": "Kopiert",
+        "promptTemplate": "Du bist ein Sitzungs-Strukturierer. Lies das folgende Sitzungs-Transkript und gib das Ergebnis als JSON zurück mit den Schlüsseln:\n  - participants: Liste der Teilnehmer-Namen\n  - topics: Liste der Diskussionspunkte (kurz)\n  - decisions: Liste der getroffenen Entscheidungen\n  - tasks: Liste { description, assignee, dueDate }\n  - openQuestions: Liste offener Fragen\n\nTranskript:\n---\n"
+      }
     },
     "categories": {
       "titleNew": "Neue Kategorie",
