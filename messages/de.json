@@ -5241,6 +5241,132 @@
           "volunteer_time": "Freiwilligen-Einsatz"
         },
         "cancel": "Schliessen"
+      },
+      "guides": {
+        "eyebrow": "ANLEITUNGEN",
+        "title": "Modell-spezifische Anleitungen",
+        "intro": "Schritt-für-Schritt-Dokumentationen pro Monitor-Modell — mit Fotos, Sicherheitshinweisen und Schaltplänen. Wir publizieren sie hier laufend, sobald sie validiert sind.",
+        "openCta": "Anleitung öffnen",
+        "items": [
+          {
+            "slug": "lenovo-l2251pwd",
+            "model": "Lenovo L2251pwd",
+            "href": "/projects/upcycling/lenovo-l2251pwd",
+            "summary": "22-Zoll-Monitor zur Leuchte umbauen — 5 Schritte, ca. 1 Stunde.",
+            "author": "Daniel",
+            "publishedAt": "2026-05-28"
+          }
+        ]
+      },
+      "lenovo_l2251pwd": {
+        "meta": {
+          "title": "Lenovo L2251pwd — Monitor zur Leuchte | Monitor-Upcycling | RevampIT",
+          "description": "Schritt-für-Schritt-Anleitung: Lenovo L2251pwd-Monitor zerlegen, LCD entfernen und Elektronik zur eigenständigen Leuchte überbrücken."
+        },
+        "back": "← Zurück zur Übersicht",
+        "eyebrow": "ANLEITUNG · MONITOR-UPCYCLING",
+        "title": "Lenovo L2251pwd",
+        "subtitle": "22-Zoll-Monitor zur Leuchte umbauen",
+        "metaLine": "Modell: Lenovo L2251pwd · Dauer: ca. 1 Stunde · Schwierigkeit: einfach",
+        "credit": "Anleitung von Daniel, RevampIT · Veröffentlicht 28. Mai 2026 · Original-Wiki: monitor.revamp-it intern",
+        "safety": {
+          "title": "Sicherheit zuerst",
+          "body": "Niemals unter Spannung arbeiten. Vor jedem Funktionstest die nötigen Schutzmassnahmen treffen. Wenn du unsicher bist: hol einen Elektronik-Kollegen dazu."
+        },
+        "tools": {
+          "title": "Werkzeug & Material",
+          "items": [
+            "Kunststoff-Spachtel zum Aushebeln",
+            "Kreuz-Schraubenzieher (PH1/PH2)",
+            "Kleiner Flachschraubenzieher",
+            "Zwei 1-kΩ-Widerstände",
+            "Lötkolben + Lötzinn",
+            "Schrumpfschlauch oder Isolierband"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Monitor zerlegen",
+            "intro": "Der Umbau läuft in wenigen Schritten und ist mit etwas Geduld unkompliziert."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 2",
+            "title": "LCD entfernen",
+            "intro": "Die schwarze Scheibe (LCD) raus, die weisse Scheibe (Hintergrundbeleuchtung) bleibt drin — sie wird zur Leuchtfläche."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 3",
+            "title": "Elektronik überbrücken",
+            "intro": "Jetzt funktioniert das Gerät noch wie ein Monitor mit manuellem Ein/Aus. Für den Leuchten-Betrieb brücken wir die Bedienelektronik."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Rahmen ausklicken",
+            "body": "Von der Rückseite mit Kunststoff-Spachteln den äusseren Rahmen 'ausklicken'. Vorsichtig der Kante entlang, damit keine Klipse abbrechen.",
+            "images": [
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-1-frame-removed.jpg", "alt": "Lenovo L2251pwd mit abgenommenem äusserem Rahmen" },
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-1-bezel-clips.jpg", "alt": "Detail der Plastikklipse am Monitorrahmen" }
+            ]
+          },
+          {
+            "n": 2,
+            "title": "Elektronik-Gehäuse lösen",
+            "body": "Auf der Rückseite die 4 Schrauben seitlich entfernen. Das Elektronik-Gehäuse lässt sich dann abheben.",
+            "images": [
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-open.jpg", "alt": "Geöffnetes Elektronik-Gehäuse auf der Monitor-Rückseite" },
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-detached.jpg", "alt": "Abgenommenes Elektronik-Gehäuse mit sichtbarer Platine" }
+            ]
+          },
+          {
+            "n": 3,
+            "title": "LCD-Elektronik freilegen",
+            "body": "Am Metallgehäuse: Schrauben lösen, die die Elektronik halten. Klipse entlang des Metallrahmens vorsichtig mit einem Schraubenzieher öffnen. Metallrahmen aufklappen. Darunter erscheinen LCD (schwarze Scheibe) und Hintergrundbeleuchtung (weisse Scheibe). Das LCD ist zusätzlich mit Klebestreifen gesichert — die lassen sich einfach abziehen.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "LCD entfernen, Rahmen wieder schliessen",
+            "body": "Schwarze LCD-Scheibe abnehmen. Den Metallrahmen wieder zusammenfügen — die weisse Hintergrundbeleuchtung bleibt geschützt darin. Das ist ab jetzt die leuchtende Fläche.",
+            "images": [
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-4-lcd-removed.jpg", "alt": "Monitor ohne LCD — nur die weisse Hintergrundbeleuchtung bleibt sichtbar" }
+            ]
+          },
+          {
+            "n": 5,
+            "title": "Bedienelektronik brücken",
+            "body": "Jetzt ist das Gerät technisch noch ein Monitor — er muss manuell ein- und ausgeschaltet werden. Für den Leuchten-Betrieb wird die Bedienelektronik entfernt und auf dem verbleibenden Stecker eine Brücke gesetzt. Die Brücke ist ein Spannungsteiler zwischen 5V (rot), GND (schwarz) und dem Signal für die Hintergrundbeleuchtung (gelb): zwei identische Widerstände (~1 kΩ) zwischen Rot↔Gelb und Schwarz↔Gelb.",
+            "images": [
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-5-control-board.jpg", "alt": "Ausgebaute Bedienelektronik des Lenovo-Monitors" },
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-soldered.jpg", "alt": "Aufgelötete Brücke aus zwei 1-kΩ-Widerständen" },
+              { "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-detail.jpg", "alt": "Detail der Spannungsteiler-Brücke am Steckverbinder" }
+            ]
+          }
+        ],
+        "schematic": {
+          "title": "Schaltprinzip",
+          "body": "Spannungsteiler: 5V (rot) → 1 kΩ → Backlight-Signal (gelb) → 1 kΩ → GND (schwarz). Die anderen Pins (3,3V, weitere Signale) bleiben unbeschaltet.",
+          "labels": {
+            "v5": "5V",
+            "signal": "Backlight-Signal",
+            "gnd": "GND",
+            "resistor": "1 kΩ"
+          }
+        },
+        "done": {
+          "title": "Fertig!",
+          "body": "Der Monitor ist jetzt eine eigenständige Leuchte mit fester Hintergrundbeleuchtung. Hänge ihn auf, stelle ihn hin oder integriere ihn in dein Möbel-Setup."
+        },
+        "feedback": {
+          "title": "Bessere Idee? Schreib uns.",
+          "body": "Diese Anleitung ist offen und lebt von Korrekturen. Falls du eine bessere Brücken-Schaltung, eine Helligkeitsregelung oder eine schönere Montage gefunden hast — wir nehmen Beiträge gerne entgegen.",
+          "cta": "Beitragen"
+        }
       }
     }
   },

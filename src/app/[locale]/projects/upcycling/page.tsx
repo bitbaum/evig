@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
-import { Lightbulb } from 'lucide-react'
+import { Lightbulb, ArrowRight } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import {
   ProjectHero,
   ProjectSection,
@@ -8,6 +9,15 @@ import {
   type NeedsSectionLabels,
 } from '@/components/projects'
 import type { ProjectPageConfig, RawCard, RawAction } from '@/components/projects'
+
+type GuideItem = {
+  slug: string
+  model: string
+  href: string
+  summary: string
+  author: string
+  publishedAt: string
+}
 
 type PageMessages = {
   meta: { title: string; description: string }
@@ -19,6 +29,7 @@ type PageMessages = {
   open_questions: { title: string; questions: string[] }
   source: { title: string; description: string }
   ai_brainstorm: { title: string; intro: string; prompts: Array<{ title: string; prompt: string }> }
+  guides: { eyebrow: string; title: string; intro: string; openCta: string; items: GuideItem[] }
   needs: NeedsSectionLabels
 }
 
@@ -87,8 +98,42 @@ export default async function UpcyclingPage() {
       {config.sections.map((section, i) => (
         <ProjectSection key={i} section={section} />
       ))}
+      <GuidesSection guides={p.guides} />
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
       {config.cta && <ProjectCallToAction cta={config.cta} />}
     </div>
+  )
+}
+
+function GuidesSection({ guides }: { guides: PageMessages['guides'] }) {
+  if (!guides?.items?.length) return null
+  return (
+    <section className="bg-canvas border-t border-subtle py-16 sm:py-20">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="ui-public-eyebrow">{guides.eyebrow}</div>
+        <h2 className="ui-public-display-md mt-3">{guides.title}</h2>
+        <p className="ui-public-section-lede mt-3">{guides.intro}</p>
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          {guides.items.map((guide) => (
+            <Link
+              key={guide.slug}
+              href={guide.href}
+              className="group flex flex-col rounded-lg border border-subtle bg-surface-base p-6 transition-colors hover:border-default"
+            >
+              <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+                {guide.publishedAt}
+              </div>
+              <h3 className="mt-3 text-lg font-semibold text-text-primary">{guide.model}</h3>
+              <p className="mt-2 text-sm text-text-secondary">{guide.summary}</p>
+              <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
+                {guides.openCta}
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
