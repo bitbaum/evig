@@ -2793,6 +2793,7 @@
     },
     "create": {
       "backToList": "Zurück zur Übersicht",
+      "eyebrow": "NEUE ANFRAGE",
       "title": "Reparaturanfrage erstellen",
       "description": "Wähle ein Gerät und beschreibe dein Problem. Die Community hilft dir.",
       "createdTitle": "Anfrage erstellt!",

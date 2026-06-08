@@ -2338,6 +2338,7 @@
     },
     "create": {
       "backToList": "Volver al listado",
+      "eyebrow": "NUEVA SOLICITUD",
       "title": "Crear solicitud de reparación",
       "description": "Elige un dispositivo y describe tu problema. La comunidad te ayudará.",
       "createdTitle": "¡Solicitud creada!",

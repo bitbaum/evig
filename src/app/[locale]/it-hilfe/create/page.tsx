@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
-  Wrench,
   CheckCircle,
 } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
@@ -138,19 +137,30 @@ export default function CreatePeerRepairPage() {
           {t('backToList')}
         </Link>
 
-        <div className="card-shell p-6 mb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-action-muted rounded-lg">
-              <Wrench className="w-6 h-6 text-action" />
-            </div>
-            <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
-          </div>
-          <p className="text-text-secondary">{t('description')}</p>
+        <div className="mb-8">
+          <div className="ui-public-eyebrow">{t('eyebrow')}</div>
+          <Heading level={1} className="ui-public-display-md mt-3">{t('title')}</Heading>
+          <p className="ui-public-section-lede mt-4">{t('description')}</p>
         </div>
 
         {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* AI-assist LEADS the form — describe the problem in plain words and
+              the AI fills in category, urgency, skills, etc. Pure manual fill
+              still works for users who prefer it; they scroll past this card. */}
+          <AIFormAssist<AIFormFields>
+            formType="it-hilfe"
+            placeholder={t('aiPlaceholder')}
+            onFieldsFilled={(data, meta) =>
+              handleAIFieldsFilled(data as Parameters<typeof handleAIFieldsFilled>[0], meta as Record<string, AIFieldMetadataEntry>)
+            }
+            currentData={formData as unknown as Record<string, unknown>}
+            variant="section"
+            defaultExpanded
+            className=""
+          />
+
           {status === 'unauthenticated' && (
             <div className="card-shell p-6 border-l-4 border-action">
               <Heading level={2} className="text-lg text-text-primary mb-2">
@@ -172,18 +182,6 @@ export default function CreatePeerRepairPage() {
               />
             </div>
           )}
-
-          <AIFormAssist<AIFormFields>
-            formType="it-hilfe"
-            placeholder={t('aiPlaceholder')}
-            onFieldsFilled={(data, meta) =>
-              handleAIFieldsFilled(data as Parameters<typeof handleAIFieldsFilled>[0], meta as Record<string, AIFieldMetadataEntry>)
-            }
-            currentData={formData as unknown as Record<string, unknown>}
-            variant="section"
-            defaultExpanded
-            className=""
-          />
 
           {formData.aiDiagnosis && (
             <AIDiagnosisCard

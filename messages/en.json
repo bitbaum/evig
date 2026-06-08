@@ -2755,6 +2755,7 @@
     },
     "create": {
       "backToList": "Back to list",
+      "eyebrow": "NEW REQUEST",
       "title": "Create a repair request",
       "description": "Choose a device and describe your problem. The community will help.",
       "createdTitle": "Request created!",

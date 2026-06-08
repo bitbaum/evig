@@ -2735,6 +2735,7 @@
     },
     "create": {
       "backToList": "Retour à la liste",
+      "eyebrow": "NOUVELLE DEMANDE",
       "title": "Créer une demande de réparation",
       "description": "Choisissez un appareil et décrivez votre problème. La communauté vous aidera.",
       "createdTitle": "Demande créée !",
