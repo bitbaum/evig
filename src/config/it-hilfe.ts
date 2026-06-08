@@ -49,6 +49,14 @@ export const IT_HILFE = {
     my: '/it-hilfe/my',
     myOffers: '/it-hilfe/my/offers',
     detail: (id: string) => `/it-hilfe/${id}`,
+    /**
+     * Public technician directory. "helpers" alias kept temporarily for
+     * any consumer importing the old key — both point at /techniker.
+     * Drop the alias once a grep for IT_HILFE.routes.helpers comes up
+     * empty (QQQ.4 onwards).
+     */
+    technicians: '/techniker',
+    /** @deprecated Use IT_HILFE.routes.technicians instead. */
     helpers: '/techniker',
     register: '/profil/techniker',
   },
@@ -56,6 +64,11 @@ export const IT_HILFE = {
     requests: '/api/it-hilfe/requests',
     myRequests: '/api/it-hilfe/my-requests',
     myOffers: '/api/it-hilfe/my-offers',
+    /**
+     * @deprecated Orphaned config entry — no src/ consumer. The endpoint
+     * itself (/api/it-hilfe/helpers) is also deprecated; use
+     * /api/technicians directly. Tracked in docs/DEAD_CODE.md.
+     */
     helpers: '/api/it-hilfe/helpers',
   },
 } as const

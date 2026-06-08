@@ -1,5 +1,9 @@
-// Legacy endpoint — thin proxy to /api/technicians?tier=professional
-// Kept for backwards compatibility. Remaps response shape for existing callers.
+/**
+ * @deprecated Orphaned — zero src/ callers as of QQQ.3. Legacy proxy
+ * forwarding to /api/technicians?tier=professional with response remap
+ * (technicians → repairers). New code should call /api/technicians
+ * directly with the tier query param. Tracked in docs/DEAD_CODE.md.
+ */
 import { NextRequest } from 'next/server'
 import { GET as techniciansGET } from '@/app/api/technicians/route'
 import { apiError } from '@/lib/api/helpers'

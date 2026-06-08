@@ -13,7 +13,13 @@ const rTable = getTableName(itHilfeRequests)
 
 /**
  * GET /api/it-hilfe/helper/my-offers
- * Returns offers submitted by the authenticated helper, with request details
+ * Returns offers submitted by the authenticated helper, with request details.
+ *
+ * @deprecated Orphaned — zero src/ callers as of QQQ.3. URL also breaks
+ * REST convention (singular `helper/` under plural namespace). The same
+ * data is available via /api/it-hilfe/my-offers (which IS used). When
+ * a real consumer appears, port it to /api/it-hilfe/me/offers (planned
+ * canonical URL). Tracked in docs/DEAD_CODE.md.
  */
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {

@@ -51,6 +51,21 @@ that's a different thing and is still in use.
 - `REPAIRER_AVAILABILITY_TYPE.BLOCKED` in `src/config/repairer-status.ts`
   — defined but never referenced.
 
+### Technician API proxies + singular `/helper/` routes (QQQ.3)
+
+Zero src/ consumers confirmed via grep across hooks/components/apps.
+Marked `@deprecated` in their route files so any future import
+surfaces a warning. Drop these once a quarterly grep confirms still
+unused:
+
+- `src/app/api/repairers/route.ts` — proxy → /api/technicians?tier=professional
+- `src/app/api/it-hilfe/helpers/route.ts` — proxy → /api/technicians?tier=community
+- `src/app/api/it-hilfe/helper/my-offers/route.ts` — duplicate of /api/it-hilfe/my-offers
+- `src/app/api/it-hilfe/helper/matching-requests/route.ts` — no caller
+- `IT_HILFE.api.helpers` in `src/config/it-hilfe.ts` — orphan config string
+- `IT_HILFE.routes.helpers` in `src/config/it-hilfe.ts` — renamed to
+  `routes.technicians`, old key kept as one-release alias
+
 ### Possibly orphaned, not yet reverified
 
 - `src/components/technicians/` — 193 lines (TechnicianCard, types,

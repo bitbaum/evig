@@ -70,7 +70,7 @@ export default function ITHilfePage() {
                 {t('getHelp')}
               </Link>
               <Link
-                href={IT_HILFE.routes.helpers}
+                href={IT_HILFE.routes.technicians}
                 className="ui-public-cta-ghost inline-flex items-center gap-2"
               >
                 <Users className="w-4 h-4" />

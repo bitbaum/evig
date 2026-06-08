@@ -16,7 +16,12 @@ const uTable = getTableName(users)
 
 /**
  * GET /api/it-hilfe/helper/matching-requests
- * Returns open requests matching the helper's skills, excluding already-offered ones
+ * Returns open requests matching the helper's skills, excluding already-offered ones.
+ *
+ * @deprecated Orphaned — zero src/ callers as of QQQ.3. URL also breaks
+ * REST convention (singular `helper/` under plural namespace). When a
+ * real consumer appears, port it to /api/it-hilfe/me/matching-requests
+ * (planned canonical URL). Tracked in docs/DEAD_CODE.md.
  */
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
