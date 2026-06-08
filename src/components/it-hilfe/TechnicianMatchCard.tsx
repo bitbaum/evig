@@ -1,5 +1,18 @@
 'use client'
 
+/**
+ * TechnicianMatchCard — request-context variant of the technician card.
+ *
+ * Renders a technician with the skill-match metadata + an inline "contact
+ * me about this request" button. Used by TechnicianMapList on the IT-Hilfe
+ * request detail page. The plain display variant (without contact button)
+ * lives at src/app/[locale]/techniker/TechnicianCard.tsx and is what every
+ * other surface uses.
+ *
+ * Was named HelperCard until QQQ.2 — renamed because there's no separate
+ * "helper" entity, only Technicians with profileTier='community'.
+ */
+
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
@@ -14,35 +27,36 @@ import { CONVERSATION_TYPES } from '@/config/database'
 import type { Technician } from '@/types/technician'
 
 /**
- * @deprecated Wraps the canonical Technician for the IT-Hilfe map context.
- * Pending QQQ.2: this whole component becomes a thin alias of TechnicianCard
- * from `@/app/[locale]/techniker/TechnicianCard`. Until then it exposes the
- * narrow prop subset that TechnicianMapList passes in.
+ * Narrow shape accepted by TechnicianMatchCard. Pick of the canonical
+ * Technician fields the matches API returns, plus a legacy `serviceTypes`
+ * alias for the same data as Technician.serviceDeliveryTypes (matches API
+ * still ships the old key, will be normalized in QQQ.3).
  */
-type Helper = Pick<Technician,
+export type TechnicianMatchInput = Pick<Technician,
   | 'userId' | 'name' | 'bio'
   | 'hourlyRateCents' | 'acceptsGratis' | 'acceptsKulturlegi'
   | 'postalCode' | 'city' | 'canton' | 'maxTravelKm'
   | 'skills'
 > & {
-  /**
-   * Same shape as canonical Technician.serviceDeliveryTypes — the legacy
-   * IT-Hilfe map list still ships the data under the old `serviceTypes`
-   * alias. Pending QQQ.3 API cleanup, accept both.
-   */
   serviceTypes: string[]
   averageRating?: number | null
   totalJobsCompleted?: number
   totalReviews?: number
 }
 
-interface HelperCardProps {
-  helper: Helper
+interface TechnicianMatchCardProps {
+  /** Match-shape technician returned by /api/it-hilfe/requests/[id]/matches. */
+  technician: TechnicianMatchInput
+  /** ID of the open request — pre-fills the contact message. */
   requestId?: string
+  /** Title of the open request — pre-fills the contact message. */
   requestTitle?: string
 }
 
-export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps) {
+export function TechnicianMatchCard({ technician, requestId, requestTitle }: TechnicianMatchCardProps) {
+  // Local alias keeps the historical variable name in the function body
+  // so the diff stays manageable. Future cleanup can rename throughout.
+  const helper = technician
   const t = useTranslations('components.helperCard')
   const [isContacting, setIsContacting] = useState(false)
   const [contactSuccess, setContactSuccess] = useState(false)

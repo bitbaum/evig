@@ -23,7 +23,7 @@ import { logger } from '@/lib/logger'
 import { getSkillById, REVAMPIT_STORE } from '@/config/it-hilfe'
 import { getCantonCoordinates } from '@/config/canton-coordinates'
 import LeafletMap, { type MapMarker } from '@/components/map/LeafletMap'
-import { HelperCard } from './HelperCard'
+import { TechnicianMatchCard } from './TechnicianMatchCard'
 import Heading from '@/components/ui/Heading'
 import { ROUTES } from '@/config/routes'
 
@@ -250,8 +250,8 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                       </div>
                     )}
 
-                    <HelperCard
-                      helper={helperForCard}
+                    <TechnicianMatchCard
+                      technician={helperForCard}
                       requestId={requestId}
                       requestTitle={requestTitle}
                     />
