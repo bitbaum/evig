@@ -135,7 +135,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                   <th className="px-4 py-3 font-medium">Beschreibung</th>
                   <th className="px-4 py-3 font-medium">Dringlichkeit</th>
                   <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium">Repairer</th>
+                  <th className="px-4 py-3 font-medium">Techniker</th>
                   <th className="px-4 py-3 font-medium">Erstellt</th>
                 </tr>
               </thead>

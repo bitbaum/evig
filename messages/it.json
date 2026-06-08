@@ -6854,7 +6854,7 @@
       "contact": "Contatto",
       "backToServices": "Torna ai servizi"
     },
-    "helperCard": {
+    "technicianMatchCard": {
       "helps": "{count, plural, one {# aiuto} other {# aiuti}}",
       "gratis": "Gratuito",
       "contacting": "Contattando...",

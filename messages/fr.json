@@ -6833,7 +6833,7 @@
       "contact": "Contact",
       "backToServices": "Retour aux services"
     },
-    "helperCard": {
+    "technicianMatchCard": {
       "helps": "{count, plural, one {# aide} other {# aides}}",
       "gratis": "Gratuit",
       "contacting": "Contacting...",

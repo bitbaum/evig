@@ -6891,7 +6891,7 @@
       "contact": "Contact",
       "backToServices": "Back to Services"
     },
-    "helperCard": {
+    "technicianMatchCard": {
       "helps": "{count, plural, one {# help} other {# helps}}",
       "gratis": "Free",
       "contacting": "Contacting...",

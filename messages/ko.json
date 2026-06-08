@@ -6828,7 +6828,7 @@
       "contact": "문의",
       "backToServices": "서비스 목록으로"
     },
-    "helperCard": {
+    "technicianMatchCard": {
       "helps": "{count}건의 도움",
       "gratis": "무료",
       "contacting": "연락 중...",

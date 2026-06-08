@@ -57,7 +57,7 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
   // Local alias keeps the historical variable name in the function body
   // so the diff stays manageable. Future cleanup can rename throughout.
   const helper = technician
-  const t = useTranslations('components.helperCard')
+  const t = useTranslations('components.technicianMatchCard')
   const [isContacting, setIsContacting] = useState(false)
   const [contactSuccess, setContactSuccess] = useState(false)
 

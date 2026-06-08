@@ -6949,7 +6949,7 @@
       "contact": "Kontakt",
       "backToServices": "Zurück zu Services"
     },
-    "helperCard": {
+    "technicianMatchCard": {
       "helps": "{count, plural, one {# Hilfe} other {# Hilfen}}",
       "gratis": "Gratis",
       "contacting": "Wird kontaktiert...",

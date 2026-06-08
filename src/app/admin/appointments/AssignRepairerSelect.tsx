@@ -84,7 +84,7 @@ export function AssignRepairerSelect({ appointmentId, alreadyAssigned, repairers
         disabled={busy}
         className="min-w-[180px]"
       >
-        <option value="">Repairer wählen…</option>
+        <option value="">Techniker wählen…</option>
         {repairers.map((r) => {
           const loc = [r.city, r.canton].filter(Boolean).join(', ')
           return (
