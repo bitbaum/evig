@@ -12,6 +12,7 @@ import { formatDate } from '@/lib/date-formats'
 import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
 import { ROUTES } from '@/config/routes'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
+import { MatchedTechnicianCard } from '@/components/it-hilfe/detail/MatchedTechnicianCard'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { ITHilfeReviewForm } from '@/components/it-hilfe/ITHilfeReviewForm'
 import { MessageSidebar } from '@/components/messaging/MessageSidebar'
@@ -117,6 +118,20 @@ export default function ITHilfeDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             <RequestHeader request={request} />
+
+            {/* Matched technician — phone reveal after offer acceptance (PPP.2).
+                API gates matchedHelperPhone behind isOwner, so this card only
+                materializes data the requester is allowed to see. */}
+            {request.status === REQUEST_STATUS.MATCHED
+              && request.matchedHelperId
+              && request.matchedHelperName
+              && request.matchedHelperPhone && (
+                <MatchedTechnicianCard
+                  technicianId={request.matchedHelperId}
+                  technicianName={request.matchedHelperName}
+                  technicianPhone={request.matchedHelperPhone}
+                />
+            )}
 
             {/* AI Diagnosis */}
             {request.aiDiagnosis && (

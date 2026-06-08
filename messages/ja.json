@@ -2246,6 +2246,11 @@
       "requestNotFound": "リクエストが見つかりません",
       "expiredBanner": "このリクエストは{date}に期限切れになり、新しいオファーを受け付けなくなりました。",
       "acceptedBanner": "オファーを承認しました。技術者との会話が開始されました。",
+      "matchedTechnician": {
+        "eyebrow": "担当技術者",
+        "description": "予定と受け渡しは直接調整してください — 電話番号はあなただけに表示されます。",
+        "callAriaLabel": "{phone}に電話"
+      },
       "completedAt": "{date}に完了",
       "reviewSubmittedTitle": "レビューを投稿しました！",
       "reviewSubmittedMessage": "フィードバックをありがとうございます。",

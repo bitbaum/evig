@@ -2272,6 +2272,11 @@
       "requestNotFound": "Solicitud no encontrada",
       "expiredBanner": "Esta solicitud expiró el {date} y ya no acepta nuevas ofertas.",
       "acceptedBanner": "Oferta aceptada. Se ha iniciado una conversación con el técnico.",
+      "matchedTechnician": {
+        "eyebrow": "TÉCNICO ASIGNADO",
+        "description": "Coordina la cita y la entrega directamente — el número de teléfono solo es visible para ti.",
+        "callAriaLabel": "Llamar a {phone}"
+      },
       "completedAt": "Completada el {date}",
       "reviewSubmittedTitle": "¡Valoración enviada!",
       "reviewSubmittedMessage": "Muchas gracias por tu opinión.",

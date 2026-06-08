@@ -2727,6 +2727,11 @@
       "requestNotFound": "Anfrage nicht gefunden",
       "expiredBanner": "Diese Anfrage ist am {date} abgelaufen und akzeptiert keine neuen Angebote mehr.",
       "acceptedBanner": "Angebot angenommen. Eine Unterhaltung mit dem Techniker wurde gestartet.",
+      "matchedTechnician": {
+        "eyebrow": "ZUGEWIESENER TECHNIKER",
+        "description": "Vereinbart Termin und Übergabe direkt — die Telefonnummer ist nur für dich sichtbar.",
+        "callAriaLabel": "{phone} anrufen"
+      },
       "completedAt": "Abgeschlossen am {date}",
       "reviewSubmittedTitle": "Bewertung abgegeben!",
       "reviewSubmittedMessage": "Vielen Dank für dein Feedback.",

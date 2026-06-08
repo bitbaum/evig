@@ -2669,6 +2669,11 @@
       "requestNotFound": "Demande introuvable",
       "expiredBanner": "Cette demande a expiré le {date} et n'accepte plus de nouvelles offres.",
       "acceptedBanner": "Offre acceptée. Une conversation avec le technicien a démarré.",
+      "matchedTechnician": {
+        "eyebrow": "TECHNICIEN ASSIGNÉ",
+        "description": "Coordonnez directement le rendez-vous et la remise — le numéro de téléphone n'est visible que par vous.",
+        "callAriaLabel": "Appeler {phone}"
+      },
       "completedAt": "Terminé le {date}",
       "reviewSubmittedTitle": "Avis soumis !",
       "reviewSubmittedMessage": "Merci pour votre retour.",

@@ -2689,6 +2689,11 @@
       "requestNotFound": "Request not found",
       "expiredBanner": "This request expired on {date} and is no longer accepting new offers.",
       "acceptedBanner": "Offer accepted. A conversation with the technician has been started.",
+      "matchedTechnician": {
+        "eyebrow": "ASSIGNED TECHNICIAN",
+        "description": "Coordinate the appointment and handover directly — the phone number is only visible to you.",
+        "callAriaLabel": "Call {phone}"
+      },
       "completedAt": "Completed on {date}",
       "reviewSubmittedTitle": "Review submitted!",
       "reviewSubmittedMessage": "Thank you for your feedback.",
