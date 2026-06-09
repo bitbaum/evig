@@ -50,7 +50,12 @@ export interface ProjectCTASection {
 }
 
 export interface ProjectPageConfig {
-  hero: ProjectHero
+  /**
+   * Optional — pages that render a bespoke hero (e.g. /projects/upcycling
+   * with its cinematic spectrum composition) omit this and render their
+   * own hero component above the section list.
+   */
+  hero?: ProjectHero
   sections: ProjectSection[]
   cta?: ProjectCTASection
   metadata: {

@@ -12,7 +12,7 @@ export function ProjectPage({ config }: ProjectPageProps) {
   // emit a plain <div> here to avoid nested-main invalid HTML / a11y issues.
   return (
     <div className="min-h-screen">
-      <ProjectHero hero={config.hero} />
+      {config.hero && <ProjectHero hero={config.hero} />}
 
       {config.sections.map((section, i) => (
         <ProjectSection key={i} section={section} />

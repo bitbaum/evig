@@ -87,7 +87,7 @@ export default function ProjectsPage() {
                 'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                 selectedCategory === null
                   ? 'bg-action text-white'
-                  : 'bg-surface-base text-text-secondary border hover:border-strong dark:hover:border-white/16'
+                  : 'bg-surface-base text-text-secondary border border-default hover:border-strong'
               )}
             >
               {t('filter.all')}
