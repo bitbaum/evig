@@ -1689,69 +1689,69 @@
       },
       "benefits": [
         {
-          "title": "Open-source development",
-          "description": "Contribute to our open-source projects and help improve our software solutions."
+          "title": "Desarrollo open source",
+          "description": "Contribuye a nuestros proyectos open source y ayúdanos a mejorar nuestras soluciones de software."
         },
         {
-          "title": "Hardware innovation",
-          "description": "Work on hardware projects that make technology more sustainable and accessible."
+          "title": "Innovación de hardware",
+          "description": "Trabaja en proyectos de hardware que hacen la tecnología más sostenible y accesible."
         },
         {
-          "title": "Knowledge sharing",
-          "description": "Share your expertise through workshops, documentation and mentoring."
+          "title": "Intercambio de conocimiento",
+          "description": "Comparte tu experiencia mediante talleres, documentación y mentoría."
         },
         {
-          "title": "Project leadership",
-          "description": "Lead technical initiatives and help shape the future of sustainable technology."
+          "title": "Liderazgo de proyectos",
+          "description": "Lidera iniciativas técnicas y ayuda a configurar el futuro de la tecnología sostenible."
         }
       ],
       "sections": [
         {
-          "title": "Technical areas",
+          "title": "Áreas de especialización",
           "items": [
-            "Software development (Python, JavaScript, Linux)",
-            "Hardware development and repair",
-            "System administration",
-            "Network engineering",
-            "Database management",
-            "Security and privacy",
-            "Technical documentation"
+            "Desarrollo de software (Python, JavaScript, Linux)",
+            "Desarrollo y reparación de hardware",
+            "Administración de sistemas",
+            "Ingeniería de redes",
+            "Gestión de bases de datos",
+            "Seguridad y privacidad",
+            "Documentación técnica"
           ]
         },
         {
-          "title": "Current projects",
+          "title": "Proyectos actuales",
           "items": [
-            "Development of open-source accounting software",
-            "Automation of hardware refurbishment",
-            "Educational platform development",
-            "System administration tools",
-            "Documentation and knowledge base"
+            "Desarrollo de software contable open source",
+            "Automatización del reacondicionamiento de hardware",
+            "Desarrollo de plataformas educativas",
+            "Herramientas de administración de sistemas",
+            "Documentación y base de conocimiento"
           ]
         },
         {
-          "title": "Membership benefits",
+          "title": "Ventajas de la participación",
           "items": [
-            "Work on meaningful projects with real impact",
-            "Collaboration with a diverse team of experts",
-            "Access to our workshop and testing facilities",
-            "Opportunities for leadership and mentoring others",
-            "Flexible contribution options"
+            "Trabaja en proyectos con sentido y un impacto real",
+            "Colabora con un equipo de expertos diverso",
+            "Acceso a nuestro taller y a nuestras instalaciones de prueba",
+            "Oportunidades de liderar y mentorizar",
+            "Posibilidades flexibles de contribución"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Open-source focus",
-          "content": "We believe in the power of open-source software and hardware. As a technical expert you have the opportunity to contribute to open-source projects."
+          "title": "Enfoque open source",
+          "content": "Creemos en la fuerza del software y el hardware open source. Como experto/a técnico/a tienes la oportunidad de impulsar este movimiento."
         }
       ],
       "howToStart": {
         "title": "Cómo empezar",
         "steps": [
-          "Contact us with your area of expertise and interests",
-          "Discuss possible projects and contributions",
-          "Review our development guidelines and processes",
-          "Start contributing to our projects"
+          "Contáctanos indicando tu especialidad e intereses",
+          "Conversemos sobre proyectos y contribuciones posibles",
+          "Revisa nuestras directrices y procesos de desarrollo",
+          "Empieza a contribuir a nuestros proyectos"
         ]
       },
       "opportunitiesTitle": "Oportunidades para expertos técnicos",
@@ -1778,68 +1778,68 @@
       },
       "benefits": [
         {
-          "title": "Hands-on experience",
-          "description": "Work on real projects that make a difference in the community."
+          "title": "Experiencia práctica",
+          "description": "Trabaja en proyectos reales que marcan la diferencia en la comunidad."
         },
         {
-          "title": "Professional development",
-          "description": "Learn from experienced mentors and develop valuable skills."
+          "title": "Desarrollo profesional",
+          "description": "Aprende de mentores con experiencia y desarrolla habilidades valiosas."
         },
         {
-          "title": "Team collaboration",
-          "description": "Work with a diverse team of professionals and volunteers."
+          "title": "Trabajo en equipo",
+          "description": "Trabaja con un equipo diverso de profesionales y voluntarios."
         },
         {
-          "title": "Learning opportunities",
-          "description": "Access to training resources and workshops."
+          "title": "Oportunidades de aprendizaje",
+          "description": "Acceso a recursos de formación y talleres."
         }
       ],
       "sections": [
         {
-          "title": "Available positions",
+          "title": "Posiciones disponibles",
           "items": [
-            "Hardware refurbishment and repair",
-            "Software development",
-            "System administration",
-            "Project management",
-            "Community work",
-            "Technical documentation"
+            "Reacondicionamiento y reparación de hardware",
+            "Desarrollo de software",
+            "Administración de sistemas",
+            "Gestión de proyectos",
+            "Trabajo comunitario",
+            "Documentación técnica"
           ]
         },
         {
-          "title": "What you will learn",
+          "title": "Qué aprenderás",
           "items": [
-            "Hardware and software troubleshooting",
-            "Project management and collaboration",
-            "Technical documentation and communication",
-            "Community engagement and outreach",
-            "Sustainable technology practices"
+            "Resolución de problemas de hardware y software",
+            "Gestión y colaboración en proyectos",
+            "Documentación técnica y comunicación",
+            "Participación comunitaria y divulgación",
+            "Prácticas tecnológicas sostenibles"
           ]
         },
         {
           "title": "Requirements",
           "items": [
-            "Enrolled in or completed relevant studies",
-            "Passion for technology and sustainability",
-            "Able to commit for the program duration",
-            "Basic computer skills",
-            "Willing to learn and contribute"
+            "Estar matriculado/a o haber completado estudios relacionados",
+            "Pasión por la tecnología y la sostenibilidad",
+            "Poder comprometerse durante la duración del programa",
+            "Conocimientos básicos de informática",
+            "Disposición a aprender y aportar"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Flexible arrangements",
-          "content": "We understand that students and professionals have different schedules. We offer flexible arrangements to accommodate your commitments."
+          "title": "Acuerdos flexibles",
+          "content": "Sabemos que estudiantes y profesionales tienen agendas distintas. Ofrecemos prácticas a tiempo parcial, completo y remotas para adaptarnos a tus necesidades."
         }
       ],
       "howToStart": {
         "title": "Cómo solicitarlo",
         "steps": [
-          "Send us your CV and a cover letter",
-          "State your area of interest and availability",
-          "Have a brief conversation",
-          "Start your internship journey!"
+          "Envíanos tu currículum y una carta de presentación",
+          "Indica tu área de interés y disponibilidad",
+          "Mantén una entrevista breve",
+          "¡Empieza tu camino como becario/a!"
         ]
       },
       "benefitsTitle": "Beneficios del programa",
@@ -1866,68 +1866,68 @@
       },
       "benefits": [
         {
-          "title": "Shared impact",
-          "description": "Amplify your organization's impact through joint initiatives."
+          "title": "Impacto compartido",
+          "description": "Amplifica el impacto de tu organización mediante iniciativas conjuntas."
         },
         {
-          "title": "Global network",
-          "description": "Connect with like-minded organizations and expand your reach."
+          "title": "Red global",
+          "description": "Conéctate con organizaciones afines y amplía tu alcance."
         },
         {
-          "title": "Resource sharing",
-          "description": "Access shared resources and expertise for greater efficiency."
+          "title": "Recursos compartidos",
+          "description": "Acceso a recursos y experiencia compartidos para mayor eficiencia."
         },
         {
-          "title": "Strategic collaboration",
-          "description": "Develop innovative solutions through joint efforts."
+          "title": "Colaboración estratégica",
+          "description": "Desarrolla soluciones innovadoras mediante esfuerzos conjuntos."
         }
       ],
       "sections": [
         {
-          "title": "Partnership models",
+          "title": "Modelos de colaboración",
           "items": [
-            "Corporate partnerships",
-            "Educational institution collaboration",
-            "Non-profit organization alliances",
-            "Technology provider partnerships",
-            "Community organization collaboration"
+            "Colaboraciones empresariales",
+            "Cooperaciones con instituciones educativas",
+            "Alianzas con organizaciones sin ánimo de lucro",
+            "Colaboraciones con proveedores tecnológicos",
+            "Colaboraciones con organizaciones comunitarias"
           ]
         },
         {
-          "title": "Collaboration areas",
+          "title": "Áreas de colaboración",
           "items": [
-            "Technology refurbishment programs",
-            "Educational initiatives",
-            "Research and development",
-            "Community outreach programs",
-            "Sustainability projects"
+            "Programas de reacondicionamiento tecnológico",
+            "Iniciativas educativas",
+            "Investigación y desarrollo",
+            "Programas de divulgación comunitaria",
+            "Proyectos de sostenibilidad"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Tailored partnership programs",
-          "content": "We understand that each organization has unique needs. Our programs are tailored to align with your organization's goals."
+          "title": "Programas de partnership a medida",
+          "content": "Entendemos que cada organización tiene necesidades únicas. Nuestros programas se adaptan a vuestros objetivos."
         }
       ],
       "partnershipProcess": {
         "title": "Cómo colaboramos",
         "steps": [
-          "Initial consultation to understand goals and opportunities",
-          "Development of partnership framework and objectives",
-          "Implementation of cooperative initiatives",
-          "Regular progress reviews and impact assessment",
-          "Continuous improvement and partnership expansion"
+          "Consulta inicial para entender objetivos y oportunidades",
+          "Desarrollo del marco y los objetivos de la colaboración",
+          "Implementación de iniciativas cooperativas",
+          "Revisiones periódicas y evaluación de impacto",
+          "Mejora continua y expansión de la colaboración"
         ]
       },
       "howToStart": {
         "title": "Cómo empezar",
         "steps": [
-          "Contact us to discuss partnership opportunities",
-          "Share your organization's goals and interests",
-          "Explore potential collaboration areas",
-          "Develop a partnership agreement",
-          "Begin your partnership journey"
+          "Contáctanos para explorar oportunidades de colaboración",
+          "Comparte los objetivos e intereses de tu organización",
+          "Explora posibles áreas de colaboración",
+          "Desarrolla un acuerdo de partnership",
+          "Inicia el camino de la colaboración"
         ]
       },
       "benefitsTitle": "Beneficios de la colaboración",
@@ -1963,71 +1963,71 @@
       },
       "benefits": [
         {
-          "title": "Skills development",
-          "description": "Learn practical skills in technology and sustainability."
+          "title": "Desarrollo de habilidades",
+          "description": "Aprende habilidades prácticas en tecnología y sostenibilidad."
         },
         {
-          "title": "Professional growth",
-          "description": "Build your CV with real experience."
+          "title": "Crecimiento profesional",
+          "description": "Amplía tu currículum con experiencia real."
         },
         {
-          "title": "Supportive environment",
-          "description": "Work in a supportive and understanding team."
+          "title": "Entorno de apoyo",
+          "description": "Trabaja en un equipo que te apoya y te entiende."
         },
         {
-          "title": "Meaningful work",
-          "description": "Contribute to projects that make a difference."
+          "title": "Trabajo con sentido",
+          "description": "Contribuye a proyectos que marcan la diferencia."
         }
       ],
       "sections": [
         {
-          "title": "Program features",
+          "title": "Características del programa",
           "items": [
-            "Structured work experience in technology",
-            "Professional development and training",
-            "Individual support and mentoring",
-            "Flexible scheduling options",
-            "Gradual workload increase"
+            "Experiencia laboral estructurada en tecnología",
+            "Desarrollo profesional y formación",
+            "Apoyo y acompañamiento individualizados",
+            "Opciones flexibles de horario",
+            "Aumento gradual de la carga de trabajo"
           ]
         },
         {
-          "title": "What you will learn",
+          "title": "Qué aprenderás",
           "items": [
-            "Computer hardware and software",
-            "Technical troubleshooting",
-            "Customer service",
-            "Team collaboration",
-            "Project management"
+            "Hardware y software de ordenadores",
+            "Resolución de problemas técnicos",
+            "Atención al cliente",
+            "Trabajo en equipo",
+            "Gestión de proyectos"
           ]
         },
         {
-          "title": "Support services",
+          "title": "Servicios de apoyo",
           "items": [
-            "Regular check-ins and progress reviews",
-            "Access to counseling services",
-            "Workplace accommodations",
-            "Career guidance and planning",
-            "Networking opportunities"
+            "Check-ins regulares y revisiones de progreso",
+            "Acceso a servicios de orientación",
+            "Adaptaciones del puesto de trabajo",
+            "Orientación y planificación profesional",
+            "Oportunidades de networking"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Individualized approach",
-          "content": "We understand that every journey is unique. Our program is flexible and can be tailored to your specific needs and goals."
+          "title": "Enfoque personalizado",
+          "content": "Entendemos que cada trayectoria es única. Nuestro programa es flexible y se adapta a tus necesidades específicas."
         },
         {
           "title": "Confidentiality",
-          "content": "We maintain strict confidentiality throughout the program. Your privacy and dignity are our top priorities."
+          "content": "Mantenemos estricta confidencialidad durante todo el programa. Tu privacidad y tu dignidad son nuestra máxima prioridad."
         }
       ],
       "howToStart": {
         "title": "Cómo empezar",
         "steps": [
-          "Contact us to discuss your situation",
-          "Meet with our team for an assessment",
-          "Develop your personalized plan",
-          "Begin your work reintegration journey"
+          "Contáctanos para hablar sobre tu situación",
+          "Reúnete con nuestro equipo para una evaluación",
+          "Desarrolla tu plan personalizado",
+          "Comienza tu camino de reincorporación laboral"
         ]
       },
       "benefitsTitle": "Beneficios del programa",

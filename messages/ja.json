@@ -1689,69 +1689,69 @@
       },
       "benefits": [
         {
-          "title": "Open-source development",
-          "description": "Contribute to our open-source projects and help improve our software solutions."
+          "title": "オープンソース開発",
+          "description": "オープンソースプロジェクトに貢献し、ソフトウェアソリューションの改善を手伝う。"
         },
         {
-          "title": "Hardware innovation",
-          "description": "Work on hardware projects that make technology more sustainable and accessible."
+          "title": "ハードウェアイノベーション",
+          "description": "テクノロジーをより持続可能でアクセスしやすくするハードウェアプロジェクトに取り組む。"
         },
         {
-          "title": "Knowledge sharing",
-          "description": "Share your expertise through workshops, documentation and mentoring."
+          "title": "知識の共有",
+          "description": "ワークショップ、ドキュメント、メンタリングを通じて専門知識を共有。"
         },
         {
-          "title": "Project leadership",
-          "description": "Lead technical initiatives and help shape the future of sustainable technology."
+          "title": "プロジェクトリード",
+          "description": "技術イニシアチブを率い、持続可能なテクノロジーの未来を形作る。"
         }
       ],
       "sections": [
         {
-          "title": "Technical areas",
+          "title": "専門分野",
           "items": [
-            "Software development (Python, JavaScript, Linux)",
-            "Hardware development and repair",
-            "System administration",
-            "Network engineering",
-            "Database management",
-            "Security and privacy",
-            "Technical documentation"
+            "ソフトウェア開発 (Python、JavaScript、Linux)",
+            "ハードウェア開発と修理",
+            "システム管理",
+            "ネットワークエンジニアリング",
+            "データベース管理",
+            "セキュリティとプライバシー",
+            "技術ドキュメント"
           ]
         },
         {
-          "title": "Current projects",
+          "title": "現在のプロジェクト",
           "items": [
-            "Development of open-source accounting software",
-            "Automation of hardware refurbishment",
-            "Educational platform development",
-            "System administration tools",
-            "Documentation and knowledge base"
+            "オープンソース会計ソフトウェアの開発",
+            "ハードウェア再生の自動化",
+            "教育プラットフォームの開発",
+            "システム管理ツール",
+            "ドキュメントとナレッジベース"
           ]
         },
         {
-          "title": "Membership benefits",
+          "title": "参加のメリット",
           "items": [
-            "Work on meaningful projects with real impact",
-            "Collaboration with a diverse team of experts",
-            "Access to our workshop and testing facilities",
-            "Opportunities for leadership and mentoring others",
-            "Flexible contribution options"
+            "本物の影響をもたらす意味のあるプロジェクトに取り組む",
+            "多様な専門家チームと協働",
+            "工房とテスト設備へのアクセス",
+            "他者を指導・メンタリングする機会",
+            "柔軟な貢献の選択肢"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Open-source focus",
-          "content": "We believe in the power of open-source software and hardware. As a technical expert you have the opportunity to contribute to open-source projects."
+          "title": "オープンソース重視",
+          "content": "オープンソースのソフトウェアとハードウェアの力を信じています。技術エキスパートとして、その動きを前進させる機会があります。"
         }
       ],
       "howToStart": {
         "title": "始め方",
         "steps": [
-          "Contact us with your area of expertise and interests",
-          "Discuss possible projects and contributions",
-          "Review our development guidelines and processes",
-          "Start contributing to our projects"
+          "専門分野と関心事を添えてお問い合わせください",
+          "可能なプロジェクトと貢献について話し合う",
+          "開発ガイドラインとプロセスを確認",
+          "プロジェクトへの貢献を始める"
         ]
       },
       "opportunitiesTitle": "技術専門家のための機会",
@@ -1778,68 +1778,68 @@
       },
       "benefits": [
         {
-          "title": "Hands-on experience",
-          "description": "Work on real projects that make a difference in the community."
+          "title": "実践的な経験",
+          "description": "地域社会に違いをもたらす実際のプロジェクトに取り組む。"
         },
         {
-          "title": "Professional development",
-          "description": "Learn from experienced mentors and develop valuable skills."
+          "title": "プロとしての成長",
+          "description": "経験豊富なメンターから学び、価値あるスキルを身につける。"
         },
         {
-          "title": "Team collaboration",
-          "description": "Work with a diverse team of professionals and volunteers."
+          "title": "チームでの協働",
+          "description": "多様なプロやボランティアと一緒に働く。"
         },
         {
-          "title": "Learning opportunities",
-          "description": "Access to training resources and workshops."
+          "title": "学びの機会",
+          "description": "研修リソースとワークショップへのアクセス。"
         }
       ],
       "sections": [
         {
-          "title": "Available positions",
+          "title": "募集中のポジション",
           "items": [
-            "Hardware refurbishment and repair",
-            "Software development",
-            "System administration",
-            "Project management",
-            "Community work",
-            "Technical documentation"
+            "ハードウェアの再生・修理",
+            "ソフトウェア開発",
+            "システム管理",
+            "プロジェクト管理",
+            "コミュニティワーク",
+            "技術ドキュメント"
           ]
         },
         {
-          "title": "What you will learn",
+          "title": "学べること",
           "items": [
-            "Hardware and software troubleshooting",
-            "Project management and collaboration",
-            "Technical documentation and communication",
-            "Community engagement and outreach",
-            "Sustainable technology practices"
+            "ハードウェア・ソフトウェアのトラブルシューティング",
+            "プロジェクト管理と協働",
+            "技術ドキュメントとコミュニケーション",
+            "コミュニティ参画と広報",
+            "持続可能な技術の実践"
           ]
         },
         {
           "title": "Requirements",
           "items": [
-            "Enrolled in or completed relevant studies",
-            "Passion for technology and sustainability",
-            "Able to commit for the program duration",
-            "Basic computer skills",
-            "Willing to learn and contribute"
+            "関連分野で在学中または修了済み",
+            "テクノロジーと持続可能性への情熱",
+            "プログラム期間中のコミットメントが可能",
+            "基本的なコンピュータースキル",
+            "学び、貢献する意欲"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Flexible arrangements",
-          "content": "We understand that students and professionals have different schedules. We offer flexible arrangements to accommodate your commitments."
+          "title": "柔軟な取り決め",
+          "content": "学生と社会人で予定が異なることを理解しています。あなたのニーズに合うよう、パートタイム、フルタイム、リモートのインターンを提供します。"
         }
       ],
       "howToStart": {
         "title": "応募方法",
         "steps": [
-          "Send us your CV and a cover letter",
-          "State your area of interest and availability",
-          "Have a brief conversation",
-          "Start your internship journey!"
+          "履歴書とカバーレターを送付",
+          "興味分野と空き状況を伝える",
+          "短い面談を行う",
+          "インターンの旅を始めよう！"
         ]
       },
       "benefitsTitle": "プログラムのメリット",
@@ -1866,68 +1866,68 @@
       },
       "benefits": [
         {
-          "title": "Shared impact",
-          "description": "Amplify your organization's impact through joint initiatives."
+          "title": "共有された影響",
+          "description": "共同イニシアチブを通じて、組織の影響力を増幅する。"
         },
         {
-          "title": "Global network",
-          "description": "Connect with like-minded organizations and expand your reach."
+          "title": "グローバルネットワーク",
+          "description": "志を同じくする組織とつながり、リーチを広げる。"
         },
         {
-          "title": "Resource sharing",
-          "description": "Access shared resources and expertise for greater efficiency."
+          "title": "リソース共有",
+          "description": "効率向上のための共有リソースと専門知識へのアクセス。"
         },
         {
-          "title": "Strategic collaboration",
-          "description": "Develop innovative solutions through joint efforts."
+          "title": "戦略的協力",
+          "description": "共同の取り組みを通じて革新的なソリューションを開発。"
         }
       ],
       "sections": [
         {
-          "title": "Partnership models",
+          "title": "パートナーシップモデル",
           "items": [
-            "Corporate partnerships",
-            "Educational institution collaboration",
-            "Non-profit organization alliances",
-            "Technology provider partnerships",
-            "Community organization collaboration"
+            "企業パートナーシップ",
+            "教育機関との連携",
+            "非営利団体との同盟",
+            "テクノロジー提供者とのパートナーシップ",
+            "コミュニティ団体との協力"
           ]
         },
         {
-          "title": "Collaboration areas",
+          "title": "協力分野",
           "items": [
-            "Technology refurbishment programs",
-            "Educational initiatives",
-            "Research and development",
-            "Community outreach programs",
-            "Sustainability projects"
+            "テクノロジー再生プログラム",
+            "教育イニシアチブ",
+            "研究開発",
+            "コミュニティ向け広報プログラム",
+            "持続可能性プロジェクト"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Tailored partnership programs",
-          "content": "We understand that each organization has unique needs. Our programs are tailored to align with your organization's goals."
+          "title": "カスタマイズされたパートナーシッププログラム",
+          "content": "どの組織にも独自のニーズがあると理解しています。プログラムは目的に合わせて柔軟に設計されます。"
         }
       ],
       "partnershipProcess": {
         "title": "協力の進め方",
         "steps": [
-          "Initial consultation to understand goals and opportunities",
-          "Development of partnership framework and objectives",
-          "Implementation of cooperative initiatives",
-          "Regular progress reviews and impact assessment",
-          "Continuous improvement and partnership expansion"
+          "目標と機会を理解するための初回相談",
+          "パートナーシップの枠組みと目的の策定",
+          "協力イニシアチブの実施",
+          "定期的な進捗確認と影響評価",
+          "継続的改善とパートナーシップの拡大"
         ]
       },
       "howToStart": {
         "title": "始め方",
         "steps": [
-          "Contact us to discuss partnership opportunities",
-          "Share your organization's goals and interests",
-          "Explore potential collaboration areas",
-          "Develop a partnership agreement",
-          "Begin your partnership journey"
+          "パートナーシップの可能性を相談する",
+          "組織の目標と関心を共有",
+          "潜在的な協力分野を探る",
+          "パートナーシップ合意を策定",
+          "パートナーシップを始めよう"
         ]
       },
       "benefitsTitle": "パートナーシップのメリット",
@@ -1963,71 +1963,71 @@
       },
       "benefits": [
         {
-          "title": "Skills development",
-          "description": "Learn practical skills in technology and sustainability."
+          "title": "スキル開発",
+          "description": "テクノロジーと持続可能性の実践的スキルを学ぶ。"
         },
         {
-          "title": "Professional growth",
-          "description": "Build your CV with real experience."
+          "title": "キャリアアップ",
+          "description": "実際の経験で履歴書を拡充する。"
         },
         {
-          "title": "Supportive environment",
-          "description": "Work in a supportive and understanding team."
+          "title": "支援的な環境",
+          "description": "支援的で理解あるチームの中で働く。"
         },
         {
-          "title": "Meaningful work",
-          "description": "Contribute to projects that make a difference."
+          "title": "意味のある仕事",
+          "description": "違いを生むプロジェクトに貢献する。"
         }
       ],
       "sections": [
         {
-          "title": "Program features",
+          "title": "プログラムの特徴",
           "items": [
-            "Structured work experience in technology",
-            "Professional development and training",
-            "Individual support and mentoring",
-            "Flexible scheduling options",
-            "Gradual workload increase"
+            "テクノロジー分野での体系的な就業経験",
+            "プロフェッショナル育成と研修",
+            "個別の支援とコーチング",
+            "柔軟なスケジュール選択",
+            "業務量の段階的な増加"
           ]
         },
         {
-          "title": "What you will learn",
+          "title": "学べること",
           "items": [
-            "Computer hardware and software",
-            "Technical troubleshooting",
-            "Customer service",
-            "Team collaboration",
-            "Project management"
+            "コンピューターハードウェアとソフトウェア",
+            "技術的トラブルシューティング",
+            "カスタマーサービス",
+            "チームでの協働",
+            "プロジェクト管理"
           ]
         },
         {
-          "title": "Support services",
+          "title": "サポートサービス",
           "items": [
-            "Regular check-ins and progress reviews",
-            "Access to counseling services",
-            "Workplace accommodations",
-            "Career guidance and planning",
-            "Networking opportunities"
+            "定期的なチェックインと進捗確認",
+            "カウンセリングサービスへのアクセス",
+            "職場環境の調整",
+            "キャリアガイダンスと計画",
+            "ネットワーキングの機会"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "Individualized approach",
-          "content": "We understand that every journey is unique. Our program is flexible and can be tailored to your specific needs and goals."
+          "title": "個別アプローチ",
+          "content": "人生の歩みはそれぞれ独自であることを理解しています。プログラムは柔軟で、あなたの具体的なニーズに合わせて調整できます。"
         },
         {
           "title": "Confidentiality",
-          "content": "We maintain strict confidentiality throughout the program. Your privacy and dignity are our top priorities."
+          "content": "プログラム期間中、厳格な機密性を保ちます。あなたのプライバシーと尊厳が最優先です。"
         }
       ],
       "howToStart": {
         "title": "始め方",
         "steps": [
-          "Contact us to discuss your situation",
-          "Meet with our team for an assessment",
-          "Develop your personalized plan",
-          "Begin your work reintegration journey"
+          "まずは状況についてお話しください",
+          "チームと面会して評価を受ける",
+          "個別プランを作成する",
+          "職場復帰の旅を始める"
         ]
       },
       "benefitsTitle": "プログラムのメリット",
