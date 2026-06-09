@@ -10,6 +10,7 @@ import WorkshopBrowseClient from './WorkshopBrowseClient'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 import { type WorkshopInstanceStatus, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { pickI18n } from '@/lib/i18n/db-content'
 
 // auth() reads request headers — prevent static generation so this page is SSR'd per-request
 export const dynamic = 'force-dynamic'
@@ -28,9 +29,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
+async function getWorkshopsWithInstances(locale: string): Promise<WorkshopWithInstances[]> {
   try {
-    // Fetch all active workshops
+    // Fetch all active workshops + their per-locale JSONB translations.
+    // pickI18n() at the boundary resolves locale → translated string with DE
+    // fallback so the client never sees raw JSONB.
     const workshopRows = await db
       .select({
         id: workshops.id,
@@ -40,6 +43,11 @@ async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
         category: workshops.category,
         duration: workshops.duration,
         level: workshops.level,
+        title_i18n: workshops.titleI18n,
+        description_i18n: workshops.descriptionI18n,
+        duration_i18n: workshops.durationI18n,
+        level_i18n: workshops.levelI18n,
+        category_i18n: workshops.categoryI18n,
         max_participants: workshops.maxParticipants,
         price_cents: workshops.priceCents,
         is_active: workshops.isActive,
@@ -109,15 +117,17 @@ async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
       instancesByWorkshop.set(inst.workshop_id, list)
     }
 
-    // Assemble result
+    // Assemble result — resolve every German-only text column through pickI18n
+    // so the client component receives already-localised strings (or DE
+    // fallback) without ever touching JSONB.
     return workshopRows.map(w => ({
       id: w.id,
       slug: w.slug,
-      title: w.title,
-      description: w.description,
-      category: w.category,
-      duration: w.duration,
-      level: w.level,
+      title:       pickI18n(w.title,       w.title_i18n,       locale) ?? w.title,
+      description: pickI18n(w.description, w.description_i18n, locale),
+      category:    pickI18n(w.category,    w.category_i18n,    locale),
+      duration:    pickI18n(w.duration,    w.duration_i18n,    locale),
+      level:       pickI18n(w.level,       w.level_i18n,       locale),
       max_participants: w.max_participants ?? 12,
       price_cents: w.price_cents ?? 0,
       is_active: w.is_active ?? true,
@@ -144,7 +154,8 @@ async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
   }
 }
 
-export default async function WorkshopsPage() {
-  const workshopsData = await getWorkshopsWithInstances()
+export default async function WorkshopsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const workshopsData = await getWorkshopsWithInstances(locale)
   return <WorkshopBrowseClient workshops={workshopsData} />
 }

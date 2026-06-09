@@ -22,6 +22,17 @@ export const workshops = pgTable('workshops', {
   priceCents: integer('price_cents').default(0),
   isActive: boolean('is_active').default(true),
 
+  // Added by 088: locale-keyed translations for the German-only text columns
+  // above. Each is JSONB of shape {en,fr,es,it,ja,ko,ru → translated string}.
+  // pickI18n(canonical, jsonb, locale) returns the localised value with
+  // canonical (DE) fallback. NULL = no translations yet → show canonical.
+  titleI18n: jsonb('title_i18n').$type<Record<string, string>>(),
+  descriptionI18n: jsonb('description_i18n').$type<Record<string, string>>(),
+  shortDescriptionI18n: jsonb('short_description_i18n').$type<Record<string, string>>(),
+  durationI18n: jsonb('duration_i18n').$type<Record<string, string>>(),
+  levelI18n: jsonb('level_i18n').$type<Record<string, string>>(),
+  categoryI18n: jsonb('category_i18n').$type<Record<string, string>>(),
+
   // Added by 038: fields for proposal-to-workshop conversion
   shortDescription: text('short_description'),
   durationMinutes: integer('duration_minutes'),

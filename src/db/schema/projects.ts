@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, integer, timestamp, index } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, integer, timestamp, index, jsonb } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 import { taskProjects } from './tasks'
 
@@ -36,6 +36,11 @@ export const projectNeeds = pgTable('project_needs', {
   targetUnit: text('target_unit'),
   status: text('status').notNull().default('open'),
   sortOrder: integer('sort_order').notNull().default(0),
+  // Added by 088: locale-keyed translations for German-only text columns.
+  // pickI18n(canonical, jsonb, locale) returns localised value with DE fallback.
+  titleI18n: jsonb('title_i18n').$type<Record<string, string>>(),
+  descriptionI18n: jsonb('description_i18n').$type<Record<string, string>>(),
+  targetUnitI18n: jsonb('target_unit_i18n').$type<Record<string, string>>(),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [
