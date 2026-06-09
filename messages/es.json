@@ -253,7 +253,13 @@
     "openingHours": "Horario de apertura",
     "openingHoursMonday": "Lun: {hours}",
     "openingHoursTueFri": "Mar–Vie: {hours}",
-    "transparency": "Transparencia"
+    "transparency": "Transparencia",
+    "locations": {
+      "store": "Tienda",
+      "warehouse": "Almacén",
+      "byAppointmentOnly": "(solo con cita previa)",
+      "country": "Suiza"
+    }
   },
   "auth": {
     "login": {

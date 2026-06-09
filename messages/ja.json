@@ -253,7 +253,13 @@
     "openingHours": "営業時間",
     "openingHoursMonday": "月: {hours}",
     "openingHoursTueFri": "火–金: {hours}",
-    "transparency": "透明性"
+    "transparency": "透明性",
+    "locations": {
+      "store": "店舗",
+      "warehouse": "倉庫",
+      "byAppointmentOnly": "（要予約）",
+      "country": "スイス"
+    }
   },
   "auth": {
     "login": {

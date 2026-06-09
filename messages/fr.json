@@ -253,7 +253,13 @@
     "openingHours": "Heures d'ouverture",
     "openingHoursMonday": "Lun : {hours}",
     "openingHoursTueFri": "Mar–Ven : {hours}",
-    "transparency": "Transparence"
+    "transparency": "Transparence",
+    "locations": {
+      "store": "Boutique",
+      "warehouse": "Entrepôt",
+      "byAppointmentOnly": "(uniquement sur rendez-vous)",
+      "country": "Suisse"
+    }
   },
   "home": {
     "meta": {

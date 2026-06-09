@@ -34,6 +34,7 @@ const TIER_AMOUNTS = [50, 100, 500] as const
 export default async function DonatePage({ params }: DonatePageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'donate' })
+  const tFooter = await getTranslations({ locale, namespace: 'footer' })
 
   const now = new Date()
   const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(now)
@@ -168,7 +169,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-2">
               {t('devices.addressLabel')}
             </p>
-            <p className="text-sm font-semibold text-text-primary">{ORG.name} {LOCATIONS.store.name}</p>
+            <p className="text-sm font-semibold text-text-primary">{ORG.name} {tFooter('locations.store')}</p>
             <p className="text-sm text-text-secondary">{LOCATIONS.store.full}</p>
             <p className="text-xs text-text-tertiary mt-2">{OPENING_HOURS.compact}</p>
             <a

@@ -253,7 +253,13 @@
     "openingHours": "Часы работы",
     "openingHoursMonday": "Пн: {hours}",
     "openingHoursTueFri": "Вт–Пт: {hours}",
-    "transparency": "Прозрачность"
+    "transparency": "Прозрачность",
+    "locations": {
+      "store": "Магазин",
+      "warehouse": "Склад",
+      "byAppointmentOnly": "(только по записи)",
+      "country": "Швейцария"
+    }
   },
   "home": {
     "meta": {

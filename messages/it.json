@@ -253,7 +253,13 @@
     "openingHours": "Orario di apertura",
     "openingHoursMonday": "Lun: {hours}",
     "openingHoursTueFri": "Mar–Ven: {hours}",
-    "transparency": "Trasparenza"
+    "transparency": "Trasparenza",
+    "locations": {
+      "store": "Negozio",
+      "warehouse": "Magazzino",
+      "byAppointmentOnly": "(solo su appuntamento)",
+      "country": "Svizzera"
+    }
   },
   "auth": {
     "login": {

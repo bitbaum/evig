@@ -253,7 +253,13 @@
     "openingHours": "Öffnungszeiten",
     "openingHoursMonday": "Mo: {hours}",
     "openingHoursTueFri": "Di–Fr: {hours}",
-    "transparency": "Transparenz"
+    "transparency": "Transparenz",
+    "locations": {
+      "store": "Verkaufsstelle",
+      "warehouse": "Lager",
+      "byAppointmentOnly": "(nur nach Terminvereinbarung)",
+      "country": "Schweiz"
+    }
   },
   "home": {
     "meta": {

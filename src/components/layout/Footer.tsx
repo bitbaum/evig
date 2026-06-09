@@ -4,7 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
-import { ORG, CONTACT, OPENING_HOURS, getLocationsDisplay } from '@/config/org'
+import { ORG, CONTACT, OPENING_HOURS, getLocationsDisplay, LOCATIONS } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
@@ -71,20 +71,34 @@ export default function Footer() {
               {tNav('contact')}
             </Heading>
             <address className="space-y-4 not-italic">
-              {footerLocations.map((location) => (
-                <div className="flex items-start" key={location.key}>
-                  <MapPin className="w-4 h-4 mt-0.5 mr-3 shrink-0 text-text-tertiary" />
-                  <div>
-                    <p className="text-sm font-medium text-text-primary">{location.name}</p>
-                    {location.addressLines.map((line) => (
-                      <p className="text-sm text-text-secondary" key={line}>{line}</p>
-                    ))}
-                    {location.note && (
-                      <p className="text-xs text-text-tertiary dark:text-text-tertiary mt-0.5">{location.note}</p>
-                    )}
+              {footerLocations.map((location) => {
+                // Strip the country line — we render a translated version below
+                const linesWithoutCountry = location.addressLines.filter(
+                  (line) => line !== LOCATIONS.store.country
+                )
+                const showCountry = location.key === 'store'
+                return (
+                  <div className="flex items-start" key={location.key}>
+                    <MapPin className="w-4 h-4 mt-0.5 mr-3 shrink-0 text-text-tertiary" />
+                    <div>
+                      <p className="text-sm font-medium text-text-primary">
+                        {tFooter(`locations.${location.key}` as never)}
+                      </p>
+                      {linesWithoutCountry.map((line) => (
+                        <p className="text-sm text-text-secondary" key={line}>{line}</p>
+                      ))}
+                      {showCountry && (
+                        <p className="text-sm text-text-secondary">{tFooter('locations.country')}</p>
+                      )}
+                      {location.note && (
+                        <p className="text-xs text-text-tertiary dark:text-text-tertiary mt-0.5">
+                          {tFooter('locations.byAppointmentOnly')}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-text-tertiary shrink-0" />
                 <a href={`tel:${CONTACT.phone}`} className="text-sm text-text-secondary hover:text-text-primary transition-colors">

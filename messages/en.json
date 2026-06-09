@@ -253,7 +253,13 @@
     "openingHours": "Opening hours",
     "openingHoursMonday": "Mon: {hours}",
     "openingHoursTueFri": "Tue–Fri: {hours}",
-    "transparency": "Transparency"
+    "transparency": "Transparency",
+    "locations": {
+      "store": "Store",
+      "warehouse": "Warehouse",
+      "byAppointmentOnly": "(by appointment only)",
+      "country": "Switzerland"
+    }
   },
   "home": {
     "meta": {
