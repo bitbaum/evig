@@ -136,7 +136,7 @@ function CinematicHero({
 
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pb-24 sm:pt-16 lg:flex lg:min-h-[calc(100svh-3.5rem)] lg:flex-col lg:px-8 lg:pb-28 lg:pt-20">
         <div className="flex flex-col gap-10 sm:gap-12 lg:grid lg:flex-1 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16">
-          <div>
+          <div className="min-w-0">
             <div className="ui-public-eyebrow">{eyebrow}</div>
             <h1 className="ui-public-hero-title mt-4 text-left sm:mt-6">{title}</h1>
             <p className="ui-public-hero-lede mx-0 mt-6 max-w-2xl text-left sm:mt-8">{intro}</p>
@@ -284,6 +284,10 @@ function Scene({ act, idx, tier }: { act: Act; idx: number; tier: RawApplication
       )}
     >
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
+        {/* min-w-0 on grid children is REQUIRED so the lamp-row column
+            (which contains a flex carousel with `w-[80vw]` figures) can
+            shrink. Without it, the carousel pushes the grid wider than
+            the viewport on mobile. */}
         <div
           className={cn(
             'grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16',
@@ -291,7 +295,7 @@ function Scene({ act, idx, tier }: { act: Act; idx: number; tier: RawApplication
           )}
         >
           {/* Text column */}
-          <div className={cn(act.reverse && 'lg:col-start-2')}>
+          <div className={cn('min-w-0', act.reverse && 'lg:col-start-2')}>
             <div className="flex items-baseline gap-4">
               <span
                 aria-hidden="true"
@@ -318,7 +322,7 @@ function Scene({ act, idx, tier }: { act: Act; idx: number; tier: RawApplication
           </div>
 
           {/* Lamp visual column */}
-          <div className={cn('relative', act.reverse && 'lg:col-start-1 lg:row-start-1')}>
+          <div className={cn('relative min-w-0', act.reverse && 'lg:col-start-1 lg:row-start-1')}>
             <SceneLampRow variant={act.variant} seeds={act.seeds} caption={tier.imageCaption} />
           </div>
         </div>

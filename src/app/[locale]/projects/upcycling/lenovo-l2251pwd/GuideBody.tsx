@@ -244,7 +244,12 @@ export function GuideBody({ data }: { data: GuideData }) {
                       id={`step-${step.n}`}
                       data-step={step.n}
                       ref={(el) => registerStep(step.n, el)}
-                      className="grid sm:grid-cols-[auto_1fr] gap-3 sm:gap-6 scroll-mt-20"
+                      // min-w-0 + the inner min-w-0 below are REQUIRED so the
+                      // step's right column (which contains the photo carousel
+                      // with `w-[85vw]` items) can shrink. Without it, the
+                      // carousel's flex children force the grid wider than the
+                      // viewport on mobile.
+                      className="grid min-w-0 sm:grid-cols-[auto_1fr] gap-3 sm:gap-6 scroll-mt-20"
                     >
                       <span
                         className="font-mono text-3xl sm:text-4xl font-light tabular-nums text-text-tertiary leading-none pt-0.5"
@@ -252,7 +257,7 @@ export function GuideBody({ data }: { data: GuideData }) {
                       >
                         {String(step.n).padStart(2, '0')}
                       </span>
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="text-lg sm:text-xl font-semibold text-text-primary">
                           {step.title}
                         </h3>

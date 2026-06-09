@@ -40,9 +40,13 @@ export function AiBrainstormSection({ section }: { section: Messages }) {
   return (
     <section className="border-t border-subtle bg-surface-raised py-16 sm:py-20">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* min-w-0 on grid children is REQUIRED so the right column's <pre>
+            can shrink — without it the prompt's longest unbroken word
+            forces the column wider than the viewport and the whole page
+            scrolls horizontally on mobile. */}
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:items-start lg:gap-16">
           {/* Left rail — why this exists */}
-          <div className="lg:sticky lg:top-24">
+          <div className="min-w-0 lg:sticky lg:top-24">
             <div className="inline-flex items-center gap-2 rounded-full border border-subtle bg-surface-base px-3 py-1 text-xs uppercase tracking-[0.18em] text-text-tertiary font-mono">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               <span>{section.title}</span>
@@ -59,9 +63,9 @@ export function AiBrainstormSection({ section }: { section: Messages }) {
           </div>
 
           {/* Right column — prompt cards */}
-          <ol className="space-y-4">
+          <ol className="min-w-0 space-y-4">
             {section.prompts.map((p, i) => (
-              <li key={i}>
+              <li key={i} className="min-w-0">
                 <PromptCard
                   index={i + 1}
                   title={p.title}
@@ -106,7 +110,7 @@ function PromptCard({
   }
 
   return (
-    <article className="overflow-hidden rounded-lg border border-subtle bg-surface-base">
+    <article className="min-w-0 overflow-hidden rounded-lg border border-subtle bg-surface-base">
       {/* Header: numbered title + copy action */}
       <header className="flex items-center justify-between gap-3 border-b border-subtle bg-surface-raised/60 px-4 py-3 sm:px-5">
         <div className="flex items-baseline gap-3 min-w-0">
@@ -134,8 +138,14 @@ function PromptCard({
         </button>
       </header>
 
-      {/* Body: prompt text in mono surface — visually clear it's code-like, copy-paste-able */}
-      <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-4 sm:px-5 sm:py-5 font-mono text-[13px] leading-relaxed text-text-primary">
+      {/* Body: prompt text in mono surface — visually clear it's code-like,
+          copy-paste-able. `break-words` + the inline overflow-wrap make long
+          German compounds / URLs / paths wrap instead of forcing the parent
+          wider than the viewport on mobile. */}
+      <pre
+        className="whitespace-pre-wrap break-words px-4 py-4 sm:px-5 sm:py-5 font-mono text-[13px] leading-relaxed text-text-primary"
+        style={{ overflowWrap: 'anywhere' }}
+      >
         {prompt}
       </pre>
     </article>
