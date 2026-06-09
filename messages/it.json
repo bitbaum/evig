@@ -2054,56 +2054,56 @@
       },
       "benefits": [
         {
-          "title": "Apply your knowledge",
-          "description": "Your IT knowledge is needed — not in an office, but for people in your community."
+          "title": "Metti a frutto le tue conoscenze",
+          "description": "Le tue competenze IT servono — non in un ufficio, ma per le persone della tua comunità."
         },
         {
-          "title": "Help flexibly",
-          "description": "You decide when and how much. From two hours per month — everything is valuable."
+          "title": "Aiuta con flessibilità",
+          "description": "Decidi tu quando e quanto. Bastano due ore al mese — tutto è prezioso."
         },
         {
-          "title": "Build community",
-          "description": "You become part of a network of volunteers who want to make technology accessible to everyone."
+          "title": "Costruire comunità",
+          "description": "Diventi parte di una rete di volontari che vogliono rendere la tecnologia accessibile a tutti."
         },
         {
-          "title": "Gain experience",
-          "description": "Explain, document, solve problems in practice — this sharpens your skills more than any course."
+          "title": "Acquisisci esperienza",
+          "description": "Spiega, documenta, risolvi problemi reali — affina le tue competenze più di qualsiasi corso."
         }
       ],
       "sections": [
         {
-          "title": "What technicians do",
+          "title": "Cosa fanno i tecnici",
           "items": [
-            "Diagnose and solve software problems (Windows, Linux, macOS)",
-            "Set up and configure devices",
-            "Perform Linux installations on refurbished laptops",
-            "Give short introductions to computers, internet and data security",
-            "Home visits on request for mobility-impaired persons"
+            "Diagnosticare e risolvere problemi software (Windows, Linux, macOS)",
+            "Installare e configurare dispositivi",
+            "Effettuare installazioni Linux su laptop ricondizionati",
+            "Tenere brevi introduzioni a computer, internet e sicurezza dei dati",
+            "Visite a domicilio su richiesta per persone con mobilità ridotta"
           ]
         },
         {
           "title": "Requirements",
           "items": [
-            "Basic IT knowledge — no degree or certificate needed",
-            "Enjoyment of explaining things simply",
-            "Patience and openness towards people with little tech experience",
-            "Time availability from approximately 2 hours per month"
+            "Conoscenze base di IT — non servono titoli né certificati",
+            "Piacere di spiegare le cose in modo semplice",
+            "Pazienza e apertura verso persone con poca esperienza tecnologica",
+            "Disponibilità di almeno circa 2 ore al mese"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "No perfectionists needed",
-          "content": "You don't need to know everything. We're looking for people who enjoy helping and can explain things. If you know how to set up a laptop or help someone with their email account — you're exactly right."
+          "title": "Non cerchiamo perfezionisti",
+          "content": "Non devi sapere tutto. Cerchiamo persone a cui piace aiutare e che sappiano spiegare."
         }
       ],
       "howToStart": {
         "title": "Come iniziare",
         "steps": [
-          "Create your technician profile with your skills and availability",
-          "Wait for requests — you decide which ones to accept",
-          "Arrange an appointment directly with the requesting person",
-          "Help, learn, make a difference"
+          "Crea il tuo profilo di tecnico con competenze e disponibilità",
+          "Attendi le richieste — decidi tu quali accettare",
+          "Concorda un appuntamento direttamente con chi ha richiesto",
+          "Aiuta, impara, fai la differenza"
         ]
       },
       "benefitsTitle": "Cosa ci guadagni",

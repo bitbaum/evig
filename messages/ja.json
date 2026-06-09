@@ -2054,56 +2054,56 @@
       },
       "benefits": [
         {
-          "title": "Apply your knowledge",
-          "description": "Your IT knowledge is needed — not in an office, but for people in your community."
+          "title": "知識を活かす",
+          "description": "あなたの IT 知識は必要とされています — オフィスではなく、地域の人々のために。"
         },
         {
-          "title": "Help flexibly",
-          "description": "You decide when and how much. From two hours per month — everything is valuable."
+          "title": "柔軟に手伝う",
+          "description": "いつ、どれだけかは自分次第。月 2 時間からでも価値があります。"
         },
         {
-          "title": "Build community",
-          "description": "You become part of a network of volunteers who want to make technology accessible to everyone."
+          "title": "コミュニティを築く",
+          "description": "誰もが技術にアクセスできる社会を目指すボランティアネットワークの一員になれます。"
         },
         {
-          "title": "Gain experience",
-          "description": "Explain, document, solve problems in practice — this sharpens your skills more than any course."
+          "title": "経験を積む",
+          "description": "説明し、ドキュメント化し、現場の問題を解決する — どんなコースよりもスキルが磨かれます。"
         }
       ],
       "sections": [
         {
-          "title": "What technicians do",
+          "title": "技術者がすること",
           "items": [
-            "Diagnose and solve software problems (Windows, Linux, macOS)",
-            "Set up and configure devices",
-            "Perform Linux installations on refurbished laptops",
-            "Give short introductions to computers, internet and data security",
-            "Home visits on request for mobility-impaired persons"
+            "ソフトウェアの問題を診断・解決（Windows、Linux、macOS）",
+            "デバイスのセットアップと設定",
+            "再生されたノート PC への Linux インストール",
+            "パソコン、インターネット、データセキュリティの短い入門講座",
+            "要請に応じて、移動が困難な方への訪問"
           ]
         },
         {
           "title": "Requirements",
           "items": [
-            "Basic IT knowledge — no degree or certificate needed",
-            "Enjoyment of explaining things simply",
-            "Patience and openness towards people with little tech experience",
-            "Time availability from approximately 2 hours per month"
+            "IT の基本知識 — 学位や資格は不要",
+            "物事をやさしく説明するのが好きなこと",
+            "IT に不慣れな方への忍耐とオープンマインド",
+            "月およそ 2 時間以上の時間的余裕"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "No perfectionists needed",
-          "content": "You don't need to know everything. We're looking for people who enjoy helping and can explain things. If you know how to set up a laptop or help someone with their email account — you're exactly right."
+          "title": "完璧を求めません",
+          "content": "何でも知っている必要はありません。手伝うのが好きで、物事を説明できる人を求めています。"
         }
       ],
       "howToStart": {
         "title": "始め方",
         "steps": [
-          "Create your technician profile with your skills and availability",
-          "Wait for requests — you decide which ones to accept",
-          "Arrange an appointment directly with the requesting person",
-          "Help, learn, make a difference"
+          "スキルと空き時間を入れて技術者プロフィールを作成",
+          "依頼を待ち、どれを受けるかを自分で決める",
+          "依頼者と直接アポイントを取る",
+          "助け、学び、違いを生む"
         ]
       },
       "benefitsTitle": "あなたが得るもの",

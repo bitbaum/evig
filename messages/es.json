@@ -2054,56 +2054,56 @@
       },
       "benefits": [
         {
-          "title": "Apply your knowledge",
-          "description": "Your IT knowledge is needed — not in an office, but for people in your community."
+          "title": "Pon tu conocimiento a trabajar",
+          "description": "Tu conocimiento de IT hace falta — no en una oficina, sino para personas de tu comunidad."
         },
         {
-          "title": "Help flexibly",
-          "description": "You decide when and how much. From two hours per month — everything is valuable."
+          "title": "Ayuda con flexibilidad",
+          "description": "Decides cuándo y cuánto. Desde dos horas al mes — todo cuenta."
         },
         {
-          "title": "Build community",
-          "description": "You become part of a network of volunteers who want to make technology accessible to everyone."
+          "title": "Construir comunidad",
+          "description": "Te conviertes en parte de una red de voluntarios que quieren hacer la tecnología accesible para todos."
         },
         {
-          "title": "Gain experience",
-          "description": "Explain, document, solve problems in practice — this sharpens your skills more than any course."
+          "title": "Gana experiencia",
+          "description": "Explica, documenta, resuelve problemas reales — afina tus habilidades más que cualquier curso."
         }
       ],
       "sections": [
         {
-          "title": "What technicians do",
+          "title": "Qué hacen los técnicos",
           "items": [
-            "Diagnose and solve software problems (Windows, Linux, macOS)",
-            "Set up and configure devices",
-            "Perform Linux installations on refurbished laptops",
-            "Give short introductions to computers, internet and data security",
-            "Home visits on request for mobility-impaired persons"
+            "Diagnosticar y resolver problemas de software (Windows, Linux, macOS)",
+            "Instalar y configurar dispositivos",
+            "Realizar instalaciones de Linux en portátiles reacondicionados",
+            "Dar breves introducciones a computación, internet y seguridad de datos",
+            "Visitas a domicilio bajo demanda para personas con movilidad reducida"
           ]
         },
         {
           "title": "Requirements",
           "items": [
-            "Basic IT knowledge — no degree or certificate needed",
-            "Enjoyment of explaining things simply",
-            "Patience and openness towards people with little tech experience",
-            "Time availability from approximately 2 hours per month"
+            "Conocimientos básicos de IT — no se requiere título ni certificado",
+            "Disfrute al explicar las cosas con sencillez",
+            "Paciencia y apertura ante personas con poca experiencia tecnológica",
+            "Disponibilidad de al menos unas 2 horas al mes"
           ]
         }
       ],
       "callouts": [
         {
-          "title": "No perfectionists needed",
-          "content": "You don't need to know everything. We're looking for people who enjoy helping and can explain things. If you know how to set up a laptop or help someone with their email account — you're exactly right."
+          "title": "No buscamos perfeccionistas",
+          "content": "No tienes que saberlo todo. Buscamos personas que disfruten ayudar y sepan explicar."
         }
       ],
       "howToStart": {
         "title": "Cómo empezar",
         "steps": [
-          "Create your technician profile with your skills and availability",
-          "Wait for requests — you decide which ones to accept",
-          "Arrange an appointment directly with the requesting person",
-          "Help, learn, make a difference"
+          "Crea tu perfil de técnico con tus habilidades y disponibilidad",
+          "Espera solicitudes — tú decides cuáles aceptar",
+          "Coordina una cita directamente con la persona solicitante",
+          "Ayuda, aprende, marca la diferencia"
         ]
       },
       "benefitsTitle": "Qué obtienes",
