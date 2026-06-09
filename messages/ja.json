@@ -207,7 +207,19 @@
     "currency": "CHF",
     "skipToContent": "コンテンツへスキップ",
     "resetFilters": "フィルターをリセット",
-    "resultsCount": "{total}件中{filtered}件"
+    "resultsCount": "{total}件中{filtered}件",
+    "eyebrows": {
+      "technicians": "技術者",
+      "getInvolved": "参加する",
+      "press": "プレス",
+      "timeline": "沿革",
+      "vision": "ビジョン",
+      "potential": "可能性",
+      "donate": "寄付",
+      "howItWorks": "仕組み",
+      "benefits": "利点",
+      "principles": "原則"
+    }
   },
   "errors": {
     "genericTitle": "エラーが発生しました",
@@ -3057,6 +3069,10 @@
       "gratis": "無料",
       "verified": "検証済み",
       "remove": "{label} を削除"
+    },
+    "eyebrows": {
+      "marketplace": "マーケット",
+      "getInvolved": "参加する"
     }
   },
   "membership": {
@@ -6522,6 +6538,9 @@
       "advanced": "上級",
       "all": "全レベル",
       "beginner_to_advanced": "初級から上級"
+    },
+    "eyebrows": {
+      "propose": "提案する"
     }
   },
   "donate": {

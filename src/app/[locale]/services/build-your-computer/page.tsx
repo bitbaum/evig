@@ -11,6 +11,7 @@ import { BuildTool } from './BuildTool'
 
 export default function BuildYourComputerPage() {
   const t = useTranslations('services.buildComputer')
+  const tEye = useTranslations('common.eyebrows')
 
   return (
     <main>
@@ -35,7 +36,7 @@ export default function BuildYourComputerPage() {
       {/* ── How It Works — text-only numbered steps ─────────────────── */}
       <section className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="ui-public-eyebrow">SO FUNKTIONIERT ES</div>
+          <div className="ui-public-eyebrow">{tEye('howItWorks')}</div>
           <Heading level={2} className="ui-public-display-lg mt-4">{t('howItWorks.heading')}</Heading>
           <div className="ui-public-body-lg mx-auto mt-14 max-w-3xl space-y-12 text-left">
             {(t.raw('howItWorks.steps') as Array<{ title: string; description: string }>).map((step, index) => (
@@ -58,7 +59,7 @@ export default function BuildYourComputerPage() {
       <section className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="ui-public-eyebrow">VORTEILE</div>
+            <div className="ui-public-eyebrow">{tEye('benefits')}</div>
             <Heading level={2} className="ui-public-display-lg mt-4">{t('features.heading')}</Heading>
           </div>
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -40,6 +40,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   const t = useTranslations('workshops.browse')
   const tCat = useTranslations('workshops.categories')
   const tLvl = useTranslations('workshops.levels')
+  const tEye = useTranslations('workshops.eyebrows')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [levelFilter, setLevelFilter] = useState<string>('all')
 
@@ -309,7 +310,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
         {/* Call to Action */}
         <div className="mt-16 border-t border-subtle pt-16 text-center">
-          <div className="ui-public-eyebrow">VORSCHLAGEN</div>
+          <div className="ui-public-eyebrow">{tEye('propose')}</div>
           <h2 className="ui-public-display-md mt-3">{t('cta.title')}</h2>
           <p className="ui-public-section-lede mt-4 mx-auto max-w-2xl">{t('cta.subtitle')}</p>
           <div className="mt-8">

@@ -207,7 +207,19 @@
     "currency": "CHF",
     "skipToContent": "Ir al contenido",
     "resetFilters": "Restablecer filtros",
-    "resultsCount": "{filtered} de {total} resultados"
+    "resultsCount": "{filtered} de {total} resultados",
+    "eyebrows": {
+      "technicians": "TÉCNICOS",
+      "getInvolved": "PARTICIPAR",
+      "press": "PRENSA",
+      "timeline": "CRONOLOGÍA",
+      "vision": "VISIÓN",
+      "potential": "POTENCIAL",
+      "donate": "DONAR",
+      "howItWorks": "CÓMO FUNCIONA",
+      "benefits": "BENEFICIOS",
+      "principles": "PRINCIPIOS"
+    }
   },
   "errors": {
     "genericTitle": "Algo salió mal",
@@ -3057,6 +3069,10 @@
       "gratis": "Gratis",
       "verified": "Verificado",
       "remove": "Quitar {label}"
+    },
+    "eyebrows": {
+      "marketplace": "MERCADO",
+      "getInvolved": "PARTICIPAR"
     }
   },
   "membership": {
@@ -6522,6 +6538,9 @@
       "advanced": "Avanzado",
       "all": "Todos los niveles",
       "beginner_to_advanced": "De principiante a avanzado"
+    },
+    "eyebrows": {
+      "propose": "PROPONER"
     }
   },
   "donate": {

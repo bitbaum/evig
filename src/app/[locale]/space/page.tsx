@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: SpacePageProps): Promise<Meta
 export default async function SpacePage({ params }: SpacePageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'space' })
+  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' })
 
   const historyLocations = t.raw('history.locations') as Array<{ highlight: string; description: string }>
   const spaceFeatures = t.raw('future.features') as Array<{ name: string; description: string }>
@@ -54,7 +55,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       <section className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <div className="ui-public-eyebrow">CHRONIK</div>
+            <div className="ui-public-eyebrow">{tEye('timeline')}</div>
             <Heading level={2} className="ui-public-display-lg mt-4">{t('history.title')}</Heading>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('history.subtitle')}</p>
           </div>
@@ -134,7 +135,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
 
           {/* Vision Statement */}
           <div className="mx-auto max-w-3xl card-shell p-10 text-center">
-            <div className="ui-public-eyebrow">VISION</div>
+            <div className="ui-public-eyebrow">{tEye('vision')}</div>
             <p className="ui-public-display-md mt-3">
               {t('future.visionTagline', { orgName: ORG.name })}
             </p>
@@ -192,7 +193,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       <section className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="ui-public-eyebrow">POTENZIAL</div>
+            <div className="ui-public-eyebrow">{tEye('potential')}</div>
             <Heading level={2} className="ui-public-display-lg mt-4">{t('impact.title')}</Heading>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('impact.subtitle')}</p>
           </div>
@@ -219,7 +220,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
 
           {/* Donation CTA */}
           <div className="mt-16 border-t border-subtle pt-16 text-center">
-            <div className="ui-public-eyebrow">SPENDEN</div>
+            <div className="ui-public-eyebrow">{tEye('donate')}</div>
             <Heading level={3} className="ui-public-display-md mt-3">{t('impact.donateCard.title')}</Heading>
             <p className="ui-public-section-lede mt-4 mx-auto">{t('impact.donateCard.body')}</p>
             <div className="ui-public-cta-row mt-8">

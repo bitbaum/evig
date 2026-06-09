@@ -173,7 +173,7 @@ function ItemBadge({ badge }: { badge?: string }) {
   if (!badge) return null
 
   return (
-    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-action-muted text-action/10 rounded-full">
+    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-action-muted text-action rounded-full">
       {badge}
     </span>
   )

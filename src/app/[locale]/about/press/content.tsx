@@ -118,6 +118,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
 
 export default function PressPageContent() {
   const t = useTranslations('about.press')
+  const tEye = useTranslations('common.eyebrows')
   const tier1Sources = getTier1Sources()
   const featuredMedia = getFeaturedMedia()
   const stats = getMediaStats()
@@ -225,7 +226,7 @@ export default function PressPageContent() {
       {/* Press Contact CTA */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">PRESSE</div>
+          <div className="ui-public-eyebrow">{tEye('press')}</div>
           <h2 className="ui-public-display-lg mt-4">{t('pressContact.title')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('pressContact.description')}</p>
           <div className="ui-public-cta-row mt-10">

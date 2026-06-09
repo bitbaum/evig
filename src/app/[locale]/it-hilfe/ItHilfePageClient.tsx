@@ -26,6 +26,7 @@ import { ItHilfeFilters } from './ItHilfeFilters'
 export default function ITHilfePage() {
   const { data: session } = useSession()
   const t = useTranslations('itHelp.page')
+  const tEye = useTranslations('common.eyebrows')
 
   const {
     requests,
@@ -191,7 +192,7 @@ export default function ITHilfePage() {
         {/* CTA — become technician */}
         {!session?.user && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
-            <div className="ui-public-eyebrow">MITMACHEN</div>
+            <div className="ui-public-eyebrow">{tEye('getInvolved')}</div>
             <h2 className="ui-public-display-md mt-3">{t('ctaTitle')}</h2>
             <p className="ui-public-section-lede mt-4 mx-auto">{t('ctaDescription')}</p>
             <div className="ui-public-cta-row mt-8">

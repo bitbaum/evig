@@ -82,7 +82,7 @@ export default function MarketplacePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">MARKTPLATZ</div>
+              <div className="ui-public-eyebrow">{t('eyebrows.marketplace')}</div>
               <h1 className="ui-public-display-md mt-3">{t('subtitle')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {t('listingsAvailable', { count: pagination.total })}
@@ -258,7 +258,7 @@ export default function MarketplacePage() {
         {status === 'unauthenticated' && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
             <div className="mx-auto max-w-2xl">
-              <div className="ui-public-eyebrow">MITMACHEN</div>
+              <div className="ui-public-eyebrow">{t('eyebrows.getInvolved')}</div>
               <h2 className="ui-public-display-md mt-3">{t('signInCta.title')}</h2>
               <p className="ui-public-section-lede mt-4">{t('signInCta.description')}</p>
               <div className="ui-public-cta-row mt-8">

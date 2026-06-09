@@ -221,7 +221,7 @@ export function MobileMenu({
                                   >
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action/10 rounded-sm">
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
                                         {subItem.badge}
                                       </span>
                                     )}
@@ -240,7 +240,7 @@ export function MobileMenu({
                                   >
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action/10 rounded-sm">
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
                                         {subItem.badge}
                                       </span>
                                     )}

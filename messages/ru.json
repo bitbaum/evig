@@ -207,7 +207,19 @@
     "currency": "CHF",
     "skipToContent": "Перейти к содержимому",
     "resetFilters": "Сбросить фильтры",
-    "resultsCount": "{filtered} из {total} результатов"
+    "resultsCount": "{filtered} из {total} результатов",
+    "eyebrows": {
+      "technicians": "ТЕХНИКИ",
+      "getInvolved": "УЧАСТВОВАТЬ",
+      "press": "ПРЕССА",
+      "timeline": "ХРОНИКА",
+      "vision": "ВИДЕНИЕ",
+      "potential": "ПОТЕНЦИАЛ",
+      "donate": "ПОЖЕРТВОВАТЬ",
+      "howItWorks": "КАК ЭТО РАБОТАЕТ",
+      "benefits": "ПРЕИМУЩЕСТВА",
+      "principles": "ПРИНЦИПЫ"
+    }
   },
   "errors": {
     "genericTitle": "Что-то пошло не так",
@@ -967,6 +979,10 @@
       "gratis": "Бесплатно",
       "verified": "Проверено",
       "remove": "Убрать {label}"
+    },
+    "eyebrows": {
+      "marketplace": "МАРКЕТПЛЕЙС",
+      "getInvolved": "УЧАСТВОВАТЬ"
     }
   },
   "services": {
@@ -2363,6 +2379,9 @@
       "advanced": "Эксперт",
       "all": "Все уровни",
       "beginner_to_advanced": "От начинающего до продвинутого"
+    },
+    "eyebrows": {
+      "propose": "ПРЕДЛОЖИТЬ"
     }
   },
   "about": {

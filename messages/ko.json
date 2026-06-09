@@ -207,7 +207,19 @@
     "currency": "CHF",
     "skipToContent": "콘텐츠로 건너뛰기",
     "resetFilters": "필터 초기화",
-    "resultsCount": "{total}개 중 {filtered}개 결과"
+    "resultsCount": "{total}개 중 {filtered}개 결과",
+    "eyebrows": {
+      "technicians": "기술자",
+      "getInvolved": "참여하기",
+      "press": "언론",
+      "timeline": "연혁",
+      "vision": "비전",
+      "potential": "잠재력",
+      "donate": "기부",
+      "howItWorks": "작동 방식",
+      "benefits": "장점",
+      "principles": "원칙"
+    }
   },
   "errors": {
     "genericTitle": "오류가 발생했습니다",
@@ -3057,6 +3069,10 @@
       "gratis": "무료",
       "verified": "검증됨",
       "remove": "{label} 제거"
+    },
+    "eyebrows": {
+      "marketplace": "마켓플레이스",
+      "getInvolved": "참여하기"
     }
   },
   "membership": {
@@ -6522,6 +6538,9 @@
       "advanced": "고급",
       "all": "모든 수준",
       "beginner_to_advanced": "초급에서 고급까지"
+    },
+    "eyebrows": {
+      "propose": "제안하기"
     }
   },
   "donate": {

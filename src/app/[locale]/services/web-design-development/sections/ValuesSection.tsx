@@ -14,12 +14,13 @@ const VALUE_KEYS = [
 
 export async function ValuesSection() {
   const t = await getTranslations('services.webDesign.values')
+  const tEye = await getTranslations('common.eyebrows')
 
   return (
     <section className="ui-public-band py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-14">
-          <div className="ui-public-eyebrow">PRINZIPIEN</div>
+          <div className="ui-public-eyebrow">{tEye('principles')}</div>
           <Heading level={2} className="ui-public-display-lg mt-4">{t('title')}</Heading>
           <p
             className="ui-public-section-lede mt-6 mx-auto"

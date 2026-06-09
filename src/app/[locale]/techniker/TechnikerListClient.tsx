@@ -25,6 +25,7 @@ import { TechnicianCard } from './TechnicianCard'
 
 export default function TechnikerListClient() {
   const t = useTranslations('techniker')
+  const tEye = useTranslations('common.eyebrows')
   const { data: session } = useSession()
 
   const {
@@ -61,7 +62,7 @@ export default function TechnikerListClient() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">TECHNIKER</div>
+              <div className="ui-public-eyebrow">{tEye('technicians')}</div>
               <h1 className="ui-public-display-md mt-3">{t('list.title')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {t('list.available', { count: pagination.total })}
@@ -185,7 +186,7 @@ export default function TechnikerListClient() {
         {/* CTA for non-logged-in */}
         {!session?.user && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
-            <div className="ui-public-eyebrow">MITMACHEN</div>
+            <div className="ui-public-eyebrow">{tEye('getInvolved')}</div>
             <h2 className="ui-public-display-md mt-3">{t('list.ctaTitle')}</h2>
             <p className="ui-public-section-lede mt-4 mx-auto">{t('list.ctaDescription')}</p>
             <div className="ui-public-cta-row mt-8">
