@@ -208,6 +208,7 @@
     "skipToContent": "콘텐츠로 건너뛰기",
     "resetFilters": "필터 초기화",
     "resultsCount": "{total}개 중 {filtered}개 결과",
+    "methodologyLink": "어떻게 계산되었나요?",
     "eyebrows": {
       "technicians": "기술자",
       "getInvolved": "참여하기",
@@ -218,7 +219,8 @@
       "donate": "기부",
       "howItWorks": "작동 방식",
       "benefits": "장점",
-      "principles": "원칙"
+      "principles": "원칙",
+      "ready": "준비됐나요?"
     }
   },
   "errors": {
@@ -4000,7 +4002,7 @@
       "hero": {
         "title": "Monitor-Upcycling",
         "description": "저희는 폐기된 컴퓨터 모니터를 고품질의 실용적인 조명으로 변모시킵니다. 전자 폐기물을 방지하고, 사회적 기업에 의미 있는 일자리를 창출하며, 스위스 시장을 위한 순환 가능한 제품을 개발하는 Revamp-IT 의 혁신적인 시범 프로젝트입니다.",
-        "cta1": "Kontakt aufnehmen",
+        "cta1": "프로젝트 둘러보기",
         "cta2": "Partner werden"
       },
       "about": {
@@ -4798,6 +4800,7 @@
       "bookAppointment": "예약하기",
       "learnMore": "더 알아보기",
       "appointmentRequested": "예약이 요청되었습니다!",
+      "appointmentDescription": "{service} 예약",
       "booking": "예약 중...",
       "bookingFailed": "예약 실패",
       "networkError": "네트워크 오류. 다시 시도해 주세요.",
@@ -5667,6 +5670,7 @@
       "certification": {
         "heading": "Revamped 인증 받기",
         "body": "우리가 조립하는 모든 컴퓨터는 독점 \"Revamped\" 인증을 받습니다 — 지속 가능성, 품질 및 성능의 보장.",
+        "eyebrow": "REVAMPED 인증",
         "sustainabilityScore": "지속 가능성 점수",
         "co2Saved": "CO₂ 절감",
         "certifiedComputers": "인증 컴퓨터 수",

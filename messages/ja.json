@@ -208,6 +208,7 @@
     "skipToContent": "コンテンツへスキップ",
     "resetFilters": "フィルターをリセット",
     "resultsCount": "{total}件中{filtered}件",
+    "methodologyLink": "どのように計算されていますか?",
     "eyebrows": {
       "technicians": "技術者",
       "getInvolved": "参加する",
@@ -218,7 +219,8 @@
       "donate": "寄付",
       "howItWorks": "仕組み",
       "benefits": "利点",
-      "principles": "原則"
+      "principles": "原則",
+      "ready": "準備はいい?"
     }
   },
   "errors": {
@@ -4000,7 +4002,7 @@
       "hero": {
         "title": "Monitor-Upcycling",
         "description": "使われなくなったコンピュータモニターを、高品質で機能的な照明に変えます。電子廃棄物を回避し、社会的事業所で意義ある仕事を生み出し、スイス市場向けの循環型製品を開発する、revamp-it の革新的なパイロットプロジェクトです。",
-        "cta1": "Kontakt aufnehmen",
+        "cta1": "プロジェクトを見る",
         "cta2": "Partner werden"
       },
       "about": {
@@ -4798,6 +4800,7 @@
       "bookAppointment": "予約する",
       "learnMore": "詳しく知る",
       "appointmentRequested": "予約リクエスト済み！",
+      "appointmentDescription": "{service}の予約",
       "booking": "予約中...",
       "bookingFailed": "予約に失敗しました",
       "networkError": "ネットワークエラーが発生しました。もう一度お試しください。",
@@ -5667,6 +5670,7 @@
       "certification": {
         "heading": "Revamped認定を取得する",
         "body": "当社が組み立てるすべてのコンピューターは、独自の\"Revamped\"認定を受けます—サステナビリティ、品質、パフォーマンスの保証。",
+        "eyebrow": "REVAMPED 認定済み",
         "sustainabilityScore": "サステナビリティスコア",
         "co2Saved": "CO₂削減量",
         "certifiedComputers": "認定コンピューター数",

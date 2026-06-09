@@ -208,6 +208,7 @@
     "skipToContent": "Zum Inhalt springen",
     "resetFilters": "Filter zurücksetzen",
     "resultsCount": "{filtered} von {total} Ergebnissen",
+    "methodologyLink": "Wie berechnet?",
     "eyebrows": {
       "technicians": "TECHNIKER",
       "getInvolved": "MITMACHEN",
@@ -218,7 +219,8 @@
       "donate": "SPENDEN",
       "howItWorks": "SO FUNKTIONIERT ES",
       "benefits": "VORTEILE",
-      "principles": "PRINZIPIEN"
+      "principles": "PRINZIPIEN",
+      "ready": "BEREIT?"
     }
   },
   "errors": {
@@ -1017,6 +1019,7 @@
       "bookAppointment": "Termin buchen",
       "learnMore": "Mehr erfahren",
       "appointmentRequested": "Termin angefragt!",
+      "appointmentDescription": "Termin für {service}",
       "booking": "Wird gebucht...",
       "bookingFailed": "Terminbuchung fehlgeschlagen",
       "networkError": "Netzwerkfehler. Bitte versuche es erneut.",
@@ -1955,6 +1958,7 @@
       "certification": {
         "heading": "Hol sich deine Revamped-Zertifizierung",
         "body": "Jeder von uns gebaute Computer erhält unsere exklusive \"Revamped\"-Zertifizierung - deine Garantie für Nachhaltigkeit, Qualität und Leistung.",
+        "eyebrow": "REVAMPED ZERTIFIZIERT",
         "sustainabilityScore": "Nachhaltigkeits-Score",
         "co2Saved": "CO₂ gespart",
         "certifiedComputers": "Zertifizierte Computer",
@@ -5374,7 +5378,7 @@
       "hero": {
         "title": "Monitor-Upcycling",
         "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
-        "cta1": "Kontakt aufnehmen",
+        "cta1": "Projekt entdecken",
         "cta2": "Partner werden"
       },
       "about": {

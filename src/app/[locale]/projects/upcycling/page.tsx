@@ -62,7 +62,10 @@ export default async function UpcyclingPage() {
       description: p.hero.description,
       icon: Lightbulb,
       ctas: [
-        { text: p.hero.cta1, href: '/contact', variant: 'primary' },
+        // Primary CTA leads INTO the mini-site (applications is the most
+        // visual sub-page). Users were missing the sub-experience entirely
+        // when both hero CTAs sent them off the project page.
+        { text: p.hero.cta1, href: '/projects/upcycling/applications', variant: 'primary' },
         { text: p.hero.cta2, href: '/get-involved', variant: 'outline' },
       ],
     },

@@ -208,6 +208,7 @@
     "skipToContent": "Aller au contenu",
     "resetFilters": "Réinitialiser les filtres",
     "resultsCount": "{filtered} sur {total} résultats",
+    "methodologyLink": "Comment est-ce calculé ?",
     "eyebrows": {
       "technicians": "TECHNICIENS",
       "getInvolved": "PARTICIPER",
@@ -218,7 +219,8 @@
       "donate": "FAIRE UN DON",
       "howItWorks": "COMMENT ÇA MARCHE",
       "benefits": "AVANTAGES",
-      "principles": "PRINCIPES"
+      "principles": "PRINCIPES",
+      "ready": "PRÊT?"
     }
   },
   "errors": {
@@ -1029,6 +1031,7 @@
       "bookAppointment": "Prendre rendez-vous",
       "learnMore": "En savoir plus",
       "appointmentRequested": "Rendez-vous demandé!",
+      "appointmentDescription": "Rendez-vous pour {service}",
       "booking": "Réservation en cours...",
       "bookingFailed": "Échec de la réservation",
       "networkError": "Erreur réseau. Veuillez réessayer.",
@@ -1898,6 +1901,7 @@
       "certification": {
         "heading": "Obtenez votre certification Revamped",
         "body": "Chaque ordinateur que nous construisons reçoit notre certification exclusive \"Revamped\" — votre garantie de durabilité, qualité et performance.",
+        "eyebrow": "CERTIFIÉ REVAMPED",
         "sustainabilityScore": "Score de durabilité",
         "co2Saved": "CO₂ économisé",
         "certifiedComputers": "Ordinateurs certifiés",
@@ -5685,7 +5689,7 @@
       "hero": {
         "title": "Monitor-Upcycling",
         "description": "Nous transformons des écrans d'ordinateur usagés en luminaires fonctionnels de haute qualité. Un projet pilote innovant de revamp-it qui évite les déchets électroniques, crée un travail valorisant dans des entreprises sociales et développe des produits circulaires pour le marché suisse.",
-        "cta1": "Kontakt aufnehmen",
+        "cta1": "Découvrir le projet",
         "cta2": "Partner werden"
       },
       "about": {

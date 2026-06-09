@@ -208,6 +208,7 @@
     "skipToContent": "Ir al contenido",
     "resetFilters": "Restablecer filtros",
     "resultsCount": "{filtered} de {total} resultados",
+    "methodologyLink": "¿Cómo se calcula?",
     "eyebrows": {
       "technicians": "TÉCNICOS",
       "getInvolved": "PARTICIPAR",
@@ -218,7 +219,8 @@
       "donate": "DONAR",
       "howItWorks": "CÓMO FUNCIONA",
       "benefits": "BENEFICIOS",
-      "principles": "PRINCIPIOS"
+      "principles": "PRINCIPIOS",
+      "ready": "¿LISTO?"
     }
   },
   "errors": {
@@ -4000,7 +4002,7 @@
       "hero": {
         "title": "Monitor-Upcycling",
         "description": "Transformamos monitores de ordenador desechados en lámparas funcionales de alta calidad. Un proyecto piloto innovador de revamp-it que evita los residuos electrónicos, genera trabajo con sentido en empresas sociales y desarrolla productos circulares para el mercado suizo.",
-        "cta1": "Kontakt aufnehmen",
+        "cta1": "Explorar el proyecto",
         "cta2": "Partner werden"
       },
       "about": {
@@ -4798,6 +4800,7 @@
       "bookAppointment": "Reservar cita",
       "learnMore": "Más información",
       "appointmentRequested": "¡Cita solicitada!",
+      "appointmentDescription": "Cita para {service}",
       "booking": "Reservando...",
       "bookingFailed": "Error al reservar la cita",
       "networkError": "Error de red. Por favor, inténtalo de nuevo.",
@@ -5667,6 +5670,7 @@
       "certification": {
         "heading": "Obtén tu certificación Revamped",
         "body": "Cada ordenador que construimos recibe nuestra certificación exclusiva \"Revamped\" — tu garantía de sostenibilidad, calidad y rendimiento.",
+        "eyebrow": "CERTIFICADO REVAMPED",
         "sustainabilityScore": "Puntuación de sostenibilidad",
         "co2Saved": "CO₂ ahorrado",
         "certifiedComputers": "Ordenadores certificados",
