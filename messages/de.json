@@ -4556,6 +4556,72 @@
       "text": "{orgName} wird von einem ehrenamtlichen Vorstand geführt. Kontakt:",
       "joinCta": "Mitglied werden",
       "donateCta": "Spenden"
+    },
+    "co2": {
+      "meta": {
+        "title": "CO₂-Berechnung & Quellen — Methodik | {orgName}",
+        "description": "Wie {orgName} CO₂-Einsparungen schätzt — Formel, Annahmen, Quellen. Transparenz statt Marketing-Zahlen.",
+        "ogTitle": "CO₂-Methodik | {orgName}",
+        "ogDescription": "Formel, Annahmen, Quellen für jede CO₂-Zahl auf der Seite."
+      },
+      "hero": {
+        "title": "CO₂-Berechnung & Quellen",
+        "subtitle": "Wir zeigen, woher jede CO₂-Zahl auf dieser Seite stammt. Konservativ gerundet, immer mit verlinkter Quelle. Lieber eine kleinere, ehrliche Zahl als eine grosse, unbelegbare."
+      },
+      "formula": {
+        "heading": "Die Formel",
+        "expression": "CO₂-Einsparung pro Gerät = Gerätegewicht (kg) × Emissionsfaktor (kg CO₂e/kg)",
+        "exampleLead": "Beispiel Laptop:",
+        "exampleResult": "2,0 kg × 57 kg CO₂e/kg ≈",
+        "exampleValue": "115 kg CO₂e",
+        "note": "Schätzung pro Geräteklasse. Modellgenaue Zahlen (Apple, Dell) sind genauer und werden ergänzt, sobald wir die Modell-PCFs der jeweiligen Hersteller in unsere Inventarisierung übernehmen."
+      },
+      "inputs": {
+        "heading": "Eingangswerte mit Quellen",
+        "openSource": "Quelle öffnen",
+        "asOf": "Stand: {date}"
+      },
+      "weights": {
+        "heading": "Gewicht pro Gerätekategorie",
+        "intro": "Diese Durchschnittsgewichte fliessen in die Formel ein. Wir verwenden konservative Werte aus öffentlich zugänglichen Produktdaten der häufigsten Modelle.",
+        "col": {
+          "category": "Kategorie",
+          "weight": "Gewicht",
+          "co2": "≈ CO₂ vermieden",
+          "source": "Quelle"
+        },
+        "sourceDirect": "Studie (zitiert)",
+        "sourceCalculated": "Gewicht × Faktor",
+        "tooltipDirect": "Direkter Studienwert: {value} kg",
+        "tooltipCalculated": "Berechnet: {weight} kg × 57 kg/kg",
+        "footer": "Bei „Studie (zitiert)\" verwenden wir den direkten Wert aus der Eingangswerttabelle oben statt der groben Gewicht-mal-Faktor-Schätzung. Sobald wir weitere kategoriespezifische LCAs (Apple/Dell PER) eingepflegt haben, wandern weitere Kategorien hierhin."
+      },
+      "limits": {
+        "heading": "Grenzen dieser Schätzung",
+        "items": [
+          "Die Zahlen umfassen die Herstellungs-Phase des Neugeräts abzüglich Aufbereitungs-Aufwand. Energieverbrauch während der Nutzung, Versand und End-of-Life sind nicht enthalten.",
+          "Die tatsächliche Einsparung hängt vom kontrafaktischen Szenario ab: Hätte die Person sonst wirklich ein Neugerät gekauft? Wir gehen davon aus, ja — aber das ist nicht jedermanns Realität.",
+          "Strommix-Annahme: Schweizer Stromnetz (~12 g CO₂e/kWh). In Ländern mit kohlelastigem Mix wären die Aufbereitungs-Emissionen höher.",
+          "Wir runden Anzeige-Werte auf 5 kg (unter 100 kg) bzw. 10 kg (darüber) — spurious Präzision wie „287,4 kg\" suggeriert Genauigkeit, die wir nicht haben."
+        ]
+      },
+      "contribute": {
+        "heading": "Aktualisierung & Mitwirken",
+        "intro": "Diese Methodik wird laufend aktualisiert. Quellcode der Berechnung und der hier verlinkten Daten:",
+        "githubLabel": "org-numbers.defaults.ts auf GitHub",
+        "closing": "Fehler entdeckt oder bessere Quelle bekannt? Eine kurze Mail genügt:"
+      },
+      "categories": {
+        "10": "Laptop",
+        "20": "Desktop-PC",
+        "30": "Monitor",
+        "40": "Tablet",
+        "50": "Smartphone",
+        "60": "Drucker / Scanner",
+        "70": "Komponente",
+        "80": "Peripherie",
+        "90": "Netzwerk-Gerät"
+      }
     }
   },
   "notFound": {

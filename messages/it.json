@@ -715,6 +715,72 @@
       "lifespanExtension": "Anni di estensione della vita",
       "internshipSuccess": "Tirocini riusciti",
       "careerReentries": "Rientri lavorativi"
+    },
+    "co2": {
+      "meta": {
+        "title": "Calcolo CO₂ e fonti — metodologia | {orgName}",
+        "description": "Come {orgName} stima i risparmi di CO₂ — formula, ipotesi, fonti. Trasparenza, non cifre di marketing.",
+        "ogTitle": "Metodologia CO₂ | {orgName}",
+        "ogDescription": "Formula, ipotesi e fonti per ogni cifra di CO₂ della pagina."
+      },
+      "hero": {
+        "title": "Calcolo CO₂ e fonti",
+        "subtitle": "Mostriamo da dove proviene ogni cifra di CO₂ in questa pagina. Arrotondata in modo conservativo, sempre con fonte collegata. Meglio un numero piccolo onesto che uno grande non supportato."
+      },
+      "formula": {
+        "heading": "La formula",
+        "expression": "CO₂ risparmiata per dispositivo = peso del dispositivo (kg) × fattore di emissione (kg CO₂e/kg)",
+        "exampleLead": "Esempio laptop:",
+        "exampleResult": "2,0 kg × 57 kg CO₂e/kg ≈",
+        "exampleValue": "115 kg CO₂e",
+        "note": "Stima per classe di dispositivo. I valori specifici per modello (Apple, Dell) sono più precisi e verranno aggiunti man mano che integriamo i PCF dei produttori nel nostro inventario."
+      },
+      "inputs": {
+        "heading": "Input con fonti",
+        "openSource": "Apri fonte",
+        "asOf": "Stato: {date}"
+      },
+      "weights": {
+        "heading": "Peso per categoria di dispositivo",
+        "intro": "Questi pesi medi alimentano la formula. Usiamo valori conservativi da dati pubblici dei prodotti più comuni.",
+        "col": {
+          "category": "Categoria",
+          "weight": "Peso",
+          "co2": "≈ CO₂ evitato",
+          "source": "Fonte"
+        },
+        "sourceDirect": "Studio (citato)",
+        "sourceCalculated": "Peso × fattore",
+        "tooltipDirect": "Valore diretto dello studio: {value} kg",
+        "tooltipCalculated": "Calcolato: {weight} kg × 57 kg/kg",
+        "footer": "In \"Studio (citato)\" usiamo il valore diretto dalla tabella degli input sopra invece della stima peso × fattore. Man mano che aggiungiamo più LCA specifici per categoria (Apple/Dell PER), altre categorie si sposteranno qui."
+      },
+      "limits": {
+        "heading": "Limiti di questa stima",
+        "items": [
+          "I numeri coprono la fase di produzione del nuovo dispositivo meno lo sforzo di ricondizionamento. Il consumo durante l'uso, la spedizione e il fine vita non sono inclusi.",
+          "Il risparmio effettivo dipende dallo scenario controfattuale: la persona avrebbe davvero comprato un dispositivo nuovo altrimenti? Assumiamo di sì — ma non è la realtà di tutti.",
+          "Ipotesi sul mix elettrico: rete svizzera (~12 g CO₂e/kWh). Nei paesi con mix ad alto contenuto di carbone, le emissioni di ricondizionamento sarebbero più alte.",
+          "Arrotondiamo i valori visualizzati a 5 kg (sotto i 100 kg) o 10 kg (sopra) — una falsa precisione come «287,4 kg» suggerisce una certezza che non abbiamo."
+        ]
+      },
+      "contribute": {
+        "heading": "Aggiornamento e contributi",
+        "intro": "Questa metodologia viene aggiornata continuamente. Codice sorgente del calcolo e dati collegati qui:",
+        "githubLabel": "org-numbers.defaults.ts su GitHub",
+        "closing": "Hai trovato un errore o conosci una fonte migliore? Una breve email è sufficiente:"
+      },
+      "categories": {
+        "10": "Laptop",
+        "20": "PC fisso",
+        "30": "Monitor",
+        "40": "Tablet",
+        "50": "Smartphone",
+        "60": "Stampante / scanner",
+        "70": "Componente",
+        "80": "Periferica",
+        "90": "Dispositivo di rete"
+      }
     }
   },
   "notFound": {

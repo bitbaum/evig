@@ -715,6 +715,72 @@
       "lifespanExtension": "수명 연장 년수",
       "internshipSuccess": "성공한 인턴십",
       "careerReentries": "직장 복귀"
+    },
+    "co2": {
+      "meta": {
+        "title": "CO₂ 계산 및 출처 — 방법론 | {orgName}",
+        "description": "{orgName}이(가) CO₂ 절감을 어떻게 추정하는지 — 공식, 가정, 출처. 마케팅 수치가 아닌 투명성.",
+        "ogTitle": "CO₂ 방법론 | {orgName}",
+        "ogDescription": "페이지의 모든 CO₂ 수치에 대한 공식, 가정, 출처."
+      },
+      "hero": {
+        "title": "CO₂ 계산 및 출처",
+        "subtitle": "이 페이지의 모든 CO₂ 수치의 출처를 보여드립니다. 보수적으로 반올림하고, 항상 출처 링크를 표시합니다. 근거 없는 큰 수치보다 정직한 작은 수치를 선호합니다."
+      },
+      "formula": {
+        "heading": "공식",
+        "expression": "기기당 CO₂ 절감 = 기기 무게 (kg) × 배출 계수 (kg CO₂e/kg)",
+        "exampleLead": "노트북 예시:",
+        "exampleResult": "2.0 kg × 57 kg CO₂e/kg ≈",
+        "exampleValue": "115 kg CO₂e",
+        "note": "기기 분류별 추정치. 모델별 수치(Apple, Dell)는 더 정확하며 제조업체 PCF를 재고에 통합하는 대로 추가됩니다."
+      },
+      "inputs": {
+        "heading": "입력값과 출처",
+        "openSource": "출처 열기",
+        "asOf": "기준일: {date}"
+      },
+      "weights": {
+        "heading": "기기 카테고리별 무게",
+        "intro": "이 평균 무게가 공식에 입력됩니다. 가장 일반적인 모델의 공개 제품 데이터에서 보수적인 값을 사용합니다.",
+        "col": {
+          "category": "카테고리",
+          "weight": "무게",
+          "co2": "≈ 회피된 CO₂",
+          "source": "출처"
+        },
+        "sourceDirect": "연구(인용)",
+        "sourceCalculated": "무게 × 계수",
+        "tooltipDirect": "직접 연구 값: {value} kg",
+        "tooltipCalculated": "계산: {weight} kg × 57 kg/kg",
+        "footer": "\"연구(인용)\"에서는 무게 × 계수 추정 대신 위 입력 표의 직접 값을 사용합니다. 카테고리별 LCA(Apple/Dell PER)를 더 추가하면서 더 많은 카테고리가 이곳으로 이동합니다."
+      },
+      "limits": {
+        "heading": "이 추정치의 한계",
+        "items": [
+          "이 수치는 새 기기의 제조 단계에서 재생 작업을 뺀 것을 다룹니다. 사용 중 에너지 소비, 운송, 폐기 단계는 포함되지 않습니다.",
+          "실제 절감은 반사실 시나리오에 따라 달라집니다: 그 사람이 실제로 새 기기를 샀을까요? 그렇다고 가정하지만, 모두에게 해당되는 현실은 아닙니다.",
+          "전력 믹스 가정: 스위스 전력망 (~12 g CO₂e/kWh). 석탄 비중이 높은 국가에서는 재생 작업 배출량이 더 높을 것입니다.",
+          "표시 값은 100 kg 미만에서는 5 kg, 그 이상에서는 10 kg로 반올림합니다 — \"287.4 kg\"와 같은 가짜 정밀도는 우리가 가지고 있지 않은 확실성을 암시합니다."
+        ]
+      },
+      "contribute": {
+        "heading": "업데이트 및 기여",
+        "intro": "이 방법론은 지속적으로 업데이트됩니다. 계산 소스 코드와 여기 링크된 데이터:",
+        "githubLabel": "GitHub의 org-numbers.defaults.ts",
+        "closing": "오류를 발견하거나 더 좋은 출처를 아시나요? 짧은 이메일이면 충분합니다:"
+      },
+      "categories": {
+        "10": "노트북",
+        "20": "데스크톱 PC",
+        "30": "모니터",
+        "40": "태블릿",
+        "50": "스마트폰",
+        "60": "프린터 / 스캐너",
+        "70": "부품",
+        "80": "주변기기",
+        "90": "네트워크 기기"
+      }
     }
   },
   "notFound": {

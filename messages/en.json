@@ -4819,6 +4819,72 @@
       "lifespanExtension": "Years of lifespan extension",
       "internshipSuccess": "Successful internships",
       "careerReentries": "Career re-entries"
+    },
+    "co2": {
+      "meta": {
+        "title": "CO₂ calculation & sources — methodology | {orgName}",
+        "description": "How {orgName} estimates CO₂ savings — formula, assumptions, sources. Transparency, not marketing numbers.",
+        "ogTitle": "CO₂ methodology | {orgName}",
+        "ogDescription": "Formula, assumptions, sources for every CO₂ number on the site."
+      },
+      "hero": {
+        "title": "CO₂ calculation & sources",
+        "subtitle": "We show where every CO₂ number on this page comes from. Conservatively rounded, always with a linked source. A smaller honest number beats a big unsupported one."
+      },
+      "formula": {
+        "heading": "The formula",
+        "expression": "CO₂ saved per device = device weight (kg) × emission factor (kg CO₂e/kg)",
+        "exampleLead": "Laptop example:",
+        "exampleResult": "2.0 kg × 57 kg CO₂e/kg ≈",
+        "exampleValue": "115 kg CO₂e",
+        "note": "Estimate per device class. Model-specific numbers (Apple, Dell) are more precise and will be added as we incorporate manufacturer PCFs into our inventory."
+      },
+      "inputs": {
+        "heading": "Inputs with sources",
+        "openSource": "Open source",
+        "asOf": "As of: {date}"
+      },
+      "weights": {
+        "heading": "Weight per device category",
+        "intro": "These average weights feed the formula. We use conservative values from publicly available product data for the most common models.",
+        "col": {
+          "category": "Category",
+          "weight": "Weight",
+          "co2": "≈ CO₂ avoided",
+          "source": "Source"
+        },
+        "sourceDirect": "Study (cited)",
+        "sourceCalculated": "Weight × factor",
+        "tooltipDirect": "Direct study value: {value} kg",
+        "tooltipCalculated": "Calculated: {weight} kg × 57 kg/kg",
+        "footer": "For \"Study (cited)\" we use the direct value from the inputs table above rather than the rough weight-times-factor estimate. As we add more category-specific LCAs (Apple/Dell PER), more categories will move here."
+      },
+      "limits": {
+        "heading": "Limits of this estimate",
+        "items": [
+          "The numbers cover the manufacturing phase of a new device minus refurbishment effort. Energy use during operation, shipping and end-of-life are not included.",
+          "Actual savings depend on the counterfactual scenario: would the person otherwise really have bought a new device? We assume yes — but that isn't everyone's reality.",
+          "Electricity mix assumption: Swiss grid (~12 g CO₂e/kWh). In countries with coal-heavy mixes, refurbishment emissions would be higher.",
+          "We round display values to 5 kg (under 100 kg) or 10 kg (above) — spurious precision like \"287.4 kg\" implies certainty we do not have."
+        ]
+      },
+      "contribute": {
+        "heading": "Updates & contributing",
+        "intro": "This methodology is updated continuously. Calculation source code and the data linked here:",
+        "githubLabel": "org-numbers.defaults.ts on GitHub",
+        "closing": "Found an error or know a better source? A short email is enough:"
+      },
+      "categories": {
+        "10": "Laptop",
+        "20": "Desktop PC",
+        "30": "Monitor",
+        "40": "Tablet",
+        "50": "Smartphone",
+        "60": "Printer / Scanner",
+        "70": "Component",
+        "80": "Peripheral",
+        "90": "Networking device"
+      }
     }
   },
   "notFound": {

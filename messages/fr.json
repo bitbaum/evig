@@ -4873,6 +4873,72 @@
       "lifespanExtension": "Années d'extension de durée de vie",
       "internshipSuccess": "Stages réussis",
       "careerReentries": "Retours à la vie active"
+    },
+    "co2": {
+      "meta": {
+        "title": "Calcul CO₂ & sources — méthodologie | {orgName}",
+        "description": "Comment {orgName} estime les économies de CO₂ — formule, hypothèses, sources. Transparence plutôt que chiffres marketing.",
+        "ogTitle": "Méthodologie CO₂ | {orgName}",
+        "ogDescription": "Formule, hypothèses, sources pour chaque chiffre CO₂ de la page."
+      },
+      "hero": {
+        "title": "Calcul CO₂ & sources",
+        "subtitle": "Nous montrons d'où vient chaque chiffre CO₂ de cette page. Arrondi prudemment, toujours avec une source liée. Mieux vaut un petit chiffre honnête qu'un grand sans preuve."
+      },
+      "formula": {
+        "heading": "La formule",
+        "expression": "CO₂ économisé par appareil = poids de l'appareil (kg) × facteur d'émission (kg CO₂e/kg)",
+        "exampleLead": "Exemple ordinateur portable :",
+        "exampleResult": "2,0 kg × 57 kg CO₂e/kg ≈",
+        "exampleValue": "115 kg CO₂e",
+        "note": "Estimation par classe d'appareil. Les chiffres spécifiques au modèle (Apple, Dell) sont plus précis et seront ajoutés à mesure que nous intégrerons les PCF des fabricants dans notre inventaire."
+      },
+      "inputs": {
+        "heading": "Données d'entrée avec sources",
+        "openSource": "Ouvrir la source",
+        "asOf": "État : {date}"
+      },
+      "weights": {
+        "heading": "Poids par catégorie d'appareil",
+        "intro": "Ces poids moyens alimentent la formule. Nous utilisons des valeurs prudentes issues des données produits publiques des modèles les plus courants.",
+        "col": {
+          "category": "Catégorie",
+          "weight": "Poids",
+          "co2": "≈ CO₂ évité",
+          "source": "Source"
+        },
+        "sourceDirect": "Étude (citée)",
+        "sourceCalculated": "Poids × facteur",
+        "tooltipDirect": "Valeur d'étude directe : {value} kg",
+        "tooltipCalculated": "Calculé : {weight} kg × 57 kg/kg",
+        "footer": "Pour « Étude (citée) », nous utilisons la valeur directe du tableau des données d'entrée ci-dessus plutôt que l'estimation poids × facteur. À mesure que nous ajouterons d'autres ACV spécifiques par catégorie (Apple/Dell PER), d'autres catégories migreront ici."
+      },
+      "limits": {
+        "heading": "Limites de cette estimation",
+        "items": [
+          "Les chiffres couvrent la phase de fabrication du neuf moins l'effort de remise à neuf. La consommation pendant l'utilisation, le transport et la fin de vie ne sont pas inclus.",
+          "L'économie réelle dépend du scénario contrefactuel : la personne aurait-elle vraiment acheté un appareil neuf sinon ? Nous supposons que oui — mais ce n'est pas la réalité de tout le monde.",
+          "Hypothèse mix électrique : réseau suisse (~12 g CO₂e/kWh). Dans les pays au mix charbonné, les émissions de remise à neuf seraient plus élevées.",
+          "Nous arrondissons les valeurs affichées à 5 kg (sous 100 kg) ou 10 kg (au-dessus) — une fausse précision comme « 287,4 kg » suggère une certitude que nous n'avons pas."
+        ]
+      },
+      "contribute": {
+        "heading": "Mise à jour & contribution",
+        "intro": "Cette méthodologie est continuellement mise à jour. Code source du calcul et données liées ici :",
+        "githubLabel": "org-numbers.defaults.ts sur GitHub",
+        "closing": "Une erreur trouvée ou une meilleure source connue ? Un court e-mail suffit :"
+      },
+      "categories": {
+        "10": "Ordinateur portable",
+        "20": "PC de bureau",
+        "30": "Écran",
+        "40": "Tablette",
+        "50": "Smartphone",
+        "60": "Imprimante / scanner",
+        "70": "Composant",
+        "80": "Périphérique",
+        "90": "Appareil réseau"
+      }
     }
   },
   "notFound": {

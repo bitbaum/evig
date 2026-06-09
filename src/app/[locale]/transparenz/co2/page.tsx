@@ -10,27 +10,24 @@ import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { PageHero } from '@/components/layout/PageHero'
 import { Section } from '@/components/layout/Section'
+import { getTranslations } from 'next-intl/server'
 
-/**
- * /transparenz/co2 — Methodology page for the CO₂ savings estimates.
- *
- * Every CO₂ number on the site (badges, impact stats, donations page)
- * traces back to one of the entries on this page. Show the formula,
- * cite the source for each input, give the last-verified date.
- *
- * The data is read directly from src/lib/org-numbers.defaults.ts —
- * adding a new factor there with citation fields automatically
- * surfaces here. No copy duplication.
- */
+interface PageProps {
+  params: Promise<{ locale: string }>
+}
 
-export const metadata: Metadata = {
-  title: `CO₂-Berechnung & Quellen — Methodik | ${ORG.name}`,
-  description: `Wie ${ORG.name} CO₂-Einsparungen schätzt — Formel, Annahmen, Quellen. Transparenz statt Marketing-Zahlen.`,
-  openGraph: {
-    title: `CO₂-Methodik | ${ORG.name}`,
-    description: 'Formel, Annahmen, Quellen für jede CO₂-Zahl auf der Seite.',
-    type: 'article',
-  },
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'transparenz' })
+  return {
+    title: t('co2.meta.title' as never, { orgName: ORG.name } as never),
+    description: t('co2.meta.description' as never, { orgName: ORG.name } as never),
+    openGraph: {
+      title: t('co2.meta.ogTitle' as never, { orgName: ORG.name } as never),
+      description: t('co2.meta.ogDescription' as never),
+      type: 'article',
+    },
+  }
 }
 
 const CO2_NUMBER_KEYS = [
@@ -41,19 +38,20 @@ const CO2_NUMBER_KEYS = [
   'annual_co2_saved_tons',
 ] as const
 
-const CATEGORY_LABELS: Record<string, string> = {
-  '10': 'Laptop',
-  '20': 'Desktop-PC',
-  '30': 'Monitor',
-  '40': 'Tablet',
-  '50': 'Smartphone',
-  '60': 'Drucker / Scanner',
-  '70': 'Komponente',
-  '80': 'Peripherie',
-  '90': 'Netzwerk-Gerät',
-}
+export default async function Co2MethodologyPage({ params }: PageProps) {
+  const { locale } = await params
+  // Use top-level transparenz namespace + prefix every key with co2. — the
+  // incremental TS type cache for nested message namespaces has been flaky
+  // after adding new branches, this avoids the symbolic-namespace error.
+  const tRoot = await getTranslations({ locale, namespace: 'transparenz' })
+  const t = ((key: string, args?: Record<string, unknown>) =>
+    tRoot(`co2.${key}` as never, args as never)) as (
+      key: string,
+      args?: Record<string, unknown>,
+    ) => string
+  // For t.raw access we need the root translator directly
+  const tRawCo2 = tRoot.raw as (key: string) => unknown
 
-export default function Co2MethodologyPage() {
   const numbers = CO2_NUMBER_KEYS
     .map(k => ORG_NUMBERS_DEFAULTS[k])
     .filter(Boolean)
@@ -62,13 +60,15 @@ export default function Co2MethodologyPage() {
     .filter(([k]) => k.length === 2) // only main categories, not sub-IDs
     .sort(([a], [b]) => a.localeCompare(b))
 
+  const limits = tRawCo2('co2.limits.items') as string[]
+
   return (
     <div className="min-h-screen">
       <PageHero
         theme="about"
         icon={Leaf}
-        title="CO₂-Berechnung & Quellen"
-        subtitle="Wir zeigen, woher jede CO₂-Zahl auf dieser Seite stammt. Konservativ gerundet, immer mit verlinkter Quelle. Lieber eine kleinere, ehrliche Zahl als eine grosse, unbelegbare."
+        title={t('hero.title')}
+        subtitle={t('hero.subtitle')}
       />
 
       <Section tone="tinted" density="compact">
@@ -76,20 +76,18 @@ export default function Co2MethodologyPage() {
           <div className="flex items-center gap-2 mb-4">
             <Calculator className="h-5 w-5 text-action" />
             <h2 className="text-2xl font-bold tracking-tight text-text-primary">
-              Die Formel
+              {t('formula.heading')}
             </h2>
           </div>
           <div className={cn(designPrimitive.surface.card, 'p-6 font-mono text-sm leading-relaxed')}>
             <p className="text-text-primary">
-              CO₂-Einsparung pro Gerät = Gerätegewicht (kg) × Emissionsfaktor (kg CO₂e/kg)
+              {t('formula.expression')}
             </p>
             <p className="mt-3 text-text-secondary">
-              Beispiel Laptop: 2,0 kg × 57 kg CO₂e/kg ≈ <strong className="text-text-primary">115 kg CO₂e</strong>
+              {t('formula.exampleLead')} {t('formula.exampleResult')} <strong className="text-text-primary">{t('formula.exampleValue')}</strong>
             </p>
             <p className="mt-3 text-xs text-text-tertiary not-italic">
-              Schätzung pro Gerät­klasse. Modellgenaue Zahlen (Apple, Dell) sind genauer und
-              werden ergänzt, sobald wir die Modell-PCFs der jeweiligen Hersteller in unsere
-              Inventarisierung übernehmen.
+              {t('formula.note')}
             </p>
           </div>
         </div>
@@ -98,7 +96,7 @@ export default function Co2MethodologyPage() {
       <Section tone="surface" density="compact">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-6">
-            Eingangswerte mit Quellen
+            {t('inputs.heading')}
           </h2>
           <div className="space-y-4">
             {numbers.map(n => (
@@ -138,10 +136,10 @@ export default function Co2MethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-action hover:underline"
                     >
-                      Quelle öffnen <ExternalLink className="h-3 w-3" />
+                      {t('inputs.openSource')} <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
-                  <span className="ml-auto">Stand: {n.lastVerified}</span>
+                  <span className="ml-auto">{t('inputs.asOf', { date: n.lastVerified ?? '—' })}</span>
                 </div>
               </article>
             ))}
@@ -152,20 +150,19 @@ export default function Co2MethodologyPage() {
       <Section tone="tinted" density="compact">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
-            Gewicht pro Geräte­kategorie
+            {t('weights.heading')}
           </h2>
           <p className="text-sm text-text-secondary mb-6">
-            Diese Durchschnittsgewichte fliessen in die Formel ein. Wir verwenden konservative
-            Werte aus öffentlich zugänglichen Produktdaten der häufigsten Modelle.
+            {t('weights.intro')}
           </p>
           <div className={cn(designPrimitive.surface.card, 'overflow-hidden')}>
             <table className="w-full text-sm">
               <thead className="bg-surface-raised dark:bg-surface-base/3 text-xs uppercase tracking-wider text-text-tertiary">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium">Kategorie</th>
-                  <th className="px-4 py-3 text-right font-medium">Gewicht</th>
-                  <th className="px-4 py-3 text-right font-medium">≈ CO₂ vermieden</th>
-                  <th className="px-4 py-3 text-left font-medium">Quelle</th>
+                  <th className="px-4 py-3 text-left font-medium">{t('weights.col.category')}</th>
+                  <th className="px-4 py-3 text-right font-medium">{t('weights.col.weight')}</th>
+                  <th className="px-4 py-3 text-right font-medium">{t('weights.col.co2')}</th>
+                  <th className="px-4 py-3 text-left font-medium">{t('weights.col.source')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-subtle">
@@ -176,7 +173,7 @@ export default function Co2MethodologyPage() {
                   return (
                     <tr key={catId}>
                       <td className="px-4 py-3 text-text-primary">
-                        {CATEGORY_LABELS[catId] ?? catId}
+                        {t(`categories.${catId}`)}
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-text-secondary">
                         {weight} kg
@@ -186,8 +183,8 @@ export default function Co2MethodologyPage() {
                       </td>
                       <td className="px-4 py-3 text-xs text-text-tertiary">
                         {source === 'direct'
-                          ? <span title={`Direkter Studienwert: ${direct} kg`}>Studie (zitiert)</span>
-                          : <span title={`Berechnet: ${weight} kg × 57 kg/kg`}>Gewicht × Faktor</span>}
+                          ? <span title={t('weights.tooltipDirect', { value: direct ?? co2 })}>{t('weights.sourceDirect')}</span>
+                          : <span title={t('weights.tooltipCalculated', { weight })}>{t('weights.sourceCalculated')}</span>}
                       </td>
                     </tr>
                   )
@@ -195,9 +192,7 @@ export default function Co2MethodologyPage() {
               </tbody>
             </table>
             <p className="text-xs text-text-tertiary p-4 border-t border-subtle">
-              Bei „Studie (zitiert)" verwenden wir den direkten Wert aus der Eingangs­wert­tabelle oben statt der
-              groben Gewicht-mal-Faktor-Schätzung. Sobald wir weitere kategorie­spezifische LCAs (Apple/Dell PER)
-              eingepflegt haben, wandern weitere Kategorien hierhin.
+              {t('weights.footer')}
             </p>
           </div>
         </div>
@@ -206,39 +201,15 @@ export default function Co2MethodologyPage() {
       <Section tone="surface" density="compact">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
-            Grenzen dieser Schätzung
+            {t('limits.heading')}
           </h2>
           <ul className="space-y-3 text-sm text-text-secondary">
-            <li className="flex gap-3">
-              <span className="text-action shrink-0">•</span>
-              <span>
-                Die Zahlen umfassen die <strong>Herstellungs-Phase</strong> des Neugeräts
-                abzüglich Aufbereitungs-Aufwand. Energie­verbrauch während der Nutzung, Versand
-                und End-of-Life sind nicht enthalten.
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="text-action shrink-0">•</span>
-              <span>
-                Die tatsächliche Einsparung hängt vom <strong>kontrafaktischen Szenario</strong>
-                ab: Hätte die Person sonst wirklich ein Neugerät gekauft? Wir gehen davon aus,
-                ja — aber das ist nicht jedermanns Realität.
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="text-action shrink-0">•</span>
-              <span>
-                Strommix­annahme: <strong>Schweizer Stromnetz</strong> (~12 g CO₂e/kWh). In
-                Ländern mit kohlelastigem Mix wären die Aufbereitungs-Emissionen höher.
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="text-action shrink-0">•</span>
-              <span>
-                Wir runden Anzeige-Werte auf 5 kg (unter 100 kg) bzw. 10 kg (darüber) — spurious
-                Präzision wie „287,4 kg" suggeriert Genauigkeit, die wir nicht haben.
-              </span>
-            </li>
+            {limits.map((item, i) => (
+              <li key={i} className="flex gap-3">
+                <span className="text-action shrink-0">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </Section>
@@ -246,11 +217,10 @@ export default function Co2MethodologyPage() {
       <Section tone="tinted" density="compact">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
-            Aktualisierung & Mitwirken
+            {t('contribute.heading')}
           </h2>
           <p className="text-sm text-text-secondary mb-3">
-            Diese Methodik wird laufend aktualisiert. Quellcode der Berechnung und der hier
-            verlinkten Daten:
+            {t('contribute.intro')}
           </p>
           <Link
             href="https://github.com/g-but/revampit/blob/main/src/lib/org-numbers.defaults.ts"
@@ -258,15 +228,14 @@ export default function Co2MethodologyPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-action hover:underline"
           >
-            org-numbers.defaults.ts auf GitHub
+            {t('contribute.githubLabel')}
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
           <p className="text-sm text-text-secondary mt-4">
-            Fehler entdeckt oder bessere Quelle bekannt? Eine kurze Mail an{' '}
+            {t('contribute.closing')}{' '}
             <a href={`mailto:${CONTACT.email}`} className="text-action hover:underline">
               {CONTACT.email}
-            </a>{' '}
-            reicht.
+            </a>
           </p>
         </div>
       </Section>
