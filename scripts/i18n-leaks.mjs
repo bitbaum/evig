@@ -28,11 +28,28 @@ const OUT_DIR = join(MESSAGES_DIR, '_missing')
 
 const LOCALES = ['fr', 'es', 'it', 'ja', 'ko', 'ru']
 
+/**
+ * Recursively flatten nested objects AND arrays to a single-level map of
+ * dotted paths → string values. Earlier version skipped arrays entirely,
+ * so leaks inside open_questions.questions[] / ai_brainstorm.prompts[] /
+ * approach.cards[].description / etc. were invisible to the audit.
+ */
 function flatten(obj, prefix = '') {
   const out = {}
+  if (Array.isArray(obj)) {
+    obj.forEach((item, i) => {
+      const p = `${prefix}[${i}]`
+      if (item && typeof item === 'object') {
+        Object.assign(out, flatten(item, p))
+      } else if (typeof item === 'string') {
+        out[p] = item
+      }
+    })
+    return out
+  }
   for (const [k, v] of Object.entries(obj)) {
     const p = prefix ? `${prefix}.${k}` : k
-    if (v && typeof v === 'object' && !Array.isArray(v)) {
+    if (v && typeof v === 'object') {
       Object.assign(out, flatten(v, p))
     } else if (typeof v === 'string') {
       out[p] = v
