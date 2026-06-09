@@ -95,13 +95,59 @@
       "donateDevicesDesc": "Give hardware a second life",
       "partnershipDesc": "Partner with us as a business",
       "becomeMemberDesc": "Become part of the association and have your say",
-      "contactDesc": "We look forward to hearing from you"
+      "contactDesc": "We look forward to hearing from you",
+      "about": "About us",
+      "missionHistory": "Mission & history",
+      "impact": "Our impact",
+      "projects": "Projects",
+      "locations": "Locations",
+      "faq": "FAQ",
+      "services": "Services",
+      "hardware": "Hardware",
+      "repairUpgrades": "Repairs & upgrades",
+      "dataRecovery": "Data recovery",
+      "hardwareRecycling": "Hardware recycling",
+      "software": "Software",
+      "linuxOpenSource": "Linux & open source",
+      "webDev": "Web development",
+      "openSourceSolutions": "Open-source solutions",
+      "marketplace": "Marketplace",
+      "buyDevices": "Buy devices",
+      "communityListings": "Community listings",
+      "orgShop": "Revamp-IT Shop",
+      "store": "Zürich storefront",
+      "sell": "Sell",
+      "createListing": "Create listing",
+      "myListings": "My listings",
+      "itHelp": "IT help",
+      "findHelp": "Find help",
+      "findTechnician": "Find a technician",
+      "becomeTechnician": "Become a technician",
+      "learn": "Learn",
+      "workshops": "Workshops",
+      "guides": "Guides",
+      "blog": "Blog",
+      "wiki": "Wiki",
+      "getInvolved": "Get involved",
+      "engagement": "Engagement",
+      "volunteer": "Volunteering",
+      "internship": "Internship",
+      "reintegration": "Return to work",
+      "itHelpTechnician": "IT help technician",
+      "support": "Support us",
+      "donate": "Donate",
+      "donateDevices": "Donate devices",
+      "partnership": "Partnership",
+      "membership": "Membership",
+      "becomeMember": "Become a member",
+      "contact": "Contact"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
     "loggedIn": "Signed in",
     "toDashboard": "To Dashboard",
-    "defaultUser": "User"
+    "defaultUser": "User",
+    "languageSelection": "Language selection"
   },
   "common": {
     "loading": "Loading...",
@@ -215,12 +261,12 @@
       "description": "Buy & sell used IT. Community-driven computer repair. Workshops on Linux, hardware and programming."
     },
     "hero": {
-      "title": "Old Hardware. New Life.",
+      "title": "Old hardware.",
       "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
       "ctaDiscover": "Explore now",
       "ctaAbout": "About us",
       "positioning": "Swiss circular-economy nonprofit since 2003",
-      "titleSecondary": "A second life.",
+      "titleSecondary": "New life.",
       "lede": "We repair second-hand computers and bring them to people who need them.",
       "sublede": "Swiss non-profit since 2003 — sustained by a community that repairs, passes on, and learns from each other.",
       "ctaDonate": "Donate a device"
@@ -723,7 +769,12 @@
       "errorMessage": "Error sending message",
       "errorNetworkMessage": "Network error sending message",
       "errorReport": "Error reporting listing",
-      "errorNetworkReport": "Network error reporting listing"
+      "errorNetworkReport": "Network error reporting listing",
+      "unavailableReserved": "This listing is reserved by someone else.",
+      "unavailableSold": "This listing has already been sold.",
+      "unavailableRemoved": "This listing has been removed and is no longer available.",
+      "unavailableDraft": "This listing has not been published yet.",
+      "unavailableGeneric": "This listing is currently unavailable."
     },
     "conditionExplainer": "What does \"{condition}\" mean for {category}?",
     "pagination": {
@@ -2420,6 +2471,61 @@
         "description": "Your support makes the difference. Every contribution, large or small, helps us make the Swiss IT landscape more sustainable and give people new opportunities.",
         "donate": "Donate now",
         "contact": "Get in touch"
+      },
+      "categories": {
+        "environmental": "ENVIRONMENT",
+        "social": "SOCIAL",
+        "economic": "ECONOMIC"
+      },
+      "units": {
+        "tonnes": "tonnes"
+      },
+      "eyebrows": {
+        "impact": "IMPACT",
+        "annual": "ANNUAL",
+        "register": "REGISTER"
+      },
+      "metrics": {
+        "devices-recycled": {
+          "title": "Devices rescued per year",
+          "description": "Number of IT devices we rescue from disposal each year (sold)",
+          "methodology": "Conservative estimate based on sales revenue ÷ average price. Systematic tracking is being implemented."
+        },
+        "device-lifespan": {
+          "title": "Lifespan extension",
+          "description": "Average lifespan extension per device (in years)",
+          "methodology": "Empirical values from 20+ years of refurbishing: Linux significantly extends the lifespan of older hardware."
+        },
+        "reuse-rate": {
+          "title": "Reuse rate",
+          "description": "Share of donated devices we successfully reuse",
+          "methodology": "Of all donated devices, ~75% are successfully repaired and reused. The remaining ~25% are professionally recycled."
+        },
+        "co2-savings": {
+          "title": "Annual CO₂ savings",
+          "description": "Estimated annual CO₂ savings through reuse instead of new production",
+          "methodology": "Producing a new laptop: 350 kg CO₂ (Fraunhofer IZM 2023). Refurbishment: 65 kg CO₂. Savings per device: 285 kg. For 150 devices sold/year ≈ 43 tonnes."
+        },
+        "ewaste-prevented": {
+          "title": "E-waste prevented",
+          "description": "Amount of e-waste we prevent each year",
+          "methodology": "Average weight per device incl. peripherals: 5 kg. 150 devices × 5 kg = 0.75 tonnes per year."
+        },
+        "people-trained": {
+          "title": "People trained",
+          "description": "People we train each year in Open Source and sustainable IT",
+          "methodology": "Participants in workshops, internships and continuing-education programs per year."
+        },
+        "internship-success": {
+          "title": "Successful internships",
+          "description": "Of our interns find entry into IT or further training",
+          "methodology": "Estimated based on historical empirical values; not systematically tracked yet."
+        },
+        "career-reentries": {
+          "title": "Career re-entries",
+          "description": "Successful re-entries into working life through our program",
+          "methodology": "Estimated based on ~10 interns/year with restricted labor-market access and ~40% success rate."
+        }
       }
     },
     "press": {
@@ -3094,7 +3200,10 @@
       "back": "Back",
       "creating": "Creating...",
       "showPassword": "Show password",
-      "hidePassword": "Hide password"
+      "hidePassword": "Hide password",
+      "donateHardware": "Donate a device",
+      "donateHardwareDesc": "Give your old computer a second life",
+      "featuredBadge": "Our mission"
     },
     "logout": {
       "title": "Signing out...",
@@ -3141,7 +3250,9 @@
       "verifying": "Verifying...",
       "verify": "Verify",
       "successHeading": "Email verified!",
-      "successDesc": "Your account is now fully activated."
+      "successDesc": "Your account is now fully activated.",
+      "editEmail": "Change email",
+      "codeLabel": "6-digit verification code"
     },
     "error": {
       "heading": "Authentication error",
@@ -3189,7 +3300,9 @@
       "errorMismatch": "Passwords do not match",
       "errorResetFailed": "Password reset failed",
       "genericError": "An error occurred",
-      "title": "Reset password"
+      "title": "Reset password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "accountTitle": "Account",
     "accountDesc": "Log in to RevampIT to submit repair requests, trade on the marketplace, and join workshops."
@@ -4306,7 +4419,12 @@
       "noListingsDescription": "This seller currently has no active listings.",
       "loadingProfile": "Loading profile...",
       "sellerNotFound": "Seller not found",
-      "errorLoading": "Error loading profile"
+      "errorLoading": "Error loading profile",
+      "meta": {
+        "title": "{name} – seller on the RevampIT Marketplace",
+        "titleFallback": "Seller profile – RevampIT Marketplace",
+        "description": "{name} on the RevampIT Marketplace – {count} active listings. Buy used tech and contribute to the circular economy."
+      }
     }
   },
   "agb": {
@@ -5435,6 +5553,509 @@
           "volunteer_time": "Volunteer time"
         },
         "cancel": "Close"
+      },
+      "guides": {
+        "eyebrow": "GUIDES",
+        "title": "Model-specific guides",
+        "intro": "Step-by-step documentation for each monitor model — with photos, safety notes and wiring diagrams. We publish them here as soon as they're validated.",
+        "openCta": "Open guide",
+        "items": [
+          {
+            "slug": "lenovo-l2251pwd",
+            "model": "Lenovo L2251pwd",
+            "href": "/projects/upcycling/lenovo-l2251pwd",
+            "summary": "Turn a 22-inch monitor into a lamp — 5 steps, about 1 hour.",
+            "author": "Daniel",
+            "publishedAt": "2026-05-28"
+          }
+        ]
+      },
+      "nav": {
+        "brand": "MONITOR UPCYCLING",
+        "overview": "Overview",
+        "applications": "Use cases",
+        "gallery": "Gallery",
+        "buildYourOwn": "Build your own",
+        "status": "Status"
+      },
+      "explore": {
+        "eyebrow": "EXPLORE",
+        "title": "Three ways through the project",
+        "intro": "See where the lamps are used, which pieces have already been built — or make your own using our open guides.",
+        "cards": [
+          {
+            "key": "applications",
+            "title": "Use cases",
+            "description": "From functional work light to interior decor to art object. Three worlds, the same revived piece of hardware.",
+            "cta": "View use cases"
+          },
+          {
+            "key": "gallery",
+            "title": "Gallery",
+            "description": "Lamps already built across all monitor models and styles — filterable by setting.",
+            "cta": "Open gallery"
+          },
+          {
+            "key": "buildYourOwn",
+            "title": "Build your own",
+            "description": "Open hardware, MIT license: all guides, schematics, and materials to build your own — anywhere in the world.",
+            "cta": "Open guides"
+          }
+        ]
+      },
+      "applications": {
+        "meta": {
+          "title": "Use cases | Monitor upcycling | RevampIT",
+          "description": "From functional task lighting to living-room decor to art object: three worlds where upcycled monitor lamps find their place."
+        },
+        "eyebrow": "USE CASES · MONITOR UPCYCLING",
+        "title": "One lamp. Three worlds.",
+        "intro": "The same retired monitor becomes a discreet task light, a warm fixture in the living room — or an art object in a gallery. The choice is not the material, but the stage.",
+        "spectrum": {
+          "label": "Spectrum",
+          "functional": "Functional",
+          "art": "Art"
+        },
+        "tiers": {
+          "functional": {
+            "title": "Functional",
+            "description": "Sturdy task lighting for rooms where the light has to do the work, not show off. Low power draw, even surface brightness, wall or ceiling mount — like a new fixture, just from a second life.",
+            "imageCaption": "Functional · neutral",
+            "examples": [
+              "Offices & co-working spaces",
+              "Utility rooms & workshops",
+              "Underground garages & parking lots",
+              "Stairwells & corridors",
+              "Storage rooms & archives",
+              "Auxiliary rooms in properties"
+            ]
+          },
+          "decor": {
+            "title": "Decor",
+            "description": "Warm, indirect light for rooms with character. The former screen becomes a light surface — flat, quiet, with a story. Works against raw concrete walls just as well as wood and textile.",
+            "imageCaption": "Decor · warm",
+            "examples": [
+              "Living rooms & loft apartments",
+              "Cafés, bars & restaurants",
+              "Hotel lobbies & boutique spaces",
+              "Ateliers & studios",
+              "Concept stores",
+              "Practice & reception areas"
+            ]
+          },
+          "art": {
+            "title": "Art",
+            "description": "When the lamp itself becomes the statement. In galleries, installations and curated spaces, the origin of the material steps into the foreground — the display that once showed images becomes the image.",
+            "imageCaption": "Art · saturated",
+            "examples": [
+              "Galleries & exhibition spaces",
+              "Art-in-architecture installations",
+              "Pop-up spaces & vernissages",
+              "Theater & stage foyers",
+              "Museum shops & educational spaces",
+              "Light art projects"
+            ]
+          }
+        },
+        "cta": {
+          "title": "Got an idea where it should go?",
+          "body": "We install pilot lamps in buildings, cafés and exhibition spaces — or show you how to build one yourself.",
+          "primary": "Request a pilot installation",
+          "secondary": "Build your own"
+        }
+      },
+      "gallery": {
+        "meta": {
+          "title": "Gallery | Monitor upcycling | RevampIT",
+          "description": "Gallery of upcycled monitor lamps — from functional task lighting to art object. Filter by use case."
+        },
+        "eyebrow": "GALLERY · MONITOR UPCYCLING",
+        "title": "What's been built so far",
+        "intro": "Every piece is a revived monitor. Filter by use case — functional, decor or art — or browse everything at once.",
+        "filterLabel": "Filter:",
+        "filters": {
+          "all": "All",
+          "functional": "Functional",
+          "decor": "Decor",
+          "art": "Art"
+        },
+        "empty": "No pieces yet for this filter.",
+        "placeholderNote": "Preview images are generated — once the first pieces are photographed, we'll replace them with real shots."
+      },
+      "buildYourOwn": {
+        "meta": {
+          "title": "Build your own | Monitor upcycling | RevampIT",
+          "description": "Open-source hardware: every guide, schematic and bill of materials for building a monitor lamp yourself. MIT licensed, free to use worldwide."
+        },
+        "eyebrow": "BUILD YOUR OWN · MONITOR UPCYCLING",
+        "title": "Build your own piece",
+        "intro": "Open hardware, open guides. Every plan, schematic and bill of materials is freely available under the MIT license — so the same idea works anywhere in the world, without going through us.",
+        "philosophy": {
+          "title": "Why open?",
+          "body": "Our mission isn't to sell as many lamps as possible — it's to pull as many monitors as possible out of the scrap pile. That only works if every workshop, every group, and every curious person is free to replicate the build. We publish everything we learn.",
+          "pillars": [
+            {
+              "title": "Documentation",
+              "body": "Step-by-step guides for each model — photos, pin assignments, schematics, and safety notes. Tested in our workshop, free for yours."
+            },
+            {
+              "title": "Reproducible worldwide",
+              "body": "Bills of materials with standard components. What works in Zurich works in Berlin, Lagos, or São Paulo. No Revamp-IT-specific parts."
+            },
+            {
+              "title": "A tool, not a product",
+              "body": "We share what we've learned. Improvements, forks, and translations are welcome — a pull request rather than an email."
+            }
+          ]
+        },
+        "guides": {
+          "title": "Guides",
+          "intro": "Each guide covers a specific monitor model — from disassembly to finished lamp. New models follow on a rolling basis.",
+          "openCta": "Open guide",
+          "empty": "No guides published yet.",
+          "items": [
+            {
+              "slug": "lenovo-l2251pwd",
+              "model": "Lenovo L2251pwd",
+              "href": "/projects/upcycling/lenovo-l2251pwd",
+              "summary": "Turn a 22-inch monitor into a lamp. Remove the LCD, bridge the backlight, done.",
+              "difficulty": "Easy",
+              "duration": "≈ 1 h",
+              "author": "Daniel"
+            }
+          ]
+        },
+        "source": {
+          "title": "Source code & license",
+          "body": "This platform itself — including every guide, schematic and component — lives on GitHub. Fork, issue or pull request: all welcome.",
+          "repoCta": "View on GitHub",
+          "repoUrl": "https://github.com/g-but/revampit",
+          "licenseLabel": "MIT license · hardware compatible with CERN-OHL-S"
+        },
+        "contribute": {
+          "title": "Get involved",
+          "body": "There are more monitor models than we could ever document. Anyone who pitches in helps grow the library.",
+          "cta": "Get in touch",
+          "items": [
+            "Write a guide for a new model",
+            "Translate an existing guide",
+            "Provide photo documentation of a build",
+            "Schematic variant for a different backlight driver",
+            "Safety review or CE notes"
+          ]
+        }
+      },
+      "lenovo_l2251pwd": {
+        "meta": {
+          "title": "Lenovo L2251pwd — monitor to lamp | Monitor upcycling | RevampIT",
+          "description": "Step-by-step guide: disassemble a Lenovo L2251pwd monitor, remove the LCD, and bridge the electronics into a standalone lamp."
+        },
+        "back": "← Back to overview",
+        "eyebrow": "GUIDE · MONITOR UPCYCLING",
+        "title": "Lenovo L2251pwd",
+        "subtitle": "Turn a 22-inch monitor into a lamp",
+        "metaLine": "Model: Lenovo L2251pwd · Duration: about 1 hour · Difficulty: easy",
+        "credit": "Guide by Daniel, RevampIT · Published 28 May 2026 · Original wiki: monitor.revamp-it internal",
+        "safety": {
+          "title": "Safety first",
+          "body": "Never work on a live circuit. Take the necessary precautions before any functional test. If you're unsure: bring in an electronics colleague."
+        },
+        "tools": {
+          "title": "Tools & materials",
+          "items": [
+            "Plastic spudger for prying",
+            "Phillips screwdriver (PH1/PH2)",
+            "Small flat-head screwdriver",
+            "Two 1 kΩ resistors",
+            "Soldering iron + solder",
+            "Heat-shrink tubing or electrical tape"
+          ]
+        },
+        "schematic": {
+          "title": "Circuit principle",
+          "body": "Voltage divider: 5V (red) → 1 kΩ → backlight signal (yellow) → 1 kΩ → GND (black). The other pins (3.3V, additional signals) stay unconnected.",
+          "labels": {
+            "v5": "5V",
+            "signal": "Backlight signal",
+            "gnd": "GND",
+            "resistor": "1 kΩ"
+          }
+        },
+        "done": {
+          "title": "Done!",
+          "body": "The monitor is now a standalone lamp with a fixed backlight. Hang it, stand it, or build it into your furniture setup."
+        },
+        "feedback": {
+          "title": "Got a better idea? Let us know.",
+          "body": "This guide is open and improves with corrections. If you've found a better bridge circuit, a brightness control, or a nicer mount — we'd love your contribution.",
+          "cta": "Contribute"
+        },
+        "ui": {
+          "openPhoto": "Enlarge photo",
+          "closePhoto": "Close",
+          "playVideo": "Play video",
+          "pauseVideo": "Pause video",
+          "stepProgressLabel": "Step",
+          "stepProgressOf": "of",
+          "jumpToStep": "Jump to step",
+          "photoCountLabel": "Photo",
+          "photoCountOf": "of"
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Disassemble the monitor",
+            "intro": "The build takes only a few steps and is straightforward with a little patience."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 2",
+            "title": "Remove the LCD",
+            "intro": "Take out the black panel (LCD); the white panel (backlight) stays in — it becomes the light surface."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 3",
+            "title": "Bridge the electronics",
+            "intro": "At this point the device still works like a monitor with manual on/off. For lamp operation, we bridge the control electronics."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Unclip the bezel",
+            "body": "From the back, use plastic spudgers to 'unclip' the outer bezel. Work carefully along the edge so no clips break off.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-frame-removed.jpg",
+                "alt": "Lenovo L2251pwd with the outer bezel removed"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-bezel-clips.jpg",
+                "alt": "Close-up of the plastic clips on the monitor bezel"
+              }
+            ]
+          },
+          {
+            "n": 2,
+            "title": "Detach the electronics housing",
+            "body": "On the back, remove the 4 screws on the sides. The electronics housing can then be lifted off.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-open.jpg",
+                "alt": "Opened electronics housing on the back of the monitor"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-detached.jpg",
+                "alt": "Detached electronics housing with the board exposed"
+              }
+            ]
+          },
+          {
+            "n": 3,
+            "title": "Expose the LCD electronics",
+            "body": "On the metal housing: undo the screws holding the electronics. Carefully open the clips along the metal frame with a screwdriver. Fold the metal frame open. Underneath you'll see the LCD (black panel) and the backlight (white panel). The LCD is also secured with adhesive strips — they peel off easily.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Remove the LCD, close the frame back up",
+            "body": "Take off the black LCD panel. Reassemble the metal frame — the white backlight stays protected inside. From now on, that's your luminous surface.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-4-lcd-removed.jpg",
+                "alt": "Monitor without the LCD — only the white backlight remains visible"
+              }
+            ]
+          },
+          {
+            "n": 5,
+            "title": "Bridge the control electronics",
+            "body": "Technically the device is still a monitor at this point — it has to be turned on and off manually. For lamp operation, the control electronics are removed and a bridge is placed on the remaining connector. The bridge is a voltage divider between 5V (red), GND (black), and the backlight signal (yellow): two identical resistors (~1 kΩ) between red↔yellow and black↔yellow.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-control-board.jpg",
+                "alt": "Removed control electronics of the Lenovo monitor"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-soldered.jpg",
+                "alt": "Soldered bridge made of two 1 kΩ resistors"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-detail.jpg",
+                "alt": "Close-up of the voltage-divider bridge at the connector"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "meta": {
+          "title": "Status & Impact | Monitor Upcycling | RevampIT",
+          "description": "Where the monitor-upcycling project stands today: production progress, impact estimate (final figures via ZHAW life-cycle assessment), milestones and partner ecosystem."
+        },
+        "eyebrow": "STATUS · MONITOR UPCYCLING",
+        "title": "Where the project stands",
+        "intro": "An honest snapshot — what is already running, what has been measured and what comes next. Source: internal project records; final life-cycle assessment will follow with the ZHAW final report.",
+        "snapshot": {
+          "label": "Status",
+          "updatedLabel": "Updated"
+        },
+        "production": {
+          "title": "Production",
+          "intro": "The small-series production is running. For each model we create documented build guides that we publish in parallel with manufacturing.",
+          "lampsLabel": "Lamps built",
+          "lampsOf": "of",
+          "lampsTarget": "Target series",
+          "modelsLabel": "Models with build guide",
+          "pilotsLabel": "Active pilot locations",
+          "intakeLabel": "Monitors in processing"
+        },
+        "impact": {
+          "title": "Impact — estimate",
+          "intro": "These figures are internal estimates, based on production to date and on typical energy and material values per device. The definitive assessment will be produced by ZHAW in their final report (planned for Q3 2026).",
+          "disclaimer": "Estimate — verified figures will follow with the ZHAW LCA",
+          "cards": [
+            {
+              "key": "ewaste",
+              "label": "E-waste avoided",
+              "unit": "kg"
+            },
+            {
+              "key": "workshop",
+              "label": "Hours in workshops",
+              "unit": "h"
+            },
+            {
+              "key": "co2",
+              "label": "CO₂ savings (estimated)",
+              "unit": "kg"
+            },
+            {
+              "key": "reuse",
+              "label": "Reuse rate",
+              "unit": "%"
+            }
+          ]
+        },
+        "timeline": {
+          "title": "Milestones",
+          "intro": "Past, ongoing and planned work at a glance.",
+          "labels": {
+            "done": "Completed",
+            "active": "In progress",
+            "upcoming": "Planned"
+          },
+          "items": [
+            {
+              "key": "kickoff",
+              "date": "Oct 2025",
+              "label": "Project start & concept"
+            },
+            {
+              "key": "prototype",
+              "date": "Feb 2026",
+              "label": "First functional prototypes"
+            },
+            {
+              "key": "lca-start",
+              "date": "Apr 2026",
+              "label": "ZHAW life-cycle assessment begins"
+            },
+            {
+              "key": "series",
+              "date": "Jun 2026",
+              "label": "Small-series production running"
+            },
+            {
+              "key": "swico",
+              "date": "3 Jul 2026",
+              "label": "Swico Innovation Fund presentation"
+            },
+            {
+              "key": "lca-final",
+              "date": "Q3 2026",
+              "label": "LCA final report (ZHAW)"
+            },
+            {
+              "key": "scale",
+              "date": "2027",
+              "label": "Scaling phase II — model range & distribution"
+            }
+          ]
+        },
+        "partners": {
+          "title": "Partner ecosystem",
+          "intro": "The project only works as a network. Who plays which role:",
+          "groups": [
+            {
+              "key": "production",
+              "title": "Production & workshops",
+              "names": [
+                "Drahtzug",
+                "FARO",
+                "St. Jakob",
+                "Palme"
+              ]
+            },
+            {
+              "key": "pilots",
+              "title": "Pilot locations (properties)",
+              "names": [
+                "Livit",
+                "Wincasa",
+                "Allreal",
+                "ISS"
+              ]
+            },
+            {
+              "key": "material",
+              "title": "Material source",
+              "names": [
+                "ERZ Zürich"
+              ]
+            },
+            {
+              "key": "science",
+              "title": "Scientific support",
+              "names": [
+                "ZHAW (life-cycle assessment & cost-benefit analysis)"
+              ]
+            },
+            {
+              "key": "funding",
+              "title": "Funding",
+              "names": [
+                "Swico Innovation Fund"
+              ]
+            }
+          ]
+        },
+        "calls": {
+          "title": "How you can contribute",
+          "intro": "Three concrete ways to take the project into its next phase.",
+          "actions": [
+            {
+              "key": "fund",
+              "title": "Become a co-funder",
+              "description": "We are looking for foundations and companies to support the 2027 scaling window — from small series to a generally available product.",
+              "cta": "Request a funding conversation"
+            },
+            {
+              "key": "pilot",
+              "title": "Become a pilot location",
+              "description": "Property, café, studio or exhibition space? We install a pilot lamp and document its everyday use together with you.",
+              "cta": "Request a pilot"
+            },
+            {
+              "key": "donate",
+              "title": "Monitors into the loop",
+              "description": "Replacing IT equipment at your organisation? We collect the old screens, document the material flow and integrate them into the small series.",
+              "cta": "Report material"
+            }
+          ]
+        }
       }
     }
   },
@@ -6310,7 +6931,8 @@
       "actionDuplicate": "Duplicate",
       "actionDelete": "Delete",
       "confirmDelete": "Do you really want to delete this listing?",
-      "loadError": "Error loading"
+      "loadError": "Error loading",
+      "paginationCurrentPage": "Page {page}"
     },
     "reviews": {
       "statusPublished": "Published",
@@ -6876,7 +7498,8 @@
       "logout": "Sign out",
       "accountMenu": "Account menu",
       "profilePicture": "Profile picture",
-      "user": "User"
+      "user": "User",
+      "invite": "Invite friends"
     },
     "workshopInstanceCard": {
       "spotsAvailable": "{count, plural, one {# spot available} other {# spots available}}",
@@ -6945,7 +7568,25 @@
       "whyRepairTitle": "Why repair first?",
       "whyRepairText": "Manufacturing a new laptop produces on average 331 kg of CO₂. A repair produces only about 15 kg – a saving of over 95%.",
       "whyRepairConclusion": "The most sustainable option is always repair",
-      "priority": "Priority {priority}"
+      "priority": "Priority {priority}",
+      "principles": {
+        "repair": {
+          "title": "Repair",
+          "description": "Defective devices are repaired and returned to the original owner. This is the most sustainable option."
+        },
+        "refurbish": {
+          "title": "Refurbish",
+          "description": "Donated devices are professionally refurbished, equipped with Linux and passed on to new users."
+        },
+        "recycle": {
+          "title": "Recycle",
+          "description": "Devices that can no longer be used are dismantled properly. Valuable raw materials are returned to the cycle."
+        },
+        "educate": {
+          "title": "Educate",
+          "description": "Through workshops and education we empower people to use their devices longer and consume more consciously."
+        }
+      }
     },
     "voice": {
       "stateIdle": "Dictate",
@@ -7109,7 +7750,35 @@
       "heading": "The E-Waste Crisis",
       "intro": "Electronic waste is the world's fastest-growing waste stream. The figures show the scale of the problem — and why urgent action is needed.",
       "keyMessage": "Less than a quarter of all electronic devices are correctly recycled.",
-      "consequence": "The rest ends up in landfills, is illegally exported or improperly processed — with devastating consequences for people and the environment."
+      "consequence": "The rest ends up in landfills, is illegally exported or improperly processed — with devastating consequences for people and the environment.",
+      "units": {
+        "millionTonnes": "million tonnes",
+        "percent": "%",
+        "kgPerPerson": "kg per person",
+        "kgCo2": "kg CO₂"
+      },
+      "stats": {
+        "global-total": {
+          "label": "Global e-waste",
+          "description": "E-waste produced worldwide each year",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "recycling-rate": {
+          "label": "Recycling rate",
+          "description": "Share of e-waste that is correctly recycled",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "europe-per-capita": {
+          "label": "E-waste per capita (Europe)",
+          "description": "Annual e-waste per person in Europe",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "laptop-co2": {
+          "label": "CO₂ per laptop (Circular Computing)",
+          "description": "Average CO₂ footprint of producing a new laptop",
+          "source": "Circular Computing (study with 230 laptops)"
+        }
+      }
     },
     "communitySpace": {
       "badge": "Our Location",
@@ -7121,7 +7790,36 @@
       "workshopLink": "Workshop programme",
       "visionLabel": "Our Vision",
       "visionCta": "Help us make this vision a reality.",
-      "supportProject": "Support the project"
+      "supportProject": "Support the project",
+      "locationName": "RevampIT Shop",
+      "offerings": [
+        "Buy refurbished hardware",
+        "Visit our vintage computer collection",
+        "Get personal advice",
+        "Drop off devices for repair or donation"
+      ],
+      "workshops": {
+        "title": "Workshops & Talks",
+        "topics": [
+          "Linux basics for beginners",
+          "Open-Source software in everyday life",
+          "Sustainable AI and its limits",
+          "Alternative techno-economic models",
+          "Repair workshops: laptop, smartphone, etc.",
+          "History of computer evolution"
+        ]
+      },
+      "vision": {
+        "title": "Community Tech Space",
+        "description": "Our dream is a larger space serving as a museum, workshop, and meeting point for the sustainable tech community.",
+        "features": [
+          "Museum for rare vintage hardware",
+          "Collection of historic synthesizers and electronic instruments",
+          "Open workshop for repair sessions",
+          "Event space for talks and meetups",
+          "Café area for community exchange"
+        ]
+      }
     },
     "messageSidebar": {
       "title": "Messages",
@@ -7253,5 +7951,190 @@
     "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development.",
     "layoutTitle": "Our Projects",
     "templateSuffix": "Projects"
+  },
+  "admin": {
+    "approvals": {
+      "approve": "Approve",
+      "release": "Release",
+      "accept": "Accept"
+    },
+    "hirn": {
+      "assistantSubtitle": "Assistant",
+      "openFullscreen": "Open fullscreen"
+    },
+    "team": {
+      "backToTeam": "Back to team",
+      "edit": "Edit",
+      "inactive": "Inactive",
+      "since": "Since",
+      "activities": "Activities",
+      "viewTeamActivities": "View team activities",
+      "activitiesDescription": "Completed tasks, milestones and help requests",
+      "skillsAndInterests": "Skills & interests",
+      "skills": "Skills",
+      "noSkills": "No skills recorded",
+      "interests": "Interests",
+      "development": "Development",
+      "goals": "Goals",
+      "strengths": "Strengths",
+      "developmentAreas": "Development areas",
+      "noDevelopmentData": "No development data recorded",
+      "availability": "Availability",
+      "workingHours": "Working hours",
+      "contractHours": "Contract hours",
+      "hoursPerWeek": "Hours/week",
+      "generalAvailability": "General availability",
+      "preferredContact": "Preferred contact method",
+      "emergencyContact": "Emergency contact",
+      "hrNotes": "HR notes (confidential)",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
+    "protocols": {
+      "queueTitle": "AI review queue",
+      "queueDescription": "Review AI output, turn it into tasks and decisions, then close it out.",
+      "newProtocol": "New protocol",
+      "noPendingReviews": "No protocols are waiting for review.",
+      "noPendingDescription": "New transcripts or notes will show up here as soon as the AI has structured them.",
+      "recognizedActions": "actions detected",
+      "notInTaskSystem": "not yet in the task system",
+      "readyToClose": "ready to close",
+      "open": "open",
+      "by": "by",
+      "openReview": "Open review",
+      "record": {
+        "start": "Record",
+        "stop": "Stop",
+        "stopAriaLabel": "Stop recording",
+        "consentRequired": "Please confirm consent first",
+        "errorPermission": "Microphone access denied. Allow access in your browser settings, or upload a file instead."
+      },
+      "consent": {
+        "label": "Everyone present has consented to the recording.",
+        "remember": "Remember this confirmation (this browser only)"
+      },
+      "alternatives": {
+        "title": "Something not working? Other ways",
+        "subtitle": "We recommend open-source tools. They all run locally or self-hosted — your session data never leaves your machine.",
+        "recordHeading": "Record it yourself",
+        "recordIntro": "If in-browser recording isn't working:",
+        "transcribeHeading": "Transcribe it yourself",
+        "transcribeIntro": "If our transcription service is currently unavailable:",
+        "structureHeading": "Structure it yourself",
+        "structureIntro": "If the AI here isn't responding — hand this prompt to a local model (Ollama, llama.cpp) or a chatbot of your choice:",
+        "copyPrompt": "Copy prompt",
+        "copied": "Copied",
+        "promptTemplate": "You are a meeting structurer. Read the following meeting transcript and return the result as JSON with the keys:\n  - participants: list of participant names\n  - topics: list of discussion points (short)\n  - decisions: list of decisions made\n  - tasks: list of { description, assignee, dueDate }\n  - openQuestions: list of open questions\n\nTranscript:\n---"
+      }
+    },
+    "categories": {
+      "titleNew": "New category",
+      "titleEdit": "Edit category",
+      "subtitleNew": "Create a new blog category",
+      "subtitleEdit": "Update category details",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "save": "Save",
+      "saving": "Saving...",
+      "preview": "Preview",
+      "defaultName": "Category name",
+      "deleteDialog": {
+        "title": "Delete category",
+        "message": "Really delete this category?"
+      }
+    },
+    "dashboard": {
+      "myTasks": "My tasks",
+      "assignedTasks": "Assigned tasks",
+      "viewAllTasks": "View all tasks",
+      "submittedContent": "Submitted content",
+      "awaitingApproval": "awaiting approval",
+      "viewAllSubmissions": "View all submissions",
+      "contentTypeLabels": {
+        "blogPost": "Blog post",
+        "workshop": "Workshop",
+        "service": "Service",
+        "other": "Submission"
+      }
+    },
+    "projects": {
+      "sidebar": "Public projects",
+      "pageTitle": "Public projects",
+      "pageDescription": "Manage the resource needs of publicly visible projects and triage incoming contributions.",
+      "detailDescription": "Needs and incoming contributions",
+      "detailTitle": "Project: {slug}",
+      "publicPageLink": "Public page",
+      "fallbackTaskProjectLabel": "Task project",
+      "stats": {
+        "total": "Total projects",
+        "active": "Active",
+        "openNeeds": "Open needs",
+        "newContributions": "New contributions"
+      },
+      "empty": {
+        "title": "No public projects yet",
+        "description": "Projects are created via migration (slug must match the i18n project page)."
+      },
+      "card": {
+        "inactive": "Inactive",
+        "openNeeds": "Open needs",
+        "newContributions": "New contributions"
+      },
+      "needs": {
+        "title": "Needs",
+        "subtitle": "What the project needs right now. Publicly visible once status = \"Open\".",
+        "new": "New need",
+        "addCancel": "Cancel",
+        "addSubmit": "Add",
+        "placeholderTitle": "Title",
+        "placeholderDescription": "Description",
+        "placeholderQuantity": "Target quantity (optional)",
+        "placeholderUnit": "Unit (e.g. monitor, CHF)",
+        "placeholderQuantityShort": "Quantity",
+        "placeholderUnitShort": "Unit",
+        "confirmDelete": "Really delete this need?",
+        "errorSave": "Save failed",
+        "errorDelete": "Delete failed",
+        "errorCreate": "Create failed",
+        "tooltipSave": "Save",
+        "tooltipDelete": "Delete",
+        "empty": "No needs defined yet.",
+        "fieldType": "Type",
+        "fieldTitle": "Title",
+        "fieldStatus": "Status"
+      },
+      "contributions": {
+        "title": "Incoming contributions",
+        "subtitle": "Inbox for offers from the public project page.",
+        "filterAll": "All",
+        "emptyAll": "No contributions.",
+        "emptyFiltered": "No contributions with status \"{status}\".",
+        "needFallback": "General",
+        "needLabel": "Need",
+        "notesPlaceholder": "Internal notes (not visible to the sender)",
+        "lastEdited": "Last edited by {name} on {date}",
+        "tooltipSave": "Save",
+        "errorSave": "Save failed"
+      },
+      "typeLabels": {
+        "expertise": "Expertise",
+        "hardware": "Hardware",
+        "partner_intro": "Partner introduction",
+        "funding": "Funding",
+        "volunteer_time": "Volunteer time"
+      },
+      "needStatusLabels": {
+        "open": "Open",
+        "matched": "Matched",
+        "fulfilled": "Fulfilled",
+        "archived": "Archived"
+      },
+      "contributionStatusLabels": {
+        "new": "New",
+        "contacted": "Contacted",
+        "accepted": "Accepted",
+        "declined": "Declined"
+      }
+    }
   }
 }

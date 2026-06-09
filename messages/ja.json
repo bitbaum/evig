@@ -268,7 +268,7 @@
       "subtitle": "アカウントにサインインしてください",
       "emailVerifiedSuccess": "メールアドレスが正常に確認されました！ログインできます。",
       "passwordResetSuccess": "パスワードが正常に変更されました！新しいパスワードでログインできます。",
-      "emailPlaceholder": "name@example.com",
+      "emailPlaceholder": "name@example.ch",
       "showPassword": "パスワードを表示",
       "hidePassword": "パスワードを非表示",
       "signingIn": "ログイン中...",
@@ -287,8 +287,8 @@
       "errorVerificationFailed": "メール確認に失敗しました。リンクが期限切れの可能性があります。",
       "errorVerificationError": "メール確認中にエラーが発生しました",
       "errorConnection": "接続の問題が発生しました。1分後にもう一度お試しください。",
-      "backHome": "Back to home",
-      "pageTitle": "Sign in | RevampIT"
+      "backHome": "ホームに戻る",
+      "pageTitle": "ログイン | RevampIT"
     },
     "register": {
       "title": "新規登録",
@@ -321,7 +321,7 @@
       "nameLabel": "名前",
       "nameOptional": "（任意）",
       "namePlaceholder": "あなたの名前",
-      "emailPlaceholder": "name@example.com",
+      "emailPlaceholder": "name@example.ch",
       "passwordPlaceholder": "8文字以上",
       "passwordMin": "8文字以上",
       "confirmPasswordPlaceholder": "パスワードを再入力",
@@ -333,39 +333,42 @@
       "back": "戻る",
       "creating": "作成中...",
       "showPassword": "パスワードを表示",
-      "hidePassword": "パスワードを非表示"
+      "hidePassword": "パスワードを非表示",
+      "donateHardware": "機器を寄付する",
+      "donateHardwareDesc": "古いコンピュータに第二の人生を",
+      "featuredBadge": "私たちのミッション"
     },
     "logout": {
       "title": "ログアウト中...",
-      "wait": "Please wait a moment.",
+      "wait": "少々お待ちください。",
       "failed": "ログアウトに失敗しました",
-      "retry": "Try again",
-      "backToDashboard": "Back to Dashboard",
-      "pageTitle": "Sign out | RevampIT",
-      "heading": "Signing out...",
-      "errorHeading": "Sign-out failed",
-      "errorMessage": "Sign-out failed. Please try again."
+      "retry": "もう一度ログアウト",
+      "backToDashboard": "ダッシュボードに戻る",
+      "pageTitle": "ログアウト | RevampIT",
+      "heading": "ログアウト中...",
+      "errorHeading": "ログアウトに失敗しました",
+      "errorMessage": "ログアウトに失敗しました。もう一度お試しください。"
     },
     "forgotPassword": {
       "title": "パスワードのリセット",
       "description": "メールアドレスを入力してください。リセット用のリンクをお送りします。",
       "email": "メールアドレス",
-      "submit": "Send password reset",
-      "backToLogin": "Back to login",
-      "heading": "Reset password",
-      "subheading": "Enter your email address and we will send you a link to reset your password.",
-      "emailLabel": "Email address",
-      "emailPlaceholder": "your@email.com",
-      "submitLoading": "Sending email...",
-      "rememberPassword": "Remember your password?",
-      "loginLink": "Login now",
-      "successHeading": "Email sent!",
-      "successSubheading": "We sent you an email with instructions to reset your password.",
-      "successInstructions": "Check your inbox and follow the instructions. If you did not receive an email, check your spam folder.",
-      "successLoginLink": "Go to login",
-      "successOtherEmail": "Use a different email address",
-      "genericError": "An error occurred",
-      "resetFailed": "Password reset failed"
+      "submit": "パスワードリセットを送信",
+      "backToLogin": "ログインに戻る",
+      "heading": "パスワードをリセット",
+      "subheading": "メールアドレスを入力してください。パスワードをリセットするリンクをお送りします。",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "your@email.ch",
+      "submitLoading": "メールを送信しています...",
+      "rememberPassword": "パスワードを思い出しましたか?",
+      "loginLink": "今すぐログイン",
+      "successHeading": "メールを送信しました!",
+      "successSubheading": "パスワードをリセットする手順を記載したメールをお送りしました。",
+      "successInstructions": "受信トレイを確認し、手順に従ってください。メールが届かない場合は、スパムフォルダもご確認ください。",
+      "successLoginLink": "ログインへ",
+      "successOtherEmail": "別のメールアドレスを使用",
+      "genericError": "エラーが発生しました",
+      "resetFailed": "パスワードリセットに失敗しました"
     },
     "verify": {
       "heading": "メールを確認してください",
@@ -380,55 +383,59 @@
       "verifying": "確認中...",
       "verify": "確認する",
       "successHeading": "メールが確認されました！",
-      "successDesc": "アカウントが完全に有効化されました。"
+      "successDesc": "アカウントが完全に有効化されました。",
+      "editEmail": "メールアドレスを変更",
+      "codeLabel": "6 桁の確認コード"
     },
     "error": {
-      "heading": "Authentication error",
-      "message": "An error occurred while signing in. Please try again.",
-      "retry": "Try again",
-      "goToLogin": "Go to sign in"
+      "heading": "認証エラー",
+      "message": "ログイン中にエラーが発生しました。もう一度お試しください。",
+      "retry": "もう一度試す",
+      "goToLogin": "ログインページへ"
     },
     "verifyEmail": {
-      "heading": "Confirm email address",
-      "subheading": "We are confirming your email address...",
-      "loading": "Confirming email address...",
-      "successHeading": "Email address confirmed!",
-      "successRedirect": "You will be redirected to login in a few seconds...",
-      "successLogin": "Login now →",
-      "errorHeading": "Verification failed",
-      "errorLogin": "Go to login",
-      "errorRetry": "Try again",
-      "noToken": "Invalid verification link. Token missing.",
-      "networkError": "Network error. Please try again later.",
-      "genericError": "Verification failed",
+      "heading": "メールアドレスを確認",
+      "subheading": "メールアドレスを確認しています...",
+      "loading": "メールアドレスを確認中...",
+      "successHeading": "メールアドレスが確認されました!",
+      "successRedirect": "数秒後にログインページへリダイレクトされます...",
+      "successLogin": "今すぐログイン →",
+      "errorHeading": "確認に失敗しました",
+      "errorLogin": "ログインへ",
+      "errorRetry": "もう一度試す",
+      "noToken": "無効な確認リンクです。トークンがありません。",
+      "networkError": "ネットワークエラーが発生しました。しばらくしてからもう一度お試しください。",
+      "genericError": "確認に失敗しました",
       "title": "メールを確認"
     },
     "resetPassword": {
-      "heading": "Set new password",
-      "subheading": "Enter your new password.",
-      "newPasswordLabel": "New password",
-      "newPasswordPlaceholder": "At least 8 characters",
-      "confirmPasswordLabel": "Confirm password",
-      "confirmPasswordPlaceholder": "Repeat password",
-      "requirementsTitle": "Password requirements:",
-      "requirementLength": "At least 8 characters",
-      "requirementMatch": "Passwords match",
-      "submitLoading": "Changing password...",
-      "submit": "Change password",
-      "invalidLink": "Invalid link",
-      "invalidLinkDesc": "This password reset link is invalid or has expired.",
-      "requestNewLink": "Request new reset link",
-      "backToLogin": "Back to login",
-      "successHeading": "Password changed!",
-      "successDesc": "Your password has been changed. You can now log in with your new password.",
-      "successRedirect": "You will be redirected to login in a few seconds...",
-      "loginNow": "Login now",
-      "errorInvalidToken": "Invalid reset link",
-      "errorTooShort": "Password must be at least 8 characters",
-      "errorMismatch": "Passwords do not match",
-      "errorResetFailed": "Password reset failed",
-      "genericError": "An error occurred",
-      "title": "パスワードをリセット"
+      "heading": "新しいパスワードを設定",
+      "subheading": "新しいパスワードを入力してください。",
+      "newPasswordLabel": "新しいパスワード",
+      "newPasswordPlaceholder": "8文字以上",
+      "confirmPasswordLabel": "パスワードを確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力",
+      "requirementsTitle": "パスワードの要件:",
+      "requirementLength": "8文字以上",
+      "requirementMatch": "パスワードが一致しています",
+      "submitLoading": "パスワードを変更しています...",
+      "submit": "パスワードを変更",
+      "invalidLink": "無効なリンク",
+      "invalidLinkDesc": "このパスワードリセットリンクは無効か、有効期限が切れています。",
+      "requestNewLink": "新しいリセットリンクをリクエスト",
+      "backToLogin": "ログインに戻る",
+      "successHeading": "パスワードを変更しました!",
+      "successDesc": "パスワードが正常に変更されました。新しいパスワードでログインできます。",
+      "successRedirect": "数秒後にログインページへリダイレクトされます...",
+      "loginNow": "今すぐログイン",
+      "errorInvalidToken": "無効なリセットリンク",
+      "errorTooShort": "パスワードは8文字以上で入力してください",
+      "errorMismatch": "パスワードが一致しません",
+      "errorResetFailed": "パスワードリセットに失敗しました",
+      "genericError": "エラーが発生しました",
+      "title": "パスワードをリセット",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示"
     },
     "accountTitle": "アカウント",
     "accountDesc": "RevampITにログインして、修理リクエストを送信し、マーケットプレイスで取引し、ワークショップに参加しましょう。"
@@ -559,7 +566,9 @@
       ],
       "downloadText": "登録済みユーザーはいつでも以下からデータの完全なコピーをダウンロードできます",
       "settingsLinkLabel": "設定 → プライバシー",
-      "contactText": "その他のご要望については、こちらにお問い合わせください："
+      "contactText": "その他のご要望については、こちらにお問い合わせください：",
+      "exportText": "ログイン済みのユーザーは、いつでも自分のデータの完全なコピーを次の場所からダウンロードできます",
+      "exportLink": "設定 → プライバシー"
     },
     "section8": {
       "title": "8. 保存期間",
@@ -618,16 +627,36 @@
     },
     "mission": {
       "title": "私たちのミッション",
-      "body": "{legalForm}（{foundingYear}年設立）として、中古ハードウェアに第二の命を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自律的にテクノロジーの使い方を学べるよう取り組んでいます。"
+      "body": "{legalForm}（{foundingYear}年設立）として、中古ハードウェアに第二の命を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自律的にテクノロジーの使い方を学べるよう取り組んでいます。",
+      "text": "{description} {legalForm}({foundingYear} 年設立)として、中古ハードウェアに第二の人生を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自主的にテクノロジーの使い方を学べる環境づくりに取り組んでいます。"
     },
     "stats": {
       "title": "数字と事実",
-      "moreLink": "詳細な影響データを見る"
+      "moreLink": "詳細な影響データを見る",
+      "detailLink": "詳細な活動成果を見る"
     },
     "howWeWork": {
       "title": "活動方法",
       "subtitle": "3つのコミュニティプラットフォームが人々とテクノロジーをつなぎます。",
-      "platformCta": "プラットフォームへ"
+      "platformCta": "プラットフォームへ",
+      "toPlatform": "プラットフォームへ",
+      "platforms": [
+        {
+          "title": "マーケットプレイス",
+          "description": "中古 IT 機器のためのコミュニティプラットフォームです。ユーザーは手数料なしで出品、購入、販売ができます。",
+          "href": "/marketplace"
+        },
+        {
+          "title": "IT サポート",
+          "description": "コンピュータ修理のためのボランティア技術者を仲介します。地域に根ざした、人と人とのシンプルなサポートです。",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "ワークショップ",
+          "description": "Linux、ハードウェア、プログラミング、AI に関する講座です。チューリッヒの現地で、知識を分かち合い、互いに学び合います。",
+          "href": "/workshops"
+        }
+      ]
     },
     "platforms": [
       {
@@ -649,13 +678,17 @@
     "finances": {
       "title": "財務",
       "body": "非営利団体として、財務情報を公開しています。年次報告書は総会で発表され、会員が閲覧できます。",
-      "memberLink": "会員になって詳細を確認する"
+      "memberLink": "会員になって詳細を確認する",
+      "text": "非営利団体として、財務情報を公開しています。年次報告書は総会で発表され、メンバーが閲覧できます。"
     },
     "board": {
       "title": "理事会",
       "body": "{orgName}はボランティアの理事会によって運営されています。連絡先：",
       "joinBtn": "会員になる",
-      "donateBtn": "寄付する"
+      "donateBtn": "寄付する",
+      "text": "{orgName} はボランティアの理事会によって運営されています。お問い合わせ:",
+      "joinCta": "メンバーになる",
+      "donateCta": "寄付する"
     },
     "compactMetrics": {
       "devicesRescued": "年間救出デバイス数",
@@ -851,6 +884,61 @@
         "description": "あなたの支援が違いを生みます。大きな貢献でも小さな貢献でも、スイスのIT状況をより持続可能にし、人々に新しいチャンスを与えるために役立ちます。",
         "donate": "今すぐ寄付する",
         "contact": "お問い合わせ"
+      },
+      "categories": {
+        "environmental": "環境",
+        "social": "社会",
+        "economic": "経済"
+      },
+      "units": {
+        "tonnes": "トン"
+      },
+      "eyebrows": {
+        "impact": "インパクト",
+        "annual": "年次報告",
+        "register": "登録簿"
+      },
+      "metrics": {
+        "devices-recycled": {
+          "title": "年間で救った機器の数",
+          "description": "年間で廃棄から救った IT 機器の数（販売済み）",
+          "methodology": "売上 ÷ 平均価格による保守的な推定値。体系的なトラッキングを整備中です。"
+        },
+        "device-lifespan": {
+          "title": "寿命の延長",
+          "description": "機器ごとの平均的な寿命延長（年）",
+          "methodology": "20 年以上のリファービッシュ経験による経験値。Linux は古いハードウェアの寿命を大幅に延ばします。"
+        },
+        "reuse-rate": {
+          "title": "再利用率",
+          "description": "寄付された機器のうち、再利用に成功した割合",
+          "methodology": "寄付されたすべての機器のうち、約 75% を修理・再利用しています。残りの 25% は適切にリサイクルされます。"
+        },
+        "co2-savings": {
+          "title": "年間 CO₂ 削減量",
+          "description": "新規製造ではなく再利用によって削減した年間 CO₂ の推定値",
+          "methodology": "新品ラップトップ製造: 350 kg CO₂（Fraunhofer IZM 2023）。リファービッシュ: 65 kg CO₂。1 台あたり削減量: 285 kg。年間 150 台で約 43 トン。"
+        },
+        "ewaste-prevented": {
+          "title": "回避した電子廃棄物",
+          "description": "年間で発生を防いだ電子廃棄物の量",
+          "methodology": "周辺機器込みで 1 台あたり平均 5 kg。150 台 × 5 kg = 年 0.75 トン。"
+        },
+        "people-trained": {
+          "title": "研修受講者数",
+          "description": "オープンソースと持続可能な IT について年間で研修した人数",
+          "methodology": "年間のワークショップ・インターン・継続教育プログラム参加者数。"
+        },
+        "internship-success": {
+          "title": "インターンの成功率",
+          "description": "インターン生のうち、IT 業界への就職または更なる学習に進む割合",
+          "methodology": "過去の経験値からの推定。まだ体系的には測定されていません。"
+        },
+        "career-reentries": {
+          "title": "職業復帰者数",
+          "description": "プログラムを通じて職業生活に復帰した人数",
+          "methodology": "労働市場へのアクセスが制限された年間約 10 名のインターンと約 40% の成功率からの推定。"
+        }
       }
     },
     "press": {
@@ -922,7 +1010,12 @@
         "point2": "すべてのデータはKivitendo会計システムから取得し、フラン単位で正確です。",
         "point3": "2015〜2021年は年次集計、2022年以降は月次データが利用可能です。"
       }
-    }
+    },
+    "title": "私たちについて",
+    "team": "チーム",
+    "history": "沿革",
+    "values": "私たちの価値観",
+    "join": "参加する"
   },
   "blog": {
     "meta": {
@@ -1489,10 +1582,10 @@
       "title": "技術専門家",
       "description": "専門知識を共有し、持続可能なテクノロジーのための革新的なソリューション開発を支援する。",
       "ctaText": "関心を表明する",
-      "benefitsHeading": "Opportunities for technical experts",
+      "benefitsHeading": "技術専門家への機会",
       "overview": {
-        "title": "Join our technical team",
-        "content": "We are always looking for technical experts who share our passion for sustainable technology and open-source solutions."
+        "title": "技術チームに参加する",
+        "content": "持続可能なテクノロジーとオープンソースソリューションへの情熱を共有してくれる技術専門家を常に募集しています。"
       },
       "benefits": [
         {
@@ -1553,7 +1646,7 @@
         }
       ],
       "howToStart": {
-        "title": "How to get started",
+        "title": "始め方",
         "steps": [
           "Contact us with your area of expertise and interests",
           "Discuss possible projects and contributions",
@@ -1578,10 +1671,10 @@
       "title": "インターンシップの機会",
       "description": "テクノロジーと持続可能性で価値ある経験を積み、本当の変化を生み出す。",
       "ctaText": "関心を表明する",
-      "benefitsHeading": "Program benefits",
+      "benefitsHeading": "プログラムの特典",
       "overview": {
-        "title": "About our internship program",
-        "content": "Our internship program offers a unique opportunity to gain hands-on experience in sustainable technology while contributing to meaningful projects."
+        "title": "インターンシッププログラムについて",
+        "content": "私たちのインターンシッププログラムは、持続可能なテクノロジーに関する実践的な経験を積みながら、意義あるプロジェクトに貢献できるユニークな機会を提供します。"
       },
       "benefits": [
         {
@@ -1641,7 +1734,7 @@
         }
       ],
       "howToStart": {
-        "title": "How to apply",
+        "title": "応募方法",
         "steps": [
           "Send us your CV and a cover letter",
           "State your area of interest and availability",
@@ -1664,12 +1757,12 @@
         "description": "持続可能なテクノロジーソリューションを作り、継続的な影響を達成するために協力しましょう。"
       },
       "title": "パートナーシップの機会",
-      "description": "Join with us to create sustainable technology solutions and achieve lasting impact.",
+      "description": "私たちと協力して、持続可能なテクノロジーソリューションを生み出し、長期的なインパクトを実現しましょう。",
       "ctaText": "関心を表明する",
-      "benefitsHeading": "Partnership benefits",
+      "benefitsHeading": "パートナーシップの利点",
       "overview": {
-        "title": "Why collaborate with us?",
-        "content": "At Revamp-IT we believe in the power of collaboration to create meaningful change. Our partnerships combine expertise, resources and shared values."
+        "title": "なぜ私たちと協力するのか?",
+        "content": "Revamp-IT では、協力こそが意義ある変化を生む力だと信じています。私たちのパートナーシップは、専門性、リソース、共通の価値観を組み合わせます。"
       },
       "benefits": [
         {
@@ -1718,7 +1811,7 @@
         }
       ],
       "partnershipProcess": {
-        "title": "How we collaborate",
+        "title": "協力の進め方",
         "steps": [
           "Initial consultation to understand goals and opportunities",
           "Development of partnership framework and objectives",
@@ -1728,7 +1821,7 @@
         ]
       },
       "howToStart": {
-        "title": "How to get started",
+        "title": "始め方",
         "steps": [
           "Contact us to discuss partnership opportunities",
           "Share your organization's goals and interests",
@@ -1763,10 +1856,10 @@
       "title": "職場復帰プログラム",
       "description": "テクノロジーと持続可能性でキャリアを再建するための支援プログラムに参加する。",
       "ctaText": "関心を表明する",
-      "benefitsHeading": "Program benefits",
+      "benefitsHeading": "プログラムの特典",
       "overview": {
-        "title": "About our program",
-        "content": "Our work reintegration program is designed to help people rebuild their careers in a supportive and understanding environment."
+        "title": "プログラムについて",
+        "content": "私たちの就労再統合プログラムは、支援的な環境の中で人々がキャリアを再構築できるよう支援することを目的としています。"
       },
       "benefits": [
         {
@@ -1829,7 +1922,7 @@
         }
       ],
       "howToStart": {
-        "title": "How to get started",
+        "title": "始め方",
         "steps": [
           "Contact us to discuss your situation",
           "Meet with our team for an assessment",
@@ -1854,10 +1947,10 @@
       "title": "ITヘルプ技術者になる",
       "description": "あなたのIT知識は他の人の生活を楽にできます。コミュニティの人々のコンピュータを手伝いましょう — 柔軟に、シンプルに、効果的に。",
       "ctaText": "技術者として登録する",
-      "benefitsHeading": "What's in it for you",
+      "benefitsHeading": "あなたへのメリット",
       "overview": {
-        "title": "What IT Help means",
-        "content": "Many people — elderly, refugees, those with little experience — struggle with their computer daily. You have the knowledge to help."
+        "title": "IT-Hilfe とは",
+        "content": "多くの人々 — 高齢者、難民、経験の少ない方々 — が日々コンピュータと格闘しています。あなたには、彼らを助ける知識があります。"
       },
       "benefits": [
         {
@@ -1905,7 +1998,7 @@
         }
       ],
       "howToStart": {
-        "title": "How to get started",
+        "title": "始め方",
         "steps": [
           "Create your technician profile with your skills and availability",
           "Wait for requests — you decide which ones to accept",
@@ -2042,12 +2135,12 @@
       "description": "中古ITを購入・販売。コミュニティによるパソコン修理。Linux、ハードウェア、プログラミングのワークショップ。"
     },
     "hero": {
-      "title": "古いハードウェア。新しい命。",
+      "title": "古いハードウェア。",
       "subtitle": "毎年6200万トンの電子機器がゴミになります。私たちはそれを変えます — 修理し、受け渡し、互いに学ぶコミュニティとともに。",
       "ctaDiscover": "今すぐ見る",
       "ctaAbout": "私たちについて",
       "positioning": "2003年からのスイスの循環型経済非営利団体",
-      "titleSecondary": "新しい命を。",
+      "titleSecondary": "新しい命。",
       "lede": "中古のコンピュータを修理し、必要としている人々のもとへ届けます。",
       "sublede": "2003年から続くスイスの非営利団体 — 修理し、譲り渡し、互いに学ぶコミュニティに支えられています。",
       "ctaDonate": "デバイスを寄付"
@@ -2689,7 +2782,12 @@
       "verifiedOnly": "検証済みのみ",
       "technicalFilters": "技術フィルター",
       "sellerTypeAriaLabel": "販売者タイプ",
-      "categoryAriaLabel": "カテゴリーフィルター"
+      "categoryAriaLabel": "カテゴリーフィルター",
+      "categoryTitle": "カテゴリー",
+      "sellerTypeTitle": "出品者",
+      "qualityTitle": "品質",
+      "showResults": "結果を表示",
+      "closeLabel": "閉じる"
     },
     "listing": {
       "contact": "販売者に連絡",
@@ -2737,7 +2835,15 @@
       "errorMessage": "メッセージの送信に失敗しました",
       "errorNetworkMessage": "ネットワークエラー：メッセージを送信できませんでした",
       "errorReport": "出品の通報に失敗しました",
-      "errorNetworkReport": "ネットワークエラー：出品を通報できませんでした"
+      "errorNetworkReport": "ネットワークエラー：出品を通報できませんでした",
+      "buyNow": "今すぐ購入",
+      "revampitTrustTitle": "Revamp-IT による検査済み",
+      "revampitTrustDesc": "プロフェッショナルに整備・テストされ、次のオーナーに引き渡す準備が整いました",
+      "unavailableReserved": "この出品は他の方が予約済みです。",
+      "unavailableSold": "この出品は既に販売済みです。",
+      "unavailableRemoved": "この出品は削除され、利用できなくなりました。",
+      "unavailableDraft": "この出品はまだ公開されていません。",
+      "unavailableGeneric": "この出品は現在利用できません。"
     },
     "empty": "出品が見つかりませんでした",
     "conditions": {
@@ -2977,7 +3083,11 @@
           "answer": "はい。理事会への簡単なメール一通で退会できます。すでにお支払いいただいた年会費は返金されません。"
         }
       ]
-    }
+    },
+    "title": "メンバーになる",
+    "subtitle": "私たちのミッションを支援してください",
+    "fee": "会費",
+    "join": "今すぐメンバーになる"
   },
   "projects": {
     "hero": {
@@ -3107,18 +3217,18 @@
     ],
     "freiecomputer": {
       "meta": {
-        "title": "FreieComputer.ch - Swiss Label for Free Software",
-        "description": "The Swiss label for computers with pre-installed free software and guaranteed support. Promoting freedom of choice in computing since 2010."
+        "title": "FreieComputer.ch - 自由なソフトウェアのためのスイスのラベル",
+        "description": "プリインストールされた自由なソフトウェアと保証されたサポートを備えたコンピュータのためのスイスのラベル。2010 年からコンピューティングにおける選択の自由を推進しています。"
       },
       "hero": {
         "title": "FreieComputer.ch",
-        "description": "The Swiss label for computers with pre-installed free software and guaranteed support",
-        "cta1": "Support our mission",
+        "description": "プリインストールされた自由なソフトウェアと保証されたサポートを備えたコンピュータのためのスイスのラベル",
+        "cta1": "私たちのミッションを支援",
         "cta2": "Contact"
       },
       "about": {
-        "title": "About FreieComputer.ch",
-        "description": "Together with committed people from the open-source community, revamp-it helped establish this label to promote freedom of choice in computing and support retailers selling computers with pre-installed free software.",
+        "title": "FreieComputer.ch について",
+        "description": "オープンソースコミュニティの熱心な人々と共に、revamp-it はこのラベルの設立を支援し、コンピューティングにおける選択の自由を推進し、自由なソフトウェアをプリインストールしたコンピュータを販売する販売店を支援してきました。",
         "cards": [
           {
             "title": "Free Software",
@@ -3135,7 +3245,7 @@
         ]
       },
       "mission": {
-        "title": "Our Mission",
+        "title": "私たちのミッション",
         "cards": [
           {
             "title": "Breaking the monopoly",
@@ -3176,7 +3286,7 @@
         ]
       },
       "history": {
-        "title": "Our History",
+        "title": "私たちの歴史",
         "cards": [
           {
             "title": "Our History",
@@ -3190,7 +3300,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "参加する",
         "actions": [
           {
             "title": "Get involved",
@@ -3212,18 +3322,18 @@
     },
     "hardware": {
       "meta": {
-        "title": "Hardware Development",
-        "description": "revamp-it's hardware development work focuses on finding new uses for retired computer hardware, optimising energy use and creating open-source hardware assembly guides."
+        "title": "ハードウェア開発",
+        "description": "revamp-it のハードウェア開発は、使われなくなったコンピュータハードウェアの新しい活用方法、エネルギー最適化、そしてオープンソースのハードウェア組立ガイドの作成に焦点を当てています。"
       },
       "hero": {
-        "title": "Hardware Development",
-        "description": "Innovative solutions for sustainable computing",
-        "cta1": "Join our projects",
+        "title": "ハードウェア開発",
+        "description": "持続可能なコンピューティングのための革新的なソリューション",
+        "cta1": "プロジェクトに参加する",
         "cta2": "Contact"
       },
       "overview": {
-        "title": "About our hardware work",
-        "description": "At revamp-it we focus on finding new applications for retired computer hardware that is still fully functional but no longer suited to its original purpose due to technological advances.",
+        "title": "私たちのハードウェアの取り組みについて",
+        "description": "revamp-it では、まだ完全に動作するものの、技術的進歩により本来の用途には適さなくなった、使われなくなったコンピュータハードウェアに新しい用途を見つけることに注力しています。",
         "cards": [
           {
             "title": "Hardware reuse",
@@ -3240,7 +3350,7 @@
         ]
       },
       "projects": {
-        "title": "Current projects",
+        "title": "現在のプロジェクト",
         "cards": [
           {
             "title": "12V power supply for recycled computers",
@@ -3281,7 +3391,7 @@
         ]
       },
       "scsi": {
-        "title": "SCSI cable reuse",
+        "title": "SCSI ケーブルの再利用",
         "cards": [
           {
             "title": "SCSI cable reuse",
@@ -3295,7 +3405,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "参加する",
         "actions": [
           {
             "title": "Share knowledge",
@@ -3317,18 +3427,18 @@
     },
     "linuxola": {
       "meta": {
-        "title": "Linuxola Association",
-        "description": "Linuxola is a Swiss organisation dedicated to providing access to information technology and connecting African partners to the global digital commons."
+        "title": "Linuxola 協会",
+        "description": "Linuxola は、情報技術へのアクセスを提供し、アフリカのパートナーをグローバルなデジタルコモンズにつなぐことに取り組むスイスの団体です。"
       },
       "hero": {
-        "title": "Linuxola Association",
-        "description": "Bridging the digital divide between Switzerland and Africa",
-        "cta1": "Donate equipment",
+        "title": "Linuxola 協会",
+        "description": "スイスとアフリカのデジタル格差を埋める",
+        "cta1": "機材を寄付する",
         "cta2": "Volunteer"
       },
       "about": {
-        "title": "About Linuxola",
-        "description": "The Linuxola association was founded on 2 December 2005 by eight people from different regions of Switzerland. The purpose of the association is to enable our partners in Africa to access information technology and connect to the global digital commons."
+        "title": "Linuxola について",
+        "description": "Linuxola 協会は、2005 年 12 月 2 日にスイスの各地域から集まった 8 名により設立されました。協会の目的は、アフリカのパートナーが情報技術にアクセスし、グローバルなデジタルコモンズにつながれるようにすることです。"
       },
       "impact": {
         "cards": [
@@ -3353,7 +3463,7 @@
         ]
       },
       "equipment": {
-        "title": "Equipment needed",
+        "title": "必要な機材",
         "cards": [
           {
             "title": "Computers & laptops",
@@ -3385,7 +3495,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "参加する",
         "actions": [
           {
             "title": "Donate equipment",
@@ -3408,17 +3518,17 @@
     "kivitendo": {
       "meta": {
         "title": "Kivitendo - Open Source CRM & ERP | revamp-it",
-        "description": "The unique open-source CRM & ERP by revamp-it, meeting the highest quality standards through continuous personalised development."
+        "description": "継続的なパーソナライズ開発によって最高品質基準を満たす、revamp-it によるユニークなオープンソース CRM & ERP。"
       },
       "hero": {
         "title": "Kivitendo",
-        "description": "The unique open-source CRM & ERP that meets the highest quality standards through continuous personalised development",
+        "description": "継続的なパーソナライズ開発によって最高品質基準を満たす、ユニークなオープンソース CRM & ERP",
         "cta1": null,
         "cta2": null
       },
       "why": {
-        "title": "Why choose Kivitendo?",
-        "description": "A comprehensive solution for order processing, inventory management and financial accounting",
+        "title": "なぜ Kivitendo を選ぶのか?",
+        "description": "受注処理、在庫管理、財務会計のための包括的なソリューション",
         "cards": [
           {
             "title": "Open-source advantages",
@@ -3447,8 +3557,8 @@
         ]
       },
       "features": {
-        "title": "Key features",
-        "description": "Comprehensive functionality for your business requirements",
+        "title": "主な機能",
+        "description": "ビジネス要件に応える包括的な機能",
         "cards": [
           {
             "title": "Business configuration",
@@ -3471,8 +3581,8 @@
         ]
       },
       "partnership": {
-        "title": "Premium partnership",
-        "description": "Since July 2015, revamp-it has been a premium partner of the Kivitendo project. We offer configuration and support for this open-source ERP system.",
+        "title": "プレミアムパートナーシップ",
+        "description": "2015 年 7 月以来、revamp-it は Kivitendo プロジェクトのプレミアムパートナーです。私たちはこのオープンソース ERP システムの設定とサポートを提供しています。",
         "cards": [
           {
             "title": "Our services",
@@ -3486,7 +3596,7 @@
         ]
       },
       "cta": {
-        "title": "Learn more",
+        "title": "詳細を見る",
         "actions": [
           {
             "title": "Kivitendo Switzerland",
@@ -3508,18 +3618,18 @@
     },
     "compirat": {
       "meta": {
-        "title": "Compirat - Computer skills with Linux | revamp-it",
-        "description": "A joint project of Caritas Zurich and revamp-it offering accessible computer courses and internet access points for people on low incomes in the canton of Zurich."
+        "title": "Compirat - Linux でコンピュータスキル | revamp-it",
+        "description": "Caritas Zürich と revamp-it の共同プロジェクトで、チューリッヒ州の低所得者の方々にコンピュータコースとインターネットアクセスポイントを提供しています。"
       },
       "hero": {
         "title": "Compirat",
-        "description": "Computer skills and Linux education for everyone",
-        "cta1": "Become a volunteer",
-        "cta2": "Get in touch"
+        "description": "すべての人のためのコンピュータスキルと Linux 教育",
+        "cta1": "ボランティアになる",
+        "cta2": "お問い合わせ"
       },
       "about": {
-        "title": "About Compirat",
-        "description": "A joint project of Caritas Zurich and revamp-it offering accessible computer courses and internet access points for people on low incomes in the canton of Zurich.",
+        "title": "Compirat について",
+        "description": "Caritas Zürich と revamp-it の共同プロジェクトで、チューリッヒ州の低所得者の方々に利用しやすいコンピュータコースとインターネットアクセスポイントを提供しています。",
         "cards": [
           {
             "title": "Local courses",
@@ -3536,7 +3646,7 @@
         ]
       },
       "program": {
-        "title": "Our programme",
+        "title": "私たちのプログラム",
         "cards": [
           {
             "title": "Beginner courses",
@@ -3577,7 +3687,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "参加する",
         "actions": [
           {
             "title": "Become a volunteer",
@@ -3600,11 +3710,11 @@
     "ltsp": {
       "meta": {
         "title": "LTSP - Linux Terminal Server Project",
-        "description": "The Linux Terminal Server Project allows multiple users to work simultaneously on older computers by connecting them to a powerful server, optimising resource use and extending hardware life."
+        "description": "Linux Terminal Server Project では、古いコンピュータを高性能なサーバーに接続することで、複数のユーザーが同時に作業できるようになります。"
       },
       "hero": {
         "title": "LTSP - Linux Terminal Server Project",
-        "description": "Extending the life of older computers through server-based computing",
+        "description": "サーバーベースのコンピューティングで古いコンピュータの寿命を延ばす",
         "cta1": null,
         "cta2": null
       },
@@ -3706,17 +3816,17 @@
     "upcycling": {
       "meta": {
         "title": "Monitor-Upcycling | RevampIT",
-        "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft, soziale Integration in geschützten Werkstätten und Ressourcenschonung – mit offenen Anleitungen und wissenschaftlicher Begleitung."
+        "description": "使われなくなったコンピュータモニターから、機能的で持続可能な照明が生まれます。循環型経済、保護作業所での社会的統合、資源節約のためのパイロットプロジェクト — オープンな組立ガイドと学術的サポート付き。"
       },
       "hero": {
         "title": "Monitor-Upcycling",
-        "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
+        "description": "使われなくなったコンピュータモニターを、高品質で機能的な照明に変えます。電子廃棄物を回避し、社会的事業所で意義ある仕事を生み出し、スイス市場向けの循環型製品を開発する、revamp-it の革新的なパイロットプロジェクトです。",
         "cta1": "Kontakt aufnehmen",
         "cta2": "Partner werden"
       },
       "about": {
         "title": "Das Projekt",
-        "description": "Im Monitor-Upcycling-Projekt bauen wir ausrangierte Bildschirme zu modernen Leuchten um. Das Projekt umfasst die Produktion einer Kleinserie (ca. 70 Stück), die Erstellung detaillierter, modell-spezifischer Anleitungen (Fotos, Platinen, Pin-Belegung, Sicherheit), eine Kosten-Nutzen-Analyse und Ökobilanz mit der ZHAW, die Klärung der CE-Konformität sowie die Zusammenarbeit mit ERZ für die Gewinnung von Altgeräten. Ein Schlussbericht und die Präsentation vor dem Swico Innovationsfonds sind für den 3. Juli 2026 geplant."
+        "description": "モニターアップサイクリングプロジェクトでは、使われなくなったディスプレイをモダンな照明に作り変えます。本プロジェクトには、小ロット生産 (約 70 台)、詳細なモデル別組立ガイドの作成 (写真、基板、ピン配置、安全性)、ZHAW との費用便益分析と環境ライフサイクル評価、CE 適合性の明確化、ERZ との廃棄機器回収における協力が含まれます。最終報告と Swico イノベーションファンドでのプレゼンテーションは 2026 年 7 月 3 日に予定されています。"
       },
       "approach": {
         "title": "Ziele & Vorgehen",
@@ -3751,8 +3861,8 @@
         ]
       },
       "nextsteps": {
-        "title": "Nächste Schritte & Meilensteine",
-        "description": "Abschluss der Kleinserie und erste Analysen bis Januar 2026. Fertigstellung des umfassenden Schlussberichts mit allen Listen, Anleitungen und Ergebnissen bis Juni 2026. Präsentation der Projektergebnisse am 3. Juli 2026 vor dem Swico Innovationsfonds. Parallel: Akquise von Fördergeldern (Klimastiftung Schweiz, KliK, Gebert Rüf, Migros Pionierfonds u.a.), weitere Produktions- und Vertriebspartner sowie Vorbereitung der öffentlichen, offenen Publikation der Anleitungen."
+        "title": "次のステップとマイルストーン",
+        "description": "2026 年 1 月までに小ロット生産と初期分析を完了。2026 年 6 月までに、すべてのリスト、組立ガイド、結果を含む包括的な最終報告書を完成。2026 年 7 月 3 日に Swico イノベーションファンドでプロジェクト結果をプレゼンテーション。並行して、助成金の獲得 (Klimastiftung Schweiz、KliK、Gebert Rüf、Migros Pionierfonds など)、追加の生産・販売パートナーの確保、組立ガイドの公開・オープン出版の準備を進めます。"
       },
       "cta": {
         "title": "Werden Sie Teil des Upcycling-Projekts",
@@ -3792,11 +3902,11 @@
       },
       "source": {
         "title": "Offene Anleitungen & Source Code",
-        "description": "Das Projekt plant die Erstellung detaillierter Anleitungen pro Monitor-Modell (Fotos, Boards, Pin-Belegung, Sicherheitsaspekte) und deren freie Publikation auf einer öffentlichen Plattform (dieser Site oder Wiki), um die Kreislaufwirtschaft zu fördern. Der Quellcode dieser Plattform ist open source unter MIT-Lizenz: https://github.com/g-but/revampit . Die Anleitungen werden hier schrittweise veröffentlicht, sobald sie erstellt und validiert sind."
+        "description": "本プロジェクトでは、モニター機種ごとの詳細な組立ガイド (写真、基板、ピン配置、安全面) を作成し、循環型経済の促進のため公開プラットフォーム (本サイトまたは Wiki) で自由に公開することを計画しています。本プラットフォームのソースコードは MIT ライセンスのもとオープンソースで公開されています: https://github.com/g-but/revampit 。組立ガイドは作成・検証され次第、順次ここで公開されます。"
       },
       "ai_brainstorm": {
         "title": "Mit KI brainstormen",
-        "intro": "Der detaillierte, strukturierte Inhalt dieser Seite (Aufgaben, offene Fragen, Partner, Empfehlungen) eignet sich hervorragend für KI-gestütztes Brainstorming zu technischen, wirtschaftlichen und sozialen Lösungen. Kopieren Sie relevante Abschnitte und nutzen Sie Prompts wie diese, um Lösungen zu entwickeln:",
+        "intro": "本ページの詳細で構造化された内容 (タスク、未解決の課題、パートナー、推奨事項) は、技術的・経済的・社会的なソリューションについての AI 支援によるブレインストーミングに最適です。関連するセクションをコピーし、以下のようなプロンプトを使ってソリューションを練ってください:",
         "prompts": [
           {
             "title": "Technische Lösungen für Flimmern & Regelung",
@@ -3815,6 +3925,540 @@
             "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
           }
         ]
+      },
+      "needs": {
+        "title": "私たちが必要としているもの",
+        "intro": "プロジェクトを前進させるための具体的なリソースです。ニーズをクリックして提供を申し出てください。数営業日以内にご連絡します。",
+        "loading": "ニーズを読み込み中...",
+        "empty": "現在、すべてのニーズが満たされています。ありがとうございます!",
+        "helpCta": "協力できます",
+        "dialogTitle": "協力を申し出る",
+        "dialogIntro": "どのように貢献できるか、簡単にお知らせください。数営業日以内にご連絡します。",
+        "fields": {
+          "name": "お名前",
+          "email": "メール",
+          "phone": "電話番号(任意)",
+          "organization": "組織名(任意)",
+          "message": "提供内容"
+        },
+        "messagePlaceholder": "何を提供できますか? ハードウェア、時間、専門知識、人脈など。",
+        "submitting": "送信中...",
+        "submit": "提供を送信",
+        "successTitle": "ありがとうございます! 提供を受け取りました。",
+        "successBody": "確認メールをお送りしています。まもなくご連絡いたします。",
+        "errorGeneric": "問題が発生しました。もう一度お試しください。",
+        "errorTooMany": "リクエストが多すぎます。しばらくしてから再度お試しください。",
+        "typeLabels": {
+          "expertise": "専門知識",
+          "hardware": "ハードウェア",
+          "partner_intro": "パートナー紹介",
+          "funding": "資金提供",
+          "volunteer_time": "ボランティア活動"
+        },
+        "cancel": "閉じる"
+      },
+      "guides": {
+        "eyebrow": "ガイド",
+        "title": "モデル別ガイド",
+        "intro": "モニターモデルごとのステップバイステップのドキュメント。写真、安全に関する注意、回路図付きです。検証が完了次第、随時こちらで公開していきます。",
+        "openCta": "ガイドを開く",
+        "items": [
+          {
+            "slug": "lenovo-l2251pwd",
+            "model": "Lenovo L2251pwd",
+            "href": "/projects/upcycling/lenovo-l2251pwd",
+            "summary": "22 インチモニターを照明器具へ改造 — 5 ステップ、約 1 時間。",
+            "author": "Daniel",
+            "publishedAt": "2026-05-28"
+          }
+        ]
+      },
+      "nav": {
+        "brand": "モニターアップサイクリング",
+        "overview": "概要",
+        "applications": "用途",
+        "gallery": "ギャラリー",
+        "buildYourOwn": "自分で作る",
+        "status": "ステータス"
+      },
+      "explore": {
+        "eyebrow": "見つける",
+        "title": "プロジェクトへの 3 つの入り口",
+        "intro": "照明がどこで使われているか、これまでに作られた作品を見たり、私たちのオープンなガイドで自分の作品を作ったりできます。",
+        "cards": [
+          {
+            "key": "applications",
+            "title": "活用分野",
+            "description": "実用的なワークライトから住空間のインテリア、アートオブジェまで。3 つの世界で、同じ蘇ったハードウェアが生きます。",
+            "cta": "活用分野を見る"
+          },
+          {
+            "key": "gallery",
+            "title": "ギャラリー",
+            "description": "あらゆるモニター機種とスタイルの完成作品をご紹介します — 用途で絞り込み可能です。",
+            "cta": "ギャラリーを開く"
+          },
+          {
+            "key": "buildYourOwn",
+            "title": "自分で作る",
+            "description": "オープンハードウェア、MIT ライセンス。すべての手順、回路図、材料を世界中どこでも再現できる形で公開しています。",
+            "cta": "手順を開く"
+          }
+        ]
+      },
+      "applications": {
+        "meta": {
+          "title": "用途 | モニターアップサイクリング | RevampIT",
+          "description": "機能的な作業灯から住空間のインテリア、アート作品まで。改造されたモニター照明が居場所を見つける 3 つの世界。"
+        },
+        "eyebrow": "用途・モニターアップサイクリング",
+        "title": "1 つの照明。3 つの世界。",
+        "intro": "同じ廃棄寸前のモニターが、控えめな作業灯になったり、住空間の温かみある家具になったり、ギャラリーのアート作品になったりします。違いは素材ではなく、舞台にあります。",
+        "spectrum": {
+          "label": "スペクトル",
+          "functional": "機能的",
+          "art": "アート"
+        },
+        "tiers": {
+          "functional": {
+            "title": "機能的",
+            "description": "輝きより明るさが求められる空間のための、頑丈な作業灯。低消費電力、均一な面発光、壁または天井への取り付け。新品の照明と同じ機能性を、第二の人生から。",
+            "imageCaption": "機能的・ニュートラル",
+            "examples": [
+              "オフィス・コワーキングスペース",
+              "技術室・作業場",
+              "地下駐車場・立体駐車場",
+              "階段室・廊下",
+              "倉庫・資料室",
+              "建物内の付帯スペース"
+            ]
+          },
+          "decor": {
+            "title": "インテリア",
+            "description": "個性のある空間のための、温かく間接的な光。かつての画面が光面に。フラットで静かで、物語を持っています。剥き出しのコンクリート壁にも、木材や織物にも合います。",
+            "imageCaption": "インテリア・温かみ",
+            "examples": [
+              "住空間・ロフト住宅",
+              "カフェ、バー、レストラン",
+              "ホテルロビー・ブティック空間",
+              "アトリエ・スタジオ",
+              "コンセプトストア",
+              "クリニック・受付スペース"
+            ]
+          },
+          "art": {
+            "title": "アート",
+            "description": "照明そのものがメッセージとなる時。ギャラリーやインスタレーション、キュレーションされた空間では、素材の来歴が前面に出ます。かつて画像を映していたディスプレイが、それ自体が画像となるのです。",
+            "imageCaption": "アート・彩度高め",
+            "examples": [
+              "ギャラリー・展示空間",
+              "建築付随アートのインスタレーション",
+              "ポップアップ空間・オープニングレセプション",
+              "劇場・舞台のホワイエ",
+              "ミュージアムショップ・教育スペース",
+              "ライトアートプロジェクト"
+            ]
+          }
+        },
+        "cta": {
+          "title": "設置場所のアイデアはありますか?",
+          "body": "物件やカフェ、展示空間にパイロット照明を設置します。または、自分で作る方法をお教えします。",
+          "primary": "パイロット設置を依頼",
+          "secondary": "自分で作る"
+        }
+      },
+      "gallery": {
+        "meta": {
+          "title": "ギャラリー | モニターアップサイクリング | RevampIT",
+          "description": "改造されたモニター照明のギャラリー。機能的な作業灯からアート作品まで。用途で絞り込めます。"
+        },
+        "eyebrow": "ギャラリー・モニターアップサイクリング",
+        "title": "これまでに生まれた作品",
+        "intro": "どれも蘇ったモニターです。用途(機能的、インテリア、アート)で絞り込むか、すべてを一度に表示できます。",
+        "filterLabel": "フィルター:",
+        "filters": {
+          "all": "すべて",
+          "functional": "機能的",
+          "decor": "インテリア",
+          "art": "アート"
+        },
+        "empty": "このフィルターに該当する作品はまだありません。",
+        "placeholderNote": "プレビュー画像は生成されたものです。最初の作品が撮影され次第、実際の写真に差し替えます。"
+      },
+      "buildYourOwn": {
+        "meta": {
+          "title": "自分で作る | モニターアップサイクリング | RevampIT",
+          "description": "オープンソースハードウェア: モニター照明を自分で作るためのガイド、回路図、材料がすべて揃っています。MIT ライセンスで、世界中で自由に利用できます。"
+        },
+        "eyebrow": "自分で作る・モニターアップサイクリング",
+        "title": "あなた自身の作品を作りましょう",
+        "intro": "オープンハードウェア、オープンガイド。すべての設計、回路図、材料リストは MIT ライセンスで自由に利用可能。同じアイデアが私たちを介さずに世界中で機能するように。",
+        "philosophy": {
+          "title": "なぜオープンに?",
+          "body": "私たちのミッションは、できるだけ多くの照明を売ることではなく、できるだけ多くのモニターを廃棄物から救うことです。これは、すべての工房、団体、好奇心ある人々が再現できる場合にのみ可能です。学んだことはすべて公開します。",
+          "pillars": [
+            {
+              "title": "ドキュメント",
+              "body": "機種ごとのステップ・バイ・ステップ手順 — 写真、ピン配置、回路図、安全上の注意。私たちの作業場で検証済み、あなたの作業場で自由に使えます。"
+            },
+            {
+              "title": "世界中で再現可能",
+              "body": "標準部品で構成された材料リスト。チューリッヒで動くものは、ベルリン、ラゴス、サンパウロでも動きます。Revamp-IT 固有の部品はありません。"
+            },
+            {
+              "title": "プロダクトではなく、ツール",
+              "body": "私たちは学んだことを共有します。改善、フォーク、翻訳を歓迎します — メールではなく、プルリクエストでどうぞ。"
+            }
+          ]
+        },
+        "guides": {
+          "title": "ガイド",
+          "intro": "各ガイドは具体的なモニターモデルを扱います。分解から完成した照明まで。新しいモデルは随時追加します。",
+          "openCta": "ガイドを開く",
+          "empty": "まだガイドは公開されていません。",
+          "items": [
+            {
+              "slug": "lenovo-l2251pwd",
+              "model": "Lenovo L2251pwd",
+              "href": "/projects/upcycling/lenovo-l2251pwd",
+              "summary": "22 インチモニターを照明器具に改造します。LCD を取り外し、バックライトをブリッジすれば完成です。",
+              "difficulty": "やさしい",
+              "duration": "約 1 時間",
+              "author": "Daniel"
+            }
+          ]
+        },
+        "source": {
+          "title": "ソースコードとライセンス",
+          "body": "このプラットフォーム自体(すべてのガイド、回路図、コンポーネントを含む)は GitHub にあります。Fork、Issue、Pull Request、すべて歓迎です。",
+          "repoCta": "GitHub で見る",
+          "repoUrl": "https://github.com/g-but/revampit",
+          "licenseLabel": "MIT ライセンス・ハードウェアは CERN-OHL-S 準拠"
+        },
+        "contribute": {
+          "title": "参加する",
+          "body": "私たちがドキュメント化できる以上のモニターモデルが存在します。協力してくれる人がライブラリを共に作っていきます。",
+          "cta": "お問い合わせ",
+          "items": [
+            "新しい機種の手順を執筆する",
+            "既存の手順を翻訳する",
+            "改造の写真ドキュメントを提供する",
+            "別のバックライトドライバ向けの回路図バリエーション",
+            "安全レビューまたは CE 表示に関する情報"
+          ]
+        }
+      },
+      "lenovo_l2251pwd": {
+        "meta": {
+          "title": "Lenovo L2251pwd — モニターを照明に | モニターアップサイクリング | RevampIT",
+          "description": "ステップバイステップガイド: Lenovo L2251pwd モニターを分解し、LCD を取り外し、独立した照明として動作するよう電子回路をブリッジします。"
+        },
+        "back": "← 概要に戻る",
+        "eyebrow": "ガイド・モニターアップサイクリング",
+        "title": "Lenovo L2251pwd",
+        "subtitle": "22 インチモニターを照明に改造",
+        "metaLine": "モデル: Lenovo L2251pwd・所要時間: 約 1 時間・難易度: 簡単",
+        "credit": "ガイド作成: Daniel、RevampIT・公開日: 2026 年 5 月 28 日・原典 Wiki: monitor.revamp-it 内部",
+        "safety": {
+          "title": "まず安全を",
+          "body": "通電状態では絶対に作業しないでください。動作テストの前には必要な安全対策を講じてください。不安な場合は、電子工学の経験者に同席してもらいましょう。"
+        },
+        "tools": {
+          "title": "工具と材料",
+          "items": [
+            "こじ開け用のプラスチック製スパチュラ",
+            "プラスドライバー (PH1/PH2)",
+            "小型のマイナスドライバー",
+            "1 kΩ 抵抗器 × 2 本",
+            "はんだごて + はんだ",
+            "熱収縮チューブまたは絶縁テープ"
+          ]
+        },
+        "schematic": {
+          "title": "回路の原理",
+          "body": "電圧分圧器: 5V(赤)→ 1 kΩ → バックライト信号(黄)→ 1 kΩ → GND(黒)。その他のピン(3.3V、他の信号)は接続しません。",
+          "labels": {
+            "v5": "5V",
+            "signal": "バックライト信号",
+            "gnd": "GND",
+            "resistor": "1 kΩ"
+          }
+        },
+        "done": {
+          "title": "完成です!",
+          "body": "モニターは今や、固定バックライトを備えた独立した照明になりました。吊るしたり、設置したり、家具と組み合わせたりして使いましょう。"
+        },
+        "feedback": {
+          "title": "もっと良いアイデアがあれば、ぜひお知らせください。",
+          "body": "このガイドはオープンで、改善を歓迎します。より良いブリッジ回路、明るさ調整、より美しい取り付け方法を見つけたら、ぜひ貢献してください。",
+          "cta": "貢献する"
+        },
+        "ui": {
+          "openPhoto": "写真を拡大",
+          "closePhoto": "閉じる",
+          "playVideo": "動画を再生",
+          "pauseVideo": "動画を一時停止",
+          "stepProgressLabel": "ステップ",
+          "stepProgressOf": "/",
+          "jumpToStep": "ステップへジャンプ",
+          "photoCountLabel": "写真",
+          "photoCountOf": "/"
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "フェーズ 1",
+            "title": "モニターを分解する",
+            "intro": "改造は数ステップで進み、少しの忍耐があれば難しくありません。"
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "フェーズ 2",
+            "title": "LCD を取り外す",
+            "intro": "黒いパネル (LCD) を取り出し、白いパネル (バックライト) はそのまま残します — これが発光面になります。"
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "フェーズ 3",
+            "title": "電子回路をブリッジする",
+            "intro": "この時点ではまだ、手動でオン/オフを切り替えるモニターとして動作します。照明器具として使うために、操作基板をブリッジします。"
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "フレームを取り外す",
+            "body": "背面からプラスチック製スパチュラを使い、外側のフレームを「カチッと外し」ます。クリップが折れないよう、エッジに沿って慎重に進めてください。",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-frame-removed.jpg",
+                "alt": "外側のフレームを取り外した Lenovo L2251pwd"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-bezel-clips.jpg",
+                "alt": "モニターフレームのプラスチッククリップの詳細"
+              }
+            ]
+          },
+          {
+            "n": 2,
+            "title": "電子回路ハウジングを外す",
+            "body": "背面の側面にある 4 本のネジを外します。これで電子回路ハウジングを持ち上げて取り外せます。",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-open.jpg",
+                "alt": "モニター背面で開いた電子回路ハウジング"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-detached.jpg",
+                "alt": "基板が見える、取り外した電子回路ハウジング"
+              }
+            ]
+          },
+          {
+            "n": 3,
+            "title": "LCD 基板を露出させる",
+            "body": "金属ハウジングで、電子回路を固定しているネジを外します。金属フレーム沿いのクリップをドライバーで慎重に開けます。金属フレームを開くと、その下に LCD (黒いパネル) とバックライト (白いパネル) が現れます。LCD はさらに粘着テープで固定されていますが、簡単に剥がせます。",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "LCD を取り外し、フレームを再び閉じる",
+            "body": "黒い LCD パネルを取り外します。金属フレームを再び組み立てます — 白いバックライトは内部で保護されたままです。これが今後の発光面になります。",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-4-lcd-removed.jpg",
+                "alt": "LCD を取り外したモニター — 白いバックライトのみが見える状態"
+              }
+            ]
+          },
+          {
+            "n": 5,
+            "title": "操作基板をブリッジする",
+            "body": "この時点ではまだ機器は技術的にモニターであり、手動でオン/オフを切り替える必要があります。照明器具として使うために操作基板を取り外し、残ったコネクタにブリッジを取り付けます。このブリッジは、5V (赤)、GND (黒)、バックライト用信号 (黄) の間の分圧回路で、同一の抵抗器 2 本 (約 1 kΩ) を赤↔黄と黒↔黄の間に接続します。",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-control-board.jpg",
+                "alt": "Lenovo モニターから取り外した操作基板"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-soldered.jpg",
+                "alt": "1 kΩ 抵抗器 2 本ではんだ付けされたブリッジ"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-detail.jpg",
+                "alt": "コネクタ部の分圧ブリッジの詳細"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "meta": {
+          "title": "ステータスとインパクト | モニター・アップサイクリング | RevampIT",
+          "description": "モニター・アップサイクリング・プロジェクトの現在地: 生産の進捗、インパクトの推定値 ( ZHAW のライフサイクル評価で確定 )、マイルストーン、そしてパートナー・エコシステム。"
+        },
+        "eyebrow": "ステータス · モニター・アップサイクリング",
+        "title": "プロジェクトの現在地",
+        "intro": "正直なスナップショットです — すでに動いていること、計測済みのこと、そして次に来ることをお伝えします。出典: プロジェクト内部の記録。最終的なライフサイクル評価は ZHAW の最終報告書とともに公開されます。",
+        "snapshot": {
+          "label": "現況",
+          "updatedLabel": "更新日"
+        },
+        "production": {
+          "title": "生産",
+          "intro": "小ロット生産が進行中です。モデルごとに作成手順を文書化し、製造と並行して公開しています。",
+          "lampsLabel": "製作したランプ",
+          "lampsOf": "/",
+          "lampsTarget": "目標シリーズ",
+          "modelsLabel": "手順書のあるモデル",
+          "pilotsLabel": "稼働中のパイロット拠点",
+          "intakeLabel": "処理中のモニター"
+        },
+        "impact": {
+          "title": "インパクト — 推定値",
+          "intro": "これらの数値は、これまでの生産実績と、1 台あたりの典型的なエネルギー・材料の値に基づく内部推定です。確定的なバランスシートは ZHAW が最終報告書で作成します ( 2026 年 Q3 予定 )。",
+          "disclaimer": "推定値 — 検証済みの数値は ZHAW の LCA とともに公開予定",
+          "cards": [
+            {
+              "key": "ewaste",
+              "label": "削減した電子廃棄物",
+              "unit": "kg"
+            },
+            {
+              "key": "workshop",
+              "label": "ワークショップでの作業時間",
+              "unit": "h"
+            },
+            {
+              "key": "co2",
+              "label": "CO₂ 削減量 ( 推定 )",
+              "unit": "kg"
+            },
+            {
+              "key": "reuse",
+              "label": "再利用率",
+              "unit": "%"
+            }
+          ]
+        },
+        "timeline": {
+          "title": "マイルストーン",
+          "intro": "過去・進行中・予定を一目で。",
+          "labels": {
+            "done": "完了",
+            "active": "進行中",
+            "upcoming": "予定"
+          },
+          "items": [
+            {
+              "key": "kickoff",
+              "date": "2025 年 10 月",
+              "label": "プロジェクト開始とコンセプト策定"
+            },
+            {
+              "key": "prototype",
+              "date": "2026 年 2 月",
+              "label": "最初の機能プロトタイプ"
+            },
+            {
+              "key": "lca-start",
+              "date": "2026 年 4 月",
+              "label": "ZHAW のライフサイクル評価が開始"
+            },
+            {
+              "key": "series",
+              "date": "2026 年 6 月",
+              "label": "小ロット生産が進行中"
+            },
+            {
+              "key": "swico",
+              "date": "2026 年 7 月 3 日",
+              "label": "Swico イノベーションファンドでのプレゼンテーション"
+            },
+            {
+              "key": "lca-final",
+              "date": "2026 年 Q3",
+              "label": "LCA 最終報告書 ( ZHAW )"
+            },
+            {
+              "key": "scale",
+              "date": "2027 年",
+              "label": "スケーリングフェーズ II — モデル展開と販売"
+            }
+          ]
+        },
+        "partners": {
+          "title": "パートナー・エコシステム",
+          "intro": "このプロジェクトはネットワークとしてのみ機能します。それぞれの役割をご紹介します:",
+          "groups": [
+            {
+              "key": "production",
+              "title": "生産とワークショップ",
+              "names": [
+                "Drahtzug",
+                "FARO",
+                "St. Jakob",
+                "Palme"
+              ]
+            },
+            {
+              "key": "pilots",
+              "title": "パイロット拠点 ( 不動産 )",
+              "names": [
+                "Livit",
+                "Wincasa",
+                "Allreal",
+                "ISS"
+              ]
+            },
+            {
+              "key": "material",
+              "title": "材料の供給元",
+              "names": [
+                "ERZ Zürich"
+              ]
+            },
+            {
+              "key": "science",
+              "title": "学術パートナー",
+              "names": [
+                "ZHAW ( ライフサイクル評価および費用便益分析 )"
+              ]
+            },
+            {
+              "key": "funding",
+              "title": "資金提供",
+              "names": [
+                "Swico Innovationsfonds"
+              ]
+            }
+          ]
+        },
+        "calls": {
+          "title": "あなたができる貢献",
+          "intro": "プロジェクトを次のフェーズへ進めるための、3 つの具体的な方法です。",
+          "actions": [
+            {
+              "key": "fund",
+              "title": "共同支援者になる",
+              "description": "2027 年のスケーリング期を支えてくださる財団や企業を探しています — 小ロット生産から、入手可能な製品へ。",
+              "cta": "支援についての面談を申し込む"
+            },
+            {
+              "key": "pilot",
+              "title": "パイロット拠点になる",
+              "description": "不動産、カフェ、アトリエ、展示スペースをお持ちですか? パイロットランプを設置し、日常での使用状況を一緒に記録します。",
+              "cta": "パイロットを申し込む"
+            },
+            {
+              "key": "donate",
+              "title": "モニターを循環へ",
+              "description": "社内の IT を入れ替え予定ですか? 古いディスプレイを引き取り、物質フローを記録し、小ロット生産に組み込みます。",
+              "cta": "材料を知らせる"
+            }
+          ]
+        }
       }
     }
   },
@@ -3984,7 +4628,10 @@
         "soon": "近日公開"
       },
       "filterByCategory": "カテゴリーでフィルター",
-      "ctaEyebrow": "準備はいい?"
+      "ctaEyebrow": "準備はいい?",
+      "badges": {
+        "soon": "近日公開"
+      }
     },
     "servicePage": {
       "comingSoonBanner": "このサービスは近日公開予定です。関心をお知らせいただくか、サービス開始時の通知をご希望の場合はお問い合わせください。"
@@ -5135,6 +5782,16 @@
         "onlineShop": "{orgName}オンラインショップ",
         "multiShopTitle": "複数のショップチャンネル？",
         "multiShopBody": "{orgName}オンラインショップは最高の品揃えのリファービッシュITハードウェアを提供します。Shopwareショップとレガシーシステムでも商品をご覧いただけます。"
+      },
+      "otherPaths": {
+        "altTitle": "手頃な価格のテクノロジーへの他の方法",
+        "altIntro": "ここに来るのは購入のためだけではありません。経済的に余裕のない方への機器の提供や、古いハードウェアの寄付も受け付けています。",
+        "donateTitle": "ハードウェアを寄付する",
+        "donateBody": "動作する、または修理可能な機器を Revamp-IT へ。私たちが整備して次の方へ届けます。",
+        "donateCta": "寄付ページへ",
+        "needTitle": "機器が必要だけれど、購入が難しいですか?",
+        "needBody": "Compirat プログラムを通じて、Caritas Zürich と協力し、経済的に余裕のない方々へ機器を提供しています。",
+        "needCta": "Compirat を見る"
       }
     },
     "search": {
@@ -5532,7 +6189,12 @@
       "noListingsDescription": "この販売者は現在アクティブな出品がありません。",
       "loadingProfile": "プロフィールを読み込み中...",
       "sellerNotFound": "販売者が見つかりません",
-      "errorLoading": "プロフィールの読み込みエラー"
+      "errorLoading": "プロフィールの読み込みエラー",
+      "meta": {
+        "title": "{name} – RevampIT マーケットプレイスの出品者",
+        "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
+        "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
+      }
     }
   },
   "workshops": {
@@ -5712,7 +6374,7 @@
           "term4": "適切な前提知識と明確な学習目標を伝えます",
           "term5": "評価システムとプラットフォーム手数料に同意します",
           "term6": "提供する情報は真実であり、最新の状態に保ちます",
-          "checkboxPrefix": "",
+          "checkboxPrefix": "以下に同意します",
           "termsLink": "利用規約",
           "checkboxMiddle": "および",
           "privacyLink": "プライバシーポリシー"
@@ -6063,37 +6725,37 @@
         "radiusHint": "自宅訪問の最大範囲"
       },
       "personalInfo": {
-        "title": "Personal details",
-        "description": "Your basic information",
-        "firstName": "First name",
-        "lastName": "Last name",
+        "title": "個人情報",
+        "description": "基本情報",
+        "firstName": "名",
+        "lastName": "姓",
         "company": "Company"
       },
-      "backToDashboard": "Back to dashboard",
-      "accountOverview": "Account overview",
-      "accountOverviewDesc": "Status and security of your account",
-      "emailVerified": "Email verified",
-      "nameNotSet": "Name not set",
-      "memberSince": "Member since {year}",
+      "backToDashboard": "ダッシュボードに戻る",
+      "accountOverview": "アカウント概要",
+      "accountOverviewDesc": "アカウントのステータスとセキュリティ",
+      "emailVerified": "メールアドレス確認済み",
+      "nameNotSet": "名前未設定",
+      "memberSince": "{year} 年からのメンバー",
       "pageTitle": "Profile",
-      "pageDescription": "Manage your public profile",
-      "saveSuccess": "Profile saved successfully",
+      "pageDescription": "公開プロフィールを管理します",
+      "saveSuccess": "プロフィールを保存しました",
       "saving": "Saving...",
       "save": "Save",
-      "avatarSectionTitle": "Profile picture",
-      "goToSettings": "Go to settings",
+      "avatarSectionTitle": "プロフィール画像",
+      "goToSettings": "設定へ",
       "publicProfile": {
-        "heading": "Public Profile",
-        "displayName": "Display name",
-        "displayNamePlaceholder": "What would you like to be called?",
-        "displayNameDescription": "This name is shown publicly",
+        "heading": "公開プロフィール",
+        "displayName": "表示名",
+        "displayNamePlaceholder": "どのように呼ばれたいですか?",
+        "displayNameDescription": "この名前は公開されます",
         "bio": "Bio",
-        "bioPlaceholder": "Tell us something about yourself...",
-        "bioDescription": "Short description about yourself (max. 500 characters)",
-        "visibility": "Profile visibility",
+        "bioPlaceholder": "自己紹介を入力してください...",
+        "bioDescription": "あなたについての短い説明 (最大 500 文字)",
+        "visibility": "プロフィールの公開設定",
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
-        "visibilityDescription": "Choose who can see your profile"
+        "visibilityDescription": "誰がプロフィールを閲覧できるかを選択します"
       },
       "contactInfo": {
         "heading": "連絡先情報",
@@ -6269,7 +6931,8 @@
       "actionDuplicate": "複製",
       "actionDelete": "削除",
       "confirmDelete": "本当にこの出品を削除しますか？",
-      "loadError": "読み込みエラー"
+      "loadError": "読み込みエラー",
+      "paginationCurrentPage": "ページ {page}"
     },
     "reviews": {
       "statusPublished": "公開済み",
@@ -6530,7 +7193,29 @@
       "receiptInfoTitle": "寄付領収書に関する注意",
       "receiptInfoText": "RevampIT は非営利団体です。CHF 100 以上の寄付には税務申告用の寄付確認書を発行します。お問い合わせ:",
       "loadError": "寄付の読み込みエラー",
-      "networkError": "データ読み込み時のネットワークエラー"
+      "networkError": "データ読み込み時のネットワークエラー",
+      "journey": {
+        "heading": "機器の旅",
+        "awaiting": "機器の引き取り、または受領を待っています。",
+        "totalItems": "{count, plural, =0 {機器なし} one {# 台の機器} other {# 台の機器}}",
+        "countRehomed": "{count, plural, one {# 台引き渡し済み} other {# 台引き渡し済み}}",
+        "countListed": "{count, plural, one {# 台ショップ掲載中} other {# 台ショップ掲載中}}",
+        "countRefurbished": "{count, plural, one {# 台整備済み} other {# 台整備済み}}",
+        "countReceived": "{count, plural, one {# 台受領済み} other {# 台受領済み}}",
+        "countParts": "{count, plural, one {# 台を部品として} other {# 台を部品として}}",
+        "countRecycled": "{count, plural, one {# 台リサイクル済み} other {# 台リサイクル済み}}",
+        "viewInShop": "ショップで見る",
+        "viewInShopNumbered": "ショップで見る (#{index})",
+        "stage": {
+          "awaiting": "受領待ち",
+          "received": "受領済み",
+          "refurbished": "整備済み",
+          "listed": "ショップ掲載中",
+          "rehomed": "引き渡し済み",
+          "parts": "部品",
+          "recycled": "リサイクル済み"
+        }
+      }
     },
     "sellerProfile": {
       "backToDashboard": "ダッシュボードへ戻る",
@@ -6560,21 +7245,21 @@
       "unexpectedError": "予期しないエラーが発生しました"
     },
     "settings": {
-      "backToDashboard": "Back to Dashboard",
-      "editProfile": "Edit Profile",
+      "backToDashboard": "ダッシュボードに戻る",
+      "editProfile": "プロフィールを編集",
       "account": {
-        "passwordNote": "Password change is managed via the Profile page (will be integrated here later)"
+        "passwordNote": "パスワードの変更はプロフィールページで管理されます (後ほどこちらに統合予定です)"
       },
       "privacy": {
-        "dataExportTitle": "Privacy & Export",
-        "dataExportDescription": "Under Swiss data protection law (DSG) and EU GDPR, you can request a copy of your data at any time.",
-        "exportFailed": "Export failed",
-        "exportFailedRetry": "Export failed. Please try again later.",
-        "exportLoading": "Creating export...",
-        "downloadButton": "Download my data"
+        "dataExportTitle": "プライバシーとエクスポート",
+        "dataExportDescription": "スイスデータ保護法 (DSG) および EU GDPR に基づき、データのコピーをいつでもリクエストできます。",
+        "exportFailed": "エクスポートに失敗しました",
+        "exportFailedRetry": "エクスポートに失敗しました。しばらくしてからもう一度お試しください。",
+        "exportLoading": "エクスポートを作成中...",
+        "downloadButton": "自分のデータをダウンロード"
       },
       "personalInfo": {
-        "cantonDefault": "Select canton"
+        "cantonDefault": "州を選択"
       }
     },
     "meta": {
@@ -6813,7 +7498,8 @@
       "logout": "ログアウト",
       "accountMenu": "アカウントメニュー",
       "profilePicture": "プロフィール画像",
-      "user": "ユーザー"
+      "user": "ユーザー",
+      "invite": "友達を招待"
     },
     "workshopInstanceCard": {
       "spotsAvailable": "{count}席空き",
@@ -6843,7 +7529,9 @@
     },
     "co2Badge": {
       "tooltip": "新品と比較した推定CO₂削減量（Fraunhofer IZM 2023）",
-      "saved": "約{amount}kg CO₂削減"
+      "saved": "約{amount}kg CO₂削減",
+      "estimate": "概算",
+      "methodologyLink": "計算方法は?"
     },
     "geschichteSection": {
       "badge": "私たちの歴史",
@@ -6867,20 +7555,38 @@
       "learnMore": "私たちの影響についてもっと知る"
     },
     "zeroWaste": {
-      "badge": "The Solution",
-      "heading": "Our Zero-Waste Approach",
-      "description": "RevampIT follows the principle: Repair before Refurbish before Recycle. This maximises the value of every device and minimises environmental impact.",
-      "impactTitle": "Our Impact Through This Approach",
-      "devicesSavedLabel": "Devices saved per year",
-      "devicesSavedDesc": "Rescued from the shredder and reused",
-      "reuseRateLabel": "Reuse rate",
-      "reuseRateDesc": "Of donated devices are put back into use",
-      "co2Label": "Tonnes of CO₂ saved",
-      "co2Desc": "Through repair instead of new production",
-      "whyRepairTitle": "Why repair first?",
-      "whyRepairText": "Manufacturing a new laptop produces on average 331 kg of CO₂. A repair produces only about 15 kg – a saving of over 95%.",
-      "whyRepairConclusion": "The most sustainable option is always repair",
-      "priority": "Priority {priority}"
+      "badge": "解決策",
+      "heading": "ゼロウェイストへのアプローチ",
+      "description": "RevampIT は「修理 ＞ リファービッシュ ＞ リサイクル」の原則に従います。これによって、各機器の価値を最大化し、環境への影響を最小化します。",
+      "impactTitle": "このアプローチによるインパクト",
+      "devicesSavedLabel": "年間で救った機器の数",
+      "devicesSavedDesc": "シュレッダー行きから救出し、再利用",
+      "reuseRateLabel": "再利用率",
+      "reuseRateDesc": "寄付された機器のうち再び使われる割合",
+      "co2Label": "削減した CO₂ のトン数",
+      "co2Desc": "新規製造ではなく修理によって",
+      "whyRepairTitle": "なぜまず修理なのか？",
+      "whyRepairText": "新品ラップトップの製造は平均 331 kg の CO₂ を発生させます。修理ならわずか約 15 kg — 95% 以上の削減です。",
+      "whyRepairConclusion": "最も持続可能な選択は、常に修理です",
+      "priority": "優先度 {priority}",
+      "principles": {
+        "repair": {
+          "title": "修理",
+          "description": "故障した機器を修理し、元の持ち主に返却します。最も持続可能な選択肢です。"
+        },
+        "refurbish": {
+          "title": "リファービッシュ",
+          "description": "寄付された機器を専門的に整備し、Linux を導入して新しい利用者へ引き渡します。"
+        },
+        "recycle": {
+          "title": "リサイクル",
+          "description": "使用できなくなった機器は適切に分解します。貴重な原料を循環に戻します。"
+        },
+        "educate": {
+          "title": "啓発",
+          "description": "ワークショップと教育を通じて、機器をより長く使い、より意識的に消費する力を育みます。"
+        }
+      }
     },
     "voice": {
       "stateIdle": "Dictate",
@@ -6889,49 +7595,49 @@
       "stateSuccess": "Recognized!",
       "stateError": "Error",
       "transcribedPrefix": "Recognized:",
-      "errorProcessing": "Processing failed",
-      "errorMicrophone": "Could not activate microphone",
-      "recordingHint": "Speak now... e.g. \"Dell Latitude 7470, good condition, 280 francs\""
+      "errorProcessing": "処理に失敗しました",
+      "errorMicrophone": "マイクを有効にできませんでした",
+      "recordingHint": "今すぐ話してください... 例:「Dell Latitude 7470、状態良好、280 フラン」"
     },
     "erfassung": {
       "productImage": {
-        "title": "Product image",
-        "upload": "Upload image",
-        "drag": "or drag here",
-        "hint": "JPG, PNG or WebP. Max 5 MB.",
+        "title": "製品画像",
+        "upload": "画像をアップロード",
+        "drag": "またはここにドラッグ",
+        "hint": "JPG、PNG または WebP。最大 5 MB。",
         "remove": "商品画像を削除"
       },
       "basicFields": {
-        "title": "Basic information",
+        "title": "基本情報",
         "manufacturer": "Manufacturer *",
-        "manufacturerPlaceholder": "e.g. Dell, HP, Lenovo",
+        "manufacturerPlaceholder": "例: Dell、HP、Lenovo",
         "condition": "Condition *",
-        "productName": "Product name / model *",
-        "productNamePlaceholder": "e.g. Latitude 7470",
-        "price": "Selling price (CHF) *",
+        "productName": "製品名 / モデル *",
+        "productNamePlaceholder": "例: Latitude 7470",
+        "price": "販売価格 (CHF) *",
         "pricePlaceholder": "0.00",
-        "description": "Short description",
-        "descriptionPlaceholder": "Short description…",
+        "description": "簡単な説明",
+        "descriptionPlaceholder": "簡単な説明…",
         "category": "Category",
         "categoryPlaceholder": "Select…",
         "subcategory": "Subcategory"
       },
       "specFields": {
-        "title": "Technical specifications",
-        "addField": "Add field",
+        "title": "技術仕様",
+        "addField": "フィールドを追加",
         "keyPlaceholder": "Property",
         "valuePlaceholder": "Value"
       },
       "dimensionFields": {
         "dimensionsTitle": "Dimensions",
-        "length": "Length (mm)",
-        "width": "Width (mm)",
-        "height": "Height (mm)",
-        "weight": "Weight (kg)",
-        "stockTitle": "Stock & Price",
-        "price": "Selling price (CHF) *",
-        "stock": "Quantity in stock",
-        "location": "Storage location",
+        "length": "長さ (mm)",
+        "width": "幅 (mm)",
+        "height": "高さ (mm)",
+        "weight": "重量 (kg)",
+        "stockTitle": "在庫と価格",
+        "price": "販売価格 (CHF) *",
+        "stock": "在庫数",
+        "location": "保管場所",
         "locationPlaceholder": "S-B816-01-…",
         "boxId": "Box ID",
         "boxIdPlaceholder": "B-YYMMDD-NNNN"
@@ -6939,39 +7645,39 @@
       "submitBar": {
         "cancel": "Cancel",
         "saving": "Saving…",
-        "saveChanges": "Save changes",
+        "saveChanges": "変更を保存",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Capture & Shop"
+        "captureAndShop": "登録 & ショップ"
       },
       "successScreen": {
-        "title": "Product captured!",
+        "title": "製品を登録しました!",
         "itemUUIDLabel": "Item UUID:",
-        "printFactsheet": "Print factsheet",
-        "captureAnother": "Capture another product",
-        "toOverview": "To product overview"
+        "printFactsheet": "ファクトシートを印刷",
+        "captureAnother": "別の製品を登録",
+        "toOverview": "製品一覧へ"
       },
       "bulkSuccess": {
-        "titlePartial": "Partially captured",
-        "titleAll": "All products captured!",
-        "summary": "{succeeded} of {total} products successfully saved",
+        "titlePartial": "一部のみ登録されました",
+        "titleAll": "すべての製品を登録しました!",
+        "summary": "{total} 件中 {succeeded} 件の製品が正常に保存されました",
         "failed": "{count} failed",
         "successLabel": "Successful",
         "failedLabel": "Failed",
         "totalLabel": "Total",
-        "createdIds": "Created item IDs:",
-        "retryFailed": "Correct failed entries",
-        "downloadCsv": "Download CSV",
-        "newCapture": "New capture"
+        "createdIds": "作成された商品 ID:",
+        "retryFailed": "失敗したものを修正",
+        "downloadCsv": "CSV をダウンロード",
+        "newCapture": "新規登録"
       },
       "profileFields": {
-        "title": "Suitable for (customer profiles)",
-        "hint": "Select the target groups this product is suitable for. Hover for details."
+        "title": "対象 (顧客プロファイル)",
+        "hint": "この製品が適したターゲットグループを選択してください。詳細はホバーで表示されます。"
       },
       "bulkDetail": {
         "editLabel": "edit",
         "sourcePrefix": "Source: ",
-        "validationError": "Manufacturer and product name required",
+        "validationError": "メーカーと製品名が必要です",
         "close": "Close",
         "apply": "Apply"
       },
@@ -6982,100 +7688,157 @@
         "productsText": "products"
       },
       "bulkActionBar": {
-        "deselectAll": "Deselect all",
-        "selectAll": "Select all",
+        "deselectAll": "選択を解除",
+        "selectAll": "すべて選択",
         "ofText": "of",
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Capture & Shop"
+        "captureAndShop": "登録 & ショップ"
       },
       "imageCapture": {
-        "dragOrText": "Drag image here or",
-        "chooseFile": "Choose file",
+        "dragOrText": "画像をここにドラッグするか",
+        "chooseFile": "ファイルを選択",
         "camera": "Camera",
-        "fileHint": "JPG, PNG, WebP up to 10 MB",
-        "imageAlt": "Product image preview",
-        "changeImage": "Different image",
-        "analyzeWithAI": "Fill with AI",
-        "analyzing": "Analysing image…",
-        "success": "Form has been filled in!",
-        "errorGeneric": "An error occurred",
-        "retry": "Try again",
-        "errorImageOnly": "Please upload image files only",
-        "errorReadFile": "Error reading file",
-        "errorAnalysis": "Analysis failed"
+        "fileHint": "JPG、PNG、WebP、最大 10 MB",
+        "imageAlt": "製品画像プレビュー",
+        "changeImage": "別の画像",
+        "analyzeWithAI": "AI で入力",
+        "analyzing": "画像を解析中…",
+        "success": "フォームに入力されました!",
+        "errorGeneric": "エラーが発生しました",
+        "retry": "もう一度試す",
+        "errorImageOnly": "画像ファイルのみをアップロードしてください",
+        "errorReadFile": "ファイルの読み取りに失敗しました",
+        "errorAnalysis": "解析に失敗しました"
       },
       "dataEntryTabs": {
         "tabTextLabel": "Text",
-        "tabTextDesc": "Enter product info, AI fills in the rest",
+        "tabTextDesc": "製品情報を入力すると AI が残りを補完します",
         "tabFileLabel": "File",
-        "tabFileDesc": "Upload CSV file",
+        "tabFileDesc": "CSV ファイルをアップロード",
         "tabSpeechLabel": "Speech",
-        "tabSpeechDesc": "Capture products by voice",
+        "tabSpeechDesc": "音声で製品を登録",
         "tabPictureLabel": "Image",
-        "tabPictureDesc": "Capture products by photo",
-        "quickEntryTitle": "AI quick entry",
-        "quickEntryFilled": "(Filled in)",
-        "quickEntryPlaceholder": "One product or several at once — the AI recognises automatically",
-        "processingFailed": "Processing failed",
-        "dataFilled": "Data processed! Please review and complete.",
-        "speechComingSoon": "Voice capture coming soon",
-        "speechRequires": "Requires self-hosted transcription service",
-        "pictureComingSoon": "Image capture coming soon",
-        "pictureRequires": "Requires vision AI model",
-        "analyzing": "AI analysing…",
-        "fillForm": "Fill form",
-        "fileImportTitle": "File import",
-        "fileImportDesc": "Upload a CSV or Excel file with product data",
+        "tabPictureDesc": "写真で製品を登録",
+        "quickEntryTitle": "AI クイック入力",
+        "quickEntryFilled": "(入力済み)",
+        "quickEntryPlaceholder": "1 製品でも複数の製品でも一度に — AI が自動で認識します",
+        "processingFailed": "処理に失敗しました",
+        "dataFilled": "データを処理しました!内容を確認し、必要に応じて補完してください。",
+        "speechComingSoon": "音声登録は近日公開",
+        "speechRequires": "セルフホストの文字起こしサービスが必要です",
+        "pictureComingSoon": "画像登録は近日公開",
+        "pictureRequires": "ビジョン AI モデルが必要です",
+        "analyzing": "AI が解析中…",
+        "fillForm": "フォームを入力",
+        "fileImportTitle": "ファイルインポート",
+        "fileImportDesc": "製品データを含む CSV または Excel ファイルをアップロードしてください",
         "processing": "Processing…",
-        "chooseFile": "Choose CSV or Excel file or drag here",
-        "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
-        "unmappedColumns": "Unmapped columns:"
+        "chooseFile": "CSV または Excel ファイルを選択するか、ここにドラッグ",
+        "fileHint": "CSV、TSV、XLSX — 列は自動で認識されます",
+        "unmappedColumns": "マッピングされていない列:"
       },
       "formErrors": {
-        "updateFailed": "Product could not be updated",
-        "saveFailed": "Product could not be saved",
-        "genericSaveError": "Error saving. Please try again."
+        "updateFailed": "製品を更新できませんでした",
+        "saveFailed": "製品を保存できませんでした",
+        "genericSaveError": "保存中にエラーが発生しました。もう一度お試しください。"
       }
     },
     "eWasteProblem": {
-      "badge": "The Problem",
-      "heading": "The E-Waste Crisis",
-      "intro": "Electronic waste is the world's fastest-growing waste stream. The figures show the scale of the problem — and why urgent action is needed.",
-      "keyMessage": "Less than a quarter of all electronic devices are correctly recycled.",
-      "consequence": "The rest ends up in landfills, is illegally exported or improperly processed — with devastating consequences for people and the environment."
+      "badge": "問題",
+      "heading": "電子廃棄物の危機",
+      "intro": "電子廃棄物は世界で最も急速に増えている廃棄物です。数字は問題の規模と、緊急の行動が必要な理由を示しています。",
+      "keyMessage": "電子機器のうち、正しくリサイクルされているのは 4 分の 1 未満です。",
+      "consequence": "残りは埋め立て地行きとなり、違法に輸出されたり、不適切に処理されたりしています — 人と環境への深刻な影響を伴って。",
+      "units": {
+        "millionTonnes": "百万トン",
+        "percent": "%",
+        "kgPerPerson": "kg/人",
+        "kgCo2": "kg CO₂"
+      },
+      "stats": {
+        "global-total": {
+          "label": "世界の電子廃棄物",
+          "description": "世界全体で年間に発生する電子廃棄物",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "recycling-rate": {
+          "label": "リサイクル率",
+          "description": "電子廃棄物のうち適切にリサイクルされる割合",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "europe-per-capita": {
+          "label": "1 人あたりの電子廃棄物（欧州）",
+          "description": "欧州における 1 人あたりの年間電子廃棄物",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "laptop-co2": {
+          "label": "ラップトップ 1 台あたりの CO₂（Circular Computing）",
+          "description": "新品ラップトップ製造による平均的な CO₂ フットプリント",
+          "source": "Circular Computing（230 台のラップトップを対象とした調査）"
+        }
+      }
     },
     "communitySpace": {
-      "badge": "Our Location",
-      "heading": "Visit Us",
-      "intro": "Our shop in Zurich is more than just a store — it is a meeting place for everyone interested in sustainable IT and open source.",
-      "offeringsTitle": "What you can find with us:",
-      "planRoute": "Plan route",
-      "workshopDesc": "Learn from experts in our regular workshops and talks. For beginners to advanced.",
-      "workshopLink": "Workshop programme",
-      "visionLabel": "Our Vision",
-      "visionCta": "Help us make this vision a reality.",
-      "supportProject": "Support the project"
+      "badge": "私たちの拠点",
+      "heading": "お越しください",
+      "intro": "チューリッヒの私たちの店舗は単なるお店以上の存在です — 持続可能な IT とオープンソースに関心のあるすべての人のための交流の場です。",
+      "offeringsTitle": "ここでできること:",
+      "planRoute": "経路を調べる",
+      "workshopDesc": "定期的なワークショップと講演で専門家から学べます。初心者から上級者まで対応しています。",
+      "workshopLink": "ワークショップのプログラム",
+      "visionLabel": "私たちのビジョン",
+      "visionCta": "このビジョンの実現にご協力ください。",
+      "supportProject": "プロジェクトを支援する",
+      "locationName": "RevampIT ショップ",
+      "offerings": [
+        "リファービッシュ済みハードウェアの購入",
+        "ヴィンテージコンピュータコレクションの見学",
+        "対面での相談",
+        "修理または寄付のための機器の持ち込み"
+      ],
+      "workshops": {
+        "title": "ワークショップと講演",
+        "topics": [
+          "初心者向け Linux の基本",
+          "日常生活におけるオープンソースソフトウェア",
+          "持続可能な AI とその限界",
+          "代替的なテクノエコノミックモデル",
+          "修理ワークショップ: ラップトップ、スマートフォンなど",
+          "コンピュータの歴史"
+        ]
+      },
+      "vision": {
+        "title": "コミュニティテックスペース",
+        "description": "私たちの夢は、博物館、工房、そして持続可能なテクノロジーコミュニティの集いの場として機能する、より大きなスペースです。",
+        "features": [
+          "希少なヴィンテージハードウェアの博物館",
+          "歴史的なシンセサイザーと電子楽器のコレクション",
+          "修理ワークショップ向けのオープンな工房",
+          "講演やミートアップのためのイベントスペース",
+          "コミュニティ交流のためのカフェエリア"
+        ]
+      }
     },
     "messageSidebar": {
       "title": "Messages",
-      "searchPlaceholder": "Search conversations...",
-      "noConversations": "No conversations found",
+      "searchPlaceholder": "会話を検索...",
+      "noConversations": "会話が見つかりません",
       "loading": "Loading...",
-      "noMessages": "No messages yet",
-      "newConversation": "New conversation",
-      "messagePlaceholder": "Write a message..."
+      "noMessages": "まだメッセージはありません",
+      "newConversation": "新しい会話",
+      "messagePlaceholder": "メッセージを入力..."
     },
     "avatarUpload": {
-      "altText": "Profile picture",
+      "altText": "プロフィール画像",
       "saving": "Saving...",
-      "change": "Change picture",
-      "upload": "Upload picture",
-      "remove": "Remove picture",
-      "errorFileType": "Only JPG, PNG and WebP images are allowed",
-      "errorFileSize": "Image must be at most 5MB",
-      "errorUpload": "Upload failed. Please try again."
+      "change": "画像を変更",
+      "upload": "画像をアップロード",
+      "remove": "画像を削除",
+      "errorFileType": "JPG、PNG、WebP の画像のみ使用できます",
+      "errorFileSize": "画像サイズは最大 5MB までです",
+      "errorUpload": "アップロードに失敗しました。もう一度お試しください。"
     },
     "map": {
       "loading": "地図を読み込んでいます..."
@@ -7086,77 +7849,86 @@
     "stepper": {
       "progressLabel": "進捗",
       "stepOf": "ステップ {current} / {total}"
+    },
+    "missionStrip": {
+      "ariaLabel": "私たちのインパクト",
+      "anchor": "購入のたびに、1 台の機器がゴミから救われます。",
+      "subAnchor": "私たちは 2003 年から活動するスイスの循環経済を推進する非営利団体です。",
+      "devicesRehomed": "引き渡し済み機器",
+      "co2Avoided": "CO₂ 削減量",
+      "methodologyLink": "計算方法は?",
+      "estimateNote": "概算 — 現在 DB に接続できません"
     }
   },
   "profil": {
     "techniker": {
-      "pageTitle": "Technician profile",
-      "pageDesc": "Enter your skills and availability to help others with IT problems.",
-      "backToDashboard": "Back to dashboard",
-      "saveSuccess": "Profile saved successfully!",
-      "saveFailed": "Save failed",
+      "pageTitle": "テクニシャンプロフィール",
+      "pageDesc": "スキルと対応可能時間を登録して、IT トラブルで困っている人を助けましょう。",
+      "backToDashboard": "ダッシュボードに戻る",
+      "saveSuccess": "プロフィールを保存しました!",
+      "saveFailed": "保存に失敗しました",
       "skills": {
-        "heading": "Your skills",
-        "desc": "Choose the areas where you can help others."
+        "heading": "あなたのスキル",
+        "desc": "あなたが他の人を助けられる分野を選択してください。"
       },
       "serviceType": {
-        "heading": "Type of help",
-        "desc": "How would you like to offer help?"
+        "heading": "サポートの種類",
+        "desc": "どのような形でサポートを提供したいですか?"
       },
       "location": {
         "heading": "Location",
-        "desc": "Where are you available?",
-        "postalCode": "Postal code",
+        "desc": "どこで対応できますか?",
+        "postalCode": "郵便番号",
         "city": "City",
         "canton": "Canton",
-        "cantonPlaceholder": "Please select...",
-        "maxTravel": "Max. travel (km)"
+        "cantonPlaceholder": "選択してください...",
+        "maxTravel": "最大移動距離 (km)"
       },
       "pricing": {
         "heading": "Compensation",
-        "desc": "Specify how you would like to be compensated.",
-        "hourlyRate": "Hourly rate (CHF)",
-        "hourlyRateHint": "Leave blank if you only want to help for free",
-        "acceptsGratis": "I also help for free (community help)",
-        "acceptsKulturlegi": "I accept KulturLegi (50% discount)"
+        "desc": "報酬の受け取り方を指定してください。",
+        "hourlyRate": "時給 (CHF)",
+        "hourlyRateHint": "無償サポートのみ希望の場合は空欄にしてください",
+        "acceptsGratis": "無償でも助けます (コミュニティサポート)",
+        "acceptsKulturlegi": "KulturLegi を受け付けます (50% 割引)"
       },
       "bio": {
-        "heading": "About you",
-        "desc": "Tell us about your experience and why you want to help others.",
-        "placeholder": "e.g. I have been repairing computers for 10 years and love helping people use their devices longer...",
+        "heading": "あなたについて",
+        "desc": "あなたの経験と、他の人を助けたい理由を教えてください。",
+        "placeholder": "例: 10 年間コンピュータの修理をしており、デバイスを長く使えるよう人々を助けるのが好きです...",
         "charCount": "{count}/1000 characters"
       },
       "activate": {
-        "heading": "Activate profile",
-        "desc": "Your profile will appear in the technician search"
+        "heading": "プロフィールを有効化",
+        "desc": "プロフィールがテクニシャン検索に表示されます"
       },
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "skillRequired": "Please select at least one skill."
+      "skillRequired": "少なくとも 1 つのスキルを選択してください。"
     }
   },
   "vote": {
-    "notFound": "Vote not found",
-    "notFoundDesc": "This link is invalid or the vote is no longer active.",
-    "backHome": "Back to home",
+    "notFound": "投票が見つかりません",
+    "notFoundDesc": "このリンクは無効か、投票がすでに終了しています。",
+    "backHome": "ホームに戻る",
     "metaTitle": "Vote: {title}",
     "metaTitleFallback": "Vote",
-    "metaDesc": "Participate in the vote.",
-    "statusVoting": "Voting in progress",
+    "metaDesc": "投票に参加してください。",
+    "statusVoting": "投票実施中",
     "statusDiscussion": "Discussion",
-    "contextHeading": "What is this about?",
+    "contextHeading": "何についての投票ですか?",
     "optionsCount": "Options ({count})",
-    "backgroundTitle": "Background & Rationale",
-    "footer": "This vote is conducted by {org}.",
-    "emailLabel": "Your email address (for identification)",
-    "emailPlaceholder": "name@example.com",
-    "emailHint": "Your email is used to identify you as a member. One vote per person.",
+    "backgroundTitle": "背景と理由",
+    "footer": "この投票は {org} によって実施されます。",
+    "emailLabel": "あなたのメールアドレス (本人確認用)",
+    "emailPlaceholder": "name@example.ch",
+    "emailHint": "メールアドレスはメンバーであることを確認するために使用されます。1 人につき 1 票です。",
     "emailHintPublic": "この投票は公開です。メールアドレスを入力してください — アカウント不要。メール1件につき1票。",
-    "yourVote": "Your vote",
-    "emailRequired": "Please enter your email address",
-    "submitError": "Error submitting vote",
-    "networkError": "Network error — please try again",
+    "yourVote": "あなたの投票",
+    "emailRequired": "メールアドレスを入力してください",
+    "submitError": "投票の送信に失敗しました",
+    "networkError": "ネットワークエラーが発生しました — もう一度お試しください",
     "successHeading": "投票完了",
     "successDesc": "投票が正常に保存されました。",
     "successRegisterHeading": "結果を確認しますか？",
@@ -7165,9 +7937,9 @@
     "successOrLogin": "すでにアカウントをお持ちですか？",
     "successLoginCta": "ログイン",
     "notStartedHeading": "この投票はまだ開始されていません",
-    "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
+    "notStartedDesc": "リンクは有効ですが、投票期間がまだ開始していません。",
     "saving": "Saving...",
-    "submit": "Submit vote"
+    "submit": "投票する"
   },
   "meta": {
     "meta": {},
@@ -7179,5 +7951,190 @@
     "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。",
     "layoutTitle": "プロジェクト",
     "templateSuffix": "プロジェクト"
+  },
+  "admin": {
+    "approvals": {
+      "approve": "承認",
+      "release": "公開",
+      "accept": "受け入れる"
+    },
+    "hirn": {
+      "assistantSubtitle": "アシスタント",
+      "openFullscreen": "全画面で開く"
+    },
+    "team": {
+      "backToTeam": "チームに戻る",
+      "edit": "編集",
+      "inactive": "非アクティブ",
+      "since": "開始日",
+      "activities": "活動",
+      "viewTeamActivities": "チームの活動を見る",
+      "activitiesDescription": "完了したタスク、マイルストーン、ヘルプリクエスト",
+      "skillsAndInterests": "スキルと興味",
+      "skills": "スキル",
+      "noSkills": "登録されているスキルはありません",
+      "interests": "興味",
+      "development": "成長",
+      "goals": "目標",
+      "strengths": "強み",
+      "developmentAreas": "成長領域",
+      "noDevelopmentData": "登録されている成長データはありません",
+      "availability": "稼働状況",
+      "workingHours": "勤務時間",
+      "contractHours": "契約時間",
+      "hoursPerWeek": "時間/週",
+      "generalAvailability": "一般的な稼働状況",
+      "preferredContact": "希望の連絡方法",
+      "emergencyContact": "緊急連絡先",
+      "hrNotes": "HR メモ(機密)",
+      "createdAt": "作成日",
+      "updatedAt": "更新日"
+    },
+    "protocols": {
+      "queueTitle": "AI レビューキュー",
+      "queueDescription": "AI の結果を確認し、そこからタスクや決定事項を生成して完了させます。",
+      "newProtocol": "新しい議事録",
+      "noPendingReviews": "レビュー待ちの議事録はありません。",
+      "noPendingDescription": "AI が構造化を完了次第、新しい文字起こしやメモがここに表示されます。",
+      "recognizedActions": "認識されたアクション",
+      "notInTaskSystem": "まだタスクシステムに未登録",
+      "readyToClose": "完了準備完了",
+      "open": "未対応",
+      "by": "作成者",
+      "openReview": "レビューを開く",
+      "record": {
+        "start": "録音",
+        "stop": "停止",
+        "stopAriaLabel": "録音を停止",
+        "consentRequired": "まず同意を確認してください",
+        "errorPermission": "マイクへのアクセスが拒否されました。ブラウザ設定でアクセスを許可するか、代わりにファイルをアップロードしてください。"
+      },
+      "consent": {
+        "label": "参加者全員が録音に同意しました。",
+        "remember": "この確認を保存する(このブラウザのみ)"
+      },
+      "alternatives": {
+        "title": "うまくいかない場合は? 他の方法",
+        "subtitle": "オープンソースツールをおすすめします。すべてローカルまたはセルフホストで動作し、会議データがコンピュータから外に出ることはありません。",
+        "recordHeading": "自分で録音する",
+        "recordIntro": "ブラウザでの録音がうまくいかない場合:",
+        "transcribeHeading": "自分で文字起こしする",
+        "transcribeIntro": "私たちの文字起こしサービスが現在利用できない場合:",
+        "structureHeading": "自分で構造化する",
+        "structureIntro": "ここで AI が応答しない場合、このプロンプトをローカルモデル(Ollama、llama.cpp)またはお好みのチャットボットに渡してください:",
+        "copyPrompt": "プロンプトをコピー",
+        "copied": "コピー済み",
+        "promptTemplate": "あなたは会議の構造化担当です。次の会議の文字起こしを読み、以下のキーを持つ JSON として結果を返してください:\n  - participants: 参加者名のリスト\n  - topics: 議論項目のリスト(簡潔に)\n  - decisions: 行われた決定のリスト\n  - tasks: { description, assignee, dueDate } のリスト\n  - openQuestions: 未解決の質問のリスト\n\n文字起こし:\n---"
+      }
+    },
+    "categories": {
+      "titleNew": "新しいカテゴリー",
+      "titleEdit": "カテゴリーを編集",
+      "subtitleNew": "新しいブログカテゴリーを作成",
+      "subtitleEdit": "カテゴリーの詳細を調整",
+      "delete": "削除",
+      "deleting": "削除中...",
+      "save": "保存",
+      "saving": "保存中...",
+      "preview": "プレビュー",
+      "defaultName": "カテゴリー名",
+      "deleteDialog": {
+        "title": "カテゴリーを削除",
+        "message": "本当にこのカテゴリーを削除しますか?"
+      }
+    },
+    "dashboard": {
+      "myTasks": "マイタスク",
+      "assignedTasks": "割り当てられたタスク",
+      "viewAllTasks": "すべてのタスクを表示",
+      "submittedContent": "提出されたコンテンツ",
+      "awaitingApproval": "承認待ち",
+      "viewAllSubmissions": "すべての提出を表示",
+      "contentTypeLabels": {
+        "blogPost": "ブログ記事",
+        "workshop": "ワークショップ",
+        "service": "サービス",
+        "other": "提出"
+      }
+    },
+    "projects": {
+      "sidebar": "公開プロジェクト",
+      "pageTitle": "公開プロジェクト",
+      "pageDescription": "公開されているプロジェクトのリソース需要を管理し、寄せられた貢献を仕分けします。",
+      "detailDescription": "ニーズと寄せられた貢献",
+      "detailTitle": "プロジェクト: {slug}",
+      "publicPageLink": "公開ページ",
+      "fallbackTaskProjectLabel": "タスクプロジェクト",
+      "stats": {
+        "total": "プロジェクト合計",
+        "active": "アクティブ",
+        "openNeeds": "未対応のニーズ",
+        "newContributions": "新しい貢献"
+      },
+      "empty": {
+        "title": "公開プロジェクトはまだありません",
+        "description": "プロジェクトはマイグレーションで作成されます(スラッグは i18n プロジェクトページと一致する必要があります)。"
+      },
+      "card": {
+        "inactive": "非アクティブ",
+        "openNeeds": "未対応のニーズ",
+        "newContributions": "新しい貢献"
+      },
+      "needs": {
+        "title": "ニーズ",
+        "subtitle": "プロジェクトが現在必要としているもの。ステータスが「未対応」になると公開されます。",
+        "new": "新しいニーズ",
+        "addCancel": "キャンセル",
+        "addSubmit": "追加",
+        "placeholderTitle": "タイトル",
+        "placeholderDescription": "説明",
+        "placeholderQuantity": "目標数量(任意)",
+        "placeholderUnit": "単位(例: モニター、CHF)",
+        "placeholderQuantityShort": "数量",
+        "placeholderUnitShort": "単位",
+        "confirmDelete": "本当にこのニーズを削除しますか?",
+        "errorSave": "保存に失敗しました",
+        "errorDelete": "削除に失敗しました",
+        "errorCreate": "作成に失敗しました",
+        "tooltipSave": "保存",
+        "tooltipDelete": "削除",
+        "empty": "まだニーズは定義されていません。",
+        "fieldType": "タイプ",
+        "fieldTitle": "タイトル",
+        "fieldStatus": "ステータス"
+      },
+      "contributions": {
+        "title": "寄せられた貢献",
+        "subtitle": "公開プロジェクトページからの提供を受け取る受信箱。",
+        "filterAll": "すべて",
+        "emptyAll": "貢献はありません。",
+        "emptyFiltered": "ステータス「{status}」の貢献はありません。",
+        "needFallback": "一般",
+        "needLabel": "ニーズ",
+        "notesPlaceholder": "内部メモ(送信者には表示されません)",
+        "lastEdited": "{date} に {name} が最終編集",
+        "tooltipSave": "保存",
+        "errorSave": "保存に失敗しました"
+      },
+      "typeLabels": {
+        "expertise": "専門知識",
+        "hardware": "ハードウェア",
+        "partner_intro": "パートナー紹介",
+        "funding": "資金提供",
+        "volunteer_time": "ボランティア活動"
+      },
+      "needStatusLabels": {
+        "open": "未対応",
+        "matched": "マッチ済み",
+        "fulfilled": "達成済み",
+        "archived": "アーカイブ済み"
+      },
+      "contributionStatusLabels": {
+        "new": "新規",
+        "contacted": "連絡済み",
+        "accepted": "承認済み",
+        "declined": "却下済み"
+      }
+    }
   }
 }

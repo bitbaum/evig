@@ -101,7 +101,52 @@
       "donateDevicesDesc": "Donner une seconde vie au matériel",
       "partnershipDesc": "Devenir partenaire en tant qu'entreprise",
       "becomeMemberDesc": "Rejoindre l'association et avoir votre mot à dire",
-      "contactDesc": "Nous sommes impatients de vous entendre"
+      "contactDesc": "Nous sommes impatients de vous entendre",
+      "about": "À propos",
+      "missionHistory": "Mission et histoire",
+      "impact": "Notre impact",
+      "projects": "Projets",
+      "locations": "Sites",
+      "faq": "FAQ",
+      "services": "Services",
+      "hardware": "Matériel",
+      "repairUpgrades": "Réparation et mises à niveau",
+      "dataRecovery": "Récupération de données",
+      "hardwareRecycling": "Recyclage de matériel",
+      "software": "Logiciel",
+      "linuxOpenSource": "Linux et open source",
+      "webDev": "Développement web",
+      "openSourceSolutions": "Solutions open source",
+      "marketplace": "Marché",
+      "buyDevices": "Acheter des appareils",
+      "communityListings": "Annonces de la communauté",
+      "orgShop": "Boutique Revamp-IT",
+      "store": "Magasin de Zurich",
+      "sell": "Vendre",
+      "createListing": "Créer une annonce",
+      "myListings": "Mes annonces",
+      "itHelp": "Aide informatique",
+      "findHelp": "Trouver de l'aide",
+      "findTechnician": "Trouver un technicien",
+      "becomeTechnician": "Devenir technicien",
+      "learn": "Apprendre",
+      "workshops": "Ateliers",
+      "guides": "Guides",
+      "blog": "Blog",
+      "wiki": "Wiki",
+      "getInvolved": "Participer",
+      "engagement": "Engagement",
+      "volunteer": "Bénévolat",
+      "internship": "Stage",
+      "reintegration": "Réinsertion",
+      "itHelpTechnician": "Technicien aide informatique",
+      "support": "Soutenir",
+      "donate": "Faire un don",
+      "donateDevices": "Donner des appareils",
+      "partnership": "Partenariat",
+      "membership": "Adhésion",
+      "becomeMember": "Devenir membre",
+      "contact": "Contact"
     }
   },
   "common": {
@@ -191,7 +236,7 @@
     "irreversible": "Cette action ne peut pas être annulée."
   },
   "footer": {
-    "tagline": "Ancien matériel. Nouvelle vie.",
+    "tagline": "Vieux matériel. Nouvelle vie.",
     "mission": "Nous sommes une association à but non lucratif suisse dédiée à la technologie durable.",
     "navigation": "Navigation",
     "services": "Services",
@@ -216,12 +261,12 @@
       "description": "Acheter & vendre du matériel informatique d'occasion. Réparation par la communauté. Ateliers Linux, hardware et programmation."
     },
     "hero": {
-      "title": "Vieux matériel. Nouvelle vie.",
+      "title": "Vieux matériel.",
       "subtitle": "Chaque année, 62 millions de tonnes d'appareils électroniques finissent à la poubelle. Nous changeons cela — avec une communauté qui répare, partage et apprend ensemble.",
       "ctaDiscover": "Découvrir maintenant",
       "ctaAbout": "Qui sommes-nous",
       "positioning": "Association suisse à but non lucratif pour l'économie circulaire depuis 2003",
-      "titleSecondary": "Une seconde vie.",
+      "titleSecondary": "Nouvelle vie.",
       "lede": "Nous réparons des ordinateurs d'occasion et les apportons aux personnes qui en ont besoin.",
       "sublede": "Association suisse à but non lucratif depuis 2003 — portée par une communauté qui répare, transmet et apprend les uns des autres.",
       "ctaDonate": "Faire don d'un appareil"
@@ -429,6 +474,16 @@
         "onlineShop": "Boutique en ligne {orgName}",
         "multiShopTitle": "Plusieurs canaux de vente ?",
         "multiShopBody": "Notre boutique en ligne {orgName} vous offre le meilleur choix de matériel informatique reconditionné. Vous trouverez également notre catalogue sur Shopware et dans le système historique."
+      },
+      "otherPaths": {
+        "altTitle": "D'autres voies vers une technologie abordable",
+        "altIntro": "Tout le monde n'arrive pas ici pour acheter — nous mettons aussi des appareils à disposition de personnes aux moyens limités et nous récupérons volontiers votre ancien matériel.",
+        "donateTitle": "Donner du matériel",
+        "donateBody": "Confiez à Revamp-IT des appareils fonctionnels ou réparables — nous les remettons en état et les transmettons.",
+        "donateCta": "Vers la page de dons",
+        "needTitle": "Vous avez besoin d'un appareil mais ne pouvez pas vous le permettre ?",
+        "needBody": "Via le programme Compirat, nous fournissons, en collaboration avec Caritas Zurich, des appareils à des personnes aux moyens limités.",
+        "needCta": "Voir Compirat"
       }
     },
     "search": {
@@ -638,7 +693,12 @@
       "verifiedOnly": "Appareils vérifiés seulement",
       "technicalFilters": "Filtres techniques",
       "sellerTypeAriaLabel": "Type de vendeur",
-      "categoryAriaLabel": "Filtre par catégorie"
+      "categoryAriaLabel": "Filtre par catégorie",
+      "categoryTitle": "Catégorie",
+      "sellerTypeTitle": "Vendeur",
+      "qualityTitle": "Qualité",
+      "showResults": "Afficher les résultats",
+      "closeLabel": "Fermer"
     },
     "listing": {
       "contact": "Contacter le vendeur",
@@ -706,7 +766,15 @@
       "errorMessage": "Erreur lors de l'envoi du message",
       "errorNetworkMessage": "Erreur réseau lors de l'envoi du message",
       "errorReport": "Erreur lors du signalement de l'annonce",
-      "errorNetworkReport": "Erreur réseau lors du signalement de l'annonce"
+      "errorNetworkReport": "Erreur réseau lors du signalement de l'annonce",
+      "buyNow": "Acheter maintenant",
+      "revampitTrustTitle": "Vérifié par Revamp-IT",
+      "revampitTrustDesc": "Remis à neuf professionnellement, testé et prêt pour son prochain propriétaire",
+      "unavailableReserved": "Cette annonce est réservée par une autre personne.",
+      "unavailableSold": "Cette annonce est déjà vendue.",
+      "unavailableRemoved": "Cette annonce a été retirée et n'est plus disponible.",
+      "unavailableDraft": "Cette annonce n'est pas encore publiée.",
+      "unavailableGeneric": "Cette annonce n'est pas disponible actuellement."
     },
     "conditionExplainer": "Que signifie \"{condition}\" pour {category} ?",
     "pagination": {
@@ -900,7 +968,10 @@
         "soon": "Bientôt Disponible"
       },
       "filterByCategory": "Filtrer par catégorie",
-      "ctaEyebrow": "PRÊT ?"
+      "ctaEyebrow": "PRÊT ?",
+      "badges": {
+        "soon": "Bientôt"
+      }
     },
     "servicePage": {
       "comingSoonBanner": "Ce service arrive bientôt. Contactez-nous pour exprimer votre intérêt et être notifié lorsqu'il sera disponible."
@@ -2400,6 +2471,61 @@
         "description": "Ton soutien fait la différence. Chaque contribution, grande ou petite, nous aide à rendre le paysage informatique suisse plus durable et à donner de nouvelles opportunités aux personnes.",
         "donate": "Donner maintenant",
         "contact": "Prendre contact"
+      },
+      "categories": {
+        "environmental": "ENVIRONNEMENT",
+        "social": "SOCIAL",
+        "economic": "ÉCONOMIE"
+      },
+      "units": {
+        "tonnes": "tonnes"
+      },
+      "eyebrows": {
+        "impact": "IMPACT",
+        "annual": "RAPPORT ANNUEL",
+        "register": "REGISTRE"
+      },
+      "metrics": {
+        "devices-recycled": {
+          "title": "Appareils sauvés par an",
+          "description": "Nombre d'appareils IT que nous sauvons chaque année du rebut (vendus)",
+          "methodology": "Estimation prudente basée sur le chiffre d'affaires des ventes ÷ prix moyen. Un suivi systématique est en cours de mise en place."
+        },
+        "device-lifespan": {
+          "title": "Prolongation de la durée de vie",
+          "description": "Prolongation moyenne de la durée de vie par appareil (en années)",
+          "methodology": "Valeurs empiriques de plus de 20 ans de reconditionnement : Linux prolonge significativement la durée de vie du matériel ancien."
+        },
+        "reuse-rate": {
+          "title": "Taux de réutilisation",
+          "description": "Part des appareils donnés que nous réutilisons avec succès",
+          "methodology": "Sur tous les appareils donnés, ~75 % sont réparés et réutilisés avec succès. Les ~25 % restants sont recyclés professionnellement."
+        },
+        "co2-savings": {
+          "title": "Économies de CO₂ annuelles",
+          "description": "Économies de CO₂ annuelles estimées grâce à la réutilisation plutôt qu'à la production neuve",
+          "methodology": "Production d'un nouveau laptop : 350 kg CO₂ (Fraunhofer IZM 2023). Reconditionnement : 65 kg CO₂. Économie par appareil : 285 kg. Pour 150 appareils vendus/an ≈ 43 tonnes."
+        },
+        "ewaste-prevented": {
+          "title": "Déchets électroniques évités",
+          "description": "Quantité de déchets électroniques que nous évitons chaque année",
+          "methodology": "Poids moyen par appareil avec périphériques : 5 kg. 150 appareils × 5 kg = 0,75 tonne par an."
+        },
+        "people-trained": {
+          "title": "Personnes formées",
+          "description": "Personnes que nous formons chaque année à l'Open Source et à l'IT durable",
+          "methodology": "Participant·es aux ateliers, stages et programmes de formation continue par an."
+        },
+        "internship-success": {
+          "title": "Stages réussis",
+          "description": "De nos stagiaires trouvent un emploi en IT ou une formation continue",
+          "methodology": "Estimé sur la base de valeurs empiriques historiques ; pas encore mesuré systématiquement."
+        },
+        "career-reentries": {
+          "title": "Réinsertions professionnelles",
+          "description": "Réinsertions professionnelles réussies grâce à notre programme",
+          "methodology": "Estimé sur la base de ~10 stagiaires/an avec un accès restreint au marché du travail et ~40 % de taux de réussite."
+        }
       }
     },
     "press": {
@@ -3028,8 +3154,8 @@
       "errorVerificationFailed": "Échec de la vérification de l'e-mail. Le lien a peut-être expiré.",
       "errorVerificationError": "Une erreur s'est produite lors de la vérification de l'e-mail",
       "errorConnection": "Problème de connexion. Veuillez réessayer dans une minute.",
-      "backHome": "Back to home",
-      "pageTitle": "Sign in | RevampIT"
+      "backHome": "Retour à l'accueil",
+      "pageTitle": "Connexion | RevampIT"
     },
     "register": {
       "title": "S'inscrire",
@@ -3074,39 +3200,42 @@
       "back": "Retour",
       "creating": "Création en cours...",
       "showPassword": "Afficher le mot de passe",
-      "hidePassword": "Masquer le mot de passe"
+      "hidePassword": "Masquer le mot de passe",
+      "donateHardware": "Donner un appareil",
+      "donateHardwareDesc": "Offrez une seconde vie à votre ancien ordinateur",
+      "featuredBadge": "Notre mission"
     },
     "logout": {
       "title": "Déconnexion en cours...",
-      "wait": "Please wait a moment.",
+      "wait": "Veuillez patienter un instant.",
       "failed": "Échec de la déconnexion",
-      "retry": "Try again",
-      "backToDashboard": "Back to Dashboard",
-      "pageTitle": "Sign out | RevampIT",
-      "heading": "Signing out...",
-      "errorHeading": "Sign-out failed",
-      "errorMessage": "Sign-out failed. Please try again."
+      "retry": "Se déconnecter à nouveau",
+      "backToDashboard": "Retour au tableau de bord",
+      "pageTitle": "Déconnexion | RevampIT",
+      "heading": "Déconnexion en cours...",
+      "errorHeading": "Échec de la déconnexion",
+      "errorMessage": "Échec de la déconnexion. Veuillez réessayer."
     },
     "forgotPassword": {
       "title": "Réinitialiser le mot de passe",
       "description": "Saisissez votre adresse courriel et nous vous enverrons un lien de réinitialisation.",
       "email": "Adresse courriel",
-      "submit": "Send password reset",
-      "backToLogin": "Back to login",
-      "heading": "Reset password",
-      "subheading": "Enter your email address and we will send you a link to reset your password.",
-      "emailLabel": "Email address",
-      "emailPlaceholder": "your@email.com",
-      "submitLoading": "Sending email...",
-      "rememberPassword": "Remember your password?",
-      "loginLink": "Login now",
-      "successHeading": "Email sent!",
-      "successSubheading": "We sent you an email with instructions to reset your password.",
-      "successInstructions": "Check your inbox and follow the instructions. If you did not receive an email, check your spam folder.",
-      "successLoginLink": "Go to login",
-      "successOtherEmail": "Use a different email address",
-      "genericError": "An error occurred",
-      "resetFailed": "Password reset failed"
+      "submit": "Envoyer la réinitialisation du mot de passe",
+      "backToLogin": "Retour à la connexion",
+      "heading": "Réinitialiser le mot de passe",
+      "subheading": "Saisissez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "votre@email.ch",
+      "submitLoading": "Envoi de l'e-mail...",
+      "rememberPassword": "Vous vous souvenez de votre mot de passe ?",
+      "loginLink": "Se connecter maintenant",
+      "successHeading": "E-mail envoyé !",
+      "successSubheading": "Nous vous avons envoyé un e-mail contenant les instructions pour réinitialiser votre mot de passe.",
+      "successInstructions": "Consultez votre boîte de réception et suivez les instructions. Si vous n'avez pas reçu d'e-mail, vérifiez votre dossier spam.",
+      "successLoginLink": "Aller à la connexion",
+      "successOtherEmail": "Utiliser une autre adresse e-mail",
+      "genericError": "Une erreur est survenue",
+      "resetFailed": "Échec de la réinitialisation du mot de passe"
     },
     "verify": {
       "heading": "Confirmez votre e-mail",
@@ -3121,55 +3250,59 @@
       "verifying": "Vérification...",
       "verify": "Vérifier",
       "successHeading": "E-mail vérifié !",
-      "successDesc": "Votre compte est maintenant entièrement activé."
+      "successDesc": "Votre compte est maintenant entièrement activé.",
+      "editEmail": "Modifier l'e-mail",
+      "codeLabel": "Code de confirmation à 6 chiffres"
     },
     "error": {
-      "heading": "Authentication error",
-      "message": "An error occurred while signing in. Please try again.",
-      "retry": "Try again",
-      "goToLogin": "Go to sign in"
+      "heading": "Erreur d'authentification",
+      "message": "Une erreur est survenue lors de la connexion. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "goToLogin": "Aller à la page de connexion"
     },
     "verifyEmail": {
-      "heading": "Confirm email address",
-      "subheading": "We are confirming your email address...",
-      "loading": "Confirming email address...",
-      "successHeading": "Email address confirmed!",
-      "successRedirect": "You will be redirected to login in a few seconds...",
-      "successLogin": "Login now →",
-      "errorHeading": "Verification failed",
-      "errorLogin": "Go to login",
-      "errorRetry": "Try again",
-      "noToken": "Invalid verification link. Token missing.",
-      "networkError": "Network error. Please try again later.",
-      "genericError": "Verification failed",
+      "heading": "Confirmer l'adresse e-mail",
+      "subheading": "Nous confirmons votre adresse e-mail...",
+      "loading": "Confirmation de l'adresse e-mail...",
+      "successHeading": "Adresse e-mail confirmée !",
+      "successRedirect": "Vous serez redirigé vers la connexion dans quelques secondes...",
+      "successLogin": "Se connecter maintenant →",
+      "errorHeading": "Échec de la vérification",
+      "errorLogin": "Aller à la connexion",
+      "errorRetry": "Réessayer",
+      "noToken": "Lien de vérification invalide. Jeton manquant.",
+      "networkError": "Erreur réseau. Veuillez réessayer plus tard.",
+      "genericError": "Échec de la vérification",
       "title": "Vérifier l'email"
     },
     "resetPassword": {
-      "heading": "Set new password",
-      "subheading": "Enter your new password.",
-      "newPasswordLabel": "New password",
-      "newPasswordPlaceholder": "At least 8 characters",
-      "confirmPasswordLabel": "Confirm password",
-      "confirmPasswordPlaceholder": "Repeat password",
-      "requirementsTitle": "Password requirements:",
-      "requirementLength": "At least 8 characters",
-      "requirementMatch": "Passwords match",
-      "submitLoading": "Changing password...",
-      "submit": "Change password",
-      "invalidLink": "Invalid link",
-      "invalidLinkDesc": "This password reset link is invalid or has expired.",
-      "requestNewLink": "Request new reset link",
-      "backToLogin": "Back to login",
-      "successHeading": "Password changed!",
-      "successDesc": "Your password has been changed. You can now log in with your new password.",
-      "successRedirect": "You will be redirected to login in a few seconds...",
-      "loginNow": "Login now",
-      "errorInvalidToken": "Invalid reset link",
-      "errorTooShort": "Password must be at least 8 characters",
-      "errorMismatch": "Passwords do not match",
-      "errorResetFailed": "Password reset failed",
-      "genericError": "An error occurred",
-      "title": "Réinitialiser le mot de passe"
+      "heading": "Définir un nouveau mot de passe",
+      "subheading": "Saisissez votre nouveau mot de passe.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "Au moins 8 caractères",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Répéter le mot de passe",
+      "requirementsTitle": "Exigences du mot de passe :",
+      "requirementLength": "Au moins 8 caractères",
+      "requirementMatch": "Les mots de passe correspondent",
+      "submitLoading": "Modification du mot de passe...",
+      "submit": "Modifier le mot de passe",
+      "invalidLink": "Lien invalide",
+      "invalidLinkDesc": "Ce lien de réinitialisation du mot de passe est invalide ou a expiré.",
+      "requestNewLink": "Demander un nouveau lien de réinitialisation",
+      "backToLogin": "Retour à la connexion",
+      "successHeading": "Mot de passe modifié !",
+      "successDesc": "Votre mot de passe a été modifié avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+      "successRedirect": "Vous serez redirigé vers la connexion dans quelques secondes...",
+      "loginNow": "Se connecter maintenant",
+      "errorInvalidToken": "Lien de réinitialisation invalide",
+      "errorTooShort": "Le mot de passe doit comporter au moins 8 caractères",
+      "errorMismatch": "Les mots de passe ne correspondent pas",
+      "errorResetFailed": "Échec de la réinitialisation du mot de passe",
+      "genericError": "Une erreur est survenue",
+      "title": "Réinitialiser le mot de passe",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe"
     },
     "accountTitle": "Compte",
     "accountDesc": "Connectez-vous à RevampIT pour soumettre des demandes de réparation, trader sur le marché et rejoindre des ateliers."
@@ -4287,7 +4420,12 @@
       "noListingsDescription": "Ce vendeur n'a actuellement aucune annonce active.",
       "loadingProfile": "Chargement du profil...",
       "sellerNotFound": "Vendeur introuvable",
-      "errorLoading": "Erreur lors du chargement du profil"
+      "errorLoading": "Erreur lors du chargement du profil",
+      "meta": {
+        "title": "{name} – Vendeur sur le marché RevampIT",
+        "titleFallback": "Profil vendeur – Marché RevampIT",
+        "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
+      }
     }
   },
   "support": {
@@ -4714,48 +4852,34 @@
       },
       {
         "title": "Monitor-Upcycling",
-        "description": "Discarded computer monitors are transformed into functional, sustainable lamps. A pilot project for the circular economy in collaboration with sheltered workshops and property partners.",
-        "category": "hardware",
-        "status": "ongoing",
-        "features": [
-          "Converting monitors into lamps",
-          "Small series & quality assurance",
-          "Collaboration with social enterprises",
-          "Ecological analyses (ZHAW)"
-        ],
-        "slug": "upcycling",
-        "year": "2025",
-        "readMoreLink": "/projects/upcycling"
-      },
-      {
-        "title": "Monitor-Upcycling",
         "description": "Les moniteurs d'ordinateur mis au rebut sont transformés en lampes fonctionnelles et durables. Un projet pilote pour l'économie circulaire en collaboration avec des ateliers protégés et des partenaires immobiliers – avec des instructions ouvertes et un accompagnement scientifique.",
-        "slug": "upcycling",
         "category": "hardware",
         "status": "ongoing",
-        "year": "2025",
         "features": [
           "Transformation de moniteurs en lampes",
           "Petite série et assurance qualité",
           "Collaboration avec des entreprises sociales",
           "Analyses écologiques (ZHAW)"
-        ]
+        ],
+        "slug": "upcycling",
+        "year": "2025",
+        "readMoreLink": "/projects/upcycling"
       }
     ],
     "freiecomputer": {
       "meta": {
-        "title": "FreieComputer.ch - Swiss Label for Free Software",
-        "description": "The Swiss label for computers with pre-installed free software and guaranteed support. Promoting freedom of choice in computing since 2010."
+        "title": "FreieComputer.ch - Le label suisse pour le logiciel libre",
+        "description": "Le label suisse pour les ordinateurs avec logiciels libres préinstallés et support garanti. Promeut la liberté de choix en informatique depuis 2010."
       },
       "hero": {
         "title": "FreieComputer.ch",
-        "description": "The Swiss label for computers with pre-installed free software and guaranteed support",
-        "cta1": "Support our mission",
+        "description": "Le label suisse pour les ordinateurs avec logiciels libres préinstallés et support garanti",
+        "cta1": "Soutenez notre mission",
         "cta2": "Contact"
       },
       "about": {
-        "title": "About FreieComputer.ch",
-        "description": "Together with committed people from the open-source community, revamp-it helped establish this label to promote freedom of choice in computing and support retailers selling computers with pre-installed free software.",
+        "title": "À propos de FreieComputer.ch",
+        "description": "Avec des personnes engagées issues de la communauté open source, revamp-it a contribué à établir ce label afin de promouvoir la liberté de choix en informatique et de soutenir les revendeurs qui vendent des ordinateurs équipés de logiciels libres préinstallés.",
         "cards": [
           {
             "title": "Free Software",
@@ -4772,7 +4896,7 @@
         ]
       },
       "mission": {
-        "title": "Our Mission",
+        "title": "Notre mission",
         "cards": [
           {
             "title": "Breaking the monopoly",
@@ -4813,7 +4937,7 @@
         ]
       },
       "history": {
-        "title": "Our History",
+        "title": "Notre histoire",
         "cards": [
           {
             "title": "Our History",
@@ -4827,7 +4951,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "Participez",
         "actions": [
           {
             "title": "Get involved",
@@ -4849,18 +4973,18 @@
     },
     "hardware": {
       "meta": {
-        "title": "Hardware Development",
-        "description": "revamp-it's hardware development work focuses on finding new uses for retired computer hardware, optimising energy use and creating open-source hardware assembly guides."
+        "title": "Développement matériel",
+        "description": "Le travail de développement matériel de revamp-it se concentre sur de nouvelles possibilités pour le matériel informatique mis au rebut, l'optimisation énergétique et les guides matériels open source."
       },
       "hero": {
-        "title": "Hardware Development",
-        "description": "Innovative solutions for sustainable computing",
-        "cta1": "Join our projects",
+        "title": "Développement matériel",
+        "description": "Des solutions innovantes pour une informatique durable",
+        "cta1": "Participer à nos projets",
         "cta2": "Contact"
       },
       "overview": {
-        "title": "About our hardware work",
-        "description": "At revamp-it we focus on finding new applications for retired computer hardware that is still fully functional but no longer suited to its original purpose due to technological advances.",
+        "title": "À propos de notre travail matériel",
+        "description": "Chez revamp-it, nous nous concentrons sur la recherche de nouvelles applications pour le matériel informatique mis au rebut, qui est encore entièrement fonctionnel mais qui n'est plus adapté à son usage initial en raison des progrès technologiques.",
         "cards": [
           {
             "title": "Hardware reuse",
@@ -4877,7 +5001,7 @@
         ]
       },
       "projects": {
-        "title": "Current projects",
+        "title": "Projets actuels",
         "cards": [
           {
             "title": "12V power supply for recycled computers",
@@ -4918,7 +5042,7 @@
         ]
       },
       "scsi": {
-        "title": "SCSI cable reuse",
+        "title": "Réutilisation des câbles SCSI",
         "cards": [
           {
             "title": "SCSI cable reuse",
@@ -4932,7 +5056,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "Participez",
         "actions": [
           {
             "title": "Share knowledge",
@@ -4954,18 +5078,18 @@
     },
     "linuxola": {
       "meta": {
-        "title": "Linuxola Association",
-        "description": "Linuxola is a Swiss organisation dedicated to providing access to information technology and connecting African partners to the global digital commons."
+        "title": "Association Linuxola",
+        "description": "Linuxola est une organisation suisse qui se consacre à l'accès aux technologies de l'information et à la connexion de partenaires africains aux biens communs numériques mondiaux."
       },
       "hero": {
-        "title": "Linuxola Association",
-        "description": "Bridging the digital divide between Switzerland and Africa",
-        "cta1": "Donate equipment",
+        "title": "Association Linuxola",
+        "description": "Combler la fracture numérique entre la Suisse et l'Afrique",
+        "cta1": "Faire don de matériel",
         "cta2": "Volunteer"
       },
       "about": {
-        "title": "About Linuxola",
-        "description": "The Linuxola association was founded on 2 December 2005 by eight people from different regions of Switzerland. The purpose of the association is to enable our partners in Africa to access information technology and connect to the global digital commons."
+        "title": "À propos de Linuxola",
+        "description": "L'association Linuxola a été fondée le 2 décembre 2005 par huit personnes issues de différentes régions de Suisse. Le but de l'association est de permettre à nos partenaires en Afrique d'accéder aux technologies de l'information et de se connecter aux biens communs numériques mondiaux."
       },
       "impact": {
         "cards": [
@@ -4990,7 +5114,7 @@
         ]
       },
       "equipment": {
-        "title": "Equipment needed",
+        "title": "Matériel nécessaire",
         "cards": [
           {
             "title": "Computers & laptops",
@@ -5022,7 +5146,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "Participez",
         "actions": [
           {
             "title": "Donate equipment",
@@ -5045,17 +5169,17 @@
     "kivitendo": {
       "meta": {
         "title": "Kivitendo - Open Source CRM & ERP | revamp-it",
-        "description": "The unique open-source CRM & ERP by revamp-it, meeting the highest quality standards through continuous personalised development."
+        "description": "Le CRM et ERP open source unique de revamp-it, qui répond aux normes de qualité les plus élevées grâce à un développement personnalisé continu."
       },
       "hero": {
         "title": "Kivitendo",
-        "description": "The unique open-source CRM & ERP that meets the highest quality standards through continuous personalised development",
+        "description": "Le CRM et ERP open source unique qui répond aux normes de qualité les plus élevées grâce à un développement personnalisé continu",
         "cta1": null,
         "cta2": null
       },
       "why": {
-        "title": "Why choose Kivitendo?",
-        "description": "A comprehensive solution for order processing, inventory management and financial accounting",
+        "title": "Pourquoi choisir Kivitendo ?",
+        "description": "Une solution complète pour le traitement des commandes, la gestion des stocks et la comptabilité financière",
         "cards": [
           {
             "title": "Open-source advantages",
@@ -5084,8 +5208,8 @@
         ]
       },
       "features": {
-        "title": "Key features",
-        "description": "Comprehensive functionality for your business requirements",
+        "title": "Caractéristiques principales",
+        "description": "Des fonctionnalités complètes pour vos besoins commerciaux",
         "cards": [
           {
             "title": "Business configuration",
@@ -5108,8 +5232,8 @@
         ]
       },
       "partnership": {
-        "title": "Premium partnership",
-        "description": "Since July 2015, revamp-it has been a premium partner of the Kivitendo project. We offer configuration and support for this open-source ERP system.",
+        "title": "Partenariat Premium",
+        "description": "Depuis juillet 2015, revamp-it est partenaire Premium du projet Kivitendo. Nous proposons la configuration et le support de ce système ERP open source.",
         "cards": [
           {
             "title": "Our services",
@@ -5123,7 +5247,7 @@
         ]
       },
       "cta": {
-        "title": "Learn more",
+        "title": "En savoir plus",
         "actions": [
           {
             "title": "Kivitendo Switzerland",
@@ -5145,18 +5269,18 @@
     },
     "compirat": {
       "meta": {
-        "title": "Compirat - Computer skills with Linux | revamp-it",
-        "description": "A joint project of Caritas Zurich and revamp-it offering accessible computer courses and internet access points for people on low incomes in the canton of Zurich."
+        "title": "Compirat - Compétences informatiques avec Linux | revamp-it",
+        "description": "Un projet conjoint de Caritas Zurich et de revamp-it qui propose des cours d'informatique et des points d'accès Internet aux personnes à faibles revenus dans le canton de Zurich."
       },
       "hero": {
         "title": "Compirat",
-        "description": "Computer skills and Linux education for everyone",
-        "cta1": "Become a volunteer",
-        "cta2": "Get in touch"
+        "description": "Compétences informatiques et formation Linux pour toutes et tous",
+        "cta1": "Devenir bénévole",
+        "cta2": "Nous contacter"
       },
       "about": {
-        "title": "About Compirat",
-        "description": "A joint project of Caritas Zurich and revamp-it offering accessible computer courses and internet access points for people on low incomes in the canton of Zurich.",
+        "title": "À propos de Compirat",
+        "description": "Un projet conjoint de Caritas Zurich et de revamp-it qui propose des cours d'informatique accessibles et des points d'accès Internet aux personnes à faibles revenus dans le canton de Zurich.",
         "cards": [
           {
             "title": "Local courses",
@@ -5173,7 +5297,7 @@
         ]
       },
       "program": {
-        "title": "Our programme",
+        "title": "Notre programme",
         "cards": [
           {
             "title": "Beginner courses",
@@ -5214,7 +5338,7 @@
         ]
       },
       "cta": {
-        "title": "Get involved",
+        "title": "Participer",
         "actions": [
           {
             "title": "Become a volunteer",
@@ -5237,11 +5361,11 @@
     "ltsp": {
       "meta": {
         "title": "LTSP - Linux Terminal Server Project",
-        "description": "The Linux Terminal Server Project allows multiple users to work simultaneously on older computers by connecting them to a powerful server, optimising resource use and extending hardware life."
+        "description": "Le Linux Terminal Server Project permet à plusieurs utilisateurs de travailler simultanément sur des ordinateurs plus anciens en les connectant à un serveur puissant."
       },
       "hero": {
         "title": "LTSP - Linux Terminal Server Project",
-        "description": "Extending the life of older computers through server-based computing",
+        "description": "Prolonger la durée de vie des ordinateurs plus anciens grâce à l'informatique basée sur serveur",
         "cta1": null,
         "cta2": null
       },
@@ -5343,17 +5467,17 @@
     "upcycling": {
       "meta": {
         "title": "Monitor-Upcycling | RevampIT",
-        "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft, soziale Integration in geschützten Werkstätten und Ressourcenschonung – mit offenen Anleitungen und wissenschaftlicher Begleitung."
+        "description": "Des écrans d'ordinateur mis au rebut deviennent des luminaires fonctionnels et durables. Un projet pilote pour l'économie circulaire, l'intégration sociale dans des ateliers protégés et la préservation des ressources – avec des guides ouverts et un accompagnement scientifique."
       },
       "hero": {
         "title": "Monitor-Upcycling",
-        "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
+        "description": "Nous transformons des écrans d'ordinateur usagés en luminaires fonctionnels de haute qualité. Un projet pilote innovant de revamp-it qui évite les déchets électroniques, crée un travail valorisant dans des entreprises sociales et développe des produits circulaires pour le marché suisse.",
         "cta1": "Kontakt aufnehmen",
         "cta2": "Partner werden"
       },
       "about": {
         "title": "Das Projekt",
-        "description": "Im Monitor-Upcycling-Projekt bauen wir ausrangierte Bildschirme zu modernen Leuchten um. Das Projekt umfasst die Produktion einer Kleinserie (ca. 70 Stück), die Erstellung detaillierter, modell-spezifischer Anleitungen (Fotos, Platinen, Pin-Belegung, Sicherheit), eine Kosten-Nutzen-Analyse und Ökobilanz mit der ZHAW, die Klärung der CE-Konformität sowie die Zusammenarbeit mit ERZ für die Gewinnung von Altgeräten. Ein Schlussbericht und die Präsentation vor dem Swico Innovationsfonds sind für den 3. Juli 2026 geplant."
+        "description": "Dans le projet d'upcycling de moniteurs, nous transformons des écrans mis au rebut en luminaires modernes. Le projet comprend la production d'une petite série (environ 70 pièces), la création de guides détaillés spécifiques au modèle (photos, circuits imprimés, brochage, sécurité), une analyse coûts-bénéfices et un bilan écologique avec la ZHAW, la clarification de la conformité CE ainsi que la collaboration avec l'ERZ pour la récupération des appareils usagés. Un rapport final et une présentation devant le Fonds d'innovation Swico sont prévus pour le 3 juillet 2026."
       },
       "approach": {
         "title": "Ziele & Vorgehen",
@@ -5388,8 +5512,8 @@
         ]
       },
       "nextsteps": {
-        "title": "Nächste Schritte & Meilensteine",
-        "description": "Abschluss der Kleinserie und erste Analysen bis Januar 2026. Fertigstellung des umfassenden Schlussberichts mit allen Listen, Anleitungen und Ergebnissen bis Juni 2026. Präsentation der Projektergebnisse am 3. Juli 2026 vor dem Swico Innovationsfonds. Parallel: Akquise von Fördergeldern (Klimastiftung Schweiz, KliK, Gebert Rüf, Migros Pionierfonds u.a.), weitere Produktions- und Vertriebspartner sowie Vorbereitung der öffentlichen, offenen Publikation der Anleitungen."
+        "title": "Prochaines étapes et jalons",
+        "description": "Finalisation de la petite série et premières analyses d'ici janvier 2026. Achèvement du rapport final complet avec toutes les listes, guides et résultats d'ici juin 2026. Présentation des résultats du projet le 3 juillet 2026 devant le Fonds d'innovation Swico. En parallèle : recherche de financements (Fondation suisse pour le climat, KliK, Gebert Rüf, Fonds pionnier Migros, etc.), recherche de partenaires de production et de distribution supplémentaires ainsi que préparation de la publication publique et ouverte des guides."
       },
       "cta": {
         "title": "Werden Sie Teil des Upcycling-Projekts",
@@ -5429,11 +5553,11 @@
       },
       "source": {
         "title": "Offene Anleitungen & Source Code",
-        "description": "Das Projekt plant die Erstellung detaillierter Anleitungen pro Monitor-Modell (Fotos, Boards, Pin-Belegung, Sicherheitsaspekte) und deren freie Publikation auf einer öffentlichen Plattform (dieser Site oder Wiki), um die Kreislaufwirtschaft zu fördern. Der Quellcode dieser Plattform ist open source unter MIT-Lizenz: https://github.com/g-but/revampit . Die Anleitungen werden hier schrittweise veröffentlicht, sobald sie erstellt und validiert sind."
+        "description": "Le projet prévoit la création de guides détaillés par modèle de moniteur (photos, cartes, brochage, aspects de sécurité) et leur publication libre sur une plateforme publique (ce site ou un wiki), afin de promouvoir l'économie circulaire. Le code source de cette plateforme est open source sous licence MIT : https://github.com/g-but/revampit . Les guides seront publiés ici progressivement, dès qu'ils auront été rédigés et validés."
       },
       "ai_brainstorm": {
         "title": "Mit KI brainstormen",
-        "intro": "Der detaillierte, strukturierte Inhalt dieser Seite (Aufgaben, offene Fragen, Partner, Empfehlungen) eignet sich hervorragend für KI-gestütztes Brainstorming zu technischen, wirtschaftlichen und sozialen Lösungen. Kopieren Sie relevante Abschnitte und nutzen Sie Prompts wie diese, um Lösungen zu entwickeln:",
+        "intro": "Le contenu détaillé et structuré de cette page (tâches, questions ouvertes, partenaires, recommandations) se prête parfaitement à un brainstorming assisté par IA pour des solutions techniques, économiques et sociales. Copiez les sections pertinentes et utilisez des prompts comme ceux-ci pour développer des solutions :",
         "prompts": [
           {
             "title": "Technische Lösungen für Flimmern & Regelung",
@@ -5452,6 +5576,540 @@
             "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
           }
         ]
+      },
+      "needs": {
+        "title": "Ce dont nous avons besoin",
+        "intro": "Des ressources concrètes qui font avancer le projet dès maintenant. Cliquez sur un besoin pour faire votre proposition — nous vous répondons en quelques jours ouvrables.",
+        "loading": "Chargement des besoins ...",
+        "empty": "Tous les besoins sont actuellement couverts. Merci !",
+        "helpCta": "Je peux aider",
+        "dialogTitle": "Proposer son aide",
+        "dialogIntro": "Dites-nous brièvement comment vous pouvez contribuer. Nous vous répondons en quelques jours ouvrables.",
+        "fields": {
+          "name": "Nom",
+          "email": "E-mail",
+          "phone": "Téléphone (facultatif)",
+          "organization": "Organisation (facultatif)",
+          "message": "Votre proposition"
+        },
+        "messagePlaceholder": "Qu'apportez-vous ? Matériel, temps, expertise, contacts ?",
+        "submitting": "Envoi en cours ...",
+        "submit": "Envoyer la proposition",
+        "successTitle": "Merci ! Nous avons bien reçu votre proposition.",
+        "successBody": "Une confirmation a été envoyée à votre adresse e-mail. Nous vous recontactons sous peu.",
+        "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+        "errorTooMany": "Trop de demandes. Veuillez réessayer plus tard.",
+        "typeLabels": {
+          "expertise": "Expertise",
+          "hardware": "Matériel",
+          "partner_intro": "Contact partenaire",
+          "funding": "Financement",
+          "volunteer_time": "Engagement bénévole"
+        },
+        "cancel": "Fermer"
+      },
+      "guides": {
+        "eyebrow": "GUIDES",
+        "title": "Guides spécifiques aux modèles",
+        "intro": "Documentations pas-à-pas par modèle d'écran — avec photos, consignes de sécurité et schémas électriques. Nous les publions ici au fur et à mesure de leur validation.",
+        "openCta": "Ouvrir le guide",
+        "items": [
+          {
+            "slug": "lenovo-l2251pwd",
+            "model": "Lenovo L2251pwd",
+            "href": "/projects/upcycling/lenovo-l2251pwd",
+            "summary": "Transformer un écran 22 pouces en luminaire — 5 étapes, environ 1 heure.",
+            "author": "Daniel",
+            "publishedAt": "2026-05-28"
+          }
+        ]
+      },
+      "nav": {
+        "brand": "UPCYCLING D'ÉCRANS",
+        "overview": "Aperçu",
+        "applications": "Utilisation",
+        "gallery": "Galerie",
+        "buildYourOwn": "Construire soi-même",
+        "status": "Statut"
+      },
+      "explore": {
+        "eyebrow": "DÉCOUVRIR",
+        "title": "Trois chemins à travers le projet",
+        "intro": "Découvrez où les luminaires sont utilisés, quelles pièces ont déjà été créées — ou construisez le vôtre grâce à nos guides ouverts.",
+        "cards": [
+          {
+            "key": "applications",
+            "title": "Domaines d'utilisation",
+            "description": "De l'éclairage de travail fonctionnel à la décoration d'intérieur jusqu'à l'objet d'art. Trois univers, le même matériel remis en vie.",
+            "cta": "Voir les domaines d'utilisation"
+          },
+          {
+            "key": "gallery",
+            "title": "Galerie",
+            "description": "Luminaires déjà transformés, tous modèles d'écrans et styles confondus — filtrables par usage.",
+            "cta": "Ouvrir la galerie"
+          },
+          {
+            "key": "buildYourOwn",
+            "title": "Construire soi-même",
+            "description": "Matériel ouvert, licence MIT : tous les guides, schémas et matériaux pour reproduire — partout dans le monde.",
+            "cta": "Ouvrir les guides"
+          }
+        ]
+      },
+      "applications": {
+        "meta": {
+          "title": "Domaines d'utilisation | Upcycling d'écrans | RevampIT",
+          "description": "De l'éclairage fonctionnel au décor d'intérieur jusqu'à l'objet d'art : trois univers dans lesquels les luminaires issus d'écrans transformés trouvent leur place."
+        },
+        "eyebrow": "DOMAINES D'UTILISATION · UPCYCLING D'ÉCRANS",
+        "title": "Un luminaire. Trois univers.",
+        "intro": "Le même écran hors d'usage devient une discrète lampe de travail, un meuble chaleureux dans le salon — ou un objet d'art en galerie. Le choix ne dépend pas du matériau, mais de la scène.",
+        "spectrum": {
+          "label": "Spectre",
+          "functional": "Fonctionnel",
+          "art": "Art"
+        },
+        "tiers": {
+          "functional": {
+            "title": "Fonctionnel",
+            "description": "Éclairage de travail robuste pour des espaces où la lumière doit éclairer, pas briller. Faible consommation, luminosité de surface uniforme, montage mural ou plafond — comme un luminaire neuf, mais issu d'une seconde vie.",
+            "imageCaption": "Fonctionnel · neutre",
+            "examples": [
+              "Bureaux et espaces de coworking",
+              "Locaux techniques et ateliers",
+              "Parkings souterrains et garages",
+              "Cages d'escalier et couloirs",
+              "Locaux de stockage et archives",
+              "Locaux annexes dans les immeubles"
+            ]
+          },
+          "decor": {
+            "title": "Décor",
+            "description": "Lumière chaude et indirecte pour des espaces qui ont du caractère. L'ancienne surface d'affichage devient une surface lumineuse — plate, discrète, avec une histoire. S'accorde aussi bien aux murs en béton brut qu'au bois et au textile.",
+            "imageCaption": "Décor · chaud",
+            "examples": [
+              "Pièces à vivre et lofts",
+              "Cafés, bars et restaurants",
+              "Halls d'hôtel et espaces boutique",
+              "Ateliers et studios",
+              "Concept-stores",
+              "Cabinets et espaces d'accueil"
+            ]
+          },
+          "art": {
+            "title": "Art",
+            "description": "Quand le luminaire devient lui-même un message. Dans les galeries, les installations et les espaces curatés, l'origine du matériau passe au premier plan — l'écran qui montrait jadis des images devient lui-même image.",
+            "imageCaption": "Art · saturé",
+            "examples": [
+              "Galeries et espaces d'exposition",
+              "Installations d'art architectural",
+              "Espaces pop-up et vernissages",
+              "Foyers de théâtre et de scène",
+              "Boutiques de musée et espaces pédagogiques",
+              "Projets d'art lumineux"
+            ]
+          }
+        },
+        "cta": {
+          "title": "Une idée d'endroit où l'installer ?",
+          "body": "Nous installons des luminaires pilotes dans des immeubles, des cafés et des espaces d'exposition — ou nous vous montrons comment en construire un vous-même.",
+          "primary": "Demander une installation pilote",
+          "secondary": "Construire soi-même"
+        }
+      },
+      "gallery": {
+        "meta": {
+          "title": "Galerie | Upcycling d'écrans | RevampIT",
+          "description": "Galerie des luminaires issus d'écrans transformés — de l'éclairage de travail fonctionnel à l'objet d'art. Filtrable par domaine d'utilisation."
+        },
+        "eyebrow": "GALERIE · UPCYCLING D'ÉCRANS",
+        "title": "Ce qui a déjà été créé",
+        "intro": "Chaque pièce est un écran ressuscité. Filtrez par domaine d'utilisation — fonctionnel, décor ou art — ou découvrez tout d'un coup.",
+        "filterLabel": "Filtre :",
+        "filters": {
+          "all": "Tous",
+          "functional": "Fonctionnel",
+          "decor": "Décor",
+          "art": "Art"
+        },
+        "empty": "Aucune pièce n'est encore disponible pour ce filtre.",
+        "placeholderNote": "Les vignettes sont générées — dès que les premières pièces auront été photographiées, nous les remplacerons par de vrais clichés."
+      },
+      "buildYourOwn": {
+        "meta": {
+          "title": "Construire soi-même | Upcycling d'écrans | RevampIT",
+          "description": "Matériel open source : tous les guides, schémas électriques et matériaux pour construire soi-même un luminaire à partir d'un écran. Licence MIT, libre d'utilisation dans le monde entier."
+        },
+        "eyebrow": "CONSTRUIRE SOI-MÊME · UPCYCLING D'ÉCRANS",
+        "title": "Construisez votre propre pièce",
+        "intro": "Matériel ouvert, guides ouverts. Tous les plans, schémas électriques et listes de matériaux sont disponibles librement sous licence MIT — pour que la même idée fonctionne partout dans le monde, sans passer par nous.",
+        "philosophy": {
+          "title": "Pourquoi ouvert ?",
+          "body": "Notre mission n'est pas de vendre le plus de luminaires possible — mais de sortir le plus d'écrans possibles de la déchèterie. Cela ne fonctionne que si chaque atelier, chaque association et chaque personne curieuse peut reproduire. Nous publions tout ce que nous apprenons.",
+          "pillars": [
+            {
+              "title": "Documentation",
+              "body": "Des guides pas à pas pour chaque modèle — photos, brochage, schémas et consignes de sécurité. Testés dans notre atelier, libres pour le vôtre."
+            },
+            {
+              "title": "Reproductible dans le monde entier",
+              "body": "Des listes de matériel à base de composants standards. Ce qui fonctionne à Zurich fonctionne à Berlin, Lagos ou São Paulo. Aucune pièce spécifique à Revamp-IT."
+            },
+            {
+              "title": "Un outil, pas un produit",
+              "body": "Nous partageons ce que nous avons appris. Améliorations, forks et traductions sont les bienvenus — une pull request plutôt qu'un e-mail."
+            }
+          ]
+        },
+        "guides": {
+          "title": "Guides",
+          "intro": "Chaque guide couvre un modèle d'écran précis — du démontage au luminaire fini. De nouveaux modèles s'ajoutent au fil du temps.",
+          "openCta": "Ouvrir le guide",
+          "empty": "Aucun guide n'a encore été publié.",
+          "items": [
+            {
+              "slug": "lenovo-l2251pwd",
+              "model": "Lenovo L2251pwd",
+              "href": "/projects/upcycling/lenovo-l2251pwd",
+              "summary": "Transformer un écran 22 pouces en luminaire. Retirer le LCD, ponter le rétroéclairage, c'est terminé.",
+              "difficulty": "Facile",
+              "duration": "≈ 1 h",
+              "author": "Daniel"
+            }
+          ]
+        },
+        "source": {
+          "title": "Code source et licence",
+          "body": "Cette plateforme elle-même — y compris tous les guides, schémas électriques et composants — est sur GitHub. Fork, issue ou pull request : tout est le bienvenu.",
+          "repoCta": "Voir sur GitHub",
+          "repoUrl": "https://github.com/g-but/revampit",
+          "licenseLabel": "Licence MIT · Matériel compatible CERN-OHL-S"
+        },
+        "contribute": {
+          "title": "Participer",
+          "body": "Il existe plus de modèles d'écrans que ce que nous pourrons jamais documenter. Celles et ceux qui aident contribuent à construire la bibliothèque.",
+          "cta": "Nous contacter",
+          "items": [
+            "Rédiger un guide pour un nouveau modèle",
+            "Traduire un guide existant",
+            "Fournir la documentation photo d'une transformation",
+            "Variante de schéma pour un autre pilote de rétroéclairage",
+            "Revue de sécurité ou indications CE"
+          ]
+        }
+      },
+      "lenovo_l2251pwd": {
+        "meta": {
+          "title": "Lenovo L2251pwd — De l'écran au luminaire | Upcycling d'écrans | RevampIT",
+          "description": "Guide pas-à-pas : démonter un écran Lenovo L2251pwd, retirer l'écran LCD et ponter l'électronique pour en faire un luminaire autonome."
+        },
+        "back": "← Retour à l'aperçu",
+        "eyebrow": "GUIDE · UPCYCLING D'ÉCRANS",
+        "title": "Lenovo L2251pwd",
+        "subtitle": "Transformer un écran 22 pouces en luminaire",
+        "metaLine": "Modèle : Lenovo L2251pwd · Durée : environ 1 heure · Difficulté : facile",
+        "credit": "Guide rédigé par Daniel, RevampIT · Publié le 28 mai 2026 · Wiki d'origine : monitor.revamp-it interne",
+        "safety": {
+          "title": "La sécurité d'abord",
+          "body": "Ne jamais travailler sous tension. Avant chaque test de fonctionnement, prendre les mesures de protection nécessaires. En cas de doute, faites appel à un collègue en électronique."
+        },
+        "tools": {
+          "title": "Outillage et matériel",
+          "items": [
+            "Spatule en plastique pour déclipser",
+            "Tournevis cruciforme (PH1/PH2)",
+            "Petit tournevis plat",
+            "Deux résistances de 1 kΩ",
+            "Fer à souder et étain",
+            "Gaine thermorétractable ou ruban isolant"
+          ]
+        },
+        "schematic": {
+          "title": "Principe du circuit",
+          "body": "Diviseur de tension : 5 V (rouge) → 1 kΩ → signal de rétroéclairage (jaune) → 1 kΩ → GND (noir). Les autres broches (3,3 V, autres signaux) restent non connectées.",
+          "labels": {
+            "v5": "5 V",
+            "signal": "Signal de rétroéclairage",
+            "gnd": "GND",
+            "resistor": "1 kΩ"
+          }
+        },
+        "done": {
+          "title": "Terminé !",
+          "body": "L'écran est désormais un luminaire autonome avec un rétroéclairage fixe. Accrochez-le, posez-le ou intégrez-le à votre mobilier."
+        },
+        "feedback": {
+          "title": "Une meilleure idée ? Écrivez-nous.",
+          "body": "Ce guide est ouvert et vit de ses corrections. Si vous avez trouvé un meilleur pont, une régulation de luminosité ou un plus joli montage — nous accueillons volontiers vos contributions.",
+          "cta": "Contribuer"
+        },
+        "ui": {
+          "openPhoto": "Agrandir la photo",
+          "closePhoto": "Fermer",
+          "playVideo": "Lire la vidéo",
+          "pauseVideo": "Mettre la vidéo en pause",
+          "stepProgressLabel": "Étape",
+          "stepProgressOf": "sur",
+          "jumpToStep": "Aller à l'étape",
+          "photoCountLabel": "Photo",
+          "photoCountOf": "sur"
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Démonter l'écran",
+            "intro": "La transformation se fait en quelques étapes et reste simple avec un peu de patience."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 2",
+            "title": "Retirer le LCD",
+            "intro": "On enlève la dalle noire (LCD), la dalle blanche (rétroéclairage) reste en place — elle devient la surface lumineuse."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 3",
+            "title": "Ponter l'électronique",
+            "intro": "À ce stade, l'appareil fonctionne encore comme un écran avec marche/arrêt manuel. Pour l'utiliser comme luminaire, nous pontons l'électronique de commande."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Déclipser le cadre",
+            "body": "Depuis l'arrière, déclipser le cadre extérieur à l'aide de spatules en plastique. Procéder avec précaution le long de l'arête afin de ne casser aucun clip.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-frame-removed.jpg",
+                "alt": "Lenovo L2251pwd avec le cadre extérieur retiré"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-bezel-clips.jpg",
+                "alt": "Détail des clips en plastique du cadre de l'écran"
+              }
+            ]
+          },
+          {
+            "n": 2,
+            "title": "Détacher le boîtier électronique",
+            "body": "À l'arrière, retirer les 4 vis sur les côtés. Le boîtier électronique peut alors être soulevé.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-open.jpg",
+                "alt": "Boîtier électronique ouvert à l'arrière de l'écran"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-detached.jpg",
+                "alt": "Boîtier électronique détaché laissant voir la carte"
+              }
+            ]
+          },
+          {
+            "n": 3,
+            "title": "Dégager l'électronique du LCD",
+            "body": "Sur le châssis métallique : dévisser les vis qui maintiennent l'électronique. Ouvrir avec précaution les clips le long du châssis métallique à l'aide d'un tournevis. Rabattre le châssis métallique. En dessous apparaissent le LCD (dalle noire) et le rétroéclairage (dalle blanche). Le LCD est en outre fixé par des bandes adhésives — elles se retirent facilement.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Retirer le LCD, refermer le cadre",
+            "body": "Retirer la dalle LCD noire. Refermer le châssis métallique — le rétroéclairage blanc reste protégé à l'intérieur. C'est désormais la surface lumineuse.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-4-lcd-removed.jpg",
+                "alt": "Écran sans LCD — seul le rétroéclairage blanc reste visible"
+              }
+            ]
+          },
+          {
+            "n": 5,
+            "title": "Ponter l'électronique de commande",
+            "body": "À ce stade, l'appareil reste techniquement un écran — il doit être allumé et éteint manuellement. Pour l'utiliser comme luminaire, on retire l'électronique de commande et on place un pont sur le connecteur restant. Le pont est un diviseur de tension entre 5 V (rouge), GND (noir) et le signal du rétroéclairage (jaune) : deux résistances identiques (~1 kΩ) entre rouge↔jaune et noir↔jaune.",
+            "images": [
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-control-board.jpg",
+                "alt": "Électronique de commande démontée de l'écran Lenovo"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-soldered.jpg",
+                "alt": "Pont soudé constitué de deux résistances de 1 kΩ"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-detail.jpg",
+                "alt": "Détail du pont diviseur de tension sur le connecteur"
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "meta": {
+          "title": "Statut et impact | Upcycling d'écrans | RevampIT",
+          "description": "Où en est aujourd'hui le projet d'upcycling d'écrans : avancement de la production, estimation de l'impact (chiffres définitifs via l'analyse de cycle de vie ZHAW), jalons et écosystème de partenaires."
+        },
+        "eyebrow": "STATUT · UPCYCLING D'ÉCRANS",
+        "title": "Où en est le projet",
+        "intro": "Un instantané honnête — ce qui est déjà en cours, ce qui est mesuré et ce qui vient ensuite. Source : comptabilité interne du projet ; l'analyse de cycle de vie définitive suivra avec le rapport final de la ZHAW.",
+        "snapshot": {
+          "label": "État",
+          "updatedLabel": "Mis à jour"
+        },
+        "production": {
+          "title": "Production",
+          "intro": "La petite série est lancée. Pour chaque modèle, nous produisons des guides documentés que nous publions en parallèle de la fabrication.",
+          "lampsLabel": "Luminaires fabriqués",
+          "lampsOf": "sur",
+          "lampsTarget": "Série visée",
+          "modelsLabel": "Modèles avec guide",
+          "pilotsLabel": "Sites pilotes actifs",
+          "intakeLabel": "Écrans en traitement"
+        },
+        "impact": {
+          "title": "Impact — estimation",
+          "intro": "Ces valeurs sont des estimations internes, basées sur la production réalisée à ce jour et sur des valeurs typiques d'énergie et de matériau par appareil. Le bilan définitif sera établi par la ZHAW dans son rapport final (prévu pour le 3e trimestre 2026).",
+          "disclaimer": "Estimation — les valeurs vérifiées suivront avec l'ACV de la ZHAW",
+          "cards": [
+            {
+              "key": "ewaste",
+              "label": "Déchets électroniques évités",
+              "unit": "kg"
+            },
+            {
+              "key": "workshop",
+              "label": "Heures en ateliers",
+              "unit": "h"
+            },
+            {
+              "key": "co2",
+              "label": "Économie de CO₂ (estimée)",
+              "unit": "kg"
+            },
+            {
+              "key": "reuse",
+              "label": "Taux de réemploi",
+              "unit": "%"
+            }
+          ]
+        },
+        "timeline": {
+          "title": "Jalons",
+          "intro": "Le passé, le présent et le prévu en un coup d'œil.",
+          "labels": {
+            "done": "Terminé",
+            "active": "En cours",
+            "upcoming": "Prévu"
+          },
+          "items": [
+            {
+              "key": "kickoff",
+              "date": "Oct. 2025",
+              "label": "Lancement du projet et concept"
+            },
+            {
+              "key": "prototype",
+              "date": "Févr. 2026",
+              "label": "Premiers prototypes fonctionnels"
+            },
+            {
+              "key": "lca-start",
+              "date": "Avr. 2026",
+              "label": "Démarrage de l'analyse de cycle de vie ZHAW"
+            },
+            {
+              "key": "series",
+              "date": "Juin 2026",
+              "label": "Production en petite série en cours"
+            },
+            {
+              "key": "swico",
+              "date": "3 juil. 2026",
+              "label": "Présentation au Fonds d'innovation Swico"
+            },
+            {
+              "key": "lca-final",
+              "date": "T3 2026",
+              "label": "Rapport final de l'ACV (ZHAW)"
+            },
+            {
+              "key": "scale",
+              "date": "2027",
+              "label": "Phase de mise à l'échelle II — gamme de modèles et distribution"
+            }
+          ]
+        },
+        "partners": {
+          "title": "Écosystème de partenaires",
+          "intro": "Le projet ne fonctionne qu'en réseau. Voici qui assume quel rôle :",
+          "groups": [
+            {
+              "key": "production",
+              "title": "Production et ateliers",
+              "names": [
+                "Drahtzug",
+                "FARO",
+                "St. Jakob",
+                "Palme"
+              ]
+            },
+            {
+              "key": "pilots",
+              "title": "Sites pilotes (immobilier)",
+              "names": [
+                "Livit",
+                "Wincasa",
+                "Allreal",
+                "ISS"
+              ]
+            },
+            {
+              "key": "material",
+              "title": "Source de matériau",
+              "names": [
+                "ERZ Zürich"
+              ]
+            },
+            {
+              "key": "science",
+              "title": "Accompagnement scientifique",
+              "names": [
+                "ZHAW (analyse de cycle de vie et analyse coûts-bénéfices)"
+              ]
+            },
+            {
+              "key": "funding",
+              "title": "Financement",
+              "names": [
+                "Fonds d'innovation Swico"
+              ]
+            }
+          ]
+        },
+        "calls": {
+          "title": "Comment vous pouvez contribuer",
+          "intro": "Trois manières concrètes de porter le projet vers sa prochaine étape.",
+          "actions": [
+            {
+              "key": "fund",
+              "title": "Devenir co-financeur",
+              "description": "Nous cherchons des fondations et des entreprises pour soutenir la fenêtre de mise à l'échelle 2027 — de la petite série au produit disponible.",
+              "cta": "Demander un entretien de financement"
+            },
+            {
+              "key": "pilot",
+              "title": "Devenir site pilote",
+              "description": "Immeuble, café, atelier ou espace d'exposition ? Nous installons un luminaire pilote et documentons avec vous son usage au quotidien.",
+              "cta": "Demander un pilote"
+            },
+            {
+              "key": "donate",
+              "title": "Des écrans dans le circuit",
+              "description": "Vous remplacez votre parc informatique ? Nous récupérons les anciens écrans, documentons le flux de matières et les intégrons dans la petite série.",
+              "cta": "Signaler du matériel"
+            }
+          ]
+        }
       }
     }
   },
@@ -6068,37 +6726,37 @@
         "radiusHint": "Rayon maximum pour les visites à domicile"
       },
       "personalInfo": {
-        "title": "Personal details",
-        "description": "Your basic information",
-        "firstName": "First name",
-        "lastName": "Last name",
+        "title": "Données personnelles",
+        "description": "Vos informations de base",
+        "firstName": "Prénom",
+        "lastName": "Nom",
         "company": "Company"
       },
-      "backToDashboard": "Back to dashboard",
-      "accountOverview": "Account overview",
-      "accountOverviewDesc": "Status and security of your account",
-      "emailVerified": "Email verified",
-      "nameNotSet": "Name not set",
-      "memberSince": "Member since {year}",
+      "backToDashboard": "Retour au tableau de bord",
+      "accountOverview": "Aperçu du compte",
+      "accountOverviewDesc": "Statut et sécurité de votre compte",
+      "emailVerified": "E-mail confirmé",
+      "nameNotSet": "Nom non renseigné",
+      "memberSince": "Membre depuis {year}",
       "pageTitle": "Profile",
-      "pageDescription": "Manage your public profile",
-      "saveSuccess": "Profile saved successfully",
+      "pageDescription": "Gérez votre profil public",
+      "saveSuccess": "Profil enregistré avec succès",
       "saving": "Saving...",
       "save": "Save",
-      "avatarSectionTitle": "Profile picture",
-      "goToSettings": "Go to settings",
+      "avatarSectionTitle": "Photo de profil",
+      "goToSettings": "Aller aux paramètres",
       "publicProfile": {
-        "heading": "Public Profile",
-        "displayName": "Display name",
-        "displayNamePlaceholder": "What would you like to be called?",
-        "displayNameDescription": "This name is shown publicly",
+        "heading": "Profil public",
+        "displayName": "Nom affiché",
+        "displayNamePlaceholder": "Comment souhaitez-vous être appelé ?",
+        "displayNameDescription": "Ce nom est affiché publiquement",
         "bio": "Bio",
-        "bioPlaceholder": "Tell us something about yourself...",
-        "bioDescription": "Short description about yourself (max. 500 characters)",
-        "visibility": "Profile visibility",
+        "bioPlaceholder": "Parlez un peu de vous...",
+        "bioDescription": "Brève description vous concernant (max. 500 caractères)",
+        "visibility": "Visibilité du profil",
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
-        "visibilityDescription": "Choose who can see your profile"
+        "visibilityDescription": "Choisissez qui peut voir votre profil"
       },
       "contactInfo": {
         "heading": "Coordonnées",
@@ -6274,7 +6932,8 @@
       "actionDuplicate": "Dupliquer",
       "actionDelete": "Supprimer",
       "confirmDelete": "Voulez-vous vraiment supprimer cette annonce ?",
-      "loadError": "Erreur de chargement"
+      "loadError": "Erreur de chargement",
+      "paginationCurrentPage": "Page {page}"
     },
     "reviews": {
       "statusPublished": "Publié",
@@ -6535,7 +7194,29 @@
       "receiptInfoTitle": "Note sur les reçus de dons",
       "receiptInfoText": "RevampIT est une association à but non lucratif. Pour les dons de CHF 100 ou plus, nous fournissons une confirmation de don pour votre déclaration d'impôts. Contactez-nous à",
       "loadError": "Erreur de chargement des dons",
-      "networkError": "Erreur réseau lors du chargement"
+      "networkError": "Erreur réseau lors du chargement",
+      "journey": {
+        "heading": "Parcours de l'appareil",
+        "awaiting": "Nous récupérons l'appareil ou attendons sa réception.",
+        "totalItems": "{count, plural, =0 {Aucun appareil} one {# appareil} other {# appareils}}",
+        "countRehomed": "{count, plural, one {# transmis} other {# transmis}}",
+        "countListed": "{count, plural, one {# en boutique} other {# en boutique}}",
+        "countRefurbished": "{count, plural, one {# remis à neuf} other {# remis à neuf}}",
+        "countReceived": "{count, plural, one {# reçu} other {# reçus}}",
+        "countParts": "{count, plural, one {# en pièces détachées} other {# en pièces détachées}}",
+        "countRecycled": "{count, plural, one {# recyclé} other {# recyclés}}",
+        "viewInShop": "Voir dans la boutique",
+        "viewInShopNumbered": "Voir dans la boutique (#{index})",
+        "stage": {
+          "awaiting": "Attendu",
+          "received": "Reçu",
+          "refurbished": "Remis à neuf",
+          "listed": "En boutique",
+          "rehomed": "Transmis",
+          "parts": "Pièces détachées",
+          "recycled": "Recyclé"
+        }
+      }
     },
     "sellerProfile": {
       "backToDashboard": "Retour au tableau de bord",
@@ -6565,21 +7246,21 @@
       "unexpectedError": "Une erreur inattendue s'est produite"
     },
     "settings": {
-      "backToDashboard": "Back to Dashboard",
-      "editProfile": "Edit Profile",
+      "backToDashboard": "Retour au tableau de bord",
+      "editProfile": "Modifier le profil",
       "account": {
-        "passwordNote": "Password change is managed via the Profile page (will be integrated here later)"
+        "passwordNote": "La modification du mot de passe est gérée depuis la page Profil (sera intégrée ici ultérieurement)"
       },
       "privacy": {
-        "dataExportTitle": "Privacy & Export",
-        "dataExportDescription": "Under Swiss data protection law (DSG) and EU GDPR, you can request a copy of your data at any time.",
-        "exportFailed": "Export failed",
-        "exportFailedRetry": "Export failed. Please try again later.",
-        "exportLoading": "Creating export...",
-        "downloadButton": "Download my data"
+        "dataExportTitle": "Protection des données et export",
+        "dataExportDescription": "Conformément à la loi suisse sur la protection des données (LPD) et au RGPD européen, vous pouvez à tout moment demander une copie de vos données.",
+        "exportFailed": "Échec de l'export",
+        "exportFailedRetry": "Échec de l'export. Veuillez réessayer plus tard.",
+        "exportLoading": "Création de l'export...",
+        "downloadButton": "Télécharger mes données"
       },
       "personalInfo": {
-        "cantonDefault": "Select canton"
+        "cantonDefault": "Choisir le canton"
       }
     },
     "meta": {
@@ -6818,7 +7499,8 @@
       "logout": "Se déconnecter",
       "accountMenu": "Menu du compte",
       "profilePicture": "Photo de profil",
-      "user": "Utilisateur"
+      "user": "Utilisateur",
+      "invite": "Inviter des amis"
     },
     "workshopInstanceCard": {
       "spotsAvailable": "{count, plural, one {# place disponible} other {# places disponibles}}",
@@ -6848,7 +7530,9 @@
     },
     "co2Badge": {
       "tooltip": "Économies de CO₂ estimées par rapport à un nouvel appareil (Fraunhofer IZM 2023)",
-      "saved": "~{amount} kg CO₂ économisés"
+      "saved": "~{amount} kg CO₂ économisés",
+      "estimate": "Estimation",
+      "methodologyLink": "Comment est-ce calculé ?"
     },
     "geschichteSection": {
       "badge": "Notre histoire",
@@ -6872,20 +7556,38 @@
       "learnMore": "En savoir plus sur notre impact"
     },
     "zeroWaste": {
-      "badge": "The Solution",
-      "heading": "Our Zero-Waste Approach",
-      "description": "RevampIT follows the principle: Repair before Refurbish before Recycle. This maximises the value of every device and minimises environmental impact.",
-      "impactTitle": "Our Impact Through This Approach",
-      "devicesSavedLabel": "Devices saved per year",
-      "devicesSavedDesc": "Rescued from the shredder and reused",
-      "reuseRateLabel": "Reuse rate",
-      "reuseRateDesc": "Of donated devices are put back into use",
-      "co2Label": "Tonnes of CO₂ saved",
-      "co2Desc": "Through repair instead of new production",
-      "whyRepairTitle": "Why repair first?",
-      "whyRepairText": "Manufacturing a new laptop produces on average 331 kg of CO₂. A repair produces only about 15 kg – a saving of over 95%.",
-      "whyRepairConclusion": "The most sustainable option is always repair",
-      "priority": "Priority {priority}"
+      "badge": "La solution",
+      "heading": "Notre approche zéro déchet",
+      "description": "RevampIT suit le principe : Réparer avant Reconditionner avant Recycler. Nous maximisons ainsi la valeur de chaque appareil et minimisons l'impact environnemental.",
+      "impactTitle": "Notre impact grâce à cette approche",
+      "devicesSavedLabel": "Appareils sauvés par an",
+      "devicesSavedDesc": "Sauvés du broyeur et réutilisés",
+      "reuseRateLabel": "Taux de réutilisation",
+      "reuseRateDesc": "Des appareils donnés sont remis en service",
+      "co2Label": "Tonnes de CO₂ économisées",
+      "co2Desc": "Grâce à la réparation plutôt qu'à la production neuve",
+      "whyRepairTitle": "Pourquoi réparer d'abord ?",
+      "whyRepairText": "La fabrication d'un nouveau laptop produit en moyenne 331 kg de CO₂. Une réparation n'en produit qu'environ 15 kg — une économie de plus de 95 %.",
+      "whyRepairConclusion": "L'option la plus durable est toujours la réparation",
+      "priority": "Priorité {priority}",
+      "principles": {
+        "repair": {
+          "title": "Réparer",
+          "description": "Les appareils défectueux sont réparés et rendus à leur propriétaire d'origine. C'est l'option la plus durable."
+        },
+        "refurbish": {
+          "title": "Reconditionner",
+          "description": "Les appareils donnés sont reconditionnés professionnellement, équipés de Linux et transmis à de nouveaux utilisateurs."
+        },
+        "recycle": {
+          "title": "Recycler",
+          "description": "Les appareils qui ne peuvent plus être utilisés sont démontés dans les règles. Les matières premières précieuses retournent dans le cycle."
+        },
+        "educate": {
+          "title": "Sensibiliser",
+          "description": "Par des ateliers et la formation, nous permettons aux personnes d'utiliser leurs appareils plus longtemps et de consommer plus consciemment."
+        }
+      }
     },
     "voice": {
       "stateIdle": "Dictate",
@@ -6894,49 +7596,49 @@
       "stateSuccess": "Recognized!",
       "stateError": "Error",
       "transcribedPrefix": "Recognized:",
-      "errorProcessing": "Processing failed",
-      "errorMicrophone": "Could not activate microphone",
-      "recordingHint": "Speak now... e.g. \"Dell Latitude 7470, good condition, 280 francs\""
+      "errorProcessing": "Échec du traitement",
+      "errorMicrophone": "Impossible d'activer le microphone",
+      "recordingHint": "Parlez maintenant... p. ex. « Dell Latitude 7470, bon état, 280 francs »"
     },
     "erfassung": {
       "productImage": {
-        "title": "Product image",
-        "upload": "Upload image",
-        "drag": "or drag here",
-        "hint": "JPG, PNG or WebP. Max 5 MB.",
+        "title": "Photo du produit",
+        "upload": "Télécharger une image",
+        "drag": "ou glisser ici",
+        "hint": "JPG, PNG ou WebP. Max. 5 Mo.",
         "remove": "Supprimer l'image du produit"
       },
       "basicFields": {
-        "title": "Basic information",
+        "title": "Informations de base",
         "manufacturer": "Manufacturer *",
-        "manufacturerPlaceholder": "e.g. Dell, HP, Lenovo",
+        "manufacturerPlaceholder": "p. ex. Dell, HP, Lenovo",
         "condition": "Condition *",
-        "productName": "Product name / model *",
-        "productNamePlaceholder": "e.g. Latitude 7470",
-        "price": "Selling price (CHF) *",
+        "productName": "Nom du produit / modèle *",
+        "productNamePlaceholder": "p. ex. Latitude 7470",
+        "price": "Prix de vente (CHF) *",
         "pricePlaceholder": "0.00",
-        "description": "Short description",
-        "descriptionPlaceholder": "Short description…",
+        "description": "Brève description",
+        "descriptionPlaceholder": "Brève description…",
         "category": "Category",
         "categoryPlaceholder": "Select…",
         "subcategory": "Subcategory"
       },
       "specFields": {
-        "title": "Technical specifications",
-        "addField": "Add field",
+        "title": "Caractéristiques techniques",
+        "addField": "Ajouter un champ",
         "keyPlaceholder": "Property",
         "valuePlaceholder": "Value"
       },
       "dimensionFields": {
         "dimensionsTitle": "Dimensions",
-        "length": "Length (mm)",
-        "width": "Width (mm)",
-        "height": "Height (mm)",
-        "weight": "Weight (kg)",
-        "stockTitle": "Stock & Price",
-        "price": "Selling price (CHF) *",
-        "stock": "Quantity in stock",
-        "location": "Storage location",
+        "length": "Longueur (mm)",
+        "width": "Largeur (mm)",
+        "height": "Hauteur (mm)",
+        "weight": "Poids (kg)",
+        "stockTitle": "Stock et prix",
+        "price": "Prix de vente (CHF) *",
+        "stock": "Quantité en stock",
+        "location": "Emplacement de stockage",
         "locationPlaceholder": "S-B816-01-…",
         "boxId": "Box ID",
         "boxIdPlaceholder": "B-YYMMDD-NNNN"
@@ -6944,39 +7646,39 @@
       "submitBar": {
         "cancel": "Cancel",
         "saving": "Saving…",
-        "saveChanges": "Save changes",
+        "saveChanges": "Enregistrer les modifications",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Capture & Shop"
+        "captureAndShop": "Saisir et publier"
       },
       "successScreen": {
-        "title": "Product captured!",
+        "title": "Produit saisi !",
         "itemUUIDLabel": "Item UUID:",
-        "printFactsheet": "Print factsheet",
-        "captureAnother": "Capture another product",
-        "toOverview": "To product overview"
+        "printFactsheet": "Imprimer la fiche technique",
+        "captureAnother": "Saisir un autre produit",
+        "toOverview": "Voir l'aperçu des produits"
       },
       "bulkSuccess": {
-        "titlePartial": "Partially captured",
-        "titleAll": "All products captured!",
-        "summary": "{succeeded} of {total} products successfully saved",
+        "titlePartial": "Partiellement saisi",
+        "titleAll": "Tous les produits ont été saisis !",
+        "summary": "{succeeded} produits sur {total} enregistrés avec succès",
         "failed": "{count} failed",
         "successLabel": "Successful",
         "failedLabel": "Failed",
         "totalLabel": "Total",
-        "createdIds": "Created item IDs:",
-        "retryFailed": "Correct failed entries",
-        "downloadCsv": "Download CSV",
-        "newCapture": "New capture"
+        "createdIds": "Identifiants d'articles créés :",
+        "retryFailed": "Corriger les entrées en échec",
+        "downloadCsv": "Télécharger le CSV",
+        "newCapture": "Nouvelle saisie"
       },
       "profileFields": {
-        "title": "Suitable for (customer profiles)",
-        "hint": "Select the target groups this product is suitable for. Hover for details."
+        "title": "Convient à (profils de clientèle)",
+        "hint": "Sélectionnez les publics cibles auxquels ce produit convient. Survolez pour plus de détails."
       },
       "bulkDetail": {
         "editLabel": "edit",
         "sourcePrefix": "Source: ",
-        "validationError": "Manufacturer and product name required",
+        "validationError": "Fabricant et nom du produit obligatoires",
         "close": "Close",
         "apply": "Apply"
       },
@@ -6987,100 +7689,157 @@
         "productsText": "products"
       },
       "bulkActionBar": {
-        "deselectAll": "Deselect all",
-        "selectAll": "Select all",
+        "deselectAll": "Tout désélectionner",
+        "selectAll": "Tout sélectionner",
         "ofText": "of",
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Capture & Shop"
+        "captureAndShop": "Saisir et publier"
       },
       "imageCapture": {
-        "dragOrText": "Drag image here or",
-        "chooseFile": "Choose file",
+        "dragOrText": "Glissez une image ici ou",
+        "chooseFile": "Choisir un fichier",
         "camera": "Camera",
-        "fileHint": "JPG, PNG, WebP up to 10 MB",
-        "imageAlt": "Product image preview",
-        "changeImage": "Different image",
-        "analyzeWithAI": "Fill with AI",
-        "analyzing": "Analysing image…",
-        "success": "Form has been filled in!",
-        "errorGeneric": "An error occurred",
-        "retry": "Try again",
-        "errorImageOnly": "Please upload image files only",
-        "errorReadFile": "Error reading file",
-        "errorAnalysis": "Analysis failed"
+        "fileHint": "JPG, PNG, WebP jusqu'à 10 Mo",
+        "imageAlt": "Aperçu de l'image du produit",
+        "changeImage": "Autre image",
+        "analyzeWithAI": "Remplir avec l'IA",
+        "analyzing": "Analyse de l'image…",
+        "success": "Le formulaire a été rempli !",
+        "errorGeneric": "Une erreur est survenue",
+        "retry": "Réessayer",
+        "errorImageOnly": "Veuillez ne télécharger que des fichiers image",
+        "errorReadFile": "Erreur lors de la lecture du fichier",
+        "errorAnalysis": "Échec de l'analyse"
       },
       "dataEntryTabs": {
         "tabTextLabel": "Text",
-        "tabTextDesc": "Enter product info, AI fills in the rest",
+        "tabTextDesc": "Saisissez les infos du produit, l'IA complète",
         "tabFileLabel": "File",
-        "tabFileDesc": "Upload CSV file",
+        "tabFileDesc": "Télécharger un fichier CSV",
         "tabSpeechLabel": "Speech",
-        "tabSpeechDesc": "Capture products by voice",
+        "tabSpeechDesc": "Saisir des produits à la voix",
         "tabPictureLabel": "Image",
-        "tabPictureDesc": "Capture products by photo",
-        "quickEntryTitle": "AI quick entry",
-        "quickEntryFilled": "(Filled in)",
-        "quickEntryPlaceholder": "One product or several at once — the AI recognises automatically",
-        "processingFailed": "Processing failed",
-        "dataFilled": "Data processed! Please review and complete.",
-        "speechComingSoon": "Voice capture coming soon",
-        "speechRequires": "Requires self-hosted transcription service",
-        "pictureComingSoon": "Image capture coming soon",
-        "pictureRequires": "Requires vision AI model",
-        "analyzing": "AI analysing…",
-        "fillForm": "Fill form",
-        "fileImportTitle": "File import",
-        "fileImportDesc": "Upload a CSV or Excel file with product data",
+        "tabPictureDesc": "Saisir des produits par photo",
+        "quickEntryTitle": "Saisie rapide par IA",
+        "quickEntryFilled": "(Rempli)",
+        "quickEntryPlaceholder": "Un produit ou plusieurs à la fois — l'IA reconnaît automatiquement",
+        "processingFailed": "Échec du traitement",
+        "dataFilled": "Données traitées ! Veuillez vérifier et compléter.",
+        "speechComingSoon": "Saisie vocale bientôt disponible",
+        "speechRequires": "Nécessite un service de transcription auto-hébergé",
+        "pictureComingSoon": "Saisie par image bientôt disponible",
+        "pictureRequires": "Nécessite un modèle d'IA de vision",
+        "analyzing": "L'IA analyse…",
+        "fillForm": "Remplir le formulaire",
+        "fileImportTitle": "Import de fichier",
+        "fileImportDesc": "Téléchargez un fichier CSV ou Excel contenant des données produit",
         "processing": "Processing…",
-        "chooseFile": "Choose CSV or Excel file or drag here",
-        "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
-        "unmappedColumns": "Unmapped columns:"
+        "chooseFile": "Choisissez un fichier CSV ou Excel, ou glissez-le ici",
+        "fileHint": "CSV, TSV, XLSX — les colonnes sont reconnues automatiquement",
+        "unmappedColumns": "Colonnes non mappées :"
       },
       "formErrors": {
-        "updateFailed": "Product could not be updated",
-        "saveFailed": "Product could not be saved",
-        "genericSaveError": "Error saving. Please try again."
+        "updateFailed": "Impossible de mettre à jour le produit",
+        "saveFailed": "Impossible d'enregistrer le produit",
+        "genericSaveError": "Erreur lors de l'enregistrement. Veuillez réessayer."
       }
     },
     "eWasteProblem": {
-      "badge": "The Problem",
-      "heading": "The E-Waste Crisis",
-      "intro": "Electronic waste is the world's fastest-growing waste stream. The figures show the scale of the problem — and why urgent action is needed.",
-      "keyMessage": "Less than a quarter of all electronic devices are correctly recycled.",
-      "consequence": "The rest ends up in landfills, is illegally exported or improperly processed — with devastating consequences for people and the environment."
+      "badge": "Le problème",
+      "heading": "La crise des e-déchets",
+      "intro": "Les déchets électroniques sont le flux de déchets qui croît le plus vite au monde. Les chiffres montrent l'ampleur du problème — et pourquoi il est urgent d'agir.",
+      "keyMessage": "Moins d'un quart de tous les appareils électroniques sont correctement recyclés.",
+      "consequence": "Le reste finit en décharge, est exporté illégalement ou traité de manière inappropriée — avec des conséquences dévastatrices pour les personnes et l'environnement.",
+      "units": {
+        "millionTonnes": "millions de tonnes",
+        "percent": "%",
+        "kgPerPerson": "kg par personne",
+        "kgCo2": "kg CO₂"
+      },
+      "stats": {
+        "global-total": {
+          "label": "E-déchets mondiaux",
+          "description": "Déchets électroniques produits chaque année dans le monde",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "recycling-rate": {
+          "label": "Taux de recyclage",
+          "description": "Part des e-déchets qui sont correctement recyclés",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "europe-per-capita": {
+          "label": "E-déchets par habitant (Europe)",
+          "description": "E-déchets annuels par personne en Europe",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "laptop-co2": {
+          "label": "CO₂ par laptop (Circular Computing)",
+          "description": "Empreinte CO₂ moyenne de la production d'un nouveau laptop",
+          "source": "Circular Computing (étude sur 230 laptops)"
+        }
+      }
     },
     "communitySpace": {
-      "badge": "Our Location",
-      "heading": "Visit Us",
-      "intro": "Our shop in Zurich is more than just a store — it is a meeting place for everyone interested in sustainable IT and open source.",
-      "offeringsTitle": "What you can find with us:",
-      "planRoute": "Plan route",
-      "workshopDesc": "Learn from experts in our regular workshops and talks. For beginners to advanced.",
-      "workshopLink": "Workshop programme",
-      "visionLabel": "Our Vision",
-      "visionCta": "Help us make this vision a reality.",
-      "supportProject": "Support the project"
+      "badge": "Notre adresse",
+      "heading": "Venez nous voir",
+      "intro": "Notre boutique à Zurich est plus qu'un magasin — c'est un lieu de rencontre pour tous ceux qui s'intéressent à l'IT durable et à l'Open Source.",
+      "offeringsTitle": "Ce que vous trouvez chez nous :",
+      "planRoute": "Itinéraire",
+      "workshopDesc": "Apprenez des experts lors de nos ateliers et conférences réguliers. Pour débutants comme avancés.",
+      "workshopLink": "Programme des ateliers",
+      "visionLabel": "Notre vision",
+      "visionCta": "Aidez-nous à réaliser cette vision.",
+      "supportProject": "Soutenir le projet",
+      "locationName": "Boutique RevampIT",
+      "offerings": [
+        "Acheter du matériel reconditionné",
+        "Découvrir notre collection d'ordinateurs vintage",
+        "Recevoir des conseils personnalisés",
+        "Déposer des appareils pour réparation ou don"
+      ],
+      "workshops": {
+        "title": "Ateliers & Conférences",
+        "topics": [
+          "Bases Linux pour débutants",
+          "Logiciels Open Source au quotidien",
+          "IA durable et ses limites",
+          "Modèles technico-économiques alternatifs",
+          "Ateliers de réparation : laptop, smartphone, etc.",
+          "Histoire de l'évolution de l'informatique"
+        ]
+      },
+      "vision": {
+        "title": "Community Tech Space",
+        "description": "Notre rêve est un espace plus grand qui serve de musée, d'atelier et de lieu de rencontre pour la communauté de la tech durable.",
+        "features": [
+          "Musée pour le matériel vintage rare",
+          "Collection de synthétiseurs historiques et instruments électroniques",
+          "Atelier ouvert pour les sessions de réparation",
+          "Espace événementiel pour conférences et meetups",
+          "Espace café pour les échanges communautaires"
+        ]
+      }
     },
     "messageSidebar": {
       "title": "Messages",
-      "searchPlaceholder": "Search conversations...",
-      "noConversations": "No conversations found",
+      "searchPlaceholder": "Rechercher des conversations...",
+      "noConversations": "Aucune conversation trouvée",
       "loading": "Loading...",
-      "noMessages": "No messages yet",
-      "newConversation": "New conversation",
-      "messagePlaceholder": "Write a message..."
+      "noMessages": "Aucun message pour l'instant",
+      "newConversation": "Nouvelle conversation",
+      "messagePlaceholder": "Écrire un message..."
     },
     "avatarUpload": {
-      "altText": "Profile picture",
+      "altText": "Photo de profil",
       "saving": "Saving...",
-      "change": "Change picture",
-      "upload": "Upload picture",
-      "remove": "Remove picture",
-      "errorFileType": "Only JPG, PNG and WebP images are allowed",
-      "errorFileSize": "Image must be at most 5MB",
-      "errorUpload": "Upload failed. Please try again."
+      "change": "Modifier l'image",
+      "upload": "Télécharger une image",
+      "remove": "Supprimer l'image",
+      "errorFileType": "Seules les images JPG, PNG et WebP sont autorisées",
+      "errorFileSize": "L'image ne doit pas dépasser 5 Mo",
+      "errorUpload": "Échec du téléchargement. Veuillez réessayer."
     },
     "map": {
       "loading": "Chargement de la carte..."
@@ -7091,77 +7850,86 @@
     "stepper": {
       "progressLabel": "Progression",
       "stepOf": "Étape {current} sur {total}"
+    },
+    "missionStrip": {
+      "ariaLabel": "Notre impact",
+      "anchor": "Chaque achat empêche un appareil de finir à la poubelle.",
+      "subAnchor": "Nous sommes une association suisse à but non lucratif pour l'économie circulaire depuis 2003.",
+      "devicesRehomed": "Appareils transmis",
+      "co2Avoided": "CO₂ évité",
+      "methodologyLink": "Comment est-ce calculé ?",
+      "estimateNote": "Estimation — base de données actuellement indisponible"
     }
   },
   "profil": {
     "techniker": {
-      "pageTitle": "Technician profile",
-      "pageDesc": "Enter your skills and availability to help others with IT problems.",
-      "backToDashboard": "Back to dashboard",
-      "saveSuccess": "Profile saved successfully!",
-      "saveFailed": "Save failed",
+      "pageTitle": "Profil de technicien",
+      "pageDesc": "Saisissez vos compétences et votre disponibilité pour aider les autres à résoudre leurs problèmes informatiques.",
+      "backToDashboard": "Retour au tableau de bord",
+      "saveSuccess": "Profil enregistré avec succès !",
+      "saveFailed": "Échec de l'enregistrement",
       "skills": {
-        "heading": "Your skills",
-        "desc": "Choose the areas where you can help others."
+        "heading": "Vos compétences",
+        "desc": "Choisissez les domaines dans lesquels vous pouvez aider les autres."
       },
       "serviceType": {
-        "heading": "Type of help",
-        "desc": "How would you like to offer help?"
+        "heading": "Type d'aide",
+        "desc": "Comment souhaitez-vous proposer votre aide ?"
       },
       "location": {
         "heading": "Location",
-        "desc": "Where are you available?",
-        "postalCode": "Postal code",
+        "desc": "Où êtes-vous disponible ?",
+        "postalCode": "NPA",
         "city": "City",
         "canton": "Canton",
-        "cantonPlaceholder": "Please select...",
-        "maxTravel": "Max. travel (km)"
+        "cantonPlaceholder": "Veuillez sélectionner...",
+        "maxTravel": "Trajet max. (km)"
       },
       "pricing": {
         "heading": "Compensation",
-        "desc": "Specify how you would like to be compensated.",
-        "hourlyRate": "Hourly rate (CHF)",
-        "hourlyRateHint": "Leave blank if you only want to help for free",
-        "acceptsGratis": "I also help for free (community help)",
-        "acceptsKulturlegi": "I accept KulturLegi (50% discount)"
+        "desc": "Indiquez comment vous souhaitez être rémunéré.",
+        "hourlyRate": "Tarif horaire (CHF)",
+        "hourlyRateHint": "Laissez vide si vous souhaitez uniquement aider gratuitement",
+        "acceptsGratis": "J'aide aussi gratuitement (aide communautaire)",
+        "acceptsKulturlegi": "J'accepte la CarteCulture (50 % de rabais)"
       },
       "bio": {
-        "heading": "About you",
-        "desc": "Tell us about your experience and why you want to help others.",
-        "placeholder": "e.g. I have been repairing computers for 10 years and love helping people use their devices longer...",
+        "heading": "À propos de vous",
+        "desc": "Parlez-nous de votre expérience et de la raison pour laquelle vous souhaitez aider les autres.",
+        "placeholder": "p. ex. Je répare des ordinateurs depuis 10 ans et j'aime aider les gens à utiliser leurs appareils plus longtemps...",
         "charCount": "{count}/1000 characters"
       },
       "activate": {
-        "heading": "Activate profile",
-        "desc": "Your profile will appear in the technician search"
+        "heading": "Activer le profil",
+        "desc": "Votre profil apparaîtra dans la recherche de techniciens"
       },
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "skillRequired": "Please select at least one skill."
+      "skillRequired": "Veuillez sélectionner au moins une compétence."
     }
   },
   "vote": {
-    "notFound": "Vote not found",
-    "notFoundDesc": "This link is invalid or the vote is no longer active.",
-    "backHome": "Back to home",
+    "notFound": "Vote introuvable",
+    "notFoundDesc": "Ce lien est invalide ou le vote n'est plus actif.",
+    "backHome": "Retour à l'accueil",
     "metaTitle": "Vote: {title}",
     "metaTitleFallback": "Vote",
-    "metaDesc": "Participate in the vote.",
-    "statusVoting": "Voting in progress",
+    "metaDesc": "Participez au vote.",
+    "statusVoting": "Vote en cours",
     "statusDiscussion": "Discussion",
-    "contextHeading": "What is this about?",
+    "contextHeading": "De quoi s'agit-il ?",
     "optionsCount": "Options ({count})",
-    "backgroundTitle": "Background & Rationale",
-    "footer": "This vote is conducted by {org}.",
-    "emailLabel": "Your email address (for identification)",
-    "emailPlaceholder": "name@example.com",
-    "emailHint": "Your email is used to identify you as a member. One vote per person.",
+    "backgroundTitle": "Justification et contexte",
+    "footer": "Ce vote est organisé par {org}.",
+    "emailLabel": "Votre adresse e-mail (pour identification)",
+    "emailPlaceholder": "nom@exemple.ch",
+    "emailHint": "Votre adresse e-mail est utilisée pour vous identifier en tant que membre. Une seule voix par personne.",
     "emailHintPublic": "Ce vote est public. Entrez votre e-mail — aucun compte nécessaire. Un vote par e-mail.",
-    "yourVote": "Your vote",
-    "emailRequired": "Please enter your email address",
-    "submitError": "Error submitting vote",
-    "networkError": "Network error — please try again",
+    "yourVote": "Votre voix",
+    "emailRequired": "Veuillez saisir votre adresse e-mail",
+    "submitError": "Erreur lors du vote",
+    "networkError": "Erreur réseau — veuillez réessayer",
     "successHeading": "Vote enregistré",
     "successDesc": "Votre vote a bien été enregistré.",
     "successRegisterHeading": "Voir les résultats ?",
@@ -7170,9 +7938,9 @@
     "successOrLogin": "Déjà un compte ?",
     "successLoginCta": "Se connecter",
     "notStartedHeading": "Ce vote n'a pas encore commencé",
-    "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
+    "notStartedDesc": "Le lien est valide, mais la phase de vote n'a pas encore commencé.",
     "saving": "Saving...",
-    "submit": "Submit vote"
+    "submit": "Voter"
   },
   "meta": {
     "meta": {},
@@ -7184,5 +7952,190 @@
     "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel.",
     "layoutTitle": "Nos Projets",
     "templateSuffix": "Projets"
+  },
+  "admin": {
+    "approvals": {
+      "approve": "Approuver",
+      "release": "Publier",
+      "accept": "Accepter"
+    },
+    "hirn": {
+      "assistantSubtitle": "Assistant",
+      "openFullscreen": "Ouvrir en plein écran"
+    },
+    "team": {
+      "backToTeam": "Retour à l'équipe",
+      "edit": "Modifier",
+      "inactive": "Inactif",
+      "since": "Depuis",
+      "activities": "Activités",
+      "viewTeamActivities": "Voir les activités de l'équipe",
+      "activitiesDescription": "Tâches accomplies, jalons et demandes d'aide",
+      "skillsAndInterests": "Compétences et intérêts",
+      "skills": "Compétences",
+      "noSkills": "Aucune compétence enregistrée",
+      "interests": "Intérêts",
+      "development": "Développement",
+      "goals": "Objectifs",
+      "strengths": "Forces",
+      "developmentAreas": "Axes de développement",
+      "noDevelopmentData": "Aucune donnée de développement enregistrée",
+      "availability": "Disponibilité",
+      "workingHours": "Horaires de travail",
+      "contractHours": "Heures contractuelles",
+      "hoursPerWeek": "Heures/semaine",
+      "generalAvailability": "Disponibilité générale",
+      "preferredContact": "Mode de contact préféré",
+      "emergencyContact": "Contact d'urgence",
+      "hrNotes": "Notes RH (confidentielles)",
+      "createdAt": "Créé",
+      "updatedAt": "Mis à jour"
+    },
+    "protocols": {
+      "queueTitle": "File d'attente de revue IA",
+      "queueDescription": "Vérifier les résultats de l'IA, en créer des tâches et des décisions, puis clôturer.",
+      "newProtocol": "Nouveau procès-verbal",
+      "noPendingReviews": "Aucun procès-verbal n'attend de revue.",
+      "noPendingDescription": "Les nouvelles transcriptions ou notes apparaissent ici dès que l'IA les a structurées.",
+      "recognizedActions": "actions reconnues",
+      "notInTaskSystem": "pas encore dans le système de tâches",
+      "readyToClose": "prêt à clôturer",
+      "open": "ouvert",
+      "by": "par",
+      "openReview": "Ouvrir la revue",
+      "record": {
+        "start": "Enregistrer",
+        "stop": "Arrêter",
+        "stopAriaLabel": "Arrêter l'enregistrement",
+        "consentRequired": "Veuillez d'abord confirmer le consentement",
+        "errorPermission": "Accès au microphone refusé. Autorisez l'accès dans les paramètres du navigateur ou téléversez un fichier à la place."
+      },
+      "consent": {
+        "label": "Toutes les personnes présentes ont consenti à l'enregistrement.",
+        "remember": "Mémoriser cette confirmation (uniquement dans ce navigateur)"
+      },
+      "alternatives": {
+        "title": "Quelque chose ne fonctionne pas ? Autres options",
+        "subtitle": "Nous recommandons des outils open source. Tous fonctionnent en local ou en auto-hébergement — les données de vos réunions ne quittent jamais votre ordinateur.",
+        "recordHeading": "Enregistrer soi-même",
+        "recordIntro": "Si l'enregistrement dans le navigateur ne fonctionne pas :",
+        "transcribeHeading": "Transcrire soi-même",
+        "transcribeIntro": "Si notre service de transcription n'est pas disponible pour le moment :",
+        "structureHeading": "Structurer soi-même",
+        "structureIntro": "Si l'IA ne répond pas ici — passez ce prompt à un modèle local (Ollama, llama.cpp) ou à un chatbot de votre choix :",
+        "copyPrompt": "Copier le prompt",
+        "copied": "Copié",
+        "promptTemplate": "Tu es un structureur de réunions. Lis la transcription de réunion suivante et renvoie le résultat au format JSON avec les clés :\n  - participants : liste des noms des participants\n  - topics : liste des points de discussion (courts)\n  - decisions : liste des décisions prises\n  - tasks : liste { description, assignee, dueDate }\n  - openQuestions : liste des questions ouvertes\n\nTranscription :\n---"
+      }
+    },
+    "categories": {
+      "titleNew": "Nouvelle catégorie",
+      "titleEdit": "Modifier la catégorie",
+      "subtitleNew": "Créer une nouvelle catégorie de blog",
+      "subtitleEdit": "Modifier les détails de la catégorie",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "preview": "Aperçu",
+      "defaultName": "Nom de la catégorie",
+      "deleteDialog": {
+        "title": "Supprimer la catégorie",
+        "message": "Voulez-vous vraiment supprimer la catégorie ?"
+      }
+    },
+    "dashboard": {
+      "myTasks": "Mes tâches",
+      "assignedTasks": "Tâches assignées",
+      "viewAllTasks": "Voir toutes les tâches",
+      "submittedContent": "Contenus soumis",
+      "awaitingApproval": "en attente de validation",
+      "viewAllSubmissions": "Voir toutes les soumissions",
+      "contentTypeLabels": {
+        "blogPost": "Article de blog",
+        "workshop": "Atelier",
+        "service": "Service",
+        "other": "Soumission"
+      }
+    },
+    "projects": {
+      "sidebar": "Projets publics",
+      "pageTitle": "Projets publics",
+      "pageDescription": "Gérez les besoins en ressources des projets visibles publiquement et triez les contributions entrantes.",
+      "detailDescription": "Besoins et contributions entrantes",
+      "detailTitle": "Projet : {slug}",
+      "publicPageLink": "Page publique",
+      "fallbackTaskProjectLabel": "Projet de tâches",
+      "stats": {
+        "total": "Projets au total",
+        "active": "Actifs",
+        "openNeeds": "Besoins ouverts",
+        "newContributions": "Nouvelles contributions"
+      },
+      "empty": {
+        "title": "Aucun projet public pour le moment",
+        "description": "Les projets sont créés via migration (le slug doit correspondre à la page projet i18n)."
+      },
+      "card": {
+        "inactive": "Inactif",
+        "openNeeds": "Besoins ouverts",
+        "newContributions": "Nouvelles contributions"
+      },
+      "needs": {
+        "title": "Besoins",
+        "subtitle": "Ce dont le projet a besoin maintenant. Visible publiquement dès que le statut est « Ouvert ».",
+        "new": "Nouveau besoin",
+        "addCancel": "Annuler",
+        "addSubmit": "Ajouter",
+        "placeholderTitle": "Titre",
+        "placeholderDescription": "Description",
+        "placeholderQuantity": "Quantité cible (facultatif)",
+        "placeholderUnit": "Unité (p. ex. écran, CHF)",
+        "placeholderQuantityShort": "Quantité",
+        "placeholderUnitShort": "Unité",
+        "confirmDelete": "Voulez-vous vraiment supprimer ce besoin ?",
+        "errorSave": "Échec de l'enregistrement",
+        "errorDelete": "Échec de la suppression",
+        "errorCreate": "Échec de la création",
+        "tooltipSave": "Enregistrer",
+        "tooltipDelete": "Supprimer",
+        "empty": "Aucun besoin n'a encore été défini.",
+        "fieldType": "Type",
+        "fieldTitle": "Titre",
+        "fieldStatus": "Statut"
+      },
+      "contributions": {
+        "title": "Contributions entrantes",
+        "subtitle": "Boîte de réception pour les propositions provenant de la page projet publique.",
+        "filterAll": "Toutes",
+        "emptyAll": "Aucune contribution.",
+        "emptyFiltered": "Aucune contribution avec le statut « {status} ».",
+        "needFallback": "Général",
+        "needLabel": "Besoin",
+        "notesPlaceholder": "Notes internes (non visibles par l'expéditeur)",
+        "lastEdited": "Dernière modification par {name} le {date}",
+        "tooltipSave": "Enregistrer",
+        "errorSave": "Échec de l'enregistrement"
+      },
+      "typeLabels": {
+        "expertise": "Expertise",
+        "hardware": "Matériel",
+        "partner_intro": "Contact partenaire",
+        "funding": "Financement",
+        "volunteer_time": "Engagement bénévole"
+      },
+      "needStatusLabels": {
+        "open": "Ouvert",
+        "matched": "Attribué",
+        "fulfilled": "Satisfait",
+        "archived": "Archivé"
+      },
+      "contributionStatusLabels": {
+        "new": "Nouveau",
+        "contacted": "Contacté",
+        "accepted": "Accepté",
+        "declined": "Refusé"
+      }
+    }
   }
 }

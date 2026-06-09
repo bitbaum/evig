@@ -2458,6 +2458,61 @@
         "description": "Deine Unterstützung macht den Unterschied. Jeder Beitrag, ob gross oder klein, hilft uns dabei, die Schweizer IT-Landschaft nachhaltiger zu gestalten und Menschen neue Chancen zu geben.",
         "donate": "Jetzt spenden",
         "contact": "Kontakt aufnehmen"
+      },
+      "categories": {
+        "environmental": "UMWELT",
+        "social": "SOZIAL",
+        "economic": "WIRTSCHAFT"
+      },
+      "units": {
+        "tonnes": "Tonnen"
+      },
+      "metrics": {
+        "devices-recycled": {
+          "title": "Geräte jährlich gerettet",
+          "description": "Anzahl der IT-Geräte, die wir jährlich vor dem Entsorgen retten (verkauft)",
+          "methodology": "Konservative Schätzung basierend auf Warenverkauf-Umsatz ÷ Durchschnittspreis. Systematisches Tracking wird aufgebaut."
+        },
+        "device-lifespan": {
+          "title": "Lebensdauerverlängerung",
+          "description": "Durchschnittliche Lebensdauerverlängerung pro Gerät (in Jahren)",
+          "methodology": "Erfahrungswerte aus 20+ Jahren Refurbishing: Linux verlängert Lebensdauer älterer Hardware signifikant."
+        },
+        "reuse-rate": {
+          "title": "Wiederverwendungsrate",
+          "description": "Anteil der gespendeten Geräte, die wir erfolgreich wiederverwenden",
+          "methodology": "Von allen gespendeten Geräten werden ca. 75% erfolgreich repariert und wiederverwendet. Die restlichen 25% werden fachgerecht recycelt."
+        },
+        "co2-savings": {
+          "title": "CO₂-Einsparung jährlich",
+          "description": "Geschätzte jährliche CO₂-Einsparung durch Wiederverwendung statt Neuproduktion",
+          "methodology": "Produktion eines neuen Laptops: 350 kg CO₂ (Fraunhofer IZM 2023). Refurbishment: 65 kg CO₂. Einsparung pro Gerät: 285 kg. Bei 150 verkauften Geräten/Jahr ≈ 43 Tonnen."
+        },
+        "ewaste-prevented": {
+          "title": "Elektroschrott verhindert",
+          "description": "Menge an Elektroschrott, die wir jährlich verhindern",
+          "methodology": "Durchschnittsgewicht pro Gerät inkl. Peripherie: 5 kg. 150 Geräte × 5 kg = 0.75 Tonnen pro Jahr."
+        },
+        "people-trained": {
+          "title": "Personen geschult",
+          "description": "Personen, die wir jährlich in Open Source und nachhaltiger IT schulen",
+          "methodology": "Teilnehmer:innen an Workshops, Praktika und Weiterbildungsprogrammen pro Jahr."
+        },
+        "internship-success": {
+          "title": "Erfolgreiche Praktika",
+          "description": "Unserer Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung",
+          "methodology": "Geschätzt auf Basis historischer Erfahrungswerte, nicht systematisch erhoben."
+        },
+        "career-reentries": {
+          "title": "Berufliche Wiedereinstiege",
+          "description": "Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm",
+          "methodology": "Geschätzt auf Basis von ~10 Praktikant:innen/Jahr mit erschwertem Arbeitsmarktzugang und ~40% Erfolgsrate."
+        }
+      },
+      "eyebrows": {
+        "impact": "WIRKUNG",
+        "annual": "JAHRESBERICHT",
+        "register": "REGISTER"
       }
     },
     "press": {
@@ -5258,6 +5313,181 @@
           }
         ]
       },
+      "nav": {
+        "brand": "MONITOR-UPCYCLING",
+        "overview": "Übersicht",
+        "applications": "Einsatz",
+        "gallery": "Galerie",
+        "buildYourOwn": "Selber bauen",
+        "status": "Status"
+      },
+      "explore": {
+        "eyebrow": "ENTDECKEN",
+        "title": "Drei Wege durch das Projekt",
+        "intro": "Schau dir an, wo die Leuchten eingesetzt werden, welche Stücke bereits entstanden sind — oder bau dein eigenes nach unseren offenen Anleitungen.",
+        "cards": [
+          {
+            "key": "applications",
+            "title": "Einsatzbereiche",
+            "description": "Vom funktionalen Arbeitslicht über Wohnraum-Dekor bis zum Kunstobjekt. Drei Welten, dasselbe wiederbelebte Stück Hardware.",
+            "cta": "Einsatzbereiche ansehen"
+          },
+          {
+            "key": "gallery",
+            "title": "Galerie",
+            "description": "Bereits umgebaute Leuchten quer durch alle Monitor-Modelle und Stilrichtungen — filterbar nach Einsatz.",
+            "cta": "Galerie öffnen"
+          },
+          {
+            "key": "buildYourOwn",
+            "title": "Selber bauen",
+            "description": "Offene Hardware, MIT-Lizenz: alle Anleitungen, Schaltpläne und Materialien zum Nachbauen — überall auf der Welt.",
+            "cta": "Anleitungen öffnen"
+          }
+        ]
+      },
+      "applications": {
+        "meta": {
+          "title": "Einsatzbereiche | Monitor-Upcycling | RevampIT",
+          "description": "Vom funktionalen Arbeitslicht über Wohnraum-Dekor bis zum Kunstobjekt: drei Welten, in denen umgebaute Monitor-Leuchten ihren Platz finden."
+        },
+        "eyebrow": "EINSATZBEREICHE · MONITOR-UPCYCLING",
+        "title": "Eine Leuchte. Drei Welten.",
+        "intro": "Derselbe ausgediente Monitor wird zur diskreten Arbeitsleuchte, zum warmen Möbelstück im Wohnraum — oder zum Kunstobjekt in der Galerie. Die Wahl hängt nicht am Material, sondern an der Bühne.",
+        "spectrum": {
+          "label": "Spektrum",
+          "functional": "Funktional",
+          "art": "Kunst"
+        },
+        "tiers": {
+          "functional": {
+            "title": "Funktional",
+            "description": "Robustes Arbeitslicht für Räume, in denen es leuchten muss, nicht glänzen. Geringer Stromverbrauch, gleichmässige Flächen-Helligkeit, Montage an Wand oder Decke — wie eine Neuleuchte, nur aus einem zweiten Leben.",
+            "examples": [
+              "Büros & Co-Working-Räume",
+              "Technikräume & Werkstätten",
+              "Tiefgaragen & Parkhäuser",
+              "Treppenhäuser & Korridore",
+              "Lagerräume & Archive",
+              "Nebenräume in Liegenschaften"
+            ],
+            "imageCaption": "Funktional · neutral"
+          },
+          "decor": {
+            "title": "Dekor",
+            "description": "Warmes, indirektes Licht für Räume mit Charakter. Die ehemalige Bildfläche wird zur Lichtfläche — flach, leise, mit einer Geschichte. Passt zu rohen Betonwänden ebenso wie zu Holz und Textil.",
+            "examples": [
+              "Wohnräume & Loft-Wohnungen",
+              "Cafés, Bars & Restaurants",
+              "Hotellobbys & Boutique-Räume",
+              "Ateliers & Studios",
+              "Concept-Stores",
+              "Praxis- & Empfangsräume"
+            ],
+            "imageCaption": "Dekor · warm"
+          },
+          "art": {
+            "title": "Kunst",
+            "description": "Wenn die Leuchte selbst zur Aussage wird. In Galerien, Installationen und kuratierten Räumen rückt die Herkunft des Materials in den Vordergrund — das Display, das einst Bilder zeigte, wird selbst zum Bild.",
+            "examples": [
+              "Galerien & Ausstellungsräume",
+              "Kunst-am-Bau-Installationen",
+              "Pop-up-Räume & Vernissagen",
+              "Theater- & Bühnenfoyers",
+              "Museumshops & Bildungsräume",
+              "Lichtkunst-Projekte"
+            ],
+            "imageCaption": "Kunst · saturiert"
+          }
+        },
+        "cta": {
+          "title": "Eine Idee, wo sie hin soll?",
+          "body": "Wir installieren Pilotleuchten in Liegenschaften, Cafés und Ausstellungsräumen — oder zeigen dir, wie du selber eine baust.",
+          "primary": "Pilotinstallation anfragen",
+          "secondary": "Selber bauen"
+        }
+      },
+      "gallery": {
+        "meta": {
+          "title": "Galerie | Monitor-Upcycling | RevampIT",
+          "description": "Galerie der umgebauten Monitor-Leuchten — vom funktionalen Arbeitslicht bis zum Kunstobjekt. Filterbar nach Einsatzbereich."
+        },
+        "eyebrow": "GALERIE · MONITOR-UPCYCLING",
+        "title": "Was bereits entstanden ist",
+        "intro": "Jedes Stück ein wiederbelebter Monitor. Filter nach Einsatzbereich — funktional, Dekor oder Kunst — oder schau dir alles auf einmal an.",
+        "filterLabel": "Filter:",
+        "filters": {
+          "all": "Alle",
+          "functional": "Funktional",
+          "decor": "Dekor",
+          "art": "Kunst"
+        },
+        "empty": "Für diesen Filter sind noch keine Stücke vorhanden.",
+        "placeholderNote": "Die Vorschaubilder werden generiert — sobald die ersten Stücke fotografiert sind, ersetzen wir sie durch echte Aufnahmen."
+      },
+      "buildYourOwn": {
+        "meta": {
+          "title": "Selber bauen | Monitor-Upcycling | RevampIT",
+          "description": "Open-Source-Hardware: alle Anleitungen, Schaltpläne und Materialien, um eine Monitor-Leuchte selbst zu bauen. MIT-Lizenz, frei nutzbar weltweit."
+        },
+        "eyebrow": "SELBER BAUEN · MONITOR-UPCYCLING",
+        "title": "Bau dein eigenes Stück",
+        "intro": "Offene Hardware, offene Anleitungen. Alle Pläne, Schaltbilder und Material-Listen stehen unter MIT-Lizenz frei zur Verfügung — damit dieselbe Idee überall auf der Welt funktioniert, ohne Umweg über uns.",
+        "philosophy": {
+          "title": "Warum offen?",
+          "body": "Unsere Mission ist nicht, möglichst viele Leuchten zu verkaufen — sondern möglichst viele Monitore aus dem Schrott zu holen. Das geht nur, wenn jede Werkstatt, jeder Verein und jeder neugierige Mensch nachbauen darf. Wir veröffentlichen alles, was wir lernen.",
+          "pillars": [
+            {
+              "title": "Dokumentation",
+              "body": "Schritt-für-Schritt-Anleitungen pro Modell — Fotos, Pin-Belegung, Schaltpläne und Sicherheitshinweise. Geprüft in unserer Werkstatt, frei für deine."
+            },
+            {
+              "title": "Weltweit reproduzierbar",
+              "body": "Material-Listen mit Standard-Komponenten. Was in Zürich funktioniert, funktioniert in Berlin, Lagos oder São Paulo. Keine RevampIT-spezifischen Teile."
+            },
+            {
+              "title": "Werkzeug, nicht Produkt",
+              "body": "Wir teilen, was wir gelernt haben. Verbesserungen, Forks und Übersetzungen sind willkommen — ein Pull Request statt eine E-Mail."
+            }
+          ]
+        },
+        "guides": {
+          "title": "Anleitungen",
+          "intro": "Jede Anleitung deckt ein konkretes Monitor-Modell ab — vom Zerlegen bis zur fertigen Leuchte. Neue Modelle folgen laufend.",
+          "openCta": "Anleitung öffnen",
+          "items": [
+            {
+              "slug": "lenovo-l2251pwd",
+              "model": "Lenovo L2251pwd",
+              "href": "/projects/upcycling/lenovo-l2251pwd",
+              "summary": "22-Zoll-Monitor zur Leuchte umbauen. LCD entfernen, Backlight überbrücken, fertig.",
+              "difficulty": "Einfach",
+              "duration": "≈ 1 h",
+              "author": "Daniel"
+            }
+          ],
+          "empty": "Noch keine Anleitungen veröffentlicht."
+        },
+        "source": {
+          "title": "Quellcode & Lizenz",
+          "body": "Diese Plattform selbst — inklusive aller Anleitungen, Schaltpläne und Komponenten — liegt auf GitHub. Fork, Issue oder Pull Request: alles willkommen.",
+          "repoCta": "Auf GitHub ansehen",
+          "repoUrl": "https://github.com/g-but/revampit",
+          "licenseLabel": "MIT-Lizenz · Hardware unter CERN-OHL-S kompatibel"
+        },
+        "contribute": {
+          "title": "Mitmachen",
+          "body": "Es gibt mehr Monitor-Modelle als wir je dokumentieren können. Wer hilft, baut die Bibliothek mit auf.",
+          "items": [
+            "Neue Modell-Anleitung schreiben",
+            "Bestehende Anleitung übersetzen",
+            "Foto-Dokumentation eines Umbaus liefern",
+            "Schaltplan-Variante für anderen Backlight-Treiber",
+            "Sicherheits-Review oder CE-Hinweise"
+          ],
+          "cta": "Kontakt aufnehmen"
+        }
+      },
       "lenovo_l2251pwd": {
         "meta": {
           "title": "Lenovo L2251pwd — Monitor zur Leuchte | Monitor-Upcycling | RevampIT",
@@ -5310,8 +5540,14 @@
             "title": "Rahmen ausklicken",
             "body": "Von der Rückseite mit Kunststoff-Spachteln den äusseren Rahmen 'ausklicken'. Vorsichtig der Kante entlang, damit keine Klipse abbrechen.",
             "images": [
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-1-frame-removed.jpg", "alt": "Lenovo L2251pwd mit abgenommenem äusserem Rahmen" },
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-1-bezel-clips.jpg", "alt": "Detail der Plastikklipse am Monitorrahmen" }
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-frame-removed.jpg",
+                "alt": "Lenovo L2251pwd mit abgenommenem äusserem Rahmen"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-1-bezel-clips.jpg",
+                "alt": "Detail der Plastikklipse am Monitorrahmen"
+              }
             ]
           },
           {
@@ -5319,8 +5555,14 @@
             "title": "Elektronik-Gehäuse lösen",
             "body": "Auf der Rückseite die 4 Schrauben seitlich entfernen. Das Elektronik-Gehäuse lässt sich dann abheben.",
             "images": [
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-open.jpg", "alt": "Geöffnetes Elektronik-Gehäuse auf der Monitor-Rückseite" },
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-detached.jpg", "alt": "Abgenommenes Elektronik-Gehäuse mit sichtbarer Platine" }
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-open.jpg",
+                "alt": "Geöffnetes Elektronik-Gehäuse auf der Monitor-Rückseite"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-2-housing-detached.jpg",
+                "alt": "Abgenommenes Elektronik-Gehäuse mit sichtbarer Platine"
+              }
             ]
           },
           {
@@ -5334,7 +5576,10 @@
             "title": "LCD entfernen, Rahmen wieder schliessen",
             "body": "Schwarze LCD-Scheibe abnehmen. Den Metallrahmen wieder zusammenfügen — die weisse Hintergrundbeleuchtung bleibt geschützt darin. Das ist ab jetzt die leuchtende Fläche.",
             "images": [
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-4-lcd-removed.jpg", "alt": "Monitor ohne LCD — nur die weisse Hintergrundbeleuchtung bleibt sichtbar" }
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-4-lcd-removed.jpg",
+                "alt": "Monitor ohne LCD — nur die weisse Hintergrundbeleuchtung bleibt sichtbar"
+              }
             ]
           },
           {
@@ -5342,9 +5587,18 @@
             "title": "Bedienelektronik brücken",
             "body": "Jetzt ist das Gerät technisch noch ein Monitor — er muss manuell ein- und ausgeschaltet werden. Für den Leuchten-Betrieb wird die Bedienelektronik entfernt und auf dem verbleibenden Stecker eine Brücke gesetzt. Die Brücke ist ein Spannungsteiler zwischen 5V (rot), GND (schwarz) und dem Signal für die Hintergrundbeleuchtung (gelb): zwei identische Widerstände (~1 kΩ) zwischen Rot↔Gelb und Schwarz↔Gelb.",
             "images": [
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-5-control-board.jpg", "alt": "Ausgebaute Bedienelektronik des Lenovo-Monitors" },
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-soldered.jpg", "alt": "Aufgelötete Brücke aus zwei 1-kΩ-Widerständen" },
-              { "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-detail.jpg", "alt": "Detail der Spannungsteiler-Brücke am Steckverbinder" }
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-control-board.jpg",
+                "alt": "Ausgebaute Bedienelektronik des Lenovo-Monitors"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-soldered.jpg",
+                "alt": "Aufgelötete Brücke aus zwei 1-kΩ-Widerständen"
+              },
+              {
+                "src": "/projects/upcycling/lenovo-l2251pwd/step-5-bridge-detail.jpg",
+                "alt": "Detail der Spannungsteiler-Brücke am Steckverbinder"
+              }
             ]
           }
         ],
@@ -5366,6 +5620,100 @@
           "title": "Bessere Idee? Schreib uns.",
           "body": "Diese Anleitung ist offen und lebt von Korrekturen. Falls du eine bessere Brücken-Schaltung, eine Helligkeitsregelung oder eine schönere Montage gefunden hast — wir nehmen Beiträge gerne entgegen.",
           "cta": "Beitragen"
+        },
+        "ui": {
+          "openPhoto": "Foto vergrössern",
+          "closePhoto": "Schliessen",
+          "playVideo": "Video abspielen",
+          "pauseVideo": "Video pausieren",
+          "stepProgressLabel": "Schritt",
+          "stepProgressOf": "von",
+          "jumpToStep": "Zu Schritt springen",
+          "photoCountLabel": "Foto",
+          "photoCountOf": "von"
+        }
+      },
+      "status": {
+        "meta": {
+          "title": "Status & Wirkung | Monitor-Upcycling | RevampIT",
+          "description": "Wo das Monitor-Upcycling-Projekt heute steht: Produktionsfortschritt, Wirkungs-Schätzung (final per ZHAW-Ökobilanz), Meilensteine und Partner-Ökosystem."
+        },
+        "eyebrow": "STATUS · MONITOR-UPCYCLING",
+        "title": "Wo das Projekt steht",
+        "intro": "Eine ehrliche Momentaufnahme — was bereits läuft, was gemessen ist und was als Nächstes kommt. Quelle: interne Projektbuchhaltung; finale Ökobilanz folgt mit dem ZHAW-Schlussbericht.",
+        "snapshot": {
+          "label": "Stand",
+          "updatedLabel": "Aktualisiert"
+        },
+        "production": {
+          "title": "Produktion",
+          "intro": "Die Kleinserie läuft. Pro Modell entstehen dokumentierte Anleitungen, die wir parallel zur Fertigung publizieren.",
+          "lampsLabel": "Leuchten gebaut",
+          "lampsOf": "von",
+          "lampsTarget": "Zielserie",
+          "modelsLabel": "Modelle mit Anleitung",
+          "pilotsLabel": "Pilot-Standorte aktiv",
+          "intakeLabel": "Monitore in Bearbeitung"
+        },
+        "impact": {
+          "title": "Wirkung — Schätzung",
+          "intro": "Diese Werte sind interne Schätzungen, basierend auf der bisherigen Produktion und auf typischen Energie- und Materialwerten pro Gerät. Die definitive Bilanz erstellt die ZHAW im Schlussbericht (geplant Q3 2026).",
+          "disclaimer": "Schätzung — verifizierte Werte folgen mit ZHAW-LCA",
+          "cards": [
+            { "key": "ewaste",    "label": "E-Schrott vermieden",         "unit": "kg" },
+            { "key": "workshop",  "label": "Stunden in Werkstätten",      "unit": "h" },
+            { "key": "co2",       "label": "CO₂-Einsparung (geschätzt)",  "unit": "kg" },
+            { "key": "reuse",     "label": "Wiederverwendungs-Rate",      "unit": "%" }
+          ]
+        },
+        "timeline": {
+          "title": "Meilensteine",
+          "intro": "Vergangenes, Laufendes und Geplantes auf einen Blick.",
+          "labels": { "done": "Abgeschlossen", "active": "Laufend", "upcoming": "Geplant" },
+          "items": [
+            { "key": "kickoff",   "date": "Okt 2025", "label": "Projektstart & Konzept" },
+            { "key": "prototype", "date": "Feb 2026", "label": "Erste funktionale Prototypen" },
+            { "key": "lca-start", "date": "Apr 2026", "label": "ZHAW-Ökobilanz startet" },
+            { "key": "series",    "date": "Jun 2026", "label": "Kleinserie-Produktion läuft" },
+            { "key": "swico",     "date": "3. Jul 2026", "label": "Swico-Innovationsfonds-Präsentation" },
+            { "key": "lca-final", "date": "Q3 2026",  "label": "LCA-Schlussbericht (ZHAW)" },
+            { "key": "scale",     "date": "2027",     "label": "Skalierungsphase II — Modellpalette & Vertrieb" }
+          ]
+        },
+        "partners": {
+          "title": "Partner-Ökosystem",
+          "intro": "Das Projekt funktioniert nur als Netzwerk. Wer welche Rolle übernimmt:",
+          "groups": [
+            { "key": "production", "title": "Produktion & Werkstätten", "names": ["Drahtzug", "FARO", "St. Jakob", "Palme"] },
+            { "key": "pilots",     "title": "Pilot-Standorte (Liegenschaften)", "names": ["Livit", "Wincasa", "Allreal", "ISS"] },
+            { "key": "material",   "title": "Material-Quelle", "names": ["ERZ Zürich"] },
+            { "key": "science",    "title": "Wissenschaftliche Begleitung", "names": ["ZHAW (Ökobilanz & Kosten-Nutzen-Analyse)"] },
+            { "key": "funding",    "title": "Förderung", "names": ["Swico Innovationsfonds"] }
+          ]
+        },
+        "calls": {
+          "title": "So kannst du beitragen",
+          "intro": "Drei konkrete Wege, das Projekt in die nächste Phase zu tragen.",
+          "actions": [
+            {
+              "key": "fund",
+              "title": "Co-Förderer werden",
+              "description": "Wir suchen Stiftungen und Unternehmen, die das Skalierungsfenster 2027 mittragen — von der Kleinserie zum verfügbaren Produkt.",
+              "cta": "Fördergespräch anfragen"
+            },
+            {
+              "key": "pilot",
+              "title": "Pilot-Standort werden",
+              "description": "Liegenschaft, Café, Atelier oder Ausstellungsraum? Wir installieren eine Pilot-Leuchte und dokumentieren mit dir den Einsatz im Alltag.",
+              "cta": "Pilot anfragen"
+            },
+            {
+              "key": "donate",
+              "title": "Monitore in den Kreislauf",
+              "description": "Du tauschst IT bei dir aus? Wir holen die alten Bildschirme ab, dokumentieren den Stoffstrom und integrieren sie in die Kleinserie.",
+              "cta": "Material melden"
+            }
+          ]
         }
       }
     }
@@ -7129,7 +7477,25 @@
       "whyRepairTitle": "Warum Reparatur zuerst?",
       "whyRepairText": "Die Herstellung eines neuen Laptops verursacht durchschnittlich 331 kg CO₂. Eine Reparatur verursacht nur etwa 15 kg – eine Einsparung von über 95 %.",
       "whyRepairConclusion": "Die nachhaltigste Option ist immer die Reparatur",
-      "priority": "Priorität {priority}"
+      "priority": "Priorität {priority}",
+      "principles": {
+        "repair": {
+          "title": "Reparieren",
+          "description": "Defekte Geräte werden repariert und dem ursprünglichen Besitzer zurückgegeben. Das ist die nachhaltigste Option."
+        },
+        "refurbish": {
+          "title": "Aufbereiten",
+          "description": "Gespendete Geräte werden professionell überholt, mit Linux ausgestattet und an neue Nutzer weitergegeben."
+        },
+        "recycle": {
+          "title": "Recyceln",
+          "description": "Nicht mehr nutzbare Geräte werden fachgerecht zerlegt. Wertvolle Rohstoffe werden dem Kreislauf zurückgeführt."
+        },
+        "educate": {
+          "title": "Aufklären",
+          "description": "Durch Workshops und Bildung befähigen wir Menschen, ihre Geräte länger zu nutzen und bewusster zu konsumieren."
+        }
+      }
     },
     "voice": {
       "stateIdle": "Diktieren",
@@ -7293,7 +7659,35 @@
       "heading": "Die E-Waste Krise",
       "intro": "Elektroschrott ist der am schnellsten wachsende Abfallstrom der Welt. Die Zahlen zeigen das Ausmass des Problems – und warum Handeln dringend nötig ist.",
       "keyMessage": "Weniger als ein Viertel aller Elektrogeräte werden korrekt recycelt.",
-      "consequence": "Der Rest landet auf Deponien, wird illegal exportiert oder unsachgemäss verarbeitet – mit verheerenden Folgen für Mensch und Umwelt."
+      "consequence": "Der Rest landet auf Deponien, wird illegal exportiert oder unsachgemäss verarbeitet – mit verheerenden Folgen für Mensch und Umwelt.",
+      "units": {
+        "millionTonnes": "Millionen Tonnen",
+        "percent": "%",
+        "kgPerPerson": "kg pro Person",
+        "kgCo2": "kg CO₂"
+      },
+      "stats": {
+        "global-total": {
+          "label": "Globaler E-Waste",
+          "description": "Jährlich produzierter Elektroschrott weltweit",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "recycling-rate": {
+          "label": "Recycling-Rate",
+          "description": "Anteil des Elektroschrotts, der korrekt recycelt wird",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "europe-per-capita": {
+          "label": "E-Waste pro Kopf (Europa)",
+          "description": "Jährlicher Elektroschrott pro Person in Europa",
+          "source": "UN Global E-waste Monitor 2024"
+        },
+        "laptop-co2": {
+          "label": "CO₂ pro Laptop (Circular Computing)",
+          "description": "Durchschnittlicher CO₂-Fussabdruck bei der Herstellung eines neuen Laptops",
+          "source": "Circular Computing (Studie mit 230 Laptops)"
+        }
+      }
     },
     "communitySpace": {
       "badge": "Unser Standort",
@@ -7305,7 +7699,36 @@
       "workshopLink": "Zum Workshop-Programm",
       "visionLabel": "Unsere Vision",
       "visionCta": "Hilf uns, diese Vision Wirklichkeit werden zu lassen.",
-      "supportProject": "Projekt unterstützen"
+      "supportProject": "Projekt unterstützen",
+      "locationName": "RevampIT Laden",
+      "offerings": [
+        "Refurbished Hardware kaufen",
+        "Vintage-Computer-Sammlung besichtigen",
+        "Persönliche Beratung erhalten",
+        "Geräte zur Reparatur oder Spende abgeben"
+      ],
+      "workshops": {
+        "title": "Workshops & Vorträge",
+        "topics": [
+          "Linux-Grundlagen für Einsteiger",
+          "Open-Source-Software im Alltag",
+          "Nachhaltige KI und ihre Grenzen",
+          "Alternative techno-ökonomische Modelle",
+          "Reparatur-Workshops: Laptop, Smartphone, etc.",
+          "Geschichte der Computerentwicklung"
+        ]
+      },
+      "vision": {
+        "title": "Community Tech Space",
+        "description": "Unser Traum ist ein grösserer Raum, der als Museum, Werkstatt und Treffpunkt für die nachhaltige Tech-Community dient.",
+        "features": [
+          "Museum für seltene Vintage-Hardware",
+          "Sammlung historischer Synthesizer und elektronischer Musikinstrumente",
+          "Offene Werkstatt für Reparatur-Workshops",
+          "Veranstaltungsraum für Vorträge und Meetups",
+          "Café-Bereich für Community-Austausch"
+        ]
+      }
     },
     "messageSidebar": {
       "title": "Nachrichten",
