@@ -44,6 +44,12 @@ interface UseShopProductsReturn {
 }
 
 export function useShopProducts(filters?: ShopProductFilters): UseShopProductsReturn {
+  const category = filters?.category
+  const search = filters?.search
+  const profile = filters?.profile
+  const limit = filters?.limit
+  const offset = filters?.offset
+
   const [data, setData] = useState<{ products: ShopProduct[]; total: number; limit: number; offset: number } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
@@ -52,13 +58,12 @@ export function useShopProducts(filters?: ShopProductFilters): UseShopProductsRe
     try {
       setIsLoading(true)
 
-      // Build query params
       const params = new URLSearchParams()
-      if (filters?.category) params.set('category', filters.category)
-      if (filters?.search) params.set('search', filters.search)
-      if (filters?.profile) params.set('profile', filters.profile)
-      if (filters?.limit) params.set('limit', filters.limit.toString())
-      if (filters?.offset) params.set('offset', filters.offset.toString())
+      if (category) params.set('category', category)
+      if (search) params.set('search', search)
+      if (profile) params.set('profile', profile)
+      if (limit) params.set('limit', limit.toString())
+      if (offset) params.set('offset', offset.toString())
 
       const queryString = params.toString()
       const url = `/api/shop/inventory${queryString ? `?${queryString}` : ''}`
@@ -76,7 +81,7 @@ export function useShopProducts(filters?: ShopProductFilters): UseShopProductsRe
     } finally {
       setIsLoading(false)
     }
-  }, [filters?.category, filters?.search, filters?.profile, filters?.limit, filters?.offset])
+  }, [category, search, profile, limit, offset])
 
   useEffect(() => {
     fetchProducts()

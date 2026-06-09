@@ -22,7 +22,6 @@ function formatAge(iso: string | null): string {
 
 export async function SystemHealthBar() {
   const table = getTableName(jobRuns)
-  const windowStart = new Date(Date.now() - WINDOW_HOURS * 60 * 60 * 1000).toISOString()
 
   let unhealthy: JobHealth[] = []
 
@@ -33,7 +32,7 @@ export async function SystemHealthBar() {
         COUNT(*) FILTER (WHERE success = false) AS failure_count,
         MAX(ran_at) AS last_ran_at
       FROM ${sql.raw(table)}
-      WHERE ran_at >= ${windowStart}
+      WHERE ran_at >= NOW() - (${WINDOW_HOURS} || ' hours')::interval
       GROUP BY job_name
       HAVING COUNT(*) FILTER (WHERE success = false) > 0
       ORDER BY failure_count DESC
