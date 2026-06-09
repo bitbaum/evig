@@ -1,17 +1,5 @@
 'use client'
 
-/**
- * Zero-Waste Solution Section
- *
- * Displays RevampIT's approach to solving the e-waste problem.
- * Green/hopeful theme to show the positive path forward.
- * Presents the Repair > Refurbish > Recycle hierarchy.
- *
- * Client component for the same reason as EWasteProblemSection — its
- * parent (about/impact/content.tsx) is `'use client'` so server-side
- * `getTranslations` crashes during render.
- */
-
 import { Wrench, RefreshCw, Recycle, Heart, ArrowDown, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
@@ -19,10 +7,10 @@ import { ZERO_WASTE_PRINCIPLES, getEnvironmentalSummary, type ZeroWastePrinciple
 
 const getIcon = (icon: ZeroWastePrinciple['icon']) => {
   switch (icon) {
-    case 'wrench': return <Wrench className="h-8 w-8" />
+    case 'wrench':  return <Wrench className="h-8 w-8" />
     case 'refresh': return <RefreshCw className="h-8 w-8" />
     case 'recycle': return <Recycle className="h-8 w-8" />
-    case 'heart': return <Heart className="h-8 w-8" />
+    case 'heart':   return <Heart className="h-8 w-8" />
   }
 }
 
@@ -36,7 +24,19 @@ const getPriorityColor = (priority: number) => {
   }
 }
 
-function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWastePrinciple; isLast: boolean; priorityLabel: string }) {
+function PrincipleCard({
+  principle,
+  isLast,
+  title,
+  description,
+  priorityLabel,
+}: {
+  principle: ZeroWastePrinciple
+  isLast: boolean
+  title: string
+  description: string
+  priorityLabel: string
+}) {
   return (
     <div className="relative">
       <div className="bg-surface-base rounded-xl p-6 border border-strong dark:border-white/6 hover:border-strong dark:hover:border-white/12 transition-colors">
@@ -50,12 +50,11 @@ function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWa
                 {priorityLabel}
               </span>
             </div>
-            <Heading level={3} className="text-xl font-bold text-text-primary mb-2">{principle.title}</Heading>
-            <p className="text-text-secondary">{principle.description}</p>
+            <Heading level={3} className="text-xl font-bold text-text-primary mb-2">{title}</Heading>
+            <p className="text-text-secondary">{description}</p>
           </div>
         </div>
       </div>
-      {/* Arrow connector */}
       {!isLast && (
         <div className="flex justify-center py-3">
           <ArrowDown className="h-6 w-6 text-action" />
@@ -73,7 +72,6 @@ export default function ZeroWasteSolutionSection() {
   return (
     <section className="py-20 bg-surface-raised">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-action-muted text-action px-4 py-2 rounded-full text-sm font-medium mb-6">
             <CheckCircle className="h-4 w-4" />
@@ -87,21 +85,20 @@ export default function ZeroWasteSolutionSection() {
           </p>
         </div>
 
-        {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Principles Hierarchy */}
           <div className="space-y-0">
             {sortedPrinciples.map((principle, index) => (
               <PrincipleCard
                 key={principle.id}
                 principle={principle}
                 isLast={index === sortedPrinciples.length - 1}
+                title={t(`principles.${principle.id}.title`)}
+                description={t(`principles.${principle.id}.description`)}
                 priorityLabel={t('priority', { priority: principle.priority })}
               />
             ))}
           </div>
 
-          {/* Impact Summary */}
           <div className="lg:sticky lg:top-24 space-y-6">
             <div className="bg-action rounded-2xl p-8 text-white">
               <Heading level={3} className="text-2xl font-bold mb-6">{t('impactTitle')}</Heading>
@@ -139,7 +136,6 @@ export default function ZeroWasteSolutionSection() {
               </div>
             </div>
 
-            {/* Key Insight */}
             <div className="bg-surface-base rounded-xl p-6 border border-strong dark:border-white/6">
               <Heading level={4} className="font-bold text-text-primary mb-3">{t('whyRepairTitle')}</Heading>
               <p className="text-text-secondary text-sm mb-4">

@@ -89,9 +89,9 @@ export default function ImpactPageContent() {
   ]
 
   const CATEGORY_LABEL: Record<ImpactMetric['category'], string> = {
-    environmental: 'UMWELT',
-    social: 'SOZIAL',
-    economic: 'WIRTSCHAFT',
+    environmental: t('categories.environmental'),
+    social: t('categories.social'),
+    economic: t('categories.economic'),
   }
 
   return (
@@ -129,13 +129,13 @@ export default function ImpactPageContent() {
                   )}
                 </div>
                 <div className="mt-3 text-3xl font-semibold text-text-primary tabular-nums tracking-tight">
-                  {metric.value}
+                  {metric.value}{metric.unitKey ? ` ${t(`units.${metric.unitKey}`)}` : ''}
                 </div>
-                <h3 className="ui-public-card-title mt-2">{metric.title}</h3>
-                <p className="ui-public-card-body">{metric.description}</p>
+                <h3 className="ui-public-card-title mt-2">{t(`metrics.${metric.id}.title` as never)}</h3>
+                <p className="ui-public-card-body">{t(`metrics.${metric.id}.description` as never)}</p>
                 <details className="mt-3 text-xs text-text-tertiary">
                   <summary className="cursor-pointer font-mono uppercase tracking-[0.18em]">{t('methodology')}</summary>
-                  <p className="mt-2">{metric.methodology}</p>
+                  <p className="mt-2">{t(`metrics.${metric.id}.methodology` as never)}</p>
                   <p className="text-text-tertiary mt-2">{t('lastUpdated')}: {metric.lastUpdated}</p>
                 </details>
               </article>
@@ -319,7 +319,7 @@ export default function ImpactPageContent() {
           {/* Impact calculator */}
           <div className="mt-12 card-shell p-8">
             <div className="text-center">
-              <div className="ui-public-eyebrow">IMPACT</div>
+              <div className="ui-public-eyebrow">{t('eyebrows.impact')}</div>
               <h3 className="ui-public-display-md mt-3">{t('donation.impactCalculator')}</h3>
               <p className="ui-public-section-lede mt-4 mx-auto">{t('donation.impactCalculatorDesc')}</p>
             </div>
@@ -359,7 +359,7 @@ export default function ImpactPageContent() {
           <div className="mt-14 grid gap-4 md:grid-cols-3">
             <article className="ui-public-card">
               <div className="ui-public-card-label inline-flex items-center gap-2">
-                <Download className="h-3 w-3" /> ANNUAL
+                <Download className="h-3 w-3" /> {t('eyebrows.annual')}
               </div>
               <h3 className="ui-public-card-title">{t('reports.annual.title')}</h3>
               <p className="ui-public-card-body">{t('reports.annual.description')}</p>
@@ -367,7 +367,7 @@ export default function ImpactPageContent() {
             </article>
             <article className="ui-public-card">
               <div className="ui-public-card-label inline-flex items-center gap-2">
-                <Calendar className="h-3 w-3" /> IMPACT
+                <Calendar className="h-3 w-3" /> {t('eyebrows.impact')}
               </div>
               <h3 className="ui-public-card-title">{t('reports.impact.title')}</h3>
               <p className="ui-public-card-body">{t('reports.impact.description')}</p>
@@ -375,7 +375,7 @@ export default function ImpactPageContent() {
             </article>
             <article className="ui-public-card">
               <div className="ui-public-card-label inline-flex items-center gap-2">
-                <MapPin className="h-3 w-3" /> REGISTER
+                <MapPin className="h-3 w-3" /> {t('eyebrows.register')}
               </div>
               <h3 className="ui-public-card-title">{t('reports.register.title')}</h3>
               <p className="ui-public-card-body">{t('reports.register.description')}</p>
