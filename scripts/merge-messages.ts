@@ -13,7 +13,7 @@ import path from 'path'
 
 const MESSAGES_DIR = path.join(process.cwd(), 'messages')
 const PARTIALS_DIR = path.join(MESSAGES_DIR, 'partials')
-const LOCALES = ['de', 'fr', 'en', 'it', 'es', 'ja', 'ko']
+const LOCALES = ['de', 'fr', 'en', 'it', 'es', 'ja', 'ko', 'ru']
 
 function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
   const result = { ...target }

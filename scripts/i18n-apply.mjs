@@ -29,7 +29,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
 const MESSAGES_DIR = join(ROOT, 'messages')
-const VALID_LOCALES = ['en', 'fr', 'es', 'it', 'ja', 'ko']
+const VALID_LOCALES = ['en', 'fr', 'es', 'it', 'ja', 'ko', 'ru']
 
 const locale = process.argv[2]
 
@@ -79,17 +79,29 @@ let skippedEmpty = 0
 let skippedExisting = 0
 const conflicts = []
 
+function isEmpty(v) {
+  if (v == null) return true
+  if (typeof v === 'string') return v.trim() === ''
+  if (Array.isArray(v)) return v.length === 0
+  if (typeof v === 'object') return Object.keys(v).length === 0
+  return false
+}
+
 for (const [key, entry] of Object.entries(input)) {
-  const translation = typeof entry?.translation === 'string' ? entry.translation.trim() : ''
-  if (!translation) {
+  // Accept strings, arrays, or objects — the DE source may be any of these
+  // (e.g. arrays of feature bullets, arrays of step objects).
+  let translation = entry?.translation
+  if (typeof translation === 'string') translation = translation.trim()
+  if (isEmpty(translation)) {
     skippedEmpty++
     continue
   }
 
   const existing = getByPath(target, key)
-  if (existing != null && typeof existing === 'string' && existing !== '' && existing !== entry.de) {
-    // Already has a translation that differs from BOTH the DE source AND
-    // the new candidate — don't silently overwrite, surface for review.
+  // Conflict detection only applies to existing non-empty string values that
+  // differ from both DE and the new candidate. Arrays/objects always overwrite
+  // (they're either missing or stale — translator owns the structure).
+  if (typeof existing === 'string' && existing !== '' && existing !== entry.de) {
     if (existing !== translation) {
       conflicts.push({ key, existing, candidate: translation })
       continue

@@ -8,7 +8,7 @@ const repoRoot = process.cwd()
 const messagesDir = path.join(repoRoot, 'messages')
 const baselinePath = path.join(repoRoot, 'scripts', 'baselines', 'i18n-missing.json')
 const defaultLocale = 'de'
-const locales = ['fr', 'en', 'it', 'es', 'ja', 'ko']
+const locales = ['fr', 'en', 'it', 'es', 'ja', 'ko', 'ru']
 const updateBaseline = process.argv.includes('--update-baseline')
 
 function readJson(filePath) {

@@ -32,7 +32,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
 const MESSAGES_DIR = join(ROOT, 'messages')
 const OUT_DIR = join(MESSAGES_DIR, '_missing')
-const LOCALES = ['en', 'fr', 'es', 'it', 'ja', 'ko']
+const LOCALES = ['en', 'fr', 'es', 'it', 'ja', 'ko', 'ru']
 
 function flatten(obj, prefix = '') {
   const out = {}
