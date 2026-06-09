@@ -21,6 +21,8 @@ import {
   WORKSHOP_INSTANCE_STATUS,
   getCategoryIcon,
   getLevelBadgeClass,
+  normalizeLevelId,
+  normalizeCategoryId,
 } from '@/config/workshops'
 import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
@@ -36,6 +38,8 @@ interface WorkshopBrowseClientProps {
 
 export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClientProps) {
   const t = useTranslations('workshops.browse')
+  const tCat = useTranslations('workshops.categories')
+  const tLvl = useTranslations('workshops.levels')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [levelFilter, setLevelFilter] = useState<string>('all')
 
@@ -85,7 +89,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
               >
                 <option value="all">{t('allCategories')}</option>
                 {WORKSHOP_CATEGORIES.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>{tCat(cat.id as never)}</option>
                 ))}
               </Select>
             </div>
@@ -102,7 +106,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
               >
                 <option value="all">{t('allLevels')}</option>
                 {WORKSHOP_LEVELS.map(level => (
-                  <option key={level.id} value={level.id}>{level.name}</option>
+                  <option key={level.id} value={level.id}>{tLvl(level.id as never)}</option>
                 ))}
               </Select>
             </div>
@@ -152,9 +156,15 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                       <div className="p-3 bg-action-muted rounded-lg">
                         <IconComponent className="w-6 h-6 text-action" />
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
-                        {workshop.level || t('allLevelsLabel')}
-                      </span>
+                      {(() => {
+                        const lvlId = normalizeLevelId(workshop.level)
+                        const lvlText = lvlId ? tLvl(lvlId as never) : (workshop.level || t('allLevelsLabel'))
+                        return (
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
+                            {lvlText}
+                          </span>
+                        )
+                      })()}
                     </div>
 
                     <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
@@ -166,14 +176,18 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                     </p>
 
                     {/* Category badge */}
-                    {workshop.category && (
-                      <div className="mb-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
-                          <IconComponent className="w-3 h-3 mr-1" />
-                          {WORKSHOP_CATEGORIES.find(c => c.id === workshop.category)?.name || workshop.category}
-                        </span>
-                      </div>
-                    )}
+                    {workshop.category && (() => {
+                      const catId = normalizeCategoryId(workshop.category)
+                      const catText = catId ? tCat(catId as never) : workshop.category
+                      return (
+                        <div className="mb-4">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
+                            <IconComponent className="w-3 h-3 mr-1" />
+                            {catText}
+                          </span>
+                        </div>
+                      )
+                    })()}
 
                     <div className="flex items-center gap-4 text-sm text-text-tertiary">
                       {workshop.duration && (

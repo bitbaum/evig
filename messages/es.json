@@ -6491,7 +6491,38 @@
       "intermediate": "Avanzado",
       "advanced": "Experto"
     },
-    "spots": "{count} plazas disponibles"
+    "spots": "{count} plazas disponibles",
+    "categories": {
+      "retraining": "Recapacitación profesional",
+      "linux": "Linux y código abierto",
+      "hardware": "Reparación de hardware",
+      "development": "Programación",
+      "web": "Desarrollo web",
+      "ai": "IA y machine learning",
+      "blockchain": "Blockchain y Web3",
+      "privacy": "Privacidad y seguridad",
+      "sustainability": "Sostenibilidad",
+      "digital-skills": "Competencias digitales"
+    },
+    "categoryDescriptions": {
+      "retraining": "Nuevas habilidades para el mundo laboral del mañana. Sé 10 veces más productivo con herramientas de IA y automatización.",
+      "linux": "Sistemas operativos, terminal, administración de servidores y herramientas de código abierto.",
+      "hardware": "Repara, actualiza y mantén ordenadores. Soldadura, diagnóstico, restauración vintage.",
+      "development": "Aprende a programar: Python, JavaScript, desarrollo web y más.",
+      "web": "Crea sitios web con herramientas modernas: HTML, CSS, React, Next.js.",
+      "ai": "Comprende y usa la inteligencia artificial. ChatGPT, automatización, herramientas de IA.",
+      "blockchain": "Criptomonedas, aplicaciones descentralizadas y tecnología blockchain.",
+      "privacy": "Seguridad en línea, cifrado, gestión de contraseñas y privacidad.",
+      "sustainability": "IT sostenible: reparar en lugar de reemplazar, ahorrar energía, evitar residuos electrónicos.",
+      "digital-skills": "Competencias digitales fundamentales para la vida diaria y el trabajo."
+    },
+    "levels": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado",
+      "all": "Todos los niveles",
+      "beginner_to_advanced": "De principiante a avanzado"
+    }
   },
   "donate": {
     "meta": {

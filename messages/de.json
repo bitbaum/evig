@@ -2332,6 +2332,37 @@
       "accessRegistered": "Erweiterter Zugang (Angemeldet)",
       "badgeAttended": "Teilnehmer",
       "badgeRegistered": "Angemeldet"
+    },
+    "categories": {
+      "retraining": "Umschulung & Karriere",
+      "linux": "Linux & Open Source",
+      "hardware": "Hardware-Reparatur",
+      "development": "Programmierung",
+      "web": "Webentwicklung",
+      "ai": "KI & Machine Learning",
+      "blockchain": "Blockchain & Web3",
+      "privacy": "Datenschutz & Sicherheit",
+      "sustainability": "Nachhaltigkeit",
+      "digital-skills": "Digital Skills"
+    },
+    "categoryDescriptions": {
+      "retraining": "Neue Fähigkeiten für die Arbeitswelt von morgen. Werde 10x produktiver mit AI-Tools und Automatisierung.",
+      "linux": "Betriebssysteme, Terminal, Server-Administration und Open-Source-Tools.",
+      "hardware": "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Vintage-Restauration.",
+      "development": "Programmieren lernen: Python, JavaScript, Webentwicklung und mehr.",
+      "web": "Websites erstellen mit modernen Tools: HTML, CSS, React, Next.js.",
+      "ai": "Künstliche Intelligenz verstehen und nutzen. ChatGPT, Automatisierung, AI-Tools.",
+      "blockchain": "Kryptowährungen, dezentrale Anwendungen und Blockchain-Technologie.",
+      "privacy": "Online-Sicherheit, Verschlüsselung, Passwort-Management und Privatsphäre.",
+      "sustainability": "Nachhaltige IT: Reparieren statt wegwerfen, Energie sparen, E-Waste vermeiden.",
+      "digital-skills": "Grundlegende digitale Kompetenzen für Alltag und Beruf."
+    },
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschrittene",
+      "advanced": "Experten",
+      "all": "Alle Stufen",
+      "beginner_to_advanced": "Anfänger bis Fortgeschrittene"
     }
   },
   "about": {

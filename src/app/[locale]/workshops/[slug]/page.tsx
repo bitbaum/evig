@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ORG } from '@/config/org'
-import { WORKSHOP_CATEGORIES, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
+import { WORKSHOP_INSTANCE_STATUS, normalizeCategoryId } from '@/config/workshops'
 import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistrationForm'
 import WorkshopReviews from '@/components/workshops/WorkshopReviews'
 import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
@@ -60,7 +60,8 @@ export default async function WorkshopDetailPage({ params }: Props) {
     (inst) => inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED && new Date(inst.start_date) > new Date()
   )
   const nextInstance = upcomingInstances[0]
-  const categoryName = WORKSHOP_CATEGORIES.find((c) => c.id === workshop.category)?.name || workshop.category
+  const catId = normalizeCategoryId(workshop.category)
+  const categoryName = catId ? t(`categories.${catId}` as never) : (workshop.category ?? null)
 
   const workshopForForm = {
     id: workshop.id,

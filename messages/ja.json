@@ -6491,7 +6491,38 @@
       "intermediate": "中級",
       "advanced": "上級"
     },
-    "spots": "残り{count}席"
+    "spots": "残り{count}席",
+    "categories": {
+      "retraining": "キャリア再構築",
+      "linux": "Linux とオープンソース",
+      "hardware": "ハードウェア修理",
+      "development": "プログラミング",
+      "web": "Web 開発",
+      "ai": "AI と機械学習",
+      "blockchain": "ブロックチェーンと Web3",
+      "privacy": "プライバシーとセキュリティ",
+      "sustainability": "持続可能性",
+      "digital-skills": "デジタルスキル"
+    },
+    "categoryDescriptions": {
+      "retraining": "明日の職場のための新しいスキル。AI ツールと自動化で 10 倍生産的に。",
+      "linux": "OS、ターミナル、サーバー管理、オープンソースツール。",
+      "hardware": "コンピュータの修理、アップグレード、保守。はんだ付け、診断、ビンテージ復元。",
+      "development": "プログラミングを学ぶ：Python、JavaScript、Web 開発、その他。",
+      "web": "最新ツールで Web サイトを構築：HTML、CSS、React、Next.js。",
+      "ai": "人工知能を理解し活用する。ChatGPT、自動化、AI ツール。",
+      "blockchain": "暗号通貨、分散型アプリケーション、ブロックチェーン技術。",
+      "privacy": "オンラインセキュリティ、暗号化、パスワード管理、プライバシー。",
+      "sustainability": "持続可能な IT：交換せず修理、省エネ、電子廃棄物を防ぐ。",
+      "digital-skills": "日常生活と仕事のための基本的なデジタルスキル。"
+    },
+    "levels": {
+      "beginner": "初級",
+      "intermediate": "中級",
+      "advanced": "上級",
+      "all": "全レベル",
+      "beginner_to_advanced": "初級から上級"
+    }
   },
   "donate": {
     "meta": {

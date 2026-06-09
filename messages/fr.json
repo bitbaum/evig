@@ -2345,6 +2345,37 @@
       "emptyMessage": "Les avis apparaitront ici une fois que les participants auront donne leur retour.",
       "count": "{count, plural, one {# avis} other {# avis}}",
       "showAll": "Afficher les {count} avis"
+    },
+    "categories": {
+      "retraining": "Reconversion professionnelle",
+      "linux": "Linux & open source",
+      "hardware": "Réparation matériel",
+      "development": "Programmation",
+      "web": "Développement web",
+      "ai": "IA & machine learning",
+      "blockchain": "Blockchain & Web3",
+      "privacy": "Vie privée & sécurité",
+      "sustainability": "Durabilité",
+      "digital-skills": "Compétences numériques"
+    },
+    "categoryDescriptions": {
+      "retraining": "De nouvelles compétences pour le monde du travail de demain. Soyez 10x plus productif avec les outils d'IA et l'automatisation.",
+      "linux": "Systèmes d'exploitation, terminal, administration de serveurs et outils open source.",
+      "hardware": "Réparer, mettre à niveau et entretenir les ordinateurs. Soudure, diagnostic, restauration vintage.",
+      "development": "Apprendre à coder : Python, JavaScript, développement web et plus encore.",
+      "web": "Créer des sites web avec des outils modernes : HTML, CSS, React, Next.js.",
+      "ai": "Comprendre et utiliser l'intelligence artificielle. ChatGPT, automatisation, outils d'IA.",
+      "blockchain": "Cryptomonnaies, applications décentralisées et technologie blockchain.",
+      "privacy": "Sécurité en ligne, chiffrement, gestion des mots de passe et vie privée.",
+      "sustainability": "IT durable : réparer plutôt que remplacer, économiser l'énergie, éviter les déchets électroniques.",
+      "digital-skills": "Compétences numériques fondamentales pour la vie quotidienne et le travail."
+    },
+    "levels": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé",
+      "all": "Tous niveaux",
+      "beginner_to_advanced": "Débutant à avancé"
     }
   },
   "about": {

@@ -10,7 +10,7 @@ import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin, BookOpen } from 'lucid
 import { formatDateWithWeekday, formatTime } from '@/lib/date-formats'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { StatusBanner } from '@/components/ui/status-banner'
-import { getLevelBadgeClass } from '@/config/workshops'
+import { getLevelBadgeClass, normalizeLevelId } from '@/config/workshops'
 import Heading from '@/components/ui/Heading'
 import type { getTranslations } from 'next-intl/server'
 import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
@@ -46,7 +46,10 @@ export function WorkshopHeader({
             {workshop.title}
           </Heading>
           <span className={`mt-2 px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
-            {workshop.level || t('detail.allLevels')}
+            {(() => {
+              const lvlId = normalizeLevelId(workshop.level)
+              return lvlId ? t(`levels.${lvlId}` as never) : (workshop.level || t('detail.allLevels'))
+            })()}
           </span>
         </div>
         {workshop.short_description && (

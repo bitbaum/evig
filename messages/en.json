@@ -2345,6 +2345,37 @@
       "accessRegistered": "Extended access (signed in)",
       "badgeAttended": "Participant",
       "badgeRegistered": "Signed in"
+    },
+    "categories": {
+      "retraining": "Career retraining",
+      "linux": "Linux & open source",
+      "hardware": "Hardware repair",
+      "development": "Programming",
+      "web": "Web development",
+      "ai": "AI & machine learning",
+      "blockchain": "Blockchain & Web3",
+      "privacy": "Privacy & security",
+      "sustainability": "Sustainability",
+      "digital-skills": "Digital skills"
+    },
+    "categoryDescriptions": {
+      "retraining": "New skills for tomorrow's working world. Become 10x more productive with AI tools and automation.",
+      "linux": "Operating systems, terminal, server administration and open-source tools.",
+      "hardware": "Repair, upgrade and maintain computers. Soldering, diagnostics, vintage restoration.",
+      "development": "Learn to code: Python, JavaScript, web development and more.",
+      "web": "Build websites with modern tools: HTML, CSS, React, Next.js.",
+      "ai": "Understand and use artificial intelligence. ChatGPT, automation, AI tools.",
+      "blockchain": "Cryptocurrencies, decentralized applications and blockchain technology.",
+      "privacy": "Online security, encryption, password management and privacy.",
+      "sustainability": "Sustainable IT: repair instead of replace, save energy, prevent e-waste.",
+      "digital-skills": "Fundamental digital skills for daily life and work."
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "all": "All levels",
+      "beginner_to_advanced": "Beginner to advanced"
     }
   },
   "about": {

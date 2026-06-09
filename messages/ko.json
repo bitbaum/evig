@@ -6491,7 +6491,38 @@
       "intermediate": "중급",
       "advanced": "고급"
     },
-    "spots": "남은 {count}석"
+    "spots": "남은 {count}석",
+    "categories": {
+      "retraining": "재교육 및 커리어",
+      "linux": "Linux 및 오픈 소스",
+      "hardware": "하드웨어 수리",
+      "development": "프로그래밍",
+      "web": "웹 개발",
+      "ai": "AI 및 머신러닝",
+      "blockchain": "블록체인 및 Web3",
+      "privacy": "개인정보 및 보안",
+      "sustainability": "지속 가능성",
+      "digital-skills": "디지털 역량"
+    },
+    "categoryDescriptions": {
+      "retraining": "내일의 직장 환경을 위한 새로운 기술. AI 도구와 자동화로 10배 더 생산적으로.",
+      "linux": "운영체제, 터미널, 서버 관리, 오픈 소스 도구.",
+      "hardware": "컴퓨터를 수리하고 업그레이드하고 유지 보수합니다. 납땜, 진단, 빈티지 복원.",
+      "development": "프로그래밍 배우기: Python, JavaScript, 웹 개발 등.",
+      "web": "최신 도구로 웹사이트 만들기: HTML, CSS, React, Next.js.",
+      "ai": "인공지능 이해하고 활용하기. ChatGPT, 자동화, AI 도구.",
+      "blockchain": "암호화폐, 분산 애플리케이션, 블록체인 기술.",
+      "privacy": "온라인 보안, 암호화, 비밀번호 관리, 개인정보 보호.",
+      "sustainability": "지속 가능한 IT: 교체 대신 수리, 에너지 절약, 전자 폐기물 방지.",
+      "digital-skills": "일상과 직장을 위한 기본 디지털 역량."
+    },
+    "levels": {
+      "beginner": "초급",
+      "intermediate": "중급",
+      "advanced": "고급",
+      "all": "모든 수준",
+      "beginner_to_advanced": "초급에서 고급까지"
+    }
   },
   "donate": {
     "meta": {

@@ -260,6 +260,64 @@ export function getLevelBadgeClass(levelName: string | null | undefined): string
 }
 
 /**
+ * Map a raw level value (canonical ID, German label, or legacy free-form
+ * DB string) to a canonical level ID that matches an i18n key under
+ * workshops.levels.* — so UI can do t(`levels.${normalizeLevelId(value)}`).
+ *
+ * Returns null when the value doesn't match any known level — caller
+ * should display the raw value as fallback.
+ */
+export function normalizeLevelId(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const v = value.trim().toLowerCase();
+
+  // Direct ID match (beginner, intermediate, advanced, all)
+  const byId = WORKSHOP_LEVELS.find((l) => l.id === v);
+  if (byId) return byId.id;
+
+  // German label match
+  const byLabel = WORKSHOP_LEVELS.find((l) => l.name.toLowerCase() === v);
+  if (byLabel) return byLabel.id;
+
+  // Common DB free-form values (legacy)
+  if (v === "anfänger bis fortgeschrittene" || v === "anfänger bis experten") return "beginner_to_advanced";
+  if (v === "fortgeschrittene bis experten") return "advanced";
+
+  return null;
+}
+
+/**
+ * Map a raw category value (canonical ID or German label) to a canonical
+ * category ID matching an i18n key under workshops.categories.*.
+ *
+ * Returns null when the value doesn't match — caller should display the
+ * raw value as fallback.
+ */
+export function normalizeCategoryId(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const v = value.trim().toLowerCase();
+
+  // Direct ID match
+  const byId = WORKSHOP_CATEGORIES.find((c) => c.id === v);
+  if (byId) return byId.id;
+
+  // German label match (e.g. "Linux & Open Source")
+  const byLabel = WORKSHOP_CATEGORIES.find((c) => c.name.toLowerCase() === v);
+  if (byLabel) return byLabel.id;
+
+  // Legacy DB free-form values that don't match any canonical ID
+  const legacyMap: Record<string, string> = {
+    betriebssysteme: "linux",
+    entwicklung: "development",
+    web: "web",
+    blockchain: "blockchain",
+    "ki & ml": "ai",
+    "kreativ": "development",
+  };
+  return legacyMap[v] ?? null;
+}
+
+/**
  * Get category names as simple string array (for dropdowns)
  */
 export function getCategoryNames(): string[] {
