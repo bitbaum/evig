@@ -12,10 +12,13 @@
  */
 
 import { Link } from '@/i18n/navigation'
-import { getConditionLabel } from '@/config/erfassung/conditions'
+import { useTranslations } from 'next-intl'
+import { normalizeConditionValue, ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import { ListingImage } from './ListingImage'
 import { ORG } from '@/config/org'
+
+const CANONICAL_CONDITION_VALUES = new Set(ZUSTAND_OPTIONS.map(o => o.value))
 
 export interface ListingCardData {
   id: string
@@ -43,18 +46,22 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing, variant = 'default', className = '' }: ListingCardProps) {
+  const t = useTranslations('marketplace')
   const sellerName = listing.seller_display_name || listing.seller_name
   const isCompact = variant === 'compact'
   const isGratis = Number(listing.price_chf) === 0
   const isVerified = !!listing.verified_at
-  const conditionLabel = getConditionLabel(listing.condition)
+  const conditionKey = normalizeConditionValue(listing.condition)
+  const conditionLabel = CANONICAL_CONDITION_VALUES.has(conditionKey)
+    ? t(`conditions.${conditionKey}` as never)
+    : null
 
   // Eyebrow = monochrome meta line. Order: source (RevampIT vs P2P) ·
   // condition · verified. Pure text, no chrome.
   const eyebrowParts = [
     listing.is_revampit ? ORG.name : null,
     conditionLabel?.toUpperCase() ?? null,
-    isVerified ? 'VERIFIZIERT' : null,
+    isVerified ? t('listing.verified').toUpperCase() : null,
   ].filter(Boolean) as string[]
 
   const location = listing.pickup_location || listing.seller_city
@@ -84,7 +91,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         </h3>
 
         <div className={`mt-3 font-mono tabular-nums ${isCompact ? 'text-base' : 'text-lg'} font-semibold text-text-primary`}>
-          {isGratis ? 'GRATIS' : formatCHF(Number(listing.price_chf))}
+          {isGratis ? t('listing.free').toUpperCase() : formatCHF(Number(listing.price_chf))}
         </div>
 
         <div className="mt-3 pt-3 border-t border-subtle font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary truncate">

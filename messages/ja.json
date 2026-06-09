@@ -2755,7 +2755,17 @@
       "community": "コミュニティ出品"
     },
     "categories": {
-      "all": "すべて"
+      "all": "すべて",
+      "10": "ノートパソコン",
+      "20": "デスクトップPC",
+      "30": "モニター",
+      "40": "タブレット",
+      "50": "スマートフォン",
+      "60": "プリンター・スキャナー",
+      "70": "コンポーネント",
+      "80": "周辺機器",
+      "90": "ネットワーク",
+      "99": "その他"
     },
     "filters": {
       "label": "フィルター",
@@ -2814,7 +2824,9 @@
       "backToMarketplace": "マーケットプレイスに戻る",
       "imageAriaLabel": "画像{n}を表示",
       "conditionMeaningFor": "{category}における「{condition}」とは？",
-      "loadError": "リスト読み込みエラー"
+      "loadError": "リスト読み込みエラー",
+      "verified": "検証済み",
+      "free": "無料"
     },
     "listing_actions": {
       "payment_info": "購入者と販売者の間の直接支払い",
@@ -2850,8 +2862,19 @@
       "new": "新品",
       "likeNew": "ほぼ新品",
       "good": "良好",
-      "fair": "普通",
-      "forParts": "部品取り用"
+      "fair": "可",
+      "forParts": "部品取り用",
+      "like_new": "ほぼ新品",
+      "poor": "難あり",
+      "defect": "部品取り用",
+      "descriptions": {
+        "new": "未開封・未使用",
+        "like_new": "使用感なし、完全動作",
+        "good": "軽い使用感、完全動作",
+        "fair": "目立つ使用感あり、動作する",
+        "poor": "強い使用感、制限付きで動作",
+        "defect": "動作不可、部品取り用"
+      }
     },
     "conditionExplainer": "{category}にとって「{condition}」はどういう意味ですか？",
     "pagination": {
@@ -3003,6 +3026,31 @@
       "shipped": "発送済み",
       "delivered": "受取済み",
       "reviewed": "レビュー済み"
+    },
+    "delivery": {
+      "pickup": "受け取り",
+      "shipping": "配送",
+      "both": "受け取り・配送"
+    },
+    "payment": {
+      "secure": "安全な支払い — 近日対応",
+      "direct": "直接 (TWINT、現金、振込)",
+      "both": "両方"
+    },
+    "sort": {
+      "newest": "新着順",
+      "price_asc": "価格が安い順",
+      "price_desc": "価格が高い順",
+      "popular": "人気順"
+    },
+    "chips": {
+      "orgDevices": "{orgName} の機器",
+      "community": "コミュニティ",
+      "priceFrom": "CHF {min} から",
+      "priceTo": "CHF {max} まで",
+      "gratis": "無料",
+      "verified": "検証済み",
+      "remove": "{label} を削除"
     }
   },
   "membership": {

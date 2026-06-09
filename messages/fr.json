@@ -725,7 +725,9 @@
       "backToMarketplace": "Retour à la place de marché",
       "imageAriaLabel": "Afficher image {n}",
       "conditionMeaningFor": "Que signifie \"{condition}\" pour {category}?",
-      "loadError": "Erreur lors du chargement de l'annonce"
+      "loadError": "Erreur lors du chargement de l'annonce",
+      "verified": "Vérifié",
+      "free": "Gratuit"
     },
     "empty": "Aucune annonce trouvée",
     "conditions": {
@@ -733,7 +735,18 @@
       "likeNew": "Comme neuf",
       "good": "Bon",
       "fair": "Acceptable",
-      "forParts": "Pour pièces"
+      "forParts": "Pour pièces",
+      "like_new": "Comme neuf",
+      "poor": "Mauvais",
+      "defect": "Pour pièces",
+      "descriptions": {
+        "new": "Emballage d'origine, neuf",
+        "like_new": "Aucune trace visible, parfait état de fonctionnement",
+        "good": "Légères traces d'usage, parfait fonctionnement",
+        "fair": "Traces visibles, fonctionne",
+        "poor": "Usure marquée, fonctionne avec limitations",
+        "defect": "Non fonctionnel, pour pièces détachées"
+      }
     },
     "listingsAvailable": "{count, plural, one {# annonce} other {# annonces}} disponible{count, plural, one {} other {s}}",
     "searchPlaceholder": "Laptop, écran, smartphone...",
@@ -745,7 +758,17 @@
       "community": "Annonces communautaires"
     },
     "categories": {
-      "all": "Tous"
+      "all": "Tous",
+      "10": "Ordinateurs portables",
+      "20": "Ordinateurs de bureau",
+      "30": "Écrans",
+      "40": "Tablettes",
+      "50": "Smartphones",
+      "60": "Imprimantes & scanners",
+      "70": "Composants",
+      "80": "Périphériques",
+      "90": "Réseau",
+      "99": "Autres"
     },
     "listing_actions": {
       "payment_info": "Paiement direct entre acheteur et vendeur",
@@ -926,6 +949,31 @@
       "shipped": "Expédié",
       "delivered": "Reçu",
       "reviewed": "Évalué"
+    },
+    "delivery": {
+      "pickup": "Retrait sur place",
+      "shipping": "Livraison",
+      "both": "Retrait & livraison"
+    },
+    "payment": {
+      "secure": "Paiement sécurisé — bientôt disponible",
+      "direct": "Direct (TWINT, espèces, virement)",
+      "both": "Les deux options"
+    },
+    "sort": {
+      "newest": "Plus récents",
+      "price_asc": "Prix croissant",
+      "price_desc": "Prix décroissant",
+      "popular": "Plus populaires"
+    },
+    "chips": {
+      "orgDevices": "Appareils {orgName}",
+      "community": "Communauté",
+      "priceFrom": "dès CHF {min}",
+      "priceTo": "jusqu'à CHF {max}",
+      "gratis": "Gratuit",
+      "verified": "Vérifié",
+      "remove": "Retirer {label}"
     }
   },
   "services": {

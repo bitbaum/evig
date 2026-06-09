@@ -2755,7 +2755,17 @@
       "community": "Anuncios de la comunidad"
     },
     "categories": {
-      "all": "Todos"
+      "all": "Todos",
+      "10": "Portátiles",
+      "20": "PCs de sobremesa",
+      "30": "Monitores",
+      "40": "Tabletas",
+      "50": "Smartphones",
+      "60": "Impresoras y escáneres",
+      "70": "Componentes",
+      "80": "Periféricos",
+      "90": "Red",
+      "99": "Otros"
     },
     "filters": {
       "label": "Filtros",
@@ -2814,7 +2824,9 @@
       "backToMarketplace": "Volver al mercado",
       "imageAriaLabel": "Mostrar imagen {n}",
       "conditionMeaningFor": "¿Qué significa \"{condition}\" para {category}?",
-      "loadError": "Error al cargar el anuncio"
+      "loadError": "Error al cargar el anuncio",
+      "verified": "Verificado",
+      "free": "Gratis"
     },
     "listing_actions": {
       "payment_info": "Pago directo entre comprador y vendedor",
@@ -2851,7 +2863,18 @@
       "likeNew": "Como nuevo",
       "good": "Bueno",
       "fair": "Aceptable",
-      "forParts": "Para piezas"
+      "forParts": "Para piezas",
+      "like_new": "Como nuevo",
+      "poor": "Malo",
+      "defect": "Para piezas",
+      "descriptions": {
+        "new": "Embalaje original, sin usar",
+        "like_new": "Sin signos visibles, totalmente funcional",
+        "good": "Ligeros signos de uso, totalmente funcional",
+        "fair": "Signos de uso visibles, funcional",
+        "poor": "Uso intenso, funcional con limitaciones",
+        "defect": "No funcional, para piezas"
+      }
     },
     "conditionExplainer": "¿Qué significa «{condition}» para {category}?",
     "pagination": {
@@ -3003,6 +3026,31 @@
       "shipped": "Enviado",
       "delivered": "Recibido",
       "reviewed": "Valorado"
+    },
+    "delivery": {
+      "pickup": "Recogida",
+      "shipping": "Envío",
+      "both": "Recogida y envío"
+    },
+    "payment": {
+      "secure": "Pago seguro — próximamente",
+      "direct": "Directo (TWINT, efectivo, transferencia)",
+      "both": "Ambas opciones"
+    },
+    "sort": {
+      "newest": "Más recientes",
+      "price_asc": "Precio ascendente",
+      "price_desc": "Precio descendente",
+      "popular": "Más populares"
+    },
+    "chips": {
+      "orgDevices": "Dispositivos de {orgName}",
+      "community": "Comunidad",
+      "priceFrom": "desde CHF {min}",
+      "priceTo": "hasta CHF {max}",
+      "gratis": "Gratis",
+      "verified": "Verificado",
+      "remove": "Quitar {label}"
     }
   },
   "membership": {

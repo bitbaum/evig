@@ -4,10 +4,7 @@ import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import {
-  MARKETPLACE_CATEGORY_LABELS,
   CATEGORY_ICONS,
-  DELIVERY_LABELS,
-  PAYMENT_MODE_LABELS,
   MARKETPLACE_SELLER_TYPE,
   getSpecFiltersForCategory,
   type DeliveryOption,
@@ -16,6 +13,8 @@ import {
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ORG } from '@/config/org'
 import type { FiltersObj } from './MarketplaceFilterSidebar'
+
+type Translator = ReturnType<typeof useTranslations<'marketplace'>>
 
 interface ActiveFilterChipsProps {
   filters: FiltersObj
@@ -32,15 +31,17 @@ interface Chip {
 function buildChips(
   filters: FiltersObj,
   resetOffset: () => void,
-  orgName: string
+  orgName: string,
+  t: Translator
 ): Chip[] {
   const chips: Chip[] = []
 
   if (filters.category) {
     const icon = CATEGORY_ICONS[filters.category]
+    const label = t(`categories.${filters.category}` as never)
     chips.push({
       key: 'category',
-      label: `${icon ? icon + ' ' : ''}${MARKETPLACE_CATEGORY_LABELS[filters.category] || filters.category}`,
+      label: `${icon ? icon + ' ' : ''}${label}`,
       onRemove: () => { filters.setCategory(''); resetOffset() },
     })
   }
@@ -50,8 +51,8 @@ function buildChips(
       key: 'sellerType',
       label:
         filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT
-          ? `${orgName} Geräte`
-          : 'Community',
+          ? t('chips.orgDevices', { orgName })
+          : t('chips.community'),
       onRemove: () => { filters.setSellerType(''); resetOffset() },
     })
   }
@@ -60,7 +61,7 @@ function buildChips(
     const opt = ZUSTAND_OPTIONS.find((o) => o.value === filters.condition)
     chips.push({
       key: 'condition',
-      label: opt?.label ?? filters.condition,
+      label: opt ? t(`conditions.${opt.value}` as never) : filters.condition,
       onRemove: () => { filters.setCondition(''); resetOffset() },
     })
   }
@@ -79,13 +80,13 @@ function buildChips(
   } else if (filters.priceMin) {
     chips.push({
       key: 'priceMin',
-      label: `ab CHF ${filters.priceMin}`,
+      label: t('chips.priceFrom', { min: filters.priceMin }),
       onRemove: () => { filters.setPriceMin(''); filters.setPriceError(null); resetOffset() },
     })
   } else if (filters.priceMax) {
     chips.push({
       key: 'priceMax',
-      label: `bis CHF ${filters.priceMax}`,
+      label: t('chips.priceTo', { max: filters.priceMax }),
       onRemove: () => { filters.setPriceMax(''); filters.setPriceError(null); resetOffset() },
     })
   }
@@ -93,7 +94,7 @@ function buildChips(
   if (filters.delivery) {
     chips.push({
       key: 'delivery',
-      label: DELIVERY_LABELS[filters.delivery as DeliveryOption] ?? filters.delivery,
+      label: t(`delivery.${filters.delivery as DeliveryOption}` as never),
       onRemove: () => { filters.setDelivery(''); resetOffset() },
     })
   }
@@ -101,7 +102,7 @@ function buildChips(
   if (filters.payment) {
     chips.push({
       key: 'payment',
-      label: PAYMENT_MODE_LABELS[filters.payment as PaymentMode] ?? filters.payment,
+      label: t(`payment.${filters.payment as PaymentMode}` as never),
       onRemove: () => { filters.setPayment(''); resetOffset() },
     })
   }
@@ -109,7 +110,7 @@ function buildChips(
   if (filters.gratisOnly) {
     chips.push({
       key: 'gratis',
-      label: 'Gratis',
+      label: t('chips.gratis'),
       onRemove: () => { filters.setGratisOnly(false); resetOffset() },
     })
   }
@@ -117,7 +118,7 @@ function buildChips(
   if (filters.verifiedOnly) {
     chips.push({
       key: 'verified',
-      label: 'Geprüft',
+      label: t('chips.verified'),
       onRemove: () => { filters.setVerifiedOnly(false); resetOffset() },
     })
   }
@@ -161,7 +162,7 @@ export function ActiveFilterChips({
   clearFilters,
 }: ActiveFilterChipsProps) {
   const t = useTranslations('marketplace')
-  const chips = buildChips(filters, resetOffset, ORG.name)
+  const chips = buildChips(filters, resetOffset, ORG.name, t)
 
   if (chips.length === 0) return null
 
@@ -178,7 +179,7 @@ export function ActiveFilterChips({
             variant="ghost"
             size="icon"
             onClick={chip.onRemove}
-            aria-label={`${chip.label} entfernen`}
+            aria-label={t('chips.remove', { label: chip.label })}
             className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full hover:bg-secondary-200 text-secondary-500 hover:text-secondary-700 h-auto p-0 bg-transparent"
           >
             <X className="w-2.5 h-2.5" />

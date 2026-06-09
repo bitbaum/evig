@@ -5,12 +5,9 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
   MARKETPLACE_CATEGORY_VALUES,
-  MARKETPLACE_CATEGORY_LABELS,
   CATEGORY_ICONS,
   DELIVERY_OPTIONS,
-  DELIVERY_LABELS,
   PAYMENT_MODES,
-  PAYMENT_MODE_LABELS,
   MARKETPLACE_LIMITS,
   MARKETPLACE_SELLER_TYPE,
   SPEC_FILTER_STATE_MAP,
@@ -172,7 +169,7 @@ export function MarketplaceFilterSidebar({
                 {CATEGORY_ICONS[val] && (
                   <span className="mr-1 text-base leading-none">{CATEGORY_ICONS[val]}</span>
                 )}
-                {MARKETPLACE_CATEGORY_LABELS[val] || val}
+                {t(`categories.${val}` as never)}
               </>
             }
           />
@@ -215,7 +212,7 @@ export function MarketplaceFilterSidebar({
             name="condition"
             checked={filters.condition === opt.value}
             onChange={() => { filters.setCondition(opt.value); resetOffset() }}
-            label={opt.label}
+            label={t(`conditions.${opt.value}` as never)}
           />
         ))}
       </FilterSection>
@@ -286,7 +283,7 @@ export function MarketplaceFilterSidebar({
             name="delivery"
             checked={filters.delivery === opt}
             onChange={() => { filters.setDelivery(opt); resetOffset() }}
-            label={DELIVERY_LABELS[opt]}
+            label={t(`delivery.${opt}` as never)}
           />
         ))}
       </FilterSection>
@@ -305,7 +302,7 @@ export function MarketplaceFilterSidebar({
             name="payment"
             checked={filters.payment === opt}
             onChange={() => { filters.setPayment(opt); resetOffset() }}
-            label={PAYMENT_MODE_LABELS[opt]}
+            label={t(`payment.${opt}` as never)}
           />
         ))}
       </FilterSection>

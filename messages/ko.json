@@ -2755,7 +2755,17 @@
       "community": "커뮤니티 판매 목록"
     },
     "categories": {
-      "all": "전체"
+      "all": "전체",
+      "10": "노트북",
+      "20": "데스크톱 PC",
+      "30": "모니터",
+      "40": "태블릿",
+      "50": "스마트폰",
+      "60": "프린터·스캐너",
+      "70": "부품",
+      "80": "주변기기",
+      "90": "네트워크",
+      "99": "기타"
     },
     "filters": {
       "label": "필터",
@@ -2814,7 +2824,9 @@
       "backToMarketplace": "마켓플레이스로 돌아가기",
       "imageAriaLabel": "이미지 {n} 보기",
       "conditionMeaningFor": "{category}에서 \"{condition}\"은(는) 무엇을 의미하나요?",
-      "loadError": "게시물 로드 오류"
+      "loadError": "게시물 로드 오류",
+      "verified": "검증됨",
+      "free": "무료"
     },
     "listing_actions": {
       "payment_info": "구매자와 판매자 간 직접 결제",
@@ -2847,11 +2859,22 @@
     },
     "empty": "판매 목록을 찾을 수 없습니다",
     "conditions": {
-      "new": "새 것",
+      "new": "새 제품",
       "likeNew": "거의 새 것",
       "good": "양호",
       "fair": "보통",
-      "forParts": "부품용"
+      "forParts": "부품용",
+      "like_new": "거의 새것",
+      "poor": "나쁨",
+      "defect": "부품용",
+      "descriptions": {
+        "new": "미개봉, 미사용",
+        "like_new": "사용 흔적 없음, 완전 작동",
+        "good": "약간의 사용 흔적, 완전 작동",
+        "fair": "사용 흔적 뚜렷, 작동함",
+        "poor": "사용감 강함, 제한적으로 작동",
+        "defect": "작동 불가, 부품용"
+      }
     },
     "conditionExplainer": "{category}에서 \"{condition}\"이 의미하는 것은?",
     "pagination": {
@@ -3003,6 +3026,31 @@
       "shipped": "배송됨",
       "delivered": "수령됨",
       "reviewed": "리뷰됨"
+    },
+    "delivery": {
+      "pickup": "직접 수령",
+      "shipping": "배송",
+      "both": "수령·배송"
+    },
+    "payment": {
+      "secure": "안전 결제 — 곧 출시",
+      "direct": "직접 (TWINT, 현금, 송금)",
+      "both": "두 가지 옵션"
+    },
+    "sort": {
+      "newest": "최신순",
+      "price_asc": "가격 낮은순",
+      "price_desc": "가격 높은순",
+      "popular": "인기순"
+    },
+    "chips": {
+      "orgDevices": "{orgName} 기기",
+      "community": "커뮤니티",
+      "priceFrom": "CHF {min}부터",
+      "priceTo": "CHF {max}까지",
+      "gratis": "무료",
+      "verified": "검증됨",
+      "remove": "{label} 제거"
     }
   },
   "membership": {

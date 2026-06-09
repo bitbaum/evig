@@ -665,7 +665,17 @@
       "community": "Community Inserate"
     },
     "categories": {
-      "all": "Alle"
+      "all": "Alle",
+      "10": "Laptops",
+      "20": "Desktop PCs",
+      "30": "Monitore",
+      "40": "Tablets",
+      "50": "Smartphones",
+      "60": "Drucker & Scanner",
+      "70": "Komponenten",
+      "80": "Peripherie",
+      "90": "Netzwerk",
+      "99": "Sonstiges"
     },
     "filters": {
       "label": "Filter",
@@ -724,7 +734,9 @@
       "backToMarketplace": "Zurück zum Marketplace",
       "imageAriaLabel": "Bild {n} anzeigen",
       "conditionMeaningFor": "Was bedeutet \"{condition}\" für {category}?",
-      "loadError": "Fehler beim Laden des Inserats"
+      "loadError": "Fehler beim Laden des Inserats",
+      "verified": "Verifiziert",
+      "free": "Gratis"
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",
@@ -761,7 +773,18 @@
       "likeNew": "Wie neu",
       "good": "Gut",
       "fair": "Akzeptabel",
-      "forParts": "Für Ersatzteile"
+      "forParts": "Für Ersatzteile",
+      "like_new": "Wie neu",
+      "poor": "Schlecht",
+      "defect": "Defekt",
+      "descriptions": {
+        "new": "Originalverpackt, unbenutzt",
+        "like_new": "Keine sichtbaren Gebrauchsspuren, voll funktionsfähig",
+        "good": "Leichte Gebrauchsspuren, voll funktionsfähig",
+        "fair": "Deutliche Gebrauchsspuren, funktionsfähig",
+        "poor": "Starke Gebrauchsspuren, funktionsfähig mit Einschränkungen",
+        "defect": "Nicht funktionsfähig, für Ersatzteile"
+      }
     },
     "conditionExplainer": "Was bedeutet \"{condition}\" für {category}?",
     "pagination": {
@@ -913,6 +936,31 @@
       "shipped": "Versandt",
       "delivered": "Erhalten",
       "reviewed": "Bewertet"
+    },
+    "delivery": {
+      "pickup": "Abholung",
+      "shipping": "Versand",
+      "both": "Abholung & Versand"
+    },
+    "payment": {
+      "secure": "Sichere Zahlung — demnächst verfügbar",
+      "direct": "Direkt (TWINT, Bar, Überweisung)",
+      "both": "Beide Optionen"
+    },
+    "sort": {
+      "newest": "Neueste zuerst",
+      "price_asc": "Preis aufsteigend",
+      "price_desc": "Preis absteigend",
+      "popular": "Beliebteste"
+    },
+    "chips": {
+      "orgDevices": "{orgName} Geräte",
+      "community": "Community",
+      "priceFrom": "ab CHF {min}",
+      "priceTo": "bis CHF {max}",
+      "gratis": "Gratis",
+      "verified": "Geprüft",
+      "remove": "{label} entfernen"
     }
   },
   "services": {
@@ -5660,35 +5708,119 @@
           "intro": "Diese Werte sind interne Schätzungen, basierend auf der bisherigen Produktion und auf typischen Energie- und Materialwerten pro Gerät. Die definitive Bilanz erstellt die ZHAW im Schlussbericht (geplant Q3 2026).",
           "disclaimer": "Schätzung — verifizierte Werte folgen mit ZHAW-LCA",
           "cards": [
-            { "key": "ewaste",    "label": "E-Schrott vermieden",         "unit": "kg" },
-            { "key": "workshop",  "label": "Stunden in Werkstätten",      "unit": "h" },
-            { "key": "co2",       "label": "CO₂-Einsparung (geschätzt)",  "unit": "kg" },
-            { "key": "reuse",     "label": "Wiederverwendungs-Rate",      "unit": "%" }
+            {
+              "key": "ewaste",
+              "label": "E-Schrott vermieden",
+              "unit": "kg"
+            },
+            {
+              "key": "workshop",
+              "label": "Stunden in Werkstätten",
+              "unit": "h"
+            },
+            {
+              "key": "co2",
+              "label": "CO₂-Einsparung (geschätzt)",
+              "unit": "kg"
+            },
+            {
+              "key": "reuse",
+              "label": "Wiederverwendungs-Rate",
+              "unit": "%"
+            }
           ]
         },
         "timeline": {
           "title": "Meilensteine",
           "intro": "Vergangenes, Laufendes und Geplantes auf einen Blick.",
-          "labels": { "done": "Abgeschlossen", "active": "Laufend", "upcoming": "Geplant" },
+          "labels": {
+            "done": "Abgeschlossen",
+            "active": "Laufend",
+            "upcoming": "Geplant"
+          },
           "items": [
-            { "key": "kickoff",   "date": "Okt 2025", "label": "Projektstart & Konzept" },
-            { "key": "prototype", "date": "Feb 2026", "label": "Erste funktionale Prototypen" },
-            { "key": "lca-start", "date": "Apr 2026", "label": "ZHAW-Ökobilanz startet" },
-            { "key": "series",    "date": "Jun 2026", "label": "Kleinserie-Produktion läuft" },
-            { "key": "swico",     "date": "3. Jul 2026", "label": "Swico-Innovationsfonds-Präsentation" },
-            { "key": "lca-final", "date": "Q3 2026",  "label": "LCA-Schlussbericht (ZHAW)" },
-            { "key": "scale",     "date": "2027",     "label": "Skalierungsphase II — Modellpalette & Vertrieb" }
+            {
+              "key": "kickoff",
+              "date": "Okt 2025",
+              "label": "Projektstart & Konzept"
+            },
+            {
+              "key": "prototype",
+              "date": "Feb 2026",
+              "label": "Erste funktionale Prototypen"
+            },
+            {
+              "key": "lca-start",
+              "date": "Apr 2026",
+              "label": "ZHAW-Ökobilanz startet"
+            },
+            {
+              "key": "series",
+              "date": "Jun 2026",
+              "label": "Kleinserie-Produktion läuft"
+            },
+            {
+              "key": "swico",
+              "date": "3. Jul 2026",
+              "label": "Swico-Innovationsfonds-Präsentation"
+            },
+            {
+              "key": "lca-final",
+              "date": "Q3 2026",
+              "label": "LCA-Schlussbericht (ZHAW)"
+            },
+            {
+              "key": "scale",
+              "date": "2027",
+              "label": "Skalierungsphase II — Modellpalette & Vertrieb"
+            }
           ]
         },
         "partners": {
           "title": "Partner-Ökosystem",
           "intro": "Das Projekt funktioniert nur als Netzwerk. Wer welche Rolle übernimmt:",
           "groups": [
-            { "key": "production", "title": "Produktion & Werkstätten", "names": ["Drahtzug", "FARO", "St. Jakob", "Palme"] },
-            { "key": "pilots",     "title": "Pilot-Standorte (Liegenschaften)", "names": ["Livit", "Wincasa", "Allreal", "ISS"] },
-            { "key": "material",   "title": "Material-Quelle", "names": ["ERZ Zürich"] },
-            { "key": "science",    "title": "Wissenschaftliche Begleitung", "names": ["ZHAW (Ökobilanz & Kosten-Nutzen-Analyse)"] },
-            { "key": "funding",    "title": "Förderung", "names": ["Swico Innovationsfonds"] }
+            {
+              "key": "production",
+              "title": "Produktion & Werkstätten",
+              "names": [
+                "Drahtzug",
+                "FARO",
+                "St. Jakob",
+                "Palme"
+              ]
+            },
+            {
+              "key": "pilots",
+              "title": "Pilot-Standorte (Liegenschaften)",
+              "names": [
+                "Livit",
+                "Wincasa",
+                "Allreal",
+                "ISS"
+              ]
+            },
+            {
+              "key": "material",
+              "title": "Material-Quelle",
+              "names": [
+                "ERZ Zürich"
+              ]
+            },
+            {
+              "key": "science",
+              "title": "Wissenschaftliche Begleitung",
+              "names": [
+                "ZHAW (Ökobilanz & Kosten-Nutzen-Analyse)"
+              ]
+            },
+            {
+              "key": "funding",
+              "title": "Förderung",
+              "names": [
+                "Swico Innovationsfonds"
+              ]
+            }
           ]
         },
         "calls": {

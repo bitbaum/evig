@@ -2755,7 +2755,17 @@
       "community": "Annunci community"
     },
     "categories": {
-      "all": "Tutti"
+      "all": "Tutti",
+      "10": "Laptop",
+      "20": "PC fissi",
+      "30": "Monitor",
+      "40": "Tablet",
+      "50": "Smartphone",
+      "60": "Stampanti e scanner",
+      "70": "Componenti",
+      "80": "Periferiche",
+      "90": "Rete",
+      "99": "Altro"
     },
     "filters": {
       "label": "Filtri",
@@ -2814,7 +2824,9 @@
       "backToMarketplace": "Torna al marketplace",
       "imageAriaLabel": "Mostra immagine {n}",
       "conditionMeaningFor": "Cosa significa \"{condition}\" per {category}?",
-      "loadError": "Errore nel caricamento dell'annuncio"
+      "loadError": "Errore nel caricamento dell'annuncio",
+      "verified": "Verificato",
+      "free": "Gratis"
     },
     "listing_actions": {
       "payment_info": "Pagamento diretto tra acquirente e venditore",
@@ -2851,7 +2863,18 @@
       "likeNew": "Come nuovo",
       "good": "Buono",
       "fair": "Accettabile",
-      "forParts": "Per ricambi"
+      "forParts": "Per ricambi",
+      "like_new": "Come nuovo",
+      "poor": "Cattivo",
+      "defect": "Per ricambi",
+      "descriptions": {
+        "new": "Confezione originale, mai usato",
+        "like_new": "Nessun segno visibile, perfettamente funzionante",
+        "good": "Lievi segni d'uso, perfettamente funzionante",
+        "fair": "Segni d'uso visibili, funzionante",
+        "poor": "Forte usura, funzionante con limitazioni",
+        "defect": "Non funzionante, per pezzi di ricambio"
+      }
     },
     "conditionExplainer": "Cosa significa \"{condition}\" per {category}?",
     "pagination": {
@@ -3003,6 +3026,31 @@
       "shipped": "Spedito",
       "delivered": "Ricevuto",
       "reviewed": "Recensito"
+    },
+    "delivery": {
+      "pickup": "Ritiro",
+      "shipping": "Spedizione",
+      "both": "Ritiro e spedizione"
+    },
+    "payment": {
+      "secure": "Pagamento sicuro — in arrivo",
+      "direct": "Diretto (TWINT, contanti, bonifico)",
+      "both": "Entrambe le opzioni"
+    },
+    "sort": {
+      "newest": "Più recenti",
+      "price_asc": "Prezzo crescente",
+      "price_desc": "Prezzo decrescente",
+      "popular": "Più popolari"
+    },
+    "chips": {
+      "orgDevices": "Dispositivi {orgName}",
+      "community": "Comunità",
+      "priceFrom": "da CHF {min}",
+      "priceTo": "fino a CHF {max}",
+      "gratis": "Gratis",
+      "verified": "Verificato",
+      "remove": "Rimuovi {label}"
     }
   },
   "membership": {

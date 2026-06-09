@@ -725,7 +725,9 @@
       "backToMarketplace": "Back to Marketplace",
       "imageAriaLabel": "Show image {n}",
       "conditionMeaningFor": "What does \"{condition}\" mean for {category}?",
-      "loadError": "Error loading listing"
+      "loadError": "Error loading listing",
+      "verified": "Verified",
+      "free": "Free"
     },
     "empty": "No listings found",
     "conditions": {
@@ -733,7 +735,18 @@
       "likeNew": "Like new",
       "good": "Good",
       "fair": "Fair",
-      "forParts": "For parts"
+      "forParts": "For parts",
+      "like_new": "Like new",
+      "poor": "Poor",
+      "defect": "For parts",
+      "descriptions": {
+        "new": "Original packaging, unused",
+        "like_new": "No visible wear, fully functional",
+        "good": "Light wear, fully functional",
+        "fair": "Visible wear, functional",
+        "poor": "Heavy wear, functional with limits",
+        "defect": "Not functional, for parts"
+      }
     },
     "listingsAvailable": "{count, plural, one {# listing} other {# listings}} available",
     "searchPlaceholder": "Laptop, monitor, smartphone...",
@@ -745,7 +758,17 @@
       "community": "Community listings"
     },
     "categories": {
-      "all": "All"
+      "all": "All",
+      "10": "Laptops",
+      "20": "Desktop PCs",
+      "30": "Monitors",
+      "40": "Tablets",
+      "50": "Smartphones",
+      "60": "Printers & Scanners",
+      "70": "Components",
+      "80": "Peripherals",
+      "90": "Networking",
+      "99": "Other"
     },
     "listing_actions": {
       "payment_info": "Direct payment between buyer and seller",
@@ -926,6 +949,31 @@
       "shipped": "Shipped",
       "delivered": "Received",
       "reviewed": "Reviewed"
+    },
+    "delivery": {
+      "pickup": "Pickup",
+      "shipping": "Shipping",
+      "both": "Pickup & Shipping"
+    },
+    "payment": {
+      "secure": "Secure payment — coming soon",
+      "direct": "Direct (TWINT, cash, transfer)",
+      "both": "Both options"
+    },
+    "sort": {
+      "newest": "Newest first",
+      "price_asc": "Price low to high",
+      "price_desc": "Price high to low",
+      "popular": "Most popular"
+    },
+    "chips": {
+      "orgDevices": "{orgName} devices",
+      "community": "Community",
+      "priceFrom": "from CHF {min}",
+      "priceTo": "up to CHF {max}",
+      "gratis": "Free",
+      "verified": "Verified",
+      "remove": "Remove {label}"
     }
   },
   "services": {

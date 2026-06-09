@@ -147,7 +147,7 @@ export default function MarketplacePage() {
             aria-label={t('filters.sort')}
           >
             {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value}>{t(`sort.${opt.value}` as never)}</option>
             ))}
           </Select>
         </div>
@@ -180,7 +180,7 @@ export default function MarketplacePage() {
                 aria-label={t('filters.sort')}
               >
                 {SORT_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  <option key={opt.value} value={opt.value}>{t(`sort.${opt.value}` as never)}</option>
                 ))}
               </Select>
             </div>
