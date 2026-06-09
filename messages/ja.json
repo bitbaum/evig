@@ -3427,16 +3427,16 @@
         "description": "オープンソースコミュニティの熱心な人々と共に、revamp-it はこのラベルの設立を支援し、コンピューティングにおける選択の自由を推進し、自由なソフトウェアをプリインストールしたコンピュータを販売する販売店を支援してきました。",
         "cards": [
           {
-            "title": "Free Software",
-            "description": "Computers with pre-installed Linux and other free software alternatives"
+            "title": "自由ソフトウェア",
+            "description": "Linux やその他の自由ソフトウェアの代替品があらかじめインストールされたパソコン"
           },
           {
-            "title": "Guaranteed Support",
-            "description": "Transparent support services with clear cost information at purchase"
+            "title": "サポート保証",
+            "description": "購入時に明確な費用情報を提示する透明なサポートサービス"
           },
           {
-            "title": "Community-run",
-            "description": "A non-profit association carried by the open-source community"
+            "title": "コミュニティ主導",
+            "description": "オープンソースコミュニティに支えられた非営利団体"
           }
         ]
       },
@@ -3444,39 +3444,39 @@
         "title": "私たちのミッション",
         "cards": [
           {
-            "title": "Breaking the monopoly",
-            "description": "Challenging the dominance of proprietary operating systems through accessible alternatives.",
+            "title": "独占を打破する",
+            "description": "アクセスしやすい代替手段によって独占的 OS の支配に挑む",
             "features": [
-              "Promoting Linux and free software",
-              "Supporting independent retailers",
-              "Creating awareness of alternatives"
+              "Linux と自由ソフトウェアの推進",
+              "独立系販売店の支援",
+              "代替手段への意識向上"
             ]
           },
           {
-            "title": "Consumer freedom of choice",
-            "description": "Making it easier for consumers to access computers with free software.",
+            "title": "消費者の選択の自由",
+            "description": "消費者が自由ソフトウェア搭載パソコンに容易にアクセスできるようにする",
             "features": [
-              "Pre-installed free software",
-              "Transparent support options",
-              "Clear cost information"
+              "自由ソフトウェアのプリインストール",
+              "透明なサポートオプション",
+              "明確な費用情報"
             ]
           },
           {
-            "title": "Support services",
-            "description": "Ensuring a smooth transition to free software with comprehensive support.",
+            "title": "サポートサービス",
+            "description": "総合的なサポートで自由ソフトウェアへのスムーズな移行を保証",
             "features": [
-              "Guaranteed support packages",
-              "Transparent pricing",
-              "Professional support"
+              "保証付きサポートパッケージ",
+              "透明な価格設定",
+              "プロフェッショナルなサポート"
             ]
           },
           {
-            "title": "Community impact",
-            "description": "Building a community dedicated to promoting free software in Switzerland.",
+            "title": "コミュニティへの影響",
+            "description": "スイスでの自由ソフトウェア推進に取り組むコミュニティを構築",
             "features": [
-              "Open-source collaboration",
-              "Knowledge sharing",
-              "Community support"
+              "オープンソースのコラボレーション",
+              "知識の共有",
+              "コミュニティサポート"
             ]
           }
         ]
@@ -3485,12 +3485,12 @@
         "title": "私たちの歴史",
         "cards": [
           {
-            "title": "Our History",
-            "description": "Since the launch of FreieComputer.ch in 2010, revamp-it has been selling certified computers under the label. We continue to work with committed people from the open-source community to make the label better known and more accessible.",
+            "title": "私たちの歩み",
+            "description": "2010 年の FreieComputer.ch 開始以来、revamp-it は自由ソフトウェアと透明なサポートを重視した認証パソコンを提供しています。",
             "features": [
-              "Founded in 2010",
-              "Non-profit association structure",
-              "Ongoing development by the community"
+              "2010 年設立",
+              "非営利団体としての体制",
+              "コミュニティによる継続的な発展"
             ]
           }
         ]
@@ -3499,19 +3499,19 @@
         "title": "参加する",
         "actions": [
           {
-            "title": "Get involved",
-            "description": "Help make the label better known and more accessible",
+            "title": "参加する",
+            "description": "ラベルの認知度を高め、より身近なものにする手助けをしてください",
             "cta": "Volunteer"
           },
           {
-            "title": "Learn more",
-            "description": "Visit our website for detailed information about the label",
-            "cta": "Visit FreieComputer.ch"
+            "title": "詳しく知る",
+            "description": "ラベルに関する詳細情報は公式サイトをご覧ください",
+            "cta": "FreieComputer.ch を訪問"
           },
           {
             "title": "Contact",
-            "description": "Contact us to learn more about our initiative",
-            "cta": "Contact us"
+            "description": "私たちの取り組みについて詳しくはお問い合わせください",
+            "cta": "お問い合わせ"
           }
         ]
       }
@@ -3532,16 +3532,16 @@
         "description": "revamp-it では、まだ完全に動作するものの、技術的進歩により本来の用途には適さなくなった、使われなくなったコンピュータハードウェアに新しい用途を見つけることに注力しています。",
         "cards": [
           {
-            "title": "Hardware reuse",
-            "description": "Finding new functionalities for used electronic components and extending their lifecycle"
+            "title": "ハードウェアの再利用",
+            "description": "使用済み電子部品に新しい機能を見出し、製品寿命を延ばす"
           },
           {
-            "title": "Energy optimisation",
-            "description": "Developing energy- and resource-efficient computing solutions"
+            "title": "エネルギー最適化",
+            "description": "省エネかつ省資源なコンピューティングソリューションの開発"
           },
           {
-            "title": "Open-source guides",
-            "description": "Creating comprehensive guides for assembling open-source hardware"
+            "title": "オープンソースガイド",
+            "description": "オープンソースハードウェアの組立ガイドを総合的に作成"
           }
         ]
       },
@@ -3549,39 +3549,39 @@
         "title": "現在のプロジェクト",
         "cards": [
           {
-            "title": "12V power supply for recycled computers",
-            "description": "Developing solutions to replace 220V power supplies with 12V alternatives for use with renewable energy sources (solar, wind or pedal power).",
+            "title": "リサイクルパソコン向け 12V 電源",
+            "description": "リサイクル部品で使用するため、220V 電源を 12V 代替品に置き換えるソリューションを開発",
             "features": [
-              "Creating DIY guides for 12V power supplies",
-              "Maximising use of recycled components",
-              "Enabling computer use in areas with limited electricity infrastructure"
+              "12V 電源の自作ガイド作成",
+              "リサイクル部品の利用最大化",
+              "電源インフラが限られた地域でのパソコン利用を可能にする"
             ]
           },
           {
-            "title": "EPROM reuse",
-            "description": "Collecting and reprogramming BIOS chips from old motherboards, expansion cards and printers.",
+            "title": "EPROM の再利用",
+            "description": "古いマザーボード、拡張カード、プリンターから BIOS チップを集めて再プログラム",
             "features": [
-              "Using an EPROM programmer to reprogram chips",
-              "Implementing in network cards with empty sockets",
-              "Enabling network boot for LTSP clients"
+              "EPROM プログラマーによるチップ再プログラミング",
+              "空きソケット付きネットワークカードへの実装",
+              "LTSP クライアントのネットワークブートを可能にする"
             ]
           },
           {
-            "title": "Power supply repair",
-            "description": "Developing expertise in repairing computer power supplies and replacing components.",
+            "title": "電源装置の修理",
+            "description": "パソコン電源の修理と部品交換の専門知識を開発",
             "features": [
-              "Focus on large, easily replaceable components",
-              "Extending the life of partially damaged power supplies",
-              "Creating repair guides and documentation"
+              "大型で交換しやすい部品に注力",
+              "部分損傷した電源装置の寿命延長",
+              "修理ガイドとドキュメントの作成"
             ]
           },
           {
-            "title": "LCD monitor repair",
-            "description": "Expanding our expertise in repairing flat-panel screens with minor defects.",
+            "title": "LCD モニターの修理",
+            "description": "小さな欠陥のあるフラットパネル画面の修理の専門知識を拡大",
             "features": [
-              "Diagnosing and fixing common LCD problems",
-              "Component-level repair techniques",
-              "Documenting successful repair methods"
+              "一般的な LCD 問題の診断と解決",
+              "部品レベルの修理技術",
+              "成功した修理方法のドキュメント化"
             ]
           }
         ]
@@ -3590,12 +3590,12 @@
         "title": "SCSI ケーブルの再利用",
         "cards": [
           {
-            "title": "SCSI cable reuse",
-            "description": "Exploring new applications for SCSI cables and interfaces, once the standard for reliable data transfer in server environments.",
+            "title": "SCSI ケーブルの再利用",
+            "description": "かつて信頼性の高い接続の標準だった SCSI ケーブルとインターフェースの新しい用途を模索",
             "features": [
-              "Finding new uses for robust SCSI cables",
-              "Developing alternative applications for SCSI interfaces",
-              "Creating documentation for reuse methods"
+              "頑丈な SCSI ケーブルの新たな用途を見つける",
+              "SCSI インターフェースの代替アプリケーション開発",
+              "再利用方法のドキュメント化"
             ]
           }
         ]
@@ -3604,19 +3604,19 @@
         "title": "参加する",
         "actions": [
           {
-            "title": "Share knowledge",
-            "description": "Bring your expertise in hardware repair and optimisation",
-            "cta": "Get involved"
+            "title": "知識を共有",
+            "description": "ハードウェア修理と最適化の専門知識を持ち込んでください",
+            "cta": "参加する"
           },
           {
-            "title": "Donate hardware",
-            "description": "Donate old hardware for our reuse projects",
+            "title": "ハードウェアを寄贈",
+            "description": "再利用プロジェクトのために古いハードウェアを寄贈",
             "cta": "Donate"
           },
           {
             "title": "Collaborate",
-            "description": "Work with us on hardware development projects",
-            "cta": "Contact us"
+            "description": "ハードウェア開発プロジェクトに協力",
+            "cta": "お問い合わせ"
           }
         ]
       }
@@ -3639,21 +3639,21 @@
       "impact": {
         "cards": [
           {
-            "title": "Our mission",
+            "title": "私たちのミッション",
             "features": [
-              "Providing access to technology and training",
-              "Supporting sustainable IT infrastructure",
-              "Promoting open-source solutions",
-              "Building long-term partnerships"
+              "テクノロジーと研修へのアクセスを提供",
+              "持続可能な IT インフラを支援",
+              "オープンソースソリューションを推進",
+              "長期的なパートナーシップの構築"
             ]
           },
           {
-            "title": "Our impact",
+            "title": "私たちの影響",
             "features": [
-              "Setting up computer rooms in schools and communities",
-              "Training local IT professionals",
-              "Implementing sustainable technology solutions",
-              "Creating lasting partnerships with African organisations"
+              "学校やコミュニティへのコンピューター室の設置",
+              "現地の IT 専門家の育成",
+              "持続可能なテクノロジーソリューションの実装",
+              "アフリカの組織との持続的な連携の構築"
             ]
           }
         ]
@@ -3662,30 +3662,30 @@
         "title": "必要な機材",
         "cards": [
           {
-            "title": "Computers & laptops",
+            "title": "パソコンとノートパソコン",
             "features": [
-              "Laptops (3-5 years old)",
-              "Desktop PCs",
+              "ノートパソコン (3〜5 年経過)",
+              "デスクトップ PC",
               "Monitors",
-              "Keyboards & mice"
+              "キーボードとマウス"
             ]
           },
           {
             "title": "Networking",
             "features": [
-              "Network switches",
-              "Wi-Fi routers",
-              "Network cables",
-              "UPS systems"
+              "ネットワークスイッチ",
+              "Wi-Fi ルーター",
+              "ネットワークケーブル",
+              "UPS システム"
             ]
           },
           {
             "title": "Accessories",
             "features": [
-              "USB drives",
-              "External hard drives",
-              "Power adapters",
-              "RAM modules"
+              "USB メモリ",
+              "外付けハードディスク",
+              "電源装置",
+              "RAM モジュール"
             ]
           }
         ]
@@ -3694,19 +3694,19 @@
         "title": "参加する",
         "actions": [
           {
-            "title": "Donate equipment",
-            "description": "Your used IT equipment can make a real difference in African communities",
-            "cta": "Donate now"
+            "title": "機器を寄贈する",
+            "description": "あなたの中古 IT 機器がアフリカのコミュニティで本当の違いを生むことができます",
+            "cta": "今すぐ寄付"
           },
           {
             "title": "Volunteer",
-            "description": "Share your technical expertise and help set up computer rooms",
-            "cta": "Get involved"
+            "description": "技術専門知識を共有し、コンピューター室の構築を支援",
+            "cta": "参加する"
           },
           {
             "title": "Contact",
-            "description": "Contact us for more information",
-            "cta": "Get in touch"
+            "description": "詳しくはお問い合わせください",
+            "cta": "お問い合わせ"
           }
         ]
       }
@@ -3727,27 +3727,27 @@
         "description": "受注処理、在庫管理、財務会計のための包括的なソリューション",
         "cards": [
           {
-            "title": "Open-source advantages",
+            "title": "オープンソースの利点",
             "features": [
-              "Highly adaptable to your needs",
-              "Full access to code and developments",
-              "No fixed licence costs"
+              "ニーズへの高い適応性",
+              "コードと開発への完全なアクセス",
+              "固定ライセンス料なし"
             ]
           },
           {
-            "title": "Order processing",
+            "title": "受注処理",
             "features": [
-              "Complete workflow from quote to invoice",
-              "Customisable document templates",
-              "Direct email integration"
+              "見積りから請求までの完全なワークフロー",
+              "カスタマイズ可能なドキュメントテンプレート",
+              "直接メール連携"
             ]
           },
           {
-            "title": "Financial accounting",
+            "title": "財務会計",
             "features": [
-              "Complete or modular accounting",
-              "Customisable chart of accounts",
-              "Bank statement import"
+              "完全またはモジュール式の会計",
+              "カスタマイズ可能な勘定科目表",
+              "銀行明細のインポート"
             ]
           }
         ]
@@ -3757,21 +3757,21 @@
         "description": "ビジネス要件に応える包括的な機能",
         "cards": [
           {
-            "title": "Business configuration",
-            "description": "Configure the system for your specific business requirements",
+            "title": "事業設定",
+            "description": "特定の事業要件に合わせてシステムを設定",
             "features": [
-              "Multiple currencies & languages",
-              "Multi-client capability",
-              "Custom user groups"
+              "複数通貨と言語",
+              "マルチテナント",
+              "カスタムユーザーグループ"
             ]
           },
           {
-            "title": "Integration & customisation",
-            "description": "Extend functionality to suit your needs",
+            "title": "統合とカスタマイズ",
+            "description": "ニーズに応じて機能を拡張",
             "features": [
-              "Web shop integration",
-              "Custom variables",
-              "Process automation"
+              "ウェブショップ連携",
+              "カスタム変数",
+              "プロセス自動化"
             ]
           }
         ]
@@ -3781,12 +3781,12 @@
         "description": "2015 年 7 月以来、revamp-it は Kivitendo プロジェクトのプレミアムパートナーです。私たちはこのオープンソース ERP システムの設定とサポートを提供しています。",
         "cards": [
           {
-            "title": "Our services",
-            "description": "We support you in using Kivitendo",
+            "title": "私たちのサービス",
+            "description": "Kivitendo の活用をサポートします",
             "features": [
-              "Configuration & customisation",
-              "Support & maintenance",
-              "Training and consulting"
+              "設定とカスタマイズ",
+              "サポートとメンテナンス",
+              "研修とコンサルティング"
             ]
           }
         ]
@@ -3795,19 +3795,19 @@
         "title": "詳細を見る",
         "actions": [
           {
-            "title": "Kivitendo Switzerland",
-            "description": "Visit the official Swiss Kivitendo website",
-            "cta": "Visit website"
+            "title": "Kivitendo スイス",
+            "description": "スイスの公式 Kivitendo サイトを訪問",
+            "cta": "サイトを訪問"
           },
           {
-            "title": "Community forum",
-            "description": "Get help and share knowledge with other users",
-            "cta": "Visit forum"
+            "title": "コミュニティフォーラム",
+            "description": "他のユーザーと知識を共有し、ヘルプを得る",
+            "cta": "フォーラムを訪問"
           },
           {
             "title": "Contact",
-            "description": "Contact us for more information",
-            "cta": "Get in touch"
+            "description": "詳しくはお問い合わせください",
+            "cta": "お問い合わせ"
           }
         ]
       }
@@ -3828,16 +3828,16 @@
         "description": "Caritas Zürich と revamp-it の共同プロジェクトで、チューリッヒ州の低所得者の方々に利用しやすいコンピュータコースとインターネットアクセスポイントを提供しています。",
         "cards": [
           {
-            "title": "Local courses",
-            "description": "Entry-level computer courses in participants' neighbourhoods or at nearby locations"
+            "title": "地域のコース",
+            "description": "参加者の近所や近くの拠点で行うパソコン入門コース"
           },
           {
-            "title": "Linux focus",
-            "description": "Introduction to Linux as an operating system and providing a free and open alternative"
+            "title": "Linux 重視",
+            "description": "OS としての Linux を紹介し、自由で無料の代替手段を提供します"
           },
           {
-            "title": "Internet access",
-            "description": "Free internet access points with professional supervision for practice and learning"
+            "title": "インターネットアクセス",
+            "description": "専門スタッフによる無料インターネットアクセスポイントで、練習と学習をサポート"
           }
         ]
       },
@@ -3845,39 +3845,39 @@
         "title": "私たちのプログラム",
         "cards": [
           {
-            "title": "Beginner courses",
-            "description": "Comprehensive computer courses for beginners focusing on basic skills and Linux fundamentals.",
+            "title": "入門コース",
+            "description": "基本スキルと Linux の基礎に焦点を当てた、初心者向け総合パソコンコース",
             "features": [
-              "Basic computer operation",
-              "Introduction to Linux",
-              "Internet and email basics"
+              "パソコンの基本操作",
+              "Linux 入門",
+              "インターネットとメールの基礎"
             ]
           },
           {
-            "title": "Internet access points",
-            "description": "Supervised practice rooms where participants can apply their skills and use the internet.",
+            "title": "インターネットアクセスポイント",
+            "description": "参加者が学んだスキルを活用し、インターネットを使える、付き添い付きの練習スペース",
             "features": [
-              "Professional supervision",
-              "Free internet access",
-              "Practice and support"
+              "専門スタッフによる付き添い",
+              "無料インターネットアクセス",
+              "練習とサポート"
             ]
           },
           {
-            "title": "Advanced courses",
-            "description": "Specialised courses for participants who want to deepen their knowledge and skills.",
+            "title": "上級コース",
+            "description": "知識とスキルをさらに深めたい参加者向けの専門コース",
             "features": [
-              "Advanced Linux use",
-              "Productivity tools",
-              "Digital communication"
+              "高度な Linux 活用",
+              "生産性ツール",
+              "デジタルコミュニケーション"
             ]
           },
           {
-            "title": "Online resources",
-            "description": "Comprehensive online platform with learning materials and support resources.",
+            "title": "オンライン教材",
+            "description": "学習教材とサポート資料を備えた、総合オンラインプラットフォーム",
             "features": [
-              "Course materials",
-              "Linux tutorials",
-              "Practice exercises"
+              "コース教材",
+              "Linux チュートリアル",
+              "練習問題"
             ]
           }
         ]
@@ -3886,19 +3886,19 @@
         "title": "参加する",
         "actions": [
           {
-            "title": "Become a volunteer",
-            "description": "Support courses and internet access points as a volunteer",
-            "cta": "Get involved"
+            "title": "ボランティアになる",
+            "description": "ボランティアとしてコースとインターネットアクセスポイントをサポート",
+            "cta": "参加する"
           },
           {
-            "title": "Learn more",
-            "description": "Visit our website for detailed information and resources",
-            "cta": "Visit Compirat.ch"
+            "title": "詳しく知る",
+            "description": "詳細情報とリソースは公式サイトをご覧ください",
+            "cta": "Compirat.ch を訪問"
           },
           {
             "title": "Contact",
-            "description": "Contact us for more information about our programmes",
-            "cta": "Get in touch"
+            "description": "プログラムについて詳しくはお問い合わせください",
+            "cta": "お問い合わせ"
           }
         ]
       }
@@ -3917,17 +3917,17 @@
       "intro": {
         "cards": [
           {
-            "title": "About LTSP",
-            "description": "The Linux Terminal Server Project (LTSP) allows multiple users to work simultaneously on older computers by connecting them to a powerful server. This optimises resource use and extends hardware life."
+            "title": "LTSP について",
+            "description": "Linux Terminal Server Project (LTSP) は、中央サーバーを通じて複数のユーザーが古いコンピューターを同時に使用することを可能にします。"
           },
           {
-            "title": "How it works",
+            "title": "仕組み",
             "features": [
-              "Applications run on a central server",
-              "Thin clients or old PCs act as terminals",
-              "Efficient resource management",
-              "Consistent user experience",
-              "Minimal requirements for client computers"
+              "アプリケーションは中央サーバーで実行",
+              "シンクライアントや古い PC が端末として機能",
+              "効率的なリソース管理",
+              "一貫したユーザー体験",
+              "クライアントマシンへの最小要件"
             ]
           }
         ]
@@ -3937,31 +3937,31 @@
           {
             "title": "Benefits",
             "features": [
-              "Extended hardware life",
-              "Reduced maintenance costs",
-              "Centralised management & updates",
-              "Improved security",
-              "Lower energy consumption"
+              "ハードウェアの寿命延長",
+              "メンテナンスコストの削減",
+              "一元化された管理と更新",
+              "セキュリティの向上",
+              "消費電力の低減"
             ]
           },
           {
             "title": "Implementation",
             "features": [
-              "Server setup & configuration",
-              "Client preparation",
-              "Network optimisation",
-              "User management & security",
-              "Ongoing support"
+              "サーバーのセットアップと設定",
+              "クライアントの準備",
+              "ネットワークの最適化",
+              "ユーザー管理とセキュリティ",
+              "継続的なサポート"
             ]
           },
           {
-            "title": "Use cases",
+            "title": "ユースケース",
             "features": [
-              "Schools & education",
-              "Public computer rooms",
+              "学校と教育",
+              "公共のコンピューター室",
               "Businesses",
-              "Community centres",
-              "Non-profit organisations"
+              "コミュニティセンター",
+              "非営利組織"
             ]
           }
         ]
@@ -3969,18 +3969,18 @@
       "start": {
         "cards": [
           {
-            "title": "Getting started",
+            "title": "最初のステップ",
             "features": [
-              "Assessing your infrastructure",
-              "Planning your implementation",
-              "Setting up server & clients",
-              "Staff training",
-              "Ongoing support"
+              "インフラの評価",
+              "導入計画の策定",
+              "サーバーとクライアントの設定",
+              "スタッフ研修",
+              "継続的なサポート"
             ]
           },
           {
-            "title": "Contact us",
-            "description": "Would you like to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
+            "title": "お問い合わせ",
+            "description": "LTSP があなたの組織にもたらすメリットについて詳しく知りたいですか？可能性を一緒に探りましょう。"
           }
         ]
       },
@@ -6212,26 +6212,26 @@
       "potentialLabel": "ポテンシャル",
       "kpis": [
         {
-          "metric": "Devices per year",
-          "reason": "More workshop stations = more capacity",
+          "metric": "年間機器数",
+          "reason": "工房スペースが増える = キャパシティ向上",
           "current": "~500",
           "potential": "2,000+"
         },
         {
-          "metric": "Workshop participants",
-          "reason": "Dedicated event space for regular courses",
+          "metric": "ワークショップ参加者",
+          "reason": "専用イベントスペースで定期コースを開催",
           "current": "~100",
           "potential": "500+"
         },
         {
-          "metric": "Community members",
-          "reason": "Coworking attracts more volunteers",
+          "metric": "コミュニティメンバー",
+          "reason": "コワーキングがボランティアを引きつける",
           "current": "~50",
           "potential": "200+"
         },
         {
-          "metric": "Social integration",
-          "reason": "More internship places with larger space",
+          "metric": "社会的包摂",
+          "reason": "より広いスペースで研修ポストを増やせる",
           "current": "~10",
           "potential": "30+"
         }
