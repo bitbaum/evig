@@ -3968,16 +3968,6 @@
       "snippet": "ich habe deine Fähigkeiten gesehen und denke, du könntest mir helfen: \"${request…"
     },
     {
-      "file": "src/components/marketplace/ActiveFilterChips.tsx",
-      "line": 53,
-      "snippet": "${orgName} Geräte"
-    },
-    {
-      "file": "src/components/marketplace/ActiveFilterChips.tsx",
-      "line": 120,
-      "snippet": "Geprüft"
-    },
-    {
       "file": "src/components/marketplace/ai-camera/config.ts",
       "line": 30,
       "snippet": "Zubehör"
@@ -13451,6 +13441,14 @@
       "ownRatio": 0,
       "otherRatio": 0.17,
       "snippet": "Almeno 10 caratteri se scrivi un commento."
+    },
+    {
+      "file": "messages/it.json",
+      "keyPath": "marketplace.payment.secure",
+      "suspectedLanguage": "en",
+      "ownRatio": 0,
+      "otherRatio": 0.25,
+      "snippet": "Pagamento sicuro — in arrivo"
     },
     {
       "file": "messages/it.json",
