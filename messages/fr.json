@@ -5114,16 +5114,16 @@
         "description": "Avec des personnes engagées issues de la communauté open source, revamp-it a contribué à établir ce label afin de promouvoir la liberté de choix en informatique et de soutenir les revendeurs qui vendent des ordinateurs équipés de logiciels libres préinstallés.",
         "cards": [
           {
-            "title": "Free Software",
-            "description": "Computers with pre-installed Linux and other free software alternatives"
+            "title": "Logiciels libres",
+            "description": "Ordinateurs avec Linux et autres alternatives libres préinstallées"
           },
           {
-            "title": "Guaranteed Support",
-            "description": "Transparent support services with clear cost information at purchase"
+            "title": "Support garanti",
+            "description": "Prestations de support transparentes avec des informations claires sur les coûts à l'achat"
           },
           {
-            "title": "Community-run",
-            "description": "A non-profit association carried by the open-source community"
+            "title": "Porté par la communauté",
+            "description": "Une association à but non lucratif portée par la communauté open source"
           }
         ]
       },
@@ -5131,39 +5131,39 @@
         "title": "Notre mission",
         "cards": [
           {
-            "title": "Breaking the monopoly",
-            "description": "Challenging the dominance of proprietary operating systems through accessible alternatives.",
+            "title": "Briser le monopole",
+            "description": "Remettre en cause la domination des systèmes propriétaires par des alternatives accessibles.",
             "features": [
-              "Promoting Linux and free software",
-              "Supporting independent retailers",
-              "Creating awareness of alternatives"
+              "Promotion de Linux et des logiciels libres",
+              "Soutien aux revendeurs indépendants",
+              "Sensibilisation aux alternatives"
             ]
           },
           {
-            "title": "Consumer freedom of choice",
-            "description": "Making it easier for consumers to access computers with free software.",
+            "title": "Liberté de choix pour les consommateur·rice·s",
+            "description": "Faciliter l'accès des consommateur·rice·s aux ordinateurs équipés de logiciels libres.",
             "features": [
-              "Pre-installed free software",
-              "Transparent support options",
-              "Clear cost information"
+              "Logiciels libres préinstallés",
+              "Options de support transparentes",
+              "Informations claires sur les coûts"
             ]
           },
           {
-            "title": "Support services",
-            "description": "Ensuring a smooth transition to free software with comprehensive support.",
+            "title": "Prestations de support",
+            "description": "Garantir une transition fluide vers les logiciels libres avec un accompagnement complet.",
             "features": [
-              "Guaranteed support packages",
-              "Transparent pricing",
-              "Professional support"
+              "Forfaits de support garantis",
+              "Tarification transparente",
+              "Accompagnement professionnel"
             ]
           },
           {
-            "title": "Community impact",
-            "description": "Building a community dedicated to promoting free software in Switzerland.",
+            "title": "Impact communautaire",
+            "description": "Construire une communauté dédiée à la promotion des logiciels libres en Suisse.",
             "features": [
-              "Open-source collaboration",
-              "Knowledge sharing",
-              "Community support"
+              "Collaboration open source",
+              "Partage de connaissances",
+              "Soutien communautaire"
             ]
           }
         ]
@@ -5172,12 +5172,12 @@
         "title": "Notre histoire",
         "cards": [
           {
-            "title": "Our History",
-            "description": "Since the launch of FreieComputer.ch in 2010, revamp-it has been selling certified computers under the label. We continue to work with committed people from the open-source community to make the label better known and more accessible.",
+            "title": "Notre histoire",
+            "description": "Depuis le lancement de FreieComputer.ch en 2010, revamp-it propose des ordinateurs certifiés sous le label, avec un accent sur les logiciels libres et un support transparent.",
             "features": [
-              "Founded in 2010",
-              "Non-profit association structure",
-              "Ongoing development by the community"
+              "Fondée en 2010",
+              "Structure associative à but non lucratif",
+              "Développement continu par la communauté"
             ]
           }
         ]
@@ -5186,19 +5186,19 @@
         "title": "Participez",
         "actions": [
           {
-            "title": "Get involved",
-            "description": "Help make the label better known and more accessible",
+            "title": "Participez",
+            "description": "Aidez-nous à faire connaître le label et à le rendre plus accessible",
             "cta": "Volunteer"
           },
           {
-            "title": "Learn more",
-            "description": "Visit our website for detailed information about the label",
-            "cta": "Visit FreieComputer.ch"
+            "title": "En savoir plus",
+            "description": "Visitez notre site pour des informations détaillées sur le label",
+            "cta": "Visiter FreieComputer.ch"
           },
           {
             "title": "Contact",
-            "description": "Contact us to learn more about our initiative",
-            "cta": "Contact us"
+            "description": "Contactez-nous pour en savoir plus sur notre initiative",
+            "cta": "Nous contacter"
           }
         ]
       }
@@ -5219,16 +5219,16 @@
         "description": "Chez revamp-it, nous nous concentrons sur la recherche de nouvelles applications pour le matériel informatique mis au rebut, qui est encore entièrement fonctionnel mais qui n'est plus adapté à son usage initial en raison des progrès technologiques.",
         "cards": [
           {
-            "title": "Hardware reuse",
-            "description": "Finding new functionalities for used electronic components and extending their lifecycle"
+            "title": "Réutilisation du matériel",
+            "description": "Trouver de nouvelles fonctionnalités pour des composants électroniques usagés et prolonger leur cycle de vie"
           },
           {
-            "title": "Energy optimisation",
-            "description": "Developing energy- and resource-efficient computing solutions"
+            "title": "Optimisation énergétique",
+            "description": "Développement de solutions informatiques économes en énergie et en ressources"
           },
           {
-            "title": "Open-source guides",
-            "description": "Creating comprehensive guides for assembling open-source hardware"
+            "title": "Guides open source",
+            "description": "Création de guides complets pour l'assemblage de matériel open source"
           }
         ]
       },
@@ -5236,39 +5236,39 @@
         "title": "Projets actuels",
         "cards": [
           {
-            "title": "12V power supply for recycled computers",
-            "description": "Developing solutions to replace 220V power supplies with 12V alternatives for use with renewable energy sources (solar, wind or pedal power).",
+            "title": "Alimentation 12 V pour ordinateurs recyclés",
+            "description": "Développement de solutions pour remplacer les blocs d'alimentation 220 V par des alternatives 12 V destinées à l'usage avec des composants recyclés.",
             "features": [
-              "Creating DIY guides for 12V power supplies",
-              "Maximising use of recycled components",
-              "Enabling computer use in areas with limited electricity infrastructure"
+              "Rédaction de guides de fabrication d'alimentations 12 V",
+              "Maximisation de l'utilisation des composants recyclés",
+              "Rendre possible l'usage de l'informatique dans des zones à infrastructure électrique limitée"
             ]
           },
           {
-            "title": "EPROM reuse",
-            "description": "Collecting and reprogramming BIOS chips from old motherboards, expansion cards and printers.",
+            "title": "Réutilisation EPROM",
+            "description": "Collecte et reprogrammation des puces BIOS de vieilles cartes mères, cartes d'extension et imprimantes.",
             "features": [
-              "Using an EPROM programmer to reprogram chips",
-              "Implementing in network cards with empty sockets",
-              "Enabling network boot for LTSP clients"
+              "Utilisation d'un programmateur EPROM pour reprogrammer les puces",
+              "Implémentation sur des cartes réseau à sockets vides",
+              "Permettre le boot réseau pour les clients LTSP"
             ]
           },
           {
-            "title": "Power supply repair",
-            "description": "Developing expertise in repairing computer power supplies and replacing components.",
+            "title": "Réparation d'alimentations",
+            "description": "Développer une expertise dans la réparation d'alimentations d'ordinateurs et le remplacement de composants.",
             "features": [
-              "Focus on large, easily replaceable components",
-              "Extending the life of partially damaged power supplies",
-              "Creating repair guides and documentation"
+              "Accent sur les composants grands et faciles à remplacer",
+              "Prolongation de la durée de vie d'alimentations partiellement endommagées",
+              "Rédaction de guides et de documentation de réparation"
             ]
           },
           {
-            "title": "LCD monitor repair",
-            "description": "Expanding our expertise in repairing flat-panel screens with minor defects.",
+            "title": "Réparation d'écrans LCD",
+            "description": "Élargir notre expertise dans la réparation d'écrans plats présentant de petits défauts.",
             "features": [
-              "Diagnosing and fixing common LCD problems",
-              "Component-level repair techniques",
-              "Documenting successful repair methods"
+              "Diagnostic et résolution des problèmes LCD courants",
+              "Techniques de réparation au niveau des composants",
+              "Documentation des méthodes de réparation réussies"
             ]
           }
         ]
@@ -5277,12 +5277,12 @@
         "title": "Réutilisation des câbles SCSI",
         "cards": [
           {
-            "title": "SCSI cable reuse",
-            "description": "Exploring new applications for SCSI cables and interfaces, once the standard for reliable data transfer in server environments.",
+            "title": "Réutilisation de câbles SCSI",
+            "description": "Explorer de nouvelles applications pour les câbles et interfaces SCSI, jadis standard des connexions fiables.",
             "features": [
-              "Finding new uses for robust SCSI cables",
-              "Developing alternative applications for SCSI interfaces",
-              "Creating documentation for reuse methods"
+              "Trouver de nouveaux usages pour les câbles SCSI robustes",
+              "Développer des applications alternatives pour les interfaces SCSI",
+              "Documenter les méthodes de réutilisation"
             ]
           }
         ]
@@ -5291,19 +5291,19 @@
         "title": "Participez",
         "actions": [
           {
-            "title": "Share knowledge",
-            "description": "Bring your expertise in hardware repair and optimisation",
-            "cta": "Get involved"
+            "title": "Partager des connaissances",
+            "description": "Apportez votre expertise en réparation et optimisation matérielle",
+            "cta": "Engagez-vous"
           },
           {
-            "title": "Donate hardware",
-            "description": "Donate old hardware for our reuse projects",
+            "title": "Donner du matériel",
+            "description": "Donnez du vieux matériel pour nos projets de réutilisation",
             "cta": "Donate"
           },
           {
             "title": "Collaborate",
-            "description": "Work with us on hardware development projects",
-            "cta": "Contact us"
+            "description": "Collaborez avec nous sur des projets de développement matériel",
+            "cta": "Nous contacter"
           }
         ]
       }
@@ -5326,21 +5326,21 @@
       "impact": {
         "cards": [
           {
-            "title": "Our mission",
+            "title": "Notre mission",
             "features": [
-              "Providing access to technology and training",
-              "Supporting sustainable IT infrastructure",
-              "Promoting open-source solutions",
-              "Building long-term partnerships"
+              "Donner accès à la technologie et à la formation",
+              "Soutenir une infrastructure IT durable",
+              "Promouvoir les solutions open source",
+              "Construire des partenariats à long terme"
             ]
           },
           {
-            "title": "Our impact",
+            "title": "Notre impact",
             "features": [
-              "Setting up computer rooms in schools and communities",
-              "Training local IT professionals",
-              "Implementing sustainable technology solutions",
-              "Creating lasting partnerships with African organisations"
+              "Mise en place de salles informatiques dans les écoles et communes",
+              "Formation de spécialistes IT locaux",
+              "Mise en œuvre de solutions technologiques durables",
+              "Création de partenariats durables avec des organisations africaines"
             ]
           }
         ]
@@ -5349,30 +5349,30 @@
         "title": "Matériel nécessaire",
         "cards": [
           {
-            "title": "Computers & laptops",
+            "title": "Ordinateurs et portables",
             "features": [
-              "Laptops (3-5 years old)",
-              "Desktop PCs",
+              "Portables (3-5 ans)",
+              "PC de bureau",
               "Monitors",
-              "Keyboards & mice"
+              "Claviers et souris"
             ]
           },
           {
             "title": "Networking",
             "features": [
-              "Network switches",
-              "Wi-Fi routers",
-              "Network cables",
-              "UPS systems"
+              "Switchs réseau",
+              "Routeurs Wi-Fi",
+              "Câbles réseau",
+              "Systèmes UPS"
             ]
           },
           {
             "title": "Accessories",
             "features": [
-              "USB drives",
-              "External hard drives",
-              "Power adapters",
-              "RAM modules"
+              "Clés USB",
+              "Disques durs externes",
+              "Blocs d'alimentation",
+              "Modules RAM"
             ]
           }
         ]
@@ -5381,19 +5381,19 @@
         "title": "Participez",
         "actions": [
           {
-            "title": "Donate equipment",
-            "description": "Your used IT equipment can make a real difference in African communities",
-            "cta": "Donate now"
+            "title": "Donner du matériel",
+            "description": "Votre matériel IT d'occasion peut faire une vraie différence dans les communautés africaines",
+            "cta": "Faire un don"
           },
           {
             "title": "Volunteer",
-            "description": "Share your technical expertise and help set up computer rooms",
-            "cta": "Get involved"
+            "description": "Partagez votre expertise technique et aidez à monter des salles informatiques",
+            "cta": "Engagez-vous"
           },
           {
             "title": "Contact",
-            "description": "Contact us for more information",
-            "cta": "Get in touch"
+            "description": "Contactez-nous pour en savoir plus",
+            "cta": "Nous contacter"
           }
         ]
       }
@@ -5414,27 +5414,27 @@
         "description": "Une solution complète pour le traitement des commandes, la gestion des stocks et la comptabilité financière",
         "cards": [
           {
-            "title": "Open-source advantages",
+            "title": "Avantages open source",
             "features": [
-              "Highly adaptable to your needs",
-              "Full access to code and developments",
-              "No fixed licence costs"
+              "Grande capacité d'adaptation à vos besoins",
+              "Accès complet au code et aux développements",
+              "Aucun coût fixe de licence"
             ]
           },
           {
-            "title": "Order processing",
+            "title": "Traitement des commandes",
             "features": [
-              "Complete workflow from quote to invoice",
-              "Customisable document templates",
-              "Direct email integration"
+              "Workflow complet du devis à la facture",
+              "Modèles de documents personnalisables",
+              "Intégration directe de la messagerie"
             ]
           },
           {
-            "title": "Financial accounting",
+            "title": "Comptabilité financière",
             "features": [
-              "Complete or modular accounting",
-              "Customisable chart of accounts",
-              "Bank statement import"
+              "Comptabilité complète ou modulaire",
+              "Plan comptable personnalisable",
+              "Import de relevés bancaires"
             ]
           }
         ]
@@ -5444,21 +5444,21 @@
         "description": "Des fonctionnalités complètes pour vos besoins commerciaux",
         "cards": [
           {
-            "title": "Business configuration",
-            "description": "Configure the system for your specific business requirements",
+            "title": "Configuration métier",
+            "description": "Configurez le système selon vos besoins métier spécifiques",
             "features": [
-              "Multiple currencies & languages",
-              "Multi-client capability",
-              "Custom user groups"
+              "Plusieurs devises et langues",
+              "Multi-clients",
+              "Groupes d'utilisateurs personnalisés"
             ]
           },
           {
-            "title": "Integration & customisation",
-            "description": "Extend functionality to suit your needs",
+            "title": "Intégration et personnalisation",
+            "description": "Étendez les fonctionnalités selon vos besoins",
             "features": [
-              "Web shop integration",
-              "Custom variables",
-              "Process automation"
+              "Intégration boutique en ligne",
+              "Variables personnalisées",
+              "Automatisation des processus"
             ]
           }
         ]
@@ -5468,12 +5468,12 @@
         "description": "Depuis juillet 2015, revamp-it est partenaire Premium du projet Kivitendo. Nous proposons la configuration et le support de ce système ERP open source.",
         "cards": [
           {
-            "title": "Our services",
-            "description": "We support you in using Kivitendo",
+            "title": "Nos prestations",
+            "description": "Nous vous accompagnons dans l'utilisation de Kivitendo",
             "features": [
-              "Configuration & customisation",
-              "Support & maintenance",
-              "Training and consulting"
+              "Configuration et personnalisation",
+              "Support et maintenance",
+              "Formations et conseil"
             ]
           }
         ]
@@ -5482,19 +5482,19 @@
         "title": "En savoir plus",
         "actions": [
           {
-            "title": "Kivitendo Switzerland",
-            "description": "Visit the official Swiss Kivitendo website",
-            "cta": "Visit website"
+            "title": "Kivitendo Suisse",
+            "description": "Visitez le site officiel suisse de Kivitendo",
+            "cta": "Visiter le site"
           },
           {
-            "title": "Community forum",
-            "description": "Get help and share knowledge with other users",
-            "cta": "Visit forum"
+            "title": "Forum communautaire",
+            "description": "Obtenez de l'aide et partagez vos connaissances avec d'autres utilisateur·rice·s",
+            "cta": "Visiter le forum"
           },
           {
             "title": "Contact",
-            "description": "Contact us for more information",
-            "cta": "Get in touch"
+            "description": "Contactez-nous pour en savoir plus",
+            "cta": "Nous contacter"
           }
         ]
       }
@@ -5515,16 +5515,16 @@
         "description": "Un projet conjoint de Caritas Zurich et de revamp-it qui propose des cours d'informatique accessibles et des points d'accès Internet aux personnes à faibles revenus dans le canton de Zurich.",
         "cards": [
           {
-            "title": "Local courses",
-            "description": "Entry-level computer courses in participants' neighbourhoods or at nearby locations"
+            "title": "Cours locaux",
+            "description": "Cours d'initiation à l'informatique dans le quartier des participant·e·s ou dans des lieux proches"
           },
           {
-            "title": "Linux focus",
-            "description": "Introduction to Linux as an operating system and providing a free and open alternative"
+            "title": "Focus Linux",
+            "description": "Introduction à Linux comme système d'exploitation et mise à disposition d'une alternative libre et gratuite"
           },
           {
-            "title": "Internet access",
-            "description": "Free internet access points with professional supervision for practice and learning"
+            "title": "Accès Internet",
+            "description": "Points d'accès Internet gratuits avec accompagnement professionnel pour pratiquer et apprendre"
           }
         ]
       },
@@ -5532,39 +5532,39 @@
         "title": "Notre programme",
         "cards": [
           {
-            "title": "Beginner courses",
-            "description": "Comprehensive computer courses for beginners focusing on basic skills and Linux fundamentals.",
+            "title": "Cours d'initiation",
+            "description": "Cours d'informatique complets pour débutant·e·s, axés sur les compétences fondamentales et les bases de Linux",
             "features": [
-              "Basic computer operation",
-              "Introduction to Linux",
-              "Internet and email basics"
+              "Utilisation de base de l'ordinateur",
+              "Introduction à Linux",
+              "Bases d'Internet et de l'e-mail"
             ]
           },
           {
-            "title": "Internet access points",
-            "description": "Supervised practice rooms where participants can apply their skills and use the internet.",
+            "title": "Points d'accès Internet",
+            "description": "Salles de pratique encadrées où les participant·e·s peuvent mettre en œuvre leurs compétences et utiliser Internet.",
             "features": [
-              "Professional supervision",
-              "Free internet access",
-              "Practice and support"
+              "Accompagnement professionnel",
+              "Accès Internet gratuit",
+              "Pratique et soutien"
             ]
           },
           {
-            "title": "Advanced courses",
-            "description": "Specialised courses for participants who want to deepen their knowledge and skills.",
+            "title": "Cours avancés",
+            "description": "Cours spécialisés pour les participant·e·s qui souhaitent approfondir leurs connaissances et compétences.",
             "features": [
-              "Advanced Linux use",
-              "Productivity tools",
-              "Digital communication"
+              "Utilisation avancée de Linux",
+              "Outils de productivité",
+              "Communication numérique"
             ]
           },
           {
-            "title": "Online resources",
-            "description": "Comprehensive online platform with learning materials and support resources.",
+            "title": "Ressources en ligne",
+            "description": "Plateforme en ligne complète avec du matériel d'apprentissage et des ressources d'accompagnement.",
             "features": [
-              "Course materials",
-              "Linux tutorials",
-              "Practice exercises"
+              "Supports de cours",
+              "Tutoriels Linux",
+              "Exercices pratiques"
             ]
           }
         ]
@@ -5573,19 +5573,19 @@
         "title": "Participer",
         "actions": [
           {
-            "title": "Become a volunteer",
-            "description": "Support courses and internet access points as a volunteer",
-            "cta": "Get involved"
+            "title": "Devenir bénévole",
+            "description": "Soutenez les cours et les points d'accès Internet en tant que bénévole",
+            "cta": "Participer"
           },
           {
-            "title": "Learn more",
-            "description": "Visit our website for detailed information and resources",
-            "cta": "Visit Compirat.ch"
+            "title": "En savoir plus",
+            "description": "Visitez notre site pour des informations détaillées et des ressources",
+            "cta": "Visiter Compirat.ch"
           },
           {
             "title": "Contact",
-            "description": "Contact us for more information about our programmes",
-            "cta": "Get in touch"
+            "description": "Contactez-nous pour plus d'informations sur nos programmes",
+            "cta": "Nous contacter"
           }
         ]
       }
@@ -5604,17 +5604,17 @@
       "intro": {
         "cards": [
           {
-            "title": "About LTSP",
-            "description": "The Linux Terminal Server Project (LTSP) allows multiple users to work simultaneously on older computers by connecting them to a powerful server. This optimises resource use and extends hardware life."
+            "title": "À propos de LTSP",
+            "description": "Le Linux Terminal Server Project (LTSP) permet à plusieurs utilisateur·rice·s d'utiliser simultanément des ordinateurs plus anciens via un serveur central."
           },
           {
-            "title": "How it works",
+            "title": "Comment ça marche",
             "features": [
-              "Applications run on a central server",
-              "Thin clients or old PCs act as terminals",
-              "Efficient resource management",
-              "Consistent user experience",
-              "Minimal requirements for client computers"
+              "Les applications tournent sur un serveur central",
+              "Les clients légers ou les vieux PC servent de terminaux",
+              "Gestion efficace des ressources",
+              "Expérience utilisateur cohérente",
+              "Exigences minimales pour les postes clients"
             ]
           }
         ]
@@ -5624,31 +5624,31 @@
           {
             "title": "Benefits",
             "features": [
-              "Extended hardware life",
-              "Reduced maintenance costs",
-              "Centralised management & updates",
-              "Improved security",
-              "Lower energy consumption"
+              "Prolongation de la durée de vie du matériel",
+              "Réduction des coûts de maintenance",
+              "Administration et mises à jour centralisées",
+              "Sécurité renforcée",
+              "Consommation d'énergie réduite"
             ]
           },
           {
             "title": "Implementation",
             "features": [
-              "Server setup & configuration",
-              "Client preparation",
-              "Network optimisation",
-              "User management & security",
-              "Ongoing support"
+              "Installation et configuration du serveur",
+              "Préparation des clients",
+              "Optimisation du réseau",
+              "Gestion des utilisateur·rice·s et sécurité",
+              "Support continu"
             ]
           },
           {
-            "title": "Use cases",
+            "title": "Cas d'utilisation",
             "features": [
-              "Schools & education",
-              "Public computer rooms",
+              "Écoles et formation",
+              "Salles informatiques publiques",
               "Businesses",
-              "Community centres",
-              "Non-profit organisations"
+              "Centres communautaires",
+              "Organisations à but non lucratif"
             ]
           }
         ]
@@ -5656,18 +5656,18 @@
       "start": {
         "cards": [
           {
-            "title": "Getting started",
+            "title": "Premiers pas",
             "features": [
-              "Assessing your infrastructure",
-              "Planning your implementation",
-              "Setting up server & clients",
-              "Staff training",
-              "Ongoing support"
+              "Évaluation de votre infrastructure",
+              "Planification de votre déploiement",
+              "Installation du serveur et des clients",
+              "Formation du personnel",
+              "Support continu"
             ]
           },
           {
-            "title": "Contact us",
-            "description": "Would you like to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
+            "title": "Nous contacter",
+            "description": "Vous voulez en savoir plus sur ce que LTSP peut apporter à votre organisation ? Contactez-nous pour explorer ce qui est possible."
           }
         ]
       },
@@ -6627,26 +6627,26 @@
       "potentialLabel": "Potentiel",
       "kpis": [
         {
-          "metric": "Devices per year",
-          "reason": "More workshop stations = more capacity",
+          "metric": "Appareils par an",
+          "reason": "Plus de postes en atelier = plus de capacité",
           "current": "~500",
           "potential": "2,000+"
         },
         {
-          "metric": "Workshop participants",
-          "reason": "Dedicated event space for regular courses",
+          "metric": "Participant·e·s aux ateliers",
+          "reason": "Salle d'événement dédiée pour des cours réguliers",
           "current": "~100",
           "potential": "500+"
         },
         {
-          "metric": "Community members",
-          "reason": "Coworking attracts more volunteers",
+          "metric": "Membres de la communauté",
+          "reason": "Le coworking attire plus de bénévoles",
           "current": "~50",
           "potential": "200+"
         },
         {
-          "metric": "Social integration",
-          "reason": "More internship places with larger space",
+          "metric": "Intégration sociale",
+          "reason": "Plus de places de stage grâce à des locaux plus grands",
           "current": "~10",
           "potential": "30+"
         }
