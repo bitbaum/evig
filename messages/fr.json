@@ -6310,6 +6310,18 @@
             }
           ]
         }
+      },
+      "interestCta": {
+        "eyebrow": "SUIVRE LE PROJET",
+        "heading": "Recevez les nouveaux guides, les installations pilotes et les résultats LCA dès leur publication.",
+        "body": "Pas une newsletter marketing — uniquement des mises à jour Monitor-Upcycling, tous les quelques mois.",
+        "oneClickButton": "Recevoir les nouvelles",
+        "oneClickHint": "À {email}",
+        "emailPlaceholder": "Adresse e-mail",
+        "submitButton": "Recevoir les nouvelles",
+        "subscribing": "Inscription en cours…",
+        "successTitle": "Inscription confirmée.",
+        "successBody": "Nous vous écrivons au prochain jalon."
       }
     }
   },

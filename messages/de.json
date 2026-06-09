@@ -5999,6 +5999,18 @@
             }
           ]
         }
+      },
+      "interestCta": {
+        "eyebrow": "AM PROJEKT DRANBLEIBEN",
+        "heading": "Erfahre, wenn neue Anleitungen, Pilot-Standorte oder die LCA-Resultate online gehen.",
+        "body": "Kein Werbe-Newsletter. Nur Updates zu Monitor-Upcycling — typisch alle paar Monate.",
+        "oneClickButton": "Updates erhalten",
+        "oneClickHint": "An {email}",
+        "emailPlaceholder": "E-Mail-Adresse",
+        "submitButton": "Updates erhalten",
+        "subscribing": "Wird angemeldet…",
+        "successTitle": "Eingetragen.",
+        "successBody": "Beim nächsten Meilenstein hörst du von uns."
       }
     }
   },

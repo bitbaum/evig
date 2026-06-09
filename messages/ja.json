@@ -4623,6 +4623,18 @@
             }
           ]
         }
+      },
+      "interestCta": {
+        "eyebrow": "プロジェクトをフォロー",
+        "heading": "新しいガイド、パイロット設置、LCA結果が公開されたらお知らせします。",
+        "body": "マーケティングメールではありません — Monitor-Upcyclingの数か月ごとの更新のみ。",
+        "oneClickButton": "更新を受け取る",
+        "oneClickHint": "{email} 宛",
+        "emailPlaceholder": "メールアドレス",
+        "submitButton": "更新を受け取る",
+        "subscribing": "登録中…",
+        "successTitle": "登録完了。",
+        "successBody": "次のマイルストーンの時にお知らせします。"
       }
     }
   },

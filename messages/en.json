@@ -6256,6 +6256,18 @@
             }
           ]
         }
+      },
+      "interestCta": {
+        "eyebrow": "FOLLOW THE PROJECT",
+        "heading": "Hear about new model guides, pilot installations and the LCA results when they land.",
+        "body": "Not a marketing newsletter — just Monitor-Upcycling updates, every few months.",
+        "oneClickButton": "Get updates",
+        "oneClickHint": "To {email}",
+        "emailPlaceholder": "Email address",
+        "submitButton": "Get updates",
+        "subscribing": "Subscribing…",
+        "successTitle": "You're in.",
+        "successBody": "We'll write when the next milestone ships."
       }
     }
   },

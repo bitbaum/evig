@@ -10,6 +10,7 @@ import {
   type NeedsSectionLabels,
 } from '@/components/projects'
 import type { ProjectPageConfig, RawCard, RawAction } from '@/components/projects'
+import { UpcyclingInterestCTA } from './UpcyclingInterestCTA'
 
 type GuideItem = {
   slug: string
@@ -30,6 +31,7 @@ type ExploreCard = {
 type PageMessages = {
   meta: { title: string; description: string }
   hero: { title: string; description: string; cta1: string; cta2: string }
+  interestCta: { eyebrow: string; heading: string; body: string }
   about: { title: string; description: string }
   approach: { title: string; cards: RawCard[] }
   nextsteps: { title: string; description: string }
@@ -117,6 +119,7 @@ export default async function UpcyclingPage() {
     <div className="min-h-screen">
       {config.hero && <ProjectHero hero={config.hero} />}
       <ExploreSection explore={p.explore} />
+      <InterestSection interestCta={p.interestCta} />
       {config.sections.map((section, i) => (
         <ProjectSection key={i} section={section} />
       ))}
@@ -124,6 +127,21 @@ export default async function UpcyclingPage() {
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
       {config.cta && <ProjectCallToAction cta={config.cta} />}
     </div>
+  )
+}
+
+function InterestSection({ interestCta }: { interestCta: PageMessages['interestCta'] }) {
+  return (
+    <section className="border-t border-subtle bg-canvas py-14 sm:py-16">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+        <div className="ui-public-eyebrow">{interestCta.eyebrow}</div>
+        <p className="mt-4 text-xl sm:text-2xl font-medium leading-snug text-text-primary">
+          {interestCta.heading}
+        </p>
+        <p className="mt-3 text-sm text-text-secondary">{interestCta.body}</p>
+        <UpcyclingInterestCTA className="mt-8 max-w-md mx-auto" />
+      </div>
+    </section>
   )
 }
 
