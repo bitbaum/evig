@@ -23,8 +23,6 @@ import { cn } from '@/lib/utils'
  * known at render time and refreshes when the team edits the data file.
  */
 
-type ImpactCardKey = 'ewaste' | 'workshop' | 'co2' | 'reuse'
-
 type Milestone = {
   key: MilestoneKey
   date: string
@@ -46,12 +44,6 @@ type StatusMessages = {
     modelsLabel: string
     pilotsLabel: string
     intakeLabel: string
-  }
-  impact: {
-    title: string
-    intro: string
-    disclaimer: string
-    cards: { key: ImpactCardKey; label: string; unit: string }[]
   }
   timeline: {
     title: string
@@ -75,16 +67,6 @@ const CALL_HREF: Record<'fund' | 'pilot' | 'donate', string> = {
   fund: '/contact',
   pilot: '/contact',
   donate: '/get-involved/donate',
-}
-
-/** Maps every impact-card slug to the matching numeric in the data SSOT.
- *  Centralised so adding a card means one new row in the i18n list plus
- *  one row here — never a per-component switch statement. */
-const IMPACT_VALUE: Record<ImpactCardKey, number> = {
-  ewaste:   UPCYCLING_STATUS.impact.eWasteAvoidedKg,
-  workshop: UPCYCLING_STATUS.impact.workshopHours,
-  co2:      UPCYCLING_STATUS.impact.co2SavedKg,
-  reuse:    UPCYCLING_STATUS.impact.reuseRatePercent,
 }
 
 export async function generateMetadata() {
@@ -112,7 +94,6 @@ export default async function UpcyclingStatusPage() {
         snapshotIso={status.snapshotIso}
       />
       <Production section={m.production} numbers={status.production} />
-      <Impact section={m.impact} />
       <Timeline section={m.timeline} statuses={status.milestoneStatuses} />
       <Partners section={m.partners} />
       <Calls section={m.calls} />
@@ -236,43 +217,6 @@ function SecondaryMetric({ label, value }: { label: string; value: number }) {
       </dd>
       <dt className="text-xs uppercase tracking-[0.18em] text-text-tertiary">{label}</dt>
     </div>
-  )
-}
-
-/* ─── Impact ────────────────────────────────────────────────────── */
-
-function Impact({ section }: { section: StatusMessages['impact'] }) {
-  return (
-    <section className="border-b border-subtle bg-surface-raised">
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-          <h2 className="ui-public-display-md">{section.title}</h2>
-          <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-            {section.disclaimer}
-          </span>
-        </div>
-        <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
-
-        <dl className="mt-10 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-          {section.cards.map((card) => (
-            <div
-              key={card.key}
-              className="rounded-xl border border-subtle bg-surface-base p-5 sm:p-6"
-            >
-              <dd className="flex items-baseline gap-1.5">
-                <span className="font-mono text-3xl font-light leading-none tabular-nums text-text-primary sm:text-4xl">
-                  {IMPACT_VALUE[card.key]}
-                </span>
-                <span className="font-mono text-sm text-text-tertiary">{card.unit}</span>
-              </dd>
-              <dt className="mt-3 text-xs uppercase tracking-[0.18em] text-text-tertiary">
-                {card.label}
-              </dt>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
   )
 }
 

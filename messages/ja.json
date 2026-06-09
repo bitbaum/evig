@@ -4152,7 +4152,12 @@
             "author": "Daniel",
             "publishedAt": "2026-05-28"
           }
-        ]
+        ],
+        "moreComing": {
+          "title": "他のガイドも準備中",
+          "body": "次のモデル（Dell、HP、Acer）を順次ドキュメント化しています。公開時に通知します。",
+          "cta": "更新を受け取る"
+        }
       },
       "nav": {
         "brand": "モニターアップサイクリング",
@@ -4307,7 +4312,12 @@
               "duration": "約 1 時間",
               "author": "Daniel"
             }
-          ]
+          ],
+          "moreComing": {
+            "title": "他のガイドも準備中",
+            "body": "次のモデル（Dell、HP、Acer）を順次ドキュメント化しています。公開時に通知します。",
+            "cta": "更新を受け取る"
+          }
         },
         "source": {
           "title": "ソースコードとライセンス",
@@ -4495,33 +4505,6 @@
           "modelsLabel": "手順書のあるモデル",
           "pilotsLabel": "稼働中のパイロット拠点",
           "intakeLabel": "処理中のモニター"
-        },
-        "impact": {
-          "title": "インパクト — 推定値",
-          "intro": "これらの数値は、これまでの生産実績と、1 台あたりの典型的なエネルギー・材料の値に基づく内部推定です。確定的なバランスシートは ZHAW が最終報告書で作成します ( 2026 年 Q3 予定 )。",
-          "disclaimer": "推定値 — 検証済みの数値は ZHAW の LCA とともに公開予定",
-          "cards": [
-            {
-              "key": "ewaste",
-              "label": "削減した電子廃棄物",
-              "unit": "kg"
-            },
-            {
-              "key": "workshop",
-              "label": "ワークショップでの作業時間",
-              "unit": "h"
-            },
-            {
-              "key": "co2",
-              "label": "CO₂ 削減量 ( 推定 )",
-              "unit": "kg"
-            },
-            {
-              "key": "reuse",
-              "label": "再利用率",
-              "unit": "%"
-            }
-          ]
         },
         "timeline": {
           "title": "マイルストーン",

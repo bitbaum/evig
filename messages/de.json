@@ -5528,7 +5528,12 @@
             "author": "Daniel",
             "publishedAt": "2026-05-28"
           }
-        ]
+        ],
+        "moreComing": {
+          "title": "Weitere Anleitungen folgen",
+          "body": "Wir dokumentieren die nächsten Modelle (Dell, HP, Acer). Auf dem Laufenden bleiben.",
+          "cta": "Updates erhalten"
+        }
       },
       "nav": {
         "brand": "MONITOR-UPCYCLING",
@@ -5683,7 +5688,12 @@
               "author": "Daniel"
             }
           ],
-          "empty": "Noch keine Anleitungen veröffentlicht."
+          "empty": "Noch keine Anleitungen veröffentlicht.",
+          "moreComing": {
+            "title": "Weitere Anleitungen folgen",
+            "body": "Wir dokumentieren die nächsten Modelle (Dell, HP, Acer). Auf dem Laufenden bleiben.",
+            "cta": "Updates erhalten"
+          }
         },
         "source": {
           "title": "Quellcode & Lizenz",
@@ -5871,33 +5881,6 @@
           "modelsLabel": "Modelle mit Anleitung",
           "pilotsLabel": "Pilot-Standorte aktiv",
           "intakeLabel": "Monitore in Bearbeitung"
-        },
-        "impact": {
-          "title": "Wirkung — Schätzung",
-          "intro": "Diese Werte sind interne Schätzungen, basierend auf der bisherigen Produktion und auf typischen Energie- und Materialwerten pro Gerät. Die definitive Bilanz erstellt die ZHAW im Schlussbericht (geplant Q3 2026).",
-          "disclaimer": "Schätzung — verifizierte Werte folgen mit ZHAW-LCA",
-          "cards": [
-            {
-              "key": "ewaste",
-              "label": "E-Schrott vermieden",
-              "unit": "kg"
-            },
-            {
-              "key": "workshop",
-              "label": "Stunden in Werkstätten",
-              "unit": "h"
-            },
-            {
-              "key": "co2",
-              "label": "CO₂-Einsparung (geschätzt)",
-              "unit": "kg"
-            },
-            {
-              "key": "reuse",
-              "label": "Wiederverwendungs-Rate",
-              "unit": "%"
-            }
-          ]
         },
         "timeline": {
           "title": "Meilensteine",

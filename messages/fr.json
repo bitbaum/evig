@@ -5839,7 +5839,12 @@
             "author": "Daniel",
             "publishedAt": "2026-05-28"
           }
-        ]
+        ],
+        "moreComing": {
+          "title": "D'autres guides arrivent",
+          "body": "Nous documentons les prochains modèles (Dell, HP, Acer). Soyez informé·e dès leur publication.",
+          "cta": "Recevoir les nouvelles"
+        }
       },
       "nav": {
         "brand": "UPCYCLING D'ÉCRANS",
@@ -5994,7 +5999,12 @@
               "duration": "≈ 1 h",
               "author": "Daniel"
             }
-          ]
+          ],
+          "moreComing": {
+            "title": "D'autres guides arrivent",
+            "body": "Nous documentons les prochains modèles (Dell, HP, Acer). Soyez informé·e dès leur publication.",
+            "cta": "Recevoir les nouvelles"
+          }
         },
         "source": {
           "title": "Code source et licence",
@@ -6182,33 +6192,6 @@
           "modelsLabel": "Modèles avec guide",
           "pilotsLabel": "Sites pilotes actifs",
           "intakeLabel": "Écrans en traitement"
-        },
-        "impact": {
-          "title": "Impact — estimation",
-          "intro": "Ces valeurs sont des estimations internes, basées sur la production réalisée à ce jour et sur des valeurs typiques d'énergie et de matériau par appareil. Le bilan définitif sera établi par la ZHAW dans son rapport final (prévu pour le 3e trimestre 2026).",
-          "disclaimer": "Estimation — les valeurs vérifiées suivront avec l'ACV de la ZHAW",
-          "cards": [
-            {
-              "key": "ewaste",
-              "label": "Déchets électroniques évités",
-              "unit": "kg"
-            },
-            {
-              "key": "workshop",
-              "label": "Heures en ateliers",
-              "unit": "h"
-            },
-            {
-              "key": "co2",
-              "label": "Économie de CO₂ (estimée)",
-              "unit": "kg"
-            },
-            {
-              "key": "reuse",
-              "label": "Taux de réemploi",
-              "unit": "%"
-            }
-          ]
         },
         "timeline": {
           "title": "Jalons",

@@ -37,7 +37,16 @@ type PageMessages = {
   open_questions: { title: string; questions: string[] }
   source: { title: string; description: string }
   ai_brainstorm: { title: string; intro: string; prompts: Array<{ title: string; prompt: string }> }
-  guides: { eyebrow: string; title: string; intro: string; openCta: string; items: GuideItem[] }
+  guides: {
+    eyebrow: string
+    title: string
+    intro: string
+    openCta: string
+    items: GuideItem[]
+    /** Rendered as a subdued companion card when only one guide exists yet —
+     *  signals progress without inventing a fake guide. */
+    moreComing: { title: string; body: string; cta: string }
+  }
   explore: { eyebrow: string; title: string; intro: string; cards: ExploreCard[] }
   needs: NeedsSectionLabels
 }
@@ -169,6 +178,10 @@ function ExploreSection({ explore }: { explore: PageMessages['explore'] }) {
 
 function GuidesSection({ guides }: { guides: PageMessages['guides'] }) {
   if (!guides?.items?.length) return null
+  // Single-guide state: pair the real guide with a "more coming" companion
+  // card so visitors see momentum (not "only one thing exists") — honest
+  // about what's published, transparent about what's queued.
+  const isSingle = guides.items.length === 1
   return (
     <section className="bg-canvas border-t border-subtle py-16 sm:py-20">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -194,6 +207,21 @@ function GuidesSection({ guides }: { guides: PageMessages['guides'] }) {
               </span>
             </Link>
           ))}
+          {isSingle && guides.moreComing && (
+            <div className="flex flex-col rounded-lg border border-dashed border-subtle bg-canvas p-6">
+              <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+                {guides.moreComing.title}
+              </div>
+              <p className="mt-3 text-sm text-text-secondary">{guides.moreComing.body}</p>
+              <Link
+                href="/projects/upcycling/build-your-own"
+                className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action hover:gap-2 transition-all"
+              >
+                {guides.moreComing.cta}
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

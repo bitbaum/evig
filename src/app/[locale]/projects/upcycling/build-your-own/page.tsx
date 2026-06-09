@@ -40,6 +40,7 @@ type PageMessages = {
     openCta: string
     items: GuideItem[]
     empty: string
+    moreComing: { title: string; body: string; cta: string }
   }
   source: {
     title: string
@@ -186,6 +187,23 @@ export default async function UpcyclingBuildYourOwnPage() {
                   </Link>
                 </li>
               ))}
+              {m.guides.items.length === 1 && m.guides.moreComing && (
+                <li>
+                  <div className="flex h-full flex-col rounded-lg border border-dashed border-subtle bg-canvas p-6">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+                      {m.guides.moreComing.title}
+                    </div>
+                    <p className="mt-3 text-sm leading-relaxed text-text-secondary">{m.guides.moreComing.body}</p>
+                    <Link
+                      href="/contact"
+                      className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action hover:gap-2 transition-all"
+                    >
+                      {m.guides.moreComing.cta}
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </li>
+              )}
             </ul>
           )}
         </div>

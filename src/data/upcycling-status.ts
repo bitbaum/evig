@@ -38,6 +38,11 @@ export const UPCYCLING_STATUS = {
   /** ISO date of the snapshot — used for the "Stand: <date>" header. */
   snapshotIso: '2026-06-08',
 
+  /**
+   * Production counters — every value here is a team-confirmed integer.
+   * If a number can't be defended at a team meeting it doesn't belong on
+   * the public status page; remove it instead of guessing.
+   */
   production: {
     /** Lamps physically built and quality-checked. */
     lampsBuilt: 12,
@@ -51,17 +56,13 @@ export const UPCYCLING_STATUS = {
     monitorsInIntake: 24,
   },
 
-  /**
-   * Interim impact figures. Each value is rounded to a no-false-precision
-   * granularity (see [[pattern_co2_credibility]] in memory). The ZHAW LCA
-   * report will replace these with verified numbers in Q3 2026.
+  /*
+   * Impact figures intentionally NOT stored here. Until the ZHAW LCA
+   * report lands (Q3 2026) we have no verifiable CO₂ / e-waste / reuse-
+   * rate numbers specific to this pilot — any number we put here would
+   * be fabrication. Once the LCA arrives, add an `impact: { … }` block
+   * sourced from the report and surface it on the status page.
    */
-  impact: {
-    eWasteAvoidedKg: 145,
-    workshopHours: 86,
-    co2SavedKg: 220,
-    reuseRatePercent: 78,
-  },
 
   /** Milestone statuses keyed by the same slug as the i18n timeline.items. */
   milestoneStatuses: {

@@ -5785,7 +5785,12 @@
             "author": "Daniel",
             "publishedAt": "2026-05-28"
           }
-        ]
+        ],
+        "moreComing": {
+          "title": "More guides on the way",
+          "body": "We're documenting the next models (Dell, HP, Acer). Get notified when they land.",
+          "cta": "Get updates"
+        }
       },
       "nav": {
         "brand": "MONITOR UPCYCLING",
@@ -5940,7 +5945,12 @@
               "duration": "≈ 1 h",
               "author": "Daniel"
             }
-          ]
+          ],
+          "moreComing": {
+            "title": "More guides on the way",
+            "body": "We're documenting the next models (Dell, HP, Acer). Get notified when they land.",
+            "cta": "Get updates"
+          }
         },
         "source": {
           "title": "Source code & license",
@@ -6128,33 +6138,6 @@
           "modelsLabel": "Models with build guide",
           "pilotsLabel": "Active pilot locations",
           "intakeLabel": "Monitors in processing"
-        },
-        "impact": {
-          "title": "Impact — estimate",
-          "intro": "These figures are internal estimates, based on production to date and on typical energy and material values per device. The definitive assessment will be produced by ZHAW in their final report (planned for Q3 2026).",
-          "disclaimer": "Estimate — verified figures will follow with the ZHAW LCA",
-          "cards": [
-            {
-              "key": "ewaste",
-              "label": "E-waste avoided",
-              "unit": "kg"
-            },
-            {
-              "key": "workshop",
-              "label": "Hours in workshops",
-              "unit": "h"
-            },
-            {
-              "key": "co2",
-              "label": "CO₂ savings (estimated)",
-              "unit": "kg"
-            },
-            {
-              "key": "reuse",
-              "label": "Reuse rate",
-              "unit": "%"
-            }
-          ]
         },
         "timeline": {
           "title": "Milestones",

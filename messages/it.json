@@ -4152,7 +4152,12 @@
             "author": "Daniel",
             "publishedAt": "2026-05-28"
           }
-        ]
+        ],
+        "moreComing": {
+          "title": "Altre guide in arrivo",
+          "body": "Stiamo documentando i prossimi modelli (Dell, HP, Acer). Ti avvisiamo quando saranno pronte.",
+          "cta": "Ricevi aggiornamenti"
+        }
       },
       "nav": {
         "brand": "UPCYCLING DI MONITOR",
@@ -4307,7 +4312,12 @@
               "duration": "≈ 1 h",
               "author": "Daniel"
             }
-          ]
+          ],
+          "moreComing": {
+            "title": "Altre guide in arrivo",
+            "body": "Stiamo documentando i prossimi modelli (Dell, HP, Acer). Ti avvisiamo quando saranno pronte.",
+            "cta": "Ricevi aggiornamenti"
+          }
         },
         "source": {
           "title": "Codice sorgente e licenza",
@@ -4495,33 +4505,6 @@
           "modelsLabel": "Modelli con istruzioni",
           "pilotsLabel": "Sedi pilota attive",
           "intakeLabel": "Monitor in lavorazione"
-        },
-        "impact": {
-          "title": "Impatto — stima",
-          "intro": "Questi valori sono stime interne, basate sulla produzione finora realizzata e su valori tipici di energia e materiali per dispositivo. Il bilancio definitivo sarà redatto dalla ZHAW nel rapporto finale (previsto per il terzo trimestre 2026).",
-          "disclaimer": "Stima — i valori verificati seguiranno con la LCA della ZHAW",
-          "cards": [
-            {
-              "key": "ewaste",
-              "label": "Rifiuti elettronici evitati",
-              "unit": "kg"
-            },
-            {
-              "key": "workshop",
-              "label": "Ore in officina",
-              "unit": "h"
-            },
-            {
-              "key": "co2",
-              "label": "Risparmio di CO₂ (stimato)",
-              "unit": "kg"
-            },
-            {
-              "key": "reuse",
-              "label": "Tasso di riutilizzo",
-              "unit": "%"
-            }
-          ]
         },
         "timeline": {
           "title": "Tappe",

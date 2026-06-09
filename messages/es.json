@@ -4152,7 +4152,12 @@
             "author": "Daniel",
             "publishedAt": "2026-05-28"
           }
-        ]
+        ],
+        "moreComing": {
+          "title": "Más guías en camino",
+          "body": "Estamos documentando los próximos modelos (Dell, HP, Acer). Te avisamos cuando estén listas.",
+          "cta": "Recibir avisos"
+        }
       },
       "nav": {
         "brand": "UPCYCLING DE MONITORES",
@@ -4307,7 +4312,12 @@
               "duration": "≈ 1 h",
               "author": "Daniel"
             }
-          ]
+          ],
+          "moreComing": {
+            "title": "Más guías en camino",
+            "body": "Estamos documentando los próximos modelos (Dell, HP, Acer). Te avisamos cuando estén listas.",
+            "cta": "Recibir avisos"
+          }
         },
         "source": {
           "title": "Código fuente y licencia",
@@ -4495,33 +4505,6 @@
           "modelsLabel": "Modelos con instrucciones",
           "pilotsLabel": "Emplazamientos piloto activos",
           "intakeLabel": "Monitores en proceso"
-        },
-        "impact": {
-          "title": "Impacto — estimación",
-          "intro": "Estos valores son estimaciones internas, basadas en la producción realizada hasta ahora y en valores típicos de energía y materiales por equipo. El balance definitivo lo elaborará la ZHAW en el informe final (previsto para el tercer trimestre de 2026).",
-          "disclaimer": "Estimación — los valores verificados se publicarán con el ACV de la ZHAW",
-          "cards": [
-            {
-              "key": "ewaste",
-              "label": "Residuos electrónicos evitados",
-              "unit": "kg"
-            },
-            {
-              "key": "workshop",
-              "label": "Horas en talleres",
-              "unit": "h"
-            },
-            {
-              "key": "co2",
-              "label": "Ahorro de CO₂ (estimado)",
-              "unit": "kg"
-            },
-            {
-              "key": "reuse",
-              "label": "Tasa de reutilización",
-              "unit": "%"
-            }
-          ]
         },
         "timeline": {
           "title": "Hitos",
