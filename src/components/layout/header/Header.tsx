@@ -33,21 +33,45 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [anyDropdownOpen, setAnyDropdownOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  // "headroom" pattern: header hides on scroll DOWN past a threshold,
+  // re-appears on scroll UP. Always visible near the top of the page so
+  // the brand isn't missing on first paint.
+  const [isHidden, setIsHidden] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
+  const lastScrollY = useRef(0)
 
   // Filter navigation - separate main nav from action items
   const primaryNavItems = mainNavigation.filter(item => !item.highlight)
   const contactItem = mainNavigation.find(item => item.highlight)
 
-  // Scroll detection for header styling
+  // Scroll detection for header styling + smart hide/show.
+  // Threshold of 5px on the delta filters out micro-jitter from trackpads
+  // and inertial scrolling; 120px floor below which we never hide so the
+  // header always appears near the top of any page.
   useEffect(() => {
+    const REVEAL_FLOOR = 120
+    const DELTA_THRESHOLD = 5
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10)
+      const currentY = window.scrollY
+      const delta = currentY - lastScrollY.current
+      setIsScrolled(currentY > 10)
+      if (currentY < REVEAL_FLOOR) {
+        setIsHidden(false)
+      } else if (delta > DELTA_THRESHOLD) {
+        setIsHidden(true)
+      } else if (delta < -DELTA_THRESHOLD) {
+        setIsHidden(false)
+      }
+      lastScrollY.current = currentY
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Never hide the header while a dropdown is open — folding nav out from
+  // under the user mid-interaction is disorienting.
+  const effectivelyHidden = isHidden && !anyDropdownOpen && !mobileMenuOpen
 
   // Escape key to close mobile menu
   useEffect(() => {
@@ -65,8 +89,13 @@ export function Header() {
       <header
         ref={headerRef}
         className={cn(
-          "fixed top-0 left-0 right-0 z-50",
-          "transition-all duration-300",
+          // z-40 sits BELOW any per-section sub-nav (z-50) so a sticky
+          // sub-nav (e.g. /projects/upcycling) remains visible when the
+          // header animates back in on scroll up. Headroom pattern: hidden
+          // = slide up by full height with a soft transition.
+          "fixed top-0 left-0 right-0 z-40",
+          "transition-[transform,background-color,backdrop-filter,border-color] duration-300 ease-out",
+          effectivelyHidden ? "-translate-y-full" : "translate-y-0",
           // Scrolled state: border-only (no shadow). Double-cueing scroll
           // with both shadow + border was a calmer-than-x.com signal.
           isScrolled || anyDropdownOpen
