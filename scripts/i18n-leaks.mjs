@@ -86,7 +86,25 @@ const en = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'en.json'), 'utf8'
 
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
 
+// CI-gate mode: when called as `i18n-leaks.mjs --check`, exit non-zero if
+// any locale grows ABOVE its baseline count. Baseline accepts known false
+// positives (Swiss NGO names, file paths, brand tokens like Strapi/Tina,
+// English-style email placeholders). Run with `--update-baseline` after a
+// real fix lands to rebaseline.
+const isCheck = process.argv.includes('--check')
+const isUpdateBaseline = process.argv.includes('--update-baseline')
+const BASELINE_PATH = join(__dirname, 'baselines', 'i18n-leaks.json')
+
+const baseline = (() => {
+  try {
+    return JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))
+  } catch {
+    return {}
+  }
+})()
+
 let total = 0
+const counts = {}
 for (const loc of LOCALES) {
   const data = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, `${loc}.json`), 'utf8')))
   const leaks = {}
@@ -105,8 +123,33 @@ for (const loc of LOCALES) {
   }
   const count = Object.keys(leaks).length
   total += count
+  counts[loc] = count
   const outPath = join(OUT_DIR, `${loc}-leaks.json`)
   writeFileSync(outPath, JSON.stringify(leaks, null, 2) + '\n', 'utf8')
   console.log(`  ${loc}: ${count} leak(s) → ${outPath.replace(ROOT + '/', '')}`)
 }
 console.log(`\nTotal leaks across ${LOCALES.length} locales: ${total}`)
+
+if (isUpdateBaseline) {
+  writeFileSync(BASELINE_PATH, JSON.stringify(counts, null, 2) + '\n', 'utf8')
+  console.log(`\n✓ Baseline updated: ${BASELINE_PATH.replace(ROOT + '/', '')}`)
+  process.exit(0)
+}
+
+if (isCheck) {
+  const regressions = []
+  for (const loc of LOCALES) {
+    const base = baseline[loc] ?? 0
+    if (counts[loc] > base) {
+      regressions.push(`  ${loc}: ${counts[loc]} > baseline ${base} (+${counts[loc] - base})`)
+    }
+  }
+  if (regressions.length > 0) {
+    console.error(`\n✗ i18n leak regression vs baseline:`)
+    regressions.forEach((r) => console.error(r))
+    console.error(`\n  Fix the new German leaks, or after a deliberate baseline shift run:`)
+    console.error(`    npm run compliance:i18n-leaks -- --update-baseline`)
+    process.exit(1)
+  }
+  console.log(`\n✓ No i18n leak regressions vs baseline.`)
+}
