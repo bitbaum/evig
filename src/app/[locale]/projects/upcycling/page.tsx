@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
-import { Lightbulb, ArrowRight } from 'lucide-react'
+import { Lightbulb, ArrowRight, Layers, Image as ImageIcon, Wrench } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import {
   ProjectHero,
@@ -19,6 +20,13 @@ type GuideItem = {
   publishedAt: string
 }
 
+type ExploreCard = {
+  key: 'applications' | 'gallery' | 'buildYourOwn'
+  title: string
+  description: string
+  cta: string
+}
+
 type PageMessages = {
   meta: { title: string; description: string }
   hero: { title: string; description: string; cta1: string; cta2: string }
@@ -30,6 +38,7 @@ type PageMessages = {
   source: { title: string; description: string }
   ai_brainstorm: { title: string; intro: string; prompts: Array<{ title: string; prompt: string }> }
   guides: { eyebrow: string; title: string; intro: string; openCta: string; items: GuideItem[] }
+  explore: { eyebrow: string; title: string; intro: string; cards: ExploreCard[] }
   needs: NeedsSectionLabels
 }
 
@@ -94,7 +103,8 @@ export default async function UpcyclingPage() {
 
   return (
     <div className="min-h-screen">
-      <ProjectHero hero={config.hero} />
+      {config.hero && <ProjectHero hero={config.hero} />}
+      <ExploreSection explore={p.explore} />
       {config.sections.map((section, i) => (
         <ProjectSection key={i} section={section} />
       ))}
@@ -102,6 +112,55 @@ export default async function UpcyclingPage() {
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
       {config.cta && <ProjectCallToAction cta={config.cta} />}
     </div>
+  )
+}
+
+const EXPLORE_META: Record<
+  ExploreCard['key'],
+  { href: string; icon: LucideIcon }
+> = {
+  applications: { href: '/projects/upcycling/applications',   icon: Layers },
+  gallery:      { href: '/projects/upcycling/gallery',        icon: ImageIcon },
+  buildYourOwn: { href: '/projects/upcycling/build-your-own', icon: Wrench },
+}
+
+function ExploreSection({ explore }: { explore: PageMessages['explore'] }) {
+  if (!explore?.cards?.length) return null
+  return (
+    <section className="bg-surface-base border-t border-subtle py-14 sm:py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <div className="ui-public-eyebrow">{explore.eyebrow}</div>
+          <h2 className="ui-public-display-md mt-3">{explore.title}</h2>
+          <p className="ui-public-section-lede mx-auto mt-3">{explore.intro}</p>
+        </div>
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {explore.cards.map((card) => {
+            const meta = EXPLORE_META[card.key]
+            if (!meta) return null
+            const Icon = meta.icon
+            return (
+              <Link
+                key={card.key}
+                href={meta.href}
+                className="group flex flex-col rounded-lg border border-subtle bg-surface-raised p-6 transition-colors hover:border-default"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-action-muted/15">
+                  <Icon className="h-5 w-5 text-action" aria-hidden="true" />
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-text-primary">{card.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{card.description}</p>
+                <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
+                  {card.cta}
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </span>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }
 
