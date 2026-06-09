@@ -4184,7 +4184,8 @@
         "applications": "Aplicaciones",
         "gallery": "Galería",
         "buildYourOwn": "Constrúyelo tú mismo",
-        "status": "Estado"
+        "status": "Estado",
+        "businessPlan": "Plan de negocio"
       },
       "explore": {
         "eyebrow": "DESCUBRIR",
@@ -4716,13 +4717,13 @@
             },
             {
               "label": "Mano de obra (taller protegido, ~1 h)",
-              "value": "~CHF 40",
-              "aside": "Coste completo, incluido el acompañamiento"
+              "value": "~CHF 15",
+              "aside": "Contribución al taller — los salarios los paga el sistema social suizo (seguro de invalidez, programas de empleo asistido), no el presupuesto del proyecto"
             },
             {
-              "label": "Embalaje y entrega",
-              "value": "~CHF 15",
-              "aside": "Caja + etiqueta + envío"
+              "label": "Embalaje",
+              "value": "~CHF 3",
+              "aside": "Caja + etiqueta — sin embalaje premium"
             },
             {
               "label": "Gastos de proyecto imputados",
@@ -4731,7 +4732,7 @@
             },
             {
               "label": "Coste unitario aproximado",
-              "value": "~CHF 100",
+              "value": "~CHF 65",
               "aside": "Suelo para la tarificación",
               "emphasis": true
             }
@@ -4743,17 +4744,17 @@
         },
         "funding": {
           "title": "Cómo se financia el proyecto",
-          "body": "Tres fuentes. Ninguna basta por sí sola; juntas sostienen la serie pequeña y el informe LCA.",
+          "body": "Tres fuentes. La mezcla se desplaza serie a serie — al principio, las fundaciones cubren la preparación (LCA, CE, herramientas); más tarde, las ventas asumen una cuota creciente.",
           "sources": [
             {
               "label": "Ventas",
-              "share": "~40 %",
-              "note": "CHF 150–250 por lámpara × ~70 lámparas en la serie pequeña"
+              "share": "~50 %",
+              "note": "CHF 150–250 por lámpara × ~70 lámparas — con coste unitario de ~CHF 65, el margen es el portador principal"
             },
             {
               "label": "Fundaciones y programas de financiación",
-              "share": "~50 %",
-              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — solicitudes paralelas"
+              "share": "~40 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — financian sobre todo LCA, herramientas y preparación CE"
             },
             {
               "label": "Aportaciones de los socios piloto",
@@ -4764,10 +4765,74 @@
         },
         "sustainability": {
           "title": "¿A partir de cuándo se sostiene el modelo sin subvenciones?",
-          "body": "No antes de la segunda serie — y solo si (a) el coste unitario en producción baja a ~CHF 80 y (b) el precio de venta de CHF 200+ se mantiene con clientes B2B recurrentes. Ambas son incógnitas. Hacemos la serie pequeña precisamente para conocer esa curva antes de escalar."
+          "body": "Realísticamente desde la serie 2 — un coste unitario de ~CHF 65 deja margen, siempre que (a) la colaboración con el taller protegido se mantenga y (b) los clientes B2B recurrentes acepten al menos CHF 150. La fragilidad estructural: el modelo depende de un mercado laboral subvencionado. Si tuviéramos que pagar salarios de mercado, el suelo subiría a ~CHF 120 y el precio de venta debería superar CHF 250."
         },
         "transparency": {
           "note": "Estas cifras son provisionales. Corrige, amplía, critica — todo a",
+          "cta": "kontakt@revamp-it.ch"
+        }
+      },
+      "businessPlan": {
+        "meta": {
+          "title": "Plan de negocio e investigación",
+          "description": "Informes, estudios y la base económica del proyecto de reciclaje de monitores."
+        },
+        "eyebrow": "PLAN DE NEGOCIO",
+        "title": "Informes, investigación y la base económica.",
+        "intro": "Esta sección reúne el material que una fundación, una autoridad pública o una cooperativa necesitan para decidir: ¿es viable el proyecto? ¿Están revisadas las cifras? ¿Quién asume el riesgo? Enlazamos todo lo que tenemos — y decimos abiertamente lo que aún falta.",
+        "pillars": {
+          "title": "Lo que ya está documentado",
+          "items": [
+            {
+              "title": "Coste unitario y precios",
+              "description": "Desglose por lámpara, rango de precio de la serie piloto, sensibilidad a la mano de obra subvencionada.",
+              "href": "/projects/upcycling/status#economics",
+              "cta": "Ver economía"
+            },
+            {
+              "title": "Mezcla de financiación",
+              "description": "~50 % ventas, ~40 % fundaciones, ~10 % socios piloto. Con los programas concretos en los que tenemos solicitudes abiertas.",
+              "href": "/projects/upcycling/status#economics",
+              "cta": "Ver financiación"
+            },
+            {
+              "title": "Hoja de ruta e hitos",
+              "description": "Dónde está el proyecto hoy, qué viene después, qué socios están implicados.",
+              "href": "/projects/upcycling/status",
+              "cta": "Ver estado"
+            },
+            {
+              "title": "Método y fuentes",
+              "description": "Cómo calculamos los ahorros de CO₂ y materiales, con referencias a Circular Computing, Öko-Institut y Apple PER.",
+              "href": "/transparenz/co2",
+              "cta": "Ver transparencia"
+            }
+          ]
+        },
+        "research": {
+          "title": "Lo que estamos estudiando",
+          "intro": "Estos estudios están en curso o encargados. Los resultados aparecerán aquí en cuanto sean sólidos.",
+          "items": [
+            {
+              "title": "Análisis de ciclo de vida (ACV) — ZHAW",
+              "status": "En curso · Resultados T3 2026",
+              "description": "Análisis de ciclo de vida completo de la lámpara Lenovo L2251pwd reconvertida frente a una lámpara LED nueva de brillo comparable. Método: ISO 14040/14044."
+            },
+            {
+              "title": "Disposición a pagar B2B",
+              "status": "Planeado · T4 2026",
+              "description": "Entrevistas estructuradas con ~10 gestoras inmobiliarias y agencias de diseño para validar la franja CHF 150–250."
+            },
+            {
+              "title": "Conformidad CE",
+              "status": "En preparación · T4 2026",
+              "description": "Directiva de baja tensión, CEM, RoHS. Laboratorio externo para la serie piloto del T4."
+            }
+          ]
+        },
+        "downloads": {
+          "title": "Descargas",
+          "note": "Los informes se enlazarán aquí cuando se publiquen. Si necesita un borrador temprano para una decisión de financiación, escríbanos — compartimos honestamente el estado de trabajo actual.",
           "cta": "kontakt@revamp-it.ch"
         }
       }

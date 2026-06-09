@@ -5560,7 +5560,8 @@
         "applications": "Einsatz",
         "gallery": "Galerie",
         "buildYourOwn": "Selber bauen",
-        "status": "Status"
+        "status": "Status",
+        "businessPlan": "Geschäftsplan"
       },
       "explore": {
         "eyebrow": "ENTDECKEN",
@@ -6092,13 +6093,13 @@
             },
             {
               "label": "Arbeit (geschützte Werkstatt, ~1 h)",
-              "value": "~CHF 40",
-              "aside": "Vollkosten inkl. Begleitung"
+              "value": "~CHF 15",
+              "aside": "Werkstattbeitrag — Löhne werden vom Sozialsystem (IV, Sozialhilfe) getragen, nicht aus Projektbudget"
             },
             {
-              "label": "Verpackung & Auslieferung",
-              "value": "~CHF 15",
-              "aside": "Karton + Etikett + Versand"
+              "label": "Verpackung",
+              "value": "~CHF 3",
+              "aside": "Karton + Etikett — kein Premium-Packaging"
             },
             {
               "label": "Indirekte Projektkosten anteilig",
@@ -6107,7 +6108,7 @@
             },
             {
               "label": "Grobe Stückkosten",
-              "value": "~CHF 100",
+              "value": "~CHF 65",
               "aside": "Untergrenze für die Preisbildung",
               "emphasis": true
             }
@@ -6119,17 +6120,17 @@
         },
         "funding": {
           "title": "Wie sich das Projekt finanziert",
-          "body": "Drei Quellen. Keine ist gross genug allein, alle drei zusammen tragen die Kleinserie und den LCA-Bericht.",
+          "body": "Drei Quellen. Die Mischung verschiebt sich Serie für Serie — am Anfang tragen Stiftungen die Vorbereitung (LCA, CE, Werkzeuge), später übernehmen Verkäufe einen wachsenden Anteil.",
           "sources": [
             {
               "label": "Verkauf",
-              "share": "~40 %",
-              "note": "CHF 150–250 pro Leuchte × ~70 Stück Kleinserie"
+              "share": "~50 %",
+              "note": "CHF 150–250 pro Leuchte × ~70 Stück Kleinserie — bei ~CHF 65 Stückkosten ist die Marge der Hauptträger"
             },
             {
               "label": "Stiftungen & Förderfonds",
-              "share": "~50 %",
-              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — parallele Anträge"
+              "share": "~40 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — finanzieren primär LCA, Werkzeugbau und CE-Vorbereitung"
             },
             {
               "label": "Pilot-Partnerbeiträge",
@@ -6140,10 +6141,74 @@
         },
         "sustainability": {
           "title": "Ab wann trägt sich das Modell ohne Stiftungen?",
-          "body": "Frühestens ab der zweiten Serie — und nur, wenn (a) die Stückkosten in der Produktion auf ~CHF 80 sinken und (b) der Verkaufspreis von wiederkehrenden B2B-Kunden bei CHF 200+ akzeptiert wird. Beides ist offen. Wir bauen die Kleinserie genau dafür: um die Kurve zu kennen, bevor wir skalieren."
+          "body": "Realistisch ab Serie 2 — die Stückkosten von ~CHF 65 lassen Spielraum, sofern (a) die geschützte Werkstatt-Partnerschaft bestehen bleibt und (b) wiederkehrende B2B-Kunden mindestens CHF 150 akzeptieren. Die strukturelle Fragilität: das Modell hängt vom subventionierten Arbeitsmarkt ab. Würden wir Marktlöhne zahlen müssen, läge die Untergrenze bei ~CHF 120 und der Verkauf müsste CHF 250+ tragen."
         },
         "transparency": {
           "note": "Diese Zahlen sind Arbeitsstand. Bitte korrigieren, ergänzen, kritisch nachfragen — alles geht an",
+          "cta": "kontakt@revamp-it.ch"
+        }
+      },
+      "businessPlan": {
+        "meta": {
+          "title": "Geschäftsplan & Forschung",
+          "description": "Berichte, Studien und das wirtschaftliche Fundament des Monitor-Upcycling-Projekts."
+        },
+        "eyebrow": "GESCHÄFTSPLAN",
+        "title": "Berichte, Forschung und das wirtschaftliche Fundament.",
+        "intro": "Dieser Bereich sammelt das Material, das einer Stiftung, einer Behörde oder einer Genossenschaft die Entscheidung erleichtert: Ist das Projekt tragfähig? Sind die Zahlen geprüft? Wer trägt das Risiko? Wir verlinken auf alles, was wir haben — und sagen offen, was noch fehlt.",
+        "pillars": {
+          "title": "Was bereits dokumentiert ist",
+          "items": [
+            {
+              "title": "Stückkosten & Preisbildung",
+              "description": "Aufschlüsselung pro Leuchte, Preisbereich der Pilotserie, Sensitivität gegenüber subventionierter Arbeit.",
+              "href": "/projects/upcycling/status#economics",
+              "cta": "Wirtschaftlichkeit ansehen"
+            },
+            {
+              "title": "Finanzierungsmix",
+              "description": "~50 % Verkauf, ~40 % Stiftungen, ~10 % Pilot-Partner. Mit den konkreten Förderprogrammen, bei denen wir Anträge stellen.",
+              "href": "/projects/upcycling/status#economics",
+              "cta": "Finanzierung ansehen"
+            },
+            {
+              "title": "Roadmap & Meilensteine",
+              "description": "Wo das Projekt heute steht, was als Nächstes ansteht, welche Partner involviert sind.",
+              "href": "/projects/upcycling/status",
+              "cta": "Statusseite ansehen"
+            },
+            {
+              "title": "Methodik & Quellen",
+              "description": "Wie wir CO₂- und Materialeinsparungen berechnen, mit Verweisen auf Circular Computing, Öko-Institut und Apple PER.",
+              "href": "/transparenz/co2",
+              "cta": "Transparenz ansehen"
+            }
+          ]
+        },
+        "research": {
+          "title": "Was wir gerade untersuchen",
+          "intro": "Diese Studien laufen oder sind beauftragt. Ergebnisse erscheinen hier, sobald belastbar.",
+          "items": [
+            {
+              "title": "Ökobilanz (LCA) — ZHAW",
+              "status": "In Arbeit · Ergebnisse Q3 2026",
+              "description": "Vollständige Lebenszyklus-Analyse der Lenovo-L2251pwd-Umbauleuchte gegenüber einer neu produzierten LED-Leuchte vergleichbarer Helligkeit. Methodik: ISO 14040/14044."
+            },
+            {
+              "title": "Zahlungsbereitschaft B2B",
+              "status": "Geplant · Q4 2026",
+              "description": "Strukturierte Interviews mit ~10 Liegenschaftsverwaltungen und Designagenturen zur Validierung des Preisbereichs CHF 150–250."
+            },
+            {
+              "title": "CE-Konformität",
+              "status": "In Vorbereitung · Q4 2026",
+              "description": "Niederspannungsrichtlinie, EMV, RoHS. Externe Prüfstelle bei Q4-Pilotserie."
+            }
+          ]
+        },
+        "downloads": {
+          "title": "Downloads",
+          "note": "Berichte werden hier verlinkt, sobald sie veröffentlicht sind. Wenn Sie einen frühen Entwurf für eine Förderentscheidung benötigen, schreiben Sie uns — wir teilen den aktuellen Arbeitsstand gerne ehrlich.",
           "cta": "kontakt@revamp-it.ch"
         }
       }

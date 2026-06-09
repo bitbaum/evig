@@ -5817,7 +5817,8 @@
         "applications": "Use cases",
         "gallery": "Gallery",
         "buildYourOwn": "Build your own",
-        "status": "Status"
+        "status": "Status",
+        "businessPlan": "Business plan"
       },
       "explore": {
         "eyebrow": "EXPLORE",
@@ -6349,13 +6350,13 @@
             },
             {
               "label": "Labour (sheltered workshop, ~1 h)",
-              "value": "~CHF 40",
-              "aside": "Full cost incl. supervision"
+              "value": "~CHF 15",
+              "aside": "Workshop contribution only — wages are paid by the Swiss social system (disability insurance, supported-employment programs), not from the project budget"
             },
             {
-              "label": "Packaging & delivery",
-              "value": "~CHF 15",
-              "aside": "Box + label + shipping"
+              "label": "Packaging",
+              "value": "~CHF 3",
+              "aside": "Cardboard + label — no premium packaging"
             },
             {
               "label": "Allocated project overhead",
@@ -6364,7 +6365,7 @@
             },
             {
               "label": "Rough unit cost",
-              "value": "~CHF 100",
+              "value": "~CHF 65",
               "aside": "Floor for pricing",
               "emphasis": true
             }
@@ -6376,17 +6377,17 @@
         },
         "funding": {
           "title": "How the project pays for itself",
-          "body": "Three sources. None is big enough alone; together they carry the small series and the LCA report.",
+          "body": "Three sources. The mix shifts series by series — at the start, foundations cover the prep work (LCA, CE, tooling); later, sales take a growing share.",
           "sources": [
             {
               "label": "Sales",
-              "share": "~40 %",
-              "note": "CHF 150–250 per lamp × ~70 lamps in the small series"
+              "share": "~50 %",
+              "note": "CHF 150–250 per lamp × ~70 lamps in the small series — with ~CHF 65 unit cost, margin is the primary carrier"
             },
             {
               "label": "Foundations & funding programs",
-              "share": "~50 %",
-              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — parallel applications"
+              "share": "~40 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — primarily finance LCA, tooling and CE prep"
             },
             {
               "label": "Pilot partner contributions",
@@ -6397,10 +6398,74 @@
         },
         "sustainability": {
           "title": "When does the model carry itself without grants?",
-          "body": "Not before the second series — and only if (a) production unit cost drops to ~CHF 80 and (b) the sale price of CHF 200+ holds with repeat B2B customers. Both are unknown. We're running the small series precisely to find that curve before scaling."
+          "body": "Realistically from series 2 — ~CHF 65 unit cost leaves headroom, provided (a) the sheltered-workshop partnership holds and (b) repeat B2B customers accept at least CHF 150. The structural fragility: the model depends on a subsidised labour market. If we had to pay market wages, the floor would rise to ~CHF 120 and the sale price would need to clear CHF 250+."
         },
         "transparency": {
           "note": "These figures are work-in-progress. Please correct, extend, push back — write to",
+          "cta": "kontakt@revamp-it.ch"
+        }
+      },
+      "businessPlan": {
+        "meta": {
+          "title": "Business plan & research",
+          "description": "Reports, studies and the economic foundation of the monitor-upcycling project."
+        },
+        "eyebrow": "BUSINESS PLAN",
+        "title": "Reports, research, and the economic foundation.",
+        "intro": "This section gathers the material a foundation, public authority, or cooperative needs to decide: is the project viable? Are the numbers reviewed? Who carries the risk? We link to everything we have — and say openly what's still missing.",
+        "pillars": {
+          "title": "What is already documented",
+          "items": [
+            {
+              "title": "Unit cost & pricing",
+              "description": "Per-lamp breakdown, pilot-series price range, sensitivity to subsidised labour.",
+              "href": "/projects/upcycling/status#economics",
+              "cta": "View economics"
+            },
+            {
+              "title": "Funding mix",
+              "description": "~50 % sales, ~40 % foundations, ~10 % pilot partners. With the specific programs we have open applications with.",
+              "href": "/projects/upcycling/status#economics",
+              "cta": "View funding"
+            },
+            {
+              "title": "Roadmap & milestones",
+              "description": "Where the project stands today, what comes next, which partners are involved.",
+              "href": "/projects/upcycling/status",
+              "cta": "View status"
+            },
+            {
+              "title": "Method & sources",
+              "description": "How we compute CO₂ and material savings, with references to Circular Computing, Öko-Institut and Apple PER.",
+              "href": "/transparenz/co2",
+              "cta": "View transparency"
+            }
+          ]
+        },
+        "research": {
+          "title": "What we're currently studying",
+          "intro": "These studies are in progress or commissioned. Results land here once they hold up.",
+          "items": [
+            {
+              "title": "Life-cycle assessment (LCA) — ZHAW",
+              "status": "In progress · Results Q3 2026",
+              "description": "Full life-cycle analysis of the Lenovo L2251pwd retrofit lamp versus a newly produced LED lamp of comparable brightness. Method: ISO 14040/14044."
+            },
+            {
+              "title": "B2B willingness to pay",
+              "status": "Planned · Q4 2026",
+              "description": "Structured interviews with ~10 property managers and design agencies to validate the CHF 150–250 price range."
+            },
+            {
+              "title": "CE conformity",
+              "status": "In preparation · Q4 2026",
+              "description": "Low-voltage directive, EMC, RoHS. External test lab for the Q4 pilot series."
+            }
+          ]
+        },
+        "downloads": {
+          "title": "Downloads",
+          "note": "Reports will be linked here once published. If you need an early draft for a funding decision, write to us — we share the current state of work honestly.",
           "cta": "kontakt@revamp-it.ch"
         }
       }

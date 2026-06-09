@@ -18,6 +18,7 @@ type SubNavMessages = {
   gallery: string
   buildYourOwn: string
   status: string
+  businessPlan: string
 }
 
 export default async function UpcyclingLayout({
@@ -34,6 +35,7 @@ export default async function UpcyclingLayout({
     { href: '/projects/upcycling/gallery',        label: nav.gallery },
     { href: '/projects/upcycling/build-your-own', label: nav.buildYourOwn },
     { href: '/projects/upcycling/status',         label: nav.status },
+    { href: '/projects/upcycling/businessplan',   label: nav.businessPlan },
   ]
 
   return (
