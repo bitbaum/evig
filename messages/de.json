@@ -6071,6 +6071,81 @@
         "title": "Vollständiges Briefing für Förder­geber und Partner",
         "body": "Ansatz, nächste Schritte, offene Fragen (inkl. Wirtschaftlichkeit) und der Open-Source-Quellcode — alles auf der Status­seite.",
         "cta": "Vollständiges Briefing öffnen"
+      },
+      "economics": {
+        "eyebrow": "WIRTSCHAFTLICHKEIT",
+        "title": "Was eine Leuchte tatsächlich kostet — und wie das Projekt sich tragen soll.",
+        "intro": "Solange die ZHAW-Ökobilanz läuft und die ersten Verkäufe Daten liefern, sind viele Werte unten Annahmen. Wir schreiben sie offen hin, statt sie zu vermarkten.",
+        "unitEconomics": {
+          "title": "Stückkosten — heutige Schätzung",
+          "note": "Working assumptions. Werden überarbeitet, sobald die Kleinserie Echtdaten liefert (Q3 2026).",
+          "rows": [
+            {
+              "label": "Monitor (gespendet/ERZ)",
+              "value": "CHF 0",
+              "aside": "Eingangsmaterial ist kostenneutral"
+            },
+            {
+              "label": "Elektronik-Umbau & Komponenten",
+              "value": "~CHF 25",
+              "aside": "LED-Treiber, Verkabelung, Kleinteile"
+            },
+            {
+              "label": "Arbeit (geschützte Werkstatt, ~1 h)",
+              "value": "~CHF 40",
+              "aside": "Vollkosten inkl. Begleitung"
+            },
+            {
+              "label": "Verpackung & Auslieferung",
+              "value": "~CHF 15",
+              "aside": "Karton + Etikett + Versand"
+            },
+            {
+              "label": "Indirekte Projektkosten anteilig",
+              "value": "~CHF 20",
+              "aside": "Dokumentation, QA, CE-Vorbereitung"
+            },
+            {
+              "label": "Grobe Stückkosten",
+              "value": "~CHF 100",
+              "aside": "Untergrenze für die Preisbildung",
+              "emphasis": true
+            }
+          ]
+        },
+        "price": {
+          "title": "Preisbereich, den wir testen",
+          "body": "CHF 150–250 für die ersten Pilot-Käufer (Liegenschaftsverwaltungen, Designräume). Die Spanne deckt Stückkosten + Projekt-Beitrag + Sicherheit für die Garantie. Die echte Zahlungsbereitschaft ist eine offene Frage (Q04)."
+        },
+        "funding": {
+          "title": "Wie sich das Projekt finanziert",
+          "body": "Drei Quellen. Keine ist gross genug allein, alle drei zusammen tragen die Kleinserie und den LCA-Bericht.",
+          "sources": [
+            {
+              "label": "Verkauf",
+              "share": "~40 %",
+              "note": "CHF 150–250 pro Leuchte × ~70 Stück Kleinserie"
+            },
+            {
+              "label": "Stiftungen & Förderfonds",
+              "share": "~50 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — parallele Anträge"
+            },
+            {
+              "label": "Pilot-Partnerbeiträge",
+              "share": "~10 %",
+              "note": "Drahtzug, FARO etc. — Material- oder Arbeitszeit-Beitrag"
+            }
+          ]
+        },
+        "sustainability": {
+          "title": "Ab wann trägt sich das Modell ohne Stiftungen?",
+          "body": "Frühestens ab der zweiten Serie — und nur, wenn (a) die Stückkosten in der Produktion auf ~CHF 80 sinken und (b) der Verkaufspreis von wiederkehrenden B2B-Kunden bei CHF 200+ akzeptiert wird. Beides ist offen. Wir bauen die Kleinserie genau dafür: um die Kurve zu kennen, bevor wir skalieren."
+        },
+        "transparency": {
+          "note": "Diese Zahlen sind Arbeitsstand. Bitte korrigieren, ergänzen, kritisch nachfragen — alles geht an",
+          "cta": "kontakt@revamp-it.ch"
+        }
       }
     }
   },

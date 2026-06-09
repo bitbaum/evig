@@ -6328,6 +6328,81 @@
         "title": "Full briefing for funders & partners",
         "body": "Approach, next steps, open questions (incl. economics) and the open-source code — all on the status page.",
         "cta": "Open the full brief"
+      },
+      "economics": {
+        "eyebrow": "ECONOMICS",
+        "title": "What a lamp actually costs — and how the project intends to pay for itself.",
+        "intro": "Until the ZHAW life-cycle assessment and the first sales produce real numbers, many of the figures below are assumptions. We write them down honestly instead of marketing them.",
+        "unitEconomics": {
+          "title": "Unit cost — today's estimate",
+          "note": "Working assumptions. Will be revised once the small series produces real numbers (Q3 2026).",
+          "rows": [
+            {
+              "label": "Monitor (donated / via ERZ)",
+              "value": "CHF 0",
+              "aside": "Input material is cost-neutral"
+            },
+            {
+              "label": "Electronics retrofit & components",
+              "value": "~CHF 25",
+              "aside": "LED driver, wiring, small parts"
+            },
+            {
+              "label": "Labour (sheltered workshop, ~1 h)",
+              "value": "~CHF 40",
+              "aside": "Full cost incl. supervision"
+            },
+            {
+              "label": "Packaging & delivery",
+              "value": "~CHF 15",
+              "aside": "Box + label + shipping"
+            },
+            {
+              "label": "Allocated project overhead",
+              "value": "~CHF 20",
+              "aside": "Documentation, QA, CE prep"
+            },
+            {
+              "label": "Rough unit cost",
+              "value": "~CHF 100",
+              "aside": "Floor for pricing",
+              "emphasis": true
+            }
+          ]
+        },
+        "price": {
+          "title": "Price range we're testing",
+          "body": "CHF 150–250 for the first pilot buyers (property managers, design studios). The range covers unit cost + project contribution + warranty buffer. The actual willingness to pay is an open question (Q04)."
+        },
+        "funding": {
+          "title": "How the project pays for itself",
+          "body": "Three sources. None is big enough alone; together they carry the small series and the LCA report.",
+          "sources": [
+            {
+              "label": "Sales",
+              "share": "~40 %",
+              "note": "CHF 150–250 per lamp × ~70 lamps in the small series"
+            },
+            {
+              "label": "Foundations & funding programs",
+              "share": "~50 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — parallel applications"
+            },
+            {
+              "label": "Pilot partner contributions",
+              "share": "~10 %",
+              "note": "Drahtzug, FARO etc. — material or labour-time contribution"
+            }
+          ]
+        },
+        "sustainability": {
+          "title": "When does the model carry itself without grants?",
+          "body": "Not before the second series — and only if (a) production unit cost drops to ~CHF 80 and (b) the sale price of CHF 200+ holds with repeat B2B customers. Both are unknown. We're running the small series precisely to find that curve before scaling."
+        },
+        "transparency": {
+          "note": "These figures are work-in-progress. Please correct, extend, push back — write to",
+          "cta": "kontakt@revamp-it.ch"
+        }
       }
     }
   },

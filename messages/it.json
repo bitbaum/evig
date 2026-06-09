@@ -4695,6 +4695,81 @@
         "title": "Briefing completo per finanziatori e partner",
         "body": "Approccio, prossimi passi, domande aperte (economia inclusa) e il codice open source — tutto sulla pagina di stato.",
         "cta": "Apri il briefing completo"
+      },
+      "economics": {
+        "eyebrow": "ECONOMIA",
+        "title": "Quanto costa davvero una lampada — e come il progetto intende sostenersi.",
+        "intro": "Finché l'analisi del ciclo di vita della ZHAW e le prime vendite non produrranno numeri reali, molte cifre qui sotto sono ipotesi. Le scriviamo apertamente invece di venderle come dati certi.",
+        "unitEconomics": {
+          "title": "Costo unitario — stima attuale",
+          "note": "Ipotesi di lavoro. Verranno riviste quando la piccola serie produrrà numeri reali (T3 2026).",
+          "rows": [
+            {
+              "label": "Monitor (donato / via ERZ)",
+              "value": "CHF 0",
+              "aside": "Materiale di partenza senza costo"
+            },
+            {
+              "label": "Riconversione elettronica e componenti",
+              "value": "~CHF 25",
+              "aside": "Driver LED, cablaggio, piccole parti"
+            },
+            {
+              "label": "Manodopera (laboratorio protetto, ~1 h)",
+              "value": "~CHF 40",
+              "aside": "Costo pieno, accompagnamento incluso"
+            },
+            {
+              "label": "Imballaggio e consegna",
+              "value": "~CHF 15",
+              "aside": "Scatola + etichetta + spedizione"
+            },
+            {
+              "label": "Spese di progetto ripartite",
+              "value": "~CHF 20",
+              "aside": "Documentazione, QA, preparazione CE"
+            },
+            {
+              "label": "Costo unitario approssimativo",
+              "value": "~CHF 100",
+              "aside": "Pavimento per il prezzo",
+              "emphasis": true
+            }
+          ]
+        },
+        "price": {
+          "title": "Fascia di prezzo che stiamo testando",
+          "body": "CHF 150–250 per i primi acquirenti pilota (amministrazioni immobiliari, studi di design). La fascia copre costo unitario + contributo al progetto + cuscinetto di garanzia. La reale disponibilità a pagare è una domanda aperta (Q04)."
+        },
+        "funding": {
+          "title": "Come si finanzia il progetto",
+          "body": "Tre fonti. Nessuna basta da sola; insieme sostengono la piccola serie e il rapporto LCA.",
+          "sources": [
+            {
+              "label": "Vendite",
+              "share": "~40 %",
+              "note": "CHF 150–250 per lampada × ~70 lampade nella piccola serie"
+            },
+            {
+              "label": "Fondazioni e programmi di finanziamento",
+              "share": "~50 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — candidature parallele"
+            },
+            {
+              "label": "Contributi dei partner pilota",
+              "share": "~10 %",
+              "note": "Drahtzug, FARO ecc. — contributo in materiale o tempo di lavoro"
+            }
+          ]
+        },
+        "sustainability": {
+          "title": "A partire da quando il modello si sostiene senza sussidi?",
+          "body": "Non prima della seconda serie — e solo se (a) il costo unitario in produzione scende a ~CHF 80 e (b) il prezzo di vendita di CHF 200+ regge con clienti B2B ricorrenti. Entrambi sono incerti. Facciamo la piccola serie proprio per conoscere quella curva prima di scalare."
+        },
+        "transparency": {
+          "note": "Queste cifre sono provvisorie. Correggete, integrate, contestate — tutto a",
+          "cta": "kontakt@revamp-it.ch"
+        }
       }
     }
   },

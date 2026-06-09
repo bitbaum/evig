@@ -6382,6 +6382,81 @@
         "title": "Briefing complet pour bailleurs et partenaires",
         "body": "Démarche, prochaines étapes, questions ouvertes (économie incluse) et le code open source — tout sur la page statut.",
         "cta": "Ouvrir le briefing complet"
+      },
+      "economics": {
+        "eyebrow": "ÉCONOMIE",
+        "title": "Ce qu'une lampe coûte vraiment — et comment le projet compte s'autofinancer.",
+        "intro": "Tant que l'analyse de cycle de vie de la ZHAW et les premières ventes ne produisent pas de chiffres réels, beaucoup de valeurs ci-dessous sont des hypothèses. Nous les écrivons honnêtement plutôt que de les vendre.",
+        "unitEconomics": {
+          "title": "Coût unitaire — estimation actuelle",
+          "note": "Hypothèses de travail. Seront révisées dès que la petite série produira des chiffres réels (T3 2026).",
+          "rows": [
+            {
+              "label": "Moniteur (don / via ERZ)",
+              "value": "CHF 0",
+              "aside": "Matière première sans coût"
+            },
+            {
+              "label": "Reconversion électronique & composants",
+              "value": "~CHF 25",
+              "aside": "Driver LED, câblage, petites pièces"
+            },
+            {
+              "label": "Main-d'œuvre (atelier protégé, ~1 h)",
+              "value": "~CHF 40",
+              "aside": "Coût complet, accompagnement inclus"
+            },
+            {
+              "label": "Emballage & livraison",
+              "value": "~CHF 15",
+              "aside": "Carton + étiquette + envoi"
+            },
+            {
+              "label": "Frais de projet répartis",
+              "value": "~CHF 20",
+              "aside": "Documentation, QA, préparation CE"
+            },
+            {
+              "label": "Coût unitaire approximatif",
+              "value": "~CHF 100",
+              "aside": "Plancher pour la tarification",
+              "emphasis": true
+            }
+          ]
+        },
+        "price": {
+          "title": "Fourchette de prix testée",
+          "body": "CHF 150–250 pour les premiers acheteurs pilotes (régies immobilières, studios de design). La fourchette couvre coût unitaire + contribution au projet + marge garantie. La disposition réelle à payer reste une question ouverte (Q04)."
+        },
+        "funding": {
+          "title": "Comment le projet se finance",
+          "body": "Trois sources. Aucune n'est suffisante à elle seule ; ensemble elles portent la petite série et le rapport LCA.",
+          "sources": [
+            {
+              "label": "Ventes",
+              "share": "~40 %",
+              "note": "CHF 150–250 par lampe × ~70 lampes pour la petite série"
+            },
+            {
+              "label": "Fondations & programmes de soutien",
+              "share": "~50 %",
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — demandes parallèles"
+            },
+            {
+              "label": "Contributions des partenaires pilotes",
+              "share": "~10 %",
+              "note": "Drahtzug, FARO etc. — matériel ou temps de travail"
+            }
+          ]
+        },
+        "sustainability": {
+          "title": "À partir de quand le modèle s'autofinance sans subventions ?",
+          "body": "Au plus tôt dès la seconde série — et seulement si (a) le coût unitaire de production tombe à ~CHF 80 et (b) le prix de vente de CHF 200+ est accepté par des clients B2B récurrents. Les deux sont incertains. Nous menons la petite série précisément pour connaître cette courbe avant de mettre à l'échelle."
+        },
+        "transparency": {
+          "note": "Ces chiffres sont des estimations de travail. Merci de corriger, compléter, contester — tout vers",
+          "cta": "kontakt@revamp-it.ch"
+        }
       }
     }
   },

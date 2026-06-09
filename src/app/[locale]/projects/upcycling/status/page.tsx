@@ -117,6 +117,7 @@ export default async function UpcyclingStatusPage() {
       />
       <Production section={m.production} numbers={status.production} />
       <Timeline section={m.timeline} statuses={status.milestoneStatuses} />
+      <Economics section={t.raw('upcycling.economics') as EconomicsCopy} />
       <ProjectBrief brief={brief} />
       <Partners section={m.partners} />
       <Calls section={m.calls} />
@@ -221,6 +222,157 @@ function ProjectBrief({
             {brief.source.description}
           </p>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Economics ──────────────────────────────────────────────────── */
+/* The honest economics treatment: unit cost breakdown (with explicit
+ * "working assumption" language), price range we're testing, three-source
+ * funding mix, and the answer to "when does this carry itself without
+ * grants?". Lives in /status because that's where funders, partner
+ * orgs, and journalists land — the main /upcycling page stays lean.
+ *
+ * Numbers are intentionally in the i18n file (not a DB or a separate TS
+ * config) because they ARE the prose — every figure is paired with an
+ * "aside" string that frames it. Splitting them apart would let the prose
+ * drift from the number it describes.
+ */
+
+type EconomicsCopy = {
+  eyebrow: string
+  title: string
+  intro: string
+  unitEconomics: {
+    title: string
+    note: string
+    rows: Array<{ label: string; value: string; aside: string; emphasis?: boolean }>
+  }
+  price: { title: string; body: string }
+  funding: {
+    title: string
+    body: string
+    sources: Array<{ label: string; share: string; note: string }>
+  }
+  sustainability: { title: string; body: string }
+  transparency: { note: string; cta: string }
+}
+
+function Economics({ section }: { section: EconomicsCopy }) {
+  return (
+    <section
+      id="economics"
+      className="border-b border-subtle bg-surface-raised"
+      aria-labelledby="economics-title"
+    >
+      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 space-y-14">
+        {/* Header */}
+        <div>
+          <div className="ui-public-eyebrow">{section.eyebrow}</div>
+          <h2 id="economics-title" className="ui-public-display-md mt-3">
+            {section.title}
+          </h2>
+          <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
+        </div>
+
+        {/* Unit-cost breakdown.
+            Definition-list semantics so screen readers and SEO crawlers
+            both pair labels with their values + aside. */}
+        <div>
+          <h3 className="text-lg font-semibold text-text-primary">
+            {section.unitEconomics.title}
+          </h3>
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
+            {section.unitEconomics.note}
+          </p>
+
+          <dl className="mt-6 divide-y divide-subtle border-y border-subtle">
+            {section.unitEconomics.rows.map((row, i) => (
+              <div
+                key={i}
+                className={cn(
+                  'grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 py-4 sm:grid-cols-[1fr_auto_auto] sm:gap-x-6',
+                  row.emphasis && 'bg-canvas px-4 -mx-4 sm:px-6 sm:-mx-6',
+                )}
+              >
+                <dt
+                  className={cn(
+                    'text-sm leading-snug text-text-primary',
+                    row.emphasis && 'font-semibold',
+                  )}
+                >
+                  {row.label}
+                </dt>
+                <dd
+                  className={cn(
+                    'font-mono text-sm tabular-nums text-text-primary',
+                    row.emphasis && 'text-base font-semibold',
+                  )}
+                >
+                  {row.value}
+                </dd>
+                <dd className="col-span-2 text-xs leading-snug text-text-tertiary sm:col-span-1 sm:text-right">
+                  {row.aside}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        {/* Price range we're testing. */}
+        <div>
+          <h3 className="text-lg font-semibold text-text-primary">{section.price.title}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+            {section.price.body}
+          </p>
+        </div>
+
+        {/* Funding mix — three sources with shares. */}
+        <div>
+          <h3 className="text-lg font-semibold text-text-primary">{section.funding.title}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+            {section.funding.body}
+          </p>
+
+          <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+            {section.funding.sources.map((src, i) => (
+              <li
+                key={i}
+                className="flex flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-5"
+              >
+                <span className="font-mono text-2xl font-light tabular-nums text-text-primary">
+                  {src.share}
+                </span>
+                <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
+                  {src.label}
+                </span>
+                <span className="text-xs leading-snug text-text-secondary">{src.note}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Sustainability — when does this carry itself without grants? */}
+        <div>
+          <h3 className="text-lg font-semibold text-text-primary">
+            {section.sustainability.title}
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+            {section.sustainability.body}
+          </p>
+        </div>
+
+        {/* Transparency note — encourage scrutiny instead of trust. */}
+        <p className="font-mono text-xs leading-relaxed text-text-tertiary">
+          {section.transparency.note}{' '}
+          <a
+            href={`mailto:${section.transparency.cta}`}
+            className="text-action underline-offset-2 hover:underline"
+          >
+            {section.transparency.cta}
+          </a>
+        </p>
       </div>
     </section>
   )
