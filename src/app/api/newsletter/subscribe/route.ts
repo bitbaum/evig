@@ -134,7 +134,11 @@ export async function POST(request: NextRequest) {
       message: 'Bestätigungs-E-Mail gesendet',
     })
   } catch (error) {
-    return apiError(error, 'Serverfehler. Bitte versuche es später erneut.')
+    // TEMP DIAG (revert once root cause identified)
+    const detail = error instanceof Error
+      ? `${error.name}: ${error.message}`
+      : String(error)
+    return apiError(error, `Serverfehler [DIAG]: ${detail.slice(0, 240)}`)
   }
 }
 
