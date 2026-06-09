@@ -6376,6 +6376,12 @@
             "linkHref": "/projects/upcycling/build-your-own"
           }
         ]
+      },
+      "briefLink": {
+        "eyebrow": "BRIEF DU PROJET",
+        "title": "Briefing complet pour bailleurs et partenaires",
+        "body": "Démarche, prochaines étapes, questions ouvertes (économie incluse) et le code open source — tout sur la page statut.",
+        "cta": "Ouvrir le briefing complet"
       }
     }
   },

@@ -6322,6 +6322,12 @@
             "linkHref": "/projects/upcycling/build-your-own"
           }
         ]
+      },
+      "briefLink": {
+        "eyebrow": "PROJECT BRIEF",
+        "title": "Full briefing for funders & partners",
+        "body": "Approach, next steps, open questions (incl. economics) and the open-source code — all on the status page.",
+        "cta": "Open the full brief"
       }
     }
   },

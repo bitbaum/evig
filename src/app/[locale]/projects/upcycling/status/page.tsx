@@ -84,6 +84,28 @@ export default async function UpcyclingStatusPage() {
   const m = t.raw('upcycling.status') as StatusMessages
   const status = UPCYCLING_STATUS
 
+  // Pull the project-brief content from the SAME i18n keys that previously
+  // lived on /projects/upcycling main page. The brief belongs on /status
+  // (funders, partners, journalists read this page for the deep narrative);
+  // the main project page now stays lean.
+  type BriefShape = {
+    about: { title: string; description: string }
+    approach: {
+      title: string
+      cards: Array<{ title: string; description?: string; features?: string[] }>
+    }
+    nextsteps: { title: string; description: string }
+    open_questions: { title: string; questions: string[] }
+    source: { title: string; description: string }
+  }
+  const brief = {
+    about:          t.raw('upcycling.about')          as BriefShape['about'],
+    approach:       t.raw('upcycling.approach')       as BriefShape['approach'],
+    nextsteps:      t.raw('upcycling.nextsteps')      as BriefShape['nextsteps'],
+    open_questions: t.raw('upcycling.open_questions') as BriefShape['open_questions'],
+    source:         t.raw('upcycling.source')         as BriefShape['source'],
+  }
+
   return (
     <article className="bg-canvas">
       <Header
@@ -95,9 +117,112 @@ export default async function UpcyclingStatusPage() {
       />
       <Production section={m.production} numbers={status.production} />
       <Timeline section={m.timeline} statuses={status.milestoneStatuses} />
+      <ProjectBrief brief={brief} />
       <Partners section={m.partners} />
       <Calls section={m.calls} />
     </article>
+  )
+}
+
+/* ─── Project Brief ───────────────────────────────────────────────── */
+/* Funder-/partner-facing deep narrative. Reads the same i18n keys that
+ * historically rendered on the main upcycling page. Kept in a single
+ * collapsible-looking column rather than the previous grid of mini-cards
+ * so the reading order matches how someone evaluating the project (a
+ * grant reviewer, a Drahtzug coordinator) would actually consume it. */
+
+function ProjectBrief({
+  brief,
+}: {
+  brief: {
+    about: { title: string; description: string }
+    approach: {
+      title: string
+      cards: Array<{ title: string; description?: string; features?: string[] }>
+    }
+    nextsteps: { title: string; description: string }
+    open_questions: { title: string; questions: string[] }
+    source: { title: string; description: string }
+  }
+}) {
+  return (
+    <section className="border-b border-subtle bg-surface-base" id="open-questions">
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 space-y-14">
+        {/* About */}
+        <div>
+          <h2 className="ui-public-display-md">{brief.about.title}</h2>
+          <p className="mt-4 ui-public-section-lede">{brief.about.description}</p>
+        </div>
+
+        {/* Approach — numbered list, each pillar with optional features */}
+        <div>
+          <h2 className="ui-public-display-md">{brief.approach.title}</h2>
+          <ol className="mt-6 space-y-8">
+            {brief.approach.cards.map((c, i) => (
+              <li key={i} className="border-t border-subtle pt-6">
+                <div className="flex items-baseline gap-4">
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-sm tabular-nums text-text-tertiary shrink-0"
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-lg font-semibold text-text-primary">{c.title}</h3>
+                </div>
+                {c.description && (
+                  <p className="mt-3 ml-10 text-sm leading-relaxed text-text-secondary">
+                    {c.description}
+                  </p>
+                )}
+                {c.features?.length ? (
+                  <ul className="mt-3 ml-10 space-y-1 text-sm text-text-tertiary">
+                    {c.features.map((f, j) => (
+                      <li key={j} className="font-mono text-xs uppercase tracking-[0.14em]">
+                        · {f}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Next steps */}
+        <div>
+          <h2 className="ui-public-display-md">{brief.nextsteps.title}</h2>
+          <p className="mt-4 text-sm leading-relaxed text-text-secondary">
+            {brief.nextsteps.description}
+          </p>
+        </div>
+
+        {/* Open questions — including the economics-related ones */}
+        <div>
+          <h2 className="ui-public-display-md">{brief.open_questions.title}</h2>
+          <ul className="mt-6 space-y-4">
+            {brief.open_questions.questions.map((q, i) => (
+              <li key={i} className="flex gap-4 border-t border-subtle pt-4">
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-xs tabular-nums text-text-tertiary shrink-0 mt-1"
+                >
+                  Q{String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="text-sm leading-relaxed text-text-secondary">{q}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Source / openness */}
+        <div>
+          <h2 className="ui-public-display-md">{brief.source.title}</h2>
+          <p className="mt-4 text-sm leading-relaxed text-text-secondary">
+            {brief.source.description}
+          </p>
+        </div>
+      </div>
+    </section>
   )
 }
 

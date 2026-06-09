@@ -6065,6 +6065,12 @@
             "linkHref": "/projects/upcycling/build-your-own"
           }
         ]
+      },
+      "briefLink": {
+        "eyebrow": "PROJEKT-BRIEFING",
+        "title": "Vollständiges Briefing für Förder­geber und Partner",
+        "body": "Ansatz, nächste Schritte, offene Fragen (inkl. Wirtschaftlichkeit) und der Open-Source-Quellcode — alles auf der Status­seite.",
+        "cta": "Vollständiges Briefing öffnen"
       }
     }
   },

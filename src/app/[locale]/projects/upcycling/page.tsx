@@ -52,12 +52,8 @@ type PageMessages = {
   hero: { title: string; description: string; cta1: string; cta2: string }
   interestCta: { eyebrow: string; heading: string; body: string }
   ideas: { eyebrow: string; title: string; intro: string; pillars: IdeaPillar[] }
-  about: { title: string; description: string }
-  approach: { title: string; cards: RawCard[] }
-  nextsteps: { title: string; description: string }
+  briefLink: { eyebrow: string; title: string; body: string; cta: string }
   cta: { title: string; actions: RawAction[] }
-  open_questions: { title: string; questions: string[] }
-  source: { title: string; description: string }
   ai_brainstorm: {
     title: string
     intro: string
@@ -108,27 +104,10 @@ export default async function UpcyclingPage() {
         { text: p.hero.cta2, href: '/get-involved', variant: 'outline' },
       ],
     },
-    sections: [
-      { title: p.about.title, description: p.about.description, backgroundColor: 'white', layout: 'single' },
-      {
-        title: p.approach.title,
-        backgroundColor: 'gray',
-        layout: 'grid-3',
-        cards: p.approach.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
-      },
-      { title: p.nextsteps.title, description: p.nextsteps.description, backgroundColor: 'white', layout: 'single' },
-      {
-        title: p.open_questions.title,
-        backgroundColor: 'gray',
-        layout: 'single',
-        cards: p.open_questions.questions.map((q: string) => ({ title: q, description: '' })),
-      },
-      { title: p.source.title, description: p.source.description, backgroundColor: 'white', layout: 'single' },
-      // ai_brainstorm dropped from this list — it now renders below via the
-      // dedicated AiBrainstormSection (copyable prompt cards). Treating each
-      // prompt as a "paragraph blob in a card grid" was hostile to the one
-      // action they exist for: paste into an LLM.
-    ],
+    // Funder-doc sections (about/approach/nextsteps/open_questions/source)
+    // moved to /projects/upcycling/status where partners + grant reviewers
+    // look. Main page stays lean — see BriefLink below for the on-ramp.
+    sections: [],
     cta: {
       title: p.cta.title,
       actions: [
@@ -146,14 +125,35 @@ export default async function UpcyclingPage() {
       <ExploreSection explore={p.explore} />
       <IdeasSection ideas={p.ideas} />
       <InterestSection interestCta={p.interestCta} />
-      {config.sections.map((section, i) => (
-        <ProjectSection key={i} section={section} />
-      ))}
       <AiBrainstormSection section={p.ai_brainstorm} />
       <GuidesSection guides={p.guides} />
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
+      <BriefLink brief={p.briefLink} />
       {config.cta && <ProjectCallToAction cta={config.cta} />}
     </div>
+  )
+}
+
+function BriefLink({ brief }: { brief: PageMessages['briefLink'] }) {
+  return (
+    <section className="border-t border-subtle bg-canvas py-12 sm:py-14">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/projects/upcycling/status"
+          className="group flex flex-col gap-3 rounded-lg border border-subtle bg-surface-base p-6 transition-colors hover:border-default sm:flex-row sm:items-center sm:gap-6"
+        >
+          <div className="flex-1">
+            <div className="ui-public-eyebrow">{brief.eyebrow}</div>
+            <p className="mt-2 text-lg font-semibold text-text-primary">{brief.title}</p>
+            <p className="mt-1 text-sm text-text-secondary">{brief.body}</p>
+          </div>
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all shrink-0">
+            {brief.cta}
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </span>
+        </Link>
+      </div>
+    </section>
   )
 }
 

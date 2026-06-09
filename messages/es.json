@@ -4689,6 +4689,12 @@
             "linkHref": "/projects/upcycling/build-your-own"
           }
         ]
+      },
+      "briefLink": {
+        "eyebrow": "INFORME DEL PROYECTO",
+        "title": "Informe completo para financiadores y socios",
+        "body": "Enfoque, próximos pasos, preguntas abiertas (incluida la economía) y el código open source — todo en la página de estado.",
+        "cta": "Abrir el informe completo"
       }
     }
   },
