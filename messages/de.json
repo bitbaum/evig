@@ -5561,7 +5561,8 @@
         "gallery": "Galerie",
         "buildYourOwn": "Selber bauen",
         "status": "Status",
-        "businessPlan": "Geschäftsplan"
+        "businessPlan": "Geschäftsplan",
+        "wirkung": "Wirkung"
       },
       "explore": {
         "eyebrow": "ENTDECKEN",
@@ -5948,76 +5949,11 @@
             }
           ]
         },
-        "partners": {
-          "title": "Partner-Ökosystem",
-          "intro": "Das Projekt funktioniert nur als Netzwerk. Wer welche Rolle übernimmt:",
-          "groups": [
-            {
-              "key": "production",
-              "title": "Produktion & Werkstätten",
-              "names": [
-                "Drahtzug",
-                "FARO",
-                "St. Jakob",
-                "Palme"
-              ]
-            },
-            {
-              "key": "pilots",
-              "title": "Pilot-Standorte (Liegenschaften)",
-              "names": [
-                "Livit",
-                "Wincasa",
-                "Allreal",
-                "ISS"
-              ]
-            },
-            {
-              "key": "material",
-              "title": "Material-Quelle",
-              "names": [
-                "ERZ Zürich"
-              ]
-            },
-            {
-              "key": "science",
-              "title": "Wissenschaftliche Begleitung",
-              "names": [
-                "ZHAW (Ökobilanz & Kosten-Nutzen-Analyse)"
-              ]
-            },
-            {
-              "key": "funding",
-              "title": "Förderung",
-              "names": [
-                "Swico Innovationsfonds"
-              ]
-            }
-          ]
-        },
-        "calls": {
-          "title": "So kannst du beitragen",
-          "intro": "Drei konkrete Wege, das Projekt in die nächste Phase zu tragen.",
-          "actions": [
-            {
-              "key": "fund",
-              "title": "Co-Förderer werden",
-              "description": "Wir suchen Stiftungen und Unternehmen, die das Skalierungsfenster 2027 mittragen — von der Kleinserie zum verfügbaren Produkt.",
-              "cta": "Fördergespräch anfragen"
-            },
-            {
-              "key": "pilot",
-              "title": "Pilot-Standort werden",
-              "description": "Liegenschaft, Café, Atelier oder Ausstellungsraum? Wir installieren eine Pilot-Leuchte und dokumentieren mit dir den Einsatz im Alltag.",
-              "cta": "Pilot anfragen"
-            },
-            {
-              "key": "donate",
-              "title": "Monitore in den Kreislauf",
-              "description": "Du tauschst IT bei dir aus? Wir holen die alten Bildschirme ab, dokumentieren den Stoffstrom und integrieren sie in die Kleinserie.",
-              "cta": "Material melden"
-            }
-          ]
+        "nextLink": {
+          "eyebrow": "TIEFER LESEN",
+          "title": "Wirtschaftlichkeit, Markt und Partner-Ökosystem.",
+          "body": "Hier steht der Snapshot. Das Vollbild — Stückkosten, Finanzierung, Kundensegmente, Risiken — lebt im Geschäftsplan.",
+          "cta": "Geschäftsplan öffnen"
         }
       },
       "interestCta": {
@@ -6153,38 +6089,6 @@
           "title": "Geschäftsplan & Forschung",
           "description": "Berichte, Studien und das wirtschaftliche Fundament des Monitor-Upcycling-Projekts."
         },
-        "eyebrow": "GESCHÄFTSPLAN",
-        "title": "Berichte, Forschung und das wirtschaftliche Fundament.",
-        "intro": "Dieser Bereich sammelt das Material, das einer Stiftung, einer Behörde oder einer Genossenschaft die Entscheidung erleichtert: Ist das Projekt tragfähig? Sind die Zahlen geprüft? Wer trägt das Risiko? Wir verlinken auf alles, was wir haben — und sagen offen, was noch fehlt.",
-        "pillars": {
-          "title": "Was bereits dokumentiert ist",
-          "items": [
-            {
-              "title": "Stückkosten & Preisbildung",
-              "description": "Aufschlüsselung pro Leuchte, Preisbereich der Pilotserie, Sensitivität gegenüber subventionierter Arbeit.",
-              "href": "/projects/upcycling/status#economics",
-              "cta": "Wirtschaftlichkeit ansehen"
-            },
-            {
-              "title": "Finanzierungsmix",
-              "description": "~50 % Verkauf, ~40 % Stiftungen, ~10 % Pilot-Partner. Mit den konkreten Förderprogrammen, bei denen wir Anträge stellen.",
-              "href": "/projects/upcycling/status#economics",
-              "cta": "Finanzierung ansehen"
-            },
-            {
-              "title": "Roadmap & Meilensteine",
-              "description": "Wo das Projekt heute steht, was als Nächstes ansteht, welche Partner involviert sind.",
-              "href": "/projects/upcycling/status",
-              "cta": "Statusseite ansehen"
-            },
-            {
-              "title": "Methodik & Quellen",
-              "description": "Wie wir CO₂- und Materialeinsparungen berechnen, mit Verweisen auf Circular Computing, Öko-Institut und Apple PER.",
-              "href": "/transparenz/co2",
-              "cta": "Transparenz ansehen"
-            }
-          ]
-        },
         "research": {
           "title": "Was wir gerade untersuchen",
           "intro": "Diese Studien laufen oder sind beauftragt. Ergebnisse erscheinen hier, sobald belastbar.",
@@ -6210,6 +6114,253 @@
           "title": "Downloads",
           "note": "Berichte werden hier verlinkt, sobald sie veröffentlicht sind. Wenn Sie einen frühen Entwurf für eine Förderentscheidung benötigen, schreiben Sie uns — wir teilen den aktuellen Arbeitsstand gerne ehrlich.",
           "cta": "kontakt@revamp-it.ch"
+        },
+        "hero": {
+          "eyebrow": "GESCHÄFTSPLAN",
+          "title": "Markt, Kunden, Wirtschaftlichkeit — und was schief gehen kann.",
+          "intro": "Ein ehrliches Bild für Förderer, Pilot-Partner und Käufer. Jede Sektion ist klappbar, damit Sie die Tiefe wählen, die Sie brauchen."
+        },
+        "marketContext": {
+          "eyebrow": "MARKTKONTEXT",
+          "title": "Womit wir uns vergleichen lassen müssen.",
+          "intro": "Wir verkaufen keine \"Designer-Lampe\" gegen Vitra, sondern eine reparierbare, lokal hergestellte Tischleuchte gegen Massenware aus Fernost.",
+          "alternatives": [
+            {
+              "label": "IKEA Tertial / Tischlampe (Neu)",
+              "price": "CHF 15–35",
+              "tradeoff": "Niedriger Preis, neu produziert, kurze Lebensdauer (~3 Jahre), nicht reparierbar. Massenfertigung in Asien — hoher Materialfußabdruck pro Stunde Licht."
+            },
+            {
+              "label": "Mainstream LED-Tischleuchte (BenQ, Philips Hue)",
+              "price": "CHF 80–250",
+              "tradeoff": "Gute Lichtqualität, elektronisch dicht — Reparatur unmöglich. CO₂-Bilanz dominiert von Herstellung."
+            },
+            {
+              "label": "Schweizer Design-Tischleuchte (Vitra, USM, Lehni)",
+              "price": "CHF 300–800+",
+              "tradeoff": "Hochwertig, oft reparierbar, langlebig — aber neu produziert. Preis nur für oberes Segment."
+            },
+            {
+              "label": "Upcycling-Tischleuchte aus Designer-Studios",
+              "price": "CHF 200–600",
+              "tradeoff": "Einzelstücke aus Resten — selten reproduzierbar, keine standardisierte Anleitung, oft ohne CE."
+            },
+            {
+              "label": "Unser Vorschlag",
+              "price": "CHF 150–250",
+              "tradeoff": "Reproduzierbar dank offener Anleitungen, in der Schweiz gefertigt (geschützte Werkstatt), reparierbar, CE-Konform geplant. Eingangsmaterial gespendet — niedriger Material-Fußabdruck.",
+              "isOurs": true
+            }
+          ],
+          "verdict": "Wir konkurrieren mit der Mittelklasse-LED — nicht mit IKEA und nicht mit Vitra. Unser Verkaufsargument ist nicht Preis, sondern Reparierbarkeit, Herkunft und Stoffstrom."
+        },
+        "segments": {
+          "eyebrow": "KUNDENSEGMENTE",
+          "title": "Wer kauft das — und wer nicht.",
+          "intro": "Wir testen parallel zwei Kanäle. Beide brauchen unterschiedliche Botschaft, Verkaufsweg und Stückzahl.",
+          "b2b": {
+            "label": "B2B (Großkunden)",
+            "volume": "50–80 % der Kleinserie",
+            "description": "Liegenschaftsverwaltungen für Nebenräume und Treppenhäuser, Co-Working-Spaces, Architektur- und Designagenturen, kleinere Hotels. Kaufargument: Nachhaltigkeitskommunikation + verlässliche Lieferung von 10–50 Stück.",
+            "examples": [
+              "Livit",
+              "Wincasa",
+              "Allreal",
+              "Hochschulen",
+              "Genossenschaftskaffees"
+            ]
+          },
+          "b2c": {
+            "label": "B2C (Privatkunden)",
+            "volume": "20–50 % der Kleinserie",
+            "description": "Designaffine Privatpersonen, die eine Geschichte und Ästhetik kaufen — keine günstigste Funktion. Auch: Studierende und Genossenschafts-WGs als Preis-bewusste Variante.",
+            "examples": [
+              "Designshop-Besucher",
+              "Architekten privat",
+              "Maker-Community",
+              "WG-Renovierungen"
+            ]
+          }
+        },
+        "risks": {
+          "eyebrow": "RISIKEN",
+          "title": "Was schiefgehen kann.",
+          "intro": "Ehrliche Liste statt Marketing. Wir schreiben Gegenmaßnahmen dazu, wo wir welche haben.",
+          "items": [
+            {
+              "label": "Geschützte Werkstatt fällt aus",
+              "severity": "Hoch",
+              "mitigation": "Mehr als ein Werkstattpartner aufbauen (Drahtzug + FARO + St. Jakob). Anleitungen so dokumentieren, dass jede Werkstatt einsteigen kann."
+            },
+            {
+              "label": "CE-Konformität verzögert sich oder schlägt fehl",
+              "severity": "Hoch",
+              "mitigation": "Q4 2026 mit externer Prüfstelle. Bei Verzögerung: B2B-Pilotinstallationen ohne kommerziellen Verkauf zur Datensammlung."
+            },
+            {
+              "label": "B2B-Zahlungsbereitschaft unter CHF 150",
+              "severity": "Mittel",
+              "mitigation": "Strukturierte Interviews Q4 2026 vor Skalierung. Bei niedriger Bereitschaft: B2C-Anteil hochfahren, Stiftungsanteil länger halten."
+            },
+            {
+              "label": "LCA zeigt schlechteres CO₂-Profil als gehofft",
+              "severity": "Mittel",
+              "mitigation": "Wir publizieren das Ergebnis unverändert, auch wenn ungünstig. Wertversprechen verschiebt sich auf Reparierbarkeit + lokale Wertschöpfung, nicht reines CO₂."
+            },
+            {
+              "label": "Monitor-Nachschub bricht ein (ERZ verändert Vertrag)",
+              "severity": "Mittel",
+              "mitigation": "Zweite Quelle aufbauen (private Sammelstellen, IT-Lifecycle-Anbieter). Mindestens 50 Monitore Reserve."
+            },
+            {
+              "label": "Haftung bei Defekt — wer trägt sie?",
+              "severity": "Mittel",
+              "mitigation": "Offene Frage Q05. Optionen: Fachingenieur-Modell, Partner-Übernahme, Versicherungsmodell. Entscheidung vor Serienverkauf."
+            }
+          ]
+        },
+        "partners": {
+          "eyebrow": "PARTNER-ÖKOSYSTEM",
+          "title": "Wer welche Rolle übernimmt.",
+          "intro": "Das Projekt funktioniert nur als Netzwerk. Hier die aktiven und potenziellen Partner.",
+          "groups": [
+            {
+              "key": "production",
+              "title": "Produktion & Werkstätten",
+              "names": [
+                "Drahtzug",
+                "FARO",
+                "St. Jakob",
+                "Palme"
+              ]
+            },
+            {
+              "key": "pilots",
+              "title": "Pilot-Standorte (Liegenschaften)",
+              "names": [
+                "Livit",
+                "Wincasa",
+                "Allreal",
+                "ISS"
+              ]
+            },
+            {
+              "key": "material",
+              "title": "Material-Quelle",
+              "names": [
+                "ERZ Zürich"
+              ]
+            },
+            {
+              "key": "science",
+              "title": "Wissenschaftliche Begleitung",
+              "names": [
+                "ZHAW (Ökobilanz & Kosten-Nutzen-Analyse)"
+              ]
+            },
+            {
+              "key": "funding",
+              "title": "Förderung",
+              "names": [
+                "Swico Innovationsfonds",
+                "Klimastiftung Schweiz",
+                "KliK",
+                "Gebert Rüf"
+              ]
+            }
+          ]
+        }
+      },
+      "wirkung": {
+        "meta": {
+          "title": "Wirkung — Umwelt, Wissenschaft, Open Hardware",
+          "description": "Was eine umgebaute Leuchte für Klima, Material und Kreislauf bedeutet — mit Quellen und ZHAW-Begleitung."
+        },
+        "eyebrow": "WIRKUNG",
+        "title": "Was es bedeutet, einen Monitor nicht wegzuwerfen.",
+        "intro": "Wir verkaufen Leuchten — aber das eigentliche Produkt ist der vermiedene Stoffstrom. Hier dokumentieren wir Umweltvorteile, wissenschaftliche Begleitung und warum die Anleitungen frei verfügbar sind.",
+        "environment": {
+          "eyebrow": "UMWELT",
+          "title": "CO₂, Material und Lebensdauer.",
+          "intro": "Vorläufige Zahlen — die ZHAW-LCA (Q3 2026) ersetzt sie durch belastbare Werte. Quellen sind unter jeder Zahl benannt.",
+          "metrics": [
+            {
+              "value": "~15–25 kg CO₂",
+              "label": "Vermieden pro Leuchte",
+              "note": "Differenz zwischen Wiederverwendung eines bereits produzierten Bildschirms und Neuproduktion einer vergleichbaren LED-Leuchte. Quelle: Apple Product Environmental Reports + Öko-Institut LCA-Daten für Display-Elektronik (zur Validierung durch ZHAW)."
+            },
+            {
+              "value": "~2,5 kg Material",
+              "label": "Im Kreislauf gehalten",
+              "note": "Durchschnittliches Gewicht der LCD-Komponenten + Gehäuse pro 22\"-Monitor (Kunststoff, Aluminium, seltene Erden in der Backlight-Einheit). Quelle: Schweizer e-Waste-Statistik 2023."
+            },
+            {
+              "value": "~5–10 Jahre",
+              "label": "Zweite Nutzungsphase",
+              "note": "Erwartete Lebensdauer der umgebauten Leuchte. Konservative Schätzung — viele LED-Treiber halten deutlich länger. Wir aktualisieren mit Garantie-Rückläufen."
+            }
+          ],
+          "caveat": "Diese Zahlen sind nicht der Werbe-Höhepunkt, sondern unsere Arbeitsbasis. Sie werden mit jedem Pilot validiert. Detaillierte Methodik auf der Transparenz-Seite.",
+          "transparencyLink": "Transparenz-Seite öffnen"
+        },
+        "scientific": {
+          "eyebrow": "WISSENSCHAFT",
+          "title": "Was die ZHAW misst — und warum es zählt.",
+          "intro": "Die Zürcher Hochschule für Angewandte Wissenschaften begleitet das Projekt mit einer vollständigen Lebenszyklus-Analyse nach ISO 14040/14044.",
+          "scope": [
+            "Vergleich Umbauleuchte vs. neu produzierte LED-Leuchte vergleichbarer Helligkeit",
+            "Materialaufwand, Energieverbrauch in der Nutzung, End-of-Life-Szenarien",
+            "Sensitivität gegenüber Standortwahl der Werkstatt und Transportwege",
+            "Validierung gegenüber Apple PER, Öko-Institut und Circular-Computing-Studien"
+          ],
+          "timeline": "Start: April 2026 · Zwischenresultate: Juni 2026 · Schlussbericht: Q3 2026.",
+          "commitment": "Wir publizieren das Ergebnis unverändert — auch wenn es ungünstig ausfällt. Eine LCA, die nur \"gewinnt\", ist keine."
+        },
+        "openHardware": {
+          "eyebrow": "OPEN HARDWARE",
+          "title": "Anleitungen sind frei, weil sie es sein müssen.",
+          "intro": "Wenn nur wir die Anleitungen haben, gibt es nur unsere Kleinserie. Sind sie öffentlich, kann jede Werkstatt der Schweiz das Modell aufnehmen — und genau das ist das Ziel.",
+          "pillars": [
+            {
+              "title": "Was wir publizieren",
+              "body": "Pro Monitor-Modell: Fotos, Schaltbilder, Pin-Belegung, BOM (Bill of Materials), Sicherheitshinweise, Test-Protokoll. Format: Markdown auf dieser Site (langfristig: Wiki)."
+            },
+            {
+              "title": "Lizenz",
+              "body": "Anleitungen unter Creative Commons CC-BY-SA — kommerzielle Nutzung erlaubt, Bedingung: Zuschreibung + gleiche Lizenz für Ableitungen. Software (diese Plattform) unter MIT."
+            },
+            {
+              "title": "Wer profitiert",
+              "body": "Andere geschützte Werkstätten, Reparaturcafés, Hochschulen für Lehrprojekte, Designstudierende, Heimwerker. Wir bekommen Rückläufer als Verbesserungen."
+            }
+          ],
+          "sourceLink": {
+            "label": "Plattform-Quellcode",
+            "url": "https://github.com/g-but/revampit"
+          }
+        },
+        "circularity": {
+          "eyebrow": "KREISLAUF",
+          "title": "Wo der Monitor herkommt — und was passiert, wenn die Leuchte ausfällt.",
+          "intro": "Stoffstrom in vier Etappen. Jede ist dokumentiert, kein \"Black Box\".",
+          "stages": [
+            {
+              "label": "Eingang",
+              "description": "Monitore von ERZ Zürich (Entsorgung + Recycling Zürich) und privaten Sammelstellen. Wir dokumentieren Modell, Zustand und Datum."
+            },
+            {
+              "label": "Umbau",
+              "description": "Geschützte Werkstatt entfernt LCD-Panel, prüft Backlight + Treiber, integriert LED-Dimmregelung, montiert Gehäuse. Dokumentation pro Stück."
+            },
+            {
+              "label": "Nutzung",
+              "description": "Auslieferung an B2B-Standort oder B2C-Kunde. 5–10 Jahre Betrieb. Bei Defekt: Reparatur durch jedes Werkstatt-Mitglied dank offener Anleitung."
+            },
+            {
+              "label": "Ende der Nutzung",
+              "description": "Rückgabe an Revamp-IT oder Partner-Werkstatt. LED-Treiber wiederverwendet, Gehäuse rezykliert. Keine Komponente erreicht den Hausmüll."
+            }
+          ]
         }
       }
     }

@@ -17,8 +17,9 @@ type SubNavMessages = {
   applications: string
   gallery: string
   buildYourOwn: string
-  status: string
+  wirkung: string
   businessPlan: string
+  status: string
 }
 
 export default async function UpcyclingLayout({
@@ -29,13 +30,16 @@ export default async function UpcyclingLayout({
   const t = await getTranslations('projects')
   const nav = t.raw('upcycling.nav') as SubNavMessages
 
+  // Nav order matches reading depth: visual / exploratory pages first,
+  // then evidence pages (wirkung → businessplan → status snapshot).
   const items = [
     { href: '/projects/upcycling',                label: nav.overview },
     { href: '/projects/upcycling/applications',   label: nav.applications },
     { href: '/projects/upcycling/gallery',        label: nav.gallery },
     { href: '/projects/upcycling/build-your-own', label: nav.buildYourOwn },
-    { href: '/projects/upcycling/status',         label: nav.status },
+    { href: '/projects/upcycling/wirkung',        label: nav.wirkung },
     { href: '/projects/upcycling/businessplan',   label: nav.businessPlan },
+    { href: '/projects/upcycling/status',         label: nav.status },
   ]
 
   return (
