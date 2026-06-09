@@ -208,7 +208,7 @@
     "skipToContent": "콘텐츠로 건너뛰기",
     "resetFilters": "필터 초기화",
     "resultsCount": "{total}개 중 {filtered}개 결과",
-    "methodologyLink": "어떻게 계산되었나요?",
+    "methodologyLink": "어떻게 계산되나요?",
     "eyebrows": {
       "technicians": "기술자",
       "getInvolved": "참여하기",
@@ -220,7 +220,7 @@
       "howItWorks": "작동 방식",
       "benefits": "장점",
       "principles": "원칙",
-      "ready": "준비됐나요?"
+      "ready": "준비되셨나요?"
     }
   },
   "errors": {

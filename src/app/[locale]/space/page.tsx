@@ -73,7 +73,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                     <div className="flex flex-wrap items-baseline gap-x-3">
                       <div className="ui-public-prose-strong">{entry.name}</div>
                       <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-                        {isCurrent ? '· AKTUELL · ' : '· '}{location?.highlight}
+                        {isCurrent ? `· ${t('history.currentHighlight').toUpperCase()} · ` : '· '}{location?.highlight}
                       </span>
                     </div>
                     <p className="ui-public-prose-muted mt-2">

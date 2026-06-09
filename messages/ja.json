@@ -208,7 +208,7 @@
     "skipToContent": "コンテンツへスキップ",
     "resetFilters": "フィルターをリセット",
     "resultsCount": "{total}件中{filtered}件",
-    "methodologyLink": "どのように計算されていますか?",
+    "methodologyLink": "計算方法は？",
     "eyebrows": {
       "technicians": "技術者",
       "getInvolved": "参加する",
@@ -220,7 +220,7 @@
       "howItWorks": "仕組み",
       "benefits": "利点",
       "principles": "原則",
-      "ready": "準備はいい?"
+      "ready": "準備はいい？"
     }
   },
   "errors": {

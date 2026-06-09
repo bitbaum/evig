@@ -14,14 +14,17 @@ import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { fetchImpactStats } from '@/lib/impact-stats'
 
 export default async function ImpactStatsSection() {
-  const [stats, t] = await Promise.all([
+  const [stats, t, tCommon] = await Promise.all([
     fetchImpactStats(),
     getTranslations('components.impactStatsSection'),
+    getTranslations('common'),
   ])
 
+  // No "+" suffix on these — the numbers are exact DB counts (or org-numbers
+  // SSOT). Implying "more than X" is fabrication per CLAUDE.md credibility rule.
   const environmentalStats = [
     {
-      value: `${stats.totalDevices}+`,
+      value: `${stats.totalDevices}`,
       description: t('devicesSaved'),
       methodologyHref: null as string | null,
     },
@@ -39,15 +42,15 @@ export default async function ImpactStatsSection() {
 
   const socialStats = [
     {
-      value: `${stats.users}+`,
+      value: `${stats.users}`,
       description: t('members'),
     },
     {
-      value: `${stats.repairs}+`,
+      value: `${stats.repairs}`,
       description: t('repairsCompleted'),
     },
     {
-      value: `${getDefaultNumeric('annual_people_trained')}+`,
+      value: `${getDefaultNumeric('annual_people_trained')}`,
       description: t('trainedPeople'),
     },
   ]
@@ -81,7 +84,7 @@ export default async function ImpactStatsSection() {
                       <>
                         {' · '}
                         <Link href={stat.methodologyHref} className="text-action hover:underline underline-offset-2">
-                          Wie berechnet?
+                          {tCommon('methodologyLink')}
                         </Link>
                       </>
                     )}

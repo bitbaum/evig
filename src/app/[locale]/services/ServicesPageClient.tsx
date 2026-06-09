@@ -56,7 +56,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         method: 'POST',
         body: {
           serviceSlug: service.slug,
-          description: `Termin für ${service.title}`,
+          description: t('appointmentDescription', { service: service.title }),
           urgency: URGENCY.NORMAL,
         },
       })

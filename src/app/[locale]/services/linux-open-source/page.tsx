@@ -56,6 +56,7 @@ export async function generateMetadata({ params }: LinuxPageProps): Promise<Meta
 export default async function LinuxPage({ params }: LinuxPageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'services.linuxOpenSource' })
+  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' })
 
   const serviceItems = t.raw('servicesSection.items') as Array<{ title: string; description: string }>
   const benefitItems = t.raw('benefitsSection.items') as Array<{ title: string; description: string }>
@@ -269,7 +270,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       {/* Final CTA */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">BEREIT?</div>
+          <div className="ui-public-eyebrow">{tEye('ready')}</div>
           <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('finalCta.body')}</p>
           <div className="ui-public-cta-row mt-10">

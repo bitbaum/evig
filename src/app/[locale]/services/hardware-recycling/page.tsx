@@ -47,6 +47,7 @@ export async function generateMetadata({ params }: HardwareRecyclingPageProps): 
 export default async function HardwareRecyclingPage({ params }: HardwareRecyclingPageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'services.hardwareRecycling' })
+  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' })
 
   const features = t.raw('features') as Array<{ title: string; description: string }>
   const pricingFeatures = t.raw('pricing.features') as string[]
@@ -228,7 +229,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
         {/* CTA Section */}
         <section className="border-t border-subtle py-20 text-center">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div className="ui-public-eyebrow">BEREIT?</div>
+            <div className="ui-public-eyebrow">{tEye('ready')}</div>
             <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
             <div className="ui-public-cta-row mt-10">

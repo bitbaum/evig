@@ -48,19 +48,28 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 }
 
+// Legacy DB condition values (data identifiers, not UI strings).
+// Inventory rows store condition as one of these normalized German tokens; the
+// display label is sourced from t('product.conditionLabels.*') below.
+// i18n-ok: data-matching keys against persisted condition values, not user-facing copy.
+const CONDITION_KEY_LIKE_NEW = 'wie neu' // i18n-ok: DB enum value
+const CONDITION_KEY_VERY_GOOD = 'sehr gut' // i18n-ok: DB enum value
+const CONDITION_KEY_GOOD = 'gut' // i18n-ok: DB enum value
+const CONDITION_KEY_ACCEPTABLE = 'akzeptabel' // i18n-ok: DB enum value
+
 function mapConditionToSchema(condition: string): string {
   switch (condition.toLowerCase()) {
-    case 'wie neu': return 'https://schema.org/NewCondition'
+    case CONDITION_KEY_LIKE_NEW: return 'https://schema.org/NewCondition'
     default: return 'https://schema.org/UsedCondition'
   }
 }
 
 // Condition badge colors (labels come from translations)
 const CONDITION_COLORS: Record<string, string> = {
-  'wie neu':    'bg-action-muted text-action',
-  'sehr gut':   'bg-action-muted text-action',
-  'gut':        'bg-surface-raised text-text-primary',
-  'akzeptabel': 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300',
+  [CONDITION_KEY_LIKE_NEW]:   'bg-action-muted text-action',
+  [CONDITION_KEY_VERY_GOOD]:  'bg-action-muted text-action',
+  [CONDITION_KEY_GOOD]:       'bg-surface-raised text-text-primary',
+  [CONDITION_KEY_ACCEPTABLE]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300',
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -81,10 +90,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const conditionKey = product.condition.toLowerCase()
   const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-surface-raised text-text-primary'
   const CONDITION_LABEL_MAP: Record<string, string> = {
-    'wie neu': t('product.conditionLabels.wieNeu'),
-    'sehr gut': t('product.conditionLabels.sehrGut'),
-    'gut': t('product.conditionLabels.gut'),
-    'akzeptabel': t('product.conditionLabels.akzeptabel'),
+    [CONDITION_KEY_LIKE_NEW]: t('product.conditionLabels.wieNeu'),
+    [CONDITION_KEY_VERY_GOOD]: t('product.conditionLabels.sehrGut'),
+    [CONDITION_KEY_GOOD]: t('product.conditionLabels.gut'),
+    [CONDITION_KEY_ACCEPTABLE]: t('product.conditionLabels.akzeptabel'),
   }
   const conditionLabel = CONDITION_LABEL_MAP[conditionKey] ?? product.condition
 

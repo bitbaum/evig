@@ -10,6 +10,7 @@ import { getTranslations } from 'next-intl/server'
 
 export default async function AboutContent() {
   const t = await getTranslations('about')
+  const tEye = await getTranslations('common.eyebrows')
   const yearsActive = new Date().getFullYear() - getDefaultNumeric('founding_year')
 
   return (
@@ -140,7 +141,7 @@ export default async function AboutContent() {
       {/* Call to Action */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">BEREIT?</div>
+          <div className="ui-public-eyebrow">{tEye('ready')}</div>
           <h2 className="ui-public-display-lg mt-4">{t('cta.title')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.description')}</p>
           <div className="mt-10">

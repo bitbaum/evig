@@ -208,7 +208,7 @@
     "skipToContent": "Aller au contenu",
     "resetFilters": "Réinitialiser les filtres",
     "resultsCount": "{filtered} sur {total} résultats",
-    "methodologyLink": "Comment est-ce calculé ?",
+    "methodologyLink": "Comment calculé ?",
     "eyebrows": {
       "technicians": "TECHNICIENS",
       "getInvolved": "PARTICIPER",
@@ -220,7 +220,7 @@
       "howItWorks": "COMMENT ÇA MARCHE",
       "benefits": "AVANTAGES",
       "principles": "PRINCIPES",
-      "ready": "PRÊT?"
+      "ready": "PRÊT ?"
     }
   },
   "errors": {

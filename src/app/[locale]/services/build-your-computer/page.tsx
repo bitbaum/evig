@@ -12,6 +12,7 @@ import { BuildTool } from './BuildTool'
 export default function BuildYourComputerPage() {
   const t = useTranslations('services.buildComputer')
   const tEye = useTranslations('common.eyebrows')
+  const tCommon = useTranslations('common')
 
   return (
     <main>
@@ -82,7 +83,7 @@ export default function BuildYourComputerPage() {
           <div className="card-shell p-8 md:p-12 text-center">
             <div className="ui-public-eyebrow inline-flex items-center gap-2 text-action">
               <Award className="w-4 h-4" />
-              <span>REVAMPED ZERTIFIZIERT</span>
+              <span>{t('certification.eyebrow')}</span>
               <Sparkles className="w-4 h-4" />
             </div>
             <Heading level={2} className="ui-public-display-md mt-4">{t('certification.heading')}</Heading>
@@ -105,7 +106,7 @@ export default function BuildYourComputerPage() {
                   {t('certification.co2Saved')}
                   <span>·</span>
                   <Link href="/transparenz/co2" className="hover:text-text-primary transition-colors normal-case tracking-normal">
-                    Wie berechnet?
+                    {tCommon('methodologyLink')}
                   </Link>
                 </div>
               </div>
@@ -132,7 +133,7 @@ export default function BuildYourComputerPage() {
       {/* ── CTA ────────────────────────────────────────────────────── */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">BEREIT?</div>
+          <div className="ui-public-eyebrow">{tEye('ready')}</div>
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
           <div className="ui-public-cta-row mt-10">
