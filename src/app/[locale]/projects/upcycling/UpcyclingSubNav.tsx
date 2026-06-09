@@ -23,10 +23,7 @@ export function UpcyclingSubNav({ items, brand }: { items: Item[]; brand: string
   return (
     <nav
       aria-label={brand}
-      // z-50 wins over the main Header (z-40) so when the header animates
-      // back in on scroll-up, it slides UNDER this nav instead of covering
-      // it. Sticky top-0 keeps the sub-nav pinned through long pages.
-      className="sticky top-0 z-50 border-b border-subtle bg-surface-base/85 backdrop-blur supports-[backdrop-filter]:bg-surface-base/70"
+      className="ui-sticky-subnav border-b border-subtle bg-surface-base/85 backdrop-blur supports-[backdrop-filter]:bg-surface-base/70"
     >
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <Link

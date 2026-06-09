@@ -73,6 +73,22 @@ export function Header() {
   // under the user mid-interaction is disorienting.
   const effectivelyHidden = isHidden && !anyDropdownOpen && !mobileMenuOpen
 
+  // Publish the current header offset as a CSS custom property on the
+  // document root so any sub-nav (sticky strip below the header) can
+  // follow the smart-hide state. When the header is visible the offset
+  // is its own height (h-16 → 4rem). When hidden the offset is 0, which
+  // lets sticky sub-navs slide up into the freed space instead of leaving
+  // a 64-px gap above themselves. CSS transition on the consumer side
+  // animates the change smoothly.
+  useEffect(() => {
+    const root = document.documentElement
+    root.style.setProperty('--header-offset', effectivelyHidden ? '0px' : '4rem')
+    return () => {
+      // Reset on unmount so downstream consumers don't see a stale offset.
+      root.style.removeProperty('--header-offset')
+    }
+  }, [effectivelyHidden])
+
   // Escape key to close mobile menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -89,11 +105,13 @@ export function Header() {
       <header
         ref={headerRef}
         className={cn(
-          // z-40 sits BELOW any per-section sub-nav (z-50) so a sticky
-          // sub-nav (e.g. /projects/upcycling) remains visible when the
-          // header animates back in on scroll up. Headroom pattern: hidden
-          // = slide up by full height with a soft transition.
-          "fixed top-0 left-0 right-0 z-40",
+          // z-50 sits above sub-navs (z-40). Sub-navs follow the smart-hide
+          // state via --header-offset (set in the useEffect above), so we
+          // can keep the natural stacking order — header on top — without
+          // the two ever visually colliding: when the header is visible the
+          // sub-nav sits exactly below it; when it hides, the sub-nav
+          // smoothly slides up into the freed space.
+          "fixed top-0 left-0 right-0 z-50",
           "transition-[transform,background-color,backdrop-filter,border-color] duration-300 ease-out",
           effectivelyHidden ? "-translate-y-full" : "translate-y-0",
           // Scrolled state: border-only (no shadow). Double-cueing scroll

@@ -23,7 +23,7 @@ export default function AboutSubNav() {
   ]
 
   return (
-    <nav className="bg-surface-base border-b border-strong sticky top-16 z-40">
+    <nav className="ui-sticky-subnav bg-surface-base border-b border-strong">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center gap-1 overflow-x-auto py-2 -mx-4 px-4 scrollbar-hide">
           {navItems.map((item) => {

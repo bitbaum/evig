@@ -308,6 +308,31 @@
   border-top: 1px solid var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
 }
+
+/* ─── Sticky sub-nav (canonical) ───────────────────────────────────
+ * Used by every per-section secondary navigation (e.g. AboutSubNav,
+ * UpcyclingSubNav, ProjectsSubNav) so all of them follow the main
+ * Header's smart hide/show state in lockstep.
+ *
+ * Contract (publisher → consumer):
+ *   - src/components/layout/header/Header.tsx writes
+ *     `--header-offset: 4rem | 0px` on document.documentElement based on
+ *     whether the header is currently shown or hidden.
+ *   - This utility reads `--header-offset` for its sticky `top`, so:
+ *       • header visible → sub-nav sits exactly below the header
+ *       • header hidden  → sub-nav slides up into the freed space
+ *   - The 300ms cubic-bezier(0,0,0.2,1) transition matches the Header's
+ *     own transform timing — the two move together, never collide.
+ *
+ * Default fallback (4rem) covers SSR + initial paint before the React
+ * effect has run.
+ */
+@utility ui-sticky-subnav {
+  position: sticky;
+  top: var(--header-offset, 4rem);
+  z-index: 40;
+  transition: top 300ms cubic-bezier(0, 0, 0.2, 1);
+}
 @utility ui-public-display-lg {
   /* Display headings for sections below the hero. */
   font-size: clamp(2rem, 5vw, 3.25rem);
