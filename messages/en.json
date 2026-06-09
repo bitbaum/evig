@@ -5753,7 +5753,11 @@
             "title": "CE and Liability",
             "prompt": "In the context of the Upcycling project (tasks on CE conformity, open question on product liability): brainstorm how responsibility for CE and liability in series production in sheltered workshops can be regulated. Suggest models (specialist engineer, partner takeover, certification), risks and how to minimize them, taking into account the priorities (electronics know-how partners like Drahtzug)."
           }
-        ]
+        ],
+        "copyButton": "Copy prompt",
+        "copied": "Copied",
+        "why": "Make it yours",
+        "whyBody": "Copy, adapt to your context, paste into your preferred LLM (Claude, ChatGPT, etc.)."
       },
       "needs": {
         "title": "What we need",
@@ -6283,6 +6287,41 @@
         "subscribing": "Subscribing…",
         "successTitle": "You're in.",
         "successBody": "We'll write when the next milestone ships."
+      },
+      "ideas": {
+        "eyebrow": "WHY THIS MATTERS",
+        "title": "Four ideas this project tests in practice.",
+        "intro": "Monitor-Upcycling isn't a one-off — it's a concrete test of four levers for sustainable IT. Go deeper via the links.",
+        "pillars": [
+          {
+            "key": "environment",
+            "title": "Environmental footprint",
+            "body": "Producing a new lamp costs raw materials and CO₂. Re-using a monitor is almost always the better choice. How we estimate CO₂ — transparent, sourced.",
+            "linkLabel": "Open CO₂ methodology",
+            "linkHref": "/transparenz/co2"
+          },
+          {
+            "key": "upcycling",
+            "title": "Upcycling, not recycling",
+            "body": "Recycling breaks a device down into raw materials. Upcycling lifts it into a second, often better life phase. The device keeps more of its value — and its history.",
+            "linkLabel": "See existing applications",
+            "linkHref": "/projects/upcycling/applications"
+          },
+          {
+            "key": "circular",
+            "title": "Circular economy",
+            "body": "Instead of linear (buy → use → discard) we think in circles: every device has multiple life phases, every component swap extends use. That reshapes the economics too — see the open questions below.",
+            "linkLabel": "Open project status",
+            "linkHref": "/projects/upcycling/status"
+          },
+          {
+            "key": "oss",
+            "title": "Open-source hardware",
+            "body": "Guides, schematics and pin-out maps are free to access. Anyone can replicate, adapt, improve. We prefer ten independent workshops to one central monopoly.",
+            "linkLabel": "Build one yourself",
+            "linkHref": "/projects/upcycling/build-your-own"
+          }
+        ]
       }
     }
   },

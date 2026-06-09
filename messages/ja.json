@@ -4120,7 +4120,11 @@
             "title": "CE und Haftung",
             "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
           }
-        ]
+        ],
+        "copyButton": "プロンプトをコピー",
+        "copied": "コピーしました",
+        "why": "自分用にカスタマイズ",
+        "whyBody": "コピーして、自分の文脈に合わせて、お好みの LLM (Claude, ChatGPT など) に貼り付け。"
       },
       "needs": {
         "title": "私たちが必要としているもの",
@@ -4650,6 +4654,41 @@
         "subscribing": "登録中…",
         "successTitle": "登録完了。",
         "successBody": "次のマイルストーンの時にお知らせします。"
+      },
+      "ideas": {
+        "eyebrow": "なぜ重要か",
+        "title": "このプロジェクトが実証する 4 つの考え方。",
+        "intro": "Monitor-Upcycling は一回限りではなく、持続可能な IT のための 4 つのレバーの具体的なテストです。リンクから深堀りできます。",
+        "pillars": [
+          {
+            "key": "environment",
+            "title": "環境への影響",
+            "body": "新しいランプを作るには原材料と CO₂ が必要です。モニターを再利用するほうがほぼ常により良い選択です。CO₂ の見積もり方法 — 出典付きで透明に。",
+            "linkLabel": "CO₂ 方法論を開く",
+            "linkHref": "/transparenz/co2"
+          },
+          {
+            "key": "upcycling",
+            "title": "リサイクルではなくアップサイクル",
+            "body": "リサイクルは機器を原材料に分解します。アップサイクルは機器を第二の、しばしばより良いライフフェーズへ持ち上げます。価値とストーリーがより多く残ります。",
+            "linkLabel": "既存のアプリケーションを見る",
+            "linkHref": "/projects/upcycling/applications"
+          },
+          {
+            "key": "circular",
+            "title": "サーキュラーエコノミー",
+            "body": "直線的（買う → 使う → 捨てる）ではなく、循環的に考えます。機器には複数のライフフェーズがあり、部品交換ごとに使用が延びます。これは経済も変えます — 下の未解決の質問を参照。",
+            "linkLabel": "プロジェクトの状況を見る",
+            "linkHref": "/projects/upcycling/status"
+          },
+          {
+            "key": "oss",
+            "title": "オープンソースハードウェア",
+            "body": "ガイド、回路図、ピン配置は自由にアクセス可能。誰でも複製、適応、改善できます。中央集権的独占よりも、独立した 10 のワークショップを選びます。",
+            "linkLabel": "自分で組み立てる",
+            "linkHref": "/projects/upcycling/build-your-own"
+          }
+        ]
       }
     }
   },

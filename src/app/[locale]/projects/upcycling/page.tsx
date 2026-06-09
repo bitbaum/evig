@@ -1,5 +1,15 @@
 import { getTranslations } from 'next-intl/server'
-import { Lightbulb, ArrowRight, Layers, Image as ImageIcon, Wrench } from 'lucide-react'
+import {
+  Lightbulb,
+  ArrowRight,
+  Layers,
+  Image as ImageIcon,
+  Wrench,
+  Leaf,
+  Recycle,
+  RotateCcw,
+  Code,
+} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import {
@@ -11,6 +21,7 @@ import {
 } from '@/components/projects'
 import type { ProjectPageConfig, RawCard, RawAction } from '@/components/projects'
 import { UpcyclingInterestCTA } from './UpcyclingInterestCTA'
+import { AiBrainstormSection } from './AiBrainstormSection'
 
 type GuideItem = {
   slug: string
@@ -28,17 +39,34 @@ type ExploreCard = {
   cta: string
 }
 
+type IdeaPillar = {
+  key: 'environment' | 'upcycling' | 'circular' | 'oss'
+  title: string
+  body: string
+  linkLabel: string
+  linkHref: string
+}
+
 type PageMessages = {
   meta: { title: string; description: string }
   hero: { title: string; description: string; cta1: string; cta2: string }
   interestCta: { eyebrow: string; heading: string; body: string }
+  ideas: { eyebrow: string; title: string; intro: string; pillars: IdeaPillar[] }
   about: { title: string; description: string }
   approach: { title: string; cards: RawCard[] }
   nextsteps: { title: string; description: string }
   cta: { title: string; actions: RawAction[] }
   open_questions: { title: string; questions: string[] }
   source: { title: string; description: string }
-  ai_brainstorm: { title: string; intro: string; prompts: Array<{ title: string; prompt: string }> }
+  ai_brainstorm: {
+    title: string
+    intro: string
+    prompts: Array<{ title: string; prompt: string }>
+    copyButton: string
+    copied: string
+    why: string
+    whyBody: string
+  }
   guides: {
     eyebrow: string
     title: string
@@ -96,13 +124,10 @@ export default async function UpcyclingPage() {
         cards: p.open_questions.questions.map((q: string) => ({ title: q, description: '' })),
       },
       { title: p.source.title, description: p.source.description, backgroundColor: 'white', layout: 'single' },
-      {
-        title: p.ai_brainstorm.title,
-        description: p.ai_brainstorm.intro,
-        backgroundColor: 'gray',
-        layout: 'grid-2',
-        cards: p.ai_brainstorm.prompts.map((pr: { title: string; prompt: string }) => ({ title: pr.title, description: pr.prompt })),
-      },
+      // ai_brainstorm dropped from this list — it now renders below via the
+      // dedicated AiBrainstormSection (copyable prompt cards). Treating each
+      // prompt as a "paragraph blob in a card grid" was hostile to the one
+      // action they exist for: paste into an LLM.
     ],
     cta: {
       title: p.cta.title,
@@ -119,14 +144,71 @@ export default async function UpcyclingPage() {
     <div className="min-h-screen">
       {config.hero && <ProjectHero hero={config.hero} />}
       <ExploreSection explore={p.explore} />
+      <IdeasSection ideas={p.ideas} />
       <InterestSection interestCta={p.interestCta} />
       {config.sections.map((section, i) => (
         <ProjectSection key={i} section={section} />
       ))}
+      <AiBrainstormSection section={p.ai_brainstorm} />
       <GuidesSection guides={p.guides} />
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
       {config.cta && <ProjectCallToAction cta={config.cta} />}
     </div>
+  )
+}
+
+const ICON_BY_KEY: Record<IdeaPillar['key'], LucideIcon> = {
+  environment: Leaf,
+  upcycling: Recycle,
+  circular: RotateCcw,
+  oss: Code,
+}
+
+function IdeasSection({ ideas }: { ideas: PageMessages['ideas'] }) {
+  if (!ideas?.pillars?.length) return null
+  return (
+    <section className="bg-canvas border-t border-subtle py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl">
+          <div className="ui-public-eyebrow">{ideas.eyebrow}</div>
+          <h2 className="ui-public-display-md mt-3">{ideas.title}</h2>
+          <p className="ui-public-section-lede mt-3">{ideas.intro}</p>
+        </div>
+
+        <ol className="mt-12 grid gap-4 sm:grid-cols-2">
+          {ideas.pillars.map((pillar, i) => {
+            const Icon = ICON_BY_KEY[pillar.key] ?? Leaf
+            return (
+              <li
+                key={pillar.key}
+                className="flex flex-col rounded-lg border border-subtle bg-surface-base p-6"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-md bg-action-muted/30">
+                    <Icon className="h-4 w-4 text-action" aria-hidden="true" />
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-xs tabular-nums text-text-tertiary"
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-lg font-semibold text-text-primary">{pillar.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{pillar.body}</p>
+                <Link
+                  href={pillar.linkHref}
+                  className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action hover:gap-2 transition-all"
+                >
+                  {pillar.linkLabel}
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
+              </li>
+            )
+          })}
+        </ol>
+      </div>
+    </section>
   )
 }
 

@@ -4120,7 +4120,11 @@
             "title": "CE und Haftung",
             "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
           }
-        ]
+        ],
+        "copyButton": "Copia prompt",
+        "copied": "Copiato",
+        "why": "Adattalo",
+        "whyBody": "Copia, adatta al tuo contesto, incolla nel tuo LLM preferito (Claude, ChatGPT, ecc.)."
       },
       "needs": {
         "title": "Di cosa abbiamo bisogno",
@@ -4650,6 +4654,41 @@
         "subscribing": "Iscrizione in corso…",
         "successTitle": "Fatto.",
         "successBody": "Ti scriviamo al prossimo traguardo."
+      },
+      "ideas": {
+        "eyebrow": "PERCHÉ CONTA",
+        "title": "Quattro idee che questo progetto mette alla prova.",
+        "intro": "Il Monitor-Upcycling non è un caso isolato — è un test concreto di quattro leve per un'IT sostenibile. Approfondisci tramite i link.",
+        "pillars": [
+          {
+            "key": "environment",
+            "title": "Impronta ambientale",
+            "body": "Produrre una nuova lampada costa materie prime e CO₂. Riutilizzare un monitor è quasi sempre la scelta migliore. Come stimiamo la CO₂ — trasparente, con fonte.",
+            "linkLabel": "Apri la metodologia CO₂",
+            "linkHref": "/transparenz/co2"
+          },
+          {
+            "key": "upcycling",
+            "title": "Upcycling, non riciclo",
+            "body": "Il riciclo scompone un dispositivo in materie prime. L'upcycling lo eleva a una seconda vita, spesso migliore. Il dispositivo mantiene di più del suo valore — e della sua storia.",
+            "linkLabel": "Vedi le applicazioni esistenti",
+            "linkHref": "/projects/upcycling/applications"
+          },
+          {
+            "key": "circular",
+            "title": "Economia circolare",
+            "body": "Invece di un modello lineare (compra → usa → butta) pensiamo in cerchi: ogni dispositivo ha più fasi di vita, ogni sostituzione di componente prolunga l'uso. Questo rimodella anche l'economia — vedi le domande aperte sotto.",
+            "linkLabel": "Vedi lo stato del progetto",
+            "linkHref": "/projects/upcycling/status"
+          },
+          {
+            "key": "oss",
+            "title": "Hardware open source",
+            "body": "Guide, schemi e pinout sono ad accesso libero. Chiunque può replicare, adattare, migliorare. Preferiamo dieci laboratori indipendenti a un monopolio centrale.",
+            "linkLabel": "Costruiscine uno",
+            "linkHref": "/projects/upcycling/build-your-own"
+          }
+        ]
       }
     }
   },

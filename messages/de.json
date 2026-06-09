@@ -5496,7 +5496,11 @@
             "title": "CE und Haftung",
             "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
           }
-        ]
+        ],
+        "copyButton": "Prompt kopieren",
+        "copied": "Kopiert",
+        "why": "Eigene Anpassung",
+        "whyBody": "Kopiere, passe an deinen Kontext an, in dein bevorzugtes LLM einfügen (Claude, ChatGPT, etc.)."
       },
       "needs": {
         "title": "Was wir brauchen",
@@ -6026,6 +6030,41 @@
         "subscribing": "Wird angemeldet…",
         "successTitle": "Eingetragen.",
         "successBody": "Beim nächsten Meilenstein hörst du von uns."
+      },
+      "ideas": {
+        "eyebrow": "WARUM DAS WICHTIG IST",
+        "title": "Vier Ideen, die das Projekt tragen.",
+        "intro": "Monitor-Upcycling steht nicht für sich allein — es ist ein konkreter Test für vier Hebel der nachhaltigen IT. Tiefer einsteigen über die Links.",
+        "pillars": [
+          {
+            "key": "environment",
+            "title": "Umweltbilanz",
+            "body": "Eine neue Leuchte zu produzieren kostet Rohstoffe und CO₂. Einen Monitor weiterzunutzen ist fast immer die bessere Wahl. Wie wir CO₂ schätzen — transparent mit Quelle.",
+            "linkLabel": "CO₂-Methodik öffnen",
+            "linkHref": "/transparenz/co2"
+          },
+          {
+            "key": "upcycling",
+            "title": "Upcycling statt Recycling",
+            "body": "Recycling zerlegt ein Gerät in Rohstoffe. Upcycling hebt es auf eine zweite, oft bessere Lebensphase. Das Gerät behält mehr von seinem Wert — und seiner Geschichte.",
+            "linkLabel": "Bestehende Anwendungen ansehen",
+            "linkHref": "/projects/upcycling/applications"
+          },
+          {
+            "key": "circular",
+            "title": "Kreislaufwirtschaft",
+            "body": "Statt linear (kaufen → benutzen → wegwerfen) denken wir zirkulär: jedes Gerät hat mehrere Lebensphasen, jeder Komponentenwechsel verlängert die Nutzung. Das verändert auch die Ökonomie — siehe offene Fragen unten.",
+            "linkLabel": "Projekt-Status öffnen",
+            "linkHref": "/projects/upcycling/status"
+          },
+          {
+            "key": "oss",
+            "title": "Open-Source-Hardware",
+            "body": "Anleitungen, Schaltpläne und Pin-Belegungen sind frei zugänglich. Jede·r darf nachbauen, anpassen, verbessern. Lieber zehn unabhängige Werkstätten als ein zentrales Monopol.",
+            "linkLabel": "Selbst bauen",
+            "linkHref": "/projects/upcycling/build-your-own"
+          }
+        ]
       }
     }
   },
