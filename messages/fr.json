@@ -3123,6 +3123,50 @@
       "errorNoRecommend": "Veuillez indiquer si vous recommanderiez le technicien",
       "errorTextTooShort": "Le texte de l'avis doit comporter au moins 10 caractères",
       "errorGeneric": "Une erreur s'est produite"
+    },
+    "accept": {
+      "linkIncomplete": {
+        "title": "Lien incomplet",
+        "message": "Ce lien ne contient pas de jeton. Veuillez ouvrir le lien depuis l'e-mail de notification."
+      },
+      "linkExpired": {
+        "title": "Lien expiré",
+        "message": "Ce lien d'acceptation a expiré. Veuillez vous connecter et accepter l'offre directement depuis la demande.",
+        "cta": "Mes demandes"
+      },
+      "linkInvalid": {
+        "title": "Lien invalide",
+        "message": "Ce lien n'a pas pu être vérifié. Veuillez vous connecter et accepter l'offre directement depuis la demande.",
+        "cta": "Mes demandes"
+      },
+      "offerNotFound": {
+        "title": "Offre introuvable",
+        "message": "L'offre n'existe plus."
+      },
+      "alreadyHandled": {
+        "title": "Déjà traitée",
+        "message": "Cette offre a déjà été acceptée, refusée ou retirée.",
+        "cta": "Ouvrir la demande"
+      },
+      "requestClosed": {
+        "title": "Demande fermée",
+        "message": "Cette demande n'accepte plus d'offres — une autre offre a été acceptée, ou la demande est close.",
+        "cta": "Ouvrir la demande"
+      },
+      "button": {
+        "accept": "Accepter l'offre",
+        "accepting": "Acceptation en cours…"
+      },
+      "errors": {
+        "expired": "Ce lien a expiré. Veuillez vous connecter et accepter l'offre directement.",
+        "invalid": "Le lien est invalide.",
+        "offerNotPending": "Cette offre a déjà été traitée.",
+        "requestNotOpen": "Cette demande n'accepte plus d'offres.",
+        "requestNotFound": "La demande n'existe plus.",
+        "offerNotFound": "L'offre n'existe plus.",
+        "generic": "Une erreur est survenue. Veuillez réessayer.",
+        "network": "Erreur réseau. Veuillez réessayer."
+      }
     }
   },
   "blog": {

@@ -2585,6 +2585,50 @@
       "errorNoRecommend": "Por favor indica si recomendarías al técnico",
       "errorTextTooShort": "El texto de la valoración debe tener al menos 10 caracteres",
       "errorGeneric": "Se ha producido un error"
+    },
+    "accept": {
+      "linkIncomplete": {
+        "title": "Enlace incompleto",
+        "message": "Este enlace no incluye token. Abre el enlace desde el correo de notificación."
+      },
+      "linkExpired": {
+        "title": "Enlace caducado",
+        "message": "Este enlace de aceptación ha caducado. Inicia sesión y acepta la oferta directamente desde la solicitud.",
+        "cta": "Mis solicitudes"
+      },
+      "linkInvalid": {
+        "title": "Enlace inválido",
+        "message": "Este enlace no se pudo verificar. Inicia sesión y acepta la oferta directamente desde la solicitud.",
+        "cta": "Mis solicitudes"
+      },
+      "offerNotFound": {
+        "title": "Oferta no encontrada",
+        "message": "La oferta ya no existe."
+      },
+      "alreadyHandled": {
+        "title": "Ya procesada",
+        "message": "Esta oferta ya ha sido aceptada, rechazada o retirada.",
+        "cta": "Abrir solicitud"
+      },
+      "requestClosed": {
+        "title": "Solicitud cerrada",
+        "message": "Esta solicitud ya no acepta ofertas — otra oferta fue aceptada o la solicitud se ha cerrado.",
+        "cta": "Abrir solicitud"
+      },
+      "button": {
+        "accept": "Aceptar oferta",
+        "accepting": "Aceptando…"
+      },
+      "errors": {
+        "expired": "Este enlace ha caducado. Inicia sesión y acepta la oferta directamente.",
+        "invalid": "El enlace no es válido.",
+        "offerNotPending": "Esta oferta ya ha sido procesada.",
+        "requestNotOpen": "Esta solicitud ya no acepta ofertas.",
+        "requestNotFound": "La solicitud ya no existe.",
+        "offerNotFound": "La oferta ya no existe.",
+        "generic": "Algo salió mal. Inténtalo de nuevo.",
+        "network": "Error de red. Inténtalo de nuevo."
+      }
     }
   },
   "knowhow": {

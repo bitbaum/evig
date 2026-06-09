@@ -14,6 +14,7 @@ import { PageShell } from '@/components/layout/PageShell'
 import Heading from '@/components/ui/Heading'
 import { buttonClass } from '@/components/ui/button-class'
 import { AlertCircle, CheckCircle, ArrowRight, Clock, Ban } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 
 interface OfferDisplay {
   offer_id: string
@@ -49,19 +50,22 @@ async function fetchOfferDisplay(offerId: string): Promise<OfferDisplay | null> 
 }
 
 interface PageProps {
+  params: Promise<{ locale: string }>
   searchParams: Promise<{ token?: string | string[] }>
 }
 
-export default async function AcceptOfferTokenPage({ searchParams }: PageProps) {
-  const params = await searchParams
-  const token = typeof params.token === 'string' ? params.token : ''
+export default async function AcceptOfferTokenPage({ params, searchParams }: PageProps) {
+  const { locale } = await params
+  const sp = await searchParams
+  const token = typeof sp.token === 'string' ? sp.token : ''
+  const t = await getTranslations({ locale, namespace: 'itHelp.accept' })
 
   if (!token) {
     return (
       <StateCard
         icon={<Ban className="w-16 h-16 text-error-500" />}
-        title="Link unvollständig"
-        message="Dieser Link enthält keinen Token. Bitte öffne den Link aus der E-Mail-Benachrichtigung."
+        title={t('linkIncomplete.title')}
+        message={t('linkIncomplete.message')}
       />
     )
   }
@@ -72,18 +76,18 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
       return (
         <StateCard
           icon={<Clock className="w-16 h-16 text-warning-500" />}
-          title="Link abgelaufen"
-          message="Dieser Annahme-Link ist abgelaufen. Bitte melde dich an und akzeptiere das Angebot direkt in der Anfrage."
-          cta={{ href: '/it-hilfe/my', label: 'Zu meinen Anfragen' }}
+          title={t('linkExpired.title')}
+          message={t('linkExpired.message')}
+          cta={{ href: '/it-hilfe/my', label: t('linkExpired.cta') }}
         />
       )
     }
     return (
       <StateCard
         icon={<Ban className="w-16 h-16 text-error-500" />}
-        title="Link ungültig"
-        message="Dieser Link konnte nicht verifiziert werden. Bitte melde dich an und akzeptiere das Angebot direkt in der Anfrage."
-        cta={{ href: '/it-hilfe/my', label: 'Zu meinen Anfragen' }}
+        title={t('linkInvalid.title')}
+        message={t('linkInvalid.message')}
+        cta={{ href: '/it-hilfe/my', label: t('linkInvalid.cta') }}
       />
     )
   }
@@ -93,8 +97,8 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
     return (
       <StateCard
         icon={<AlertCircle className="w-16 h-16 text-error-500" />}
-        title="Angebot nicht gefunden"
-        message="Das Angebot existiert nicht mehr."
+        title={t('offerNotFound.title')}
+        message={t('offerNotFound.message')}
       />
     )
   }
@@ -103,9 +107,9 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
     return (
       <StateCard
         icon={<AlertCircle className="w-16 h-16 text-warning-500" />}
-        title="Bereits bearbeitet"
-        message="Dieses Angebot wurde bereits angenommen, abgelehnt oder zurückgezogen."
-        cta={{ href: `/it-hilfe/${offerDisplay.request_id}`, label: 'Anfrage öffnen' }}
+        title={t('alreadyHandled.title')}
+        message={t('alreadyHandled.message')}
+        cta={{ href: `/it-hilfe/${offerDisplay.request_id}`, label: t('alreadyHandled.cta') }}
       />
     )
   }
@@ -114,9 +118,9 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
     return (
       <StateCard
         icon={<AlertCircle className="w-16 h-16 text-warning-500" />}
-        title="Anfrage geschlossen"
-        message="Diese Anfrage akzeptiert keine Angebote mehr — ein anderes Angebot wurde bereits angenommen, oder die Anfrage wurde abgeschlossen."
-        cta={{ href: `/it-hilfe/${offerDisplay.request_id}`, label: 'Anfrage öffnen' }}
+        title={t('requestClosed.title')}
+        message={t('requestClosed.message')}
+        cta={{ href: `/it-hilfe/${offerDisplay.request_id}`, label: t('requestClosed.cta') }}
       />
     )
   }

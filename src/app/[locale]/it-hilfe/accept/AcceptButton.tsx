@@ -6,6 +6,7 @@ import { useState } from 'react'
 // gets pushed to a plain /it-hilfe/<id> path would jump locale (en → de).
 // Using this useRouter preserves the active locale across the redirect.
 import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 
@@ -25,8 +26,29 @@ interface AcceptButtonProps {
  */
 export function AcceptButton({ token }: AcceptButtonProps) {
   const router = useRouter()
+  const t = useTranslations('itHelp.accept')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  function humanError(reason: string | undefined, fallback: string | undefined): string {
+    switch (reason) {
+      case 'expired':
+        return t('errors.expired')
+      case 'malformed':
+      case 'invalid_signature':
+        return t('errors.invalid')
+      case 'offer_not_pending':
+        return t('errors.offerNotPending')
+      case 'request_not_open':
+        return t('errors.requestNotOpen')
+      case 'request_not_found':
+        return t('errors.requestNotFound')
+      case 'offer_not_found':
+        return t('errors.offerNotFound')
+      default:
+        return fallback || t('errors.generic')
+    }
+  }
 
   async function handleAccept() {
     setSubmitting(true)
@@ -45,7 +67,7 @@ export function AcceptButton({ token }: AcceptButtonProps) {
       if (!res.ok || !body || body.success === false) {
         // Distinct messages so the user can recover when possible.
         const reason = body && 'reason' in body ? body.reason : undefined
-        const fallback = body?.success === false ? body.error : 'Etwas ist schiefgelaufen.'
+        const fallback = body?.success === false ? body.error : undefined
         setError(humanError(reason, fallback))
         setSubmitting(false)
         return
@@ -55,7 +77,7 @@ export function AcceptButton({ token }: AcceptButtonProps) {
       router.push(`/it-hilfe/${body.data.requestId}?accepted=1`)
       router.refresh()
     } catch {
-      setError('Netzwerkfehler. Bitte erneut versuchen.')
+      setError(t('errors.network'))
       setSubmitting(false)
     }
   }
@@ -71,10 +93,10 @@ export function AcceptButton({ token }: AcceptButtonProps) {
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            Wird angenommen…
+            {t('button.accepting')}
           </>
         ) : (
-          'Angebot annehmen'
+          t('button.accept')
         )}
       </Button>
       {error && (
@@ -84,24 +106,4 @@ export function AcceptButton({ token }: AcceptButtonProps) {
       )}
     </div>
   )
-}
-
-function humanError(reason: string | undefined, fallback: string | undefined): string {
-  switch (reason) {
-    case 'expired':
-      return 'Dieser Link ist abgelaufen. Bitte melde dich an und akzeptiere das Angebot direkt.'
-    case 'malformed':
-    case 'invalid_signature':
-      return 'Der Link ist ungültig.'
-    case 'offer_not_pending':
-      return 'Dieses Angebot wurde bereits bearbeitet.'
-    case 'request_not_open':
-      return 'Diese Anfrage akzeptiert keine Angebote mehr.'
-    case 'request_not_found':
-      return 'Die Anfrage existiert nicht mehr.'
-    case 'offer_not_found':
-      return 'Das Angebot existiert nicht mehr.'
-    default:
-      return fallback || 'Etwas ist schiefgelaufen. Bitte erneut versuchen.'
-  }
 }

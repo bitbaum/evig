@@ -3110,6 +3110,50 @@
       "timeLeftLessThanHour": "< 1 Std.",
       "timeLeftHours": "Noch {count} Std.",
       "offersCount": "{count, plural, one {# Angebot} other {# Angebote}}"
+    },
+    "accept": {
+      "linkIncomplete": {
+        "title": "Link unvollständig",
+        "message": "Dieser Link enthält keinen Token. Bitte öffne den Link aus der E-Mail-Benachrichtigung."
+      },
+      "linkExpired": {
+        "title": "Link abgelaufen",
+        "message": "Dieser Annahme-Link ist abgelaufen. Bitte melde dich an und akzeptiere das Angebot direkt in der Anfrage.",
+        "cta": "Zu meinen Anfragen"
+      },
+      "linkInvalid": {
+        "title": "Link ungültig",
+        "message": "Dieser Link konnte nicht verifiziert werden. Bitte melde dich an und akzeptiere das Angebot direkt in der Anfrage.",
+        "cta": "Zu meinen Anfragen"
+      },
+      "offerNotFound": {
+        "title": "Angebot nicht gefunden",
+        "message": "Das Angebot existiert nicht mehr."
+      },
+      "alreadyHandled": {
+        "title": "Bereits bearbeitet",
+        "message": "Dieses Angebot wurde bereits angenommen, abgelehnt oder zurückgezogen.",
+        "cta": "Anfrage öffnen"
+      },
+      "requestClosed": {
+        "title": "Anfrage geschlossen",
+        "message": "Diese Anfrage akzeptiert keine Angebote mehr — ein anderes Angebot wurde bereits angenommen, oder die Anfrage wurde abgeschlossen.",
+        "cta": "Anfrage öffnen"
+      },
+      "button": {
+        "accept": "Angebot annehmen",
+        "accepting": "Wird angenommen…"
+      },
+      "errors": {
+        "expired": "Dieser Link ist abgelaufen. Bitte melde dich an und akzeptiere das Angebot direkt.",
+        "invalid": "Der Link ist ungültig.",
+        "offerNotPending": "Dieses Angebot wurde bereits bearbeitet.",
+        "requestNotOpen": "Diese Anfrage akzeptiert keine Angebote mehr.",
+        "requestNotFound": "Die Anfrage existiert nicht mehr.",
+        "offerNotFound": "Das Angebot existiert nicht mehr.",
+        "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+        "network": "Netzwerkfehler. Bitte erneut versuchen."
+      }
     }
   },
   "blog": {

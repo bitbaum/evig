@@ -2585,6 +2585,50 @@
       "errorNoRecommend": "Indica se raccomanderesti il tecnico",
       "errorTextTooShort": "Il testo della valutazione deve avere almeno 10 caratteri",
       "errorGeneric": "Si è verificato un errore"
+    },
+    "accept": {
+      "linkIncomplete": {
+        "title": "Link incompleto",
+        "message": "Questo link non contiene un token. Apri il link dalla notifica email."
+      },
+      "linkExpired": {
+        "title": "Link scaduto",
+        "message": "Questo link di accettazione è scaduto. Accedi e accetta l'offerta direttamente dalla richiesta.",
+        "cta": "Le mie richieste"
+      },
+      "linkInvalid": {
+        "title": "Link non valido",
+        "message": "Questo link non è stato verificato. Accedi e accetta l'offerta direttamente dalla richiesta.",
+        "cta": "Le mie richieste"
+      },
+      "offerNotFound": {
+        "title": "Offerta non trovata",
+        "message": "L'offerta non esiste più."
+      },
+      "alreadyHandled": {
+        "title": "Già gestita",
+        "message": "Questa offerta è già stata accettata, rifiutata o ritirata.",
+        "cta": "Apri richiesta"
+      },
+      "requestClosed": {
+        "title": "Richiesta chiusa",
+        "message": "Questa richiesta non accetta più offerte — un'altra offerta è stata accettata o la richiesta è stata chiusa.",
+        "cta": "Apri richiesta"
+      },
+      "button": {
+        "accept": "Accetta offerta",
+        "accepting": "In corso…"
+      },
+      "errors": {
+        "expired": "Questo link è scaduto. Accedi e accetta l'offerta direttamente.",
+        "invalid": "Il link non è valido.",
+        "offerNotPending": "Questa offerta è già stata gestita.",
+        "requestNotOpen": "Questa richiesta non accetta più offerte.",
+        "requestNotFound": "La richiesta non esiste più.",
+        "offerNotFound": "L'offerta non esiste più.",
+        "generic": "Qualcosa è andato storto. Riprova.",
+        "network": "Errore di rete. Riprova."
+      }
     }
   },
   "knowhow": {

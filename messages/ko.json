@@ -2585,6 +2585,50 @@
       "errorNoRecommend": "기술자 추천 여부를 선택해 주세요",
       "errorTextTooShort": "리뷰 텍스트는 최소 10자 이상이어야 합니다",
       "errorGeneric": "오류가 발생했습니다"
+    },
+    "accept": {
+      "linkIncomplete": {
+        "title": "링크 불완전",
+        "message": "이 링크에 토큰이 없습니다. 이메일 알림의 링크를 열어주세요."
+      },
+      "linkExpired": {
+        "title": "링크 만료",
+        "message": "이 수락 링크가 만료되었습니다. 로그인 후 요청에서 직접 제안을 수락해주세요.",
+        "cta": "내 요청"
+      },
+      "linkInvalid": {
+        "title": "링크 무효",
+        "message": "이 링크를 확인할 수 없습니다. 로그인 후 요청에서 직접 제안을 수락해주세요.",
+        "cta": "내 요청"
+      },
+      "offerNotFound": {
+        "title": "제안을 찾을 수 없음",
+        "message": "제안이 더 이상 존재하지 않습니다."
+      },
+      "alreadyHandled": {
+        "title": "이미 처리됨",
+        "message": "이 제안은 이미 수락, 거절 또는 철회되었습니다.",
+        "cta": "요청 열기"
+      },
+      "requestClosed": {
+        "title": "요청 종료",
+        "message": "이 요청은 더 이상 제안을 받지 않습니다 — 다른 제안이 수락되었거나 요청이 종료되었습니다.",
+        "cta": "요청 열기"
+      },
+      "button": {
+        "accept": "제안 수락",
+        "accepting": "수락 중…"
+      },
+      "errors": {
+        "expired": "링크가 만료되었습니다. 로그인 후 직접 수락해주세요.",
+        "invalid": "링크가 유효하지 않습니다.",
+        "offerNotPending": "이 제안은 이미 처리되었습니다.",
+        "requestNotOpen": "이 요청은 더 이상 제안을 받지 않습니다.",
+        "requestNotFound": "요청이 존재하지 않습니다.",
+        "offerNotFound": "제안이 존재하지 않습니다.",
+        "generic": "문제가 발생했습니다. 다시 시도해주세요.",
+        "network": "네트워크 오류. 다시 시도해주세요."
+      }
     }
   },
   "knowhow": {

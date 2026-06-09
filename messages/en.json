@@ -3123,6 +3123,50 @@
       "timeLeftLessThanHour": "< 1 hr",
       "timeLeftHours": "{count} hr left",
       "offersCount": "{count, plural, one {# offer} other {# offers}}"
+    },
+    "accept": {
+      "linkIncomplete": {
+        "title": "Link incomplete",
+        "message": "This link is missing its token. Please open the link from the email notification."
+      },
+      "linkExpired": {
+        "title": "Link expired",
+        "message": "This acceptance link has expired. Please sign in and accept the offer directly from the request.",
+        "cta": "My requests"
+      },
+      "linkInvalid": {
+        "title": "Link invalid",
+        "message": "This link could not be verified. Please sign in and accept the offer directly from the request.",
+        "cta": "My requests"
+      },
+      "offerNotFound": {
+        "title": "Offer not found",
+        "message": "The offer no longer exists."
+      },
+      "alreadyHandled": {
+        "title": "Already handled",
+        "message": "This offer has already been accepted, declined or withdrawn.",
+        "cta": "Open request"
+      },
+      "requestClosed": {
+        "title": "Request closed",
+        "message": "This request no longer accepts offers — another offer was accepted, or the request has been closed.",
+        "cta": "Open request"
+      },
+      "button": {
+        "accept": "Accept offer",
+        "accepting": "Accepting…"
+      },
+      "errors": {
+        "expired": "This link has expired. Please sign in and accept the offer directly.",
+        "invalid": "The link is invalid.",
+        "offerNotPending": "This offer has already been handled.",
+        "requestNotOpen": "This request no longer accepts offers.",
+        "requestNotFound": "The request no longer exists.",
+        "offerNotFound": "The offer no longer exists.",
+        "generic": "Something went wrong. Please try again.",
+        "network": "Network error. Please try again."
+      }
     }
   },
   "blog": {
