@@ -8348,6 +8348,9 @@
         "accepted": "承認済み",
         "declined": "却下済み"
       }
+    },
+    "localeFallback": {
+      "notice": "管理エリアはドイツ語のみで利用可能です。"
     }
   }
 }

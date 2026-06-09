@@ -8348,6 +8348,9 @@
         "accepted": "Aceptada",
         "declined": "Rechazada"
       }
+    },
+    "localeFallback": {
+      "notice": "El área de administración solo está disponible en alemán."
     }
   }
 }

@@ -8348,6 +8348,9 @@
         "accepted": "Accepted",
         "declined": "Declined"
       }
+    },
+    "localeFallback": {
+      "notice": "The admin area is only available in German."
     }
   }
 }

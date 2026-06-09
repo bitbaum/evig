@@ -8348,6 +8348,9 @@
         "accepted": "수락됨",
         "declined": "거절됨"
       }
+    },
+    "localeFallback": {
+      "notice": "관리 영역은 독일어로만 제공됩니다."
     }
   }
 }

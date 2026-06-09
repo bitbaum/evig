@@ -8349,6 +8349,9 @@
         "accepted": "Accepté",
         "declined": "Refusé"
       }
+    },
+    "localeFallback": {
+      "notice": "L'espace d'administration n'est disponible qu'en allemand."
     }
   }
 }

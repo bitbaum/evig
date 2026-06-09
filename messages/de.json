@@ -8341,6 +8341,9 @@
         "accepted": "Angenommen",
         "declined": "Abgelehnt"
       }
+    },
+    "localeFallback": {
+      "notice": "Der Admin-Bereich ist nur auf Deutsch verfügbar."
     }
   }
 }
