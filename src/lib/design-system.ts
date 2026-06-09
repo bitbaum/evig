@@ -357,8 +357,11 @@ export const designPrimitive = {
     'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
 
   button: {
-    default:     'bg-primary-600 text-white hover:bg-primary-700',
-    primary:     'bg-primary-600 text-white hover:bg-primary-700',
+    // In dark mode the brand pulse goes brighter (primary-500 #22c55e) and the
+    // text flips to near-black for WCAG AA contrast. Plain `text-white` on
+    // primary-600 was reading as 3.1:1 — looked green-washed.
+    default:     'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:text-neutral-950 dark:hover:bg-primary-400',
+    primary:     'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:text-neutral-950 dark:hover:bg-primary-400',
     outline:     'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-white/8 dark:bg-transparent dark:text-white dark:hover:bg-white/4',
     outlineLight:'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
     secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-white/6 dark:text-white dark:hover:bg-white/10',

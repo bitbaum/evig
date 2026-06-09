@@ -279,10 +279,12 @@
   color: var(--text-tertiary);
 }
 @utility ui-public-cta {
-  /* CTA primary — RevampIT green; large tap target; opacity hover. */
+  /* CTA primary — RevampIT green; large tap target; opacity hover.
+   * Text uses --color-action-text which flips: white on dark-green (light mode),
+   * near-black on bright-green (dark mode) — keeps WCAG AA contrast in both. */
   @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-action-text);
   min-height: 48px;
 }
 @utility ui-public-cta-ghost {
@@ -387,7 +389,7 @@
 @utility ui-public-cta-lg {
   @apply inline-flex items-center justify-center rounded-2xl px-12 py-4 text-xl font-semibold transition-opacity hover:opacity-90 active:opacity-80;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-action-text);
   min-height: 56px;
 }
 
