@@ -74,9 +74,32 @@ export async function middleware(request: NextRequest) {
     if (!(await hasValidSession(request))) {
       const loginUrl = new URL('/auth/login', request.url)
       loginUrl.searchParams.set('callbackUrl', pathname + request.nextUrl.search)
-      return NextResponse.redirect(loginUrl)
+      const redirectResponse = NextResponse.redirect(loginUrl)
+      // Preserve the user's locale across the redirect into the
+      // non-locale-prefixed /auth shell. Without this, a user on
+      // /en/admin lands on a German login page (BYPASS_INTL means
+      // /auth routes never see requestLocale, so request.ts falls
+      // back to defaultLocale unless NEXT_LOCALE tells it otherwise).
+      const localeMatch = pathname.match(LOCALE_PREFIX_REGEX)
+      if (localeMatch) {
+        redirectResponse.cookies.set('NEXT_LOCALE', localeMatch[1], {
+          path: '/',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 365,
+        })
+      }
+      return redirectResponse
     }
   }
+
+  // For every locale-prefixed request, write the NEXT_LOCALE cookie so
+  // any subsequent BYPASS_INTL navigation (e.g. /auth/register from an
+  // /en/* page) renders in the right language. No-op if the cookie is
+  // already correct.
+  const visitedLocaleMatch = pathname.match(LOCALE_PREFIX_REGEX)
+  const writeLocaleCookie =
+    visitedLocaleMatch &&
+    visitedLocaleMatch[1] !== request.cookies.get('NEXT_LOCALE')?.value
 
   // Skip intl routing for non-public paths
   const skipIntl = BYPASS_INTL.some(prefix => pathname.startsWith(prefix))
@@ -96,6 +119,15 @@ export async function middleware(request: NextRequest) {
   if (shouldIssueCsrfCookie(pathname, method) && !getCsrfFromCookies(request.headers.get('cookie'))) {
     const token = generateCsrfToken()
     response.headers.set('Set-Cookie', createCsrfCookie(token))
+  }
+
+  // Persist the URL-derived locale so BYPASS_INTL routes can recover it.
+  if (writeLocaleCookie && visitedLocaleMatch) {
+    response.cookies.set('NEXT_LOCALE', visitedLocaleMatch[1], {
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 365,
+    })
   }
 
   return response
