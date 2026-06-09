@@ -4944,8 +4944,7 @@
   "notFound": {
     "title": "Page introuvable",
     "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
-    "goHome": "Aller à l'accueil",
-    "reportProblem": "Signaler un problème"
+    "goHome": "Aller à l'accueil"
   },
   "error": {
     "title": "Une erreur s'est produite",

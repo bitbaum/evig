@@ -17,15 +17,10 @@ export default async function NotFound() {
         <p className="text-text-secondary mb-8">
           {t('description')}
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2' })}>
-            <Home className="w-4 h-4" />
-            {t('goHome')}
-          </Link>
-          <Link href="/contact" className={buttonClass({ variant: 'outline' })}>
-            {t('reportProblem')}
-          </Link>
-        </div>
+        <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2 inline-flex' })}>
+          <Home className="w-4 h-4" />
+          {t('goHome')}
+        </Link>
       </div>
     </div>
   )

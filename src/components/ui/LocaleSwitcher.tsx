@@ -9,9 +9,13 @@ import { cn } from '@/lib/utils'
 
 type Props = {
   className?: string
+  /** When the switcher sits at the bottom of a container (e.g. mobile menu
+   * footer), force the dropdown to open upward so options aren't clipped
+   * by the viewport edge. */
+  openUpward?: boolean
 }
 
-export function LocaleSwitcher({ className }: Props) {
+export function LocaleSwitcher({ className, openUpward = false }: Props) {
   const locale = useLocale() as Locale
   const pathname = usePathname()
   const router = useRouter()
@@ -39,7 +43,11 @@ export function LocaleSwitcher({ className }: Props) {
   }
 
   return (
-    <div ref={ref} className={cn('relative', className)}>
+    <div
+      ref={ref}
+      data-locale-up={openUpward ? 'true' : undefined}
+      className={cn('group/locale-switcher relative', className)}
+    >
       <button
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
@@ -60,8 +68,12 @@ export function LocaleSwitcher({ className }: Props) {
         <div
           role="listbox"
           className={cn(
+            // top-full opens downward by default; bottom-[100%] forces upward
+            // when the parent has the `data-locale-up` flag (mobile menu
+            // footer, where opening downward goes off-screen).
             'absolute right-0 top-full mt-1 z-50',
-            'min-w-28 rounded-lg border border-neutral-200 dark:border-white/6 bg-white dark:bg-neutral-900 shadow-lg dark:shadow-black/30 py-1',
+            'group-data-[locale-up=true]/locale-switcher:top-auto group-data-[locale-up=true]/locale-switcher:bottom-full group-data-[locale-up=true]/locale-switcher:mt-0 group-data-[locale-up=true]/locale-switcher:mb-1',
+            'min-w-28 max-h-[calc(100vh-8rem)] overflow-y-auto rounded-lg border border-neutral-200 dark:border-white/6 bg-white dark:bg-neutral-900 shadow-lg dark:shadow-black/30 py-1',
           )}
         >
           {locales.map((loc) => (

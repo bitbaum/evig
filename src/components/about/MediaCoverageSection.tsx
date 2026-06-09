@@ -142,7 +142,7 @@ export default function MediaCoverageSection() {
         {/* Stats Bar */}
         <div className="flex flex-wrap justify-center gap-8 mb-16">
           <div className="text-center">
-            <p className="text-3xl font-bold text-action">{stats.totalMentions}+</p>
+            <p className="text-3xl font-bold text-action">{stats.totalMentions}</p>
             <p className="text-sm text-text-tertiary">{t('statMentions')}</p>
           </div>
           <div className="hidden sm:block w-px bg-surface-overlay" />

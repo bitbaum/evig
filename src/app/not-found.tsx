@@ -3,30 +3,29 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { Search, Home } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import { Home } from 'lucide-react'
 import { buttonClass } from '@/components/ui/button-class'
 
+/**
+ * Global 404 fallback — fires for routes outside any `[locale]` segment
+ * (e.g. admin pages that aren't locale-aware) where next-intl provider
+ * isn't available, so we can't call useTranslations.
+ *
+ * Kept locale-neutral on purpose: a giant numeric "404" + one home link.
+ * No prose, no decorative text — works for every visitor regardless of
+ * their browser language.
+ */
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface-raised px-4">
       <div className="max-w-md w-full text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-raised rounded-full mb-6">
-          <Search className="w-8 h-8 text-text-muted" />
-        </div>
-        <Heading level={1} className="text-2xl text-text-primary mb-2">Seite nicht gefunden</Heading>
-        <p className="text-text-secondary mb-8">
-          Die gesuchte Seite existiert nicht oder wurde verschoben.
+        <p className="font-mono text-8xl font-bold text-text-tertiary mb-6 tabular-nums" aria-hidden="true">
+          404
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2' })}>
-            <Home className="w-4 h-4" />
-            Zur Startseite
-          </Link>
-          <Link href="/contact" className={buttonClass({ variant: 'outline' })}>
-            Problem melden
-          </Link>
-        </div>
+        <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2 inline-flex' })}>
+          <Home className="w-4 h-4" />
+          revamp-it.ch
+        </Link>
       </div>
     </div>
   )

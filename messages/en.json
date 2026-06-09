@@ -4890,8 +4890,7 @@
   "notFound": {
     "title": "Page Not Found",
     "description": "The page you're looking for doesn't exist or has been moved.",
-    "goHome": "Go to Homepage",
-    "reportProblem": "Report a Problem"
+    "goHome": "Go to Homepage"
   },
   "error": {
     "title": "Something Went Wrong",

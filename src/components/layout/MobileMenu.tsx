@@ -319,7 +319,7 @@ export function MobileMenu({
           <div className="flex items-center gap-2">
             <ThemeToggle />
           </div>
-          <LocaleSwitcher />
+          <LocaleSwitcher openUpward />
         </div>
         <div className="px-6 pb-4">
           {session?.user ? (

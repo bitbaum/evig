@@ -139,7 +139,7 @@ export default function PressPageContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap justify-center gap-8 sm:gap-16">
             <div className="text-center">
-              <p className="text-3xl sm:text-4xl font-bold text-action">{stats.totalMentions}+</p>
+              <p className="text-3xl sm:text-4xl font-bold text-action">{stats.totalMentions}</p>
               <p className="text-sm text-text-tertiary mt-1">{t('stats.mediaMentions')}</p>
             </div>
             <div className="text-center">

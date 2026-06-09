@@ -786,8 +786,7 @@
   "notFound": {
     "title": "ページが見つかりません",
     "description": "お探しのページは存在しないか、移動されました。",
-    "goHome": "ホームへ",
-    "reportProblem": "問題を報告"
+    "goHome": "ホームへ"
   },
   "error": {
     "title": "問題が発生しました",

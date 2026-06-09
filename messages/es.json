@@ -786,8 +786,7 @@
   "notFound": {
     "title": "Página no encontrada",
     "description": "La página que buscas no existe o ha sido trasladada.",
-    "goHome": "Ir al inicio",
-    "reportProblem": "Informar de un problema"
+    "goHome": "Ir al inicio"
   },
   "error": {
     "title": "Algo ha salido mal",

@@ -106,7 +106,7 @@ export default function ZeroWasteSolutionSection() {
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 bg-surface-base/20 rounded-xl flex items-center justify-center shrink-0">
-                    <span className="text-2xl font-bold">{envSummary.devicesSaved}+</span>
+                    <span className="text-2xl font-bold">{envSummary.devicesSaved}</span>
                   </div>
                   <div>
                     <p className="font-semibold">{t('devicesSavedLabel')}</p>
