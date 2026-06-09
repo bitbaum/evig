@@ -146,7 +146,7 @@ export const mainNavigation: NavigationItem[] = [
     nameKey: 'marketplace',
     href: '/marketplace',
     descriptionKey: 'marketplaceDesc',
-    badge: 'Neu',
+    badge: 'new',
     isMultiColumn: true,
     subItems: [
       // Section: Geräte kaufen
@@ -230,7 +230,7 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'aboPools',
         href: '/abos',
         descriptionKey: 'aboPoolsDesc',
-        badge: 'Neu',
+        badge: 'new',
       },
     ],
   },
@@ -305,7 +305,7 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'itHelpTechnician',
         href: '/get-involved/it-hilfe-techniker',
         descriptionKey: 'itHelpTechnicianDesc',
-        badge: 'Neu',
+        badge: 'new',
       },
       // Section: Unterstützen
       {
@@ -344,7 +344,7 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'becomeMember',
         href: '/mitglied-werden',
         descriptionKey: 'becomeMemberDesc',
-        badge: 'Neu',
+        badge: 'new',
       },
     ],
   },

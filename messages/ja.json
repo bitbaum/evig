@@ -147,7 +147,10 @@
     "sectionMembership": "会員資格",
     "learn": "学ぶ",
     "sectionAbos": "サブスク交換",
-    "aboPools": "サブスクプール"
+    "aboPools": "サブスクプール",
+    "badge": {
+      "new": "新着"
+    }
   },
   "common": {
     "loading": "読み込み中...",
@@ -471,7 +474,19 @@
     "skipToContent": "コンテンツへスキップ",
     "openMenu": "メニューを開く",
     "closeMenu": "メニューを閉じる",
-    "backToTop": "ページトップへ"
+    "backToTop": "ページトップへ",
+    "theme": {
+      "toLight": "ライトモードに切り替え",
+      "toDark": "ダークモードに切り替え",
+      "toggle": "テーマを切り替え"
+    },
+    "chatbot": {
+      "open": "Revamp IT アシスタントを開く"
+    },
+    "feedback": {
+      "open": "改善提案を開く",
+      "cta": "改善を提案"
+    }
   },
   "agb": {
     "meta": {

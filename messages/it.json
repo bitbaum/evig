@@ -147,7 +147,10 @@
     "sectionMembership": "Iscrizione",
     "learn": "Imparare",
     "sectionAbos": "Borsa abbonamenti",
-    "aboPools": "Pool abbonamenti"
+    "aboPools": "Pool abbonamenti",
+    "badge": {
+      "new": "Nuovo"
+    }
   },
   "common": {
     "loading": "Caricamento...",
@@ -471,7 +474,19 @@
     "skipToContent": "Vai al contenuto",
     "openMenu": "Apri menu",
     "closeMenu": "Chiudi menu",
-    "backToTop": "Torna in cima"
+    "backToTop": "Torna in cima",
+    "theme": {
+      "toLight": "Passa al tema chiaro",
+      "toDark": "Passa al tema scuro",
+      "toggle": "Cambia tema"
+    },
+    "chatbot": {
+      "open": "Apri l'assistente Revamp IT"
+    },
+    "feedback": {
+      "open": "Apri suggerimenti per miglioramenti",
+      "cta": "Suggerisci miglioramenti"
+    }
   },
   "agb": {
     "meta": {

@@ -170,11 +170,17 @@ function MenuLink({
 }
 
 function ItemBadge({ badge }: { badge?: string }) {
+  const t = useTranslations('nav.badge')
   if (!badge) return null
-
+  // `badge` in navigation config is an i18n key (e.g. "new"), not a literal.
+  // Render the translated text; fall back to the raw key on a miss so we
+  // never show empty space.
+  const label = ((): string => {
+    try { return t(badge as never) } catch { return badge }
+  })()
   return (
     <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-action-muted text-action rounded-full">
-      {badge}
+      {label}
     </span>
   )
 }

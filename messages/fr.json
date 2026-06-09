@@ -147,6 +147,9 @@
       "membership": "Adhésion",
       "becomeMember": "Devenir membre",
       "contact": "Contact"
+    },
+    "badge": {
+      "new": "Nouveau"
     }
   },
   "common": {
@@ -3470,7 +3473,19 @@
     "skipToContent": "Aller au contenu",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
-    "backToTop": "Haut de page"
+    "backToTop": "Haut de page",
+    "theme": {
+      "toLight": "Passer en mode clair",
+      "toDark": "Passer en mode sombre",
+      "toggle": "Basculer le thème"
+    },
+    "chatbot": {
+      "open": "Ouvrir l'assistant Revamp IT"
+    },
+    "feedback": {
+      "open": "Ouvrir les suggestions",
+      "cta": "Suggérer une amélioration"
+    }
   },
   "faq": {
     "meta": {

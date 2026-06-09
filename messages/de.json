@@ -147,7 +147,10 @@
     "sectionMembership": "Mitgliedschaft",
     "learn": "Lernen",
     "sectionAbos": "Abo-Tauschbörse",
-    "aboPools": "Abo-Pools"
+    "aboPools": "Abo-Pools",
+    "badge": {
+      "new": "Neu"
+    }
   },
   "common": {
     "loading": "Laden...",
@@ -3456,7 +3459,19 @@
     "skipToContent": "Zum Inhalt springen",
     "openMenu": "Menü öffnen",
     "closeMenu": "Menü schliessen",
-    "backToTop": "Nach oben"
+    "backToTop": "Nach oben",
+    "theme": {
+      "toLight": "Auf Hell umschalten",
+      "toDark": "Auf Dunkel umschalten",
+      "toggle": "Theme umschalten"
+    },
+    "chatbot": {
+      "open": "Revamp IT Assistent öffnen"
+    },
+    "feedback": {
+      "open": "Verbesserungen vorschlagen öffnen",
+      "cta": "Verbesserungen vorschlagen"
+    }
   },
   "getInvolved": {
     "meta": {

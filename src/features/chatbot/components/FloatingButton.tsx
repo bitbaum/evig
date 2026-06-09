@@ -1,6 +1,7 @@
 'use client'
 
 import { Bot, Sparkles } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import type { Language } from '@/lib/suggestion-utils'
@@ -13,6 +14,7 @@ interface FloatingButtonProps {
 }
 
 export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingButtonProps) {
+  const t = useTranslations('accessibility.chatbot')
   if (isOpen) return null
 
   return (
@@ -31,7 +33,7 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
         "p-3 sm:p-4",
         isOpen && "ring-2 ring-primary-500 ring-offset-2"
       )}
-      aria-label={currentLanguage === 'de' ? 'Revamp IT Assistent öffnen' : 'Open Revamp IT Assistant'}
+      aria-label={t('open')}
     >
       <div className="relative">
         <Bot className="w-6 h-6 sm:w-6 sm:h-6" />

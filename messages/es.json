@@ -147,7 +147,10 @@
     "sectionMembership": "Membresía",
     "learn": "Aprender",
     "sectionAbos": "Bolsa de suscripciones",
-    "aboPools": "Grupos de suscripción"
+    "aboPools": "Grupos de suscripción",
+    "badge": {
+      "new": "Nuevo"
+    }
   },
   "common": {
     "loading": "Cargando...",
@@ -471,7 +474,19 @@
     "skipToContent": "Ir al contenido",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
-    "backToTop": "Volver arriba"
+    "backToTop": "Volver arriba",
+    "theme": {
+      "toLight": "Cambiar a modo claro",
+      "toDark": "Cambiar a modo oscuro",
+      "toggle": "Cambiar tema"
+    },
+    "chatbot": {
+      "open": "Abrir el asistente de Revamp IT"
+    },
+    "feedback": {
+      "open": "Abrir sugerencias de mejora",
+      "cta": "Sugerir mejoras"
+    }
   },
   "agb": {
     "meta": {

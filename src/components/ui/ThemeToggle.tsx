@@ -1,6 +1,7 @@
 'use client'
 
 import { useTheme } from 'next-themes'
+import { useTranslations } from 'next-intl'
 import { Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -17,6 +18,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   // theme is known and lock the click handler. This keeps the surrounding
   // DOM stable and removes the documented hydration mismatch warning.
   const { resolvedTheme, setTheme } = useTheme()
+  const t = useTranslations('accessibility.theme')
   const ready = Boolean(resolvedTheme)
   const isDark = resolvedTheme === 'dark'
 
@@ -24,7 +26,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     <button
       type="button"
       onClick={() => ready && setTheme(isDark ? 'light' : 'dark')}
-      aria-label={ready ? (isDark ? 'Auf Hell umschalten' : 'Auf Dunkel umschalten') : 'Theme umschalten'}
+      aria-label={ready ? (isDark ? t('toLight') : t('toDark')) : t('toggle')}
       suppressHydrationWarning
       className={cn(
         'p-2 rounded-lg transition-colors',

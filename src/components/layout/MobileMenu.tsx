@@ -36,7 +36,15 @@ export function MobileMenu({
   const router = useRouter()
   const { data: session } = useSession()
   const t = useTranslations('nav')
+  const tBadge = useTranslations('nav.badge')
   const tAccessibility = useTranslations('accessibility')
+
+  // navigation config uses `badge: 'new'` (i18n key, not literal). Map
+  // here so consumers below stay simple.
+  function badgeLabel(key: string | undefined): string | null {
+    if (!key) return null
+    try { return tBadge(key as never) } catch { return key }
+  }
   const menuPanelRef = useRef<HTMLDivElement>(null)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -222,7 +230,7 @@ export function MobileMenu({
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
                                       <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
-                                        {subItem.badge}
+                                        {badgeLabel(subItem.badge)}
                                       </span>
                                     )}
                                     <ExternalLink className="w-3 h-3 text-text-tertiary" />
@@ -241,7 +249,7 @@ export function MobileMenu({
                                     <span>{subLabel}</span>
                                     {subItem.badge && (
                                       <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
-                                        {subItem.badge}
+                                        {badgeLabel(subItem.badge)}
                                       </span>
                                     )}
                                   </Button>

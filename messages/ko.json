@@ -147,7 +147,10 @@
     "sectionMembership": "회원",
     "learn": "배우기",
     "sectionAbos": "구독 교환소",
-    "aboPools": "구독 풀"
+    "aboPools": "구독 풀",
+    "badge": {
+      "new": "신규"
+    }
   },
   "common": {
     "loading": "로딩 중...",
@@ -471,7 +474,19 @@
     "skipToContent": "콘텐츠로 건너뛰기",
     "openMenu": "메뉴 열기",
     "closeMenu": "메뉴 닫기",
-    "backToTop": "맨 위로"
+    "backToTop": "맨 위로",
+    "theme": {
+      "toLight": "라이트 모드로 전환",
+      "toDark": "다크 모드로 전환",
+      "toggle": "테마 전환"
+    },
+    "chatbot": {
+      "open": "Revamp IT 어시스턴트 열기"
+    },
+    "feedback": {
+      "open": "개선 제안 열기",
+      "cta": "개선 제안하기"
+    }
   },
   "agb": {
     "meta": {

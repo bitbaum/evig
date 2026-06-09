@@ -147,7 +147,10 @@
     "sectionMembership": "Членство",
     "learn": "Обучение",
     "sectionAbos": "Обмен подписками",
-    "aboPools": "Пулы подписок"
+    "aboPools": "Пулы подписок",
+    "badge": {
+      "new": "Новое"
+    }
   },
   "common": {
     "loading": "Загрузка...",
@@ -3456,7 +3459,19 @@
     "skipToContent": "Перейти к содержанию",
     "openMenu": "Открыть меню",
     "closeMenu": "Закрыть меню",
-    "backToTop": "Наверх"
+    "backToTop": "Наверх",
+    "theme": {
+      "toLight": "Переключить на светлую тему",
+      "toDark": "Переключить на тёмную тему",
+      "toggle": "Сменить тему"
+    },
+    "chatbot": {
+      "open": "Открыть ассистента Revamp IT"
+    },
+    "feedback": {
+      "open": "Открыть предложения по улучшению",
+      "cta": "Предложить улучшение"
+    }
   },
   "getInvolved": {
     "meta": {

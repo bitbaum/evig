@@ -147,7 +147,10 @@
     "loggedIn": "Signed in",
     "toDashboard": "To Dashboard",
     "defaultUser": "User",
-    "languageSelection": "Language selection"
+    "languageSelection": "Language selection",
+    "badge": {
+      "new": "New"
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -3469,7 +3472,19 @@
     "skipToContent": "Skip to content",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "backToTop": "Back to top"
+    "backToTop": "Back to top",
+    "theme": {
+      "toLight": "Switch to light theme",
+      "toDark": "Switch to dark theme",
+      "toggle": "Toggle theme"
+    },
+    "chatbot": {
+      "open": "Open Revamp IT assistant"
+    },
+    "feedback": {
+      "open": "Open improvement suggestions",
+      "cta": "Suggest improvements"
+    }
   },
   "faq": {
     "meta": {

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Edit3, X, Info } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,7 @@ import { SuccessMessage } from './SuccessMessage'
 import '../styles/element-selection.css'
 
 export default function SuggestionButton() {
+  const t = useTranslations('accessibility.feedback')
   const [isExpanded, setIsExpanded] = useState(false)
   const [feedbackScope, setFeedbackScope] = useState<FeedbackScope>('page')
   const panelRef = useRef<HTMLDivElement>(null)
@@ -184,7 +186,7 @@ export default function SuggestionButton() {
                 <div className="flex items-center space-x-2">
                   <Edit3 className="w-4 h-4 text-primary-600" />
                   <Heading level={3} id="suggestion-panel-title" className="font-semibold text-neutral-900 text-sm">
-                    Verbesserungen vorschlagen
+                    {t('cta')}
                   </Heading>
                 </div>
                 <Button
@@ -341,7 +343,7 @@ export default function SuggestionButton() {
           "hover:scale-110 active:scale-95 touch-manipulation",
           isExpanded && "ring-2 ring-primary-500 ring-offset-2"
         )}
-        aria-label="Verbesserungen vorschlagen öffnen"
+        aria-label={t('open')}
         aria-expanded={isExpanded}
         aria-haspopup="dialog"
         tabIndex={0}
