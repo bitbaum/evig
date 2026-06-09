@@ -4101,8 +4101,8 @@
         "description": "Il progetto prevede la creazione di istruzioni dettagliate per ogni modello di monitor (foto, schede, piedinatura, aspetti di sicurezza) e la loro libera pubblicazione su una piattaforma pubblica (questo sito o wiki), al fine di promuovere l'economia circolare. Il codice sorgente di questa piattaforma è open source con licenza MIT: https://github.com/g-but/revampit . Le istruzioni saranno pubblicate qui gradualmente, non appena create e validate."
       },
       "ai_brainstorm": {
-        "title": "Fare brainstorming con l'IA",
-        "intro": "Il contenuto dettagliato e strutturato di questa pagina (compiti, domande aperte, partner, raccomandazioni) si presta in modo eccellente al brainstorming assistito dall'IA su soluzioni tecniche, economiche e sociali. Copi le sezioni pertinenti e utilizzi prompt come questi per sviluppare soluzioni:",
+        "title": "Aiutaci a trovare risposte.",
+        "intro": "Abbiamo domande aperte — tecniche, economiche, legali. Copia un prompt, incollalo nel tuo LLM, condividi ciò che ottieni.",
         "prompts": [
           {
             "title": "Soluzioni tecniche per sfarfallio e regolazione",
@@ -4123,8 +4123,9 @@
         ],
         "copyButton": "Copia prompt",
         "copied": "Copiato",
-        "why": "Adattalo",
-        "whyBody": "Copia, adatta al tuo contesto, incolla nel tuo LLM preferito (Claude, ChatGPT, ecc.)."
+        "why": "Come usare questi prompt",
+        "whyBody": "Copia, incolla nel tuo LLM preferito (Claude, ChatGPT, ecc.), adatta al tuo contesto. Condividi risultati interessanti con kontakt@revamp-it.ch.",
+        "eyebrow": "BRAINSTORMING"
       },
       "needs": {
         "title": "Di cosa abbiamo bisogno",

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Copy, Check, Sparkles } from 'lucide-react'
+import { Copy, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /**
@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils'
 type Prompt = { title: string; prompt: string }
 
 type Messages = {
+  eyebrow: string
   title: string
   intro: string
   prompts: Prompt[]
@@ -45,13 +46,17 @@ export function AiBrainstormSection({ section }: { section: Messages }) {
             forces the column wider than the viewport and the whole page
             scrolls horizontally on mobile. */}
         <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:items-start lg:gap-16">
-          {/* Left rail — why this exists */}
+          {/* Left rail — header (eyebrow + short title + lede) + how-to tip.
+              Prior version put the long intro inside an h2 with display-md
+              typography — display heading on body copy reads as amateurish
+              marketing. The fix: title carries the heading, intro stays
+              body, eyebrow becomes the small kicker. */}
           <div className="min-w-0 lg:sticky lg:top-24">
-            <div className="inline-flex items-center gap-2 rounded-full border border-subtle bg-surface-base px-3 py-1 text-xs uppercase tracking-[0.18em] text-text-tertiary font-mono">
-              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>{section.title}</span>
-            </div>
-            <h2 className="ui-public-display-md mt-4">{section.intro}</h2>
+            <div className="ui-public-eyebrow">{section.eyebrow}</div>
+            <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+            <p className="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+              {section.intro}
+            </p>
             <div className="mt-6 rounded-lg border border-subtle bg-surface-base/60 p-5">
               <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
                 {t('why')}

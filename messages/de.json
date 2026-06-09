@@ -5477,8 +5477,8 @@
         "description": "Das Projekt plant die Erstellung detaillierter Anleitungen pro Monitor-Modell (Fotos, Boards, Pin-Belegung, Sicherheitsaspekte) und deren freie Publikation auf einer öffentlichen Plattform (dieser Site oder Wiki), um die Kreislaufwirtschaft zu fördern. Der Quellcode dieser Plattform ist open source unter MIT-Lizenz: https://github.com/g-but/revampit . Die Anleitungen werden hier schrittweise veröffentlicht, sobald sie erstellt und validiert sind."
       },
       "ai_brainstorm": {
-        "title": "Mit KI brainstormen",
-        "intro": "Der detaillierte, strukturierte Inhalt dieser Seite (Aufgaben, offene Fragen, Partner, Empfehlungen) eignet sich hervorragend für KI-gestütztes Brainstorming zu technischen, wirtschaftlichen und sozialen Lösungen. Kopieren Sie relevante Abschnitte und nutzen Sie Prompts wie diese, um Lösungen zu entwickeln:",
+        "title": "Hilf mit, Lösungen zu finden.",
+        "intro": "Wir haben offene Fragen — technisch, wirtschaftlich, juristisch. Kopiere einen Prompt, füge ihn in dein LLM ein und teile gute Antworten.",
         "prompts": [
           {
             "title": "Technische Lösungen für Flimmern & Regelung",
@@ -5499,8 +5499,9 @@
         ],
         "copyButton": "Prompt kopieren",
         "copied": "Kopiert",
-        "why": "Eigene Anpassung",
-        "whyBody": "Kopiere, passe an deinen Kontext an, in dein bevorzugtes LLM einfügen (Claude, ChatGPT, etc.)."
+        "why": "So nutzt du diese Prompts",
+        "whyBody": "Kopiere, füge in dein bevorzugtes LLM (Claude, ChatGPT, etc.) ein, passe an deinen Kontext an. Teile interessante Resultate an kontakt@revamp-it.ch.",
+        "eyebrow": "BRAINSTORMING"
       },
       "needs": {
         "title": "Was wir brauchen",

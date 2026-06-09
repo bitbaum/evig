@@ -55,6 +55,7 @@ type PageMessages = {
   briefLink: { eyebrow: string; title: string; body: string; cta: string }
   cta: { title: string; actions: RawAction[] }
   ai_brainstorm: {
+    eyebrow: string
     title: string
     intro: string
     prompts: Array<{ title: string; prompt: string }>

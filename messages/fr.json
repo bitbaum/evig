@@ -5788,8 +5788,8 @@
         "description": "Le projet prévoit la création de guides détaillés par modèle de moniteur (photos, cartes, brochage, aspects de sécurité) et leur publication libre sur une plateforme publique (ce site ou un wiki), afin de promouvoir l'économie circulaire. Le code source de cette plateforme est open source sous licence MIT : https://github.com/g-but/revampit . Les guides seront publiés ici progressivement, dès qu'ils auront été rédigés et validés."
       },
       "ai_brainstorm": {
-        "title": "Brainstormer avec une IA",
-        "intro": "Le contenu détaillé et structuré de cette page (tâches, questions ouvertes, partenaires, recommandations) se prête parfaitement à un brainstorming assisté par IA pour des solutions techniques, économiques et sociales. Copiez les sections pertinentes et utilisez des prompts comme ceux-ci pour développer des solutions :",
+        "title": "Aide-nous à trouver des réponses.",
+        "intro": "Nous avons des questions ouvertes — techniques, économiques, juridiques. Copie un prompt, colle-le dans ton LLM, partage les réponses utiles.",
         "prompts": [
           {
             "title": "Solutions techniques pour le scintillement et la régulation",
@@ -5810,8 +5810,9 @@
         ],
         "copyButton": "Copier le prompt",
         "copied": "Copié",
-        "why": "Adaptez-le",
-        "whyBody": "Copiez, adaptez à votre contexte, collez dans votre LLM préféré (Claude, ChatGPT, etc.)."
+        "why": "Comment utiliser ces prompts",
+        "whyBody": "Copie, colle dans ton LLM préféré (Claude, ChatGPT, etc.), adapte à ton contexte. Partage les résultats intéressants à kontakt@revamp-it.ch.",
+        "eyebrow": "BRAINSTORMING"
       },
       "needs": {
         "title": "Ce dont nous avons besoin",

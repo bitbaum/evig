@@ -4101,8 +4101,8 @@
         "description": "El proyecto prevé la elaboración de guías detalladas por modelo de monitor (fotos, placas, asignación de pines, aspectos de seguridad) y su publicación libre en una plataforma pública (este sitio o una wiki) para promover la economía circular. El código fuente de esta plataforma es de código abierto bajo licencia MIT: https://github.com/g-but/revampit . Las guías se publicarán aquí de forma progresiva, a medida que se elaboren y validen."
       },
       "ai_brainstorm": {
-        "title": "Hacer brainstorming con IA",
-        "intro": "El contenido detallado y estructurado de esta página (tareas, preguntas abiertas, socios, recomendaciones) es idóneo para una sesión de brainstorming asistida por IA sobre soluciones técnicas, económicas y sociales. Copie las secciones relevantes y utilice prompts como los siguientes para desarrollar soluciones:",
+        "title": "Ayúdanos a encontrar respuestas.",
+        "intro": "Tenemos preguntas abiertas — técnicas, económicas, legales. Copia un prompt, pégalo en tu LLM, comparte lo que devuelva.",
         "prompts": [
           {
             "title": "Soluciones técnicas para parpadeo y regulación",
@@ -4123,8 +4123,9 @@
         ],
         "copyButton": "Copiar prompt",
         "copied": "Copiado",
-        "why": "Hazlo tuyo",
-        "whyBody": "Copia, adapta a tu contexto, pega en tu LLM preferido (Claude, ChatGPT, etc.)."
+        "why": "Cómo usar estos prompts",
+        "whyBody": "Copia, pega en tu LLM preferido (Claude, ChatGPT, etc.), adapta a tu contexto. Comparte resultados interesantes con kontakt@revamp-it.ch.",
+        "eyebrow": "LLUVIA DE IDEAS"
       },
       "needs": {
         "title": "Lo que necesitamos",

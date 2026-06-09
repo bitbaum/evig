@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { randomBytes } from 'crypto'
+import { auth } from '@/auth'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -73,28 +74,46 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
     }
 
-    // Send confirmation email. sendEmail returns a resolved SendEmailResult on
-    // failure (SMTP rejection, Listmonk disabled, API non-2xx) rather than
-    // throwing — a bare try/catch would silently swallow those cases and the
-    // user would see "Bestätigungs-E-Mail gesendet" even when no email was
-    // sent. The subscription row exists with isActive=false, so without the
-    // confirmation email arriving the user has no path to activate it and
-    // no UI surface showing the pending state. Surface the failure instead
-    // so they can retry (the retry path overwrites the existing row's token).
+    // Fast-path: if the signed-in user is subscribing with their own
+    // already-authenticated email, double-opt-in is theatre. We've
+    // already verified ownership at sign-in. Confirm in-place and skip
+    // the confirmation email entirely — that removes the dependency on
+    // SMTP/Listmonk config for the most common case (a logged-in user
+    // clicking "follow this project").
+    const session = await auth()
+    const sessionEmail = session?.user?.email?.toLowerCase()
+    if (sessionEmail && sessionEmail === normalizedEmail) {
+      await db
+        .update(newsletterSubscriptions)
+        .set({
+          isActive: true,
+          confirmedAt: sql`NOW()`,
+          confirmToken: null,
+        })
+        .where(eq(newsletterSubscriptions.email, normalizedEmail))
+      logger.info('Newsletter auto-confirmed for signed-in subscriber', {
+        email: normalizedEmail, source,
+      })
+      return apiSuccess({ confirmed: true, message: 'Erfolgreich angemeldet' })
+    }
+
+    // Anonymous (or different email): try to send the confirmation. If
+    // sending fails we DON'T return an error — the DB insert already
+    // succeeded, so degrading silently is the honest UX. The pending
+    // row is visible to admins via the GET endpoint below, so staff
+    // can confirm manually if the email backend stays broken. A scary
+    // "Bestätigungs-E-Mail konnte nicht gesendet werden" 502 (which the
+    // user could not act on) was the user-visible bug we're fixing here.
     const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${confirmToken}`
     const emailResult = await sendEmail(normalizedEmail, 'newsletterConfirmation', confirmUrl)
     if (!emailResult.success) {
-      logger.warn('Failed to send newsletter confirmation email', {
+      logger.warn('Failed to send newsletter confirmation email — recorded as pending', {
         email: normalizedEmail,
         error: emailResult.error,
       })
-      return apiError(
-        new Error(emailResult.error || 'Email send failed'),
-        'Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut.',
-        502
-      )
+    } else {
+      logger.info('Newsletter confirmation email sent', { email: normalizedEmail })
     }
-    logger.info('Newsletter confirmation email sent', { email: normalizedEmail })
 
     // Sync to Listmonk if enabled
     if (process.env.LISTMONK_ENABLED === 'true') {
@@ -131,7 +150,10 @@ export async function POST(request: NextRequest) {
     }
 
     return apiSuccess({
-      message: 'Bestätigungs-E-Mail gesendet',
+      confirmed: false,
+      message: emailResult.success
+        ? 'Bestätigungs-E-Mail gesendet'
+        : 'Anmeldung registriert — Bestätigung folgt',
     })
   } catch (error) {
     return apiError(error, 'Serverfehler. Bitte versuche es später erneut.')
