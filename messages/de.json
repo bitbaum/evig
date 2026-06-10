@@ -8722,7 +8722,28 @@
       "submitting": "Sende…",
       "resubmit": "Erneut einreichen",
       "save": "Speichern",
-      "saving": "Speichere…"
+      "saving": "Speichere…",
+      "noScheduleLine": "Du hast noch keinen Standardschedule.",
+      "applyStandardSchedule": "Mo–Fr 09–17 übernehmen",
+      "applyingSchedule": "Wende an…",
+      "setOwnSchedule": "Eigene Zeiten setzen",
+      "scheduleApplyFailed": "Schedule konnte nicht angewendet werden.",
+      "gridIntro": "Monatsübersicht",
+      "gridPrefilledLabel": "Vorgefüllt aus Schedule",
+      "dayEditorHasEntry": "Eintrag",
+      "dayEditorNoEntry": "Kein Eintrag",
+      "dayActionFillFromSchedule": "Aus Schedule ausfüllen",
+      "dayActionFillDefault": "09:00 – 17:00 ausfüllen",
+      "dayActionFree": "Frei",
+      "dayActionSick": "Krank",
+      "dayActionAdjust": "Anpassen",
+      "dayActionAdjustClose": "Anpassen schliessen",
+      "fieldStart": "Start",
+      "fieldEnd": "Ende",
+      "fieldBreak": "Pause (Min)",
+      "fieldCategory": "Kategorie",
+      "fieldNote": "Notiz",
+      "fieldNotePlaceholder": "Nur wenn dieser Tag anders war"
     }
   }
 }

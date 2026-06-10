@@ -8724,7 +8724,28 @@
       "submitting": "Submitting…",
       "resubmit": "Resubmit",
       "save": "Save",
-      "saving": "Saving…"
+      "saving": "Saving…",
+      "noScheduleLine": "You don't have a default schedule yet.",
+      "applyStandardSchedule": "Apply Mon–Fri 09–17",
+      "applyingSchedule": "Applying…",
+      "setOwnSchedule": "Set custom hours",
+      "scheduleApplyFailed": "Couldn't apply the schedule.",
+      "gridIntro": "Month overview",
+      "gridPrefilledLabel": "Pre-filled from schedule",
+      "dayEditorHasEntry": "Entry",
+      "dayEditorNoEntry": "No entry",
+      "dayActionFillFromSchedule": "Fill from schedule",
+      "dayActionFillDefault": "Fill with 09:00 – 17:00",
+      "dayActionFree": "Off",
+      "dayActionSick": "Sick",
+      "dayActionAdjust": "Adjust",
+      "dayActionAdjustClose": "Close adjust",
+      "fieldStart": "Start",
+      "fieldEnd": "End",
+      "fieldBreak": "Break (min)",
+      "fieldCategory": "Category",
+      "fieldNote": "Note",
+      "fieldNotePlaceholder": "Only when this day was different"
     }
   }
 }

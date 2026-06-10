@@ -8737,7 +8737,28 @@
       "submitting": "Envoi…",
       "resubmit": "Resoumettre",
       "save": "Enregistrer",
-      "saving": "Enregistrement…"
+      "saving": "Enregistrement…",
+      "noScheduleLine": "Tu n'as pas encore d'horaire par défaut.",
+      "applyStandardSchedule": "Appliquer Lun–Ven 09–17",
+      "applyingSchedule": "Application…",
+      "setOwnSchedule": "Définir mes heures",
+      "scheduleApplyFailed": "Impossible d'appliquer l'horaire.",
+      "gridIntro": "Aperçu du mois",
+      "gridPrefilledLabel": "Pré-rempli depuis l'horaire",
+      "dayEditorHasEntry": "Entrée",
+      "dayEditorNoEntry": "Pas d'entrée",
+      "dayActionFillFromSchedule": "Remplir depuis l'horaire",
+      "dayActionFillDefault": "Remplir avec 09:00 – 17:00",
+      "dayActionFree": "Congé",
+      "dayActionSick": "Malade",
+      "dayActionAdjust": "Ajuster",
+      "dayActionAdjustClose": "Fermer l'ajustement",
+      "fieldStart": "Début",
+      "fieldEnd": "Fin",
+      "fieldBreak": "Pause (min)",
+      "fieldCategory": "Catégorie",
+      "fieldNote": "Note",
+      "fieldNotePlaceholder": "Seulement si ce jour était différent"
     }
   }
 }

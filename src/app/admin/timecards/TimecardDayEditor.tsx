@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
@@ -47,6 +48,7 @@ export function TimecardDayEditor({
   onRestoreFromSchedule: () => void
   onApplyDefault9To17: () => void
 }) {
+  const t = useTranslations('admin.timecards')
   const [expanded, setExpanded] = useState(false)
   const hasEntry = !!selectedEntry
 
@@ -55,7 +57,7 @@ export function TimecardDayEditor({
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-            {hasEntry ? 'Eintrag' : 'Kein Eintrag'}
+            {hasEntry ? t('dayEditorHasEntry') : t('dayEditorNoEntry')}
           </p>
           <h2 className="mt-1 text-lg font-medium text-text-primary">
             {getDisplayDate(selectedDate)}
@@ -71,19 +73,19 @@ export function TimecardDayEditor({
       <div className="mt-4 flex flex-wrap gap-2">
         {!hasEntry && hasSchedule && (
           <ActionChip onClick={onRestoreFromSchedule} primary>
-            Aus Schedule ausfüllen
+            {t('dayActionFillFromSchedule')}
           </ActionChip>
         )}
         {!hasEntry && (
           <ActionChip onClick={onApplyDefault9To17} primary={!hasSchedule}>
-            09:00 – 17:00 ausfüllen
+            {t('dayActionFillDefault')}
           </ActionChip>
         )}
-        <ActionChip onClick={() => onMarkOff('frei')}>Frei</ActionChip>
-        <ActionChip onClick={() => onMarkOff('krank')}>Krank</ActionChip>
+        <ActionChip onClick={() => onMarkOff('frei')}>{t('dayActionFree')}</ActionChip>
+        <ActionChip onClick={() => onMarkOff('krank')}>{t('dayActionSick')}</ActionChip>
         {hasEntry && (
           <ActionChip onClick={() => setExpanded(e => !e)}>
-            {expanded ? 'Anpassen schliessen' : 'Anpassen'}
+            {expanded ? t('dayActionAdjustClose') : t('dayActionAdjust')}
           </ActionChip>
         )}
       </div>
@@ -127,9 +129,10 @@ function DetailFields({
   entry: TimecardEntryInput
   onPatch: (patch: Partial<TimecardEntryInput>) => void
 }) {
+  const t = useTranslations('admin.timecards')
   return (
     <div className="mt-5 grid gap-4 border-t border-subtle pt-5 sm:grid-cols-2">
-      <Field label="Start">
+      <Field label={t('fieldStart')}>
         <input
           type="time"
           value={entry.start_time ?? '09:00'}
@@ -137,7 +140,7 @@ function DetailFields({
           className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         />
       </Field>
-      <Field label="Ende">
+      <Field label={t('fieldEnd')}>
         <input
           type="time"
           value={entry.end_time ?? '17:00'}
@@ -145,7 +148,7 @@ function DetailFields({
           className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         />
       </Field>
-      <Field label="Pause (Min)">
+      <Field label={t('fieldBreak')}>
         <input
           type="number"
           min={0}
@@ -156,7 +159,7 @@ function DetailFields({
           className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm tabular-nums focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         />
       </Field>
-      <Field label="Kategorie">
+      <Field label={t('fieldCategory')}>
         <select
           value={entry.category ?? 'other'}
           onChange={e => onPatch({ category: e.target.value as TimecardEntryCategory })}
@@ -169,12 +172,12 @@ function DetailFields({
           ))}
         </select>
       </Field>
-      <Field label="Notiz" className="sm:col-span-2">
+      <Field label={t('fieldNote')} className="sm:col-span-2">
         <textarea
           rows={2}
           value={entry.description ?? ''}
           onChange={e => onPatch({ description: e.target.value })}
-          placeholder="Nur wenn dieser Tag anders war"
+          placeholder={t('fieldNotePlaceholder')}
           className="w-full resize-none rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         />
       </Field>

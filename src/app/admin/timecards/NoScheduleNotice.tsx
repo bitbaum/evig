@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 import { apiFetch } from '@/lib/api/client'
 
@@ -20,6 +21,7 @@ import { apiFetch } from '@/lib/api/client'
  * reloads so the page re-reads workingHours.
  */
 export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
+  const t = useTranslations('admin.timecards')
   const [isApplying, setIsApplying] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -33,7 +35,7 @@ export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
       { method: 'POST' },
     )
     if (!result.success) {
-      setErrorMessage(result.error || 'Schedule konnte nicht angewendet werden.')
+      setErrorMessage(result.error || t('scheduleApplyFailed'))
       setIsApplying(false)
       return
     }
@@ -42,9 +44,7 @@ export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
 
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-subtle bg-surface-raised px-4 py-3">
-      <p className="text-sm text-text-secondary">
-        Du hast noch keinen Standardschedule.
-      </p>
+      <p className="text-sm text-text-secondary">{t('noScheduleLine')}</p>
       <button
         type="button"
         onClick={applyDefault}
@@ -52,13 +52,13 @@ export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
         className="inline-flex items-center gap-1.5 rounded-full border border-action bg-action px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-action-strong disabled:opacity-60"
       >
         <Sparkles className="h-3 w-3" aria-hidden="true" />
-        {isApplying ? 'Wende an…' : 'Mo–Fr 09–17 übernehmen'}
+        {isApplying ? t('applyingSchedule') : t('applyStandardSchedule')}
       </button>
       <Link
         href={ROUTES.admin.team}
         className="text-xs text-text-tertiary underline-offset-2 hover:text-text-secondary hover:underline"
       >
-        Eigene Zeiten setzen
+        {t('setOwnSchedule')}
       </Link>
       {errorMessage && (
         <p className="basis-full text-xs text-error-700">{errorMessage}</p>
