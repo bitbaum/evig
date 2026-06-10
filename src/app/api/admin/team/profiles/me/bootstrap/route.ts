@@ -88,6 +88,13 @@ export const POST = withAdmin(async (_request, session) => {
     })
   } catch (error) {
     logger.error('Failed to bootstrap team profile', { error, userId: session.user.id })
-    return apiError(error, 'Konnte den Standard-Schedule nicht anwenden.')
+    // TEMP DIAG (revert once root cause identified)
+    const detail = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
+    const cause = (error as { cause?: unknown })?.cause
+    const causeMsg = cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause)
+    return apiError(
+      error,
+      `Konnte den Standard-Schedule nicht anwenden. [DIAG] ${detail.slice(0, 200)} | CAUSE: ${causeMsg.slice(0, 400)}`,
+    )
   }
 })
