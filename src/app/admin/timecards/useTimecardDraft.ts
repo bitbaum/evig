@@ -218,6 +218,30 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     }))
   }, [monthEntries, draft.selectedDate, updateCurrentDraft])
 
+  /**
+   * Manual fallback: apply a vanilla 09:00–17:00 (60 min break, "admin"
+   * category) entry to the selected day, regardless of whether the user
+   * has a working_hours schedule. Used by the empty-day affordance —
+   * "if a day is empty and I click it, give me a one-tap apply-9-17."
+   */
+  const applyDefault9To17 = useCallback(() => {
+    const standardEntry: TimecardEntryInput = {
+      work_date: draft.selectedDate,
+      start_time: '09:00',
+      end_time: '17:00',
+      break_minutes: 60,
+      duration_minutes: calculateTimeRangeMinutes('09:00', '17:00', 60),
+      category: 'admin',
+      source: 'manual',
+      description: '',
+    }
+    updateCurrentDraft(current => ({
+      ...current,
+      entries: mergeEntries(current.entries, [standardEntry]),
+      status: TIMECARD_STATUSES.DRAFT,
+    }))
+  }, [draft.selectedDate, updateCurrentDraft])
+
   const handleAIFieldsFilled = useCallback(
     (
       data: Partial<TimecardAIResult>,
@@ -345,6 +369,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     updateSelectedEntry,
     markSelectedDateOff,
     restoreSelectedDateFromSchedule,
+    applyDefault9To17,
     rebuildCurrentDraft,
     saveDraft,
     submitDraft,

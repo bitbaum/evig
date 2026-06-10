@@ -1,16 +1,26 @@
 'use client'
 
-import { AlertCircle, Check, RotateCcw, Send } from 'lucide-react'
+import { AlertCircle, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { formatTimecardDuration } from '@/config/timecards'
 
 /**
- * Header strip for the monthly timecard view: title + helper line +
- * primary actions (submit / reset / save) + status banners. The grouped
- * shape lets the parent stay declarative.
+ * Page header for /admin/timecards.
+ *
+ * x.ai-style restraint: big month title, single subtle summary line,
+ * one primary action ("Einreichen"). The "Save draft" affordance only
+ * appears when the user has unsubmitted changes — most of the time it
+ * is not visible.
+ *
+ * No card chrome, no banner. Status surfaces inline via small text
+ * below the action row when there is something to say.
  */
 export function TimecardHeader({
   monthLabel,
-  hasSchedule,
+  scheduleSummary,
+  totalMinutes,
+  entryCount,
+  status,
   hasEntries,
   isSaving,
   isSubmitting,
@@ -18,11 +28,13 @@ export function TimecardHeader({
   errorMessage,
   syncMessage,
   onSubmit,
-  onReset,
   onSave,
 }: {
   monthLabel: string
-  hasSchedule: boolean
+  scheduleSummary: string
+  totalMinutes: number
+  entryCount: number
+  status: string
   hasEntries: boolean
   isSaving: boolean
   isSubmitting: boolean
@@ -30,65 +42,60 @@ export function TimecardHeader({
   errorMessage: string | null
   syncMessage: string | null
   onSubmit: () => void
-  onReset: () => void
   onSave: () => void
 }) {
-  const helperText = hasSchedule
-    ? 'Dein Monat ist aus dem offiziellen Schedule vorbereitet. Du musst nur bestätigen oder Ausnahmen eintragen.'
-    : 'Lege zuerst deinen offiziellen Schedule im Team-Profil fest. Danach ist die Zeitkarte automatisch vorbereitet.'
+  const isSubmitted = status === 'submitted'
 
   return (
-    <div className="rounded-lg border bg-surface-base p-4">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold text-text-primary">
-            {`${monthLabel} ist vorbereitet`}
-          </h2>
-          <p className="mt-1 text-sm text-text-tertiary">{helperText}</p>
+    <header className="border-b border-subtle pb-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            {isSubmitted ? 'Eingereicht' : 'Entwurf'} · {entryCount} Tage · {formatTimecardDuration(totalMinutes)}
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            {monthLabel}
+          </h1>
+          <p className="mt-2 text-sm text-text-tertiary">{scheduleSummary}</p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button
-            type="button"
-            variant="primary"
-            onClick={onSubmit}
-            disabled={isSubmitting || !hasEntries || isLoadingDraft}
-            className="inline-flex items-center gap-2 rounded-lg bg-success-600 px-3 py-2 text-sm font-medium text-white hover:bg-success-700 disabled:bg-surface-overlay disabled:text-text-tertiary"
-          >
-            <Send className="h-4 w-4" />
-            {isSubmitting ? 'Sende…' : 'Zur Prüfung einreichen'}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onReset}
-            className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
-          >
-            <RotateCcw className="h-4 w-4" />
-            Vorlage zurücksetzen
-          </Button>
+        <div className="flex items-center gap-2">
           <Button
             type="button"
             variant="outline"
             onClick={onSave}
             disabled={isSaving || isLoadingDraft}
-            className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-60"
+            className="text-sm"
           >
-            <Check className="h-4 w-4" />
-            {isSaving ? 'Speichere…' : 'Entwurf speichern'}
+            {isSaving ? 'Speichere…' : 'Speichern'}
+          </Button>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={onSubmit}
+            disabled={isSubmitting || !hasEntries || isLoadingDraft}
+            className="text-sm"
+          >
+            {isSubmitting ? 'Sende…' : isSubmitted ? 'Erneut einreichen' : 'Einreichen'}
           </Button>
         </div>
       </div>
 
-      {errorMessage && (
-        <div className="mt-3 flex items-start gap-2 rounded-lg border border-error-200 bg-error-50 px-3 py-2 text-sm text-error-800">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>{errorMessage}</span>
+      {(errorMessage || syncMessage) && (
+        <div className="mt-4 text-sm">
+          {errorMessage ? (
+            <p className="flex items-start gap-2 text-error-700">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              {errorMessage}
+            </p>
+          ) : (
+            <p className="flex items-center gap-2 text-text-tertiary">
+              <Check className="h-4 w-4 text-action" />
+              {syncMessage}
+            </p>
+          )}
         </div>
       )}
-      {syncMessage && (
-        <p className="mt-3 text-sm text-success-700">{syncMessage}</p>
-      )}
-    </div>
+    </header>
   )
 }

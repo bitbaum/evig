@@ -1,7 +1,5 @@
 'use client'
 
-import { Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   formatTimecardDuration,
@@ -9,73 +7,81 @@ import {
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { getEntryForDate } from '@/lib/team/timecard-utils'
+import { cn } from '@/lib/utils'
 
 /**
- * The month's day grid. Each tile is a button — selecting it makes that
- * day editable in the day-detail aside. Pure render; selection state is
- * a controlled prop.
+ * Month grid for /admin/timecards.
+ *
+ * Design: one button per day, 7 columns ≥sm. Each tile renders only the
+ * minimum needed signal — weekday letter, day number, duration. Category
+ * appears as a thin underline ("admin", "workshop", etc.) on hover via
+ * title attribute; the previous version put the full category label on
+ * every tile which produced a wall of repetitive "Administration"
+ * strings. The active day gets an outlined ring; days with no entry
+ * render muted ("—") so the eye finds gaps immediately.
  */
 export function TimecardMonthGrid({
-  monthLabel,
   visibleDates,
   entries,
   selectedDate,
   onSelect,
 }: {
-  monthLabel: string
   visibleDates: string[]
   entries: TimecardEntryInput[]
   selectedDate: string
   onSelect: (date: string) => void
 }) {
   return (
-    <div className="rounded-lg border bg-surface-base p-4">
-      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold text-text-primary">{monthLabel}</h2>
-          <p className="mt-1 text-sm text-text-tertiary">
-            Normale Tage bleiben unverändert. Wähle nur einen Tag aus, wenn etwas anders war.
-          </p>
-        </div>
-        <div className="text-sm text-text-tertiary">Monatsübersicht</div>
-      </div>
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-7">
+      {visibleDates.map(date => {
+        const entry = getEntryForDate(entries, date)
+        const active = selectedDate === date
+        const d = new Date(`${date}T00:00:00.000Z`)
+        const weekdayLabel = new Intl.DateTimeFormat('de-CH', { weekday: 'short' }).format(d)
+        const dayNum = d.getUTCDate()
+        const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6
+        const categoryLabel = entry
+          ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory]
+          : undefined
 
-      <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-7">
-        {visibleDates.map(date => {
-          const entry = getEntryForDate(entries, date)
-          const active = selectedDate === date
-          const weekdayLabel = new Intl.DateTimeFormat('de-CH', { weekday: 'short' }).format(
-            new Date(`${date}T00:00:00.000Z`),
-          )
-          return (
-            <Button
-              key={date}
-              type="button"
-              variant="outline"
-              onClick={() => onSelect(date)}
-              className={`min-h-28 rounded-lg border p-3 text-left transition-colors ${
-                active
-                  ? 'border-action bg-action-muted ring-2 ring-action/20'
-                  : 'border bg-surface-raised hover:border-strong hover:bg-surface-base'
-              }`}
+        return (
+          <button
+            key={date}
+            type="button"
+            onClick={() => onSelect(date)}
+            title={categoryLabel}
+            className={cn(
+              'group flex flex-col gap-1 rounded-lg border bg-surface-base px-3 py-2.5 text-left transition-colors',
+              active
+                ? 'border-action ring-2 ring-action/15'
+                : 'border-subtle hover:border-strong',
+              !entry && !active && 'bg-canvas',
+            )}
+          >
+            <div className="flex items-baseline justify-between">
+              <span
+                className={cn(
+                  'font-mono text-xs uppercase tracking-wide',
+                  isWeekend ? 'text-text-tertiary' : 'text-text-secondary',
+                )}
+              >
+                {weekdayLabel}
+              </span>
+              <span className="font-mono text-xs tabular-nums text-text-tertiary">
+                {String(dayNum).padStart(2, '0')}
+              </span>
+            </div>
+            <span
+              className={cn(
+                'font-mono text-lg tabular-nums leading-tight',
+                entry ? 'text-text-primary' : 'text-text-tertiary',
+              )}
             >
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-sm font-semibold text-text-primary">{weekdayLabel}</p>
-                {entry && <Check className="h-4 w-4 text-success-600" />}
-              </div>
-              <p className="mt-1 text-xs text-text-tertiary">{date.slice(5)}</p>
-              <p className="mt-4 text-lg font-semibold text-text-primary">
-                {formatTimecardDuration(entry?.duration_minutes ?? 0)}
-              </p>
-              <p className="mt-1 truncate text-xs text-text-tertiary">
-                {entry
-                  ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory]
-                  : 'Vorgefüllt aus Schedule'}
-              </p>
-            </Button>
-          )
-        })}
-      </div>
+              {entry ? formatTimecardDuration(entry.duration_minutes) : '—'}
+            </span>
+          </button>
+        )
+      })}
     </div>
   )
 }

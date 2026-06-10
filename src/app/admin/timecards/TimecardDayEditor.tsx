@@ -1,9 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+import { useState } from 'react'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
@@ -12,132 +9,192 @@ import {
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
+import { cn } from '@/lib/utils'
 
 /**
- * The right-side detail editor for the selected day: quick "off/sick"
- * actions, time range, break, category, free-text note, and the
- * "restore from schedule" button. Pure form — all changes flow through
- * the parent's handlers.
+ * Inline day editor (replaces the right-aside detail panel).
+ *
+ * Default state is collapsed — just the date header, the day's hours,
+ * and three quick actions (Frei / Krank / Anpassen). The full time
+ * range + category + note fields only expand when the user taps
+ * "Anpassen" — most days are normal and need zero edits.
+ *
+ * Empty-day affordance: if no entry exists for the selected date,
+ * the quick actions include "Aus Schedule ausfüllen" (uses the user's
+ * working_hours) and "9–17 ausfüllen" (a manual one-tap fallback if
+ * no schedule is set). This is the path the user complained about:
+ * "if a day is not filled and I click on it, there should be an
+ * option to autofill it with my schedule or with 9-17."
+ *
+ * No card border around the whole component — let the parent control
+ * spacing. The editor surfaces as a thin sticky panel underneath the
+ * month grid.
  */
 export function TimecardDayEditor({
   selectedDate,
   selectedEntry,
+  hasSchedule,
   onPatch,
   onMarkOff,
   onRestoreFromSchedule,
+  onApplyDefault9To17,
 }: {
   selectedDate: string
   selectedEntry: TimecardEntryInput | undefined
+  hasSchedule: boolean
   onPatch: (patch: Partial<TimecardEntryInput>) => void
   onMarkOff: (reason: string) => void
   onRestoreFromSchedule: () => void
+  onApplyDefault9To17: () => void
+}) {
+  const [expanded, setExpanded] = useState(false)
+  const hasEntry = !!selectedEntry
+
+  return (
+    <section className="rounded-lg border border-subtle bg-surface-base p-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            {hasEntry ? 'Eintrag' : 'Kein Eintrag'}
+          </p>
+          <h2 className="mt-1 text-lg font-medium text-text-primary">
+            {getDisplayDate(selectedDate)}
+          </h2>
+        </div>
+        {hasEntry && (
+          <p className="font-mono text-xl tabular-nums text-text-primary">
+            {formatTimecardDuration(selectedEntry.duration_minutes)}
+          </p>
+        )}
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {!hasEntry && hasSchedule && (
+          <ActionChip onClick={onRestoreFromSchedule} primary>
+            Aus Schedule ausfüllen
+          </ActionChip>
+        )}
+        {!hasEntry && (
+          <ActionChip onClick={onApplyDefault9To17} primary={!hasSchedule}>
+            09:00 – 17:00 ausfüllen
+          </ActionChip>
+        )}
+        <ActionChip onClick={() => onMarkOff('frei')}>Frei</ActionChip>
+        <ActionChip onClick={() => onMarkOff('krank')}>Krank</ActionChip>
+        {hasEntry && (
+          <ActionChip onClick={() => setExpanded(e => !e)}>
+            {expanded ? 'Anpassen schliessen' : 'Anpassen'}
+          </ActionChip>
+        )}
+      </div>
+
+      {expanded && hasEntry && (
+        <DetailFields entry={selectedEntry} onPatch={onPatch} />
+      )}
+    </section>
+  )
+}
+
+function ActionChip({
+  onClick,
+  primary,
+  children,
+}: {
+  onClick: () => void
+  primary?: boolean
+  children: React.ReactNode
 }) {
   return (
-    <aside className="rounded-lg border bg-surface-base p-4">
-      <h2 className="text-lg font-semibold text-text-primary">Ausnahme</h2>
-      <p className="mt-1 text-sm text-text-tertiary">{getDisplayDate(selectedDate)}</p>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors',
+        primary
+          ? 'border-action bg-action text-white hover:bg-action-strong'
+          : 'border-subtle bg-surface-base text-text-secondary hover:border-strong hover:text-text-primary',
+      )}
+    >
+      {children}
+    </button>
+  )
+}
 
-      <div className="mt-4 space-y-3">
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => onMarkOff('frei')}
-            className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
-          >
-            Frei
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => onMarkOff('krank')}
-            className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
-          >
-            Krank
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          <label className="block text-sm font-medium text-text-secondary">
-            Start
-            <Input
-              variant="elevated"
-              type="time"
-              value={selectedEntry?.start_time ?? '09:00'}
-              onChange={e => onPatch({ start_time: e.target.value })}
-              className="mt-1"
-            />
-          </label>
-          <label className="block text-sm font-medium text-text-secondary">
-            Ende
-            <Input
-              variant="elevated"
-              type="time"
-              value={selectedEntry?.end_time ?? '17:00'}
-              onChange={e => onPatch({ end_time: e.target.value })}
-              className="mt-1"
-            />
-          </label>
-        </div>
-
-        <label className="block text-sm font-medium text-text-secondary">
-          Pause in Minuten
-          <Input
-            variant="elevated"
-            type="number"
-            min={0}
-            max={240}
-            step={15}
-            value={selectedEntry?.break_minutes ?? 0}
-            onChange={e => onPatch({ break_minutes: Number(e.target.value) })}
-            className="mt-1"
-          />
-        </label>
-
-        <div className="rounded-lg bg-surface-raised px-3 py-2 text-sm text-text-secondary">
-          Berechnete Dauer:{' '}
-          <span className="font-semibold text-text-primary">
-            {formatTimecardDuration(selectedEntry?.duration_minutes ?? 0)}
-          </span>
-        </div>
-
-        <label className="block text-sm font-medium text-text-secondary">
-          Kategorie
-          <Select
-            variant="elevated"
-            value={selectedEntry?.category ?? 'other'}
-            onChange={e => onPatch({ category: e.target.value as TimecardEntryCategory })}
-            className="mt-1"
-          >
-            {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
-              <option key={category} value={category}>
-                {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
-              </option>
-            ))}
-          </Select>
-        </label>
-
-        <label className="block text-sm font-medium text-text-secondary">
-          Notiz
-          <Textarea
-            variant="elevated"
-            rows={3}
-            value={selectedEntry?.description ?? ''}
-            onChange={e => onPatch({ description: e.target.value })}
-            placeholder="Nur wenn dieser Tag anders war"
-            className="mt-1 resize-none"
-          />
-        </label>
-
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onRestoreFromSchedule}
-          className="w-full rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
+function DetailFields({
+  entry,
+  onPatch,
+}: {
+  entry: TimecardEntryInput
+  onPatch: (patch: Partial<TimecardEntryInput>) => void
+}) {
+  return (
+    <div className="mt-5 grid gap-4 border-t border-subtle pt-5 sm:grid-cols-2">
+      <Field label="Start">
+        <input
+          type="time"
+          value={entry.start_time ?? '09:00'}
+          onChange={e => onPatch({ start_time: e.target.value })}
+          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+        />
+      </Field>
+      <Field label="Ende">
+        <input
+          type="time"
+          value={entry.end_time ?? '17:00'}
+          onChange={e => onPatch({ end_time: e.target.value })}
+          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+        />
+      </Field>
+      <Field label="Pause (Min)">
+        <input
+          type="number"
+          min={0}
+          max={240}
+          step={15}
+          value={entry.break_minutes ?? 0}
+          onChange={e => onPatch({ break_minutes: Number(e.target.value) })}
+          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm tabular-nums focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+        />
+      </Field>
+      <Field label="Kategorie">
+        <select
+          value={entry.category ?? 'other'}
+          onChange={e => onPatch({ category: e.target.value as TimecardEntryCategory })}
+          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         >
-          Tag aus Vorlage wiederherstellen
-        </Button>
-      </div>
-    </aside>
+          {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
+            <option key={category} value={category}>
+              {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
+            </option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Notiz" className="sm:col-span-2">
+        <textarea
+          rows={2}
+          value={entry.description ?? ''}
+          onChange={e => onPatch({ description: e.target.value })}
+          placeholder="Nur wenn dieser Tag anders war"
+          className="w-full resize-none rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+        />
+      </Field>
+    </div>
+  )
+}
+
+function Field({
+  label,
+  className,
+  children,
+}: {
+  label: string
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <label className={cn('block text-xs font-medium uppercase tracking-wide text-text-tertiary', className)}>
+      {label}
+      <div className="mt-1">{children}</div>
+    </label>
   )
 }
