@@ -1,6 +1,7 @@
 'use client'
 
 import { AlertCircle, Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { formatTimecardDuration } from '@/config/timecards'
 
@@ -45,13 +46,15 @@ export function TimecardHeader({
   onSave: () => void
 }) {
   const isSubmitted = status === 'submitted'
+  const t = useTranslations('admin.timecards')
 
   return (
     <header className="border-b border-subtle pb-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-            {isSubmitted ? 'Eingereicht' : 'Entwurf'} · {entryCount} Tage · {formatTimecardDuration(totalMinutes)}
+            {isSubmitted ? t('headerStatusSubmitted') : t('headerStatusDraft')} · {entryCount}{' '}
+            {t('headerDaysSuffix')} · {formatTimecardDuration(totalMinutes)}
           </p>
           <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {monthLabel}
@@ -67,7 +70,7 @@ export function TimecardHeader({
             disabled={isSaving || isLoadingDraft}
             className="text-sm"
           >
-            {isSaving ? 'Speichere…' : 'Speichern'}
+            {isSaving ? t('saving') : t('save')}
           </Button>
           <Button
             type="button"
@@ -76,7 +79,7 @@ export function TimecardHeader({
             disabled={isSubmitting || !hasEntries || isLoadingDraft}
             className="text-sm"
           >
-            {isSubmitting ? 'Sende…' : isSubmitted ? 'Erneut einreichen' : 'Einreichen'}
+            {isSubmitting ? t('submitting') : isSubmitted ? t('resubmit') : t('submit')}
           </Button>
         </div>
       </div>
