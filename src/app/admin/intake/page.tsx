@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { PackageCheck } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import IntakeClient from './IntakeClient'
@@ -8,11 +9,12 @@ export const metadata: Metadata = {
   description: 'Geräte erfassen, prüfen und für den Verkauf freigeben.',
 }
 
-export default function IntakePage() {
+export default async function IntakePage() {
+  const t = await getTranslations('admin.intake')
   return (
     <AdminPageWrapper
-      title="Geräte-Eingang"
-      description="Geräte erfassen, prüfen und freigeben"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={PackageCheck}
       iconColor="blue"
     >

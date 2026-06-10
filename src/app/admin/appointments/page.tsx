@@ -12,6 +12,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { Calendar, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
@@ -41,6 +42,7 @@ interface PageProps {
 }
 
 export default async function AdminAppointmentsPage({ searchParams }: PageProps) {
+  const t = await getTranslations('admin.appointments')
   const params = await searchParams
   const status = params.status || undefined
 
@@ -85,8 +87,8 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
 
   return (
     <AdminPageWrapper
-      title="Termine"
-      description="Service-Termine prüfen und Reparateure zuweisen"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Calendar}
       iconColor="amber"
     >

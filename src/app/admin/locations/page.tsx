@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/date-formats'
@@ -35,6 +37,7 @@ function getTypeIcon(type: string) {
 }
 
 export default function AdminLocationsPage() {
+  const t = useTranslations('admin.locations')
   const {
     sessionStatus,
     filteredLocations,
@@ -70,8 +73,8 @@ export default function AdminLocationsPage() {
 
   return (
     <AdminPageWrapper
-      title="Ortsverwaltung"
-      description="Veranstaltungsorte und deren Genehmigungen verwalten"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={MapPin}
       iconColor="blue"
       actions={

@@ -5,6 +5,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
 import { auth } from '@/auth'
@@ -124,6 +125,7 @@ function formatDuration(minutes: number | null): string {
 }
 
 export default async function AdminServicesPage() {
+  const t = await getTranslations('admin.services')
   const session = await auth()
 
   if (!session?.user) {
@@ -137,8 +139,8 @@ export default async function AdminServicesPage() {
 
   return (
     <AdminPageWrapper
-      title="Dienstleistungen verwalten"
-      description="Erstellen und verwalten Sie Ihre Service-Angebote"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Wrench}
       iconColor="green"
       actions={

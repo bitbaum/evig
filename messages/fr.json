@@ -8536,11 +8536,15 @@
     "approvals": {
       "approve": "Approuver",
       "release": "Publier",
-      "accept": "Accepter"
+      "accept": "Accepter",
+      "pageTitle": "Validations",
+      "pageDescription": "Examiner et approuver les contenus soumis"
     },
     "hirn": {
       "assistantSubtitle": "Assistant",
-      "openFullscreen": "Ouvrir en plein écran"
+      "openFullscreen": "Ouvrir en plein écran",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "Assistant IA pour RevampIT"
     },
     "team": {
       "backToTeam": "Retour à l'équipe",
@@ -8608,7 +8612,9 @@
         "copyPrompt": "Copier le prompt",
         "copied": "Copié",
         "promptTemplate": "Tu es un structureur de réunions. Lis la transcription de réunion suivante et renvoie le résultat au format JSON avec les clés :\n  - participants : liste des noms des participants\n  - topics : liste des points de discussion (courts)\n  - decisions : liste des décisions prises\n  - tasks : liste { description, assignee, dueDate }\n  - openQuestions : liste des questions ouvertes\n\nTranscription :\n---"
-      }
+      },
+      "pageTitle": "Procès-verbaux",
+      "pageDescription": "Procès-verbaux et notes de réunion"
     },
     "categories": {
       "titleNew": "Nouvelle catégorie",
@@ -8758,7 +8764,93 @@
       "fieldBreak": "Pause (min)",
       "fieldCategory": "Catégorie",
       "fieldNote": "Note",
-      "fieldNotePlaceholder": "Seulement si ce jour était différent"
+      "fieldNotePlaceholder": "Seulement si ce jour était différent",
+      "pageTitle": "Feuilles de temps",
+      "pageDescription": "Saisir, soumettre et approuver les heures"
+    },
+    "appointments": {
+      "pageTitle": "Rendez-vous",
+      "pageDescription": "Examiner les rendez-vous et assigner les techniciens"
+    },
+    "content": {
+      "pageTitle": "Contenu",
+      "pageDescription": "Gérer les articles, pages et médias"
+    },
+    "decisions": {
+      "pageTitle": "Décisions",
+      "pageDescription": "Propositions et votes de l'équipe"
+    },
+    "intake": {
+      "pageTitle": "Réception",
+      "pageDescription": "Enregistrer, inspecter et libérer les appareils"
+    },
+    "it-hilfe": {
+      "pageTitle": "Aide IT",
+      "pageDescription": "Gérer les demandes d'aide et les techniciens"
+    },
+    "locations": {
+      "pageTitle": "Lieux",
+      "pageDescription": "Gérer les lieux et leurs autorisations"
+    },
+    "marketplace": {
+      "pageTitle": "Marché",
+      "pageDescription": "Gérer annonces, signalements et commandes"
+    },
+    "payroll": {
+      "pageTitle": "Paie",
+      "pageDescription": "Clôturer le mois, geler les tarifs, exporter le CSV pour la comptabilité."
+    },
+    "products": {
+      "pageTitle": "Produits",
+      "pageDescription": "Gérer les produits du shop et leurs détails"
+    },
+    "reviews": {
+      "pageTitle": "Gestion des avis",
+      "pageDescription": "Modérer et gérer les avis"
+    },
+    "services": {
+      "pageTitle": "Services",
+      "pageDescription": "Créer et gérer vos offres de service"
+    },
+    "settings": {
+      "pageTitle": "Paramètres",
+      "pageDescription": "Configuration du système et préférences"
+    },
+    "tasks": {
+      "pageTitle": "Tâches",
+      "pageDescription": "Gérer et coordonner les tâches de l'équipe"
+    },
+    "users": {
+      "pageTitle": "Utilisateurs",
+      "pageDescription": "Voir les comptes et gérer les autorisations"
+    },
+    "workshops": {
+      "pageTitle": "Ateliers",
+      "pageDescription": "Approuver et gérer les propositions d'atelier"
+    },
+    "analytics": {
+      "pageTitle": "Analyses",
+      "pageDescription": "Statistiques et rapports pour RevampIT"
+    },
+    "donations": {
+      "pageTitle": "Dons",
+      "pageDescription": "Gérer les dons financiers et matériels"
+    },
+    "erfassung": {
+      "pageTitle": "Saisie",
+      "pageDescription": "Saisir et publier les données produit"
+    },
+    "repairer-applications": {
+      "pageTitle": "Candidatures réparateurs",
+      "pageDescription": "Examiner et gérer les candidatures"
+    },
+    "analyse": {
+      "pageTitle": "Analyse",
+      "pageDescription": "Vue d'ensemble et explorations"
+    },
+    "membership": {
+      "pageTitle": "Membres",
+      "pageDescription": "Gérer les membres de l'association"
     }
   }
 }

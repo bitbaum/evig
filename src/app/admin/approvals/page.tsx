@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
@@ -220,6 +221,7 @@ function ApprovalsHero({
 }
 
 export default async function ApprovalsPage() {
+  const t = await getTranslations('admin.approvals')
   const session = await auth()
 
   if (!session?.user) {
@@ -238,8 +240,8 @@ export default async function ApprovalsPage() {
 
   return (
     <AdminPageWrapper
-      title="Freigaben"
-      description="Eingereichte Inhalte von Benutzern prüfen und freigeben"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={CheckSquare}
       iconColor="orange"
     >

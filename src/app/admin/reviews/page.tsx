@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -46,6 +48,7 @@ function renderStars(rating: number) {
 }
 
 export default function AdminReviewsPage() {
+  const t = useTranslations('admin.reviews')
   const {
     filteredReviews, loading, error,
     selectedStatus, searchQuery, moderatingId, moderatingAction, moderationReason, actionInProgress,
@@ -77,8 +80,8 @@ export default function AdminReviewsPage() {
 
   return (
     <AdminPageWrapper
-      title="Bewertungs-Management"
-      description="Bewertungen moderieren und verwalten"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={MessageSquare}
       iconColor="amber"
     >

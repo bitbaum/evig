@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -65,14 +66,15 @@ async function getUserStats(): Promise<UserStats> {
 }
 
 export default async function AdminUsersPage() {
+  const t = await getTranslations('admin.users')
   const session = await requireSection('users')
   const stats = await getUserStats()
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
   return (
     <AdminPageWrapper
-      title="Benutzer verwalten"
-      description="Benutzerkonten anzeigen und Berechtigungen verwalten"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Users}
       iconColor="blue"
     >

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { FileText } from 'lucide-react'
 import Link from 'next/link'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -10,11 +11,12 @@ export const metadata: Metadata = {
   description: 'Blog-Artikel, Seiten und Medien verwalten.',
 }
 
-export default function ContentPage() {
+export default async function ContentPage() {
+  const t = await getTranslations('admin.content')
   return (
     <AdminPageWrapper
-      title="Inhalte"
-      description="Blog-Artikel, Seiten und Medien verwalten"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={FileText}
       iconColor="teal"
     >

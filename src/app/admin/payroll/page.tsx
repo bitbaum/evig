@@ -15,6 +15,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import { Wallet } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
 }
 
 export default async function PayrollPage() {
+  const t = await getTranslations('admin.payroll')
   // Payroll is even more sensitive than timecards: needs the timecards
   // permission AND super-admin. Section guard handles the first; the
   // explicit isSuperAdmin check handles the second.
@@ -38,8 +40,8 @@ export default async function PayrollPage() {
 
   return (
     <AdminPageWrapper
-      title="Lohnlauf"
-      description="Monat abschliessen, Stundensätze einfrieren und CSV für die Buchhaltung herunterladen."
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Wallet}
       iconColor="green"
       backButton={{ href: '/admin/team', label: 'Team' }}

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { requireSection } from '@/lib/admin/guards'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function SettingsPage() {
+  const t = await getTranslations('admin.settings')
   await requireSection('settings')
 
   // None of the sub-pages exist yet — keep cards informational, not navigational
@@ -59,8 +61,8 @@ export default async function SettingsPage() {
 
   return (
     <AdminPageWrapper
-      title="Einstellungen"
-      description="Systemkonfiguration und Einstellungen"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Settings}
       iconColor="gray"
     >

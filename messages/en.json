@@ -8523,11 +8523,15 @@
     "approvals": {
       "approve": "Approve",
       "release": "Release",
-      "accept": "Accept"
+      "accept": "Accept",
+      "pageTitle": "Approvals",
+      "pageDescription": "Review and approve content submitted by users"
     },
     "hirn": {
       "assistantSubtitle": "Assistant",
-      "openFullscreen": "Open fullscreen"
+      "openFullscreen": "Open fullscreen",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "AI assistant for RevampIT"
     },
     "team": {
       "backToTeam": "Back to team",
@@ -8595,7 +8599,9 @@
         "copyPrompt": "Copy prompt",
         "copied": "Copied",
         "promptTemplate": "You are a meeting structurer. Read the following meeting transcript and return the result as JSON with the keys:\n  - participants: list of participant names\n  - topics: list of discussion points (short)\n  - decisions: list of decisions made\n  - tasks: list of { description, assignee, dueDate }\n  - openQuestions: list of open questions\n\nTranscript:\n---"
-      }
+      },
+      "pageTitle": "Minutes",
+      "pageDescription": "Meeting minutes and notes"
     },
     "categories": {
       "titleNew": "New category",
@@ -8745,7 +8751,93 @@
       "fieldBreak": "Break (min)",
       "fieldCategory": "Category",
       "fieldNote": "Note",
-      "fieldNotePlaceholder": "Only when this day was different"
+      "fieldNotePlaceholder": "Only when this day was different",
+      "pageTitle": "Timecards",
+      "pageDescription": "Log, submit, and approve hours worked"
+    },
+    "appointments": {
+      "pageTitle": "Appointments",
+      "pageDescription": "Review service appointments and assign technicians"
+    },
+    "content": {
+      "pageTitle": "Content",
+      "pageDescription": "Manage blog posts, pages, and media"
+    },
+    "decisions": {
+      "pageTitle": "Decisions",
+      "pageDescription": "Team proposals and votes"
+    },
+    "intake": {
+      "pageTitle": "Device intake",
+      "pageDescription": "Log incoming devices, inspect, and release"
+    },
+    "it-hilfe": {
+      "pageTitle": "IT help",
+      "pageDescription": "Manage help requests and technicians"
+    },
+    "locations": {
+      "pageTitle": "Locations",
+      "pageDescription": "Manage venues and their approvals"
+    },
+    "marketplace": {
+      "pageTitle": "Marketplace",
+      "pageDescription": "Manage listings, reports, and orders"
+    },
+    "payroll": {
+      "pageTitle": "Payroll",
+      "pageDescription": "Close the month, freeze rates, and download CSV for accounting."
+    },
+    "products": {
+      "pageTitle": "Products",
+      "pageDescription": "Manage shop products and their details"
+    },
+    "reviews": {
+      "pageTitle": "Review management",
+      "pageDescription": "Moderate and manage reviews"
+    },
+    "services": {
+      "pageTitle": "Services",
+      "pageDescription": "Create and manage your service offerings"
+    },
+    "settings": {
+      "pageTitle": "Settings",
+      "pageDescription": "System configuration and preferences"
+    },
+    "tasks": {
+      "pageTitle": "Tasks",
+      "pageDescription": "Manage and coordinate team tasks"
+    },
+    "users": {
+      "pageTitle": "Users",
+      "pageDescription": "View user accounts and manage permissions"
+    },
+    "workshops": {
+      "pageTitle": "Workshops",
+      "pageDescription": "Approve and manage workshop proposals"
+    },
+    "analytics": {
+      "pageTitle": "Analytics",
+      "pageDescription": "Statistics and reports for RevampIT"
+    },
+    "donations": {
+      "pageTitle": "Donations",
+      "pageDescription": "Manage cash and in-kind donations"
+    },
+    "erfassung": {
+      "pageTitle": "Intake form",
+      "pageDescription": "Enter product data and publish"
+    },
+    "repairer-applications": {
+      "pageTitle": "Repairer applications",
+      "pageDescription": "Review and manage applications"
+    },
+    "analyse": {
+      "pageTitle": "Analyse",
+      "pageDescription": "Overview and drill-downs"
+    },
+    "membership": {
+      "pageTitle": "Members",
+      "pageDescription": "Manage organisation members"
     }
   }
 }

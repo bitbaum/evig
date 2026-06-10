@@ -8521,11 +8521,15 @@
     "approvals": {
       "approve": "Genehmigen",
       "release": "Freigeben",
-      "accept": "Annehmen"
+      "accept": "Annehmen",
+      "pageTitle": "Freigaben",
+      "pageDescription": "Eingereichte Inhalte von Benutzern prüfen und freigeben"
     },
     "hirn": {
       "assistantSubtitle": "Assistent",
-      "openFullscreen": "Vollbild öffnen"
+      "openFullscreen": "Vollbild öffnen",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "KI-Assistent für RevampIT"
     },
     "team": {
       "backToTeam": "Zurück zum Team",
@@ -8593,7 +8597,9 @@
         "copyPrompt": "Prompt kopieren",
         "copied": "Kopiert",
         "promptTemplate": "Du bist ein Sitzungs-Strukturierer. Lies das folgende Sitzungs-Transkript und gib das Ergebnis als JSON zurück mit den Schlüsseln:\n  - participants: Liste der Teilnehmer-Namen\n  - topics: Liste der Diskussionspunkte (kurz)\n  - decisions: Liste der getroffenen Entscheidungen\n  - tasks: Liste { description, assignee, dueDate }\n  - openQuestions: Liste offener Fragen\n\nTranskript:\n---\n"
-      }
+      },
+      "pageTitle": "Protokolle",
+      "pageDescription": "Sitzungsprotokolle und Besprechungsnotizen"
     },
     "categories": {
       "titleNew": "Neue Kategorie",
@@ -8743,7 +8749,93 @@
       "fieldBreak": "Pause (Min)",
       "fieldCategory": "Kategorie",
       "fieldNote": "Notiz",
-      "fieldNotePlaceholder": "Nur wenn dieser Tag anders war"
+      "fieldNotePlaceholder": "Nur wenn dieser Tag anders war",
+      "pageTitle": "Zeitkarten",
+      "pageDescription": "Arbeitszeiten erfassen, einreichen und genehmigen"
+    },
+    "appointments": {
+      "pageTitle": "Termine",
+      "pageDescription": "Service-Termine prüfen und Reparateure zuweisen"
+    },
+    "content": {
+      "pageTitle": "Inhalte",
+      "pageDescription": "Blog-Artikel, Seiten und Medien verwalten"
+    },
+    "decisions": {
+      "pageTitle": "Entscheidungen",
+      "pageDescription": "Vorschläge und Abstimmungen im Team"
+    },
+    "intake": {
+      "pageTitle": "Geräte-Eingang",
+      "pageDescription": "Geräte erfassen, prüfen und freigeben"
+    },
+    "it-hilfe": {
+      "pageTitle": "IT-Hilfe",
+      "pageDescription": "Hilfsanfragen und Techniker verwalten"
+    },
+    "locations": {
+      "pageTitle": "Ortsverwaltung",
+      "pageDescription": "Veranstaltungsorte und deren Genehmigungen verwalten"
+    },
+    "marketplace": {
+      "pageTitle": "Marketplace",
+      "pageDescription": "Inserate, Meldungen und Bestellungen verwalten"
+    },
+    "payroll": {
+      "pageTitle": "Lohnlauf",
+      "pageDescription": "Monat abschliessen, Stundensätze einfrieren und CSV für die Buchhaltung herunterladen."
+    },
+    "products": {
+      "pageTitle": "Produktverwaltung",
+      "pageDescription": "Verwalte die Shop-Produkte und deren Details"
+    },
+    "reviews": {
+      "pageTitle": "Bewertungs-Management",
+      "pageDescription": "Bewertungen moderieren und verwalten"
+    },
+    "services": {
+      "pageTitle": "Dienstleistungen verwalten",
+      "pageDescription": "Erstellen und verwalten Sie Ihre Service-Angebote"
+    },
+    "settings": {
+      "pageTitle": "Einstellungen",
+      "pageDescription": "Systemkonfiguration und Einstellungen"
+    },
+    "tasks": {
+      "pageTitle": "Aufgaben",
+      "pageDescription": "Teamaufgaben verwalten und koordinieren"
+    },
+    "users": {
+      "pageTitle": "Benutzer verwalten",
+      "pageDescription": "Benutzerkonten anzeigen und Berechtigungen verwalten"
+    },
+    "workshops": {
+      "pageTitle": "Workshop-Verwaltung",
+      "pageDescription": "Genehmige und verwalte Workshop-Vorschläge"
+    },
+    "analytics": {
+      "pageTitle": "Analytics",
+      "pageDescription": "Statistiken und Auswertungen für RevampIT"
+    },
+    "donations": {
+      "pageTitle": "Spenden",
+      "pageDescription": "Geld- und Sachspenden verwalten"
+    },
+    "erfassung": {
+      "pageTitle": "Erfassung",
+      "pageDescription": "Produktdaten erfassen und veröffentlichen"
+    },
+    "repairer-applications": {
+      "pageTitle": "Reparateur-Bewerbungen",
+      "pageDescription": "Bewerbungen prüfen und verwalten"
+    },
+    "analyse": {
+      "pageTitle": "Analyse",
+      "pageDescription": "Übersicht und Drill-Downs"
+    },
+    "membership": {
+      "pageTitle": "Mitglieder",
+      "pageDescription": "Vereinsmitglieder verwalten"
     }
   }
 }

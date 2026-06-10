@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -65,6 +67,7 @@ function getLocationText(proposal: WorkshopProposalWithProposer): string {
 // ─── Component ─────────────────────────────────────────────────────────────
 
 export default function AdminWorkshopsPage() {
+  const t = useTranslations('admin.workshops')
   const router = useRouter()
   const {
     proposals, totalItems, totalPages, loading, error,
@@ -95,8 +98,8 @@ export default function AdminWorkshopsPage() {
 
   return (
     <AdminPageWrapper
-      title="Workshop-Verwaltung"
-      description="Genehmige und verwalte Workshop-Vorschläge"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={GraduationCap}
       iconColor="blue"
       actions={

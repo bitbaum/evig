@@ -5,6 +5,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
 import { auth } from '@/auth'
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DecisionsAdminPage() {
+  const t = await getTranslations('admin.decisions')
   const session = await auth()
   if (!session?.user?.email) {
     return null
@@ -36,8 +38,8 @@ export default async function DecisionsAdminPage() {
 
   return (
     <AdminPageWrapper
-      title="Entscheidungen"
-      description="Vorschläge und Abstimmungen im Team"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Vote}
       iconColor="blue"
       actions={

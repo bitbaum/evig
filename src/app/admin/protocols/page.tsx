@@ -7,6 +7,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
 import { Suspense } from 'react'
@@ -62,6 +63,7 @@ export default async function ProtocolsAdminPage({
 }: {
   searchParams: Promise<{ meeting_type?: string; status?: string; step?: string; q?: string; attendee?: string; page?: string }>
 }) {
+  const t = await getTranslations('admin.protocols')
   const params = await searchParams
 
   const session = await auth()
@@ -140,8 +142,8 @@ export default async function ProtocolsAdminPage({
 
   return (
     <AdminPageWrapper
-      title="Protokolle"
-      description="Sitzungsprotokolle und Besprechungsnotizen"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={FileText}
       iconColor="blue"
       actions={

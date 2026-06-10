@@ -5,6 +5,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
 import { Suspense } from 'react'
@@ -43,6 +44,7 @@ export default async function TasksAdminPage({
 }: {
   searchParams: Promise<{ category?: string; status?: string; q?: string; priority?: string; page?: string }>
 }) {
+  const t = await getTranslations('admin.tasks')
   const params = await searchParams
   const currentPage = Math.max(1, parseInt(params.page ?? '1', 10) || 1)
   const stats = await getTaskStats()
@@ -75,8 +77,8 @@ export default async function TasksAdminPage({
 
   return (
     <AdminPageWrapper
-      title="Aufgaben"
-      description="Teamaufgaben verwalten und koordinieren"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={ClipboardList}
       iconColor="blue"
       actions={
