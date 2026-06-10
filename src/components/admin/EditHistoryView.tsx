@@ -13,8 +13,11 @@
 
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { formatDateTime } from '@/lib/date-formats';
 import { EditHistoryEntry } from '@/lib/admin/edit-utils';
+
+type EditHistoryTranslator = ReturnType<typeof useTranslations>;
 
 interface EditHistoryViewProps {
   /** Edit history entries from database */
@@ -35,11 +38,13 @@ export function EditHistoryView({
   fieldLabels,
   className = '',
 }: EditHistoryViewProps) {
+  const t = useTranslations('admin.editHistory');
+
   // Handle empty or null history
   if (!history || !Array.isArray(history) || history.length === 0) {
     return (
       <div className={`text-sm text-text-tertiary italic ${className}`}>
-        Keine Bearbeitungen durch Admins
+        {t('empty')}
       </div>
     );
   }
@@ -51,6 +56,7 @@ export function EditHistoryView({
           key={index}
           entry={entry}
           fieldLabels={fieldLabels}
+          t={t}
         />
       ))}
     </div>
@@ -63,9 +69,11 @@ export function EditHistoryView({
 function EditHistoryEntryView({
   entry,
   fieldLabels,
+  t,
 }: {
   entry: EditHistoryEntry;
   fieldLabels: Record<string, string>;
+  t: EditHistoryTranslator;
 }) {
   const fieldsChangedLabels = entry.fields_changed.map(
     (field) => fieldLabels[field] || field
@@ -83,18 +91,18 @@ function EditHistoryEntryView({
 
       {/* Changed fields summary */}
       <div className="text-sm text-text-secondary mb-2">
-        <strong>Geänderte Felder:</strong>{' '}
+        <strong>{t('changedFields')}</strong>{' '}
         <span>{fieldsChangedLabels.join(', ')}</span>
       </div>
 
       {/* Expandable details showing before/after values */}
       <details className="mt-2">
         <summary className="text-xs text-action cursor-pointer hover:text-action">
-          Änderungen anzeigen
+          {t('showChanges')}
         </summary>
         <div className="mt-2 text-xs bg-surface-base p-3 rounded-sm border border">
           {entry.fields_changed.length === 0 ? (
-            <p className="text-text-tertiary italic">Keine Änderungen</p>
+            <p className="text-text-tertiary italic">{t('noChanges')}</p>
           ) : (
             <div className="space-y-3">
               {entry.fields_changed.map((field) => (
@@ -103,6 +111,7 @@ function EditHistoryEntryView({
                   field={field}
                   label={fieldLabels[field] || field}
                   previousValue={entry.snapshot[field]}
+                  t={t}
                 />
               ))}
             </div>
@@ -120,18 +129,20 @@ function FieldChange({
   field,
   label,
   previousValue,
+  t,
 }: {
   field: string;
   label: string;
   previousValue: unknown;
+  t: EditHistoryTranslator;
 }) {
-  const formattedValue = formatValue(previousValue);
+  const formattedValue = formatValue(previousValue, t);
 
   return (
     <div className="pb-2 border-b border-subtle last:border-0">
       <div className="font-semibold text-text-secondary mb-1">{label}:</div>
       <div className="text-text-secondary pl-2">
-        <div className="text-xs text-text-tertiary">Vorheriger Wert:</div>
+        <div className="text-xs text-text-tertiary">{t('previousValue')}</div>
         <div className="mt-1">{formattedValue}</div>
       </div>
     </div>
@@ -141,13 +152,13 @@ function FieldChange({
 /**
  * Format a value for display (handles arrays, objects, null, etc.)
  */
-function formatValue(value: unknown): React.ReactNode {
+function formatValue(value: unknown, t: EditHistoryTranslator): React.ReactNode {
   if (value === null || value === undefined) {
-    return <span className="italic text-text-tertiary">(leer)</span>;
+    return <span className="italic text-text-tertiary">{t('valueEmpty')}</span>;
   }
 
   if (Array.isArray(value)) {
-    return value.length > 0 ? value.join(', ') : '(leere Liste)';
+    return value.length > 0 ? value.join(', ') : t('valueEmptyList');
   }
 
   if (typeof value === 'object') {
@@ -161,10 +172,10 @@ function formatValue(value: unknown): React.ReactNode {
     return (
       <>
         {strValue.substring(0, 300)}
-        <span className="text-text-tertiary italic">... (gekürzt)</span>
+        <span className="text-text-tertiary italic">{t('valueTruncated')}</span>
       </>
     );
   }
 
-  return strValue || <span className="italic text-text-tertiary">(leer)</span>;
+  return strValue || <span className="italic text-text-tertiary">{t('valueEmpty')}</span>;
 }

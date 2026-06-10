@@ -8898,7 +8898,18 @@
     "notifications": {
       "title": "Notifications",
       "empty": "Aucune nouvelle notification",
-      "markAllRead": "Tout marquer comme lu"
+      "markAllRead": "Tout marquer comme lu",
+      "markAllReadShort": "Tout lu",
+      "bellAriaLabel": "Notifications",
+      "bellAriaWithUnread": "Notifications ({count} non lues)",
+      "loadError": "Impossible de charger les notifications",
+      "retry": "Réessayer",
+      "loading": "Chargement…",
+      "open": "Ouvrir",
+      "relativeJustNow": "À l'instant",
+      "relativeMinutes": "il y a {count} min",
+      "relativeHours": "il y a {count} h",
+      "relativeDays": "{count, plural, one {il y a # jour} other {il y a # jours}}"
     },
     "forms": {
       "cancel": "Annuler",
@@ -8940,6 +8951,26 @@
       "prev": "Précédent",
       "next": "Suivant",
       "total": "{count} entrées"
+    },
+    "filters": {
+      "searchLabel": "Recherche",
+      "searchPlaceholder": "Rechercher…",
+      "allOption": "Tous",
+      "clearFilters": "Réinitialiser les filtres"
+    },
+    "iconPicker": {
+      "choose": "Choisir…",
+      "noneSelected": "Aucune icône choisie"
+    },
+    "editHistory": {
+      "empty": "Aucune modification admin",
+      "changedFields": "Champs modifiés :",
+      "showChanges": "Afficher les modifications",
+      "noChanges": "Aucune modification",
+      "previousValue": "Valeur précédente :",
+      "valueEmpty": "(vide)",
+      "valueEmptyList": "(liste vide)",
+      "valueTruncated": "… (tronqué)"
     },
     "sectionLabels": {
       "uebersicht": "Aujourd'hui",

@@ -8885,7 +8885,18 @@
     "notifications": {
       "title": "Notifications",
       "empty": "No new notifications",
-      "markAllRead": "Mark all as read"
+      "markAllRead": "Mark all as read",
+      "markAllReadShort": "Mark all read",
+      "bellAriaLabel": "Notifications",
+      "bellAriaWithUnread": "Notifications ({count} unread)",
+      "loadError": "Could not load notifications",
+      "retry": "Try again",
+      "loading": "Loading…",
+      "open": "Open",
+      "relativeJustNow": "Just now",
+      "relativeMinutes": "{count} min ago",
+      "relativeHours": "{count} h ago",
+      "relativeDays": "{count, plural, one {# day ago} other {# days ago}}"
     },
     "forms": {
       "cancel": "Cancel",
@@ -8927,6 +8938,26 @@
       "prev": "Previous",
       "next": "Next",
       "total": "{count} entries"
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search…",
+      "allOption": "All",
+      "clearFilters": "Clear filters"
+    },
+    "iconPicker": {
+      "choose": "Choose…",
+      "noneSelected": "No icon selected"
+    },
+    "editHistory": {
+      "empty": "No admin edits",
+      "changedFields": "Changed fields:",
+      "showChanges": "Show changes",
+      "noChanges": "No changes",
+      "previousValue": "Previous value:",
+      "valueEmpty": "(empty)",
+      "valueEmptyList": "(empty list)",
+      "valueTruncated": "… (truncated)"
     },
     "sectionLabels": {
       "uebersicht": "Today",

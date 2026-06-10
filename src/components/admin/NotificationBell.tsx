@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Bell, X, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
@@ -18,15 +19,19 @@ interface Notification {
   created_at: string
 }
 
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime()
-  const minutes = Math.floor(diff / 60000)
-  if (minutes < 1) return 'Gerade eben'
-  if (minutes < 60) return `vor ${minutes} Min.`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `vor ${hours} Std.`
-  const days = Math.floor(hours / 24)
-  return `vor ${days} Tag${days !== 1 ? 'en' : ''}`
+type RelativeTimeFormatter = (iso: string) => string
+
+function makeRelativeTime(t: ReturnType<typeof useTranslations>): RelativeTimeFormatter {
+  return (iso: string) => {
+    const diff = Date.now() - new Date(iso).getTime()
+    const minutes = Math.floor(diff / 60000)
+    if (minutes < 1) return t('relativeJustNow')
+    if (minutes < 60) return t('relativeMinutes', { count: minutes })
+    const hours = Math.floor(minutes / 60)
+    if (hours < 24) return t('relativeHours', { count: hours })
+    const days = Math.floor(hours / 24)
+    return t('relativeDays', { count: days })
+  }
 }
 
 function relatedHref(notification: Notification): string | null {
@@ -37,6 +42,8 @@ function relatedHref(notification: Notification): string | null {
 }
 
 export function NotificationBell() {
+  const t = useTranslations('admin.notifications')
+  const relativeTime = makeRelativeTime(t)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [open, setOpen] = useState(false)
@@ -54,10 +61,10 @@ export function NotificationBell() {
       setNotifications(result.data.notifications)
       setUnreadCount(result.data.unreadCount)
     } else {
-      setError(result.error || 'Benachrichtigungen konnten nicht geladen werden')
+      setError(result.error || t('loadError'))
     }
     setLoading(false)
-  }, [])
+  }, [t])
 
   // Fetch on mount and every 60 seconds for live badge updates
   useEffect(() => {
@@ -129,7 +136,7 @@ export function NotificationBell() {
         size="icon"
         onClick={handleOpen}
         className="relative w-9 h-9 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
-        aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
+        aria-label={unreadCount > 0 ? t('bellAriaWithUnread', { count: unreadCount }) : t('bellAriaLabel')}
       >
         <Bell className="w-5 h-5 text-text-secondary" />
         {unreadCount > 0 && (
@@ -144,7 +151,7 @@ export function NotificationBell() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-subtle px-4 py-3 dark:border-white/6">
             <span className="font-semibold text-sm text-text-primary">
-              Benachrichtigungen
+              {t('title')}
               {unreadCount > 0 && (
                 <span className="ml-2 px-1.5 py-0.5 text-xs bg-error-100 text-error-600 rounded-full">
                   {unreadCount}
@@ -159,10 +166,10 @@ export function NotificationBell() {
                   onClick={markAllRead}
                   disabled={markingAll}
                   className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary hover:bg-surface-raised hover:text-text-secondary dark:hover:bg-surface-base/6 h-auto"
-                  title="Alle als gelesen markieren"
+                  title={t('markAllRead')}
                 >
                   <Check className="w-3 h-3" />
-                  Alle gelesen
+                  {t('markAllReadShort')}
                 </Button>
               )}
               <Button
@@ -187,17 +194,17 @@ export function NotificationBell() {
                   onClick={() => void fetchNotifications()}
                   className="text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
                 >
-                  Erneut versuchen
+                  {t('retry')}
                 </Button>
               </div>
             ) : loading && notifications.length === 0 ? (
               <div className="py-8 text-center text-sm text-text-tertiary">
-                Laden…
+                {t('loading')}
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <Bell className="w-8 h-8 text-text-muted dark:text-text-secondary mx-auto mb-2" />
-                <p className="text-sm text-text-tertiary">Keine Benachrichtigungen</p>
+                <p className="text-sm text-text-tertiary">{t('empty')}</p>
               </div>
             ) : (
               notifications.map(n => {
@@ -231,7 +238,7 @@ export function NotificationBell() {
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (
-                            <span className="text-xs text-action">Öffnen →</span>
+                            <span className="text-xs text-action">{t('open')} →</span>
                           )}
                         </div>
                       </div>

@@ -8,6 +8,7 @@
  */
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { SERVICE_ICONS } from '@/config/service-icons'
 import { Wrench } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -26,10 +27,11 @@ function RenderIcon({ iconName, className }: { iconName: string | null; classNam
 }
 
 export function IconPicker({ value, onChange, className = '' }: IconPickerProps) {
+  const t = useTranslations('admin.iconPicker')
   const [isOpen, setIsOpen] = useState(false)
   const iconNames = Object.keys(SERVICE_ICONS)
 
-  const currentLabel = value ? SERVICE_ICONS[value]?.label : 'Wählen...'
+  const currentLabel = value ? SERVICE_ICONS[value]?.label : t('choose')
 
   return (
     <div className={`relative ${className}`}>
@@ -45,7 +47,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
         </div>
         <div className="flex-1 text-left">
           <span className="text-text-primary">{currentLabel}</span>
-          <span className="block text-xs text-text-tertiary">{value || 'Kein Icon gewählt'}</span>
+          <span className="block text-xs text-text-tertiary">{value || t('noneSelected')}</span>
         </div>
         <svg
           className={`w-5 h-5 text-text-tertiary transition-transform ${isOpen ? 'rotate-180' : ''}`}

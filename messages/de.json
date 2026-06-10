@@ -8883,7 +8883,18 @@
     "notifications": {
       "title": "Benachrichtigungen",
       "empty": "Keine neuen Benachrichtigungen",
-      "markAllRead": "Alle als gelesen markieren"
+      "markAllRead": "Alle als gelesen markieren",
+      "markAllReadShort": "Alle gelesen",
+      "bellAriaLabel": "Benachrichtigungen",
+      "bellAriaWithUnread": "Benachrichtigungen ({count} ungelesen)",
+      "loadError": "Benachrichtigungen konnten nicht geladen werden",
+      "retry": "Erneut versuchen",
+      "loading": "Laden…",
+      "open": "Öffnen",
+      "relativeJustNow": "Gerade eben",
+      "relativeMinutes": "vor {count} Min.",
+      "relativeHours": "vor {count} Std.",
+      "relativeDays": "vor {count, plural, one {# Tag} other {# Tagen}}"
     },
     "forms": {
       "cancel": "Abbrechen",
@@ -8925,6 +8936,26 @@
       "prev": "Zurück",
       "next": "Weiter",
       "total": "{count} Einträge"
+    },
+    "filters": {
+      "searchLabel": "Suche",
+      "searchPlaceholder": "Suchen…",
+      "allOption": "Alle",
+      "clearFilters": "Filter zurücksetzen"
+    },
+    "iconPicker": {
+      "choose": "Wählen…",
+      "noneSelected": "Kein Icon gewählt"
+    },
+    "editHistory": {
+      "empty": "Keine Bearbeitungen durch Admins",
+      "changedFields": "Geänderte Felder:",
+      "showChanges": "Änderungen anzeigen",
+      "noChanges": "Keine Änderungen",
+      "previousValue": "Vorheriger Wert:",
+      "valueEmpty": "(leer)",
+      "valueEmptyList": "(leere Liste)",
+      "valueTruncated": "… (gekürzt)"
     },
     "sectionLabels": {
       "uebersicht": "Heute",

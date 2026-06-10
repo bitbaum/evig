@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -28,12 +29,13 @@ export interface AdminFilterBarProps {
 export function AdminFilterBar({
   searchValue,
   onSearchChange,
-  searchPlaceholder = 'Suchen...',
+  searchPlaceholder,
   dropdowns = [],
   hasActiveFilters = false,
   onClearFilters,
   children,
 }: AdminFilterBarProps) {
+  const t = useTranslations('admin.filters')
   return (
     <div className="bg-surface-base rounded-lg border border p-4">
       {/* Stack vertically on mobile, row on sm+ — each field is max 240px on desktop to prevent
@@ -41,7 +43,7 @@ export function AdminFilterBar({
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
         {onSearchChange !== undefined && (
           <div className="w-full sm:flex-[0_1_240px]">
-            <FormField label="Suche" htmlFor="admin-filter-search">
+            <FormField label={t('searchLabel')} htmlFor="admin-filter-search">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
                 <Input
@@ -49,7 +51,7 @@ export function AdminFilterBar({
                   type="text"
                   value={searchValue ?? ''}
                   onChange={(e) => onSearchChange(e.target.value)}
-                  placeholder={searchPlaceholder}
+                  placeholder={searchPlaceholder ?? t('searchPlaceholder')}
                   className="pl-10"
                 />
               </div>
@@ -67,7 +69,7 @@ export function AdminFilterBar({
                   value={dropdown.value}
                   onChange={(e) => dropdown.onChange(e.target.value)}
                 >
-                  <option value="all">{dropdown.allLabel ?? 'Alle'}</option>
+                  <option value="all">{dropdown.allLabel ?? t('allOption')}</option>
                   {dropdown.options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
@@ -90,7 +92,7 @@ export function AdminFilterBar({
               className="gap-1.5"
             >
               <X className="w-4 h-4" />
-              Filter zurücksetzen
+              {t('clearFilters')}
             </Button>
           </div>
         )}
