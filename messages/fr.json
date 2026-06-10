@@ -8829,7 +8829,154 @@
     },
     "intake": {
       "pageTitle": "Réception",
-      "pageDescription": "Enregistrer, inspecter et libérer les appareils"
+      "pageDescription": "Saisir, vérifier et valider les appareils",
+      "createForm": {
+        "title": "Saisir un nouvel appareil",
+        "tierLabel": "Niveau de traitement",
+        "aiTitle": "Saisie rapide IA",
+        "aiTabs": {
+          "text": "Texte",
+          "voice": "Voix",
+          "photo": "Photo"
+        },
+        "textPlaceholder": "p.ex. Dell Latitude E7470 i5 8GB 256GB SSD bon état",
+        "analyze": "Analyser",
+        "startRecording": "Démarrer l'enregistrement",
+        "stopRecording": "Arrêter l'enregistrement",
+        "processingVoice": "Traitement de la voix…",
+        "transcription": "Transcription : {text}",
+        "fields": {
+          "manufacturer": "Fabricant",
+          "manufacturerPlaceholder": "p.ex. Lenovo, Apple, Dell",
+          "productName": "Nom du produit",
+          "productNamePlaceholder": "p.ex. ThinkPad T480",
+          "shortDescription": "Brève description",
+          "shortDescriptionPlaceholder": "Brève description de l'appareil et de son état",
+          "category": "Catégorie",
+          "subcategory": "Sous-catégorie",
+          "condition": "État",
+          "salesPrice": "Prix de vente estimé (CHF)",
+          "choose": "Choisir…"
+        },
+        "donation": {
+          "isDonation": "Ceci est un don",
+          "donorName": "Nom du donateur",
+          "donorEmail": "E-mail du donateur",
+          "donorNotes": "Notes sur le don",
+          "optional": "Optionnel",
+          "notesPlaceholder": "p.ex. Remis au site de Zurich"
+        },
+        "saving": "Enregistrement…",
+        "submit": "Saisir l'appareil"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "Réception",
+            "description": "Liste & don"
+          },
+          {
+            "label": "Erfassung",
+            "description": "Saisir les données produit"
+          },
+          {
+            "label": "En boutique",
+            "description": "Publier"
+          }
+        ],
+        "loading": "Chargement…",
+        "backToPipeline": "← Retour au pipeline",
+        "donation": "Don",
+        "donationWithName": "Don : {name}",
+        "inShop": "En boutique",
+        "changeTier": "Changer le niveau",
+        "refresh": "Actualiser",
+        "progress": "Progression : {completed}/{total} points obligatoires",
+        "markAllRequiredTitle": "Marquer tous les points obligatoires comme « terminés »",
+        "markAllRequired": "Tout est bon",
+        "publishHeading": "Publier dans la boutique",
+        "publishGate": "Tous les points obligatoires de la liste doivent être cochés avant la publication de l'appareil.",
+        "sellingPriceLabel": "Prix de vente (CHF)",
+        "publishing": "Publication…",
+        "publishNow": "Publier maintenant",
+        "openFullErfassungTitle": "Ouvrir le produit dans Erfassung pour ajouter des détails",
+        "openFullErfassung": "Saisie complète",
+        "publishedConfirm": "Cet appareil est publié dans la boutique",
+        "publishedPrice": "Prix : CHF {price}",
+        "tierChange": {
+          "heading": "Changer le niveau",
+          "warning": "Toute la progression de la liste sera réinitialisée.",
+          "newTierLabel": "Nouveau niveau",
+          "reasonLabel": "Motif *",
+          "reasonPlaceholder": "p.ex. L'appareil n'est pas réparable",
+          "applying": "Changement…",
+          "apply": "Changer le niveau"
+        },
+        "timelineHeading": "Historique"
+      },
+      "pipeline": {
+        "newDevice": "Nouvel appareil",
+        "filters": {
+          "allTiers": "Tous les niveaux",
+          "allStatus": "Tous les statuts",
+          "allCategories": "Toutes les catégories",
+          "searchPlaceholder": "Recherche…"
+        },
+        "loading": "Chargement…",
+        "empty": "Aucun appareil dans le pipeline",
+        "createFirst": "Saisir le premier appareil",
+        "columns": {
+          "uuid": "UUID",
+          "device": "Appareil",
+          "tier": "Niveau",
+          "checklist": "Liste",
+          "status": "Statut",
+          "donation": "Don",
+          "date": "Date"
+        },
+        "status": {
+          "published": "Publié",
+          "ready": "Prêt",
+          "inProgress": "En cours"
+        },
+        "donationYes": "Oui",
+        "hero": {
+          "kpis": {
+            "total": "Total",
+            "inProgress": "En cours",
+            "ready": "Prêts",
+            "published": "Publiés"
+          },
+          "ready": {
+            "headline": "{count, plural, one {# appareil} other {# appareils}} prêts à publier",
+            "sub": "Les appareils prêts attendent la publication. Publier les rend publics.",
+            "cta": "Voir les prêts"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {# appareil} other {# appareils}} en cours",
+            "sub": "Diagnostic, test ou remise à neuf en cours. Garder les statuts à jour.",
+            "cta": "Voir en cours"
+          },
+          "empty": {
+            "headline": "Le pipeline est vide",
+            "sub": "Dès qu'un appareil arrive, il apparaît ici. Saisis le premier.",
+            "cta": "Saisir un nouvel appareil"
+          },
+          "healthy": {
+            "headline": "Le pipeline va bien.",
+            "sub": "{published} appareils publiés, rien à traiter."
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "Obligatoire",
+        "completedAt": "Terminé le {date}",
+        "addNote": "Ajouter une note",
+        "editNote": "Modifier la note",
+        "notePlaceholder": "p.ex. Test de stress CPU réussi, max 75 °C …",
+        "ariaUncheck": "Annuler {label}",
+        "ariaCheck": "Cocher {label}"
+      }
     },
     "it-hilfe": {
       "pageTitle": "Aide IT",

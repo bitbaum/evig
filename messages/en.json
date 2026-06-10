@@ -8831,7 +8831,154 @@
     },
     "intake": {
       "pageTitle": "Device intake",
-      "pageDescription": "Log incoming devices, inspect, and release"
+      "pageDescription": "Log, check and release devices",
+      "createForm": {
+        "title": "Log new device",
+        "tierLabel": "Processing tier",
+        "aiTitle": "AI quick input",
+        "aiTabs": {
+          "text": "Text",
+          "voice": "Voice",
+          "photo": "Photo"
+        },
+        "textPlaceholder": "e.g. Dell Latitude E7470 i5 8GB 256GB SSD good condition",
+        "analyze": "Analyse",
+        "startRecording": "Start recording",
+        "stopRecording": "Stop recording",
+        "processingVoice": "Processing voice…",
+        "transcription": "Transcription: {text}",
+        "fields": {
+          "manufacturer": "Manufacturer",
+          "manufacturerPlaceholder": "e.g. Lenovo, Apple, Dell",
+          "productName": "Product name",
+          "productNamePlaceholder": "e.g. ThinkPad T480",
+          "shortDescription": "Short description",
+          "shortDescriptionPlaceholder": "Brief description of the device and its condition",
+          "category": "Category",
+          "subcategory": "Subcategory",
+          "condition": "Condition",
+          "salesPrice": "Estimated sales price (CHF)",
+          "choose": "Choose…"
+        },
+        "donation": {
+          "isDonation": "This is a donation",
+          "donorName": "Donor name",
+          "donorEmail": "Donor email",
+          "donorNotes": "Donation notes",
+          "optional": "Optional",
+          "notesPlaceholder": "e.g. Handed over at the Zurich location"
+        },
+        "saving": "Saving…",
+        "submit": "Log device"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "Intake",
+            "description": "Checklist & donation"
+          },
+          {
+            "label": "Erfassung",
+            "description": "Enter product data"
+          },
+          {
+            "label": "In shop",
+            "description": "Publish"
+          }
+        ],
+        "loading": "Loading…",
+        "backToPipeline": "← Back to pipeline",
+        "donation": "Donation",
+        "donationWithName": "Donation: {name}",
+        "inShop": "In shop",
+        "changeTier": "Change tier",
+        "refresh": "Refresh",
+        "progress": "Progress: {completed}/{total} required items",
+        "markAllRequiredTitle": "Mark all required items as done",
+        "markAllRequired": "All good",
+        "publishHeading": "Publish to shop",
+        "publishGate": "All required checklist items must be ticked before the device can be published.",
+        "sellingPriceLabel": "Sales price (CHF)",
+        "publishing": "Publishing…",
+        "publishNow": "Publish now",
+        "openFullErfassungTitle": "Open in Erfassung to add product details",
+        "openFullErfassung": "Full erfassung",
+        "publishedConfirm": "This device is published in the shop",
+        "publishedPrice": "Price: CHF {price}",
+        "tierChange": {
+          "heading": "Change tier",
+          "warning": "All checklist progress will be reset.",
+          "newTierLabel": "New tier",
+          "reasonLabel": "Reason *",
+          "reasonPlaceholder": "e.g. Device cannot be repaired",
+          "applying": "Changing…",
+          "apply": "Change tier"
+        },
+        "timelineHeading": "History"
+      },
+      "pipeline": {
+        "newDevice": "New device",
+        "filters": {
+          "allTiers": "All tiers",
+          "allStatus": "All statuses",
+          "allCategories": "All categories",
+          "searchPlaceholder": "Search…"
+        },
+        "loading": "Loading…",
+        "empty": "No devices in the pipeline",
+        "createFirst": "Log the first device",
+        "columns": {
+          "uuid": "UUID",
+          "device": "Device",
+          "tier": "Tier",
+          "checklist": "Checklist",
+          "status": "Status",
+          "donation": "Donation",
+          "date": "Date"
+        },
+        "status": {
+          "published": "Published",
+          "ready": "Ready",
+          "inProgress": "In progress"
+        },
+        "donationYes": "Yes",
+        "hero": {
+          "kpis": {
+            "total": "Total",
+            "inProgress": "In progress",
+            "ready": "Ready",
+            "published": "Published"
+          },
+          "ready": {
+            "headline": "{count, plural, one {# device} other {# devices}} ready to publish",
+            "sub": "Ready devices are finished in the pipeline. Publishing makes them public.",
+            "cta": "Show ready"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {# device} other {# devices}} in progress",
+            "sub": "Diagnosis, test or refurbishment in motion. Keep statuses current.",
+            "cta": "Show in progress"
+          },
+          "empty": {
+            "headline": "Pipeline is empty",
+            "sub": "As soon as a device comes in, it shows up here. Log the first one.",
+            "cta": "Log new device"
+          },
+          "healthy": {
+            "headline": "Pipeline is healthy.",
+            "sub": "{published} devices published, nothing waiting on you."
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "Required",
+        "completedAt": "Completed on {date}",
+        "addNote": "Add note",
+        "editNote": "Edit note",
+        "notePlaceholder": "e.g. CPU stress test passed, max 75 °C …",
+        "ariaUncheck": "Undo {label}",
+        "ariaCheck": "Tick {label}"
+      }
     },
     "it-hilfe": {
       "pageTitle": "IT help",

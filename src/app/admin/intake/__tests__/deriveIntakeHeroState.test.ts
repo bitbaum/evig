@@ -6,8 +6,46 @@
 import { deriveIntakeHeroState } from '../IntakePipelineView'
 import { INTAKE_STATUS } from '@/config/intake-status'
 
+/**
+ * Stub translator returning canonical DE strings — the function uses ICU
+ * plurals via next-intl; the stub resolves the test cases without depending
+ * on the next-intl runtime.
+ */
+function makeStubTranslator() {
+  const fakeT = (key: string, params?: Record<string, unknown>): string => {
+    const count = (params?.count as number | undefined) ?? 0
+    const published = params?.published as number | undefined
+    switch (key) {
+      case 'hero.kpis.total': return 'Total'
+      case 'hero.kpis.inProgress': return 'In Bearbeitung'
+      case 'hero.kpis.ready': return 'Bereit'
+      case 'hero.kpis.published': return 'Publiziert'
+      case 'hero.ready.headline':
+        return `${count} ${count === 1 ? 'Gerät' : 'Geräte'} bereit zum Publizieren`
+      case 'hero.ready.sub':
+        return 'Bereit-Geräte stehen fertig in der Pipeline. Publizieren macht sie öffentlich.'
+      case 'hero.ready.cta': return 'Bereit anzeigen'
+      case 'hero.inProgress.headline':
+        return `${count} ${count === 1 ? 'Gerät' : 'Geräte'} in Bearbeitung`
+      case 'hero.inProgress.sub':
+        return 'Diagnose, Test oder Aufbereitung läuft. Status aktuell halten.'
+      case 'hero.inProgress.cta': return 'In Bearbeitung anzeigen'
+      case 'hero.empty.headline': return 'Pipeline ist leer'
+      case 'hero.empty.sub':
+        return 'Sobald ein Gerät reinkommt, taucht es hier auf. Erfasse das erste.'
+      case 'hero.empty.cta': return 'Neues Gerät erfassen'
+      case 'hero.healthy.headline': return 'Pipeline im grünen Bereich.'
+      case 'hero.healthy.sub':
+        return `${published} Geräte publiziert, nichts wartet auf Bearbeitung.`
+      default: return key
+    }
+  }
+  return fakeT as unknown as Parameters<typeof deriveIntakeHeroState>[3]
+}
+
 const onStatusFilter = jest.fn()
 const onCreateNew = jest.fn()
+const t = makeStubTranslator()
 
 beforeEach(() => jest.clearAllMocks())
 
@@ -17,6 +55,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 10, inProgress: 5, ready: 2, published: 3 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(s.tone).toBe('attention')
     expect(s.headline).toContain('2 Geräte bereit')
@@ -30,6 +69,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 8, inProgress: 4, ready: 0, published: 4 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(s.tone).toBe('attention')
     expect(s.headline).toContain('4 Geräte in Bearbeitung')
@@ -42,6 +82,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 0, inProgress: 0, ready: 0, published: 0 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(s.tone).toBe('empty')
     expect(s.headline).toContain('leer')
@@ -55,6 +96,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 10, inProgress: 0, ready: 0, published: 10 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(s.tone).toBe('healthy')
     expect(s.headline).toMatch(/grünen Bereich/)
@@ -67,6 +109,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 1, inProgress: 1, ready: 0, published: 0 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(singular.headline).toContain('1 Gerät in Bearbeitung')
 
@@ -74,6 +117,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 3, inProgress: 3, ready: 0, published: 0 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(plural.headline).toContain('3 Geräte in Bearbeitung')
   })
@@ -83,6 +127,7 @@ describe('deriveIntakeHeroState', () => {
       { total: 5, inProgress: 1, ready: 2, published: 2 },
       onStatusFilter,
       onCreateNew,
+      t,
     )
     expect(s.kpis.map((k) => k.label)).toEqual([
       'Total',

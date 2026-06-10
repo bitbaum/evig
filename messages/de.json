@@ -8829,7 +8829,154 @@
     },
     "intake": {
       "pageTitle": "Geräte-Eingang",
-      "pageDescription": "Geräte erfassen, prüfen und freigeben"
+      "pageDescription": "Geräte erfassen, prüfen und freigeben",
+      "createForm": {
+        "title": "Neues Gerät erfassen",
+        "tierLabel": "Verarbeitungsstufe",
+        "aiTitle": "KI-Schnelleingabe",
+        "aiTabs": {
+          "text": "Text",
+          "voice": "Sprache",
+          "photo": "Foto"
+        },
+        "textPlaceholder": "z.B. Dell Latitude E7470 i5 8GB 256GB SSD guter Zustand",
+        "analyze": "Analysieren",
+        "startRecording": "Aufnahme starten",
+        "stopRecording": "Aufnahme stoppen",
+        "processingVoice": "Verarbeite Sprache…",
+        "transcription": "Transkription: {text}",
+        "fields": {
+          "manufacturer": "Hersteller",
+          "manufacturerPlaceholder": "z.B. Lenovo, Apple, Dell",
+          "productName": "Produktname",
+          "productNamePlaceholder": "z.B. ThinkPad T480",
+          "shortDescription": "Kurzbeschreibung",
+          "shortDescriptionPlaceholder": "Kurze Beschreibung des Geräts und seines Zustands",
+          "category": "Kategorie",
+          "subcategory": "Unterkategorie",
+          "condition": "Zustand",
+          "salesPrice": "Geschätzter Verkaufspreis (CHF)",
+          "choose": "Wählen…"
+        },
+        "donation": {
+          "isDonation": "Dies ist eine Spende",
+          "donorName": "Name Spender/in",
+          "donorEmail": "E-Mail Spender/in",
+          "donorNotes": "Notizen zur Spende",
+          "optional": "Optional",
+          "notesPlaceholder": "z.B. Übergeben am Standort Zürich"
+        },
+        "saving": "Speichern…",
+        "submit": "Gerät erfassen"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "Geräte-Eingang",
+            "description": "Checkliste & Spende"
+          },
+          {
+            "label": "Erfassung",
+            "description": "Produktdaten eingeben"
+          },
+          {
+            "label": "Im Shop",
+            "description": "Veröffentlichen"
+          }
+        ],
+        "loading": "Laden…",
+        "backToPipeline": "← Zurück zur Pipeline",
+        "donation": "Spende",
+        "donationWithName": "Spende: {name}",
+        "inShop": "Im Shop",
+        "changeTier": "Stufe ändern",
+        "refresh": "Aktualisieren",
+        "progress": "Fortschritt: {completed}/{total} Pflichtpunkte",
+        "markAllRequiredTitle": "Alle Pflichtpunkte auf „erledigt“ setzen",
+        "markAllRequired": "Alles in Ordnung",
+        "publishHeading": "Im Shop veröffentlichen",
+        "publishGate": "Alle Pflichtpunkte der Checkliste müssen abgehakt sein, bevor das Gerät publiziert werden kann.",
+        "sellingPriceLabel": "Verkaufspreis (CHF)",
+        "publishing": "Publizieren…",
+        "publishNow": "Jetzt publizieren",
+        "openFullErfassungTitle": "Produkt in Erfassung öffnen um Details zu ergänzen",
+        "openFullErfassung": "Vollständig erfassen",
+        "publishedConfirm": "Dieses Gerät ist im Shop veröffentlicht",
+        "publishedPrice": "Preis: CHF {price}",
+        "tierChange": {
+          "heading": "Stufe ändern",
+          "warning": "Alle Checklisten-Fortschritte werden zurückgesetzt.",
+          "newTierLabel": "Neue Stufe",
+          "reasonLabel": "Begründung *",
+          "reasonPlaceholder": "z.B. Gerät ist nicht reparierbar",
+          "applying": "Ändern…",
+          "apply": "Stufe ändern"
+        },
+        "timelineHeading": "Verlauf"
+      },
+      "pipeline": {
+        "newDevice": "Neues Gerät",
+        "filters": {
+          "allTiers": "Alle Stufen",
+          "allStatus": "Alle Status",
+          "allCategories": "Alle Kategorien",
+          "searchPlaceholder": "Suche…"
+        },
+        "loading": "Laden…",
+        "empty": "Keine Geräte in der Pipeline",
+        "createFirst": "Erstes Gerät erfassen",
+        "columns": {
+          "uuid": "UUID",
+          "device": "Gerät",
+          "tier": "Stufe",
+          "checklist": "Checkliste",
+          "status": "Status",
+          "donation": "Spende",
+          "date": "Datum"
+        },
+        "status": {
+          "published": "Publiziert",
+          "ready": "Bereit",
+          "inProgress": "In Bearbeitung"
+        },
+        "donationYes": "Ja",
+        "hero": {
+          "kpis": {
+            "total": "Total",
+            "inProgress": "In Bearbeitung",
+            "ready": "Bereit",
+            "published": "Publiziert"
+          },
+          "ready": {
+            "headline": "{count, plural, one {# Gerät} other {# Geräte}} bereit zum Publizieren",
+            "sub": "Bereit-Geräte stehen fertig in der Pipeline. Publizieren macht sie öffentlich.",
+            "cta": "Bereit anzeigen"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {# Gerät} other {# Geräte}} in Bearbeitung",
+            "sub": "Diagnose, Test oder Aufbereitung läuft. Status aktuell halten.",
+            "cta": "In Bearbeitung anzeigen"
+          },
+          "empty": {
+            "headline": "Pipeline ist leer",
+            "sub": "Sobald ein Gerät reinkommt, taucht es hier auf. Erfasse das erste.",
+            "cta": "Neues Gerät erfassen"
+          },
+          "healthy": {
+            "headline": "Pipeline im grünen Bereich.",
+            "sub": "{published} Geräte publiziert, nichts wartet auf Bearbeitung."
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "Pflichtpunkt",
+        "completedAt": "Erledigt am {date}",
+        "addNote": "Notiz hinzufügen",
+        "editNote": "Notiz bearbeiten",
+        "notePlaceholder": "z.B. CPU-Stresstest bestanden, max. 75 °C …",
+        "ariaUncheck": "{label} rückgängig machen",
+        "ariaCheck": "{label} abhaken"
+      }
     },
     "it-hilfe": {
       "pageTitle": "IT-Hilfe",

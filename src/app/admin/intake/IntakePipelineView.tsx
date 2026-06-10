@@ -1,11 +1,14 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import {
   Plus, Search, Filter, Check, Package, Wrench, Send,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+
+type IntakePipelineTranslator = ReturnType<typeof useTranslations>
 import {
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
@@ -54,14 +57,15 @@ export function IntakePipelineView({
   onOpenDetail,
   onPageChange,
 }: IntakePipelineViewProps) {
+  const t = useTranslations('admin.intake.pipeline')
   return (
     <div className="space-y-4">
-      <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} onCreateNew={onCreateNew} />
+      <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} onCreateNew={onCreateNew} t={t} />
 
       {/* Filters + Actions */}
       <div className="flex flex-wrap gap-2 items-center">
         <Button onClick={onCreateNew} variant="primary" size="sm">
-          <Plus className="w-4 h-4" /> Neues Gerät
+          <Plus className="w-4 h-4" /> {t('newDevice')}
         </Button>
 
         <div className="flex items-center gap-1 ml-auto">
@@ -73,7 +77,7 @@ export function IntakePipelineView({
           onChange={(e) => onTierFilterChange(e.target.value)}
           className="w-auto"
         >
-          <option value="">Alle Stufen</option>
+          <option value="">{t('filters.allTiers')}</option>
           {getIntakeTierOptions().map(o => (
             <option key={o.value} value={o.value}>{o.icon} {o.label}</option>
           ))}
@@ -84,7 +88,7 @@ export function IntakePipelineView({
           onChange={(e) => onStatusFilterChange(e.target.value)}
           className="w-auto"
         >
-          <option value="">Alle Status</option>
+          <option value="">{t('filters.allStatus')}</option>
           {Object.values(INTAKE_STATUS).map(status => (
             <option key={status} value={status}>{INTAKE_STATUS_LABELS[status]}</option>
           ))}
@@ -95,7 +99,7 @@ export function IntakePipelineView({
           onChange={(e) => onCategoryFilterChange(e.target.value)}
           className="w-auto"
         >
-          <option value="">Alle Kategorien</option>
+          <option value="">{t('filters.allCategories')}</option>
           {KATEGORIEN.map(k => (
             <option key={k.value} value={k.value}>{k.icon} {k.label}</option>
           ))}
@@ -105,7 +109,7 @@ export function IntakePipelineView({
           <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 text-text-tertiary" />
           <Input
             type="text"
-            placeholder="Suche..."
+            placeholder={t('filters.searchPlaceholder')}
             value={searchFilter}
             onChange={(e) => onSearchFilterChange(e.target.value)}
             className="pl-8 pr-3 w-40"
@@ -115,18 +119,18 @@ export function IntakePipelineView({
 
       {/* Table */}
       {loading ? (
-        <div className="text-center py-8 text-text-tertiary">Laden...</div>
+        <div className="text-center py-8 text-text-tertiary">{t('loading')}</div>
       ) : items.length === 0 ? (
         <div className="text-center py-12 bg-surface-raised rounded-lg">
           <Package className="w-12 h-12 mx-auto text-text-muted mb-3" />
-          <p className="text-text-tertiary mb-2">Keine Geräte in der Pipeline</p>
+          <p className="text-text-tertiary mb-2">{t('empty')}</p>
           <Button
             variant="ghost"
             size="sm"
             onClick={onCreateNew}
             className="text-action hover:underline text-sm"
           >
-            Erstes Gerät erfassen
+            {t('createFirst')}
           </Button>
         </div>
       ) : (
@@ -135,13 +139,13 @@ export function IntakePipelineView({
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-text-tertiary">
-                  <th className="pb-2 font-medium">UUID</th>
-                  <th className="pb-2 font-medium">Gerät</th>
-                  <th className="pb-2 font-medium">Stufe</th>
-                  <th className="pb-2 font-medium">Checkliste</th>
-                  <th className="pb-2 font-medium">Status</th>
-                  <th className="pb-2 font-medium">Spende</th>
-                  <th className="pb-2 font-medium">Datum</th>
+                  <th className="pb-2 font-medium">{t('columns.uuid')}</th>
+                  <th className="pb-2 font-medium">{t('columns.device')}</th>
+                  <th className="pb-2 font-medium">{t('columns.tier')}</th>
+                  <th className="pb-2 font-medium">{t('columns.checklist')}</th>
+                  <th className="pb-2 font-medium">{t('columns.status')}</th>
+                  <th className="pb-2 font-medium">{t('columns.donation')}</th>
+                  <th className="pb-2 font-medium">{t('columns.date')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -184,19 +188,19 @@ export function IntakePipelineView({
                       <td className="py-2.5">
                         {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
-                            <Check className="w-3 h-3" /> Publiziert
+                            <Check className="w-3 h-3" /> {t('status.published')}
                           </span>
                         ) : item.checklist_complete ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
-                            Bereit
+                            {t('status.ready')}
                           </span>
                         ) : (
-                          <StatusBadge variant="warning">In Bearbeitung</StatusBadge>
+                          <StatusBadge variant="warning">{t('status.inProgress')}</StatusBadge>
                         )}
                       </td>
                       <td className="py-2.5">
                         {item.source_donation_id ? (
-                          <span className="text-xs text-action">{item.donor_name || 'Ja'}</span>
+                          <span className="text-xs text-action">{item.donor_name || t('donationYes')}</span>
                         ) : (
                           <span className="text-xs text-text-muted">-</span>
                         )}
@@ -242,6 +246,7 @@ export function deriveIntakeHeroState(
   counts: IntakeStatusCounts,
   onStatusFilter: (v: string) => void,
   onCreateNew: () => void,
+  t: IntakePipelineTranslator,
 ): {
   tone: HeroTone
   icon: typeof Package
@@ -251,20 +256,20 @@ export function deriveIntakeHeroState(
   kpis: HeroKpi[]
 } {
   const kpis: HeroKpi[] = [
-    { label: 'Total', value: counts.total },
-    { label: 'In Bearbeitung', value: counts.inProgress },
-    { label: 'Bereit', value: counts.ready },
-    { label: 'Publiziert', value: counts.published },
+    { label: t('hero.kpis.total'), value: counts.total },
+    { label: t('hero.kpis.inProgress'), value: counts.inProgress },
+    { label: t('hero.kpis.ready'), value: counts.ready },
+    { label: t('hero.kpis.published'), value: counts.published },
   ]
 
   if (counts.ready > 0) {
     return {
       tone: 'attention',
       icon: Send,
-      headline: `${counts.ready} Gerät${counts.ready === 1 ? '' : 'e'} bereit zum Publizieren`,
-      sub: 'Bereit-Geräte stehen fertig in der Pipeline. Publizieren macht sie öffentlich.',
+      headline: t('hero.ready.headline', { count: counts.ready }),
+      sub: t('hero.ready.sub'),
       cta: {
-        label: 'Bereit anzeigen',
+        label: t('hero.ready.cta'),
         onClick: () => onStatusFilter(INTAKE_STATUS.READY),
       },
       kpis,
@@ -274,10 +279,10 @@ export function deriveIntakeHeroState(
     return {
       tone: 'attention',
       icon: Wrench,
-      headline: `${counts.inProgress} Gerät${counts.inProgress === 1 ? '' : 'e'} in Bearbeitung`,
-      sub: 'Diagnose, Test oder Aufbereitung läuft. Status aktuell halten.',
+      headline: t('hero.inProgress.headline', { count: counts.inProgress }),
+      sub: t('hero.inProgress.sub'),
       cta: {
-        label: 'In Bearbeitung anzeigen',
+        label: t('hero.inProgress.cta'),
         onClick: () => onStatusFilter(INTAKE_STATUS.IN_PROGRESS),
       },
       kpis,
@@ -287,17 +292,17 @@ export function deriveIntakeHeroState(
     return {
       tone: 'empty',
       icon: Package,
-      headline: 'Pipeline ist leer',
-      sub: 'Sobald ein Gerät reinkommt, taucht es hier auf. Erfasse das erste.',
-      cta: { label: 'Neues Gerät erfassen', onClick: onCreateNew },
+      headline: t('hero.empty.headline'),
+      sub: t('hero.empty.sub'),
+      cta: { label: t('hero.empty.cta'), onClick: onCreateNew },
       kpis,
     }
   }
   return {
     tone: 'healthy',
     icon: Check,
-    headline: 'Pipeline im grünen Bereich.',
-    sub: `${counts.published} Geräte publiziert, nichts wartet auf Bearbeitung.`,
+    headline: t('hero.healthy.headline'),
+    sub: t('hero.healthy.sub', { published: counts.published }),
     kpis,
   }
 }
@@ -306,12 +311,14 @@ function IntakeHero({
   statusCounts,
   onStatusFilter,
   onCreateNew,
+  t,
 }: {
   statusCounts: IntakeStatusCounts
   onStatusFilter: (v: string) => void
   onCreateNew: () => void
+  t: IntakePipelineTranslator
 }) {
-  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, onCreateNew)
+  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, onCreateNew, t)
   return (
     <AdminHeroStatus
       tone={s.tone}

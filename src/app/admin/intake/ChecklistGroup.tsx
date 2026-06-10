@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ChevronDown, ChevronRight, Check, StickyNote } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,8 @@ interface ChecklistGroupProps {
 }
 
 export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
+  const t = useTranslations('admin.intake.checklist')
+  const tForms = useTranslations('admin.forms')
   const [expanded, setExpanded] = useState(true)
   const [notesOpen, setNotesOpen] = useState<Record<string, boolean>>({})
   const [notesText, setNotesText] = useState<Record<string, string>>({})
@@ -68,7 +71,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                       ? 'bg-action border-action text-white'
                       : 'border-default hover:border-action'
                   }`}
-                  aria-label={item.state.completed ? `${item.label} rückgängig machen` : `${item.label} abhaken`}
+                  aria-label={item.state.completed ? t('ariaUncheck', { label: item.label }) : t('ariaCheck', { label: item.label })}
                 >
                   {item.state.completed && <Check className="w-3 h-3" />}
                 </Button>
@@ -80,7 +83,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                       {item.label}
                     </span>
                     {item.required && (
-                      <span className="text-xs text-error-500" title="Pflichtpunkt">*</span>
+                      <span className="text-xs text-error-500" title={t('requiredMarker')}>*</span>
                     )}
                   </div>
 
@@ -93,7 +96,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                       <div className="flex items-center gap-3 flex-wrap">
                         {item.state.completedAt && (
                           <span className="text-xs text-action">
-                            Erledigt am {formatDateShort(item.state.completedAt)}
+                            {t('completedAt', { date: formatDateShort(item.state.completedAt) })}
                           </span>
                         )}
                         {!notesOpen[item.id] && (
@@ -105,7 +108,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                             className="text-xs text-text-muted hover:text-action flex items-center gap-0.5 transition-colors"
                           >
                             <StickyNote className="w-3 h-3" />
-                            {item.state.notes ? 'Notiz bearbeiten' : 'Notiz hinzufügen'}
+                            {item.state.notes ? t('editNote') : t('addNote')}
                           </Button>
                         )}
                       </div>
@@ -123,8 +126,8 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                       <Textarea
                         autoFocus
                         value={notesText[item.id] ?? ''}
-                        onChange={(e) => setNotesText(t => ({ ...t, [item.id]: e.target.value }))}
-                        placeholder="z.B. CPU-Stresstest bestanden, max. 75 °C ..."
+                        onChange={(e) => setNotesText(prev => ({ ...prev, [item.id]: e.target.value }))}
+                        placeholder={t('notePlaceholder')}
                         rows={2}
                         className="text-xs resize-none"
                       />
@@ -135,7 +138,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           variant="primary"
                           size="sm"
                         >
-                          Speichern
+                          {tForms('save')}
                         </Button>
                         <Button
                           type="button"
@@ -144,7 +147,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}
                           className="text-xs px-2.5 py-1 border rounded-sm hover:bg-surface-raised transition-colors"
                         >
-                          Abbrechen
+                          {tForms('cancel')}
                         </Button>
                       </div>
                     </div>

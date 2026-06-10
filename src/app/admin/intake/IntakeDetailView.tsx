@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
@@ -22,12 +23,6 @@ import { ChecklistGroup } from './ChecklistGroup'
 import { Stepper } from '@/components/ui/Stepper'
 import type { DetailData } from './types'
 import Heading from '@/components/admin/AdminHeading'
-
-const INTAKE_PIPELINE_STEPS = [
-  { label: 'Geräte-Eingang', description: 'Checkliste & Spende' },
-  { label: 'Erfassung', description: 'Produktdaten eingeben' },
-  { label: 'Im Shop', description: 'Veröffentlichen' },
-]
 
 interface IntakeDetailViewProps {
   detail: DetailData | null
@@ -70,8 +65,11 @@ export function IntakeDetailView({
   onPublish,
   onTierChange,
 }: IntakeDetailViewProps) {
+  const t = useTranslations('admin.intake.detail')
+  const tForms = useTranslations('admin.forms')
+  const pipelineSteps = t.raw('pipelineSteps') as { label: string; description: string }[]
   if (detailLoading || !detail) {
-    return <div className="text-center py-8 text-text-tertiary">Laden...</div>
+    return <div className="text-center py-8 text-text-tertiary">{t('loading')}</div>
   }
 
   const progress = detail.checklist_progress
@@ -87,7 +85,7 @@ export function IntakeDetailView({
       {/* Pipeline progress — shown for refurbish-tier items */}
       {detail.intake_tier === INTAKE_TIERS.REFURBISH && (
         <div className="bg-surface-base border border rounded-lg px-4 py-3">
-          <Stepper steps={INTAKE_PIPELINE_STEPS} currentStep={pipelineStep} />
+          <Stepper steps={pipelineSteps} currentStep={pipelineStep} />
         </div>
       )}
 
@@ -100,14 +98,14 @@ export function IntakeDetailView({
             onClick={onBack}
             className="text-sm text-action hover:underline mb-2 flex items-center gap-1"
           >
-            ← Zurück zur Pipeline
+            {t('backToPipeline')}
           </Button>
           <Heading level={2} className="text-lg font-semibold">{detail.brand} {detail.product_name}</Heading>
           <div className="flex items-center gap-3 text-sm text-text-tertiary mt-1">
             <span className="font-mono">{detail.item_uuid}</span>
             <span>{INTAKE_TIER_ICONS[detail.intake_tier]} {INTAKE_TIER_LABELS[detail.intake_tier]}</span>
             {detail.source_donation_id && (
-              <span className="text-action">Spende{detail.donor_name ? `: ${detail.donor_name}` : ''}</span>
+              <span className="text-action">{detail.donor_name ? t('donationWithName', { name: detail.donor_name }) : t('donation')}</span>
             )}
           </div>
         </div>
@@ -115,7 +113,7 @@ export function IntakeDetailView({
         <div className="flex items-center gap-2">
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
-              <Check className="w-4 h-4" /> Im Shop
+              <Check className="w-4 h-4" /> {t('inShop')}
             </span>
           ) : (
             <>
@@ -125,11 +123,11 @@ export function IntakeDetailView({
                 size="sm"
                 onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
                 className="flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg hover:bg-surface-raised"
-                title="Stufe ändern"
+                title={t('changeTier')}
               >
-                <ArrowDownUp className="w-3.5 h-3.5" /> Stufe ändern
+                <ArrowDownUp className="w-3.5 h-3.5" /> {t('changeTier')}
               </Button>
-              <Button onClick={onRefresh} variant="ghost" size="icon" title="Aktualisieren">
+              <Button onClick={onRefresh} variant="ghost" size="icon" title={t('refresh')}>
                 <RefreshCw className="w-4 h-4" />
               </Button>
             </>
@@ -141,7 +139,7 @@ export function IntakeDetailView({
       <div className="bg-surface-base border rounded-lg p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">
-            Fortschritt: {progress.requiredCompleted}/{progress.requiredTotal} Pflichtpunkte
+            {t('progress', { completed: progress.requiredCompleted, total: progress.requiredTotal })}
           </span>
           <div className="flex items-center gap-3">
             {progress.percentage < 100 && (
@@ -150,10 +148,10 @@ export function IntakeDetailView({
                 onClick={onMarkAllRequired}
                 variant="primary"
                 size="sm"
-                title="Alle Pflichtpunkte auf 'erledigt' setzen"
+                title={t('markAllRequiredTitle')}
               >
                 <CheckCheck className="w-3.5 h-3.5" />
-                Alles in Ordnung
+                {t('markAllRequired')}
               </Button>
             )}
             <span className={`text-sm font-bold ${
@@ -194,19 +192,19 @@ export function IntakeDetailView({
         }`}>
           <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
             <ExternalLink className="w-4 h-4" />
-            Im Shop veröffentlichen
+            {t('publishHeading')}
           </Heading>
 
           {!detail.checklist_complete && (
             <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 dark:text-warning-200 bg-warning-50 dark:bg-warning-900/20 p-2 rounded-sm">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>Alle Pflichtpunkte der Checkliste müssen abgehakt sein, bevor das Gerät publiziert werden kann.</span>
+              <span>{t('publishGate')}</span>
             </div>
           )}
 
           <div className="flex flex-wrap items-end gap-3">
             <div>
-              <label className="block text-sm font-medium mb-1">Verkaufspreis (CHF)</label>
+              <label className="block text-sm font-medium mb-1">{t('sellingPriceLabel')}</label>
               <Input
                 type="number"
                 value={publishPrice || ''}
@@ -222,16 +220,16 @@ export function IntakeDetailView({
               variant="primary"
               size="sm"
             >
-              {publishing ? 'Publizieren...' : 'Jetzt publizieren'}
+              {publishing ? t('publishing') : t('publishNow')}
             </Button>
             {detail.checklist_complete && (
               <Link
                 href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised text-sm font-medium"
-                title="Produkt in Erfassung öffnen um Details zu ergänzen"
+                title={t('openFullErfassungTitle')}
               >
                 <ClipboardList className="w-4 h-4" />
-                Vollständig erfassen
+                {t('openFullErfassung')}
               </Link>
             )}
           </div>
@@ -242,9 +240,9 @@ export function IntakeDetailView({
       {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
         <div className="border-2 border-strong bg-action-muted rounded-lg p-4 text-center">
           <Check className="w-8 h-8 text-action mx-auto mb-2" />
-          <p className="font-medium text-action">Dieses Gerät ist im Shop veröffentlicht</p>
+          <p className="font-medium text-action">{t('publishedConfirm')}</p>
           {detail.selling_price_chf && (
-            <p className="text-sm text-action mt-1">Preis: CHF {detail.selling_price_chf.toFixed(2)}</p>
+            <p className="text-sm text-action mt-1">{t('publishedPrice', { price: detail.selling_price_chf.toFixed(2) })}</p>
           )}
         </div>
       )}
@@ -253,14 +251,14 @@ export function IntakeDetailView({
       {showTierChange && (
         <div className="border-2 border-warning-300 bg-warning-50 dark:bg-warning-900/20 rounded-lg p-4 space-y-3">
           <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800 dark:text-warning-200">
-            <ArrowDownUp className="w-4 h-4" /> Stufe ändern
+            <ArrowDownUp className="w-4 h-4" /> {t('tierChange.heading')}
           </Heading>
           <div className="flex items-start gap-2 text-sm text-warning-700 dark:text-warning-200 bg-warning-100 dark:bg-warning-900/30 p-2 rounded-sm">
             <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-            <span>Alle Checklisten-Fortschritte werden zurückgesetzt.</span>
+            <span>{t('tierChange.warning')}</span>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Neue Stufe</label>
+            <label className="block text-sm font-medium mb-1">{t('tierChange.newTierLabel')}</label>
             <Select
               value={newTier}
               onChange={(e) => setNewTier(e.target.value as IntakeTier)}
@@ -272,12 +270,12 @@ export function IntakeDetailView({
             </Select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Begründung *</label>
+            <label className="block text-sm font-medium mb-1">{t('tierChange.reasonLabel')}</label>
             <Input
               type="text"
               value={tierChangeReason}
               onChange={(e) => setTierChangeReason(e.target.value)}
-              placeholder="z.B. Gerät ist nicht reparierbar"
+              placeholder={t('tierChange.reasonPlaceholder')}
             />
           </div>
           <div className="flex gap-2">
@@ -288,7 +286,7 @@ export function IntakeDetailView({
               variant="warning"
               size="sm"
             >
-              {tierChanging ? 'Ändern...' : 'Stufe ändern'}
+              {tierChanging ? t('tierChange.applying') : t('tierChange.apply')}
             </Button>
             <Button
               type="button"
@@ -297,7 +295,7 @@ export function IntakeDetailView({
               onClick={() => setShowTierChange(false)}
               className="px-3 py-1.5 border rounded-lg hover:bg-surface-raised text-sm"
             >
-              Abbrechen
+              {tForms('cancel')}
             </Button>
           </div>
         </div>
@@ -308,7 +306,7 @@ export function IntakeDetailView({
         <div className="border rounded-lg overflow-hidden">
           <div className="flex items-center gap-2 p-3 bg-surface-raised border-b">
             <Clock className="w-4 h-4 text-text-tertiary" />
-            <span className="text-sm font-medium">Verlauf</span>
+            <span className="text-sm font-medium">{t('timelineHeading')}</span>
             <span className="text-xs text-text-tertiary">({detail.intake_events.length})</span>
           </div>
           <div className="divide-y max-h-64 overflow-y-auto">

@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import {
   X, ChevronDown, ChevronRight,
   AlertCircle, Type, Mic, Camera, Loader2,
@@ -57,13 +58,15 @@ export function IntakeCreateForm({
   onCreate,
   onCancel,
 }: IntakeCreateFormProps) {
+  const t = useTranslations('admin.intake.createForm')
+  const tForms = useTranslations('admin.forms')
   const tierOptions = getIntakeTierOptions()
   const selectedCategory = KATEGORIEN.find(k => k.value === formData.hauptkategorie)
 
   return (
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
-        <Heading level={2} className="text-lg font-semibold">Neues Gerät erfassen</Heading>
+        <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
         <Button variant="ghost" size="icon" onClick={onCancel} className="text-text-tertiary hover:text-text-secondary">
           <X className="w-5 h-5" />
         </Button>
@@ -71,7 +74,7 @@ export function IntakeCreateForm({
 
       {/* Tier Selection */}
       <div>
-        <label className="block text-sm font-medium mb-2">Verarbeitungsstufe</label>
+        <label className="block text-sm font-medium mb-2">{t('tierLabel')}</label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {tierOptions.map(opt => (
             <Button
@@ -103,7 +106,7 @@ export function IntakeCreateForm({
         >
           <span className="text-sm font-medium text-action flex items-center gap-2">
             <Loader2 className="w-4 h-4" />
-            KI-Schnelleingabe
+            {t('aiTitle')}
           </span>
           {aiOpen ? <ChevronDown className="w-4 h-4 text-action" /> : <ChevronRight className="w-4 h-4 text-action" />}
         </Button>
@@ -113,9 +116,9 @@ export function IntakeCreateForm({
             {/* Tabs */}
             <div className="flex gap-1 border-b">
               {([
-                { key: 'text' as const, icon: Type, label: 'Text' },
-                { key: 'voice' as const, icon: Mic, label: 'Sprache' },
-                { key: 'photo' as const, icon: Camera, label: 'Foto' },
+                { key: 'text' as const, icon: Type, label: t('aiTabs.text') },
+                { key: 'voice' as const, icon: Mic, label: t('aiTabs.voice') },
+                { key: 'photo' as const, icon: Camera, label: t('aiTabs.photo') },
               ]).map(tab => (
                 <Button
                   key={tab.key}
@@ -141,7 +144,7 @@ export function IntakeCreateForm({
                 <Textarea
                   value={aiText}
                   onChange={(e) => setAiText(e.target.value)}
-                  placeholder="z.B. Dell Latitude E7470 i5 8GB 256GB SSD guter Zustand"
+                  placeholder={t('textPlaceholder')}
                   rows={3}
                 />
                 <Button
@@ -152,7 +155,7 @@ export function IntakeCreateForm({
                   size="sm"
                 >
                   {aiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Type className="w-3.5 h-3.5" />}
-                  Analysieren
+                  {t('analyze')}
                 </Button>
               </div>
             )}
@@ -168,7 +171,7 @@ export function IntakeCreateForm({
                     className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-default rounded-lg hover:border-action w-full justify-center text-sm text-text-secondary"
                   >
                     <Mic className="w-5 h-5" />
-                    Aufnahme starten
+                    {t('startRecording')}
                   </Button>
                 )}
                 {voiceState === 'recording' && (
@@ -179,17 +182,17 @@ export function IntakeCreateForm({
                     className="flex items-center gap-2 px-4 py-3 bg-error-50 dark:bg-error-900/20 border-2 border-error-300 rounded-lg w-full justify-center text-sm text-error-700 dark:text-error-400 animate-pulse"
                   >
                     <Mic className="w-5 h-5" />
-                    Aufnahme stoppen
+                    {t('stopRecording')}
                   </Button>
                 )}
                 {voiceState === 'processing' && (
                   <div className="flex items-center gap-2 px-4 py-3 bg-action-muted rounded-lg justify-center text-sm text-action">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Verarbeite Sprache...
+                    {t('processingVoice')}
                   </div>
                 )}
                 {aiText && voiceState === 'idle' && (
-                  <p className="text-xs text-text-tertiary bg-surface-raised p-2 rounded-sm">Transkription: {aiText}</p>
+                  <p className="text-xs text-text-tertiary bg-surface-raised p-2 rounded-sm">{t('transcription', { text: aiText })}</p>
                 )}
               </div>
             )}
@@ -215,58 +218,58 @@ export function IntakeCreateForm({
 
       {/* Device Info */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FormField label="Hersteller" required>
+        <FormField label={t('fields.manufacturer')} required>
           <Input
             type="text"
             value={formData.hersteller}
             onChange={(e) => setFormData(f => ({ ...f, hersteller: e.target.value }))}
-            placeholder="z.B. Lenovo, Apple, Dell"
+            placeholder={t('fields.manufacturerPlaceholder')}
           />
         </FormField>
-        <FormField label="Produktname" required>
+        <FormField label={t('fields.productName')} required>
           <Input
             type="text"
             value={formData.produktname}
             onChange={(e) => setFormData(f => ({ ...f, produktname: e.target.value }))}
-            placeholder="z.B. ThinkPad T480"
+            placeholder={t('fields.productNamePlaceholder')}
           />
         </FormField>
       </div>
 
-      <FormField label="Kurzbeschreibung">
+      <FormField label={t('fields.shortDescription')}>
         <Textarea
           value={formData.kurzbeschreibung}
           onChange={(e) => setFormData(f => ({ ...f, kurzbeschreibung: e.target.value }))}
-          placeholder="Kurze Beschreibung des Geräts und seines Zustands"
+          placeholder={t('fields.shortDescriptionPlaceholder')}
           rows={2}
         />
       </FormField>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <FormField label="Kategorie">
+        <FormField label={t('fields.category')}>
           <Select
             value={formData.hauptkategorie}
             onChange={(e) => setFormData(f => ({ ...f, hauptkategorie: e.target.value, unterkategorie: '' }))}
           >
-            <option value="">Wählen...</option>
+            <option value="">{t('fields.choose')}</option>
             {KATEGORIEN.map(k => (
               <option key={k.value} value={k.value}>{k.icon} {k.label}</option>
             ))}
           </Select>
         </FormField>
-        <FormField label="Unterkategorie">
+        <FormField label={t('fields.subcategory')}>
           <Select
             value={formData.unterkategorie}
             onChange={(e) => setFormData(f => ({ ...f, unterkategorie: e.target.value }))}
             disabled={!selectedCategory}
           >
-            <option value="">Wählen...</option>
+            <option value="">{t('fields.choose')}</option>
             {selectedCategory?.subs.map(s => (
               <option key={s.value} value={s.value}>{s.label}</option>
             ))}
           </Select>
         </FormField>
-        <FormField label="Zustand" required>
+        <FormField label={t('fields.condition')} required>
           <Select
             value={formData.zustand}
             onChange={(e) => setFormData(f => ({ ...f, zustand: e.target.value }))}
@@ -279,7 +282,7 @@ export function IntakeCreateForm({
       </div>
 
       {formData.intake_tier === INTAKE_TIERS.REFURBISH && (
-        <FormField label="Geschätzter Verkaufspreis (CHF)">
+        <FormField label={t('fields.salesPrice')}>
           <Input
             type="number"
             value={formData.verkaufspreis || ''}
@@ -299,34 +302,34 @@ export function IntakeCreateForm({
             onChange={(e) => setFormData(f => ({ ...f, is_donation: e.target.checked }))}
             className="rounded-sm"
           />
-          <span className="text-sm font-medium">Dies ist eine Spende</span>
+          <span className="text-sm font-medium">{t('donation.isDonation')}</span>
         </label>
 
         {formData.is_donation && (
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <FormField label="Name Spender/in">
+            <FormField label={t('donation.donorName')}>
               <Input
                 type="text"
                 value={formData.donor_name}
                 onChange={(e) => setFormData(f => ({ ...f, donor_name: e.target.value }))}
-                placeholder="Optional"
+                placeholder={t('donation.optional')}
               />
             </FormField>
-            <FormField label="E-Mail Spender/in">
+            <FormField label={t('donation.donorEmail')}>
               <Input
                 type="email"
                 value={formData.donor_email}
                 onChange={(e) => setFormData(f => ({ ...f, donor_email: e.target.value }))}
-                placeholder="Optional"
+                placeholder={t('donation.optional')}
               />
             </FormField>
             <div className="col-span-2">
-              <FormField label="Notizen zur Spende">
+              <FormField label={t('donation.donorNotes')}>
                 <Input
                   type="text"
                   value={formData.donor_notes}
                   onChange={(e) => setFormData(f => ({ ...f, donor_notes: e.target.value }))}
-                  placeholder="z.B. Übergeben am Standort Zürich"
+                  placeholder={t('donation.notesPlaceholder')}
                 />
               </FormField>
             </div>
@@ -342,10 +345,10 @@ export function IntakeCreateForm({
           variant="primary"
           size="sm"
         >
-          {saving ? 'Speichern...' : 'Gerät erfassen'}
+          {saving ? t('saving') : t('submit')}
         </Button>
         <Button onClick={onCancel} variant="outline" size="sm">
-          Abbrechen
+          {tForms('cancel')}
         </Button>
       </div>
     </div>
