@@ -43,6 +43,13 @@ export function AdminSidebar({
   pathname,
 }: AdminSidebarProps) {
   const t = useTranslations('admin.sidebar')
+  const tLabels = useTranslations('admin.sectionLabels')
+  // Helper: prefer the i18n label, fall back to the SSOT DE label when
+  // a section hasn't been translated yet. next-intl throws on missing
+  // keys, so we have to catch.
+  const labelFor = (id: string, fallback: string): string => {
+    try { return tLabels(id as never) || fallback } catch { return fallback }
+  }
   const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(() => {
     return new Set(['uebersicht', 'angebot', 'inhalte'])
   })
@@ -155,7 +162,7 @@ export function AdminSidebar({
                       : 'text-text-muted dark:text-text-secondary hover:text-text-secondary dark:hover:text-text-muted'
                   }`}
                 >
-                  <span>{group.label}</span>
+                  <span>{labelFor(group.id, group.label)}</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
                   />
@@ -182,13 +189,13 @@ export function AdminSidebar({
                             ? 'bg-action/10 text-action/8'
                             : 'text-text-tertiary hover:bg-surface-raised dark:hover:bg-surface-base/4 hover:text-text-primary'
                         }`}
-                        title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
+                        title={sidebarCollapsed ? `${labelFor(section.id, section.ui.label)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
                         <Icon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
                         {!sidebarCollapsed && (
                           <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
-                            {section.ui.label}
+                            {labelFor(section.id, section.ui.label)}
                             {sensitive && (
                               <span title={sensitivityReason}>
                                 <Shield className="w-3 h-3 text-warning-400" />

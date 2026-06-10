@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -21,11 +22,17 @@ interface MobileBottomNavProps {
 export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
   const pathname = usePathname()
   const items = getMobileBottomNavSections()
+  const t = useTranslations('admin.sidebar')
+  const tLabels = useTranslations('admin.sectionLabels')
+  // Same fallback pattern as AdminSidebar — i18n label, then SSOT DE fallback.
+  const labelFor = (id: string, fallback: string): string => {
+    try { return tLabels(id as never) || fallback } catch { return fallback }
+  }
 
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base lg:hidden"
-      aria-label="Mobile Navigation"
+      aria-label={t('navAria')}
     >
       {items.map(section => {
         // Dashboard ("/admin") needs exact-match so it isn't lit for
@@ -33,7 +40,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
         const exact = section.path === '/admin'
         const active = exact ? pathname === section.path : pathname.startsWith(section.path)
         const Icon = section.ui.icon
-        const label = section.ui.mobileBottomNavLabel ?? section.ui.label
+        const label = section.ui.mobileBottomNavLabel ?? labelFor(section.id, section.ui.label)
         return (
           <Link
             key={section.id}
@@ -56,10 +63,10 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
         variant="ghost"
         onClick={onMenuClick}
         className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] h-auto text-xs text-text-tertiary hover:text-text-secondary rounded-none"
-        aria-label="Seitenleiste öffnen"
+        aria-label={t('openAria')}
       >
         <Menu className="w-5 h-5" aria-hidden="true" />
-        <span>Mehr</span>
+        <span>{t('mobileMore')}</span>
       </Button>
     </nav>
   )
