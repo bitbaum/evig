@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import {
   MonitorLampPlaceholder,
@@ -35,6 +36,10 @@ type Piece = {
   tier: Tier
   variant: MonitorLampPlaceholderVariant
   seed: number
+  /** When real photography is dropped into public/projects/upcycling/gallery/,
+   *  set this to the filename and the card renders the JPG instead of the
+   *  generative SVG placeholder. See PROMPTS.md in that folder. */
+  image?: string
 }
 
 type GalleryMessages = {
@@ -48,15 +53,15 @@ type GalleryMessages = {
 }
 
 const PIECES: Piece[] = [
-  { id: 'lenovo-l2251pwd-04', model: 'Lenovo L2251pwd', tier: 'art',        variant: 'art',        seed: 301 },
-  { id: 'lenovo-l2251pwd-01', model: 'Lenovo L2251pwd', tier: 'functional', variant: 'functional', seed: 101 },
-  { id: 'lenovo-l2251pwd-02', model: 'Lenovo L2251pwd', tier: 'functional', variant: 'functional', seed: 102 },
-  { id: 'lenovo-l2251pwd-03', model: 'Lenovo L2251pwd', tier: 'decor',      variant: 'warm',       seed: 201 },
-  { id: 'dell-u2412m-01',     model: 'Dell U2412M',     tier: 'functional', variant: 'cool',       seed: 103 },
-  { id: 'hp-l2245wg-01',      model: 'HP L2245wg',      tier: 'decor',      variant: 'warm',       seed: 202 },
-  { id: 'samsung-s24-01',     model: 'Samsung S24',     tier: 'decor',      variant: 'warm',       seed: 203 },
-  { id: 'asus-mx259h-01',     model: 'Asus MX259H',     tier: 'art',        variant: 'art',        seed: 302 },
-  { id: 'eizo-flexscan-01',   model: 'Eizo FlexScan',   tier: 'art',        variant: 'cool',       seed: 303 },
+  { id: 'lenovo-l2251pwd-04', model: 'Lenovo L2251pwd', tier: 'art',        variant: 'art',        seed: 301, image: 'spotlight-lenovo-l2251pwd-art.jpg' },
+  { id: 'lenovo-l2251pwd-01', model: 'Lenovo L2251pwd', tier: 'functional', variant: 'functional', seed: 101, image: 'lenovo-l2251pwd-functional-1.jpg' },
+  { id: 'lenovo-l2251pwd-02', model: 'Lenovo L2251pwd', tier: 'functional', variant: 'functional', seed: 102, image: 'lenovo-l2251pwd-functional-2.jpg' },
+  { id: 'lenovo-l2251pwd-03', model: 'Lenovo L2251pwd', tier: 'decor',      variant: 'warm',       seed: 201, image: 'lenovo-l2251pwd-decor-warm.jpg' },
+  { id: 'dell-u2412m-01',     model: 'Dell U2412M',     tier: 'functional', variant: 'cool',       seed: 103, image: 'dell-u2412m-functional.jpg' },
+  { id: 'hp-l2245wg-01',      model: 'HP L2245wg',      tier: 'decor',      variant: 'warm',       seed: 202, image: 'hp-l2245wg-decor.jpg' },
+  { id: 'samsung-s24-01',     model: 'Samsung S24',     tier: 'decor',      variant: 'warm',       seed: 203, image: 'samsung-s24-decor.jpg' },
+  { id: 'asus-mx259h-01',     model: 'Asus MX259H',     tier: 'art',        variant: 'art',        seed: 302, image: 'asus-mx259h-art.jpg' },
+  { id: 'eizo-flexscan-01',   model: 'Eizo FlexScan',   tier: 'art',        variant: 'cool',       seed: 303, image: 'eizo-flexscan-art.jpg' },
 ]
 
 const FILTERS: Filter[] = ['all', 'functional', 'decor', 'art']
@@ -169,6 +174,39 @@ export function GalleryClient() {
   )
 }
 
+/* ─── PieceVisual ────────────────────────────────────────────────────
+ * Either renders the real JPG (when present in
+ * public/projects/upcycling/gallery/) or falls back to the generative
+ * SVG placeholder. Each card decides independently — so the gallery
+ * can light up image-by-image as photography arrives, no all-or-nothing.
+ *
+ * Why client-side fallback: the JPG might be missing in dev or on
+ * branches where photography hasn't shipped yet. next/image will
+ * trigger onError; we swap to the SVG so we never show a broken icon.
+ */
+function PieceVisual({ piece, sizes }: { piece: Piece; sizes: string }) {
+  const [failed, setFailed] = useState(false)
+  if (!piece.image || failed) {
+    return (
+      <MonitorLampPlaceholder
+        variant={piece.variant}
+        seed={piece.seed}
+        className="h-full w-full"
+      />
+    )
+  }
+  return (
+    <Image
+      src={`/projects/upcycling/gallery/${piece.image}`}
+      alt={piece.model}
+      fill
+      sizes={sizes}
+      className="object-cover"
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
 /* ─── Spotlight ──────────────────────────────────────────────────────
  * The opening piece. Larger frame, wider aspect, paired with the model
  * name and tier label. No per-piece prose: we don't have translated
@@ -181,8 +219,8 @@ function Spotlight({ piece, tierLabel }: { piece: Piece; tierLabel: string }) {
       aria-label={piece.model}
       className="grid gap-6 sm:gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-center"
     >
-      <figure className="aspect-[16/10] overflow-hidden rounded-2xl border border-subtle bg-surface-base">
-        <MonitorLampPlaceholder variant={piece.variant} seed={piece.seed} className="h-full w-full" />
+      <figure className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-subtle bg-surface-base">
+        <PieceVisual piece={piece} sizes="(min-width: 1024px) 60vw, 100vw" />
       </figure>
       <div className="flex items-baseline gap-3 lg:flex-col lg:items-start lg:gap-4">
         <span aria-hidden="true" className="h-px w-8 bg-action lg:w-12" />
@@ -218,12 +256,8 @@ function PieceCard({
         spanClass,
       )}
     >
-      <div className="aspect-[4/3] sm:h-full sm:aspect-auto">
-        <MonitorLampPlaceholder
-          variant={piece.variant}
-          seed={piece.seed}
-          className="h-full w-full"
-        />
+      <div className="relative aspect-[4/3] sm:h-full sm:aspect-auto">
+        <PieceVisual piece={piece} sizes="(min-width: 1024px) 25vw, 50vw" />
       </div>
 
       {/* Floating caption — sits on the lamp surface bottom-left,
