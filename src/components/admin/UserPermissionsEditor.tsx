@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Shield, Crown, Check, Save } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
+import { getSection } from '@/config/sections'
 
 interface UserPermissionsEditorProps {
   userId: string
@@ -18,21 +20,23 @@ interface UserPermissionsEditorProps {
   onSaved: () => void
 }
 
-const SECTIONS = [
-  { id: 'dashboard', label: 'Dashboard', sensitive: false },
-  { id: 'products', label: 'Produkte', sensitive: false },
-  { id: 'workshops-admin', label: 'Workshops', sensitive: false },
-  { id: 'services', label: 'Dienstleistungen', sensitive: false },
-  { id: 'locations', label: 'Standorte', sensitive: false },
-  { id: 'reviews', label: 'Bewertungen', sensitive: false },
-  { id: 'content', label: 'Inhalte', sensitive: false },
-  { id: 'approvals', label: 'Freigaben', sensitive: false },
-  { id: 'analytics', label: 'Analytics', sensitive: false },
-  { id: 'users', label: 'Benutzer', sensitive: true },
-  { id: 'team', label: 'Team & HR', sensitive: true },
-  { id: 'finances', label: 'Finanzen', sensitive: true },
-  { id: 'settings', label: 'Einstellungen', sensitive: true },
-  { id: 'hirn', label: 'Hirn', sensitive: true },
+// Editable sections — labels resolved at render time from admin.sectionLabels,
+// with the section-config SSOT label as a fallback.
+const SECTION_IDS: { id: string; sensitive: boolean }[] = [
+  { id: 'dashboard', sensitive: false },
+  { id: 'products', sensitive: false },
+  { id: 'workshops-admin', sensitive: false },
+  { id: 'services', sensitive: false },
+  { id: 'locations', sensitive: false },
+  { id: 'reviews', sensitive: false },
+  { id: 'content', sensitive: false },
+  { id: 'approvals', sensitive: false },
+  { id: 'analytics', sensitive: false },
+  { id: 'users', sensitive: true },
+  { id: 'team', sensitive: true },
+  { id: 'finances', sensitive: true },
+  { id: 'settings', sensitive: true },
+  { id: 'hirn', sensitive: true },
 ]
 
 export function UserPermissionsEditor({
@@ -45,10 +49,17 @@ export function UserPermissionsEditor({
   onClose,
   onSaved,
 }: UserPermissionsEditorProps) {
+  const t = useTranslations('admin.permissions.editor')
+  const tLabels = useTranslations('admin.sectionLabels')
+  const tForms = useTranslations('admin.forms')
+  const sectionLabelFor = (id: string): string => {
+    const fallback = getSection(id)?.ui.label ?? id
+    try { return tLabels(id as never) || fallback } catch { return fallback }
+  }
   const hasFullAccess = currentPermissions.includes('*')
 
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>(
-    hasFullAccess ? SECTIONS.map(s => s.id) : currentPermissions
+    hasFullAccess ? SECTION_IDS.map(s => s.id) : currentPermissions
   )
   const [superAdminStatus, setSuperAdminStatus] = useState(initialSuperAdmin)
   const [grantFullAccess, setGrantFullAccess] = useState(hasFullAccess)
@@ -79,20 +90,20 @@ export function UserPermissionsEditor({
       })
 
       if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Speichern')
+        throw new Error(result.error || t('saveError'))
       }
 
       onSaved()
       onClose()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(err instanceof Error ? err.message : t('unknownError'))
     } finally {
       setSaving(false)
     }
   }
 
   return (
-    <Modal isOpen={true} onClose={onClose} title="Berechtigungen bearbeiten" size="lg">
+    <Modal isOpen={true} onClose={onClose} title={t('title')} size="lg">
         <p className="text-sm text-text-secondary -mt-3 mb-4">
           {userName || userEmail}
         </p>
@@ -106,10 +117,10 @@ export function UserPermissionsEditor({
                 <Crown className="w-5 h-5 text-action" />
                 <div>
                   <p className="font-medium text-action-text">
-                    Super Admin Status
+                    {t('superAdminLabel')}
                   </p>
                   <p className="text-sm text-action">
-                    Voller Zugriff auf alle Bereiche inkl. Benutzerverwaltung
+                    {t('superAdminDescription')}
                   </p>
                 </div>
               </div>
@@ -130,7 +141,7 @@ export function UserPermissionsEditor({
             </div>
             {isInHardcodedList && (
               <p className="mt-2 text-xs text-action">
-                Dieser Benutzer ist in der Kern-Super-Admin-Liste und kann nicht herabgestuft werden.
+                {t('superAdminHardcoded')}
               </p>
             )}
           </div>
@@ -143,10 +154,10 @@ export function UserPermissionsEditor({
                   <Shield className="w-5 h-5 text-action" />
                   <div>
                     <p className="font-medium text-action-text">
-                      Voller Zugriff
+                      {t('fullAccessLabel')}
                     </p>
                     <p className="text-sm text-action">
-                      Zugriff auf alle Bereiche (ohne Super Admin Rechte)
+                      {t('fullAccessDescription')}
                     </p>
                   </div>
                 </div>
@@ -171,10 +182,10 @@ export function UserPermissionsEditor({
           {!superAdminStatus && !grantFullAccess && (
             <div>
               <Heading level={3} className="font-medium text-text-primary mb-3">
-                Einzelne Bereiche
+                {t('individualHeading')}
               </Heading>
               <div className="grid grid-cols-2 gap-2">
-                {SECTIONS.map(section => (
+                {SECTION_IDS.map(section => (
                   <Button
                     key={section.id}
                     variant="ghost"
@@ -200,10 +211,10 @@ export function UserPermissionsEditor({
                           ? 'text-error-700 dark:text-error-400'
                           : 'text-text-primary'
                       }`}>
-                        {section.label}
+                        {sectionLabelFor(section.id)}
                       </span>
                       {section.sensitive && (
-                        <span className="text-xs text-error-500">Sensibel</span>
+                        <span className="text-xs text-error-500">{t('sensitiveBadge')}</span>
                       )}
                     </div>
                   </Button>
@@ -226,7 +237,7 @@ export function UserPermissionsEditor({
             onClick={onClose}
             variant="ghost"
           >
-            Abbrechen
+            {tForms('cancel')}
           </Button>
           <Button
             onClick={handleSave}
@@ -236,12 +247,12 @@ export function UserPermissionsEditor({
             {saving ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Wird gespeichert...
+                {t('saving')}
               </>
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                Speichern
+                {tForms('save')}
               </>
             )}
           </Button>

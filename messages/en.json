@@ -8995,6 +8995,48 @@
       "choose": "Choose…",
       "noneSelected": "No icon selected"
     },
+    "permissions": {
+      "request": {
+        "title": "Request access",
+        "subtitle": "Pick the sections you need access to.",
+        "sectionsLabel": "Choose sections",
+        "reasonLabel": "Reason",
+        "reasonPlaceholder": "Why do you need access to these sections?",
+        "submit": "Send request",
+        "submitting": "Sending…",
+        "successTitle": "Request sent",
+        "successBody": "A super admin will review your request.",
+        "validationNoSections": "Please select at least one section.",
+        "validationReasonTooShort": "Please give a reason (at least 10 characters)."
+      },
+      "manager": {
+        "heading": "Permission requests ({count})",
+        "empty": "No pending permission requests",
+        "loadError": "Failed to load",
+        "unknownError": "Unknown error",
+        "processError": "Failed to process",
+        "genericError": "Error",
+        "retry": "Try again",
+        "approve": "Approve",
+        "reject": "Reject",
+        "rejectionLabel": "Reason for rejection (optional):",
+        "rejectionPlaceholder": "Optional rejection reason…",
+        "confirmReject": "Confirm rejection"
+      },
+      "editor": {
+        "title": "Edit permissions",
+        "superAdminLabel": "Super admin status",
+        "superAdminDescription": "Full access to every section including user management",
+        "superAdminHardcoded": "This user is in the core super-admin list and cannot be demoted.",
+        "fullAccessLabel": "Full access",
+        "fullAccessDescription": "Access to every section (without super-admin rights)",
+        "individualHeading": "Individual sections",
+        "sensitiveBadge": "Sensitive",
+        "saveError": "Failed to save",
+        "unknownError": "Unknown error",
+        "saving": "Saving…"
+      }
+    },
     "editHistory": {
       "empty": "No admin edits",
       "changedFields": "Changed fields:",

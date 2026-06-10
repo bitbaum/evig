@@ -8993,6 +8993,48 @@
       "choose": "Wählen…",
       "noneSelected": "Kein Icon gewählt"
     },
+    "permissions": {
+      "request": {
+        "title": "Zugriff anfordern",
+        "subtitle": "Wähle die Bereiche aus, auf die du Zugriff benötigst.",
+        "sectionsLabel": "Bereiche auswählen",
+        "reasonLabel": "Begründung",
+        "reasonPlaceholder": "Warum benötigst du Zugriff auf diese Bereiche?",
+        "submit": "Anfrage senden",
+        "submitting": "Wird gesendet…",
+        "successTitle": "Anfrage gesendet",
+        "successBody": "Ein Super Admin wird deine Anfrage prüfen.",
+        "validationNoSections": "Bitte wähle mindestens einen Bereich aus.",
+        "validationReasonTooShort": "Bitte gib einen Grund an (mindestens 10 Zeichen)."
+      },
+      "manager": {
+        "heading": "Berechtigungsanfragen ({count})",
+        "empty": "Keine ausstehenden Berechtigungsanfragen",
+        "loadError": "Fehler beim Laden",
+        "unknownError": "Unbekannter Fehler",
+        "processError": "Fehler bei der Verarbeitung",
+        "genericError": "Fehler",
+        "retry": "Erneut versuchen",
+        "approve": "Genehmigen",
+        "reject": "Ablehnen",
+        "rejectionLabel": "Grund für Ablehnung (optional):",
+        "rejectionPlaceholder": "Optionaler Ablehnungsgrund…",
+        "confirmReject": "Ablehnung bestätigen"
+      },
+      "editor": {
+        "title": "Berechtigungen bearbeiten",
+        "superAdminLabel": "Super Admin Status",
+        "superAdminDescription": "Voller Zugriff auf alle Bereiche inkl. Benutzerverwaltung",
+        "superAdminHardcoded": "Dieser Benutzer ist in der Kern-Super-Admin-Liste und kann nicht herabgestuft werden.",
+        "fullAccessLabel": "Voller Zugriff",
+        "fullAccessDescription": "Zugriff auf alle Bereiche (ohne Super Admin Rechte)",
+        "individualHeading": "Einzelne Bereiche",
+        "sensitiveBadge": "Sensibel",
+        "saveError": "Fehler beim Speichern",
+        "unknownError": "Unbekannter Fehler",
+        "saving": "Wird gespeichert…"
+      }
+    },
     "editHistory": {
       "empty": "Keine Bearbeitungen durch Admins",
       "changedFields": "Geänderte Felder:",

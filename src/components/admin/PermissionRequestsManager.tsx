@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
@@ -20,11 +21,15 @@ interface PermissionRequest {
   created_at: string
 }
 
-function getSectionLabel(id: string): string {
-  return getSection(id)?.ui.label ?? id
-}
-
 export function PermissionRequestsManager() {
+  const t = useTranslations('admin.permissions.manager')
+  const tLabels = useTranslations('admin.sectionLabels')
+  const tForms = useTranslations('admin.forms')
+  // Same fallback pattern as AdminSidebar — i18n label, then SSOT DE fallback.
+  const sectionLabelFor = (id: string): string => {
+    const fallback = getSection(id)?.ui.label ?? id
+    try { return tLabels(id as never) || fallback } catch { return fallback }
+  }
   const [requests, setRequests] = useState<PermissionRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -38,12 +43,12 @@ export function PermissionRequestsManager() {
       const result = await apiFetch<{ requests: PermissionRequest[] }>('/api/admin/permissions/requests?status=pending')
 
       if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Laden')
+        throw new Error(result.error || t('loadError'))
       }
 
       setRequests(result.data?.requests || [])
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(err instanceof Error ? err.message : t('unknownError'))
     } finally {
       setLoading(false)
     }
@@ -62,11 +67,11 @@ export function PermissionRequestsManager() {
         body: { action: 'approve', notes: null },
       })
       if (!result.success) {
-        throw new Error(result.error || 'Fehler bei der Verarbeitung')
+        throw new Error(result.error || t('processError'))
       }
       setRequests(prev => prev.filter(r => r.id !== requestId))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Fehler')
+      setError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setProcessingId(null)
     }
@@ -80,13 +85,13 @@ export function PermissionRequestsManager() {
         body: { action: 'reject', notes: rejectionNotes || null },
       })
       if (!result.success) {
-        throw new Error(result.error || 'Fehler bei der Verarbeitung')
+        throw new Error(result.error || t('processError'))
       }
       setRejectingId(null)
       setRejectionNotes('')
       setRequests(prev => prev.filter(r => r.id !== requestId))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Fehler')
+      setError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setProcessingId(null)
     }
@@ -116,7 +121,7 @@ export function PermissionRequestsManager() {
           className="mt-2 text-sm text-error-600 hover:text-error-700 flex items-center gap-1 h-auto px-0 bg-transparent hover:bg-transparent"
         >
           <RefreshCw className="w-4 h-4" />
-          Erneut versuchen
+          {t('retry')}
         </Button>
       </div>
     )
@@ -127,7 +132,7 @@ export function PermissionRequestsManager() {
       <div className="p-6 bg-surface-base rounded-xl border border">
         <div className="flex items-center gap-3 text-text-tertiary">
           <Shield className="w-5 h-5" />
-          <span>Keine ausstehenden Berechtigungsanfragen</span>
+          <span>{t('empty')}</span>
         </div>
       </div>
     )
@@ -139,7 +144,7 @@ export function PermissionRequestsManager() {
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-secondary-500" />
           <Heading level={3} className="font-semibold text-text-primary">
-            Berechtigungsanfragen ({requests.length})
+            {t('heading', { count: requests.length })}
           </Heading>
         </div>
         <Button
@@ -173,7 +178,7 @@ export function PermissionRequestsManager() {
                       key={section}
                       className="px-2 py-0.5 bg-surface-raised text-text-secondary text-xs rounded-sm"
                     >
-                      {getSectionLabel(section)}
+                      {sectionLabelFor(section)}
                     </span>
                   ))}
                 </div>
@@ -196,7 +201,7 @@ export function PermissionRequestsManager() {
                   className="gap-1"
                 >
                   <Check className="w-4 h-4" />
-                  Genehmigen
+                  {t('approve')}
                 </Button>
                 <Button
                   onClick={() => { setRejectingId(request.id); setRejectionNotes('') }}
@@ -206,7 +211,7 @@ export function PermissionRequestsManager() {
                   className="gap-1"
                 >
                   <X className="w-4 h-4" />
-                  Ablehnen
+                  {t('reject')}
                 </Button>
               </div>
             </div>
@@ -214,13 +219,13 @@ export function PermissionRequestsManager() {
             {rejectingId === request.id && (
               <div className="mt-3 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
                 <label htmlFor={`rejection-notes-${request.id}`} className="block text-sm font-medium text-error-800 dark:text-error-300 mb-1">
-                  Grund für Ablehnung (optional):
+                  {t('rejectionLabel')}
                 </label>
                 <Textarea
                   id={`rejection-notes-${request.id}`}
                   value={rejectionNotes}
                   onChange={(e) => setRejectionNotes(e.target.value)}
-                  placeholder="Optionaler Ablehnungsgrund..."
+                  placeholder={t('rejectionPlaceholder')}
                   rows={2}
                   autoFocus
                 />
@@ -231,14 +236,14 @@ export function PermissionRequestsManager() {
                     variant="destructive"
                     size="sm"
                   >
-                    Ablehnung bestätigen
+                    {t('confirmReject')}
                   </Button>
                   <Button
                     onClick={() => { setRejectingId(null); setRejectionNotes('') }}
                     variant="outline"
                     size="sm"
                   >
-                    Abbrechen
+                    {tForms('cancel')}
                   </Button>
                 </div>
               </div>

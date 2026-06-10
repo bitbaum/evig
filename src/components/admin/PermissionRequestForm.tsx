@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Shield, Send, X, Check } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { useFormHandler } from '@/hooks/useFormHandler'
@@ -24,16 +25,18 @@ interface PermissionRequestData {
 }
 
 export function PermissionRequestForm({ availableSections, onClose }: PermissionRequestFormProps) {
+  const t = useTranslations('admin.permissions.request')
+  const tForms = useTranslations('admin.forms')
   const form = useFormHandler<PermissionRequestData>({
     initialData: { sections: [], reason: '' },
     apiEndpoint: '/api/admin/permissions/request',
-    createSuccessMessage: 'Anfrage gesendet',
+    createSuccessMessage: t('successTitle'),
     validate: (data) => {
       if (data.sections.length === 0) {
-        return 'Bitte wähle mindestens einen Bereich aus.'
+        return t('validationNoSections')
       }
       if (data.reason.trim().length < 10) {
-        return 'Bitte gib einen Grund an (mindestens 10 Zeichen).'
+        return t('validationReasonTooShort')
       }
       return null
     },
@@ -61,10 +64,10 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           </div>
           <div>
             <Heading level={3} className="font-semibold text-action-text">
-              Anfrage gesendet
+              {t('successTitle')}
             </Heading>
             <p className="text-sm text-action">
-              Ein Super Admin wird deine Anfrage prüfen.
+              {t('successBody')}
             </p>
           </div>
         </div>
@@ -76,7 +79,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
             size="sm"
             className="text-sm text-action hover:text-action"
           >
-            Schliessen
+            {tForms('close')}
           </Button>
         )}
       </div>
@@ -91,10 +94,10 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         </div>
         <div>
           <Heading level={3} className="font-semibold text-text-primary">
-            Zugriff anfordern
+            {t('title')}
           </Heading>
           <p className="text-sm text-text-secondary">
-            Wähle die Bereiche aus, auf die du Zugriff benötigst.
+            {t('subtitle')}
           </p>
         </div>
         {onClose && (
@@ -113,7 +116,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
       {/* Section Selection */}
       <div className="space-y-2">
         <label className="block text-sm font-medium text-text-secondary">
-          Bereiche auswählen
+          {t('sectionsLabel')}
         </label>
         <div className="grid grid-cols-2 gap-2">
           {availableSections.map(section => (
@@ -140,11 +143,11 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
       </div>
 
       {/* Reason */}
-      <FormField label="Begründung">
+      <FormField label={t('reasonLabel')}>
         <Textarea
           value={form.data.reason}
           onChange={e => form.updateField('reason', e.target.value)}
-          placeholder="Warum benötigst du Zugriff auf diese Bereiche?"
+          placeholder={t('reasonPlaceholder')}
           rows={3}
           aria-required="true"
           aria-invalid={!!form.error}
@@ -169,12 +172,12 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         {form.isSubmitting ? (
           <>
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            Wird gesendet...
+            {t('submitting')}
           </>
         ) : (
           <>
             <Send className="w-4 h-4" />
-            Anfrage senden
+            {t('submit')}
           </>
         )}
       </Button>

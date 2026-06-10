@@ -8993,6 +8993,48 @@
       "choose": "Choisir…",
       "noneSelected": "Aucune icône choisie"
     },
+    "permissions": {
+      "request": {
+        "title": "Demander l'accès",
+        "subtitle": "Sélectionne les sections auxquelles tu as besoin d'accéder.",
+        "sectionsLabel": "Choisir les sections",
+        "reasonLabel": "Motif",
+        "reasonPlaceholder": "Pourquoi as-tu besoin d'accéder à ces sections ?",
+        "submit": "Envoyer la demande",
+        "submitting": "Envoi…",
+        "successTitle": "Demande envoyée",
+        "successBody": "Un super administrateur examinera ta demande.",
+        "validationNoSections": "Sélectionne au moins une section.",
+        "validationReasonTooShort": "Donne un motif (au moins 10 caractères)."
+      },
+      "manager": {
+        "heading": "Demandes d'accès ({count})",
+        "empty": "Aucune demande d'accès en attente",
+        "loadError": "Échec du chargement",
+        "unknownError": "Erreur inconnue",
+        "processError": "Échec du traitement",
+        "genericError": "Erreur",
+        "retry": "Réessayer",
+        "approve": "Approuver",
+        "reject": "Refuser",
+        "rejectionLabel": "Motif du refus (optionnel) :",
+        "rejectionPlaceholder": "Motif de refus optionnel…",
+        "confirmReject": "Confirmer le refus"
+      },
+      "editor": {
+        "title": "Modifier les autorisations",
+        "superAdminLabel": "Statut Super Admin",
+        "superAdminDescription": "Accès complet à toutes les sections, y compris la gestion des utilisateurs",
+        "superAdminHardcoded": "Cet utilisateur figure dans la liste centrale des super admins et ne peut pas être rétrogradé.",
+        "fullAccessLabel": "Accès complet",
+        "fullAccessDescription": "Accès à toutes les sections (sans droits super admin)",
+        "individualHeading": "Sections individuelles",
+        "sensitiveBadge": "Sensible",
+        "saveError": "Échec de l'enregistrement",
+        "unknownError": "Erreur inconnue",
+        "saving": "Enregistrement…"
+      }
+    },
     "editHistory": {
       "empty": "Aucune modification admin",
       "changedFields": "Champs modifiés :",
