@@ -112,7 +112,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
 
         <div className="space-y-4">
           {/* Show Email */}
-          <div className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border-2 border">
+          <div className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border border-subtle">
             <div className="shrink-0">
               <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                 {profile.show_email ? (
@@ -152,7 +152,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           </div>
 
           {/* Show Phone */}
-          <div className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border-2 border">
+          <div className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border border-subtle">
             <div className="shrink-0">
               <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                 {profile.show_phone ? (

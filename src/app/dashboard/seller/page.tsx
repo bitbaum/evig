@@ -67,34 +67,32 @@ export default function SellerDashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Welcome Header */}
-      <div className="bg-action rounded-xl p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold mb-2">
-              {t('pageTitle')}
-            </h1>
-            <p className="text-action-text">
-              {t('pageSubtitle')}
-            </p>
-          </div>
-          <Button
-            onClick={fetchDashboardData}
-            variant="ghost"
-            size="icon"
-            className="bg-surface-base/10 hover:bg-surface-base/20 text-white"
-            title={t('refresh')}
-            aria-label={t('refresh')}
-          >
-            <RefreshCw className="w-5 h-5" />
-          </Button>
+    <article className="mx-auto max-w-5xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
+      {/* Header — flat, no decorative gradient block */}
+      <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            {t('pageSubtitle')}
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            {t('pageTitle')}
+          </h1>
         </div>
-      </div>
+        <Button
+          onClick={fetchDashboardData}
+          variant="outline"
+          size="sm"
+          title={t('refresh')}
+          aria-label={t('refresh')}
+        >
+          <RefreshCw className="h-4 w-4" />
+          <span className="hidden sm:inline">{t('refresh')}</span>
+        </Button>
+      </header>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+        <div className="bg-surface-base rounded-xl p-6 border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsProducts')}</p>
@@ -105,7 +103,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+        <div className="bg-surface-base rounded-xl p-6 border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsRevenue')}</p>
@@ -121,7 +119,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+        <div className="bg-surface-base rounded-xl p-6 border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsViews')}</p>
@@ -132,7 +130,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+        <div className="bg-surface-base rounded-xl p-6 border border-subtle">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('statsOrders')}</p>
@@ -146,7 +144,7 @@ export default function SellerDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Products */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+        <div className="bg-surface-base rounded-xl border border-subtle">
           <div className="p-6 border-b border-subtle">
             <h2 className="text-lg font-semibold text-text-primary">
               {t('recentTitle')}
@@ -211,7 +209,7 @@ export default function SellerDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+        <div className="bg-surface-base rounded-xl border border-subtle">
           <div className="p-6 border-b border-subtle">
             <h2 className="text-lg font-semibold text-text-primary">
               {t('quickActionsTitle')}
@@ -271,6 +269,6 @@ export default function SellerDashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   )
 }

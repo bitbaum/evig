@@ -113,7 +113,7 @@ export default function DonationsDashboard() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl shadow-lg p-8 border-2 border">
+          <div className="bg-surface-base rounded-xl shadow-lg p-8 border border-subtle">
             <div className="animate-pulse">
               <div className="h-8 bg-surface-overlay rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
@@ -151,20 +151,20 @@ export default function DonationsDashboard() {
     <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 border-b border-subtle pb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center mb-4 text-text-secondary hover:text-action"
+            className="mb-3 inline-flex items-center text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold mb-2 text-text-primary">
-            {t('pageTitle')}
-          </Heading>
-          <p className="text-sm sm:text-base text-text-secondary">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
             {t('pageSubtitle')}
           </p>
+          <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            {t('pageTitle')}
+          </Heading>
         </div>
 
         {/* Error Message */}
@@ -180,7 +180,7 @@ export default function DonationsDashboard() {
             {donations.map((donation) => (
               <div
                 key={donation.id}
-                className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border"
+                className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-subtle"
               >
                 <div className="flex items-start gap-4">
                   {/* Type Icon */}

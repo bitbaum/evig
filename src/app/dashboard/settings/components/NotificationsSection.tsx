@@ -60,7 +60,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
         {notificationOptions.map((option) => (
           <div
             key={option.id}
-            className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border-2 border"
+            className="flex items-start gap-4 p-4 bg-surface-raised rounded-lg border border-subtle"
           >
             <div className="shrink-0">
               <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">

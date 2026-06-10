@@ -109,7 +109,7 @@ export default function MyListingsPage() {
               size="sm"
               className={`flex-1 ${
                 statusFilter === tab.value
-                  ? 'bg-surface-base text-text-primary shadow-xs'
+                  ? 'bg-surface-base text-text-primary'
                   : 'text-text-secondary hover:text-text-primary'
               }`}
             >

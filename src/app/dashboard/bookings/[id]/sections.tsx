@@ -43,7 +43,7 @@ const CAN_CANCEL_STATUSES: readonly BookingStatus[] = [
   BOOKING_STATUS.QUOTE_APPROVED,
 ]
 
-const CARD_CLASS = 'bg-surface-base rounded-xl border border-subtle dark:border-white/6 p-6'
+const CARD_CLASS = 'bg-surface-base rounded-xl border border-subtle p-6'
 const SECTION_TITLE_CLASS = 'text-sm font-semibold text-text-tertiary uppercase tracking-widest'
 
 /* ─────────────────────────── Star display ─────────────────────────── */
@@ -205,7 +205,7 @@ function CompletionNotice({ appointment, statusLabel }: { appointment: Appointme
 function RatingForm({ state }: { state: BookingDetailState }) {
   const t = useTranslations('dashboard.bookings')
   return (
-    <div className="mt-4 pt-4 border-t border-subtle dark:border-white/6 space-y-4">
+    <div className="mt-4 pt-4 border-t border-subtle space-y-4">
       <Heading level={3} className="text-sm font-semibold text-text-primary">
         {t('ratingModalTitle')}
       </Heading>

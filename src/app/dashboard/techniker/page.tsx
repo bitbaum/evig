@@ -89,12 +89,9 @@ export default async function TechnikerDashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Header */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mb-8 flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <Heading level={1} className={cn('text-2xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-              {t('pageTitle')}
-            </Heading>
-            <p className={cn('mt-1 text-sm', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
               {t('pageSubtitle')}
               {profile.city ? ` · ${profile.city}` : ''}
               {!profile.isActive && (
@@ -103,6 +100,9 @@ export default async function TechnikerDashboardPage() {
                 </span>
               )}
             </p>
+            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+              {t('pageTitle')}
+            </Heading>
           </div>
           <div className="flex items-center gap-3">
             <Link

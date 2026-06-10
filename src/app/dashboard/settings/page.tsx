@@ -40,81 +40,70 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-surface-raised">
-      {/* Header */}
-      <div className="bg-surface-base border-b-2 border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center text-text-secondary hover:text-text-secondary dark:text-text-muted mb-4 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToDashboard')}
-          </Link>
-          <div className="flex items-center justify-between">
-            <div>
-              <Heading level={1} className="text-2xl font-bold text-text-primary">
-                {labels.pageTitle}
-              </Heading>
-              <p className="mt-1 text-sm sm:text-base text-text-secondary">
-                {labels.pageDescription}
-              </p>
-            </div>
+    <main className="min-h-screen bg-canvas">
+      <article className="mx-auto max-w-4xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header */}
+        <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div>
             <Link
-              href="/dashboard/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-raised hover:bg-surface-overlay text-text-secondary rounded-lg transition-colors text-sm"
+              href="/dashboard"
+              className="mb-3 inline-flex items-center text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
             >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline">{t('editProfile')}</span>
+              <ArrowLeft className="mr-1.5 h-3 w-3" />
+              {t('backToDashboard')}
             </Link>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+              {labels.pageDescription}
+            </p>
+            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+              {labels.pageTitle}
+            </Heading>
           </div>
-        </div>
-      </div>
+          <Link
+            href="/dashboard/profile"
+            className="inline-flex items-center gap-2 rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-strong hover:text-text-primary"
+          >
+            <User className="h-4 w-4" />
+            <span className="hidden sm:inline">{t('editProfile')}</span>
+          </Link>
+        </header>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tabs */}
-        <div className="bg-surface-base rounded-xl shadow-xs border-2 border mb-6 overflow-x-auto">
-          <nav className="flex">
-            {tabs.map((tab) => (
-              <Button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                variant="ghost"
-                className={`flex-1 rounded-none border-b-2 py-4 ${
-                  activeTab === tab.id
-                    ? 'border-action text-action bg-action-muted/50'
-                    : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-raised'
-                }`}
-              >
-                <tab.icon className="w-5 h-5" />
-                <span className="hidden sm:inline">{tab.label}</span>
-              </Button>
-            ))}
-          </nav>
+        {/* Tabs — segmented control on neutral background */}
+        <div className="flex flex-wrap gap-1 rounded-lg bg-surface-raised p-1">
+          {tabs.map(tab => (
+            <Button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              variant="ghost"
+              size="sm"
+              className={`flex-1 gap-2 ${
+                activeTab === tab.id
+                  ? 'bg-surface-base text-text-primary'
+                  : 'text-text-secondary hover:text-text-primary'
+              }`}
+            >
+              <tab.icon className="h-4 w-4" />
+              <span className="hidden sm:inline">{tab.label}</span>
+            </Button>
+          ))}
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Success Message */}
           {saveSuccess && (
-            <div className="bg-action-muted border-2 border-strong rounded-lg p-4 flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-action" />
-              <p className="text-action">
-                {labels.saveSuccess}
-              </p>
+            <div className="flex items-center gap-3 rounded-lg border border-action/30 bg-action-muted/40 p-4">
+              <CheckCircle2 className="h-5 w-5 text-action" />
+              <p className="text-sm text-action">{labels.saveSuccess}</p>
             </div>
           )}
 
-          {/* Error Message */}
           {error && (
-            <div className="bg-error-50 dark:bg-error-900/20 border-2 border-error-200 dark:border-error-800 rounded-lg p-4">
-              <p className="text-error-700 dark:text-error-300">{error}</p>
+            <div className="rounded-lg border border-error-200 bg-error-50 p-4 dark:border-error-800 dark:bg-error-900/20">
+              <p className="text-sm text-error-700 dark:text-error-300">{error}</p>
             </div>
           )}
 
-          {/* Tab Content */}
-          <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6">
+          <div className="rounded-lg border border-subtle bg-surface-base p-6">
             {activeTab === 'account' && (
               <AccountSection
                 profile={profile}
@@ -124,38 +113,31 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'notifications' && (
-              <NotificationsSection
-                profile={profile}
-                handleChange={handleChange}
-              />
+              <NotificationsSection profile={profile} handleChange={handleChange} />
             )}
 
             {activeTab === 'privacy' && (
-              <PrivacySection
-                profile={profile}
-                handleChange={handleChange}
-              />
+              <PrivacySection profile={profile} handleChange={handleChange} />
             )}
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-end">
-            <Button type="submit" disabled={isSaving} variant="primary" className="gap-2 px-6 py-3">
+            <Button type="submit" disabled={isSaving} variant="primary" className="gap-2">
               {isSaving ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   {labels.saving}
                 </>
               ) : (
                 <>
-                  <Save className="w-5 h-5" />
+                  <Save className="h-4 w-4" />
                   {labels.save}
                 </>
               )}
             </Button>
           </div>
         </form>
-      </div>
+      </article>
     </main>
   )
 }

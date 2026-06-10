@@ -94,16 +94,19 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <Heading level={1} className="text-2xl font-bold text-text-primary flex items-center gap-2">
-          <Heart className="w-6 h-6 text-error-500" />
-          {t('pageTitle')}
-        </Heading>
-        <p className="text-sm text-text-tertiary mt-1">
+    <article className="mx-auto max-w-6xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
+      <header className="border-b border-subtle pb-8">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {t('pageSubtitle')}
         </p>
-      </div>
+        <Heading
+          level={1}
+          className="mt-2 flex items-center gap-2 text-3xl font-semibold text-text-primary sm:text-4xl"
+        >
+          <Heart className="h-6 w-6 text-error-500" />
+          {t('pageTitle')}
+        </Heading>
+      </header>
 
       {isLoading && (
         <div className="flex items-center justify-center py-12">
@@ -146,7 +149,7 @@ export default function FavoritesPage() {
             return (
               <div
                 key={listing.id}
-                className="group bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden"
+                className="group bg-surface-base rounded-xl border border-subtle overflow-hidden"
               >
                 <Link href={`/marketplace/${listing.id}`}>
                   <div className="relative aspect-4/3">
@@ -203,6 +206,6 @@ export default function FavoritesPage() {
           })}
         </div>
       )}
-    </div>
+    </article>
   )
 }

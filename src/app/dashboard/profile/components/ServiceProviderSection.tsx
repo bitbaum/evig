@@ -15,7 +15,7 @@ interface ServiceProviderSectionProps {
 export function ServiceProviderSection({ profile, handleChange }: ServiceProviderSectionProps) {
   const t = useTranslations('dashboard.profile.serviceProvider')
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
+    <div className="bg-surface-base rounded-xl border border-subtle p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
           <Wrench className="w-5 h-5 text-action" />

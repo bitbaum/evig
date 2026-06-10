@@ -127,7 +127,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   const t = useTranslations('dashboard.reviews')
   const tDates = useTranslations('dashboard.dates')
   return (
-    <div className="bg-surface-base rounded-lg shadow-xs border overflow-hidden">
+    <div className="bg-surface-base rounded-lg border overflow-hidden">
       <div className="p-6 border-b border">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -286,11 +286,13 @@ export default function UserReviewsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-surface-base rounded-lg shadow-xs border p-6">
-        <Heading level={1} className="text-2xl font-bold text-text-primary mb-2">{t('pageTitle')}</Heading>
-        <p className="text-text-secondary">
+      <div className="border-b border-subtle pb-8">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {t('pageDescription')}
         </p>
+        <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+          {t('pageTitle')}
+        </Heading>
       </div>
 
       {/* Reviews List */}

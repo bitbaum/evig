@@ -9,6 +9,7 @@ import { ExternalLink, ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import type { NavigationItem } from '@/config/navigation'
 import type { NavigationGroup } from './utils'
 
@@ -66,23 +67,82 @@ function MultiColumnLayout({
 
   return (
     <div className={cn("grid divide-x divide-neutral-100 dark:divide-white/6", gridCols)}>
-      {groups.map((group, idx) => (
-        <div key={idx} className="p-6">
-          {group.section && (
-            <Heading level={3} className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-4">
-              {getLabel(group.section, t)}
-            </Heading>
-          )}
-          <ul className="space-y-1">
-            {group.items.map((subItem) => (
-              <li key={subItem.name}>
-                <MenuLink item={subItem} onClose={onClose} t={t} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      {groups.map((group, idx) => {
+        const featured = group.items.find((it) => it.featured)
+        const rest = group.items.filter((it) => !it.featured)
+        return (
+          <div key={idx} className="p-6 flex flex-col">
+            {group.section && (
+              <Heading level={3} className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-4">
+                {getLabel(group.section, t)}
+              </Heading>
+            )}
+            {featured && (
+              <FeaturedCard item={featured} onClose={onClose} t={t} />
+            )}
+            {rest.length > 0 && (
+              <ul className={cn('space-y-1', featured && 'mt-3')}>
+                {rest.map((subItem) => (
+                  <li key={subItem.name}>
+                    <MenuLink item={subItem} onClose={onClose} t={t} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )
+      })}
     </div>
+  )
+}
+
+function FeaturedCard({
+  item,
+  onClose,
+  t,
+}: {
+  item: NavigationItem
+  onClose: () => void
+  t: TFn
+}) {
+  const Icon = item.featuredIcon
+  const themeKey = item.featuredTheme ?? 'marketplace'
+  const badge = DESIGN_TOKENS.iconBadges[themeKey]
+  return (
+    <Link
+      href={item.href}
+      onClick={onClose}
+      className={cn(
+        'group block rounded-xl p-4',
+        'border border-primary-300 dark:border-primary-500/30',
+        'ring-1 ring-primary-200 dark:ring-primary-500/20',
+        'bg-surface-base hover:bg-surface-raised dark:hover:bg-surface-base/4',
+        'transition-colors duration-200'
+      )}
+      {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+    >
+      <div className="flex items-start gap-3">
+        {Icon && (
+          <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', badge.bg)}>
+            <Icon className={cn('h-5 w-5', badge.text)} aria-hidden="true" />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-text-primary group-hover:text-action transition-colors">
+              {getLabel(item, t)}
+            </span>
+            <ItemBadge badge={item.badge} />
+          </div>
+          {(item.descriptionKey || item.description) && (
+            <p className="mt-1 text-sm text-text-secondary line-clamp-2">
+              {item.descriptionKey ? t(`items.${item.descriptionKey}` as never) : item.description}
+            </p>
+          )}
+        </div>
+        <ArrowRight className="w-4 h-4 text-text-secondary group-hover:text-action group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+      </div>
+    </Link>
   )
 }
 

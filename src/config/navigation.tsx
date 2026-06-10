@@ -1,15 +1,18 @@
 import React from 'react'
+import { ShoppingBag, Wrench, type LucideIcon } from 'lucide-react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
 
 /**
  * Navigation Configuration - SSOT for all navigation data
  *
  * Design principles:
- * - 5-6 primary items max (cognitive load)
+ * - Direct-link top-level items are lightweight (no dropdown cognitive load)
  * - Clear, action-oriented labels
  * - No "coming soon" items in nav (show when ready)
  * - Consolidated shop experience
  * - Progressive disclosure (simple → detailed)
+ * - Featured items inside dropdowns get a hero-card treatment so the highest-value
+ *   destinations (marketplace of things, marketplace of people) read as the primary action
  */
 
 export interface NavigationItem {
@@ -26,22 +29,36 @@ export interface NavigationItem {
   icon?: React.ReactNode
   isMultiColumn?: boolean
   dropdownAlignment?: 'left' | 'center' | 'right'
+  /** Marks this dropdown item as the section's hero entry — rendered as a larger card. */
+  featured?: boolean
+  /** Lucide icon shown inside the hero card when `featured` is true. */
+  featuredIcon?: LucideIcon
+  /** Optional theme key for icon-badge tinting on featured tiles (matches DESIGN_TOKENS.iconBadges). */
+  featuredTheme?: 'marketplace' | 'repairers'
 }
 
 /**
  * Main navigation structure
  *
- * Strategic positioning (6 items):
- * 1. Über uns - About, mission, history, projects
- * 2. Dienstleistungen - Professional services (B2C)
- * 3. Marktplatz - ALL customer-facing buy/sell/help: Shop + Marketplace + IT-Hilfe
- * 4. Lernen - Workshops, guides, blog
- * 5. Mitmachen - Volunteer, donate, partner
- * 6. Kontakt - CTA (highlighted)
+ * Strategic positioning (7 top-level items):
+ * 1. Über uns       - About, mission, history (identity)
+ * 2. Projekte       - Mission proof — what we've built. Direct link, no dropdown.
+ * 3. Dienstleistungen - Professional services (B2C)
+ * 4. Marktplatz     - ALL customer-facing buy/sell/help: Shop + Marketplace + IT-Hilfe
+ * 5. Lernen         - Workshops, guides, blog
+ * 6. Mitmachen      - Volunteer, donate, partner
+ * 7. Kontakt        - CTA (highlighted)
  *
- * Key decision: Shop (team's legacy) + Marketplace (P2P) + IT-Hilfe (services marketplace)
- * live together under "Marktplatz" because a customer looking for tech or help doesn't care
- * about the organizational boundary between RevampIT inventory vs community listings.
+ * Why 7 (not 6): "Projekte" became its own top-level entry because projects ARE the mission
+ * proof — burying them under Über uns hid the work. Direct links don't add dropdown
+ * cognitive load, so the extra slot is cheap.
+ *
+ * Key decision: Shop + Marketplace (P2P) + IT-Hilfe live together under "Marktplatz" because
+ * a customer looking for tech or help doesn't care about the organizational boundary between
+ * RevampIT inventory vs community listings. Inside Marktplatz, two items are `featured`:
+ *  - Community-Inserate (the marketplace of THINGS)
+ *  - Techniker finden    (the marketplace of PEOPLE / repairers)
+ * The featured pair renders as hero cards so visitors land on the right page without scanning.
  */
 export const mainNavigation: NavigationItem[] = [
   {
@@ -63,12 +80,6 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'impactDesc',
       },
       {
-        name: 'Projekte',
-        nameKey: 'projects',
-        href: '/projects',
-        descriptionKey: 'projectsDesc',
-      },
-      {
         name: 'Standorte',
         nameKey: 'locations',
         href: '/space',
@@ -81,6 +92,12 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'faqDesc',
       },
     ],
+  },
+  {
+    name: 'Projekte',
+    nameKey: 'projects',
+    href: '/projects',
+    descriptionKey: 'projectsDesc',
   },
   {
     name: 'Dienstleistungen',
@@ -161,6 +178,9 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'communityListings',
         href: '/marketplace',
         descriptionKey: 'communityListingsDesc',
+        featured: true,
+        featuredIcon: ShoppingBag,
+        featuredTheme: 'marketplace',
       },
       {
         name: `${ORG.name} Shop`,
@@ -187,12 +207,6 @@ export const mainNavigation: NavigationItem[] = [
         href: '/marketplace/sell',
         descriptionKey: 'createListingDesc',
       },
-      {
-        name: 'Meine Inserate',
-        nameKey: 'myListings',
-        href: '/dashboard/listings',
-        descriptionKey: 'myListingsDesc',
-      },
       // Section: IT-Hilfe
       {
         name: 'IT-Hilfe',
@@ -201,16 +215,19 @@ export const mainNavigation: NavigationItem[] = [
         isSection: true,
       },
       {
-        name: 'Hilfe suchen',
-        nameKey: 'findHelp',
-        href: '/it-hilfe',
-        descriptionKey: 'findHelpDesc',
-      },
-      {
         name: 'Techniker finden',
         nameKey: 'findTechnicians',
         href: '/techniker',
         descriptionKey: 'findTechnicianDesc',
+        featured: true,
+        featuredIcon: Wrench,
+        featuredTheme: 'repairers',
+      },
+      {
+        name: 'Hilfe suchen',
+        nameKey: 'findHelp',
+        href: '/it-hilfe',
+        descriptionKey: 'findHelpDesc',
       },
       {
         name: 'Techniker werden',
@@ -299,13 +316,6 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'workReintegration',
         href: '/get-involved/work-reintegration',
         descriptionKey: 'reintegrationDesc',
-      },
-      {
-        name: 'IT-Hilfe Techniker',
-        nameKey: 'itHelpTechnician',
-        href: '/get-involved/it-hilfe-techniker',
-        descriptionKey: 'itHelpTechnicianDesc',
-        badge: 'new',
       },
       // Section: Unterstützen
       {

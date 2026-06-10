@@ -84,13 +84,15 @@ function MessagesContent() {
   }
 
   return (
-    <div className="space-y-4">
-      <div>
-        <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
-        <p className="text-sm text-text-tertiary mt-1">
+    <div className="space-y-6">
+      <header className="border-b border-subtle pb-6">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {t('pageSubtitle')}
         </p>
-      </div>
+        <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+          {t('pageTitle')}
+        </Heading>
+      </header>
 
       {conversations.length === 0 ? (
         <EmptyState
@@ -106,7 +108,7 @@ function MessagesContent() {
           }
         />
       ) : (
-        <div className="bg-surface-base rounded-xl shadow-xs border overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
+        <div className="bg-surface-base rounded-xl border overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
           <div className="flex h-full">
             {/* Conversation list — hidden on mobile when thread is open */}
             <div className={`w-full lg:w-80 lg:border-r border overflow-y-auto shrink-0 ${

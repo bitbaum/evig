@@ -72,35 +72,35 @@ export default async function DashboardTimecardsPage() {
     .limit(8)
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+    <article className="mx-auto max-w-7xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
+      <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein
+          </p>
+          <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             Meine Zeiterfassung
           </Heading>
-          <p className="mt-1 text-sm text-text-secondary">
-            Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein.
-          </p>
         </div>
         <Link
           href="/dashboard/shift"
-          className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-action text-white text-sm font-semibold hover:bg-action transition-colors"
+          className="inline-flex items-center justify-center rounded-md bg-action px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-action-strong"
         >
           Schicht starten
         </Link>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-8">
         <div className="min-w-0">
           <TimecardsClient
             workingHours={profile?.workingHours ?? null}
             userName={session.user.name || session.user.email || 'Du'}
           />
         </div>
-        <aside className="lg:sticky lg:top-20 lg:self-start">
+        <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
           <TimecardHistorySidebar history={history} />
         </aside>
       </div>
-    </div>
+    </article>
   )
 }

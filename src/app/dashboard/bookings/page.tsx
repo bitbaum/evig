@@ -48,8 +48,12 @@ export default function CustomerBookings() {
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
-            <p className="text-text-secondary">{t('pageSubtitle')}</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+              {t('pageSubtitle')}
+            </p>
+            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+              {t('pageTitle')}
+            </Heading>
           </div>
           <div className="flex gap-2">
             <Button
@@ -123,7 +127,7 @@ export default function CustomerBookings() {
             />
           ) : (
             filteredAppointments.map(apt => (
-              <div key={apt.id} className="bg-surface-base rounded-lg shadow-xs border border p-4 md:p-6">
+              <div key={apt.id} className="bg-surface-base rounded-lg border border p-4 md:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
@@ -178,7 +182,7 @@ export default function CustomerBookings() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-subtle dark:border-white/6">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-subtle">
                   {apt.status === BOOKING_STATUS.QUOTED && (
                     <>
                       <Button

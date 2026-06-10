@@ -44,21 +44,23 @@ export default async function DashboardDecisionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
-      <Heading level={1} className="mb-1 text-2xl font-bold text-text-primary">
-        {t('pageTitle')}
-      </Heading>
-      <p className="mb-6 text-sm text-text-tertiary">
-        {t('pageSubtitle')}
-      </p>
+    <article className="mx-auto max-w-3xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
+      <header className="border-b border-subtle pb-8">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          {t('pageSubtitle')}
+        </p>
+        <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+          {t('pageTitle')}
+        </Heading>
+      </header>
 
       {votingDecisions.length === 0 ? (
-        <div className="rounded-lg border border bg-surface-raised p-8 text-center">
-          <p className="text-sm text-text-tertiary">{t('noVotings')}</p>
-        </div>
+        <p className="rounded-lg border border-subtle bg-surface-raised p-8 text-center text-sm text-text-tertiary">
+          {t('noVotings')}
+        </p>
       ) : (
-        <div className="space-y-3">
-          {votingDecisions.map((d) => {
+        <ul className="divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">
+          {votingDecisions.map(d => {
             const statusConf = DECISION_STATUS_CONFIG[d.status as DecisionStatus]
             const methodConf = VOTING_METHOD_CONFIG[d.votingMethod as VotingMethod]
             const deadlineInfo = d.votingDeadline
@@ -66,16 +68,15 @@ export default async function DashboardDecisionsPage() {
               : null
 
             return (
-              <Link
-                key={d.id}
-                href={`/dashboard/decisions/${d.id}`}
-                className="block rounded-lg border border bg-surface-base p-4 hover:border-action dark:hover:border-action hover:shadow-xs dark:hover:shadow-black/20 transition-all"
-              >
-                <div className="flex items-start justify-between gap-3">
+              <li key={d.id}>
+                <Link
+                  href={`/dashboard/decisions/${d.id}`}
+                  className="group flex items-start justify-between gap-3 p-4 transition-colors hover:bg-surface-raised"
+                >
                   <div className="min-w-0">
-                    <p className="font-medium text-text-primary truncate">{d.title}</p>
+                    <p className="truncate text-sm font-medium text-text-primary">{d.title}</p>
                     {d.description && (
-                      <p className="mt-0.5 line-clamp-2 text-sm text-text-tertiary">
+                      <p className="mt-1 line-clamp-2 text-xs text-text-tertiary">
                         {d.description}
                       </p>
                     )}
@@ -87,23 +88,19 @@ export default async function DashboardDecisionsPage() {
                         {methodConf.label}
                       </span>
                       {deadlineInfo && (
-                        <StatusBadge variant="warning" tone="subtle">
-                          {deadlineInfo}
-                        </StatusBadge>
+                        <StatusBadge variant="warning" tone="subtle">{deadlineInfo}</StatusBadge>
                       )}
                       {d.hasUserVoted ? (
                         <span className="rounded-full bg-action-muted px-2 py-0.5 text-xs text-action">
                           {t('voted')}
                         </span>
                       ) : (
-                        <StatusBadge variant="warning">
-                          {t('votePending')}
-                        </StatusBadge>
+                        <StatusBadge variant="warning">{t('votePending')}</StatusBadge>
                       )}
                     </div>
                   </div>
                   <svg
-                    className="mt-1 h-4 w-4 shrink-0 text-text-muted"
+                    className="mt-1 h-4 w-4 shrink-0 text-text-tertiary transition-colors group-hover:text-action"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -111,12 +108,12 @@ export default async function DashboardDecisionsPage() {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
-                </div>
-              </Link>
+                </Link>
+              </li>
             )
           })}
-        </div>
+        </ul>
       )}
-    </div>
+    </article>
   )
 }

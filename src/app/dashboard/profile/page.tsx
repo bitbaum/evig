@@ -31,149 +31,122 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-surface-raised">
-      {/* Header */}
-      <div className="bg-surface-base border-b-2 border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center text-text-secondary hover:text-text-secondary dark:text-text-muted mb-4 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToDashboard')}
-          </Link>
-          <div className="flex items-center justify-between">
-            <div>
-              <Heading level={1} className="text-2xl font-bold text-text-primary">
-                {t('pageTitle')}
-              </Heading>
-              <p className="mt-1 text-sm sm:text-base text-text-secondary">
-                {t('pageDescription')}
-              </p>
-            </div>
+    <main className="min-h-screen bg-canvas">
+      <article className="mx-auto max-w-4xl space-y-10 px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header — flat, eyebrow + h1, settings link as ghost action */}
+        <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div>
             <Link
-              href="/dashboard/settings"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-raised hover:bg-surface-overlay text-text-secondary rounded-lg transition-colors"
+              href="/dashboard"
+              className="mb-3 inline-flex items-center text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
             >
-              <SettingsIcon className="w-4 h-4" />
-              <span className="hidden sm:inline">{t('goToSettings')}</span>
+              <ArrowLeft className="mr-1.5 h-3 w-3" />
+              {t('backToDashboard')}
             </Link>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+              {t('pageDescription')}
+            </p>
+            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+              {t('pageTitle')}
+            </Heading>
           </div>
-        </div>
-      </div>
+          <Link
+            href="/dashboard/settings"
+            className="inline-flex items-center gap-2 rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-strong hover:text-text-primary"
+          >
+            <SettingsIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">{t('goToSettings')}</span>
+          </Link>
+        </header>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Account Status */}
-        <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6 mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
-              <Shield className="w-5 h-5 text-action" />
-            </div>
-            <div>
-              <Heading level={2} className="text-lg font-semibold text-text-primary">
-                {t('accountOverview')}
-              </Heading>
-              <p className="text-sm text-text-secondary">
-                {t('accountOverviewDesc')}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Email Verified */}
-            <div className="flex items-center gap-3 p-4 bg-surface-raised rounded-lg border-2 border">
-              <div className="w-8 h-8 bg-action-muted rounded-full flex items-center justify-center">
-                <CheckCircle2 className="w-4 h-4 text-action" />
-              </div>
-              <div>
-                <p className="font-medium text-text-primary">
-                  {t('emailVerified')}
-                </p>
-                <p className="text-sm text-text-secondary">
-                  {session?.user?.email}
-                </p>
+        {/* Account Status — single bordered list of two facts (divide-y),
+            no nested mini-cards. */}
+        <section aria-labelledby="profile-overview">
+          <h2
+            id="profile-overview"
+            className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
+          >
+            <Shield className="mr-1.5 inline h-3 w-3 align-[-1px] text-action" />
+            {t('accountOverview')}
+          </h2>
+          <dl className="mt-3 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">
+            <div className="flex items-center gap-3 p-4">
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-action" />
+              <div className="min-w-0">
+                <dt className="text-sm font-medium text-text-primary">{t('emailVerified')}</dt>
+                <dd className="truncate text-xs text-text-tertiary">{session?.user?.email}</dd>
               </div>
             </div>
-
-            {/* User Info */}
-            <div className="flex items-center gap-3 p-4 bg-surface-raised rounded-lg border-2 border">
-              <div className="w-8 h-8 bg-surface-raised rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-text-secondary" />
-              </div>
-              <div>
-                <p className="font-medium text-text-primary">
+            <div className="flex items-center gap-3 p-4">
+              <User className="h-4 w-4 shrink-0 text-text-tertiary" />
+              <div className="min-w-0">
+                <dt className="text-sm font-medium text-text-primary">
                   {profile.first_name && profile.last_name
                     ? `${profile.first_name} ${profile.last_name}`
                     : profile.display_name || t('nameNotSet')}
-                </p>
-                <p className="text-sm text-text-secondary">
+                </dt>
+                <dd className="text-xs text-text-tertiary">
                   {t('memberSince', { year: new Date().getFullYear() })}
-                </p>
+                </dd>
               </div>
             </div>
-          </div>
-        </div>
+          </dl>
+        </section>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Success Message */}
+        <form onSubmit={handleSubmit} className="space-y-8">
           {saveSuccess && (
-            <div className="bg-action-muted border-2 border-strong rounded-lg p-4 flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-action" />
-              <p className="text-action">
-                {t('saveSuccess')}
-              </p>
+            <div className="flex items-center gap-3 rounded-lg border border-action/30 bg-action-muted/40 p-4">
+              <CheckCircle2 className="h-5 w-5 text-action" />
+              <p className="text-sm text-action">{t('saveSuccess')}</p>
             </div>
           )}
 
-          {/* Error Message */}
           {error && (
-            <div className="bg-error-50 dark:bg-error-900/20 border-2 border-error-200 dark:border-error-800 rounded-lg p-4">
-              <p className="text-error-700 dark:text-error-300">{error}</p>
+            <div className="rounded-lg border border-error-200 bg-error-50 p-4 dark:border-error-800 dark:bg-error-900/20">
+              <p className="text-sm text-error-700 dark:text-error-300">{error}</p>
             </div>
           )}
 
-          {/* Avatar Section */}
-          <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6">
-            <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
+          {/* Avatar */}
+          <section aria-labelledby="profile-avatar">
+            <h2
+              id="profile-avatar"
+              className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
+            >
               {t('avatarSectionTitle')}
-            </Heading>
-            <AvatarUpload
-              currentAvatarUrl={profile.avatar_url}
-              onUploadSuccess={handleAvatarUpload}
-            />
-          </div>
+            </h2>
+            <div className="mt-3 rounded-lg border border-subtle bg-surface-base p-6">
+              <AvatarUpload
+                currentAvatarUrl={profile.avatar_url}
+                onUploadSuccess={handleAvatarUpload}
+              />
+            </div>
+          </section>
 
-          {/* Public Profile Section */}
           <PublicProfileSection profile={profile} handleChange={handleChange} />
-
-          {/* Personal Info Section */}
           <PersonalInfoSection profile={profile} handleChange={handleChange} />
-
-          {/* Service Provider Section (conditional) */}
           {isServiceProvider && (
             <ServiceProviderSection profile={profile} handleChange={handleChange} />
           )}
 
-          {/* Submit Button */}
-          <div className="flex justify-end gap-3">
-            <Button type="submit" disabled={isSaving} variant="primary" className="gap-2 px-6 py-3">
+          <div className="flex justify-end">
+            <Button type="submit" disabled={isSaving} variant="primary" className="gap-2">
               {isSaving ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   {t('saving')}
                 </>
               ) : (
                 <>
-                  <Save className="w-5 h-5" />
+                  <Save className="h-4 w-4" />
                   {t('save')}
                 </>
               )}
             </Button>
           </div>
         </form>
-      </div>
+      </article>
     </main>
   )
 }

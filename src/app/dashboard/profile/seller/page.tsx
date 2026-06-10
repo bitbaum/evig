@@ -61,21 +61,24 @@ export default function SellerProfileEditPage() {
     <div className="max-w-2xl mx-auto">
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6"
+        className="mb-3 inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="h-3 w-3" />
         {t('backToDashboard')}
       </Link>
 
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
-        <div className="p-6 border-b border-subtle">
-          <Heading level={1} className="text-xl font-bold text-text-primary flex items-center gap-2">
-            <User className="w-5 h-5 text-action" />
-            {t('pageTitle')}
-          </Heading>
-          <p className="text-sm text-text-tertiary mt-1">
+      <div className="rounded-lg border border-subtle bg-surface-base">
+        <div className="border-b border-subtle p-6">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
             {noProfile ? t('noProfileDesc') : t('editProfileDesc')}
           </p>
+          <Heading
+            level={1}
+            className="mt-2 flex items-center gap-2 text-2xl font-semibold text-text-primary"
+          >
+            <User className="h-5 w-5 text-action" />
+            {t('pageTitle')}
+          </Heading>
         </div>
 
         <div className="p-6 space-y-5">
@@ -114,7 +117,7 @@ export default function SellerProfileEditPage() {
                   <img
                     src={avatarUrl}
                     alt={t('avatarAlt')}
-                    className="w-16 h-16 rounded-full object-cover border-2 border"
+                    className="w-16 h-16 rounded-full object-cover border border-subtle"
                   />
                   <Button
                     type="button"

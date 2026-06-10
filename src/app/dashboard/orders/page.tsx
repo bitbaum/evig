@@ -90,10 +90,13 @@ export default function DashboardOrdersPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <Heading level={1} className="text-2xl font-bold text-text-primary flex items-center gap-2">
-          <ShoppingBag className="w-6 h-6" />
+    <article className="mx-auto max-w-4xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
+      <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <Heading
+          level={1}
+          className="flex items-center gap-2 text-3xl font-semibold text-text-primary sm:text-4xl"
+        >
+          <ShoppingBag className="h-6 w-6" />
           {t('pageTitle')}
         </Heading>
 
@@ -104,7 +107,7 @@ export default function DashboardOrdersPage() {
             variant="ghost"
             size="sm"
             className={role === 'buyer'
-              ? 'bg-surface-base text-text-primary shadow-xs'
+              ? 'bg-surface-base text-text-primary'
               : 'text-text-tertiary hover:text-text-secondary'}
           >
             {t('roleBuyer')}
@@ -114,13 +117,13 @@ export default function DashboardOrdersPage() {
             variant="ghost"
             size="sm"
             className={role === 'seller'
-              ? 'bg-surface-base text-text-primary shadow-xs'
+              ? 'bg-surface-base text-text-primary'
               : 'text-text-tertiary hover:text-text-secondary'}
           >
             {t('roleSeller')}
           </Button>
         </div>
-      </div>
+      </header>
 
       {/* Status tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto">
@@ -169,7 +172,7 @@ export default function DashboardOrdersPage() {
               <Link
                 key={order.id}
                 href={`/dashboard/orders/${order.id}`}
-                className="flex items-center gap-4 bg-surface-base rounded-xl p-4 shadow-xs hover:shadow-md hover:ring-1 hover:ring-action/20 dark:hover:ring-primary-800 transition-all"
+                className="flex items-center gap-4 bg-surface-base rounded-xl p-4 hover:shadow-md hover:ring-1 hover:ring-action/20 dark:hover:ring-primary-800 transition-all"
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
                   {order.thumbnail ? (
@@ -204,6 +207,6 @@ export default function DashboardOrdersPage() {
           })}
         </div>
       )}
-    </div>
+    </article>
   )
 }

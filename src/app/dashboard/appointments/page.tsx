@@ -96,15 +96,20 @@ export default function AppointmentsDashboard() {
   return (
     <div className="min-h-screen bg-surface-raised py-8">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-text-secondary hover:text-text-primary dark:text-text-muted mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+        <div className="mb-8 border-b border-subtle pb-8">
+          <Link
+            href="/dashboard"
+            className="mb-3 inline-flex items-center text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
+          >
+            <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">{t('pageTitle')}</Heading>
-          <p className="text-text-secondary">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
             {isRepairerView ? t('pageSubtitleRepairer') : t('pageSubtitle')}
           </p>
+          <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            {t('pageTitle')}
+          </Heading>
         </div>
 
         {paymentSuccess && (
@@ -186,7 +191,7 @@ export default function AppointmentsDashboard() {
                 )}
 
                 {appointment.status === APPOINTMENT_STATUS.COMPLETED && (
-                  <div className="bg-action-muted/10 border-2 border-strong dark:border-action/30 rounded-lg p-3 sm:p-4">
+                  <div className="bg-action-muted/10 border border-subtle dark:border-action/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-action">
                       <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('completedTitle')}</span>

@@ -17,7 +17,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
   const t = useTranslations('dashboard.profile.publicProfile')
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border-2 border p-6">
+    <div className="bg-surface-base rounded-xl border border-subtle p-6">
       <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
         {t('heading')}
       </Heading>
