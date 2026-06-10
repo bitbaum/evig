@@ -9035,6 +9035,121 @@
         "saving": "Enregistrement…"
       }
     },
+    "itHilfe": {
+      "tabs": {
+        "requests": "Demandes",
+        "helpers": "Techniciens"
+      },
+      "topActions": {
+        "reviewApplications": "Examiner les candidatures",
+        "newRequest": "Nouvelle demande"
+      },
+      "hero": {
+        "kpis": {
+          "open": "Ouvertes",
+          "activeTechniker": "Techniciens actifs",
+          "verified": "Vérifiés",
+          "resolutionRate": "Taux de résolution"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# demande urgente} other {# demandes urgentes}} en attente",
+          "sub": "Une réaction rapide évite que les demandeurs renoncent.",
+          "cta": "Voir les urgentes"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {# demande ouverte} other {# demandes ouvertes}}, mais aucun technicien actif",
+          "sub": "Approuve des candidatures pour que quelqu'un puisse prendre en charge les demandes.",
+          "cta": "Examiner les candidatures"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {# demande ouverte} other {# demandes ouvertes}}",
+          "sub": "{technikerCount} techniciens actifs peuvent les prendre en charge.",
+          "cta": "Voir les demandes"
+        },
+        "noTechniker": {
+          "headline": "Pas encore de techniciens actifs",
+          "sub": "Approuve des candidatures pour que le système puisse recevoir des demandes.",
+          "cta": "Examiner les candidatures"
+        },
+        "healthy": {
+          "headline": "Tout va bien.",
+          "sub": "{total} demandes au total, {percent} % résolues."
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "Tous les statuts",
+          "allCategories": "Toutes les catégories",
+          "allUrgencies": "Toutes les urgences",
+          "allCantons": "Tous les cantons",
+          "searchPlaceholder": "Rechercher…"
+        },
+        "columns": {
+          "title": "Titre",
+          "category": "Catégorie",
+          "urgency": "Urgence",
+          "status": "Statut",
+          "creator": "Créateur",
+          "canton": "Canton",
+          "budget": "Budget",
+          "offers": "Offres",
+          "date": "Date",
+          "actions": "Actions"
+        },
+        "actions": {
+          "edit": "Modifier",
+          "createTask": "Créer une tâche"
+        },
+        "empty": "Aucune demande trouvée",
+        "countLabel": "{count, plural, one {# demande} other {# demandes}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "Tous les techniciens",
+          "allCantons": "Tous les cantons"
+        },
+        "columns": {
+          "name": "Nom",
+          "skills": "Compétences",
+          "canton": "Canton",
+          "rate": "Tarif",
+          "status": "Statut",
+          "helps": "Aides",
+          "actions": "Actions"
+        },
+        "badges": {
+          "gratis": "Gratuit",
+          "kulturlegi": "KulturLegi",
+          "suspended": "Suspendu",
+          "verified": "Vérifié",
+          "active": "Actif",
+          "inactive": "Inactif"
+        },
+        "actions": {
+          "verify": "Vérifier",
+          "suspend": "Suspendre",
+          "reactivate": "Réactiver"
+        },
+        "empty": "Aucun technicien trouvé",
+        "countLabel": "{count, plural, one {# technicien} other {# techniciens}}"
+      },
+      "editModal": {
+        "title": "Modifier la demande",
+        "statusLabel": "Statut",
+        "urgencyLabel": "Urgence",
+        "adminNotesLabel": "Notes admin",
+        "adminNotesPlaceholder": "Notes internes…"
+      },
+      "helperActionModal": {
+        "titleVerify": "Vérifier le technicien",
+        "titleSuspend": "Suspendre le technicien",
+        "titleReactivate": "Réactiver le technicien",
+        "titleDefault": "Action",
+        "notesLabel": "Notes",
+        "notesPlaceholder": "Motif (optionnel)…",
+        "confirm": "Confirmer"
+      }
+    },
     "editHistory": {
       "empty": "Aucune modification admin",
       "changedFields": "Champs modifiés :",

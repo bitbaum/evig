@@ -2,6 +2,9 @@
 // IT-Hilfe Admin — Requests tab
 // ---------------------------------------------------------------------------
 
+'use client'
+
+import { useTranslations } from 'next-intl'
 import { Search, ExternalLink, Edit3, ClipboardList } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -28,31 +31,32 @@ interface RequestsTabProps {
 export function RequestsTab({
   requests, reqFilter, setReqFilter, reqOffset, setReqOffset, onEdit,
 }: RequestsTabProps) {
+  const t = useTranslations('admin.itHilfe.requests')
   return (
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <Select value={reqFilter.status} onChange={e => { setReqFilter(f => ({ ...f, status: e.target.value })); setReqOffset(0) }} className="w-auto">
-          <option value="all">Alle Status</option>
+          <option value="all">{t('filters.allStatus')}</option>
           {REQUEST_STATUSES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
         </Select>
         <Select value={reqFilter.category} onChange={e => { setReqFilter(f => ({ ...f, category: e.target.value })); setReqOffset(0) }} className="w-auto">
-          <option value="all">Alle Kategorien</option>
+          <option value="all">{t('filters.allCategories')}</option>
           {DEVICE_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
         </Select>
         <Select value={reqFilter.urgency} onChange={e => { setReqFilter(f => ({ ...f, urgency: e.target.value })); setReqOffset(0) }} className="w-auto">
-          <option value="all">Alle Dringlichkeiten</option>
+          <option value="all">{t('filters.allUrgencies')}</option>
           {URGENCY_LEVELS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
         </Select>
         <Select value={reqFilter.canton} onChange={e => { setReqFilter(f => ({ ...f, canton: e.target.value })); setReqOffset(0) }} className="w-auto">
-          <option value="">Alle Kantone</option>
+          <option value="">{t('filters.allCantons')}</option>
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
         </Select>
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
           <Input
             type="text"
-            placeholder="Suchen..."
+            placeholder={t('filters.searchPlaceholder')}
             value={reqFilter.search}
             onChange={e => { setReqFilter(f => ({ ...f, search: e.target.value })); setReqOffset(0) }}
             className="pl-9 pr-3"
@@ -65,16 +69,16 @@ export function RequestsTab({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">Titel</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Kategorie</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Dringlichkeit</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Status</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Ersteller</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Kanton</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Budget</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Angebote</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Datum</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.title')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.category')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.urgency')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.creator')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.canton')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.budget')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.offers')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
@@ -113,14 +117,14 @@ export function RequestsTab({
                       size="icon"
                       onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
                       className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
-                      title="Bearbeiten"
+                      title={t('actions.edit')}
                     >
                       <Edit3 className="w-4 h-4 text-action" />
                     </Button>
                     <Link
                       href={`/admin/tasks/new?source=it_hilfe&source_id=${r.id}&title=${encodeURIComponent(`IT-Hilfe: ${r.title}`)}&priority=${r.urgency === 'urgent' ? 'urgent' : 'normal'}`}
                       className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
-                      title="Aufgabe erstellen"
+                      title={t('actions.createTask')}
                     >
                       <ClipboardList className="w-4 h-4 text-text-tertiary" />
                     </Link>
@@ -131,19 +135,31 @@ export function RequestsTab({
           </tbody>
         </table>
         {requests && requests.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">Keine Anfragen gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
         )}
       </div>
 
       {requests && requests.pagination.total > 50 && (
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-text-tertiary">{requests.pagination.total} Anfragen</span>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled={reqOffset === 0} onClick={() => setReqOffset(o => Math.max(0, o - 50))}>Zurück</Button>
-            <Button variant="outline" size="sm" disabled={!requests.pagination.hasMore} onClick={() => setReqOffset(o => o + 50)}>Weiter</Button>
-          </div>
-        </div>
+        <Pagination
+          offset={reqOffset}
+          setOffset={setReqOffset}
+          hasMore={requests.pagination.hasMore}
+          countLabel={t('countLabel', { count: requests.pagination.total })}
+        />
       )}
+    </div>
+  )
+}
+
+function Pagination({ offset, setOffset, hasMore, countLabel }: { offset: number; setOffset: React.Dispatch<React.SetStateAction<number>>; hasMore: boolean; countLabel: string }) {
+  const tPag = useTranslations('admin.pagination')
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-text-tertiary">{countLabel}</span>
+      <div className="flex gap-2">
+        <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>{tPag('prev')}</Button>
+        <Button variant="outline" size="sm" disabled={!hasMore} onClick={() => setOffset(o => o + 50)}>{tPag('next')}</Button>
+      </div>
     </div>
   )
 }

@@ -9037,6 +9037,121 @@
         "saving": "Saving…"
       }
     },
+    "itHilfe": {
+      "tabs": {
+        "requests": "Requests",
+        "helpers": "Technicians"
+      },
+      "topActions": {
+        "reviewApplications": "Review applications",
+        "newRequest": "New request"
+      },
+      "hero": {
+        "kpis": {
+          "open": "Open",
+          "activeTechniker": "Active technicians",
+          "verified": "Verified",
+          "resolutionRate": "Resolution rate"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# urgent request} other {# urgent requests}} waiting",
+          "sub": "Fast response keeps people from giving up.",
+          "cta": "Show urgent"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {# open request} other {# open requests}}, but no active technicians",
+          "sub": "Approve applications so someone can pick up the requests.",
+          "cta": "Review applications"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {# open request} other {# open requests}}",
+          "sub": "{technikerCount} active technicians can take them on.",
+          "cta": "View requests"
+        },
+        "noTechniker": {
+          "headline": "No active technicians yet",
+          "sub": "Approve applications so the system can accept requests.",
+          "cta": "Review applications"
+        },
+        "healthy": {
+          "headline": "All good.",
+          "sub": "{total} requests total, {percent}% resolved."
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "All statuses",
+          "allCategories": "All categories",
+          "allUrgencies": "All urgencies",
+          "allCantons": "All cantons",
+          "searchPlaceholder": "Search…"
+        },
+        "columns": {
+          "title": "Title",
+          "category": "Category",
+          "urgency": "Urgency",
+          "status": "Status",
+          "creator": "Creator",
+          "canton": "Canton",
+          "budget": "Budget",
+          "offers": "Offers",
+          "date": "Date",
+          "actions": "Actions"
+        },
+        "actions": {
+          "edit": "Edit",
+          "createTask": "Create task"
+        },
+        "empty": "No requests found",
+        "countLabel": "{count, plural, one {# request} other {# requests}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "All technicians",
+          "allCantons": "All cantons"
+        },
+        "columns": {
+          "name": "Name",
+          "skills": "Skills",
+          "canton": "Canton",
+          "rate": "Rate",
+          "status": "Status",
+          "helps": "Helps",
+          "actions": "Actions"
+        },
+        "badges": {
+          "gratis": "Free",
+          "kulturlegi": "KulturLegi",
+          "suspended": "Suspended",
+          "verified": "Verified",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "actions": {
+          "verify": "Verify",
+          "suspend": "Suspend",
+          "reactivate": "Reactivate"
+        },
+        "empty": "No technicians found",
+        "countLabel": "{count, plural, one {# technician} other {# technicians}}"
+      },
+      "editModal": {
+        "title": "Edit request",
+        "statusLabel": "Status",
+        "urgencyLabel": "Urgency",
+        "adminNotesLabel": "Admin notes",
+        "adminNotesPlaceholder": "Internal notes…"
+      },
+      "helperActionModal": {
+        "titleVerify": "Verify technician",
+        "titleSuspend": "Suspend technician",
+        "titleReactivate": "Reactivate technician",
+        "titleDefault": "Action",
+        "notesLabel": "Notes",
+        "notesPlaceholder": "Reason (optional)…",
+        "confirm": "Confirm"
+      }
+    },
     "editHistory": {
       "empty": "No admin edits",
       "changedFields": "Changed fields:",

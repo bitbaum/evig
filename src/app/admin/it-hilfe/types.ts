@@ -61,9 +61,11 @@ export interface Stats {
 
 export type Tab = 'requests' | 'helpers'
 
-export const TABS: { id: Tab; label: string; icon: typeof HelpCircle }[] = [
-  { id: 'requests', label: 'Anfragen', icon: HelpCircle },
-  { id: 'helpers', label: 'Techniker', icon: Users },
+// TABS define the structural list of tabs — labels are resolved at render time
+// from admin.itHilfe.tabs.* so they translate per locale.
+export const TABS: { id: Tab; labelKey: 'requests' | 'helpers'; icon: typeof HelpCircle }[] = [
+  { id: 'requests', labelKey: 'requests', icon: HelpCircle },
+  { id: 'helpers', labelKey: 'helpers', icon: Users },
 ]
 
 export interface RequestFilter {

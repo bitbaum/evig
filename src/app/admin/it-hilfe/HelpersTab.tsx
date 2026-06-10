@@ -2,7 +2,10 @@
 // IT-Hilfe Admin — Helpers tab
 // ---------------------------------------------------------------------------
 
+'use client'
+
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import {
@@ -27,18 +30,19 @@ interface HelpersTabProps {
 export function HelpersTab({
   helpers, helpFilter, setHelpFilter, helpOffset, setHelpOffset, stats, onAction,
 }: HelpersTabProps) {
+  const t = useTranslations('admin.itHilfe.helpers')
   return (
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <Select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="w-auto">
-          <option value="all">Alle Techniker</option>
+          <option value="all">{t('filters.allHelpers')}</option>
           <option value={HELPER_STATUS.ACTIVE}>{HELPER_STATUS_LABELS[HELPER_STATUS.ACTIVE]}</option>
           <option value={HELPER_STATUS.VERIFIED}>{HELPER_STATUS_LABELS[HELPER_STATUS.VERIFIED]}</option>
           <option value={HELPER_STATUS.SUSPENDED}>{HELPER_STATUS_LABELS[HELPER_STATUS.SUSPENDED]}</option>
         </Select>
         <Select value={helpFilter.canton} onChange={e => { setHelpFilter(f => ({ ...f, canton: e.target.value })); setHelpOffset(0) }} className="w-auto">
-          <option value="">Alle Kantone</option>
+          <option value="">{t('filters.allCantons')}</option>
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
         </Select>
       </div>
@@ -48,13 +52,13 @@ export function HelpersTab({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">Name</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Fähigkeiten</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Kanton</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Tarif</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Status</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Hilfe</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.name')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.skills')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.canton')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.rate')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.helps')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
@@ -65,8 +69,8 @@ export function HelpersTab({
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted text-action">Gratis</span>}
-                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">KulturLegi</span>}
+                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted text-action">{t('badges.gratis')}</span>}
+                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">{t('badges.kulturlegi')}</span>}
                   </div>
                 </td>
                 <td className="px-4 py-3">
@@ -82,13 +86,13 @@ export function HelpersTab({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {h.suspended_at ? (
-                      <StatusBadge variant="error">Gesperrt</StatusBadge>
+                      <StatusBadge variant="error">{t('badges.suspended')}</StatusBadge>
                     ) : h.is_verified ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">Verifiziert</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">{t('badges.verified')}</span>
                     ) : h.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">Aktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">{t('badges.active')}</span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">Inaktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">{t('badges.inactive')}</span>
                     )}
                   </div>
                 </td>
@@ -101,7 +105,7 @@ export function HelpersTab({
                         size="icon"
                         onClick={() => onAction(h.id, 'verify')}
                         className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
-                        title="Verifizieren"
+                        title={t('actions.verify')}
                       >
                         <ShieldCheck className="w-4 h-4 text-action" />
                       </Button>
@@ -112,7 +116,7 @@ export function HelpersTab({
                         size="icon"
                         onClick={() => onAction(h.id, 'suspend')}
                         className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
-                        title="Sperren"
+                        title={t('actions.suspend')}
                       >
                         <Ban className="w-4 h-4 text-error-500" />
                       </Button>
@@ -123,7 +127,7 @@ export function HelpersTab({
                         size="icon"
                         onClick={() => onAction(h.id, 'reactivate')}
                         className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
-                        title="Reaktivieren"
+                        title={t('actions.reactivate')}
                       >
                         <UserCheck className="w-4 h-4 text-action" />
                       </Button>
@@ -135,19 +139,31 @@ export function HelpersTab({
           </tbody>
         </table>
         {helpers && helpers.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">Keine Techniker gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
         )}
       </div>
 
       {helpers && helpers.pagination.total > 50 && (
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-text-tertiary">{helpers.pagination.total} Techniker</span>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled={helpOffset === 0} onClick={() => setHelpOffset(o => Math.max(0, o - 50))}>Zurück</Button>
-            <Button variant="outline" size="sm" disabled={!helpers.pagination.hasMore} onClick={() => setHelpOffset(o => o + 50)}>Weiter</Button>
-          </div>
-        </div>
+        <Pagination
+          offset={helpOffset}
+          setOffset={setHelpOffset}
+          hasMore={helpers.pagination.hasMore}
+          countLabel={t('countLabel', { count: helpers.pagination.total })}
+        />
       )}
+    </div>
+  )
+}
+
+function Pagination({ offset, setOffset, hasMore, countLabel }: { offset: number; setOffset: React.Dispatch<React.SetStateAction<number>>; hasMore: boolean; countLabel: string }) {
+  const tPag = useTranslations('admin.pagination')
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-sm text-text-tertiary">{countLabel}</span>
+      <div className="flex gap-2">
+        <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>{tPag('prev')}</Button>
+        <Button variant="outline" size="sm" disabled={!hasMore} onClick={() => setOffset(o => o + 50)}>{tPag('next')}</Button>
+      </div>
     </div>
   )
 }

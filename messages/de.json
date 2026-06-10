@@ -9035,6 +9035,121 @@
         "saving": "Wird gespeichert…"
       }
     },
+    "itHilfe": {
+      "tabs": {
+        "requests": "Anfragen",
+        "helpers": "Techniker"
+      },
+      "topActions": {
+        "reviewApplications": "Bewerbungen prüfen",
+        "newRequest": "Neue Anfrage"
+      },
+      "hero": {
+        "kpis": {
+          "open": "Offen",
+          "activeTechniker": "Aktive Techniker",
+          "verified": "Verifiziert",
+          "resolutionRate": "Lösungsrate"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# dringende Anfrage} other {# dringende Anfragen}} warten",
+          "sub": "Schnelle Reaktion verhindert, dass Hilfesuchende abspringen.",
+          "cta": "Dringende anzeigen"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {# offene Anfrage} other {# offene Anfragen}}, aber keine aktiven Techniker",
+          "sub": "Bestätige Bewerbungen, damit jemand die Anfragen übernehmen kann.",
+          "cta": "Bewerbungen prüfen"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {# offene Anfrage} other {# offene Anfragen}}",
+          "sub": "{technikerCount} aktive Techniker können sie übernehmen.",
+          "cta": "Anfragen ansehen"
+        },
+        "noTechniker": {
+          "headline": "Noch keine aktiven Techniker",
+          "sub": "Aktiviere Bewerbungen, damit das System Anfragen entgegennehmen kann.",
+          "cta": "Bewerbungen prüfen"
+        },
+        "healthy": {
+          "headline": "Alles im grünen Bereich.",
+          "sub": "{total} Anfragen insgesamt, {percent}% gelöst."
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "Alle Status",
+          "allCategories": "Alle Kategorien",
+          "allUrgencies": "Alle Dringlichkeiten",
+          "allCantons": "Alle Kantone",
+          "searchPlaceholder": "Suchen…"
+        },
+        "columns": {
+          "title": "Titel",
+          "category": "Kategorie",
+          "urgency": "Dringlichkeit",
+          "status": "Status",
+          "creator": "Ersteller",
+          "canton": "Kanton",
+          "budget": "Budget",
+          "offers": "Angebote",
+          "date": "Datum",
+          "actions": "Aktionen"
+        },
+        "actions": {
+          "edit": "Bearbeiten",
+          "createTask": "Aufgabe erstellen"
+        },
+        "empty": "Keine Anfragen gefunden",
+        "countLabel": "{count, plural, one {# Anfrage} other {# Anfragen}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "Alle Techniker",
+          "allCantons": "Alle Kantone"
+        },
+        "columns": {
+          "name": "Name",
+          "skills": "Fähigkeiten",
+          "canton": "Kanton",
+          "rate": "Tarif",
+          "status": "Status",
+          "helps": "Hilfe",
+          "actions": "Aktionen"
+        },
+        "badges": {
+          "gratis": "Gratis",
+          "kulturlegi": "KulturLegi",
+          "suspended": "Gesperrt",
+          "verified": "Verifiziert",
+          "active": "Aktiv",
+          "inactive": "Inaktiv"
+        },
+        "actions": {
+          "verify": "Verifizieren",
+          "suspend": "Sperren",
+          "reactivate": "Reaktivieren"
+        },
+        "empty": "Keine Techniker gefunden",
+        "countLabel": "{count, plural, one {# Techniker} other {# Techniker}}"
+      },
+      "editModal": {
+        "title": "Anfrage bearbeiten",
+        "statusLabel": "Status",
+        "urgencyLabel": "Dringlichkeit",
+        "adminNotesLabel": "Admin-Notizen",
+        "adminNotesPlaceholder": "Interne Notizen…"
+      },
+      "helperActionModal": {
+        "titleVerify": "Techniker verifizieren",
+        "titleSuspend": "Techniker sperren",
+        "titleReactivate": "Techniker reaktivieren",
+        "titleDefault": "Aktion",
+        "notesLabel": "Notizen",
+        "notesPlaceholder": "Begründung (optional)…",
+        "confirm": "Bestätigen"
+      }
+    },
     "editHistory": {
       "empty": "Keine Bearbeitungen durch Admins",
       "changedFields": "Geänderte Felder:",
