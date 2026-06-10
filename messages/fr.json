@@ -8544,7 +8544,52 @@
       "assistantSubtitle": "Assistant",
       "openFullscreen": "Ouvrir en plein écran",
       "pageTitle": "Hirn AI",
-      "pageDescription": "Assistant IA pour RevampIT"
+      "pageDescription": "Assistant IA pour RevampIT",
+      "sidebar": {
+        "newConversation": "Nouvelle conversation",
+        "documentsLabel": "Documents",
+        "chunksLabel": "Chunks",
+        "conversationsHeading": "Conversations",
+        "emptyConversations": "Aucune conversation",
+        "messageCount": "{count, plural, one {# message} other {# messages}}"
+      },
+      "chat": {
+        "title": "Hirn Assistant",
+        "clear": "Supprimer",
+        "welcomeTitle": "Bienvenue dans Hirn",
+        "welcomeBody": "Pose tes questions sur {orgName} — je connais notre mission, notre histoire, nos chiffres, nos services et nos tarifs et je suis là pour t'aider.",
+        "inputPlaceholder": "Pose une question…",
+        "confirmDeleteTitle": "Supprimer la conversation",
+        "confirmDeleteMessage": "Veux-tu vraiment supprimer cette conversation ?",
+        "errorSendDefault": "Échec de l'envoi",
+        "errorEmptyResponse": "Aucune réponse reçue.",
+        "errorUnknown": "Erreur inconnue",
+        "errorDelete": "Échec de la suppression",
+        "errorActionDefault": "L'action a échoué"
+      },
+      "floatingButton": {
+        "open": "Ouvrir Hirn AI",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "Aucun fournisseur",
+        "panelTitle": "Choisis ton cerveau",
+        "panelSubtitle": "Quelle IA doit répondre ?",
+        "categoryLocal": "Local",
+        "categoryLocalDescription": "Sur ton ordinateur",
+        "categoryFree": "Gratuit / Pay-per-use",
+        "categoryFreeDescription": "APIs cloud",
+        "providerDescriptionOllama": "Local, gratuit, privé",
+        "providerDescriptionGroq": "Gratuit, ultra-rapide",
+        "providerDescriptionOpenrouter": "Beaucoup de modèles, pay-per-use",
+        "activeBadge": "Actif",
+        "saveKey": "Enregistrer la clé",
+        "apiKeyPrompt": "Saisir la clé API",
+        "errorLoad": "Échec du chargement",
+        "errorGeneric": "Erreur",
+        "errorSaveKey": "Impossible d'enregistrer la clé API",
+        "footerHint": "Choisis un fournisseur avec une clé API active"
+      }
     },
     "team": {
       "backToTeam": "Retour à l'équipe",

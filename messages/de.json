@@ -8529,7 +8529,52 @@
       "assistantSubtitle": "Assistent",
       "openFullscreen": "Vollbild öffnen",
       "pageTitle": "Hirn AI",
-      "pageDescription": "KI-Assistent für RevampIT"
+      "pageDescription": "KI-Assistent für RevampIT",
+      "sidebar": {
+        "newConversation": "Neues Gespräch",
+        "documentsLabel": "Dokumente",
+        "chunksLabel": "Chunks",
+        "conversationsHeading": "Gespräche",
+        "emptyConversations": "Keine Gespräche vorhanden",
+        "messageCount": "{count, plural, one {# Nachricht} other {# Nachrichten}}"
+      },
+      "chat": {
+        "title": "Hirn Assistant",
+        "clear": "Löschen",
+        "welcomeTitle": "Willkommen bei Hirn",
+        "welcomeBody": "Stelle Fragen zu {orgName} — ich kenne unsere Mission, Geschichte, Zahlen, Dienstleistungen und Preise und helfe dir gerne weiter.",
+        "inputPlaceholder": "Stelle eine Frage…",
+        "confirmDeleteTitle": "Gespräch löschen",
+        "confirmDeleteMessage": "Möchtest du dieses Gespräch wirklich löschen?",
+        "errorSendDefault": "Fehler beim Senden",
+        "errorEmptyResponse": "Keine Antwort erhalten.",
+        "errorUnknown": "Unbekannter Fehler",
+        "errorDelete": "Fehler beim Löschen",
+        "errorActionDefault": "Aktion fehlgeschlagen"
+      },
+      "floatingButton": {
+        "open": "Hirn AI öffnen",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "Kein Provider",
+        "panelTitle": "Wähle dein Gehirn",
+        "panelSubtitle": "Welche KI soll antworten?",
+        "categoryLocal": "Lokal",
+        "categoryLocalDescription": "Auf deinem Computer",
+        "categoryFree": "Gratis / Pay-per-use",
+        "categoryFreeDescription": "Cloud APIs",
+        "providerDescriptionOllama": "Lokal, kostenlos, privat",
+        "providerDescriptionGroq": "Gratis, ultra-schnell",
+        "providerDescriptionOpenrouter": "Viele Modelle, pay-per-use",
+        "activeBadge": "Aktiv",
+        "saveKey": "Key speichern",
+        "apiKeyPrompt": "API-Key eingeben",
+        "errorLoad": "Fehler beim Laden",
+        "errorGeneric": "Fehler",
+        "errorSaveKey": "API-Key konnte nicht gespeichert werden",
+        "footerHint": "Wähle einen Provider mit aktivem API-Key"
+      }
     },
     "team": {
       "backToTeam": "Zurück zum Team",

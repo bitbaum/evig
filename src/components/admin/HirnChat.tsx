@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
@@ -38,6 +39,7 @@ interface HirnChatProps {
 }
 
 export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnChatProps) {
+  const t = useTranslations('admin.hirn.chat')
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -99,7 +101,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       })
 
       if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Senden')
+        throw new Error(result.error || t('errorSendDefault'))
       }
 
       const responseData = result.data!
@@ -107,7 +109,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
-        content: responseData.content || 'Keine Antwort erhalten.',
+        content: responseData.content || t('errorEmptyResponse'),
         createdAt: new Date(),
         model: responseData.model || undefined,
         provider: responseData.provider || undefined,
@@ -117,7 +119,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       setMessages(prev => [...prev, assistantMessage])
       setError('')  // Clear any previous error on success
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(err instanceof Error ? err.message : t('errorUnknown'))
     } finally {
       setLoading(false)
     }
@@ -134,7 +136,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       onSessionChange?.()
     } catch (err) {
       logger.warn('Failed to delete Hirn chat session', { error: err })
-      setError('Fehler beim Löschen')
+      setError(t('errorDelete'))
     }
   }
 
@@ -159,14 +161,14 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         },
       })
 
-      if (!result.success) throw new Error(result.error || 'Aktion fehlgschlage')
+      if (!result.success) throw new Error(result.error || t('errorActionDefault'))
 
       const link = result.data?.entity?.link
       if (link) {
         window.location.href = link
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Aktion fehlgschlage')
+      setError(err instanceof Error ? err.message : t('errorActionDefault'))
     }
   }
 
@@ -185,7 +187,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         <div className="flex items-center justify-between p-4 border-b border">
           <div className="flex items-center gap-2">
             <Bot className="w-5 h-5 text-action" />
-            <span className="font-medium text-text-primary">Hirn Assistant</span>
+            <span className="font-medium text-text-primary">{t('title')}</span>
           </div>
           {messages.length > 0 && (
             <Button
@@ -195,7 +197,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               className="gap-1"
             >
               <Trash2 className="w-4 h-4" />
-              Löschen
+              {t('clear')}
             </Button>
           )}
         </div>
@@ -206,10 +208,9 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-text-tertiary">
             <Sparkles className="w-12 h-12 mb-4 text-action" />
-            <Heading level={3} className="text-lg font-medium">Willkommen bei Hirn</Heading>
+            <Heading level={3} className="text-lg font-medium">{t('welcomeTitle')}</Heading>
             <p className="text-sm max-w-md mt-2">
-              Stelle Fragen zu {ORG.name} — ich kenne unsere Mission, Geschichte, Zahlen,
-              Dienstleistungen und Preise und helfe dir gerne weiter.
+              {t('welcomeBody', { orgName: ORG.name })}
             </p>
           </div>
         ) : (
@@ -306,7 +307,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
-            placeholder="Stelle eine Frage..."
+            placeholder={t('inputPlaceholder')}
             disabled={loading}
             aria-required="true"
             aria-invalid={!!error}
@@ -329,8 +330,8 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
       <ConfirmDialog
         isOpen={pendingClear}
-        title="Gespräch löschen"
-        message="Möchtest du dieses Gespräch wirklich löschen?"
+        title={t('confirmDeleteTitle')}
+        message={t('confirmDeleteMessage')}
         onConfirm={() => { setPendingClear(false); doClearSession() }}
         onClose={() => setPendingClear(false)}
       />

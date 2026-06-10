@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,7 @@ export function HirnSidebar({
   onNewSession,
   refreshTrigger,
 }: HirnSidebarProps) {
+  const t = useTranslations('admin.hirn.sidebar')
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<{
@@ -73,7 +75,7 @@ export function HirnSidebar({
       <div className="p-4">
         <Button onClick={onNewSession} variant="primary" className="w-full">
           <Plus className="w-4 h-4" />
-          Neues Gespräch
+          {t('newConversation')}
         </Button>
       </div>
 
@@ -84,14 +86,14 @@ export function HirnSidebar({
             <div className="flex items-center gap-2 p-2 bg-surface-raised rounded-lg">
               <FileText className="w-4 h-4 text-action" />
               <div>
-                <p className="text-xs text-text-tertiary">Dokumente</p>
+                <p className="text-xs text-text-tertiary">{t('documentsLabel')}</p>
                 <p className="font-medium text-text-primary">{stats.totalDocuments}</p>
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 bg-surface-raised rounded-lg">
               <BarChart3 className="w-4 h-4 text-action" />
               <div>
-                <p className="text-xs text-text-tertiary">Chunks</p>
+                <p className="text-xs text-text-tertiary">{t('chunksLabel')}</p>
                 <p className="font-medium text-text-primary">{stats.totalChunks}</p>
               </div>
             </div>
@@ -102,7 +104,7 @@ export function HirnSidebar({
       {/* Sessions List */}
       <div className="flex-1 overflow-y-auto px-2">
         <Heading level={3} className="px-2 py-1 text-xs font-medium text-text-tertiary uppercase">
-          Gespräche
+          {t('conversationsHeading')}
         </Heading>
 
         {loading ? (
@@ -111,7 +113,7 @@ export function HirnSidebar({
           </div>
         ) : sessions.length === 0 ? (
           <p className="px-2 py-4 text-sm text-text-tertiary text-center">
-            Keine Gespräche vorhanden
+            {t('emptyConversations')}
           </p>
         ) : (
           <div className="space-y-1">
@@ -133,7 +135,7 @@ export function HirnSidebar({
                     {session.firstMessage.length > 40 ? '...' : ''}
                   </p>
                   <p className="text-xs text-text-tertiary">
-                    {formatRelativeTime(session.lastActivity.toISOString())} · {session.messageCount} Nachrichten
+                    {formatRelativeTime(session.lastActivity.toISOString())} · {t('messageCount', { count: session.messageCount })}
                   </p>
                 </div>
                 <ChevronRight className="w-4 h-4 shrink-0 opacity-50" />

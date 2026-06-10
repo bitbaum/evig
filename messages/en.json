@@ -8531,7 +8531,52 @@
       "assistantSubtitle": "Assistant",
       "openFullscreen": "Open fullscreen",
       "pageTitle": "Hirn AI",
-      "pageDescription": "AI assistant for RevampIT"
+      "pageDescription": "AI assistant for RevampIT",
+      "sidebar": {
+        "newConversation": "New conversation",
+        "documentsLabel": "Documents",
+        "chunksLabel": "Chunks",
+        "conversationsHeading": "Conversations",
+        "emptyConversations": "No conversations yet",
+        "messageCount": "{count, plural, one {# message} other {# messages}}"
+      },
+      "chat": {
+        "title": "Hirn Assistant",
+        "clear": "Delete",
+        "welcomeTitle": "Welcome to Hirn",
+        "welcomeBody": "Ask questions about {orgName} — I know our mission, history, numbers, services and pricing and I'm happy to help.",
+        "inputPlaceholder": "Ask a question…",
+        "confirmDeleteTitle": "Delete conversation",
+        "confirmDeleteMessage": "Are you sure you want to delete this conversation?",
+        "errorSendDefault": "Failed to send",
+        "errorEmptyResponse": "No response received.",
+        "errorUnknown": "Unknown error",
+        "errorDelete": "Failed to delete",
+        "errorActionDefault": "Action failed"
+      },
+      "floatingButton": {
+        "open": "Open Hirn AI",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "No provider",
+        "panelTitle": "Pick your brain",
+        "panelSubtitle": "Which AI should answer?",
+        "categoryLocal": "Local",
+        "categoryLocalDescription": "On your computer",
+        "categoryFree": "Free / Pay-per-use",
+        "categoryFreeDescription": "Cloud APIs",
+        "providerDescriptionOllama": "Local, free, private",
+        "providerDescriptionGroq": "Free, ultra-fast",
+        "providerDescriptionOpenrouter": "Many models, pay-per-use",
+        "activeBadge": "Active",
+        "saveKey": "Save key",
+        "apiKeyPrompt": "Enter API key",
+        "errorLoad": "Failed to load",
+        "errorGeneric": "Error",
+        "errorSaveKey": "Could not save API key",
+        "footerHint": "Pick a provider with an active API key"
+      }
     },
     "team": {
       "backToTeam": "Back to team",

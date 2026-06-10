@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { Settings, Check, Loader2, Cpu, Cloud, Zap, X, Key, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
@@ -18,12 +19,14 @@ interface Provider {
 type ProviderCategory = 'local' | 'free'
 
 interface ProviderMeta {
+  /** Brand name — proper noun, not translated */
   label: string
   icon: typeof Cpu
   color: string
   bgColor: string
   category: ProviderCategory
-  description: string
+  /** i18n key under admin.hirn.providers for the user-facing description */
+  descriptionKey: 'providerDescriptionOllama' | 'providerDescriptionGroq' | 'providerDescriptionOpenrouter'
   keyName: string
   keyUrl?: string
   keyPrefix?: string
@@ -36,7 +39,7 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     color: 'text-action',
     bgColor: 'bg-action-muted',
     category: 'local',
-    description: 'Lokal, kostenlos, privat',
+    descriptionKey: 'providerDescriptionOllama',
     keyName: '',
     keyUrl: 'https://ollama.ai',
   },
@@ -46,7 +49,7 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     color: 'text-secondary-500',
     bgColor: 'bg-secondary-100 dark:bg-secondary-900/30',
     category: 'free',
-    description: 'Gratis, ultra-schnell',
+    descriptionKey: 'providerDescriptionGroq',
     keyName: 'GROQ_API_KEY',
     keyUrl: 'https://console.groq.com/keys',
     keyPrefix: 'gsk_',
@@ -57,19 +60,20 @@ const PROVIDER_META: Record<string, ProviderMeta> = {
     color: 'text-action',
     bgColor: 'bg-action-muted',
     category: 'free',
-    description: 'Viele Modelle, pay-per-use',
+    descriptionKey: 'providerDescriptionOpenrouter',
     keyName: 'OPENROUTER_API_KEY',
     keyUrl: 'https://openrouter.ai/keys',
     keyPrefix: 'sk-or-',
   },
 }
 
-const CATEGORIES: { id: ProviderCategory; label: string; description: string }[] = [
-  { id: 'local', label: 'Lokal', description: 'Auf deinem Computer' },
-  { id: 'free', label: 'Gratis / Pay-per-use', description: 'Cloud APIs' },
+const CATEGORIES: { id: ProviderCategory; labelKey: 'categoryLocal' | 'categoryFree'; descriptionKey: 'categoryLocalDescription' | 'categoryFreeDescription' }[] = [
+  { id: 'local', labelKey: 'categoryLocal', descriptionKey: 'categoryLocalDescription' },
+  { id: 'free', labelKey: 'categoryFree', descriptionKey: 'categoryFreeDescription' },
 ]
 
 export function HirnProviderSelector() {
+  const t = useTranslations('admin.hirn.providers')
   const [providers, setProviders] = useState<Provider[]>([])
   const [loading, setLoading] = useState(true)
   const [changing, setChanging] = useState(false)
@@ -81,10 +85,10 @@ export function HirnProviderSelector() {
     if (result.success && result.data) {
       setProviders(result.data)
     } else {
-      setError(result.error || 'Fehler beim Laden')
+      setError(result.error || t('errorLoad'))
     }
     setLoading(false)
-  }, [])
+  }, [t])
 
   useEffect(() => {
     let cancelled = false
@@ -94,13 +98,13 @@ export function HirnProviderSelector() {
       if (result.success && result.data) {
         setProviders(result.data)
       } else {
-        setError(result.error || 'Fehler beim Laden')
+        setError(result.error || t('errorLoad'))
       }
       setLoading(false)
     }
     load()
     return () => { cancelled = true }
-  }, [])
+  }, [t])
 
   const setDefaultProvider = async (provider: string) => {
     setChanging(true)
@@ -113,14 +117,14 @@ export function HirnProviderSelector() {
       await loadProviders()
       setOpen(false)
     } else {
-      setError(result.error || 'Fehler')
+      setError(result.error || t('errorGeneric'))
     }
     setChanging(false)
   }
 
 
   const saveApiKey = async (provider: string, currentValue = '') => {
-    const nextKey = window.prompt('API-Key eingeben', currentValue)
+    const nextKey = window.prompt(t('apiKeyPrompt'), currentValue)
     if (nextKey === null) return
 
     setChanging(true)
@@ -132,7 +136,7 @@ export function HirnProviderSelector() {
     if (result.success) {
       await loadProviders()
     } else {
-      setError(result.error || 'API-Key konnte nicht gespeichert werden')
+      setError(result.error || t('errorSaveKey'))
     }
     setChanging(false)
   }
@@ -170,7 +174,7 @@ export function HirnProviderSelector() {
             </div>
           </>
         ) : (
-          <span className="text-text-tertiary">Kein Provider</span>
+          <span className="text-text-tertiary">{t('noneSelected')}</span>
         )}
         <Settings className="w-4 h-4 text-text-tertiary ml-1" />
       </Button>
@@ -183,8 +187,8 @@ export function HirnProviderSelector() {
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-subtle">
               <div>
-                <Heading level={3} className="font-semibold text-text-primary">Wähle dein Gehirn</Heading>
-                <p className="text-xs text-text-tertiary mt-0.5">Welche KI soll antworten?</p>
+                <Heading level={3} className="font-semibold text-text-primary">{t('panelTitle')}</Heading>
+                <p className="text-xs text-text-tertiary mt-0.5">{t('panelSubtitle')}</p>
               </div>
               <Button onClick={() => setOpen(false)} variant="ghost" size="icon" className="text-text-tertiary">
                 <X className="w-4 h-4" />
@@ -203,9 +207,9 @@ export function HirnProviderSelector() {
                   <div key={category.id} className="p-2">
                     <div className="px-2 py-1 mb-1">
                       <span className="text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                        {category.label}
+                        {t(category.labelKey)}
                       </span>
-                      <span className="text-xs text-text-tertiary ml-2">{category.description}</span>
+                      <span className="text-xs text-text-tertiary ml-2">{t(category.descriptionKey)}</span>
                     </div>
 
                     <div className="space-y-1">
@@ -242,12 +246,12 @@ export function HirnProviderSelector() {
                                 {isSelected && (
                                   <span className="flex items-center gap-1 text-xs text-action bg-action-muted px-2 py-0.5 rounded-full">
                                     <Check className="w-3 h-3" />
-                                    Aktiv
+                                    {t('activeBadge')}
                                   </span>
                                 )}
                               </div>
                               <div className="text-xs text-text-tertiary mt-0.5">
-                                {meta.description} · {provider.model}
+                                {t(meta.descriptionKey)} · {provider.model}
                               </div>
                             </div>
 
@@ -264,7 +268,7 @@ export function HirnProviderSelector() {
                                   className="flex items-center gap-1 px-2 py-1 text-xs text-action hover:text-action bg-action-muted rounded-lg"
                                 >
                                   <Key className="w-3 h-3" />
-                                  Key speichern
+                                  {t('saveKey')}
                                 </Button>
                                 {meta.keyUrl && (
                                   <a
@@ -297,7 +301,7 @@ export function HirnProviderSelector() {
 
             <div className="p-3 bg-surface-raised border-t border-subtle">
               <p className="text-xs text-text-tertiary text-center">
-                Wähle einen Provider mit aktivem API-Key
+                {t('footerHint')}
               </p>
             </div>
           </div>
