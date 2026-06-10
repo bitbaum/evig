@@ -117,22 +117,42 @@ export async function getDefaultChatProvider(userId?: string): Promise<AIProvide
     if (await provider.isAvailable()) {
       return provider
     }
+    // Default is configured but its credentials are dead. Log loudly so
+    // the failure surfaces in Vercel logs — the previous silent fall-
+    // through to "any other enabled provider" made stale API keys look
+    // like a different provider's bug (e.g. user thinks Groq is selected,
+    // sees an "OpenRouter API error: 401" because Groq quietly failed
+    // and OpenRouter took the call with its own bad key).
+    logger.error('Default chat provider unavailable — credentials likely revoked', {
+      provider: systemDefault.provider,
+      hint: 'Update the API key for this provider in /admin/hirn or via env (e.g. GROQ_API_KEY).',
+    })
   }
 
-  // Try any available provider
-  for (const settings of systemSettings.filter(s => s.is_enabled)) {
+  // Try any other available provider — explicit chain so the next-best
+  // pick is logged. Skip the default we already tried.
+  for (const settings of systemSettings.filter(s => s.is_enabled && !s.is_default)) {
     const provider = createProvider(settings.provider, {
       apiKey: settings.settings.api_key,
       baseUrl: settings.settings.base_url,
       model: settings.settings.model,
     })
     if (await provider.isAvailable()) {
-      logger.warn('Using fallback provider', { provider: settings.provider })
+      logger.warn('Using fallback chat provider — default was unavailable', {
+        fallback: settings.provider,
+        defaultProvider: systemDefault?.provider ?? null,
+      })
       return provider
     }
   }
 
-  throw new Error('No available AI providers configured')
+  // Build a more actionable error than "No available AI providers
+  // configured" — the prior message led users to think the providers
+  // were missing entirely, when in practice the keys were just dead.
+  const tried = systemSettings.filter(s => s.is_enabled).map(s => s.provider).join(', ')
+  throw new Error(
+    `Kein KI-Anbieter verfügbar. Geprüft: ${tried || 'keiner'}. Aktualisiere den API-Key (z.B. GROQ_API_KEY) oder die Anbieter-Einstellungen in /admin/hirn.`,
+  )
 }
 
 /**
