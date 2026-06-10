@@ -8616,6 +8616,15 @@
         "sectionHrNotes": "HR-Notizen",
         "userSelectTitle": "Benutzer auswählen",
         "userSelectPlaceholder": "Benutzer wählen…"
+      },
+      "list": {
+        "emptyHeading": "Keine Team-Profile gefunden",
+        "emptyWithFilters": "Keine Profile entsprechen Ihren Filterkriterien.",
+        "emptyNoFilters": "Erstelle ein Profil, um loszulegen.",
+        "profilesCount": "{count, plural, one {# Profil} other {# Profile}} gefunden",
+        "refresh": "Aktualisieren",
+        "retry": "Erneut versuchen",
+        "clearFilters": "Filter zurücksetzen"
       }
     },
     "protocols": {
@@ -8655,7 +8664,15 @@
         "promptTemplate": "Du bist ein Sitzungs-Strukturierer. Lies das folgende Sitzungs-Transkript und gib das Ergebnis als JSON zurück mit den Schlüsseln:\n  - participants: Liste der Teilnehmer-Namen\n  - topics: Liste der Diskussionspunkte (kurz)\n  - decisions: Liste der getroffenen Entscheidungen\n  - tasks: Liste { description, assignee, dueDate }\n  - openQuestions: Liste offener Fragen\n\nTranskript:\n---\n"
       },
       "pageTitle": "Protokolle",
-      "pageDescription": "Sitzungsprotokolle und Besprechungsnotizen"
+      "pageDescription": "Sitzungsprotokolle und Besprechungsnotizen",
+      "filters": {
+        "searchPlaceholder": "Suchen…",
+        "typeLabel": "Typ:",
+        "statusLabel": "Status:",
+        "stepLabel": "Schritt:",
+        "attendeeLabel": "Teilnehmer:",
+        "all": "Alle"
+      }
     },
     "categories": {
       "titleNew": "Neue Kategorie",
@@ -9497,6 +9514,25 @@
       "system": "System",
       "analyse": "Analyse",
       "seller-onboarding": "Verkäufer werden"
+    },
+    "errorPage": {
+      "title": "Etwas ist schiefgelaufen",
+      "description": "Beim Laden der Admin-Seite ist ein Fehler aufgetreten.",
+      "retry": "Erneut versuchen"
+    },
+    "blog": {
+      "form": {
+        "newPost": "Neuer Artikel",
+        "editPost": "Artikel bearbeiten",
+        "newSubtitle": "Erstelle einen neuen Blog-Artikel",
+        "editSubtitle": "Änderungen am Artikel vornehmen",
+        "preview": "Vorschau",
+        "previewTitle": "Veröffentlichten Artikel ansehen",
+        "previewNotAvailable": "Artikel muss zuerst veröffentlicht werden",
+        "publish": "Veröffentlichen",
+        "aiPlaceholderEdit": "z.B. „Füge einen Abschnitt über Reparatur-Tipps hinzu“ oder „Mache den Text ansprechender“",
+        "aiPlaceholderNew": "Beschreibe das Thema oder die Idee für deinen Blog-Artikel…"
+      }
     }
   }
 }

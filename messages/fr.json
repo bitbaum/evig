@@ -8616,6 +8616,15 @@
         "sectionHrNotes": "Notes RH",
         "userSelectTitle": "Sélectionner l'utilisateur",
         "userSelectPlaceholder": "Choisir un utilisateur…"
+      },
+      "list": {
+        "emptyHeading": "Aucun profil d'équipe trouvé",
+        "emptyWithFilters": "Aucun profil ne correspond à tes critères de filtre.",
+        "emptyNoFilters": "Crée un profil pour commencer.",
+        "profilesCount": "{count, plural, one {# profil trouvé} other {# profils trouvés}}",
+        "refresh": "Actualiser",
+        "retry": "Réessayer",
+        "clearFilters": "Réinitialiser les filtres"
       }
     },
     "protocols": {
@@ -8655,7 +8664,15 @@
         "promptTemplate": "Tu es un structureur de réunions. Lis la transcription de réunion suivante et renvoie le résultat au format JSON avec les clés :\n  - participants : liste des noms des participants\n  - topics : liste des points de discussion (courts)\n  - decisions : liste des décisions prises\n  - tasks : liste { description, assignee, dueDate }\n  - openQuestions : liste des questions ouvertes\n\nTranscription :\n---"
       },
       "pageTitle": "Procès-verbaux",
-      "pageDescription": "Procès-verbaux et notes de réunion"
+      "pageDescription": "Procès-verbaux et notes de réunion",
+      "filters": {
+        "searchPlaceholder": "Rechercher…",
+        "typeLabel": "Type :",
+        "statusLabel": "Statut :",
+        "stepLabel": "Étape :",
+        "attendeeLabel": "Participant :",
+        "all": "Tous"
+      }
     },
     "categories": {
       "titleNew": "Nouvelle catégorie",
@@ -9497,6 +9514,25 @@
       "system": "Système",
       "analyse": "Analyse",
       "seller-onboarding": "Devenir vendeur"
+    },
+    "errorPage": {
+      "title": "Quelque chose a mal tourné",
+      "description": "Une erreur s'est produite lors du chargement de la page admin.",
+      "retry": "Réessayer"
+    },
+    "blog": {
+      "form": {
+        "newPost": "Nouvel article",
+        "editPost": "Modifier l'article",
+        "newSubtitle": "Crée un nouvel article de blog",
+        "editSubtitle": "Apporter des modifications à l'article",
+        "preview": "Aperçu",
+        "previewTitle": "Voir l'article publié",
+        "previewNotAvailable": "L'article doit d'abord être publié",
+        "publish": "Publier",
+        "aiPlaceholderEdit": "p.ex. « Ajoute une section sur les conseils de réparation » ou « Rends le texte plus engageant »",
+        "aiPlaceholderNew": "Décris le sujet ou l'idée de ton article de blog…"
+      }
     }
   }
 }

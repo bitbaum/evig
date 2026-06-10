@@ -8,6 +8,7 @@
  */
 
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Filter, Search } from 'lucide-react'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
@@ -22,6 +23,7 @@ interface ProtocolListClientProps {
 }
 
 export default function ProtocolListClient({ teamMembers }: ProtocolListClientProps) {
+  const t = useTranslations('admin.protocols.filters')
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -47,7 +49,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
           <Search className="w-4 h-4 text-text-tertiary" />
           <Input
             type="text"
-            placeholder="Suchen..."
+            placeholder={t('searchPlaceholder')}
             className="w-48"
             defaultValue={searchParams.get('q') || ''}
             onKeyDown={(e) => {
@@ -66,13 +68,13 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Meeting type filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-text-secondary">Typ:</label>
+          <label className="text-sm text-text-secondary">{t('typeLabel')}</label>
           <Select
             className="w-auto"
             value={searchParams.get('meeting_type') || ''}
             onChange={(e) => handleFilterChange('meeting_type', e.target.value)}
           >
-            <option value="">Alle</option>
+            <option value="">{t('all')}</option>
             {Object.entries(MEETING_TYPE_LABELS).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -83,13 +85,13 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Status filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-text-secondary">Status:</label>
+          <label className="text-sm text-text-secondary">{t('statusLabel')}</label>
           <Select
             className="w-auto"
             value={searchParams.get('status') || ''}
             onChange={(e) => handleFilterChange('status', e.target.value)}
           >
-            <option value="">Alle</option>
+            <option value="">{t('all')}</option>
             {Object.entries(PROTOCOL_STATUS_LABELS).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -100,13 +102,13 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Workflow step filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-text-secondary">Schritt:</label>
+          <label className="text-sm text-text-secondary">{t('stepLabel')}</label>
           <Select
             className="w-auto"
             value={searchParams.get('step') || ''}
             onChange={(e) => handleFilterChange('step', e.target.value)}
           >
-            <option value="">Alle</option>
+            <option value="">{t('all')}</option>
             {PROTOCOL_WORKFLOW_STEPS.map((step, index) => (
               <option key={step.id} value={step.id}>
                 {index + 1}) {step.label}
@@ -117,13 +119,13 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Attendee filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-text-secondary">Teilnehmer:</label>
+          <label className="text-sm text-text-secondary">{t('attendeeLabel')}</label>
           <Select
             className="w-auto"
             value={searchParams.get('attendee') || ''}
             onChange={(e) => handleFilterChange('attendee', e.target.value)}
           >
-            <option value="">Alle</option>
+            <option value="">{t('all')}</option>
             {teamMembers.map((member) => (
               <option key={member.id} value={member.id}>
                 {member.name}

@@ -7,6 +7,7 @@
  * Used by /admin/content/blog/new and /admin/content/blog/[id]
  */
 
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/admin/AdminHeading'
 import {
@@ -28,6 +29,8 @@ import { generateSlug } from '@/lib/utils/slug'
 import { ROUTES } from '@/config/routes'
 
 export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps) {
+  const t = useTranslations('admin.blog.form')
+  const tForms = useTranslations('admin.forms')
   const {
     formData,
     setFormData,
@@ -56,10 +59,10 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
           </Link>
           <div>
             <Heading level={1} className="text-2xl text-text-primary">
-              {isEdit ? 'Artikel bearbeiten' : 'Neuer Artikel'}
+              {isEdit ? t('editPost') : t('newPost')}
             </Heading>
             <p className="text-text-secondary mt-1">
-              {isEdit ? 'Änderungen am Artikel vornehmen' : 'Erstelle einen neuen Blog-Artikel'}
+              {isEdit ? t('editSubtitle') : t('newSubtitle')}
             </p>
           </div>
         </div>
@@ -71,18 +74,18 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
                 href={ROUTES.public.blogPost(formData.slug)}
                 target="_blank"
                 className="inline-flex items-center gap-2 px-4 py-2 text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
-                title="Veröffentlichten Artikel ansehen"
+                title={t('previewTitle')}
               >
                 <Eye className="w-4 h-4" />
-                Vorschau
+                {t('preview')}
               </Link>
             ) : (
               <span
                 className="inline-flex items-center gap-2 px-4 py-2 text-text-muted cursor-not-allowed"
-                title="Artikel muss zuerst veröffentlicht werden"
+                title={t('previewNotAvailable')}
               >
                 <Eye className="w-4 h-4" />
-                Vorschau
+                {t('preview')}
               </span>
             )
           )}
@@ -92,7 +95,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             className="gap-2 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Speichern
+            {tForms('save')}
           </Button>
           <Button
             onClick={() => handleSubmit(true)}
@@ -100,7 +103,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             className="gap-2"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-            Veröffentlichen
+            {t('publish')}
           </Button>
         </div>
       </div>
@@ -163,10 +166,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
             return updated
           })
         }}
-        placeholder={isEdit
-          ? 'z.B. "Füge einen Abschnitt über Reparatur-Tipps hinzu" oder "Mache den Text ansprechender"'
-          : 'Beschreibe das Thema oder die Idee für deinen Blog-Artikel...'
-        }
+        placeholder={isEdit ? t('aiPlaceholderEdit') : t('aiPlaceholderNew')}
       />
     </div>
   )

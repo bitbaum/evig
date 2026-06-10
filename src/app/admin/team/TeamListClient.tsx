@@ -6,6 +6,7 @@
  * Handles filtering and display of team profiles.
  */
 
+import { useTranslations } from 'next-intl'
 import { Users, RefreshCw } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import {
@@ -16,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 export function TeamListClient() {
+  const t = useTranslations('admin.team.list')
   const {
     profiles,
     loading,
@@ -51,7 +53,7 @@ export function TeamListClient() {
               className="flex items-center gap-2 text-error-600 hover:text-error-700"
             >
               <RefreshCw className="w-4 h-4" />
-              Erneut versuchen
+              {t('retry')}
             </Button>
           </div>
         </div>
@@ -89,12 +91,12 @@ export function TeamListClient() {
         <div className="p-12 bg-surface-base rounded-lg border border-subtle text-center">
           <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-            Keine Team-Profile gefunden
+            {t('emptyHeading')}
           </Heading>
           <p className="text-text-tertiary mb-4">
             {filters.search || filters.department || filters.employmentType
-              ? 'Keine Profile entsprechen Ihren Filterkriterien.'
-              : 'Erstelle ein Profil, um loszulegen.'}
+              ? t('emptyWithFilters')
+              : t('emptyNoFilters')}
           </p>
           {(filters.search || filters.department || filters.employmentType) && (
             <Button
@@ -110,7 +112,7 @@ export function TeamListClient() {
               }
               className="text-action hover:text-action text-sm"
             >
-              Filter zurücksetzen
+              {t('clearFilters')}
             </Button>
           )}
         </div>
@@ -121,7 +123,7 @@ export function TeamListClient() {
         <>
           <div className="flex items-center justify-between">
             <p className="text-sm text-text-tertiary">
-              {profiles.length} {profiles.length === 1 ? 'Profil' : 'Profile'} gefunden
+              {t('profilesCount', { count: profiles.length })}
             </p>
             <Button
               variant="ghost"
@@ -130,7 +132,7 @@ export function TeamListClient() {
               className="flex items-center gap-1 text-sm text-text-tertiary hover:text-text-secondary"
             >
               <RefreshCw className="w-4 h-4" />
-              Aktualisieren
+              {t('refresh')}
             </Button>
           </div>
 

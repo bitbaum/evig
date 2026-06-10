@@ -8618,6 +8618,15 @@
         "sectionHrNotes": "HR notes",
         "userSelectTitle": "Select user",
         "userSelectPlaceholder": "Choose a user…"
+      },
+      "list": {
+        "emptyHeading": "No team profiles found",
+        "emptyWithFilters": "No profiles match your filter criteria.",
+        "emptyNoFilters": "Create a profile to get started.",
+        "profilesCount": "{count, plural, one {# profile} other {# profiles}} found",
+        "refresh": "Refresh",
+        "retry": "Try again",
+        "clearFilters": "Clear filters"
       }
     },
     "protocols": {
@@ -8657,7 +8666,15 @@
         "promptTemplate": "You are a meeting structurer. Read the following meeting transcript and return the result as JSON with the keys:\n  - participants: list of participant names\n  - topics: list of discussion points (short)\n  - decisions: list of decisions made\n  - tasks: list of { description, assignee, dueDate }\n  - openQuestions: list of open questions\n\nTranscript:\n---"
       },
       "pageTitle": "Minutes",
-      "pageDescription": "Meeting minutes and notes"
+      "pageDescription": "Meeting minutes and notes",
+      "filters": {
+        "searchPlaceholder": "Search…",
+        "typeLabel": "Type:",
+        "statusLabel": "Status:",
+        "stepLabel": "Step:",
+        "attendeeLabel": "Attendee:",
+        "all": "All"
+      }
     },
     "categories": {
       "titleNew": "New category",
@@ -9499,6 +9516,25 @@
       "system": "System",
       "analyse": "Analytics",
       "seller-onboarding": "Become a seller"
+    },
+    "errorPage": {
+      "title": "Something went wrong",
+      "description": "An error occurred while loading the admin page.",
+      "retry": "Try again"
+    },
+    "blog": {
+      "form": {
+        "newPost": "New article",
+        "editPost": "Edit article",
+        "newSubtitle": "Create a new blog article",
+        "editSubtitle": "Make changes to the article",
+        "preview": "Preview",
+        "previewTitle": "View the published article",
+        "previewNotAvailable": "Article must be published first",
+        "publish": "Publish",
+        "aiPlaceholderEdit": "e.g. “Add a section about repair tips” or “Make the text more engaging”",
+        "aiPlaceholderNew": "Describe the topic or idea for your blog article…"
+      }
     }
   }
 }
