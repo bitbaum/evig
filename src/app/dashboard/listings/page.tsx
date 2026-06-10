@@ -17,7 +17,6 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { ListingImage } from '@/components/marketplace/ListingImage'
@@ -27,6 +26,14 @@ import { getConditionBadge } from '@/config/erfassung/conditions'
 import { useMyListings } from '@/hooks/useMyListings'
 import { ROUTES } from '@/config/routes'
 
+/**
+ * /dashboard/listings — the user's own marketplace listings.
+ *
+ * Phase 2 polish: flat-document layout matching the redesigned
+ * /dashboard hub and /admin dashboard. Header with mono kicker,
+ * tab strip, then one divide-y list of listing rows (no card-stacking
+ * per listing). Empty state and error state use existing primitives.
+ */
 export default function MyListingsPage() {
   const t = useTranslations('dashboard.listings')
 
@@ -62,209 +69,216 @@ export default function MyListingsPage() {
 
   if (sessionStatus === 'loading') {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-action animate-spin" />
-      </div>
+      <main className="min-h-screen bg-canvas">
+        <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="flex min-h-[400px] items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-action" />
+          </div>
+        </div>
+      </main>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
-          <p className="text-sm text-text-tertiary mt-1">{t('pageSubtitle')}</p>
-        </div>
-        <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
-          <Plus className="w-4 h-4" />
-          {t('newListing')}
-        </Button>
-      </div>
-
-      <div className="flex gap-1 bg-surface-raised rounded-lg p-1">
-        {STATUS_TABS.map(tab => (
-          <Button
-            key={tab.value}
-            onClick={() => handleStatusFilterChange(tab.value)}
-            variant="ghost"
-            size="sm"
-            className={`flex-1 ${
-              statusFilter === tab.value
-                ? 'bg-surface-base text-text-primary shadow-xs'
-                : 'text-text-secondary hover:text-text-primary'
-            }`}
-          >
-            {tab.label}
+    <main className="min-h-screen bg-canvas">
+      <article className="mx-auto max-w-4xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header */}
+        <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+              {t('pageSubtitle')}
+              {total > 0 && ` · ${t('totalCount', { count: total })}`}
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+              {t('pageTitle')}
+            </h1>
+          </div>
+          <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
+            <Plus className="h-4 w-4" />
+            {t('newListing')}
           </Button>
-        ))}
-      </div>
+        </header>
 
-      {isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-action animate-spin" />
-          <span className="ml-3 text-text-secondary">{t('loading')}</span>
-        </div>
-      )}
-
-      {error && !isLoading && (
-        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
-          <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
-          <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
-          <Button onClick={() => refresh()} variant="destructive" className="gap-2">
-            <RefreshCw className="w-4 h-4" />
-            {t('retry')}
-          </Button>
-        </div>
-      )}
-
-      {!isLoading && !error && listings.length === 0 && (
-        <EmptyState
-          icon={Package}
-          iconBg="bg-violet-50 dark:bg-violet-900/20"
-          iconColor="text-violet-500 dark:text-violet-400"
-          title={statusFilter ? t('emptyFilteredTitle') : t('emptyTitle')}
-          description={t('emptyDesc')}
-          action={
-            <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary">
-              <Plus className="w-4 h-4" />
-              {t('createFirst')}
-            </Button>
-          }
-        />
-      )}
-
-      {!isLoading && !error && listings.length > 0 && (
-        <div className="space-y-3">
-          {listings.map((listing) => {
-            const statusConfig = LISTING_STATUS_CONFIG[listing.status as ListingStatus]
-            const conditionInfo = getConditionBadge(listing.condition)
-            return (
-              <div
-                key={listing.id}
-                className="bg-surface-base rounded-xl shadow-xs border border-subtle p-4 flex items-center gap-4"
-              >
-                <Link href={`/marketplace/${listing.id}`} className="shrink-0 w-16 h-16 rounded-lg overflow-hidden">
-                  <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
-                </Link>
-
-                <div className="flex-1 min-w-0">
-                  <Link href={`/marketplace/${listing.id}`} className="hover:text-action transition-colors">
-                    <Heading level={3} className="font-medium text-text-primary truncate">{listing.title}</Heading>
-                  </Link>
-                  <div className="flex items-center gap-3 mt-1 text-sm text-text-tertiary">
-                    <span className="font-semibold text-text-primary">
-                      {formatCHF(Number(listing.price_chf))}
-                    </span>
-                    <span>{listing.category}</span>
-                    <span className={`inline-flex px-1.5 py-0.5 text-xs rounded-sm ${conditionInfo.color}`}>
-                      {conditionInfo.label}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-text-muted">
-                    <span className="inline-flex items-center gap-1">
-                      <Eye className="w-3 h-3" />
-                      {listing.view_count}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Heart className="w-3 h-3" />
-                      {listing.favorite_count}
-                    </span>
-                  </div>
-                </div>
-
-                {statusConfig && (
-                  <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${statusConfig.color}`}>
-                    {statusConfig.label}
-                  </span>
-                )}
-
-                <div className="flex items-center gap-1 shrink-0">
-                  <Link
-                    href={`${ROUTES.public.marketplaceSell}?edit=${listing.id}`}
-                    className="p-2 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-surface-raised transition-colors"
-                    title={t('actionEdit')}
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Link>
-                  <Button
-                    onClick={() => handleDuplicate(listing.id)}
-                    disabled={duplicatingId === listing.id}
-                    variant="ghost"
-                    size="icon"
-                    className="text-text-tertiary hover:text-text-secondary"
-                    title={t('actionDuplicate')}
-                  >
-                    {duplicatingId === listing.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                  </Button>
-                  <Button
-                    onClick={() => setPendingDeleteId(listing.id)}
-                    disabled={deletingId === listing.id}
-                    variant="destructive-ghost"
-                    size="icon"
-                    className="text-text-tertiary"
-                    title={t('actionDelete')}
-                  >
-                    {deletingId === listing.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Trash2 className="w-4 h-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
-
-      {!isLoading && !error && (hasNext || hasPrev) && (
-        <div className="flex items-center justify-between pt-4">
-          <p className="text-sm text-text-tertiary">
-            {t('totalCount', { count: total })}
-          </p>
-          <div className="flex items-center gap-2">
+        {/* Status tabs */}
+        <div className="flex flex-wrap gap-1 rounded-lg bg-surface-raised p-1">
+          {STATUS_TABS.map(tab => (
             <Button
-              onClick={goPrev}
-              disabled={!hasPrev}
-              variant="outline"
+              key={tab.value}
+              onClick={() => handleStatusFilterChange(tab.value)}
+              variant="ghost"
               size="sm"
+              className={`flex-1 ${
+                statusFilter === tab.value
+                  ? 'bg-surface-base text-text-primary shadow-xs'
+                  : 'text-text-secondary hover:text-text-primary'
+              }`}
             >
-              <ChevronLeft className="w-4 h-4" />
-              {t('prevPage')}
+              {tab.label}
             </Button>
-            <span className="text-sm text-text-secondary">
-              {/* Keyset doesn't know the total page count up front (total
-                  divided by page size is close but doesn't always
-                  match because of filter changes mid-scroll). Show just
-                  the current page; "more available" is conveyed by the
-                  enabled-state of the Next button. */}
-              {t('paginationCurrentPage', { page })}
-            </span>
-            <Button
-              onClick={goNext}
-              disabled={!hasNext}
-              variant="outline"
-              size="sm"
-            >
-              {t('nextPage')}
-              <ChevronRight className="w-4 h-4" />
+          ))}
+        </div>
+
+        {/* Loading */}
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-action" />
+            <span className="ml-3 text-text-secondary">{t('loading')}</span>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && !isLoading && (
+          <div className="rounded-xl border border-error-200 bg-error-50 p-6 text-center dark:border-error-800 dark:bg-error-900/20">
+            <AlertCircle className="mx-auto mb-4 h-12 w-12 text-error-500" />
+            <p className="mb-4 text-error-600 dark:text-error-300">{error}</p>
+            <Button onClick={() => refresh()} variant="destructive" className="gap-2">
+              <RefreshCw className="h-4 w-4" />
+              {t('retry')}
             </Button>
           </div>
-        </div>
-      )}
+        )}
 
-      <ConfirmDialog
-        isOpen={!!pendingDeleteId}
-        title={t('actionDelete')}
-        message={t('confirmDelete')}
-        itemName={listings.find(l => l.id === pendingDeleteId)?.title}
-        onConfirm={doDelete}
-        onClose={() => setPendingDeleteId(null)}
-      />
-    </div>
+        {/* Empty */}
+        {!isLoading && !error && listings.length === 0 && (
+          <EmptyState
+            icon={Package}
+            title={statusFilter ? t('emptyFilteredTitle') : t('emptyTitle')}
+            description={t('emptyDesc')}
+            action={
+              <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary">
+                <Plus className="h-4 w-4" />
+                {t('createFirst')}
+              </Button>
+            }
+          />
+        )}
+
+        {/* Listings — divide-y, single border. No per-row card chrome. */}
+        {!isLoading && !error && listings.length > 0 && (
+          <ul className="divide-y divide-subtle overflow-hidden rounded-lg border border-subtle bg-surface-base">
+            {listings.map(listing => {
+              const statusConfig = LISTING_STATUS_CONFIG[listing.status as ListingStatus]
+              const conditionInfo = getConditionBadge(listing.condition)
+              return (
+                <li key={listing.id} className="flex items-center gap-4 p-4">
+                  <Link
+                    href={`/marketplace/${listing.id}`}
+                    className="h-14 w-14 shrink-0 overflow-hidden rounded-md"
+                  >
+                    <ListingImage
+                      src={listing.thumbnail}
+                      alt={listing.title}
+                      fallbackIconSize="w-6 h-6"
+                    />
+                  </Link>
+
+                  <div className="min-w-0 flex-1">
+                    <Link
+                      href={`/marketplace/${listing.id}`}
+                      className="block transition-colors hover:text-action"
+                    >
+                      <p className="truncate text-sm font-medium text-text-primary">
+                        {listing.title}
+                      </p>
+                    </Link>
+                    <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-text-tertiary">
+                      <span className="font-semibold text-text-primary">
+                        {formatCHF(Number(listing.price_chf))}
+                      </span>
+                      <span>{listing.category}</span>
+                      <span className={`inline-flex rounded-sm px-1.5 py-0.5 ${conditionInfo.color}`}>
+                        {conditionInfo.label}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Eye className="h-3 w-3" />
+                        {listing.view_count}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Heart className="h-3 w-3" />
+                        {listing.favorite_count}
+                      </span>
+                    </div>
+                  </div>
+
+                  {statusConfig && (
+                    <span
+                      className={`hidden shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold sm:inline-flex ${statusConfig.color}`}
+                    >
+                      {statusConfig.label}
+                    </span>
+                  )}
+
+                  <div className="flex shrink-0 items-center gap-1">
+                    <Link
+                      href={`${ROUTES.public.marketplaceSell}?edit=${listing.id}`}
+                      className="rounded-md p-2 text-text-tertiary transition-colors hover:bg-surface-raised hover:text-text-secondary"
+                      title={t('actionEdit')}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Link>
+                    <Button
+                      onClick={() => handleDuplicate(listing.id)}
+                      disabled={duplicatingId === listing.id}
+                      variant="ghost"
+                      size="icon"
+                      className="text-text-tertiary hover:text-text-secondary"
+                      title={t('actionDuplicate')}
+                    >
+                      {duplicatingId === listing.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => setPendingDeleteId(listing.id)}
+                      disabled={deletingId === listing.id}
+                      variant="destructive-ghost"
+                      size="icon"
+                      className="text-text-tertiary"
+                      title={t('actionDelete')}
+                    >
+                      {deletingId === listing.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+
+        {/* Pagination */}
+        {!isLoading && !error && (hasNext || hasPrev) && (
+          <div className="flex items-center justify-between pt-2">
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+              {t('paginationCurrentPage', { page })}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button onClick={goPrev} disabled={!hasPrev} variant="outline" size="sm">
+                <ChevronLeft className="h-4 w-4" />
+                {t('prevPage')}
+              </Button>
+              <Button onClick={goNext} disabled={!hasNext} variant="outline" size="sm">
+                {t('nextPage')}
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <ConfirmDialog
+          isOpen={!!pendingDeleteId}
+          title={t('actionDelete')}
+          message={t('confirmDelete')}
+          itemName={listings.find(l => l.id === pendingDeleteId)?.title}
+          onConfirm={doDelete}
+          onClose={() => setPendingDeleteId(null)}
+        />
+      </article>
+    </main>
   )
 }
