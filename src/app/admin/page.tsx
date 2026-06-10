@@ -1,19 +1,19 @@
 /**
- * Admin Dashboard — Task-Oriented UX
+ * /admin — Dashboard.
  *
- * Layout (top to bottom):
- * 1. Greeting
- * 2. VotingBanner — pending decisions the current user hasn't voted on
- * 3. PersonalSection — my assigned tasks + my submitted content
- * 4. UnifiedQueue — org-wide "Wartet auf Bearbeitung" (merged action items)
- * 5. CreateStrip — compact creation shortcuts
- * 6. Permission requests — super admin only
- * 7. Monatsüberblick — collapsible mission metrics
+ * Layout principle: flat document, not stacked cards. Each block is a
+ * <section> with an eyebrow + content, separated by `space-y-12` on
+ * the article. The page reads top-to-bottom like a brief, not like a
+ * spreadsheet of widgets.
  *
- * Streaming: VotingBanner and PersonalSection run their own queries in
- * parallel via Suspense. UnifiedQueue and Monatsüberblick share a single
- * getDashboardStats() Promise so the DB is queried only once, then both
- * sections stream when it resolves.
+ * Streaming pattern preserved from the prior version: VotingBanner and
+ * PersonalSection run their own queries in parallel; UnifiedQueue and
+ * Monatsüberblick share a single getDashboardStats() Promise so the DB
+ * is queried exactly once.
+ *
+ * Responsible to its audience: the dashboard is the staff member's
+ * entry point. The eyebrow on each section answers "what is this for?"
+ * before the data appears, so the page is legible even mid-skeleton.
  */
 
 import { Suspense } from 'react'
@@ -40,20 +40,25 @@ import {
 } from '@/components/admin/dashboard'
 import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
 import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
-import Heading from '@/components/admin/AdminHeading'
 import type { DashboardStats } from '@/components/admin/dashboard'
 
 type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
 
 export const metadata: Metadata = {
-  title: 'Admin Dashboard',
+  title: 'Admin',
   description: `Verwalte das ${ORG.name}-System.`,
 }
 
-// ---------------------------------------------------------------------------
-// Async section wrappers — await the shared statsPromise so the DB is only
-// queried once, then feed results to the respective rendering component.
-// ---------------------------------------------------------------------------
+// Stable, server-safe date string — no Date.now/Math.random in the body.
+function todayLongLabel(): string {
+  return new Intl.DateTimeFormat('de-CH', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date())
+}
+
+// ── Streaming wrappers ─────────────────────────────────────────────
 
 async function UnifiedQueueSection({
   statsPromise,
@@ -96,27 +101,27 @@ async function PermissionRequestsSection({
   const stats = await statsPromise
   if (stats.pendingPermissionRequests === 0) return null
   return (
-    <div id="permission-requests">
-      <PermissionRequestsManager />
-    </div>
+    <section id="permission-requests" aria-labelledby="dashboard-perm-title">
+      <h2
+        id="dashboard-perm-title"
+        className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
+      >
+        Zugriffs-Anfragen
+      </h2>
+      <div className="mt-3">
+        <PermissionRequestsManager />
+      </div>
+    </section>
   )
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
+// ── Page ────────────────────────────────────────────────────────────
 
 export default async function AdminDashboard() {
   const session = await auth()
-
-  if (!session?.user) {
-    return null
-  }
+  if (!session?.user) return null
 
   const isSuper = isSuperAdmin(session.user.email)
-
-  // Start stats fetch — NOT awaited here. Shared across Suspense sections so
-  // the DB is queried exactly once.
   const statsPromise = getDashboardStats(isSuper)
 
   const userForPermissions = {
@@ -126,7 +131,6 @@ export default async function AdminDashboard() {
   }
 
   const accessibleSections = getAccessibleSections(userForPermissions)
-
   const allSections = Object.keys(ADMIN_SECTIONS)
   const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
   const inaccessibleSections = hasFullAccess
@@ -144,38 +148,41 @@ export default async function AdminDashboard() {
 
   const userId = session.user.id ?? ''
   const isMember = !!(session.user as { isMember?: boolean }).isMember
-  const dashboardMode: DashboardMode = (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator'
+  const dashboardMode: DashboardMode =
+    (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator'
+  const firstName = session.user.name?.split(' ')[0] || 'Admin'
 
   return (
-    <div className="space-y-4">
-      {/* Greeting — renders immediately, no data needed */}
-      <div className="flex items-start justify-between gap-4">
+    <article className="space-y-12 pb-12">
+      {/* Header — date in mono on top, big greeting, subtle mode toggle */}
+      <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <Heading level={1} className="text-2xl font-bold text-text-primary">
-            Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
-          </Heading>
-          <p className="text-sm text-text-tertiary">
-            {isSuper ? 'Super Admin' : 'Staff'}
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            {todayLongLabel()} · {isSuper ? 'Super Admin' : 'Staff'}
           </p>
+          <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            Hallo, {firstName}.
+          </h1>
         </div>
         <DashboardModeToggle current={dashboardMode} />
-      </div>
+      </header>
 
-      {/* VotingBanner — runs its own query, streams independently */}
+      {/* AUF DEINEM TISCH — combines voting + personal + org queue.
+          Each streams independently; they share a top-level eyebrow
+          group in the layout so the visual block "what needs me" is
+          legible even mid-load. */}
       {userId && (
         <Suspense fallback={<BannerSkeleton />}>
           <VotingBanner userId={userId} isSuper={isSuper} isMember={isMember} />
         </Suspense>
       )}
 
-      {/* PersonalSection — runs its own queries, streams independently */}
       {userId && (
         <Suspense fallback={<PersonalSectionSkeleton />}>
           <PersonalSection userId={userId} />
         </Suspense>
       )}
 
-      {/* UnifiedQueue — shares statsPromise, streams when stats resolve */}
       <Suspense fallback={<UnifiedQueueSkeleton />}>
         <UnifiedQueueSection
           statsPromise={statsPromise}
@@ -184,23 +191,23 @@ export default async function AdminDashboard() {
         />
       </Suspense>
 
-      {/* CreateStrip — synchronous, renders immediately */}
+      {/* SCHNELL ERSTELLEN */}
       <CreateStrip actions={quickActions} />
 
-      {/* PermissionRequestsManager — shares statsPromise, hidden for most users */}
+      {/* ZUGRIFFS-ANFRAGEN — super admin only, only when pending */}
       <Suspense fallback={null}>
         <PermissionRequestsSection statsPromise={statsPromise} isSuper={isSuper} />
       </Suspense>
 
-      {/* Monatsüberblick — shares statsPromise; expanded by default for 'lead' mode */}
+      {/* MONATSÜBERBLICK — collapsed by default except for 'lead' mode */}
       <Suspense fallback={null}>
         <MonatsueberblickSection statsPromise={statsPromise} mode={dashboardMode} />
       </Suspense>
 
-      {/* Request More Access — synchronous */}
+      {/* Request more access — bottom of page, only for limited users */}
       {!isSuper && !hasFullAccess && inaccessibleSections.length > 0 && (
         <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
-    </div>
+    </article>
   )
 }
