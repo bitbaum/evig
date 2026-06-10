@@ -88,7 +88,7 @@ export function ProtocolProgressStrip({ items, onStepClick }: ProtocolProgressSt
       {/* Active step hint */}
       {activeItem && (
         <div className={cn(
-          'mt-3 pt-3 border-t border-subtle dark:border-white/6 text-xs',
+          'mt-3 pt-3 border-t border-subtle text-xs',
           activeItem.state === 'blocked' ? 'text-error-600' : 'text-warning-700 dark:text-warning-400'
         )}>
           <span className="font-medium">{activeItem.label}: </span>

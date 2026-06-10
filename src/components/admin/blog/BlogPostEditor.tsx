@@ -12,7 +12,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
   return (
     <div className="lg:col-span-2 space-y-6">
       {/* Title & Slug */}
-      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-text-secondary mb-2">
@@ -46,7 +46,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
       </div>
 
       {/* Excerpt */}
-      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
         <label className="block text-sm font-medium text-text-secondary mb-2">
           Kurzbeschreibung
         </label>
@@ -61,7 +61,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
       </div>
 
       {/* Content */}
-      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
         <label className="block text-sm font-medium text-text-secondary mb-2">
           Inhalt * (Markdown)
         </label>

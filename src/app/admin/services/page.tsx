@@ -150,7 +150,7 @@ export default async function AdminServicesPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-action" />
             <div>
@@ -160,7 +160,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -170,7 +170,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-action" />
             <div>
@@ -180,7 +180,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-secondary-600" />
             <div>
@@ -192,7 +192,7 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Services Table */}
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
         {services.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">

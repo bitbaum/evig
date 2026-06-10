@@ -11,8 +11,8 @@ export function QuickActionsSection({ quickActions, fulfillActions }: QuickActio
   if (quickActions.length === 0 && fulfillActions.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
-      <div className="p-4 border-b border-subtle dark:border-white/6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+      <div className="p-4 border-b border-subtle">
         <Heading level={2} className="font-semibold text-text-primary">
           Schnellaktionen
         </Heading>

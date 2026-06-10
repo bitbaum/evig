@@ -108,7 +108,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 mt-4 pt-4 border-t border-subtle dark:border-white/6">
+      <div className="flex gap-2 mt-4 pt-4 border-t border-subtle">
         <Link
           href={`/admin/team/${member.id}`}
           className="flex-1 flex items-center justify-center gap-1.5 px-3 min-h-11 text-sm text-text-secondary bg-surface-raised hover:bg-surface-overlay rounded-lg transition-colors"

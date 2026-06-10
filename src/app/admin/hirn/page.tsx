@@ -6,14 +6,11 @@
  * future tools). Layout-level sidebar filtering already hides the entry
  * point but a direct URL would otherwise render the client chat UI; only
  * the per-message API calls would then fail auth-side, producing a
- * confusing partial-render. Matches the pattern used by
- * /admin/users/page.tsx and /admin/team/page.tsx.
+ * confusing partial-render.
  */
 
 import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import HirnPageClient from './HirnPageClient'
 
 export const metadata: Metadata = {
@@ -22,21 +19,6 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminHirnPage() {
-  const session = await auth()
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/hirn')
-  }
-
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'hirn')
-
-  if (!hasAccess) {
-    redirect('/admin?error=no_hirn_access')
-  }
-
+  await requireSection('hirn')
   return <HirnPageClient />
 }

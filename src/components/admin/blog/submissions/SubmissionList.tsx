@@ -28,7 +28,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
           className={`bg-surface-base rounded-xl shadow-xs border p-5 cursor-pointer transition-all ${
             selectedId === submission.id
               ? 'border-action ring-2 ring-action/20'
-              : 'border-subtle dark:border-white/6 hover:border-strong'
+              : 'border-subtle hover:border-strong'
           }`}
         >
           <div className="flex items-start justify-between mb-3">

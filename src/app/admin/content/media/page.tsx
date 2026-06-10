@@ -83,7 +83,7 @@ export default async function AdminMediaPage() {
       />
 
       {/* Toolbar */}
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-4">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
@@ -117,7 +117,7 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Empty State */}
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
         <div className="text-center py-16">
           <div className="w-20 h-20 bg-surface-raised rounded-full flex items-center justify-center mx-auto mb-6">
             <ImageIcon className="w-10 h-10 text-text-muted" />

@@ -46,7 +46,7 @@ export function SubmissionDetail({
 
   if (!submission) {
     return (
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-12 text-center">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-12 text-center">
         <Eye className="w-12 h-12 text-text-muted mx-auto mb-4" />
         <p className="text-text-secondary">
           Wähle eine Einreichung aus, um Details anzuzeigen
@@ -56,7 +56,7 @@ export function SubmissionDetail({
   }
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
       {/* Header */}
       <div className="border-b border pb-4 mb-4">
         <Heading level={2} className="text-xl text-text-primary mb-3">

@@ -75,7 +75,7 @@ export default function NewLocationPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8">
+        <form onSubmit={handleSubmit} className="bg-surface-base rounded-xl border border-subtle p-8">
           <LocationBasicInfoSection formData={formData} submitResult={submitResult} onFieldChange={handleFieldChange} />
           <LocationAddressSection formData={formData} onFieldChange={handleFieldChange} />
           <LocationFacilitiesSection formData={formData} onFieldChange={handleFieldChange} onFacilityChange={handleFacilityChange} />

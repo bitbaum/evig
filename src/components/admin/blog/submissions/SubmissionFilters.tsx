@@ -14,7 +14,7 @@ interface SubmissionFiltersProps {
 
 export function SubmissionFilters({ filter, counts, onFilterChange }: SubmissionFiltersProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-4">
       <div className="flex flex-wrap gap-2">
         {FILTER_OPTIONS.map((status) => (
           <Button

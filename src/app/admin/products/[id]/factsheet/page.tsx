@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ROUTES } from '@/config/routes'
+import { buildQrImageUrl } from '@/config/integrations'
 import { Button } from '@/components/ui/button'
 import {
   Printer,
@@ -131,7 +132,12 @@ export default function FactSheetPage() {
   const specs = product.specifications || {}
   const specEntries = Object.entries(specs).slice(0, 8) // Limit to 8 specs for layout
   const shopUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/marketplace/${product.id}`
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(shopUrl)}&bgcolor=ffffff&color=16a34a`
+  // QR-image generation. The third-party endpoint and the brand colour
+  // both come from /config so a swap (self-hosted goqr instance, brand
+  // re-theme) needs a one-line edit, not a hunt-and-replace. The
+  // foreground colour mirrors --primitive-green-600 from globals.css,
+  // hex-only because the QR service speaks the wire-format directly.
+  const qrCodeUrl = buildQrImageUrl(shopUrl)
 
   return (
     <>

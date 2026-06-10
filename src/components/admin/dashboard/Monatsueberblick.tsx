@@ -40,7 +40,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   }
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
       {/* Toggle header — same structure as card headers, but interactive */}
       <Button
         variant="ghost"
@@ -65,7 +65,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       {hydrated && open && (
         <div
           id="monatsueberblick-content"
-          className="border-t border-subtle dark:border-white/6 p-4 space-y-4"
+          className="border-t border-subtle p-4 space-y-4"
         >
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />

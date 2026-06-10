@@ -1,12 +1,10 @@
 import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
 import { eq } from 'drizzle-orm'
 import { Clock } from 'lucide-react'
-import { auth } from '@/auth'
 import { db } from '@/db'
 import { teamProfiles } from '@/db/schema'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { canAccessSection } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { TimecardsClient } from './TimecardsClient'
 
 export const metadata: Metadata = {
@@ -15,22 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default async function TimecardsPage() {
-  const session = await auth()
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/timecards')
-  }
-
-  const user = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-    is_super_admin: session.user.isSuperAdmin,
-  }
-
-  if (!canAccessSection(user, 'timecards')) {
-    redirect('/admin?error=no_timecards_access')
-  }
+  const session = await requireSection('timecards')
 
   const [profile] = await db
     .select({ workingHours: teamProfiles.workingHours })

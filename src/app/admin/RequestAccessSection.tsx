@@ -24,8 +24,8 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
   }
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
-      <div className="p-6 border-b border-subtle dark:border-white/6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+      <div className="p-6 border-b border-subtle">
         <Heading level={2} className="text-lg font-semibold text-text-primary flex items-center gap-2">
           <Shield className="w-5 h-5 text-text-tertiary" />
           Weitere Bereiche verfügbar

@@ -42,7 +42,7 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
 
   return (
     <>
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-surface-raised">

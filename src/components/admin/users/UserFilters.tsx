@@ -28,7 +28,7 @@ export function UserFilters({
   onVerifiedChange,
 }: UserFiltersProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Search */}
         <div className="flex-1">

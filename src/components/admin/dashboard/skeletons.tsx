@@ -18,7 +18,7 @@ export function BannerSkeleton() {
 
 export function PersonalSectionSkeleton() {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4 space-y-2">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-4 space-y-2">
       <Shimmer className="h-5 w-32 mb-3" />
       <Shimmer className="h-10" />
       <Shimmer className="h-10" />
@@ -28,7 +28,7 @@ export function PersonalSectionSkeleton() {
 
 export function UnifiedQueueSkeleton() {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-4 space-y-2">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-4 space-y-2">
       <Shimmer className="h-5 w-40 mb-3" />
       <Shimmer className="h-14" />
       <Shimmer className="h-14" />

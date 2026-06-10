@@ -140,7 +140,7 @@ export default function CategoryForm({
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* Name */}
             <FormField label="Name" required htmlFor="category-name">
@@ -281,7 +281,7 @@ export default function CategoryForm({
         </div>
 
         {/* Preview */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
           <Heading level={3} className="text-sm font-medium text-text-secondary mb-4">
             {t('preview')}
           </Heading>

@@ -104,8 +104,8 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
   if (myTasks.length === 0 && mySubmissions.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
-      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+      <div className="p-4 border-b border-subtle flex items-center gap-2">
         <CheckSquare className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           {t('myTasks')}

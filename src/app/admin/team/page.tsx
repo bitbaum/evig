@@ -9,11 +9,10 @@
 
 import { Metadata } from 'next'
 import { ORG } from '@/config/org'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { logger } from '@/lib/logger'
 import { Users, UserPlus, Briefcase, Crown, Shield } from 'lucide-react'
 import Link from 'next/link'
@@ -97,22 +96,7 @@ async function getStaffWithoutProfiles(): Promise<Array<{ id: string; name: stri
 }
 
 export default async function TeamPage() {
-  const session = await auth()
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/team')
-  }
-
-  const user = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }
-
-  if (!canAccessSection(user, 'team')) {
-    redirect('/admin?error=no_team_access')
-  }
-
+  const session = await requireSection('team')
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
   const [stats, staffWithoutProfiles] = await Promise.all([

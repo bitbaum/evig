@@ -4,9 +4,7 @@
  * Dashboard showing key metrics from all sections.
  */
 
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
+import { requireAnySection } from '@/lib/admin/guards'
 import { loadAllYearsData } from '@/lib/hirn/data/financial-loader'
 import { compareYears, generateYearInsights } from '@/lib/hirn/data/analysis'
 import { getMissingDataMetrics, getMetricsByCategory, CATEGORY_LABELS } from '@/config/analyse/metrics'
@@ -21,26 +19,9 @@ import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
 
 export default async function AnalysePage() {
-  const session = await auth()
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/analyse')
-  }
-
-  // Check permission for analyse sections
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'finanzen') || canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'hirn')
-
-  if (!hasAccess) {
-    redirect('/admin?error=no_analyse_access')
-  }
+  // /admin/analyse is a dashboard over both 'finanzen' and 'hirn' —
+  // grant access if the user can reach either underlying section.
+  await requireAnySection(['finanzen', 'hirn'], 'analyse')
 
   // Load financial data
   let allData: Map<number, Awaited<ReturnType<typeof loadAllYearsData>> extends Map<infer K, infer V> ? V : never> = new Map()

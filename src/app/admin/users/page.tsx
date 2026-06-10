@@ -6,12 +6,11 @@
  */
 
 import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
 import { ORG } from '@/config/org'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { logger } from '@/lib/logger'
 import {
   Users,
@@ -21,6 +20,7 @@ import {
 } from 'lucide-react'
 import { UsersListClient } from './UsersListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
@@ -65,22 +65,7 @@ async function getUserStats(): Promise<UserStats> {
 }
 
 export default async function AdminUsersPage() {
-  const session = await auth()
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/users')
-  }
-
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'users')
-
-  if (!hasAccess) {
-    redirect('/admin?error=no_users_access')
-  }
-
+  const session = await requireSection('users')
   const stats = await getUserStats()
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
@@ -91,48 +76,14 @@ export default async function AdminUsersPage() {
       icon={Users}
       iconColor="blue"
     >
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">Gesamt Benutzer</p>
-              <p className="text-2xl font-bold text-text-primary">{stats.totalUsers}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <UserCheck className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">Verifiziert</p>
-              <p className="text-2xl font-bold text-text-primary">{stats.activeUsers}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <Crown className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">Staff</p>
-              <p className="text-2xl font-bold text-text-primary">{stats.staffCount}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
-          <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-text-secondary" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">Benutzer</p>
-              <p className="text-2xl font-bold text-text-primary">{stats.regularUsers}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AdminStatsGrid
+        items={[
+          { icon: Users,     color: 'blue',   label: 'Gesamt Benutzer', value: stats.totalUsers },
+          { icon: UserCheck, color: 'green',  label: 'Verifiziert',     value: stats.activeUsers },
+          { icon: Crown,     color: 'purple', label: 'Staff',           value: stats.staffCount },
+          { icon: Users,     color: 'gray',   label: 'Benutzer',        value: stats.regularUsers },
+        ] satisfies StatCardItem[]}
+      />
 
       {/* Users List with Client-side Filtering */}
       <UsersListClient currentUserIsSuperAdmin={currentUserIsSuperAdmin} />

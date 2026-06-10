@@ -14,7 +14,7 @@ interface Props {
 
 export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAdd, onRemove }: Props) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
       <div className="flex items-center justify-between mb-6">
         <Heading level={2} className="text-lg text-text-primary flex items-center gap-2">
           <FileText className="w-5 h-5" />

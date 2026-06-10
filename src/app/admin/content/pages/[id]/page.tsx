@@ -44,7 +44,7 @@ export default function EditStaticPagePage() {
           <div className="h-5 w-5 bg-surface-overlay rounded-sm animate-pulse"></div>
           <div className="h-8 bg-surface-overlay rounded-sm w-1/3 animate-pulse"></div>
         </div>
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-8">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-8">
           <div className="animate-pulse space-y-6">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-12 bg-surface-overlay rounded-sm"></div>
@@ -135,7 +135,7 @@ export default function EditStaticPagePage() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 space-y-6">
           <FormField label="Titel" required htmlFor="page-title">
             <Input
               id="page-title"
@@ -195,7 +195,7 @@ export default function EditStaticPagePage() {
         </div>
 
         {/* SEO Section */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 space-y-6">
           <Heading level={2} className="text-lg font-semibold text-text-primary">SEO</Heading>
 
           <FormField label="SEO Titel" htmlFor="seo-title">

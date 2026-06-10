@@ -13,7 +13,7 @@ interface Props {
 
 export function WorkshopPrerequisitesSection({ formData, onInputChange }: Props) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
       <Heading level={2} className="text-lg text-text-primary mb-6 flex items-center gap-2">
         <FileText className="w-5 h-5" />
         Voraussetzungen & Materialien

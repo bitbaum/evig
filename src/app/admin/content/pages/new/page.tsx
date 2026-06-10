@@ -110,7 +110,7 @@ function NewStaticPageContent() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 space-y-6">
           {/* Title */}
           <FormField label="Titel" required htmlFor="page-title">
             <Input
@@ -184,7 +184,7 @@ function NewStaticPageContent() {
         </div>
 
         {/* SEO Section */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 p-6 space-y-6">
+        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 space-y-6">
           <Heading level={2} className="text-lg font-semibold text-text-primary">SEO</Heading>
 
           <FormField label="SEO Titel" htmlFor="seo-title">

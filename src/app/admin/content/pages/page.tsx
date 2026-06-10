@@ -155,7 +155,7 @@ export default async function AdminPagesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Globe className="w-8 h-8 text-action" />
             <div>
@@ -169,7 +169,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -183,7 +183,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Clock className="w-8 h-8 text-secondary-600" />
             <div>
@@ -199,7 +199,7 @@ export default async function AdminPagesPage() {
       </div>
 
       {/* Pages Table */}
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
         {pages.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">

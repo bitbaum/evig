@@ -32,9 +32,9 @@ const URGENCY_CONFIG = {
 
 export function UnifiedQueue({ items }: UnifiedQueueProps) {
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
       {/* Card header */}
-      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
+      <div className="p-4 border-b border-subtle flex items-center gap-2">
         <Zap className="w-5 h-5 text-warning-500 shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           Wartet auf Bearbeitung

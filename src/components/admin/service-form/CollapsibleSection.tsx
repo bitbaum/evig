@@ -19,7 +19,7 @@ export function CollapsibleSection({
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <section className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+    <section className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
       <Button
         type="button"
         variant="ghost"

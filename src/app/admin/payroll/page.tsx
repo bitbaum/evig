@@ -17,9 +17,9 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { Wallet } from 'lucide-react'
-import { auth } from '@/auth'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { isSuperAdmin, canAccessSection } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { PayrollClient } from '@/components/admin/payroll/PayrollClient'
 
 export const metadata: Metadata = {
@@ -28,20 +28,10 @@ export const metadata: Metadata = {
 }
 
 export default async function PayrollPage() {
-  const session = await auth()
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/payroll')
-  }
-
-  const user = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-    is_super_admin: session.user.isSuperAdmin,
-  }
-  if (!canAccessSection(user, 'timecards')) {
-    redirect('/admin?error=no_timecards_access')
-  }
+  // Payroll is even more sensitive than timecards: needs the timecards
+  // permission AND super-admin. Section guard handles the first; the
+  // explicit isSuperAdmin check handles the second.
+  const session = await requireSection('timecards')
   if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
     redirect('/admin?error=payroll_super_admin_only')
   }

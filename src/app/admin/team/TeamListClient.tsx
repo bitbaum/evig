@@ -73,7 +73,7 @@ export function TeamListClient() {
                   <div className="h-3 bg-surface-overlay rounded-sm w-full" />
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t border-subtle dark:border-white/6">
+              <div className="mt-4 pt-4 border-t border-subtle">
                 <div className="flex gap-2">
                   <div className="h-8 bg-surface-overlay rounded-sm flex-1" />
                   <div className="h-8 bg-surface-overlay rounded-sm flex-1" />

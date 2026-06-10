@@ -30,8 +30,8 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
   const hasNoActionItems = actionItems.length === 0
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6">
-      <div className="p-4 border-b border-subtle dark:border-white/6 flex items-center gap-2">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
+      <div className="p-4 border-b border-subtle flex items-center gap-2">
         <Zap className="w-5 h-5 text-warning-500" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-text-primary">
           Was gibt es zu tun?

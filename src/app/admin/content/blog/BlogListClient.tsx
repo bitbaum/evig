@@ -48,7 +48,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   }, [posts, search, statusFilter])
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
       {/* Filters */}
       <div className="px-6 py-4 border-b border">
         <div className="flex flex-wrap gap-3">

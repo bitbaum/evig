@@ -13,6 +13,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { Button } from '@/components/ui/button'
 import { buttonClass } from '@/components/ui/button-class'
+import { EmptyState } from '@/components/ui/EmptyState'
 import {
   Plus,
   Tag,
@@ -138,7 +139,7 @@ export default async function AdminCategoriesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-action" />
             <div>
@@ -152,7 +153,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-action" />
             <div>
@@ -166,7 +167,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle dark:border-white/6">
+        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-text-secondary" />
             <div>
@@ -182,7 +183,7 @@ export default async function AdminCategoriesPage() {
       </div>
 
       {/* Categories Table */}
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle dark:border-white/6 overflow-hidden">
+      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
         {categories.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -296,19 +297,17 @@ export default async function AdminCategoriesPage() {
             </table>
           </div>
         ) : (
-          <div className="text-center py-12">
-            <Tag className="w-12 h-12 text-text-muted mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-              Noch keine Kategorien
-            </Heading>
-            <p className="text-text-secondary mb-6">
-              Erstelle Kategorien, um deine Blog-Artikel zu organisieren.
-            </p>
-            <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
-              <Plus className="w-5 h-5" />
-              Erste Kategorie erstellen
-            </Link>
-          </div>
+          <EmptyState
+            icon={Tag}
+            title="Noch keine Kategorien"
+            description="Erstelle Kategorien, um deine Blog-Artikel zu organisieren."
+            action={
+              <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
+                <Plus className="w-5 h-5" />
+                Erste Kategorie erstellen
+              </Link>
+            }
+          />
         )}
       </div>
 

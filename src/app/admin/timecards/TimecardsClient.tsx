@@ -1,412 +1,70 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { AlertCircle, Check, Clock, RotateCcw, Send, Sparkles, UserCheck } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { apiFetch } from '@/lib/api/client'
-import {
-  TIMECARD_ENTRY_CATEGORY_LABELS,
-  TIMECARD_ENTRY_CATEGORY_OPTIONS,
-  TIMECARD_STATUSES,
-  formatTimecardDuration,
-  sumTimecardMinutes,
-  type TimecardEntryCategory,
-} from '@/config/timecards'
-import {
-  WEEKDAY_IDS,
-  WEEKDAY_LABELS,
-  buildTimecardEntriesForMonth,
-  calculateTimeRangeMinutes,
-  getMonthStart,
-  getNextMonthStart,
-  parseWeeklySchedule,
-  summarizeWeeklySchedule,
-  toISODate,
-} from '@/lib/team/schedule'
-import {
-  getDaysInRange,
-  getDisplayDate,
-  normalizeEntry,
-  mergeEntries,
-  getEntryForDate,
-} from '@/lib/team/timecard-utils'
-import type { Timecard, TimecardEntryInput, TimecardSaveInput } from '@/lib/schemas/timecards'
-import { ROUTES } from '@/config/routes'
-import type { TimecardAIResult, DraftState } from './types'
-import { createDraft, toDraftState } from './draft-utils'
+import { formatTimecardDuration } from '@/config/timecards'
+import { NoScheduleNotice } from './NoScheduleNotice'
+import { TimecardDayEditor } from './TimecardDayEditor'
+import { TimecardHeader } from './TimecardHeader'
+import { TimecardMonthGrid } from './TimecardMonthGrid'
+import { TimecardStats } from './TimecardStats'
+import { useTimecardDraft } from './useTimecardDraft'
+import type { TimecardAIResult } from './types'
 
-interface TimecardsClientProps {
+/**
+ * Monthly timecard editor.
+ *
+ * Most of the brain lives in useTimecardDraft (state + every mutation +
+ * the save/submit network calls). This component is now just composition:
+ * read the hook, pass the bits each presentational subcomponent needs,
+ * keep the AI-assist + notes inline (they're tiny and only used here).
+ *
+ * Prior version was a 593-line god component. The hook + subcomponent
+ * split is the audit fix called out in the admin code-quality review.
+ */
+export function TimecardsClient({
+  workingHours,
+  userName,
+}: {
   workingHours: string | null
   userName: string
-}
-
-export function TimecardsClient({ workingHours, userName }: TimecardsClientProps) {
-  const schedule = useMemo(() => parseWeeklySchedule(workingHours), [workingHours])
-  const hasSchedule = useMemo(
-    () => WEEKDAY_IDS.some(day => schedule.days[day].enabled),
-    [schedule]
-  )
-  const currentDate = useMemo(() => new Date(), [])
-  const currentMonthStart = useMemo(() => getMonthStart(currentDate), [currentDate])
-  const currentMonthEnd = useMemo(() => getNextMonthStart(currentDate), [currentDate])
-  const monthDates = useMemo(
-    () => getDaysInRange(currentMonthStart, currentMonthEnd),
-    [currentMonthStart, currentMonthEnd]
-  )
-  const monthEntries = useMemo(
-    () => buildTimecardEntriesForMonth(schedule, currentMonthStart),
-    [schedule, currentMonthStart]
-  )
-  const monthLabel = useMemo(
-    () => new Intl.DateTimeFormat('de-CH', { month: 'long', year: 'numeric' }).format(currentDate),
-    [currentDate]
-  )
-
-  // Month-only by design: payroll cadence is monthly, weekly mode was deleted
-  // in the Phase Y admin UX audit. The previous version kept "mode" state
-  // ('month' | 'week') and dual drafts as scaffolding for a later refactor;
-  // this is that refactor.
-  const [draft, setDraft] = useState<DraftState>(() =>
-    createDraft(
-      monthEntries,
-      monthDates.find(date => getEntryForDate(monthEntries, date)) || monthDates[0],
-    ),
-  )
-  const [isLoadingDraft, setIsLoadingDraft] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [syncMessage, setSyncMessage] = useState<string | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const currentPeriodRange = {
-    period_type: 'month' as const,
-    period_start: toISODate(currentMonthStart),
-    period_end: toISODate(currentMonthEnd),
-  }
-
-  const periodEntries = draft.entries
-  const totalMinutes = sumTimecardMinutes(periodEntries)
-  const selectedEntry = getEntryForDate(periodEntries, draft.selectedDate)
-  const scheduleSummary = hasSchedule ? summarizeWeeklySchedule(schedule) : 'Noch kein Standardschedule hinterlegt'
-
-  const updateCurrentDraft = (updater: (current: DraftState) => DraftState) => {
-    setDraft(prev => updater(prev))
-    setSyncMessage(null)
-    setErrorMessage(null)
-  }
-
-  const rebuildCurrentDraft = () => {
-    const nextEntries = monthEntries
-    const nextSelected = monthDates.find(date => getEntryForDate(nextEntries, date)) || monthDates[0]
-    updateCurrentDraft(current => ({
-      ...current,
-      entries: nextEntries,
-      notes: '',
-      status: TIMECARD_STATUSES.DRAFT,
-      selectedDate: nextSelected,
-    }))
-  }
-
-  const currentSavePayload: TimecardSaveInput = {
-    period_type: currentPeriodRange.period_type,
-    period_start: currentPeriodRange.period_start,
-    period_end: currentPeriodRange.period_end,
-    notes: draft.notes || null,
-    entries: periodEntries,
-  }
-
-  const visibleDates = monthDates
-
-  useEffect(() => {
-    let active = true
-
-    const loadDraft = async () => {
-      setIsLoadingDraft(true)
-      setSyncMessage(null)
-      try {
-        const params = new URLSearchParams({
-          period_type: currentPeriodRange.period_type,
-          period_date: currentPeriodRange.period_start,
-        })
-        const result = await apiFetch<Timecard>(`/api/timecards?${params.toString()}`)
-        if (!active) return
-        if (!result.success || !result.data) {
-          setErrorMessage(result.error || 'Zeitkarte konnte nicht geladen werden.')
-          return
-        }
-        const loadedTimecard = result.data
-
-        setDraft(toDraftState(loadedTimecard, visibleDates[0]))
-        setSyncMessage('Zeitkarte geladen')
-      } finally {
-        if (active) setIsLoadingDraft(false)
-      }
-    }
-
-    loadDraft().catch(() => {
-      if (active) {
-        setErrorMessage('Zeitkarte konnte nicht geladen werden.')
-        setIsLoadingDraft(false)
-      }
-    })
-
-    return () => {
-      active = false
-    }
-  }, [currentPeriodRange.period_end, currentPeriodRange.period_start, currentPeriodRange.period_type, visibleDates])
-
-  const saveDraft = async () => {
-    setIsSaving(true)
-    setSyncMessage(null)
-    setErrorMessage(null)
-    try {
-      const result = await apiFetch<Timecard>('/api/timecards', {
-        method: 'PUT',
-        body: currentSavePayload,
-      })
-      if (!result.success || !result.data) throw new Error(result.error || 'save_failed')
-      const savedTimecard = result.data
-      setDraft(toDraftState(savedTimecard, draft.selectedDate))
-      setSyncMessage('Gespeichert')
-    } catch {
-      setErrorMessage('Zeitkarte konnte nicht gespeichert werden.')
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  const submitDraft = async () => {
-    setIsSubmitting(true)
-    setSyncMessage(null)
-    setErrorMessage(null)
-    try {
-      const result = await apiFetch<Timecard>('/api/timecards', {
-        method: 'POST',
-        body: currentSavePayload,
-      })
-      if (!result.success || !result.data) throw new Error(result.error || 'submit_failed')
-      const submittedTimecard = result.data
-      setDraft(toDraftState(submittedTimecard, draft.selectedDate))
-      setSyncMessage('Zur Prüfung gesendet')
-    } catch {
-      setErrorMessage('Zeitkarte konnte nicht eingereicht werden.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const updateSelectedEntry = (patch: Partial<TimecardEntryInput>) => {
-    updateCurrentDraft(current => {
-      const selectedDate = current.selectedDate
-      const existing = getEntryForDate(current.entries, selectedDate)
-      const baseEntry = existing ?? {
-        work_date: selectedDate,
-        start_time: '09:00',
-        end_time: '17:00',
-        break_minutes: 60,
-        duration_minutes: 420,
-        category: 'other',
-        source: 'manual',
-        description: '',
-      }
-      const mergedEntry = normalizeEntry({ ...baseEntry, ...patch })
-      const shouldRecalculateDuration =
-        patch.start_time !== undefined ||
-        patch.end_time !== undefined ||
-        patch.break_minutes !== undefined
-      const nextEntry = shouldRecalculateDuration && mergedEntry.start_time && mergedEntry.end_time
-        ? {
-            ...mergedEntry,
-            duration_minutes: calculateTimeRangeMinutes(
-              mergedEntry.start_time,
-              mergedEntry.end_time,
-              mergedEntry.break_minutes ?? 0
-            ),
-          }
-        : mergedEntry
-      const nextEntries = existing
-        ? current.entries.map(entry =>
-            entry.work_date === selectedDate ? nextEntry : entry
-          )
-        : mergeEntries(current.entries, [nextEntry])
-
-      return {
-        ...current,
-        entries: nextEntries,
-        status: TIMECARD_STATUSES.DRAFT,
-      }
-    })
-  }
-
-  const removeSelectedEntry = () => {
-    updateCurrentDraft(current => ({
-      ...current,
-      entries: current.entries.filter(entry => entry.work_date !== current.selectedDate),
-      status: TIMECARD_STATUSES.DRAFT,
-    }))
-  }
-
-  const markSelectedDateOff = (reason: string) => {
-    updateCurrentDraft(current => {
-      const note = `${getDisplayDate(current.selectedDate)}: ${reason}`
-      return {
-        ...current,
-        entries: current.entries.filter(entry => entry.work_date !== current.selectedDate),
-        notes: current.notes.includes(note)
-          ? current.notes
-          : [current.notes, note].filter(Boolean).join('\n'),
-        status: TIMECARD_STATUSES.DRAFT,
-      }
-    })
-  }
-
-  const restoreSelectedDateFromSchedule = () => {
-    const templateEntry = getEntryForDate(monthEntries, draft.selectedDate)
-    updateCurrentDraft(current => ({
-      ...current,
-      entries: templateEntry
-        ? mergeEntries(current.entries, [templateEntry])
-        : current.entries.filter(entry => entry.work_date !== current.selectedDate),
-      status: TIMECARD_STATUSES.DRAFT,
-    }))
-  }
-
-  const handleAIFieldsFilled = (
-    data: Partial<TimecardAIResult>,
-    _metadata: Record<string, AIFieldMetadataEntry>
-  ) => {
-    updateCurrentDraft(current => {
-      const nextEntries = Array.isArray(data.entries)
-        ? mergeEntries(current.entries, data.entries)
-        : current.entries
-
-      return {
-        ...current,
-        entries: nextEntries,
-        notes: typeof data.notes === 'string' ? data.notes : current.notes,
-        status: TIMECARD_STATUSES.DRAFT,
-        selectedDate: nextEntries[0]?.work_date || current.selectedDate,
-      }
-    })
-  }
-
-  const helperText = hasSchedule
-    ? 'Dein Monat ist aus dem offiziellen Schedule vorbereitet. Du musst nur bestätigen oder Ausnahmen eintragen.'
-    : 'Lege zuerst deinen offiziellen Schedule im Team-Profil fest. Danach ist die Zeitkarte automatisch vorbereitet.'
+}) {
+  const tc = useTimecardDraft({ workingHours })
 
   const currentData = {
-    period_label: monthLabel,
-    schedule: scheduleSummary,
-    summary: `${userName}: ${formatTimecardDuration(totalMinutes)} in diesem Monat. ${periodEntries.length} Einträge.`,
-    entries: periodEntries,
-    notes: draft.notes,
+    period_label: tc.monthLabel,
+    schedule: tc.scheduleSummary,
+    summary: `${userName}: ${formatTimecardDuration(tc.totalMinutes)} in diesem Monat. ${tc.periodEntries.length} Einträge.`,
+    entries: tc.periodEntries,
+    notes: tc.draft.notes,
   }
 
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border bg-surface-base p-4">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
-            <div>
-              <h2 className="text-xl font-semibold text-text-primary">
-                {`${monthLabel} ist vorbereitet`}
-              </h2>
-              <p className="mt-1 text-sm text-text-tertiary">{helperText}</p>
-            </div>
-          </div>
+      <TimecardHeader
+        monthLabel={tc.monthLabel}
+        hasSchedule={tc.hasSchedule}
+        hasEntries={tc.periodEntries.length > 0}
+        isSaving={tc.isSaving}
+        isSubmitting={tc.isSubmitting}
+        isLoadingDraft={tc.isLoadingDraft}
+        errorMessage={tc.errorMessage}
+        syncMessage={tc.syncMessage}
+        onSubmit={tc.submitDraft}
+        onReset={tc.rebuildCurrentDraft}
+        onSave={tc.saveDraft}
+      />
 
-          <div className="flex flex-wrap gap-2">
-            <Button
-              type="button"
-              variant="primary"
-              onClick={submitDraft}
-              disabled={isSubmitting || periodEntries.length === 0 || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg bg-success-600 px-3 py-2 text-sm font-medium text-white hover:bg-success-700 disabled:bg-surface-overlay disabled:text-text-tertiary"
-            >
-              <Send className="h-4 w-4" />
-              {isSubmitting ? 'Sende…' : 'Zur Prüfung einreichen'}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={rebuildCurrentDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Vorlage zurücksetzen
-              </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={saveDraft}
-              disabled={isSaving || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-default bg-surface-base px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-surface-base/6"
-            >
-              <Check className="h-4 w-4" />
-              {isSaving ? 'Speichere…' : 'Entwurf speichern'}
-            </Button>
-          </div>
-        </div>
-        {errorMessage && (
-          <div className="mt-3 flex items-start gap-2 rounded-lg border border-error-200 bg-error-50 px-3 py-2 text-sm text-error-800 dark:border-error-800 dark:bg-error-900/20 dark:text-error-200">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
-        )}
-        {syncMessage && (
-          <p className="mt-3 text-sm text-success-700 dark:text-success-300">{syncMessage}</p>
-        )}
-      </div>
+      <TimecardStats
+        totalMinutes={tc.totalMinutes}
+        entryCount={tc.periodEntries.length}
+        status={tc.draft.status}
+        scheduleSummary={tc.scheduleSummary}
+        hasSchedule={tc.hasSchedule}
+      />
 
-      <div className="grid gap-3 md:grid-cols-3">
-        <div className="rounded-lg border border bg-surface-base p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">
-            Diesen Monat
-          </p>
-          <p className="mt-2 text-2xl font-semibold text-text-primary">
-            {formatTimecardDuration(totalMinutes)}
-          </p>
-          <p className="mt-1 text-sm text-text-tertiary">
-            {periodEntries.length} vorbereitete Tage aus Schedule und Ausnahmen.
-          </p>
-        </div>
-        <div className="rounded-lg border border bg-surface-base p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Status</p>
-          <p className="mt-2 flex items-center gap-2 text-2xl font-semibold text-text-primary">
-            {draft.status === TIMECARD_STATUSES.SUBMITTED ? <UserCheck className="h-5 w-5 text-success-600" /> : <Clock className="h-5 w-5 text-text-tertiary" />}
-            {draft.status === TIMECARD_STATUSES.SUBMITTED ? 'Bereit' : 'Entwurf'}
-          </p>
-          <p className="mt-1 text-sm text-text-tertiary">Einreichen heisst: von dir geprüft und bereit für Freigabe.</p>
-        </div>
-        <div className="rounded-lg border border bg-surface-base p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-text-tertiary">Schedule</p>
-          <p className="mt-2 text-lg font-semibold text-text-primary">{scheduleSummary}</p>
-          {!hasSchedule && (
-            <p className="mt-1 text-sm text-warning-600 dark:text-warning-400">Ohne Standardschedule kannst du nur manuell arbeiten.</p>
-          )}
-        </div>
-      </div>
-
-      {!hasSchedule && (
-        <div className="rounded-lg border border-warning-200 bg-warning-50 p-4 text-warning-900 dark:border-warning-800 dark:bg-warning-900/20 dark:text-warning-200">
-          <p className="text-sm font-medium">Dein offizieller Schedule fehlt noch.</p>
-          <p className="mt-1 text-sm text-warning-800 dark:text-warning-300">
-            Lege ihn im Team-Profil fest. Danach werden Zeitkarten automatisch vorgefüllt und du musst nur noch Ausnahmen anfassen.
-          </p>
-          <Link
-            href={ROUTES.admin.team}
-            className="mt-3 inline-flex items-center rounded-lg bg-surface-base px-3 py-2 text-sm font-medium text-warning-900 transition-colors hover:bg-warning-100 dark:bg-warning-950/40 dark:text-warning-100 dark:hover:bg-warning-900/40"
-          >
-            Team-Profil öffnen
-          </Link>
-        </div>
-      )}
+      <NoScheduleNotice hasSchedule={tc.hasSchedule} />
 
       <AIFormAssist<TimecardAIResult>
         formType="timecard"
@@ -414,167 +72,28 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         defaultExpanded={false}
         currentData={currentData}
         placeholder="z.B. 12. und 13. frei, sonst normal"
-        onFieldsFilled={handleAIFieldsFilled}
+        onFieldsFilled={tc.handleAIFieldsFilled}
       />
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="rounded-lg border border bg-surface-base p-4">
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-text-primary">
-                {monthLabel}
-              </h2>
-              <p className="mt-1 text-sm text-text-tertiary">
-                Normale Tage bleiben unverändert. Wähle nur einen Tag aus, wenn etwas anders war.
-              </p>
-            </div>
-            <div className="text-sm text-text-tertiary">
-              Monatsübersicht
-            </div>
-          </div>
+        <TimecardMonthGrid
+          monthLabel={tc.monthLabel}
+          visibleDates={tc.visibleDates}
+          entries={tc.periodEntries}
+          selectedDate={tc.draft.selectedDate}
+          onSelect={tc.setSelectedDate}
+        />
 
-          <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-7">
-            {visibleDates.map((date) => {
-              const entry = getEntryForDate(periodEntries, date)
-              const active = draft.selectedDate === date
-              const weekdayLabel = new Intl.DateTimeFormat('de-CH', { weekday: 'short' }).format(new Date(`${date}T00:00:00.000Z`))
-              return (
-                <Button
-                  key={date}
-                  type="button"
-                  variant="outline"
-                  onClick={() => updateCurrentDraft(current => ({ ...current, selectedDate: date }))}
-                  className={`min-h-28 rounded-lg border p-3 text-left transition-colors ${
-                    active
-                      ? 'border-action bg-action-muted ring-2 ring-action/20 dark:border-action-muted'
-                      : 'border bg-surface-raised hover:border-strong hover:bg-surface-base'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-semibold text-text-primary">{weekdayLabel}</p>
-                    {entry && <Check className="h-4 w-4 text-success-600" />}
-                  </div>
-                  <p className="mt-1 text-xs text-text-tertiary">{date.slice(5)}</p>
-                  <p className="mt-4 text-lg font-semibold text-text-primary">
-                    {formatTimecardDuration(entry?.duration_minutes ?? 0)}
-                  </p>
-                  <p className="mt-1 truncate text-xs text-text-tertiary">
-                    {entry ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory] : 'Vorgefüllt aus Schedule'}
-                  </p>
-                </Button>
-              )
-            })}
-          </div>
-        </div>
-
-        <aside className="rounded-lg border border bg-surface-base p-4">
-          <h2 className="text-lg font-semibold text-text-primary">Ausnahme</h2>
-          <p className="mt-1 text-sm text-text-tertiary">{getDisplayDate(draft.selectedDate)}</p>
-
-          <div className="mt-4 space-y-3">
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => markSelectedDateOff('frei')}
-                className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
-              >
-                Frei
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => markSelectedDateOff('krank')}
-                className="rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
-              >
-                Krank
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <label className="block text-sm font-medium text-text-secondary">
-                Start
-                <Input
-                  variant="elevated"
-                  type="time"
-                  value={selectedEntry?.start_time ?? '09:00'}
-                  onChange={(e) => updateSelectedEntry({ start_time: e.target.value })}
-                  className="mt-1"
-                />
-              </label>
-              <label className="block text-sm font-medium text-text-secondary">
-                Ende
-                <Input
-                  variant="elevated"
-                  type="time"
-                  value={selectedEntry?.end_time ?? '17:00'}
-                  onChange={(e) => updateSelectedEntry({ end_time: e.target.value })}
-                  className="mt-1"
-                />
-              </label>
-            </div>
-
-            <label className="block text-sm font-medium text-text-secondary">
-              Pause in Minuten
-              <Input
-                variant="elevated"
-                type="number"
-                min={0}
-                max={240}
-                step={15}
-                value={selectedEntry?.break_minutes ?? 0}
-                onChange={(e) => updateSelectedEntry({ break_minutes: Number(e.target.value) })}
-                className="mt-1"
-              />
-            </label>
-
-            <div className="rounded-lg bg-surface-raised px-3 py-2 text-sm text-text-secondary">
-              Berechnete Dauer: <span className="font-semibold text-text-primary">{formatTimecardDuration(selectedEntry?.duration_minutes ?? 0)}</span>
-            </div>
-
-            <label className="block text-sm font-medium text-text-secondary">
-              Kategorie
-              <Select
-                variant="elevated"
-                value={selectedEntry?.category ?? 'other'}
-                onChange={(e) => updateSelectedEntry({ category: e.target.value as TimecardEntryCategory })}
-                className="mt-1"
-              >
-                {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
-                  <option key={category} value={category}>
-                    {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
-                  </option>
-                ))}
-              </Select>
-            </label>
-
-            <label className="block text-sm font-medium text-text-secondary">
-              Notiz
-              <Textarea
-                variant="elevated"
-                rows={3}
-                value={selectedEntry?.description ?? ''}
-                onChange={(e) => updateSelectedEntry({ description: e.target.value })}
-                placeholder="Nur wenn dieser Tag anders war"
-                className="mt-1 resize-none"
-              />
-            </label>
-
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={restoreSelectedDateFromSchedule}
-                className="w-full rounded-lg border border-default px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6"
-              >
-                Tag aus Vorlage wiederherstellen
-              </Button>
-            </div>
-          </div>
-        </aside>
+        <TimecardDayEditor
+          selectedDate={tc.draft.selectedDate}
+          selectedEntry={tc.selectedEntry}
+          onPatch={tc.updateSelectedEntry}
+          onMarkOff={tc.markSelectedDateOff}
+          onRestoreFromSchedule={tc.restoreSelectedDateFromSchedule}
+        />
       </section>
 
-      <label className="block rounded-lg border border bg-surface-base p-4">
+      <label className="block rounded-lg border bg-surface-base p-4">
         <span className="flex items-center gap-2 text-sm font-semibold text-text-primary">
           <Sparkles className="h-4 w-4 text-action" />
           Wochen- oder Monatskommentar
@@ -582,8 +101,8 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         <Textarea
           variant="elevated"
           rows={2}
-          value={draft.notes}
-          onChange={(e) => updateCurrentDraft(current => ({ ...current, notes: e.target.value }))}
+          value={tc.draft.notes}
+          onChange={e => tc.setNotes(e.target.value)}
           placeholder="Optional, z.B. Ferien, Krankheit, Sondereinsatz oder Korrekturgrund"
           className="mt-2 resize-none"
         />

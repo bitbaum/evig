@@ -1,7 +1,5 @@
 import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
@@ -12,22 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default async function SettingsPage() {
-  const session = await auth()
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/settings')
-  }
-
-  // Check permission for sensitive settings section
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'settings')
-
-  if (!hasAccess) {
-    redirect('/admin?error=no_settings_access')
-  }
+  await requireSection('settings')
 
   // None of the sub-pages exist yet — keep cards informational, not navigational
   const settingsSections = [
