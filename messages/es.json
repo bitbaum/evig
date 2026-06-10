@@ -4717,143 +4717,143 @@
           "description": "Informes, estudios y la base económica del proyecto de reciclaje de monitores."
         },
         "research": {
-          "title": "Lo que estamos estudiando",
+          "title": "Lo que estamos estudiando ahora",
           "intro": "Estos estudios están en curso o encargados. Los resultados aparecerán aquí en cuanto sean sólidos.",
           "items": [
             {
               "title": "Análisis de ciclo de vida (ACV) — ZHAW",
-              "status": "En curso · Resultados T3 2026",
-              "description": "Análisis de ciclo de vida completo de la lámpara Lenovo L2251pwd reconvertida frente a una lámpara LED nueva de brillo comparable. Método: ISO 14040/14044."
+              "status": "En curso · resultados T3 2026",
+              "description": "Análisis completo del ciclo de vida de la lámpara reconvertida Lenovo L2251pwd frente a una lámpara LED nueva de luminosidad comparable. Metodología: ISO 14040/14044."
             },
             {
               "title": "Disposición a pagar B2B",
-              "status": "Planeado · T4 2026",
-              "description": "Entrevistas estructuradas con ~10 gestoras inmobiliarias y agencias de diseño para validar la franja CHF 150–250."
+              "status": "Planificado · T4 2026",
+              "description": "Entrevistas estructuradas con ~10 administraciones inmobiliarias y agencias de diseño para validar el rango 150–250 CHF."
             },
             {
               "title": "Conformidad CE",
               "status": "En preparación · T4 2026",
-              "description": "Directiva de baja tensión, CEM, RoHS. Laboratorio externo para la serie piloto del T4."
+              "description": "Directiva de baja tensión, EMC, RoHS. Organismo de certificación externo para la pre-serie T4."
             }
           ]
         },
         "downloads": {
           "title": "Descargas",
-          "note": "Los informes se enlazarán aquí cuando se publiquen. Si necesita un borrador temprano para una decisión de financiación, escríbanos — compartimos honestamente el estado de trabajo actual.",
+          "note": "Los informes se enlazarán aquí cuando se publiquen. Si necesita un borrador temprano para una decisión de financiación, escríbanos — compartimos con gusto el estado de trabajo actual, honestamente.",
           "cta": "kontakt@revamp-it.ch"
         },
         "hero": {
-          "eyebrow": "BUSINESS PLAN",
-          "title": "Market, customers, economics — and what can go wrong.",
-          "intro": "An honest picture for funders, pilot partners, and buyers. Every section is collapsible so you can pick the depth you need."
+          "eyebrow": "PLAN DE NEGOCIO",
+          "title": "Mercado, clientes, economía — y lo que puede salir mal.",
+          "intro": "Una imagen honesta para financiadores, socios piloto y compradores. Cada sección es plegable para elegir la profundidad deseada."
         },
         "marketContext": {
-          "eyebrow": "MARKET CONTEXT",
-          "title": "What we should be compared against.",
-          "intro": "We're not selling a 'designer lamp' against Vitra — we're selling a repairable, locally made desk lamp against mass-produced imports.",
+          "eyebrow": "CONTEXTO DE MERCADO",
+          "title": "Con qué debemos aceptar ser comparados.",
+          "intro": "No vendemos una \"lámpara de diseñador\" frente a Vitra, sino una lámpara de escritorio reparable, producida localmente, frente a la producción de masa del Lejano Oriente.",
           "alternatives": [
             {
-              "label": "IKEA Tertial / desk lamp (new)",
-              "price": "CHF 15–35",
-              "tradeoff": "Low price, newly produced, short lifespan (~3 years), not repairable. Mass production in Asia — high material footprint per hour of light."
+              "label": "IKEA Tertial / lámpara de escritorio (nueva)",
+              "price": "15–35 CHF",
+              "tradeoff": "Precio bajo, producción nueva, vida corta (~3 años), no reparable. Producción de masa en Asia — huella material alta por hora de luz."
             },
             {
-              "label": "Mainstream LED desk lamp (BenQ, Philips Hue)",
-              "price": "CHF 80–250",
-              "tradeoff": "Good light quality, sealed electronics — repair impossible. CO₂ footprint dominated by manufacturing."
+              "label": "Lámpara LED mainstream (BenQ, Philips Hue)",
+              "price": "80–250 CHF",
+              "tradeoff": "Buena calidad de luz, electrónica sellada — reparación imposible. Balance CO₂ dominado por la fabricación."
             },
             {
-              "label": "Swiss design desk lamp (Vitra, USM, Lehni)",
-              "price": "CHF 300–800+",
-              "tradeoff": "High quality, often repairable, long-lasting — but newly produced. Price only for upper segment."
+              "label": "Lámpara de escritorio diseño suizo (Vitra, USM, Lehni)",
+              "price": "300–800+ CHF",
+              "tradeoff": "Alta gama, a menudo reparable, duradera — pero nueva. Precio solo para el segmento superior."
             },
             {
-              "label": "Upcycling desk lamps from designer studios",
-              "price": "CHF 200–600",
-              "tradeoff": "One-off pieces from leftovers — rarely reproducible, no standardised manual, often without CE."
+              "label": "Lámpara upcycling de estudios de diseño",
+              "price": "200–600 CHF",
+              "tradeoff": "Piezas únicas de restos — raramente reproducibles, sin instrucciones estandarizadas, a menudo sin CE."
             },
             {
-              "label": "Our proposition",
-              "price": "CHF 150–250",
-              "tradeoff": "Reproducible thanks to open guides, made in Switzerland (sheltered workshop), repairable, CE-conformity planned. Input material donated — low material footprint.",
+              "label": "Nuestra propuesta",
+              "price": "150–250 CHF",
+              "tradeoff": "Reproducible gracias a las instrucciones abiertas, producida en Suiza (taller protegido), reparable, conformidad CE planificada. Material de entrada donado — huella material baja.",
               "isOurs": true
             }
           ],
-          "verdict": "We compete with mid-range LED — not IKEA, not Vitra. Our selling point is not price; it's repairability, provenance and material flow."
+          "verdict": "Competimos con la LED de gama media — no con IKEA, no con Vitra. Nuestro argumento de venta no es el precio, sino la reparabilidad, el origen y el flujo de materia."
         },
         "segments": {
-          "eyebrow": "CUSTOMER SEGMENTS",
-          "title": "Who buys it — and who does not.",
-          "intro": "Two channels tested in parallel. Each needs a different message, sales path and order size.",
+          "eyebrow": "SEGMENTOS DE CLIENTE",
+          "title": "Quién lo compra — y quién no.",
+          "intro": "Probamos dos canales en paralelo. Cada uno requiere mensaje, ruta de venta y volumen distintos.",
           "b2b": {
-            "label": "B2B (volume buyers)",
-            "volume": "50–80 % of the small series",
-            "description": "Property managers for ancillary spaces and stairwells, co-working spaces, architecture and design agencies, smaller hotels. Buying argument: sustainability story + reliable delivery of 10–50 units.",
+            "label": "B2B (grandes cuentas)",
+            "volume": "50–80 % de la pre-serie",
+            "description": "Administraciones inmobiliarias para espacios anexos y escaleras, coworkings, agencias de arquitectura y diseño, hoteles pequeños. Argumento de compra: comunicación de sostenibilidad + entrega fiable de lotes de 10–50 piezas.",
             "examples": [
               "Livit",
               "Wincasa",
               "Allreal",
-              "universities",
-              "cooperative cafés"
+              "Universidades",
+              "Cafés cooperativos"
             ]
           },
           "b2c": {
-            "label": "B2C (individual buyers)",
-            "volume": "20–50 % of the small series",
-            "description": "Design-conscious individuals buying a story and aesthetic — not the cheapest function. Plus: students and cooperative flatshares as a budget variant.",
+            "label": "B2C (particulares)",
+            "volume": "20–50 % de la pre-serie",
+            "description": "Particulares afines al diseño que compran una historia y una estética — no la función más barata. También: estudiantes y pisos compartidos cooperativos como variante sensible al precio.",
             "examples": [
-              "design-shop visitors",
-              "architects (private)",
-              "maker community",
-              "flatshare renovations"
+              "Visitantes de design shops",
+              "Arquitectos a título privado",
+              "Comunidad maker",
+              "Reformas en pisos compartidos"
             ]
           }
         },
         "risks": {
-          "eyebrow": "RISKS",
-          "title": "What can go wrong.",
-          "intro": "Honest list instead of marketing. We write mitigations next to each risk where we have one.",
+          "eyebrow": "RIESGOS",
+          "title": "Lo que puede salir mal.",
+          "intro": "Lista honesta en lugar de marketing. Añadimos contramedidas donde las tenemos.",
           "items": [
             {
-              "label": "Sheltered workshop drops out",
-              "severity": "High",
-              "mitigation": "Build more than one workshop partnership (Drahtzug + FARO + St. Jakob). Document manuals so any workshop can step in."
+              "label": "El taller protegido cae",
+              "severity": "Alto",
+              "mitigation": "Construir más de un socio-taller (Drahtzug + FARO + St. Jakob). Documentar las instrucciones para que cualquier taller pueda entrar."
             },
             {
-              "label": "CE conformity delayed or fails",
-              "severity": "High",
-              "mitigation": "Q4 2026 with external test lab. If delayed: B2B pilot installations without commercial sale, for data collection."
+              "label": "La conformidad CE se retrasa o falla",
+              "severity": "Alto",
+              "mitigation": "T4 2026 con organismo externo. En caso de retraso: instalaciones piloto B2B sin venta comercial para recopilar datos."
             },
             {
-              "label": "B2B willingness to pay below CHF 150",
-              "severity": "Medium",
-              "mitigation": "Structured interviews Q4 2026 before scaling. If low: increase B2C share, hold foundation share longer."
+              "label": "Disposición a pagar B2B por debajo de 150 CHF",
+              "severity": "Medio",
+              "mitigation": "Entrevistas estructuradas T4 2026 antes de escalar. En caso de baja disposición: aumentar cuota B2C, mantener más tiempo la cuota de fundaciones."
             },
             {
-              "label": "LCA shows worse CO₂ profile than hoped",
-              "severity": "Medium",
-              "mitigation": "We publish the result unchanged, even if unfavourable. Value proposition shifts to repairability + local value creation rather than pure CO₂."
+              "label": "El ACV muestra un perfil CO₂ peor del esperado",
+              "severity": "Medio",
+              "mitigation": "Publicamos el resultado tal cual, incluso desfavorable. La propuesta de valor se desplaza a reparabilidad + valor añadido local, no puro CO₂."
             },
             {
-              "label": "Monitor supply collapses (ERZ contract changes)",
-              "severity": "Medium",
-              "mitigation": "Build a second source (private collection points, IT-lifecycle providers). Keep at least 50 monitors in reserve."
+              "label": "El suministro de monitores se interrumpe (ERZ cambia el contrato)",
+              "severity": "Medio",
+              "mitigation": "Construir una segunda fuente (puntos de recogida privados, proveedores de IT-lifecycle). Al menos 50 monitores de reserva."
             },
             {
-              "label": "Liability for defects — who carries it?",
-              "severity": "Medium",
-              "mitigation": "Open question Q05. Options: certified engineer model, partner takeover, insurance model. Decision before series sales."
+              "label": "Responsabilidad ante defecto — ¿quién la asume?",
+              "severity": "Medio",
+              "mitigation": "Pregunta abierta Q05. Opciones: modelo ingeniero certificado, asunción por socio, modelo asegurador. Decisión antes de la venta en serie."
             }
           ]
         },
         "partners": {
-          "eyebrow": "PARTNER ECOSYSTEM",
-          "title": "Who takes which role.",
-          "intro": "The project only works as a network. Active and potential partners here.",
+          "eyebrow": "ECOSISTEMA DE SOCIOS",
+          "title": "Quién asume qué rol.",
+          "intro": "El proyecto solo funciona como red. Estos son los socios activos y potenciales.",
           "groups": [
             {
               "key": "production",
-              "title": "Production & workshops",
+              "title": "Producción y talleres",
               "names": [
                 "Drahtzug",
                 "FARO",
@@ -4863,7 +4863,7 @@
             },
             {
               "key": "pilots",
-              "title": "Pilot locations (property)",
+              "title": "Sitios piloto (inmobiliario)",
               "names": [
                 "Livit",
                 "Wincasa",
@@ -4873,21 +4873,21 @@
             },
             {
               "key": "material",
-              "title": "Material source",
+              "title": "Fuente de material",
               "names": [
                 "ERZ Zürich"
               ]
             },
             {
               "key": "science",
-              "title": "Scientific partnership",
+              "title": "Acompañamiento científico",
               "names": [
-                "ZHAW (LCA & cost-benefit analysis)"
+                "ZHAW (ACV y análisis coste-beneficio)"
               ]
             },
             {
               "key": "funding",
-              "title": "Funding",
+              "title": "Financiación",
               "names": [
                 "Swico Innovationsfonds",
                 "Klimastiftung Schweiz",
@@ -4900,92 +4900,92 @@
       },
       "wirkung": {
         "meta": {
-          "title": "Impact — environment, science, open hardware",
-          "description": "What a retrofitted lamp means for climate, materials, and the circular economy — with sources and ZHAW oversight."
+          "title": "Impacto — medio ambiente, ciencia, hardware abierto",
+          "description": "Lo que significa una lámpara reconvertida para clima, materiales y circularidad — con fuentes y acompañamiento científico ZHAW."
         },
-        "eyebrow": "IMPACT",
-        "title": "What it means not to throw a monitor away.",
-        "intro": "We sell lamps — but the real product is the material stream we avoid. Here we document environmental benefits, scientific oversight, and why the build manuals are freely available.",
+        "eyebrow": "IMPACTO",
+        "title": "Lo que significa no tirar un monitor.",
+        "intro": "Vendemos lámparas — pero el verdadero producto es el flujo de materia evitado. Aquí documentamos los beneficios ambientales, el acompañamiento científico y por qué las instrucciones están libremente disponibles.",
         "environment": {
-          "eyebrow": "ENVIRONMENT",
-          "title": "CO₂, materials, and lifespan.",
-          "intro": "Provisional figures — the ZHAW LCA (Q3 2026) replaces them with rigorous values. Sources cited below each number.",
+          "eyebrow": "MEDIO AMBIENTE",
+          "title": "CO₂, materiales y vida útil.",
+          "intro": "Cifras provisionales — el ACV ZHAW (T3 2026) las reemplazará con valores robustos. Las fuentes están indicadas bajo cada cifra.",
           "metrics": [
             {
               "value": "~15–25 kg CO₂",
-              "label": "Avoided per lamp",
-              "note": "Difference between reusing an already-produced display and newly producing a comparable LED lamp. Source: Apple Product Environmental Reports + Öko-Institut LCA data for display electronics (pending ZHAW validation)."
+              "label": "Evitados por lámpara",
+              "note": "Diferencia entre reutilizar una pantalla ya producida y fabricar una lámpara LED nueva comparable. Fuente: Apple Product Environmental Reports + datos ACV Öko-Institut para electrónica de display (a validar por ZHAW)."
             },
             {
-              "value": "~2.5 kg material",
-              "label": "Kept in circulation",
-              "note": "Average weight of LCD components + housing per 22\" monitor (plastic, aluminium, rare earths in the backlight). Source: Swiss e-waste statistics 2023."
+              "value": "~2,5 kg de material",
+              "label": "Mantenidos en el ciclo",
+              "note": "Peso medio de los componentes LCD + carcasa por monitor 22\" (plástico, aluminio, tierras raras en la retroiluminación). Fuente: estadística suiza de e-waste 2023."
             },
             {
-              "value": "~5–10 years",
-              "label": "Second-life duration",
-              "note": "Expected lifespan of the retrofit lamp. Conservative estimate — many LED drivers last much longer. We update with warranty returns."
+              "value": "~5–10 años",
+              "label": "Segunda fase de uso",
+              "note": "Vida esperada de la lámpara reconvertida. Estimación conservadora — muchos drivers LED duran bastante más. Actualizamos con los retornos de garantía."
             }
           ],
-          "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
-          "transparencyLink": "Open transparency page"
+          "caveat": "Estas cifras no son el clímax publicitario, sino nuestra base de trabajo. Se validan con cada piloto. Metodología detallada en la página de Transparencia.",
+          "transparencyLink": "Abrir página de Transparencia"
         },
         "scientific": {
-          "eyebrow": "SCIENCE",
-          "title": "What ZHAW measures — and why it matters.",
-          "intro": "The Zurich University of Applied Sciences accompanies the project with a full life-cycle assessment per ISO 14040/14044.",
+          "eyebrow": "CIENCIA",
+          "title": "Lo que mide ZHAW — y por qué importa.",
+          "intro": "La Zürcher Hochschule für Angewandte Wissenschaften acompaña el proyecto con un análisis completo de ciclo de vida según ISO 14040/14044.",
           "scope": [
-            "Comparison retrofit lamp vs. newly produced LED lamp of comparable brightness",
-            "Material input, energy consumption in use, end-of-life scenarios",
-            "Sensitivity to workshop location choice and transport routes",
-            "Validation against Apple PER, Öko-Institut and Circular Computing studies"
+            "Comparación lámpara reconvertida vs. lámpara LED nueva de luminosidad comparable",
+            "Consumo material, energía en uso, escenarios de fin de vida",
+            "Sensibilidad a la ubicación del taller y rutas de transporte",
+            "Validación frente a Apple PER, Öko-Institut y estudios Circular Computing"
           ],
-          "timeline": "Start: April 2026 · Interim results: June 2026 · Final report: Q3 2026.",
-          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA."
+          "timeline": "Inicio: abril 2026 · resultados intermedios: junio 2026 · informe final: T3 2026.",
+          "commitment": "Publicamos el resultado tal cual — incluso si es desfavorable. Un ACV que solo \"gana\" no es un ACV."
         },
         "openHardware": {
-          "eyebrow": "OPEN HARDWARE",
-          "title": "Manuals are free because they have to be.",
-          "intro": "If only we have the manuals, only our small series exists. If they are public, any workshop in Switzerland can pick up the model — and that is precisely the goal.",
+          "eyebrow": "HARDWARE ABIERTO",
+          "title": "Las instrucciones son libres porque deben serlo.",
+          "intro": "Si solo nosotros las tenemos, solo existe nuestra serie pequeña. Si son públicas, cualquier taller suizo puede adoptar el modelo — y ese es exactamente el objetivo.",
           "pillars": [
             {
-              "title": "What we publish",
-              "body": "Per monitor model: photos, schematics, pin assignments, BOM (bill of materials), safety notes, test protocol. Format: Markdown on this site (long-term: wiki)."
+              "title": "Lo que publicamos",
+              "body": "Por modelo de monitor: fotos, esquemas, pinout, BOM (lista de materiales), advertencias de seguridad, protocolo de test. Formato: Markdown en este sitio (a largo plazo: wiki)."
             },
             {
-              "title": "Licence",
-              "body": "Manuals under Creative Commons CC-BY-SA — commercial use allowed, condition: attribution + same licence for derivatives. Software (this platform) under MIT."
+              "title": "Licencia",
+              "body": "Instrucciones bajo Creative Commons CC-BY-SA — uso comercial permitido, condición: atribución + misma licencia para obras derivadas. Software (esta plataforma) bajo MIT."
             },
             {
-              "title": "Who benefits",
-              "body": "Other sheltered workshops, repair cafés, universities for teaching projects, design students, hobbyists. We get back improvements as feedback."
+              "title": "Quién se beneficia",
+              "body": "Otros talleres protegidos, repair cafés, universidades para proyectos didácticos, estudiantes de diseño, aficionados. Las mejoras nos vuelven en forma de retornos."
             }
           ],
           "sourceLink": {
-            "label": "Platform source code",
+            "label": "Código fuente de la plataforma",
             "url": "https://github.com/g-but/revampit"
           }
         },
         "circularity": {
-          "eyebrow": "CIRCULAR FLOW",
-          "title": "Where the monitor comes from — and what happens when the lamp fails.",
-          "intro": "Material flow in four stages. Each one documented, no \"black box\".",
+          "eyebrow": "CIRCULARIDAD",
+          "title": "De dónde viene el monitor — y qué ocurre cuando la lámpara se avería.",
+          "intro": "Flujo de materia en cuatro etapas. Cada una está documentada — sin \"caja negra\".",
           "stages": [
             {
-              "label": "Intake",
-              "description": "Monitors from ERZ Zürich (disposal + recycling Zürich) and private collection points. We document model, condition, and date."
+              "label": "Entrada",
+              "description": "Monitores de ERZ Zurich (Entsorgung + Recycling Zürich) y puntos de recogida privados. Documentamos modelo, estado y fecha."
             },
             {
-              "label": "Retrofit",
-              "description": "Sheltered workshop removes LCD panel, tests backlight + driver, integrates LED dimming control, mounts housing. Per-unit documentation."
+              "label": "Reconversión",
+              "description": "El taller protegido retira el panel LCD, verifica retroiluminación y driver, integra una regulación LED, monta la carcasa. Documentación pieza por pieza."
             },
             {
-              "label": "Use",
-              "description": "Delivery to B2B location or B2C customer. 5–10 years of operation. On failure: repair by any workshop member thanks to the open manual."
+              "label": "Uso",
+              "description": "Entrega a sitio B2B o cliente B2C. 5–10 años de funcionamiento. En caso de avería: reparación por cualquier miembro del taller gracias a la instrucción abierta."
             },
             {
-              "label": "End of use",
-              "description": "Return to Revamp-IT or a partner workshop. LED driver reused, housing recycled. No component reaches household waste."
+              "label": "Fin de uso",
+              "description": "Devolución a Revamp-IT o taller socio. Driver LED reutilizado, carcasa reciclada. Ningún componente acaba en residuo doméstico."
             }
           ]
         }
