@@ -6351,6 +6351,55 @@
           "title": "Business plan & research",
           "description": "Reports, studies and the economic foundation of the monitor-upcycling project."
         },
+        "nav": {
+          "label": "Contents",
+          "items": [
+            {
+              "id": "marktforschung",
+              "label": "Market research"
+            },
+            {
+              "id": "alternatives",
+              "label": "Alternatives"
+            },
+            {
+              "id": "segments",
+              "label": "Customers"
+            },
+            {
+              "id": "lieferanten",
+              "label": "Suppliers"
+            },
+            {
+              "id": "economics",
+              "label": "Economics"
+            },
+            {
+              "id": "funding",
+              "label": "Funding"
+            },
+            {
+              "id": "risks",
+              "label": "Risks"
+            },
+            {
+              "id": "partners",
+              "label": "Partners"
+            },
+            {
+              "id": "research",
+              "label": "Research"
+            },
+            {
+              "id": "openQuestions",
+              "label": "Open questions"
+            },
+            {
+              "id": "getInvolved",
+              "label": "Get involved"
+            }
+          ]
+        },
         "research": {
           "title": "What we're currently studying",
           "intro": "These studies are in progress or commissioned. Results land here once they hold up.",
@@ -6529,6 +6578,175 @@
                 "KliK",
                 "Gebert Rüf"
               ]
+            }
+          ]
+        },
+        "marketResearch": {
+          "eyebrow": "MARKET RESEARCH",
+          "title": "What we know — and where the numbers come from.",
+          "intro": "Every claim has a source. We use public data where available and label assumptions clearly. The ZHAW LCA (Q3 2026) replaces the estimates with rigorous values.",
+          "datapoints": [
+            {
+              "label": "E-waste Switzerland",
+              "value": "131,400 tonnes / year",
+              "note": "Annual e-waste volume in Switzerland — many devices end up in recycling prematurely even though components still work.",
+              "sourceLabel": "BAFU + Swico Recycling",
+              "sourceUrl": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "label": "Displays in the stream",
+              "value": "~15% by weight",
+              "note": "Monitors + TVs make up a substantial share of the Swiss e-waste stream. ERZ Zürich and Swico collection points are the main channels.",
+              "sourceLabel": "ERZ Zürich",
+              "sourceUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "label": "Repair movement",
+              "value": "200+ Repair Cafés",
+              "note": "Active repair initiatives in Switzerland — a grown community that establishes repair as the norm. We build on this network.",
+              "sourceLabel": "Repair Café Switzerland",
+              "sourceUrl": "https://repair-cafe.ch/"
+            }
+          ],
+          "methodologyNote": "Methodology: ISO 14040/14044 for the LCA. Validation against Apple PER and Öko-Institut LCA data. Detailed sources under each card group or on the Transparency page.",
+          "methodologyLinks": [
+            {
+              "label": "ISO 14040/14044",
+              "url": "https://www.iso.org/standard/37456.html"
+            },
+            {
+              "label": "Apple Product Environmental Reports",
+              "url": "https://www.apple.com/environment/"
+            },
+            {
+              "label": "Öko-Institut publications",
+              "url": "https://www.oeko.de/publikationen/"
+            }
+          ]
+        },
+        "suppliers": {
+          "eyebrow": "SUPPLIERS & MATERIAL FLOW",
+          "title": "Where the monitors come from — and why this scales.",
+          "intro": "Input material is the structural strength of the project: monitors are abundantly available in the Swiss e-waste stream, free of cost, and in most cases technically reusable.",
+          "sources": [
+            {
+              "key": "erz",
+              "label": "ERZ Zürich (Entsorgung + Recycling Zürich)",
+              "description": "Main source from Q4 2026. Structured handover of decommissioned monitors to Revamp-IT — before they enter the shredder.",
+              "volume": "~50–100 devices / month estimated",
+              "linkLabel": "ERZ Zürich",
+              "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "key": "swico",
+              "label": "Swico recycling points",
+              "description": "Switzerland-wide network of return points for IT devices. Potential second source for diversification.",
+              "volume": "Scalable",
+              "linkLabel": "Swico Recycling",
+              "linkUrl": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "key": "private",
+              "label": "Private collection + corporate IT lifecycle",
+              "description": "Direct donations from companies with IT hardware refresh cycles and private donations. Built on existing Revamp-IT relationships.",
+              "volume": "~20 devices / month",
+              "linkLabel": "Donation overview",
+              "linkUrl": "/get-involved/donate"
+            }
+          ],
+          "criteria": {
+            "title": "Criteria for reuse",
+            "items": [
+              "LCD panel intact (backlight works)",
+              "Control electronics undamaged",
+              "Casing structurally whole (small scratches are OK)",
+              "Standard size 19–24 inch (for workshop efficiency)"
+            ]
+          },
+          "rejected": {
+            "title": "What we don't accept",
+            "items": [
+              "CRT screens (too heavy, low efficiency)",
+              "Completely destroyed casings",
+              "Non-standard connectors"
+            ]
+          }
+        },
+        "openQuestions": {
+          "eyebrow": "OPEN QUESTIONS",
+          "title": "What we don't know yet.",
+          "intro": "Honest list of open questions — no marketing filter. If you have an answer or a hunch, write to us.",
+          "items": [
+            {
+              "q": "Q01",
+              "title": "What exact light output do B2B buyers accept?",
+              "body": "The retrofitted lamp delivers 200–400 lumens. Mainstream LED lamps offer 600+ lumens. Is that enough for our target segments? Structured interviews Q4 2026.",
+              "tag": "Research Q4"
+            },
+            {
+              "q": "Q02",
+              "title": "What is the real lifespan of the LED drivers?",
+              "body": "We estimate 5–10 years conservatively. But real data we only have in 2–3 years. Warranty returns deliver first signals.",
+              "tag": "Pilot data"
+            },
+            {
+              "q": "Q03",
+              "title": "Is a second workshop in parallel to Drahtzug worth it?",
+              "body": "Drahtzug alone has capacity limits. More than one partner spreads risk but increases coordination overhead. Decision before series 2.",
+              "tag": "Strategy"
+            },
+            {
+              "q": "Q04",
+              "title": "B2B willingness to pay below CHF 150 — what then?",
+              "body": "If buyers only pay CHF 80–120, the unit math tips. Plan B: scale up B2C share, hold foundation share longer, possibly add a premium variant.",
+              "tag": "Economics"
+            },
+            {
+              "q": "Q05",
+              "title": "Who carries liability in case of defect?",
+              "body": "Electrical product with CE marking — legal liability must be clearly assigned. Options: certified engineer, insurance, partner takeover.",
+              "tag": "Legal"
+            }
+          ],
+          "feedbackCta": "Answer, hunch, or source? Write to us.",
+          "feedbackEmail": "kontakt@revamp-it.ch"
+        },
+        "getInvolved": {
+          "eyebrow": "GET INVOLVED",
+          "title": "How you can contribute.",
+          "intro": "The project works as a network — money, hardware, time, contacts. The concrete options here.",
+          "options": [
+            {
+              "key": "fund",
+              "title": "Apply for / support funding",
+              "body": "We're in talks with Klimastiftung Schweiz, KliK and Gebert Rüf. If you know a foundation that fits Open Hardware + social innovation, an introduction is welcome.",
+              "ctaLabel": "Become a funding partner",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Funding Monitor-Upcycling",
+              "linkLabel": "Klimastiftung Schweiz",
+              "linkUrl": "https://www.klimastiftung.ch/"
+            },
+            {
+              "key": "partner",
+              "title": "Become a pilot site",
+              "body": "Property managers, co-working spaces, hotels, and design studios — we're looking for pilot installations. Test light quality, deliver data, possibly follow-up orders.",
+              "ctaLabel": "Pilot inquiry",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Pilot site Monitor-Upcycling"
+            },
+            {
+              "key": "workshop",
+              "title": "Workshop partnership",
+              "body": "Protected workshops and Repair Cafés — we share guides, tools, and experience. Goal: make the model broadly available.",
+              "ctaLabel": "Workshop inquiry",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Workshop partnership Monitor-Upcycling",
+              "linkLabel": "Repair Café Switzerland",
+              "linkUrl": "https://repair-cafe.ch/"
+            },
+            {
+              "key": "donate",
+              "title": "Donate hardware",
+              "body": "Do you have a decommissioned 19–24 inch monitor? We accept it, document it, and you get a donation receipt.",
+              "ctaLabel": "Donate device",
+              "ctaHref": "/get-involved/donate"
             }
           ]
         }

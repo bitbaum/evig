@@ -6402,6 +6402,55 @@
           "title": "Plan d'affaires et recherche",
           "description": "Rapports, études et fondement économique du projet de revalorisation des moniteurs."
         },
+        "nav": {
+          "label": "Sommaire",
+          "items": [
+            {
+              "id": "marktforschung",
+              "label": "Étude de marché"
+            },
+            {
+              "id": "alternatives",
+              "label": "Alternatives"
+            },
+            {
+              "id": "segments",
+              "label": "Clients"
+            },
+            {
+              "id": "lieferanten",
+              "label": "Fournisseurs"
+            },
+            {
+              "id": "economics",
+              "label": "Économie"
+            },
+            {
+              "id": "funding",
+              "label": "Financement"
+            },
+            {
+              "id": "risks",
+              "label": "Risques"
+            },
+            {
+              "id": "partners",
+              "label": "Partenaires"
+            },
+            {
+              "id": "research",
+              "label": "Recherche"
+            },
+            {
+              "id": "openQuestions",
+              "label": "Questions ouvertes"
+            },
+            {
+              "id": "getInvolved",
+              "label": "Participer"
+            }
+          ]
+        },
         "research": {
           "title": "Ce que nous étudions actuellement",
           "intro": "Ces études sont en cours ou commandées. Les résultats arrivent ici dès qu'ils sont fiables.",
@@ -6580,6 +6629,175 @@
                 "KliK",
                 "Gebert Rüf"
               ]
+            }
+          ]
+        },
+        "marketResearch": {
+          "eyebrow": "ÉTUDE DE MARCHÉ",
+          "title": "Ce que nous savons — et d'où viennent les chiffres.",
+          "intro": "Chaque affirmation a une source. Nous utilisons des données publiques quand elles existent et étiquetons clairement les hypothèses. L'ACV ZHAW (T3 2026) remplacera les estimations par des valeurs robustes.",
+          "datapoints": [
+            {
+              "label": "Déchets électroniques Suisse",
+              "value": "131 400 tonnes / an",
+              "note": "Volume annuel de déchets électroniques en Suisse — beaucoup d'appareils sont recyclés prématurément alors que les composants fonctionnent encore.",
+              "sourceLabel": "OFEV + Swico Recycling",
+              "sourceUrl": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "label": "Écrans dans le flux",
+              "value": "~15% en poids",
+              "note": "Moniteurs + TV représentent une part substantielle du flux suisse de déchets électroniques. ERZ Zurich et les points Swico sont les principaux canaux.",
+              "sourceLabel": "ERZ Zurich",
+              "sourceUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "label": "Mouvement réparation",
+              "value": "200+ Repair Cafés",
+              "note": "Initiatives de réparation actives en Suisse — communauté établie qui fait de la réparation la norme. Nous construisons sur ce réseau.",
+              "sourceLabel": "Repair Café Suisse",
+              "sourceUrl": "https://repair-cafe.ch/"
+            }
+          ],
+          "methodologyNote": "Méthodologie : ISO 14040/14044 pour l'ACV. Validation par rapport à Apple PER et données ACV Öko-Institut. Sources détaillées sous chaque groupe de cartes ou sur la page Transparence.",
+          "methodologyLinks": [
+            {
+              "label": "ISO 14040/14044",
+              "url": "https://www.iso.org/standard/37456.html"
+            },
+            {
+              "label": "Apple Product Environmental Reports",
+              "url": "https://www.apple.com/environment/"
+            },
+            {
+              "label": "Publications Öko-Institut",
+              "url": "https://www.oeko.de/publikationen/"
+            }
+          ]
+        },
+        "suppliers": {
+          "eyebrow": "FOURNISSEURS & FLUX MATIÈRE",
+          "title": "D'où viennent les moniteurs — et pourquoi cela passe à l'échelle.",
+          "intro": "Le matériau d'entrée est la force structurelle du projet : les moniteurs sont abondamment disponibles dans le flux suisse de déchets électroniques, sans coût, et dans la plupart des cas techniquement réutilisables.",
+          "sources": [
+            {
+              "key": "erz",
+              "label": "ERZ Zurich (Entsorgung + Recycling Zürich)",
+              "description": "Source principale dès T4 2026. Remise structurée des moniteurs déclassés à Revamp-IT — avant qu'ils ne passent au broyeur.",
+              "volume": "~50–100 appareils / mois estimé",
+              "linkLabel": "ERZ Zurich",
+              "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "key": "swico",
+              "label": "Points de recyclage Swico",
+              "description": "Réseau suisse de points de retour pour appareils IT. Source secondaire potentielle pour la diversification.",
+              "volume": "Évolutif",
+              "linkLabel": "Swico Recycling",
+              "linkUrl": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "key": "private",
+              "label": "Collecte privée + lifecycle IT entreprises",
+              "description": "Dons directs d'entreprises avec cycles de renouvellement IT et dons privés. Construit sur les relations Revamp-IT existantes.",
+              "volume": "~20 appareils / mois",
+              "linkLabel": "Aperçu des dons",
+              "linkUrl": "/get-involved/donate"
+            }
+          ],
+          "criteria": {
+            "title": "Critères de réutilisation",
+            "items": [
+              "Dalle LCD intacte (rétroéclairage fonctionne)",
+              "Électronique de commande non endommagée",
+              "Boîtier structurellement complet (petites rayures OK)",
+              "Taille standard 19–24 pouces (pour l'efficacité de l'atelier)"
+            ]
+          },
+          "rejected": {
+            "title": "Ce que nous n'acceptons pas",
+            "items": [
+              "Écrans CRT (trop lourds, faible efficacité)",
+              "Boîtiers totalement détruits",
+              "Connecteurs non standard"
+            ]
+          }
+        },
+        "openQuestions": {
+          "eyebrow": "QUESTIONS OUVERTES",
+          "title": "Ce que nous ne savons pas encore.",
+          "intro": "Liste honnête des questions ouvertes — pas de filtre marketing. Si tu as une réponse ou une intuition, écris-nous.",
+          "items": [
+            {
+              "q": "Q01",
+              "title": "Quelle intensité lumineuse exacte les acheteurs B2B acceptent-ils ?",
+              "body": "La lampe reconvertie délivre 200–400 lumens. Les lampes LED grand public offrent 600+ lumens. Est-ce suffisant pour nos segments cibles ? Entretiens structurés T4 2026.",
+              "tag": "Recherche T4"
+            },
+            {
+              "q": "Q02",
+              "title": "Quelle est la durée de vie réelle des drivers LED ?",
+              "body": "Nous estimons 5–10 ans de manière conservative. Mais les données réelles nous les aurons dans 2–3 ans. Les retours garantie donneront les premiers indices.",
+              "tag": "Données pilote"
+            },
+            {
+              "q": "Q03",
+              "title": "Un second atelier parallèle à Drahtzug vaut-il le coup ?",
+              "body": "Drahtzug seul a des limites de capacité. Plus d'un partenaire répartit le risque mais augmente la coordination. Décision avant la série 2.",
+              "tag": "Stratégie"
+            },
+            {
+              "q": "Q04",
+              "title": "Disposition B2B à payer sous 150 CHF — et après ?",
+              "body": "Si les acheteurs ne paient que 80–120 CHF, l'économie unitaire bascule. Plan B : monter la part B2C, garder plus longtemps la part fondations, ajouter une variante premium.",
+              "tag": "Économie"
+            },
+            {
+              "q": "Q05",
+              "title": "Qui porte la responsabilité en cas de défaut ?",
+              "body": "Produit électrique avec marquage CE — la responsabilité légale doit être clairement attribuée. Options : ingénieur certifié, assurance, reprise partenaire.",
+              "tag": "Juridique"
+            }
+          ],
+          "feedbackCta": "Une réponse, une intuition, une source ? Écris-nous.",
+          "feedbackEmail": "kontakt@revamp-it.ch"
+        },
+        "getInvolved": {
+          "eyebrow": "PARTICIPER",
+          "title": "Comment tu peux contribuer.",
+          "intro": "Le projet fonctionne comme un réseau — argent, matériel, temps, contacts. Voici les options concrètes.",
+          "options": [
+            {
+              "key": "fund",
+              "title": "Demander / soutenir un financement",
+              "body": "Nous sommes en discussion avec Klimastiftung Schweiz, KliK et Gebert Rüf. Si tu connais une fondation qui correspond à Open Hardware + innovation sociale, une mise en relation est bienvenue.",
+              "ctaLabel": "Devenir partenaire de financement",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Financement Monitor-Upcycling",
+              "linkLabel": "Klimastiftung Schweiz",
+              "linkUrl": "https://www.klimastiftung.ch/"
+            },
+            {
+              "key": "partner",
+              "title": "Devenir site pilote",
+              "body": "Régies immobilières, coworkings, hôtels et studios de design — nous cherchons des installations pilotes. Tester la qualité de la lumière, fournir des données, peut-être des commandes ultérieures.",
+              "ctaLabel": "Demande pilote",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Site pilote Monitor-Upcycling"
+            },
+            {
+              "key": "workshop",
+              "title": "Partenariat atelier",
+              "body": "Ateliers protégés et Repair Cafés — nous partageons les guides, outils et expérience. Objectif : rendre le modèle largement disponible.",
+              "ctaLabel": "Demande atelier",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Partenariat atelier Monitor-Upcycling",
+              "linkLabel": "Repair Café Suisse",
+              "linkUrl": "https://repair-cafe.ch/"
+            },
+            {
+              "key": "donate",
+              "title": "Donner du matériel",
+              "body": "Tu as un moniteur 19–24 pouces déclassé ? Nous le récupérons, le documentons et tu reçois un reçu de don.",
+              "ctaLabel": "Donner un appareil",
+              "ctaHref": "/get-involved/donate"
             }
           ]
         }

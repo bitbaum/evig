@@ -6097,6 +6097,55 @@
           "title": "Geschäftsplan & Forschung",
           "description": "Berichte, Studien und das wirtschaftliche Fundament des Monitor-Upcycling-Projekts."
         },
+        "nav": {
+          "label": "Inhalt",
+          "items": [
+            {
+              "id": "marktforschung",
+              "label": "Marktforschung"
+            },
+            {
+              "id": "alternatives",
+              "label": "Alternativen"
+            },
+            {
+              "id": "segments",
+              "label": "Kunden"
+            },
+            {
+              "id": "lieferanten",
+              "label": "Lieferanten"
+            },
+            {
+              "id": "economics",
+              "label": "Wirtschaftlichkeit"
+            },
+            {
+              "id": "funding",
+              "label": "Finanzierung"
+            },
+            {
+              "id": "risks",
+              "label": "Risiken"
+            },
+            {
+              "id": "partners",
+              "label": "Partner"
+            },
+            {
+              "id": "research",
+              "label": "Forschung"
+            },
+            {
+              "id": "openQuestions",
+              "label": "Offene Fragen"
+            },
+            {
+              "id": "getInvolved",
+              "label": "Mitmachen"
+            }
+          ]
+        },
         "research": {
           "title": "Was wir gerade untersuchen",
           "intro": "Diese Studien laufen oder sind beauftragt. Ergebnisse erscheinen hier, sobald belastbar.",
@@ -6275,6 +6324,175 @@
                 "KliK",
                 "Gebert Rüf"
               ]
+            }
+          ]
+        },
+        "marketResearch": {
+          "eyebrow": "MARKTFORSCHUNG",
+          "title": "Was wir wissen — und woher die Zahlen stammen.",
+          "intro": "Jede Aussage hat eine Quelle. Wir nutzen öffentliche Daten, wo verfügbar, und kennzeichnen Annahmen klar. Die ZHAW-LCA (Q3 2026) ersetzt die Schätzungen durch belastbare Werte.",
+          "datapoints": [
+            {
+              "label": "Elektroschrott Schweiz",
+              "value": "131'400 Tonnen / Jahr",
+              "note": "Jährliche Menge Elektroschrott in der Schweiz — viele Geräte landen vorzeitig im Recycling, obwohl die Komponenten noch funktionieren.",
+              "sourceLabel": "BAFU + Swico Recycling",
+              "sourceUrl": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "label": "Bildschirme im Strom",
+              "value": "~15% nach Gewicht",
+              "note": "Monitore + Fernseher machen einen substanziellen Anteil des Schweizer E-Waste-Stroms aus. ERZ Zürich und Swico-Sammelstellen sind die Hauptkanäle.",
+              "sourceLabel": "ERZ Zürich",
+              "sourceUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "label": "Reparatur-Bewegung",
+              "value": "200+ Repair Cafés",
+              "note": "In der Schweiz aktive Repair-Initiativen — gewachsene Community, die Reparatur als Norm etabliert. Wir bauen auf diesem Netzwerk auf.",
+              "sourceLabel": "Repair Café Schweiz",
+              "sourceUrl": "https://repair-cafe.ch/"
+            }
+          ],
+          "methodologyNote": "Methodik: ISO 14040/14044 für die LCA. Validierung gegenüber Apple PER und Öko-Institut LCA-Daten. Detaillierte Quellen unter jeder Cardgruppe oder auf der Transparenz-Seite.",
+          "methodologyLinks": [
+            {
+              "label": "ISO 14040/14044",
+              "url": "https://www.iso.org/standard/37456.html"
+            },
+            {
+              "label": "Apple Product Environmental Reports",
+              "url": "https://www.apple.com/environment/"
+            },
+            {
+              "label": "Öko-Institut Publikationen",
+              "url": "https://www.oeko.de/publikationen/"
+            }
+          ]
+        },
+        "suppliers": {
+          "eyebrow": "LIEFERANTEN & MATERIALFLUSS",
+          "title": "Woher die Monitore kommen — und warum das skaliert.",
+          "intro": "Eingangsmaterial ist die strukturelle Stärke des Projekts: Monitore sind im Schweizer E-Waste-Strom reichlich vorhanden, kostenneutral verfügbar und in den meisten Fällen technisch wiederverwendbar.",
+          "sources": [
+            {
+              "key": "erz",
+              "label": "ERZ Zürich (Entsorgung + Recycling Zürich)",
+              "description": "Hauptquelle ab Q4 2026. Strukturierte Übergabe ausgemusterter Monitore an Revamp-IT — bevor sie in den Schredder gehen.",
+              "volume": "~50–100 Geräte / Monat geschätzt",
+              "linkLabel": "ERZ Zürich",
+              "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "key": "swico",
+              "label": "Swico-Recyclingstellen",
+              "description": "Schweizweites Netzwerk an Rückgabestellen für IT-Geräte. Potenzielle zweite Quelle für Diversifizierung.",
+              "volume": "Skalierbar",
+              "linkLabel": "Swico Recycling",
+              "linkUrl": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "key": "private",
+              "label": "Private Sammelstellen + Firmen-Lifecycle",
+              "description": "Direkte Spenden von Firmen mit IT-Hardware-Refresh und private Spenden. Aufgebaut über bestehende Revamp-IT-Beziehungen.",
+              "volume": "~20 Geräte / Monat",
+              "linkLabel": "Spenden-Übersicht",
+              "linkUrl": "/get-involved/donate"
+            }
+          ],
+          "criteria": {
+            "title": "Kriterien für Weiterverwendung",
+            "items": [
+              "LCD-Panel intakt (Hintergrundbeleuchtung funktioniert)",
+              "Steuerelektronik unbeschädigt",
+              "Gehäuse strukturell ganz (kleine Kratzer sind OK)",
+              "Standardgrösse 19–24 Zoll (für Werkstatt-Effizienz)"
+            ]
+          },
+          "rejected": {
+            "title": "Was wir nicht annehmen",
+            "items": [
+              "CRT-Bildschirme (zu schwer, geringe Effizienz)",
+              "Komplett zerstörte Gehäuse",
+              "Nicht-standardisierte Anschlüsse"
+            ]
+          }
+        },
+        "openQuestions": {
+          "eyebrow": "OFFENE FRAGEN",
+          "title": "Was wir noch nicht wissen.",
+          "intro": "Ehrliche Liste der offenen Fragen — kein Marketingfilter. Wenn du eine Antwort hast oder eine Vermutung, schreib uns.",
+          "items": [
+            {
+              "q": "Q01",
+              "title": "Welche genaue Lichtstärke akzeptieren B2B-Käufer?",
+              "body": "Die Umbauleuchte hat 200–400 Lumen. Mainstream-LED-Lampen bieten 600+ Lumen. Reicht das für unsere Zielsegmente? Strukturierte Interviews Q4 2026.",
+              "tag": "Forschung Q4"
+            },
+            {
+              "q": "Q02",
+              "title": "Wie ist die echte Lebensdauer der LED-Treiber?",
+              "body": "Wir schätzen 5–10 Jahre konservativ. Aber Realdaten haben wir erst in 2–3 Jahren. Garantieretouren liefern erste Hinweise.",
+              "tag": "Pilot-Daten"
+            },
+            {
+              "q": "Q03",
+              "title": "Lohnt sich eine zweite Werkstatt parallel zu Drahtzug?",
+              "body": "Drahtzug allein hat Kapazitätsgrenzen. Mehr als ein Partner streut Risiko, aber erhöht Koordinationsaufwand. Entscheidung vor Serie 2.",
+              "tag": "Strategie"
+            },
+            {
+              "q": "Q04",
+              "title": "B2B-Zahlungsbereitschaft unter CHF 150 — was dann?",
+              "body": "Wenn Käufer nur CHF 80–120 zahlen, kippt die Stückrechnung. Plan B: B2C-Anteil hochfahren, Stiftungsanteil länger halten, eventuell Premium-Variante.",
+              "tag": "Wirtschaftlichkeit"
+            },
+            {
+              "q": "Q05",
+              "title": "Wer trägt die Haftung bei Defekt?",
+              "body": "Strom-Produkt mit CE-Kennzeichnung — die rechtliche Haftung muss klar zugeordnet sein. Optionen: Fachingenieur, Versicherung, Partnerübernahme.",
+              "tag": "Rechtlich"
+            }
+          ],
+          "feedbackCta": "Antwort, Vermutung oder Quelle? Schreib uns.",
+          "feedbackEmail": "kontakt@revamp-it.ch"
+        },
+        "getInvolved": {
+          "eyebrow": "MITMACHEN",
+          "title": "Wie du beitragen kannst.",
+          "intro": "Das Projekt funktioniert als Netzwerk — Geld, Hardware, Zeit, Kontakte. Hier die konkreten Optionen.",
+          "options": [
+            {
+              "key": "fund",
+              "title": "Förderung beantragen / unterstützen",
+              "body": "Wir sind in Gesprächen mit Klimastiftung Schweiz, KliK und Gebert Rüf. Wenn du eine Stiftung kennst, die zu Open Hardware + soziale Innovation passt — Empfehlung gerne.",
+              "ctaLabel": "Förderpartner werden",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Förderung Monitor-Upcycling",
+              "linkLabel": "Klimastiftung Schweiz",
+              "linkUrl": "https://www.klimastiftung.ch/"
+            },
+            {
+              "key": "partner",
+              "title": "Pilot-Standort werden",
+              "body": "Liegenschaftsverwaltungen, Co-Working-Spaces, Hotels und Designstudios suchen wir für Pilotinstallationen. Lichtqualität testen, Daten liefern, später ggf. Folgeauftrag.",
+              "ctaLabel": "Pilot-Anfrage",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Pilot-Standort Monitor-Upcycling"
+            },
+            {
+              "key": "workshop",
+              "title": "Werkstatt-Partnerschaft",
+              "body": "Geschützte Werkstätten und Repair Cafés — wir teilen Anleitungen, Werkzeuge und Erfahrung. Ziel: das Modell breit verfügbar machen.",
+              "ctaLabel": "Werkstatt anfragen",
+              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Werkstatt-Partnerschaft Monitor-Upcycling",
+              "linkLabel": "Repair Café Schweiz",
+              "linkUrl": "https://repair-cafe.ch/"
+            },
+            {
+              "key": "donate",
+              "title": "Hardware spenden",
+              "body": "Du hast einen ausgemusterten 19–24 Zoll Monitor? Wir nehmen ihn entgegen, dokumentieren ihn, und du bekommst eine Spendenbescheinigung.",
+              "ctaLabel": "Gerät spenden",
+              "ctaHref": "/get-involved/donate"
             }
           ]
         }
