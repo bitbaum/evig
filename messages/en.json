@@ -8555,7 +8555,10 @@
       "emergencyContact": "Emergency contact",
       "hrNotes": "HR notes (confidential)",
       "createdAt": "Created",
-      "updatedAt": "Updated"
+      "updatedAt": "Updated",
+      "withoutProfileTitle": "{count} without profile · one click to add",
+      "withoutProfileMore": "+{count} more",
+      "footerNotice": "Sensitive data · {domain} addresses are auto-recognised as staff"
     },
     "protocols": {
       "queueTitle": "AI review queue",
@@ -8622,7 +8625,14 @@
         "workshop": "Workshop",
         "service": "Service",
         "other": "Submission"
-      }
+      },
+      "greeting": "Hello, {firstName}.",
+      "roleSuperAdmin": "Super Admin",
+      "roleStaff": "Staff",
+      "attentionQueueTitle": "On your plate",
+      "attentionQueueAllDone": "All done — nothing waiting.",
+      "quickCreateTitle": "Quick create",
+      "permissionRequestsTitle": "Access requests"
     },
     "projects": {
       "sidebar": "Public projects",
@@ -8705,6 +8715,16 @@
     },
     "localeFallback": {
       "notice": "The admin area is only available in German."
+    },
+    "timecards": {
+      "headerStatusSubmitted": "Submitted",
+      "headerStatusDraft": "Draft",
+      "headerDaysSuffix": "days",
+      "submit": "Submit",
+      "submitting": "Submitting…",
+      "resubmit": "Resubmit",
+      "save": "Save",
+      "saving": "Saving…"
     }
   }
 }

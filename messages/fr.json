@@ -8568,7 +8568,10 @@
       "emergencyContact": "Contact d'urgence",
       "hrNotes": "Notes RH (confidentielles)",
       "createdAt": "Créé",
-      "updatedAt": "Mis à jour"
+      "updatedAt": "Mis à jour",
+      "withoutProfileTitle": "{count} sans profil · un clic pour ajouter",
+      "withoutProfileMore": "+{count} de plus",
+      "footerNotice": "Données sensibles · les adresses {domain} sont reconnues comme personnel"
     },
     "protocols": {
       "queueTitle": "File d'attente de revue IA",
@@ -8635,7 +8638,14 @@
         "workshop": "Atelier",
         "service": "Service",
         "other": "Soumission"
-      }
+      },
+      "greeting": "Bonjour, {firstName}.",
+      "roleSuperAdmin": "Super Admin",
+      "roleStaff": "Personnel",
+      "attentionQueueTitle": "À traiter",
+      "attentionQueueAllDone": "Tout est fait — rien en attente.",
+      "quickCreateTitle": "Créer rapidement",
+      "permissionRequestsTitle": "Demandes d'accès"
     },
     "projects": {
       "sidebar": "Projets publics",
@@ -8718,6 +8728,16 @@
     },
     "localeFallback": {
       "notice": "L'espace d'administration n'est disponible qu'en allemand."
+    },
+    "timecards": {
+      "headerStatusSubmitted": "Soumise",
+      "headerStatusDraft": "Brouillon",
+      "headerDaysSuffix": "jours",
+      "submit": "Soumettre",
+      "submitting": "Envoi…",
+      "resubmit": "Resoumettre",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…"
     }
   }
 }

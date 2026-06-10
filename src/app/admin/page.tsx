@@ -18,6 +18,7 @@
 
 import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { auth } from '@/auth'
 import { ORG } from '@/config/org'
 import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
@@ -100,13 +101,14 @@ async function PermissionRequestsSection({
   if (!isSuper) return null
   const stats = await statsPromise
   if (stats.pendingPermissionRequests === 0) return null
+  const t = await getTranslations('admin.dashboard')
   return (
     <section id="permission-requests" aria-labelledby="dashboard-perm-title">
       <h2
         id="dashboard-perm-title"
         className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
       >
-        Zugriffs-Anfragen
+        {t('permissionRequestsTitle')}
       </h2>
       <div className="mt-3">
         <PermissionRequestsManager />
@@ -123,6 +125,7 @@ export default async function AdminDashboard() {
 
   const isSuper = isSuperAdmin(session.user.email)
   const statsPromise = getDashboardStats(isSuper)
+  const t = await getTranslations('admin.dashboard')
 
   const userForPermissions = {
     email: session.user.email ?? '',
@@ -158,10 +161,10 @@ export default async function AdminDashboard() {
       <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-            {todayLongLabel()} · {isSuper ? 'Super Admin' : 'Staff'}
+            {todayLongLabel()} · {isSuper ? t('roleSuperAdmin') : t('roleStaff')}
           </p>
           <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
-            Hallo, {firstName}.
+            {t('greeting', { firstName })}
           </h1>
         </div>
         <DashboardModeToggle current={dashboardMode} />

@@ -8553,7 +8553,10 @@
       "emergencyContact": "Notfallkontakt",
       "hrNotes": "HR-Notizen (Vertraulich)",
       "createdAt": "Erstellt",
-      "updatedAt": "Aktualisiert"
+      "updatedAt": "Aktualisiert",
+      "withoutProfileTitle": "{count} ohne Profil · ein Klick zum Hinzufügen",
+      "withoutProfileMore": "+{count} weitere",
+      "footerNotice": "Sensible Daten · {domain}-Adressen werden automatisch als Staff erkannt"
     },
     "protocols": {
       "queueTitle": "AI Review Queue",
@@ -8620,7 +8623,14 @@
         "workshop": "Workshop",
         "service": "Dienstleistung",
         "other": "Einreichung"
-      }
+      },
+      "greeting": "Hallo, {firstName}.",
+      "roleSuperAdmin": "Super Admin",
+      "roleStaff": "Staff",
+      "attentionQueueTitle": "Auf deinem Tisch",
+      "attentionQueueAllDone": "Alles erledigt — keine offenen Aufgaben.",
+      "quickCreateTitle": "Schnell erstellen",
+      "permissionRequestsTitle": "Zugriffs-Anfragen"
     },
     "projects": {
       "sidebar": "Öffentliche Projekte",
@@ -8703,6 +8713,16 @@
     },
     "localeFallback": {
       "notice": "Der Admin-Bereich ist nur auf Deutsch verfügbar."
+    },
+    "timecards": {
+      "headerStatusSubmitted": "Eingereicht",
+      "headerStatusDraft": "Entwurf",
+      "headerDaysSuffix": "Tage",
+      "submit": "Einreichen",
+      "submitting": "Sende…",
+      "resubmit": "Erneut einreichen",
+      "save": "Speichern",
+      "saving": "Speichere…"
     }
   }
 }

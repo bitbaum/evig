@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { Check, ArrowRight } from 'lucide-react'
 import { InlineActionButton } from './InlineActionButton'
@@ -43,7 +44,8 @@ const URGENCY_LABEL = {
  *
  * Empty state still gets a small reassurance line.
  */
-export function UnifiedQueue({ items }: UnifiedQueueProps) {
+export async function UnifiedQueue({ items }: UnifiedQueueProps) {
+  const t = await getTranslations('admin.dashboard')
   return (
     <section aria-labelledby="dashboard-queue-title">
       <div className="flex items-baseline justify-between">
@@ -51,7 +53,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
           id="dashboard-queue-title"
           className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
         >
-          Auf deinem Tisch
+          {t('attentionQueueTitle')}
         </h2>
         {items.length > 0 && (
           <span className="font-mono text-xs tabular-nums text-text-tertiary">
@@ -63,7 +65,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
       {items.length === 0 ? (
         <p className="mt-3 inline-flex items-center gap-2 text-sm text-text-secondary">
           <Check className="h-4 w-4 text-action" aria-hidden="true" />
-          Alles erledigt — keine offenen Aufgaben.
+          {t('attentionQueueAllDone')}
         </p>
       ) : (
         <ul className="mt-3 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">

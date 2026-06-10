@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { QuickAction } from './types'
 
@@ -14,8 +15,9 @@ interface CreateStripProps {
  * action color from `buildQuickActions`; the row wraps to multiple
  * lines on narrow viewports.
  */
-export function CreateStrip({ actions }: CreateStripProps) {
+export async function CreateStrip({ actions }: CreateStripProps) {
   if (actions.length === 0) return null
+  const t = await getTranslations('admin.dashboard')
 
   return (
     <section aria-labelledby="dashboard-create-title">
@@ -23,7 +25,7 @@ export function CreateStrip({ actions }: CreateStripProps) {
         id="dashboard-create-title"
         className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
       >
-        Schnell erstellen
+        {t('quickCreateTitle')}
       </h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {actions.map(action => {

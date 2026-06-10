@@ -8,6 +8,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -98,6 +99,7 @@ async function getStaffWithoutProfiles(): Promise<Array<{ id: string; name: stri
 export default async function TeamPage() {
   const session = await requireSection('team')
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+  const t = await getTranslations('admin.team')
 
   const [stats, staffWithoutProfiles] = await Promise.all([
     getTeamStats(),
@@ -129,7 +131,7 @@ export default async function TeamPage() {
             id="staff-without-profile-title"
             className="font-mono text-xs uppercase tracking-[0.18em] text-warning-700 dark:text-warning-400"
           >
-            {staffWithoutProfiles.length} ohne Profil · ein Klick zum Hinzufügen
+            {t('withoutProfileTitle', { count: staffWithoutProfiles.length })}
           </h2>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {staffWithoutProfiles.slice(0, 8).map(user => (
@@ -144,7 +146,7 @@ export default async function TeamPage() {
             ))}
             {staffWithoutProfiles.length > 8 && (
               <span className="inline-flex items-center px-2 text-xs text-warning-700 dark:text-warning-400">
-                +{staffWithoutProfiles.length - 8} weitere
+                {t('withoutProfileMore', { count: staffWithoutProfiles.length - 8 })}
               </span>
             )}
           </div>
@@ -180,7 +182,7 @@ export default async function TeamPage() {
       {/* Footer notice — sensitive data + auto-staff detection, collapsed
           to a single mono line so it stops competing with the list. */}
       <p className="border-t border-subtle pt-6 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
-        Sensible Daten · {`@${ORG.emailDomain}`}-Adressen werden automatisch als Staff erkannt
+        {t('footerNotice', { domain: `@${ORG.emailDomain}` })}
       </p>
     </AdminPageWrapper>
   )
