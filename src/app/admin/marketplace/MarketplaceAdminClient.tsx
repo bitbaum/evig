@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { AlertTriangle, Clock, Loader2, ShoppingBag } from 'lucide-react'
 import { useMarketplaceAdmin } from './useMarketplaceAdmin'
 import { TABS } from './types'
@@ -13,31 +14,34 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
 import type { Stats as MarketplaceStats } from './types'
 
+type MarketplaceTranslator = ReturnType<typeof useTranslations>
+
 export default function MarketplaceAdminClient() {
+  const t = useTranslations('admin.marketplace')
   const m = useMarketplaceAdmin()
 
   return (
     <div className="space-y-6">
       {/* Hero status — surfaces the next action, not 4 dead numbers */}
-      {m.stats && <HeroStatus stats={m.stats} onJumpTo={m.switchTab} />}
+      {m.stats && <HeroStatus stats={m.stats} onJumpTo={m.switchTab} t={t} />}
 
       {/* Tab Navigation */}
       <div className="flex gap-1 border-b border">
-        {TABS.map(t => (
+        {TABS.map(tabDef => (
           <Button
-            key={t.id}
+            key={tabDef.id}
             variant="ghost"
             size="sm"
-            onClick={() => m.switchTab(t.id)}
+            onClick={() => m.switchTab(tabDef.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
-              m.tab === t.id
+              m.tab === tabDef.id
                 ? 'border-action text-action'
                 : 'border-transparent text-text-tertiary hover:text-text-secondary'
             }`}
           >
-            <t.icon className="w-4 h-4" />
-            {t.label}
-            {t.id === 'reports' && m.stats && m.stats.openReports > 0 && (
+            <tabDef.icon className="w-4 h-4" />
+            {t(`tabs.${tabDef.labelKey}`)}
+            {tabDef.id === 'reports' && m.stats && m.stats.openReports > 0 && (
               <span className="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
                 {m.stats.openReports}
               </span>
@@ -113,8 +117,8 @@ export default function MarketplaceAdminClient() {
 
       <ConfirmDialog
         isOpen={!!m.pendingRemove}
-        title="Inserat entfernen"
-        message={`Inserat "${m.pendingRemove?.title}" wirklich entfernen?`}
+        title={t('listings.removeConfirm.title')}
+        message={t('listings.removeConfirm.message', { title: m.pendingRemove?.title ?? '' })}
         onConfirm={m.doRemove}
         onClose={m.cancelRemove}
       />
@@ -131,6 +135,7 @@ type MarketplaceTab = 'listings' | 'reports' | 'orders'
 function deriveHeroState(
   stats: MarketplaceStats,
   onJumpTo: (tab: MarketplaceTab) => void,
+  t: MarketplaceTranslator,
 ): {
   tone: HeroTone
   icon: typeof AlertTriangle
@@ -144,19 +149,19 @@ function deriveHeroState(
   const openReports = stats.openReports
 
   const kpis: HeroKpi[] = [
-    { label: 'Aktiv', value: activeListings },
-    { label: 'Ungeprüft', value: unverified },
-    { label: 'Offene Meldungen', value: openReports },
-    { label: 'RevampIT-Inserate', value: stats.revampit },
+    { label: t('hero.kpis.active'), value: activeListings },
+    { label: t('hero.kpis.unverified'), value: unverified },
+    { label: t('hero.kpis.openReports'), value: openReports },
+    { label: t('hero.kpis.revampit'), value: stats.revampit },
   ]
 
   if (openReports > 0) {
     return {
       tone: 'urgent',
       icon: AlertTriangle,
-      headline: `${openReports} offene Meldung${openReports === 1 ? '' : 'en'} prüfen`,
-      sub: 'Gemeldete Inserate brauchen eine Entscheidung — sonst sehen sie Käufer weiter.',
-      cta: { label: 'Meldungen ansehen', onClick: () => onJumpTo('reports') },
+      headline: t('hero.urgent.headline', { count: openReports }),
+      sub: t('hero.urgent.sub'),
+      cta: { label: t('hero.urgent.cta'), onClick: () => onJumpTo('reports') },
       kpis,
     }
   }
@@ -164,17 +169,17 @@ function deriveHeroState(
     return {
       tone: 'attention',
       icon: Clock,
-      headline: `${unverified} ungeprüfte Inserate`,
-      sub: 'Neue Einträge warten auf Freischaltung — bis dahin sind sie nicht öffentlich.',
-      cta: { label: 'Inserate prüfen', onClick: () => onJumpTo('listings') },
+      headline: t('hero.attention.headline', { count: unverified }),
+      sub: t('hero.attention.sub'),
+      cta: { label: t('hero.attention.cta'), onClick: () => onJumpTo('listings') },
       kpis,
     }
   }
   return {
     tone: 'healthy',
     icon: ShoppingBag,
-    headline: 'Marketplace im grünen Bereich.',
-    sub: `${activeListings} aktive Inserate, keine offenen Meldungen.`,
+    headline: t('hero.healthy.headline'),
+    sub: t('hero.healthy.sub', { active: activeListings }),
     kpis,
   }
 }
@@ -182,11 +187,13 @@ function deriveHeroState(
 function HeroStatus({
   stats,
   onJumpTo,
+  t,
 }: {
   stats: MarketplaceStats
   onJumpTo: (tab: MarketplaceTab) => void
+  t: MarketplaceTranslator
 }) {
-  const s = deriveHeroState(stats, onJumpTo)
+  const s = deriveHeroState(stats, onJumpTo, t)
   return (
     <AdminHeroStatus
       tone={s.tone}

@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -23,13 +24,15 @@ interface ReportsTabProps {
 }
 
 export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHandle }: ReportsTabProps) {
+  const t = useTranslations('admin.marketplace.reports')
+  const tPag = useTranslations('admin.pagination')
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
         <Select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="w-auto">
           <option value={REPORT_STATUS.PENDING}>{REPORT_STATUS_LABELS[REPORT_STATUS.PENDING]}</option>
           <option value={REPORT_STATUS.REVIEWED}>{REPORT_STATUS_LABELS[REPORT_STATUS.REVIEWED]}</option>
-          <option value="all">Alle</option>
+          <option value="all">{t('filters.all')}</option>
         </Select>
       </div>
 
@@ -37,12 +40,12 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">Inserat</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Grund</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Melder</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Datum</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Status</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Aktionen</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.listing')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.reason')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.reporter')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
@@ -52,7 +55,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                   <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
                     {r.listing_title} <ExternalLink className="w-3 h-3" />
                   </a>
-                  <p className="text-xs text-text-tertiary">Verkäufer: {r.seller_name || r.seller_email}</p>
+                  <p className="text-xs text-text-tertiary">{t('sellerLabel', { name: r.seller_name || r.seller_email })}</p>
                 </td>
                 <td className="px-4 py-3">
                   <span className="font-medium">{getReportReasonLabel(r.reason)}</span>
@@ -62,9 +65,9 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                 <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(r.created_at)}</td>
                 <td className="px-4 py-3">
                   {r.status === REPORT_STATUS.PENDING ? (
-                    <StatusBadge variant="warning">Offen</StatusBadge>
+                    <StatusBadge variant="warning">{t('statusOpen')}</StatusBadge>
                   ) : (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">{r.resolution_action ?? 'Bearbeitet'}</span>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">{r.resolution_action ?? t('statusProcessed')}</span>
                   )}
                 </td>
                 <td className="px-4 py-3">
@@ -75,7 +78,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                       onClick={() => onHandle(r.id)}
                       className="px-3 py-1.5 text-sm rounded-lg border border hover:bg-surface-raised dark:hover:bg-surface-base/6"
                     >
-                      Bearbeiten
+                      {t('edit')}
                     </Button>
                   )}
                 </td>
@@ -84,16 +87,16 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
           </tbody>
         </table>
         {reports && reports.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">Keine Meldungen gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
         )}
       </div>
 
       {reports && reports.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-text-tertiary">{reports.pagination.total} Meldungen</span>
+          <span className="text-sm text-text-tertiary">{t('countLabel', { count: reports.pagination.total })}</span>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>Zurück</Button>
-            <Button variant="outline" size="sm" disabled={!reports.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>Weiter</Button>
+            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>{tPag('prev')}</Button>
+            <Button variant="outline" size="sm" disabled={!reports.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>{tPag('next')}</Button>
           </div>
         </div>
       )}

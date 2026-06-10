@@ -8988,7 +8988,133 @@
     },
     "marketplace": {
       "pageTitle": "Marché",
-      "pageDescription": "Gérer annonces, signalements et commandes"
+      "pageDescription": "Gérer annonces, signalements et commandes",
+      "tabs": {
+        "listings": "Annonces",
+        "reports": "Signalements",
+        "orders": "Commandes"
+      },
+      "hero": {
+        "kpis": {
+          "active": "Actives",
+          "unverified": "Non vérifiées",
+          "openReports": "Signalements ouverts",
+          "revampit": "Annonces RevampIT"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# signalement ouvert} other {# signalements ouverts}} à examiner",
+          "sub": "Les annonces signalées attendent une décision — d'ici là les acheteurs les voient toujours.",
+          "cta": "Voir les signalements"
+        },
+        "attention": {
+          "headline": "{count, plural, one {# annonce non vérifiée} other {# annonces non vérifiées}}",
+          "sub": "De nouvelles entrées attendent la validation — d'ici là elles ne sont pas publiques.",
+          "cta": "Examiner les annonces"
+        },
+        "healthy": {
+          "headline": "Le marketplace va bien.",
+          "sub": "{active} annonces actives, aucun signalement ouvert."
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "Tous les statuts",
+          "allCategories": "Toutes les catégories",
+          "allSellers": "Tous les vendeurs",
+          "revampit": "RevampIT",
+          "community": "Communauté",
+          "verification": "Vérification",
+          "verified": "Vérifiées",
+          "unverified": "Non vérifiées",
+          "reports": "Signalements",
+          "reported": "Signalée",
+          "searchPlaceholder": "Rechercher…"
+        },
+        "columns": {
+          "title": "Titre",
+          "category": "Catégorie",
+          "price": "Prix",
+          "seller": "Vendeur",
+          "status": "Statut",
+          "date": "Date",
+          "actions": "Actions"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {# signalement} other {# signalements}}"
+        },
+        "actions": {
+          "view": "Voir",
+          "edit": "Modifier",
+          "remove": "Retirer",
+          "verify": "Vérifier",
+          "markVerified": "Marquer comme vérifiée",
+          "removeVerification": "Retirer la vérification",
+          "ok": "OK",
+          "notePlaceholder": "Note (optionnelle)"
+        },
+        "empty": "Aucune annonce trouvée",
+        "countLabel": "{count, plural, one {# annonce} other {# annonces}}",
+        "removeConfirm": {
+          "title": "Retirer l'annonce",
+          "message": "Vraiment retirer l'annonce « {title} » ?"
+        },
+        "unverifyConfirm": {
+          "title": "Retirer la vérification",
+          "message": "Vraiment retirer la vérification ?"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "Tous"
+        },
+        "columns": {
+          "listing": "Annonce",
+          "reason": "Motif",
+          "reporter": "Auteur",
+          "date": "Date",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "sellerLabel": "Vendeur : {name}",
+        "statusOpen": "Ouvert",
+        "statusProcessed": "Traité",
+        "edit": "Traiter",
+        "empty": "Aucun signalement trouvé",
+        "countLabel": "{count, plural, one {# signalement} other {# signalements}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "Tous les statuts"
+        },
+        "columns": {
+          "orderId": "ID commande",
+          "listing": "Annonce",
+          "buyer": "Acheteur",
+          "seller": "Vendeur",
+          "amount": "Montant",
+          "status": "Statut",
+          "date": "Date"
+        },
+        "empty": "Aucune commande trouvée",
+        "countLabel": "{count, plural, one {# commande} other {# commandes}}"
+      },
+      "editModal": {
+        "title": "Modifier l'annonce",
+        "statusLabel": "Statut",
+        "adminNotesLabel": "Notes admin",
+        "adminNotesPlaceholder": "Notes internes…"
+      },
+      "handleReportModal": {
+        "title": "Traiter le signalement",
+        "actionLabel": "Action",
+        "actionDismiss": "Rejeter",
+        "actionWarnSeller": "Avertir le vendeur",
+        "actionRemoveListing": "Retirer l'annonce",
+        "notesLabel": "Notes",
+        "notesPlaceholder": "Motif…",
+        "execute": "Exécuter"
+      }
     },
     "payroll": {
       "pageTitle": "Paie",

@@ -75,8 +75,10 @@ export interface Stats {
 
 export type Tab = 'listings' | 'reports' | 'orders'
 
-export const TABS: { id: Tab; label: string; icon: typeof Package }[] = [
-  { id: 'listings', label: 'Inserate', icon: Package },
-  { id: 'reports', label: 'Meldungen', icon: AlertTriangle },
-  { id: 'orders', label: 'Bestellungen', icon: ShoppingBag },
+// TABS define the structural list of tabs — labels are resolved at render
+// time from admin.marketplace.tabs.* so they translate per locale.
+export const TABS: { id: Tab; labelKey: 'listings' | 'reports' | 'orders'; icon: typeof Package }[] = [
+  { id: 'listings', labelKey: 'listings', icon: Package },
+  { id: 'reports', labelKey: 'reports', icon: AlertTriangle },
+  { id: 'orders', labelKey: 'orders', icon: ShoppingBag },
 ]

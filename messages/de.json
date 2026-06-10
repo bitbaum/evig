@@ -8988,7 +8988,133 @@
     },
     "marketplace": {
       "pageTitle": "Marketplace",
-      "pageDescription": "Inserate, Meldungen und Bestellungen verwalten"
+      "pageDescription": "Inserate, Meldungen und Bestellungen verwalten",
+      "tabs": {
+        "listings": "Inserate",
+        "reports": "Meldungen",
+        "orders": "Bestellungen"
+      },
+      "hero": {
+        "kpis": {
+          "active": "Aktiv",
+          "unverified": "Ungeprüft",
+          "openReports": "Offene Meldungen",
+          "revampit": "RevampIT-Inserate"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# offene Meldung} other {# offene Meldungen}} prüfen",
+          "sub": "Gemeldete Inserate brauchen eine Entscheidung — sonst sehen sie Käufer weiter.",
+          "cta": "Meldungen ansehen"
+        },
+        "attention": {
+          "headline": "{count, plural, one {# ungeprüftes Inserat} other {# ungeprüfte Inserate}}",
+          "sub": "Neue Einträge warten auf Freischaltung — bis dahin sind sie nicht öffentlich.",
+          "cta": "Inserate prüfen"
+        },
+        "healthy": {
+          "headline": "Marketplace im grünen Bereich.",
+          "sub": "{active} aktive Inserate, keine offenen Meldungen."
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "Alle Status",
+          "allCategories": "Alle Kategorien",
+          "allSellers": "Alle Verkäufer",
+          "revampit": "RevampIT",
+          "community": "Community",
+          "verification": "Verifizierung",
+          "verified": "Geprüft",
+          "unverified": "Ungeprüft",
+          "reports": "Meldungen",
+          "reported": "Gemeldet",
+          "searchPlaceholder": "Suchen…"
+        },
+        "columns": {
+          "title": "Titel",
+          "category": "Kategorie",
+          "price": "Preis",
+          "seller": "Verkäufer",
+          "status": "Status",
+          "date": "Datum",
+          "actions": "Aktionen"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {# Meldung} other {# Meldungen}}"
+        },
+        "actions": {
+          "view": "Ansehen",
+          "edit": "Bearbeiten",
+          "remove": "Entfernen",
+          "verify": "Verifizieren",
+          "markVerified": "Als geprüft markieren",
+          "removeVerification": "Verifizierung entfernen",
+          "ok": "OK",
+          "notePlaceholder": "Notiz (optional)"
+        },
+        "empty": "Keine Inserate gefunden",
+        "countLabel": "{count, plural, one {# Inserat} other {# Inserate}}",
+        "removeConfirm": {
+          "title": "Inserat entfernen",
+          "message": "Inserat „{title}\" wirklich entfernen?"
+        },
+        "unverifyConfirm": {
+          "title": "Verifizierung entfernen",
+          "message": "Verifizierung wirklich entfernen?"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "Alle"
+        },
+        "columns": {
+          "listing": "Inserat",
+          "reason": "Grund",
+          "reporter": "Melder",
+          "date": "Datum",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "sellerLabel": "Verkäufer: {name}",
+        "statusOpen": "Offen",
+        "statusProcessed": "Bearbeitet",
+        "edit": "Bearbeiten",
+        "empty": "Keine Meldungen gefunden",
+        "countLabel": "{count, plural, one {# Meldung} other {# Meldungen}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "Alle Status"
+        },
+        "columns": {
+          "orderId": "Bestell-ID",
+          "listing": "Inserat",
+          "buyer": "Käufer",
+          "seller": "Verkäufer",
+          "amount": "Betrag",
+          "status": "Status",
+          "date": "Datum"
+        },
+        "empty": "Keine Bestellungen gefunden",
+        "countLabel": "{count, plural, one {# Bestellung} other {# Bestellungen}}"
+      },
+      "editModal": {
+        "title": "Inserat bearbeiten",
+        "statusLabel": "Status",
+        "adminNotesLabel": "Admin-Notizen",
+        "adminNotesPlaceholder": "Interne Notizen…"
+      },
+      "handleReportModal": {
+        "title": "Meldung bearbeiten",
+        "actionLabel": "Aktion",
+        "actionDismiss": "Abweisen",
+        "actionWarnSeller": "Verkäufer verwarnen",
+        "actionRemoveListing": "Inserat entfernen",
+        "notesLabel": "Notizen",
+        "notesPlaceholder": "Begründung…",
+        "execute": "Ausführen"
+      }
     },
     "payroll": {
       "pageTitle": "Lohnlauf",

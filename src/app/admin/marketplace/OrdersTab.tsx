@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -16,11 +17,13 @@ interface OrdersTabProps {
 }
 
 export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: OrdersTabProps) {
+  const t = useTranslations('admin.marketplace.orders')
+  const tPag = useTranslations('admin.pagination')
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
         <Select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="w-auto">
-          <option value="all">Alle Status</option>
+          <option value="all">{t('filters.allStatus')}</option>
           {Object.entries(ORDER_STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
         </Select>
       </div>
@@ -29,13 +32,13 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">Bestell-ID</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Inserat</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Käufer</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Verkäufer</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Betrag</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Status</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">Datum</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.orderId')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.listing')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.buyer')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.seller')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.amount')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
@@ -53,16 +56,16 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
           </tbody>
         </table>
         {orders && orders.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">Keine Bestellungen gefunden</div>
+          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
         )}
       </div>
 
       {orders && orders.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-text-tertiary">{orders.pagination.total} Bestellungen</span>
+          <span className="text-sm text-text-tertiary">{t('countLabel', { count: orders.pagination.total })}</span>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>Zurück</Button>
-            <Button variant="outline" size="sm" disabled={!orders.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>Weiter</Button>
+            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>{tPag('prev')}</Button>
+            <Button variant="outline" size="sm" disabled={!orders.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>{tPag('next')}</Button>
           </div>
         </div>
       )}

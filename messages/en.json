@@ -8990,7 +8990,133 @@
     },
     "marketplace": {
       "pageTitle": "Marketplace",
-      "pageDescription": "Manage listings, reports, and orders"
+      "pageDescription": "Manage listings, reports, and orders",
+      "tabs": {
+        "listings": "Listings",
+        "reports": "Reports",
+        "orders": "Orders"
+      },
+      "hero": {
+        "kpis": {
+          "active": "Active",
+          "unverified": "Unverified",
+          "openReports": "Open reports",
+          "revampit": "RevampIT listings"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# open report} other {# open reports}} to review",
+          "sub": "Reported listings need a decision — until then buyers keep seeing them.",
+          "cta": "View reports"
+        },
+        "attention": {
+          "headline": "{count, plural, one {# unverified listing} other {# unverified listings}}",
+          "sub": "New entries wait for approval — until then they are not public.",
+          "cta": "Review listings"
+        },
+        "healthy": {
+          "headline": "Marketplace is healthy.",
+          "sub": "{active} active listings, no open reports."
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "All statuses",
+          "allCategories": "All categories",
+          "allSellers": "All sellers",
+          "revampit": "RevampIT",
+          "community": "Community",
+          "verification": "Verification",
+          "verified": "Verified",
+          "unverified": "Unverified",
+          "reports": "Reports",
+          "reported": "Reported",
+          "searchPlaceholder": "Search…"
+        },
+        "columns": {
+          "title": "Title",
+          "category": "Category",
+          "price": "Price",
+          "seller": "Seller",
+          "status": "Status",
+          "date": "Date",
+          "actions": "Actions"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {# report} other {# reports}}"
+        },
+        "actions": {
+          "view": "View",
+          "edit": "Edit",
+          "remove": "Remove",
+          "verify": "Verify",
+          "markVerified": "Mark verified",
+          "removeVerification": "Remove verification",
+          "ok": "OK",
+          "notePlaceholder": "Note (optional)"
+        },
+        "empty": "No listings found",
+        "countLabel": "{count, plural, one {# listing} other {# listings}}",
+        "removeConfirm": {
+          "title": "Remove listing",
+          "message": "Really remove listing „{title}\"?"
+        },
+        "unverifyConfirm": {
+          "title": "Remove verification",
+          "message": "Really remove verification?"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "All"
+        },
+        "columns": {
+          "listing": "Listing",
+          "reason": "Reason",
+          "reporter": "Reporter",
+          "date": "Date",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "sellerLabel": "Seller: {name}",
+        "statusOpen": "Open",
+        "statusProcessed": "Processed",
+        "edit": "Handle",
+        "empty": "No reports found",
+        "countLabel": "{count, plural, one {# report} other {# reports}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "All statuses"
+        },
+        "columns": {
+          "orderId": "Order ID",
+          "listing": "Listing",
+          "buyer": "Buyer",
+          "seller": "Seller",
+          "amount": "Amount",
+          "status": "Status",
+          "date": "Date"
+        },
+        "empty": "No orders found",
+        "countLabel": "{count, plural, one {# order} other {# orders}}"
+      },
+      "editModal": {
+        "title": "Edit listing",
+        "statusLabel": "Status",
+        "adminNotesLabel": "Admin notes",
+        "adminNotesPlaceholder": "Internal notes…"
+      },
+      "handleReportModal": {
+        "title": "Handle report",
+        "actionLabel": "Action",
+        "actionDismiss": "Dismiss",
+        "actionWarnSeller": "Warn seller",
+        "actionRemoveListing": "Remove listing",
+        "notesLabel": "Notes",
+        "notesPlaceholder": "Reason…",
+        "execute": "Execute"
+      }
     },
     "payroll": {
       "pageTitle": "Payroll",
