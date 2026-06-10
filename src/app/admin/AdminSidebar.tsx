@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -41,6 +42,7 @@ export function AdminSidebar({
   accessibleSections,
   pathname,
 }: AdminSidebarProps) {
+  const t = useTranslations('admin.sidebar')
   const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(() => {
     return new Set(['uebersicht', 'angebot', 'inhalte'])
   })
@@ -125,14 +127,14 @@ export function AdminSidebar({
           size="icon"
           onClick={() => setMobileMenuOpen(false)}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:hidden"
-          aria-label="Seitenleiste schliessen"
+          aria-label={t('closeAria')}
         >
           <ChevronLeft className="w-5 h-5 text-text-secondary" />
         </Button>
       </div>
 
       {/* Navigation */}
-      <nav aria-label="Admin-Navigation" className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+      <nav aria-label={t('navAria')} className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
         {groupedSections.map(({ group, sections }) => {
           const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
           if (accessibleGroupSections.length === 0) return null
@@ -180,7 +182,7 @@ export function AdminSidebar({
                             ? 'bg-action/10 text-action/8'
                             : 'text-text-tertiary hover:bg-surface-raised dark:hover:bg-surface-base/4 hover:text-text-primary'
                         }`}
-                        title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
+                        title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
                         <Icon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
@@ -217,15 +219,15 @@ export function AdminSidebar({
                   ? 'bg-action/10 text-action ring-1 ring-action/30'
                   : 'text-text-secondary hover:bg-action/10'
               }`}
-              title={sidebarCollapsed ? 'Hirn AI' : undefined}
+              title={sidebarCollapsed ? t('hirnTitle') : undefined}
             >
               <div className="w-8 h-8 rounded-lg bg-action flex items-center justify-center shrink-0">
                 <Brain className="w-4 h-4 text-white" />
               </div>
               {!sidebarCollapsed && (
                 <div className="flex-1">
-                  <span className="text-sm font-semibold">Hirn AI</span>
-                  <p className="text-xs text-text-secondary">KI-Assistent</p>
+                  <span className="text-sm font-semibold">{t('hirnTitle')}</span>
+                  <p className="text-xs text-text-secondary">{t('hirnSubtitle')}</p>
                 </div>
               )}
             </Link>
@@ -236,14 +238,14 @@ export function AdminSidebar({
         <div className="mt-4 border-t border pt-3">
           {!sidebarCollapsed && (
             <p className="mb-1 px-2 text-xs font-medium uppercase tracking-widest text-text-muted dark:text-text-secondary">
-              Website
+              {t('websiteGroup')}
             </p>
           )}
           <div className="space-y-0.5">
             {[
-              { href: '/', icon: Home, label: 'Startseite' },
-              { href: '/shop', icon: Store, label: 'Shop' },
-              { href: '/dashboard', icon: User, label: 'Mein Bereich' },
+              { href: '/', icon: Home, label: t('linkHome') },
+              { href: '/shop', icon: Store, label: t('linkShop') },
+              { href: '/dashboard', icon: User, label: t('linkDashboard') },
             ].map(({ href, icon: Icon, label }) => (
               <Link
                 key={href}

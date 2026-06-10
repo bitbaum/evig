@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import {
@@ -20,6 +21,7 @@ interface UserMenuDropdownProps {
 }
 
 export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
+  const t = useTranslations('admin.userMenu')
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
 
@@ -100,11 +102,11 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/4"
             >
               <ExternalLink className="w-4 h-4 text-text-tertiary" />
-              Zur Website
+              {t('toWebsite')}
             </Link>
 
             <div className="flex w-full items-center justify-between px-4 py-1.5 text-sm text-text-secondary">
-              <span>Dark Mode</span>
+              <span>{t('darkMode')}</span>
               <ThemeToggle />
             </div>
           </div>
@@ -119,7 +121,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
               className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-text-secondary hover:bg-error-50 dark:hover:bg-error-900/20 hover:text-error-600 dark:hover:text-error-400 transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              Abmelden
+              {t('signOut')}
             </Button>
           </div>
         </div>

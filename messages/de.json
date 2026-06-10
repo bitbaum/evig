@@ -8836,6 +8836,36 @@
     "membership": {
       "pageTitle": "Mitglieder",
       "pageDescription": "Vereinsmitglieder verwalten"
+    },
+    "sidebar": {
+      "closeAria": "Seitenleiste schliessen",
+      "navAria": "Admin-Navigation",
+      "sensitiveLabel": "Geschützt",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "KI-Assistent",
+      "websiteGroup": "Website",
+      "linkHome": "Startseite",
+      "linkShop": "Shop",
+      "linkDashboard": "Mein Bereich",
+      "expandSidebarTitle": "Seitenleiste aufklappen",
+      "collapseSidebarTitle": "Seitenleiste einklappen"
+    },
+    "commandBar": {
+      "placeholder": "Suche oder Befehl…",
+      "openShortcut": "Befehlsleiste öffnen",
+      "noResults": "Keine Ergebnisse",
+      "recentlyVisited": "Zuletzt besucht"
+    },
+    "userMenu": {
+      "darkMode": "Dark Mode",
+      "toWebsite": "Zur Website",
+      "signOut": "Abmelden",
+      "adminArea": "Admin-Bereich"
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "empty": "Keine neuen Benachrichtigungen",
+      "markAllRead": "Alle als gelesen markieren"
     }
   }
 }

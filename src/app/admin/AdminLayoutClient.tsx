@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from '@/i18n/navigation'
 import { Menu, Globe } from 'lucide-react'
@@ -33,6 +34,8 @@ export function AdminLayoutClient({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const t = useTranslations('admin.sidebar')
+  const tUser = useTranslations('admin.userMenu')
 
   // Body scroll lock when mobile sidebar is open
   useEffect(() => {
@@ -93,7 +96,7 @@ export function AdminLayoutClient({
                 size="icon"
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:flex"
-                title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
+                title={sidebarCollapsed ? t('expandSidebarTitle') : t('collapseSidebarTitle')}
               >
                 <Menu className="h-4 w-4 text-text-tertiary" />
               </Button>
@@ -108,7 +111,7 @@ export function AdminLayoutClient({
                 className="hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30/10 sm:flex"
               >
                 <Globe className="w-3.5 h-3.5" />
-                Website
+                {tUser('toWebsite')}
               </Link>
 
               <CommandBar />

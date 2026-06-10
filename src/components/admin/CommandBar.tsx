@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import {
@@ -181,6 +182,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
 // ---------------------------------------------------------------------------
 
 export function CommandBar() {
+  const t = useTranslations('admin.commandBar')
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState<SearchIndex | null>(null)
@@ -295,7 +297,7 @@ export function CommandBar() {
         className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-2xl backdrop:bg-black/60"
         onKeyDown={handleKeyDown}
         onClose={close}
-        aria-label="Befehlspalette"
+        aria-label={t('openShortcut')}
       >
         {/* Search input */}
         <div className="flex items-center gap-3 border-b border px-4 py-3">
@@ -303,7 +305,7 @@ export function CommandBar() {
           <Input
             ref={inputRef}
             type="search"
-            placeholder="Suche oder Befehl..."
+            placeholder={t('placeholder')}
             value={query}
             onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
             className="flex-1 bg-transparent border-0 focus:ring-0 focus-visible:ring-0 px-0"

@@ -8838,6 +8838,36 @@
     "membership": {
       "pageTitle": "Members",
       "pageDescription": "Manage organisation members"
+    },
+    "sidebar": {
+      "closeAria": "Close sidebar",
+      "navAria": "Admin navigation",
+      "sensitiveLabel": "Protected",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "AI assistant",
+      "websiteGroup": "Website",
+      "linkHome": "Home",
+      "linkShop": "Shop",
+      "linkDashboard": "My space",
+      "expandSidebarTitle": "Expand sidebar",
+      "collapseSidebarTitle": "Collapse sidebar"
+    },
+    "commandBar": {
+      "placeholder": "Search or command…",
+      "openShortcut": "Open command bar",
+      "noResults": "No results",
+      "recentlyVisited": "Recently visited"
+    },
+    "userMenu": {
+      "darkMode": "Dark mode",
+      "toWebsite": "To website",
+      "signOut": "Sign out",
+      "adminArea": "Admin area"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No new notifications",
+      "markAllRead": "Mark all as read"
     }
   }
 }

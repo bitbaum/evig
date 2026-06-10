@@ -8851,6 +8851,36 @@
     "membership": {
       "pageTitle": "Membres",
       "pageDescription": "Gérer les membres de l'association"
+    },
+    "sidebar": {
+      "closeAria": "Fermer la barre latérale",
+      "navAria": "Navigation admin",
+      "sensitiveLabel": "Protégé",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "Assistant IA",
+      "websiteGroup": "Site web",
+      "linkHome": "Accueil",
+      "linkShop": "Boutique",
+      "linkDashboard": "Mon espace",
+      "expandSidebarTitle": "Déplier la barre latérale",
+      "collapseSidebarTitle": "Replier la barre latérale"
+    },
+    "commandBar": {
+      "placeholder": "Recherche ou commande…",
+      "openShortcut": "Ouvrir la barre de commande",
+      "noResults": "Aucun résultat",
+      "recentlyVisited": "Récemment visités"
+    },
+    "userMenu": {
+      "darkMode": "Mode sombre",
+      "toWebsite": "Vers le site",
+      "signOut": "Déconnexion",
+      "adminArea": "Espace admin"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "Aucune nouvelle notification",
+      "markAllRead": "Tout marquer comme lu"
     }
   }
 }
