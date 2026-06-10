@@ -8761,7 +8761,13 @@
       "fieldNote": "Notiz",
       "fieldNotePlaceholder": "Nur wenn dieser Tag anders war",
       "pageTitle": "Zeitkarten",
-      "pageDescription": "Arbeitszeiten erfassen, einreichen und genehmigen"
+      "pageDescription": "Arbeitszeiten erfassen, einreichen und genehmigen",
+      "extrasToggle": "Erweitert · Kommentar, KI-Assistent, Vorlage zurücksetzen",
+      "extrasMonthComment": "Monatskommentar",
+      "extrasMonthCommentPlaceholder": "Optional — z.B. Ferien, Krankheit, Sondereinsatz.",
+      "extrasAiAssist": "KI-Assistent",
+      "extrasAiPlaceholder": "z.B. 12. und 13. frei, sonst normal",
+      "extrasResetMonth": "Monat aus Schedule neu aufbauen (löscht aktuelle Einträge)"
     },
     "appointments": {
       "pageTitle": "Termine",
@@ -8892,6 +8898,31 @@
       "confirm": "Bestätigen",
       "back": "Zurück",
       "next": "Weiter"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "pending": "Ausstehend",
+      "approved": "Freigegeben",
+      "rejected": "Abgelehnt",
+      "archived": "Archiviert",
+      "draft": "Entwurf",
+      "submitted": "Eingereicht",
+      "cancelled": "Storniert",
+      "sold": "Verkauft",
+      "reserved": "Reserviert"
+    },
+    "empty": {
+      "noResults": "Keine Ergebnisse",
+      "noDataYet": "Noch keine Daten vorhanden",
+      "tryDifferentFilter": "Versuch einen anderen Filter"
+    },
+    "pagination": {
+      "page": "Seite",
+      "of": "von",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "total": "{count} Einträge"
     }
   }
 }

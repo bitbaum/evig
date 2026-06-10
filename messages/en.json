@@ -8763,7 +8763,13 @@
       "fieldNote": "Note",
       "fieldNotePlaceholder": "Only when this day was different",
       "pageTitle": "Timecards",
-      "pageDescription": "Log, submit, and approve hours worked"
+      "pageDescription": "Log, submit, and approve hours worked",
+      "extrasToggle": "Advanced · comment, AI assist, reset template",
+      "extrasMonthComment": "Month note",
+      "extrasMonthCommentPlaceholder": "Optional — e.g. holiday, sick day, special shift.",
+      "extrasAiAssist": "AI assistant",
+      "extrasAiPlaceholder": "e.g. 12th and 13th off, otherwise normal",
+      "extrasResetMonth": "Rebuild month from schedule (drops current entries)"
     },
     "appointments": {
       "pageTitle": "Appointments",
@@ -8894,6 +8900,31 @@
       "confirm": "Confirm",
       "back": "Back",
       "next": "Next"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "archived": "Archived",
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "cancelled": "Cancelled",
+      "sold": "Sold",
+      "reserved": "Reserved"
+    },
+    "empty": {
+      "noResults": "No results",
+      "noDataYet": "No data yet",
+      "tryDifferentFilter": "Try a different filter"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "of",
+      "prev": "Previous",
+      "next": "Next",
+      "total": "{count} entries"
     }
   }
 }

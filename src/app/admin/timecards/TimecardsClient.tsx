@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Sparkles, ChevronRight } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
@@ -32,6 +33,7 @@ export function TimecardsClient({
 }) {
   const tc = useTimecardDraft({ workingHours })
   const [extrasOpen, setExtrasOpen] = useState(false)
+  const t = useTranslations('admin.timecards')
 
   const currentData = {
     period_label: tc.monthLabel,
@@ -91,21 +93,21 @@ export function TimecardsClient({
             className={`h-3.5 w-3.5 transition-transform ${extrasOpen ? 'rotate-90' : ''}`}
             aria-hidden="true"
           />
-          Erweitert · Kommentar, KI-Assistent, Vorlage zurücksetzen
+          {t('extrasToggle')}
         </button>
 
         {extrasOpen && (
           <div className="mt-5 space-y-5">
             <label className="block">
               <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
-                Monatskommentar
+                {t('extrasMonthComment')}
               </span>
               <Textarea
                 variant="elevated"
                 rows={2}
                 value={tc.draft.notes}
                 onChange={e => tc.setNotes(e.target.value)}
-                placeholder="Optional — z.B. Ferien, Krankheit, Sondereinsatz."
+                placeholder={t('extrasMonthCommentPlaceholder')}
                 className="mt-1 resize-none"
               />
             </label>
@@ -113,7 +115,7 @@ export function TimecardsClient({
             <div className="rounded-lg border border-subtle bg-surface-base p-4">
               <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
                 <Sparkles className="h-3.5 w-3.5 text-action" aria-hidden="true" />
-                KI-Assistent
+                {t('extrasAiAssist')}
               </p>
               <div className="mt-3">
                 <AIFormAssist<TimecardAIResult>
@@ -121,7 +123,7 @@ export function TimecardsClient({
                   variant="section"
                   defaultExpanded
                   currentData={currentData}
-                  placeholder="z.B. 12. und 13. frei, sonst normal"
+                  placeholder={t('extrasAiPlaceholder')}
                   onFieldsFilled={tc.handleAIFieldsFilled}
                 />
               </div>
@@ -132,7 +134,7 @@ export function TimecardsClient({
               onClick={tc.rebuildCurrentDraft}
               className="text-sm text-text-tertiary underline-offset-2 hover:text-text-secondary hover:underline"
             >
-              Monat aus Schedule neu aufbauen (löscht aktuelle Einträge)
+              {t('extrasResetMonth')}
             </button>
           </div>
         )}

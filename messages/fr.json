@@ -8776,7 +8776,13 @@
       "fieldNote": "Note",
       "fieldNotePlaceholder": "Seulement si ce jour était différent",
       "pageTitle": "Feuilles de temps",
-      "pageDescription": "Saisir, soumettre et approuver les heures"
+      "pageDescription": "Saisir, soumettre et approuver les heures",
+      "extrasToggle": "Avancé · commentaire, assistant IA, réinitialiser",
+      "extrasMonthComment": "Note du mois",
+      "extrasMonthCommentPlaceholder": "Optionnel — p.ex. vacances, maladie, intervention spéciale.",
+      "extrasAiAssist": "Assistant IA",
+      "extrasAiPlaceholder": "p.ex. 12 et 13 off, sinon normal",
+      "extrasResetMonth": "Reconstruire le mois depuis l'horaire (supprime les entrées actuelles)"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",
@@ -8907,6 +8913,31 @@
       "confirm": "Confirmer",
       "back": "Retour",
       "next": "Suivant"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En attente",
+      "approved": "Approuvé",
+      "rejected": "Refusé",
+      "archived": "Archivé",
+      "draft": "Brouillon",
+      "submitted": "Soumis",
+      "cancelled": "Annulé",
+      "sold": "Vendu",
+      "reserved": "Réservé"
+    },
+    "empty": {
+      "noResults": "Aucun résultat",
+      "noDataYet": "Aucune donnée",
+      "tryDifferentFilter": "Essaie un autre filtre"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "de",
+      "prev": "Précédent",
+      "next": "Suivant",
+      "total": "{count} entrées"
     }
   }
 }
