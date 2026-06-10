@@ -8560,7 +8560,17 @@
       "updatedAt": "Aktualisiert",
       "withoutProfileTitle": "{count} ohne Profil · ein Klick zum Hinzufügen",
       "withoutProfileMore": "+{count} weitere",
-      "footerNotice": "Sensible Daten · {domain}-Adressen werden automatisch als Staff erkannt"
+      "footerNotice": "Sensible Daten · {domain}-Adressen werden automatisch als Staff erkannt",
+      "form": {
+        "sectionBasic": "Grundinformationen",
+        "sectionCompensation": "Vergütung & Beschäftigung",
+        "sectionTalent": "Fähigkeiten & Entwicklung",
+        "sectionAvailability": "Verfügbarkeit & Kontakt",
+        "sectionEmergency": "Notfallkontakt",
+        "sectionHrNotes": "HR-Notizen",
+        "userSelectTitle": "Benutzer auswählen",
+        "userSelectPlaceholder": "Benutzer wählen…"
+      }
     },
     "protocols": {
       "queueTitle": "AI Review Queue",
@@ -8866,6 +8876,22 @@
       "title": "Benachrichtigungen",
       "empty": "Keine neuen Benachrichtigungen",
       "markAllRead": "Alle als gelesen markieren"
+    },
+    "forms": {
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "saving": "Speichere…",
+      "create": "Erstellen",
+      "creating": "Erstelle…",
+      "delete": "Löschen",
+      "deleting": "Lösche…",
+      "edit": "Bearbeiten",
+      "submit": "Absenden",
+      "submitting": "Sende…",
+      "close": "Schliessen",
+      "confirm": "Bestätigen",
+      "back": "Zurück",
+      "next": "Weiter"
     }
   }
 }

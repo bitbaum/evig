@@ -8562,7 +8562,17 @@
       "updatedAt": "Updated",
       "withoutProfileTitle": "{count} without profile · one click to add",
       "withoutProfileMore": "+{count} more",
-      "footerNotice": "Sensitive data · {domain} addresses are auto-recognised as staff"
+      "footerNotice": "Sensitive data · {domain} addresses are auto-recognised as staff",
+      "form": {
+        "sectionBasic": "Basic info",
+        "sectionCompensation": "Compensation & employment",
+        "sectionTalent": "Skills & development",
+        "sectionAvailability": "Availability & contact",
+        "sectionEmergency": "Emergency contact",
+        "sectionHrNotes": "HR notes",
+        "userSelectTitle": "Select user",
+        "userSelectPlaceholder": "Choose a user…"
+      }
     },
     "protocols": {
       "queueTitle": "AI review queue",
@@ -8868,6 +8878,22 @@
       "title": "Notifications",
       "empty": "No new notifications",
       "markAllRead": "Mark all as read"
+    },
+    "forms": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving…",
+      "create": "Create",
+      "creating": "Creating…",
+      "delete": "Delete",
+      "deleting": "Deleting…",
+      "edit": "Edit",
+      "submit": "Submit",
+      "submitting": "Submitting…",
+      "close": "Close",
+      "confirm": "Confirm",
+      "back": "Back",
+      "next": "Next"
     }
   }
 }

@@ -7,6 +7,7 @@
  * Progressive disclosure with collapsible sections.
  */
 
+import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
   Save,
@@ -38,13 +39,6 @@ interface FormSection {
   icon: React.ReactNode
 }
 
-const FORM_SECTIONS: FormSection[] = [
-  { id: 'basic', label: 'Grundinformationen', icon: <Briefcase className="w-5 h-5" /> },
-  { id: 'compensation', label: 'Vergütung & Beschäftigung', icon: <Wallet className="w-5 h-5" /> },
-  { id: 'talent', label: 'Fähigkeiten & Entwicklung', icon: <Star className="w-5 h-5" /> },
-  { id: 'availability', label: 'Verfügbarkeit & Kontakt', icon: <Clock className="w-5 h-5" /> },
-  { id: 'emergency', label: 'Notfallkontakt', icon: <AlertCircle className="w-5 h-5" /> },
-]
 
 export function TeamProfileForm({
   initialData,
@@ -55,6 +49,15 @@ export function TeamProfileForm({
   onCancel,
   isSuperAdmin,
 }: TeamProfileFormProps) {
+  const tForm = useTranslations('admin.forms')
+  const tSection = useTranslations('admin.team.form')
+  const FORM_SECTIONS: FormSection[] = [
+    { id: 'basic',         label: tSection('sectionBasic'),         icon: <Briefcase className="w-5 h-5" /> },
+    { id: 'compensation',  label: tSection('sectionCompensation'),  icon: <Wallet className="w-5 h-5" /> },
+    { id: 'talent',        label: tSection('sectionTalent'),        icon: <Star className="w-5 h-5" /> },
+    { id: 'availability',  label: tSection('sectionAvailability'),  icon: <Clock className="w-5 h-5" /> },
+    { id: 'emergency',     label: tSection('sectionEmergency'),     icon: <AlertCircle className="w-5 h-5" /> },
+  ]
   const {
     form,
     saving,
@@ -86,7 +89,7 @@ export function TeamProfileForm({
           className="flex items-center gap-2 text-text-secondary hover:text-text-primary h-auto px-0 bg-transparent hover:bg-transparent"
         >
           <ArrowLeft className="w-5 h-5" />
-          Abbrechen
+          {tForm('cancel')}
         </Button>
         <Button
           type="submit"
@@ -95,7 +98,7 @@ export function TeamProfileForm({
           className="flex items-center gap-2"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          {isEdit ? 'Speichern' : 'Erstellen'}
+          {isEdit ? tForm('save') : tForm('create')}
         </Button>
       </div>
 
@@ -111,7 +114,7 @@ export function TeamProfileForm({
         <div className="bg-surface-base rounded-lg border border-subtle p-6">
           <div className="flex items-center gap-3 mb-4">
             <User className="w-5 h-5 text-text-tertiary" />
-            <Heading level={2} className="text-text-primary">Benutzer auswählen</Heading>
+            <Heading level={2} className="text-text-primary">{tSection('userSelectTitle')}</Heading>
           </div>
           <Select
             value={form.user_id}
@@ -121,7 +124,7 @@ export function TeamProfileForm({
             aria-invalid={!!error}
             aria-describedby={error ? 'team-profile-error' : undefined}
           >
-            <option value="">Benutzer wählen...</option>
+            <option value="">{tSection('userSelectPlaceholder')}</option>
             {users.map(user => (
               <option key={user.id} value={user.id}>
                 {user.name || user.email} ({user.email})
