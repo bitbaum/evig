@@ -89,7 +89,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   }
 
   return (
-    <div className="bg-surface-base rounded-xl border border p-4 hover:shadow-md transition-shadow">
+    <div className="bg-surface-base rounded-lg border border-subtle p-4 hover:border-strong transition-shadow">
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="shrink-0">

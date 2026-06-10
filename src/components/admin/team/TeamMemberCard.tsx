@@ -27,7 +27,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
   const displayName = member.user_name || member.user_email.split('@')[0]
 
   return (
-    <div className="bg-surface-base rounded-xl border border p-5 hover:shadow-md transition-shadow">
+    <div className="rounded-lg border border-subtle bg-surface-base p-5 transition-colors hover:border-strong">
       <div className="flex items-start gap-4">
         {/* Avatar */}
         <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${

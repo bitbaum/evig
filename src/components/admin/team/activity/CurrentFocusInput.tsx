@@ -109,7 +109,7 @@ export function CurrentFocusInput({
   }
 
   return (
-    <div className="bg-surface-base rounded-xl border border p-4">
+    <div className="bg-surface-base rounded-lg border border-subtle p-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-text-tertiary" />
         <Heading level={3} className="text-text-primary">Aktueller Fokus</Heading>

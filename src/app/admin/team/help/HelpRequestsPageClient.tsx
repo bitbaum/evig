@@ -135,7 +135,7 @@ export function HelpRequestsPageClient({
 
       {/* Filter Panel */}
       {showFilters && (
-        <div className="bg-surface-base rounded-xl border border p-4">
+        <div className="bg-surface-base rounded-lg border border-subtle p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Status Filter */}
             <FormField label="Status" className="flex-1">
@@ -209,7 +209,7 @@ export function HelpRequestsPageClient({
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="bg-surface-base rounded-xl border border p-4 animate-pulse"
+              className="bg-surface-base rounded-lg border border-subtle p-4 animate-pulse"
             >
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-surface-overlay rounded-full" />
@@ -226,7 +226,7 @@ export function HelpRequestsPageClient({
 
       {/* Empty State */}
       {!loading && !error && requests.length === 0 && (
-        <div className="bg-surface-base rounded-xl border border p-8 text-center">
+        <div className="bg-surface-base rounded-lg border border-subtle p-8 text-center">
           <p className="text-text-tertiary mb-4">
             {hasActiveFilters
               ? 'Keine Hilfsanfragen mit diesen Filtern gefunden.'

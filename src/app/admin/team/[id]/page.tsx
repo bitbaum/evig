@@ -5,9 +5,9 @@
  */
 
 import { Metadata } from 'next'
-import { redirect, notFound } from 'next/navigation'
-import { auth } from '@/auth'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { notFound } from 'next/navigation'
+import { isSuperAdmin } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -126,23 +126,8 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
 }
 
 export default async function TeamProfilePage({ params }: PageProps) {
-  const session = await auth()
+  const session = await requireSection('team')
   const { id } = await params
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/team')
-  }
-
-  const user = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }
-
-  if (!canAccessSection(user, 'team')) {
-    redirect('/admin?error=no_team_access')
-  }
-
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
   const profile = await getProfile(id, currentUserIsSuperAdmin)
 

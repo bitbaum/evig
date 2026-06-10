@@ -48,7 +48,7 @@ export function DigestPageClient() {
             onClick={() => setDateRange('week')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'week'
-                ? 'bg-surface-base text-text-primary shadow-xs'
+                ? 'bg-surface-base text-text-primary'
                 : 'text-text-secondary hover:text-text-primary'
             }`}
           >
@@ -60,7 +60,7 @@ export function DigestPageClient() {
             onClick={() => setDateRange('month')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'month'
-                ? 'bg-surface-base text-text-primary shadow-xs'
+                ? 'bg-surface-base text-text-primary'
                 : 'text-text-secondary hover:text-text-primary'
             }`}
           >
@@ -94,14 +94,14 @@ export function DigestPageClient() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="bg-surface-base rounded-xl border border p-4 animate-pulse"
+                className="bg-surface-base rounded-lg border border-subtle p-4 animate-pulse"
               >
                 <div className="h-8 bg-surface-overlay rounded-sm w-16 mb-2" />
                 <div className="h-4 bg-surface-overlay rounded-sm w-24" />
               </div>
             ))}
           </div>
-          <div className="bg-surface-base rounded-xl border border p-6 animate-pulse">
+          <div className="bg-surface-base rounded-lg border border-subtle p-6 animate-pulse">
             <div className="h-6 bg-surface-overlay rounded-sm w-40 mb-4" />
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
@@ -125,7 +125,7 @@ export function DigestPageClient() {
 
           {/* Totals */}
           <div className="grid md:grid-cols-5 gap-4">
-            <div className="p-4 bg-surface-base rounded-xl border border">
+            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-action" />
@@ -139,7 +139,7 @@ export function DigestPageClient() {
               </div>
             </div>
 
-            <div className="p-4 bg-surface-base rounded-xl border border">
+            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
                   <FileText className="w-5 h-5 text-text-secondary" />
@@ -153,7 +153,7 @@ export function DigestPageClient() {
               </div>
             </div>
 
-            <div className="p-4 bg-surface-base rounded-xl border border">
+            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
                   <HelpCircle className="w-5 h-5 text-warning-600 dark:text-warning-200" />
@@ -167,7 +167,7 @@ export function DigestPageClient() {
               </div>
             </div>
 
-            <div className="p-4 bg-surface-base rounded-xl border border">
+            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-action" />
@@ -181,7 +181,7 @@ export function DigestPageClient() {
               </div>
             </div>
 
-            <div className="p-4 bg-surface-base rounded-xl border border">
+            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
                   <Users className="w-5 h-5 text-text-secondary" />
@@ -199,7 +199,7 @@ export function DigestPageClient() {
           {/* Top Contributors & Milestones */}
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Top Contributors */}
-            <div className="bg-surface-base rounded-xl border border p-6">
+            <div className="bg-surface-base rounded-lg border border-subtle p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-warning-500" />
                 <Heading level={3} className="font-semibold text-text-primary">Top Beiträger</Heading>
@@ -250,7 +250,7 @@ export function DigestPageClient() {
             </div>
 
             {/* Recent Milestones */}
-            <div className="bg-surface-base rounded-xl border border p-6">
+            <div className="bg-surface-base rounded-lg border border-subtle p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Flag className="w-5 h-5 text-action" />
                 <Heading level={3} className="font-semibold text-text-primary">
@@ -289,7 +289,7 @@ export function DigestPageClient() {
 
           {/* Category Breakdown */}
           {digest.by_category.length > 0 && (
-            <div className="bg-surface-base rounded-xl border border p-6">
+            <div className="bg-surface-base rounded-lg border border-subtle p-6">
               <Heading level={3} className="font-semibold text-text-primary mb-4">
                 Aufgaben nach Kategorie
               </Heading>
@@ -313,7 +313,7 @@ export function DigestPageClient() {
 
           {/* All Users Activity */}
           {digest.by_user.length > 0 && (
-            <div className="bg-surface-base rounded-xl border border p-6">
+            <div className="bg-surface-base rounded-lg border border-subtle p-6">
               <Heading level={3} className="font-semibold text-text-primary mb-4">
                 Alle Mitarbeiter
               </Heading>

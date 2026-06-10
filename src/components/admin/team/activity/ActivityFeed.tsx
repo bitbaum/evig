@@ -125,7 +125,7 @@ export function ActivityFeed({
 
       {/* Filter Panel */}
       {showFilters && showFilterPanel && (
-        <div className="bg-surface-base rounded-xl border border p-4">
+        <div className="bg-surface-base rounded-lg border border-subtle p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Source Type Filter */}
             <div className="flex-1">
@@ -205,7 +205,7 @@ export function ActivityFeed({
           {[...Array(compact ? 3 : 5)].map((_, i) => (
             <div
               key={i}
-              className="bg-surface-base rounded-xl border border p-4 animate-pulse"
+              className="bg-surface-base rounded-lg border border-subtle p-4 animate-pulse"
             >
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-surface-overlay rounded-full" />
@@ -222,7 +222,7 @@ export function ActivityFeed({
 
       {/* Empty State */}
       {!loading && !error && activities.length === 0 && (
-        <div className="bg-surface-base rounded-xl border border p-8 text-center">
+        <div className="bg-surface-base rounded-lg border border-subtle p-8 text-center">
           <p className="text-text-tertiary mb-4">
             {hasActiveFilters
               ? 'Keine Aktivitäten mit diesen Filtern gefunden.'

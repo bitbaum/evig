@@ -5,9 +5,9 @@
  */
 
 import { Metadata } from 'next'
-import { redirect, notFound } from 'next/navigation'
-import { auth } from '@/auth'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { notFound } from 'next/navigation'
+import { isSuperAdmin } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -121,40 +121,24 @@ async function getProfile(id: string, includeSensitive = false): Promise<Profile
 }
 
 export default async function TeamProfileEditPage({ params }: PageProps) {
-  const session = await auth()
+  const session = await requireSection('team')
   const { id } = await params
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/team')
-  }
-
-  const user = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }
-
-  if (!canAccessSection(user, 'team')) {
-    redirect('/admin?error=no_team_access')
-  }
 
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
   const profile = await getProfile(id, currentUserIsSuperAdmin)
 
-  if (!profile) {
-    notFound()
-  }
+  if (!profile) notFound()
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <Heading level={1} className="text-2xl font-bold text-text-primary">
-          Profil bearbeiten
-        </Heading>
-        <p className="text-text-secondary mt-1">
+    <div className="mx-auto max-w-4xl">
+      <header className="mb-8 border-b border-subtle pb-6">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {profile.user_name || profile.user_email}
         </p>
-      </div>
+        <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+          Profil bearbeiten
+        </Heading>
+      </header>
 
       <TeamProfileForm
         initialData={profile}

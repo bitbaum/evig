@@ -13,7 +13,7 @@ interface Props {
 
 export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Props) {
   return (
-    <div className="bg-warning-50 dark:bg-warning-900/20 rounded-xl border border-warning-200 dark:border-warning-800 overflow-hidden">
+    <div className="bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-subtle-warning-200 dark:border-warning-800 overflow-hidden">
       <Button
         type="button"
         variant="ghost"

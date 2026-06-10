@@ -113,7 +113,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
       )}
 
       {rows.length > 0 && (
-        <div className="rounded-xl border border bg-surface-base overflow-hidden">
+        <div className="rounded-lg border border-subtle bg-surface-base overflow-hidden">
           <ul className="divide-y divide-subtle">
             {rows.map(row => {
               const status = row.status as TimecardStatus

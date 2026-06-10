@@ -117,81 +117,71 @@ export default async function TeamPage() {
         </Link>
       }
     >
-      {/* Stats */}
-      <AdminStatsGrid items={[
-        {
-          icon: Briefcase,
-          color: 'blue',
-          label: 'Staff Gesamt',
-          value: stats.totalStaff,
-        },
-        {
-          icon: Crown,
-          color: 'purple',
-          label: 'Profile',
-          value: stats.totalProfiles,
-        },
-        {
-          icon: Shield,
-          color: 'green',
-          label: 'Mit Abteilung',
-          value: Object.values(stats.byDepartment).reduce((a, b) => a + b, 0) || 0,
-        },
-        {
-          icon: UserPlus,
-          color: 'orange',
-          label: 'Ohne Profil',
-          value: staffWithoutProfiles.length,
-        },
-      ] satisfies StatCardItem[]} />
-
-      {/* Permission Requests - Super Admin Only */}
-      {currentUserIsSuperAdmin && (
-        <PermissionRequestsManager />
-      )}
-
-      {/* Staff without profiles warning */}
+      {/* Staff without profiles — promoted to the top so adding a member
+          is one click from this page. Each chip pre-fills the new-profile
+          form with the user_id, skipping the "pick a user" step entirely. */}
       {staffWithoutProfiles.length > 0 && (
-        <div className="p-4 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl">
-          <Heading level={3} className="font-medium text-warning-900 dark:text-warning-200 mb-2">
-            {staffWithoutProfiles.length} Staff-Mitglieder ohne Profil
-          </Heading>
-          <div className="flex flex-wrap gap-2">
-            {staffWithoutProfiles.slice(0, 5).map(user => (
+        <section
+          aria-labelledby="staff-without-profile-title"
+          className="rounded-lg border border-warning-200 bg-warning-50 p-4 dark:border-warning-800 dark:bg-warning-900/20"
+        >
+          <h2
+            id="staff-without-profile-title"
+            className="font-mono text-xs uppercase tracking-[0.18em] text-warning-700 dark:text-warning-400"
+          >
+            {staffWithoutProfiles.length} ohne Profil · ein Klick zum Hinzufügen
+          </h2>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {staffWithoutProfiles.slice(0, 8).map(user => (
               <Link
                 key={user.id}
                 href={`/admin/team/new?user_id=${user.id}`}
-                className="px-3 py-1 bg-warning-100 dark:bg-warning-900/40 text-warning-800 dark:text-warning-300 text-sm rounded-full hover:bg-warning-200 dark:hover:bg-warning-900/60 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-full border border-warning-200 bg-surface-base px-3 py-1 text-xs font-medium text-warning-900 transition-colors hover:border-warning-400 hover:bg-warning-100 dark:border-warning-700 dark:bg-warning-950/40 dark:text-warning-200 dark:hover:bg-warning-900/40"
               >
+                <UserPlus className="h-3 w-3" />
                 {user.name || user.email}
               </Link>
             ))}
-            {staffWithoutProfiles.length > 5 && (
-              <span className="px-3 py-1 text-warning-700 dark:text-warning-400 text-sm">
-                +{staffWithoutProfiles.length - 5} weitere
+            {staffWithoutProfiles.length > 8 && (
+              <span className="inline-flex items-center px-2 text-xs text-warning-700 dark:text-warning-400">
+                +{staffWithoutProfiles.length - 8} weitere
               </span>
             )}
           </div>
-        </div>
+        </section>
       )}
+
+      {/* Stats */}
+      <AdminStatsGrid
+        items={[
+          { icon: Briefcase, color: 'blue',   label: 'Staff Gesamt', value: stats.totalStaff },
+          { icon: Crown,     color: 'purple', label: 'Profile',      value: stats.totalProfiles },
+          {
+            icon: Shield,
+            color: 'green',
+            label: 'Mit Abteilung',
+            value: Object.values(stats.byDepartment).reduce((a, b) => a + b, 0) || 0,
+          },
+          {
+            icon: UserPlus,
+            color: 'orange',
+            label: 'Ohne Profil',
+            value: staffWithoutProfiles.length,
+          },
+        ] satisfies StatCardItem[]}
+      />
+
+      {/* Permission Requests - Super Admin Only */}
+      {currentUserIsSuperAdmin && <PermissionRequestsManager />}
 
       {/* Team List with Filters (Client Component) */}
       <TeamListClient />
 
-      {/* Info Boxes */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="p-4 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl">
-          <p className="text-sm text-warning-700 dark:text-warning-300">
-            <strong>Sensible Daten:</strong> Diese Seite enthält vertrauliche Team-Informationen und ist nur für autorisierte Mitarbeiter zugänglich.
-          </p>
-        </div>
-
-        <div className="p-4 bg-surface-raised border border rounded-xl">
-          <p className="text-sm text-text-secondary">
-            <strong>Hinweis:</strong> Benutzer mit @{ORG.emailDomain} E-Mail-Adresse werden automatisch als Staff erkannt.
-          </p>
-        </div>
-      </div>
+      {/* Footer notice — sensitive data + auto-staff detection, collapsed
+          to a single mono line so it stops competing with the list. */}
+      <p className="border-t border-subtle pt-6 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
+        Sensible Daten · {`@${ORG.emailDomain}`}-Adressen werden automatisch als Staff erkannt
+      </p>
     </AdminPageWrapper>
   )
 }

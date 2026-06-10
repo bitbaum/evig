@@ -63,7 +63,7 @@ export function TeamListClient() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="bg-surface-base rounded-xl border border p-5 animate-pulse"
+              className="bg-surface-base rounded-lg border border-subtle p-5 animate-pulse"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-surface-overlay rounded-full" />
@@ -86,7 +86,7 @@ export function TeamListClient() {
 
       {/* Empty State */}
       {!loading && !error && profiles.length === 0 && (
-        <div className="p-12 bg-surface-base rounded-xl border border text-center">
+        <div className="p-12 bg-surface-base rounded-lg border border-subtle text-center">
           <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             Keine Team-Profile gefunden

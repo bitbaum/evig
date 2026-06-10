@@ -71,7 +71,7 @@ export function TeamProfileView({
       </div>
 
       {/* Profile Header Card */}
-      <div className="bg-surface-base rounded-xl border border p-6">
+      <div className="rounded-lg border border-subtle bg-surface-base p-5">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
@@ -146,7 +146,7 @@ export function TeamProfileView({
         />
 
         {/* Activity Link */}
-        <div className="bg-surface-base rounded-xl border border p-4">
+        <div className="rounded-lg border border-subtle bg-surface-base p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-action" />
@@ -170,7 +170,7 @@ export function TeamProfileView({
         {/* Left Column */}
         <div className="space-y-6">
           {/* Skills & Interests */}
-          <div className="bg-surface-base rounded-xl border border p-6">
+          <div className="rounded-lg border border-subtle bg-surface-base p-5">
             <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
               <Star className="w-5 h-5 text-warning-500" />
               {t('skillsAndInterests')}
@@ -216,7 +216,7 @@ export function TeamProfileView({
           </div>
 
           {/* Development Areas */}
-          <div className="bg-surface-base rounded-xl border border p-6">
+          <div className="rounded-lg border border-subtle bg-surface-base p-5">
             <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-action" />
               {t('development')}
@@ -264,7 +264,7 @@ export function TeamProfileView({
         {/* Right Column */}
         <div className="space-y-6">
           {/* Availability */}
-          <div className="bg-surface-base rounded-xl border border p-6">
+          <div className="rounded-lg border border-subtle bg-surface-base p-5">
             <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-action" />
               {t('availability')}
@@ -317,7 +317,7 @@ export function TeamProfileView({
 
           {/* Emergency Contact */}
           {(profile.emergency_contact_name || profile.emergency_contact_phone) && (
-            <div className="bg-surface-base rounded-xl border border p-6">
+            <div className="rounded-lg border border-subtle bg-surface-base p-5">
               <Heading level={2} className="text-text-primary mb-4 flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-error-500" />
                 {t('emergencyContact')}
@@ -351,7 +351,7 @@ export function TeamProfileView({
 
           {/* HR Notes - Super Admin Only */}
           {isSuperAdmin && profile.hr_notes && (
-            <div className="bg-warning-50 dark:bg-warning-900/20 rounded-xl border border-warning-200 dark:border-warning-800 p-6">
+            <div className="rounded-lg border border-warning-200 bg-warning-50 p-5 dark:border-warning-800 dark:bg-warning-900/20">
               <Heading level={2} className="text-warning-900 dark:text-warning-200 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 {t('hrNotes')}

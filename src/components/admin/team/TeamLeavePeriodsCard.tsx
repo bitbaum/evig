@@ -136,7 +136,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border bg-surface-base overflow-hidden">
+    <div className="rounded-lg border border-subtle bg-surface-base overflow-hidden">
       <div className="px-5 py-3.5 border-b border flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-text-tertiary" />

@@ -108,7 +108,7 @@ export function TeamProfileForm({
 
       {/* User Selection (only for new profiles) */}
       {!isEdit && users && (
-        <div className="bg-surface-base rounded-xl border border p-6">
+        <div className="bg-surface-base rounded-lg border border-subtle p-6">
           <div className="flex items-center gap-3 mb-4">
             <User className="w-5 h-5 text-text-tertiary" />
             <Heading level={2} className="text-text-primary">Benutzer auswählen</Heading>
@@ -135,7 +135,7 @@ export function TeamProfileForm({
       {FORM_SECTIONS.map(section => (
         <div
           key={section.id}
-          className="bg-surface-base rounded-xl border border overflow-hidden"
+          className="bg-surface-base rounded-lg border border-subtle overflow-hidden"
         >
           <Button
             type="button"

@@ -5,9 +5,8 @@
  */
 
 import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { auth } from '@/auth'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
+import { isSuperAdmin } from '@/lib/permissions'
+import { requireSection } from '@/lib/admin/guards'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
@@ -46,48 +45,38 @@ async function getStaffWithoutProfiles(): Promise<StaffUser[]> {
 }
 
 export default async function NewTeamProfilePage({ searchParams }: PageProps) {
-  const session = await auth()
+  const session = await requireSection('team')
   const { user_id: preselectedUserId } = await searchParams
-
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/team/new')
-  }
-
-  const user = {
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }
-
-  if (!canAccessSection(user, 'team')) {
-    redirect('/admin?error=no_team_access')
-  }
 
   const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
   const availableUsers = await getStaffWithoutProfiles()
 
-  // Check if preselected user is valid
+  // Check if preselected user is valid — chip from /admin/team passes
+  // the user_id directly, so this lands on the form with the user
+  // already locked in (one fewer click).
   const validPreselection = preselectedUserId
     ? availableUsers.find(u => u.id === preselectedUserId)
     : null
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <Heading level={1} className="text-2xl font-bold text-text-primary">
-          Neues Team-Profil erstellen
-        </Heading>
-        <p className="text-text-secondary mt-1">
-          Erstelle ein Profil für ein Staff-Mitglied
+    <div className="mx-auto max-w-4xl">
+      <header className="mb-8 border-b border-subtle pb-6">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          {validPreselection
+            ? `Für ${validPreselection.name || validPreselection.email}`
+            : 'Staff-Profil anlegen'}
         </p>
-      </div>
+        <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+          Neues Team-Profil
+        </Heading>
+      </header>
 
       {availableUsers.length === 0 ? (
-        <div className="p-8 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl text-center">
-          <Heading level={2} className="text-lg font-medium text-warning-900 dark:text-warning-200 mb-2">
-            Alle Staff-Mitglieder haben bereits ein Profil
-          </Heading>
-          <p className="text-warning-700 dark:text-warning-300">
+        <div className="rounded-lg border border-warning-200 bg-warning-50 p-6 text-center dark:border-warning-800 dark:bg-warning-900/20">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-warning-700 dark:text-warning-400">
+            Alle Profile angelegt
+          </p>
+          <p className="mt-2 text-sm text-warning-800 dark:text-warning-300">
             Es gibt keine Staff-Mitglieder ohne Team-Profil.
           </p>
         </div>
