@@ -60,6 +60,10 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     return apiSuccess(timecard)
   } catch (error) {
     logger.error('Error submitting timecard', { error, userId: session.user.id })
-    return apiError(error, 'Zeitkarte konnte nicht eingereicht werden')
+    // TEMP DIAG (revert once root cause identified)
+    const detail = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
+    const cause = (error as { cause?: unknown })?.cause
+    const causeMsg = cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause)
+    return apiError(error, `Zeitkarte konnte nicht eingereicht werden. [DIAG] ${detail.slice(0,200)} | CAUSE: ${causeMsg.slice(0,400)}`)
   }
 })
