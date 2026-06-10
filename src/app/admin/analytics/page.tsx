@@ -11,6 +11,7 @@
  */
 
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import {
   BarChart3,
@@ -40,6 +41,7 @@ export const metadata: Metadata = {
 
 export default async function AnalyticsPage() {
   await requireSection('analytics')
+  const t = await getTranslations('admin.analytics')
 
   const [stats, userGrowth, activity] = await Promise.all([
     getAnalyticsStats(),
@@ -80,9 +82,9 @@ export default async function AnalyticsPage() {
         </div>
         <div>
           <Heading level={1} className="text-2xl font-bold text-text-primary">
-            Analytics
+            {t('pageTitle')}
           </Heading>
-          <p className="text-text-secondary">Statistiken und Auswertungen für RevampIT</p>
+          <p className="text-text-secondary">{t('pageDescription')}</p>
         </div>
       </div>
 

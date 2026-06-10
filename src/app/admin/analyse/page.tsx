@@ -4,6 +4,7 @@
  * Dashboard showing key metrics from all sections.
  */
 
+import { getTranslations } from 'next-intl/server'
 import { requireAnySection } from '@/lib/admin/guards'
 import { loadAllYearsData } from '@/lib/hirn/data/financial-loader'
 import { compareYears, generateYearInsights } from '@/lib/hirn/data/analysis'
@@ -22,6 +23,7 @@ export default async function AnalysePage() {
   // /admin/analyse is a dashboard over both 'finanzen' and 'hirn' —
   // grant access if the user can reach either underlying section.
   await requireAnySection(['finanzen', 'hirn'], 'analyse')
+  const t = await getTranslations('admin.analyse')
 
   // Load financial data
   let allData: Map<number, Awaited<ReturnType<typeof loadAllYearsData>> extends Map<infer K, infer V> ? V : never> = new Map()
@@ -87,10 +89,8 @@ export default async function AnalysePage() {
             <BarChart3 className="w-6 h-6 text-action" />
           </div>
           <div>
-            <Heading level={1} className="text-3xl font-bold">Analyse</Heading>
-            <p className="text-muted-foreground">
-              Übersicht aller Kennzahlen und Metriken
-            </p>
+            <Heading level={1} className="text-3xl font-bold">{t('pageTitle')}</Heading>
+            <p className="text-muted-foreground">{t('pageDescription')}</p>
           </div>
         </div>
       </div>

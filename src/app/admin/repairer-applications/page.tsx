@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { XCircle, FileText, ArrowLeft } from 'lucide-react'
 import {
@@ -16,6 +17,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 
 export default function RepairerApplicationsAdmin() {
+  const t = useTranslations('admin.repairer-applications')
   const router = useRouter()
   const {
     applications,
@@ -78,7 +80,7 @@ export default function RepairerApplicationsAdmin() {
             Zurück zum Admin-Bereich
           </Button>
         </div>
-        <Heading level={1} className="text-2xl font-bold text-text-primary">Techniker-Bewerbungen</Heading>
+        <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
       </div>
 
       {/* Success Message */}

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { eq } from 'drizzle-orm'
 import { Clock } from 'lucide-react'
 import { db } from '@/db'
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 
 export default async function TimecardsPage() {
   const session = await requireSection('timecards')
+  const t = await getTranslations('admin.timecards')
 
   const [profile] = await db
     .select({ workingHours: teamProfiles.workingHours })
@@ -23,8 +25,8 @@ export default async function TimecardsPage() {
 
   return (
     <AdminPageWrapper
-      title="Zeitkarten"
-      description="Arbeitszeiten erfassen, einreichen und genehmigen"
+      title={t('pageTitle')}
+      description={t('pageDescription')}
       icon={Clock}
       iconColor="blue"
     >
