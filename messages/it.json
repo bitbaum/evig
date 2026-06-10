@@ -803,7 +803,8 @@
   "notFound": {
     "title": "Pagina non trovata",
     "description": "La pagina cercata non esiste o è stata spostata.",
-    "goHome": "Vai alla home"
+    "goHome": "Vai alla home",
+    "reportProblem": "Segnala un problema"
   },
   "error": {
     "title": "Qualcosa è andato storto",
@@ -2235,7 +2236,7 @@
       "description": "Compra e vendi IT usato. Riparazione computer dalla community. Workshop su Linux, hardware e programmazione."
     },
     "hero": {
-      "title": "Hardware vecchio.",
+      "title": "Hardware vecchio. Nuova vita.",
       "subtitle": "Ogni anno 62 milioni di tonnellate di dispositivi elettronici finiscono in discarica. Noi lo cambiamo — con una community che ripara, condivide e impara insieme.",
       "ctaDiscover": "Scopri ora",
       "ctaAbout": "Chi siamo",
@@ -2899,7 +2900,6 @@
       "community": "Annunci community"
     },
     "categories": {
-      "all": "Tutti",
       "10": "Laptop",
       "20": "PC fissi",
       "30": "Monitor",
@@ -2909,7 +2909,8 @@
       "70": "Componenti",
       "80": "Periferiche",
       "90": "Rete",
-      "99": "Altro"
+      "99": "Altro",
+      "all": "Tutti"
     },
     "filters": {
       "label": "Filtri",
@@ -5395,7 +5396,7 @@
             "benefits": [
               "Approccio API-First",
               "Tipi di contenuto flessibili",
-              "Adatto agli sviluppatori",
+              "Developer-friendly",
               "Self-hosted"
             ]
           },
@@ -5414,7 +5415,7 @@
               "Editing visivo",
               "Flusso di lavoro Git",
               "Anteprima in tempo reale",
-              "Adatto agli sviluppatori"
+              "Developer-friendly"
             ]
           },
           "wordpress": {

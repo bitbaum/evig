@@ -84,7 +84,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
   const quorumMet = participation?.quorumMet ?? false
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <article className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
 
       {/* Status row */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -108,7 +108,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
       </div>
 
       {/* Title */}
-      <Heading level={1} className="mb-3 text-2xl font-bold text-text-primary">
+      <Heading level={1} className="mb-4 text-3xl font-semibold text-text-primary sm:text-4xl">
         {decision.title}
       </Heading>
 
@@ -214,10 +214,10 @@ export default async function DashboardDecisionPage({ params }: Props) {
       )}
 
       {decisionStatus === DECISION_STATUS.DISCUSSION && (
-        <div className="rounded-lg border border bg-surface-raised p-4 text-sm text-text-secondary">
+        <div className="rounded-lg border border-subtle bg-surface-raised p-4 text-sm text-text-secondary">
           Diese Abstimmung befindet sich noch in der Diskussionsphase. Du wirst per E-Mail benachrichtigt, wenn die Abstimmung geöffnet wird.
         </div>
       )}
-    </div>
+    </article>
   )
 }

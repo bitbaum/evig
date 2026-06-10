@@ -7,6 +7,7 @@
     "list": {
       "title": "Technicians",
       "available": "{count, plural, one {# technician} other {# technicians}} available",
+      "availableEmpty": "Coming soon — be part of the first wave",
       "becomeTechnician": "Become a technician",
       "searchPlaceholder": "Name, city, description...",
       "searchAriaLabel": "Search technicians",
@@ -27,6 +28,7 @@
       "emptyMessageEmpty": "No active technician profiles yet.",
       "emptyActionFiltered": "Reset filters",
       "emptyActionEmpty": "Create technician profile",
+      "emptyActionSecondary": "Request help anyway → IT Help",
       "ctaTitle": "Can you repair devices?",
       "ctaDescription": "Register as a technician and help people nearby. For free or for payment — your choice.",
       "ctaCreateProfile": "Create technician profile",

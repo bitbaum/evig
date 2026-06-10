@@ -169,6 +169,10 @@ export async function GET(request: NextRequest) {
     const technicians = rows.map((row) => ({
       ...row,
       skills: row.skills || [],
+      // PG numeric → string at the driver layer; cast back to number so the
+      // canonical Technician type (averageRating: number | null) holds at the
+      // network boundary instead of crashing TechnicianCard.toFixed().
+      averageRating: row.averageRating != null ? Number(row.averageRating) : null,
     }))
 
     logger.info('Technicians search completed', {

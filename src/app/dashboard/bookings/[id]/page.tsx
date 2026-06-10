@@ -47,12 +47,12 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <article className="mx-auto max-w-2xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
       <Link
         href="/dashboard/bookings"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-action text-sm"
+        className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="h-3 w-3" />
         {td('backToBookings')}
       </Link>
 
@@ -62,6 +62,6 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
       <DatesCard appointment={appointment} />
       <LocationCard appointment={appointment} />
       <RatingCard appointment={appointment} />
-    </div>
+    </article>
   )
 }

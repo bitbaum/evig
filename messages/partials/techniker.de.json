@@ -7,6 +7,7 @@
     "list": {
       "title": "Techniker",
       "available": "{count, plural, one {# Techniker} other {# Techniker}} verfügbar",
+      "availableEmpty": "Bald verfügbar — werde Teil der ersten Generation",
       "becomeTechnician": "Techniker werden",
       "searchPlaceholder": "Name, Stadt, Beschreibung...",
       "searchAriaLabel": "Techniker suchen",
@@ -27,6 +28,7 @@
       "emptyMessageEmpty": "Noch keine aktiven Techniker-Profile vorhanden.",
       "emptyActionFiltered": "Filter zurücksetzen",
       "emptyActionEmpty": "Techniker-Profil erstellen",
+      "emptyActionSecondary": "Hilfe trotzdem anfragen → IT-Hilfe",
       "ctaTitle": "Kannst du Geräte reparieren?",
       "ctaDescription": "Registriere dich als Techniker und hilf Menschen in deiner Nähe. Kostenlos oder gegen Vergütung — du entscheidest.",
       "ctaCreateProfile": "Techniker-Profil erstellen",

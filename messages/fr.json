@@ -284,7 +284,7 @@
       "description": "Acheter & vendre du matériel informatique d'occasion. Réparation par la communauté. Ateliers Linux, hardware et programmation."
     },
     "hero": {
-      "title": "Vieux matériel.",
+      "title": "Vieux matériel. Nouvelle vie.",
       "subtitle": "Chaque année, 62 millions de tonnes d'appareils électroniques finissent à la poubelle. Nous changeons cela — avec une communauté qui répare, partage et apprend ensemble.",
       "ctaDiscover": "Découvrir maintenant",
       "ctaAbout": "Qui sommes-nous",
@@ -781,7 +781,6 @@
       "community": "Annonces communautaires"
     },
     "categories": {
-      "all": "Tous",
       "10": "Ordinateurs portables",
       "20": "Ordinateurs de bureau",
       "30": "Écrans",
@@ -791,7 +790,8 @@
       "70": "Composants",
       "80": "Périphériques",
       "90": "Réseau",
-      "99": "Autres"
+      "99": "Autres",
+      "all": "Tous"
     },
     "listing_actions": {
       "payment_info": "Paiement direct entre acheteur et vendeur",
@@ -4963,7 +4963,8 @@
   "notFound": {
     "title": "Page introuvable",
     "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
-    "goHome": "Aller à l'accueil"
+    "goHome": "Aller à l'accueil",
+    "reportProblem": "Signaler un problème"
   },
   "error": {
     "title": "Une erreur s'est produite",
@@ -5084,18 +5085,32 @@
       },
       {
         "title": "Monitor-Upcycling",
-        "description": "Les moniteurs d'ordinateur mis au rebut sont transformés en lampes fonctionnelles et durables. Un projet pilote pour l'économie circulaire en collaboration avec des ateliers protégés et des partenaires immobiliers – avec des instructions ouvertes et un accompagnement scientifique.",
+        "description": "Discarded computer monitors are transformed into functional, sustainable lamps. A pilot project for the circular economy in collaboration with sheltered workshops and property partners.",
         "category": "hardware",
         "status": "ongoing",
+        "features": [
+          "Converting monitors into lamps",
+          "Small series & quality assurance",
+          "Collaboration with social enterprises",
+          "Ecological analyses (ZHAW)"
+        ],
+        "slug": "upcycling",
+        "year": "2025",
+        "readMoreLink": "/projects/upcycling"
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Les moniteurs d'ordinateur mis au rebut sont transformés en lampes fonctionnelles et durables. Un projet pilote pour l'économie circulaire en collaboration avec des ateliers protégés et des partenaires immobiliers – avec des instructions ouvertes et un accompagnement scientifique.",
+        "slug": "upcycling",
+        "category": "hardware",
+        "status": "ongoing",
+        "year": "2025",
         "features": [
           "Transformation de moniteurs en lampes",
           "Petite série et assurance qualité",
           "Collaboration avec des entreprises sociales",
           "Analyses écologiques (ZHAW)"
-        ],
-        "slug": "upcycling",
-        "year": "2025",
-        "readMoreLink": "/projects/upcycling"
+        ]
       }
     ],
     "freiecomputer": {

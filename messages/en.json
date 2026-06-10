@@ -284,7 +284,7 @@
       "description": "Buy & sell used IT. Community-driven computer repair. Workshops on Linux, hardware and programming."
     },
     "hero": {
-      "title": "Old hardware.",
+      "title": "Old Hardware. New Life.",
       "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
       "ctaDiscover": "Explore now",
       "ctaAbout": "About us",
@@ -321,7 +321,7 @@
       "subtitle": "Whether you want to get rid of an old device, buy an affordable one, or help with repairs — you're in the right place."
     },
     "proServices": {
-      "text": "We also offer professional IT services: computer repair, data recovery, Linux installation and web development.",
+      "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
       "linkLabel": "IT services"
     },
     "impact": {
@@ -781,7 +781,6 @@
       "community": "Community listings"
     },
     "categories": {
-      "all": "All",
       "10": "Laptops",
       "20": "Desktop PCs",
       "30": "Monitors",
@@ -791,7 +790,8 @@
       "70": "Components",
       "80": "Peripherals",
       "90": "Networking",
-      "99": "Other"
+      "99": "Other",
+      "all": "All"
     },
     "listing_actions": {
       "payment_info": "Direct payment between buyer and seller",
@@ -4548,7 +4548,9 @@
       "community": "Community",
       "gratis": "Free",
       "kulturlegi": "KulturLegi",
-      "loadingError": "Error loading technicians. Please try again."
+      "loadingError": "Error loading technicians. Please try again.",
+      "availableEmpty": "Coming soon — be part of the first wave",
+      "emptyActionSecondary": "Request help anyway → IT Help"
     },
     "detail": {
       "backToList": "All technicians",
@@ -4909,7 +4911,8 @@
   "notFound": {
     "title": "Page Not Found",
     "description": "The page you're looking for doesn't exist or has been moved.",
-    "goHome": "Go to Homepage"
+    "goHome": "Go to Homepage",
+    "reportProblem": "Report a Problem"
   },
   "error": {
     "title": "Something Went Wrong",

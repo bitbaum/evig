@@ -284,44 +284,44 @@
       "description": "Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung."
     },
     "hero": {
-      "title": "Alte Hardware.",
+      "title": "Alte Hardware. Neues Leben.",
       "titleSecondary": "Neues Leben.",
       "lede": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen.",
       "sublede": "Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",
-      "subtitle": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen. Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",
+      "subtitle": "Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt.",
       "ctaDonate": "Gerät spenden",
-      "ctaDiscover": "Geräte ansehen",
+      "ctaDiscover": "Jetzt entdecken",
       "ctaAbout": "Über uns",
       "positioning": "Schweizer Non-Profit für Kreislaufwirtschaft · seit 2003"
     },
     "actions": {
       "eyebrow": "DREI WEGE",
-      "heading": "Such etwas? Hilf mit?",
+      "heading": "Was möchtest du tun?",
       "subtitle": "Egal ob du ein altes Gerät loswerden, ein günstiges kaufen, oder bei Reparaturen helfen willst — du landest am richtigen Ort.",
       "sell": {
         "label": "01 / MARKTPLATZ",
         "title": "Altes Gerät übrig?",
-        "subtitle": "Verkaufe oder verschenke es in 2 Minuten. Kostenlos, ohne Gebühren, ohne Mittelsmann.",
+        "subtitle": "Verkaufe oder verschenke es in 2 Minuten — kostenlos und ohne Gebühren.",
         "primaryLabel": "Marktplatz entdecken",
         "secondaryLabel": "Jetzt verkaufen"
       },
       "repair": {
         "label": "02 / IT-HILFE",
         "title": "Computer kaputt?",
-        "subtitle": "Techniker aus der Community helfen — schnell, fair, vor Ort. Oder bieten Sie selbst Reparaturen an.",
+        "subtitle": "Techniker in deiner Nähe helfen — oder biete selbst Reparaturen an.",
         "primaryLabel": "Hilfe finden",
         "secondaryLabel": "Techniker werden"
       },
       "learn": {
         "label": "03 / WORKSHOPS",
         "title": "Etwas Neues lernen?",
-        "subtitle": "Praxis-Workshops zu Linux, Hardware-Reparatur, Programmierung und KI. Klein, persönlich, hands-on.",
+        "subtitle": "Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.",
         "primaryLabel": "Workshops ansehen",
         "secondaryLabel": "Knowhow entdecken"
       }
     },
     "proServices": {
-      "text": "Wir bieten auch professionelle IT-Dienstleistungen an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
+      "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
       "linkLabel": "IT-Dienstleistungen"
     },
     "ribbon": {
@@ -357,26 +357,26 @@
     },
     "community": {
       "eyebrow": "MITMACHEN",
-      "heading": "Werde Teil der Community.",
-      "subtitle": "Ob nutzen, mithelfen, spenden oder Mitglied werden — jeder Beitrag zählt. Such dir den Weg, der zu dir passt.",
+      "heading": "Werde Teil der Community",
+      "subtitle": "Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.",
       "use": {
-        "title": "Geräte kaufen",
-        "desc": "Refurbished Laptops, Desktops, Komponenten — fair bepreist, sofort einsatzbereit.",
+        "title": "Nutzen",
+        "desc": "Kaufen, verkaufen, reparieren — kostenlos",
         "cta": "Zum Shop"
       },
       "volunteer": {
         "title": "Mithelfen",
-        "desc": "Teile dein Wissen als freiwilliger Techniker, Workshop-Geberin oder Helfer im Verein.",
+        "desc": "Teile dein Wissen als freiwilliger Techniker",
         "cta": "Mitmachen"
       },
       "donate": {
-        "title": "Gerät spenden",
-        "desc": "Dein alter Computer bekommt ein zweites Leben. Wir holen ab, Spendenquittung inklusive.",
+        "title": "Unterstützen",
+        "desc": "Spende Geräte oder Geld für den Verein",
         "cta": "Jetzt spenden"
       },
       "membership": {
         "title": "Mitglied werden",
-        "desc": "Stimme mit, gestalte den Verein, erhalte exklusive Updates und Einladungen.",
+        "desc": "Stimme mit und gestalte den Verein aktiv",
         "cta": "Mitglied werden"
       }
     },
@@ -416,6 +416,11 @@
       "service2Desc": "Wiederherstellung von Daten aus beschädigten Geräten",
       "service3Name": "Computer-Reparatur",
       "service3Desc": "Reparatur und Aufbau von Vintage-Computern"
+    },
+    "impact": {
+      "title": "Unsere Wirkung",
+      "subtitle": "Was wir gemeinsam erreicht haben",
+      "moreLink": "Mehr über unsere Wirkung"
     }
   },
   "shop": {
@@ -688,7 +693,6 @@
       "community": "Community Inserate"
     },
     "categories": {
-      "all": "Alle",
       "10": "Laptops",
       "20": "Desktop PCs",
       "30": "Monitore",
@@ -698,7 +702,8 @@
       "70": "Komponenten",
       "80": "Peripherie",
       "90": "Netzwerk",
-      "99": "Sonstiges"
+      "99": "Sonstiges",
+      "all": "Alle"
     },
     "filters": {
       "label": "Filter",
@@ -4646,7 +4651,8 @@
   "notFound": {
     "title": "Seite nicht gefunden",
     "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
-    "goHome": "Zur Startseite"
+    "goHome": "Zur Startseite",
+    "reportProblem": "Problem melden"
   },
   "error": {
     "title": "Etwas ist schiefgelaufen",
@@ -6785,7 +6791,9 @@
       "community": "Community",
       "gratis": "Gratis",
       "kulturlegi": "KulturLegi",
-      "loadingError": "Fehler beim Laden der Techniker. Bitte versuche es erneut."
+      "loadingError": "Fehler beim Laden der Techniker. Bitte versuche es erneut.",
+      "availableEmpty": "Bald verfügbar — werde Teil der ersten Generation",
+      "emptyActionSecondary": "Hilfe trotzdem anfragen → IT-Hilfe"
     },
     "detail": {
       "backToList": "Alle Techniker",

@@ -65,7 +65,9 @@ export default function TechnikerListClient() {
               <div className="ui-public-eyebrow">{tEye('technicians')}</div>
               <h1 className="ui-public-display-md mt-3">{t('list.title')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
-                {t('list.available', { count: pagination.total })}
+                {pagination.total === 0 && !hasActiveFilters
+                  ? t('list.availableEmpty')
+                  : t('list.available', { count: pagination.total })}
               </p>
             </div>
             <Link
@@ -149,16 +151,25 @@ export default function TechnikerListClient() {
         )}
 
         {!loading && !error && technicians.length === 0 && (
-          <EmptyState
-            icon={Users}
-            title={t('list.emptyTitle')}
-            message={hasActiveFilters ? t('list.emptyMessageFiltered') : t('list.emptyMessageEmpty')}
-            action={
-              hasActiveFilters
-                ? { label: t('list.emptyActionFiltered'), onClick: clearFilters }
-                : { label: t('list.emptyActionEmpty'), href: '/profil/techniker' }
-            }
-          />
+          <div>
+            <EmptyState
+              icon={Users}
+              title={t('list.emptyTitle')}
+              message={hasActiveFilters ? t('list.emptyMessageFiltered') : t('list.emptyMessageEmpty')}
+              action={
+                hasActiveFilters
+                  ? { label: t('list.emptyActionFiltered'), onClick: clearFilters }
+                  : { label: t('list.emptyActionEmpty'), href: '/profil/techniker' }
+              }
+            />
+            {!hasActiveFilters && (
+              <p className="mt-4 text-center text-sm text-text-secondary">
+                <Link href={ROUTES.public.itHilfe} className="font-medium text-action hover:underline">
+                  {t('list.emptyActionSecondary')}
+                </Link>
+              </p>
+            )}
+          </div>
         )}
 
         {!loading && !error && technicians.length > 0 && (

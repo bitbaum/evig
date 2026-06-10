@@ -15,6 +15,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/config/routes'
+import { DESIGN_TOKENS } from '@/lib/design/tokens'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -213,6 +214,46 @@ export function MobileMenu({
                         <ul className="mt-1 ml-4 space-y-1 border-l-2 border-subtle dark:border-white/6 pl-4">
                           {item.subItems.filter(sub => !sub.isSection).map((subItem) => {
                             const subLabel = subItem.nameKey ? t(subItem.nameKey as never) : subItem.name
+                            if (subItem.featured && subItem.featuredIcon) {
+                              const FeaturedIcon = subItem.featuredIcon
+                              const badge = DESIGN_TOKENS.iconBadges[subItem.featuredTheme ?? 'marketplace']
+                              const featuredDesc = subItem.descriptionKey
+                                ? t(`items.${subItem.descriptionKey}` as never)
+                                : subItem.description
+                              return (
+                                <li key={subItem.name}>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    className={cn(
+                                      "group flex items-start gap-3 w-full text-left h-auto px-3 py-3 my-1.5",
+                                      "rounded-xl border border-primary-300 dark:border-primary-500/30",
+                                      "ring-1 ring-primary-200 dark:ring-primary-500/20",
+                                      "hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
+                                    )}
+                                    onClick={() => handleNavigation(subItem.href)}
+                                  >
+                                    <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg', badge.bg)}>
+                                      <FeaturedIcon className={cn('h-4 w-4', badge.text)} aria-hidden="true" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-sm font-semibold text-text-primary">{subLabel}</span>
+                                        {subItem.badge && (
+                                          <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
+                                            {badgeLabel(subItem.badge)}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {featuredDesc && (
+                                        <p className="mt-0.5 text-xs text-text-secondary line-clamp-2">{featuredDesc}</p>
+                                      )}
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-text-secondary shrink-0 mt-1" />
+                                  </Button>
+                                </li>
+                              )
+                            }
                             return (
                               <li key={subItem.name}>
                                 {subItem.external ? (

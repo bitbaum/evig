@@ -490,205 +490,205 @@
   },
   "agb": {
     "meta": {
-      "title": "이용약관",
-      "description": "revamp-it 이용약관"
+      "title": "Terms and Conditions",
+      "description": "Terms and Conditions of revamp-it"
     },
-    "title": "이용약관",
+    "title": "Terms and Conditions",
     "section1": {
-      "title": "1. 적용 범위",
-      "body": "이 이용약관(AGB)은 {legalName}, {address}의 모든 서비스 및 제공에 적용됩니다."
+      "title": "1. Scope",
+      "body": "These Terms and Conditions (T&Cs) apply to all services and offers of {legalName}, {address}."
     },
     "section2": {
-      "title": "2. 서비스",
-      "intro": "{orgName}은 IT 기기의 지속 가능한 재정비 및 재사용을 위해 헌신하는 비영리 단체입니다. 저희 서비스에는 다음이 포함됩니다:",
+      "title": "2. Services",
+      "intro": "{orgName} is a non-profit association committed to the sustainable refurbishment and reuse of IT equipment. Our services include:",
       "items": [
-        "중고 IT 기기의 재정비 및 판매",
-        "IT 수리 서비스",
-        "워크숍 및 교육",
-        "중고 기기 P2P 마켓플레이스",
-        "IT 지원 및 도움"
+        "Refurbishment and sale of second-hand IT equipment",
+        "IT repair services",
+        "Workshops and training",
+        "P2P marketplace for second-hand devices",
+        "IT help and support"
       ]
     },
     "section3": {
-      "title": "3. 가격 및 결제",
-      "body": "달리 명시되지 않는 한 모든 가격은 부가가치세 포함 스위스 프랑(CHF)으로 표시됩니다. 결제 조건은 각 제안에 명시됩니다."
+      "title": "3. Prices and Payment",
+      "body": "All prices are in Swiss Francs (CHF) including VAT, unless stated otherwise. Payment terms are specified for each offer."
     },
     "section4": {
-      "title": "4. 계약 체결",
-      "body": "계약은 플랫폼, 매장 또는 이메일을 통한 주문과 {orgName}의 이후 확인을 통해 성립됩니다. 웹사이트의 표시는 구속력 없는 청약 초대로 간주됩니다."
+      "title": "4. Conclusion of Contract",
+      "body": "A contract is concluded by placing an order via the platform, in the shop or by e-mail, followed by confirmation from {orgName}. Representations on the website constitute a non-binding invitation to submit an offer."
     },
     "section5": {
-      "title": "5. 철회 권리",
-      "body": "매장 내 구매 시 스위스 법에는 오프라인 매장에 대한 법적 철회 권리가 없습니다. 온라인 구매의 경우 미사용 및 원래 포장 상태로 반환되는 경우 상품 수령 후 14일 이내에 자발적 반품 권리를 제공합니다.",
-      "contactLabel": "문의:"
+      "title": "5. Right of Withdrawal",
+      "body": "For in-store purchases there is no statutory right of withdrawal, as Swiss law does not provide for this in physical shops. For online purchases, we grant a voluntary right of return of 14 days from receipt, provided the goods are returned unused and in their original packaging.",
+      "contactLabel": "Contact:"
     },
     "section6": {
-      "title": "6. 보증",
-      "body": "재정비된 기기에 대해 {orgName}은 법적 규정에 따른 보증을 제공합니다. 정확한 보증 조건은 구매 시 알려드립니다. P2P 마켓플레이스에서 제3자가 판매하는 기기에 대해 {orgName}은 보증 책임을 지지 않습니다."
+      "title": "6. Warranty",
+      "body": "{orgName} provides a warranty on refurbished devices in accordance with the applicable legal provisions. Exact warranty terms are communicated at the point of purchase. For devices sold via the P2P marketplace by third parties, {orgName} assumes no warranty."
     },
     "section7": {
-      "title": "7. 책임",
-      "body": "{orgName}은 법적 규정의 범위 내에서 책임을 집니다. 법적으로 허용되는 한 경과실에 대한 책임은 제외됩니다."
+      "title": "7. Liability",
+      "body": "{orgName} is liable within the scope of the applicable legal provisions. Liability for minor negligence is excluded to the extent permitted by law."
     },
     "section8": {
-      "title": "8. 개인정보 보호",
-      "body": "개인 데이터의 처리는 저희 개인정보 보호정책에 따라 이루어집니다. 등록된 사용자는 언제든지 자신의 데이터를 직접 내보낼 수 있습니다.",
-      "privacyLinkLabel": "개인정보 보호정책"
+      "title": "8. Data Protection",
+      "body": "Personal data is processed in accordance with our privacy policy. Registered users can export their data at any time.",
+      "privacyLinkLabel": "privacy policy"
     },
     "section9": {
-      "title": "9. 최종 조항",
-      "body": "이 이용약관의 개별 조항이 무효인 경우에도 나머지 조항의 유효성은 영향을 받지 않습니다. 스위스 법이 적용됩니다. 관할 법원은 취리히, 스위스입니다."
+      "title": "9. Final Provisions",
+      "body": "Should individual provisions of these T&Cs prove invalid, the validity of the remaining provisions is not affected. Swiss law applies. The place of jurisdiction is Zurich, Switzerland."
     },
     "section10": {
-      "title": "10. 변경",
-      "body": "{orgName}은 언제든지 이 이용약관을 변경할 권리를 보유합니다. 현재 버전은 이 페이지에서 확인할 수 있습니다. 공급자에 관한 법적 정보는 임프레섬에 있습니다.",
-      "impressumLinkLabel": "임프레섬"
+      "title": "10. Changes",
+      "body": "{orgName} reserves the right to change these T&Cs at any time. The current version is available on this page. Legal information about the provider can be found in the legal notice.",
+      "impressumLinkLabel": "legal notice"
     },
-    "asOf": "기준일: 2026년 4월"
+    "asOf": "As of: April 2026"
   },
   "datenschutz": {
     "meta": {
-      "title": "개인정보 처리방침",
-      "description": "{orgName}의 개인정보 처리방침"
+      "title": "Privacy Policy",
+      "description": "Privacy Policy of revamp-it"
     },
-    "title": "개인정보 처리방침",
+    "title": "Privacy Policy",
     "section1": {
-      "title": "1. 개인정보 처리자",
+      "title": "1. Data Controller",
       "emailLabel": "이메일:"
     },
     "section2": {
-      "title": "2. 개인정보 수집 및 처리",
-      "intro": "플랫폼 가입, 서비스 이용 또는 문의 시 개인정보를 수집합니다. 여기에는 다음이 포함됩니다:",
+      "title": "2. Collection and Processing of Personal Data",
+      "intro": "We collect personal data when you register on our platform, use our services or get in touch with us. This includes:",
       "items": [
-        "이름 및 이메일 주소 (가입 시)",
-        "연락처 정보 (문의 및 예약 시)",
-        "이용 데이터 (플랫폼 사용 시)"
+        "Name and e-mail address (upon registration)",
+        "Contact details (for enquiries and bookings)",
+        "Usage data (when using the platform)"
       ]
     },
     "section3": {
-      "title": "3. 개인정보 처리 목적",
-      "intro": "귀하의 데이터는 다음 목적으로 사용됩니다:",
+      "title": "3. Purpose of Data Processing",
+      "intro": "Your data is used for:",
       "items": [
-        "사용자 계정 제공 및 관리",
-        "수리 주문 및 서비스 이행",
-        "워크숍 등록 관리",
-        "P2P 마켓플레이스 운영",
-        "서비스 관련 커뮤니케이션 (동의한 경우에만)"
+        "Providing and managing your user account",
+        "Carrying out repairs and services",
+        "Managing workshop registrations",
+        "Operating the P2P marketplace",
+        "Communication regarding our offers (with consent only)"
       ]
     },
     "section4": {
-      "title": "4. 데이터 공유",
-      "body": "귀하의 데이터는 제3자에게 판매되지 않습니다. 서비스 제공에 필요한 경우(예: 예약된 수리를 위한 수리 업체 제공)나 법적으로 의무화된 경우에만 데이터가 공유됩니다."
+      "title": "4. Data Disclosure",
+      "body": "Your data is not sold to third parties. Disclosure only occurs where necessary to provide our services (e.g. to repair providers for booked repairs) or where we are legally required to do so."
     },
     "section5": {
-      "title": "5. 데이터 보안",
-      "body": "귀하의 데이터를 무단 접근, 손실 또는 오용으로부터 보호하기 위해 기술적·조직적 조치를 시행합니다. 비밀번호는 해시 형태로만 저장됩니다."
+      "title": "5. Data Security",
+      "body": "We implement technical and organisational measures to protect your data against unauthorised access, loss or misuse. Passwords are stored exclusively in hashed form."
     },
     "section6": {
-      "title": "6. 쿠키",
-      "body": "플랫폼은 세션 관리 및 인증을 위해 기능적 쿠키를 사용합니다. 분석 쿠키는 귀하의 동의가 있는 경우에만 설정됩니다."
+      "title": "6. Cookies",
+      "body": "Our platform uses functional cookies for session management and authentication. Analytical cookies are only set with your consent."
     },
     "section7": {
-      "title": "7. 귀하의 권리",
-      "intro": "귀하는 다음과 같은 권리를 가집니다:",
+      "title": "7. Your Rights",
+      "intro": "You have the right to:",
       "items": [
-        "저장된 데이터에 대한 접근",
-        "부정확한 데이터 수정",
-        "데이터 삭제",
-        "처리 제한",
-        "데이터 이동성 (데이터 내보내기)",
-        "부여한 동의 철회"
+        "Access your stored data",
+        "Correct inaccurate data",
+        "Delete your data",
+        "Restrict processing",
+        "Data portability (data export)",
+        "Revoke granted consents"
       ],
       "downloadText": "등록된 사용자는 언제든지 다음에서 데이터의 전체 사본을 다운로드할 수 있습니다",
       "settingsLinkLabel": "설정 → 개인정보",
-      "contactText": "기타 문의 사항은 다음으로 연락해 주세요:",
-      "exportText": "로그인한 사용자는 언제든지 다음 경로에서 자신의 데이터 사본 전체를 직접 내려받을 수 있습니다:",
-      "exportLink": "설정 → 개인정보 보호"
+      "contactText": "For all other enquiries, please contact:",
+      "exportText": "Registered users can download a full copy of their data at any time under",
+      "exportLink": "Settings → Privacy"
     },
     "section8": {
-      "title": "8. 보관 기간",
-      "body": "개인정보는 명시된 목적에 필요한 기간 또는 법적 보관 기간이 요구하는 기간 동안만 보관됩니다. 계정 및 프로필 데이터는 계정 삭제 후 법적 의무(예: 청구서 세무 보관)가 없는 한 삭제됩니다."
+      "title": "8. Retention Period",
+      "body": "We store your personal data only as long as necessary for the stated purposes or as required by statutory retention obligations. Account and profile data is removed after account deletion, unless legal obligations (e.g. fiscal retention of invoices) prevent this."
     },
     "section9": {
-      "title": "9. 법적 근거",
-      "body": "처리는 스위스 연방 데이터 보호법(DSG) 및 해당하는 경우 GDPR 제6조 제1항(계약 이행, 정당한 이익, 동의)에 근거합니다."
+      "title": "9. Legal Basis",
+      "body": "Processing is based on the Swiss Federal Act on Data Protection (FADP) and, where applicable, on Art. 6(1) GDPR (contract performance, legitimate interests, consent)."
     },
     "section10": {
-      "title": "10. 준거법",
-      "body": "이 개인정보 처리방침은 스위스 연방 데이터 보호법(DSG) 및 해당하는 경우 EU 일반 데이터 보호 규정(GDPR)의 적용을 받습니다. 다음도 참조하세요:",
-      "impressumLinkLabel": "법적 고지"
+      "title": "10. Applicable Law",
+      "body": "This privacy policy is subject to the Swiss Federal Act on Data Protection (FADP) and, where applicable, the General Data Protection Regulation (GDPR).",
+      "impressumLinkLabel": "legal notice"
     },
-    "asOf": "최종 업데이트: 2026년 3월"
+    "asOf": "As of: March 2026"
   },
   "impressum": {
     "meta": {
-      "title": "임프레섬",
-      "description": "임프레섬 및 법적 정보"
+      "title": "Legal Notice",
+      "description": "Legal notice and legal information"
     },
-    "title": "임프레섬",
-    "legalInfo": "스위스 법에 따른 정보",
-    "organisation": "조직",
-    "contact": "연락처",
-    "emailLabel": "이메일:",
-    "phoneLabel": "전화:",
-    "authorised": "대표권자",
-    "authorisedValue": "이사회",
-    "legalForm": "법적 형태",
-    "legalFormValue": "스위스 민법(ZGB) 제60조 이하에 따른 단체",
-    "purpose": "목적",
-    "purposeText": "{description} {orgName}은 기술의 자유로운 교환, 오픈 소스 하드웨어 및 소프트웨어 촉진, IT 기기의 지속 가능한 재정비 및 재사용을 위해 헌신하는 비영리 단체입니다.",
-    "disclaimer": "면책 조항",
-    "disclaimerP1": "저자는 이 웹사이트의 정보에 대한 내용의 정확성, 정밀성, 최신성, 신뢰성 및 완전성에 대해 어떠한 보증도 하지 않습니다.",
-    "disclaimerP2": "게시된 정보에 대한 접근 또는 사용, 오용 또는 기술적 장애로 인해 발생하는 물질적 또는 비물질적 손해에 대해 저자에게 제기되는 책임 청구는 제외됩니다.",
-    "disclaimerP3": "모든 제안은 구속력이 없습니다. 저자는 별도의 통지 없이 페이지의 일부나 전체 제공을 변경, 보완, 삭제하거나 일시적 또는 영구적으로 게시를 중단할 권리를 명시적으로 보유합니다.",
-    "linksDisclaimer": "참조 및 링크에 대한 면책 조항",
-    "linksDisclaimerText": "제3자 웹사이트에 대한 참조 및 링크는 저희의 책임 범위 밖입니다. 저희는 그러한 웹사이트에 대한 어떠한 책임도 거부합니다. 그러한 웹사이트에 대한 접근 및 사용은 각 사용자의 책임 하에 이루어집니다.",
-    "copyright": "저작권",
-    "copyrightText": "이 웹사이트의 콘텐츠, 이미지, 사진 또는 기타 파일에 대한 저작권 및 기타 모든 권리는 {legalName} 또는 특별히 명시된 권리 보유자에게만 귀속됩니다. 어떠한 요소도 복제하려면 저작권 보유자로부터 서면 동의를 미리 받아야 합니다.",
-    "furtherLegal": "추가 법적 고지",
-    "furtherLegalText": "개인정보 보호정책 및 이용약관도 참조하세요.",
-    "privacyLinkLabel": "개인정보 보호정책",
-    "agbLinkLabel": "이용약관",
-    "asOf": "기준일: 2026년 4월"
+    "title": "Legal Notice",
+    "legalInfo": "Information pursuant to Swiss law",
+    "organisation": "Organisation",
+    "contact": "Contact",
+    "emailLabel": "E-mail:",
+    "phoneLabel": "Phone:",
+    "authorised": "Authorised Representative",
+    "authorisedValue": "The Board",
+    "legalForm": "Legal Form",
+    "legalFormValue": "Association under Art. 60 et seq. ZGB (Swiss Civil Code)",
+    "purpose": "Purpose",
+    "purposeText": "{description} {orgName} is a non-profit association committed to the free exchange of technology, the promotion of open-source hardware and software, and the sustainable refurbishment and reuse of IT equipment.",
+    "disclaimer": "Disclaimer",
+    "disclaimerP1": "The author accepts no liability whatsoever regarding the accuracy, correctness, currency, reliability and completeness of the information on this website.",
+    "disclaimerP2": "Liability claims against the author for material or immaterial damage arising from access to or use or non-use of published information, from misuse of the connection or from technical malfunctions are excluded.",
+    "disclaimerP3": "All offers are non-binding. The author expressly reserves the right to change, supplement or delete parts of the pages or the entire offering without prior notice, or to cease publication temporarily or permanently.",
+    "linksDisclaimer": "Disclaimer for Links and References",
+    "linksDisclaimerText": "References and links to third-party websites are outside our area of responsibility. All liability for such websites is disclaimed. Access to and use of such websites is at the sole risk of the user concerned.",
+    "copyright": "Copyright",
+    "copyrightText": "The copyright and all other rights to content, images, photos or other files on this website belong exclusively to {legalName} or the specifically named rights holders. The prior written consent of the copyright holders must be obtained for the reproduction of any elements.",
+    "furtherLegal": "Further Legal Information",
+    "furtherLegalText": "See also our privacy policy and our terms and conditions.",
+    "privacyLinkLabel": "privacy policy",
+    "agbLinkLabel": "terms and conditions",
+    "asOf": "As of: April 2026"
   },
   "transparenz": {
     "meta": {
-      "title": "투명성",
-      "description": "{orgName}의 활동 내용과 방법. 미션, 수치, 운영 방식에 대한 정보."
+      "title": "Transparency",
+      "description": "What we do and how we do it. An insight into our mission, figures and working methods."
     },
     "hero": {
-      "title": "투명성",
-      "subtitle": "우리가 하는 일과 방법"
+      "title": "Transparency",
+      "subtitle": "What we do and how we do it"
     },
     "mission": {
-      "title": "우리의 미션",
+      "title": "Our Mission",
       "body": "{legalForm}으로서 ({foundingYear}년 설립), 중고 하드웨어에 두 번째 삶을 부여하고, 오픈 소프트웨어를 모두가 이용할 수 있게 하며, 사람들이 자율적으로 기술 사용법을 배울 수 있도록 노력합니다.",
-      "text": "{description} {foundingYear} 년에 설립된 {legalForm} 으로서, 저희는 중고 하드웨어가 두 번째 삶을 얻고, 누구나 오픈 소프트웨어를 이용할 수 있으며, 사람들이 자율적으로 기술을 익힐 수 있도록 노력합니다."
+      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
     },
     "stats": {
-      "title": "수치와 사실",
+      "title": "Facts & Figures",
       "moreLink": "상세 영향 수치 보기",
-      "detailLink": "상세 임팩트 수치 보기"
+      "detailLink": "View detailed impact figures"
     },
     "howWeWork": {
-      "title": "운영 방식",
-      "subtitle": "세 개의 커뮤니티 플랫폼이 사람들과 기술을 연결합니다.",
+      "title": "How We Work",
+      "subtitle": "Our three community platforms connect people with technology.",
       "platformCta": "플랫폼으로 이동",
-      "toPlatform": "플랫폼으로 이동",
+      "toPlatform": "Go to Platform",
       "platforms": [
         {
-          "title": "마켓플레이스",
-          "description": "중고 IT 기기를 위한 커뮤니티 플랫폼입니다. 사용자는 수수료 없이 매물을 등록하고, 구매하고, 판매할 수 있습니다.",
+          "title": "Marketplace",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
           "href": "/marketplace"
         },
         {
-          "title": "IT 도움",
-          "description": "컴퓨터 수리를 위해 자원봉사 기술자를 연결해 드립니다. 사람과 사람 사이의 도움, 지역적이고 간편합니다.",
+          "title": "IT Help",
+          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
           "href": "/it-hilfe"
         },
         {
-          "title": "워크숍",
-          "description": "Linux, 하드웨어, 프로그래밍 및 AI에 관한 강좌입니다. 지식을 나누고 서로 배우십시오 — 취리히 현장에서.",
+          "title": "Workshops",
+          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
           "href": "/workshops"
         }
       ]
@@ -711,19 +711,19 @@
       }
     ],
     "finances": {
-      "title": "재무",
+      "title": "Finances",
       "body": "비영리 단체로서 재무 정보를 공개합니다. 연간 보고서는 총회에서 발표되며 회원이 열람할 수 있습니다.",
-      "memberLink": "회원이 되어 정보 확인하기",
-      "text": "비영리 단체로서 저희는 재정을 투명하게 공개합니다. 연차 보고서는 총회에서 발표되며 회원이 열람할 수 있습니다."
+      "memberLink": "Become a member and gain access",
+      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members."
     },
     "board": {
-      "title": "이사회",
+      "title": "Board",
       "body": "{orgName}은 자원봉사 이사회가 운영합니다. 연락처:",
       "joinBtn": "회원 되기",
       "donateBtn": "기부하기",
-      "text": "{orgName} 은 자원봉사 이사회가 이끌고 있습니다. 연락처:",
-      "joinCta": "회원 가입",
-      "donateCta": "기부하기"
+      "text": "{orgName} is run by a voluntary board. Contact:",
+      "joinCta": "Become a Member",
+      "donateCta": "Donate"
     },
     "compactMetrics": {
       "devicesRescued": "연간 구해낸 장치",
@@ -801,15 +801,16 @@
     }
   },
   "notFound": {
-    "title": "페이지를 찾을 수 없습니다",
-    "description": "찾으시는 페이지가 존재하지 않거나 이동되었습니다.",
-    "goHome": "홈으로 이동"
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go to Homepage",
+    "reportProblem": "Report a Problem"
   },
   "error": {
-    "title": "문제가 발생했습니다",
-    "description": "예기치 않은 오류가 발생했습니다. 페이지를 새로고침해 보세요 — 문제가 지속되면 문의해 주세요.",
-    "retry": "다시 시도",
-    "goHome": "홈으로 이동"
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Try reloading the page — if the problem persists, please contact us.",
+    "retry": "Try Again",
+    "goHome": "Go to Homepage"
   },
   "about": {
     "meta": {
@@ -2235,7 +2236,7 @@
       "description": "중고 IT 구매 & 판매. 커뮤니티 컴퓨터 수리. Linux, 하드웨어, 프로그래밍 워크숍."
     },
     "hero": {
-      "title": "오래된 하드웨어.",
+      "title": "오래된 하드웨어. 새로운 삶.",
       "subtitle": "매년 6,200만 톤의 전자 폐기물이 버려집니다. 저희는 수리하고, 나누고, 서로에게서 배우는 커뮤니티와 함께 이를 바꾸고 있습니다.",
       "ctaDiscover": "지금 둘러보기",
       "ctaAbout": "소개",
@@ -2899,7 +2900,6 @@
       "community": "커뮤니티 판매 목록"
     },
     "categories": {
-      "all": "전체",
       "10": "노트북",
       "20": "데스크톱 PC",
       "30": "모니터",
@@ -2909,7 +2909,8 @@
       "70": "부품",
       "80": "주변기기",
       "90": "네트워크",
-      "99": "기타"
+      "99": "기타",
+      "all": "전체"
     },
     "filters": {
       "label": "필터",
@@ -3003,7 +3004,7 @@
     },
     "empty": "판매 목록을 찾을 수 없습니다",
     "conditions": {
-      "new": "새 제품",
+      "new": "새 것",
       "likeNew": "거의 새 것",
       "good": "양호",
       "fair": "보통",

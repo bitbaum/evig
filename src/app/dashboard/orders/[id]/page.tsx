@@ -64,12 +64,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   if (!order) return null
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <article className="mx-auto max-w-3xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
       <Link
         href="/dashboard/orders"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.16em] text-text-tertiary transition-colors hover:text-text-secondary"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <ArrowLeft className="h-3 w-3" />
         {t('backToOrders')}
       </Link>
 
@@ -77,7 +77,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Live error banner — surfaces fetch failures triggered after mount */}
       {error && (
-        <div className="mb-6 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4 text-error-700 dark:text-error-300">
+        <div className="rounded-lg border border-error-200 bg-error-50 p-4 text-sm text-error-700 dark:border-error-800 dark:bg-error-900/20 dark:text-error-300">
           {error}
         </div>
       )}
@@ -85,7 +85,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       <PendingPaymentBanner order={order} />
       <StatusTimelineCard order={order} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <ListingInfoCard order={order} />
         <PriceBreakdownCard order={order} />
         <CounterpartyCard order={order} />
@@ -112,6 +112,6 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         onConfirm={() => { setConfirmCancel(false); updateStatus(ORDER_STATUS.CANCELLED) }}
         onClose={() => setConfirmCancel(false)}
       />
-    </div>
+    </article>
   )
 }

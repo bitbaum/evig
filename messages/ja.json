@@ -490,205 +490,205 @@
   },
   "agb": {
     "meta": {
-      "title": "利用規約",
-      "description": "revamp-itの利用規約"
+      "title": "Terms and Conditions",
+      "description": "Terms and Conditions of revamp-it"
     },
-    "title": "利用規約",
+    "title": "Terms and Conditions",
     "section1": {
-      "title": "1. 適用範囲",
-      "body": "本利用規約（以下「規約」）は、{legalName}（{address}）が提供するすべてのサービスおよびオファーに適用されます。"
+      "title": "1. Scope",
+      "body": "These Terms and Conditions (T&Cs) apply to all services and offers of {legalName}, {address}."
     },
     "section2": {
-      "title": "2. サービス内容",
-      "intro": "{orgName}は、ITデバイスの持続可能な再生・再利用を推進する非営利団体です。提供するサービスは以下を含みます：",
+      "title": "2. Services",
+      "intro": "{orgName} is a non-profit association committed to the sustainable refurbishment and reuse of IT equipment. Our services include:",
       "items": [
-        "中古ITデバイスの再生・販売",
-        "IT修理サービス",
-        "ワークショップおよびトレーニング",
-        "中古デバイスのP2Pマーケットプレイス",
-        "ITヘルプとサポート"
+        "Refurbishment and sale of second-hand IT equipment",
+        "IT repair services",
+        "Workshops and training",
+        "P2P marketplace for second-hand devices",
+        "IT help and support"
       ]
     },
     "section3": {
-      "title": "3. 価格と支払い",
-      "body": "特に記載のない限り、すべての価格はスイスフラン（CHF）で表示され、付加価値税（VAT）が含まれます。支払い条件は各オファーに記載されます。"
+      "title": "3. Prices and Payment",
+      "body": "All prices are in Swiss Francs (CHF) including VAT, unless stated otherwise. Payment terms are specified for each offer."
     },
     "section4": {
-      "title": "4. 契約の成立",
-      "body": "契約は、プラットフォーム上、店頭、またはメールでの注文と、その後の{orgName}による確認によって成立します。ウェブサイト上の情報は、申込の招待として拘束力を持たないものとします。"
+      "title": "4. Conclusion of Contract",
+      "body": "A contract is concluded by placing an order via the platform, in the shop or by e-mail, followed by confirmation from {orgName}. Representations on the website constitute a non-binding invitation to submit an offer."
     },
     "section5": {
-      "title": "5. 返品・返金",
-      "body": "スイスの法律では実店舗での購入に法定撤回権は設けられていません。オンライン購入については、商品が未使用で元の状態で返送される場合、受取日から14日以内の自主的な返品を認めます。",
-      "contactLabel": "お問い合わせ："
+      "title": "5. Right of Withdrawal",
+      "body": "For in-store purchases there is no statutory right of withdrawal, as Swiss law does not provide for this in physical shops. For online purchases, we grant a voluntary right of return of 14 days from receipt, provided the goods are returned unused and in their original packaging.",
+      "contactLabel": "Contact:"
     },
     "section6": {
-      "title": "6. 品質保証",
-      "body": "再生デバイスについては、{orgName}が法律の規定に従って保証を提供します。詳細な保証条件は購入時にお知らせします。P2Pマーケットプレイスを通じてサードパーティが販売するデバイスについては、{orgName}は保証を提供しません。"
+      "title": "6. Warranty",
+      "body": "{orgName} provides a warranty on refurbished devices in accordance with the applicable legal provisions. Exact warranty terms are communicated at the point of purchase. For devices sold via the P2P marketplace by third parties, {orgName} assumes no warranty."
     },
     "section7": {
-      "title": "7. 責任制限",
-      "body": "{orgName}は法律の規定の範囲内で責任を負います。法律で許される限り、軽過失に対する責任は免除されます。"
+      "title": "7. Liability",
+      "body": "{orgName} is liable within the scope of the applicable legal provisions. Liability for minor negligence is excluded to the extent permitted by law."
     },
     "section8": {
-      "title": "8. データ保護",
-      "body": "個人データの処理はプライバシーポリシーに従って行われます。登録ユーザーはいつでも自分のデータをエクスポートできます。",
-      "privacyLinkLabel": "プライバシーポリシー"
+      "title": "8. Data Protection",
+      "body": "Personal data is processed in accordance with our privacy policy. Registered users can export their data at any time.",
+      "privacyLinkLabel": "privacy policy"
     },
     "section9": {
-      "title": "9. 最終規定",
-      "body": "本規約の個々の条項が無効であっても、残りの条項の有効性には影響しません。本規約はスイス法に準拠します。裁判管轄はスイス・チューリッヒとします。"
+      "title": "9. Final Provisions",
+      "body": "Should individual provisions of these T&Cs prove invalid, the validity of the remaining provisions is not affected. Swiss law applies. The place of jurisdiction is Zurich, Switzerland."
     },
     "section10": {
-      "title": "10. 変更",
-      "body": "{orgName}はいつでも本規約を変更する権利を留保します。最新版はこのページで確認できます。運営者に関する法的情報は運営情報に記載されています。",
-      "impressumLinkLabel": "運営情報"
+      "title": "10. Changes",
+      "body": "{orgName} reserves the right to change these T&Cs at any time. The current version is available on this page. Legal information about the provider can be found in the legal notice.",
+      "impressumLinkLabel": "legal notice"
     },
-    "asOf": "最終更新：2026年4月"
+    "asOf": "As of: April 2026"
   },
   "datenschutz": {
     "meta": {
-      "title": "プライバシーポリシー",
-      "description": "{orgName}のプライバシーポリシー"
+      "title": "Privacy Policy",
+      "description": "Privacy Policy of revamp-it"
     },
-    "title": "プライバシーポリシー",
+    "title": "Privacy Policy",
     "section1": {
-      "title": "1. データ管理者",
+      "title": "1. Data Controller",
       "emailLabel": "メール："
     },
     "section2": {
-      "title": "2. 個人データの収集と処理",
-      "intro": "当プラットフォームへの登録、サービスの利用、またはお問い合わせの際に個人データを収集します。これには以下が含まれます：",
+      "title": "2. Collection and Processing of Personal Data",
+      "intro": "We collect personal data when you register on our platform, use our services or get in touch with us. This includes:",
       "items": [
-        "氏名とメールアドレス（登録時）",
-        "連絡先情報（お問い合わせと予約時）",
-        "利用データ（プラットフォーム使用時）"
+        "Name and e-mail address (upon registration)",
+        "Contact details (for enquiries and bookings)",
+        "Usage data (when using the platform)"
       ]
     },
     "section3": {
-      "title": "3. データ処理の目的",
-      "intro": "お客様のデータは以下の目的で使用されます：",
+      "title": "3. Purpose of Data Processing",
+      "intro": "Your data is used for:",
       "items": [
-        "ユーザーアカウントの提供と管理",
-        "修理注文とサービスの実施",
-        "ワークショップ登録の管理",
-        "P2Pマーケットプレイスの運営",
-        "当社のオファーに関する連絡（同意がある場合のみ）"
+        "Providing and managing your user account",
+        "Carrying out repairs and services",
+        "Managing workshop registrations",
+        "Operating the P2P marketplace",
+        "Communication regarding our offers (with consent only)"
       ]
     },
     "section4": {
-      "title": "4. データの共有",
-      "body": "お客様のデータは第三者に販売されません。データの共有は、サービスの提供に必要な場合（例：予約した修理のための修理業者への提供）または法的義務がある場合にのみ行われます。"
+      "title": "4. Data Disclosure",
+      "body": "Your data is not sold to third parties. Disclosure only occurs where necessary to provide our services (e.g. to repair providers for booked repairs) or where we are legally required to do so."
     },
     "section5": {
-      "title": "5. データセキュリティ",
-      "body": "不正アクセス、損失、または不正使用からデータを保護するための技術的・組織的対策を実施しています。パスワードはハッシュ化された形式でのみ保存されます。"
+      "title": "5. Data Security",
+      "body": "We implement technical and organisational measures to protect your data against unauthorised access, loss or misuse. Passwords are stored exclusively in hashed form."
     },
     "section6": {
-      "title": "6. クッキー",
-      "body": "当プラットフォームはセッション管理と認証のために機能的クッキーを使用しています。分析クッキーはお客様の同意がある場合にのみ設定されます。"
+      "title": "6. Cookies",
+      "body": "Our platform uses functional cookies for session management and authentication. Analytical cookies are only set with your consent."
     },
     "section7": {
-      "title": "7. お客様の権利",
-      "intro": "お客様には以下の権利があります：",
+      "title": "7. Your Rights",
+      "intro": "You have the right to:",
       "items": [
-        "保存されたデータへのアクセス",
-        "不正確なデータの訂正",
-        "データの削除",
-        "処理の制限",
-        "データポータビリティ（データエクスポート）",
-        "付与した同意の撤回"
+        "Access your stored data",
+        "Correct inaccurate data",
+        "Delete your data",
+        "Restrict processing",
+        "Data portability (data export)",
+        "Revoke granted consents"
       ],
       "downloadText": "登録済みユーザーはいつでも以下からデータの完全なコピーをダウンロードできます",
       "settingsLinkLabel": "設定 → プライバシー",
-      "contactText": "その他のご要望については、こちらにお問い合わせください：",
-      "exportText": "ログイン済みのユーザーは、いつでも自分のデータの完全なコピーを次の場所からダウンロードできます",
-      "exportLink": "設定 → プライバシー"
+      "contactText": "For all other enquiries, please contact:",
+      "exportText": "Registered users can download a full copy of their data at any time under",
+      "exportLink": "Settings → Privacy"
     },
     "section8": {
-      "title": "8. 保存期間",
-      "body": "個人データは、記載された目的に必要な期間または法定保存期間が要求する期間のみ保存します。アカウントおよびプロフィールデータは、アカウント削除後に削除されます（法的義務（例：請求書の税務保存）がある場合を除く）。"
+      "title": "8. Retention Period",
+      "body": "We store your personal data only as long as necessary for the stated purposes or as required by statutory retention obligations. Account and profile data is removed after account deletion, unless legal obligations (e.g. fiscal retention of invoices) prevent this."
     },
     "section9": {
-      "title": "9. 法的根拠",
-      "body": "処理はスイス連邦データ保護法（DSG）、および適用がある場合はGDPR第6条第1項（契約の履行、正当な利益、同意）に基づいています。"
+      "title": "9. Legal Basis",
+      "body": "Processing is based on the Swiss Federal Act on Data Protection (FADP) and, where applicable, on Art. 6(1) GDPR (contract performance, legitimate interests, consent)."
     },
     "section10": {
-      "title": "10. 適用法",
-      "body": "このプライバシーポリシーはスイス連邦データ保護法（DSG）、および適用がある場合はEUの一般データ保護規則（GDPR）によって規定されています。こちらもご参照ください：",
-      "impressumLinkLabel": "法的情報"
+      "title": "10. Applicable Law",
+      "body": "This privacy policy is subject to the Swiss Federal Act on Data Protection (FADP) and, where applicable, the General Data Protection Regulation (GDPR).",
+      "impressumLinkLabel": "legal notice"
     },
-    "asOf": "最終更新：2026年3月"
+    "asOf": "As of: March 2026"
   },
   "impressum": {
     "meta": {
-      "title": "運営情報",
-      "description": "運営情報および法的情報"
+      "title": "Legal Notice",
+      "description": "Legal notice and legal information"
     },
-    "title": "運営情報",
-    "legalInfo": "スイス法に基づく情報",
-    "organisation": "団体",
-    "contact": "お問い合わせ",
-    "emailLabel": "メール：",
-    "phoneLabel": "電話：",
-    "authorised": "代表者",
-    "authorisedValue": "理事会",
-    "legalForm": "法的形式",
-    "legalFormValue": "民法典（ZGB）第60条以降に基づく団体（スイス民法）",
-    "purpose": "目的",
-    "purposeText": "{description} {orgName}は、テクノロジーの自由な交換、Open Sourceハードウェアおよびソフトウェアの推進、ならびにITデバイスの持続可能な再生と再利用を推進する非営利団体です。",
-    "disclaimer": "免責事項",
-    "disclaimerP1": "著者は本ウェブサイト上の情報の内容的正確性、精密性、現在性、信頼性および完全性について一切の保証を行いません。",
-    "disclaimerP2": "公開された情報へのアクセスまたは使用若しくは不使用、接続の悪用、または技術的障害から生じる物質的または非物質的損害に対する著者への責任請求は除外されます。",
-    "disclaimerP3": "すべてのオファーは拘束力を持ちません。著者は、別段の通知なしに、サイトの一部または全体を変更、補足、削除、あるいは出版を一時的または恒久的に停止する権利を明示的に留保します。",
-    "linksDisclaimer": "参照とリンクに関する免責事項",
-    "linksDisclaimerText": "第三者のウェブサイトへの参照とリンクは当社の責任範囲外です。そのようなウェブサイトに対する一切の責任は否定されます。そのようなウェブサイトへのアクセスと使用は、各ユーザーの自己責任において行われます。",
-    "copyright": "著作権",
-    "copyrightText": "本ウェブサイトのコンテンツ、画像、写真またはその他のファイルに関する著作権およびその他のすべての権利は、{legalName}または特定の権利所有者に帰属します。いかなる要素の複製も、事前に著作権者の書面による同意を得る必要があります。",
-    "furtherLegal": "その他の法的情報",
-    "furtherLegalText": "プライバシーポリシーおよび利用規約もご参照ください。",
-    "privacyLinkLabel": "プライバシーポリシー",
-    "agbLinkLabel": "利用規約",
-    "asOf": "最終更新：2026年4月"
+    "title": "Legal Notice",
+    "legalInfo": "Information pursuant to Swiss law",
+    "organisation": "Organisation",
+    "contact": "Contact",
+    "emailLabel": "E-mail:",
+    "phoneLabel": "Phone:",
+    "authorised": "Authorised Representative",
+    "authorisedValue": "The Board",
+    "legalForm": "Legal Form",
+    "legalFormValue": "Association under Art. 60 et seq. ZGB (Swiss Civil Code)",
+    "purpose": "Purpose",
+    "purposeText": "{description} {orgName} is a non-profit association committed to the free exchange of technology, the promotion of open-source hardware and software, and the sustainable refurbishment and reuse of IT equipment.",
+    "disclaimer": "Disclaimer",
+    "disclaimerP1": "The author accepts no liability whatsoever regarding the accuracy, correctness, currency, reliability and completeness of the information on this website.",
+    "disclaimerP2": "Liability claims against the author for material or immaterial damage arising from access to or use or non-use of published information, from misuse of the connection or from technical malfunctions are excluded.",
+    "disclaimerP3": "All offers are non-binding. The author expressly reserves the right to change, supplement or delete parts of the pages or the entire offering without prior notice, or to cease publication temporarily or permanently.",
+    "linksDisclaimer": "Disclaimer for Links and References",
+    "linksDisclaimerText": "References and links to third-party websites are outside our area of responsibility. All liability for such websites is disclaimed. Access to and use of such websites is at the sole risk of the user concerned.",
+    "copyright": "Copyright",
+    "copyrightText": "The copyright and all other rights to content, images, photos or other files on this website belong exclusively to {legalName} or the specifically named rights holders. The prior written consent of the copyright holders must be obtained for the reproduction of any elements.",
+    "furtherLegal": "Further Legal Information",
+    "furtherLegalText": "See also our privacy policy and our terms and conditions.",
+    "privacyLinkLabel": "privacy policy",
+    "agbLinkLabel": "terms and conditions",
+    "asOf": "As of: April 2026"
   },
   "transparenz": {
     "meta": {
-      "title": "透明性",
-      "description": "{orgName}の活動内容と方法。ミッション、数字、活動方針の紹介。"
+      "title": "Transparency",
+      "description": "What we do and how we do it. An insight into our mission, figures and working methods."
     },
     "hero": {
-      "title": "透明性",
-      "subtitle": "私たちが何をしているか、どのように行っているか"
+      "title": "Transparency",
+      "subtitle": "What we do and how we do it"
     },
     "mission": {
-      "title": "私たちのミッション",
+      "title": "Our Mission",
       "body": "{legalForm}（{foundingYear}年設立）として、中古ハードウェアに第二の命を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自律的にテクノロジーの使い方を学べるよう取り組んでいます。",
-      "text": "{description} {legalForm}({foundingYear} 年設立)として、中古ハードウェアに第二の人生を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自主的にテクノロジーの使い方を学べる環境づくりに取り組んでいます。"
+      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
     },
     "stats": {
-      "title": "数字と事実",
+      "title": "Facts & Figures",
       "moreLink": "詳細な影響データを見る",
-      "detailLink": "詳細な活動成果を見る"
+      "detailLink": "View detailed impact figures"
     },
     "howWeWork": {
-      "title": "活動方法",
-      "subtitle": "3つのコミュニティプラットフォームが人々とテクノロジーをつなぎます。",
+      "title": "How We Work",
+      "subtitle": "Our three community platforms connect people with technology.",
       "platformCta": "プラットフォームへ",
-      "toPlatform": "プラットフォームへ",
+      "toPlatform": "Go to Platform",
       "platforms": [
         {
-          "title": "マーケットプレイス",
-          "description": "中古 IT 機器のためのコミュニティプラットフォームです。ユーザーは手数料なしで出品、購入、販売ができます。",
+          "title": "Marketplace",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
           "href": "/marketplace"
         },
         {
-          "title": "IT サポート",
-          "description": "コンピュータ修理のためのボランティア技術者を仲介します。地域に根ざした、人と人とのシンプルなサポートです。",
+          "title": "IT Help",
+          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
           "href": "/it-hilfe"
         },
         {
-          "title": "ワークショップ",
-          "description": "Linux、ハードウェア、プログラミング、AI に関する講座です。チューリッヒの現地で、知識を分かち合い、互いに学び合います。",
+          "title": "Workshops",
+          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
           "href": "/workshops"
         }
       ]
@@ -711,19 +711,19 @@
       }
     ],
     "finances": {
-      "title": "財務",
+      "title": "Finances",
       "body": "非営利団体として、財務情報を公開しています。年次報告書は総会で発表され、会員が閲覧できます。",
-      "memberLink": "会員になって詳細を確認する",
-      "text": "非営利団体として、財務情報を公開しています。年次報告書は総会で発表され、メンバーが閲覧できます。"
+      "memberLink": "Become a member and gain access",
+      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members."
     },
     "board": {
-      "title": "理事会",
+      "title": "Board",
       "body": "{orgName}はボランティアの理事会によって運営されています。連絡先：",
       "joinBtn": "会員になる",
       "donateBtn": "寄付する",
-      "text": "{orgName} はボランティアの理事会によって運営されています。お問い合わせ:",
-      "joinCta": "メンバーになる",
-      "donateCta": "寄付する"
+      "text": "{orgName} is run by a voluntary board. Contact:",
+      "joinCta": "Become a Member",
+      "donateCta": "Donate"
     },
     "compactMetrics": {
       "devicesRescued": "年間救出デバイス数",
@@ -801,15 +801,16 @@
     }
   },
   "notFound": {
-    "title": "ページが見つかりません",
-    "description": "お探しのページは存在しないか、移動されました。",
-    "goHome": "ホームへ"
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go to Homepage",
+    "reportProblem": "Report a Problem"
   },
   "error": {
-    "title": "問題が発生しました",
-    "description": "予期しないエラーが発生しました。ページを再読み込みしてみてください — 問題が続く場合はお問い合わせください。",
-    "retry": "再試行",
-    "goHome": "ホームへ"
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Try reloading the page — if the problem persists, please contact us.",
+    "retry": "Try Again",
+    "goHome": "Go to Homepage"
   },
   "about": {
     "meta": {
@@ -2235,7 +2236,7 @@
       "description": "中古ITを購入・販売。コミュニティによるパソコン修理。Linux、ハードウェア、プログラミングのワークショップ。"
     },
     "hero": {
-      "title": "古いハードウェア。",
+      "title": "古いハードウェア。新しい命。",
       "subtitle": "毎年6200万トンの電子機器がゴミになります。私たちはそれを変えます — 修理し、受け渡し、互いに学ぶコミュニティとともに。",
       "ctaDiscover": "今すぐ見る",
       "ctaAbout": "私たちについて",
@@ -2899,7 +2900,6 @@
       "community": "コミュニティ出品"
     },
     "categories": {
-      "all": "すべて",
       "10": "ノートパソコン",
       "20": "デスクトップPC",
       "30": "モニター",
@@ -2909,7 +2909,8 @@
       "70": "コンポーネント",
       "80": "周辺機器",
       "90": "ネットワーク",
-      "99": "その他"
+      "99": "その他",
+      "all": "すべて"
     },
     "filters": {
       "label": "フィルター",
@@ -3006,7 +3007,7 @@
       "new": "新品",
       "likeNew": "ほぼ新品",
       "good": "良好",
-      "fair": "可",
+      "fair": "普通",
       "forParts": "部品取り用",
       "like_new": "ほぼ新品",
       "poor": "難あり",

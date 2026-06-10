@@ -43,8 +43,8 @@ const CAN_CANCEL_STATUSES: readonly BookingStatus[] = [
   BOOKING_STATUS.QUOTE_APPROVED,
 ]
 
-const CARD_CLASS = 'bg-surface-base rounded-xl border border-subtle p-6'
-const SECTION_TITLE_CLASS = 'text-sm font-semibold text-text-tertiary uppercase tracking-widest'
+const CARD_CLASS = 'rounded-lg border border-subtle bg-surface-base p-5'
+const SECTION_TITLE_CLASS = 'font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary'
 
 /* ─────────────────────────── Star display ─────────────────────────── */
 
@@ -147,7 +147,7 @@ function ErrorBanner({ message, onDismiss }: { message: string; onDismiss: () =>
 function QuoteSection({ appointment, state }: { appointment: AppointmentDetail; state: BookingDetailState }) {
   const t = useTranslations('dashboard.bookings')
   return (
-    <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-4 mb-4">
+    <div className="mb-4 rounded-lg border border-warning-200 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/10">
       <div className="flex items-center justify-between gap-4 mb-2">
         <div>
           <p className="text-sm font-medium text-warning-800 dark:text-warning-300">{t('quoteLabel')}</p>

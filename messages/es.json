@@ -803,7 +803,8 @@
   "notFound": {
     "title": "Página no encontrada",
     "description": "La página que buscas no existe o ha sido trasladada.",
-    "goHome": "Ir al inicio"
+    "goHome": "Ir al inicio",
+    "reportProblem": "Informar de un problema"
   },
   "error": {
     "title": "Algo ha salido mal",
@@ -2235,7 +2236,7 @@
       "description": "Compra y vende TI de segunda mano. Reparación de ordenadores por la comunidad. Talleres de Linux, hardware y programación."
     },
     "hero": {
-      "title": "Hardware antiguo.",
+      "title": "Hardware antiguo. Nueva vida.",
       "subtitle": "Cada año se tiran 62 millones de toneladas de residuos electrónicos. Nosotros lo cambiamos — con una comunidad que repara, comparte y aprende junta.",
       "ctaDiscover": "Descubrir ahora",
       "ctaAbout": "Sobre nosotros",
@@ -2899,7 +2900,6 @@
       "community": "Anuncios de la comunidad"
     },
     "categories": {
-      "all": "Todos",
       "10": "Portátiles",
       "20": "PCs de sobremesa",
       "30": "Monitores",
@@ -2909,7 +2909,8 @@
       "70": "Componentes",
       "80": "Periféricos",
       "90": "Red",
-      "99": "Otros"
+      "99": "Otros",
+      "all": "Todos"
     },
     "filters": {
       "label": "Filtros",

@@ -1,36 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
-import { ArrowRight, Filter, CheckCircle2, Calendar, Code, Globe, Users, Wrench, Rocket, Layers, Server, Lightbulb } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { Filter, Rocket } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
-import { DESIGN_TOKENS } from '@/lib/design/tokens'
-
-// Icon config keyed by slug — no positional coupling
-const ICON_BY_SLUG: Record<string, LucideIcon> = {
-  kivitendo:    Code,
-  linuxola:     Globe,
-  freiecomputer: Layers,
-  compirat:     Users,
-  hardware:     Wrench,
-  ltsp:         Server,
-  upcycling:    Lightbulb,
-}
-
-type ProjectItem = {
-  title: string
-  description: string
-  category: 'software' | 'hardware' | 'community'
-  status: 'active' | 'ongoing'
-  features: string[]
-  slug: string
-  year: string
-}
+import { ProjectCard, type ProjectItem } from './ProjectCard'
 
 export default function ProjectsPage() {
   const t = useTranslations('projects')
@@ -39,7 +15,6 @@ export default function ProjectsPage() {
   const categoryKeys = ['software', 'hardware', 'community'] as const
   type CategoryKey = typeof categoryKeys[number]
 
-  const allLabel = t('filter.all')
   const [selectedCategory, setSelectedCategory] = useState<CategoryKey | null>(null)
 
   const filteredItems = selectedCategory
@@ -49,8 +24,6 @@ export default function ProjectsPage() {
   const handleToggle = (key: CategoryKey) => {
     setSelectedCategory(prev => (prev === key ? null : key))
   }
-
-  const iconBadge = DESIGN_TOKENS.iconBadges.projects
 
   return (
     <main>
@@ -111,84 +84,9 @@ export default function ProjectsPage() {
 
           {/* Projects grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {filteredItems.map((project, index) => {
-              const Icon = ICON_BY_SLUG[project.slug] ?? Layers
-              return (
-                <div
-                  key={project.slug}
-                  className={cn(
-                    designPrimitive.surface.card,
-                    'group flex flex-col animate-fade-in-up'
-                  )}
-                  style={{ animationDelay: `${index * 60}ms` }}
-                >
-                  <div className="p-6 flex flex-col h-full">
-                    {/* Card header */}
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className={cn(
-                        'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors',
-                        iconBadge.bg,
-                        'group-hover:bg-action'
-                      )}>
-                        <Icon className={cn(
-                          'h-5 w-5 transition-colors',
-                          iconBadge.text,
-                          'group-hover:text-white'
-                        )} />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="text-base font-semibold text-text-primary truncate">
-                            {project.title}
-                          </h3>
-                          <span className={cn(
-                            designPrimitive.badgeBase,
-                            designPrimitive.badge.success
-                          )}>
-                            {t(`status.${project.status}`)}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                          <Calendar className="h-3.5 w-3.5" />
-                          <span>{t('since', { year: project.year })}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-text-secondary mb-4 grow leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    {/* Features */}
-                    {project.features.length > 0 && (
-                      <ul className="space-y-2 mb-5">
-                        {project.features.map((feat, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-text-tertiary">
-                            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-action" />
-                            <span>{feat}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {/* Footer */}
-                    <div className="mt-auto pt-4 border-t border-subtle flex items-center justify-between">
-                      <span className="text-xs font-medium uppercase tracking-wider text-text-muted">
-                        {t(`categories.${project.category}`)}
-                      </span>
-                      <Link
-                        href={`/projects/${project.slug}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-action hover:text-action transition-colors"
-                      >
-                        {t('learnMore')}
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+            {filteredItems.map((project, index) => (
+              <ProjectCard key={project.slug} project={project} index={index} />
+            ))}
           </div>
 
           {/* Result count */}
