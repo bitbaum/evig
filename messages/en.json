@@ -285,6 +285,7 @@
     },
     "hero": {
       "title": "Old Hardware. New Life.",
+      "titlePrimary": "Old Hardware.",
       "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
       "ctaDiscover": "Explore now",
       "ctaAbout": "About us",

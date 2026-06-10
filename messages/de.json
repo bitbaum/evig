@@ -285,6 +285,7 @@
     },
     "hero": {
       "title": "Alte Hardware. Neues Leben.",
+      "titlePrimary": "Alte Hardware.",
       "titleSecondary": "Neues Leben.",
       "lede": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen.",
       "sublede": "Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",

@@ -284,7 +284,8 @@
       "description": "Покупайте и продавайте б/у IT. Ремонт компьютеров силами сообщества. Воркшопы по Linux, оборудованию и программированию."
     },
     "hero": {
-      "title": "Старое оборудование.",
+      "title": "Старое оборудование. Новая жизнь.",
+      "titlePrimary": "Старое оборудование.",
       "titleSecondary": "Новая жизнь.",
       "lede": "Мы ремонтируем подержанные компьютеры и передаём их тем, кому они нужны.",
       "sublede": "Швейцарская некоммерческая организация с 2003 года — её движет сообщество, которое ремонтирует, делится и учится друг у друга.",
@@ -5905,222 +5906,222 @@
       },
       "economics": {
         "eyebrow": "ЭКОНОМИКА",
-        "title": "Сколько на самом деле стоит лампа — и как проект собирается окупаться.",
-        "intro": "Пока оценка жизненного цикла ZHAW и первые продажи не дадут реальных данных, многие цифры ниже — это допущения. Мы пишем их открыто, не выдавая за факты.",
+        "title": "Что на самом деле стоит светильник — и как проект должен себя нести.",
+        "intro": "Пока идёт LCA от ZHAW и первые продажи дают данные, многие значения ниже — рабочие предположения. Мы пишем их открыто, а не продаём.",
         "unitEconomics": {
-          "title": "Себестоимость единицы — текущая оценка",
-          "note": "Рабочие допущения. Будут пересмотрены, когда малая серия даст реальные данные (3 кв. 2026).",
+          "title": "Стоимость единицы — сегодняшняя оценка",
+          "note": "Рабочие предположения. Будут пересмотрены, как только малая серия даст реальные данные (3-й квартал 2026).",
           "rows": [
             {
-              "label": "Монитор (пожертвование / через ERZ)",
-              "value": "CHF 0",
-              "aside": "Входное сырьё без затрат"
+              "label": "Монитор (пожертвован/ERZ)",
+              "value": "0 CHF",
+              "aside": "Входной материал безвозмездный"
             },
             {
-              "label": "Переделка электроники и компоненты",
-              "value": "~CHF 25",
-              "aside": "LED-драйвер, провода, мелочи"
+              "label": "Электронная переделка и компоненты",
+              "value": "~25 CHF",
+              "aside": "LED-драйвер, проводка, мелкие детали"
             },
             {
               "label": "Труд (защищённая мастерская, ~1 ч)",
-              "value": "~CHF 15",
-              "aside": "Только взнос мастерской — зарплаты выплачивает швейцарская соцсистема (страхование инвалидности, программы поддерживаемой занятости), а не бюджет проекта"
+              "value": "~15 CHF",
+              "aside": "Взнос мастерской — зарплаты несёт социальная система (IV, социальная помощь), а не бюджет проекта"
             },
             {
               "label": "Упаковка",
-              "value": "~CHF 3",
+              "value": "~3 CHF",
               "aside": "Картон + этикетка — без премиум-упаковки"
             },
             {
-              "label": "Распределённые проектные расходы",
-              "value": "~CHF 20",
-              "aside": "Документация, QA, подготовка CE"
+              "label": "Косвенные проектные расходы (пропорционально)",
+              "value": "~20 CHF",
+              "aside": "Документация, контроль качества, подготовка к CE"
             },
             {
-              "label": "Ориентировочная себестоимость",
-              "value": "~CHF 65",
-              "aside": "Нижний порог цены",
+              "label": "Ориентировочная стоимость единицы",
+              "value": "~65 CHF",
+              "aside": "Нижняя граница для ценообразования",
               "emphasis": true
             }
           ]
         },
         "price": {
           "title": "Ценовой диапазон, который мы тестируем",
-          "body": "CHF 150–250 для первых пилотных покупателей (управляющих недвижимостью, дизайн-студий). Диапазон покрывает себестоимость + вклад в проект + резерв на гарантию. Реальная готовность платить — открытый вопрос (Q04)."
+          "body": "150–250 CHF для первых пилотных покупателей (управляющие компании, дизайн-помещения). Диапазон покрывает стоимость единицы + проектный вклад + резерв на гарантию. Реальная готовность платить — открытый вопрос (Q04)."
         },
         "funding": {
-          "title": "Как проект финансируется",
-          "body": "Три источника. Соотношение меняется от серии к серии — сначала фонды покрывают подготовку (LCA, CE, оснастку), потом продажи берут на себя растущую долю.",
+          "title": "Как финансируется проект",
+          "body": "Три источника. Смесь сдвигается от серии к серии — в начале фонды несут подготовку (LCA, CE, инструменты), позже продажи берут на себя растущую долю.",
           "sources": [
             {
-              "label": "Продажи",
+              "label": "Продажа",
               "share": "~50 %",
-              "note": "CHF 150–250 за лампу × ~70 ламп — при себестоимости ~CHF 65 маржа становится основным несущим элементом"
+              "note": "150–250 CHF за светильник × ~70 штук малой серии — при стоимости единицы ~65 CHF маржа — главный носитель"
             },
             {
-              "label": "Фонды и программы финансирования",
+              "label": "Фонды и грантовые программы",
               "share": "~40 %",
-              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — финансируют преимущественно LCA, оснастку и подготовку CE"
+              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — финансируют преимущественно LCA, инструменты и подготовку к CE"
             },
             {
-              "label": "Вклад пилотных партнёров",
+              "label": "Взносы пилотных партнёров",
               "share": "~10 %",
-              "note": "Drahtzug, FARO и др. — материалы или рабочее время"
+              "note": "Drahtzug, FARO и др. — взнос материалом или рабочим временем"
             }
           ]
         },
         "sustainability": {
-          "title": "Когда модель сможет работать без грантов?",
-          "body": "Реалистично — со второй серии: себестоимость ~CHF 65 даёт запас при условии, что (a) партнёрство с защищённой мастерской сохраняется и (b) повторные B2B-клиенты соглашаются на CHF 150 и выше. Структурная уязвимость: модель опирается на субсидируемый рынок труда. Если придётся платить рыночные зарплаты, нижний порог поднимется до ~CHF 120, а цена должна будет превышать CHF 250."
+          "title": "С какого момента модель несёт себя без фондов?",
+          "body": "Реалистично — со 2-й серии: стоимость единицы ~65 CHF оставляет простор, при условии что (а) партнёрство с защищённой мастерской сохраняется и (б) повторные B2B-клиенты принимают минимум 150 CHF. Структурная хрупкость: модель зависит от субсидируемого рынка труда. Если бы пришлось платить рыночные зарплаты, нижняя граница составила бы ~120 CHF и продажи должны были бы нести 250+ CHF."
         },
         "transparency": {
-          "note": "Эти цифры — рабочие. Поправки, дополнения, критика приветствуются — всё на",
+          "note": "Эти цифры — рабочее состояние. Пожалуйста, исправляйте, дополняйте, критически спрашивайте — всё на",
           "cta": "kontakt@revamp-it.ch"
         }
       },
       "businessPlan": {
         "meta": {
           "title": "Бизнес-план и исследования",
-          "description": "Отчёты, исследования и экономическая основа проекта апсайклинга мониторов."
+          "description": "Отчёты, исследования и экономический фундамент проекта апсайклинга мониторов."
         },
         "research": {
           "title": "Что мы сейчас изучаем",
-          "intro": "Эти исследования идут или заказаны. Результаты появляются здесь, как только становятся надёжными.",
+          "intro": "Эти исследования идут или заказаны. Результаты появятся здесь, как только станут достоверными.",
           "items": [
             {
-              "title": "Оценка жизненного цикла (LCA) — ZHAW",
-              "status": "В работе · Результаты 3 кв. 2026",
-              "description": "Полный анализ жизненного цикла переделанной лампы Lenovo L2251pwd по сравнению с новой LED-лампой сопоставимой яркости. Метод: ISO 14040/14044."
+              "title": "Анализ жизненного цикла (LCA) — ZHAW",
+              "status": "В работе · результаты в 3-м квартале 2026",
+              "description": "Полный анализ жизненного цикла переделанного светильника Lenovo L2251pwd в сравнении с новым LED-светильником сопоставимой яркости. Методика: ISO 14040/14044."
             },
             {
-              "title": "Готовность платить B2B",
-              "status": "Запланировано · 4 кв. 2026",
-              "description": "Структурированные интервью с ~10 управляющими недвижимостью и дизайн-агентствами для проверки диапазона CHF 150–250."
+              "title": "Готовность B2B к оплате",
+              "status": "Запланировано · 4-й квартал 2026",
+              "description": "Структурированные интервью с ~10 управляющими компаниями недвижимости и дизайнерскими агентствами для валидации диапазона цен 150–250 CHF."
             },
             {
               "title": "Соответствие CE",
-              "status": "В подготовке · 4 кв. 2026",
-              "description": "Директива по низкому напряжению, ЭМС, RoHS. Внешняя испытательная лаборатория для пилотной серии 4 кв."
+              "status": "В подготовке · 4-й квартал 2026",
+              "description": "Директива о низковольтном оборудовании, ЭМС, RoHS. Внешняя сертификация для пилотной серии 4-го квартала."
             }
           ]
         },
         "downloads": {
-          "title": "Загрузки",
-          "note": "Отчёты будут связаны здесь по мере публикации. Если вам нужен ранний черновик для финансового решения, напишите нам — мы честно делимся текущим состоянием работы.",
+          "title": "Скачать",
+          "note": "Отчёты будут связаны здесь после публикации. Если ранний черновик нужен для решения о финансировании — напишите нам, мы охотно поделимся текущим рабочим состоянием честно.",
           "cta": "kontakt@revamp-it.ch"
         },
         "hero": {
-          "eyebrow": "BUSINESS PLAN",
-          "title": "Market, customers, economics — and what can go wrong.",
-          "intro": "An honest picture for funders, pilot partners, and buyers. Every section is collapsible so you can pick the depth you need."
+          "eyebrow": "БИЗНЕС-ПЛАН",
+          "title": "Рынок, клиенты, экономика — и что может пойти не так.",
+          "intro": "Честная картина для спонсоров, пилотных партнёров и покупателей. Каждый раздел сворачивается, чтобы вы могли выбрать нужную глубину."
         },
         "marketContext": {
-          "eyebrow": "MARKET CONTEXT",
-          "title": "What we should be compared against.",
-          "intro": "We're not selling a 'designer lamp' against Vitra — we're selling a repairable, locally made desk lamp against mass-produced imports.",
+          "eyebrow": "РЫНОЧНЫЙ КОНТЕКСТ",
+          "title": "С чем нас можно справедливо сравнить.",
+          "intro": "Мы не продаём «дизайнерскую лампу» против Vitra, а ремонтопригодный, локально произведённый настольный светильник против массовой продукции с Дальнего Востока.",
           "alternatives": [
             {
-              "label": "IKEA Tertial / desk lamp (new)",
-              "price": "CHF 15–35",
-              "tradeoff": "Low price, newly produced, short lifespan (~3 years), not repairable. Mass production in Asia — high material footprint per hour of light."
+              "label": "IKEA Tertial / настольная лампа (новая)",
+              "price": "15–35 CHF",
+              "tradeoff": "Низкая цена, новое производство, короткий срок службы (~3 года), не подлежит ремонту. Массовое производство в Азии — высокий материальный след на час света."
             },
             {
-              "label": "Mainstream LED desk lamp (BenQ, Philips Hue)",
-              "price": "CHF 80–250",
-              "tradeoff": "Good light quality, sealed electronics — repair impossible. CO₂ footprint dominated by manufacturing."
+              "label": "Массовая LED-настольная лампа (BenQ, Philips Hue)",
+              "price": "80–250 CHF",
+              "tradeoff": "Хорошее качество света, герметичная электроника — ремонт невозможен. Углеродный след доминируется производством."
             },
             {
-              "label": "Swiss design desk lamp (Vitra, USM, Lehni)",
-              "price": "CHF 300–800+",
-              "tradeoff": "High quality, often repairable, long-lasting — but newly produced. Price only for upper segment."
+              "label": "Швейцарская дизайнерская настольная лампа (Vitra, USM, Lehni)",
+              "price": "300–800+ CHF",
+              "tradeoff": "Высокое качество, часто ремонтопригодна, долговечна — но новое производство. Цена только для верхнего сегмента."
             },
             {
-              "label": "Upcycling desk lamps from designer studios",
-              "price": "CHF 200–600",
-              "tradeoff": "One-off pieces from leftovers — rarely reproducible, no standardised manual, often without CE."
+              "label": "Апсайклинг-светильник из дизайн-студий",
+              "price": "200–600 CHF",
+              "tradeoff": "Единичные экземпляры из остатков — редко воспроизводимы, нет стандартизированной инструкции, часто без CE."
             },
             {
-              "label": "Our proposition",
-              "price": "CHF 150–250",
-              "tradeoff": "Reproducible thanks to open guides, made in Switzerland (sheltered workshop), repairable, CE-conformity planned. Input material donated — low material footprint.",
+              "label": "Наше предложение",
+              "price": "150–250 CHF",
+              "tradeoff": "Воспроизводимый благодаря открытым инструкциям, изготовлен в Швейцарии (защищённая мастерская), ремонтопригоден, CE-сертификация в плане. Входное сырьё — пожертвовано: низкий материальный след.",
               "isOurs": true
             }
           ],
-          "verdict": "We compete with mid-range LED — not IKEA, not Vitra. Our selling point is not price; it's repairability, provenance and material flow."
+          "verdict": "Мы конкурируем со средним классом LED — не с IKEA и не с Vitra. Наш аргумент продажи — не цена, а ремонтопригодность, происхождение и материальный поток."
         },
         "segments": {
-          "eyebrow": "CUSTOMER SEGMENTS",
-          "title": "Who buys it — and who does not.",
-          "intro": "Two channels tested in parallel. Each needs a different message, sales path and order size.",
+          "eyebrow": "КЛИЕНТСКИЕ СЕГМЕНТЫ",
+          "title": "Кто это покупает — и кто нет.",
+          "intro": "Мы параллельно тестируем два канала. Каждому нужны разные сообщения, путь продаж и тираж.",
           "b2b": {
-            "label": "B2B (volume buyers)",
-            "volume": "50–80 % of the small series",
-            "description": "Property managers for ancillary spaces and stairwells, co-working spaces, architecture and design agencies, smaller hotels. Buying argument: sustainability story + reliable delivery of 10–50 units.",
+            "label": "B2B (крупные клиенты)",
+            "volume": "50–80 % малой серии",
+            "description": "Управляющие компании недвижимости для подсобных помещений и лестничных клеток, ко-воркинги, архитектурные и дизайнерские агентства, небольшие отели. Аргумент покупки: коммуникация об устойчивости + надёжная поставка партий 10–50 штук.",
             "examples": [
               "Livit",
               "Wincasa",
               "Allreal",
-              "universities",
-              "cooperative cafés"
+              "Вузы",
+              "Кооперативные кафе"
             ]
           },
           "b2c": {
-            "label": "B2C (individual buyers)",
-            "volume": "20–50 % of the small series",
-            "description": "Design-conscious individuals buying a story and aesthetic — not the cheapest function. Plus: students and cooperative flatshares as a budget variant.",
+            "label": "B2C (частные клиенты)",
+            "volume": "20–50 % малой серии",
+            "description": "Аффинные к дизайну частные лица, покупающие историю и эстетику — не самую дешёвую функцию. Также: студенты и кооперативные общежития как ценочувствительная категория.",
             "examples": [
-              "design-shop visitors",
-              "architects (private)",
-              "maker community",
-              "flatshare renovations"
+              "Посетители дизайн-магазинов",
+              "Архитекторы для себя",
+              "Maker-сообщество",
+              "Ремонт общежитий"
             ]
           }
         },
         "risks": {
-          "eyebrow": "RISKS",
-          "title": "What can go wrong.",
-          "intro": "Honest list instead of marketing. We write mitigations next to each risk where we have one.",
+          "eyebrow": "РИСКИ",
+          "title": "Что может пойти не так.",
+          "intro": "Честный список вместо маркетинга. Где есть контрмеры — пишем их.",
           "items": [
             {
-              "label": "Sheltered workshop drops out",
-              "severity": "High",
-              "mitigation": "Build more than one workshop partnership (Drahtzug + FARO + St. Jakob). Document manuals so any workshop can step in."
+              "label": "Защищённая мастерская выпадает",
+              "severity": "Высокий",
+              "mitigation": "Выстроить больше одного партнёра-мастерской (Drahtzug + FARO + St. Jakob). Документировать инструкции так, чтобы любая мастерская могла подключиться."
             },
             {
-              "label": "CE conformity delayed or fails",
-              "severity": "High",
-              "mitigation": "Q4 2026 with external test lab. If delayed: B2B pilot installations without commercial sale, for data collection."
+              "label": "CE-сертификация задерживается или проваливается",
+              "severity": "Высокий",
+              "mitigation": "4-й квартал 2026 с внешней сертификацией. При задержке: B2B-пилотные установки без коммерческой продажи для сбора данных."
             },
             {
-              "label": "B2B willingness to pay below CHF 150",
-              "severity": "Medium",
-              "mitigation": "Structured interviews Q4 2026 before scaling. If low: increase B2C share, hold foundation share longer."
+              "label": "B2B-готовность платить ниже 150 CHF",
+              "severity": "Средний",
+              "mitigation": "Структурированные интервью в 4-м квартале 2026 до масштабирования. При низкой готовности: увеличить долю B2C, дольше удерживать долю фондов."
             },
             {
-              "label": "LCA shows worse CO₂ profile than hoped",
-              "severity": "Medium",
-              "mitigation": "We publish the result unchanged, even if unfavourable. Value proposition shifts to repairability + local value creation rather than pure CO₂."
+              "label": "LCA показывает худший CO₂-профиль, чем надеялись",
+              "severity": "Средний",
+              "mitigation": "Публикуем результат без изменений, даже неблагоприятный. Ценностное предложение смещается на ремонтопригодность + локальную добавленную стоимость, а не на чистый CO₂."
             },
             {
-              "label": "Monitor supply collapses (ERZ contract changes)",
-              "severity": "Medium",
-              "mitigation": "Build a second source (private collection points, IT-lifecycle providers). Keep at least 50 monitors in reserve."
+              "label": "Поток мониторов прерывается (ERZ меняет контракт)",
+              "severity": "Средний",
+              "mitigation": "Выстроить второй источник (частные пункты сбора, IT-lifecycle-провайдеры). Минимум 50 мониторов в резерве."
             },
             {
-              "label": "Liability for defects — who carries it?",
-              "severity": "Medium",
-              "mitigation": "Open question Q05. Options: certified engineer model, partner takeover, insurance model. Decision before series sales."
+              "label": "Ответственность при дефекте — кто несёт?",
+              "severity": "Средний",
+              "mitigation": "Открытый вопрос Q05. Варианты: модель сертифицированного инженера, принятие на себя партнёром, страховая модель. Решение до серийной продажи."
             }
           ]
         },
         "partners": {
-          "eyebrow": "PARTNER ECOSYSTEM",
-          "title": "Who takes which role.",
-          "intro": "The project only works as a network. Active and potential partners here.",
+          "eyebrow": "ЭКОСИСТЕМА ПАРТНЁРОВ",
+          "title": "Кто какую роль берёт на себя.",
+          "intro": "Проект работает только как сеть. Вот активные и потенциальные партнёры.",
           "groups": [
             {
               "key": "production",
-              "title": "Production & workshops",
+              "title": "Производство и мастерские",
               "names": [
                 "Drahtzug",
                 "FARO",
@@ -6130,7 +6131,7 @@
             },
             {
               "key": "pilots",
-              "title": "Pilot locations (property)",
+              "title": "Пилотные площадки (недвижимость)",
               "names": [
                 "Livit",
                 "Wincasa",
@@ -6140,21 +6141,21 @@
             },
             {
               "key": "material",
-              "title": "Material source",
+              "title": "Источник материала",
               "names": [
                 "ERZ Zürich"
               ]
             },
             {
               "key": "science",
-              "title": "Scientific partnership",
+              "title": "Научное сопровождение",
               "names": [
-                "ZHAW (LCA & cost-benefit analysis)"
+                "ZHAW (LCA и анализ затрат-выгод)"
               ]
             },
             {
               "key": "funding",
-              "title": "Funding",
+              "title": "Финансирование",
               "names": [
                 "Swico Innovationsfonds",
                 "Klimastiftung Schweiz",
@@ -6167,92 +6168,92 @@
       },
       "wirkung": {
         "meta": {
-          "title": "Impact — environment, science, open hardware",
-          "description": "What a retrofitted lamp means for climate, materials, and the circular economy — with sources and ZHAW oversight."
+          "title": "Воздействие — экология, наука, открытое железо",
+          "description": "Что переделанный светильник значит для климата, материалов и циклической экономики — с источниками и научным сопровождением ZHAW."
         },
-        "eyebrow": "IMPACT",
-        "title": "What it means not to throw a monitor away.",
-        "intro": "We sell lamps — but the real product is the material stream we avoid. Here we document environmental benefits, scientific oversight, and why the build manuals are freely available.",
+        "eyebrow": "ВОЗДЕЙСТВИЕ",
+        "title": "Что значит — не выбрасывать монитор.",
+        "intro": "Мы продаём светильники, но настоящий продукт — это предотвращённый поток отходов. Здесь мы документируем экологические выгоды, научное сопровождение и почему инструкции находятся в свободном доступе.",
         "environment": {
-          "eyebrow": "ENVIRONMENT",
-          "title": "CO₂, materials, and lifespan.",
-          "intro": "Provisional figures — the ZHAW LCA (Q3 2026) replaces them with rigorous values. Sources cited below each number.",
+          "eyebrow": "ЭКОЛОГИЯ",
+          "title": "CO₂, материалы и срок службы.",
+          "intro": "Предварительные цифры — LCA от ZHAW (3-й квартал 2026) заменит их верифицированными значениями. Источники указаны под каждой цифрой.",
           "metrics": [
             {
-              "value": "~15–25 kg CO₂",
-              "label": "Avoided per lamp",
-              "note": "Difference between reusing an already-produced display and newly producing a comparable LED lamp. Source: Apple Product Environmental Reports + Öko-Institut LCA data for display electronics (pending ZHAW validation)."
+              "value": "~15–25 кг CO₂",
+              "label": "Сэкономлено на светильник",
+              "note": "Разница между повторным использованием уже произведённого экрана и производством сопоставимого нового LED-светильника. Источник: Apple Product Environmental Reports + данные LCA Öko-Institut по электронике дисплеев (подлежит верификации ZHAW)."
             },
             {
-              "value": "~2.5 kg material",
-              "label": "Kept in circulation",
-              "note": "Average weight of LCD components + housing per 22\" monitor (plastic, aluminium, rare earths in the backlight). Source: Swiss e-waste statistics 2023."
+              "value": "~2,5 кг материала",
+              "label": "Возвращено в оборот",
+              "note": "Средний вес компонентов ЖК-панели и корпуса на 22\"-монитор (пластик, алюминий, редкоземельные элементы в блоке подсветки). Источник: швейцарская статистика по электронным отходам, 2023."
             },
             {
-              "value": "~5–10 years",
-              "label": "Second-life duration",
-              "note": "Expected lifespan of the retrofit lamp. Conservative estimate — many LED drivers last much longer. We update with warranty returns."
+              "value": "~5–10 лет",
+              "label": "Вторая фаза использования",
+              "note": "Ожидаемый срок службы переделанного светильника. Консервативная оценка — многие LED-драйверы служат значительно дольше. Обновляем по возвратам по гарантии."
             }
           ],
-          "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
-          "transparencyLink": "Open transparency page"
+          "caveat": "Эти цифры — не рекламный пик, а наша рабочая база. Они валидируются с каждым пилотом. Подробная методология — на странице «Прозрачность».",
+          "transparencyLink": "Открыть страницу «Прозрачность»"
         },
         "scientific": {
-          "eyebrow": "SCIENCE",
-          "title": "What ZHAW measures — and why it matters.",
-          "intro": "The Zurich University of Applied Sciences accompanies the project with a full life-cycle assessment per ISO 14040/14044.",
+          "eyebrow": "НАУКА",
+          "title": "Что измеряет ZHAW — и почему это важно.",
+          "intro": "Цюрихский университет прикладных наук сопровождает проект полным анализом жизненного цикла по ISO 14040/14044.",
           "scope": [
-            "Comparison retrofit lamp vs. newly produced LED lamp of comparable brightness",
-            "Material input, energy consumption in use, end-of-life scenarios",
-            "Sensitivity to workshop location choice and transport routes",
-            "Validation against Apple PER, Öko-Institut and Circular Computing studies"
+            "Сравнение переделанного светильника с новым LED-светильником сопоставимой яркости",
+            "Расход материалов, потребление энергии в эксплуатации, сценарии конца жизненного цикла",
+            "Чувствительность к выбору местоположения мастерской и транспортным маршрутам",
+            "Валидация относительно Apple PER, Öko-Institut и исследований Circular Computing"
           ],
-          "timeline": "Start: April 2026 · Interim results: June 2026 · Final report: Q3 2026.",
-          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA."
+          "timeline": "Старт: апрель 2026 · промежуточные результаты: июнь 2026 · финальный отчёт: 3-й квартал 2026.",
+          "commitment": "Мы публикуем результат без изменений — даже если он окажется неблагоприятным. LCA, который только «выигрывает», — это не LCA."
         },
         "openHardware": {
-          "eyebrow": "OPEN HARDWARE",
-          "title": "Manuals are free because they have to be.",
-          "intro": "If only we have the manuals, only our small series exists. If they are public, any workshop in Switzerland can pick up the model — and that is precisely the goal.",
+          "eyebrow": "ОТКРЫТОЕ ЖЕЛЕЗО",
+          "title": "Инструкции свободны, потому что иначе нельзя.",
+          "intro": "Если инструкции есть только у нас — будет только наша малая серия. Если они в открытом доступе — любая мастерская в Швейцарии сможет подхватить модель. Именно это и есть цель.",
           "pillars": [
             {
-              "title": "What we publish",
-              "body": "Per monitor model: photos, schematics, pin assignments, BOM (bill of materials), safety notes, test protocol. Format: Markdown on this site (long-term: wiki)."
+              "title": "Что мы публикуем",
+              "body": "На каждую модель монитора: фотографии, схемы, распиновку, BOM (спецификацию материалов), указания по безопасности, протокол тестирования. Формат: Markdown на этом сайте (в перспективе — Wiki)."
             },
             {
-              "title": "Licence",
-              "body": "Manuals under Creative Commons CC-BY-SA — commercial use allowed, condition: attribution + same licence for derivatives. Software (this platform) under MIT."
+              "title": "Лицензия",
+              "body": "Инструкции под Creative Commons CC-BY-SA — коммерческое использование разрешено, условие: указание авторства + та же лицензия для производных работ. Программное обеспечение (эта платформа) — под MIT."
             },
             {
-              "title": "Who benefits",
-              "body": "Other sheltered workshops, repair cafés, universities for teaching projects, design students, hobbyists. We get back improvements as feedback."
+              "title": "Кто выигрывает",
+              "body": "Другие защищённые мастерские, ремонтные кафе, вузы для учебных проектов, студенты дизайна, домашние мастера. Возвращаются к нам в виде улучшений."
             }
           ],
           "sourceLink": {
-            "label": "Platform source code",
+            "label": "Исходный код платформы",
             "url": "https://github.com/g-but/revampit"
           }
         },
         "circularity": {
-          "eyebrow": "CIRCULAR FLOW",
-          "title": "Where the monitor comes from — and what happens when the lamp fails.",
-          "intro": "Material flow in four stages. Each one documented, no \"black box\".",
+          "eyebrow": "КРУГОВОРОТ",
+          "title": "Откуда берётся монитор — и что происходит, когда светильник выходит из строя.",
+          "intro": "Поток материалов в четыре этапа. Каждый задокументирован, никакого «чёрного ящика».",
           "stages": [
             {
-              "label": "Intake",
-              "description": "Monitors from ERZ Zürich (disposal + recycling Zürich) and private collection points. We document model, condition, and date."
+              "label": "Поступление",
+              "description": "Мониторы от ERZ Zürich (Entsorgung + Recycling Zürich) и частных пунктов сбора. Документируем модель, состояние и дату."
             },
             {
-              "label": "Retrofit",
-              "description": "Sheltered workshop removes LCD panel, tests backlight + driver, integrates LED dimming control, mounts housing. Per-unit documentation."
+              "label": "Переделка",
+              "description": "Защищённая мастерская снимает ЖК-панель, проверяет подсветку и драйвер, интегрирует регулировку яркости, собирает корпус. Документация на каждое изделие."
             },
             {
-              "label": "Use",
-              "description": "Delivery to B2B location or B2C customer. 5–10 years of operation. On failure: repair by any workshop member thanks to the open manual."
+              "label": "Эксплуатация",
+              "description": "Доставка на B2B-объект или B2C-клиенту. 5–10 лет работы. При поломке: ремонт любым участником мастерской благодаря открытой инструкции."
             },
             {
-              "label": "End of use",
-              "description": "Return to Revamp-IT or a partner workshop. LED driver reused, housing recycled. No component reaches household waste."
+              "label": "Конец эксплуатации",
+              "description": "Возврат в Revamp-IT или партнёрскую мастерскую. LED-драйвер переиспользуется, корпус идёт на переработку. Ни один компонент не попадает на свалку."
             }
           ]
         }

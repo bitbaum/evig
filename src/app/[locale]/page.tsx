@@ -131,8 +131,8 @@ export default async function Home() {
           <div className="ui-public-hero-badge">{t('hero.positioning')}</div>
 
           <h1 className="ui-public-hero-title">
-            {t('hero.title')}<br />
-            <span className="text-text-tertiary">{t('hero.titleSecondary')}</span>
+            {t('hero.titlePrimary')}<br />
+            <span className="ui-public-hero-title-fade text-text-tertiary">{t('hero.titleSecondary')}</span>
           </h1>
 
           <p className="ui-public-hero-lede">{t('hero.lede')}</p>
