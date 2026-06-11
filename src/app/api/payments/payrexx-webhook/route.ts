@@ -75,7 +75,9 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get('payrexx-signature');
 
     if (!await verifyPayrexxSignature(rawBody, signature)) {
-      logger.warn('Payrexx webhook: invalid signature', { signature });
+      // Log presence/length only — never the raw signature bytes
+      // (defense-in-depth: rejected payloads can include attacker-supplied data).
+      logger.warn('Payrexx webhook: invalid signature', { signaturePresent: signature !== null });
       return apiUnauthorized('Invalid signature');
     }
 
@@ -91,9 +93,19 @@ export async function POST(request: NextRequest) {
     const status = tx.status || body.status;
 
     if (!referenceId || !status) {
-      logger.warn('Payrexx webhook: missing referenceId or status', { body });
+      // Log known fields only — rawBody can include partial transaction data.
+      logger.warn('Payrexx webhook: missing referenceId or status', { status, hasReferenceId: !!referenceId });
       return apiBadRequest('Missing referenceId or status');
     }
+
+    // Amount + currency claim from Payrexx — used by handlers to verify the
+    // webhook matches the expected order/transaction value. A valid HMAC
+    // alone is not enough; a replay from a smaller transaction would still
+    // be signature-valid.
+    const amountClaim = {
+      amount: typeof tx.amount === 'number' ? tx.amount : null,
+      currency: typeof tx.currency === 'string' ? tx.currency : null,
+    };
 
     logger.info('Payrexx webhook received', { referenceId, transactionId, status });
 
@@ -101,12 +113,12 @@ export async function POST(request: NextRequest) {
     const lookup = await lookupPaymentByReferenceId(referenceId);
 
     if (lookup.type === 'marketplace' && lookup.order) {
-      await handleMarketplacePayment(lookup.order, status, transactionId);
+      await handleMarketplacePayment(lookup.order, status, transactionId, amountClaim);
       return apiSuccess({ received: true });
     }
 
     if (lookup.type === 'payment_transaction' && lookup.paymentTx) {
-      await handleGenericPayment(lookup.paymentTx, status, transactionId);
+      await handleGenericPayment(lookup.paymentTx, status, transactionId, amountClaim);
       return apiSuccess({ received: true });
     }
 

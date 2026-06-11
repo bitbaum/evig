@@ -333,7 +333,7 @@ describe('handleMarketplacePayment — RESERVED', () => {
   it('skips update when order status is not PENDING_PAYMENT', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc')
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 25000, currency: 'CHF' })
 
     expect(mockDbUpdate).not.toHaveBeenCalled()
   })
@@ -341,7 +341,7 @@ describe('handleMarketplacePayment — RESERVED', () => {
   it('updates order to PAID when status is PENDING_PAYMENT', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc')
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 25000, currency: 'CHF' })
 
     expect(mockDbUpdate).toHaveBeenCalledTimes(1)
     expect(mockUpdateSet).toHaveBeenCalledWith(
@@ -352,7 +352,7 @@ describe('handleMarketplacePayment — RESERVED', () => {
   it('stores payrexxTransactionId on the order', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-xyz')
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-xyz', { amount: 25000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ payrexxTransactionId: 'tx-xyz' }),
@@ -365,8 +365,35 @@ describe('handleMarketplacePayment — RESERVED', () => {
     sendCustomEmail.mockRejectedValueOnce(new Error('SMTP down'))
 
     await expect(
-      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, null),
+      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 25000, currency: 'CHF' }),
     ).resolves.not.toThrow()
+  })
+
+  // Amount-claim verification — a signed-but-replayed webhook from a smaller
+  // transaction would otherwise be accepted. Each mismatched-claim case must
+  // refuse to advance the order's state.
+  it('refuses to mark paid when claimed amount does not match order amount', async () => {
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 100, currency: 'CHF' })
+
+    expect(mockDbUpdate).not.toHaveBeenCalled()
+  })
+
+  it('refuses to mark paid when claimed currency is wrong', async () => {
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 25000, currency: 'EUR' })
+
+    expect(mockDbUpdate).not.toHaveBeenCalled()
+  })
+
+  it('refuses to mark paid when claim amount is missing', async () => {
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: null, currency: 'CHF' })
+
+    expect(mockDbUpdate).not.toHaveBeenCalled()
   })
 })
 
@@ -378,7 +405,7 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
   it('skips update when order status is not PAID or DELIVERED', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockDbUpdate).not.toHaveBeenCalled()
   })
@@ -386,7 +413,7 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
   it('updates order to COMPLETED when status is PAID', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.COMPLETED }),
@@ -396,7 +423,7 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
   it('updates order to COMPLETED when status is DELIVERED', async () => {
     const order = makeOrder({ status: ORDER_STATUS.DELIVERED })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.COMPLETED }),
@@ -412,7 +439,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
   it('skips when order is already COMPLETED', async () => {
     const order = makeOrder({ status: ORDER_STATUS.COMPLETED })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockDbUpdate).not.toHaveBeenCalled()
   })
@@ -420,7 +447,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
   it('skips when order is already CANCELLED', async () => {
     const order = makeOrder({ status: ORDER_STATUS.CANCELLED })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockDbUpdate).not.toHaveBeenCalled()
   })
@@ -428,7 +455,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
   it('updates order to CANCELLED for CANCELLED status', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockDbUpdate).toHaveBeenCalledWith(expect.anything()) // marketplaceOrders
     expect(mockUpdateSet).toHaveBeenCalledWith(
@@ -439,7 +466,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
   it('also restores listing to ACTIVE on CANCELLED', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
 
     // Two db.update calls: order + listing
     expect(mockDbUpdate).toHaveBeenCalledTimes(2)
@@ -452,7 +479,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
   it('updates order to CANCELLED for DECLINED status', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.CANCELLED }),
@@ -467,7 +494,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
     // writes run through the tx wrapper, so postgres rolls back if either
     // half fails.
     const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockDbTransaction).toHaveBeenCalledTimes(1)
     // Both updates happen inside the transaction callback (which routes
@@ -485,7 +512,7 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
 
     await expect(
-      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null),
+      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' }),
     ).rejects.toThrow('FK contention')
   })
 })
@@ -498,7 +525,7 @@ describe('handleMarketplacePayment — REFUNDED / PARTIALLY_REFUNDED', () => {
   it('updates order to REFUNDED on REFUNDED status', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.REFUNDED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.REFUNDED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.REFUNDED }),
@@ -508,7 +535,7 @@ describe('handleMarketplacePayment — REFUNDED / PARTIALLY_REFUNDED', () => {
   it('updates order to REFUNDED on PARTIALLY_REFUNDED status', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PAID })
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null)
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null, { amount: 25000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.REFUNDED }),
@@ -524,7 +551,7 @@ describe('handleGenericPayment — RESERVED', () => {
   it('skips update when payment transaction is not PENDING', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1')
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' })
 
     expect(mockDbUpdate).not.toHaveBeenCalled()
   })
@@ -532,7 +559,7 @@ describe('handleGenericPayment — RESERVED', () => {
   it('updates payment transaction to SUCCEEDED', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1')
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.SUCCEEDED }),
@@ -542,7 +569,7 @@ describe('handleGenericPayment — RESERVED', () => {
   it('confirms workshop registration when workshopRegistrationId is set', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
 
     // Two updates: payment transaction + workshop registration
     expect(mockDbUpdate).toHaveBeenCalledTimes(2)
@@ -557,7 +584,7 @@ describe('handleGenericPayment — RESERVED', () => {
   it('confirms service appointment when serviceAppointmentId is set', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, serviceAppointmentId: 'appt-1' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockDbUpdate).toHaveBeenCalledTimes(2)
     expect(mockUpdateSet).toHaveBeenCalledWith(
@@ -568,10 +595,32 @@ describe('handleGenericPayment — RESERVED', () => {
   it('does NOT update workshop/appointment when IDs are null', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: null, serviceAppointmentId: null })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
 
     // Only one update: the payment transaction itself
     expect(mockDbUpdate).toHaveBeenCalledTimes(1)
+  })
+
+  // Amount-claim verification for payment transactions — same threat model
+  // as marketplace: a signed-but-replayed webhook from a smaller transaction
+  // would otherwise flip workshop registrations / appointments to confirmed
+  // without the user actually paying that amount.
+  it('refuses to mark succeeded when claimed amount does not match transaction amount', async () => {
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 100, currency: 'CHF' })
+
+    expect(mockDbUpdate).not.toHaveBeenCalled()
+    expect(mockDbTransaction).not.toHaveBeenCalled()
+  })
+
+  it('refuses to mark succeeded when claimed currency is wrong', async () => {
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'EUR' })
+
+    expect(mockDbUpdate).not.toHaveBeenCalled()
+    expect(mockDbTransaction).not.toHaveBeenCalled()
   })
 
   it('wraps payment + workshop confirmation in a single transaction (highest-impact gap)', async () => {
@@ -584,7 +633,7 @@ describe('handleGenericPayment — RESERVED', () => {
     // assert both writes happen inside one db.transaction.
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1')
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' })
 
     expect(mockDbTransaction).toHaveBeenCalledTimes(1)
     // Both updates happen via tx.update routed through mockDbUpdate.
@@ -598,7 +647,7 @@ describe('handleGenericPayment — RESERVED', () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
 
     await expect(
-      handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1'),
+      handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' }),
     ).rejects.toThrow('workshop registration update failed')
   })
 })
@@ -611,7 +660,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
   it('updates payment transaction to FAILED on CANCELLED', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.FAILED }),
@@ -621,7 +670,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
   it('updates payment transaction to FAILED on DECLINED', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.FAILED }),
@@ -631,7 +680,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
   it('cancels workshop registration when workshopRegistrationId is set', async () => {
     const tx = makePaymentTx({ workshopRegistrationId: 'reg-2' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: WORKSHOP_REGISTRATION_STATUS.CANCELLED }),
@@ -650,7 +699,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]))
     const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockDbExecute).toHaveBeenCalledTimes(1)
   })
@@ -660,7 +709,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     mockDbSelect.mockImplementation(() => makeSelectChain([]))
     const tx = makePaymentTx({ workshopRegistrationId: 'reg-missing' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockDbExecute).not.toHaveBeenCalled()
   })
@@ -668,7 +717,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
   it('cancels service appointment when serviceAppointmentId is set', async () => {
     const tx = makePaymentTx({ serviceAppointmentId: 'appt-2' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: APPOINTMENT_STATUS.CANCELLED }),
@@ -685,7 +734,7 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]))
     const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockDbTransaction).toHaveBeenCalledTimes(1)
     // Two updates (paymentTx FAILED + registration CANCELLED) routed
@@ -703,7 +752,7 @@ describe('handleGenericPayment — REFUNDED', () => {
   it('updates payment transaction to REFUNDED on REFUNDED', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.REFUNDED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.REFUNDED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.REFUNDED }),
@@ -713,7 +762,7 @@ describe('handleGenericPayment — REFUNDED', () => {
   it('updates payment transaction to REFUNDED on PARTIALLY_REFUNDED', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED })
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null)
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.REFUNDED }),

@@ -8,14 +8,23 @@
  *
  * No auth required — public voters (via /vote/[id]) need this too.
  * The decision context is passed in the request body (already loaded by the caller).
+ *
+ * Rate limiting (two-tier, defense-in-depth):
+ *  - voteAdvisorIp: 5 calls/hour/IP  — stops a single attacker hammering
+ *  - voteAdvisorGlobal: 50 calls/hour across all IPs — budget backstop in
+ *    case of botnet distribution (per-IP alone is not enough — LRU evicts
+ *    at 500 unique IDs and a small botnet would slip past)
+ * Each upstream LLM call costs real money; without these limits a script
+ * could drain the AI budget in minutes.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
 import { callWithFallback } from '@/lib/ai/providers'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import {
   VOTING_ADVISOR_PROMPTS,
   VOTING_METHOD_LABELS,
@@ -36,6 +45,19 @@ const requestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate-limit BEFORE validating the body so a flood of bad-body requests
+    // can't bypass the check. Per-IP first, then the global cap.
+    const clientId = getClientIdentifier(request)
+    if (!rateLimiters.voteAdvisorIp(clientId)) {
+      return apiRateLimited()
+    }
+    if (!rateLimiters.voteAdvisorGlobal('global')) {
+      logger.warn('Vote advisor global rate limit reached — refusing call', {
+        identifier: clientId,
+      })
+      return apiRateLimited()
+    }
+
     let body: unknown
     try {
       body = await request.json()

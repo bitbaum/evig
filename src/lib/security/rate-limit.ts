@@ -80,6 +80,19 @@ export const rateLimiters = {
   // Public vote submit: 10 per hour per IP (unauthenticated, prevents vote spam)
   voteSubmit: createRateLimiter(ONE_HOUR_MS, 10),
 
+  // Public vote-advisor: 5 per hour per IP. Anonymous LLM call that bills
+  // upstream (Groq → OpenRouter → Ollama via callWithFallback). Without
+  // a limit a script can drain the AI budget in minutes.
+  voteAdvisorIp: createRateLimiter(ONE_HOUR_MS, 5),
+
+  // Public vote-advisor global cap: 50 calls/hour across ALL IPs. The
+  // per-IP limit assumes one identifier per attacker; a small botnet could
+  // still rack up cost. The LRU also evicts at 500 unique IDs, so per-IP
+  // alone is not a budget safety net. This second-tier cap is the budget
+  // backstop — once 50 advisor calls have happened in the last hour, the
+  // endpoint refuses additional calls regardless of source IP.
+  voteAdvisorGlobal: createRateLimiter(ONE_HOUR_MS, 50),
+
   // Project contributions: 5 per hour per IP (unauthenticated, prevents spam)
   projectContribute: createRateLimiter(ONE_HOUR_MS, 5),
 

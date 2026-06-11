@@ -131,19 +131,30 @@ describe('POST /api/payments/payrexx-webhook — not found', () => {
 // ============================================================================
 
 describe('POST /api/payments/payrexx-webhook — marketplace payment', () => {
-  it('returns 200 and calls handleMarketplacePayment', async () => {
+  it('returns 200 and calls handleMarketplacePayment with extracted amount claim', async () => {
     mockLookup.mockResolvedValue({ type: 'marketplace', order: MOCK_ORDER } as never)
     mockHandleMarketplace.mockResolvedValue(undefined as never)
 
     const req = makeWebhookRequest({
-      transaction: { id: 42, status: 'reserved', referenceId: 'ref-abc' },
+      transaction: { id: 42, status: 'reserved', referenceId: 'ref-abc', amount: 25000, currency: 'CHF' },
     })
     const response = await POST(req)
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.success).toBe(true)
     expect(body.data.received).toBe(true)
-    expect(mockHandleMarketplace).toHaveBeenCalledWith(MOCK_ORDER, 'reserved', '42')
+    expect(mockHandleMarketplace).toHaveBeenCalledWith(MOCK_ORDER, 'reserved', '42', { amount: 25000, currency: 'CHF' })
+  })
+
+  it('forwards amount=null when Payrexx omits the field (handler refuses the state change)', async () => {
+    mockLookup.mockResolvedValue({ type: 'marketplace', order: MOCK_ORDER } as never)
+    mockHandleMarketplace.mockResolvedValue(undefined as never)
+
+    const req = makeWebhookRequest({
+      transaction: { id: 42, status: 'reserved', referenceId: 'ref-abc' },
+    })
+    await POST(req)
+    expect(mockHandleMarketplace).toHaveBeenCalledWith(MOCK_ORDER, 'reserved', '42', { amount: null, currency: null })
   })
 })
 
@@ -163,7 +174,7 @@ describe('POST /api/payments/payrexx-webhook — generic payment', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.success).toBe(true)
-    expect(mockHandleGeneric).toHaveBeenCalledWith(MOCK_TX, 'confirmed', '99')
+    expect(mockHandleGeneric).toHaveBeenCalledWith(MOCK_TX, 'confirmed', '99', { amount: null, currency: null })
   })
 
   it('supports flat body format (referenceId at root level)', async () => {

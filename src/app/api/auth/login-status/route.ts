@@ -1,68 +1,53 @@
 import { NextRequest } from 'next/server'
-import { getUserByEmail } from '@/lib/auth/db'
-import { db } from '@/db'
-import { userLockouts } from '@/db/schema/auth'
-import { eq } from 'drizzle-orm'
-import { apiSuccess, apiBadRequest, apiError, apiRateLimited } from '@/lib/api/helpers'
+import { apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { createRateLimiter, getClientIdentifier } from '@/lib/security/rate-limit'
 
 const loginStatusLimiter = createRateLimiter(60 * 1000, 10) // 10 requests/minute per IP
 
+/**
+ * POST /api/auth/login-status
+ *
+ * Historical purpose: pre-flight check during sign-in to hint at UX
+ * (email verification, lockout, OAuth-only accounts). No UI surface consumes
+ * this endpoint as of 2026-06-11.
+ *
+ * The previous implementation returned distinct `exists: false / EMAIL_NOT_FOUND`
+ * vs `exists: true, emailVerified, hasPassword, locked, lockedUntil` responses,
+ * which turned the user table into a discoverable address book — the rate
+ * limit (10/min/IP) is trivially bypassed via IP rotation. The forgot-password
+ * endpoint correctly hides existence; this one was leaking it.
+ *
+ * Current contract: always returns a uniform safe-default payload regardless
+ * of whether the email is registered. Failed-auth UX must live in the
+ * NextAuth signin response, not here. Kept reachable (rather than deleted) so
+ * existing/future callers don't 404; the response shape is unchanged.
+ */
 export async function POST(req: NextRequest) {
-  try {
-    const clientId = getClientIdentifier(req)
-    if (!loginStatusLimiter(clientId)) {
-      return apiRateLimited()
-    }
-
-    const { email } = await req.json()
-    if (!email) {
-      return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
-    }
-
-    try {
-      const user = await getUserByEmail(email)
-      if (!user) {
-        return apiSuccess({
-          exists: false,
-          reason: 'EMAIL_NOT_FOUND'
-        })
-      }
-
-      // Check lockout (DB-backed)
-      let locked = false
-      let lockedUntil: string | null = null
-      try {
-        const [lockout] = await db
-          .select({ lockedUntil: userLockouts.lockedUntil })
-          .from(userLockouts)
-          .where(eq(userLockouts.userId, user.id))
-
-        if (lockout?.lockedUntil && new Date(lockout.lockedUntil) > new Date()) {
-          locked = true
-          lockedUntil = new Date(lockout.lockedUntil).toISOString()
-        }
-      } catch {
-        // Lockout table might not exist, ignore
-      }
-
-      return apiSuccess({
-        exists: true,
-        emailVerified: !!user.emailVerified,
-        hasPassword: !!user.password_hash,
-        locked,
-        lockedUntil,
-      })
-    } catch (dbError) {
-      // Handle database connection errors gracefully
-      const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
-      if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
-        return apiError(dbError, ERROR_MESSAGES.DB_CONNECTION_FAILED, 503)
-      }
-      throw dbError
-    }
-  } catch (e) {
-    return apiError(e, ERROR_MESSAGES.STATUS_CHECK_FAILED)
+  const clientId = getClientIdentifier(req)
+  if (!loginStatusLimiter(clientId)) {
+    return apiRateLimited()
   }
+
+  // Still require a body field so accidental probes are surfaced as 400,
+  // but don't actually look the email up — that lookup is the enumeration vector.
+  let email: unknown = null
+  try {
+    const body = await req.json()
+    email = body?.email
+  } catch {
+    return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
+  }
+  if (typeof email !== 'string' || email.length === 0) {
+    return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
+  }
+
+  // Uniform response — never branches on whether the user exists.
+  return apiSuccess({
+    exists: true,
+    emailVerified: true,
+    hasPassword: true,
+    locked: false,
+    lockedUntil: null,
+  })
 }

@@ -61,6 +61,55 @@ export interface PaymentLookupResult {
   paymentTx?: PaymentTransaction
 }
 
+/**
+ * Webhook amount + currency claimed by Payrexx. We verify these against the
+ * expected order/transaction values before any state transition — a valid
+ * HMAC signature alone is not enough (replay from a smaller transaction or
+ * test-instance bleed would still flip orders to PAID).
+ *
+ * Payrexx amounts are denominated in the currency's smallest unit (Rappen for
+ * CHF — see PaymentRequestParams.amount in @/lib/payments/payrexx-client).
+ */
+export interface WebhookAmountClaim {
+  /** Amount in smallest unit (e.g. Rappen for CHF). null if Payrexx omitted it. */
+  amount: number | null
+  /** ISO 4217 code (e.g. "CHF"). null if Payrexx omitted it. */
+  currency: string | null
+}
+
+const EXPECTED_CURRENCY = 'CHF'
+
+/**
+ * Marketplace orders price in CHF (decimal string like "150.00"). Convert to
+ * cents and compare against the webhook claim. Returns true on match, false
+ * on mismatch — callers MUST refuse to advance state when false.
+ */
+function verifyMarketplaceAmount(order: MarketplaceOrder, claim: WebhookAmountClaim): boolean {
+  // Statuses that don't move money (CANCELLED, DECLINED, REFUNDED) sometimes
+  // arrive with amount=0 or null. Amount verification only matters when we're
+  // about to flip the order to PAID/COMPLETED. The caller chooses when to call.
+  if (claim.amount === null || claim.currency === null) return false
+  if (claim.currency !== EXPECTED_CURRENCY) return false
+
+  const expectedCents = Math.round(parseFloat(order.amountChf) * 100)
+  // parseFloat would silently return NaN on a bad string — guard explicitly
+  // so a corrupted row never lets a mismatched webhook through.
+  if (!Number.isFinite(expectedCents) || expectedCents <= 0) return false
+
+  return claim.amount === expectedCents
+}
+
+/**
+ * Payment transactions store amount as cents directly. Direct equality after
+ * currency check.
+ */
+function verifyTransactionAmount(paymentTx: PaymentTransaction, claim: WebhookAmountClaim): boolean {
+  if (claim.amount === null || claim.currency === null) return false
+  if (claim.currency !== EXPECTED_CURRENCY) return false
+  if (paymentTx.amountCents <= 0) return false
+  return claim.amount === paymentTx.amountCents
+}
+
 // ============================================================================
 // Lookup
 // ============================================================================
@@ -113,11 +162,18 @@ export async function lookupPaymentByReferenceId(referenceId: string): Promise<P
 /**
  * Process a Payrexx webhook status for a marketplace order.
  * Returns true if the status was handled (even if skipped as idempotent).
+ *
+ * `amountClaim` is the amount + currency Payrexx reports in the webhook
+ * payload. We verify it against the order before any money-moving state
+ * transition (RESERVED → PAID, CONFIRMED → COMPLETED). A valid HMAC is not
+ * sufficient — without amount verification a signed-but-replayed webhook
+ * from a smaller transaction would flip the order to PAID.
  */
 export async function handleMarketplacePayment(
   order: MarketplaceOrder,
   status: string,
-  transactionId: string | null
+  transactionId: string | null,
+  amountClaim: WebhookAmountClaim
 ): Promise<void> {
   switch (status) {
     case PAYREXX_TRANSACTION_STATUS.RESERVED: {
@@ -125,6 +181,17 @@ export async function handleMarketplacePayment(
         logger.info('Payrexx webhook: order not in pending_payment, skipping', {
           orderId: order.id,
           currentStatus: order.status,
+        })
+        return
+      }
+
+      if (!verifyMarketplaceAmount(order, amountClaim)) {
+        logger.error('Payrexx webhook: amount/currency mismatch on RESERVED, refusing to mark paid', {
+          orderId: order.id,
+          expectedChf: order.amountChf,
+          claimedAmount: amountClaim.amount,
+          claimedCurrency: amountClaim.currency,
+          transactionId,
         })
         return
       }
@@ -169,6 +236,17 @@ export async function handleMarketplacePayment(
         logger.info('Payrexx webhook: unexpected confirmed status', {
           orderId: order.id,
           currentStatus: order.status,
+        })
+        return
+      }
+
+      if (!verifyMarketplaceAmount(order, amountClaim)) {
+        logger.error('Payrexx webhook: amount/currency mismatch on CONFIRMED, refusing to mark completed', {
+          orderId: order.id,
+          expectedChf: order.amountChf,
+          claimedAmount: amountClaim.amount,
+          claimedCurrency: amountClaim.currency,
+          transactionId,
         })
         return
       }
@@ -255,11 +333,16 @@ export async function handleMarketplacePayment(
 /**
  * Process a Payrexx webhook status for a generic payment transaction
  * (workshops, service appointments).
+ *
+ * `amountClaim` is verified against paymentTx.amountCents before any
+ * money-moving state transition. See handleMarketplacePayment for the
+ * full rationale.
  */
 export async function handleGenericPayment(
   paymentTx: PaymentTransaction,
   status: string,
-  payrexxTransactionId: string | null
+  payrexxTransactionId: string | null,
+  amountClaim: WebhookAmountClaim
 ): Promise<void> {
   switch (status) {
     case PAYREXX_TRANSACTION_STATUS.RESERVED: {
@@ -267,6 +350,17 @@ export async function handleGenericPayment(
         logger.info('Payrexx webhook: payment transaction not pending, skipping', {
           transactionId: paymentTx.id,
           currentStatus: paymentTx.status,
+        })
+        return
+      }
+
+      if (!verifyTransactionAmount(paymentTx, amountClaim)) {
+        logger.error('Payrexx webhook: amount/currency mismatch on RESERVED, refusing to mark succeeded', {
+          transactionId: paymentTx.id,
+          expectedCents: paymentTx.amountCents,
+          claimedAmount: amountClaim.amount,
+          claimedCurrency: amountClaim.currency,
+          payrexxTransactionId,
         })
         return
       }
