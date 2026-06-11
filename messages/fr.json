@@ -146,7 +146,24 @@
       "partnership": "Partenariat",
       "membership": "Adhésion",
       "becomeMember": "Devenir membre",
-      "contact": "Contact"
+      "contact": "Contact",
+      "projectMonitorUpcycling": "Monitor-Upcycling",
+      "projectMonitorUpcyclingDesc": "Actif · luminaires muraux et plafonniers à partir de moniteurs déclassés, avec ACV ZHAW et soutien Swico.",
+      "projectHardware": "Développement matériel",
+      "projectHardwareDesc": "Projets open hardware et concepts de réparation.",
+      "projectLtsp": "LTSP",
+      "projectLtspDesc": "Linux Terminal Server Project — infrastructure légère de clients minces.",
+      "projectKivitendo": "Kivitendo Modus CH",
+      "projectKivitendoDesc": "ERP open source adapté aux besoins suisses.",
+      "projectLinuxola": "Verein Linuxola",
+      "projectLinuxolaDesc": "Association partenaire pour la promotion de Linux et des compétences numériques.",
+      "projectFreieComputer": "FreieComputer.ch",
+      "projectFreieComputerDesc": "Ordinateurs reconditionnés avec logiciels libres à usage associatif.",
+      "projectCompirat": "Compirat",
+      "projectCompiratDesc": "Initiative historique de remise à neuf de PC.",
+      "sectionAllProjects": "Tous les projets",
+      "sectionDevices": "Appareils",
+      "sectionHelp": "Aide"
     },
     "badge": {
       "new": "Nouveau"

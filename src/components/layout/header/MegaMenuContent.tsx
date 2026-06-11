@@ -155,9 +155,19 @@ function SingleColumnLayout({
   onClose: () => void
   t: TFn
 }) {
+  // Featured items (e.g. the active Monitor-Upcycling project) render as a
+  // hero card on top so the menu has a clear focal point. Rest of the list
+  // follows below.
+  const featured = items.find((it) => it.featured)
+  const rest = items.filter((it) => !it.featured)
   return (
-    <div className="py-2">
-      {items.map((subItem) => (
+    <div className={cn(featured ? 'p-4' : 'py-2')}>
+      {featured && (
+        <div className="mb-2">
+          <FeaturedCard item={featured} onClose={onClose} t={t} />
+        </div>
+      )}
+      {rest.map((subItem) => (
         <Link
           key={subItem.name}
           href={subItem.href}

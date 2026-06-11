@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShoppingBag, Wrench, type LucideIcon } from 'lucide-react'
+import { ShoppingBag, Wrench, Lightbulb, type LucideIcon } from 'lucide-react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
 
 /**
@@ -34,7 +34,7 @@ export interface NavigationItem {
   /** Lucide icon shown inside the hero card when `featured` is true. */
   featuredIcon?: LucideIcon
   /** Optional theme key for icon-badge tinting on featured tiles (matches DESIGN_TOKENS.iconBadges). */
-  featuredTheme?: 'marketplace' | 'repairers'
+  featuredTheme?: 'marketplace' | 'repairers' | 'projects'
 }
 
 /**
@@ -98,6 +98,56 @@ export const mainNavigation: NavigationItem[] = [
     nameKey: 'projects',
     href: '/projects',
     descriptionKey: 'projectsDesc',
+    subItems: [
+      // The featured Monitor-Upcycling sits at the top because it's the
+      // active, funded project with ZHAW partnership — the cleanest mission
+      // proof we have right now.
+      {
+        name: 'Monitor-Upcycling',
+        nameKey: 'projectMonitorUpcycling',
+        href: '/projects/upcycling',
+        descriptionKey: 'projectMonitorUpcyclingDesc',
+        featured: true,
+        featuredIcon: Lightbulb,
+        featuredTheme: 'projects',
+      },
+      {
+        name: 'Hardware-Entwicklung',
+        nameKey: 'projectHardware',
+        href: '/projects/hardware',
+        descriptionKey: 'projectHardwareDesc',
+      },
+      {
+        name: 'LTSP',
+        nameKey: 'projectLtsp',
+        href: '/projects/ltsp',
+        descriptionKey: 'projectLtspDesc',
+      },
+      {
+        name: 'Kivitendo Modus CH',
+        nameKey: 'projectKivitendo',
+        href: '/projects/kivitendo',
+        descriptionKey: 'projectKivitendoDesc',
+      },
+      {
+        name: 'Verein Linuxola',
+        nameKey: 'projectLinuxola',
+        href: '/projects/linuxola',
+        descriptionKey: 'projectLinuxolaDesc',
+      },
+      {
+        name: 'FreieComputer.ch',
+        nameKey: 'projectFreieComputer',
+        href: '/projects/freiecomputer',
+        descriptionKey: 'projectFreieComputerDesc',
+      },
+      {
+        name: 'Compirat',
+        nameKey: 'projectCompirat',
+        href: '/projects/compirat',
+        descriptionKey: 'projectCompiratDesc',
+      },
+    ],
   },
   {
     name: 'Dienstleistungen',
@@ -165,11 +215,19 @@ export const mainNavigation: NavigationItem[] = [
     descriptionKey: 'marketplaceDesc',
     badge: 'new',
     isMultiColumn: true,
+    // Two clear columns — "things" on the left, "people" on the right.
+    // Each column has one featured hero card so visitors orient at a glance:
+    //   ⤷ Geräte → marketplace of THINGS (Community-Inserate is the hero)
+    //   ⤷ Hilfe  → marketplace of PEOPLE (Techniker finden is the hero)
+    // Previous layout had 4 sections (Geräte kaufen, Verkaufen, IT-Hilfe,
+    // Abo-Tauschbörse) which obscured the things↔people dichotomy.
+    // Abo-Pools moved to Mitmachen — it's a resource-sharing engagement
+    // model, not a buy/sell marketplace flow.
     subItems: [
-      // Section: Geräte kaufen
+      // ─── Column 1: Geräte (things) ─────────────────────────────────
       {
-        name: 'Geräte kaufen',
-        nameKey: 'sectionBuyDevices',
+        name: 'Geräte',
+        nameKey: 'sectionDevices',
         href: '/marketplace',
         isSection: true,
       },
@@ -194,23 +252,16 @@ export const mainNavigation: NavigationItem[] = [
         href: '/shop#ladenlokal',
         descriptionKey: 'storeDesc',
       },
-      // Section: Verkaufen
-      {
-        name: 'Verkaufen',
-        nameKey: 'sectionSell',
-        href: '/marketplace/sell',
-        isSection: true,
-      },
       {
         name: 'Inserat erstellen',
         nameKey: 'createListing',
         href: '/marketplace/sell',
         descriptionKey: 'createListingDesc',
       },
-      // Section: IT-Hilfe
+      // ─── Column 2: Hilfe (people) ──────────────────────────────────
       {
-        name: 'IT-Hilfe',
-        nameKey: 'itHelp',
+        name: 'Hilfe',
+        nameKey: 'sectionHelp',
         href: '/it-hilfe',
         isSection: true,
       },
@@ -234,20 +285,6 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'becomeTechnician',
         href: '/profil/techniker',
         descriptionKey: 'becomeTechnicianDesc',
-      },
-      // Section: Abo-Tauschbörse
-      {
-        name: 'Abo-Tauschbörse',
-        nameKey: 'sectionAbos',
-        href: '/abos',
-        isSection: true,
-      },
-      {
-        name: 'Abo-Pools',
-        nameKey: 'aboPools',
-        href: '/abos',
-        descriptionKey: 'aboPoolsDesc',
-        badge: 'new',
       },
     ],
   },
@@ -342,7 +379,10 @@ export const mainNavigation: NavigationItem[] = [
         href: '/get-involved/partnerships',
         descriptionKey: 'partnershipDesc',
       },
-      // Section: Mitgliedschaft
+      // Section: Mitgliedschaft + Teilen
+      // Abo-Pools live here, not in Marktplatz — they are a resource-sharing
+      // engagement model, not a buy/sell flow. Logically grouped with
+      // "Mitmachen" (volunteer time, donate, share resources).
       {
         name: 'Mitgliedschaft',
         nameKey: 'sectionMembership',
@@ -354,6 +394,13 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'becomeMember',
         href: '/mitglied-werden',
         descriptionKey: 'becomeMemberDesc',
+        badge: 'new',
+      },
+      {
+        name: 'Abo-Pools',
+        nameKey: 'aboPools',
+        href: '/abos',
+        descriptionKey: 'aboPoolsDesc',
         badge: 'new',
       },
     ],
