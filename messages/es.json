@@ -4204,21 +4204,7 @@
         "intro": "Guías abiertas, documentación abierta. Cada paso, foto y lista de materiales se publica bajo Creative Commons CC-BY-SA — para que la misma idea funcione en cualquier lugar, sin pasar por nosotros.",
         "philosophy": {
           "title": "¿Por qué abierto?",
-          "body": "Nuestra misión no es vender el mayor número posible de lámparas, sino rescatar el mayor número posible de monitores de la chatarra. Eso solo es posible si cualquier taller, asociación o persona curiosa puede reproducirlas. Publicamos todo lo que aprendemos.",
-          "pillars": [
-            {
-              "title": "Documentación",
-              "body": "Instrucciones paso a paso por modelo: fotos, asignación de pines, esquemas e indicaciones de seguridad. Probadas en nuestro taller, libres para el suyo."
-            },
-            {
-              "title": "Reproducible en todo el mundo",
-              "body": "Listas de materiales con componentes estándar. Lo que funciona en Zúrich, funciona en Berlín, Lagos o São Paulo. Sin piezas específicas de Revamp-IT."
-            },
-            {
-              "title": "Herramienta, no producto",
-              "body": "Compartimos lo que hemos aprendido. Las mejoras, los forks y las traducciones son bienvenidos: un pull request en lugar de un correo electrónico."
-            }
-          ]
+          "body": "Nuestra misión no es vender el mayor número posible de lámparas, sino rescatar el mayor número posible de monitores de la chatarra. Eso solo es posible si cualquier taller, asociación o persona curiosa puede reproducirlas. Publicamos todo lo que aprendemos."
         },
         "guides": {
           "title": "Guías",

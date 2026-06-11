@@ -5585,21 +5585,7 @@
         "intro": "Offene Anleitungen, offene Dokumentation. Alle Schritte, Fotos und Material-Listen stehen unter Creative Commons CC-BY-SA — damit dieselbe Idee überall auf der Welt funktioniert, ohne Umweg über uns.",
         "philosophy": {
           "title": "Warum offen?",
-          "body": "Unsere Mission ist nicht, möglichst viele Leuchten zu verkaufen — sondern möglichst viele Monitore aus dem Schrott zu holen. Das geht nur, wenn jede Werkstatt, jeder Verein und jeder neugierige Mensch nachbauen darf. Wir veröffentlichen alles, was wir lernen.",
-          "pillars": [
-            {
-              "title": "Dokumentation",
-              "body": "Schritt-für-Schritt-Anleitungen pro Modell — Fotos, Pin-Belegung, Schaltpläne und Sicherheitshinweise. Geprüft in unserer Werkstatt, frei für deine."
-            },
-            {
-              "title": "Weltweit reproduzierbar",
-              "body": "Material-Listen mit Standard-Komponenten. Was in Zürich funktioniert, funktioniert in Berlin, Lagos oder São Paulo. Keine RevampIT-spezifischen Teile."
-            },
-            {
-              "title": "Werkzeug, nicht Produkt",
-              "body": "Wir teilen, was wir gelernt haben. Verbesserungen, Forks und Übersetzungen sind willkommen — ein Pull Request statt eine E-Mail."
-            }
-          ]
+          "body": "Unsere Mission ist nicht, möglichst viele Leuchten zu verkaufen — sondern möglichst viele Monitore aus dem Schrott zu holen. Das geht nur, wenn jede Werkstatt, jeder Verein und jeder neugierige Mensch nachbauen darf. Wir veröffentlichen alles, was wir lernen."
         },
         "guides": {
           "title": "Anleitungen",

@@ -5839,21 +5839,7 @@
         "intro": "Open guides, open documentation. Every step, photo and bill of materials is published under Creative Commons CC-BY-SA — so the same idea works anywhere, without having to go through us.",
         "philosophy": {
           "title": "Why open?",
-          "body": "Our mission isn't to sell as many lamps as possible — it's to pull as many monitors as possible out of the scrap pile. That only works if every workshop, every group, and every curious person is free to replicate the build. We publish everything we learn.",
-          "pillars": [
-            {
-              "title": "Documentation",
-              "body": "Step-by-step guides for each model — photos, pin assignments, schematics, and safety notes. Tested in our workshop, free for yours."
-            },
-            {
-              "title": "Reproducible worldwide",
-              "body": "Bills of materials with standard components. What works in Zurich works in Berlin, Lagos, or São Paulo. No Revamp-IT-specific parts."
-            },
-            {
-              "title": "A tool, not a product",
-              "body": "We share what we've learned. Improvements, forks, and translations are welcome — a pull request rather than an email."
-            }
-          ]
+          "body": "Our mission isn't to sell as many lamps as possible — it's to pull as many monitors as possible out of the scrap pile. That only works if every workshop, every group, and every curious person is free to replicate the build. We publish everything we learn."
         },
         "guides": {
           "title": "Guides",

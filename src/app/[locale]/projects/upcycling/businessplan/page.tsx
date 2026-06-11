@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import { ArrowRight, ExternalLink, Mail, Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { DesktopTocRail } from './DesktopTocRail'
 
 /**
  * /projects/upcycling/businessplan — source-grounded evidence page.
@@ -210,28 +211,6 @@ function Hero({ hero }: { hero: BusinessPlan['hero'] }) {
 }
 
 /* ─── TOC: desktop rail + mobile select ───────────────────────────── */
-
-function DesktopTocRail({ nav }: { nav: BusinessPlan['nav'] }) {
-  return (
-    <nav aria-label={nav.label} className="ui-public-toc-rail hidden lg:block">
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mb-3">
-        {nav.label}
-      </p>
-      <ul className="space-y-1.5 text-sm">
-        {nav.items.map((item) => (
-          <li key={item.id}>
-            <a
-              href={`#${item.id}`}
-              className="block rounded-md px-2 py-1.5 text-text-tertiary transition-colors hover:bg-surface-raised hover:text-text-primary"
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
-}
 
 function MobileToc({ nav }: { nav: BusinessPlan['nav'] }) {
   // Server-renderable mobile TOC: a native <select> wrapped in a tiny

@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { Github, BookOpen, Globe, Wrench, ArrowRight, ExternalLink } from 'lucide-react'
+import { Github, ArrowRight, ExternalLink } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { MonitorLampPlaceholder } from '../MonitorLampPlaceholder'
 
@@ -32,7 +32,6 @@ type PageMessages = {
   philosophy: {
     title: string
     body: string
-    pillars: { title: string; body: string }[]
   }
   guides: {
     title: string
@@ -56,8 +55,6 @@ type PageMessages = {
     cta: string
   }
 }
-
-const PILLAR_ICONS = [BookOpen, Globe, Wrench]
 
 export async function generateMetadata() {
   const t = await getTranslations('projects')
@@ -110,46 +107,18 @@ export default async function UpcyclingBuildYourOwnPage() {
         </div>
       </header>
 
-      {/* Manifesto — the philosophical core. The body line is set as a
-          pull-quote at section width so it carries the weight of a stance;
-          the three pillars below are numbered, full-width rows (not small
-          cards) so each one reads as a beat in the argument. */}
+      {/* Why open — the philosophical core in one paragraph. The audit
+          flagged the previous treatment (pull-quote + 3 numbered pillars +
+          icons) as manifesto-scale chrome for a project with 1 published
+          guide. The body line still carries the stance, but the page no
+          longer reads as a marketing landing: it reads as a hub that
+          gets out of the way and lets the guides speak. */}
       <section className="border-t border-subtle bg-surface-raised">
-        <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="ui-public-eyebrow">{m.philosophy.title}</div>
-          <p className="mt-6 max-w-3xl text-2xl font-medium leading-snug tracking-tight text-text-primary sm:text-3xl md:text-4xl">
+          <p className="mt-5 text-xl font-medium leading-snug tracking-tight text-text-primary sm:text-2xl">
             {m.philosophy.body}
           </p>
-
-          <ol className="mt-14 space-y-10 sm:space-y-12">
-            {m.philosophy.pillars.map((pillar, i) => {
-              const Icon = PILLAR_ICONS[i] ?? BookOpen
-              return (
-                <li
-                  key={i}
-                  className="grid gap-4 border-t border-subtle pt-8 sm:grid-cols-[auto_auto_1fr] sm:items-start sm:gap-6"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="font-mono text-4xl font-light leading-none tabular-nums text-text-tertiary sm:text-5xl"
-                  >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-action-muted/15">
-                    <Icon className="h-5 w-5 text-action" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-text-primary sm:text-xl">
-                      {pillar.title}
-                    </h3>
-                    <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
-                      {pillar.body}
-                    </p>
-                  </div>
-                </li>
-              )
-            })}
-          </ol>
         </div>
       </section>
 
