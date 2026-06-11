@@ -5558,15 +5558,22 @@
         },
         "eyebrow": "GALERIE · MONITOR-UPCYCLING",
         "title": "Was bereits entstanden ist",
-        "intro": "Jedes Stück ein wiederbelebter Monitor. Filter nach Einsatzbereich — funktional, Dekor oder Kunst — oder schau dir alles auf einmal an.",
-        "filterLabel": "Filter:",
-        "filters": {
-          "all": "Alle",
-          "functional": "Funktional",
-          "decor": "Dekor"
+        "intro": "Jedes Stück ein wiederbelebter Monitor. Oben: Modelle mit echter Foto-Dokumentation und Anleitung. Unten: Modelle, die wir umgebaut, aber noch nicht abgelichtet haben.",
+        "placeholderNote": "Die Vorschaubilder werden generiert — sobald die ersten Stücke fotografiert sind, ersetzen wir sie durch echte Aufnahmen.",
+        "documented": {
+          "title": "Bereits dokumentiert",
+          "cta": "Anleitung lesen"
         },
-        "empty": "Für diesen Filter sind noch keine Stücke vorhanden.",
-        "placeholderNote": "Die Vorschaubilder werden generiert — sobald die ersten Stücke fotografiert sind, ersetzen wir sie durch echte Aufnahmen."
+        "queued": {
+          "title": "In der Warteschlange",
+          "intro": "Diese Modelle sind erfolgreich umgebaut worden, aber noch nicht fotografisch dokumentiert. Sobald Fotos und Anleitung vorliegen, wandern sie nach oben."
+        },
+        "help": {
+          "eyebrow": "MITMACHEN",
+          "title": "Du fotografierst — wir dokumentieren weiter.",
+          "body": "Jedes Modell, das wir nicht selbst fotografieren, bleibt eine SVG-Skizze. Bist du in Zürich und magst Werkstatt-Fotografie? Sag uns Bescheid.",
+          "cta": "Mithelfen"
+        }
       },
       "buildYourOwn": {
         "meta": {

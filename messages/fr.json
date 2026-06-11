@@ -5863,15 +5863,22 @@
         },
         "eyebrow": "GALERIE · UPCYCLING D'ÉCRANS",
         "title": "Ce qui a déjà été créé",
-        "intro": "Chaque pièce est un écran ressuscité. Filtrez par domaine d'utilisation — fonctionnel, décor ou art — ou découvrez tout d'un coup.",
-        "filterLabel": "Filtre :",
-        "filters": {
-          "all": "Tous",
-          "functional": "Fonctionnel",
-          "decor": "Décor"
+        "intro": "Chaque pièce un moniteur revivifié. En haut : modèles avec photo réelle et guide. En bas : modèles reconvertis mais pas encore photographiés.",
+        "placeholderNote": "Les vignettes sont générées — dès que les premières pièces auront été photographiées, nous les remplacerons par de vrais clichés.",
+        "documented": {
+          "title": "Documentés",
+          "cta": "Ouvrir le guide"
         },
-        "empty": "Aucune pièce n'est encore disponible pour ce filtre.",
-        "placeholderNote": "Les vignettes sont générées — dès que les premières pièces auront été photographiées, nous les remplacerons par de vrais clichés."
+        "queued": {
+          "title": "En file d'attente",
+          "intro": "Ces modèles ont été reconvertis avec succès mais pas encore photographiés. Dès que photos et guide sont prêts, ils remontent."
+        },
+        "help": {
+          "eyebrow": "PARTICIPER",
+          "title": "Vous photographiez — nous continuons à documenter.",
+          "body": "Chaque modèle que nous ne photographions pas nous-mêmes reste un croquis SVG. Si vous êtes à Zurich et aimez la photo d'atelier, dites-le nous.",
+          "cta": "Participer"
+        }
       },
       "buildYourOwn": {
         "meta": {

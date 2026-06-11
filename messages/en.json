@@ -5812,15 +5812,22 @@
         },
         "eyebrow": "GALLERY · MONITOR UPCYCLING",
         "title": "What's been built so far",
-        "intro": "Every piece is a revived monitor. Filter by use case — functional, decor or art — or browse everything at once.",
-        "filterLabel": "Filter:",
-        "filters": {
-          "all": "All",
-          "functional": "Functional",
-          "decor": "Decor"
+        "intro": "Each piece a revived monitor. Above: models with real photo documentation and a guide. Below: models we have retrofitted but not yet photographed.",
+        "placeholderNote": "Preview images are generated — once the first pieces are photographed, we'll replace them with real shots.",
+        "documented": {
+          "title": "Documented",
+          "cta": "Open guide"
         },
-        "empty": "No pieces yet for this filter.",
-        "placeholderNote": "Preview images are generated — once the first pieces are photographed, we'll replace them with real shots."
+        "queued": {
+          "title": "Queued",
+          "intro": "These models have been successfully retrofitted but aren't photographed yet. Once photos and a guide land, they move up."
+        },
+        "help": {
+          "eyebrow": "HELP OUT",
+          "title": "You shoot — we keep documenting.",
+          "body": "Every model we don't photograph ourselves stays an SVG sketch. If you're in Zürich and like workshop photography, get in touch.",
+          "cta": "Get involved"
+        }
       },
       "buildYourOwn": {
         "meta": {

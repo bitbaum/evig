@@ -4177,15 +4177,22 @@
         },
         "eyebrow": "GALLERIA · UPCYCLING DI MONITOR",
         "title": "Cosa è già nato",
-        "intro": "Ogni pezzo è un monitor riportato in vita. Filtri per ambito d'uso — funzionale, decor o arte — oppure guardi tutto insieme.",
-        "filterLabel": "Filtro:",
-        "filters": {
-          "all": "Tutti",
-          "functional": "Funzionale",
-          "decor": "Decor"
+        "intro": "Ogni pezzo un monitor riportato in vita. Sopra: modelli con foto e guida reali. Sotto: modelli riconvertiti ma non ancora fotografati.",
+        "placeholderNote": "Le immagini di anteprima vengono generate — non appena i primi pezzi saranno fotografati, le sostituiremo con foto reali.",
+        "documented": {
+          "title": "Documentati",
+          "cta": "Apri guida"
         },
-        "empty": "Per questo filtro non sono ancora disponibili pezzi.",
-        "placeholderNote": "Le immagini di anteprima vengono generate — non appena i primi pezzi saranno fotografati, le sostituiremo con foto reali."
+        "queued": {
+          "title": "In coda",
+          "intro": "Questi modelli sono stati riconvertiti con successo ma non ancora fotografati. Appena foto e guida sono pronte, salgono in alto."
+        },
+        "help": {
+          "eyebrow": "PARTECIPARE",
+          "title": "Tu scatti — noi continuiamo a documentare.",
+          "body": "Ogni modello che non fotografiamo noi resta uno schizzo SVG. Se sei a Zurigo e ti piace la fotografia da laboratorio, fatti sentire.",
+          "cta": "Partecipa"
+        }
       },
       "buildYourOwn": {
         "meta": {
