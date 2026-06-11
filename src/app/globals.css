@@ -356,6 +356,22 @@
   z-index: 40;
   transition: top 300ms cubic-bezier(0, 0, 0.2, 1);
 }
+@utility ui-public-toc-rail {
+  /* Long-document table-of-contents rail. Sticky vertical list on lg+,
+   * sits below the header. On screens < lg the rail is hidden (the page
+   * uses a <select> dropdown sitting in ui-sticky-subnav instead). This
+   * pattern is for pages where the horizontal sub-nav would overflow on
+   * mobile and squish on desktop — e.g. /projects/upcycling/businessplan. */
+  display: none;
+  @apply lg:block;
+  position: sticky;
+  top: calc(var(--header-offset, 4rem) + 1rem);
+  align-self: start;
+  width: 12rem;
+  max-height: calc(100vh - var(--header-offset, 4rem) - 2rem);
+  overflow-y: auto;
+  transition: top 300ms cubic-bezier(0, 0, 0.2, 1);
+}
 @utility ui-public-display-lg {
   /* Display headings for sections below the hero. */
   font-size: clamp(2rem, 5vw, 3.25rem);

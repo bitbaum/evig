@@ -4713,187 +4713,973 @@
       },
       "businessPlan": {
         "meta": {
-          "title": "사업 계획 및 연구",
-          "description": "모니터 업사이클링 프로젝트의 경제적 기반, 보고서, 연구."
+          "title": "사업 계획 — 모니터 업사이클을 통한 벽면·천장 조명",
+          "description": "정직한 근거 페이지: 실제로 존재하는 것, 출처 포함. 2026년 6월 기준."
         },
-        "research": {
-          "title": "현재 연구 중인 것",
-          "intro": "이 연구들은 진행 중이거나 위탁된 상태입니다. 결과는 신뢰할 수 있는 수준이 되는 즉시 여기에 게시됩니다.",
+        "nav": {
+          "label": "목차",
           "items": [
             {
-              "title": "생애주기 평가(LCA) — ZHAW",
-              "status": "진행 중 · 결과 2026년 3분기",
-              "description": "Lenovo L2251pwd 개조 램프와 동등한 밝기의 신제품 LED 램프의 완전한 생애주기 분석. 방법: ISO 14040/14044."
+              "id": "status",
+              "label": "현재 상태"
             },
             {
-              "title": "B2B 지불 의향",
-              "status": "계획됨 · 2026년 4분기",
-              "description": "부동산 관리사 10곳과 디자인 에이전시 구조화 인터뷰로 CHF 150–250 가격대 검증."
+              "id": "produkt",
+              "label": "우리가 만드는 것"
             },
             {
-              "title": "CE 적합성",
-              "status": "준비 중 · 2026년 4분기",
-              "description": "저전압 지침, EMC, RoHS. 4분기 파일럿 시리즈를 위한 외부 시험기관."
+              "id": "lieferanten",
+              "label": "공급"
+            },
+            {
+              "id": "alternativen",
+              "label": "시장의 대안"
+            },
+            {
+              "id": "kunden",
+              "label": "고객·판매"
+            },
+            {
+              "id": "wirtschaftlichkeit",
+              "label": "경제성"
+            },
+            {
+              "id": "wissenschaft",
+              "label": "학술 평가"
+            },
+            {
+              "id": "ce",
+              "label": "CE 적합성"
+            },
+            {
+              "id": "partner",
+              "label": "파트너"
+            },
+            {
+              "id": "risiken",
+              "label": "리스크 및 미해결 질문"
+            },
+            {
+              "id": "foerderung",
+              "label": "자금 조달"
+            },
+            {
+              "id": "mitmachen",
+              "label": "참여하기"
+            },
+            {
+              "id": "belege",
+              "label": "출처·참고자료"
             }
           ]
         },
-        "downloads": {
-          "title": "다운로드",
-          "note": "보고서는 발행되는 대로 여기에 연결됩니다. 자금 결정을 위해 초기 초안이 필요하시면 연락 주세요 — 현재 작업 상태를 정직하게 공유합니다.",
-          "cta": "kontakt@revamp-it.ch"
-        },
         "hero": {
-          "eyebrow": "BUSINESS PLAN",
-          "title": "Market, customers, economics — and what can go wrong.",
-          "intro": "An honest picture for funders, pilot partners, and buyers. Every section is collapsible so you can pick the depth you need."
+          "eyebrow": "사업 계획",
+          "title": "폐기된 컴퓨터 모니터로 만드는 벽면·천장 조명.",
+          "intro": "현재 스위스 IT 재활용 흐름으로 들어가는 화면들의 여전히 작동하는 LCD 백라이트를 벽면·천장 조명으로 개조합니다. 이 페이지는 마케팅 서사가 아닌, 2026년 6월 시점에 실제로 존재하는 것과 그 출처를 담은 정직한 근거 버전입니다.",
+          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
+          "heroImageAlt": "벽면 패널로 점등된 개조 후 Lenovo L2251pwd 모니터, 2026년 5월 28일 작업대 촬영"
         },
-        "marketContext": {
-          "eyebrow": "MARKET CONTEXT",
-          "title": "What we should be compared against.",
-          "intro": "We're not selling a 'designer lamp' against Vitra — we're selling a repairable, locally made desk lamp against mass-produced imports.",
-          "alternatives": [
+        "status": {
+          "eyebrow": "현재 상태 · 2026년 6월",
+          "title": "프로젝트의 현재 위치.",
+          "intro": "1단계 완료, 2단계 마무리 단계. ZHAW의 학술 평가는 병행 진행 중이며, 보고서는 2026년 6월 18일자입니다.",
+          "kpis": [
             {
-              "label": "IKEA Tertial / desk lamp (new)",
-              "price": "CHF 15–35",
-              "tradeoff": "Low price, newly produced, short lifespan (~3 years), not repairable. Mass production in Asia — high material footprint per hour of light."
+              "label": "단계 상태",
+              "value": "Etappe 2 läuft",
+              "note": "Swico 최종 보고서 2026-06-30 까지",
+              "cite": "cit02_swico_feb2026"
             },
             {
-              "label": "Mainstream LED desk lamp (BenQ, Philips Hue)",
-              "price": "CHF 80–250",
-              "tradeoff": "Good light quality, sealed electronics — repair impossible. CO₂ footprint dominated by manufacturing."
+              "label": "ZHAW LCA 보고서",
+              "value": "18.06.2026",
+              "note": "프로젝트 132.351 INNO-EE, Gantt 계획에 따라 작성 중",
+              "cite": "cit05_zhaw_gantt"
             },
             {
-              "label": "Swiss design desk lamp (Vitra, USM, Lehni)",
-              "price": "CHF 300–800+",
-              "tradeoff": "High quality, often repairable, long-lasting — but newly produced. Price only for upper segment."
+              "label": "최종 발표",
+              "value": "03.07.2026, 09:00",
+              "note": "Swico 본사, Lagerstrasse 33, 8004 Zürich",
+              "cite": "cit02_swico_feb2026"
             },
             {
-              "label": "Upcycling desk lamps from designer studios",
-              "price": "CHF 200–600",
-              "tradeoff": "One-off pieces from leftovers — rarely reproducible, no standardised manual, often without CE."
-            },
-            {
-              "label": "Our proposition",
-              "price": "CHF 150–250",
-              "tradeoff": "Reproducible thanks to open guides, made in Switzerland (sheltered workshop), repairable, CE-conformity planned. Input material donated — low material footprint.",
-              "isOurs": true
+              "label": "지금까지 개조한 모델",
+              "value": "12 erfolgreich",
+              "note": "5개는 대기 회피책 문서화 완료, 2단계에서 추가 문서화",
+              "cite": "cit08_modelle_md"
             }
-          ],
-          "verdict": "We compete with mid-range LED — not IKEA, not Vitra. Our selling point is not price; it's repairability, provenance and material flow."
+          ]
         },
-        "segments": {
-          "eyebrow": "CUSTOMER SEGMENTS",
-          "title": "Who buys it — and who does not.",
-          "intro": "Two channels tested in parallel. Each needs a different message, sales path and order size.",
-          "b2b": {
-            "label": "B2B (volume buyers)",
-            "volume": "50–80 % of the small series",
-            "description": "Property managers for ancillary spaces and stairwells, co-working spaces, architecture and design agencies, smaller hotels. Buying argument: sustainability story + reliable delivery of 10–50 units.",
-            "examples": [
-              "Livit",
-              "Wincasa",
-              "Allreal",
-              "universities",
-              "cooperative cafés"
+        "produkt": {
+          "eyebrow": "우리가 만드는 것",
+          "title": "모니터 → 벽면 또는 천장 조명. 새 기기도, 새 플라스틱도 없이.",
+          "intro": "폐기된 모니터에서 여전히 완전히 작동하는 세 가지 부품을 재사용합니다: 전원부, LED 백라이트, 본체. 결과는 사무실, 계단실, 학교 건물용 조명입니다.",
+          "buildSteps": {
+            "title": "개조 흐름",
+            "steps": [
+              {
+                "title": "적합한 기기 선별",
+                "body": "LED 백라이트 모니터를 우선 선택: 전력 소모가 낮고, 더 밝으며, 추가 자재가 거의 필요 없습니다.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "적합성 점검",
+                "body": "적합: 긁힘, 구멍, 픽셀 결함, 표시 불량. 부적합: 전원부 고장, 본체 파손.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "대기 모드 우회 설치",
+                "body": "많은 모니터는 몇 분 후 대기 모드로 전환됩니다. 해결책: 전원부의 저전압 측에 작은 전압 분배기를 만들어 자작 커넥터에 납땜. 모니터 기종마다 별도 매뉴얼.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "고정",
+                "body": "대부분의 모델은 뒷면에 VESA MIS-D 홀 패턴이 있어 시판되는 벽면/천장용 모니터 거치대가 그대로 맞습니다. 벽면에는 침대 프레임 금구, 천장에는 옆으로 미끄러지는 것을 막는 3D 프린팅 클립을 사용합니다.",
+                "cite": "cit04_kurzbericht_e1",
+                "linkLabel": "VESA MIS-D 표준",
+                "linkUrl": "https://www.vesa-standard.de/vesa-mis-d.html"
+              }
             ]
           },
-          "b2c": {
-            "label": "B2C (individual buyers)",
-            "volume": "20–50 % of the small series",
-            "description": "Design-conscious individuals buying a story and aesthetic — not the cheapest function. Plus: students and cooperative flatshares as a budget variant.",
-            "examples": [
-              "design-shop visitors",
-              "architects (private)",
-              "maker community",
-              "flatshare renovations"
+          "photoGallery": {
+            "title": "Lenovo L2251pwd 개조, 2026년 5월 28일 기록",
+            "intro": "2026년 5월 작업대 사진 6장. 폐기 소스 모니터에서 빛을 내는 패널 조명까지.",
+            "items": [
+              {
+                "src": "/projects/upcycling/businessplan/06-source-monitor-label.jpg",
+                "caption": "소스 기기: Lenovo Wide LCD Monitor, 뒷면에 FCC/CE/RoHS 라벨. 한국 제조, Lenovo 2009."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/02-back-cover-opened.jpg",
+                "caption": "본체 개방. 왼쪽: 플라스틱 후면 커버. 오른쪽: 접착 테이프와 원래 나사 위치가 있는 알루미늄 지지판."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/03-lcd-panel-removed.jpg",
+                "caption": "LCD 패널 제거. 노출된 LED 백라이트와 컨트롤 바가 보입니다. LCD 층은 제거합니다 — 표시할 이미지가 없으면 빛을 가리기만 하기 때문입니다."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/04-electronics-spread.jpg",
+                "caption": "전자 부품 펼침: 로직 보드(오른쪽), 버튼 보드(왼쪽), 연결 케이블. 대부분의 모델에서 로직 보드는 본체에 남아 있으며 — 전원부의 작은 개조만 필요합니다."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/05-standby-bypass-spannungsteiler.jpg",
+                "caption": "대기 우회: 저항 두 개를 전압 분배기로 구성해 전원부 핀으로 가는 커넥터에 직접 납땜. 대기로 들어가지 않고 항상 점등을 유지합니다. 솔루션은 Benjamin Ernst(ReCreaZZZ)가 개발."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "caption": "완성 결과. 모니터는 원래 본체 그대로, 새 플라스틱 부품 없이, 균일한 발광 패널로 빛납니다."
+              }
+            ]
+          },
+          "links": [
+            {
+              "label": "동영상: 모니터를 조명으로 개조 (revamp-it Nextcloud)",
+              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+            },
+            {
+              "label": "Open Hardware Repository (CERN)",
+              "url": "https://ohwr.org/welcome"
+            },
+            {
+              "label": "Open Source Hardware Association",
+              "url": "https://www.oshwa.org/"
+            }
+          ]
+        },
+        "lieferanten": {
+          "eyebrow": "공급 · 자재 흐름",
+          "title": "투입 자재는 이미 확보 — Euro 팔레트 150개를 보관 중.",
+          "intro": "프로젝트 시작 전부터 Revamp-IT는 폐기 IT 하드웨어를 체계적으로 수집해 왔습니다. 2023년 기준 Euro 팔레트 150개를 보유하고 있으며, 그중 약 30개에 업사이클 대상 화면이 있습니다.",
+          "stockBreakdown": {
+            "title": "창고에 무엇이 있는가",
+            "subtitle": "수집된 Euro 팔레트 150개 분석",
+            "rows": [
+              {
+                "label": "다양한 크기·연식의 완성 PC",
+                "value": "ca. 40 Paletten"
+              },
+              {
+                "label": "프린터·복합기",
+                "value": "ca. 30 Paletten"
+              },
+              {
+                "label": "모니터·TV·올인원",
+                "value": "ca. 30 Paletten",
+                "emphasis": true,
+                "note": "← 조명 업사이클의 투입 자재"
+              },
+              {
+                "label": "서버 랙·서버 케이스",
+                "value": "ca. 15 Paletten"
+              },
+              {
+                "label": "씬 클라이언트·미니 컴퓨터",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "PC 케이스",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "케이블",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "키보드",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "스캐너",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "네트워크 장비",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "기타 장비·부품",
+                "value": "ca. 5 Paletten"
+              }
+            ],
+            "cite": "cit06_qa_swico_2023"
+          },
+          "channels": {
+            "title": "앞으로의 화면 공급원",
+            "items": [
+              {
+                "label": "revamp-it 보유 재고",
+                "body": "모니터·TV·올인원 30 팔레트가 이미 정리·분류 — 2단계 소량 생산에 충분합니다.",
+                "cite": "cit06_qa_swico_2023"
+              },
+              {
+                "label": "ERZ Entsorgung + Recycling Zürich",
+                "body": "Swico Recycling과 협의하에 더 큰 규모의 모니터 업사이클을 위해 취리히 시 ERZ와 논의 진행 중.",
+                "cite": "cit04_kurzbericht_e1",
+                "linkLabel": "ERZ Zürich",
+                "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+              },
+              {
+                "label": "Swico Recycling 시스템 (스케일업 옵션)",
+                "body": "비전: 스위스 재활용으로 들어오는 모든 모니터와 TV를 자재 회수 전에 업사이클 적합성 사전 검사.",
+                "cite": "cit07_klimast_2023",
+                "linkLabel": "Swico Recycling",
+                "linkUrl": "https://www.swico.ch/de/recycling/"
+              }
+            ]
+          },
+          "criteria": {
+            "title": "수령 가능 기기",
+            "items": [
+              "화면이 켜짐 — 전원부 작동",
+              "본체가 구조적으로 온전 (스크래치는 무방)",
+              "LED 백라이트 (형광관보다 우선)",
+              "표준 크기 19–24인치"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          },
+          "rejected": {
+            "title": "수령하지 않는 것",
+            "items": [
+              "전원부 고장 — 화면이 켜지지 않음",
+              "본체 심각 파손",
+              "CRT 화면 (무겁고 효율 낮음)"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          }
+        },
+        "alternativen": {
+          "eyebrow": "시장의 대안",
+          "title": "어떤 제품과 비교되어야 하는지 — 정직하게.",
+          "intro": "이 제품은 벽면 또는 천장 조명이며 디자이너 테이블 램프가 아닙니다. 현실적인 비교 대상은 DIY 매장에서 흔히 보는 LED 패널이며, Vitra나 USM의 테이블 램프가 아닙니다.",
+          "benchmarkPhoto": {
+            "src": "/projects/upcycling/competitor-benchmark/brilliant-abie-led-panel.jpg",
+            "caption": "Brilliant ABIE LED Panel 24W 40×40 cm, CCT + 디머 + RGB + 리모컨. Jumbo 판매가 CHF 79.95. 2026년 매장 진열대 촬영."
+          },
+          "alternativesTable": {
+            "title": "매장 진열대의 비교 제품",
+            "rows": [
+              {
+                "label": "Brilliant ABIE LED Panel 24W, 40×40 cm",
+                "price": "CHF 79.95",
+                "note": "CCT + 디머 + RGB + 리모컨. Jumbo에서 판매.",
+                "cite": "cit09_brilliant_jumbo",
+                "linkLabel": "brilliant-ag.com",
+                "linkUrl": "https://www.brilliant-ag.com"
+              },
+              {
+                "label": "브랜드 LED 패널 60×60 cm (사무실 표준)",
+                "price": "CHF 80–200",
+                "note": "전형적인 사무실 천장. LEDVANCE, Osram, Philips, Trilux 등.",
+                "cite": null,
+                "linkLabel": null,
+                "linkUrl": null
+              },
+              {
+                "label": "노브랜드 저가 LED 패널",
+                "price": "CHF 30–60",
+                "note": "아시아 수입품, 수리 불가, 보증 거의 없음.",
+                "cite": null,
+                "linkLabel": null,
+                "linkUrl": null
+              },
+              {
+                "label": "모니터 업사이클 조명 (이 프로젝트)",
+                "price": "미정",
+                "note": "단가와 판매 가격은 2단계 평가의 일부 (Q4 미해결).",
+                "cite": "cit03_swico_oct2025",
+                "linkLabel": null,
+                "linkUrl": null,
+                "isOurs": true
+              }
+            ]
+          },
+          "verdict": "우리는 가격으로 경쟁하지 않습니다. 우리의 논지는 출처 스토리, 수리 가능성, 신규 생산 회피입니다. 진지한 가격 권고는 소량 생산 평가 이후 이뤄지며 2단계 최종 보고서에 기록됩니다."
+        },
+        "kunden": {
+          "eyebrow": "고객 · 판매",
+          "title": "모니터로 만든 벽면·천장 조명을 누가 살까.",
+          "intro": "1단계 작업과 Swico 회신(2023-09-28)에서 네 개의 타깃 세그먼트가 도출되었습니다 — 디자이너 시장이 아니라 전문 조명 구매 행동.",
+          "segments": [
+            {
+              "label": "B2B 직판 — 대규모 사무실 보유 기업",
+              "body": "은행, 보험사, 공공 행정. 계단실과 부속 공간 시범 설치 후 구매 카탈로그 편입.",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "가구·인테리어 기업",
+              "body": "스위스 인테리어 업체와 협업해 업사이클 조명을 라인업에 추가 — 스토리이자 아시아 대량 생산의 지속 가능한 대안으로.",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "DIY 매장",
+              "body": "Brilliant 패널처럼 기존 유통 채널을 통해. 마케팅 부담 크고 마진 좁음 — 추후 스케일업 옵션.",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "부동산 회사 (리모델링/신축)",
+              "body": "리모델링/신축 시 신규 제품 대신 업사이클 조명 직접 사용. 자산 관리 회사·건축 사무소를 통한 접근.",
+              "cite": "cit06_qa_swico_2023"
+            }
+          ],
+          "pilotPlan": {
+            "title": "2단계 예정 시범 설치",
+            "intro": "세 가지 사용 패턴, 전력·수명·유지보수 프로필이 다른 세 곳 — 데이터는 ZHAW LCA와 단가 평가에 활용됩니다.",
+            "items": [
+              "24시간 운전 (예: 계단실)",
+              "야간/주말 소등 (예: 타이머 사무실)",
+              "동작 감지기 제어 (잦은 점·소등)"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          }
+        },
+        "wirtschaftlichkeit": {
+          "eyebrow": "경제성",
+          "title": "2단계 예산 (Swico 50,000 CHF, Innosuisse 15,000 CHF).",
+          "intro": "진행 중인 2단계의 예산은 명확합니다. 완성 조명의 단가는 의도적으로 공개하지 않습니다 — 단가는 소량 생산 평가에서 도출되며 2026년 6월 말 최종 보고서에 공개됩니다.",
+          "budget": {
+            "title": "단기 보고서 기준 2단계 예산",
+            "note": "총 필요액 65,000 CHF에서 15,000 CHF Innosuisse Innoscheck 차감 = Swico 부담 50,000 CHF.",
+            "rows": [
+              {
+                "label": "급여 및 사례비",
+                "value": "27'000 CHF"
+              },
+              {
+                "label": "공간, 보관, 운송",
+                "value": "12'000 CHF"
+              },
+              {
+                "label": "학술 평가 (ZHAW, Innoscheck)",
+                "value": "15'000 CHF",
+                "note": "Innosuisse에서 ZHAW로 직접 지급"
+              },
+              {
+                "label": "Barologic GmbH CE 감정서",
+                "value": "2'000 CHF"
+              },
+              {
+                "label": "자재비",
+                "value": "1'000 CHF"
+              },
+              {
+                "label": "마케팅·홍보",
+                "value": "3'000 CHF"
+              },
+              {
+                "label": "예비비",
+                "value": "5'000 CHF"
+              },
+              {
+                "label": "소계",
+                "value": "65'000 CHF",
+                "emphasis": true
+              },
+              {
+                "label": "− Innosuisse Innoscheck",
+                "value": "−15'000 CHF"
+              },
+              {
+                "label": "Swico 2단계 부담분",
+                "value": "50'000 CHF",
+                "emphasis": true
+              }
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          },
+          "scopeNote": "의도적으로 명시하지 않는 것: 완성 조명 1개당 단가. 2단계 실제 생산 데이터 없는 추정은 투기적이 됩니다. 실제 단가와 진지한 가격 권고는 2단계 최종 보고서와 함께 공개됩니다.",
+          "scopeCite": "cit03_swico_oct2025"
+        },
+        "wissenschaft": {
+          "eyebrow": "학술 평가",
+          "title": "ZHAW 프로젝트 132.351 INNO-EE — ISO 14044 기반 LCA.",
+          "intro": "Innosuisse는 ZHAW의 비교 전과정평가(LCA)에 자금을 지원합니다. 업사이클 조명의 환경 성과를 시판 LED·형광등 조명과 전 과정에 걸쳐 비교합니다.",
+          "factsheet": {
+            "title": "프로젝트 개요",
+            "rows": [
+              {
+                "label": "프로젝트 번호",
+                "value": "132.351 INNO-EE",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "제목",
+                "value": "광원으로서 모니터 재사용의 환경 성과 평가",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "연구 파트너",
+                "value": "ZHAW Institut für Nachhaltige Entwicklung, School of Engineering, Winterthur",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "프로젝트 책임자",
+                "value": "Corinna Baumgartner, ZHAW",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "방법론",
+                "value": "ISO 14044 기반 LCA, 1차 데이터 우선, SimaPro로 모델링",
+                "cite": "cit05_zhaw_gantt",
+                "linkLabel": "ISO 14044",
+                "linkUrl": "https://www.iso.org/standard/38498.html"
+              },
+              {
+                "label": "Innosuisse 분담금",
+                "value": "급여 15,000 CHF",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "구현 파트너",
+                "value": "Verein revamp-it",
+                "cite": "cit01_innolink"
+              }
+            ]
+          },
+          "timeline": {
+            "title": "ZHAW 계획 (Gantt 2026-01-20)",
+            "phases": [
+              {
+                "label": "킥오프",
+                "date": "19.01.2026"
+              },
+              {
+                "label": "데이터 수집 (문헌)",
+                "date": "02.02. – 05.04.2026"
+              },
+              {
+                "label": "측정 포함 현장 시험 + 설문",
+                "date": "23.03. – 05.04.2026"
+              },
+              {
+                "label": "SimaPro 모델링",
+                "date": "23.03. – 03.05.2026"
+              },
+              {
+                "label": "타당성 검증 + 반복",
+                "date": "11.05. – 18.05.2026"
+              },
+              {
+                "label": "영향 평가 + 민감도 분석",
+                "date": "18.05. – 24.05.2026"
+              },
+              {
+                "label": "결과 발표",
+                "date": "25.05. – 31.05.2026"
+              },
+              {
+                "label": "보고서 작성 + 최종화",
+                "date": "26.05. – 18.06.2026"
+              }
+            ],
+            "cite": "cit05_zhaw_gantt"
+          },
+          "scope": {
+            "title": "LCA가 검토하는 것",
+            "items": [
+              "사무실, 계단실, 학교 건물의 벽면·천장 조명 용도",
+              "LED 백라이트 PC 모니터에 초점",
+              "개조 정도: LCD 제거만 vs 대기 우회 vs LED 스트립 교체 vs 전원부 전체 교체",
+              "화면 기술별 수명 시나리오",
+              "폐기 시점의 평균 연령",
+              "광 출력 비교: 모니터 조명 vs 일반 광원 (측정 포함)",
+              "브레이크이븐 포인트: 어떤 사용 기간에 재사용이 생태적으로 의미 있는가"
+            ],
+            "cite": "cit01_innolink"
+          },
+          "history": "원래 학술 평가는 FHNW(Christoph Hugi 교수, Institut für Ecopreneurship)가 담당할 예정이었습니다. 역량 문제로 FHNW가 빠지면서 ZHAW가 2025년 가을 Innosuisse Innoscheck를 통해 인수했습니다.",
+          "historyCite": "cit01_innolink"
+        },
+        "ce": {
+          "eyebrow": "CE 적합성",
+          "title": "전략: 기존 CE 확인, 재인증 아님.",
+          "intro": "개조 과정에서 모니터의 CE 상태에 영향을 줄 새 부품을 추가하지 않습니다. 또한 벽면·천장 조명은 작업대의 모니터보다 사람으로부터 멀리 있고 직접 응시되지도 않습니다.",
+          "approach": {
+            "title": "2단계의 접근",
+            "items": [
+              {
+                "label": "Barologic GmbH Winterthur의 감정서",
+                "body": "2단계의 범위에서 Barologic이 업사이클 조명의 기존 CE 적합성을 확인하는 감정서를 작성합니다. 예산 2,000 CHF.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "label": "필요 시: 해외 재인증",
+                "body": "일회성 CE 재인증은 독일 Reichenwalde의 Eurofins에 의뢰할 수 있습니다. ElektroSuisse에 따르면 스위스에서는 이런 종류의 인증을 수행하지 않습니다.",
+                "cite": "cit04_kurzbericht_e1"
+              }
             ]
           }
         },
-        "risks": {
-          "eyebrow": "RISKS",
-          "title": "What can go wrong.",
-          "intro": "Honest list instead of marketing. We write mitigations next to each risk where we have one.",
+        "partner": {
+          "eyebrow": "파트너",
+          "title": "누가 무엇을 기여하는가 — 확인 가능한 이름만.",
+          "intro": "이 목록은 프로젝트 문서에 이름으로 등장하는 조직과 개인만 포함합니다. 가상의 또는 추측에 의한 파트너는 표시하지 않습니다.",
+          "groups": [
+            {
+              "title": "주요 파트너",
+              "items": [
+                {
+                  "name": "Verein revamp-it",
+                  "role": "프로젝트 주체, 수집, 작업장 조정",
+                  "cite": "cit01_innolink"
+                },
+                {
+                  "name": "Werkraum 4 (Stiftung zsge)",
+                  "role": "생산 파트너. 동행 지원하에 클라이언트를 고용. 라벨 recyclingArt + lerski.",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "werkraum4.ch",
+                  "linkUrl": "https://www.werkraum4.ch"
+                },
+                {
+                  "name": "ZHAW Institut für Nachhaltige Entwicklung",
+                  "role": "학술 평가 — ISO 14044 기반 LCA (프로젝트 132.351 INNO-EE).",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "자금 제공자",
+              "items": [
+                {
+                  "name": "Swico Innovationsfonds",
+                  "role": "1·2단계 주요 자금 제공자 (승인됨, 단계별 지급).",
+                  "cite": "cit01_innolink",
+                  "linkLabel": "Swico",
+                  "linkUrl": "https://www.swico.ch"
+                },
+                {
+                  "name": "Innosuisse",
+                  "role": "ZHAW 평가용 Innoscheck 지원 (급여 15,000 CHF).",
+                  "cite": "cit01_innolink",
+                  "linkLabel": "Innosuisse",
+                  "linkUrl": "https://www.innosuisse.admin.ch/"
+                },
+                {
+                  "name": "Umwelt- und Gesundheitsschutz Stadt Zürich",
+                  "role": "2023년 사전 작업·지원서 작성용 초기 자금 10,000 CHF.",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "자재·수거 채널",
+              "items": [
+                {
+                  "name": "ERZ Entsorgung + Recycling Zürich",
+                  "role": "Swico Recycling과 협의하에 시 수거에서 보다 큰 규모 업사이클 논의 중.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Swico Recycling",
+                  "role": "스위스 전국 수거 시스템. 자재 사전 선별의 스케일업 파트너.",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "swico.ch/de/recycling",
+                  "linkUrl": "https://www.swico.ch/de/recycling/"
+                }
+              ]
+            },
+            {
+              "title": "기술 전문성과 적합성",
+              "items": [
+                {
+                  "name": "Barologic GmbH Winterthur",
+                  "role": "업사이클 조명 CE 감정서 (Roland Bamert).",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Benjamin Ernst (ReCreaZZZ)",
+                  "role": "사례비 기반 전자 기술자. 대기 우회용 전압 분배기 솔루션 개발.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Eurofins Reichenwalde (DE)",
+                  "role": "일회성 CE 재인증 가능 경로 (스위스에서는 제공되지 않음).",
+                  "cite": "cit04_kurzbericht_e1"
+                }
+              ]
+            },
+            {
+              "title": "프로젝트 팀",
+              "items": [
+                {
+                  "name": "Andreas Rudin (revamp-it)",
+                  "role": "프로젝트 조정, 협회 이사.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Mike Rey (revamp-it)",
+                  "role": "프로젝트 책임, 학술 파트너 연락, 시범 현장 평가.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Gregor Szombath (Werkraum 4)",
+                  "role": "생산 책임, 클라이언트 지도, 소량 생산 문서화.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Daniel Afzali (revamp-it)",
+                  "role": "개조 단계와 시범 적용의 사진·영상 문서화.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Corinna Baumgartner (ZHAW)",
+                  "role": "학술 평가의 프로젝트 책임자.",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "외부 전문가 네트워크",
+              "intro": "2023년 Klimastiftung 지원서 — 수리 및 오픈 하드웨어 커뮤니티.",
+              "items": [
+                {
+                  "name": "Balz Krügel (Reparabel)",
+                  "role": "수리 전문성",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Roland Bamert (Barologic / Revita repair)",
+                  "role": "전기 공학 + 적합성",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Rolf Huber (Reparaturia, Oerlikon)",
+                  "role": "수리 커뮤니티",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Karel Kulhavy",
+                  "role": "OpenSource Hardware Ronja 개발자",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "ronja.twibright.com",
+                  "linkUrl": "http://ronja.twibright.com"
+                },
+                {
+                  "name": "Hasan Hüseyin Isik",
+                  "role": "메카트로닉스 혁신",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "isikinnovations.com",
+                  "linkUrl": "https://isikinnovations.com"
+                },
+                {
+                  "name": "Martin Flüeler (Winnetui Atelier-Werkstatt Schwerzenbach)",
+                  "role": "오픈 아틀리에 워크숍",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Schweizerische Gesellschaft für Mechatronische Kunst",
+                  "role": "예술·기술 네트워크",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "mechatronicart.ch",
+                  "linkUrl": "https://mechatronicart.ch"
+                }
+              ]
+            }
+          ],
+          "klimastNote": "Klimastiftung Schweiz는 프로젝트를 긍정적으로 평가했지만 2단계 결과가 나올 때까지 자금 지원을 보류하고 있습니다. 이 때문에 여기서는 자금 제공자로 표시하지 않습니다.",
+          "klimastCite": "cit04_kurzbericht_e1"
+        },
+        "risiken": {
+          "eyebrow": "리스크 · 미해결 질문",
+          "title": "마케팅 대신 정직한 목록.",
+          "intro": "이 목록은 Swico 자문위원회 2025-10-31자 회신서 (2단계를 충분치 않다고 평가)와 1단계 단기 보고서를 따릅니다. 각 항목에는 상태가 있으며 희망적 사고는 없습니다.",
           "items": [
             {
-              "label": "Sheltered workshop drops out",
-              "severity": "High",
-              "mitigation": "Build more than one workshop partnership (Drahtzug + FARO + St. Jakob). Document manuals so any workshop can step in."
+              "label": "판매 시장이 아직 신뢰성 있게 입증되지 않음",
+              "status": "미해결",
+              "body": "Swico 자문위원회는 2025-10-31자 서한에서 2단계 목표가 충분히 달성되지 않았음을 명시 — 시장, 경제, 환경 영향에 대한 신뢰성 있는 결과가 여전히 부족. 2단계 시범 설치로 이를 보완합니다.",
+              "cite": "cit03_swico_oct2025"
             },
             {
-              "label": "CE conformity delayed or fails",
-              "severity": "High",
-              "mitigation": "Q4 2026 with external test lab. If delayed: B2B pilot installations without commercial sale, for data collection."
+              "label": "경제적 영향 — 단가와 마진",
+              "status": "미해결",
+              "body": "신뢰성 있는 단가는 소량 생산 완료 후에야 확보됩니다. 평가는 2026년 6월 말 2단계 최종 보고서에 포함됩니다.",
+              "cite": "cit03_swico_oct2025"
             },
             {
-              "label": "B2B willingness to pay below CHF 150",
-              "severity": "Medium",
-              "mitigation": "Structured interviews Q4 2026 before scaling. If low: increase B2C share, hold foundation share longer."
+              "label": "학술 분석 (ZHAW LCA)",
+              "status": "진행 중",
+              "body": "보고서 작성은 2026-06-18까지, 발표는 2026년 5월 말 완료. SimaPro 모델링은 5월 중순에 완료.",
+              "cite": "cit05_zhaw_gantt"
             },
             {
-              "label": "LCA shows worse CO₂ profile than hoped",
-              "severity": "Medium",
-              "mitigation": "We publish the result unchanged, even if unfavourable. Value proposition shifts to repairability + local value creation rather than pure CO₂."
+              "label": "Barologic CE 감정서",
+              "status": "계획됨",
+              "body": "2단계 범위에서 의뢰. 예산 2,000 CHF 확보.",
+              "cite": "cit04_kurzbericht_e1"
             },
             {
-              "label": "Monitor supply collapses (ERZ contract changes)",
-              "severity": "Medium",
-              "mitigation": "Build a second source (private collection points, IT-lifecycle providers). Keep at least 50 monitors in reserve."
+              "label": "다른 모니터 모델의 대기 우회 문서화",
+              "status": "5 / 12+",
+              "body": "현재 5개 모델에 대해 완성된 매뉴얼 보유. 2단계에서는 모든 매뉴얼을 공개 위키로 정리해 전 세계 전자 기술자가 참여할 수 있도록 합니다.",
+              "cite": "cit04_kurzbericht_e1"
             },
             {
-              "label": "Liability for defects — who carries it?",
-              "severity": "Medium",
-              "mitigation": "Open question Q05. Options: certified engineer model, partner takeover, insurance model. Decision before series sales."
+              "label": "Klimastiftung 후속 지원",
+              "status": "대기",
+              "body": "Klimastiftung Schweiz는 2단계 결과가 확보된 후에만 자금을 지원합니다. 2026년 이후 스케일업 단계에 후속 신청 예정.",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "초기 학술 파트너 FHNW 이탈",
+              "status": "해결됨",
+              "body": "FHNW는 역량 문제로 계속할 수 없었음. ZHAW가 Innosuisse Innoscheck를 통해 인수 — 시간 손실은 있었지만 평가의 공백은 없음.",
+              "cite": "cit01_innolink"
             }
           ]
         },
-        "partners": {
-          "eyebrow": "PARTNER ECOSYSTEM",
-          "title": "Who takes which role.",
-          "intro": "The project only works as a network. Active and potential partners here.",
-          "groups": [
+        "foerderung": {
+          "eyebrow": "자금 조달",
+          "title": "실제로 확보된 것.",
+          "intro": "세 가지 자금원이 활성, 하나는 제출되어 대기 중, 하나는 보류. 가상의 재단도, 희망 목록도 없음.",
+          "lines": [
             {
-              "key": "production",
-              "title": "Production & workshops",
-              "names": [
-                "Drahtzug",
-                "FARO",
-                "St. Jakob",
-                "Palme"
-              ]
+              "label": "취리히시 환경 보건국",
+              "status": "수령",
+              "amount": "10'000 CHF",
+              "note": "2023년 사전 작업·지원서 작성용 초기 자금 10,000 CHF.",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "pilots",
-              "title": "Pilot locations (property)",
-              "names": [
-                "Livit",
-                "Wincasa",
-                "Allreal",
-                "ISS"
-              ]
+              "label": "revamp-it 자체 자금",
+              "status": "투입",
+              "amount": "ca. 80'500 CHF",
+              "note": "수집, 시험, 보관, 2023–2024 지원서 작성.",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "material",
-              "title": "Material source",
-              "names": [
-                "ERZ Zürich"
-              ]
+              "label": "Swico Innovationsfonds",
+              "status": "승인",
+              "amount": "ca. 300'000 CHF (gesamt)",
+              "note": "단계별 지급 (1·2단계). 결정 기구: Roger Gnos 의장의 Swico 자문위원회.",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "science",
-              "title": "Scientific partnership",
-              "names": [
-                "ZHAW (LCA & cost-benefit analysis)"
-              ]
+              "label": "Innosuisse Innoscheck (ZHAW LCA)",
+              "status": "제출",
+              "amount": "15'000 CHF",
+              "note": "Innolink 지원서 132.351 INNO-EE 2025년 11월 제출.",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "funding",
-              "title": "Funding",
-              "names": [
-                "Swico Innovationsfonds",
-                "Klimastiftung Schweiz",
-                "KliK",
-                "Gebert Rüf"
-              ]
+              "label": "Klimastiftung Schweiz",
+              "status": "보류",
+              "amount": "—",
+              "note": "긍정적 평가. 자금 지원은 2단계 결과 확보 후.",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "소량 생산 판매 수익",
+              "status": "모델 수치",
+              "amount": "30–50'000 CHF",
+              "note": "소량 생산 판매로 예산화된 비중. 실제 수치는 2단계 평가와 함께.",
+              "cite": "cit06_qa_swico_2023"
+            }
+          ]
+        },
+        "mitmachen": {
+          "eyebrow": "참여하기",
+          "title": "프로젝트를 지원하는 네 가지 구체적 방법.",
+          "intro": "시범 현장, 하드웨어, 작업장 파트너, 자금 제공자 추천을 찾고 있습니다. 직접 연락: Andreas Rudin, andreas.rudin@revamp-it.ch, +41 43 960 32 64.",
+          "options": [
+            {
+              "key": "pilot",
+              "title": "시범 현장 되기",
+              "body": "귀하의 계단실, 사무실, 학교에 시험 설치하고 수명과 전력 소비를 학술적으로 평가합니다. 세 가지 사용 패턴을 찾습니다: 상시 운전, 주간/주말 타이머, 동작 감지기.",
+              "ctaLabel": "시범 문의",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%EC%8B%9C%EB%B2%94%20%ED%98%84%EC%9E%A5%20Monitor-Upcycling",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "donate",
+              "title": "모니터 기증",
+              "body": "19–24인치, LED 백라이트, 전원이 켜지는 것 — 스크래치나 픽셀 결함은 환영. CRT, 전원 고장, 본체 파손은 받지 않음. 인계 장소: Birmensdorferstr. 379, 8055 Zürich.",
+              "ctaLabel": "기기 기증",
+              "ctaHref": "/get-involved/donate",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "workshop",
+              "title": "작업장 파트너 되기",
+              "body": "다른 보호 작업장과 Repair Café: 매뉴얼, 도구, 대기 우회 솔루션을 공유합니다. 목표는 공개 위키 데이터베이스.",
+              "ctaLabel": "작업장 문의",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%EC%9E%91%EC%97%85%EC%9E%A5%20%ED%8C%8C%ED%8A%B8%EB%84%88%EC%8B%AD%20Monitor-Upcycling",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "fund",
+              "title": "자금 제공자 추천",
+              "body": "오픈 하드웨어 + 사회 혁신 + 스위스 자재 순환에 맞는 재단을 찾습니다. 알고 있거나 연결해 줄 수 있다면 짧은 메모면 충분합니다.",
+              "ctaLabel": "추천 보내기",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%EC%9E%90%EA%B8%88%20%EC%A0%9C%EA%B3%B5%EC%9E%90%20Monitor-Upcycling",
+              "cite": null
+            }
+          ]
+        },
+        "belege": {
+          "eyebrow": "출처 · 참고자료",
+          "title": "모든 수치, 모든 주장 — 출처와 함께.",
+          "intro": "내부 문서 또는 외부 링크, 원문 그대로 인용 가능. 누락된 부분이 있거나 주장을 검증하려면 연락해 주세요.",
+          "citations": [
+            {
+              "key": "cit01_innolink",
+              "label": "Innolink 신청서 132.351 INNO-EE",
+              "detail": "Innosuisse Innovation Booster / Innoscheck 신청서 «광원으로서 모니터 재사용의 환경 성과 평가», ZHAW + Verein revamp-it, 2025년 11월 21일",
+              "url": null
+            },
+            {
+              "key": "cit02_swico_feb2026",
+              "label": "Swico 회신 2026-03-12",
+              "detail": "Swico Innovationsfonds, 프로젝트 02-2023-01 회신서, Roger Gnos, 2026년 3월 12일 — 2단계 최종 보고서 기한을 2026-06-30로 연장, 최종 발표 2026-07-03 09:00",
+              "url": "https://www.swico.ch"
+            },
+            {
+              "key": "cit03_swico_oct2025",
+              "label": "Swico 회신 2025-10-31",
+              "detail": "Swico Innovationsfonds, 프로젝트 02-2023-01 회신서, Roger Gnos, 2025년 10월 31일 — 2단계 목표 미달, LCA 필수 아님",
+              "url": null
+            },
+            {
+              "key": "cit04_kurzbericht_e1",
+              "label": "1단계 단기 보고서 (2026-03-12 시점)",
+              "detail": "Verein revamp-it, 프로젝트 2023-02-01 «IT 기기의 기능적 순환 이용» 1단계 단기 보고서, 2026년 3월 12일 개정판",
+              "url": null
+            },
+            {
+              "key": "cit05_zhaw_gantt",
+              "label": "ZHAW 프로젝트 계획 132.351 INNO-EE",
+              "detail": "ZHAW Institut für Nachhaltige Entwicklung, 프로젝트 132.351 INNO-EE의 Gantt 계획 (킥오프 2026-01-19, 보고서 2026-06-18), 2026-01-20 시점",
+              "url": null
+            },
+            {
+              "key": "cit06_qa_swico_2023",
+              "label": "Swico 질의서, revamp-it 응답 2023-09-28",
+              "detail": "Verein revamp-it, «IT 기기의 기능적 순환 이용» 신청에 대한 Swico 질의서 응답, Andreas Rudin, 2023년 9월 28일",
+              "url": null
+            },
+            {
+              "key": "cit07_klimast_2023",
+              "label": "Klimastiftung 신청 revamp-it 2023",
+              "detail": "Verein revamp-it, Klimastiftung Schweiz 신청 «IT 기기의 기능적 순환 이용», 2023년 8월 31일 시점",
+              "url": null
+            },
+            {
+              "key": "cit08_modelle_md",
+              "label": "개조 모델 정보 (revamp-it / ReCreaZZZ)",
+              "detail": "지금까지 개조한 모니터 모델과 전압 분배기 기술 메모, 2025년 2월 26일 시점",
+              "url": null
+            },
+            {
+              "key": "cit09_brilliant_jumbo",
+              "label": "사진 Brilliant ABIE LED Panel 24W, Jumbo 매장",
+              "detail": "Jumbo 매장 진열대에서 촬영 (24W 40×40 cm CCT+DIM+RGB+리모컨, 판매가 CHF 79.95)",
+              "url": "https://www.jumbo.ch"
+            },
+            {
+              "key": "cit10_film",
+              "label": "영상: 모니터를 조명으로 개조",
+              "detail": "개조 과정의 영상 기록. Revamp-IT Nextcloud 인스턴스에서 호스팅",
+              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+            },
+            {
+              "key": "cit11_vesa",
+              "label": "VESA 표준 MIS-D",
+              "detail": "모니터 뒷면의 75/100 mm 홀 간격 표준 (장착)",
+              "url": "https://www.vesa-standard.de/vesa-mis-d.html"
+            },
+            {
+              "key": "cit12_oshwa",
+              "label": "Open Source Hardware Association",
+              "detail": "오픈 하드웨어 라이선스와 정의 표준",
+              "url": "https://www.oshwa.org/"
+            },
+            {
+              "key": "cit13_ohwr",
+              "label": "Open Hardware Repository (CERN)",
+              "detail": "오픈 하드웨어 프로젝트 플랫폼",
+              "url": "https://ohwr.org/welcome"
+            },
+            {
+              "key": "cit14_swico_recycling",
+              "label": "Swico Recycling",
+              "detail": "선납 재활용 요금으로 운영되는 스위스의 IT 전자 기기 수거 시스템",
+              "url": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "key": "cit15_erz",
+              "label": "ERZ Entsorgung + Recycling Zürich",
+              "detail": "취리히시 자재 수거 거점",
+              "url": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "key": "cit16_klimast",
+              "label": "Klimastiftung Schweiz",
+              "detail": "스위스 기후 재단 — 중소기업 지원 프로그램",
+              "url": "https://www.klimastiftung.ch/"
+            },
+            {
+              "key": "cit17_innosuisse",
+              "label": "Innosuisse",
+              "detail": "스위스 혁신 진흥 기관",
+              "url": "https://www.innosuisse.admin.ch/"
+            },
+            {
+              "key": "cit18_iso14044",
+              "label": "ISO 14044",
+              "detail": "전과정평가 표준 — 요구 사항과 지침",
+              "url": "https://www.iso.org/standard/38498.html"
+            },
+            {
+              "key": "cit19_werkraum4",
+              "label": "Werkraum 4 (Stiftung zsge)",
+              "detail": "Stiftung zsge의 브랜드, 라벨 recyclingArt와 lerski의 생산 파트너",
+              "url": "https://www.werkraum4.ch"
+            },
+            {
+              "key": "cit20_barologic",
+              "label": "Barologic GmbH Winterthur",
+              "detail": "업사이클 조명 CE 감정서 (Roland Bamert)",
+              "url": "https://barologic.ch"
             }
           ]
         }

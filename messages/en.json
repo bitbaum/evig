@@ -6348,405 +6348,973 @@
       },
       "businessPlan": {
         "meta": {
-          "title": "Business plan & research",
-          "description": "Reports, studies and the economic foundation of the monitor-upcycling project."
+          "title": "Business plan — monitor upcycling into wall and ceiling lights",
+          "description": "Honest evidence page: what actually exists, with sources. Status June 2026."
         },
         "nav": {
           "label": "Contents",
           "items": [
             {
-              "id": "marktforschung",
-              "label": "Market research"
+              "id": "status",
+              "label": "Current status"
             },
             {
-              "id": "alternatives",
-              "label": "Alternatives"
-            },
-            {
-              "id": "segments",
-              "label": "Customers"
+              "id": "produkt",
+              "label": "What we build"
             },
             {
               "id": "lieferanten",
               "label": "Suppliers"
             },
             {
-              "id": "economics",
+              "id": "alternativen",
+              "label": "Market alternatives"
+            },
+            {
+              "id": "kunden",
+              "label": "Customers & marketing"
+            },
+            {
+              "id": "wirtschaftlichkeit",
               "label": "Economics"
             },
             {
-              "id": "funding",
-              "label": "Funding"
+              "id": "wissenschaft",
+              "label": "Scientific evaluation"
             },
             {
-              "id": "risks",
-              "label": "Risks"
+              "id": "ce",
+              "label": "CE conformity"
             },
             {
-              "id": "partners",
+              "id": "partner",
               "label": "Partners"
             },
             {
-              "id": "research",
-              "label": "Research"
+              "id": "risiken",
+              "label": "Risks & open questions"
             },
             {
-              "id": "openQuestions",
-              "label": "Open questions"
+              "id": "foerderung",
+              "label": "Funding"
             },
             {
-              "id": "getInvolved",
+              "id": "mitmachen",
               "label": "Get involved"
-            }
-          ]
-        },
-        "research": {
-          "title": "What we're currently studying",
-          "intro": "These studies are in progress or commissioned. Results land here once they hold up.",
-          "items": [
-            {
-              "title": "Life-cycle assessment (LCA) — ZHAW",
-              "status": "In progress · Results Q3 2026",
-              "description": "Full life-cycle analysis of the Lenovo L2251pwd retrofit lamp versus a newly produced LED lamp of comparable brightness. Method: ISO 14040/14044."
             },
             {
-              "title": "B2B willingness to pay",
-              "status": "Planned · Q4 2026",
-              "description": "Structured interviews with ~10 property managers and design agencies to validate the CHF 150–250 price range."
-            },
-            {
-              "title": "CE conformity",
-              "status": "In preparation · Q4 2026",
-              "description": "Low-voltage directive, EMC, RoHS. External test lab for the Q4 pilot series."
+              "id": "belege",
+              "label": "Sources & references"
             }
           ]
-        },
-        "downloads": {
-          "title": "Downloads",
-          "note": "Reports will be linked here once published. If you need an early draft for a funding decision, write to us — we share the current state of work honestly.",
-          "cta": "kontakt@revamp-it.ch"
         },
         "hero": {
           "eyebrow": "BUSINESS PLAN",
-          "title": "Market, customers, economics — and what can go wrong.",
-          "intro": "An honest picture for funders, pilot partners, and buyers. Every section is collapsible so you can pick the depth you need."
+          "title": "Wall and ceiling lights from decommissioned computer monitors.",
+          "intro": "We retrofit the still-working LCD backlights of monitors currently entering Switzerland's IT recycling stream into wall and ceiling lights. This page is the honest evidence version of the project — not a marketing narrative, but what actually exists as of June 2026, with sources.",
+          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
+          "heroImageAlt": "Retrofitted Lenovo L2251pwd monitor lit as a wall panel, workshop bench photo from 28 May 2026"
         },
-        "marketContext": {
-          "eyebrow": "MARKET CONTEXT",
-          "title": "What we should be compared against.",
-          "intro": "We're not selling a 'designer lamp' against Vitra — we're selling a repairable, locally made desk lamp against mass-produced imports.",
-          "alternatives": [
+        "status": {
+          "eyebrow": "CURRENT STATUS · JUNE 2026",
+          "title": "Where the project stands today.",
+          "intro": "Stage 1 complete, stage 2 in its closing phase. The ZHAW scientific evaluation runs in parallel; the report is dated 18 June 2026.",
+          "kpis": [
             {
-              "label": "IKEA Tertial / desk lamp (new)",
-              "price": "CHF 15–35",
-              "tradeoff": "Low price, newly produced, short lifespan (~3 years), not repairable. Mass production in Asia — high material footprint per hour of light."
+              "label": "Stage status",
+              "value": "Etappe 2 läuft",
+              "note": "Final report to Swico due by 30.06.2026",
+              "cite": "cit02_swico_feb2026"
             },
             {
-              "label": "Mainstream LED desk lamp (BenQ, Philips Hue)",
-              "price": "CHF 80–250",
-              "tradeoff": "Good light quality, sealed electronics — repair impossible. CO₂ footprint dominated by manufacturing."
+              "label": "ZHAW LCA report",
+              "value": "18.06.2026",
+              "note": "Project 132.351 INNO-EE, report drafting per Gantt plan",
+              "cite": "cit05_zhaw_gantt"
             },
             {
-              "label": "Swiss design desk lamp (Vitra, USM, Lehni)",
-              "price": "CHF 300–800+",
-              "tradeoff": "High quality, often repairable, long-lasting — but newly produced. Price only for upper segment."
+              "label": "Final presentation",
+              "value": "03.07.2026, 09:00",
+              "note": "Swico head office, Lagerstrasse 33, 8004 Zurich",
+              "cite": "cit02_swico_feb2026"
             },
             {
-              "label": "Upcycling desk lamps from designer studios",
-              "price": "CHF 200–600",
-              "tradeoff": "One-off pieces from leftovers — rarely reproducible, no standardised manual, often without CE."
-            },
-            {
-              "label": "Our proposition",
-              "price": "CHF 150–250",
-              "tradeoff": "Reproducible thanks to open guides, made in Switzerland (sheltered workshop), repairable, CE-conformity planned. Input material donated — low material footprint.",
-              "isOurs": true
+              "label": "Models retrofitted so far",
+              "value": "12 erfolgreich",
+              "note": "5 with documented standby workaround; further instructions added in stage 2",
+              "cite": "cit08_modelle_md"
             }
-          ],
-          "verdict": "We compete with mid-range LED — not IKEA, not Vitra. Our selling point is not price; it's repairability, provenance and material flow."
+          ]
         },
-        "segments": {
-          "eyebrow": "CUSTOMER SEGMENTS",
-          "title": "Who buys it — and who does not.",
-          "intro": "Two channels tested in parallel. Each needs a different message, sales path and order size.",
-          "b2b": {
-            "label": "B2B (volume buyers)",
-            "volume": "50–80 % of the small series",
-            "description": "Property managers for ancillary spaces and stairwells, co-working spaces, architecture and design agencies, smaller hotels. Buying argument: sustainability story + reliable delivery of 10–50 units.",
-            "examples": [
-              "Livit",
-              "Wincasa",
-              "Allreal",
-              "universities",
-              "cooperative cafés"
+        "produkt": {
+          "eyebrow": "WHAT WE BUILD",
+          "title": "Monitor → wall or ceiling light. No new device, no new plastic.",
+          "intro": "We reuse three components that still work in the decommissioned monitor: the power supply, the LED backlight, and the housing. The result is a light fixture for offices, stairwells, and school buildings.",
+          "buildSteps": {
+            "title": "How the retrofit works",
+            "steps": [
+              {
+                "title": "Pick suitable devices",
+                "body": "Monitors with LED backlights have priority: lower energy use, higher light output, almost no additional material needed.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "Check eligibility",
+                "body": "Suitable: scratches, holes, pixel defects, broken image rendering. Not suitable: broken power supply, fractured housing.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "Install the standby bypass",
+                "body": "Many monitors drop into standby after a few minutes. The fix: a small voltage divider on the low-voltage side of the power supply, soldered onto a self-made connector. One instruction sheet per monitor type.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "Mount it",
+                "body": "Most models have the VESA MIS-D hole pattern on the back — off-the-shelf monitor wall/ceiling mounts fit directly. For wall mounting we use bed-frame bearing fittings; for ceiling mounting, a 3D-printed clip to prevent the monitor from sliding sideways.",
+                "cite": "cit04_kurzbericht_e1",
+                "linkLabel": "VESA MIS-D standard",
+                "linkUrl": "https://www.vesa-standard.de/vesa-mis-d.html"
+              }
             ]
           },
-          "b2c": {
-            "label": "B2C (individual buyers)",
-            "volume": "20–50 % of the small series",
-            "description": "Design-conscious individuals buying a story and aesthetic — not the cheapest function. Plus: students and cooperative flatshares as a budget variant.",
-            "examples": [
-              "design-shop visitors",
-              "architects (private)",
-              "maker community",
-              "flatshare renovations"
-            ]
-          }
-        },
-        "risks": {
-          "eyebrow": "RISKS",
-          "title": "What can go wrong.",
-          "intro": "Honest list instead of marketing. We write mitigations next to each risk where we have one.",
-          "items": [
-            {
-              "label": "Sheltered workshop drops out",
-              "severity": "High",
-              "mitigation": "Build more than one workshop partnership (Drahtzug + FARO + St. Jakob). Document manuals so any workshop can step in."
-            },
-            {
-              "label": "CE conformity delayed or fails",
-              "severity": "High",
-              "mitigation": "Q4 2026 with external test lab. If delayed: B2B pilot installations without commercial sale, for data collection."
-            },
-            {
-              "label": "B2B willingness to pay below CHF 150",
-              "severity": "Medium",
-              "mitigation": "Structured interviews Q4 2026 before scaling. If low: increase B2C share, hold foundation share longer."
-            },
-            {
-              "label": "LCA shows worse CO₂ profile than hoped",
-              "severity": "Medium",
-              "mitigation": "We publish the result unchanged, even if unfavourable. Value proposition shifts to repairability + local value creation rather than pure CO₂."
-            },
-            {
-              "label": "Monitor supply collapses (ERZ contract changes)",
-              "severity": "Medium",
-              "mitigation": "Build a second source (private collection points, IT-lifecycle providers). Keep at least 50 monitors in reserve."
-            },
-            {
-              "label": "Liability for defects — who carries it?",
-              "severity": "Medium",
-              "mitigation": "Open question Q05. Options: certified engineer model, partner takeover, insurance model. Decision before series sales."
-            }
-          ]
-        },
-        "partners": {
-          "eyebrow": "PARTNER ECOSYSTEM",
-          "title": "Who takes which role.",
-          "intro": "The project only works as a network. Active and potential partners here.",
-          "groups": [
-            {
-              "key": "production",
-              "title": "Production & workshops",
-              "names": [
-                "Drahtzug",
-                "FARO",
-                "St. Jakob",
-                "Palme"
-              ]
-            },
-            {
-              "key": "pilots",
-              "title": "Pilot locations (property)",
-              "names": [
-                "Livit",
-                "Wincasa",
-                "Allreal",
-                "ISS"
-              ]
-            },
-            {
-              "key": "material",
-              "title": "Material source",
-              "names": [
-                "ERZ Zürich"
-              ]
-            },
-            {
-              "key": "science",
-              "title": "Scientific partnership",
-              "names": [
-                "ZHAW (LCA & cost-benefit analysis)"
-              ]
-            },
-            {
-              "key": "funding",
-              "title": "Funding",
-              "names": [
-                "Swico Innovationsfonds",
-                "Klimastiftung Schweiz",
-                "KliK",
-                "Gebert Rüf"
-              ]
-            }
-          ]
-        },
-        "marketResearch": {
-          "eyebrow": "MARKET RESEARCH",
-          "title": "What we know — and where the numbers come from.",
-          "intro": "Every claim has a source. We use public data where available and label assumptions clearly. The ZHAW LCA (Q3 2026) replaces the estimates with rigorous values.",
-          "datapoints": [
-            {
-              "label": "E-waste Switzerland",
-              "value": "131,400 tonnes / year",
-              "note": "Annual e-waste volume in Switzerland — many devices end up in recycling prematurely even though components still work.",
-              "sourceLabel": "BAFU + Swico Recycling",
-              "sourceUrl": "https://www.swico.ch/de/recycling/"
-            },
-            {
-              "label": "Displays in the stream",
-              "value": "~15% by weight",
-              "note": "Monitors + TVs make up a substantial share of the Swiss e-waste stream. ERZ Zürich and Swico collection points are the main channels.",
-              "sourceLabel": "ERZ Zürich",
-              "sourceUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
-            },
-            {
-              "label": "Repair movement",
-              "value": "200+ Repair Cafés",
-              "note": "Active repair initiatives in Switzerland — a grown community that establishes repair as the norm. We build on this network.",
-              "sourceLabel": "Repair Café Switzerland",
-              "sourceUrl": "https://repair-cafe.ch/"
-            }
-          ],
-          "methodologyNote": "Methodology: ISO 14040/14044 for the LCA. Validation against Apple PER and Öko-Institut LCA data. Detailed sources under each card group or on the Transparency page.",
-          "methodologyLinks": [
-            {
-              "label": "ISO 14040/14044",
-              "url": "https://www.iso.org/standard/37456.html"
-            },
-            {
-              "label": "Apple Product Environmental Reports",
-              "url": "https://www.apple.com/environment/"
-            },
-            {
-              "label": "Öko-Institut publications",
-              "url": "https://www.oeko.de/publikationen/"
-            }
-          ]
-        },
-        "suppliers": {
-          "eyebrow": "SUPPLIERS & MATERIAL FLOW",
-          "title": "Where the monitors come from — and why this scales.",
-          "intro": "Input material is the structural strength of the project: monitors are abundantly available in the Swiss e-waste stream, free of cost, and in most cases technically reusable.",
-          "sources": [
-            {
-              "key": "erz",
-              "label": "ERZ Zürich (Entsorgung + Recycling Zürich)",
-              "description": "Main source from Q4 2026. Structured handover of decommissioned monitors to Revamp-IT — before they enter the shredder.",
-              "volume": "~50–100 devices / month estimated",
-              "linkLabel": "ERZ Zürich",
-              "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
-            },
-            {
-              "key": "swico",
-              "label": "Swico recycling points",
-              "description": "Switzerland-wide network of return points for IT devices. Potential second source for diversification.",
-              "volume": "Scalable",
-              "linkLabel": "Swico Recycling",
-              "linkUrl": "https://www.swico.ch/de/recycling/"
-            },
-            {
-              "key": "private",
-              "label": "Private collection + corporate IT lifecycle",
-              "description": "Direct donations from companies with IT hardware refresh cycles and private donations. Built on existing Revamp-IT relationships.",
-              "volume": "~20 devices / month",
-              "linkLabel": "Donation overview",
-              "linkUrl": "/get-involved/donate"
-            }
-          ],
-          "criteria": {
-            "title": "Criteria for reuse",
+          "photoGallery": {
+            "title": "Lenovo L2251pwd retrofit, documented 28 May 2026",
+            "intro": "Six bench shots from May 2026, from the decommissioned source monitor to the glowing panel light.",
             "items": [
-              "LCD panel intact (backlight works)",
-              "Control electronics undamaged",
-              "Casing structurally whole (small scratches are OK)",
-              "Standard size 19–24 inch (for workshop efficiency)"
+              {
+                "src": "/projects/upcycling/businessplan/06-source-monitor-label.jpg",
+                "caption": "Source device: Lenovo Wide LCD Monitor, FCC/CE/RoHS label on the back. Made in Korea, Lenovo 2009."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/02-back-cover-opened.jpg",
+                "caption": "Housing opened. Left: the plastic back cover. Right: the aluminium carrier plate with adhesive strips and original screw locations."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/03-lcd-panel-removed.jpg",
+                "caption": "LCD panel removed. Visible: the exposed LED backlight and the control strip. The LCD layer is removed because, with no image content to display, it would only dim the light."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/04-electronics-spread.jpg",
+                "caption": "Electronics spread out: logic board (right), button board (left) and connecting cables. On most models the logic board stays in the housing — only a small power-supply modification is needed."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/05-standby-bypass-spannungsteiler.jpg",
+                "caption": "The standby bypass: two resistors as a voltage divider, soldered directly onto the connector going to the power-supply pin. This keeps the light permanently on instead of dropping into standby. Solution developed by Benjamin Ernst (ReCreaZZZ)."
+              },
+              {
+                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "caption": "Finished result. The monitor glows as a uniform light panel, in its original housing, with no new plastic parts."
+              }
             ]
+          },
+          "links": [
+            {
+              "label": "Film: retrofitting a monitor into a light (revamp-it Nextcloud)",
+              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+            },
+            {
+              "label": "Open Hardware Repository (CERN)",
+              "url": "https://ohwr.org/welcome"
+            },
+            {
+              "label": "Open Source Hardware Association",
+              "url": "https://www.oshwa.org/"
+            }
+          ]
+        },
+        "lieferanten": {
+          "eyebrow": "SUPPLIERS · MATERIAL FLOW",
+          "title": "The input material is already here — 150 Euro pallets in storage.",
+          "intro": "Before the project started, Revamp-IT systematically collected decommissioned IT hardware. As of 2023, 150 Euro pallets are available, including roughly 30 pallets of screens relevant for the upcycling work.",
+          "stockBreakdown": {
+            "title": "What's in the warehouse",
+            "subtitle": "Breakdown of the collected 150 Euro pallets",
+            "rows": [
+              {
+                "label": "Complete PCs in various sizes and ages",
+                "value": "ca. 40 Paletten"
+              },
+              {
+                "label": "Printers and multi-function devices",
+                "value": "ca. 30 Paletten"
+              },
+              {
+                "label": "Monitors, TVs and all-in-one computers",
+                "value": "ca. 30 Paletten",
+                "emphasis": true,
+                "note": "← input material for the light upcycling"
+              },
+              {
+                "label": "Server racks and server cases",
+                "value": "ca. 15 Paletten"
+              },
+              {
+                "label": "Thin clients and mini computers",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "PC cases",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "Cables",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "Keyboards",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "Scanners",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "Network gear",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "Other miscellaneous devices and parts",
+                "value": "ca. 5 Paletten"
+              }
+            ],
+            "cite": "cit06_qa_swico_2023"
+          },
+          "channels": {
+            "title": "Where the screens will come from in the future",
+            "items": [
+              {
+                "label": "Existing revamp-it stock",
+                "body": "30 pallets of monitors, TVs and all-in-ones are already sorted and categorised — enough for the stage 2 small series.",
+                "cite": "cit06_qa_swico_2023"
+              },
+              {
+                "label": "ERZ Entsorgung + Recycling Zürich",
+                "body": "Talks are under way with the City of Zurich's ERZ for a larger-scale monitor upcycling pipeline — in coordination with Swico Recycling.",
+                "cite": "cit04_kurzbericht_e1",
+                "linkLabel": "ERZ Zurich",
+                "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+              },
+              {
+                "label": "Swico recycling system (scaling option)",
+                "body": "Vision: every monitor and TV entering the Swiss recycling system gets pre-checked for upcycling suitability before material recovery.",
+                "cite": "cit07_klimast_2023",
+                "linkLabel": "Swico Recycling",
+                "linkUrl": "https://www.swico.ch/de/recycling/"
+              }
+            ]
+          },
+          "criteria": {
+            "title": "Devices we accept",
+            "items": [
+              "Screen powers on — power supply works",
+              "Housing is structurally whole (no fractures; scratches are fine)",
+              "LED backlight (higher priority than fluorescent tubes)",
+              "Standard size 19–24 inches"
+            ],
+            "cite": "cit04_kurzbericht_e1"
           },
           "rejected": {
             "title": "What we don't accept",
             "items": [
-              "CRT screens (too heavy, low efficiency)",
-              "Completely destroyed casings",
-              "Non-standard connectors"
+              "Broken power supply — screen won't power on",
+              "Severe fracture damage to the housing",
+              "CRT screens (too heavy, low efficiency)"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          }
+        },
+        "alternativen": {
+          "eyebrow": "MARKET ALTERNATIVES",
+          "title": "What we have to be measured against — honestly.",
+          "intro": "The product is a wall or ceiling light, not a designer table lamp. The realistic reference points are off-the-shelf LED panels from hardware stores, not table lamps by Vitra or USM.",
+          "benchmarkPhoto": {
+            "src": "/projects/upcycling/competitor-benchmark/brilliant-abie-led-panel.jpg",
+            "caption": "Brilliant ABIE LED Panel 24W 40×40 cm, CCT + DIM + RGB + remote. Retail price CHF 79.95 at Jumbo hardware store. Photographed in the aisle, 2026."
+          },
+          "alternativesTable": {
+            "title": "Comparable products on the retail shelf",
+            "rows": [
+              {
+                "label": "Brilliant ABIE LED Panel 24W, 40×40 cm",
+                "price": "CHF 79.95",
+                "note": "CCT + dimmer + RGB + remote control. Available at Jumbo.",
+                "cite": "cit09_brilliant_jumbo",
+                "linkLabel": "brilliant-ag.com",
+                "linkUrl": "https://www.brilliant-ag.com"
+              },
+              {
+                "label": "Brand-name LED panel 60×60 cm (office standard)",
+                "price": "CHF 80–200",
+                "note": "Classic office ceiling. Brands like LEDVANCE, Osram, Philips, Trilux.",
+                "cite": null,
+                "linkLabel": null,
+                "linkUrl": null
+              },
+              {
+                "label": "Unbranded discount LED panel",
+                "price": "CHF 30–60",
+                "note": "Asian import goods, no repair, almost no warranty.",
+                "cite": null,
+                "linkLabel": null,
+                "linkUrl": null
+              },
+              {
+                "label": "Upcycling monitor light (this project)",
+                "price": "open",
+                "note": "Unit cost and retail price are part of the stage 2 evaluation (Q4 still open).",
+                "cite": "cit03_swico_oct2025",
+                "linkLabel": null,
+                "linkUrl": null,
+                "isOurs": true
+              }
+            ]
+          },
+          "verdict": "We don't compete on price. Our arguments are provenance, repairability, and avoided new production. A serious price recommendation will come after the small-series evaluation and will be documented in the stage 2 final report."
+        },
+        "kunden": {
+          "eyebrow": "CUSTOMERS · MARKETING",
+          "title": "Who buys a wall or ceiling light made from a monitor?",
+          "intro": "From the stage 1 work and the response letter to Swico (28.09.2023), four target segments emerged — not a designer market, but professional lighting procurement behaviour.",
+          "segments": [
+            {
+              "label": "B2B direct — firms with large office floors",
+              "body": "Banks, insurance companies, public administrations. Pilot installations in stairwells and ancillary spaces, then inclusion in the procurement catalogue.",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "Furniture and interior fit-out companies",
+              "body": "Cooperation with Swiss interior outfitters who add upcycling lamps to their range — as a story and as a sustainable alternative to Asian mass production.",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "Hardware stores (DIY chains)",
+              "body": "Like the Brilliant panels: via established retail channels. High marketing effort, tight margins — more of a scaling option for later.",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "Real estate firms (renovation/new build)",
+              "body": "Direct use during renovations or new construction: upcycling lights instead of new products. Outreach via property managers and architecture firms.",
+              "cite": "cit06_qa_swico_2023"
+            }
+          ],
+          "pilotPlan": {
+            "title": "Planned stage 2 pilot installations",
+            "intro": "Three usage patterns, three locations with different power, lifespan and maintenance profiles — the data feeds the ZHAW life-cycle assessment and the unit-cost evaluation.",
+            "items": [
+              "24-hour operation (e.g. stairwell)",
+              "Off during nights/weekends (e.g. timed office)",
+              "Motion-sensor controlled (frequent on/off)"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          }
+        },
+        "wirtschaftlichkeit": {
+          "eyebrow": "ECONOMICS",
+          "title": "Stage 2 budget (CHF 50,000 Swico, CHF 15,000 Innosuisse).",
+          "intro": "The current stage 2 budget is clear. We deliberately do not publish unit costs for the finished lights — those will come from the small-series evaluation and be released in the stage 2 final report at the end of June 2026.",
+          "budget": {
+            "title": "Stage 2 budget per short report",
+            "note": "Gross need CHF 65,000, less CHF 15,000 Innosuisse Innoscheck = CHF 50,000 Swico share.",
+            "rows": [
+              {
+                "label": "Salaries and fees",
+                "value": "27'000 CHF"
+              },
+              {
+                "label": "Space, storage, transport",
+                "value": "12'000 CHF"
+              },
+              {
+                "label": "Scientific evaluation (ZHAW, Innoscheck)",
+                "value": "15'000 CHF",
+                "note": "paid by Innosuisse directly to ZHAW"
+              },
+              {
+                "label": "CE assessment by Barologic GmbH",
+                "value": "2'000 CHF"
+              },
+              {
+                "label": "Material costs",
+                "value": "1'000 CHF"
+              },
+              {
+                "label": "Marketing and outreach",
+                "value": "3'000 CHF"
+              },
+              {
+                "label": "Reserve",
+                "value": "5'000 CHF"
+              },
+              {
+                "label": "Subtotal",
+                "value": "65'000 CHF",
+                "emphasis": true
+              },
+              {
+                "label": "− Innosuisse Innoscheck",
+                "value": "−15'000 CHF"
+              },
+              {
+                "label": "Swico share of stage 2",
+                "value": "50'000 CHF",
+                "emphasis": true
+              }
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          },
+          "scopeNote": "What we deliberately don't state: unit costs per finished light. Any estimate without real stage 2 production data would be speculative. The real unit costs — and a serious price recommendation — will come with the stage 2 final report.",
+          "scopeCite": "cit03_swico_oct2025"
+        },
+        "wissenschaft": {
+          "eyebrow": "SCIENTIFIC EVALUATION",
+          "title": "ZHAW project 132.351 INNO-EE — life-cycle assessment per ISO 14044.",
+          "intro": "Innosuisse is funding a comparative life-cycle assessment (LCA) by ZHAW. It compares the environmental performance of the upcycling lamps against off-the-shelf LED and fluorescent lamps across the full life cycle.",
+          "factsheet": {
+            "title": "Project at a glance",
+            "rows": [
+              {
+                "label": "Project number",
+                "value": "132.351 INNO-EE",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "Title",
+                "value": "Environmental performance of the re-use of monitors as light sources",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "Research partner",
+                "value": "ZHAW Institute for Sustainable Development, School of Engineering, Winterthur",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "Project lead",
+                "value": "Corinna Baumgartner, ZHAW",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "Methodology",
+                "value": "Life-cycle assessment per ISO 14044, primary data prioritised, modelling in SimaPro",
+                "cite": "cit05_zhaw_gantt",
+                "linkLabel": "ISO 14044",
+                "linkUrl": "https://www.iso.org/standard/38498.html"
+              },
+              {
+                "label": "Innosuisse contribution",
+                "value": "CHF 15,000 salary costs",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "Implementation partner",
+                "value": "Verein revamp-it",
+                "cite": "cit01_innolink"
+              }
+            ]
+          },
+          "timeline": {
+            "title": "ZHAW project plan (Gantt 20.01.2026)",
+            "phases": [
+              {
+                "label": "Kick-off",
+                "date": "19.01.2026"
+              },
+              {
+                "label": "Data gathering (literature)",
+                "date": "02.02. – 05.04.2026"
+              },
+              {
+                "label": "Field tests incl. measurements + survey",
+                "date": "23.03. – 05.04.2026"
+              },
+              {
+                "label": "Modelling in SimaPro",
+                "date": "23.03. – 03.05.2026"
+              },
+              {
+                "label": "Plausibility check + iteration",
+                "date": "11.05. – 18.05.2026"
+              },
+              {
+                "label": "Impact assessment + sensitivity analysis",
+                "date": "18.05. – 24.05.2026"
+              },
+              {
+                "label": "Presentation of results",
+                "date": "25.05. – 31.05.2026"
+              },
+              {
+                "label": "Report drafting + finalisation",
+                "date": "26.05. – 18.06.2026"
+              }
+            ],
+            "cite": "cit05_zhaw_gantt"
+          },
+          "scope": {
+            "title": "What the LCA investigates",
+            "items": [
+              "Use as wall and ceiling lights in office buildings, stairwells and schools",
+              "Focus on PC monitors with LED backlights",
+              "Modification levels: LCD removal only vs. standby bypass vs. LED-strip replacement vs. full power-supply swap",
+              "Lifespan scenarios by screen technology",
+              "Average age at decommissioning",
+              "Light output comparison: monitor lamps vs. conventional light sources (with measurements)",
+              "Break-even points: at and up to what usage duration is the reuse ecologically worthwhile?"
+            ],
+            "cite": "cit01_innolink"
+          },
+          "history": "Originally the scientific work was meant to be done by FHNW (Prof. Christoph Hugi, Institute for Ecopreneurship). FHNW had to step out due to capacity constraints. ZHAW took over the mandate in autumn 2025 via an Innosuisse Innoscheck.",
+          "historyCite": "cit01_innolink"
+        },
+        "ce": {
+          "eyebrow": "CE CONFORMITY",
+          "title": "Strategy: confirm existing CE, don't re-certify.",
+          "intro": "The retrofit adds no new components that would affect the monitors' CE status. Wall and ceiling lights are also further away from people than monitors at a workstation and are not viewed directly.",
+          "approach": {
+            "title": "Approach in stage 2",
+            "items": [
+              {
+                "label": "Assessment by Barologic GmbH Winterthur",
+                "body": "Barologic prepares an assessment as part of stage 2 confirming the existing CE conformity of the upcycling lights. Budget: CHF 2,000.",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "label": "If needed: re-certification abroad",
+                "body": "A one-time CE re-certification could be commissioned at Eurofins in Reichenwalde, Germany. Per ElektroSuisse, this type of certification is not offered in Switzerland.",
+                "cite": "cit04_kurzbericht_e1"
+              }
             ]
           }
         },
-        "openQuestions": {
-          "eyebrow": "OPEN QUESTIONS",
-          "title": "What we don't know yet.",
-          "intro": "Honest list of open questions — no marketing filter. If you have an answer or a hunch, write to us.",
-          "items": [
+        "partner": {
+          "eyebrow": "PARTNERS",
+          "title": "Who contributes what — only verifiable names.",
+          "intro": "This list contains only organisations and people that appear by name in the project documents. Speculative or hypothetical partners are hidden.",
+          "groups": [
             {
-              "q": "Q01",
-              "title": "What exact light output do B2B buyers accept?",
-              "body": "The retrofitted lamp delivers 200–400 lumens. Mainstream LED lamps offer 600+ lumens. Is that enough for our target segments? Structured interviews Q4 2026.",
-              "tag": "Research Q4"
+              "title": "Lead partners",
+              "items": [
+                {
+                  "name": "Verein revamp-it",
+                  "role": "Project sponsor, collection, workshop coordination",
+                  "cite": "cit01_innolink"
+                },
+                {
+                  "name": "Werkraum 4 (Stiftung zsge)",
+                  "role": "Production partner, employs clients under supervision. Brands recyclingArt + lerski.",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "werkraum4.ch",
+                  "linkUrl": "https://www.werkraum4.ch"
+                },
+                {
+                  "name": "ZHAW Institut für Nachhaltige Entwicklung",
+                  "role": "Scientific evaluation — life-cycle assessment per ISO 14044 (project 132.351 INNO-EE).",
+                  "cite": "cit01_innolink"
+                }
+              ]
             },
             {
-              "q": "Q02",
-              "title": "What is the real lifespan of the LED drivers?",
-              "body": "We estimate 5–10 years conservatively. But real data we only have in 2–3 years. Warranty returns deliver first signals.",
-              "tag": "Pilot data"
+              "title": "Funders",
+              "items": [
+                {
+                  "name": "Swico Innovationsfonds",
+                  "role": "Main funder of stages 1+2 (approved, paid out in tranches).",
+                  "cite": "cit01_innolink",
+                  "linkLabel": "Swico",
+                  "linkUrl": "https://www.swico.ch"
+                },
+                {
+                  "name": "Innosuisse",
+                  "role": "Innoscheck funding for the ZHAW evaluation (CHF 15,000 salary costs).",
+                  "cite": "cit01_innolink",
+                  "linkLabel": "Innosuisse",
+                  "linkUrl": "https://www.innosuisse.admin.ch/"
+                },
+                {
+                  "name": "Umwelt- und Gesundheitsschutz Stadt Zürich",
+                  "role": "Initial CHF 10,000 in 2023 for preparatory work and applications.",
+                  "cite": "cit01_innolink"
+                }
+              ]
             },
             {
-              "q": "Q03",
-              "title": "Is a second workshop in parallel to Drahtzug worth it?",
-              "body": "Drahtzug alone has capacity limits. More than one partner spreads risk but increases coordination overhead. Decision before series 2.",
-              "tag": "Strategy"
+              "title": "Material and collection channels",
+              "items": [
+                {
+                  "name": "ERZ Entsorgung + Recycling Zürich",
+                  "role": "Talks on larger-scale upcycling from the city's collection, in coordination with Swico Recycling.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Swico Recycling",
+                  "role": "Nationwide collection system; scaling partner for material pre-screening.",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "swico.ch/de/recycling",
+                  "linkUrl": "https://www.swico.ch/de/recycling/"
+                }
+              ]
             },
             {
-              "q": "Q04",
-              "title": "B2B willingness to pay below CHF 150 — what then?",
-              "body": "If buyers only pay CHF 80–120, the unit math tips. Plan B: scale up B2C share, hold foundation share longer, possibly add a premium variant.",
-              "tag": "Economics"
+              "title": "Technical expertise and conformity",
+              "items": [
+                {
+                  "name": "Barologic GmbH Winterthur",
+                  "role": "CE assessment for the upcycling lights (Roland Bamert).",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Benjamin Ernst (ReCreaZZZ)",
+                  "role": "Freelance electronics expert; developed the voltage-divider fix for the standby bypass.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Eurofins Reichenwalde (DE)",
+                  "role": "Possible route for a one-time CE re-certification (not offered in Switzerland).",
+                  "cite": "cit04_kurzbericht_e1"
+                }
+              ]
             },
             {
-              "q": "Q05",
-              "title": "Who carries liability in case of defect?",
-              "body": "Electrical product with CE marking — legal liability must be clearly assigned. Options: certified engineer, insurance, partner takeover.",
-              "tag": "Legal"
+              "title": "Project team",
+              "items": [
+                {
+                  "name": "Andreas Rudin (revamp-it)",
+                  "role": "Project coordination, association board member.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Mike Rey (revamp-it)",
+                  "role": "Project responsibility, liaison with the scientific partner, pilot site evaluation.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Gregor Szombath (Werkraum 4)",
+                  "role": "Production responsibility, supervising clients, small-series documentation.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Daniel Afzali (revamp-it)",
+                  "role": "Photo and video documentation of the retrofit steps and pilot deployments.",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Corinna Baumgartner (ZHAW)",
+                  "role": "Project lead of the scientific evaluation.",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "External expert network",
+              "intro": "From the 2023 Klimastiftung application — repair and open-hardware community.",
+              "items": [
+                {
+                  "name": "Balz Krügel (Reparabel)",
+                  "role": "Repair expertise",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Roland Bamert (Barologic / Revita repair)",
+                  "role": "Electrical engineering + conformity",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Rolf Huber (Reparaturia, Oerlikon)",
+                  "role": "Repair community",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Karel Kulhavy",
+                  "role": "Developer of the OpenSource Hardware Ronja",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "ronja.twibright.com",
+                  "linkUrl": "http://ronja.twibright.com"
+                },
+                {
+                  "name": "Hasan Hüseyin Isik",
+                  "role": "Mechatronics innovation",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "isikinnovations.com",
+                  "linkUrl": "https://isikinnovations.com"
+                },
+                {
+                  "name": "Martin Flüeler (Winnetui Atelier-Werkstatt Schwerzenbach)",
+                  "role": "Open atelier workshop",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Schweizerische Gesellschaft für Mechatronische Kunst",
+                  "role": "Artistic-technical network",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "mechatronicart.ch",
+                  "linkUrl": "https://mechatronicart.ch"
+                }
+              ]
             }
           ],
-          "feedbackCta": "Answer, hunch, or source? Write to us.",
-          "feedbackEmail": "kontakt@revamp-it.ch"
+          "klimastNote": "Klimastiftung Schweiz evaluated the project positively but is withholding funding until stage 2 results are in. They are therefore not listed as a funder here.",
+          "klimastCite": "cit04_kurzbericht_e1"
         },
-        "getInvolved": {
+        "risiken": {
+          "eyebrow": "RISKS · OPEN QUESTIONS",
+          "title": "Honest list instead of marketing.",
+          "intro": "The list follows the Swico board's response letter of 31.10.2025 (stage 2 rated insufficient) and the stage 1 short report. Every question has a status, no wishful thinking.",
+          "items": [
+            {
+              "label": "Market demand not yet robustly demonstrated",
+              "status": "open",
+              "body": "The Swico board's letter of 31.10.2025 states explicitly that the stage 2 goals were not yet sufficiently reached — robust results on demand, economics, or environmental impact are still missing. The stage 2 pilot installations are meant to fix this.",
+              "cite": "cit03_swico_oct2025"
+            },
+            {
+              "label": "Economic impact — unit cost and margin",
+              "status": "open",
+              "body": "Robust unit costs are only available after the small series is finished. The evaluation is in the stage 2 final report at the end of June 2026.",
+              "cite": "cit03_swico_oct2025"
+            },
+            {
+              "label": "Scientific analysis (ZHAW LCA)",
+              "status": "in progress",
+              "body": "Report drafting runs until 18.06.2026, presentation took place at the end of May 2026. SimaPro modelling was completed in mid May.",
+              "cite": "cit05_zhaw_gantt"
+            },
+            {
+              "label": "Barologic CE assessment",
+              "status": "planned",
+              "body": "Commissioned as part of stage 2; CHF 2,000 set aside in the budget.",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "Standby bypass documented for further monitor models",
+              "status": "5 of 12+",
+              "body": "5 models with a finished instruction sheet so far. Stage 2 is meant to build a publicly accessible wiki database of all instructions, open to electronics experts worldwide.",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "Klimastiftung follow-up application",
+              "status": "pending",
+              "body": "Klimastiftung Schweiz will only fund once stage 2 results are in. A follow-up application is planned for the scaling phase after 2026.",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "Original scientific partner FHNW stepped out",
+              "status": "resolved",
+              "body": "FHNW could not continue for capacity reasons. ZHAW took over the mandate via an Innosuisse Innoscheck — some lost time, but no gap in the evaluation.",
+              "cite": "cit01_innolink"
+            }
+          ]
+        },
+        "foerderung": {
+          "eyebrow": "FUNDING",
+          "title": "What is actually committed.",
+          "intro": "Three funding sources are active, one is submitted and waiting, one is on hold. No fictional foundations, no wishlists.",
+          "lines": [
+            {
+              "label": "City of Zurich, Environmental and Health Protection",
+              "status": "received",
+              "amount": "10'000 CHF",
+              "note": "CHF 10,000 seed funding in 2023 for preparatory work and applications.",
+              "cite": "cit01_innolink"
+            },
+            {
+              "label": "revamp-it own funds",
+              "status": "deployed",
+              "amount": "ca. 80'500 CHF",
+              "note": "Collection, testing, storage, applications 2023–2024.",
+              "cite": "cit01_innolink"
+            },
+            {
+              "label": "Swico Innovationsfonds",
+              "status": "approved",
+              "amount": "ca. 300'000 CHF (gesamt)",
+              "note": "Paid out in tranches (stages 1+2). Decision body: Swico board chaired by Roger Gnos.",
+              "cite": "cit01_innolink"
+            },
+            {
+              "label": "Innosuisse Innoscheck (ZHAW LCA)",
+              "status": "submitted",
+              "amount": "15'000 CHF",
+              "note": "Innolink application 132.351 INNO-EE submitted in November 2025.",
+              "cite": "cit01_innolink"
+            },
+            {
+              "label": "Klimastiftung Schweiz",
+              "status": "on hold",
+              "amount": "—",
+              "note": "Positive evaluation, but funding only after stage 2 results are in.",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "Sales income from small series",
+              "status": "model figure",
+              "amount": "30–50'000 CHF",
+              "note": "Budgeted share from small-series sales. Real numbers come with the stage 2 evaluation.",
+              "cite": "cit06_qa_swico_2023"
+            }
+          ]
+        },
+        "mitmachen": {
           "eyebrow": "GET INVOLVED",
-          "title": "How you can contribute.",
-          "intro": "The project works as a network — money, hardware, time, contacts. The concrete options here.",
+          "title": "Four concrete ways to support the project.",
+          "intro": "We're looking for pilot sites, hardware, workshop partners, and recommendations for funders. Direct contact: Andreas Rudin, andreas.rudin@revamp-it.ch, +41 43 960 32 64.",
           "options": [
             {
-              "key": "fund",
-              "title": "Apply for / support funding",
-              "body": "We're in talks with Klimastiftung Schweiz, KliK and Gebert Rüf. If you know a foundation that fits Open Hardware + social innovation, an introduction is welcome.",
-              "ctaLabel": "Become a funding partner",
-              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Funding Monitor-Upcycling",
-              "linkLabel": "Klimastiftung Schweiz",
-              "linkUrl": "https://www.klimastiftung.ch/"
-            },
-            {
-              "key": "partner",
+              "key": "pilot",
               "title": "Become a pilot site",
-              "body": "Property managers, co-working spaces, hotels, and design studios — we're looking for pilot installations. Test light quality, deliver data, possibly follow-up orders.",
+              "body": "We install a light on a trial basis in your stairwell, office area or school — and evaluate lifespan and energy use scientifically. Three usage patterns are sought: 24/7 operation, day/weekend timer, motion sensor.",
               "ctaLabel": "Pilot inquiry",
-              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Pilot site Monitor-Upcycling"
-            },
-            {
-              "key": "workshop",
-              "title": "Workshop partnership",
-              "body": "Protected workshops and Repair Cafés — we share guides, tools, and experience. Goal: make the model broadly available.",
-              "ctaLabel": "Workshop inquiry",
-              "ctaHref": "mailto:kontakt@revamp-it.ch?subject=Workshop partnership Monitor-Upcycling",
-              "linkLabel": "Repair Café Switzerland",
-              "linkUrl": "https://repair-cafe.ch/"
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=Pilot%20site%20Monitor-Upcycling",
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "key": "donate",
-              "title": "Donate hardware",
-              "body": "Do you have a decommissioned 19–24 inch monitor? We accept it, document it, and you get a donation receipt.",
+              "title": "Donate a monitor",
+              "body": "19–24 inches, LED backlight, powers on — scratches or pixel defects welcome. No CRTs, no broken power supplies, no fractured housings. Drop-off at Birmensdorferstr. 379, 8055 Zurich.",
               "ctaLabel": "Donate device",
-              "ctaHref": "/get-involved/donate"
+              "ctaHref": "/get-involved/donate",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "workshop",
+              "title": "Become a workshop partner",
+              "body": "Other sheltered workshops and repair cafés: we share instructions, tools, and the standby bypass solution. The goal is a publicly accessible wiki database.",
+              "ctaLabel": "Workshop inquiry",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=Workshop%20partnership%20Monitor-Upcycling",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "fund",
+              "title": "Recommend a funder",
+              "body": "We're looking for foundations that fit open hardware + social innovation + Swiss material cycles. If you know one or can broker a contact, a short note is enough.",
+              "ctaLabel": "Send funding hint",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=Funder%20hint%20Monitor-Upcycling",
+              "cite": null
+            }
+          ]
+        },
+        "belege": {
+          "eyebrow": "SOURCES · REFERENCES",
+          "title": "Every number, every claim — with a source.",
+          "intro": "Internal document or external link, quotable in the original wording. If something is missing or you want to verify a claim, write to us.",
+          "citations": [
+            {
+              "key": "cit01_innolink",
+              "label": "Innolink application 132.351 INNO-EE",
+              "detail": "Innosuisse Innovation Booster / Innoscheck application «Environmental performance of the re-use of monitors as light sources», ZHAW + Verein revamp-it, 21 November 2025",
+              "url": null
+            },
+            {
+              "key": "cit02_swico_feb2026",
+              "label": "Swico reply, 12.03.2026",
+              "detail": "Swico Innovationsfonds, response letter project 02-2023-01, Roger Gnos, 12 March 2026 — deadline extension for stage 2 final report to 30.06.2026, final presentation 03.07.2026 09:00",
+              "url": "https://www.swico.ch"
+            },
+            {
+              "key": "cit03_swico_oct2025",
+              "label": "Swico reply, 31.10.2025",
+              "detail": "Swico Innovationsfonds, response letter project 02-2023-01, Roger Gnos, 31 October 2025 — stage 2 goals not yet sufficiently reached; LCA not strictly required",
+              "url": null
+            },
+            {
+              "key": "cit04_kurzbericht_e1",
+              "label": "Stage 1 short report (status 12.03.2026)",
+              "detail": "Verein revamp-it, stage 1 short report for project 2023-02-01 «Functional circular use of IT devices», revised status 12 March 2026",
+              "url": null
+            },
+            {
+              "key": "cit05_zhaw_gantt",
+              "label": "ZHAW project plan 132.351 INNO-EE",
+              "detail": "ZHAW Institute for Sustainable Development, Gantt plan project 132.351 INNO-EE (kick-off 19.01.2026, report 18.06.2026), status 20.01.2026",
+              "url": null
+            },
+            {
+              "key": "cit06_qa_swico_2023",
+              "label": "Swico questionnaire, revamp-it answers 28.09.2023",
+              "detail": "Verein revamp-it, answers to the Swico questionnaire on the project application «Functional circular use of IT devices», Andreas Rudin, 28 September 2023",
+              "url": null
+            },
+            {
+              "key": "cit07_klimast_2023",
+              "label": "Klimastiftung application revamp-it 2023",
+              "detail": "Verein revamp-it, application to Klimastiftung Schweiz «Functional circular use of IT devices», status 31.08.2023",
+              "url": null
+            },
+            {
+              "key": "cit08_modelle_md",
+              "label": "Info on retrofitted models (revamp-it / ReCreaZZZ)",
+              "detail": "List of retrofitted monitor models so far including technical notes on voltage dividers, status 26.02.2025",
+              "url": null
+            },
+            {
+              "key": "cit09_brilliant_jumbo",
+              "label": "Photo Brilliant ABIE LED Panel 24W, Jumbo hardware store",
+              "detail": "Photos taken in the Jumbo shelf (retail price CHF 79.95 for 24W 40×40 cm CCT+DIM+RGB+remote)",
+              "url": "https://www.jumbo.ch"
+            },
+            {
+              "key": "cit10_film",
+              "label": "Film: retrofitting a monitor into a light",
+              "detail": "Video documentation of the retrofit process, hosted on the Revamp-IT Nextcloud instance",
+              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+            },
+            {
+              "key": "cit11_vesa",
+              "label": "VESA standard MIS-D",
+              "detail": "Standard for 75-/100-mm hole spacing on the back of monitors (mounting)",
+              "url": "https://www.vesa-standard.de/vesa-mis-d.html"
+            },
+            {
+              "key": "cit12_oshwa",
+              "label": "Open Source Hardware Association",
+              "detail": "Open hardware licence and definition standard",
+              "url": "https://www.oshwa.org/"
+            },
+            {
+              "key": "cit13_ohwr",
+              "label": "Open Hardware Repository (CERN)",
+              "detail": "Open-hardware project platform",
+              "url": "https://ohwr.org/welcome"
+            },
+            {
+              "key": "cit14_swico_recycling",
+              "label": "Swico Recycling",
+              "detail": "Swiss collection system for IT electronics, financed by the advance recycling fee",
+              "url": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "key": "cit15_erz",
+              "label": "ERZ Entsorgung + Recycling Zürich",
+              "detail": "City of Zurich, material collection points",
+              "url": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "key": "cit16_klimast",
+              "label": "Klimastiftung Schweiz",
+              "detail": "Swiss climate foundation — SME funding programme",
+              "url": "https://www.klimastiftung.ch/"
+            },
+            {
+              "key": "cit17_innosuisse",
+              "label": "Innosuisse",
+              "detail": "Swiss Innovation Agency",
+              "url": "https://www.innosuisse.admin.ch/"
+            },
+            {
+              "key": "cit18_iso14044",
+              "label": "ISO 14044",
+              "detail": "Standard for life-cycle assessment — requirements and guidelines",
+              "url": "https://www.iso.org/standard/38498.html"
+            },
+            {
+              "key": "cit19_werkraum4",
+              "label": "Werkraum 4 (Stiftung zsge)",
+              "detail": "Brand of the Stiftung zsge, production partner under the labels recyclingArt and lerski",
+              "url": "https://www.werkraum4.ch"
+            },
+            {
+              "key": "cit20_barologic",
+              "label": "Barologic GmbH Winterthur",
+              "detail": "CE assessment for the upcycling lights (Roland Bamert)",
+              "url": "https://barologic.ch"
             }
           ]
         }

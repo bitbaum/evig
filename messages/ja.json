@@ -4713,187 +4713,973 @@
       },
       "businessPlan": {
         "meta": {
-          "title": "事業計画と研究",
-          "description": "モニター・アップサイクリング・プロジェクトの経済的基盤、レポート、研究。"
+          "title": "事業計画 — モニターを壁面・天井照明にアップサイクル",
+          "description": "事実に基づく証拠ページ。出典付き、状況は2026年6月時点。"
         },
-        "research": {
-          "title": "現在研究中のもの",
-          "intro": "これらの研究は進行中または委託済みです。信頼できるものになり次第ここに掲載されます。",
+        "nav": {
+          "label": "目次",
           "items": [
             {
-              "title": "ライフサイクル アセスメント（LCA）— ZHAW",
-              "status": "進行中 · 結果 Q3 2026",
-              "description": "Lenovo L2251pwd 改造ランプと同等の明るさの新製 LED ランプの完全ライフサイクル分析。方法 : ISO 14040/14044。"
+              "id": "status",
+              "label": "現状"
             },
             {
-              "title": "B2B 支払意欲",
-              "status": "計画中 · Q4 2026",
-              "description": "不動産管理 10 社とデザイン代理店との構造化インタビューで CHF 150–250 の価格帯を検証。"
+              "id": "produkt",
+              "label": "私たちが作るもの"
             },
             {
-              "title": "CE 適合",
-              "status": "準備中 · Q4 2026",
-              "description": "低電圧指令、EMC、RoHS。Q4 パイロット シリーズに外部試験機関を起用。"
+              "id": "lieferanten",
+              "label": "供給"
+            },
+            {
+              "id": "alternativen",
+              "label": "市場の代替品"
+            },
+            {
+              "id": "kunden",
+              "label": "顧客・販売"
+            },
+            {
+              "id": "wirtschaftlichkeit",
+              "label": "経済性"
+            },
+            {
+              "id": "wissenschaft",
+              "label": "学術評価"
+            },
+            {
+              "id": "ce",
+              "label": "CE適合"
+            },
+            {
+              "id": "partner",
+              "label": "パートナー"
+            },
+            {
+              "id": "risiken",
+              "label": "リスクと未解決事項"
+            },
+            {
+              "id": "foerderung",
+              "label": "資金調達"
+            },
+            {
+              "id": "mitmachen",
+              "label": "参加する"
+            },
+            {
+              "id": "belege",
+              "label": "出典と参考資料"
             }
           ]
         },
-        "downloads": {
-          "title": "ダウンロード",
-          "note": "レポートは公開され次第ここにリンクされます。資金決定のために早期ドラフトが必要な場合はご連絡ください — 現在の作業状態を正直に共有します。",
-          "cta": "kontakt@revamp-it.ch"
-        },
         "hero": {
-          "eyebrow": "BUSINESS PLAN",
-          "title": "Market, customers, economics — and what can go wrong.",
-          "intro": "An honest picture for funders, pilot partners, and buyers. Every section is collapsible so you can pick the depth you need."
+          "eyebrow": "事業計画",
+          "title": "廃棄されたコンピューターモニターからの壁面・天井照明。",
+          "intro": "現在スイスのIT再資源化フローに流れている画面の、まだ機能するLCDバックライトを、壁面・天井照明に作り変えます。このページはプロジェクトの「誠実な証拠版」であり、マーケティングの物語ではなく、2026年6月時点で実際に存在することと、出典です。",
+          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
+          "heroImageAlt": "改修されたLenovo L2251pwdモニターが壁面パネルとして発光している様子。2026年5月28日の作業台撮影。"
         },
-        "marketContext": {
-          "eyebrow": "MARKET CONTEXT",
-          "title": "What we should be compared against.",
-          "intro": "We're not selling a 'designer lamp' against Vitra — we're selling a repairable, locally made desk lamp against mass-produced imports.",
-          "alternatives": [
+        "status": {
+          "eyebrow": "現状 · 2026年6月",
+          "title": "プロジェクトの現在地。",
+          "intro": "ステージ1完了。ステージ2は最終段階。ZHAWによる学術評価が並行して進行中で、報告書は2026年6月18日付。",
+          "kpis": [
             {
-              "label": "IKEA Tertial / desk lamp (new)",
-              "price": "CHF 15–35",
-              "tradeoff": "Low price, newly produced, short lifespan (~3 years), not repairable. Mass production in Asia — high material footprint per hour of light."
+              "label": "ステージ状況",
+              "value": "Etappe 2 läuft",
+              "note": "Swico向け最終報告書は2026年6月30日まで",
+              "cite": "cit02_swico_feb2026"
             },
             {
-              "label": "Mainstream LED desk lamp (BenQ, Philips Hue)",
-              "price": "CHF 80–250",
-              "tradeoff": "Good light quality, sealed electronics — repair impossible. CO₂ footprint dominated by manufacturing."
+              "label": "ZHAW LCA報告書",
+              "value": "18.06.2026",
+              "note": "プロジェクト132.351 INNO-EE、Ganttスケジュール通り作成中",
+              "cite": "cit05_zhaw_gantt"
             },
             {
-              "label": "Swiss design desk lamp (Vitra, USM, Lehni)",
-              "price": "CHF 300–800+",
-              "tradeoff": "High quality, often repairable, long-lasting — but newly produced. Price only for upper segment."
+              "label": "最終プレゼンテーション",
+              "value": "03.07.2026, 09:00",
+              "note": "Swico本部、Lagerstrasse 33, 8004 Zürich",
+              "cite": "cit02_swico_feb2026"
             },
             {
-              "label": "Upcycling desk lamps from designer studios",
-              "price": "CHF 200–600",
-              "tradeoff": "One-off pieces from leftovers — rarely reproducible, no standardised manual, often without CE."
-            },
-            {
-              "label": "Our proposition",
-              "price": "CHF 150–250",
-              "tradeoff": "Reproducible thanks to open guides, made in Switzerland (sheltered workshop), repairable, CE-conformity planned. Input material donated — low material footprint.",
-              "isOurs": true
+              "label": "これまでに改修したモデル",
+              "value": "12 erfolgreich",
+              "note": "5機種でスタンバイ対策手順を文書化済み、ステージ2でさらに追加",
+              "cite": "cit08_modelle_md"
             }
-          ],
-          "verdict": "We compete with mid-range LED — not IKEA, not Vitra. Our selling point is not price; it's repairability, provenance and material flow."
+          ]
         },
-        "segments": {
-          "eyebrow": "CUSTOMER SEGMENTS",
-          "title": "Who buys it — and who does not.",
-          "intro": "Two channels tested in parallel. Each needs a different message, sales path and order size.",
-          "b2b": {
-            "label": "B2B (volume buyers)",
-            "volume": "50–80 % of the small series",
-            "description": "Property managers for ancillary spaces and stairwells, co-working spaces, architecture and design agencies, smaller hotels. Buying argument: sustainability story + reliable delivery of 10–50 units.",
-            "examples": [
-              "Livit",
-              "Wincasa",
-              "Allreal",
-              "universities",
-              "cooperative cafés"
+        "produkt": {
+          "eyebrow": "私たちが作るもの",
+          "title": "モニター → 壁面または天井照明。新しい機器も、新しいプラスチックも不要。",
+          "intro": "廃棄されたモニターでなお完全に機能している3つの部品を再利用します：電源、LEDバックライト、筐体。結果として、オフィス、階段室、学校用の照明器具になります。",
+          "buildSteps": {
+            "title": "改修の流れ",
+            "steps": [
+              {
+                "title": "適したモニターを選ぶ",
+                "body": "LEDバックライトのモニターを優先：消費電力が低く、明るく、追加部材がほぼ不要。",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "適合性を確認",
+                "body": "適：傷、穴、画素欠け、表示異常。不適：電源故障、筐体破損。",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "スタンバイ・バイパスを実装",
+                "body": "多くのモニターは数分でスタンバイに入ります。解決策：電源の低電圧側に小さな分圧器を作り、自作コネクタにはんだ付け。モニター種別ごとに手順書を用意。",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "title": "取り付ける",
+                "body": "多くの機種は背面にVESA MIS-D穴があり、市販の壁面・天井用モニターアームがそのまま使えます。壁面はベッドフレーム用金具、天井は3Dプリント製の脱落防止クリップを使用。",
+                "cite": "cit04_kurzbericht_e1",
+                "linkLabel": "VESA MIS-D規格",
+                "linkUrl": "https://www.vesa-standard.de/vesa-mis-d.html"
+              }
             ]
           },
-          "b2c": {
-            "label": "B2C (individual buyers)",
-            "volume": "20–50 % of the small series",
-            "description": "Design-conscious individuals buying a story and aesthetic — not the cheapest function. Plus: students and cooperative flatshares as a budget variant.",
-            "examples": [
-              "design-shop visitors",
-              "architects (private)",
-              "maker community",
-              "flatshare renovations"
+          "photoGallery": {
+            "title": "Lenovo L2251pwd改修記録（2026年5月28日）",
+            "intro": "2026年5月の作業台写真6枚。廃棄されたソース機から発光パネルまで。",
+            "items": [
+              {
+                "src": "/projects/upcycling/businessplan/06-source-monitor-label.jpg",
+                "caption": "ソース機：Lenovo Wide LCD Monitor。背面にFCC/CE/RoHSラベル。韓国製、Lenovo 2009年。"
+              },
+              {
+                "src": "/projects/upcycling/businessplan/02-back-cover-opened.jpg",
+                "caption": "筐体を開いた状態。左：プラスチック背面カバー。右：アルミニウム支持板、接着テープと元のネジ位置。"
+              },
+              {
+                "src": "/projects/upcycling/businessplan/03-lcd-panel-removed.jpg",
+                "caption": "LCDパネルを除去。露出したLEDバックライトと制御バーが見える。LCD層は除去する。表示する画像がなければ光を遮るだけだから。"
+              },
+              {
+                "src": "/projects/upcycling/businessplan/04-electronics-spread.jpg",
+                "caption": "電子部品を広げた様子：ロジックボード（右）、ボタンボード（左）、接続ケーブル。多くの機種でロジックボードは筐体内に残る — 電源側の小さな改修だけで済む。"
+              },
+              {
+                "src": "/projects/upcycling/businessplan/05-standby-bypass-spannungsteiler.jpg",
+                "caption": "スタンバイ・バイパス：2本の抵抗で分圧器を構成し、電源ピン向けコネクタに直接はんだ付け。これでスタンバイに入らず常時点灯。Benjamin Ernst（ReCreaZZZ）が考案した解。"
+              },
+              {
+                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "caption": "完成形。モニターは元の筐体のまま、均一な発光パネルとして光る。新しいプラスチック部品は使わない。"
+              }
+            ]
+          },
+          "links": [
+            {
+              "label": "動画：モニターから照明への改修（revamp-it Nextcloud）",
+              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+            },
+            {
+              "label": "Open Hardware Repository（CERN）",
+              "url": "https://ohwr.org/welcome"
+            },
+            {
+              "label": "Open Source Hardware Association",
+              "url": "https://www.oshwa.org/"
+            }
+          ]
+        },
+        "lieferanten": {
+          "eyebrow": "供給 · 物流",
+          "title": "原材料は揃っている — Euroパレット150枚を在庫済み。",
+          "intro": "プロジェクト開始前から、Revamp-ITは廃棄ITハードウェアを体系的に収集してきました。2023年時点でEuroパレット150枚が利用可能で、うち約30枚がアップサイクル対象の画面類です。",
+          "stockBreakdown": {
+            "title": "倉庫の中身",
+            "subtitle": "収集済みEuroパレット150枚の内訳",
+            "rows": [
+              {
+                "label": "サイズ・年式が様々なPC一式",
+                "value": "ca. 40 Paletten"
+              },
+              {
+                "label": "プリンター・複合機",
+                "value": "ca. 30 Paletten"
+              },
+              {
+                "label": "モニター・テレビ・オールインワン",
+                "value": "ca. 30 Paletten",
+                "emphasis": true,
+                "note": "← 照明アップサイクルの原材料"
+              },
+              {
+                "label": "サーバーラック・サーバー筐体",
+                "value": "ca. 15 Paletten"
+              },
+              {
+                "label": "シンクライアントとミニPC",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "PCケース",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "ケーブル類",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "キーボード",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "スキャナー",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "ネットワーク機器",
+                "value": "ca. 5 Paletten"
+              },
+              {
+                "label": "その他機器・部品",
+                "value": "ca. 5 Paletten"
+              }
+            ],
+            "cite": "cit06_qa_swico_2023"
+          },
+          "channels": {
+            "title": "今後の画面の供給源",
+            "items": [
+              {
+                "label": "revamp-itの既存在庫",
+                "body": "モニター/テレビ/オールインワン30パレット分は既に仕分け済み — ステージ2の小規模生産には十分。",
+                "cite": "cit06_qa_swico_2023"
+              },
+              {
+                "label": "ERZ Entsorgung + Recycling Zürich",
+                "body": "Swico Recyclingと連携の上、より大規模なモニターアップサイクルに向けてチューリッヒ市ERZと協議中。",
+                "cite": "cit04_kurzbericht_e1",
+                "linkLabel": "ERZ Zürich",
+                "linkUrl": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+              },
+              {
+                "label": "Swico Recyclingシステム（スケーリング想定）",
+                "body": "構想：スイスでリサイクルに出されるすべてのモニター・テレビを、素材回収前にアップサイクル適合性で事前選別する。",
+                "cite": "cit07_klimast_2023",
+                "linkLabel": "Swico Recycling",
+                "linkUrl": "https://www.swico.ch/de/recycling/"
+              }
+            ]
+          },
+          "criteria": {
+            "title": "受け入れる機器",
+            "items": [
+              "電源が入る — 電源回路が動作している",
+              "筐体が構造的に保たれている（割れなし、傷は可）",
+              "LEDバックライト（蛍光管より優先）",
+              "標準サイズ19〜24インチ"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          },
+          "rejected": {
+            "title": "受け入れないもの",
+            "items": [
+              "電源故障 — 起動しない",
+              "筐体の重大な破損",
+              "CRTディスプレイ（重く、効率が低い）"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          }
+        },
+        "alternativen": {
+          "eyebrow": "市場の代替品",
+          "title": "比較対象 — 正直に。",
+          "intro": "本製品は壁面・天井照明であり、デザイナーの卓上ライトではありません。現実的な比較対象は、ホームセンターで入手できるLEDパネルで、VitraやUSMの卓上ランプではありません。",
+          "benchmarkPhoto": {
+            "src": "/projects/upcycling/competitor-benchmark/brilliant-abie-led-panel.jpg",
+            "caption": "Brilliant ABIE LED Panel 24W 40×40cm、CCT＋調光＋RGB＋リモコン。Jumbo店頭価格CHF 79.95。2026年売り場撮影。"
+          },
+          "alternativesTable": {
+            "title": "店頭の比較可能製品",
+            "rows": [
+              {
+                "label": "Brilliant ABIE LED Panel 24W, 40×40 cm",
+                "price": "CHF 79.95",
+                "note": "CCT＋調光＋RGB＋リモコン。Jumboで販売。",
+                "cite": "cit09_brilliant_jumbo",
+                "linkLabel": "brilliant-ag.com",
+                "linkUrl": "https://www.brilliant-ag.com"
+              },
+              {
+                "label": "ブランドLEDパネル 60×60 cm（オフィス標準）",
+                "price": "CHF 80–200",
+                "note": "オフィス天井の定番。LEDVANCE、Osram、Philips、Trilux等。",
+                "cite": null,
+                "linkLabel": null,
+                "linkUrl": null
+              },
+              {
+                "label": "ノーブランド廉価LEDパネル",
+                "price": "CHF 30–60",
+                "note": "アジア輸入、修理不可、保証ほぼなし。",
+                "cite": null,
+                "linkLabel": null,
+                "linkUrl": null
+              },
+              {
+                "label": "アップサイクル・モニター照明（本プロジェクト）",
+                "price": "未定",
+                "note": "原価と販売価格はステージ2評価の一部（Q4未解決）。",
+                "cite": "cit03_swico_oct2025",
+                "linkLabel": null,
+                "linkUrl": null,
+                "isOurs": true
+              }
+            ]
+          },
+          "verdict": "私たちは価格で競争しません。私たちの論点は、出自、修理可能性、そして新規生産の回避です。確かな価格提案は小規模生産の評価後に行い、ステージ2最終報告書で公表します。"
+        },
+        "kunden": {
+          "eyebrow": "顧客 · 販売",
+          "title": "モニターを使った壁面・天井照明を、誰が買うのか。",
+          "intro": "ステージ1の作業とSwico宛て回答書（2023年9月28日）から、4つのターゲット層が浮かび上がりました — デザイナー市場ではなく、業務用照明の購買行動です。",
+          "segments": [
+            {
+              "label": "B2B直販 — 大規模オフィス保有企業",
+              "body": "銀行、保険、公共行政。階段室や付帯室にパイロット導入し、その後購買カタログに組み入れる。",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "家具・内装会社",
+              "body": "スイスのインテリア事業者と連携し、アップサイクル照明を品揃えに加える — ストーリーとして、またアジア大量生産への持続可能な代替として。",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "ホームセンター",
+              "body": "Brilliantパネルと同様、確立した販路経由。マーケティング負担は大きく、利幅は薄い — 将来のスケーリング選択肢。",
+              "cite": "cit06_qa_swico_2023"
+            },
+            {
+              "label": "不動産会社（改装・新築）",
+              "body": "改装や新築での直接導入：新品の代わりにアップサイクル照明。物件管理会社や建築事務所経由でアプローチ。",
+              "cite": "cit06_qa_swico_2023"
+            }
+          ],
+          "pilotPlan": {
+            "title": "ステージ2で予定しているパイロット導入",
+            "intro": "3つの利用パターン、電力消費・寿命・保守の異なる3拠点 — データはZHAWのLCAと原価評価に使われます。",
+            "items": [
+              "24時間運転（例：階段室）",
+              "夜間・週末は消灯（例：タイマー付きオフィス）",
+              "人感センサー制御（頻繁な点灯/消灯）"
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          }
+        },
+        "wirtschaftlichkeit": {
+          "eyebrow": "経済性",
+          "title": "ステージ2予算（Swico 50,000 CHF、Innosuisse 15,000 CHF）。",
+          "intro": "進行中のステージ2予算は明確です。完成した照明の単価はあえて公表しません — 小規模生産の評価から得られる数字で、2026年6月末の最終報告書で公開予定です。",
+          "budget": {
+            "title": "短報告書に基づくステージ2予算",
+            "note": "総額65,000 CHF、Innosuisse Innoscheck 15,000 CHFを差し引いてSwico負担分50,000 CHF。",
+            "rows": [
+              {
+                "label": "給与・謝礼",
+                "value": "27'000 CHF"
+              },
+              {
+                "label": "場所・保管・輸送",
+                "value": "12'000 CHF"
+              },
+              {
+                "label": "学術評価（ZHAW, Innoscheck）",
+                "value": "15'000 CHF",
+                "note": "InnosuisseからZHAWへ直接支払い"
+              },
+              {
+                "label": "CE鑑定 Barologic GmbH",
+                "value": "2'000 CHF"
+              },
+              {
+                "label": "材料費",
+                "value": "1'000 CHF"
+              },
+              {
+                "label": "マーケティング・広報",
+                "value": "3'000 CHF"
+              },
+              {
+                "label": "予備費",
+                "value": "5'000 CHF"
+              },
+              {
+                "label": "小計",
+                "value": "65'000 CHF",
+                "emphasis": true
+              },
+              {
+                "label": "− Innosuisse Innoscheck",
+                "value": "−15'000 CHF"
+              },
+              {
+                "label": "Swicoステージ2負担分",
+                "value": "50'000 CHF",
+                "emphasis": true
+              }
+            ],
+            "cite": "cit04_kurzbericht_e1"
+          },
+          "scopeNote": "あえて出さないもの：完成照明1台あたりの原価。ステージ2の実生産データなしの推定は投機的になります。実際の原価 — そして真剣な価格提案 — はステージ2最終報告書とともに出ます。",
+          "scopeCite": "cit03_swico_oct2025"
+        },
+        "wissenschaft": {
+          "eyebrow": "学術評価",
+          "title": "ZHAWプロジェクト132.351 INNO-EE — ISO 14044に基づくLCA。",
+          "intro": "InnosuisseはZHAWによる比較LCAに資金を出します。アップサイクル照明の環境性能を、市販LED・蛍光灯ランプとライフサイクル全体で比較します。",
+          "factsheet": {
+            "title": "プロジェクト概要",
+            "rows": [
+              {
+                "label": "プロジェクト番号",
+                "value": "132.351 INNO-EE",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "タイトル",
+                "value": "光源としてのモニター再利用の環境性能評価",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "研究パートナー",
+                "value": "ZHAW Institut für Nachhaltige Entwicklung, School of Engineering, Winterthur",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "プロジェクト責任者",
+                "value": "Corinna Baumgartner, ZHAW",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "方法論",
+                "value": "ISO 14044に準拠したLCA、一次データ優先、SimaProでモデリング",
+                "cite": "cit05_zhaw_gantt",
+                "linkLabel": "ISO 14044",
+                "linkUrl": "https://www.iso.org/standard/38498.html"
+              },
+              {
+                "label": "Innosuisse拠出",
+                "value": "給与15,000 CHF",
+                "cite": "cit01_innolink"
+              },
+              {
+                "label": "実装パートナー",
+                "value": "Verein revamp-it",
+                "cite": "cit01_innolink"
+              }
+            ]
+          },
+          "timeline": {
+            "title": "ZHAW計画（Gantt 2026年1月20日版）",
+            "phases": [
+              {
+                "label": "キックオフ",
+                "date": "19.01.2026"
+              },
+              {
+                "label": "データ収集（文献）",
+                "date": "02.02. – 05.04.2026"
+              },
+              {
+                "label": "計測を含む実地試験＋アンケート",
+                "date": "23.03. – 05.04.2026"
+              },
+              {
+                "label": "SimaProでのモデリング",
+                "date": "23.03. – 03.05.2026"
+              },
+              {
+                "label": "妥当性検証＋反復",
+                "date": "11.05. – 18.05.2026"
+              },
+              {
+                "label": "影響評価＋感度解析",
+                "date": "18.05. – 24.05.2026"
+              },
+              {
+                "label": "結果発表",
+                "date": "25.05. – 31.05.2026"
+              },
+              {
+                "label": "報告書作成＋最終化",
+                "date": "26.05. – 18.06.2026"
+              }
+            ],
+            "cite": "cit05_zhaw_gantt"
+          },
+          "scope": {
+            "title": "LCAの対象",
+            "items": [
+              "オフィス、階段室、学校での壁面・天井照明としての利用",
+              "LEDバックライトのPCモニターに焦点",
+              "改造度合：LCD除去のみ／スタンバイ・バイパス／LEDストリップ交換／電源完全交換",
+              "画面技術別の寿命シナリオ",
+              "廃棄時の平均年齢",
+              "光量比較：モニター照明 vs 従来光源（計測あり）",
+              "ブレークイーブン点：どの利用期間で再利用が環境的に意味を持つか"
+            ],
+            "cite": "cit01_innolink"
+          },
+          "history": "学術評価は当初FHNW（Christoph Hugi教授、Institut für Ecopreneurship）に予定されていました。FHNWは能力不足から離脱。ZHAWが2025年秋にInnosuisse Innoscheck経由で引き継ぎました。",
+          "historyCite": "cit01_innolink"
+        },
+        "ce": {
+          "eyebrow": "CE適合",
+          "title": "戦略：既存のCEを確認し、再認証しない。",
+          "intro": "改修ではモニターのCE状態に影響を与える新部品を追加しません。さらに壁面・天井照明は作業机のモニターより人から離れ、直接見られることもありません。",
+          "approach": {
+            "title": "ステージ2の進め方",
+            "items": [
+              {
+                "label": "Barologic GmbH Winterthurによる鑑定",
+                "body": "ステージ2の枠内でBarologicが、アップサイクル照明の既存CE適合性を確認する鑑定書を作成します。予算2,000 CHF。",
+                "cite": "cit04_kurzbericht_e1"
+              },
+              {
+                "label": "必要時：海外での再認証",
+                "body": "一度限りのCE再認証はドイツ・ReichenwaldeのEurofinsに依頼可能です。ElektroSuisseによれば、スイス国内ではこの種の認証は提供されていません。",
+                "cite": "cit04_kurzbericht_e1"
+              }
             ]
           }
         },
-        "risks": {
-          "eyebrow": "RISKS",
-          "title": "What can go wrong.",
-          "intro": "Honest list instead of marketing. We write mitigations next to each risk where we have one.",
+        "partner": {
+          "eyebrow": "パートナー",
+          "title": "誰が何を担うのか — 確認できる名前のみ。",
+          "intro": "このリストは、プロジェクト文書に固有名詞で現れる組織・個人だけを含みます。仮想的・推測的なパートナーは表示しません。",
+          "groups": [
+            {
+              "title": "主要パートナー",
+              "items": [
+                {
+                  "name": "Verein revamp-it",
+                  "role": "プロジェクト主体、収集、作業所コーディネーション",
+                  "cite": "cit01_innolink"
+                },
+                {
+                  "name": "Werkraum 4 (Stiftung zsge)",
+                  "role": "生産パートナー。クライアントを伴走の上で雇用。ラベルrecyclingArt＋lerski。",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "werkraum4.ch",
+                  "linkUrl": "https://www.werkraum4.ch"
+                },
+                {
+                  "name": "ZHAW Institut für Nachhaltige Entwicklung",
+                  "role": "学術評価 — ISO 14044に基づくLCA（プロジェクト132.351 INNO-EE）。",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "資金提供者",
+              "items": [
+                {
+                  "name": "Swico Innovationsfonds",
+                  "role": "ステージ1+2の主要資金提供者（承認済み、分割払い）。",
+                  "cite": "cit01_innolink",
+                  "linkLabel": "Swico",
+                  "linkUrl": "https://www.swico.ch"
+                },
+                {
+                  "name": "Innosuisse",
+                  "role": "ZHAW評価向けInnoscheck資金（給与15,000 CHF）。",
+                  "cite": "cit01_innolink",
+                  "linkLabel": "Innosuisse",
+                  "linkUrl": "https://www.innosuisse.admin.ch/"
+                },
+                {
+                  "name": "Umwelt- und Gesundheitsschutz Stadt Zürich",
+                  "role": "2023年の準備作業・申請のための初期資金10,000 CHF。",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "資材・収集チャネル",
+              "items": [
+                {
+                  "name": "ERZ Entsorgung + Recycling Zürich",
+                  "role": "市の収集からの大規模アップサイクルに向けた協議、Swico Recyclingと連携。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Swico Recycling",
+                  "role": "全国収集システム。材料事前選別でのスケーリング・パートナー。",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "swico.ch/de/recycling",
+                  "linkUrl": "https://www.swico.ch/de/recycling/"
+                }
+              ]
+            },
+            {
+              "title": "技術的専門知識と適合",
+              "items": [
+                {
+                  "name": "Barologic GmbH Winterthur",
+                  "role": "アップサイクル照明のCE鑑定（Roland Bamert）。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Benjamin Ernst (ReCreaZZZ)",
+                  "role": "謝礼ベースの電子技術者。スタンバイ・バイパス用の分圧器解を考案。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Eurofins Reichenwalde (DE)",
+                  "role": "一度限りのCE再認証ルート候補（スイスでは提供されない）。",
+                  "cite": "cit04_kurzbericht_e1"
+                }
+              ]
+            },
+            {
+              "title": "プロジェクトチーム",
+              "items": [
+                {
+                  "name": "Andreas Rudin (revamp-it)",
+                  "role": "プロジェクト・コーディネーション、協会理事。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Mike Rey (revamp-it)",
+                  "role": "プロジェクト責任、学術評価との連携、パイロット評価。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Gregor Szombath (Werkraum 4)",
+                  "role": "生産責任、クライアントの指導、小規模生産の記録。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Daniel Afzali (revamp-it)",
+                  "role": "改修ステップとパイロット導入の写真・動画記録。",
+                  "cite": "cit04_kurzbericht_e1"
+                },
+                {
+                  "name": "Corinna Baumgartner (ZHAW)",
+                  "role": "学術評価のプロジェクト責任者。",
+                  "cite": "cit01_innolink"
+                }
+              ]
+            },
+            {
+              "title": "外部専門家ネットワーク",
+              "intro": "2023年Klimastiftung申請より — 修理とオープンハードウェアのコミュニティ。",
+              "items": [
+                {
+                  "name": "Balz Krügel (Reparabel)",
+                  "role": "修理の専門知識",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Roland Bamert (Barologic / Revita repair)",
+                  "role": "電気工学＋適合",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Rolf Huber (Reparaturia, Oerlikon)",
+                  "role": "修理コミュニティ",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Karel Kulhavy",
+                  "role": "OpenSource Hardware Ronja開発者",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "ronja.twibright.com",
+                  "linkUrl": "http://ronja.twibright.com"
+                },
+                {
+                  "name": "Hasan Hüseyin Isik",
+                  "role": "メカトロニクスのイノベーション",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "isikinnovations.com",
+                  "linkUrl": "https://isikinnovations.com"
+                },
+                {
+                  "name": "Martin Flüeler (Winnetui Atelier-Werkstatt Schwerzenbach)",
+                  "role": "オープン・アトリエ工房",
+                  "cite": "cit07_klimast_2023"
+                },
+                {
+                  "name": "Schweizerische Gesellschaft für Mechatronische Kunst",
+                  "role": "芸術と技術のネットワーク",
+                  "cite": "cit07_klimast_2023",
+                  "linkLabel": "mechatronicart.ch",
+                  "linkUrl": "https://mechatronicart.ch"
+                }
+              ]
+            }
+          ],
+          "klimastNote": "Klimastiftung Schweizは本プロジェクトを肯定的に評価しましたが、ステージ2の成果が揃うまで資金提供を保留しています。そのためここでは資金提供者として掲載していません。",
+          "klimastCite": "cit04_kurzbericht_e1"
+        },
+        "risiken": {
+          "eyebrow": "リスク · 未解決事項",
+          "title": "マーケティングではなく、誠実な一覧。",
+          "intro": "このリストはSwico諮問委員会2025年10月31日付回答書（ステージ2は不十分と評価）とステージ1短報告書に基づきます。各項目に状態があり、希望的観測はありません。",
           "items": [
             {
-              "label": "Sheltered workshop drops out",
-              "severity": "High",
-              "mitigation": "Build more than one workshop partnership (Drahtzug + FARO + St. Jakob). Document manuals so any workshop can step in."
+              "label": "販路がまだ確実に示されていない",
+              "status": "未解決",
+              "body": "Swico諮問委員会は2025年10月31日付で、ステージ2の目標は十分に達成されていないと明記しています — 販路、経済性、環境影響について確かな結果がまだ揃っていません。ステージ2のパイロット導入で補います。",
+              "cite": "cit03_swico_oct2025"
             },
             {
-              "label": "CE conformity delayed or fails",
-              "severity": "High",
-              "mitigation": "Q4 2026 with external test lab. If delayed: B2B pilot installations without commercial sale, for data collection."
+              "label": "経済的影響 — 原価とマージン",
+              "status": "未解決",
+              "body": "確かな原価は小規模生産の完了後に得られます。評価は2026年6月末のステージ2最終報告書に記載。",
+              "cite": "cit03_swico_oct2025"
             },
             {
-              "label": "B2B willingness to pay below CHF 150",
-              "severity": "Medium",
-              "mitigation": "Structured interviews Q4 2026 before scaling. If low: increase B2C share, hold foundation share longer."
+              "label": "学術分析（ZHAW LCA）",
+              "status": "進行中",
+              "body": "報告書作成は2026年6月18日まで、プレゼンテーションは2026年5月末に実施。SimaProモデリングは5月中旬に完了。",
+              "cite": "cit05_zhaw_gantt"
             },
             {
-              "label": "LCA shows worse CO₂ profile than hoped",
-              "severity": "Medium",
-              "mitigation": "We publish the result unchanged, even if unfavourable. Value proposition shifts to repairability + local value creation rather than pure CO₂."
+              "label": "Barologic CE鑑定",
+              "status": "計画済み",
+              "body": "ステージ2の枠で発注済み。予算2,000 CHFを確保。",
+              "cite": "cit04_kurzbericht_e1"
             },
             {
-              "label": "Monitor supply collapses (ERZ contract changes)",
-              "severity": "Medium",
-              "mitigation": "Build a second source (private collection points, IT-lifecycle providers). Keep at least 50 monitors in reserve."
+              "label": "他モニター機種のスタンバイ対策手順整備",
+              "status": "5/12以上",
+              "body": "現時点で5機種に完成手順あり。ステージ2では全手順を公開Wikiにまとめ、世界中の電子技術者が参加できるようにします。",
+              "cite": "cit04_kurzbericht_e1"
             },
             {
-              "label": "Liability for defects — who carries it?",
-              "severity": "Medium",
-              "mitigation": "Open question Q05. Options: certified engineer model, partner takeover, insurance model. Decision before series sales."
+              "label": "Klimastiftungへの継続申請",
+              "status": "保留",
+              "body": "Klimastiftung Schweizはステージ2の結果が揃うまで資金提供しません。2026年以降のスケーリング段階に継続申請を予定。",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "当初の学術パートナーFHNWの離脱",
+              "status": "解決済み",
+              "body": "FHNWは能力不足のため継続不可。ZHAWがInnosuisse Innoscheck経由で引き継ぎ — 時間損失はあったが評価に空白はなし。",
+              "cite": "cit01_innolink"
             }
           ]
         },
-        "partners": {
-          "eyebrow": "PARTNER ECOSYSTEM",
-          "title": "Who takes which role.",
-          "intro": "The project only works as a network. Active and potential partners here.",
-          "groups": [
+        "foerderung": {
+          "eyebrow": "資金調達",
+          "title": "実際にコミットされているもの。",
+          "intro": "資金源3つが稼働中、1つが申請済みで待機、1つが保留。架空の財団や希望リストはなし。",
+          "lines": [
             {
-              "key": "production",
-              "title": "Production & workshops",
-              "names": [
-                "Drahtzug",
-                "FARO",
-                "St. Jakob",
-                "Palme"
-              ]
+              "label": "チューリッヒ市 環境衛生局",
+              "status": "受領済み",
+              "amount": "10'000 CHF",
+              "note": "2023年に準備作業・申請のための初期資金10,000 CHF。",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "pilots",
-              "title": "Pilot locations (property)",
-              "names": [
-                "Livit",
-                "Wincasa",
-                "Allreal",
-                "ISS"
-              ]
+              "label": "revamp-it自己資金",
+              "status": "投入済み",
+              "amount": "ca. 80'500 CHF",
+              "note": "収集、試験、保管、2023〜2024年の申請作業。",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "material",
-              "title": "Material source",
-              "names": [
-                "ERZ Zürich"
-              ]
+              "label": "Swico Innovationsfonds",
+              "status": "承認済み",
+              "amount": "ca. 300'000 CHF (gesamt)",
+              "note": "段階払い（ステージ1+2）。決定機関：Roger Gnos委員長のSwico諮問委員会。",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "science",
-              "title": "Scientific partnership",
-              "names": [
-                "ZHAW (LCA & cost-benefit analysis)"
-              ]
+              "label": "Innosuisse Innoscheck（ZHAW LCA）",
+              "status": "申請済み",
+              "amount": "15'000 CHF",
+              "note": "Innolink申請132.351 INNO-EEを2025年11月に提出。",
+              "cite": "cit01_innolink"
             },
             {
-              "key": "funding",
-              "title": "Funding",
-              "names": [
-                "Swico Innovationsfonds",
-                "Klimastiftung Schweiz",
-                "KliK",
-                "Gebert Rüf"
-              ]
+              "label": "Klimastiftung Schweiz",
+              "status": "保留",
+              "amount": "—",
+              "note": "肯定的評価。ただし資金提供はステージ2結果待ち。",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "label": "小規模生産の販売収入",
+              "status": "試算",
+              "amount": "30–50'000 CHF",
+              "note": "小規模生産販売の予算想定額。実数はステージ2評価で確定。",
+              "cite": "cit06_qa_swico_2023"
+            }
+          ]
+        },
+        "mitmachen": {
+          "eyebrow": "参加する",
+          "title": "プロジェクトを支える4つの具体的な方法。",
+          "intro": "パイロット拠点、ハードウェア、作業所パートナー、資金提供候補の紹介を募集しています。直接連絡：Andreas Rudin, andreas.rudin@revamp-it.ch, +41 43 960 32 64.",
+          "options": [
+            {
+              "key": "pilot",
+              "title": "パイロット拠点になる",
+              "body": "御社の階段室、オフィス、学校に試験的に照明を設置し、寿命と消費電力を学術的に評価します。求める利用パターンは3つ：常時運転、昼／週末タイマー、人感センサー。",
+              "ctaLabel": "パイロット問い合わせ",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%E3%83%91%E3%82%A4%E3%83%AD%E3%83%83%E3%83%88%E6%8B%A0%E7%82%B9%20Monitor-Upcycling",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "donate",
+              "title": "モニターを寄贈する",
+              "body": "19〜24インチ、LEDバックライト、電源が入るもの — 傷や画素欠けがあっても歓迎。CRT、電源故障、筐体破損は不可。お渡し先：Birmensdorferstr. 379, 8055 Zürich。",
+              "ctaLabel": "機器を寄贈する",
+              "ctaHref": "/get-involved/donate",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "workshop",
+              "title": "作業所パートナーになる",
+              "body": "他の保護作業所やRepair Café：手順、工具、スタンバイ・バイパス解を共有します。目標は公開Wikiでのデータベース化。",
+              "ctaLabel": "作業所問い合わせ",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%E4%BD%9C%E6%A5%AD%E6%89%80%E3%83%91%E3%83%BC%E3%83%88%E3%83%8A%E3%83%BC%20Monitor-Upcycling",
+              "cite": "cit04_kurzbericht_e1"
+            },
+            {
+              "key": "fund",
+              "title": "資金提供候補を推薦する",
+              "body": "オープンハードウェア＋社会的イノベーション＋スイス国内素材循環に合う財団を探しています。心当たり、または橋渡しが可能であれば、一報お願いします。",
+              "ctaLabel": "推薦を送る",
+              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%E8%B3%87%E9%87%91%E6%8F%90%E4%BE%9B%E5%80%99%E8%A3%9C%20Monitor-Upcycling",
+              "cite": null
+            }
+          ]
+        },
+        "belege": {
+          "eyebrow": "出典 · 参考資料",
+          "title": "すべての数値、すべての主張に出典を。",
+          "intro": "社内文書または外部リンクで、原文のまま引用可能です。不足や検証希望があればご連絡ください。",
+          "citations": [
+            {
+              "key": "cit01_innolink",
+              "label": "Innolink申請 132.351 INNO-EE",
+              "detail": "Innosuisse Innovation Booster / Innoscheck申請『光源としてのモニター再利用の環境性能評価』、ZHAW + Verein revamp-it、2025年11月21日",
+              "url": null
+            },
+            {
+              "key": "cit02_swico_feb2026",
+              "label": "Swico回答 2026年3月12日",
+              "detail": "Swico Innovationsfonds、プロジェクト02-2023-01回答書、Roger Gnos、2026年3月12日 — ステージ2最終報告書の期限を2026年6月30日に延長、最終プレゼンテーション2026年7月3日9:00",
+              "url": "https://www.swico.ch"
+            },
+            {
+              "key": "cit03_swico_oct2025",
+              "label": "Swico回答 2025年10月31日",
+              "detail": "Swico Innovationsfonds、プロジェクト02-2023-01回答書、Roger Gnos、2025年10月31日 — ステージ2目標は十分に達成されておらず、LCAは必須ではない",
+              "url": null
+            },
+            {
+              "key": "cit04_kurzbericht_e1",
+              "label": "ステージ1短報告書（2026年3月12日時点）",
+              "detail": "Verein revamp-it、プロジェクト2023-02-01『IT機器の機能的循環利用』ステージ1短報告書、2026年3月12日改訂版",
+              "url": null
+            },
+            {
+              "key": "cit05_zhaw_gantt",
+              "label": "ZHAWプロジェクト計画 132.351 INNO-EE",
+              "detail": "ZHAW Institut für Nachhaltige Entwicklung、プロジェクト132.351 INNO-EEのGantt計画（キックオフ2026年1月19日、報告書2026年6月18日）、2026年1月20日時点",
+              "url": null
+            },
+            {
+              "key": "cit06_qa_swico_2023",
+              "label": "Swico質問票、revamp-it回答 2023年9月28日",
+              "detail": "Verein revamp-it、申請『IT機器の機能的循環利用』に対するSwico質問票回答、Andreas Rudin、2023年9月28日",
+              "url": null
+            },
+            {
+              "key": "cit07_klimast_2023",
+              "label": "Klimastiftung申請 revamp-it 2023",
+              "detail": "Verein revamp-it、Klimastiftung Schweizへの申請『IT機器の機能的循環利用』、2023年8月31日時点",
+              "url": null
+            },
+            {
+              "key": "cit08_modelle_md",
+              "label": "改修モデル情報（revamp-it / ReCreaZZZ）",
+              "detail": "これまでに改修したモニター機種の一覧と分圧器に関する技術メモ、2025年2月26日時点",
+              "url": null
+            },
+            {
+              "key": "cit09_brilliant_jumbo",
+              "label": "写真 Brilliant ABIE LED Panel 24W、Jumboホームセンター",
+              "detail": "Jumboの売り場で撮影（24W 40×40cm CCT+DIM+RGB+リモコンで店頭価格CHF 79.95）",
+              "url": "https://www.jumbo.ch"
+            },
+            {
+              "key": "cit10_film",
+              "label": "動画：モニターから照明への改修",
+              "detail": "改修プロセスの動画記録。Revamp-IT Nextcloudインスタンスでホスト",
+              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+            },
+            {
+              "key": "cit11_vesa",
+              "label": "VESA規格 MIS-D",
+              "detail": "モニター背面の75/100 mmネジ間隔の規格（取り付け）",
+              "url": "https://www.vesa-standard.de/vesa-mis-d.html"
+            },
+            {
+              "key": "cit12_oshwa",
+              "label": "Open Source Hardware Association",
+              "detail": "オープンハードウェアのライセンス・定義標準",
+              "url": "https://www.oshwa.org/"
+            },
+            {
+              "key": "cit13_ohwr",
+              "label": "Open Hardware Repository（CERN）",
+              "detail": "オープンハードウェアのプロジェクトプラットフォーム",
+              "url": "https://ohwr.org/welcome"
+            },
+            {
+              "key": "cit14_swico_recycling",
+              "label": "Swico Recycling",
+              "detail": "前払いリサイクル料金で運営される、スイスのIT電子機器収集システム",
+              "url": "https://www.swico.ch/de/recycling/"
+            },
+            {
+              "key": "cit15_erz",
+              "label": "ERZ Entsorgung + Recycling Zürich",
+              "detail": "チューリッヒ市の素材収集拠点",
+              "url": "https://www.stadt-zuerich.ch/de/politik-und-verwaltung/stadtverwaltung/tiefbau-und-entsorgungsdepartement/entsorgung-und-recycling-zuerich.html"
+            },
+            {
+              "key": "cit16_klimast",
+              "label": "Klimastiftung Schweiz",
+              "detail": "スイス気候財団 — 中小企業向け支援プログラム",
+              "url": "https://www.klimastiftung.ch/"
+            },
+            {
+              "key": "cit17_innosuisse",
+              "label": "Innosuisse",
+              "detail": "スイスのイノベーション促進機関",
+              "url": "https://www.innosuisse.admin.ch/"
+            },
+            {
+              "key": "cit18_iso14044",
+              "label": "ISO 14044",
+              "detail": "ライフサイクル評価の規格 — 要求事項と指針",
+              "url": "https://www.iso.org/standard/38498.html"
+            },
+            {
+              "key": "cit19_werkraum4",
+              "label": "Werkraum 4（Stiftung zsge）",
+              "detail": "Stiftung zsgeのブランド。recyclingArtおよびlerskiラベルでの生産パートナー",
+              "url": "https://www.werkraum4.ch"
+            },
+            {
+              "key": "cit20_barologic",
+              "label": "Barologic GmbH Winterthur",
+              "detail": "アップサイクル照明のCE鑑定（Roland Bamert）",
+              "url": "https://barologic.ch"
             }
           ]
         }

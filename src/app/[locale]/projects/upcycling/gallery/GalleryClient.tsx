@@ -52,16 +52,29 @@ type GalleryMessages = {
   placeholderNote: string
 }
 
+/**
+ * The 12 monitor models that have been successfully retrofitted to lamps,
+ * sourced from `Recreazzz_Anleitungen_zu_Umbau/! Infos zu umgebautenModellen.md`
+ * (revamp-it / ReCreaZZZ, 2025-02-26). Only the Lenovo L2251pwd has real
+ * production photos (May 2026); the rest fall back to the SVG placeholder
+ * until photography lands. Tier is intentionally heuristic — until real
+ * photography exists, all entries use the `functional` cool-neutral
+ * placeholder palette.
+ */
 const PIECES: Piece[] = [
-  { id: 'lenovo-l2251pwd-04', model: 'Lenovo L2251pwd', tier: 'art',        variant: 'art',        seed: 301, image: 'spotlight-lenovo-l2251pwd-art.jpg' },
-  { id: 'lenovo-l2251pwd-01', model: 'Lenovo L2251pwd', tier: 'functional', variant: 'functional', seed: 101, image: 'lenovo-l2251pwd-functional-1.jpg' },
-  { id: 'lenovo-l2251pwd-02', model: 'Lenovo L2251pwd', tier: 'functional', variant: 'functional', seed: 102, image: 'lenovo-l2251pwd-functional-2.jpg' },
-  { id: 'lenovo-l2251pwd-03', model: 'Lenovo L2251pwd', tier: 'decor',      variant: 'warm',       seed: 201, image: 'lenovo-l2251pwd-decor-warm.jpg' },
-  { id: 'dell-u2412m-01',     model: 'Dell U2412M',     tier: 'functional', variant: 'cool',       seed: 103, image: 'dell-u2412m-functional.jpg' },
-  { id: 'hp-l2245wg-01',      model: 'HP L2245wg',      tier: 'decor',      variant: 'warm',       seed: 202, image: 'hp-l2245wg-decor.jpg' },
-  { id: 'samsung-s24-01',     model: 'Samsung S24',     tier: 'decor',      variant: 'warm',       seed: 203, image: 'samsung-s24-decor.jpg' },
-  { id: 'asus-mx259h-01',     model: 'Asus MX259H',     tier: 'art',        variant: 'art',        seed: 302, image: 'asus-mx259h-art.jpg' },
-  { id: 'eizo-flexscan-01',   model: 'Eizo FlexScan',   tier: 'art',        variant: 'cool',       seed: 303, image: 'eizo-flexscan-art.jpg' },
+  { id: 'lenovo-l2251pwd',        model: 'Lenovo L2251pwd',        tier: 'functional', variant: 'functional', seed: 101, image: 'lenovo-l2251pwd-finished.gif' },
+  { id: 'nec-multisync-e233-wmi', model: 'NEC Multisync E233 WMi', tier: 'functional', variant: 'functional', seed: 102 },
+  { id: 'lenovo-t2254a',          model: 'Lenovo T2254A',          tier: 'functional', variant: 'functional', seed: 103 },
+  { id: 'lenovo-24',              model: 'Lenovo 24"',             tier: 'functional', variant: 'functional', seed: 104 },
+  { id: 'dell-u2312hmt',          model: 'DELL U2312HMt',          tier: 'functional', variant: 'cool',       seed: 105 },
+  { id: 'dell-u2412m',            model: 'DELL U2412M',            tier: 'functional', variant: 'cool',       seed: 106 },
+  { id: 'dell-u2713hb',           model: 'DELL U2713Hb',           tier: 'functional', variant: 'cool',       seed: 107 },
+  { id: 'dell-p2418d',            model: 'DELL P2418D',            tier: 'functional', variant: 'cool',       seed: 108 },
+  { id: 'hp-elite-display-e242',  model: 'HP EliteDisplay E242',   tier: 'functional', variant: 'warm',       seed: 109 },
+  { id: 'hp-e24i-g4',             model: 'HP E24i G4',             tier: 'functional', variant: 'warm',       seed: 110 },
+  { id: 'hp-e243m',               model: 'HP E243m',               tier: 'functional', variant: 'warm',       seed: 111 },
+  { id: 'asus-v247',              model: 'ASUS V247',              tier: 'decor',      variant: 'warm',       seed: 112 },
+  { id: 'eizo-ev2315w',           model: 'EIZO EV2315W',           tier: 'decor',      variant: 'cool',       seed: 113 },
 ]
 
 const FILTERS: Filter[] = ['all', 'functional', 'decor', 'art']

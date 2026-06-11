@@ -1,163 +1,122 @@
 import { getTranslations } from 'next-intl/server'
-import { ExternalLink, ArrowRight, Check, X, Mail } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, ExternalLink, Mail, Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /**
- * /projects/upcycling/businessplan — the funder/partner deep-evidence
- * surface for the Monitor-Upcycling project.
+ * /projects/upcycling/businessplan — source-grounded evidence page.
  *
- * Layout philosophy (2026-06 restructure):
- *   - Sticky table of contents at the top lets readers jump to any
- *     section. The page is long by design; navigation must be flawless.
- *   - Every claim links to a source. Trust beats prose.
- *   - Information hierarchy: hero → market research (evidence) →
- *     alternatives → customers → suppliers → economics → risk → research
- *     → open questions → get involved. The reader can stop at any level
- *     and still have something coherent.
- *   - Server-rendered; all interactivity is native (sticky CSS + anchor
- *     navigation). No client component needed.
+ * Every claim, number and proper noun is in messages/<lc>.json under
+ * projects.upcycling.businessPlan, anchored to a citation in the
+ * `belege.citations` block. SSOT enforced by
+ * `npm run i18n:businessplan` (scripts/i18n-businessplan-parity.mjs):
+ *   - identical key shape across all 8 locales
+ *   - numeric values, dates, URLs, photo paths byte-identical to DE
  *
- * Numbers live in messages/<locale>.json paired with their framing prose
- * and source URLs so a number can't drift from its caveat or citation.
+ * Page structure: see /home/g/.claude/plans/playful-forging-widget.md.
+ * 15 anchored sections, sticky left rail TOC on lg+, mobile select on
+ * smaller. Server component, native <details> for progressive disclosure,
+ * zero client JS.
  */
 
-type Money = string
+/* ─── Types ────────────────────────────────────────────────────────── */
 
-type Alternative = {
-  label: string
-  price: Money
-  tradeoff: string
-  isOurs?: boolean
-  sourceUrl?: string
-}
-
-type RiskItem = { label: string; severity: string; mitigation: string }
-
-type PartnerGroup = { key: string; title: string; names: string[] }
-
-type ResearchItem = { title: string; status: string; description: string }
-
-type DataPoint = {
-  label: string
-  value: string
-  note: string
-  sourceLabel: string
-  sourceUrl: string
-}
-
-type SupplierSource = {
-  key: string
-  label: string
-  description: string
-  volume: string
-  linkLabel: string
-  linkUrl: string
-}
-
-type OpenQuestion = { q: string; title: string; body: string; tag: string }
-
-type GetInvolvedOption = {
-  key: string
-  title: string
-  body: string
-  ctaLabel: string
-  ctaHref: string
-  linkLabel?: string
-  linkUrl?: string
-}
+type Cite = string | null
 
 type NavItem = { id: string; label: string }
 
-type BusinessPlanCopy = {
+type Kpi = { label: string; value: string; note: string; cite: Cite }
+
+type BuildStep = { title: string; body: string; cite: Cite; linkLabel?: string; linkUrl?: string }
+
+type Photo = { src: string; caption: string }
+
+type StockRow = { label: string; value: string; emphasis?: boolean; note?: string }
+
+type Channel = { label: string; body: string; cite: Cite; linkLabel?: string; linkUrl?: string }
+
+type AlternativeRow = { label: string; price: string; note: string; cite: Cite; linkLabel: string | null; linkUrl: string | null; isOurs?: boolean }
+
+type Segment = { label: string; body: string; cite: Cite }
+
+type BudgetRow = { label: string; value: string; note?: string; emphasis?: boolean }
+
+type FactRow = { label: string; value: string; cite: Cite; linkLabel?: string; linkUrl?: string }
+
+type TimelinePhase = { label: string; date: string }
+
+type PartnerItem = { name: string; role: string; cite: Cite; linkLabel?: string; linkUrl?: string }
+
+type PartnerGroup = { title: string; intro?: string; items: PartnerItem[] }
+
+type RiskItem = { label: string; status: string; body: string; cite: Cite }
+
+type FundingLine = { label: string; status: string; amount: string; note: string; cite: Cite }
+
+type GetInvolved = { key: string; title: string; body: string; ctaLabel: string; ctaHref: string; cite: Cite }
+
+type Citation = { key: string; label: string; detail: string; url: string | null }
+
+type BusinessPlan = {
   meta: { title: string; description: string }
   nav: { label: string; items: NavItem[] }
-  hero: { eyebrow: string; title: string; intro: string }
-  marketResearch: {
-    eyebrow: string
-    title: string
-    intro: string
-    datapoints: DataPoint[]
-    methodologyNote: string
-    methodologyLinks: { label: string; url: string }[]
+  hero: { eyebrow: string; title: string; intro: string; heroImage: string; heroImageAlt: string }
+  status: { eyebrow: string; title: string; intro: string; kpis: Kpi[] }
+  produkt: {
+    eyebrow: string; title: string; intro: string
+    buildSteps: { title: string; steps: BuildStep[] }
+    photoGallery: { title: string; intro: string; items: Photo[] }
+    links: { label: string; url: string }[]
   }
-  marketContext: {
-    eyebrow: string
-    title: string
-    intro: string
-    alternatives: Alternative[]
+  lieferanten: {
+    eyebrow: string; title: string; intro: string
+    stockBreakdown: { title: string; subtitle: string; rows: StockRow[]; cite: Cite }
+    channels: { title: string; items: Channel[] }
+    criteria: { title: string; items: string[]; cite: Cite }
+    rejected: { title: string; items: string[]; cite: Cite }
+  }
+  alternativen: {
+    eyebrow: string; title: string; intro: string
+    benchmarkPhoto: Photo
+    alternativesTable: { title: string; rows: AlternativeRow[] }
     verdict: string
   }
-  segments: {
-    eyebrow: string
-    title: string
-    intro: string
-    b2b: { label: string; volume: string; description: string; examples: string[] }
-    b2c: { label: string; volume: string; description: string; examples: string[] }
+  kunden: {
+    eyebrow: string; title: string; intro: string; segments: Segment[]
+    pilotPlan: { title: string; intro: string; items: string[]; cite: Cite }
   }
-  suppliers: {
-    eyebrow: string
-    title: string
-    intro: string
-    sources: SupplierSource[]
-    criteria: { title: string; items: string[] }
-    rejected: { title: string; items: string[] }
+  wirtschaftlichkeit: {
+    eyebrow: string; title: string; intro: string
+    budget: { title: string; note: string; rows: BudgetRow[]; cite: Cite }
+    scopeNote: string; scopeCite: Cite
   }
-  risks: {
-    eyebrow: string
-    title: string
-    intro: string
-    items: RiskItem[]
+  wissenschaft: {
+    eyebrow: string; title: string; intro: string
+    factsheet: { title: string; rows: FactRow[] }
+    timeline: { title: string; phases: TimelinePhase[]; cite: Cite }
+    scope: { title: string; items: string[]; cite: Cite }
+    history: string; historyCite: Cite
   }
-  partners: {
-    eyebrow: string
-    title: string
-    intro: string
+  ce: {
+    eyebrow: string; title: string; intro: string
+    approach: { title: string; items: { label: string; body: string; cite: Cite }[] }
+  }
+  partner: {
+    eyebrow: string; title: string; intro: string
     groups: PartnerGroup[]
+    klimastNote: string; klimastCite: Cite
   }
-  research: {
-    title: string
-    intro: string
-    items: ResearchItem[]
-  }
-  openQuestions: {
-    eyebrow: string
-    title: string
-    intro: string
-    items: OpenQuestion[]
-    feedbackCta: string
-    feedbackEmail: string
-  }
-  getInvolved: {
-    eyebrow: string
-    title: string
-    intro: string
-    options: GetInvolvedOption[]
-  }
-  downloads: { title: string; note: string; cta: string }
+  risiken: { eyebrow: string; title: string; intro: string; items: RiskItem[] }
+  foerderung: { eyebrow: string; title: string; intro: string; lines: FundingLine[] }
+  mitmachen: { eyebrow: string; title: string; intro: string; options: GetInvolved[] }
+  belege: { eyebrow: string; title: string; intro: string; citations: Citation[] }
 }
 
-type EconomicsCopy = {
-  eyebrow: string
-  title: string
-  intro: string
-  unitEconomics: {
-    title: string
-    note: string
-    rows: Array<{ label: string; value: string; aside: string; emphasis?: boolean }>
-  }
-  price: { title: string; body: string }
-  funding: {
-    title: string
-    body: string
-    sources: Array<{ label: string; share: string; note: string }>
-  }
-  sustainability: { title: string; body: string }
-  transparency: { note: string; cta: string }
-}
+/* ─── Metadata + page entry ────────────────────────────────────────── */
 
 export async function generateMetadata() {
   const t = await getTranslations('projects')
-  const m = t.raw('upcycling.businessPlan') as BusinessPlanCopy
+  const m = t.raw('upcycling.businessPlan') as BusinessPlan
   return {
     title: m.meta.title,
     description: m.meta.description,
@@ -167,455 +126,496 @@ export async function generateMetadata() {
 
 export default async function UpcyclingBusinessPlanPage() {
   const t = await getTranslations('projects')
-  const m = t.raw('upcycling.businessPlan') as BusinessPlanCopy
-  const econ = t.raw('upcycling.economics') as EconomicsCopy
+  const m = t.raw('upcycling.businessPlan') as BusinessPlan
+  const citeMap = new Map(m.belege.citations.map((c, i) => [c.key, i + 1]))
 
   return (
     <article className="bg-canvas">
       <Hero hero={m.hero} />
-      <TableOfContents nav={m.nav} />
-      <MarketResearch section={m.marketResearch} />
-      <MarketContext section={m.marketContext} />
-      <Segments section={m.segments} />
-      <Suppliers section={m.suppliers} />
-      <UnitCost section={econ.unitEconomics} priceTitle={econ.price.title} priceBody={econ.price.body} />
-      <FundingMix section={econ.funding} />
-      <Sustainability section={econ.sustainability} />
-      <Risks section={m.risks} />
-      <Partners section={m.partners} />
-      <Research section={m.research} />
-      <OpenQuestions section={m.openQuestions} />
-      <GetInvolved section={m.getInvolved} />
-      <Downloads section={m.downloads} />
+      <MobileToc nav={m.nav} />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-10">
+          <DesktopTocRail nav={m.nav} />
+          <main className="min-w-0">
+            <Status section={m.status} citeMap={citeMap} />
+            <Produkt section={m.produkt} />
+            <Lieferanten section={m.lieferanten} citeMap={citeMap} />
+            <Alternativen section={m.alternativen} citeMap={citeMap} />
+            <Kunden section={m.kunden} citeMap={citeMap} />
+            <Wirtschaftlichkeit section={m.wirtschaftlichkeit} citeMap={citeMap} />
+            <Wissenschaft section={m.wissenschaft} citeMap={citeMap} />
+            <CE section={m.ce} citeMap={citeMap} />
+            <Partner section={m.partner} citeMap={citeMap} />
+            <Risiken section={m.risiken} citeMap={citeMap} />
+            <Foerderung section={m.foerderung} citeMap={citeMap} />
+            <Mitmachen section={m.mitmachen} />
+            <Belege section={m.belege} />
+          </main>
+        </div>
+      </div>
     </article>
   )
 }
 
-/* ─── Hero ──────────────────────────────────────────────────────── */
+/* ─── Citation rendering ──────────────────────────────────────────── */
 
-function Hero({ hero }: { hero: BusinessPlanCopy['hero'] }) {
+function Cite({ k, citeMap }: { k: Cite; citeMap: Map<string, number> }) {
+  if (!k) return null
+  const n = citeMap.get(k)
+  if (!n) return null
+  return (
+    <a
+      href={`#belege-${k}`}
+      className="ml-1 inline-flex align-baseline rounded-sm bg-surface-raised px-1 text-[10px] font-mono text-text-tertiary no-underline hover:bg-action-muted hover:text-action"
+      aria-label={`Beleg ${n}`}
+    >
+      [{n}]
+    </a>
+  )
+}
+
+/* ─── Hero ─────────────────────────────────────────────────────────── */
+
+function Hero({ hero }: { hero: BusinessPlan['hero'] }) {
   return (
     <header className="border-b border-subtle bg-surface-base">
-      <div className="mx-auto max-w-5xl px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
-        <div className="ui-public-eyebrow">{hero.eyebrow}</div>
-        <h1 className="ui-public-display-lg mt-3">{hero.title}</h1>
-        <p className="ui-public-section-lede mt-4 max-w-3xl">{hero.intro}</p>
+      <div className="mx-auto max-w-7xl px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div className="min-w-0">
+            <div className="ui-public-eyebrow">{hero.eyebrow}</div>
+            <h1 className="ui-public-display-lg mt-3">{hero.title}</h1>
+            <p className="ui-public-section-lede mt-4 max-w-2xl">{hero.intro}</p>
+          </div>
+          <figure className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-subtle bg-canvas">
+            <Image
+              src={hero.heroImage}
+              alt={hero.heroImageAlt}
+              fill
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="object-cover"
+              unoptimized
+              priority
+            />
+          </figure>
+        </div>
       </div>
     </header>
   )
 }
 
-/* ─── Table of Contents (sticky sub-nav) ─────────────────────────
- * Anchor links to every major section, sticky under the main header.
- * On mobile, the list scrolls horizontally — never wraps, never hides.
- * CSS scroll-behavior:smooth + scroll-margin-top:5rem on each section
- * lands the anchor target below the sticky bar instead of behind it.
- */
-function TableOfContents({ nav }: { nav: BusinessPlanCopy['nav'] }) {
+/* ─── TOC: desktop rail + mobile select ───────────────────────────── */
+
+function DesktopTocRail({ nav }: { nav: BusinessPlan['nav'] }) {
   return (
-    <nav
-      aria-label={nav.label}
-      className="ui-sticky-subnav border-b border-subtle bg-surface-base/95 backdrop-blur supports-[backdrop-filter]:bg-surface-base/75"
-    >
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-1 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mr-3 shrink-0">
-            {nav.label}
-          </span>
-          {nav.items.map((item) => (
+    <nav aria-label={nav.label} className="ui-public-toc-rail hidden lg:block">
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mb-3">
+        {nav.label}
+      </p>
+      <ul className="space-y-1.5 text-sm">
+        {nav.items.map((item) => (
+          <li key={item.id}>
             <a
-              key={item.id}
               href={`#${item.id}`}
-              className="inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-xs font-medium text-text-tertiary transition-colors hover:bg-surface-raised hover:text-text-primary"
+              className="block rounded-md px-2 py-1.5 text-text-tertiary transition-colors hover:bg-surface-raised hover:text-text-primary"
             >
               {item.label}
             </a>
-          ))}
-        </div>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+function MobileToc({ nav }: { nav: BusinessPlan['nav'] }) {
+  // Server-renderable mobile TOC: a native <select> wrapped in a tiny
+  // inline script that navigates on change. No React state, no JS bundle.
+  return (
+    <nav aria-label={nav.label} className="ui-sticky-subnav lg:hidden border-b border-subtle bg-surface-base/95 backdrop-blur supports-[backdrop-filter]:bg-surface-base/75">
+      <div className="mx-auto max-w-5xl px-4 py-2.5 sm:px-6">
+        <label className="flex items-center gap-3">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary shrink-0">
+            {nav.label}
+          </span>
+          <select
+            className="flex-1 min-w-0 rounded-md border border-default bg-surface-base px-2 py-1.5 text-sm text-text-primary"
+            defaultValue=""
+            onChange={
+               
+              undefined
+            }
+            // Inline JS handler — server component allows this attribute string
+            // because next/script isn't needed for a one-line nav handler.
+            {...{ onchange: "if(this.value){location.hash=this.value}" }}
+          >
+            <option value="">— {nav.label} —</option>
+            {nav.items.map((item) => (
+              <option key={item.id} value={item.id}>{item.label}</option>
+            ))}
+          </select>
+        </label>
       </div>
     </nav>
   )
 }
 
-/* ─── Section wrapper — applies anchor scroll-margin uniformly ──── */
+/* ─── Section wrapper ─────────────────────────────────────────────── */
 
 function Section({
   id,
   tone = 'canvas',
   children,
-  labelledBy,
-  ariaLabel,
 }: {
   id: string
   tone?: 'canvas' | 'raised' | 'base'
   children: React.ReactNode
-  labelledBy?: string
-  ariaLabel?: string
 }) {
   return (
     <section
       id={id}
       className={cn(
-        'border-b border-subtle scroll-mt-20 sm:scroll-mt-24',
+        'border-b border-subtle scroll-mt-24 sm:scroll-mt-28',
         tone === 'canvas' && 'bg-canvas',
-        tone === 'raised' && 'bg-surface-raised',
-        tone === 'base'   && 'bg-surface-base',
+        tone === 'raised' && 'bg-surface-raised -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-0 lg:px-0',
+        tone === 'base'   && 'bg-surface-base -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-0 lg:px-0',
       )}
-      aria-labelledby={labelledBy}
-      aria-label={ariaLabel}
     >
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        {children}
-      </div>
+      <div className="py-14 sm:py-16">{children}</div>
     </section>
   )
 }
 
-/* ─── Market research (NEW) ─────────────────────────────────────── */
+/* ─── 1. Status ────────────────────────────────────────────────────── */
 
-function MarketResearch({ section }: { section: BusinessPlanCopy['marketResearch'] }) {
+function Status({ section, citeMap }: { section: BusinessPlan['status']; citeMap: Map<string, number> }) {
   return (
-    <Section id="marktforschung" tone="base" labelledBy="research-title">
+    <Section id="status" tone="base">
       <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="research-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
-
-      <div className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-3">
-        {section.datapoints.map((dp, i) => (
-          <article
-            key={i}
-            className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-canvas p-5"
-          >
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-              {dp.label}
-            </span>
-            <span className="font-mono text-2xl font-light tabular-nums text-text-primary">
-              {dp.value}
-            </span>
-            <p className="text-sm leading-relaxed text-text-secondary">{dp.note}</p>
-            <a
-              href={dp.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto inline-flex items-center gap-1.5 text-xs font-medium text-action hover:underline underline-offset-2"
-            >
-              {dp.sourceLabel}
-              <ExternalLink className="h-3 w-3" aria-hidden="true" />
-            </a>
-          </article>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {section.kpis.map((k) => (
+          <li key={k.label} className="rounded-xl border border-subtle bg-canvas p-5">
+            <div className="font-mono text-xs uppercase tracking-[0.18em] text-action">{k.label}</div>
+            <div className="mt-2 font-mono text-xl font-light tabular-nums text-text-primary">{k.value}</div>
+            <p className="mt-2 text-xs leading-relaxed text-text-secondary">
+              {k.note}<Cite k={k.cite} citeMap={citeMap} />
+            </p>
+          </li>
         ))}
+      </ul>
+    </Section>
+  )
+}
+
+/* ─── 2. Was wir bauen ────────────────────────────────────────────── */
+
+function Produkt({ section }: { section: BusinessPlan['produkt'] }) {
+  return (
+    <Section id="produkt" tone="canvas">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+
+      <h3 className="mt-10 text-lg font-semibold text-text-primary">{section.buildSteps.title}</h3>
+      <ol className="mt-4 grid gap-4 sm:grid-cols-2">
+        {section.buildSteps.steps.map((s, i) => (
+          <li key={i} className="flex flex-col gap-2 rounded-xl border border-subtle bg-surface-base p-5">
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">{`Schritt ${i + 1}`}</span>
+            <h4 className="text-base font-semibold text-text-primary">{s.title}</h4>
+            <p className="text-sm leading-relaxed text-text-secondary">{s.body}</p>
+            {s.linkUrl && s.linkLabel && (
+              <a href={s.linkUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 pt-2 text-xs font-medium text-action hover:underline underline-offset-2">
+                {s.linkLabel}<ExternalLink className="h-3 w-3" aria-hidden="true" />
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+
+      <h3 className="mt-12 text-lg font-semibold text-text-primary">{section.photoGallery.title}</h3>
+      <p className="mt-2 text-sm text-text-secondary">{section.photoGallery.intro}</p>
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {section.photoGallery.items.map((p) => (
+          <li key={p.src} className="flex flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-3">
+            <figure className="relative aspect-[4/3] overflow-hidden rounded-lg bg-canvas">
+              <Image
+                src={p.src}
+                alt={p.caption}
+                fill
+                sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+                className="object-cover"
+                unoptimized
+              />
+            </figure>
+            <figcaption className="text-xs leading-relaxed text-text-secondary">{p.caption}</figcaption>
+          </li>
+        ))}
+      </ul>
+
+      <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        {section.links.map((l) => (
+          <li key={l.url}>
+            <a href={l.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-medium text-action hover:underline underline-offset-2">
+              {l.label}<ExternalLink className="h-3 w-3" aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )
+}
+
+/* ─── 3. Lieferanten ──────────────────────────────────────────────── */
+
+function Lieferanten({ section, citeMap }: { section: BusinessPlan['lieferanten']; citeMap: Map<string, number> }) {
+  return (
+    <Section id="lieferanten" tone="raised">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+
+      <div className="mt-8 rounded-xl border border-subtle bg-surface-base p-5 sm:p-6">
+        <h3 className="text-lg font-semibold text-text-primary">{section.stockBreakdown.title}</h3>
+        <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">{section.stockBreakdown.subtitle}</p>
+        <dl className="mt-4 divide-y divide-subtle border-y border-subtle">
+          {section.stockBreakdown.rows.map((r, i) => (
+            <div key={i} className={cn('grid grid-cols-[1fr_auto] gap-x-4 py-3 sm:gap-x-6', r.emphasis && 'bg-action-muted/40 -mx-4 px-4 sm:-mx-6 sm:px-6')}>
+              <dt className={cn('text-sm text-text-primary', r.emphasis && 'font-semibold')}>{r.label}{r.note && <span className="ml-2 text-xs text-action">{r.note}</span>}</dt>
+              <dd className={cn('font-mono text-sm tabular-nums text-text-primary', r.emphasis && 'font-semibold')}>{r.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-3 text-xs text-text-tertiary">Quelle:<Cite k={section.stockBreakdown.cite} citeMap={citeMap} /></p>
       </div>
 
-      <details className="mt-8 group rounded-xl border border-subtle bg-canvas open:bg-surface-raised">
-        <summary className="cursor-pointer list-none px-5 py-4 text-sm font-medium text-text-secondary flex items-center justify-between gap-3 hover:text-text-primary">
-          <span className="flex items-center gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary">
-              METHODIK
-            </span>
-            <span>{section.methodologyNote.split('.')[0]}.</span>
-          </span>
-          <span aria-hidden="true" className="font-mono text-text-tertiary transition-transform group-open:rotate-180">
-            ⌄
-          </span>
+      <h3 className="mt-10 text-lg font-semibold text-text-primary">{section.channels.title}</h3>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-3">
+        {section.channels.items.map((c, i) => (
+          <li key={i} className="flex flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-5">
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-action">{c.label}</span>
+            <p className="text-sm leading-relaxed text-text-secondary">{c.body}<Cite k={c.cite} citeMap={citeMap} /></p>
+            {c.linkUrl && c.linkLabel && (
+              <a href={c.linkUrl} {...(c.linkUrl.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="mt-auto inline-flex items-center gap-1.5 text-xs font-medium text-action hover:underline underline-offset-2">
+                {c.linkLabel}<ExternalLink className="h-3 w-3" aria-hidden="true" />
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <CriteriaCard variant="accept" title={section.criteria.title} items={section.criteria.items} cite={section.criteria.cite} citeMap={citeMap} />
+        <CriteriaCard variant="reject" title={section.rejected.title} items={section.rejected.items} cite={section.rejected.cite} citeMap={citeMap} />
+      </div>
+    </Section>
+  )
+}
+
+function CriteriaCard({ variant, title, items, cite, citeMap }: { variant: 'accept' | 'reject'; title: string; items: string[]; cite: Cite; citeMap: Map<string, number> }) {
+  const Icon = variant === 'accept' ? Check : X
+  return (
+    <div className="min-w-0 rounded-xl border border-subtle bg-surface-base p-6">
+      <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-action">{title}</h3>
+      <ul className="mt-4 space-y-2 text-sm text-text-secondary">
+        {items.map((item, i) => (
+          <li key={i} className="flex items-start gap-2">
+            <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', variant === 'accept' ? 'text-action' : 'text-text-tertiary')} aria-hidden="true" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-xs text-text-tertiary">Quelle:<Cite k={cite} citeMap={citeMap} /></p>
+    </div>
+  )
+}
+
+/* ─── 4. Alternativen am Markt ────────────────────────────────────── */
+
+function Alternativen({ section, citeMap }: { section: BusinessPlan['alternativen']; citeMap: Map<string, number> }) {
+  return (
+    <Section id="alternativen" tone="canvas">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+
+      <figure className="mt-8 grid gap-6 rounded-xl border border-subtle bg-surface-base p-4 sm:grid-cols-[1.2fr_1fr] sm:p-6">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-canvas">
+          <Image src={section.benchmarkPhoto.src} alt={section.benchmarkPhoto.caption} fill sizes="(min-width: 640px) 40vw, 100vw" className="object-cover" unoptimized />
+        </div>
+        <figcaption className="self-center text-sm leading-relaxed text-text-secondary">{section.benchmarkPhoto.caption}</figcaption>
+      </figure>
+
+      <h3 className="mt-10 text-lg font-semibold text-text-primary">{section.alternativesTable.title}</h3>
+      <ul className="mt-4 divide-y divide-subtle border-y border-subtle">
+        {section.alternativesTable.rows.map((alt, i) => (
+          <li key={i} className={cn('grid grid-cols-1 gap-2 py-5 sm:grid-cols-[1fr_auto] sm:gap-x-6', alt.isOurs && 'bg-action-muted/30 -mx-4 px-4 sm:-mx-6 sm:px-6')}>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className={cn('text-sm font-medium text-text-primary sm:text-base', alt.isOurs && 'text-action')}>{alt.label}</span>
+                {alt.linkUrl && alt.linkLabel && (
+                  <a href={alt.linkUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-xs text-action hover:underline" aria-label={`${alt.label} — Quelle`}>
+                    {alt.linkLabel}<ExternalLink className="h-3 w-3" aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+              <p className="mt-1.5 text-xs leading-relaxed text-text-secondary sm:text-sm">{alt.note}<Cite k={alt.cite} citeMap={citeMap} /></p>
+            </div>
+            <div className="font-mono text-sm tabular-nums text-text-primary sm:text-base sm:text-right">{alt.price}</div>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-text-secondary sm:text-base">
+        <span className="mr-2 font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">→</span>{section.verdict}
+      </p>
+    </Section>
+  )
+}
+
+/* ─── 5. Kunden ──────────────────────────────────────────────────── */
+
+function Kunden({ section, citeMap }: { section: BusinessPlan['kunden']; citeMap: Map<string, number> }) {
+  return (
+    <Section id="kunden" tone="raised">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+
+      <ul className="mt-8 grid gap-4 sm:gap-5 md:grid-cols-2">
+        {section.segments.map((s, i) => (
+          <li key={i} className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-6">
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">{s.label}</span>
+            <p className="text-sm leading-relaxed text-text-secondary">{s.body}<Cite k={s.cite} citeMap={citeMap} /></p>
+          </li>
+        ))}
+      </ul>
+
+      <details className="mt-8 group rounded-xl border border-subtle bg-surface-base open:bg-canvas">
+        <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-3 text-sm font-medium text-text-secondary hover:text-text-primary">
+          <span><span className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary mr-2">DETAIL</span>{section.pilotPlan.title}</span>
+          <span aria-hidden="true" className="font-mono text-text-tertiary transition-transform group-open:rotate-180">⌄</span>
         </summary>
-        <div className="px-5 pb-5 pt-1 text-sm leading-relaxed text-text-secondary">
-          <p>{section.methodologyNote}</p>
-          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-            {section.methodologyLinks.map((link) => (
-              <li key={link.url}>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-action hover:underline underline-offset-2"
-                >
-                  {link.label}
-                  <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                </a>
+        <div className="px-5 pb-5 text-sm leading-relaxed text-text-secondary">
+          <p>{section.pilotPlan.intro}</p>
+          <ul className="mt-3 space-y-1">
+            {section.pilotPlan.items.map((it, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <span aria-hidden="true" className="font-mono text-text-tertiary">·</span>{it}
               </li>
             ))}
           </ul>
+          <p className="mt-3 text-xs text-text-tertiary">Quelle:<Cite k={section.pilotPlan.cite} citeMap={citeMap} /></p>
         </div>
       </details>
     </Section>
   )
 }
 
-/* ─── Market context (alternatives) ─────────────────────────────── */
+/* ─── 6. Wirtschaftlichkeit ──────────────────────────────────────── */
 
-function MarketContext({ section }: { section: BusinessPlanCopy['marketContext'] }) {
+function Wirtschaftlichkeit({ section, citeMap }: { section: BusinessPlan['wirtschaftlichkeit']; citeMap: Map<string, number> }) {
   return (
-    <Section id="alternatives" tone="canvas" labelledBy="alternatives-title">
+    <Section id="wirtschaftlichkeit" tone="canvas">
       <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="alternatives-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
 
-      <ul className="mt-10 divide-y divide-subtle border-y border-subtle">
-        {section.alternatives.map((alt, i) => (
-          <li
-            key={i}
-            className={cn(
-              'grid grid-cols-1 gap-2 py-5 sm:grid-cols-[1fr_auto] sm:gap-x-6',
-              alt.isOurs && 'bg-surface-raised px-4 -mx-4 sm:px-6 sm:-mx-6',
-            )}
-          >
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span
-                  className={cn(
-                    'text-sm font-medium text-text-primary sm:text-base',
-                    alt.isOurs && 'text-action',
-                  )}
-                >
-                  {alt.label}
-                </span>
-                {alt.sourceUrl && (
-                  <a
-                    href={alt.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center text-text-tertiary hover:text-action"
-                    aria-label={`${alt.label} — Quelle`}
-                  >
-                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                  </a>
-                )}
-              </div>
-              <p className="mt-1.5 text-xs leading-relaxed text-text-secondary sm:text-sm">
-                {alt.tradeoff}
-              </p>
+      <div className="mt-8 rounded-xl border border-subtle bg-surface-base p-5 sm:p-6">
+        <h3 className="text-lg font-semibold text-text-primary">{section.budget.title}</h3>
+        <p className="mt-2 text-sm text-text-secondary">{section.budget.note}</p>
+        <dl className="mt-5 divide-y divide-subtle border-y border-subtle">
+          {section.budget.rows.map((r, i) => (
+            <div key={i} className={cn('grid grid-cols-[1fr_auto] gap-x-4 py-3 sm:gap-x-6', r.emphasis && 'bg-action-muted/40 -mx-4 px-4 sm:-mx-6 sm:px-6')}>
+              <dt className={cn('text-sm leading-snug text-text-primary', r.emphasis && 'font-semibold')}>{r.label}{r.note && <span className="ml-2 text-xs text-text-tertiary">{r.note}</span>}</dt>
+              <dd className={cn('font-mono text-sm tabular-nums text-text-primary', r.emphasis && 'font-semibold')}>{r.value}</dd>
             </div>
-            <div className="font-mono text-sm tabular-nums text-text-primary sm:text-base sm:text-right">
-              {alt.price}
-            </div>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </dl>
+        <p className="mt-3 text-xs text-text-tertiary">Quelle:<Cite k={section.budget.cite} citeMap={citeMap} /></p>
+      </div>
 
-      <p className="mt-8 max-w-3xl text-sm leading-relaxed text-text-secondary sm:text-base">
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary mr-2">→</span>
-        {section.verdict}
+      <p className="mt-6 max-w-3xl rounded-xl border border-dashed border-subtle bg-canvas p-5 text-sm leading-relaxed text-text-secondary">
+        {section.scopeNote}<Cite k={section.scopeCite} citeMap={citeMap} />
       </p>
     </Section>
   )
 }
 
-/* ─── Customer segments ─────────────────────────────────────────── */
+/* ─── 7. Wissenschaftliche Begleitung ─────────────────────────────── */
 
-function Segments({ section }: { section: BusinessPlanCopy['segments'] }) {
+function Wissenschaft({ section, citeMap }: { section: BusinessPlan['wissenschaft']; citeMap: Map<string, number> }) {
   return (
-    <Section id="segments" tone="raised" labelledBy="segments-title">
+    <Section id="wissenschaft" tone="raised">
       <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="segments-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
 
-      <div className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-2">
-        <SegmentCard segment={section.b2b} />
-        <SegmentCard segment={section.b2c} />
+      <div className="mt-8 rounded-xl border border-subtle bg-surface-base p-5 sm:p-6">
+        <h3 className="text-lg font-semibold text-text-primary">{section.factsheet.title}</h3>
+        <dl className="mt-4 divide-y divide-subtle border-y border-subtle">
+          {section.factsheet.rows.map((r, i) => (
+            <div key={i} className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-[12rem_1fr] sm:gap-x-6">
+              <dt className="font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">{r.label}</dt>
+              <dd className="text-sm text-text-primary">{r.value}<Cite k={r.cite} citeMap={citeMap} />{r.linkUrl && r.linkLabel && (<> · <a href={r.linkUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-xs text-action hover:underline">{r.linkLabel}<ExternalLink className="h-3 w-3" aria-hidden="true" /></a></>)}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
-    </Section>
-  )
-}
 
-function SegmentCard({
-  segment,
-}: {
-  segment: BusinessPlanCopy['segments']['b2b']
-}) {
-  return (
-    <div className="flex min-w-0 flex-col gap-4 rounded-xl border border-subtle bg-surface-base p-6">
-      <div className="flex items-baseline justify-between gap-4">
-        <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-          {segment.label}
-        </span>
-        <span className="font-mono text-xs tabular-nums text-text-tertiary">
-          {segment.volume}
-        </span>
-      </div>
-      <p className="text-sm leading-relaxed text-text-secondary">{segment.description}</p>
-      <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-tertiary">
-        {segment.examples.map((ex, i) => (
-          <li key={i} className="font-mono">
-            · {ex}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+      <details className="mt-6 group rounded-xl border border-subtle bg-surface-base open:bg-canvas">
+        <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-3 text-sm font-medium text-text-secondary hover:text-text-primary">
+          <span><span className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary mr-2">PLAN</span>{section.timeline.title}</span>
+          <span aria-hidden="true" className="font-mono text-text-tertiary transition-transform group-open:rotate-180">⌄</span>
+        </summary>
+        <ol className="px-5 pb-5 divide-y divide-subtle border-t border-subtle">
+          {section.timeline.phases.map((p, i) => (
+            <li key={i} className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-[1fr_auto] sm:gap-x-6">
+              <span className="text-sm text-text-primary">{p.label}</span>
+              <span className="font-mono text-xs tabular-nums text-text-tertiary sm:text-right">{p.date}</span>
+            </li>
+          ))}
+          <li className="pt-3 text-xs text-text-tertiary">Quelle:<Cite k={section.timeline.cite} citeMap={citeMap} /></li>
+        </ol>
+      </details>
 
-/* ─── Suppliers (NEW) ───────────────────────────────────────────── */
+      <details className="mt-4 group rounded-xl border border-subtle bg-surface-base open:bg-canvas">
+        <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-3 text-sm font-medium text-text-secondary hover:text-text-primary">
+          <span><span className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-tertiary mr-2">UMFANG</span>{section.scope.title}</span>
+          <span aria-hidden="true" className="font-mono text-text-tertiary transition-transform group-open:rotate-180">⌄</span>
+        </summary>
+        <div className="px-5 pb-5 text-sm leading-relaxed text-text-secondary">
+          <ul className="space-y-2">
+            {section.scope.items.map((it, i) => (
+              <li key={i} className="flex items-start gap-2"><span aria-hidden="true" className="mt-1 font-mono text-text-tertiary">·</span>{it}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-text-tertiary">Quelle:<Cite k={section.scope.cite} citeMap={citeMap} /></p>
+        </div>
+      </details>
 
-function Suppliers({ section }: { section: BusinessPlanCopy['suppliers'] }) {
-  return (
-    <Section id="lieferanten" tone="canvas" labelledBy="suppliers-title">
-      <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="suppliers-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
-
-      <ul className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-3">
-        {section.sources.map((src) => (
-          <li
-            key={src.key}
-            className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-6"
-          >
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-action">
-              {src.label}
-            </span>
-            <p className="text-sm leading-relaxed text-text-secondary">{src.description}</p>
-            <span className="font-mono text-xs tabular-nums text-text-tertiary">
-              {src.volume}
-            </span>
-            <a
-              href={src.linkUrl}
-              {...(src.linkUrl.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              className="mt-auto inline-flex items-center gap-1.5 text-xs font-medium text-action hover:underline underline-offset-2"
-            >
-              {src.linkLabel}
-              <ExternalLink className="h-3 w-3" aria-hidden="true" />
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-2">
-        <CriteriaCard
-          variant="accept"
-          title={section.criteria.title}
-          items={section.criteria.items}
-        />
-        <CriteriaCard
-          variant="reject"
-          title={section.rejected.title}
-          items={section.rejected.items}
-        />
-      </div>
-    </Section>
-  )
-}
-
-function CriteriaCard({
-  variant,
-  title,
-  items,
-}: {
-  variant: 'accept' | 'reject'
-  title: string
-  items: string[]
-}) {
-  const Icon = variant === 'accept' ? Check : X
-  return (
-    <div className="min-w-0 rounded-xl border border-subtle bg-surface-base p-6">
-      <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-        {title}
-      </h3>
-      <ul className="mt-4 space-y-2 text-sm text-text-secondary">
-        {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <Icon
-              className={cn(
-                'mt-0.5 h-4 w-4 shrink-0',
-                variant === 'accept' ? 'text-action' : 'text-text-tertiary',
-              )}
-              aria-hidden="true"
-            />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-/* ─── Unit economics ─────────────────────────────────────────────── */
-
-function UnitCost({
-  section,
-  priceTitle,
-  priceBody,
-}: {
-  section: EconomicsCopy['unitEconomics']
-  priceTitle: string
-  priceBody: string
-}) {
-  return (
-    <Section id="economics" tone="base" labelledBy="economics-title">
-      <h2 id="economics-title" className="ui-public-display-md">
-        {section.title}
-      </h2>
-      <p className="mt-3 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
-        {section.note}
+      <p className="mt-6 max-w-3xl text-sm leading-relaxed text-text-secondary">
+        {section.history}<Cite k={section.historyCite} citeMap={citeMap} />
       </p>
-
-      <dl className="mt-6 divide-y divide-subtle border-y border-subtle">
-        {section.rows.map((row, i) => (
-          <div
-            key={i}
-            className={cn(
-              'grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 py-4 sm:grid-cols-[1fr_auto_auto] sm:gap-x-6',
-              row.emphasis && 'bg-surface-raised px-4 -mx-4 sm:px-6 sm:-mx-6',
-            )}
-          >
-            <dt
-              className={cn(
-                'text-sm leading-snug text-text-primary',
-                row.emphasis && 'font-semibold',
-              )}
-            >
-              {row.label}
-            </dt>
-            <dd
-              className={cn(
-                'font-mono text-sm tabular-nums text-text-primary',
-                row.emphasis && 'text-base font-semibold',
-              )}
-            >
-              {row.value}
-            </dd>
-            <dd className="col-span-2 text-xs leading-snug text-text-tertiary sm:col-span-1 sm:text-right">
-              {row.aside}
-            </dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className="mt-10">
-        <h3 className="text-lg font-semibold text-text-primary">{priceTitle}</h3>
-        <p className="mt-3 text-sm leading-relaxed text-text-secondary">{priceBody}</p>
-      </div>
     </Section>
   )
 }
 
-/* ─── Funding mix ───────────────────────────────────────────────── */
+/* ─── 8. CE-Konformität ────────────────────────────────────────── */
 
-function FundingMix({ section }: { section: EconomicsCopy['funding'] }) {
+function CE({ section, citeMap }: { section: BusinessPlan['ce']; citeMap: Map<string, number> }) {
   return (
-    <Section id="funding" tone="raised" labelledBy="funding-title">
-      <h2 id="funding-title" className="ui-public-display-md">{section.title}</h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.body}</p>
+    <Section id="ce" tone="canvas">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
 
-      <ul className="mt-10 grid gap-3 sm:grid-cols-3">
-        {section.sources.map((src, i) => (
-          <li
-            key={i}
-            className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-5"
-          >
-            <span className="font-mono text-2xl font-light tabular-nums text-text-primary">
-              {src.share}
-            </span>
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-              {src.label}
-            </span>
-            <span className="text-xs leading-snug text-text-secondary">{src.note}</span>
+      <h3 className="mt-8 text-lg font-semibold text-text-primary">{section.approach.title}</h3>
+      <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+        {section.approach.items.map((it, i) => (
+          <li key={i} className="rounded-xl border border-subtle bg-surface-base p-5">
+            <h4 className="font-mono text-xs uppercase tracking-[0.18em] text-action">{it.label}</h4>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">{it.body}<Cite k={it.cite} citeMap={citeMap} /></p>
           </li>
         ))}
       </ul>
@@ -623,210 +623,89 @@ function FundingMix({ section }: { section: EconomicsCopy['funding'] }) {
   )
 }
 
-/* ─── Sustainability ────────────────────────────────────────────── */
+/* ─── 9. Partner ──────────────────────────────────────────────── */
 
-function Sustainability({ section }: { section: EconomicsCopy['sustainability'] }) {
+function Partner({ section, citeMap }: { section: BusinessPlan['partner']; citeMap: Map<string, number> }) {
   return (
-    <Section id="sustainability" tone="canvas">
-      <div className="mx-auto max-w-3xl">
-        <h2 className="ui-public-display-md">{section.title}</h2>
-        <p className="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
-          {section.body}
-        </p>
-      </div>
-    </Section>
-  )
-}
-
-/* ─── Risks ─────────────────────────────────────────────────────── */
-
-function Risks({ section }: { section: BusinessPlanCopy['risks'] }) {
-  return (
-    <Section id="risks" tone="raised" labelledBy="risks-title">
+    <Section id="partner" tone="raised">
       <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="risks-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
 
-      <ul className="mt-10 divide-y divide-subtle border-y border-subtle">
-        {section.items.map((risk, i) => (
-          <li key={i} className="grid grid-cols-1 gap-2 py-5 sm:grid-cols-[1fr_auto] sm:gap-x-6">
-            <div className="min-w-0">
-              <div className="text-sm font-medium text-text-primary sm:text-base">
-                {risk.label}
-              </div>
-              <p className="mt-2 text-xs leading-relaxed text-text-secondary sm:text-sm">
-                <span className="font-mono uppercase tracking-[0.14em] text-text-tertiary mr-2">
-                  →
-                </span>
-                {risk.mitigation}
-              </p>
+      <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {section.groups.map((g, gi) => (
+          <details key={gi} open={gi < 2} className="group rounded-xl border border-subtle bg-surface-base open:bg-canvas">
+            <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-3">
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">{g.title}</span>
+              <span aria-hidden="true" className="font-mono text-text-tertiary transition-transform group-open:rotate-180">⌄</span>
+            </summary>
+            <div className="px-5 pb-5 space-y-3 text-sm leading-relaxed">
+              {g.intro && <p className="text-text-tertiary text-xs">{g.intro}</p>}
+              <ul className="space-y-3">
+                {g.items.map((it, i) => (
+                  <li key={i} className="border-t border-subtle pt-3 first:border-t-0 first:pt-0">
+                    <div className="font-medium text-text-primary">{it.name}{it.linkUrl && it.linkLabel && (<> · <a href={it.linkUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-xs text-action hover:underline">{it.linkLabel}<ExternalLink className="h-3 w-3" aria-hidden="true" /></a></>)}</div>
+                    <p className="mt-0.5 text-text-secondary">{it.role}<Cite k={it.cite} citeMap={citeMap} /></p>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="font-mono text-xs uppercase tracking-[0.14em] text-action sm:self-start sm:text-right">
-              {risk.severity}
-            </div>
-          </li>
-        ))}
-      </ul>
-    </Section>
-  )
-}
-
-/* ─── Partners ──────────────────────────────────────────────────── */
-
-function Partners({ section }: { section: BusinessPlanCopy['partners'] }) {
-  return (
-    <Section id="partners" tone="canvas" labelledBy="partners-title">
-      <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="partners-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
-
-      <div className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {section.groups.map((group) => (
-          <div
-            key={group.key}
-            className="min-w-0 rounded-xl border border-subtle bg-surface-base p-6"
-          >
-            <div className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-              {group.title}
-            </div>
-            <ul className="mt-4 space-y-2 text-sm text-text-secondary">
-              {group.names.map((name) => (
-                <li key={name} className="flex gap-2">
-                  <span aria-hidden="true" className="font-mono text-text-tertiary">·</span>
-                  {name}
-                </li>
-              ))}
-            </ul>
-          </div>
+          </details>
         ))}
       </div>
+
+      <p className="mt-6 max-w-3xl rounded-xl border border-dashed border-subtle bg-surface-base p-5 text-sm leading-relaxed text-text-secondary">
+        {section.klimastNote}<Cite k={section.klimastCite} citeMap={citeMap} />
+      </p>
     </Section>
   )
 }
 
-/* ─── Research ──────────────────────────────────────────────────── */
+/* ─── 10. Risiken ─────────────────────────────────────────────── */
 
-function Research({ section }: { section: BusinessPlanCopy['research'] }) {
+function Risiken({ section, citeMap }: { section: BusinessPlan['risiken']; citeMap: Map<string, number> }) {
   return (
-    <Section id="research" tone="raised" labelledBy="active-research-title">
-      <h2 id="active-research-title" className="ui-public-display-md">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
-
-      <ol className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-3">
-        {section.items.map((item, i) => (
-          <li
-            key={i}
-            className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-6"
-          >
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
-              {item.status}
-            </span>
-            <h3 className="text-base font-semibold text-text-primary">{item.title}</h3>
-            <p className="text-sm leading-relaxed text-text-secondary">{item.description}</p>
-          </li>
-        ))}
-      </ol>
-    </Section>
-  )
-}
-
-/* ─── Open questions (NEW) ──────────────────────────────────────── */
-
-function OpenQuestions({ section }: { section: BusinessPlanCopy['openQuestions'] }) {
-  return (
-    <Section id="openQuestions" tone="canvas" labelledBy="open-questions-title">
+    <Section id="risiken" tone="canvas">
       <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="open-questions-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
 
-      <ul className="mt-10 space-y-2">
-        {section.items.map((q) => (
-          <li key={q.q}>
-            <details className="group rounded-xl border border-subtle bg-surface-base open:bg-surface-raised">
-              <summary className="cursor-pointer list-none px-5 py-4 flex items-start gap-4 hover:bg-surface-raised/50">
-                <span className="font-mono text-xs uppercase tracking-[0.18em] text-action shrink-0 mt-0.5">
-                  {q.q}
-                </span>
-                <span className="flex-1 text-sm font-medium text-text-primary sm:text-base">
-                  {q.title}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary shrink-0 mt-1">
-                  {q.tag}
-                </span>
-                <span aria-hidden="true" className="font-mono text-text-tertiary transition-transform group-open:rotate-180 mt-0.5">
-                  ⌄
-                </span>
+      <ul className="mt-8 space-y-3">
+        {section.items.map((r, i) => (
+          <li key={i} className="rounded-xl border border-subtle bg-surface-base">
+            <details className="group">
+              <summary className="cursor-pointer list-none px-5 py-4 flex items-start gap-4">
+                <span className="flex-1 text-sm font-medium text-text-primary sm:text-base">{r.label}</span>
+                <span className="shrink-0 rounded-full bg-surface-raised px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-action">{r.status}</span>
+                <span aria-hidden="true" className="mt-1 font-mono text-text-tertiary transition-transform group-open:rotate-180">⌄</span>
               </summary>
-              <p className="px-5 pb-5 pt-1 pl-[3.5rem] text-sm leading-relaxed text-text-secondary">
-                {q.body}
-              </p>
+              <p className="px-5 pb-5 text-sm leading-relaxed text-text-secondary">{r.body}<Cite k={r.cite} citeMap={citeMap} /></p>
             </details>
           </li>
         ))}
       </ul>
-
-      <div className="mt-10 rounded-xl border border-dashed border-subtle bg-surface-base p-6 text-center">
-        <p className="text-sm text-text-secondary">{section.feedbackCta}</p>
-        <a
-          href={`mailto:${section.feedbackEmail}`}
-          className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-action hover:underline underline-offset-2"
-        >
-          <Mail className="h-4 w-4" aria-hidden="true" />
-          {section.feedbackEmail}
-        </a>
-      </div>
     </Section>
   )
 }
 
-/* ─── Get involved (NEW) ────────────────────────────────────────── */
+/* ─── 11. Förderung ─────────────────────────────────────────── */
 
-function GetInvolved({ section }: { section: BusinessPlanCopy['getInvolved'] }) {
+function Foerderung({ section, citeMap }: { section: BusinessPlan['foerderung']; citeMap: Map<string, number> }) {
   return (
-    <Section id="getInvolved" tone="raised" labelledBy="get-involved-title">
+    <Section id="foerderung" tone="raised">
       <div className="ui-public-eyebrow">{section.eyebrow}</div>
-      <h2 id="get-involved-title" className="ui-public-display-md mt-3">
-        {section.title}
-      </h2>
-      <p className="ui-public-section-lede mt-4 max-w-3xl">{section.intro}</p>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
 
-      <ul className="mt-10 grid gap-4 sm:gap-5 md:grid-cols-2">
-        {section.options.map((opt) => (
-          <li
-            key={opt.key}
-            className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-6"
-          >
-            <h3 className="text-base font-semibold text-text-primary">{opt.title}</h3>
-            <p className="text-sm leading-relaxed text-text-secondary">{opt.body}</p>
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
-              <a
-                href={opt.ctaHref}
-                {...(opt.ctaHref.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-action hover:underline underline-offset-2"
-              >
-                {opt.ctaLabel}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-              </a>
-              {opt.linkUrl && (
-                <a
-                  href={opt.linkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-text-tertiary hover:text-action"
-                >
-                  {opt.linkLabel}
-                  <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                </a>
-              )}
+      <ul className="mt-8 divide-y divide-subtle border-y border-subtle">
+        {section.lines.map((l, i) => (
+          <li key={i} className="grid grid-cols-1 gap-2 py-4 sm:grid-cols-[1.4fr_auto_auto] sm:items-baseline sm:gap-x-6">
+            <div className="min-w-0">
+              <div className="text-sm font-medium text-text-primary sm:text-base">{l.label}</div>
+              <p className="mt-1 text-xs leading-relaxed text-text-secondary sm:text-sm">{l.note}<Cite k={l.cite} citeMap={citeMap} /></p>
             </div>
+            <span className="rounded-full bg-surface-base px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-action sm:self-start">{l.status}</span>
+            <span className="font-mono text-sm tabular-nums text-text-primary sm:text-right">{l.amount}</span>
           </li>
         ))}
       </ul>
@@ -834,26 +713,57 @@ function GetInvolved({ section }: { section: BusinessPlanCopy['getInvolved'] }) 
   )
 }
 
-/* ─── Downloads (empty state) ───────────────────────────────────── */
+/* ─── 12. Mitmachen ─────────────────────────────────────────── */
 
-function Downloads({ section }: { section: BusinessPlanCopy['downloads'] }) {
+function Mitmachen({ section }: { section: BusinessPlan['mitmachen'] }) {
   return (
-    <section className="bg-canvas">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <h2 className="ui-public-display-md">
-          {section.title}
-        </h2>
-        <div className="mt-6 rounded-xl border border-dashed border-subtle bg-surface-base p-6 sm:p-8">
-          <p className="text-sm leading-relaxed text-text-secondary">{section.note}</p>
-          <a
-            href={`mailto:${section.cta}`}
-            className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-action hover:underline underline-offset-2"
-          >
-            {section.cta}
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
-        </div>
-      </div>
-    </section>
+    <Section id="mitmachen" tone="canvas">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+        {section.options.map((o) => (
+          <li key={o.key} className="flex min-w-0 flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-6">
+            <h3 className="text-base font-semibold text-text-primary">{o.title}</h3>
+            <p className="text-sm leading-relaxed text-text-secondary">{o.body}</p>
+            <a href={o.ctaHref} {...(o.ctaHref.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-action hover:underline underline-offset-2">
+              {o.ctaLabel}<ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )
+}
+
+/* ─── 13. Belege & Quellen ─────────────────────────────────── */
+
+function Belege({ section }: { section: BusinessPlan['belege'] }) {
+  return (
+    <Section id="belege" tone="base">
+      <div className="ui-public-eyebrow">{section.eyebrow}</div>
+      <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+      <p className="ui-public-section-lede mt-3 max-w-3xl">{section.intro}</p>
+
+      <ol className="mt-8 space-y-3">
+        {section.citations.map((c, i) => (
+          <li id={`belege-${c.key}`} key={c.key} className="scroll-mt-28 rounded-lg border border-subtle bg-canvas p-4">
+            <div className="flex items-baseline gap-3">
+              <span className="font-mono text-xs text-action shrink-0">[{i + 1}]</span>
+              <div className="min-w-0">
+                <div className="text-sm font-medium text-text-primary">{c.label}</div>
+                <p className="mt-1 text-xs leading-relaxed text-text-secondary">{c.detail}</p>
+                {c.url && (
+                  <a href={c.url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 text-xs text-action hover:underline">
+                    <Mail className="h-3 w-3" aria-hidden="true" />{c.url}<ExternalLink className="h-3 w-3" aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
   )
 }
