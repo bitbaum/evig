@@ -4559,8 +4559,9 @@
           "eyebrow": "BUSINESS PLAN",
           "title": "Plafoniere e applique da monitor per computer dismessi.",
           "intro": "Trasformiamo le retroilluminazioni LCD ancora funzionanti di schermi che oggi finiscono nel flusso svizzero di riciclo IT in plafoniere e applique. Questa pagina è la versione « prove oneste » del progetto — non un racconto di marketing, ma cosa esiste davvero a giugno 2026, con le fonti.",
-          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
-          "heroImageAlt": "Monitor Lenovo L2251pwd riconvertito in pannello luminoso a parete, scatto da banco del 28 maggio 2026"
+          "heroImageAlt": "Monitor Lenovo L2251pwd riconvertito in pannello luminoso a parete, scatto da banco del 28 maggio 2026",
+          "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
+          "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
         },
         "status": {
           "eyebrow": "STATO ATTUALE · GIUGNO 2026",
@@ -4649,7 +4650,7 @@
                 "caption": "Il bypass standby: due resistenze come partitore di tensione, saldate direttamente sul connettore verso il pin dell'alimentatore. La luce resta accesa in continuo invece di andare in standby. Soluzione sviluppata da Benjamin Ernst (ReCreaZZZ)."
               },
               {
-                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "src": "/projects/upcycling/businessplan/hero-finished-poster.jpg",
                 "caption": "Risultato finito. Il monitor brilla come pannello luminoso uniforme, nell'involucro originale, senza nuovi pezzi in plastica."
               }
             ]

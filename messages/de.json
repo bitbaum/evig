@@ -5940,8 +5940,9 @@
           "eyebrow": "GESCHÄFTSPLAN",
           "title": "Wand- und Deckenleuchten aus ausgemusterten Computermonitoren.",
           "intro": "Wir bauen funktionsfähige LCD-Hintergrundbeleuchtungen aus Bildschirmen, die heute im Schweizer IT-Recycling-Strom landen, zu Wand- und Deckenleuchten um. Diese Seite ist die ehrliche Beweis-Version des Projekts — keine Marketing-Erzählung, sondern was Stand Juni 2026 tatsächlich vorliegt, mit Quellen.",
-          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
-          "heroImageAlt": "Umgebauter Lenovo L2251pwd Monitor leuchtet als Wandpanel, Werkbankaufnahme vom 28. Mai 2026"
+          "heroImageAlt": "Umgebauter Lenovo L2251pwd Monitor leuchtet als Wandpanel, Werkbankaufnahme vom 28. Mai 2026",
+          "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
+          "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
         },
         "status": {
           "eyebrow": "AKTUELLER STAND · JUNI 2026",
@@ -6030,7 +6031,7 @@
                 "caption": "Der Standby-Bypass: zwei Widerstände als Spannungsteiler, direkt am Stecker zum Netzteil-Pin verlötet. Damit bleibt die Leuchte dauerhaft an, statt nach Minuten in Standby zu wechseln. Lösung entwickelt von Benjamin Ernst (ReCreaZZZ)."
               },
               {
-                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "src": "/projects/upcycling/businessplan/hero-finished-poster.jpg",
                 "caption": "Fertiges Resultat. Der Monitor leuchtet als gleichmässiges Lichtpanel, mit dem ursprünglichen Gehäuse, ohne neue Plastikteile."
               }
             ]

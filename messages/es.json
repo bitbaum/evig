@@ -4559,8 +4559,9 @@
           "eyebrow": "PLAN DE NEGOCIO",
           "title": "Luminarias de pared y techo a partir de monitores de ordenador retirados.",
           "intro": "Convertimos las retroiluminaciones LCD aún funcionales de pantallas que hoy acaban en el flujo suizo de reciclaje TI en luminarias de pared y techo. Esta página es la versión « pruebas honestas » del proyecto — no un relato de marketing, sino lo que realmente existe a junio de 2026, con fuentes.",
-          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
-          "heroImageAlt": "Monitor Lenovo L2251pwd reconvertido como panel luminoso de pared, foto de banco del 28 de mayo de 2026"
+          "heroImageAlt": "Monitor Lenovo L2251pwd reconvertido como panel luminoso de pared, foto de banco del 28 de mayo de 2026",
+          "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
+          "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
         },
         "status": {
           "eyebrow": "ESTADO ACTUAL · JUNIO 2026",
@@ -4649,7 +4650,7 @@
                 "caption": "El bypass de standby: dos resistencias como divisor de tensión, soldadas directamente al conector hacia el pin de la fuente. Así la luz permanece siempre encendida en lugar de pasar a standby. Solución desarrollada por Benjamin Ernst (ReCreaZZZ)."
               },
               {
-                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "src": "/projects/upcycling/businessplan/hero-finished-poster.jpg",
                 "caption": "Resultado final. El monitor brilla como un panel luminoso uniforme, en su carcasa original, sin piezas nuevas de plástico."
               }
             ]

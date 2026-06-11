@@ -6245,8 +6245,9 @@
           "eyebrow": "PLAN D'AFFAIRES",
           "title": "Luminaires muraux et plafonniers à partir de moniteurs d'ordinateur déclassés.",
           "intro": "Nous transformons les rétroéclairages LCD encore fonctionnels d'écrans qui finissent aujourd'hui dans le flux suisse de recyclage IT en luminaires muraux et plafonniers. Cette page est la version « preuves honnêtes » du projet — pas un récit marketing, mais ce qui existe vraiment en juin 2026, avec les sources.",
-          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
-          "heroImageAlt": "Moniteur Lenovo L2251pwd reconverti en panneau lumineux mural, photo d'établi du 28 mai 2026"
+          "heroImageAlt": "Moniteur Lenovo L2251pwd reconverti en panneau lumineux mural, photo d'établi du 28 mai 2026",
+          "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
+          "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
         },
         "status": {
           "eyebrow": "ÉTAT ACTUEL · JUIN 2026",
@@ -6335,7 +6336,7 @@
                 "caption": "Le bypass de veille : deux résistances montées en pont diviseur, soudées directement sur le connecteur vers la broche de l'alimentation. La lampe reste ainsi allumée en permanence au lieu de basculer en veille. Solution développée par Benjamin Ernst (ReCreaZZZ)."
               },
               {
-                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "src": "/projects/upcycling/businessplan/hero-finished-poster.jpg",
                 "caption": "Résultat fini. Le moniteur diffuse une lumière uniforme, dans son boîtier d'origine, sans nouvelles pièces plastiques."
               }
             ]

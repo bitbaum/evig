@@ -6194,8 +6194,9 @@
           "eyebrow": "BUSINESS PLAN",
           "title": "Wall and ceiling lights from decommissioned computer monitors.",
           "intro": "We retrofit the still-working LCD backlights of monitors currently entering Switzerland's IT recycling stream into wall and ceiling lights. This page is the honest evidence version of the project — not a marketing narrative, but what actually exists as of June 2026, with sources.",
-          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
-          "heroImageAlt": "Retrofitted Lenovo L2251pwd monitor lit as a wall panel, workshop bench photo from 28 May 2026"
+          "heroImageAlt": "Retrofitted Lenovo L2251pwd monitor lit as a wall panel, workshop bench photo from 28 May 2026",
+          "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
+          "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
         },
         "status": {
           "eyebrow": "CURRENT STATUS · JUNE 2026",
@@ -6284,7 +6285,7 @@
                 "caption": "The standby bypass: two resistors as a voltage divider, soldered directly onto the connector going to the power-supply pin. This keeps the light permanently on instead of dropping into standby. Solution developed by Benjamin Ernst (ReCreaZZZ)."
               },
               {
-                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "src": "/projects/upcycling/businessplan/hero-finished-poster.jpg",
                 "caption": "Finished result. The monitor glows as a uniform light panel, in its original housing, with no new plastic parts."
               }
             ]

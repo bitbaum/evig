@@ -40,6 +40,10 @@ type Piece = {
    *  set this to the filename and the card renders the JPG instead of the
    *  generative SVG placeholder. See REAL_PHOTOS.md in that folder. */
   image?: string
+  /** Optional looping video (mp4) that plays in place of the still image.
+   *  When set, `image` is used as the video poster so something is on screen
+   *  before the video buffers. */
+  video?: string
 }
 
 type GalleryMessages = {
@@ -62,7 +66,7 @@ type GalleryMessages = {
  * placeholder palette.
  */
 const PIECES: Piece[] = [
-  { id: 'lenovo-l2251pwd',        model: 'Lenovo L2251pwd',        tier: 'functional', variant: 'functional', seed: 101, image: 'lenovo-l2251pwd-finished.gif' },
+  { id: 'lenovo-l2251pwd',        model: 'Lenovo L2251pwd',        tier: 'functional', variant: 'functional', seed: 101, image: 'lenovo-l2251pwd-finished-poster.jpg', video: 'lenovo-l2251pwd-finished.mp4' },
   { id: 'nec-multisync-e233-wmi', model: 'NEC Multisync E233 WMi', tier: 'functional', variant: 'functional', seed: 102 },
   { id: 'lenovo-t2254a',          model: 'Lenovo T2254A',          tier: 'functional', variant: 'functional', seed: 103 },
   { id: 'lenovo-24',              model: 'Lenovo 24"',             tier: 'functional', variant: 'functional', seed: 104 },
@@ -205,6 +209,25 @@ function PieceVisual({ piece, sizes }: { piece: Piece; sizes: string }) {
         variant={piece.variant}
         seed={piece.seed}
         className="h-full w-full"
+      />
+    )
+  }
+  // Looping demo (mp4) takes priority over the still image when both are set —
+  // the still acts as the video poster so something paints before the video
+  // buffers. Previously this was a 2.8MB GIF served as a still <Image>;
+  // mp4+poster cuts that to ~120KB and renders correctly on iOS.
+  if (piece.video) {
+    return (
+      <video
+        src={`/projects/upcycling/gallery/${piece.video}`}
+        poster={`/projects/upcycling/gallery/${piece.image}`}
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-label={piece.model}
+        className="absolute inset-0 h-full w-full object-cover"
+        onError={() => setFailed(true)}
       />
     )
   }

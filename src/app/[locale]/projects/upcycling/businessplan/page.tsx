@@ -60,7 +60,7 @@ type Citation = { key: string; label: string; detail: string; url: string | null
 type BusinessPlan = {
   meta: { title: string; description: string }
   nav: { label: string; items: NavItem[] }
-  hero: { eyebrow: string; title: string; intro: string; heroImage: string; heroImageAlt: string }
+  hero: { eyebrow: string; title: string; intro: string; heroVideo: string; heroPoster: string; heroImageAlt: string }
   status: { eyebrow: string; title: string; intro: string; kpis: Kpi[] }
   produkt: {
     eyebrow: string; title: string; intro: string
@@ -187,14 +187,20 @@ function Hero({ hero }: { hero: BusinessPlan['hero'] }) {
             <p className="ui-public-section-lede mt-4 max-w-2xl">{hero.intro}</p>
           </div>
           <figure className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-subtle bg-canvas">
-            <Image
-              src={hero.heroImage}
-              alt={hero.heroImageAlt}
-              fill
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover"
-              unoptimized
-              priority
+            {/* The hero is an animated demo loop. Previously this was a 2.8MB
+                GIF served via <Image unoptimized priority> — multi-second LCP
+                on 4G. Now a ~100KB MP4 with a ~20KB JPG poster: the poster
+                paints immediately, the video starts when ready. autoplay+
+                muted+playsinline ensures iOS plays inline without prompting. */}
+            <video
+              src={hero.heroVideo}
+              poster={hero.heroPoster}
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label={hero.heroImageAlt}
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </figure>
         </div>
@@ -339,13 +345,15 @@ function Produkt({ section }: { section: BusinessPlan['produkt'] }) {
         {section.photoGallery.items.map((p) => (
           <li key={p.src} className="flex flex-col gap-3 rounded-xl border border-subtle bg-surface-base p-3">
             <figure className="relative aspect-[4/3] overflow-hidden rounded-lg bg-canvas">
+              {/* Photos are pre-compressed (max 1600px, mozjpeg q82). Letting
+                  Next/Image transcode to AVIF/WebP + size them per breakpoint
+                  is a further 2-4x savings on most clients. */}
               <Image
                 src={p.src}
                 alt={p.caption}
                 fill
                 sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
                 className="object-cover"
-                unoptimized
               />
             </figure>
             <figcaption className="text-xs leading-relaxed text-text-secondary">{p.caption}</figcaption>
@@ -441,7 +449,7 @@ function Alternativen({ section, citeMap }: { section: BusinessPlan['alternative
 
       <figure className="mt-8 grid gap-6 rounded-xl border border-subtle bg-surface-base p-4 sm:grid-cols-[1.2fr_1fr] sm:p-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-canvas">
-          <Image src={section.benchmarkPhoto.src} alt={section.benchmarkPhoto.caption} fill sizes="(min-width: 640px) 40vw, 100vw" className="object-cover" unoptimized />
+          <Image src={section.benchmarkPhoto.src} alt={section.benchmarkPhoto.caption} fill sizes="(min-width: 640px) 40vw, 100vw" className="object-cover" />
         </div>
         <figcaption className="self-center text-sm leading-relaxed text-text-secondary">{section.benchmarkPhoto.caption}</figcaption>
       </figure>

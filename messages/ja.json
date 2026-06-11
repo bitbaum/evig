@@ -4559,8 +4559,9 @@
           "eyebrow": "事業計画",
           "title": "廃棄されたコンピューターモニターからの壁面・天井照明。",
           "intro": "現在スイスのIT再資源化フローに流れている画面の、まだ機能するLCDバックライトを、壁面・天井照明に作り変えます。このページはプロジェクトの「誠実な証拠版」であり、マーケティングの物語ではなく、2026年6月時点で実際に存在することと、出典です。",
-          "heroImage": "/projects/upcycling/businessplan/hero-finished.gif",
-          "heroImageAlt": "改修されたLenovo L2251pwdモニターが壁面パネルとして発光している様子。2026年5月28日の作業台撮影。"
+          "heroImageAlt": "改修されたLenovo L2251pwdモニターが壁面パネルとして発光している様子。2026年5月28日の作業台撮影。",
+          "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
+          "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
         },
         "status": {
           "eyebrow": "現状 · 2026年6月",
@@ -4649,7 +4650,7 @@
                 "caption": "スタンバイ・バイパス：2本の抵抗で分圧器を構成し、電源ピン向けコネクタに直接はんだ付け。これでスタンバイに入らず常時点灯。Benjamin Ernst（ReCreaZZZ）が考案した解。"
               },
               {
-                "src": "/projects/upcycling/businessplan/hero-finished.gif",
+                "src": "/projects/upcycling/businessplan/hero-finished-poster.jpg",
                 "caption": "完成形。モニターは元の筐体のまま、均一な発光パネルとして光る。新しいプラスチック部品は使わない。"
               }
             ]
