@@ -5,23 +5,16 @@ import {
   Layers,
   Image as ImageIcon,
   Wrench,
-  Leaf,
-  Recycle,
-  RotateCcw,
-  Code,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import {
   ProjectHero,
-  ProjectSection,
-  ProjectCallToAction,
   ProjectNeedsSection,
   type NeedsSectionLabels,
 } from '@/components/projects'
-import type { ProjectPageConfig, RawCard, RawAction } from '@/components/projects'
+import type { ProjectPageConfig } from '@/components/projects'
 import { UpcyclingInterestCTA } from './UpcyclingInterestCTA'
-import { AiBrainstormSection } from './AiBrainstormSection'
 
 type GuideItem = {
   slug: string
@@ -39,31 +32,11 @@ type ExploreCard = {
   cta: string
 }
 
-type IdeaPillar = {
-  key: 'environment' | 'upcycling' | 'circular' | 'oss'
-  title: string
-  body: string
-  linkLabel: string
-  linkHref: string
-}
-
 type PageMessages = {
   meta: { title: string; description: string }
   hero: { title: string; description: string; cta1: string; cta2: string }
   interestCta: { eyebrow: string; heading: string; body: string }
-  ideas: { eyebrow: string; title: string; intro: string; pillars: IdeaPillar[] }
   briefLink: { eyebrow: string; title: string; body: string; cta: string }
-  cta: { title: string; actions: RawAction[] }
-  ai_brainstorm: {
-    eyebrow: string
-    title: string
-    intro: string
-    prompts: Array<{ title: string; prompt: string }>
-    copyButton: string
-    copied: string
-    why: string
-    whyBody: string
-  }
   guides: {
     eyebrow: string
     title: string
@@ -105,32 +78,23 @@ export default async function UpcyclingPage() {
         { text: p.hero.cta2, href: '/get-involved', variant: 'outline' },
       ],
     },
-    // Funder-doc sections (about/approach/nextsteps/open_questions/source)
-    // moved to /projects/upcycling/status where partners + grant reviewers
-    // look. Main page stays lean — see BriefLink below for the on-ramp.
     sections: [],
-    cta: {
-      title: p.cta.title,
-      actions: [
-        { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: '/contact',             ctaText: p.cta.actions[0].cta },
-        { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: '/get-involved/donate', ctaText: p.cta.actions[1].cta },
-        { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact',             ctaText: p.cta.actions[2].cta },
-      ],
-    },
     metadata: { title: p.meta.title, description: p.meta.description },
   }
 
+  // Page order: Hero → Explore (where to go) → Guides (what we've published) →
+  // Needs (how to help) → Interest (stay informed) → Status link (the
+  // funder-grade proof). Removed: IdeasSection (duplicated /wirkung),
+  // AiBrainstormSection (read as scaffolding, cited fabricated partners),
+  // generic 3-action CallToAction at the bottom (duplicated Needs).
   return (
     <div className="min-h-screen">
       {config.hero && <ProjectHero hero={config.hero} />}
       <ExploreSection explore={p.explore} />
-      <IdeasSection ideas={p.ideas} />
-      <InterestSection interestCta={p.interestCta} />
-      <AiBrainstormSection section={p.ai_brainstorm} />
       <GuidesSection guides={p.guides} />
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
+      <InterestSection interestCta={p.interestCta} />
       <BriefLink brief={p.briefLink} />
-      {config.cta && <ProjectCallToAction cta={config.cta} />}
     </div>
   )
 }
@@ -153,61 +117,6 @@ function BriefLink({ brief }: { brief: PageMessages['briefLink'] }) {
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
         </Link>
-      </div>
-    </section>
-  )
-}
-
-const ICON_BY_KEY: Record<IdeaPillar['key'], LucideIcon> = {
-  environment: Leaf,
-  upcycling: Recycle,
-  circular: RotateCcw,
-  oss: Code,
-}
-
-function IdeasSection({ ideas }: { ideas: PageMessages['ideas'] }) {
-  if (!ideas?.pillars?.length) return null
-  return (
-    <section className="bg-canvas border-t border-subtle py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
-          <div className="ui-public-eyebrow">{ideas.eyebrow}</div>
-          <h2 className="ui-public-display-md mt-3">{ideas.title}</h2>
-          <p className="ui-public-section-lede mt-3">{ideas.intro}</p>
-        </div>
-
-        <ol className="mt-12 grid gap-4 sm:grid-cols-2">
-          {ideas.pillars.map((pillar, i) => {
-            const Icon = ICON_BY_KEY[pillar.key] ?? Leaf
-            return (
-              <li
-                key={pillar.key}
-                className="flex flex-col rounded-lg border border-subtle bg-surface-base p-6"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-md bg-action-muted/30">
-                    <Icon className="h-4 w-4 text-action" aria-hidden="true" />
-                  </div>
-                  <span
-                    aria-hidden="true"
-                    className="font-mono text-xs tabular-nums text-text-tertiary"
-                  >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                </div>
-                <h3 className="mt-5 text-lg font-semibold text-text-primary">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{pillar.body}</p>
-                <Link
-                  href={pillar.linkHref}
-                  className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action hover:gap-2 transition-all"
-                >
-                  {pillar.linkLabel}
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
-              </li>
-            )
-          })}
-        </ol>
       </div>
     </section>
   )

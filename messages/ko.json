@@ -4039,113 +4039,6 @@
         "cta1": "프로젝트 둘러보기",
         "cta2": "파트너 되기"
       },
-      "about": {
-        "title": "Das Projekt",
-        "description": "모니터 업사이클링 프로젝트에서는 폐기된 화면을 현대적인 조명으로 개조합니다. 이 프로젝트는 소규모 생산 (약 70 개), 모델별 상세 가이드 작성 (사진, 회로 기판, 핀 배치, 안전), ZHAW 와의 비용-편익 분석 및 환경 평가, CE 적합성 확인 그리고 폐기 기기 확보를 위한 ERZ 와의 협력을 포함합니다. 최종 보고서와 Swico 혁신 기금 앞에서의 발표는 2026 년 7 월 3 일로 예정되어 있습니다."
-      },
-      "approach": {
-        "title": "Ziele & Vorgehen",
-        "cards": [
-          {
-            "title": "소량 생산과 품질",
-            "description": "모니터 모델별로 문서화된 작업 단계와 엄격한 품질 보증을 갖춘 30-70개 기능 조명 생산.",
-            "features": [
-              "30–70 Einheiten",
-              "Modell-spezifische Anleitungen",
-              "CE 적합성"
-            ]
-          },
-          {
-            "title": "Wissenschaftliche Begleitung",
-            "description": "ZHAW와 협력한 비용-편익 분석 및 간소화된 생애주기 평가(LCA 비교) — 신제품 조명 대비 실제 환경 이점 측정.",
-            "features": [
-              "LCA-Vergleich",
-              "Umweltvorteil quantifizieren",
-              "Wirtschaftlichkeitsanalyse"
-            ]
-          },
-          {
-            "title": "Partnerschaften & Piloten",
-            "description": "전자 조립에 강점이 있는 적합한 보호 작업장 및 부속 공간, 주차장, 기술실의 파일럿 설치를 위한 부동산 관리·시설 관리와의 파트너 발굴 및 협력.",
-            "features": [
-              "Drahtzug, FARO, St. Jakob, Palme u.a.",
-              "Livit, Wincasa, Allreal, ISS",
-              "ERZ & Swico"
-            ]
-          }
-        ]
-      },
-      "nextsteps": {
-        "title": "다음 단계 및 주요 일정",
-        "description": "2026 년 1 월까지 소규모 생산 완료 및 초기 분석. 2026 년 6 월까지 모든 목록, 가이드 및 결과를 포함한 포괄적인 최종 보고서 완성. 2026 년 7 월 3 일에 Swico 혁신 기금 앞에서 프로젝트 결과 발표. 병행: 보조금 확보 (Klimastiftung Schweiz, KliK, Gebert Rüf, Migros Pionierfonds 등), 추가 생산 및 유통 파트너 확보 그리고 가이드의 공개 출판 준비."
-      },
-      "cta": {
-        "title": "업사이클링 프로젝트에 참여하기",
-        "actions": [
-          {
-            "title": "Kontakt & Partnerschaft",
-            "description": "귀하의 건물에 파일럿 설치 또는 보호 작업장에서 생산 파트너로 참여하실 의향이 있으십니까?",
-            "cta": "Jetzt kontaktieren",
-            "href": "/contact"
-          },
-          {
-            "title": "지원과 자금 후원",
-            "description": "기부 또는 재단·후원 파트너로 프로젝트를 지원해 주세요 — 더 많은 순환 경제와 사회적 통합을 위해.",
-            "cta": "Fördern",
-            "href": "/get-involved/donate"
-          },
-          {
-            "title": "Technik & Wissen",
-            "description": "공개 가이드, 기술 세부 사항, 문서화 협업에 관심이 있으십니까?",
-            "cta": "Kontakt aufnehmen",
-            "href": "/contact"
-          }
-        ]
-      },
-      "open_questions": {
-        "title": "Offene Fragen",
-        "questions": [
-          "어떤 모니터 모델이 가장 적합합니까? 다양한 보드의 모니터를 어떻게 표준화합니까?",
-          "여러 모델에 걸쳐 깜빡임과 밝기 조절을 어떻게 해결할 수 있습니까?",
-          "신제품 조명 대비 실제 환경 이점은 얼마나 됩니까? 대략적인 에코 밸런스로 충분합니까, 아니면 종합적인 LCA가 요구됩니까?",
-          "시장에서 수용되기 위해 램프 가격은 얼마까지 가능합니까? 고객의 지불 의향은 어느 정도입니까?",
-          "양산 시 어떤 파트너가 제품 책임과 CE 마킹을 담당합니까?",
-          "교체할 모니터의 충분한 수량을 어떻게 확보합니까(ERZ 및 기타 수거 거점과의 협력)?",
-          "현실적으로 어떤 후원금을 받을 수 있으며 어떤 조건이 따릅니까?",
-          "프로젝트를 어떻게 알릴까요(기능 조명 vs. 창의 디자인 오브젝트)?"
-        ]
-      },
-      "source": {
-        "title": "Offene Anleitungen & Source Code",
-        "description": "이 프로젝트는 순환 경제를 촉진하기 위해 모니터 모델별 상세 가이드 (사진, 회로 기판, 핀 배치, 안전 측면) 를 작성하고 이를 공개 플랫폼 (이 사이트 또는 Wiki) 에서 무료로 공개할 계획입니다. 이 플랫폼의 소스 코드는 MIT 라이선스 하에 오픈 소스입니다: https://github.com/g-but/revampit . 가이드는 작성 및 검증되는 대로 이곳에 단계적으로 공개될 것입니다."
-      },
-      "ai_brainstorm": {
-        "title": "답을 찾는 데 함께해 주세요.",
-        "intro": "미해결 질문이 있습니다 — 기술, 경제, 법적. 프롬프트를 복사해 LLM에 붙여넣고, 결과를 공유해 주세요.",
-        "prompts": [
-          {
-            "title": "깜빡임 및 조절을 위한 기술적 해결책",
-            "prompt": "당신은 전자공학과 순환 경제 전문가입니다. revamp-it의 모니터 업사이클링 프로젝트(요약: 「프로젝트」와 「목표와 접근 방식」을 복사)를 바탕으로, \"여러 모델에 걸쳐 깜빡임과 밝기 조절을 어떻게 해결할 수 있을까?\" 라는 질문에 대해 4-5가지 구체적인 기술적 해결책을 제안하세요. 고려 사항: 전자공학 노하우를 보유한 보호 작업장(예: Drahtzug, FARO)에서의 실행 가능성, 소량 생산 비용, CE 적합성, 신제품 조명 대비 환경 이점, 소량 생산 확장성. 단순하고 견고한 접근을 우선시하세요."
-          },
-          {
-            "title": "Kommunikationsstrategie",
-            "prompt": "모니터 업사이클링 프로젝트([권장 사항과 미해결 질문을 복사])를 바탕으로, 본 제품을 기능적이고 순환적인 대안으로 자리매김하는 명확한 커뮤니케이션 전략을 수립하세요. 향후 단계에서 창의적 측면(디자인 오브젝트)을 다룰 3-5개의 채널, 메시지, 자료를 제안하세요. 홍보(SNS, 위키)가 파트너와 고객 확보를 어떻게 지원할 수 있습니까?"
-          },
-          {
-            "title": "자금 조달 및 후원 전략",
-            "prompt": "모니터 업사이클링 프로젝트(목표, 후원금에 관한 미해결 질문)와 관련하여, 언급된 재단들(Klimastiftung Schweiz, KliK, Gebert Rüf, Binding, Migros Pionierfonds, Swiss Re)을 분석하고 병행 신청 전략을 제안하세요. 어떤 조건이 가장 잘 맞습니까? 소량 생산을 위해 Swico 지원금과 고객 매출을 어떻게 결합합니까? 구체적인 다음 단계를 3-5개 제시하세요."
-          },
-          {
-            "title": "CE 및 책임",
-            "prompt": "업사이클링 프로젝트(CE 적합성 과제, 제품 책임에 관한 미해결 질문) 맥락에서, 보호 작업장에서의 양산 시 CE 및 제품 책임을 어떻게 규정할 수 있을지 제안하세요. 모델 제안(전문 엔지니어, 파트너 인수, 인증), 위험과 최소화 방법, 우선순위(Drahtzug 등 전자공학 노하우 보유 파트너)를 고려하세요."
-          }
-        ],
-        "copyButton": "프롬프트 복사",
-        "copied": "복사됨",
-        "why": "이 프롬프트 사용법",
-        "whyBody": "선호하는 LLM(Claude, ChatGPT 등)에 복사 & 붙여넣고, 자신의 맥락에 맞게 조정하세요. 흥미로운 결과는 kontakt@revamp-it.ch 로 공유해 주세요.",
-        "eyebrow": "브레인스토밍"
-      },
       "needs": {
         "title": "필요한 것들",
         "intro": "프로젝트를 지금 한 걸음 더 나아가게 할 구체적인 자원입니다. 항목을 클릭해 제안을 보내 주세요. 영업일 며칠 안에 답변드립니다.",
@@ -4216,7 +4109,7 @@
           {
             "key": "applications",
             "title": "활용 분야",
-            "description": "기능적인 작업 조명에서 거실 장식, 예술 작품까지. 세 가지 세계, 같은 재생된 하드웨어 한 조각.",
+            "description": "계단실에서 사무실, 학교, 거실까지 — 두 가지 분명한 세계, 같은 재생된 하드웨어.",
             "cta": "활용 분야 보기"
           },
           {
@@ -4228,7 +4121,7 @@
           {
             "key": "buildYourOwn",
             "title": "직접 만들기",
-            "description": "오픈 하드웨어, MIT 라이선스: 따라 만들기 위한 모든 안내서, 회로도, 자재 — 전 세계 어디에서나.",
+            "description": "Creative Commons CC-BY-SA로 공개된 가이드 — 전 세계 어디서나 재현 가능한 단계별 노하우.",
             "cta": "안내서 열기"
           }
         ]
@@ -4236,55 +4129,38 @@
       "applications": {
         "meta": {
           "title": "활용 분야 | 모니터 업사이클링 | RevampIT",
-          "description": "기능적인 작업등에서 거주 공간 데코, 예술 작품까지. 개조된 모니터 조명이 자리를 잡는 세 가지 세계."
+          "description": "폐기된 모니터로 만든 기능적 벽면·천장 조명 — 계단실, 사무실, 학교, 주거 공간을 위한."
         },
         "eyebrow": "활용 분야 · 모니터 업사이클링",
-        "title": "하나의 조명. 세 가지 세계.",
-        "intro": "같은 폐 모니터가 절제된 작업등이 되기도 하고, 거주 공간의 따뜻한 가구가 되기도 하며, 갤러리의 예술 작품이 되기도 합니다. 선택은 재료가 아니라 무대에 달려 있습니다.",
+        "title": "하나의 조명. 두 가지 분명한 활용 세계.",
+        "intro": "같은 폐기 모니터가 계단실, 사무실, 학교의 조용한 작업등이 되기도 하고 — 거실의 따뜻한 가구가 되기도 합니다. 선택은 재료가 아니라 무대에 달려 있습니다.",
         "spectrum": {
           "label": "스펙트럼",
           "functional": "기능적",
-          "art": "예술"
+          "decor": "데코"
         },
         "tiers": {
           "functional": {
             "title": "기능적",
-            "description": "빛나야 하지만 화려할 필요는 없는 공간을 위한 견고한 작업등입니다. 낮은 전력 소비, 균일한 면 조도, 벽이나 천장 설치 가능 — 새 조명과 같지만 두 번째 삶에서 만들어졌습니다.",
-            "imageCaption": "기능적 · 중립",
+            "description": "연출이 아닌 조명이 필요한 공간을 위한 견고한 작업등. 저전력, 균일한 면 휘도, VESA 규격에 따른 벽 또는 천장 설치.",
             "examples": [
-              "사무실 및 코워킹 공간",
-              "기술실 및 작업장",
-              "지하 주차장 및 주차 빌딩",
-              "계단실 및 복도",
-              "창고 및 보관실",
-              "건물 내 부속 공간"
-            ]
+              "계단실 & 복도",
+              "사무실 & 코워킹 공간",
+              "학교 & 교육 공간",
+              "지하 주차장 & 기술실"
+            ],
+            "imageCaption": "기능적 · 중립"
           },
           "decor": {
             "title": "데코",
-            "description": "개성 있는 공간을 위한 따뜻한 간접 조명입니다. 한때 화면이었던 면이 빛의 면이 됩니다 — 얇고 조용하며 이야기를 담고 있습니다. 거친 콘크리트 벽과도, 나무나 직물과도 잘 어울립니다.",
-            "imageCaption": "데코 · 따뜻함",
+            "description": "개성 있는 공간을 위한 따뜻한 간접 조명. 한때의 디스플레이 면이 조명 면이 됩니다 — 얇고, 조용하며, 이야기가 있는.",
             "examples": [
-              "거실 및 로프트 주거 공간",
-              "카페, 바 및 레스토랑",
-              "호텔 로비 및 부티크 공간",
-              "아틀리에 및 스튜디오",
-              "컨셉 스토어",
-              "진료실 및 리셉션 공간"
-            ]
-          },
-          "art": {
-            "title": "예술",
-            "description": "조명 자체가 메시지가 될 때입니다. 갤러리, 설치 작품, 큐레이팅된 공간에서 재료의 출처가 전면에 드러납니다 — 한때 이미지를 보여 주던 디스플레이가 스스로 이미지가 됩니다.",
-            "imageCaption": "예술 · 채도 높음",
-            "examples": [
-              "갤러리 및 전시 공간",
-              "건축 예술 (Kunst am Bau) 설치 작품",
-              "팝업 공간 및 개막식",
-              "극장 및 무대 로비",
-              "박물관 상점 및 교육 공간",
-              "라이트 아트 프로젝트"
-            ]
+              "주거 & 로프트",
+              "카페 & 레스토랑",
+              "아틀리에 & 스튜디오",
+              "호텔 로비 & 리셉션"
+            ],
+            "imageCaption": "데코 · 웜톤"
           }
         },
         "cta": {
@@ -4306,8 +4182,7 @@
         "filters": {
           "all": "전체",
           "functional": "기능적",
-          "decor": "데코",
-          "art": "예술"
+          "decor": "데코"
         },
         "empty": "이 필터에 해당하는 작품이 아직 없습니다.",
         "placeholderNote": "미리보기 이미지는 자동 생성된 것입니다. 첫 작품이 촬영되는 대로 실제 사진으로 교체할 예정입니다."
@@ -4319,7 +4194,7 @@
         },
         "eyebrow": "직접 만들기 · 모니터 업사이클링",
         "title": "나만의 작품을 만들어 보세요",
-        "intro": "오픈 하드웨어, 오픈 가이드. 모든 설계도, 회로도, 자재 목록은 MIT 라이선스로 자유롭게 제공됩니다 — 같은 아이디어가 저희를 거치지 않고도 전 세계 어디서나 작동하도록.",
+        "intro": "오픈 가이드, 오픈 문서 — 모든 단계, 사진, 자재 목록을 Creative Commons CC-BY-SA로 공개해, 같은 아이디어가 우리를 거치지 않고도 어디서나 작동하도록 합니다.",
         "philosophy": {
           "title": "왜 오픈인가요?",
           "body": "저희의 미션은 조명을 최대한 많이 파는 것이 아니라, 최대한 많은 모니터를 폐기물에서 구해 내는 것입니다. 이것은 모든 작업장, 모든 단체, 모든 호기심 많은 사람들이 따라 만들 수 있을 때에만 가능합니다. 저희가 배우는 모든 것을 공개합니다.",
@@ -4362,10 +4237,10 @@
         },
         "source": {
           "title": "소스 코드 및 라이선스",
-          "body": "이 플랫폼 자체 — 모든 가이드, 회로도, 컴포넌트를 포함하여 — GitHub 에 공개되어 있습니다. Fork, Issue, Pull Request 모두 환영합니다.",
+          "body": "플랫폼 코드와 모든 가이드는 GitHub에 있습니다. Fork, Issue, Pull Request 모두 환영합니다.",
           "repoCta": "GitHub 에서 보기",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "MIT 라이선스 · 하드웨어는 CERN-OHL-S 와 호환"
+          "licenseLabel": "Creative Commons CC-BY-SA · 플랫폼 코드는 MIT"
         },
         "contribute": {
           "title": "함께하기",
@@ -4390,7 +4265,7 @@
         "title": "Lenovo L2251pwd",
         "subtitle": "22 인치 모니터를 조명으로 개조하기",
         "metaLine": "모델: Lenovo L2251pwd · 소요 시간: 약 1 시간 · 난이도: 쉬움",
-        "credit": "가이드 작성: Daniel, RevampIT · 게시일 2026 년 5 월 28 일 · 원본 위키: monitor.revamp-it 내부",
+        "credit": "가이드 작성: Daniel, RevampIT · 게시: 2026년 5월 28일",
         "safety": {
           "title": "안전이 우선입니다",
           "body": "절대 전원이 켜진 상태에서 작업하지 마세요. 모든 기능 테스트 전에 필요한 보호 조치를 취하세요. 확신이 없다면 전자 분야 동료의 도움을 받으세요."
@@ -4612,121 +4487,11 @@
         "successTitle": "등록되었습니다.",
         "successBody": "다음 마일스톤 때 메일을 보내드립니다."
       },
-      "ideas": {
-        "eyebrow": "왜 중요한가",
-        "title": "이 프로젝트가 실증하는 네 가지 아이디어.",
-        "intro": "Monitor-Upcycling은 일회성 사례가 아니라 지속 가능한 IT를 위한 네 가지 레버를 구체적으로 시험합니다. 링크로 더 깊이 들어가세요.",
-        "pillars": [
-          {
-            "key": "environment",
-            "title": "환경 영향",
-            "body": "새 조명을 만드는 데는 원자재와 CO₂가 듭니다. 모니터를 재사용하는 것이 거의 항상 더 나은 선택입니다. CO₂ 추정 방법 — 출처와 함께 투명하게.",
-            "linkLabel": "CO₂ 방법론 열기",
-            "linkHref": "/transparenz/co2"
-          },
-          {
-            "key": "upcycling",
-            "title": "재활용이 아닌 업사이클링",
-            "body": "재활용은 기기를 원자재로 분해합니다. 업사이클링은 기기를 두 번째, 종종 더 나은 생애 단계로 끌어올립니다. 기기는 가치와 이야기를 더 많이 유지합니다.",
-            "linkLabel": "기존 응용 사례 보기",
-            "linkHref": "/projects/upcycling/applications"
-          },
-          {
-            "key": "circular",
-            "title": "순환 경제",
-            "body": "선형(구매 → 사용 → 폐기)이 아닌 순환적으로 생각합니다. 모든 기기에는 여러 생애 단계가 있고, 부품 교체마다 사용이 연장됩니다. 이것은 경제도 바꿉니다 — 아래 미해결 질문 참조.",
-            "linkLabel": "프로젝트 상태 보기",
-            "linkHref": "/projects/upcycling/status"
-          },
-          {
-            "key": "oss",
-            "title": "오픈 소스 하드웨어",
-            "body": "가이드, 회로도, 핀맵은 자유롭게 접근할 수 있습니다. 누구나 복제, 변형, 개선할 수 있습니다. 중앙 독점보다 독립적인 10개 작업장을 선호합니다.",
-            "linkLabel": "직접 만들기",
-            "linkHref": "/projects/upcycling/build-your-own"
-          }
-        ]
-      },
       "briefLink": {
         "eyebrow": "프로젝트 브리핑",
         "title": "후원자 및 파트너를 위한 종합 브리핑",
         "body": "접근 방식, 다음 단계, 미해결 질문(경제성 포함), 오픈 소스 코드 — 모두 상태 페이지에 있습니다.",
         "cta": "종합 브리핑 열기"
-      },
-      "economics": {
-        "eyebrow": "경제성",
-        "title": "램프 한 개의 실제 비용과, 프로젝트가 자립하려는 계획.",
-        "intro": "ZHAW의 생애주기 평가와 첫 판매가 실제 수치를 만들어낼 때까지, 아래의 많은 수치는 가정입니다. 마케팅 자료가 아니라 정직한 추정치로 공개합니다.",
-        "unitEconomics": {
-          "title": "단가 — 현재 추정",
-          "note": "작업 가정. 소량 생산이 실제 수치를 만들어내는 시점(2026년 3분기)에 수정 예정.",
-          "rows": [
-            {
-              "label": "모니터 (기증 / ERZ 경유)",
-              "value": "CHF 0",
-              "aside": "입력 자재는 비용 중립"
-            },
-            {
-              "label": "전자 회로 개조 및 부품",
-              "value": "~CHF 25",
-              "aside": "LED 드라이버, 배선, 소형 부품"
-            },
-            {
-              "label": "인건비 (보호 작업장, 약 1시간)",
-              "value": "~CHF 15",
-              "aside": "작업장 기여금만 — 임금은 스위스 사회보장 제도(장애보험, 지원고용 프로그램)에서 지급되며 프로젝트 예산이 아님"
-            },
-            {
-              "label": "포장",
-              "value": "~CHF 3",
-              "aside": "판지 + 라벨 — 프리미엄 포장 없음"
-            },
-            {
-              "label": "배분된 프로젝트 간접비",
-              "value": "~CHF 20",
-              "aside": "문서화, QA, CE 준비"
-            },
-            {
-              "label": "대략적인 단가",
-              "value": "~CHF 65",
-              "aside": "가격 책정의 하한",
-              "emphasis": true
-            }
-          ]
-        },
-        "price": {
-          "title": "테스트 중인 가격대",
-          "body": "첫 파일럿 구매자(부동산 관리, 디자인 스튜디오)를 위해 CHF 150–250. 이 범위는 단가 + 프로젝트 기여분 + 보증 여유분을 포함합니다. 실제 지불 의향은 미해결 질문(Q04)입니다."
-        },
-        "funding": {
-          "title": "프로젝트는 어떻게 자금을 마련하는가",
-          "body": "세 가지 출처. 비중은 시리즈마다 이동합니다 — 초기에는 재단이 준비 작업(LCA, CE, 치공구)을 지원하고, 이후에는 판매 비중이 커집니다.",
-          "sources": [
-            {
-              "label": "판매",
-              "share": "~50 %",
-              "note": "소량 생산 약 70개 × CHF 150–250 — ~CHF 65 단가에서는 마진이 주된 동력"
-            },
-            {
-              "label": "재단 및 후원 프로그램",
-              "share": "~40 %",
-              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — 주로 LCA, 치공구, CE 준비에 충당"
-            },
-            {
-              "label": "파일럿 파트너 기여",
-              "share": "~10 %",
-              "note": "Drahtzug, FARO 등 — 자재 또는 노동 시간 기여"
-            }
-          ]
-        },
-        "sustainability": {
-          "title": "보조금 없이 모델이 자립하는 시점은?",
-          "body": "현실적으로 시리즈 2부터 — ~CHF 65 단가는 여유를 남기며, (a) 보호 작업장과의 파트너십이 유지되고 (b) 반복 B2B 고객이 최소 CHF 150을 수용하는 한 가능합니다. 구조적 취약점: 이 모델은 보조된 노동 시장에 의존합니다. 시장 임금을 지급해야 한다면 하한이 ~CHF 120으로 오르고 판매가는 CHF 250+를 넘어야 합니다."
-        },
-        "transparency": {
-          "note": "이 수치들은 작업 중인 추정치입니다. 정정, 보완, 비판을 환영합니다 — 모두",
-          "cta": "kontakt@revamp-it.ch"
-        }
       },
       "businessPlan": {
         "meta": {
@@ -5718,16 +5483,6 @@
               "value": "~15–25 kg CO₂",
               "label": "Avoided per lamp",
               "note": "Difference between reusing an already-produced display and newly producing a comparable LED lamp. Source: Apple Product Environmental Reports + Öko-Institut LCA data for display electronics (pending ZHAW validation)."
-            },
-            {
-              "value": "~2.5 kg material",
-              "label": "Kept in circulation",
-              "note": "Average weight of LCD components + housing per 22\" monitor (plastic, aluminium, rare earths in the backlight). Source: Swiss e-waste statistics 2023."
-            },
-            {
-              "value": "~5–10 years",
-              "label": "Second-life duration",
-              "note": "Expected lifespan of the retrofit lamp. Conservative estimate — many LED drivers last much longer. We update with warranty returns."
             }
           ],
           "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
@@ -5761,7 +5516,7 @@
             },
             {
               "title": "Who benefits",
-              "body": "Other sheltered workshops, repair cafés, universities for teaching projects, design students, hobbyists. We get back improvements as feedback."
+              "body": "생산 파트너인 Werkraum 4와 이 방식을 채택하려는 다른 스위스의 사회적 공방. 새로운 모니터 모델의 개조를 문서화하는 공방은 그 결과를 오픈 컬렉션에 환원합니다."
             }
           ],
           "sourceLink": {
@@ -5791,6 +5546,13 @@
               "description": "Return to Revamp-IT or a partner workshop. LED driver reused, housing recycled. No component reaches household waste."
             }
           ]
+        },
+        "nextSteps": {
+          "eyebrow": "더 깊이 보기",
+          "title": "인상에서 증거로.",
+          "body": "방금 읽은 것은 주장입니다. 사업계획서에는 증거가 있습니다 — 단계 상태, 예산, 파트너, 출처. 또는 오픈 가이드를 보고 직접 램프를 만들어 보세요.",
+          "primary": "사업계획서와 출처 보기",
+          "secondary": "직접 만들기"
         }
       }
     }

@@ -58,6 +58,13 @@ type WirkungCopy = {
     intro: string
     stages: Stage[]
   }
+  nextSteps: {
+    eyebrow: string
+    title: string
+    body: string
+    primary: string
+    secondary: string
+  }
 }
 
 export async function generateMetadata() {
@@ -81,7 +88,34 @@ export default async function UpcyclingWirkungPage() {
       <Scientific section={m.scientific} />
       <OpenHardware section={m.openHardware} />
       <Circularity section={m.circularity} />
+      <NextSteps section={m.nextSteps} />
     </article>
+  )
+}
+
+/* ─── 5. Next steps — actionable exit ─────────────────────────────── */
+
+function NextSteps({ section }: { section: WirkungCopy['nextSteps'] }) {
+  return (
+    <section className="border-t border-subtle bg-canvas">
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
+        <div className="ui-public-eyebrow">{section.eyebrow}</div>
+        <h2 className="ui-public-display-md mt-3">{section.title}</h2>
+        <p className="ui-public-section-lede mx-auto mt-4">{section.body}</p>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Link href="/projects/upcycling/businessplan" className="ui-public-cta">
+            {section.primary}
+          </Link>
+          <Link
+            href="/projects/upcycling/build-your-own"
+            className="ui-public-cta-ghost inline-flex items-center gap-2"
+          >
+            {section.secondary}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+    </section>
   )
 }
 

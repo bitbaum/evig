@@ -11,9 +11,12 @@ import { cn } from '@/lib/utils'
 
 /**
  * Cinematic Applications — the showcase surface of the Monitor-Upcycling
- * mini-site. Three acts: Functional → Decor → Art. The page itself is the
- * argument: the same physical object can land in three completely different
- * rooms.
+ * mini-site. Two acts: Functional → Decor. The page itself is the argument:
+ * the same physical object can land in two completely different rooms.
+ *
+ * The third "Art" act was removed in June 2026 — it presented gallery-object
+ * speculation as roadmap with no real evidence. Etappe-2 pilots target
+ * stairwells, offices and schools (functional) plus living spaces (decor).
  *
  * SSOT discipline:
  *  - Chrome (text, surface, border) flows through CSS-var semantic tokens.
@@ -37,17 +40,16 @@ export type ApplicationsMessages = {
   eyebrow: string
   title: string
   intro: string
-  spectrum: { label: string; functional: string; art: string }
+  spectrum: { label: string; functional: string; decor: string }
   tiers: {
     functional: RawApplication
     decor: RawApplication
-    art: RawApplication
   }
   cta: { title: string; body: string; primary: string; secondary: string }
 }
 
 type Act = {
-  key: 'functional' | 'decor' | 'art'
+  key: 'functional' | 'decor'
   variant: MonitorLampPlaceholderVariant
   /** Visual seeds so each lamp in the row varies even at the same variant. */
   seeds: [number, number, number]
@@ -58,7 +60,6 @@ type Act = {
 const ACTS: Act[] = [
   { key: 'functional', variant: 'functional', seeds: [11, 12, 13], reverse: false },
   { key: 'decor',      variant: 'warm',       seeds: [21, 22, 23], reverse: true  },
-  { key: 'art',        variant: 'art',        seeds: [31, 32, 33], reverse: false },
 ]
 
 /** Zero-padded 2-digit label for a 0-based index — "01", "02", "03", … */
@@ -79,7 +80,6 @@ export function ApplicationsExperience({ messages: m }: { messages: Applications
         tierLabels={{
           functional: m.tiers.functional.title,
           decor: m.tiers.decor.title,
-          art: m.tiers.art.title,
         }}
       />
 
@@ -87,7 +87,6 @@ export function ApplicationsExperience({ messages: m }: { messages: Applications
         labels={{
           functional: m.tiers.functional.title,
           decor: m.tiers.decor.title,
-          art: m.tiers.art.title,
         }}
       />
 
@@ -118,7 +117,7 @@ function CinematicHero({
   title: string
   intro: string
   spectrum: ApplicationsMessages['spectrum']
-  tierLabels: { functional: string; decor: string; art: string }
+  tierLabels: { functional: string; decor: string }
 }) {
   return (
     <section
@@ -144,7 +143,7 @@ function CinematicHero({
             <div className="mt-8 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary sm:mt-10">
               <span>{spectrum.functional}</span>
               <span aria-hidden="true" className="h-px flex-1 bg-border-default" />
-              <span>{spectrum.art}</span>
+              <span>{spectrum.decor}</span>
             </div>
           </div>
 
@@ -162,11 +161,11 @@ function CinematicHero({
   )
 }
 
-/* The three-lamp staggered composition that mirrors the three acts. */
+/* Two-lamp staggered composition mirroring the two acts. */
 function SpectrumComposition({
   tierLabels,
 }: {
-  tierLabels: { functional: string; decor: string; art: string }
+  tierLabels: { functional: string; decor: string }
 }) {
   return (
     <div className="relative aspect-[5/4] w-full">
@@ -174,19 +173,13 @@ function SpectrumComposition({
         variant="functional"
         seed={1}
         label={tierLabels.functional}
-        className="absolute left-[4%] top-[12%] w-[54%]"
+        className="absolute left-[2%] top-[18%] w-[56%]"
       />
       <LampFrame
         variant="warm"
         seed={2}
         label={tierLabels.decor}
-        className="absolute right-0 top-0 w-[54%]"
-      />
-      <LampFrame
-        variant="art"
-        seed={3}
-        label={tierLabels.art}
-        className="absolute bottom-0 left-[20%] w-[60%]"
+        className="absolute right-0 bottom-[8%] w-[56%]"
       />
     </div>
   )
@@ -219,7 +212,7 @@ function LampFrame({
 function SceneIndex({
   labels,
 }: {
-  labels: { functional: string; decor: string; art: string }
+  labels: { functional: string; decor: string }
 }) {
   // -1 = above the first scene (hide the chip); 0..n = inside scene n.
   const [activeIdx, setActiveIdx] = useState<number>(-1)

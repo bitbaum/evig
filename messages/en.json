@@ -5674,113 +5674,6 @@
         "cta1": "Explore the project",
         "cta2": "Become a partner"
       },
-      "about": {
-        "title": "The Project",
-        "description": "In the Monitor Upcycling project we convert discarded screens into modern lamps. The project includes production of a small series (approx. 70 units), creation of detailed model-specific instructions (photos, boards, pinouts, safety), a cost-benefit analysis and simplified LCA with ZHAW, clarification of CE conformity and cooperation with ERZ to source end-of-life units. A final report and presentation to the Swico Innovation Fund are planned for 3 July 2026."
-      },
-      "approach": {
-        "title": "Goals & Approach",
-        "cards": [
-          {
-            "title": "Pilot Series & Quality",
-            "description": "Production of 30–70 functional lamps with documented work steps for each monitor model and rigorous quality assurance.",
-            "features": [
-              "30–70 units",
-              "Model-specific guides",
-              "CE conformity"
-            ]
-          },
-          {
-            "title": "Scientific Support",
-            "description": "Cost-benefit analysis and simplified life-cycle assessment (LCA comparison) in cooperation with ZHAW – quantifying the real environmental advantage versus new lamps.",
-            "features": [
-              "LCA comparison",
-              "Measure environmental gain",
-              "Economic viability check"
-            ]
-          },
-          {
-            "title": "Partnerships & Pilots",
-            "description": "Identification and collaboration with suitable sheltered workshops (focus on electronics assembly skills) as well as property management and facility management companies for pilot installations in ancillary rooms, car parks and technical spaces.",
-            "features": [
-              "Drahtzug, FARO, St. Jakob, Palme etc.",
-              "Livit, Wincasa, Allreal, ISS",
-              "ERZ & Swico"
-            ]
-          }
-        ]
-      },
-      "nextsteps": {
-        "title": "Next Steps & Milestones",
-        "description": "Completion of the small series and initial analyses by January 2026. Final comprehensive report with all lists, instructions and results by June 2026. Presentation of project results on 3 July 2026 to the Swico Innovation Fund. In parallel: acquisition of further funding (Klimastiftung Schweiz, KliK, Gebert Rüf, Migros Pionierfonds etc.), additional production and distribution partners and preparation of open public publication of the instructions."
-      },
-      "cta": {
-        "title": "Become Part of the Upcycling Project",
-        "actions": [
-          {
-            "title": "Contact & Partnership",
-            "description": "Interested in a pilot installation in your buildings or as a production partner in a sheltered workshop?",
-            "cta": "Contact us now",
-            "href": "/contact"
-          },
-          {
-            "title": "Funding & Support",
-            "description": "Support the project with a donation or as a foundation/funding partner – for more circular economy and social integration.",
-            "cta": "Support us",
-            "href": "/get-involved/donate"
-          },
-          {
-            "title": "Technical Knowledge",
-            "description": "Interested in the open instructions, technical details or collaboration on documentation?",
-            "cta": "Get in touch",
-            "href": "/contact"
-          }
-        ]
-      },
-      "open_questions": {
-        "title": "Open Questions",
-        "questions": [
-          "Which monitor models are best suited? How can monitors with different boards be standardized?",
-          "How can flicker and brightness control be solved across models?",
-          "What is the actual environmental benefit compared to new lights? Is a rough eco-balance sufficient or is a comprehensive LCA expected?",
-          "How much can the lamp cost to be accepted in the market? What willingness to pay exists among customers?",
-          "Which partners assume responsibility for product liability and CE marking in series production?",
-          "How can sufficient quantities of screens to be replaced be secured (cooperation with ERZ, other collection points)?",
-          "Which grants can realistically be acquired and what conditions are attached?",
-          "How should the project be communicated (functional light vs. creative design object)?"
-        ]
-      },
-      "source": {
-        "title": "Open Instructions & Source Code",
-        "description": "The project plans to create detailed instructions per monitor model (photos, boards, pin assignments, safety aspects) and publish them freely on a public platform (this site or wiki) to promote the circular economy. The source code of this platform is open source under the MIT license: https://github.com/g-but/revampit . The instructions will be published here step by step once created and validated."
-      },
-      "ai_brainstorm": {
-        "title": "Help us find answers.",
-        "intro": "We have open questions — technical, economic, legal. Copy a prompt, paste it into your LLM, share what comes back.",
-        "prompts": [
-          {
-            "title": "Technical Solutions for Flicker & Control",
-            "prompt": "You are an expert in electronics and circular economy. Based on the Monitor-Upcycling project by revamp-it (summary: [copy \"The Project\" and \"Goals & Approach\"]), brainstorm 4-5 concrete technical solutions for the question: \"How can flicker and brightness control be solved across models?\". Consider: Feasibility in sheltered workshops with electronics know-how (e.g. Drahtzug, FARO), costs for small series, CE conformity, environmental benefit vs. new lights, scalability for small series. Prioritize simple, robust approaches."
-          },
-          {
-            "title": "Communication Strategy",
-            "prompt": "Based on the Monitor-Upcycling project ( [copy recommendations and open questions] ): develop a clear communication strategy that positions the product as a functional, circular alternative. Suggest 3-5 channels, messages and materials that address creative aspects (design object) in a later phase. How can public relations (social media, wiki) support the acquisition of partners and customers?"
-          },
-          {
-            "title": "Funding and Financing Strategy",
-            "prompt": "For the Monitor-Upcycling project (goals, open questions on grants): analyze the mentioned foundations (Klimastiftung Schweiz, KliK, Gebert Rüf, Binding, Migros Pionierfonds, Swiss Re) and propose a parallel application strategy. Which conditions fit best? How to combine with Swico funding and customer revenues for the small series? Give 3-5 concrete next steps."
-          },
-          {
-            "title": "CE and Liability",
-            "prompt": "In the context of the Upcycling project (tasks on CE conformity, open question on product liability): brainstorm how responsibility for CE and liability in series production in sheltered workshops can be regulated. Suggest models (specialist engineer, partner takeover, certification), risks and how to minimize them, taking into account the priorities (electronics know-how partners like Drahtzug)."
-          }
-        ],
-        "copyButton": "Copy prompt",
-        "copied": "Copied",
-        "why": "How to use these prompts",
-        "whyBody": "Copy, paste into your preferred LLM (Claude, ChatGPT, etc.), adapt to your context. Share interesting results with kontakt@revamp-it.ch.",
-        "eyebrow": "BRAINSTORMING"
-      },
       "needs": {
         "title": "What we need",
         "intro": "Concrete resources that will move this project forward. Click a need to make your offer — we reply within a few working days.",
@@ -5851,7 +5744,7 @@
           {
             "key": "applications",
             "title": "Use cases",
-            "description": "From functional work light to interior decor to art object. Three worlds, the same revived piece of hardware.",
+            "description": "From stairwell to office, school and living room: two clear worlds, the same reborn piece of hardware.",
             "cta": "View use cases"
           },
           {
@@ -5863,7 +5756,7 @@
           {
             "key": "buildYourOwn",
             "title": "Build your own",
-            "description": "Open hardware, MIT license: all guides, schematics, and materials to build your own — anywhere in the world.",
+            "description": "Open guides under Creative Commons CC-BY-SA: step-by-step knowledge to rebuild anywhere in the world.",
             "cta": "Open guides"
           }
         ]
@@ -5871,55 +5764,38 @@
       "applications": {
         "meta": {
           "title": "Use cases | Monitor upcycling | RevampIT",
-          "description": "From functional task lighting to living-room decor to art object: three worlds where upcycled monitor lamps find their place."
+          "description": "Functional wall and ceiling lights from decommissioned computer monitors — for stairwells, offices, schools and living spaces."
         },
         "eyebrow": "USE CASES · MONITOR UPCYCLING",
-        "title": "One lamp. Three worlds.",
-        "intro": "The same retired monitor becomes a discreet task light, a warm fixture in the living room — or an art object in a gallery. The choice is not the material, but the stage.",
+        "title": "One lamp. Two clear deployment worlds.",
+        "intro": "The same retired monitor becomes a quiet work light in a stairwell, office or school — or a warm furniture piece in a living room. The choice is not about the material, but about the stage.",
         "spectrum": {
           "label": "Spectrum",
           "functional": "Functional",
-          "art": "Art"
+          "decor": "Decor"
         },
         "tiers": {
           "functional": {
             "title": "Functional",
-            "description": "Sturdy task lighting for rooms where the light has to do the work, not show off. Low power draw, even surface brightness, wall or ceiling mount — like a new fixture, just from a second life.",
-            "imageCaption": "Functional · neutral",
+            "description": "Rugged work light for spaces that need to be lit, not styled. Low power draw, even surface brightness, wall- or ceiling-mounted via VESA standard.",
             "examples": [
-              "Offices & co-working spaces",
-              "Utility rooms & workshops",
-              "Underground garages & parking lots",
               "Stairwells & corridors",
-              "Storage rooms & archives",
-              "Auxiliary rooms in properties"
-            ]
+              "Offices & co-working spaces",
+              "Schools & educational rooms",
+              "Underground garages & utility rooms"
+            ],
+            "imageCaption": "Functional · neutral"
           },
           "decor": {
             "title": "Decor",
-            "description": "Warm, indirect light for rooms with character. The former screen becomes a light surface — flat, quiet, with a story. Works against raw concrete walls just as well as wood and textile.",
-            "imageCaption": "Decor · warm",
+            "description": "Warm, indirect light for rooms with character. The former display surface becomes a light surface — flat, quiet, with a back-story.",
             "examples": [
-              "Living rooms & loft apartments",
-              "Cafés, bars & restaurants",
-              "Hotel lobbies & boutique spaces",
-              "Ateliers & studios",
-              "Concept stores",
-              "Practice & reception areas"
-            ]
-          },
-          "art": {
-            "title": "Art",
-            "description": "When the lamp itself becomes the statement. In galleries, installations and curated spaces, the origin of the material steps into the foreground — the display that once showed images becomes the image.",
-            "imageCaption": "Art · saturated",
-            "examples": [
-              "Galleries & exhibition spaces",
-              "Art-in-architecture installations",
-              "Pop-up spaces & vernissages",
-              "Theater & stage foyers",
-              "Museum shops & educational spaces",
-              "Light art projects"
-            ]
+              "Homes & lofts",
+              "Cafés & restaurants",
+              "Studios & ateliers",
+              "Hotel lobbies & reception areas"
+            ],
+            "imageCaption": "Decor · warm"
           }
         },
         "cta": {
@@ -5941,8 +5817,7 @@
         "filters": {
           "all": "All",
           "functional": "Functional",
-          "decor": "Decor",
-          "art": "Art"
+          "decor": "Decor"
         },
         "empty": "No pieces yet for this filter.",
         "placeholderNote": "Preview images are generated — once the first pieces are photographed, we'll replace them with real shots."
@@ -5954,7 +5829,7 @@
         },
         "eyebrow": "BUILD YOUR OWN · MONITOR UPCYCLING",
         "title": "Build your own piece",
-        "intro": "Open hardware, open guides. Every plan, schematic and bill of materials is freely available under the MIT license — so the same idea works anywhere in the world, without going through us.",
+        "intro": "Open guides, open documentation. Every step, photo and bill of materials is published under Creative Commons CC-BY-SA — so the same idea works anywhere, without having to go through us.",
         "philosophy": {
           "title": "Why open?",
           "body": "Our mission isn't to sell as many lamps as possible — it's to pull as many monitors as possible out of the scrap pile. That only works if every workshop, every group, and every curious person is free to replicate the build. We publish everything we learn.",
@@ -5997,10 +5872,10 @@
         },
         "source": {
           "title": "Source code & license",
-          "body": "This platform itself — including every guide, schematic and component — lives on GitHub. Fork, issue or pull request: all welcome.",
+          "body": "Platform code and every guide live on GitHub. Fork, issue or pull request — all welcome.",
           "repoCta": "View on GitHub",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "MIT license · hardware compatible with CERN-OHL-S"
+          "licenseLabel": "Creative Commons CC-BY-SA · platform code under MIT"
         },
         "contribute": {
           "title": "Get involved",
@@ -6025,7 +5900,7 @@
         "title": "Lenovo L2251pwd",
         "subtitle": "Turn a 22-inch monitor into a lamp",
         "metaLine": "Model: Lenovo L2251pwd · Duration: about 1 hour · Difficulty: easy",
-        "credit": "Guide by Daniel, RevampIT · Published 28 May 2026 · Original wiki: monitor.revamp-it internal",
+        "credit": "Guide by Daniel, RevampIT · Published 28 May 2026",
         "safety": {
           "title": "Safety first",
           "body": "Never work on a live circuit. Take the necessary precautions before any functional test. If you're unsure: bring in an electronics colleague."
@@ -6247,121 +6122,11 @@
         "successTitle": "You're in.",
         "successBody": "We'll write when the next milestone ships."
       },
-      "ideas": {
-        "eyebrow": "WHY THIS MATTERS",
-        "title": "Four ideas this project tests in practice.",
-        "intro": "Monitor-Upcycling isn't a one-off — it's a concrete test of four levers for sustainable IT. Go deeper via the links.",
-        "pillars": [
-          {
-            "key": "environment",
-            "title": "Environmental footprint",
-            "body": "Producing a new lamp costs raw materials and CO₂. Re-using a monitor is almost always the better choice. How we estimate CO₂ — transparent, sourced.",
-            "linkLabel": "Open CO₂ methodology",
-            "linkHref": "/transparenz/co2"
-          },
-          {
-            "key": "upcycling",
-            "title": "Upcycling, not recycling",
-            "body": "Recycling breaks a device down into raw materials. Upcycling lifts it into a second, often better life phase. The device keeps more of its value — and its history.",
-            "linkLabel": "See existing applications",
-            "linkHref": "/projects/upcycling/applications"
-          },
-          {
-            "key": "circular",
-            "title": "Circular economy",
-            "body": "Instead of linear (buy → use → discard) we think in circles: every device has multiple life phases, every component swap extends use. That reshapes the economics too — see the open questions below.",
-            "linkLabel": "Open project status",
-            "linkHref": "/projects/upcycling/status"
-          },
-          {
-            "key": "oss",
-            "title": "Open-source hardware",
-            "body": "Guides, schematics and pin-out maps are free to access. Anyone can replicate, adapt, improve. We prefer ten independent workshops to one central monopoly.",
-            "linkLabel": "Build one yourself",
-            "linkHref": "/projects/upcycling/build-your-own"
-          }
-        ]
-      },
       "briefLink": {
         "eyebrow": "PROJECT BRIEF",
         "title": "Full briefing for funders & partners",
         "body": "Approach, next steps, open questions (incl. economics) and the open-source code — all on the status page.",
         "cta": "Open the full brief"
-      },
-      "economics": {
-        "eyebrow": "ECONOMICS",
-        "title": "What a lamp actually costs — and how the project intends to pay for itself.",
-        "intro": "Until the ZHAW life-cycle assessment and the first sales produce real numbers, many of the figures below are assumptions. We write them down honestly instead of marketing them.",
-        "unitEconomics": {
-          "title": "Unit cost — today's estimate",
-          "note": "Working assumptions. Will be revised once the small series produces real numbers (Q3 2026).",
-          "rows": [
-            {
-              "label": "Monitor (donated / via ERZ)",
-              "value": "CHF 0",
-              "aside": "Input material is cost-neutral"
-            },
-            {
-              "label": "Electronics retrofit & components",
-              "value": "~CHF 25",
-              "aside": "LED driver, wiring, small parts"
-            },
-            {
-              "label": "Labour (sheltered workshop, ~1 h)",
-              "value": "~CHF 15",
-              "aside": "Workshop contribution only — wages are paid by the Swiss social system (disability insurance, supported-employment programs), not from the project budget"
-            },
-            {
-              "label": "Packaging",
-              "value": "~CHF 3",
-              "aside": "Cardboard + label — no premium packaging"
-            },
-            {
-              "label": "Allocated project overhead",
-              "value": "~CHF 20",
-              "aside": "Documentation, QA, CE prep"
-            },
-            {
-              "label": "Rough unit cost",
-              "value": "~CHF 65",
-              "aside": "Floor for pricing",
-              "emphasis": true
-            }
-          ]
-        },
-        "price": {
-          "title": "Price range we're testing",
-          "body": "CHF 150–250 for the first pilot buyers (property managers, design studios). The range covers unit cost + project contribution + warranty buffer. The actual willingness to pay is an open question (Q04)."
-        },
-        "funding": {
-          "title": "How the project pays for itself",
-          "body": "Three sources. The mix shifts series by series — at the start, foundations cover the prep work (LCA, CE, tooling); later, sales take a growing share.",
-          "sources": [
-            {
-              "label": "Sales",
-              "share": "~50 %",
-              "note": "CHF 150–250 per lamp × ~70 lamps in the small series — with ~CHF 65 unit cost, margin is the primary carrier"
-            },
-            {
-              "label": "Foundations & funding programs",
-              "share": "~40 %",
-              "note": "Swico Innovationsfonds, Klimastiftung Schweiz, KliK, Gebert Rüf — primarily finance LCA, tooling and CE prep"
-            },
-            {
-              "label": "Pilot partner contributions",
-              "share": "~10 %",
-              "note": "Drahtzug, FARO etc. — material or labour-time contribution"
-            }
-          ]
-        },
-        "sustainability": {
-          "title": "When does the model carry itself without grants?",
-          "body": "Realistically from series 2 — ~CHF 65 unit cost leaves headroom, provided (a) the sheltered-workshop partnership holds and (b) repeat B2B customers accept at least CHF 150. The structural fragility: the model depends on a subsidised labour market. If we had to pay market wages, the floor would rise to ~CHF 120 and the sale price would need to clear CHF 250+."
-        },
-        "transparency": {
-          "note": "These figures are work-in-progress. Please correct, extend, push back — write to",
-          "cta": "kontakt@revamp-it.ch"
-        }
       },
       "businessPlan": {
         "meta": {
@@ -7353,16 +7118,6 @@
               "value": "~15–25 kg CO₂",
               "label": "Avoided per lamp",
               "note": "Difference between reusing an already-produced display and newly producing a comparable LED lamp. Source: Apple Product Environmental Reports + Öko-Institut LCA data for display electronics (pending ZHAW validation)."
-            },
-            {
-              "value": "~2.5 kg material",
-              "label": "Kept in circulation",
-              "note": "Average weight of LCD components + housing per 22\" monitor (plastic, aluminium, rare earths in the backlight). Source: Swiss e-waste statistics 2023."
-            },
-            {
-              "value": "~5–10 years",
-              "label": "Second-life duration",
-              "note": "Expected lifespan of the retrofit lamp. Conservative estimate — many LED drivers last much longer. We update with warranty returns."
             }
           ],
           "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
@@ -7396,7 +7151,7 @@
             },
             {
               "title": "Who benefits",
-              "body": "Other sheltered workshops, repair cafés, universities for teaching projects, design students, hobbyists. We get back improvements as feedback."
+              "body": "Werkraum 4 as production partner, plus any other Swiss social-purpose workshop that wants to adopt the process. Every workshop that documents a new monitor-model retrofit feeds back into the open collection."
             }
           ],
           "sourceLink": {
@@ -7426,6 +7181,13 @@
               "description": "Return to Revamp-IT or a partner workshop. LED driver reused, housing recycled. No component reaches household waste."
             }
           ]
+        },
+        "nextSteps": {
+          "eyebrow": "GO DEEPER",
+          "title": "From impression to evidence.",
+          "body": "What you just read is the argument. The business plan holds the evidence — phase status, budget, partners, sources. Or jump to the open guides and build your own lamp.",
+          "primary": "View business plan & sources",
+          "secondary": "Build your own"
         }
       }
     }

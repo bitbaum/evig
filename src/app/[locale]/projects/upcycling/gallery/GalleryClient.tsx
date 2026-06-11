@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils'
  * collapses gracefully on small viewports.
  */
 
-type Tier = 'functional' | 'decor' | 'art'
+type Tier = 'functional' | 'decor'
 type Filter = Tier | 'all'
 
 type Piece = {
@@ -38,7 +38,7 @@ type Piece = {
   seed: number
   /** When real photography is dropped into public/projects/upcycling/gallery/,
    *  set this to the filename and the card renders the JPG instead of the
-   *  generative SVG placeholder. See PROMPTS.md in that folder. */
+   *  generative SVG placeholder. See REAL_PHOTOS.md in that folder. */
   image?: string
 }
 
@@ -47,7 +47,7 @@ type GalleryMessages = {
   title: string
   intro: string
   filterLabel: string
-  filters: { all: string; functional: string; decor: string; art: string }
+  filters: { all: string; functional: string; decor: string }
   empty: string
   placeholderNote: string
 }
@@ -77,7 +77,7 @@ const PIECES: Piece[] = [
   { id: 'eizo-ev2315w',           model: 'EIZO EV2315W',           tier: 'decor',      variant: 'cool',       seed: 113 },
 ]
 
-const FILTERS: Filter[] = ['all', 'functional', 'decor', 'art']
+const FILTERS: Filter[] = ['all', 'functional', 'decor']
 
 /**
  * Bento sizing pattern by visible index. The grid is 2-col on sm and 4-col
