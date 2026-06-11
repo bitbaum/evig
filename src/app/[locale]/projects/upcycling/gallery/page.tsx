@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { GalleryClient } from './GalleryClient'
+import { ogFor } from '../og-images'
 
 export async function generateMetadata() {
   const t = await getTranslations('projects')
@@ -7,7 +8,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'website' },
+    ...ogFor('gallery', m.meta),
   }
 }
 

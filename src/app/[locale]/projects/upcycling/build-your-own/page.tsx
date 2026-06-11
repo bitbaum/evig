@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { Github, ArrowRight, ExternalLink } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { MonitorLampPlaceholder } from '../MonitorLampPlaceholder'
+import { ogFor } from '../og-images'
 
 /**
  * Build-Your-Own — the open-source-hardware hub.
@@ -62,7 +63,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'website' },
+    ...ogFor('buildYourOwn', m.meta),
   }
 }
 

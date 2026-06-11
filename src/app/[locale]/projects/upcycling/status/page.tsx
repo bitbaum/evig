@@ -7,6 +7,7 @@ import {
   type MilestoneStatus,
 } from '@/data/upcycling-status'
 import { cn } from '@/lib/utils'
+import { ogFor } from '../og-images'
 
 /** Rebuild every hour so the deadline countdown stays within 1 day of accurate.
  *  The rest of the page is otherwise static-data-driven. */
@@ -72,7 +73,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'website' },
+    ...ogFor('status', m.meta),
   }
 }
 

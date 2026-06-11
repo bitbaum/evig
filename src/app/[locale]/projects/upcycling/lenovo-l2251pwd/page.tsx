@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { GuideBody, type GuideData } from './GuideBody'
+import { ogFor } from '../og-images'
 
 /**
  * Lenovo L2251pwd guide — server-side metadata + i18n loading only.
@@ -15,7 +16,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'article' },
+    ...ogFor('lenovoL2251pwd', m.meta, { type: 'article' }),
   }
 }
 

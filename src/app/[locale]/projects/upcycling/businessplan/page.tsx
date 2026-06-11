@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ArrowRight, ExternalLink, Mail, Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DesktopTocRail } from './DesktopTocRail'
+import { ogFor } from '../og-images'
 
 /**
  * /projects/upcycling/businessplan — source-grounded evidence page.
@@ -121,7 +122,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'website' },
+    ...ogFor('businessplan', m.meta),
   }
 }
 

@@ -15,6 +15,7 @@ import {
 } from '@/components/projects'
 import type { ProjectPageConfig } from '@/components/projects'
 import { UpcyclingInterestCTA } from './UpcyclingInterestCTA'
+import { ogFor } from './og-images'
 
 type GuideItem = {
   slug: string
@@ -57,7 +58,7 @@ export async function generateMetadata() {
   return {
     title: p.meta.title,
     description: p.meta.description,
-    openGraph: { title: p.meta.title, description: p.meta.description, type: 'website' },
+    ...ogFor('landing', p.meta),
   }
 }
 

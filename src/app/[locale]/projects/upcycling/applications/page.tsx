@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { ApplicationsExperience, type ApplicationsMessages } from './ApplicationsExperience'
+import { ogFor } from '../og-images'
 
 /**
  * Applications — the cinematic spectrum surface of the Monitor-Upcycling
@@ -14,7 +15,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'website' },
+    ...ogFor('applications', m.meta),
   }
 }
 

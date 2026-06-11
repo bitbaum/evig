@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, ExternalLink, BookOpen } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { ogFor } from '../og-images'
 
 /**
  * /projects/upcycling/wirkung — the environmental, scientific, and
@@ -73,7 +74,7 @@ export async function generateMetadata() {
   return {
     title: m.meta.title,
     description: m.meta.description,
-    openGraph: { title: m.meta.title, description: m.meta.description, type: 'website' },
+    ...ogFor('wirkung', m.meta),
   }
 }
 
