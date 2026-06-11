@@ -6115,6 +6115,11 @@
           "title": "Economics, market, and partner ecosystem.",
           "body": "This page is the snapshot. The full picture — unit cost, funding, customer segments, risks — lives in the business plan.",
           "cta": "Open business plan"
+        },
+        "countdown": {
+          "daysLeft": "{days, plural, one {# day} other {# days}} until {milestone}",
+          "today": "Due today: {milestone}",
+          "overdue": "{days, plural, one {# day} other {# days}} overdue: {milestone}"
         }
       },
       "interestCta": {
@@ -7146,24 +7151,12 @@
         },
         "openHardware": {
           "eyebrow": "OPEN HARDWARE",
-          "title": "Manuals are free because they have to be.",
-          "intro": "If only we have the manuals, only our small series exists. If they are public, any workshop in Switzerland can pick up the model — and that is precisely the goal.",
-          "pillars": [
-            {
-              "title": "What we publish",
-              "body": "Per monitor model: photos, schematics, pin assignments, BOM (bill of materials), safety notes, test protocol. Format: Markdown on this site (long-term: wiki)."
-            },
-            {
-              "title": "Licence",
-              "body": "Manuals under Creative Commons CC-BY-SA — commercial use allowed, condition: attribution + same licence for derivatives. Software (this platform) under MIT."
-            },
-            {
-              "title": "Who benefits",
-              "body": "Werkraum 4 as production partner, plus any other Swiss social-purpose workshop that wants to adopt the process. Every workshop that documents a new monitor-model retrofit feeds back into the open collection."
-            }
-          ],
+          "title": "Guides are free because they have to be.",
+          "body": "If only we have the guides, only our small series exists. If they are public, any Swiss workshop can adopt the model — and that is the point. For every monitor model we publish photos, schematics, pin assignments, bill of materials, safety notes and a test protocol as markdown on this platform.",
+          "licenseLine": "Guides under Creative Commons CC-BY-SA · platform code under MIT.",
+          "guideCta": "Build your own",
           "sourceLink": {
-            "label": "Platform source code",
+            "label": "Platform source",
             "url": "https://github.com/g-but/revampit"
           }
         },

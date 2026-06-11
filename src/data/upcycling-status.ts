@@ -74,4 +74,21 @@ export const UPCYCLING_STATUS = {
     'lca-final': 'upcoming',
     'scale':     'upcoming',
   } satisfies Record<MilestoneKey, MilestoneStatus>,
+
+  /**
+   * Optional ISO dates per milestone — only set when we have day-level
+   * confidence. Used by the header countdown to feature the next deadline
+   * ("Noch X Tage bis ZHAW LCA-Bericht"). Quarter-only milestones (Q3 2026)
+   * stay null — a countdown to a vague target overstates certainty.
+   */
+  milestoneDeadlines: {
+    'kickoff':   null,
+    'prototype': null,
+    'lca-start': null,
+    'series':    null,
+    // Etappe-2-Bericht to Swico — per Swico letter 12.03.2026 (businessplan §15).
+    'lca-final': '2026-06-18',  // ZHAW LCA Schlussbericht — businessplan KPI
+    'swico':     '2026-07-03',  // Schlusspräsentation Lagerstrasse 33, Zürich 09:00
+    'scale':     null,
+  } satisfies Record<MilestoneKey, string | null>,
 }

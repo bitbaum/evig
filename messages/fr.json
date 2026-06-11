@@ -6166,6 +6166,11 @@
           "title": "Économie, marché et écosystème partenaires.",
           "body": "Cette page est l'instantané. Le tableau complet — coût unitaire, financement, segments clients, risques — vit dans le plan d'affaires.",
           "cta": "Ouvrir le plan d'affaires"
+        },
+        "countdown": {
+          "daysLeft": "{days, plural, one {# jour} other {# jours}} avant {milestone}",
+          "today": "Échéance aujourd'hui : {milestone}",
+          "overdue": "{days, plural, one {# jour} other {# jours}} de retard : {milestone}"
         }
       },
       "interestCta": {
@@ -7196,25 +7201,13 @@
           "commitment": "Nous publierons le résultat tel quel — même s'il est défavorable. Une ACV qui ne « gagne » que n'en est pas une."
         },
         "openHardware": {
-          "eyebrow": "MATÉRIEL OUVERT",
-          "title": "Les instructions sont libres parce qu'elles doivent l'être.",
-          "intro": "Si nous sommes les seuls à les avoir, il n'y aura que notre petite série. Si elles sont publiques, n'importe quel atelier de Suisse peut reprendre le modèle — et c'est précisément le but.",
-          "pillars": [
-            {
-              "title": "Ce que nous publions",
-              "body": "Par modèle de moniteur : photos, schémas électriques, brochage, BOM (nomenclature), consignes de sécurité, protocole de test. Format : Markdown sur ce site (à long terme : wiki)."
-            },
-            {
-              "title": "Licence",
-              "body": "Instructions sous Creative Commons CC-BY-SA — usage commercial autorisé, condition : attribution + même licence pour les œuvres dérivées. Logiciel (cette plateforme) sous MIT."
-            },
-            {
-              "title": "Qui en profite",
-              "body": "Werkraum 4 comme partenaire de production, et tout autre atelier suisse à but social qui souhaite adopter la méthode. Chaque atelier qui documente un nouveau modèle de moniteur enrichit la collection ouverte."
-            }
-          ],
+          "eyebrow": "OPEN HARDWARE",
+          "title": "Les guides sont libres parce qu’ils doivent l’être.",
+          "body": "Si seuls nous avons les guides, seule notre petite série existe. S'ils sont publics, n'importe quel atelier suisse peut reprendre le modèle — et c'est précisément le but. Pour chaque modèle de moniteur, nous publions photos, schémas, brochage, liste de matériaux, consignes de sécurité et protocole de test, en markdown sur cette plateforme.",
+          "licenseLine": "Guides sous Creative Commons CC-BY-SA · code de la plateforme sous MIT.",
+          "guideCta": "Construire la vôtre",
           "sourceLink": {
-            "label": "Code source de la plateforme",
+            "label": "Source de la plateforme",
             "url": "https://github.com/g-but/revampit"
           }
         },

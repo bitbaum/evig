@@ -5861,6 +5861,11 @@
           "title": "Wirtschaftlichkeit, Markt und Partner-Ökosystem.",
           "body": "Hier steht der Snapshot. Das Vollbild — Stückkosten, Finanzierung, Kundensegmente, Risiken — lebt im Geschäftsplan.",
           "cta": "Geschäftsplan öffnen"
+        },
+        "countdown": {
+          "daysLeft": "{days, plural, one {Noch # Tag} other {Noch # Tage}} bis {milestone}",
+          "today": "Heute fällig: {milestone}",
+          "overdue": "{days, plural, one {# Tag} other {# Tage}} überfällig: {milestone}"
         }
       },
       "interestCta": {
@@ -6893,21 +6898,9 @@
         "openHardware": {
           "eyebrow": "OPEN HARDWARE",
           "title": "Anleitungen sind frei, weil sie es sein müssen.",
-          "intro": "Wenn nur wir die Anleitungen haben, gibt es nur unsere Kleinserie. Sind sie öffentlich, kann jede Werkstatt der Schweiz das Modell aufnehmen — und genau das ist das Ziel.",
-          "pillars": [
-            {
-              "title": "Was wir publizieren",
-              "body": "Pro Monitor-Modell: Fotos, Schaltbilder, Pin-Belegung, BOM (Bill of Materials), Sicherheitshinweise, Test-Protokoll. Format: Markdown auf dieser Site (langfristig: Wiki)."
-            },
-            {
-              "title": "Lizenz",
-              "body": "Anleitungen unter Creative Commons CC-BY-SA — kommerzielle Nutzung erlaubt, Bedingung: Zuschreibung + gleiche Lizenz für Ableitungen. Software (diese Plattform) unter MIT."
-            },
-            {
-              "title": "Wer profitiert",
-              "body": "Werkraum 4 als Produktionspartner, andere geschützte Werkstätten der Schweiz, die das Verfahren übernehmen möchten. Jede Werkstatt, die einen Monitor-Modell-Umbau dokumentiert, fliesst zurück in die offene Sammlung."
-            }
-          ],
+          "body": "Wenn nur wir die Anleitungen haben, gibt es nur unsere Kleinserie. Sind sie öffentlich, kann jede Werkstatt der Schweiz das Modell aufnehmen — und genau das ist das Ziel. Pro Monitor-Modell publizieren wir Fotos, Schaltbilder, Pin-Belegung, Materialliste, Sicherheitshinweise und Test-Protokoll als Markdown auf dieser Plattform.",
+          "licenseLine": "Anleitungen unter Creative Commons CC-BY-SA · Plattform-Code unter MIT.",
+          "guideCta": "Selber bauen",
           "sourceLink": {
             "label": "Plattform-Quellcode",
             "url": "https://github.com/g-but/revampit"

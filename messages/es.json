@@ -4480,6 +4480,11 @@
           "title": "Economía, mercado y ecosistema de socios.",
           "body": "Esta página es la instantánea. El cuadro completo — coste unitario, financiación, segmentos de clientes, riesgos — vive en el plan de negocio.",
           "cta": "Abrir plan de negocio"
+        },
+        "countdown": {
+          "daysLeft": "{days, plural, one {# día} other {# días}} hasta {milestone}",
+          "today": "Vence hoy: {milestone}",
+          "overdue": "{days, plural, one {# día} other {# días}} de retraso: {milestone}"
         }
       },
       "interestCta": {
@@ -5510,23 +5515,11 @@
           "commitment": "Publicamos el resultado tal cual — incluso si es desfavorable. Un ACV que solo \"gana\" no es un ACV."
         },
         "openHardware": {
-          "eyebrow": "HARDWARE ABIERTO",
-          "title": "Las instrucciones son libres porque deben serlo.",
-          "intro": "Si solo nosotros las tenemos, solo existe nuestra serie pequeña. Si son públicas, cualquier taller suizo puede adoptar el modelo — y ese es exactamente el objetivo.",
-          "pillars": [
-            {
-              "title": "Lo que publicamos",
-              "body": "Por modelo de monitor: fotos, esquemas, pinout, BOM (lista de materiales), advertencias de seguridad, protocolo de test. Formato: Markdown en este sitio (a largo plazo: wiki)."
-            },
-            {
-              "title": "Licencia",
-              "body": "Instrucciones bajo Creative Commons CC-BY-SA — uso comercial permitido, condición: atribución + misma licencia para obras derivadas. Software (esta plataforma) bajo MIT."
-            },
-            {
-              "title": "Quién se beneficia",
-              "body": "Werkraum 4 como socio de producción, más cualquier otro taller social suizo que quiera adoptar el método. Cada taller que documenta un nuevo modelo de monitor enriquece la colección abierta."
-            }
-          ],
+          "eyebrow": "OPEN HARDWARE",
+          "title": "Las guías son libres porque deben serlo.",
+          "body": "Si solo nosotros tenemos las guías, solo existe nuestra pequeña serie. Si son públicas, cualquier taller suizo puede adoptar el modelo — y ese es justamente el objetivo. Para cada modelo de monitor publicamos fotos, esquemas, pinout, lista de materiales, notas de seguridad y protocolo de prueba en markdown en esta plataforma.",
+          "licenseLine": "Guías bajo Creative Commons CC-BY-SA · código de la plataforma bajo MIT.",
+          "guideCta": "Construye la tuya",
           "sourceLink": {
             "label": "Código fuente de la plataforma",
             "url": "https://github.com/g-but/revampit"

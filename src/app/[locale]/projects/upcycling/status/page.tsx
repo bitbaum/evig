@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { ArrowRight, CheckCircle2, CircleDot, Circle } from 'lucide-react'
+import { ArrowRight, CheckCircle2, CircleDot, Circle, Clock } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import {
   UPCYCLING_STATUS,
@@ -7,6 +7,10 @@ import {
   type MilestoneStatus,
 } from '@/data/upcycling-status'
 import { cn } from '@/lib/utils'
+
+/** Rebuild every hour so the deadline countdown stays within 1 day of accurate.
+ *  The rest of the page is otherwise static-data-driven. */
+export const revalidate = 3600
 
 /**
  * /projects/upcycling/status — public progress snapshot.
@@ -30,6 +34,14 @@ type StatusMessages = {
   title: string
   intro: string
   snapshot: { label: string; updatedLabel: string }
+  /** ICU-format strings for the next-deadline countdown chip. The same
+   *  countdown serves any milestone with an ISO date; the milestone-specific
+   *  label is interpolated via `{milestone}`. */
+  countdown: {
+    daysLeft: string    // "{days, plural, one {Noch # Tag} other {Noch # Tage}} bis {milestone}"
+    today: string       // "Heute fällig: {milestone}"
+    overdue: string     // "{days, plural, one {# Tag} other {# Tage}} überfällig: {milestone}"
+  }
   production: {
     title: string
     intro: string
@@ -69,6 +81,9 @@ export default async function UpcyclingStatusPage() {
   const m = t.raw('upcycling.status') as StatusMessages
   const status = UPCYCLING_STATUS
 
+  // Find the next dated milestone — drives the header countdown chip.
+  const nextDeadline = pickNextDeadline(status.milestoneDeadlines, m.timeline.items)
+
   return (
     <article className="bg-canvas">
       <Header
@@ -77,12 +92,50 @@ export default async function UpcyclingStatusPage() {
         intro={m.intro}
         snapshot={m.snapshot}
         snapshotIso={status.snapshotIso}
+        countdown={m.countdown}
+        nextDeadline={nextDeadline}
       />
       <Production section={m.production} numbers={status.production} />
       <Timeline section={m.timeline} statuses={status.milestoneStatuses} />
       <NextLink link={m.nextLink} />
     </article>
   )
+}
+
+/** Resolve which dated milestone to feature in the countdown chip.
+ *  Picks the soonest deadline that hasn't yet passed by more than 14 days
+ *  (so a freshly-met deadline still gets credit) and falls back to the
+ *  soonest future deadline otherwise. Returns null when nothing is dated. */
+function pickNextDeadline(
+  deadlines: Record<MilestoneKey, string | null>,
+  items: StatusMessages['timeline']['items'],
+): { key: MilestoneKey; label: string; daysLeft: number; isoDate: string } | null {
+  // UTC midnight today — independent of the server's local timezone so the
+  // count is consistent across server restarts and CDN PoPs.
+  const today = new Date()
+  const todayMs = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+
+  const dated = Object.entries(deadlines)
+    .filter(([, iso]) => !!iso)
+    .map(([k, iso]) => {
+      const [y, mo, d] = (iso as string).split('-').map(Number)
+      const ms = Date.UTC(y, mo - 1, d)
+      const daysLeft = Math.round((ms - todayMs) / 86_400_000)
+      const label = items.find((it) => it.key === (k as MilestoneKey))?.label ?? k
+      return { key: k as MilestoneKey, label, daysLeft, isoDate: iso as string }
+    })
+    // Prefer not-yet-overdue, but allow up to 14 days past as a grace
+    // window so a milestone reads as "0 days" → "1 day overdue" → … and
+    // doesn't immediately disappear after slipping. After 14 days overdue
+    // the team should have updated the SSOT.
+    .sort((a, b) => {
+      const aHidden = a.daysLeft < -14
+      const bHidden = b.daysLeft < -14
+      if (aHidden !== bHidden) return aHidden ? 1 : -1
+      return a.daysLeft - b.daysLeft
+    })
+
+  return dated[0] ?? null
 }
 
 /* ─── Header ─────────────────────────────────────────────────────── */
@@ -93,12 +146,16 @@ function Header({
   intro,
   snapshot,
   snapshotIso,
+  countdown,
+  nextDeadline,
 }: {
   eyebrow: string
   title: string
   intro: string
   snapshot: StatusMessages['snapshot']
   snapshotIso: string
+  countdown: StatusMessages['countdown']
+  nextDeadline: { key: MilestoneKey; label: string; daysLeft: number; isoDate: string } | null
 }) {
   return (
     <header className="border-b border-subtle bg-surface-base">
@@ -114,8 +171,58 @@ function Header({
         </div>
         <h1 className="ui-public-display-lg mt-3">{title}</h1>
         <p className="ui-public-section-lede mt-4">{intro}</p>
+        {nextDeadline && (
+          <DeadlineChip nextDeadline={nextDeadline} countdown={countdown} />
+        )}
       </div>
     </header>
+  )
+}
+
+/** Live deadline countdown for the soonest dated milestone. ICU plurals via
+ *  next-intl mean each locale handles its own number-agreement rules. */
+function DeadlineChip({
+  nextDeadline,
+  countdown,
+}: {
+  nextDeadline: { key: MilestoneKey; label: string; daysLeft: number; isoDate: string }
+  countdown: StatusMessages['countdown']
+}) {
+  // Pick the ICU template based on past/present/future; next-intl renders
+  // the plural form. We could use t() with formatting but the messages are
+  // already shaped — interpolating directly keeps the chip server-renderable.
+  const { daysLeft, label } = nextDeadline
+  const abs = Math.abs(daysLeft)
+  const template =
+    daysLeft === 0 ? countdown.today
+    : daysLeft > 0 ? countdown.daysLeft
+    : countdown.overdue
+  const message = template
+    .replace('{milestone}', label)
+    .replace(/\{days,\s*plural,([^}]*)\}/, (_match, body: string) => {
+      // ICU-ish: {days, plural, one {Noch # Tag} other {Noch # Tage}}
+      const one = body.match(/one\s*\{([^}]*)\}/)?.[1] ?? ''
+      const other = body.match(/other\s*\{([^}]*)\}/)?.[1] ?? ''
+      const chosen = abs === 1 ? one : other
+      return chosen.replace(/#/g, String(abs))
+    })
+  const tone =
+    daysLeft < 0 ? 'border-warning-300/60 bg-warning-50 text-warning-700 dark:bg-warning-900/20 dark:text-warning-300'
+    : daysLeft <= 7 ? 'border-action/40 bg-action-muted/15 text-action'
+    : 'border-subtle bg-surface-raised text-text-secondary'
+  return (
+    <div className="mt-6">
+      <div className={cn(
+        'inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium sm:text-sm',
+        tone,
+      )}>
+        <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+        <span>{message}</span>
+        <time dateTime={nextDeadline.isoDate} className="hidden font-mono text-[10px] uppercase tracking-[0.18em] opacity-70 sm:inline">
+          {nextDeadline.isoDate}
+        </time>
+      </div>
+    </div>
   )
 }
 

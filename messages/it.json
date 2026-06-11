@@ -4480,6 +4480,11 @@
           "title": "Economia, mercato ed ecosistema di partner.",
           "body": "Questa pagina è l'istantanea. Il quadro completo — costo unitario, finanziamento, segmenti clienti, rischi — vive nel piano aziendale.",
           "cta": "Apri piano aziendale"
+        },
+        "countdown": {
+          "daysLeft": "{days, plural, one {# giorno} other {# giorni}} a {milestone}",
+          "today": "In scadenza oggi: {milestone}",
+          "overdue": "{days, plural, one {# giorno} other {# giorni}} di ritardo: {milestone}"
         }
       },
       "interestCta": {
@@ -5510,25 +5515,13 @@
           "commitment": "Pubblichiamo il risultato così com'è — anche se sfavorevole. Un LCA che \"vince\" sempre non è un LCA."
         },
         "openHardware": {
-          "eyebrow": "HARDWARE APERTO",
-          "title": "Le istruzioni sono libere perché devono esserlo.",
-          "intro": "Se solo noi le abbiamo, esiste solo la nostra piccola serie. Se sono pubbliche, qualunque officina svizzera può adottare il modello — ed è esattamente l'obiettivo.",
-          "pillars": [
-            {
-              "title": "Cosa pubblichiamo",
-              "body": "Per modello di monitor: foto, schemi, pinout, BOM (distinta materiali), avvertenze di sicurezza, protocollo di test. Formato: Markdown su questo sito (a lungo termine: wiki)."
-            },
-            {
-              "title": "Licenza",
-              "body": "Istruzioni sotto Creative Commons CC-BY-SA — uso commerciale ammesso, condizione: attribuzione + stessa licenza per opere derivate. Software (questa piattaforma) sotto MIT."
-            },
-            {
-              "title": "Chi ne beneficia",
-              "body": "Werkraum 4 come partner produttivo, più qualsiasi altro laboratorio sociale svizzero che voglia adottare il metodo. Ogni laboratorio che documenta un nuovo modello di monitor arricchisce la raccolta aperta."
-            }
-          ],
+          "eyebrow": "OPEN HARDWARE",
+          "title": "Le guide sono libere perché devono esserlo.",
+          "body": "Se le guide le abbiamo solo noi, esiste solo la nostra piccola serie. Se sono pubbliche, qualunque laboratorio svizzero può adottare il modello — ed è proprio questo l'obiettivo. Per ogni modello di monitor pubblichiamo foto, schemi, pinout, distinta materiali, note di sicurezza e protocollo di test in markdown su questa piattaforma.",
+          "licenseLine": "Guide sotto Creative Commons CC-BY-SA · codice della piattaforma sotto MIT.",
+          "guideCta": "Costruisci la tua",
           "sourceLink": {
-            "label": "Codice sorgente piattaforma",
+            "label": "Sorgente della piattaforma",
             "url": "https://github.com/g-but/revampit"
           }
         },

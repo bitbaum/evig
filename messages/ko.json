@@ -4480,6 +4480,11 @@
           "title": "경제성, 시장, 파트너 생태계.",
           "body": "이 페이지는 스냅샷입니다. 전체 그림 — 단가, 자금, 고객 세그먼트, 위험 — 은 사업 계획에 있습니다.",
           "cta": "사업 계획 열기"
+        },
+        "countdown": {
+          "daysLeft": "{milestone}까지 {days, plural, other {#일}} 남음",
+          "today": "오늘 마감: {milestone}",
+          "overdue": "{days, plural, other {#일}} 지남: {milestone}"
         }
       },
       "interestCta": {
@@ -5510,25 +5515,13 @@
           "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA."
         },
         "openHardware": {
-          "eyebrow": "OPEN HARDWARE",
-          "title": "Manuals are free because they have to be.",
-          "intro": "If only we have the manuals, only our small series exists. If they are public, any workshop in Switzerland can pick up the model — and that is precisely the goal.",
-          "pillars": [
-            {
-              "title": "What we publish",
-              "body": "Per monitor model: photos, schematics, pin assignments, BOM (bill of materials), safety notes, test protocol. Format: Markdown on this site (long-term: wiki)."
-            },
-            {
-              "title": "Licence",
-              "body": "Manuals under Creative Commons CC-BY-SA — commercial use allowed, condition: attribution + same licence for derivatives. Software (this platform) under MIT."
-            },
-            {
-              "title": "Who benefits",
-              "body": "생산 파트너인 Werkraum 4와 이 방식을 채택하려는 다른 스위스의 사회적 공방. 새로운 모니터 모델의 개조를 문서화하는 공방은 그 결과를 오픈 컬렉션에 환원합니다."
-            }
-          ],
+          "eyebrow": "오픈 하드웨어",
+          "title": "가이드는 반드시 자유로워야 합니다.",
+          "body": "가이드가 우리에게만 있다면 우리의 소량 생산만 존재합니다. 가이드가 공개되면 스위스의 어떤 공방이든 그 모델을 받아들일 수 있습니다 — 바로 그것이 목표입니다. 모니터 모델별로 사진, 회로도, 핀맵, 자재 목록, 안전 사항, 테스트 프로토콜을 이 플랫폼에 markdown으로 공개합니다.",
+          "licenseLine": "가이드는 Creative Commons CC-BY-SA · 플랫폼 코드는 MIT.",
+          "guideCta": "직접 만들기",
           "sourceLink": {
-            "label": "Platform source code",
+            "label": "플랫폼 소스",
             "url": "https://github.com/g-but/revampit"
           }
         },
