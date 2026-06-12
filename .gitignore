@@ -120,3 +120,4 @@ docker-compose.override.yml
 .playwright-mcp/
 public/sitemap.xml
 messages/_missing/
+.env.selfhost.local
