@@ -72,7 +72,7 @@ These are real wins but each is medium-to-large with risk of breaking a workflow
 | Y.6 | Protocols: deleted `ProtocolWorkflowStepper` (dead code, grep-verified) | ✓ |
 | Y.7 | Protocols: attendee-mapping warning → neutral advisory | ✓ |
 | Y.4 | Tasks: localStorage default filter | **done** (Phase AB — `action_needed` preset = needs_attention ∪ requested; persisted in localStorage) |
-| Y.8 | Team: leave card to main profile | **deferred** (structural rework) |
+| Y.8 | Team: leave card to main profile | **done** (Z.3 + Phase AA persistent profile header) |
 | — | Audit hotfix: extended `AuditEventType` union (Phase W.5 helpers) | ✓ (unblocked DB deploy) |
 
 ### What's deferred to a dedicated branch
@@ -81,7 +81,7 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 
 | Item | Effort | Why dedicated |
 |---|---|---|
-| Timecards: drop aside panel, inline day-edit grid | medium | Layout rewrite; mobile flow risk |
+| ~~Timecards: drop aside panel, inline day-edit grid~~ | ~~medium~~ | **Done** — `01b59d93` (`TimecardDayEditor` inline below month grid) |
 | Tasks: collapse new-task form 11 → 5 fields | medium | Need to confirm which fields admin actually uses |
 | Tasks: delete standalone analytics page | medium | Decide if anyone uses it |
 | Protocols: kill DecisionActions voting flow → "approve + create tasks" 2-button | large | 4 API routes to consolidate |
@@ -130,5 +130,20 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | AB.2 | `getTasks()` applies `action_needed` as `needs_attention ∪ requested` when URL has no status | ✓ |
 | AB.3 | `TaskFiltersClient` seeds/syncs `localStorage` (`admin.tasks.statusFilter`) and normalizes bare URL | ✓ |
 | AB.4 | Gesamt stat card links to `?status=all` for explicit full list | ✓ |
+
+**Last modified:** 2026-06-15 — Phase AC documents prior timecards inline editor; smoke-tested push.
+
+---
+
+## Execution log (Phase AC — timecards inline editor, audit closure)
+
+**Date:** 2026-06-15  
+**Scope:** Close deferred audit item — inline day editing (no aside panel).
+
+| # | Change | Result |
+|---|---|---|
+| AC.1 | Verified `TimecardDayEditor` inline below `TimecardMonthGrid` (landed in `01b59d93`) | ✓ (already in main) |
+| AC.2 | Updated stale `/dashboard/timecards` doc comment (removed month/week toggle reference) | ✓ |
+| AC.3 | Smoke: `/` 200, `/admin/tasks` + `/admin/erfassung` → login redirect, typecheck + Y.4 tests pass | ✓ |
 
 ---

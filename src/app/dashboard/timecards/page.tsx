@@ -9,9 +9,8 @@
  * "review everyone's hours" loop.
  *
  * What lives here:
- *   - Current period (defaults to this week) — uses the existing
- *     TimecardsClient form, which already has month/week toggle and
- *     AI assist baked in.
+ *   - Monthly timecard form (`TimecardsClient`) — calendar-first with inline
+ *     day editor below the grid (no aside detail panel).
  *   - History sidebar — last 8 timecards with status badge so the user
  *     can see at a glance "yes, my April card was approved".
  *
