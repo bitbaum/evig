@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-01-07
-last_modified_summary: Created SSOT for project context (mission, tech stack, location, database)
+last_modified_date: 2026-06-15
+last_modified_summary: Added auth stack (JWT sessions, shared admin login) and onboarding checklist pointers
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -27,8 +27,9 @@ last_modified_summary: Created SSOT for project context (mission, tech stack, lo
 |-------|------------|-------|
 | Frontend | Next.js 16 (App Router), TypeScript, Tailwind CSS | Port 3000 |
 | Backend | Next.js API Routes | — |
+| Auth | Auth.js v5, Credentials, JWT sessions | Same login for `/dashboard` and `/admin` — see `docs/UNIFIED_AUTH.md` |
 | E-commerce | Custom (inventory-based) | Integrated |
-| Database | PostgreSQL (5433), Redis (6380), Meilisearch (7700) | |
+| Database | PostgreSQL (Neon prod; Docker 5433 local), Redis (6380), Meilisearch (7700) | Drizzle ORM |
 | Deploy | Vercel, Docker, GitHub Actions | |
 
 ---
@@ -78,4 +79,12 @@ scripts/db/migrations/    # Migration scripts (PROTECTED)
 
 ---
 
-**Last Updated**: 2026-01-07
+## Auth & onboarding (pointers)
+
+- **SSOT:** `docs/UNIFIED_AUTH.md` — registration, verify-code, password reset, staff permissions
+- **Live onboarding:** `OnboardingChecklist` on `/dashboard` (`src/lib/domain/onboarding.ts`)
+- **Notifications:** central `notifyUsers()` pipeline — see `docs/ARCHITECTURE_DEBT.md` (#2 closed)
+
+---
+
+**Last Updated**: 2026-06-15

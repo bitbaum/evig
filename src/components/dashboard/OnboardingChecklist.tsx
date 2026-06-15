@@ -1,7 +1,8 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { UserRole, ROLES } from '@/lib/constants'
+import { ROLES, type UserRole } from '@/lib/constants'
+import type { OnboardingChecklistState } from '@/lib/domain/onboarding'
 import { CheckCircle, Circle } from 'lucide-react'
 
 interface Step {
@@ -10,24 +11,48 @@ interface Step {
   href?: string
 }
 
-interface OnboardingChecklistProps {
+interface OnboardingChecklistProps extends OnboardingChecklistState {
   role: UserRole
-  emailVerified: boolean
   className?: string
 }
 
-export function OnboardingChecklist({ role, emailVerified, className }: OnboardingChecklistProps) {
+export function OnboardingChecklist({
+  role,
+  emailVerified,
+  profileComplete,
+  sellerProfileSetup,
+  hasListing,
+  repairerProfileSetup,
+  hasPublishedService,
+  className,
+}: OnboardingChecklistProps) {
   const steps: Step[] = [
     { label: 'E-Mail-Adresse bestätigen', done: emailVerified, href: '/dashboard/profile' },
-    { label: 'Profil vervollständigen', done: false, href: '/dashboard/profile' },
+    { label: 'Profil vervollständigen', done: profileComplete, href: '/dashboard/profile' },
   ]
 
   if (role === ROLES.SELLER) {
-    steps.push({ label: 'Seller-Profil eingerichtet', done: true })
-    steps.push({ label: 'Erstes Produkt inserieren', done: false, href: '/dashboard/seller' })
+    steps.push({
+      label: 'Seller-Profil eingerichtet',
+      done: sellerProfileSetup,
+      href: '/dashboard/seller',
+    })
+    steps.push({
+      label: 'Erstes Produkt inserieren',
+      done: hasListing,
+      href: '/dashboard/seller',
+    })
   } else if (role === ROLES.REPAIRER) {
-    steps.push({ label: 'Techniker-Profil eingerichtet', done: true })
-    steps.push({ label: 'Erste Dienstleistung publizieren', done: false, href: '/dashboard/repairer' })
+    steps.push({
+      label: 'Techniker-Profil eingerichtet',
+      done: repairerProfileSetup,
+      href: '/dashboard/repairer',
+    })
+    steps.push({
+      label: 'Erste Dienstleistung publizieren',
+      done: hasPublishedService,
+      href: '/dashboard/repairer',
+    })
   }
 
   const allDone = steps.every((s) => s.done)

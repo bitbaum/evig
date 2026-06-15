@@ -1,288 +1,346 @@
 # RevampIT Unified Authentication System
 
 **Created:** 2025-12-02  
-**Last Modified:** 2025-12-02  
-**Last Modified Summary:** Complete implementation of unified auth - registration, login, dashboard, profile management all working
+**Last Modified:** 2026-06-15  
+**Last Modified Summary:** Rewritten to match the live Auth.js v5 stack — JWT sessions, email verification, password reset, staff permissions, and shared admin/user auth.
 
 ---
 
 ## Overview
 
-The RevampIT unified authentication system provides a single account for all user interactions:
+RevampIT uses **one account** for everything on the platform:
 
-- 🛒 **Shop purchases**
-- 📚 **Workshop registration & management**
-- 🔧 **Service appointment booking**
-- 💝 **Donation tracking**
-- 🤝 **Volunteer/intern applications**
-- 📧 **Newsletter preferences**
+- Shop purchases and marketplace listings
+- Workshop registration
+- Service appointments and IT-Hilfe
+- Donations and volunteer applications
+- Newsletter preferences
+- **Admin dashboard** (`/admin`) — same login, gated by `isStaff` + `staff_permissions`
+
+There is **no separate admin token system**. Staff sign in through the same `/auth/login` flow as everyone else.
+
+---
 
 ## Architecture
 
-### Tech Stack
+### Tech stack
 
 | Component | Technology |
 |-----------|------------|
-| **Auth Framework** | Auth.js v5 (NextAuth) |
-| **Database** | PostgreSQL (existing, port 5433) |
-| **Database Adapter** | @auth/pg-adapter |
-| **Password Hashing** | bcrypt (12 rounds) |
-| **Session Strategy** | Database sessions |
+| Auth framework | Auth.js v5 (NextAuth) |
+| Provider | Credentials (email + password) only |
+| Session strategy | **JWT** (signed cookie, not DB sessions) |
+| Database | PostgreSQL (Neon in production; Docker locally) |
+| ORM | Drizzle |
+| Password hashing | bcrypt (12 rounds) |
+| Email | Listmonk → SMTP fallback via `sendEmail()` |
 
-### Why Auth.js v5?
+### Why JWT (not database sessions)?
 
-- ✅ **Self-hosted** – No external services, data stays in your database
-- ✅ **Native Next.js integration** – Designed for App Router
-- ✅ **PostgreSQL adapter** – Uses existing database infrastructure
-- ✅ **Proven at scale** – Powers thousands of production apps
-- ✅ **Flexible providers** – Start with email/password, add OAuth later
+The Credentials provider requires JWT strategy in Auth.js. Database sessions would need the `@auth/pg-adapter`, which is **intentionally disabled** until OAuth providers are added.
 
-## Database Schema
+Implications:
 
-### Core Auth Tables
+- Sessions live in HttpOnly cookies, not the `sessions` table (table exists for future OAuth).
+- Revocation is handled via **`token_version`** on the user row — admin permission changes bump this counter; the JWT callback re-fetches claims on the next token refresh (~24h via `updateAge`).
+- Account lockout uses in-memory + DB rate limiting on failed login attempts.
 
-```sql
--- Central user accounts
-users (id, email, name, password_hash, role, email_verified, ...)
+### Staff and admin access
 
--- Active sessions (database strategy)
-sessions (session_token, user_id, expires)
+Staff status is determined by:
 
--- OAuth provider links (future use)
-accounts (provider, provider_account_id, user_id, ...)
+1. **`users.is_staff`** flag in the database (SSOT), or
+2. **`@revamp-it.ch` email domain** for initial auto-provisioning at registration.
 
--- Email verification & password reset
-verification_tokens (identifier, token, expires)
-```
+Permissions live in **`users.staff_permissions`** (string array). See `src/lib/permissions.ts` for section access rules.
 
-### Application Tables
+Admin layout (`src/app/admin/layout.tsx`) requires:
 
-```sql
--- Extended profile data (Swiss address format)
-user_profiles (user_id, first_name, last_name, address, canton, ...)
+- Valid session
+- `session.user.isStaff === true`
+- At least one accessible admin section from `getAccessibleSections()`
 
--- Workshop management
-workshops (slug, title, category, level, ...)
-workshop_instances (workshop_id, start_date, location, ...)
-workshop_registrations (user_id, instance_id, status, ...)
+Super-admin checks use `session.user.isSuperAdmin` plus email allowlist helpers.
 
--- Service appointments
-service_types (slug, name, duration_minutes, price_cents, ...)
-service_appointments (user_id, service_type_id, status, ...)
+---
 
--- Donations & support
-donations (user_id, amount_cents, payment_method, ...)
+## User lifecycle
 
--- Volunteer/intern applications
-applications (user_id, type, status, motivation, ...)
-
--- Newsletter (for users and non-users)
-newsletter_subscriptions (email, user_id, topics[], ...)
+### 1. Registration
 
 ```
+RegistrationWizard → POST /api/auth/register → registerUser() in auth.ts
+```
 
-## File Structure
+- Validates with `RegisterSchema` (Zod)
+- Rate-limited per IP
+- Creates `users` row + empty `user_profiles` row
+- Sends **6-digit verification code** email (`verificationCode` or `staffVerificationCode` template)
+- User is **not** logged in yet — `emailVerified` remains null
+
+Optional referral code is redeemed fire-and-forget after successful registration.
+
+### 2. Email verification
+
+```
+RegistrationWizard step 2 → POST /api/auth/verify-code
+```
+
+- Verifies the 6-digit code against `verification_codes` table
+- Sets `users.emailVerified`
+- Sends welcome email (`welcome` or `staffWelcome`)
+- User can now log in (login rejects unverified accounts)
+
+Resend: `POST /api/auth/resend-code` (rate-limited).
+
+Legacy link flow still exists at `/auth/verify-email` + `POST /api/auth/verify-email` for older tokens.
+
+### 3. Login
+
+```
+LoginForm → Auth.js Credentials provider → JWT session cookie
+```
+
+Security checks (in order):
+
+1. User exists
+2. Account lockout (failed attempts)
+3. Password valid (bcrypt)
+4. **Email verified** — unverified users cannot sign in
+5. Staff claims populated from DB + email domain rules
+
+On first sign-in, `getOrCreateProfile()` ensures a `user_profiles` row exists.
+
+New users are redirected to `/dashboard/profile` (`pages.newUser`).
+
+### 4. Password reset
+
+```
+/auth/forgot-password → POST /api/auth/forgot-password
+/auth/reset-password  → POST /api/auth/reset-password
+```
+
+- Token stored in verification infrastructure (`db-verification.ts`)
+- Default TTL: 1 hour
+- Enumeration-safe: same response whether email exists or not
+- Email via `passwordReset` template
+
+Also used by IT-Hilfe anonymous-post claim flow (password-set link for unclaimed accounts).
+
+### 5. Onboarding (dashboard)
+
+Live onboarding is **`OnboardingChecklist`** on `/dashboard`:
+
+| Step | Done when |
+|------|-----------|
+| E-Mail bestätigen | `session.user.emailVerified` |
+| Profil vervollständigen | `first_name` + `last_name` in `user_profiles` (min 2 chars each) |
+| Seller steps | `seller_profiles` row exists; at least one listing |
+| Repairer steps | `repairer_profiles` row exists; at least one active `repairer_services` row |
+
+Logic: `src/lib/domain/onboarding.ts` + `src/lib/services/onboarding-state.ts`.
+
+`EmailVerificationBanner` shows when email is unverified.
+
+---
+
+## Database schema (auth-related)
+
+```sql
+users (
+  id, email, name, password_hash, emailVerified,
+  is_staff, staff_permissions, is_super_admin, token_version,
+  dashboard_mode, role  -- role column is legacy; prefer is_staff + permissions
+)
+
+user_profiles (
+  user_id, first_name, last_name, phone, address_*, avatar_url, ...
+)
+
+verification_tokens   -- Auth.js adapter + legacy tokens
+verification_codes    -- 6-digit email verification
+sessions, accounts    -- Auth.js adapter tables (OAuth future use)
+```
+
+Full Drizzle definitions: `src/db/schema/auth.ts`.
+
+---
+
+## File structure
 
 ```
 src/
-├── auth.ts                          # Main Auth.js configuration
-├── middleware.ts                    # Route protection
+├── auth.ts                              # Auth.js config + registerUser()
+├── middleware.ts                        # Route protection, CSRF
 │
 ├── lib/auth/
-│   ├── db.ts                        # Database client & queries
-│   └── password.ts                  # Password hashing utilities
+│   ├── db.ts, db-users.ts               # User/profile queries
+│   ├── db-verification.ts               # Codes + password-reset tokens
+│   ├── password.ts                      # bcrypt helpers
+│   ├── rate-limiter.ts                  # Login/register/reset limits
+│   └── audit.ts                         # Security audit events
+│
+├── lib/domain/onboarding.ts             # Profile completeness rules
+├── lib/services/onboarding-state.ts     # Dashboard checklist DB state
 │
 ├── components/auth/
-│   ├── LoginForm.tsx                # Login form component
-│   ├── RegisterForm.tsx             # Registration form
-│   ├── SessionProvider.tsx          # Session context provider
-│   └── UserMenu.tsx                 # Header user menu dropdown
+│   ├── LoginForm.tsx
+│   ├── RegistrationWizard.tsx
+│   └── UserMenu.tsx
+│
+├── components/dashboard/
+│   ├── OnboardingChecklist.tsx
+│   └── EmailVerificationBanner.tsx
 │
 ├── app/
-│   ├── api/
-│   │   ├── auth/
-│   │   │   ├── [...nextauth]/route.ts  # Auth.js API routes
-│   │   │   └── register/route.ts       # Registration API
-│   │   └── user/
-│   │       └── profile/route.ts        # Profile management API
-│   │
-│   ├── auth/
-│   │   ├── login/page.tsx           # Login page
-│   │   └── register/page.tsx        # Registration page
-│   │
-│   └── dashboard/
-│       ├── page.tsx                 # Dashboard home
-│       └── profile/page.tsx         # Profile editor
+│   ├── api/auth/
+│   │   ├── [...nextauth]/route.ts
+│   │   ├── register/route.ts
+│   │   ├── verify-code/route.ts
+│   │   ├── resend-code/route.ts
+│   │   ├── verify-email/route.ts
+│   │   ├── forgot-password/route.ts
+│   │   └── reset-password/route.ts
+│   ├── auth/login/page.tsx
+│   ├── auth/register/page.tsx
+│   ├── auth/forgot-password/page.tsx
+│   ├── auth/reset-password/page.tsx
+│   ├── dashboard/page.tsx
+│   └── admin/layout.tsx                 # Staff gate
 │
-└── scripts/db/
-    ├── migrations/
-    │   └── 001-unified-auth.sql     # Database migration
-    └── run-migration.sh             # Migration runner script
+└── config/
+    ├── security.ts                      # Session maxAge / updateAge
+    ├── auth-ui.ts                       # Form labels + validation SSOT
+    └── error-messages.ts
 ```
 
-## Setup Guide
+---
 
-### 1. Environment Variables
-
-Add to your `.env.local`:
+## Environment variables
 
 ```bash
-# Auth.js Configuration
-AUTH_SECRET=your-random-secret-at-least-32-characters
+# Required
+AUTH_SECRET=<32+ char random string>   # openssl rand -base64 32
 
-# Database (uses existing settings, or override)
-AUTH_DB_HOST=localhost
-AUTH_DB_PORT=5433
-AUTH_DB_NAME=revampit_cms
-AUTH_DB_USER=postgres
-AUTH_DB_PASSWORD=your-password
+# Database (see docs/SHARED_CONTEXT.md)
+DATABASE_URL=postgresql://...
+
+# Email (required for registration + reset — see docs/EMAIL_SETUP.md)
+EMAIL_HOST=...
+EMAIL_PORT=587
+EMAIL_USER=...
+EMAIL_PASS=...
+EMAIL_FROM=...
 ```
 
-Generate a secret:
-```bash
-openssl rand -base64 32
-```
+`AUTH_SECRET` or legacy `NEXTAUTH_SECRET` both work.
 
-### 2. Run Database Migration
+---
 
-```bash
-# Start PostgreSQL if not running
-docker compose up -d
-
-# Run the migration
-./scripts/db/run-migration.sh
-```
-
-### 3. Test the Auth System
-
-```bash
-# Start the development server
-npm run dev
-
-# Open the login page
-open http://localhost:3000/auth/login
-
-# Or register a new account
-open http://localhost:3000/auth/register
-```
-
-## API Reference
+## API reference
 
 ### Authentication
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/auth/signin` | GET/POST | Sign in (Auth.js handled) |
-| `/api/auth/signout` | POST | Sign out |
-| `/api/auth/session` | GET | Get current session |
-| `/api/auth/register` | POST | Register new user |
+| `/api/auth/[...nextauth]` | GET/POST | Auth.js sign-in, sign-out, session |
+| `/api/auth/register` | POST | Create account + send verification code |
+| `/api/auth/verify-code` | POST | Verify 6-digit code |
+| `/api/auth/resend-code` | POST | Resend verification code |
+| `/api/auth/forgot-password` | POST | Request reset link |
+| `/api/auth/reset-password` | POST | Set new password with token |
 
-### User Profile
+### User profile
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/user/profile` | GET | Get current user's profile |
-| `/api/user/profile` | PUT | Update profile |
+| `/api/user/profile` | GET | Get profile (creates row if missing) |
+| `/api/user/profile` | PUT | Update profile fields |
 
-## Security Features
+---
 
-### Password Requirements
+## Security features
+
+### Password requirements
+
+Defined in `AUTH_CONFIG` / `RegisterSchema`:
+
 - Minimum 8 characters
-- At least one uppercase letter
-- At least one lowercase letter
-- At least one number
+- At least one uppercase, lowercase, and number
 
-### Session Security
-- Database sessions (not JWT) for revocability
-- 30-day session lifetime
-- Secure, HttpOnly cookies
-- CSRF protection built-in
+### Session security
 
-### Protected Routes
-- `/dashboard/*` - Requires authentication
-- `/admin/*` - Requires admin token (separate system)
+- JWT in secure HttpOnly cookie
+- 30-day max age (`SESSION_MAX_AGE_SECONDS`)
+- Token refresh every 24h (`SESSION_UPDATE_AGE_SECONDS`)
+- CSRF protection on mutating API routes
+- Permission changes enforced via `token_version` staleness check
 
-## User Roles
+### Protected routes
 
-| Role | Description |
-|------|-------------|
-| `user` | Regular customer/visitor |
-| `supporter` | Donor, volunteer, or partner |
-| `admin` | Full administrative access |
+| Route | Requirement |
+|-------|-------------|
+| `/dashboard/*` | Authenticated session |
+| `/admin/*` | Session + `isStaff` + section permission |
+| Most `/api/*` POST/PATCH/DELETE | CSRF token |
 
-## Future Enhancements
+Middleware redirects unauthenticated users to `/auth/login?callbackUrl=...`.
 
-### Planned Features
-- [ ] Magic link / passwordless login
-- [ ] Email verification flow
-- [ ] Password reset flow
-- [ ] OAuth providers (Google, GitHub)
-- [ ] Two-factor authentication
-- [ ] Account deletion / GDPR compliance
+---
 
-### Workshop System
-- [ ] Workshop calendar with availability
-- [ ] Online registration with payment (if applicable)
-- [ ] Waiting list management
-- [ ] Reminder emails
-- [ ] Attendance tracking
-- [ ] Feedback collection
+## Email integration
 
-### Service Appointments
-- [ ] Time slot booking
-- [ ] Appointment reminders
-- [ ] Status updates via email
-- [ ] Quote generation
+All auth emails go through `sendEmail()` in `src/lib/email/index.ts`:
+
+| Template | Trigger |
+|----------|---------|
+| `verificationCode` | Registration (regular user) |
+| `staffVerificationCode` | Registration (@revamp-it.ch) |
+| `welcome` / `staffWelcome` | After successful verify-code |
+| `passwordReset` | Forgot-password flow |
+
+See `docs/EMAIL_SETUP.md` for provider configuration.
+
+Notifications for platform events (IT-Hilfe, decisions, etc.) use the central **`notifyUsers()`** pipeline in `src/lib/services/notifications.ts`, which respects `user_profiles.email_notifications`.
+
+---
 
 ## Troubleshooting
 
-### Common Issues
+**"Bitte bestätige zuerst deine E-Mail-Adresse"**  
+User must complete verify-code step before login.
 
-**"Database connection failed"**
-- Ensure PostgreSQL container is running: `docker compose ps`
-- Check database credentials in `.env.local`
-- Verify port 5433 is accessible
+**"AUTH_SECRET is missing"**  
+Add `AUTH_SECRET` to `.env.local`.
 
-**"AUTH_SECRET is missing"**
-- Add `AUTH_SECRET` to `.env.local`
-- Generate with: `openssl rand -base64 32`
+**Session not updating after permission change**  
+Wait for JWT refresh (~24h) or re-login. Admins can bump `token_version` to force refresh on next request.
 
-**"Session not persisting"**
-- Clear browser cookies
-- Check if sessions table exists in database
-- Verify NEXTAUTH_URL is set correctly
+**Admin redirect to `/?error=not_staff`**  
+User is logged in but `is_staff` is false and email is not `@revamp-it.ch`.
 
-### Database Reset
+**Email not arriving**  
+Check `docs/EMAIL_SETUP.md` — email is required for registration and reset.
 
-To reset the auth tables (WARNING: deletes all user data):
+---
 
-```sql
-DROP TABLE IF EXISTS newsletter_subscriptions CASCADE;
-DROP TABLE IF EXISTS applications CASCADE;
-DROP TABLE IF EXISTS donations CASCADE;
-DROP TABLE IF EXISTS service_appointments CASCADE;
-DROP TABLE IF EXISTS service_types CASCADE;
-DROP TABLE IF EXISTS workshop_registrations CASCADE;
-DROP TABLE IF EXISTS workshop_instances CASCADE;
-DROP TABLE IF EXISTS workshops CASCADE;
-DROP TABLE IF EXISTS user_profiles CASCADE;
-DROP TABLE IF EXISTS verification_tokens CASCADE;
-DROP TABLE IF EXISTS accounts CASCADE;
-DROP TABLE IF EXISTS sessions CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-```
+## Future enhancements
 
-Then re-run the migration.
+- [ ] OAuth providers (Google, GitHub) — requires enabling `@auth/pg-adapter`
+- [ ] Magic link / passwordless login
+- [ ] Two-factor authentication
+- [ ] Drop legacy `users.role` column once all readers migrated
 
-## Support
+---
 
-For issues with the authentication system:
-1. Check this documentation
-2. Review Auth.js docs: https://authjs.dev
-3. Check the console for error messages
-4. Review database connection settings
+## Related documentation
+
+- `docs/EMAIL_SETUP.md` — email provider setup
+- `docs/UNIFIED_AUTH.md` — this file
+- `docs/ARCHITECTURE_DEBT.md` — notification pipeline status
+- `docs/SHARED_CONTEXT.md` — tech stack and database
+- `src/lib/permissions.ts` — admin section access SSOT
 
 ---
 
 **End of Documentation**
-

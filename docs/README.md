@@ -13,7 +13,8 @@ Curated reference for engineers, operators, and contributors. Everything in this
 
 - [ARCHITECTURE_DATABASE_BACKEND.md](./ARCHITECTURE_DATABASE_BACKEND.md) — schema, Drizzle ORM, query patterns
 - [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md) — the canonical schema reference
-- [UNIFIED_AUTH.md](./UNIFIED_AUTH.md) — NextAuth v5 + staff/permission model
+- [UNIFIED_AUTH.md](./UNIFIED_AUTH.md) — Auth.js v5, JWT sessions, verify-code, shared admin login
+- [ARCHITECTURE_DEBT.md](./ARCHITECTURE_DEBT.md) — resolved parallel-implementation debt (#1–#3 done)
 - [HIRN_AI.md](./HIRN_AI.md) — the in-house AI knowledge / action system
 - [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) — public + internal API surface
 

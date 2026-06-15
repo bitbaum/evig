@@ -1,6 +1,10 @@
 # Architecture Debt — Parallel Implementations + Spaghetti Patterns
 
-**Last updated:** 2026-06-04 (after QQ session — partial progress on all three)
+**Created:** 2026-06-04  
+**Last Modified:** 2026-06-15  
+**Last Modified Summary:** Marked #2 (IT-Hilfe notifications) resolved; all three debt items closed
+
+**Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
 **Session progress (QQ + RR commits, 2026-06-04/05):**
 - #1 (decision systems): ✓ DONE. Migration 086 applied (protocol FK on
@@ -10,12 +14,11 @@
   removed legacy `/api/protocols/[id]/decisions/*` routes,
   `protocols-voting.ts`, and Drizzle schemas; apply migration
   `087_drop_protocol_decision_legacy.sql` on each environment.
-- #2 (IT-Hilfe notifications): PARTIAL. Central `getEmailContent` in
-  `notifications.ts` dispatches IT-Hilfe types to rich HTML templates
-  (QQ.4 step 1). `accept-offer.ts` + offers POST migrated to
-  `notifyUsers()` (steps 2-3). 4 callsites still use the legacy wrapper
-  — the in-app-only vs email-only distinctions in those sites are
-  behavior choices that need per-site confirmation.
+- #2 (IT-Hilfe notifications): ✓ DONE (2026-06-15). `src/lib/it-hilfe/notifications.ts`
+  routes all per-user sends through `notifyUsers()`. Central
+  `getEmailContent()` dispatches IT-Hilfe types to rich HTML templates.
+  The only remaining direct `sendCustomEmail()` is the admin shared inbox
+  alert (`REVAMPIT_NOTIFICATION_EMAIL`) — intentional; not a per-user path.
 - #3 (status taxonomy): ✓ DONE. Additive `LifecycleStage` layer in
   `src/config/lifecycle-stage.ts`. Maps booking + appointment + IT-Hilfe
   statuses to `pending | active | completed | cancelled`. No existing
@@ -94,48 +97,30 @@ as fallback.
 
 ---
 
-## #2 — Two notification pipelines (IT-Hilfe bypasses the central one)
+## #2 — Two notification pipelines (IT-Hilfe bypasses the central one) — ✓ RESOLVED
 
-**The problem:**
+**Was the problem:**
 
 - **Central:** `src/lib/services/notifications.ts` — `notifyUsers`,
   `notifyAllStaff`, `createNotification`, `fireNotification`. Sends
   in-app row to `notifications` table + email via the unified `sendEmail`
   pipeline based on user preferences.
-- **IT-Hilfe-specific:** `src/lib/it-hilfe/notifications.ts` — calls
-  `sendCustomEmail()` directly + uses a different helper
-  `createInAppNotifications` from `task-helpers.ts`. Both create in-app
-  rows and send emails, but via uncoordinated code paths.
+- **IT-Hilfe-specific:** `src/lib/it-hilfe/notifications.ts` — previously
+  called `sendCustomEmail()` directly + used a different helper
+  `createInAppNotifications` from `task-helpers.ts`.
 
-Risk: email-preference checks, retries, and logging differ between the
-two. Users who opted out of emails may still get IT-Hilfe ones (or vice
-versa). Maintenance burden: a change to "how we notify someone" has to
-touch two files.
+**Resolution (2026-06-15):**
 
-**The fix:**
+`src/lib/it-hilfe/notifications.ts` now wraps `notifyUsers()` for all
+per-user lifecycle events. `getEmailContent()` in the central service
+dispatches `NOTIFICATION_TYPES.IT_HILFE_*` to templates in
+`src/lib/email/templates/it-hilfe.ts`. `sendItHilfeNotification()` is a
+thin wrapper for generic SYSTEM-type alerts.
 
-Replace direct `sendCustomEmail()` calls in IT-Hilfe with the central
-`notifyUsers()` / `notifyAllStaff()` API. The central API already
-supports a `metadata` field for type-specific email-template selection
-— IT-Hilfe templates plug in via `getEmailContent()` in the central
-service (already there for decision-specific templates, just needs the
-IT-Hilfe types added).
+**Intentional exception:** admin shared inbox (`REVAMPIT_NOTIFICATION_EMAIL`)
+still uses `sendCustomEmail()` — one email to `info@…`, not per-user rows.
 
-**Migration plan:**
-
-1. In `src/lib/services/notifications.ts:getEmailContent()`, add cases
-   for the IT-Hilfe notification types (`it_hilfe_new_offer`,
-   `it_hilfe_offer_accepted`, etc.) returning the existing template
-   functions from `src/lib/email/templates/it-hilfe.ts`.
-2. Refactor `src/lib/it-hilfe/notifications.ts` — replace each
-   `sendCustomEmail(...)` block with `notifyUsers(...)` call carrying
-   the type + metadata needed for the template.
-3. Verify in-app rows still land via the central service.
-4. Delete the now-unused parts of `it-hilfe/notifications.ts`.
-
-**Estimated effort:** 3-4 hours focused. Risk: email content drift if
-template signatures don't quite match — testable via the existing
-notification tests.
+**Tests:** `src/lib/it-hilfe/__tests__/notifications.test.ts`
 
 ---
 
@@ -196,13 +181,5 @@ change existing enums.
 
 ## Execution order recommendation
 
-If picking up this work in a future session:
-
-1. **#1 first** (decision systems) — the user has explicitly called this
-   out and the data shape is well-understood. Migration is bounded.
-2. **#2 next** (notifications) — smaller, mechanical, no schema changes.
-3. **#3 last** (status taxonomy) — additive, lowest urgency.
-
-Each can be a separate session ending in a deployable commit. Don't try
-to do more than one of these in a single session — each has enough
-edge cases that focused attention matters.
+All three items are resolved as of 2026-06-15. Re-open this doc when a
+new parallel-implementation pattern is discovered.

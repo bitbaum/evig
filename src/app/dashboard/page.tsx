@@ -28,6 +28,7 @@ import {
 } from '@/config/dashboard'
 import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
+import { getOnboardingChecklistState } from '@/lib/services/onboarding-state'
 import type { Metadata } from 'next'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -89,6 +90,12 @@ export default async function DashboardPage() {
 
   const visibleCategories = CATEGORY_ORDER.filter(c => (cardsByCategory.get(c)?.length ?? 0) > 0)
   const firstName = session.user.name?.split(' ')[0] || session.user.email?.split('@')[0] || 'Du'
+  const userRole = (session.user.role as UserRole) || ROLES.CUSTOMER
+  const onboardingState = await getOnboardingChecklistState(
+    session.user.id,
+    userRole,
+    session.user.emailVerified ?? false,
+  )
 
   return (
     <main className="min-h-screen bg-canvas">
@@ -107,10 +114,7 @@ export default async function DashboardPage() {
         {!session.user.emailVerified && session.user.email && (
           <EmailVerificationBanner email={session.user.email} />
         )}
-        <OnboardingChecklist
-          role={(session.user.role as UserRole) || ROLES.CUSTOMER}
-          emailVerified={session.user.emailVerified ?? false}
-        />
+        <OnboardingChecklist role={userRole} {...onboardingState} />
 
         {/* Category sections — each is an eyebrow + divide-y list of links.
             No outer wrapper card; the list itself has the only border. */}

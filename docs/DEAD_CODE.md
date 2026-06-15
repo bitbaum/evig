@@ -1,5 +1,9 @@
 # Dead Code Inventory
 
+**Created:** 2026-06-07  
+**Last Modified:** 2026-06-15  
+**Last Modified Summary:** Removed orphaned onboarding info page pair; noted deletion in inventory
+
 Code that has zero importers in `src/` and is a candidate for removal in
 a future cleanup PR. Listed here instead of deleted because the team
 hasn't signed off on a bulk deletion yet (NNN.3, June 2026).
@@ -7,7 +11,7 @@ hasn't signed off on a bulk deletion yet (NNN.3, June 2026).
 Re-verify before deleting — orphan status can change if a feature is
 turned back on.
 
-## Verified orphaned (last checked: 2026-06-07)
+## Verified orphaned (last checked: 2026-06-15)
 
 ### Payment / service-booking flow (~590 lines)
 
@@ -24,14 +28,10 @@ from the orphaned hook.
 - `src/app/api/appointments/book-with-payment/` — only called by the
   orphaned `useServiceBooking.ts`
 
-### Onboarding info page (~330 lines)
+### ~~Onboarding info page (~330 lines)~~ — REMOVED 2026-06-15
 
-Generic onboarding-info config + its renderer. Neither is referenced
-outside the pair itself.
-
-- `src/components/onboarding/OnboardingInfoPage.tsx`
-- `src/config/onboarding.ts` (exports `OnboardingConfig`, `REPAIRER_ONBOARDING`
-  — only the orphan component imports them)
+Was: `OnboardingInfoPage.tsx` + `config/onboarding.ts`. Deleted; live
+onboarding is `OnboardingChecklist` on `/dashboard`.
 
 ### Seller-applications Drizzle block (~50 lines)
 
