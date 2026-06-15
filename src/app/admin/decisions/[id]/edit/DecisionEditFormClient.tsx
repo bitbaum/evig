@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { FormField } from '@/components/ui/form-field';
 import { Button } from '@/components/ui/button';
+import { adminInteractive } from '@/lib/admin-ui'
 
 export default function DecisionEditFormClient({ decisionId }: { decisionId: string }) {
   const {
@@ -136,7 +137,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         </Button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-default dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-surface-raised"
+          className={`rounded-lg border border-default dark:border-white/8 px-4 py-2 text-sm font-medium text-text-secondary ${adminInteractive.rowHover}`}
         >
           Abbrechen
         </Link>

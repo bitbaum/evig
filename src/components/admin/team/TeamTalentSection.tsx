@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   form: TeamProfileFormState
@@ -87,7 +88,7 @@ export function TeamTalentSection({
                   onClick={() => onAddSkill(skill)}
                   variant="ghost"
                   size="sm"
-                  className="w-full px-4 py-2 text-left hover:bg-surface-raised dark:hover:bg-surface-base/6 text-sm"
+                  className={`w-full px-4 py-2 text-left ${adminInteractive.rowHover} text-sm`}
                 >
                   {skill}
                 </Button>

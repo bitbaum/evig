@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { DECISION_TYPES, DECISION_TYPE_CONFIG, type DecisionType } from '@/config/decisions';
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   selected: DecisionType;
@@ -25,7 +26,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               className={`rounded-lg border-2 p-3 text-left transition-all ${
                 isSelected
                   ? 'border-action bg-action-muted ring-1 ring-action/20'
-                  : 'border hover:border-strong hover:bg-surface-raised'
+                  : 'border hover:border-strong ${adminInteractive.rowHover}'
               }`}
             >
               <div className="flex items-center gap-2">

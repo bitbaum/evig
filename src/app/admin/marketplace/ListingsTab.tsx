@@ -14,6 +14,7 @@ import { getConditionLabel } from '@/config/erfassung/conditions'
 import { VerifyActions } from './VerifyActions'
 import { StatusBadge } from './StatusBadge'
 import type { ListingRow, PaginatedResponse } from './types'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 
 interface ListingsTabProps {
   listings: PaginatedResponse<ListingRow> | null
@@ -82,7 +83,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {listings?.items.map(l => (
-              <tr key={l.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
+              <tr key={l.id} className={adminTable.tr}>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-medium text-text-primary">{l.title}</span>
@@ -109,15 +110,15 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                 <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(l.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title={t('actions.view')}>
+                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.view')}>
                       <Eye className="w-4 h-4 text-text-tertiary" />
                     </a>
-                    <Button variant="ghost" size="icon" onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title={t('actions.edit')}>
+                    <Button variant="ghost" size="icon" onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.edit')}>
                       <Edit3 className="w-4 h-4 text-text-tertiary" />
                     </Button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
-                      <Button variant="destructive-ghost" size="icon" onClick={() => onRemove(l.id, l.title)} className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6" title={t('actions.remove')}>
+                      <Button variant="destructive-ghost" size="icon" onClick={() => onRemove(l.id, l.title)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.remove')}>
                         <Trash2 className="w-4 h-4 text-error-500" />
                       </Button>
                     )}

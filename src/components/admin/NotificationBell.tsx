@@ -7,6 +7,8 @@ import { Bell, X, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { RELATED_TYPE_HREFS } from '@/config/notifications'
+import { adminInteractive } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 
 interface Notification {
   id: string
@@ -135,7 +137,7 @@ export function NotificationBell() {
         variant="ghost"
         size="icon"
         onClick={handleOpen}
-        className="relative w-9 h-9 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
+        className={`relative w-9 h-9 rounded-lg ${adminInteractive.rowHover}`}
         aria-label={unreadCount > 0 ? t('bellAriaWithUnread', { count: unreadCount }) : t('bellAriaLabel')}
       >
         <Bell className="w-5 h-5 text-text-secondary" />
@@ -165,7 +167,7 @@ export function NotificationBell() {
                   size="sm"
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary hover:bg-surface-raised hover:text-text-secondary dark:hover:bg-surface-base/6 h-auto"
+                  className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-tertiary ${adminInteractive.rowHover} hover:text-text-secondary h-auto`}
                   title={t('markAllRead')}
                 >
                   <Check className="w-3 h-3" />
@@ -176,7 +178,7 @@ export function NotificationBell() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setOpen(false)}
-                className="rounded-md p-1 hover:bg-surface-raised dark:hover:bg-surface-base/6 h-auto w-auto"
+                className={`rounded-md p-1 ${adminInteractive.rowHover} h-auto w-auto`}
               >
                 <X className="w-4 h-4 text-text-tertiary" />
               </Button>
@@ -214,9 +216,11 @@ export function NotificationBell() {
                     key={n.id}
                     variant="ghost"
                     onClick={() => void markOneRead(n)}
-                    className={`w-full text-left px-4 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 h-auto rounded-none justify-start ${
-                      !n.is_read ? 'bg-action-muted/50' : ''
-                    }`}
+                    className={cn(
+                      'w-full text-left px-4 py-3 h-auto rounded-none justify-start',
+                      adminInteractive.rowHover,
+                      !n.is_read && adminInteractive.unreadTint,
+                    )}
                   >
                     <div className="flex items-start gap-2">
                       {!n.is_read && (

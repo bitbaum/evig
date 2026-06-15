@@ -18,6 +18,7 @@ import {
   TASK_STATUS_COLORS,
   TASK_PRIORITY_COLORS,
 } from '@/config/tasks'
+import { adminTable } from '@/lib/admin-ui'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import Heading from '@/components/admin/AdminHeading'
 import type { TaskListItem } from '@/lib/schemas/tasks'
@@ -59,7 +60,7 @@ export function TaskTable({ tasks, hasError }: Props) {
 
 function TaskRow({ task }: { task: TaskListItem }) {
   return (
-    <tr className="hover:bg-surface-raised">
+    <tr className={adminTable.tr}>
       <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
         <div className="flex items-center gap-2 min-w-0">
           <Link

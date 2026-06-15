@@ -12,6 +12,8 @@ import {
   TASK_STATUSES,
   TASK_PRIORITIES,
   REQUEST_STATUSES,
+  TASK_LIST_FILTERS,
+  TASK_LIST_DEFAULT_FILTER,
 } from '@/config/tasks'
 import type { TaskListItem } from '@/lib/schemas/tasks'
 import { PAGINATION } from '@/config/pagination'
@@ -66,17 +68,52 @@ export interface TasksQuery {
   page?: number
 }
 
+/**
+ * Resolve URL `status` param to an effective list filter.
+ * Bare `/admin/tasks` lands on ACTION_NEEDED (needs_attention ∪ requested).
+ */
+export function resolveTaskListStatus(status: string | undefined): string {
+  if (status === undefined || status === '') {
+    return TASK_LIST_DEFAULT_FILTER
+  }
+  return status
+}
+
+function applyStatusFilter(
+  status: string | undefined,
+  filterClause: string,
+  params: (string | number)[],
+  paramIndex: number,
+): { filterClause: string; params: (string | number)[]; paramIndex: number } {
+  const effective = resolveTaskListStatus(status)
+  if (effective === TASK_LIST_FILTERS.ALL) {
+    return { filterClause, params, paramIndex }
+  }
+  if (effective === TASK_LIST_FILTERS.ACTION_NEEDED) {
+    return {
+      filterClause: `${filterClause} AND t.current_status IN ($${paramIndex++}, $${paramIndex++})`,
+      params: [...params, TASK_STATUSES.NEEDS_ATTENTION, TASK_STATUSES.REQUESTED],
+      paramIndex,
+    }
+  }
+  return {
+    filterClause: `${filterClause} AND t.current_status = $${paramIndex++}`,
+    params: [...params, effective],
+    paramIndex,
+  }
+}
+
 export async function getTasks(
   filters: TasksQuery = {},
 ): Promise<{ rows: TaskListItem[]; total: number }> {
   const { category, status, q, priority, page = 1 } = filters
 
   let filterClause = `WHERE NOT t.is_archived`
-  const params: (string | number)[] = []
+  let params: (string | number)[] = []
   let paramIndex = 1
 
   if (category) { filterClause += ` AND t.category = $${paramIndex++}`; params.push(category) }
-  if (status)   { filterClause += ` AND t.current_status = $${paramIndex++}`; params.push(status) }
+  ;({ filterClause, params, paramIndex } = applyStatusFilter(status, filterClause, params, paramIndex))
   if (q) {
     filterClause += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`
     params.push(`%${q}%`)
@@ -164,7 +201,7 @@ export async function getTasks(
 export function buildTasksHrefBase(basePath: string, filters: TasksQuery): string {
   const p = new URLSearchParams()
   if (filters.category) p.set('category', filters.category)
-  if (filters.status)   p.set('status',   filters.status)
+  p.set('status', resolveTaskListStatus(filters.status))
   if (filters.q)        p.set('q',        filters.q)
   if (filters.priority) p.set('priority', filters.priority)
   const qs = p.toString()

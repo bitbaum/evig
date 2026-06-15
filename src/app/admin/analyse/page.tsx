@@ -18,6 +18,7 @@ import { formatCHF } from '@/lib/hirn/format'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
+import { adminInteractive } from '@/lib/admin-ui'
 
 export default async function AnalysePage() {
   // /admin/analyse is a dashboard over both 'finanzen' and 'hirn' —
@@ -252,7 +253,7 @@ export default async function AnalysePage() {
       {/* Quick Links */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Link href={ROUTES.admin.analyseFinanzen} className="block">
-          <Card className="hover:bg-surface-raised transition-colors">
+          <Card className={`${adminInteractive.rowHover} transition-colors`}>
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Finanzen</div>
               <div className="text-sm text-muted-foreground">
@@ -262,7 +263,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href={ROUTES.admin.analyseKennzahlen} className="block">
-          <Card className="hover:bg-surface-raised transition-colors">
+          <Card className={`${adminInteractive.rowHover} transition-colors`}>
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Kennzahlen</div>
               <div className="text-sm text-muted-foreground">
@@ -272,7 +273,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href={ROUTES.admin.analyseWirkung} className="block">
-          <Card className="hover:bg-surface-raised transition-colors">
+          <Card className={`${adminInteractive.rowHover} transition-colors`}>
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Wirkung</div>
               <div className="text-sm text-muted-foreground">
@@ -282,7 +283,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href={ROUTES.admin.analyseTransparenz} className="block">
-          <Card className="hover:bg-surface-raised transition-colors">
+          <Card className={`${adminInteractive.rowHover} transition-colors`}>
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Transparenz</div>
               <div className="text-sm text-muted-foreground">

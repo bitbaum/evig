@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -100,7 +101,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               {filtered.map((post) => (
                 <tr
                   key={post.id}
-                  className="hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                  className={adminTable.tr}
                 >
                   <td className="px-6 py-4">
                     <div>

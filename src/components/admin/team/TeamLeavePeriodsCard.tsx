@@ -31,6 +31,8 @@ import {
   getLeavePeriodKindLabel,
   getLeavePeriodKindColor,
 } from '@/config/team'
+import { adminInteractive } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 
 interface LeaveRow {
   id: string
@@ -148,7 +150,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             size="icon"
             onClick={load}
             disabled={isLoading}
-            className="w-11 h-11 text-text-tertiary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/4"
+            className={`w-11 h-11 text-text-tertiary hover:text-text-primary ${adminInteractive.rowHoverSubtle}`}
             aria-label="Aktualisieren"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -240,7 +242,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
             return (
               <li
                 key={row.id}
-                className={`px-5 py-3 ${active ? 'bg-action-muted/40/5' : ''} ${past ? 'opacity-60' : ''}`}
+                className={cn('px-5 py-3', active && adminInteractive.rowSelected, past && 'opacity-60')}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">

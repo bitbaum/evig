@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { OptionCard, type VotingOption } from './OptionCard';
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   options: VotingOption[];
@@ -32,7 +33,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                     onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1));
                   }}
                   disabled={(allocations[opt.id] || 0) <= 0}
-                  className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
+                  className={`h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary ${adminInteractive.rowHover} disabled:opacity-30`}
                 >
                   -
                 </Button>
@@ -48,7 +49,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                     onSet(opt.id, (allocations[opt.id] || 0) + 1);
                   }}
                   disabled={usedDots >= maxDots}
-                  className="h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
+                  className={`h-7 w-7 rounded-full border bg-surface-base text-sm font-bold text-text-secondary ${adminInteractive.rowHover} disabled:opacity-30`}
                 >
                   +
                 </Button>
@@ -72,7 +73,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                 size="icon"
                 onClick={() => onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1))}
                 disabled={(allocations[opt.id] || 0) <= 0}
-                className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
+                className={`h-8 w-8 rounded-md border text-lg font-bold text-text-secondary ${adminInteractive.rowHover} disabled:opacity-30`}
               >
                 -
               </Button>
@@ -85,7 +86,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                 size="icon"
                 onClick={() => onSet(opt.id, (allocations[opt.id] || 0) + 1)}
                 disabled={usedDots >= maxDots}
-                className="h-8 w-8 rounded-md border text-lg font-bold text-text-secondary hover:bg-surface-raised disabled:opacity-30"
+                className={`h-8 w-8 rounded-md border text-lg font-bold text-text-secondary ${adminInteractive.rowHover} disabled:opacity-30`}
               >
                 +
               </Button>

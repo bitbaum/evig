@@ -6,6 +6,7 @@
 
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import {
@@ -63,7 +64,7 @@ export function HelpersTab({
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {helpers?.items.map(h => (
-              <tr key={h.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
+              <tr key={h.id} className={adminTable.tr}>
                 <td className="px-4 py-3">
                   <div>
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
@@ -104,7 +105,7 @@ export function HelpersTab({
                         variant="ghost"
                         size="icon"
                         onClick={() => onAction(h.id, 'verify')}
-                        className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                        className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
                         title={t('actions.verify')}
                       >
                         <ShieldCheck className="w-4 h-4 text-action" />
@@ -115,7 +116,7 @@ export function HelpersTab({
                         variant="destructive-ghost"
                         size="icon"
                         onClick={() => onAction(h.id, 'suspend')}
-                        className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                        className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
                         title={t('actions.suspend')}
                       >
                         <Ban className="w-4 h-4 text-error-500" />
@@ -126,7 +127,7 @@ export function HelpersTab({
                         variant="ghost"
                         size="icon"
                         onClick={() => onAction(h.id, 'reactivate')}
-                        className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                        className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
                         title={t('actions.reactivate')}
                       >
                         <UserCheck className="w-4 h-4 text-action" />

@@ -9,10 +9,7 @@
 
 import { useState } from 'react'
 import {
-  ArrowLeft,
-  Mail,
   Phone,
-  Calendar,
   Clock,
   User,
   Target,
@@ -23,13 +20,8 @@ import {
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import {
-  getEmploymentTypeLabel,
-  getEmploymentTypeColor,
-  getDepartmentLabel,
-  getDepartmentColor,
   CONTACT_METHOD_LABELS,
   EMERGENCY_RELATION_LABELS,
   type ContactMethod,
@@ -43,99 +35,12 @@ import { ROUTES } from '@/config/routes'
 export function TeamProfileView({
   profile,
   isSuperAdmin,
-  onBack,
 }: TeamProfileViewProps) {
   const [currentFocus, setCurrentFocus] = useState(profile.current_focus)
   const t = useTranslations('admin.team')
 
-  const initials = profile.user_name
-    ? profile.user_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : profile.user_email[0].toUpperCase()
-
-  const displayName = profile.user_name || profile.user_email.split('@')[0]
-
   return (
     <div className="space-y-6">
-      {/* Header — the "Bearbeiten" action lives on the TeamProfileTabs strip
-          above this view (always visible across tabs). Showing a second one
-          inside the overview tab was redundant; only the back link stays. */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={onBack}
-          className="flex items-center gap-2 text-text-secondary hover:text-text-primary h-auto px-0 hover:bg-transparent"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          {t('backToTeam')}
-        </Button>
-      </div>
-
-      {/* Profile Header Card */}
-      <div className="rounded-lg border border-subtle bg-surface-base p-5">
-        <div className="flex items-start gap-6">
-          {/* Avatar */}
-          <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
-            profile.is_active
-              ? 'bg-action'
-              : 'bg-surface-overlay'
-          }`}>
-            <span className="text-white font-bold text-2xl">{initials}</span>
-          </div>
-
-          {/* Info */}
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <Heading level={1} className="text-2xl text-text-primary">
-                {displayName}
-              </Heading>
-              {!profile.is_active && (
-                <span className="px-2 py-1 text-sm rounded-sm bg-surface-overlay text-text-secondary">
-                  {t('inactive')}
-                </span>
-              )}
-            </div>
-
-            {profile.position && (
-              <p className="text-lg text-text-secondary mt-1">
-                {profile.position}
-              </p>
-            )}
-
-            <div className="flex flex-wrap gap-2 mt-3">
-              {profile.department && (
-                <span className={`px-3 py-1 text-sm rounded-full ${getDepartmentColor(profile.department)}`}>
-                  {getDepartmentLabel(profile.department)}
-                </span>
-              )}
-              {profile.employment_type && (
-                <span className={`px-3 py-1 text-sm rounded-full ${getEmploymentTypeColor(profile.employment_type)}`}>
-                  {getEmploymentTypeLabel(profile.employment_type)}
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-wrap gap-4 mt-4 text-sm text-text-tertiary">
-              <div className="flex items-center gap-1">
-                <Mail className="w-4 h-4" />
-                {profile.user_email}
-              </div>
-              {profile.phone && (
-                <div className="flex items-center gap-1">
-                  <Phone className="w-4 h-4" />
-                  {profile.phone}
-                </div>
-              )}
-              {profile.start_date && (
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  {t('since')} {formatDateShort(profile.start_date)}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Current Focus & Activity */}
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Current Focus */}

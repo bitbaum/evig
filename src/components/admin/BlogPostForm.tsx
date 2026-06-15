@@ -8,6 +8,7 @@
  */
 
 import { useTranslations } from 'next-intl'
+import { adminInteractive } from '@/lib/admin-ui'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/admin/AdminHeading'
 import {
@@ -53,7 +54,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.contentBlog}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -73,7 +74,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               <Link
                 href={ROUTES.public.blogPost(formData.slug)}
                 target="_blank"
-                className="inline-flex items-center gap-2 px-4 py-2 text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+                className={`inline-flex items-center gap-2 px-4 py-2 text-text-secondary ${adminInteractive.rowHover} rounded-lg transition-colors`}
                 title={t('previewTitle')}
               >
                 <Eye className="w-4 h-4" />

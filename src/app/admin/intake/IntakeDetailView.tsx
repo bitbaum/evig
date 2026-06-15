@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { adminInteractive } from '@/lib/admin-ui'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
@@ -122,7 +123,7 @@ export function IntakeDetailView({
                 variant="outline"
                 size="sm"
                 onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
-                className="flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg hover:bg-surface-raised"
+                className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg ${adminInteractive.rowHover}`}
                 title={t('changeTier')}
               >
                 <ArrowDownUp className="w-3.5 h-3.5" /> {t('changeTier')}
@@ -225,7 +226,7 @@ export function IntakeDetailView({
             {detail.checklist_complete && (
               <Link
                 href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised text-sm font-medium"
+                className={`inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg ${adminInteractive.rowHover} text-sm font-medium`}
                 title={t('openFullErfassungTitle')}
               >
                 <ClipboardList className="w-4 h-4" />
@@ -293,7 +294,7 @@ export function IntakeDetailView({
               variant="outline"
               size="sm"
               onClick={() => setShowTierChange(false)}
-              className="px-3 py-1.5 border rounded-lg hover:bg-surface-raised text-sm"
+              className={`px-3 py-1.5 border rounded-lg ${adminInteractive.rowHover} text-sm`}
             >
               {tForms('cancel')}
             </Button>

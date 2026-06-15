@@ -18,6 +18,7 @@ import { SourceUploader } from '@/components/admin/protocols/SourceUploader'
 import { RecordButton } from '@/components/admin/protocols/RecordButton'
 import { ProtocolConsent } from '@/components/admin/protocols/ProtocolConsent'
 import { CaptureAlternatives } from '@/components/admin/protocols/CaptureAlternatives'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -152,7 +153,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 {filteredTeamMembers.map((member) => (
                   <label
                     key={member.id}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-surface-raised cursor-pointer text-sm"
+                    className={`flex items-center gap-2 px-2 py-1.5 rounded-sm ${adminInteractive.rowHover} cursor-pointer text-sm`}
                   >
                     <input
                       type="checkbox"

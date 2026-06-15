@@ -7,6 +7,7 @@
  */
 
 import { Metadata } from 'next'
+import { adminTable } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
@@ -253,7 +254,7 @@ export default async function ProtocolsAdminPage({
               {filteredProtocols.map((protocol) => {
                 const TypeIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType]
                 return (
-                  <tr key={protocol.id} className="hover:bg-surface-raised">
+                  <tr key={protocol.id} className={adminTable.tr}>
                     <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
                         href={ROUTES.admin.protocol(protocol.id)}
@@ -322,8 +323,8 @@ export default async function ProtocolsAdminPage({
                         const workflowIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowStep) + 1
                         const workflowLabel = PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowStep)?.label || 'Workflow'
                         return (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full bg-slate-100 text-slate-700">
-                            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 text-[10px] font-semibold">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full bg-surface-raised text-text-secondary">
+                            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-surface-overlay text-[10px] font-semibold text-text-primary">
                               {workflowIndex}
                             </span>
                             {workflowLabel}

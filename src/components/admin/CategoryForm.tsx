@@ -23,6 +23,7 @@ import { DEFAULT_CATEGORY_COLOR, UI_COLOR_PALETTE } from '@/config/ui-colors'
 import { generateSlug } from '@/lib/utils/slug'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 import { ROUTES } from '@/config/routes'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
@@ -81,7 +82,7 @@ export default function CategoryForm({
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.categories}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>

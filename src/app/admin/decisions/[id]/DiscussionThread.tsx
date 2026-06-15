@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { adminInteractive } from '@/lib/admin-ui'
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import Heading from '@/components/admin/AdminHeading';
@@ -230,7 +231,7 @@ export default function DiscussionThread({
                                 variant="outline"
                                 size="sm"
                                 onClick={cancelEdit}
-                                className="flex items-center gap-1 rounded-md border border-default px-3 py-1 text-xs text-text-secondary hover:bg-surface-raised"
+                                className={`flex items-center gap-1 rounded-md border border-default px-3 py-1 text-xs text-text-secondary ${adminInteractive.rowHover}`}
                               >
                                 <X className="w-3 h-3" />
                                 Abbrechen

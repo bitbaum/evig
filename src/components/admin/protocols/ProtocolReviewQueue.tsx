@@ -59,7 +59,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
             return (
               <article
                 key={protocol.id}
-                className="rounded-lg border border bg-surface-base p-4 transition-colors hover:border-strong hover:bg-action-muted/40-muted"
+                className="rounded-lg border border bg-surface-base p-4 transition-colors hover:border-strong hover:bg-action-muted/40"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div className="min-w-0">

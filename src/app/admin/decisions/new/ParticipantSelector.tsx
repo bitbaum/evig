@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, PARTICIPANT_SCOPE, type ParticipantScope } from '@/config/decisions';
 import { type TeamMember } from './useDecisionForm';
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   participantScope: ParticipantScope;
@@ -66,7 +67,7 @@ export function ParticipantSelector({
               {filteredMembers.map((m) => (
                 <label
                   key={m.id}
-                  className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface-raised cursor-pointer"
+                  className={`flex items-center gap-2 rounded-md px-2 py-1.5 ${adminInteractive.rowHover} cursor-pointer`}
                 >
                   <input
                     type="checkbox"

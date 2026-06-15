@@ -7,6 +7,7 @@ import { Select } from '@/components/ui/select'
 import { formatPrice, ORDER_STATUS_CONFIG } from '@/config/marketplace'
 import { StatusBadge } from './StatusBadge'
 import type { OrderRow, PaginatedResponse } from './types'
+import { adminTable } from '@/lib/admin-ui'
 
 interface OrdersTabProps {
   orders: PaginatedResponse<OrderRow> | null
@@ -43,7 +44,7 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {orders?.items.map(o => (
-              <tr key={o.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
+              <tr key={o.id} className={adminTable.tr}>
                 <td className="px-4 py-3 font-mono text-xs text-text-secondary">{o.id.slice(0, 8)}</td>
                 <td className="px-4 py-3 font-medium text-text-primary">{o.listing_title}</td>
                 <td className="px-4 py-3 text-text-secondary">{o.buyer_name || o.buyer_email}</td>

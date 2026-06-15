@@ -7,6 +7,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { MissionMetrics } from './MissionMetrics'
 import { WeeklyActivitySection } from './WeeklyActivitySection'
 import type { DashboardStats } from './types'
+import { adminInteractive } from '@/lib/admin-ui'
 
 const STORAGE_KEY = 'dashboard_monatsueberblick_open'
 
@@ -45,7 +46,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       <Button
         variant="ghost"
         onClick={toggle}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 rounded-xl h-auto"
+        className={`w-full flex items-center justify-between p-4 text-left ${adminInteractive.rowHover} rounded-xl h-auto`}
         aria-expanded={open}
         aria-controls="monatsueberblick-content"
       >

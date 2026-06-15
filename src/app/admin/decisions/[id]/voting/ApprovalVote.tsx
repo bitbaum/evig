@@ -1,6 +1,7 @@
 'use client';
 
 import { OptionCard, type VotingOption } from './OptionCard';
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   options: VotingOption[];
@@ -34,7 +35,7 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
           {options.map((opt) => (
             <label
               key={opt.id}
-              className="flex items-center gap-3 rounded-md border border p-3 hover:bg-surface-raised cursor-pointer"
+              className={`flex items-center gap-3 rounded-md border border p-3 ${adminInteractive.rowHover} cursor-pointer`}
             >
               <input
                 type="checkbox"

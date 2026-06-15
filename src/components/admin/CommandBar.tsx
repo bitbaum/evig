@@ -16,6 +16,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/config/routes'
+import { adminInteractive } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -339,11 +341,12 @@ export function CommandBar() {
                       variant="ghost"
                       onClick={() => { router.push(item.href); close() }}
                       onMouseEnter={() => setActiveIdx(currentFlatIdx)}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left h-auto rounded-none justify-start ${
+                      className={cn(
+                        'w-full flex items-center gap-3 px-4 py-2.5 text-left h-auto rounded-none justify-start',
                         isCurrent
-                          ? 'bg-action-muted text-action/8'
-                          : 'text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/3'
-                      }`}
+                          ? adminInteractive.pickerActive
+                          : cn('text-text-secondary', adminInteractive.rowHoverSubtle),
+                      )}
                     >
                       <span className={`shrink-0 ${isCurrent ? 'text-action' : 'text-text-muted'}`}>
                         {item.icon}

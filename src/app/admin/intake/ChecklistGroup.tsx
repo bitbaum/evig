@@ -7,6 +7,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import type { ChecklistGroup as ChecklistGroupType } from './types'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface ChecklistGroupProps {
   group: ChecklistGroupType
@@ -37,7 +38,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         type="button"
         variant="ghost"
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-3 bg-surface-raised hover:bg-surface-raised text-left"
+        className={`w-full flex items-center justify-between p-3 bg-surface-raised ${adminInteractive.rowHover} text-left`}
       >
         <div className="flex items-center gap-2">
           {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -145,7 +146,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}
-                          className="text-xs px-2.5 py-1 border rounded-sm hover:bg-surface-raised transition-colors"
+                          className={`text-xs px-2.5 py-1 border rounded-sm ${adminInteractive.rowHover} transition-colors`}
                         >
                           {tForms('cancel')}
                         </Button>

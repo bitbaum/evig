@@ -23,6 +23,7 @@ import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { adminInteractive } from '@/lib/admin-ui'
 
 const APPROVAL_CONTENT_TYPES = [SUBMISSION_CONTENT_TYPE.WORKSHOP, SUBMISSION_CONTENT_TYPE.BLOG_POST]
 
@@ -268,7 +269,7 @@ export default async function ApprovalsPage() {
             <Link
               key={source.href}
               href={source.href}
-              className="p-4 flex items-center justify-between hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 transition-colors"
+              className={`p-4 flex items-center justify-between ${adminInteractive.rowHover} transition-colors`}
             >
               <span className="text-text-primary">{source.label}</span>
               <span className="flex items-center gap-2">

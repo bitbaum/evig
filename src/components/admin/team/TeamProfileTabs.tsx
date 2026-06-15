@@ -17,14 +17,24 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
-import { User, Clock, Activity, Edit2 } from 'lucide-react'
+import { ArrowLeft, User, Clock, Activity, Edit2, Mail, Calendar, Phone } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { adminInteractive } from '@/lib/admin-ui'
 import { TeamProfileView } from './TeamProfileView'
 import { TeamProfileTimecardsTab } from './TeamProfileTimecardsTab'
 import { TeamProfileActivityTab } from './TeamProfileActivityTab'
 import { TeamLeavePeriodsCard } from './TeamLeavePeriodsCard'
 import type { TeamProfileWithUser } from '@/lib/schemas/team'
+import { Button } from '@/components/ui/button'
+import {
+  getDepartmentColor,
+  getDepartmentLabel,
+  getEmploymentTypeColor,
+  getEmploymentTypeLabel,
+} from '@/config/team'
+import { formatDateShort } from '@/lib/date-formats'
 
 type TabKey = 'uebersicht' | 'zeiterfassung' | 'aktivitaet'
 
@@ -45,6 +55,7 @@ function parseTabKey(value: string | null): TabKey {
 }
 
 export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
+  const t = useTranslations('admin.team')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -68,8 +79,91 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
   }, [searchParams, tab])
   /* eslint-enable react-hooks/set-state-in-effect */
 
+  const initials = profile.user_name
+    ? profile.user_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    : profile.user_email[0].toUpperCase()
+  const displayName = profile.user_name || profile.user_email.split('@')[0]
+
   return (
     <div className="space-y-4">
+      <section className="rounded-lg border border-subtle bg-surface-base p-5">
+        <div className="mb-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            type="button"
+            onClick={() => router.push('/admin/team')}
+            className="h-auto px-0 text-sm text-text-secondary hover:bg-transparent hover:text-text-primary"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t('backToTeam')}
+          </Button>
+        </div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 items-start gap-4">
+            <div className={cn(
+              'flex h-14 w-14 shrink-0 items-center justify-center rounded-full',
+              profile.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive,
+            )}>
+              <span className="text-base font-semibold">{initials}</span>
+            </div>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="truncate text-xl font-semibold text-text-primary">{displayName}</h1>
+                {!profile.is_active && (
+                  <span className="rounded-full bg-surface-overlay px-2 py-0.5 text-xs font-medium text-text-secondary">
+                    {t('inactive')}
+                  </span>
+                )}
+              </div>
+              {profile.position && (
+                <p className="mt-0.5 text-sm text-text-secondary">{profile.position}</p>
+              )}
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-tertiary">
+                <span className="inline-flex min-w-0 items-center gap-1.5">
+                  <Mail className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{profile.user_email}</span>
+                </span>
+                {profile.phone && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <Phone className="h-3.5 w-3.5 shrink-0" />
+                    {profile.phone}
+                  </span>
+                )}
+                {profile.start_date && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {t('since')} {formatDateShort(profile.start_date)}
+                  </span>
+                )}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {profile.department && (
+                  <span className={cn('rounded-full px-2.5 py-1 text-xs font-medium', getDepartmentColor(profile.department))}>
+                    {getDepartmentLabel(profile.department)}
+                  </span>
+                )}
+                {profile.employment_type && (
+                  <span className={cn('rounded-full px-2.5 py-1 text-xs font-medium', getEmploymentTypeColor(profile.employment_type))}>
+                    {getEmploymentTypeLabel(profile.employment_type)}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <Link
+            href={`/admin/team/${profile.id}/edit`}
+            className={cn(
+              'inline-flex items-center justify-center gap-1.5 rounded-md border border-default px-3 py-1.5 text-sm font-medium text-text-secondary',
+              adminInteractive.rowHoverSubtle,
+            )}
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+            {t('edit')}
+          </Link>
+        </div>
+      </section>
+
       {/* Leave periods — hoisted above the tab strip (Z.3) so HR always
           sees who's away regardless of which tab is active. */}
       <TeamLeavePeriodsCard profileId={profile.id} />
@@ -99,13 +193,6 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
             )
           })}
         </nav>
-        <Link
-          href={`/admin/team/${profile.id}/edit`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-default text-sm font-medium text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/4 whitespace-nowrap"
-        >
-          <Edit2 className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Bearbeiten</span>
-        </Link>
       </div>
 
       {/* Tab content */}
@@ -114,7 +201,6 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
           <TeamProfileView
             profile={profile}
             isSuperAdmin={isSuperAdmin}
-            onBack={() => router.push('/admin/team')}
           />
         )}
         {tab === 'zeiterfassung' && (

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { adminInteractive } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Plus, Loader2 } from 'lucide-react'
@@ -45,7 +46,7 @@ export default function AdminWorkshopInstancesPage() {
             <div className="flex gap-3">
               <Link
                 href={ROUTES.admin.workshops}
-                className="inline-flex items-center px-4 py-2 border border-default rounded-lg text-text-secondary hover:bg-surface-raised transition-colors"
+                className={`inline-flex items-center px-4 py-2 border border-default rounded-lg text-text-secondary ${adminInteractive.rowHover} transition-colors`}
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Workshop-Vorschläge

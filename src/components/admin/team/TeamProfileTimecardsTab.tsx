@@ -13,6 +13,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { Clock, ExternalLink, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -122,7 +123,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
               const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
               const dateRef = row.reviewed_at || row.submitted_at
               return (
-                <li key={row.id} className="px-4 sm:px-5 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors">
+                <li key={row.id} className={`px-4 sm:px-5 py-3 ${adminInteractive.rowHoverFaint} transition-colors`}>
                   <div className="flex items-start gap-3">
                     <Icon className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                     <div className="min-w-0 flex-1">

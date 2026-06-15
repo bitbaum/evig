@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { type VotingOption } from './OptionCard';
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   options: VotingOption[];
@@ -39,7 +40,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                   size="icon"
                   onClick={() => onMoveUp(index)}
                   disabled={index === 0}
-                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-surface-raised disabled:opacity-30"
+                  className={`flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary ${adminInteractive.rowHover} disabled:opacity-30`}
                   title="Höher"
                 >
                   ↑
@@ -50,7 +51,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
                   size="icon"
                   onClick={() => onMoveDown(index)}
                   disabled={index === ranking.length - 1}
-                  className="flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary hover:bg-surface-raised disabled:opacity-30"
+                  className={`flex h-7 w-7 items-center justify-center rounded-sm border border text-text-tertiary ${adminInteractive.rowHover} disabled:opacity-30`}
                   title="Tiefer"
                 >
                   ↓

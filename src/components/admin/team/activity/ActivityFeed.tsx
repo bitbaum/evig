@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
@@ -102,7 +103,7 @@ export function ActivityFeed({
               className={
                 hasActiveFilters
                   ? 'text-action bg-action-muted'
-                  : 'text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6'
+                  : 'text-text-tertiary hover:text-text-secondary ${adminInteractive.rowHover}'
               }
               title="Filter"
             >

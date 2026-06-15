@@ -22,6 +22,7 @@ import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
+import { adminInteractive } from '@/lib/admin-ui'
 
 const INTAKE_PIPELINE_STEPS = [
   { label: 'Geräte-Eingang', description: 'Checkliste & Spende' },
@@ -191,7 +192,7 @@ function ErfassungContent() {
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
           href={ROUTES.admin.products}
-          className="p-2 sm:p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 touch-manipulation"
+          className={`p-2 sm:p-2 rounded-lg ${adminInteractive.rowHover} touch-manipulation`}
         >
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>

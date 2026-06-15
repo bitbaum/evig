@@ -150,12 +150,37 @@ export const adminTable = {
   thead: designPrimitive.table.thead,
   /** th cell */
   th:    designPrimitive.table.th,
-  /** tbody tr */
-  tr:    designPrimitive.table.tr,
+  /** tbody tr — admin-surface hover; use on `<tr>` inside admin tables */
+  tr:    'border-b border-neutral-100 transition-colors hover:bg-surface-raised dark:border-white/4 dark:hover:bg-surface-base/6',
   /** td cell */
   td:    designPrimitive.table.td,
   /** Empty state container */
   empty: designPrimitive.table.empty,
+} as const
+
+// ─── Interactive states ───────────────────────────────────────────────────────
+// Hover, selected, and active patterns for dense admin surfaces (tables, lists,
+// sidebar, command palette). Fixes malformed Tailwind like `/[0.06]/50`.
+
+export const adminInteractive = {
+  /** Table rows, queue links, card rows — standard pointer hover */
+  rowHover:        'hover:bg-surface-raised dark:hover:bg-surface-base/6',
+  /** Sidebar items, icon buttons — lighter hover */
+  rowHoverSubtle:  'hover:bg-surface-raised dark:hover:bg-surface-base/4',
+  /** Compact list rows (timecards, payroll batches) */
+  rowHoverFaint:   'hover:bg-surface-raised dark:hover:bg-surface-base/2',
+  /** Checkbox-selected or active leave-period row */
+  rowSelected:     'bg-action-muted/40',
+  /** Sidebar nav item — current route */
+  navActive:       'bg-action/10 text-action ring-1 ring-action/20',
+  /** Command palette / typeahead keyboard highlight */
+  pickerActive:    'bg-action-muted text-action',
+  /** Unread notification row tint */
+  unreadTint:      'bg-action-muted/50',
+  /** Active team member avatar */
+  avatarActive:    'bg-action text-white',
+  /** Inactive team member avatar — readable initials on dark admin chrome */
+  avatarInactive:  'bg-surface-overlay text-text-secondary',
 } as const
 
 // ─── Form ─────────────────────────────────────────────────────────────────────

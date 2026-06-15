@@ -5,6 +5,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import { Search, ExternalLink, Edit3, ClipboardList } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -83,7 +84,7 @@ export function RequestsTab({
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {requests?.items.map(r => (
-              <tr key={r.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
+              <tr key={r.id} className={adminTable.tr}>
                 <td className="px-4 py-3">
                   <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
                     {r.title} <ExternalLink className="w-3 h-3 shrink-0" />
@@ -116,14 +117,14 @@ export function RequestsTab({
                       variant="ghost"
                       size="icon"
                       onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
-                      className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                      className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
                       title={t('actions.edit')}
                     >
                       <Edit3 className="w-4 h-4 text-action" />
                     </Button>
                     <Link
                       href={`/admin/tasks/new?source=it_hilfe&source_id=${r.id}&title=${encodeURIComponent(`IT-Hilfe: ${r.title}`)}&priority=${r.urgency === 'urgent' ? 'urgent' : 'normal'}`}
-                      className="p-2 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                      className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
                       title={t('actions.createTask')}
                     >
                       <ClipboardList className="w-4 h-4 text-text-tertiary" />

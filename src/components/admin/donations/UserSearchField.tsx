@@ -2,6 +2,7 @@ import { Search, User, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { UserResult } from './types'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Props {
   selectedUser: UserResult | null
@@ -73,7 +74,7 @@ export function UserSearchField({
                   type="button"
                   variant="ghost"
                   onClick={() => onSelectUser(user)}
-                  className="w-full px-3 py-2 text-left hover:bg-surface-raised flex items-center gap-2 h-auto rounded-none justify-start"
+                  className={`w-full px-3 py-2 text-left ${adminInteractive.rowHover} flex items-center gap-2 h-auto rounded-none justify-start`}
                 >
                   <User className="w-4 h-4 text-text-muted" />
                   <div>

@@ -8,6 +8,7 @@
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface PaginationProps {
   page: number
@@ -70,7 +71,7 @@ export function Pagination({
           size="icon"
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
+          className={`p-2 rounded-lg ${adminInteractive.rowHover}`}
         >
           <ChevronLeft className="w-5 h-5" />
         </Button>
@@ -85,7 +86,7 @@ export function Pagination({
               className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium ${
                 page === p
                   ? ''
-                  : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary'
+                  : '${adminInteractive.rowHover} text-text-secondary'
               }`}
             >
               {p}
@@ -103,7 +104,7 @@ export function Pagination({
           size="icon"
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6"
+          className={`p-2 rounded-lg ${adminInteractive.rowHover}`}
         >
           <ChevronRight className="w-5 h-5" />
         </Button>

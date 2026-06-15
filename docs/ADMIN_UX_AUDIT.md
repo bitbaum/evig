@@ -71,7 +71,7 @@ These are real wins but each is medium-to-large with risk of breaking a workflow
 | Y.5 | Tasks list: replaced "Typ" column with "Zeitplan" (surfaces `schedule_human`) | ✓ |
 | Y.6 | Protocols: deleted `ProtocolWorkflowStepper` (dead code, grep-verified) | ✓ |
 | Y.7 | Protocols: attendee-mapping warning → neutral advisory | ✓ |
-| Y.4 | Tasks: localStorage default filter | **deferred** (server→client conversion) |
+| Y.4 | Tasks: localStorage default filter | **done** (Phase AB — `action_needed` preset = needs_attention ∪ requested; persisted in localStorage) |
 | Y.8 | Team: leave card to main profile | **deferred** (structural rework) |
 | — | Audit hotfix: extended `AuditEventType` union (Phase W.5 helpers) | ✓ (unblocked DB deploy) |
 
@@ -101,4 +101,34 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | Z.4 | Tasks: top stat cards are now Links (`Gesamt`, `Braucht Aufmerksamkeit`, `Angefragt`) — 1-click filter; `AdminStatsGrid` got optional `href` prop | ✓ |
 | Z.5 | Protocols: collapsed wizard gate (`{setupComplete && ...}`) — Inhalt section always visible; `canSubmit` still validates. Deleted 4 orphan step components (`MeetingTypeStep`, `ProtocolDetailsStep`, `InputMethodStep`, `ContentInputStep`) — only re-exported by `index.ts`, no actual consumers | ✓ |
 
-Net: -714 LOC (5 dead component files), 15 files touched, typecheck clean.
+## Execution log (Phase AA — admin contrast & interactive SSOT)
+
+**Date:** 2026-06-15  
+**Scope:** Malformed Tailwind opacity utilities, low-contrast active/hover states across admin nav, HR, protocols, tasks, dashboard queue.
+
+| # | Change | Result |
+|---|---|---|
+| AA.1 | Added `adminInteractive` tokens to `src/lib/admin-ui.ts` (row hover/selected, nav active, avatars, command palette) | ✓ |
+| AA.2 | Extended `adminTable.tr` with admin-surface dark hover (replaces broken `/[0.06]/50` strings) | ✓ |
+| AA.3 | Team profile: persistent header uses i18n + phone meta; inactive avatar contrast via `adminInteractive.avatarInactive` | ✓ |
+| AA.4 | Fixed missed table/list hovers: protocols list, tasks table, dashboard `UnifiedQueue`, command palette | ✓ |
+| AA.5 | Public nav: `Projekte` direct link (no dropdown) — matches `navigation.tsx` SSOT comment | ✓ (prior session) |
+| AA.6 | Batch-migrated ~70 admin files: all table/list/icon hovers now use `adminInteractive.*` or `adminTable.tr`; zero raw `hover:bg-surface-raised` left under `src/app/admin` and `src/components/admin` | ✓ |
+
+**Last modified:** 2026-06-15 — Phase AB tasks default filter (Y.4).
+
+---
+
+## Execution log (Phase AB — tasks default filter, Y.4)
+
+**Date:** 2026-06-15  
+**Scope:** `/admin/tasks` landing experience — show actionable work first, not all tasks.
+
+| # | Change | Result |
+|---|---|---|
+| AB.1 | Added `TASK_LIST_FILTERS` + `TASK_LIST_DEFAULT_FILTER` preset in `src/config/tasks.ts` | ✓ |
+| AB.2 | `getTasks()` applies `action_needed` as `needs_attention ∪ requested` when URL has no status | ✓ |
+| AB.3 | `TaskFiltersClient` seeds/syncs `localStorage` (`admin.tasks.statusFilter`) and normalizes bare URL | ✓ |
+| AB.4 | Gesamt stat card links to `?status=all` for explicit full list | ✓ |
+
+---

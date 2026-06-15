@@ -3,6 +3,7 @@ import { Zap, ArrowRight, Check } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { formatQueueAge } from './format'
 import type { ActionItem } from './types'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface ActionItemsSectionProps {
   actionItems: ActionItem[]
@@ -55,7 +56,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                 <li key={index}>
                   <Link
                     href={item.href}
-                    className="flex items-center justify-between p-3 rounded-lg bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors group"
+                    className={`flex items-center justify-between p-3 rounded-lg bg-surface-raised ${adminInteractive.rowHover} transition-colors group`}
                     aria-label={`${urgency.label}: ${item.label}${age ? ` (${age})` : ''}`}
                   >
                     <div className="flex items-start gap-3">

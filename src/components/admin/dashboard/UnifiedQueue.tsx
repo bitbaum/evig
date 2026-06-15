@@ -1,4 +1,6 @@
 import { getTranslations } from 'next-intl/server'
+import { adminInteractive } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 import { Link } from '@/i18n/navigation'
 import { Check, ArrowRight } from 'lucide-react'
 import { InlineActionButton } from './InlineActionButton'
@@ -77,7 +79,7 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
                 <Link
                   href={item.href}
                   aria-label={ariaLabel}
-                  className="group flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-surface-raised"
+                  className={cn('group flex items-center justify-between gap-3 px-4 py-3 transition-colors', adminInteractive.rowHover)}
                 >
                   <div className="flex min-w-0 items-start gap-3">
                     <span

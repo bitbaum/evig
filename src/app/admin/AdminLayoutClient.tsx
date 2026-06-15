@@ -14,6 +14,7 @@ import { CommandBar } from '@/components/admin/CommandBar'
 import { MobileBottomNav } from '@/components/admin/MobileBottomNav'
 import { Button } from '@/components/ui/button'
 import { getHirnSection } from '@/config/sections'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface AdminLayoutClientProps {
   children: React.ReactNode
@@ -86,7 +87,7 @@ export function AdminLayoutClient({
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileMenuOpen(true)}
-                className="shrink-0 rounded-lg p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:hidden"
+                className={`shrink-0 rounded-lg p-2 ${adminInteractive.rowHover} lg:hidden`}
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -95,7 +96,7 @@ export function AdminLayoutClient({
                 variant="ghost"
                 size="icon"
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:flex"
+                className={`hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg ${adminInteractive.rowHover} lg:flex`}
                 title={sidebarCollapsed ? t('expandSidebarTitle') : t('collapseSidebarTitle')}
               >
                 <Menu className="h-4 w-4 text-text-tertiary" />
@@ -108,7 +109,7 @@ export function AdminLayoutClient({
             <div className="flex items-center gap-3 shrink-0">
               <Link
                 href="/"
-                className="hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30/10 sm:flex"
+                className="hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30 sm:flex"
               >
                 <Globe className="w-3.5 h-3.5" />
                 {tUser('toWebsite')}

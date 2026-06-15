@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import { Plus, Filter, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -113,7 +114,7 @@ export function HelpRequestsPageClient({
             className={`p-2 rounded-lg ${
               hasActiveFilters
                 ? 'text-action bg-action-muted'
-                : 'text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6'
+                : 'text-text-tertiary hover:text-text-secondary ${adminInteractive.rowHover}'
             }`}
             title="Filter"
           >

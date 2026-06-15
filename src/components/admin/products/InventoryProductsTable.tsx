@@ -1,6 +1,7 @@
 "use client"
 
 import { Link } from '@/i18n/navigation'
+import { adminInteractive } from '@/lib/admin-ui'
 import { motion } from 'framer-motion'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
@@ -106,7 +107,7 @@ export function InventoryProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-surface-raised", selectable && selectedIds.has(product.id) && "bg-action-muted")}
+                className={cn(`${adminInteractive.rowHover}`, selectable && selectedIds.has(product.id) && "bg-action-muted")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">

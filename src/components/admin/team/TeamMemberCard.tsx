@@ -17,6 +17,8 @@ import {
   getDepartmentColor,
 } from '@/config/team'
 import { formatDateShort } from '@/lib/date-formats'
+import { adminInteractive } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 import type { TeamMemberCardProps } from './types'
 
 export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) {
@@ -30,12 +32,11 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
     <div className="rounded-lg border border-subtle bg-surface-base p-5 transition-colors hover:border-strong">
       <div className="flex items-start gap-4">
         {/* Avatar */}
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
-          member.is_active
-            ? 'bg-action'
-            : 'bg-surface-overlay'
-        }`}>
-          <span className="text-white font-medium text-sm">{initials}</span>
+        <div className={cn(
+          'w-12 h-12 rounded-full flex items-center justify-center shrink-0',
+          member.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive,
+        )}>
+          <span className="font-medium text-sm">{initials}</span>
         </div>
 
         {/* Info */}

@@ -17,6 +17,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
 import { MEMBERSHIP } from '@/config/org'
 import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
+import { adminTable } from '@/lib/admin-ui'
 
 export const metadata: Metadata = {
   title: 'Mitgliedschaften',
@@ -119,7 +120,7 @@ export default async function MembershipPage() {
                   const paid = isPaid(member)
                   const fee = member.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
                   return (
-                    <tr key={member.id} className="hover:bg-surface-raised">
+                    <tr key={member.id} className={adminTable.tr}>
                       <td className="px-4 py-3 font-medium text-text-primary">
                         {member.name || '—'}
                       </td>

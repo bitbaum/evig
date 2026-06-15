@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {
   RefreshCw,
@@ -73,7 +74,7 @@ export function DigestPageClient() {
           size="icon"
           onClick={() => refetch()}
           disabled={loading}
-          className="p-2 text-text-tertiary hover:text-text-secondary hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg"
+          className={`p-2 text-text-tertiary hover:text-text-secondary ${adminInteractive.rowHover} rounded-lg`}
           title="Aktualisieren"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -214,7 +215,7 @@ export function DigestPageClient() {
                   {digest.top_contributors.slice(0, 5).map((user, index) => (
                     <div
                       key={user.user_id}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50"
+                      className={`flex items-center gap-3 p-2 rounded-lg ${adminInteractive.rowHover}`}
                     >
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
@@ -267,7 +268,7 @@ export function DigestPageClient() {
                   {digest.recent_milestones.map((milestone) => (
                     <div
                       key={milestone.id}
-                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50"
+                      className={`flex items-start gap-3 p-2 rounded-lg ${adminInteractive.rowHover}`}
                     >
                       <div className="w-8 h-8 bg-action-muted rounded-lg flex items-center justify-center shrink-0">
                         <Flag className="w-4 h-4 text-action" />
@@ -342,7 +343,7 @@ export function DigestPageClient() {
                     {digest.by_user.map((user) => (
                       <tr
                         key={user.user_id}
-                        className="border-b border-subtle dark:border-white/[0.06]/50 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/30"
+                        className={`border-b border-subtle dark:border-white/6 ${adminInteractive.rowHover}`}
                       >
                         <td className="py-2 px-3">
                           <span className="font-medium text-text-primary">

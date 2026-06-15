@@ -8,6 +8,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { ROUTES } from '@/config/routes'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface PersonalSectionProps {
   userId: string
@@ -128,7 +129,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                   <li key={task.id}>
                     <Link
                       href={`${ROUTES.admin.tasks}?highlight=${task.id}`}
-                      className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors group"
+                      className={`flex items-start gap-3 p-3 rounded-lg bg-surface-raised ${adminInteractive.rowHover} transition-colors group`}
                     >
                       {overdue ? (
                         <AlertCircle className="w-4 h-4 text-error-500 shrink-0 mt-0.5" aria-hidden="true" />
@@ -173,7 +174,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 <li key={sub.id}>
                   <Link
                     href={ROUTES.admin.approvals}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors"
+                    className={`flex items-start gap-3 p-3 rounded-lg bg-surface-raised ${adminInteractive.rowHover} transition-colors`}
                   >
                     <FileText className="w-4 h-4 text-warning-400 shrink-0 mt-0.5" aria-hidden="true" />
                     <div className="min-w-0 flex-1">

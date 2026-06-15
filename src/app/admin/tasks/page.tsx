@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
 import { Suspense } from 'react'
 import { logger } from '@/lib/logger'
-import { TASK_STATUSES } from '@/config/tasks'
+import { TASK_STATUSES, TASK_LIST_FILTERS } from '@/config/tasks'
 import type { TaskListItem } from '@/lib/schemas/tasks'
 import {
   Plus,
@@ -103,7 +103,7 @@ export default async function TasksAdminPage({
           color: 'gray',
           label: 'Gesamt',
           value: stats.total,
-          href: ROUTES.admin.tasks,
+          href: `${ROUTES.admin.tasks}?status=${TASK_LIST_FILTERS.ALL}`,
         },
         {
           icon: AlertTriangle,

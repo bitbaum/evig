@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -119,7 +120,7 @@ export function AdminSidebar({
           variant="ghost"
           size="icon"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:flex"
+          className={`hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${adminInteractive.rowHover} lg:flex`}
         >
           {sidebarCollapsed ? (
             <ChevronRight className="h-4 w-4 text-text-muted" />
@@ -133,7 +134,7 @@ export function AdminSidebar({
           variant="ghost"
           size="icon"
           onClick={() => setMobileMenuOpen(false)}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 lg:hidden"
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${adminInteractive.rowHover} lg:hidden`}
           aria-label={t('closeAria')}
         >
           <ChevronLeft className="w-5 h-5 text-text-secondary" />
@@ -186,8 +187,8 @@ export function AdminSidebar({
                           sidebarCollapsed ? 'justify-center' : ''
                         } ${
                           active
-                            ? 'bg-action/10 text-action/8'
-                            : 'text-text-tertiary hover:bg-surface-raised dark:hover:bg-surface-base/4 hover:text-text-primary'
+                            ? adminInteractive.navActive
+                            : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
                         }`}
                         title={sidebarCollapsed ? `${labelFor(section.id, section.ui.label)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
@@ -258,7 +259,7 @@ export function AdminSidebar({
                 key={href}
                 href={href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-text-muted transition-colors hover:bg-surface-raised hover:text-text-primary dark:text-text-secondary dark:hover:bg-surface-base/4 ${
+                className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-text-muted transition-colors ${adminInteractive.rowHoverSubtle} hover:text-text-primary dark:text-text-secondary ${
                   sidebarCollapsed ? 'justify-center' : ''
                 }`}
                 title={sidebarCollapsed ? label : undefined}

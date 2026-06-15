@@ -10,6 +10,7 @@
  */
 
 import { Link } from '@/i18n/navigation'
+import { adminInteractive } from '@/lib/admin-ui'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
@@ -122,7 +123,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={ROUTES.admin.services} className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors">
+          <Link href={ROUTES.admin.services} className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}>
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>

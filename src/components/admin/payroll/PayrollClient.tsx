@@ -13,6 +13,7 @@
  */
 
 import { useCallback, useEffect, useState } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import {
   Calendar, Lock, Download, AlertTriangle, CheckCircle2,
   RefreshCw, FileText, Loader2,
@@ -268,7 +269,7 @@ export function PayrollClient() {
         ) : (
           <ul className="divide-y divide-subtle">
             {batches.map(batch => (
-              <li key={batch.id} className="px-5 py-4 flex items-start gap-3 hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors">
+              <li key={batch.id} className={`px-5 py-4 flex items-start gap-3 ${adminInteractive.rowHoverFaint} transition-colors`}>
                 <FileText className="w-4 h-4 mt-1 text-text-muted shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">

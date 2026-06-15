@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { formatDateNumeric } from '@/lib/date-formats'
@@ -109,7 +110,7 @@ export default async function AdminPagesPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -226,7 +227,7 @@ export default async function AdminPagesPage() {
                 {pages.map((page) => (
                   <tr
                     key={page.id}
-                    className="hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                    className={adminTable.tr}
                   >
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-text-primary">

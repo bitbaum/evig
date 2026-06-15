@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { adminInteractive } from '@/lib/admin-ui'
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -157,7 +158,7 @@ export default function AdminWorkshopsPage() {
             const statusLabel = PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status
 
             return (
-              <div key={proposal.id} className="p-6 hover:bg-surface-raised">
+              <div key={proposal.id} className={`p-6 ${adminInteractive.rowHover}`}>
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
@@ -202,7 +203,7 @@ export default function AdminWorkshopsPage() {
                   <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:shrink-0">
                     <Link
                       href={ROUTES.admin.workshopProposal(proposal.id)}
-                      className="inline-flex items-center px-3 py-2 border border-default rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
+                      className={`inline-flex items-center px-3 py-2 border border-default rounded-lg text-sm font-medium text-text-secondary ${adminInteractive.rowHover}`}
                     >
                       <Eye className="w-4 h-4 mr-1" /> Details
                     </Link>
@@ -261,7 +262,7 @@ export default function AdminWorkshopsPage() {
                         variant="outline"
                         size="sm"
                         onClick={cancelReject}
-                        className="px-3 py-1.5 border border-default rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised"
+                        className={`px-3 py-1.5 border border-default rounded-lg text-sm font-medium text-text-secondary ${adminInteractive.rowHover}`}
                       >
                         Abbrechen
                       </Button>

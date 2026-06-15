@@ -22,7 +22,7 @@ import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react'
 
 const STATUS_BADGE: Record<ProjectStatus, string> = {
   planning:  'bg-surface-raised text-text-secondary dark:bg-surface-base/6',
-  active:    'bg-action-muted text-action/15',
+  active:    'bg-action-muted text-action',
   on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
   completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
   cancelled: 'bg-error-100 text-error-800 dark:bg-error-500/15 dark:text-error-400',

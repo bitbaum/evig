@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { adminInteractive } from '@/lib/admin-ui'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
@@ -101,7 +102,7 @@ export function ShopProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-surface-raised", selectable && selectedIds.has(product.id) && "bg-action-muted")}
+                className={cn(`${adminInteractive.rowHover}`, selectable && selectedIds.has(product.id) && "bg-action-muted")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">

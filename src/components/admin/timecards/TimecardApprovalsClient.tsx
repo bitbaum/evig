@@ -37,6 +37,8 @@ import {
   type TimecardStatus,
 } from '@/config/timecards'
 import { formatTimecardPeriod } from '@/lib/team/timecard-display'
+import { adminInteractive } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 
 interface ApprovalRow {
   id: string
@@ -297,9 +299,11 @@ export function TimecardApprovalsClient() {
                 return (
                   <li
                     key={row.id}
-                    className={`flex items-center gap-3 px-4 sm:px-6 py-3 transition-colors ${
-                      isSelected ? 'bg-action-muted/50/5' : ''
-                    } hover:bg-surface-raised dark:hover:bg-surface-base/2`}
+                    className={cn(
+                      'flex items-center gap-3 px-4 sm:px-6 py-3 transition-colors',
+                      isSelected && adminInteractive.rowSelected,
+                      adminInteractive.rowHoverFaint,
+                    )}
                   >
                     <input
                       type="checkbox"

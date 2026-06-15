@@ -1,6 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import { adminInteractive } from '@/lib/admin-ui'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -66,7 +67,7 @@ export default function EditStaticPagePage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.contentPages}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -94,7 +95,7 @@ export default function EditStaticPagePage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.contentPages}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -111,7 +112,7 @@ export default function EditStaticPagePage() {
           <Link
             href={`/${formData.slug}`}
             target="_blank"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-default rounded-lg text-sm text-text-secondary hover:bg-surface-raised transition-colors"
+            className={`inline-flex items-center gap-2 px-4 py-2 border border-default rounded-lg text-sm text-text-secondary ${adminInteractive.rowHover} transition-colors`}
           >
             <Eye className="w-4 h-4" />
             Vorschau
@@ -163,7 +164,7 @@ export default function EditStaticPagePage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-default rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary"
+                className={`px-3 py-2 text-sm border border-default rounded-lg ${adminInteractive.rowHover} text-text-secondary`}
               >
                 Generieren
               </Button>
@@ -221,7 +222,7 @@ export default function EditStaticPagePage() {
         <div className="flex justify-end gap-3">
           <Link
             href={ROUTES.admin.contentPages}
-            className="px-4 py-2 border border-default rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-raised transition-colors"
+            className={`px-4 py-2 border border-default rounded-lg text-sm font-medium text-text-secondary ${adminInteractive.rowHover} transition-colors`}
           >
             Abbrechen
           </Link>

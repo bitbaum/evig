@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { adminInteractive } from '@/lib/admin-ui'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -53,7 +54,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
         className={`flex items-center gap-3 p-1.5 pr-3 rounded-full transition-all duration-200 ${
           userMenuOpen
             ? 'bg-surface-raised'
-            : 'hover:bg-surface-raised dark:hover:bg-surface-base/6'
+            : '${adminInteractive.rowHover}'
         }`}
         aria-expanded={userMenuOpen}
         aria-haspopup="true"
@@ -99,7 +100,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             <Link
               href={ROUTES.public.home}
               onClick={() => setUserMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors hover:bg-surface-raised dark:hover:bg-surface-base/4"
+              className={`flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors ${adminInteractive.rowHoverSubtle}`}
             >
               <ExternalLink className="w-4 h-4 text-text-tertiary" />
               {t('toWebsite')}

@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next'
+import { adminInteractive } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
@@ -47,7 +48,7 @@ export default async function AdminMediaPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -97,7 +98,7 @@ export default async function AdminMediaPage() {
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="flex items-center gap-2 px-3 py-2 border border rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 transition-colors">
+            <Button variant="outline" size="sm" className={`flex items-center gap-2 px-3 py-2 border border rounded-lg ${adminInteractive.rowHover} transition-colors`}>
               <Filter className="w-4 h-4 text-text-secondary" />
               <span className="text-sm text-text-secondary">
                 Filter
@@ -108,7 +109,7 @@ export default async function AdminMediaPage() {
               <Button variant="ghost" size="icon" className="p-2 bg-action-muted text-action">
                 <Grid className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 text-text-secondary">
+              <Button variant="ghost" size="icon" className={`p-2 ${adminInteractive.rowHover} text-text-secondary`}>
                 <List className="w-4 h-4" />
               </Button>
             </div>

@@ -35,6 +35,28 @@ export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
   in_progress: 'In Bearbeitung',
 };
 
+/** List-page status presets (includes multi-status filters beyond single TaskStatus). */
+export const TASK_LIST_FILTERS = {
+  ALL: 'all',
+  ACTION_NEEDED: 'action_needed',
+} as const;
+
+export type TaskListFilter =
+  | (typeof TASK_LIST_FILTERS)[keyof typeof TASK_LIST_FILTERS]
+  | TaskStatus;
+
+/** localStorage key — persists last chosen tasks list status filter (Y.4). */
+export const TASK_LIST_FILTER_STORAGE_KEY = 'admin.tasks.statusFilter';
+
+export const TASK_LIST_FILTER_LABELS: Record<string, string> = {
+  [TASK_LIST_FILTERS.ALL]: 'Alle',
+  [TASK_LIST_FILTERS.ACTION_NEEDED]: 'Aufmerksamkeit + Anfragen',
+  ...TASK_STATUS_LABELS,
+};
+
+/** Default landing filter: tasks that need someone to act now. */
+export const TASK_LIST_DEFAULT_FILTER = TASK_LIST_FILTERS.ACTION_NEEDED;
+
 // Task categories
 export const TASK_CATEGORIES = {
   CLEANING: 'cleaning',

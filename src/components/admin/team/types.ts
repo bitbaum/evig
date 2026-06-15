@@ -65,7 +65,6 @@ export interface TeamProfileFormProps {
 export interface TeamProfileViewProps {
   profile: TeamProfileWithUser
   isSuperAdmin?: boolean
-  onBack?: () => void
 }
 
 /**

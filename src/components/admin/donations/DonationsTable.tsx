@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/navigation'
+import { adminTable } from '@/lib/admin-ui'
 import { Heart, Package, CheckCircle, Clock, Receipt, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { formatDateNumeric } from '@/lib/date-formats'
@@ -64,7 +65,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
         </thead>
         <tbody className="bg-surface-base divide-y divide-neutral-200">
           {donations.map((donation) => (
-            <tr key={donation.id} className="hover:bg-surface-raised">
+            <tr key={donation.id} className={adminTable.tr}>
               <td className="px-4 py-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   donation.donation_type === DONATION_TYPES.MONETARY

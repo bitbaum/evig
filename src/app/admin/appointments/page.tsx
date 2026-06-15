@@ -12,6 +12,7 @@
  */
 
 import { Metadata } from 'next'
+import { adminTable } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import { Calendar, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -110,7 +111,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                 'px-3 min-h-9 inline-flex items-center rounded-full border transition-colors ' +
                 (isActive
                   ? 'border-action bg-action-muted text-action'
-                  : 'text-text-secondary hover:border-strong hover:bg-surface-raised')
+                  : 'text-text-secondary hover:border-strong ${adminInteractive.rowHover}')
               }
             >
               {opt.label}
@@ -146,7 +147,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                   const statusBadge = getBookingStatusBadge(row.status ?? '')
                   const urgencyBadge = getUrgencyBadge(row.urgency ?? '')
                   return (
-                    <tr key={row.id} className="hover:bg-surface-raised">
+                    <tr key={row.id} className={adminTable.tr}>
                       <td className="px-4 py-3">
                         <div className="font-medium text-text-primary">
                           {row.customer_name || row.customer_email}

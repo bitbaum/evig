@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { formatRelativeTime } from '@/lib/utils'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Session {
   sessionId: string
@@ -125,7 +126,7 @@ export function HirnSidebar({
                 className={`w-full flex items-center gap-2 p-2 rounded-lg text-left h-auto justify-start ${
                   currentSessionId === session.sessionId
                     ? 'bg-action-muted text-action'
-                    : 'hover:bg-surface-raised text-text-secondary'
+                    : '${adminInteractive.rowHover} text-text-secondary'
                 }`}
               >
                 <MessageSquare className="w-4 h-4 shrink-0" />

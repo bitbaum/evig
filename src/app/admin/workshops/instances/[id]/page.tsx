@@ -1,6 +1,7 @@
 'use client'
 
 import { use } from 'react'
+import { adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import {
   Calendar,
@@ -234,7 +235,7 @@ export default function AdminWorkshopInstanceDetailPage({
                 </thead>
                 <tbody className="divide-y divide-neutral-200">
                   {registrations.map((reg) => (
-                    <tr key={reg.id} className="hover:bg-surface-raised">
+                    <tr key={reg.id} className={adminTable.tr}>
                       <td className="px-6 py-4">
                         <div className="flex items-center">
                           <div className="shrink-0 h-10 w-10 bg-surface-overlay rounded-full flex items-center justify-center">

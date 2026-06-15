@@ -8,6 +8,7 @@
  */
 
 import { useTranslations } from 'next-intl'
+import { adminInteractive } from '@/lib/admin-ui'
 import {
   ArrowLeft,
   Save,
@@ -144,7 +145,7 @@ export function TeamProfileForm({
             type="button"
             variant="ghost"
             onClick={() => toggleSection(section.id)}
-            className="w-full flex items-center justify-between p-4 hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 h-auto rounded-none"
+            className={`w-full flex items-center justify-between p-4 ${adminInteractive.rowHover} h-auto rounded-none`}
           >
             <div className="flex items-center gap-3">
               <span className="text-text-tertiary">{section.icon}</span>

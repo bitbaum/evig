@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl'
 import { SERVICE_ICONS } from '@/config/service-icons'
 import { Wrench } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface IconPickerProps {
   value: string | null
@@ -88,7 +89,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     title={label}
                     className={`flex flex-col items-center justify-center p-2 rounded-lg h-auto ${isSelected
                       ? 'bg-action-muted border-2 border-action'
-                      : 'hover:bg-surface-raised dark:hover:bg-surface-base/6 border-2 border-transparent'
+                      : '${adminInteractive.rowHover} border-2 border-transparent'
                     }`}
                   >
                     <IconComponent

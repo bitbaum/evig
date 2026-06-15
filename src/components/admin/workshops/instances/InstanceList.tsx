@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { adminInteractive } from '@/lib/admin-ui'
 import {
   Calendar,
   Plus,
@@ -45,7 +46,7 @@ export function InstanceList({
         {instances.map((instance) => {
           const badge = getStatusBadge(instance.status)
           return (
-            <div key={instance.id} className="p-6 hover:bg-surface-raised">
+            <div key={instance.id} className={`p-6 ${adminInteractive.rowHover}`}>
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">

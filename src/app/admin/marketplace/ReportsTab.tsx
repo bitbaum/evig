@@ -9,6 +9,7 @@ import { REPORT_REASONS } from '@/config/marketplace'
 import { REPORT_STATUS, REPORT_STATUS_LABELS } from '@/config/report-status'
 import type { ReportRow, PaginatedResponse } from './types'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 
 function getReportReasonLabel(reason: string): string {
   return REPORT_REASONS.find(r => r.value === reason)?.label ?? reason
@@ -50,7 +51,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
           </thead>
           <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
             {reports?.items.map(r => (
-              <tr key={r.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50">
+              <tr key={r.id} className={adminTable.tr}>
                 <td className="px-4 py-3">
                   <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
                     {r.listing_title} <ExternalLink className="w-3 h-3" />
@@ -76,7 +77,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                       variant="outline"
                       size="sm"
                       onClick={() => onHandle(r.id)}
-                      className="px-3 py-1.5 text-sm rounded-lg border border hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                      className={`px-3 py-1.5 text-sm rounded-lg border border ${adminInteractive.rowHover}`}
                     >
                       {t('edit')}
                     </Button>

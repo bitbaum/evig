@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShoppingBag, Wrench, Lightbulb, type LucideIcon } from 'lucide-react'
+import { ShoppingBag, Wrench, type LucideIcon } from 'lucide-react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
 
 /**
@@ -98,56 +98,6 @@ export const mainNavigation: NavigationItem[] = [
     nameKey: 'projects',
     href: '/projects',
     descriptionKey: 'projectsDesc',
-    subItems: [
-      // The featured Monitor-Upcycling sits at the top because it's the
-      // active, funded project with ZHAW partnership — the cleanest mission
-      // proof we have right now.
-      {
-        name: 'Monitor-Upcycling',
-        nameKey: 'projectMonitorUpcycling',
-        href: '/projects/upcycling',
-        descriptionKey: 'projectMonitorUpcyclingDesc',
-        featured: true,
-        featuredIcon: Lightbulb,
-        featuredTheme: 'projects',
-      },
-      {
-        name: 'Hardware-Entwicklung',
-        nameKey: 'projectHardware',
-        href: '/projects/hardware',
-        descriptionKey: 'projectHardwareDesc',
-      },
-      {
-        name: 'LTSP',
-        nameKey: 'projectLtsp',
-        href: '/projects/ltsp',
-        descriptionKey: 'projectLtspDesc',
-      },
-      {
-        name: 'Kivitendo Modus CH',
-        nameKey: 'projectKivitendo',
-        href: '/projects/kivitendo',
-        descriptionKey: 'projectKivitendoDesc',
-      },
-      {
-        name: 'Verein Linuxola',
-        nameKey: 'projectLinuxola',
-        href: '/projects/linuxola',
-        descriptionKey: 'projectLinuxolaDesc',
-      },
-      {
-        name: 'FreieComputer.ch',
-        nameKey: 'projectFreieComputer',
-        href: '/projects/freiecomputer',
-        descriptionKey: 'projectFreieComputerDesc',
-      },
-      {
-        name: 'Compirat',
-        nameKey: 'projectCompirat',
-        href: '/projects/compirat',
-        descriptionKey: 'projectCompiratDesc',
-      },
-    ],
   },
   {
     name: 'Dienstleistungen',

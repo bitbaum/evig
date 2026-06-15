@@ -5,6 +5,7 @@
  */
 
 import { Metadata } from 'next'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
@@ -219,7 +220,7 @@ export default async function AdminServicesPage() {
               </thead>
               <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
                 {services.map((service) => (
-                  <tr key={service.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/6">
+                  <tr key={service.id} className={adminTable.tr}>
                     <td className="px-6 py-4">
                       <div>
                         <div className="text-sm font-medium text-text-primary">
@@ -270,7 +271,7 @@ export default async function AdminServicesPage() {
                           <Link
                             href={`/services/${service.slug}`}
                             target="_blank"
-                            className="p-2.5 text-text-secondary hover:text-text-primary hover:bg-surface-raised rounded-sm"
+                            className={`p-2.5 text-text-secondary hover:text-text-primary ${adminInteractive.rowHover} rounded-sm`}
                             title="Auf Website ansehen"
                           >
                             <Eye className="w-4 h-4" />

@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { adminInteractive } from '@/lib/admin-ui'
 import {
   Plus, Search, Filter, Check, Package, Wrench, Send,
 } from 'lucide-react'
@@ -154,7 +155,7 @@ export function IntakePipelineView({
                   return (
                     <tr
                       key={item.id}
-                      className="hover:bg-surface-raised cursor-pointer"
+                      className={`${adminInteractive.rowHover} cursor-pointer`}
                       onClick={() => onOpenDetail(item.id)}
                     >
                       <td className="py-2.5 font-mono text-xs text-text-tertiary">{item.item_uuid}</td>

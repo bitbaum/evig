@@ -46,7 +46,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
 
         const cardClass = cn(
           'rounded-lg border border bg-surface-base p-4',
-          item.href && 'transition-colors hover:border-strong hover:bg-surface-raised'
+          item.href && 'transition-colors hover:border-strong ${adminInteractive.rowHover}'
         )
 
         const body = (

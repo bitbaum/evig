@@ -4,6 +4,7 @@ import type { Workshop, InstanceFiltersState } from './types'
 import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface InstanceFiltersProps {
   filters: InstanceFiltersState
@@ -44,7 +45,7 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
         </div>
 
         <div className="flex items-end">
-          <label className="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer hover:bg-surface-raised">
+          <label className={`inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer ${adminInteractive.rowHover}`}>
             <input
               type="checkbox"
               checked={filters.upcoming}

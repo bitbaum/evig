@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
@@ -118,7 +119,7 @@ export default async function AdminCategoriesPage() {
         <div className="flex items-center gap-4">
           <Link
             href={ROUTES.admin.content}
-            className="p-2 hover:bg-surface-raised dark:hover:bg-surface-base/6 rounded-lg transition-colors"
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
@@ -210,7 +211,7 @@ export default async function AdminCategoriesPage() {
                 {categories.map((category) => (
                   <tr
                     key={category.id}
-                    className="hover:bg-surface-raised dark:hover:bg-surface-base/6"
+                    className={adminTable.tr}
                   >
                     <td className="px-6 py-4">
                       <div>

@@ -6,6 +6,7 @@ import { Settings, Check, Loader2, Cpu, Cloud, Zap, X, Key, ExternalLink } from 
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import { apiFetch } from '@/lib/api/client'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface Provider {
   provider: string
@@ -230,7 +231,7 @@ export function HirnProviderSelector() {
                               isSelected
                                 ? 'bg-action-muted border-2 border-strong'
                                 : canSelect
-                                ? 'hover:bg-surface-raised dark:hover:bg-surface-base/[0.06]/50 border-2 border-transparent'
+                                ? '${adminInteractive.rowHover} border-2 border-transparent'
                                 : 'opacity-50 cursor-not-allowed border-2 border-transparent'
                             }`}
                           >

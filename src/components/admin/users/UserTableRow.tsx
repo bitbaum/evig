@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import { formatDateShort } from '@/lib/date-formats'
 import type { UserRow } from './types'
+import { adminTable } from '@/lib/admin-ui'
 
 interface UserTableRowProps {
   user: UserRow
@@ -31,7 +32,7 @@ export function UserTableRow({
   const hasFullAccess = permissions.includes('*')
 
   return (
-    <tr className="hover:bg-surface-raised dark:hover:bg-surface-base/6">
+    <tr className={adminTable.tr}>
       <UserInfoCell user={user} userIsSuperAdmin={userIsSuperAdmin} userIsStaff={userIsStaff} />
       <StatusCell
         userIsSuperAdmin={userIsSuperAdmin}

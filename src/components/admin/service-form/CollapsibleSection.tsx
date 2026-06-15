@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface CollapsibleSectionProps {
   title: string
@@ -24,7 +25,7 @@ export function CollapsibleSection({
         type="button"
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 bg-surface-raised hover:bg-surface-raised dark:hover:bg-surface-base/6 h-auto rounded-none"
+        className={`w-full flex items-center justify-between px-6 py-4 bg-surface-raised ${adminInteractive.rowHover} h-auto rounded-none`}
       >
         <Heading level={3} className="text-lg text-text-primary">{title}</Heading>
         {isOpen ? (

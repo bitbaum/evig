@@ -7,6 +7,7 @@ import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { adminInteractive } from '@/lib/admin-ui'
 
 interface TeamMember {
   id: string
@@ -126,7 +127,7 @@ export function ProtocolAttendeesCard({
             {filtered.map((member) => (
               <label
                 key={member.id}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-sm hover:bg-surface-raised dark:hover:bg-surface-base/4 cursor-pointer text-sm text-text-secondary"
+                className={`flex items-center gap-2 px-2 py-1.5 rounded-sm ${adminInteractive.rowHoverSubtle} cursor-pointer text-sm text-text-secondary`}
               >
                 <input
                   type="checkbox"

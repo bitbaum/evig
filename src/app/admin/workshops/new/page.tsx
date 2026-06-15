@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import { adminInteractive } from '@/lib/admin-ui'
 import { Button } from '@/components/ui/button'
 import {
   useWorkshopForm,
@@ -54,7 +55,7 @@ export default function NewWorkshopPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Link href={ROUTES.admin.workshops} className="p-2 rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6">
+        <Link href={ROUTES.admin.workshops} className={`p-2 rounded-lg ${adminInteractive.rowHover}`}>
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
@@ -90,7 +91,7 @@ export default function NewWorkshopPage() {
         <div className="flex justify-end gap-4">
           <Link
             href={ROUTES.admin.workshops}
-            className="px-6 py-3 border border-default text-text-secondary rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/6 font-medium"
+            className={`px-6 py-3 border border-default text-text-secondary rounded-lg ${adminInteractive.rowHover} font-medium`}
           >
             Abbrechen
           </Link>
