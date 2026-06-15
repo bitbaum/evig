@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
   TASK_TYPES,
@@ -10,7 +11,7 @@ import {
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
 import type { TaskEditItem } from '@/lib/schemas/tasks'
-import { Loader2, Save, Info } from 'lucide-react'
+import { Loader2, Save, Info, ChevronRight } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useTaskForm } from '@/hooks/useTaskForm'
 import { Input } from '@/components/ui/input'
@@ -18,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface Props {
   task?: TaskEditItem
@@ -46,6 +48,16 @@ export default function TaskFormClient({ task }: Props) {
   } = useTaskForm(task, prefill)
 
   const errorId = isEdit ? 'task-edit-error' : 'task-form-error'
+
+  const hasAdvancedValues = useMemo(() => Boolean(
+    formData.assigned_to ||
+    formData.instructions ||
+    formData.estimated_minutes ||
+    formData.due_date ||
+    formData.tags.trim(),
+  ), [formData])
+
+  const [advancedOpen, setAdvancedOpen] = useState(isEdit && hasAdvancedValues)
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
@@ -122,29 +134,6 @@ export default function TaskFormClient({ task }: Props) {
           </Select>
         </FormField>
 
-        <FormField label="Priorität" htmlFor="priority">
-          <Select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
-            {Object.entries(TASK_PRIORITIES).map(([, value]) => (
-              <option key={value} value={value}>
-                {TASK_PRIORITY_LABELS[value as keyof typeof TASK_PRIORITY_LABELS]}
-              </option>
-            ))}
-          </Select>
-        </FormField>
-
-        {teamMembers.length > 0 && (
-          <FormField label="Zuweisen an" htmlFor="assigned_to">
-            <Select id="assigned_to" name="assigned_to" value={formData.assigned_to} onChange={handleChange}>
-              <option value="">Nicht zugewiesen</option>
-              {teamMembers.map((member) => (
-                <option key={member.user_id} value={member.user_id}>
-                  {member.name}{member.position ? ` (${member.position})` : ''}
-                </option>
-              ))}
-            </Select>
-          </FormField>
-        )}
-
         <FormField label="Beschreibung" htmlFor="description">
           <Textarea
             id="description"
@@ -157,16 +146,14 @@ export default function TaskFormClient({ task }: Props) {
           />
         </FormField>
 
-        <FormField label="Anleitung" htmlFor="instructions">
-          <Textarea
-            id="instructions"
-            name="instructions"
-            value={formData.instructions}
-            onChange={handleChange}
-            rows={5}
-            maxLength={5000}
-            placeholder="Schritt-für-Schritt Anleitung zur Erledigung..."
-          />
+        <FormField label="Priorität" htmlFor="priority">
+          <Select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
+            {Object.entries(TASK_PRIORITIES).map(([, value]) => (
+              <option key={value} value={value}>
+                {TASK_PRIORITY_LABELS[value as keyof typeof TASK_PRIORITY_LABELS]}
+              </option>
+            ))}
+          </Select>
         </FormField>
 
         {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED && (
@@ -182,43 +169,89 @@ export default function TaskFormClient({ task }: Props) {
           </FormField>
         )}
 
-        <FormField label="Geschätzte Dauer (Minuten)" htmlFor="estimated_minutes">
-          <Input
-            type="number"
-            id="estimated_minutes"
-            name="estimated_minutes"
-            value={formData.estimated_minutes}
-            onChange={handleChange}
-            min={1}
-            max={480}
-            placeholder="z.B. 30"
-          />
-        </FormField>
+        <div className="border-t border-subtle pt-4">
+          <button
+            type="button"
+            onClick={() => setAdvancedOpen(o => !o)}
+            className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary"
+          >
+            <ChevronRight
+              className={cn('h-4 w-4 transition-transform', advancedOpen && 'rotate-90')}
+              aria-hidden="true"
+            />
+            Erweitert
+            {!advancedOpen && hasAdvancedValues && (
+              <span className="text-xs font-normal text-text-tertiary">(ausgefüllt)</span>
+            )}
+          </button>
 
-        <FormField label="Fälligkeitsdatum (optional)" htmlFor="due_date">
-          <Input
-            type="date"
-            id="due_date"
-            name="due_date"
-            value={formData.due_date}
-            onChange={handleChange}
-          />
-        </FormField>
+          {advancedOpen && (
+            <div className="mt-4 space-y-6">
+              {teamMembers.length > 0 && (
+                <FormField label="Zuweisen an" htmlFor="assigned_to">
+                  <Select id="assigned_to" name="assigned_to" value={formData.assigned_to} onChange={handleChange}>
+                    <option value="">Nicht zugewiesen</option>
+                    {teamMembers.map((member) => (
+                      <option key={member.user_id} value={member.user_id}>
+                        {member.name}{member.position ? ` (${member.position})` : ''}
+                      </option>
+                    ))}
+                  </Select>
+                </FormField>
+              )}
 
-        <FormField
-          label="Tags"
-          htmlFor="tags"
-          hint="Mehrere Tags mit Komma trennen"
-        >
-          <Input
-            type="text"
-            id="tags"
-            name="tags"
-            value={formData.tags}
-            onChange={handleChange}
-            placeholder="Komma-getrennt, z.B. küche, hygiene, täglich"
-          />
-        </FormField>
+              <FormField label="Anleitung" htmlFor="instructions">
+                <Textarea
+                  id="instructions"
+                  name="instructions"
+                  value={formData.instructions}
+                  onChange={handleChange}
+                  rows={5}
+                  maxLength={5000}
+                  placeholder="Schritt-für-Schritt Anleitung zur Erledigung..."
+                />
+              </FormField>
+
+              <FormField label="Geschätzte Dauer (Minuten)" htmlFor="estimated_minutes">
+                <Input
+                  type="number"
+                  id="estimated_minutes"
+                  name="estimated_minutes"
+                  value={formData.estimated_minutes}
+                  onChange={handleChange}
+                  min={1}
+                  max={480}
+                  placeholder="z.B. 30"
+                />
+              </FormField>
+
+              <FormField label="Fälligkeitsdatum (optional)" htmlFor="due_date">
+                <Input
+                  type="date"
+                  id="due_date"
+                  name="due_date"
+                  value={formData.due_date}
+                  onChange={handleChange}
+                />
+              </FormField>
+
+              <FormField
+                label="Tags"
+                htmlFor="tags"
+                hint="Mehrere Tags mit Komma trennen"
+              >
+                <Input
+                  type="text"
+                  id="tags"
+                  name="tags"
+                  value={formData.tags}
+                  onChange={handleChange}
+                  placeholder="Komma-getrennt, z.B. küche, hygiene, täglich"
+                />
+              </FormField>
+            </div>
+          )}
+        </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t">
           <Button type="button" variant="ghost" onClick={() => router.back()}>

@@ -164,10 +164,10 @@ export default async function AnalyticsPage() {
           description="Detaillierte Finanz-Statistiken und Diagramme"
         />
         <DrillDownLink
-          href={ROUTES.admin.tasksAnalytics}
+          href={ROUTES.admin.tasks}
           icon={ClipboardList}
-          title="Aufgaben-Analyse"
-          description="Beiträge, Kategorien und Verlauf"
+          title="Aufgaben"
+          description="Offene Aufgaben, Filter und Erledigungen heute"
         />
       </div>
 

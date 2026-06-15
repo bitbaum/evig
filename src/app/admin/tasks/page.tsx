@@ -18,7 +18,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
-  BarChart3,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
@@ -82,19 +81,10 @@ export default async function TasksAdminPage({
       icon={ClipboardList}
       iconColor="blue"
       actions={
-        <>
-          <Link
-            href={ROUTES.admin.tasksAnalytics}
-            className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary border border hover:border-strong rounded-lg transition-colors flex items-center gap-2"
-          >
-            <BarChart3 className="w-4 h-4" />
-            Statistiken
-          </Link>
-          <Link href={ROUTES.admin.taskNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
-            <Plus className="w-4 h-4" />
-            Neue Aufgabe
-          </Link>
-        </>
+        <Link href={ROUTES.admin.taskNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
+          <Plus className="w-4 h-4" />
+          Neue Aufgabe
+        </Link>
       }
     >
       <AdminStatsGrid items={[

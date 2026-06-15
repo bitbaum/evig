@@ -24,6 +24,7 @@ export const ROUTES = {
     tasks:              '/admin/tasks',
     taskNew:            '/admin/tasks/new',
     task:               (id: string) => `/admin/tasks/${id}`,
+    /** @deprecated Redirects to tasks list — kept for legacy bookmarks only */
     tasksAnalytics:     '/admin/tasks/analytics',
     taskProjects:       '/admin/tasks/projects',
     taskProjectNew:     '/admin/tasks/projects/new',

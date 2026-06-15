@@ -82,8 +82,8 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | Item | Effort | Why dedicated |
 |---|---|---|
 | ~~Timecards: drop aside panel, inline day-edit grid~~ | ~~medium~~ | **Done** — `01b59d93` (`TimecardDayEditor` inline below month grid) |
-| Tasks: collapse new-task form 11 → 5 fields | medium | Need to confirm which fields admin actually uses |
-| Tasks: delete standalone analytics page | medium | Decide if anyone uses it |
+| ~~Tasks: delete standalone analytics page~~ | ~~medium~~ | **Done** — Phase AD redirect; stats on tasks list + `/admin/analytics` |
+| ~~Tasks: collapse new-task form 11 → 5 fields~~ | ~~medium~~ | **Done** — Phase AE: 5 core fields + Erweitert disclosure |
 | Protocols: kill DecisionActions voting flow → "approve + create tasks" 2-button | large | 4 API routes to consolidate |
 | Protocols: split ProtocolDetailClient (357 lines) by lifecycle state | large | Refactor; test-first approach |
 | Team: profile form compression (drop schema-first compensation fields) | medium | HR adoption signal needed |
@@ -145,5 +145,31 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | AC.1 | Verified `TimecardDayEditor` inline below `TimecardMonthGrid` (landed in `01b59d93`) | ✓ (already in main) |
 | AC.2 | Updated stale `/dashboard/timecards` doc comment (removed month/week toggle reference) | ✓ |
 | AC.3 | Smoke: `/` 200, `/admin/tasks` + `/admin/erfassung` → login redirect, typecheck + Y.4 tests pass | ✓ |
+
+**Last modified:** 2026-06-15 — Phase AE tasks form + analytics cleanup.
+
+---
+
+## Execution log (Phase AD — remove standalone task analytics)
+
+**Date:** 2026-06-15
+
+| # | Change | Result |
+|---|---|---|
+| AD.1 | Replaced `/admin/tasks/analytics` with redirect to tasks list | ✓ |
+| AD.2 | Removed redundant Statistiken button from tasks page header | ✓ |
+| AD.3 | `/admin/analytics` drill-down now links to tasks list | ✓ |
+
+---
+
+## Execution log (Phase AE — task form compression)
+
+**Date:** 2026-06-15
+
+| # | Change | Result |
+|---|---|---|
+| AE.1 | Create form shows 5 core fields: Titel, Typ, Kategorie, Beschreibung, Priorität | ✓ |
+| AE.2 | Zuweisung, Anleitung, Dauer, Fälligkeit, Tags moved to collapsed Erweitert section | ✓ |
+| AE.3 | Edit mode auto-expands Erweitert when any advanced field is populated | ✓ |
 
 ---
