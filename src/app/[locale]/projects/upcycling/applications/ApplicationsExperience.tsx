@@ -1,12 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, ChevronDown } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import {
-  MonitorLampPlaceholder,
-  type MonitorLampPlaceholderVariant,
-} from '../MonitorLampPlaceholder'
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { ChevronDown } from 'lucide-react'
+import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
 import { cn } from '@/lib/utils'
 
 /**
@@ -20,8 +17,7 @@ import { cn } from '@/lib/utils'
  *
  * SSOT discipline:
  *  - Chrome (text, surface, border) flows through CSS-var semantic tokens.
- *  - The chromatic identity per act lives inside <MonitorLampPlaceholder>
- *    (its own contained palette SSOT), NOT in arbitrary Tailwind classes.
+ *  - Scene visuals use local workshop photography where available.
  *  - Typography flows through ui-public-* primitives where they fit.
  *
  * Client component because the sticky scene index needs IntersectionObserver
@@ -50,8 +46,8 @@ export type ApplicationsMessages = {
 
 type Act = {
   key: 'functional' | 'decor'
-  variant: MonitorLampPlaceholderVariant
-  /** Visual seeds so each lamp in the row varies even at the same variant. */
+  variant: 'functional' | 'warm'
+  /** Visual seeds reserved for future multi-photo rows. */
   seeds: [number, number, number]
   /** Right-tilt scenes alternate with left-tilt scenes for rhythm. */
   reverse: boolean
@@ -59,8 +55,19 @@ type Act = {
 
 const ACTS: Act[] = [
   { key: 'functional', variant: 'functional', seeds: [11, 12, 13], reverse: false },
-  { key: 'decor',      variant: 'warm',       seeds: [21, 22, 23], reverse: true  },
+  { key: 'decor', variant: 'warm', seeds: [21, 22, 23], reverse: true },
 ]
+
+const ACT_PHOTOS: Record<Act['key'], { src: string; alt: string }> = {
+  functional: {
+    src: UPCYCLING_ASSETS.businessplan.electronicsSpread,
+    alt: 'Electronics spread from a monitor retrofit — workshop documentation',
+  },
+  decor: {
+    src: UPCYCLING_ASSETS.gallery.lenovoPoster,
+    alt: 'Finished monitor lamp (Lenovo L2251pwd) in warm ambient light',
+  },
+}
 
 /** Zero-padded 2-digit label for a 0-based index — "01", "02", "03", … */
 const actLabel = (idx: number) => String(idx + 1).padStart(2, '0')
@@ -93,8 +100,6 @@ export function ApplicationsExperience({ messages: m }: { messages: Applications
       {ACTS.map((act, idx) => (
         <Scene key={act.key} idx={idx} act={act} tier={m.tiers[act.key]} />
       ))}
-
-      <FinalCTA cta={m.cta} />
     </article>
   )
 }
@@ -161,45 +166,24 @@ function CinematicHero({
   )
 }
 
-/* Two-lamp staggered composition mirroring the two acts. */
+/* Hero composition — real workshop photo (documented retrofit). */
 function SpectrumComposition({
   tierLabels,
 }: {
   tierLabels: { functional: string; decor: string }
 }) {
   return (
-    <div className="relative aspect-[5/4] w-full">
-      <LampFrame
-        variant="functional"
-        seed={1}
-        label={tierLabels.functional}
-        className="absolute left-[2%] top-[18%] w-[56%]"
+    <figure className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl border border-subtle bg-surface-base">
+      <Image
+        src={UPCYCLING_ASSETS.businessplan.heroPoster}
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 45vw, 50vw"
+        className="object-cover"
       />
-      <LampFrame
-        variant="warm"
-        seed={2}
-        label={tierLabels.decor}
-        className="absolute right-0 bottom-[8%] w-[56%]"
-      />
-    </div>
-  )
-}
-
-function LampFrame({
-  variant,
-  seed,
-  label,
-  className,
-}: {
-  variant: MonitorLampPlaceholderVariant
-  seed: number
-  label: string
-  className?: string
-}) {
-  return (
-    <figure className={cn('aspect-[4/3] overflow-hidden rounded-2xl border border-subtle bg-surface-base', className)}>
-      <MonitorLampPlaceholder variant={variant} seed={seed} className="h-full w-full" />
-      <figcaption className="sr-only">{label}</figcaption>
+      <figcaption className="sr-only">
+        {tierLabels.functional}, {tierLabels.decor}
+      </figcaption>
     </figure>
   )
 }
@@ -316,7 +300,7 @@ function Scene({ act, idx, tier }: { act: Act; idx: number; tier: RawApplication
 
           {/* Lamp visual column */}
           <div className={cn('relative min-w-0', act.reverse && 'lg:col-start-1 lg:row-start-1')}>
-            <SceneLampRow variant={act.variant} seeds={act.seeds} caption={tier.imageCaption} />
+            <ScenePhoto actKey={act.key} caption={tier.imageCaption} />
           </div>
         </div>
       </div>
@@ -324,64 +308,17 @@ function Scene({ act, idx, tier }: { act: Act; idx: number; tier: RawApplication
   )
 }
 
-/* A scene's lamp row — three variant-matched lamps in a soft mosaic.
- * On mobile: horizontal snap-scroll so it doesn't dominate the fold.
- * On ≥sm: irregular grid (one tall hero + two stacked) for visual
- * interest without the lamp count exploding. */
-function SceneLampRow({
-  variant,
-  seeds,
-  caption,
-}: {
-  variant: MonitorLampPlaceholderVariant
-  seeds: [number, number, number]
-  caption: string
-}) {
+function ScenePhoto({ actKey, caption }: { actKey: Act['key']; caption: string }) {
+  const photo = ACT_PHOTOS[actKey]
   return (
-    <div>
-      <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-3 sm:overflow-visible sm:px-0 sm:pb-0">
-        {seeds.map((seed, i) => (
-          <figure
-            key={seed}
-            className={cn(
-              'shrink-0 snap-start overflow-hidden rounded-xl border border-subtle bg-surface-base',
-              // Mobile: each card 80vw. ≥sm: irregular — first card spans
-              // 2 cols + 2 rows, the next two stack on the right.
-              'w-[80vw] aspect-[4/3] sm:w-auto sm:shrink',
-              i === 0 && 'sm:col-span-2 sm:row-span-2 sm:aspect-[16/10]',
-              i !== 0 && 'sm:aspect-[4/3]',
-            )}
-          >
-            <MonitorLampPlaceholder variant={variant} seed={seed} className="h-full w-full" />
-          </figure>
-        ))}
+    <figure className="overflow-hidden rounded-2xl border border-subtle bg-surface-base">
+      <div className="relative aspect-[4/3]">
+        <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
       </div>
-      <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-tertiary">
+      <figcaption className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-tertiary">
         {caption}
-      </p>
-    </div>
+      </figcaption>
+    </figure>
   )
 }
 
-function FinalCTA({ cta }: { cta: ApplicationsMessages['cta'] }) {
-  return (
-    <section className="border-t border-subtle bg-surface-base">
-      <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 sm:py-28 lg:px-8">
-        <h2 className="ui-public-display-md">{cta.title}</h2>
-        <p className="ui-public-section-lede mx-auto mt-4">{cta.body}</p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/contact" className="ui-public-cta">
-            {cta.primary}
-          </Link>
-          <Link
-            href="/projects/upcycling/build-your-own"
-            className="ui-public-cta-ghost inline-flex items-center gap-2"
-          >
-            {cta.secondary}
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
-}

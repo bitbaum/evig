@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils'
 import type { NavigationItem } from '@/config/navigation'
 import { groupItemsBySection } from './utils'
 import { MegaMenuContent } from './MegaMenuContent'
+import { navItemLabel, type NavTranslator } from './nav-i18n'
 
 interface NavItemProps {
   item: NavigationItem
@@ -29,7 +30,7 @@ interface NavItemProps {
 
 export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
   const t = useTranslations('nav')
-  const label = item.nameKey ? t(item.nameKey as never) : item.name
+  const label = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
   const [isOpen, setIsOpen] = useState(false)
   const hasDropdown = item.subItems && item.subItems.length > 0
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)

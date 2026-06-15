@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-01-07
-last_modified_summary: Created SSOT for all npm commands and scripts
+last_modified_date: 2026-06-15
+last_modified_summary: Added i18n:businessplan and Monitor-Upcycling mini-site doc pointer
 ---
 
 # RevampIT Commands Reference (SSOT)
@@ -51,7 +51,17 @@ npm run build          # Production build (Next.js + sitemap)
 npm run start          # Start production server
 npm run typecheck      # TypeScript validation (run before commits!)
 npm run lint           # ESLint check
+npm run i18n:businessplan  # Business plan i18n shape/invariant parity (8 locales)
 ```
+
+### Monitor-Upcycling content scripts
+
+```bash
+node scripts/sync-businessplan-locales.mjs   # After editing DE businessPlan block
+node scripts/prune-businessplan-archive.mjs  # Remove archived citation keys from all locales
+```
+
+See `docs/projects/upcycling.md` for mini-site SSOT map.
 
 ---
 
@@ -96,5 +106,5 @@ npm run prod:down      # Stop production containers
 
 ---
 
-**Last Updated**: 2026-01-07  
+**Last Updated**: 2026-06-15  
 **Source**: `package.json`

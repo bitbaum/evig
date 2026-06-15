@@ -2,6 +2,7 @@
 
 import { Link, usePathname } from '@/i18n/navigation'
 import { isUpcyclingSubNavActive } from '@/lib/domain/upcycling-status-helpers'
+import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
 import { cn } from '@/lib/utils'
 
 /**
@@ -28,7 +29,7 @@ export function UpcyclingSubNav({ items, brand }: { items: Item[]; brand: string
     >
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <Link
-          href="/projects/upcycling"
+          href={UPCYCLING_ROUTES.landing}
           className="flex shrink-0 items-center gap-2 py-3 font-mono text-xs uppercase tracking-[0.18em] text-text-primary"
         >
           <span

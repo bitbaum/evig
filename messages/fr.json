@@ -5723,7 +5723,8 @@
         "title": "Monitor-Upcycling",
         "description": "Nous transformons des écrans d'ordinateur usagés en luminaires fonctionnels de haute qualité. Un projet pilote innovant de revamp-it qui évite les déchets électroniques, crée un travail valorisant dans des entreprises sociales et développe des produits circulaires pour le marché suisse.",
         "cta1": "Découvrir le projet",
-        "cta2": "Devenir partenaire"
+        "cta2": "Devenir partenaire",
+        "photoAlt": "Lampe monitor finie (Lenovo L2251pwd), atelier Werkraum 4, mai 2026"
       },
       "needs": {
         "title": "Ce dont nous avons besoin",
@@ -5801,7 +5802,7 @@
           {
             "key": "gallery",
             "title": "Galerie",
-            "description": "Luminaires déjà transformés, tous modèles d'écrans et styles confondus — filtrables par usage.",
+            "description": "Retrofits documentés avec de vraies photos — et modèles en attente indiqués honnêtement.",
             "cta": "Ouvrir la galerie"
           },
           {
@@ -5859,7 +5860,7 @@
       "gallery": {
         "meta": {
           "title": "Galerie | Upcycling d'écrans | RevampIT",
-          "description": "Galerie des luminaires issus d'écrans transformés — de l'éclairage de travail fonctionnel à l'objet d'art. Filtrable par domaine d'utilisation."
+          "description": "Galerie de lampes monitor upcyclées — photos réelles ou file d’attente indiquée clairement."
         },
         "eyebrow": "GALERIE · UPCYCLING D'ÉCRANS",
         "title": "Ce qui a déjà été créé",
@@ -5878,7 +5879,8 @@
           "title": "Vous photographiez — nous continuons à documenter.",
           "body": "Chaque modèle que nous ne photographions pas nous-mêmes reste un croquis SVG. Si vous êtes à Zurich et aimez la photo d'atelier, dites-le nous.",
           "cta": "Participer"
-        }
+        },
+        "statsLine": "{documented} documenté · {queued} en attente"
       },
       "buildYourOwn": {
         "meta": {
@@ -6143,7 +6145,7 @@
             {
               "key": "scale",
               "date": "2027",
-              "label": "Phase de mise à l'échelle II — gamme de modèles et distribution"
+              "label": "Phase de montée en charge II — modèles & vente"
             }
           ]
         },
@@ -6171,12 +6173,6 @@
         "successTitle": "Inscription confirmée.",
         "successBody": "Nous vous écrivons au prochain jalon."
       },
-      "briefLink": {
-        "eyebrow": "BRIEF DU PROJET",
-        "title": "Briefing complet pour bailleurs et partenaires",
-        "body": "Démarche, prochaines étapes, questions ouvertes (économie incluse) et le code open source — tout dans le plan d'affaires.",
-        "cta": "Ouvrir le briefing complet"
-      },
       "businessPlan": {
         "meta": {
           "title": "Plan d'affaires — upcycling de moniteurs en luminaires muraux et plafonniers",
@@ -6185,6 +6181,10 @@
         "nav": {
           "label": "Sommaire",
           "items": [
+            {
+              "id": "zusammenfassung",
+              "label": "Résumé"
+            },
             {
               "id": "status",
               "label": "État actuel"
@@ -6240,9 +6240,9 @@
           ]
         },
         "hero": {
-          "eyebrow": "PLAN D'AFFAIRES",
+          "eyebrow": "PLAN D’AFFAIRES · ÉTAPE 2",
           "title": "Luminaires muraux et plafonniers à partir de moniteurs d'ordinateur déclassés.",
-          "intro": "Nous transformons les rétroéclairages LCD encore fonctionnels d'écrans qui finissent aujourd'hui dans le flux suisse de recyclage IT en luminaires muraux et plafonniers. Cette page est la version « preuves honnêtes » du projet — pas un récit marketing, mais ce qui existe vraiment en juin 2026, avec les sources.",
+          "intro": "Ce document résume l’état, le produit, le marché, le financement et les questions ouvertes pour bailleurs, partenaires et comité. Tous les chiffres et noms sont sourcés — pas une version marketing.",
           "heroImageAlt": "Moniteur Lenovo L2251pwd reconverti en panneau lumineux mural, photo d'établi du 28 mai 2026",
           "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
           "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
@@ -6250,7 +6250,7 @@
         "status": {
           "eyebrow": "ÉTAT ACTUEL · JUIN 2026",
           "title": "Où en est le projet aujourd'hui.",
-          "intro": "Étape 1 terminée, étape 2 en phase finale. L'accompagnement scientifique de la ZHAW se déroule en parallèle ; le rapport est daté du 18 juin 2026.",
+          "intro": "Étape 1 terminée, étape 2 en phase finale. Petite série et installations pilotes en cours ; rapport ACV ZHAW en finalisation (remise 18.06.2026).",
           "kpis": [
             {
               "label": "État des étapes",
@@ -6356,68 +6356,33 @@
         },
         "lieferanten": {
           "eyebrow": "FOURNISSEURS · FLUX DE MATIÈRE",
-          "title": "La matière première est déjà là — 150 palettes Europe en stock.",
-          "intro": "Avant que le projet ne commence, Revamp-IT a collecté de manière systématique du matériel IT déclassé. En 2023, 150 palettes Europe sont disponibles, dont environ 30 palettes d'écrans pertinents pour l'upcycling.",
+          "title": "Matière première : moniteurs déclassés.",
+          "intro": "Le projet nécessite des écrans fonctionnels à rétroéclairage LED (typ. 19–24 pouces). Revamp-IT collecte du matériel IT déclassé à Zurich ; le stock de moniteurs actuel suffit pour la petite série de l’étape 2.",
           "stockBreakdown": {
-            "title": "Ce qui dort en stock",
-            "subtitle": "Détail des 150 palettes Europe collectées",
+            "title": "Équipement pertinent sur site",
+            "subtitle": "Focus upcycling moniteurs — pas d’inventaire complet",
             "rows": [
               {
-                "label": "Ordinateurs complets de tailles et d'âges divers",
-                "value": "ca. 40 Paletten"
-              },
-              {
-                "label": "Imprimantes et multifonctions",
-                "value": "ca. 30 Paletten"
-              },
-              {
-                "label": "Moniteurs, téléviseurs et tout-en-un",
-                "value": "ca. 30 Paletten",
+                "label": "Moniteurs, TV et all-in-one",
+                "value": "Petite série couverte",
                 "emphasis": true,
-                "note": "← matière première pour l'upcycling des luminaires"
+                "note": "← matière directe"
               },
               {
-                "label": "Baies de serveur et châssis serveur",
-                "value": "ca. 15 Paletten"
-              },
-              {
-                "label": "Clients légers et mini-ordinateurs",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "Boîtiers PC",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "Câbles",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "Claviers",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "Scanners",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "Équipement réseau",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "Autres appareils et pièces diverses",
-                "value": "ca. 5 Paletten"
+                "label": "Technologie privilégiée",
+                "value": "Rétroéclairage LED",
+                "note": "plus de lumière, moins de travail de retrofit"
               }
             ],
-            "cite": "cit06_qa_swico_2023"
+            "cite": "cit04_kurzbericht_e1"
           },
           "channels": {
             "title": "D'où viendront les écrans à l'avenir",
             "items": [
               {
                 "label": "Stock existant revamp-it",
-                "body": "30 palettes de moniteurs/TV/tout-en-un sont déjà triées et catégorisées — suffisant pour les petites séries d'étape 2.",
-                "cite": "cit06_qa_swico_2023"
+                "body": "Le stock de moniteurs collecté et trié sur site couvre la petite série de l’étape 2.",
+                "cite": "cit04_kurzbericht_e1"
               },
               {
                 "label": "ERZ Entsorgung + Recycling Zürich",
@@ -6429,7 +6394,7 @@
               {
                 "label": "Système Swico Recycling (option de mise à l'échelle)",
                 "body": "Vision : tous les moniteurs et téléviseurs entrant dans le recyclage suisse sont prétestés pour l'upcycling avant la récupération matière.",
-                "cite": "cit07_klimast_2023",
+                "cite": "cit14_swico_recycling",
                 "linkLabel": "Swico Recycling",
                 "linkUrl": "https://www.swico.ch/de/recycling/"
               }
@@ -6506,27 +6471,27 @@
         "kunden": {
           "eyebrow": "CLIENTS · COMMERCIALISATION",
           "title": "Qui achète un luminaire mural ou plafonnier fait à partir d'un moniteur ?",
-          "intro": "Des travaux d'étape 1 et de la réponse écrite à Swico (28.09.2023), quatre segments cibles se dégagent — pas un marché de designers, mais un comportement d'achat d'éclairage professionnel.",
+          "intro": "Les travaux de l’étape 1 et les échanges avec des acheteurs potentiels dégagent quatre segments — achat professionnel d’éclairage, pas un marché design.",
           "segments": [
             {
               "label": "B2B direct — entreprises à grandes surfaces de bureau",
               "body": "Banques, assurances, administrations publiques. Installations pilotes dans les cages d'escalier et locaux annexes, puis intégration au catalogue d'achats.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "label": "Entreprises d'ameublement et d'agencement",
               "body": "Coopération avec des aménageurs suisses qui ajoutent les luminaires upcycling à leur gamme — comme histoire et comme alternative durable à la production de masse asiatique.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "label": "Magasins de bricolage",
               "body": "Comme pour les panneaux Brilliant : via les canaux de vente établis. Effort marketing élevé, marges serrées — plutôt une option de mise à l'échelle pour plus tard.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "label": "Sociétés immobilières (rénovation/construction)",
               "body": "Usage direct lors de rénovations ou de constructions neuves : luminaires upcycling à la place de produits neufs. Mise en relation via régies et bureaux d'architectes.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             }
           ],
           "pilotPlan": {
@@ -6671,7 +6636,7 @@
                 "date": "18.05. – 24.05.2026"
               },
               {
-                "label": "Présentation des résultats",
+                "label": "Présentation des résultats (terminée)",
                 "date": "25.05. – 31.05.2026"
               },
               {
@@ -6720,7 +6685,7 @@
         "partner": {
           "eyebrow": "PARTENAIRES",
           "title": "Qui fait quoi — uniquement des noms vérifiables.",
-          "intro": "Cette liste ne contient que des organisations et personnes nommément citées dans les documents du projet. Les partenaires spéculatifs ou hypothétiques sont écartés.",
+          "intro": "Organisations et personnes avec un rôle actif à l’étape 2 — pas de noms tirés d’anciens dossiers de candidature (2023).",
           "groups": [
             {
               "title": "Partenaires principaux",
@@ -6733,7 +6698,7 @@
                 {
                   "name": "Werkraum 4 (Stiftung zsge)",
                   "role": "Partenaire de production, emploie des clients sous accompagnement. Marques recyclingArt + lerski.",
-                  "cite": "cit07_klimast_2023",
+                  "cite": "cit19_werkraum4",
                   "linkLabel": "werkraum4.ch",
                   "linkUrl": "https://www.werkraum4.ch"
                 },
@@ -6779,7 +6744,7 @@
                 {
                   "name": "Swico Recycling",
                   "role": "Système national de collecte ; partenaire de mise à l'échelle pour le pré-tri matière.",
-                  "cite": "cit07_klimast_2023",
+                  "cite": "cit14_swico_recycling",
                   "linkLabel": "swico.ch/de/recycling",
                   "linkUrl": "https://www.swico.ch/de/recycling/"
                 }
@@ -6834,53 +6799,6 @@
                   "cite": "cit01_innolink"
                 }
               ]
-            },
-            {
-              "title": "Réseau d'experts externes",
-              "intro": "Issu de la candidature Klimastiftung 2023 — communauté réparation et open hardware.",
-              "items": [
-                {
-                  "name": "Balz Krügel (Reparabel)",
-                  "role": "Expertise réparation",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Roland Bamert (Barologic / Revita repair)",
-                  "role": "Électrotechnique + conformité",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Rolf Huber (Reparaturia, Oerlikon)",
-                  "role": "Communauté réparation",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Karel Kulhavy",
-                  "role": "Développeur de l'OpenSource Hardware Ronja",
-                  "cite": "cit07_klimast_2023",
-                  "linkLabel": "ronja.twibright.com",
-                  "linkUrl": "http://ronja.twibright.com"
-                },
-                {
-                  "name": "Hasan Hüseyin Isik",
-                  "role": "Innovation mécatronique",
-                  "cite": "cit07_klimast_2023",
-                  "linkLabel": "isikinnovations.com",
-                  "linkUrl": "https://isikinnovations.com"
-                },
-                {
-                  "name": "Martin Flüeler (Winnetui Atelier-Werkstatt Schwerzenbach)",
-                  "role": "Atelier ouvert",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Schweizerische Gesellschaft für Mechatronische Kunst",
-                  "role": "Réseau artistique-technique",
-                  "cite": "cit07_klimast_2023",
-                  "linkLabel": "mechatronicart.ch",
-                  "linkUrl": "https://mechatronicart.ch"
-                }
-              ]
             }
           ],
           "klimastNote": "La Klimastiftung Schweiz a évalué le projet positivement, mais a suspendu le financement jusqu'à la présentation des résultats étape 2. Elle n'est donc pas listée ici comme bailleur.",
@@ -6906,7 +6824,7 @@
             {
               "label": "Analyse scientifique (ACV ZHAW)",
               "status": "en cours",
-              "body": "Rédaction jusqu'au 18.06.2026, présentation fin mai 2026 réalisée. La modélisation SimaPro a été achevée mi-mai.",
+              "body": "Modélisation SimaPro et présentation des résultats à la ZHAW achevées en mai 2026. Rapport écrit finalisé d’ici le 18.06.2026.",
               "cite": "cit05_zhaw_gantt"
             },
             {
@@ -6980,7 +6898,7 @@
               "status": "modèle",
               "amount": "30–50'000 CHF",
               "note": "Part budgétée des ventes de petites séries. Chiffres réels avec l'évaluation étape 2.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             }
           ]
         },
@@ -7026,7 +6944,7 @@
         "belege": {
           "eyebrow": "SOURCES · RÉFÉRENCES",
           "title": "Chaque chiffre, chaque affirmation — avec une source.",
-          "intro": "Document interne ou lien externe, toujours citable dans sa formulation d'origine. Si quelque chose manque ou si vous souhaitez vérifier une affirmation, écrivez-nous.",
+          "intro": "Uniquement des sources encore valables en juin 2026 : courriers Swico actuels, plan ZHAW, rapport court étape 1 révisé (mars 2026) et documentation d’atelier. Les anciens dossiers de candidature ne figurent pas ici.",
           "citations": [
             {
               "key": "cit01_innolink",
@@ -7059,21 +6977,9 @@
               "url": null
             },
             {
-              "key": "cit06_qa_swico_2023",
-              "label": "Questionnaire Swico, réponses revamp-it 28.09.2023",
-              "detail": "Verein revamp-it, réponses au questionnaire Swico sur la candidature « Utilisation circulaire fonctionnelle d'appareils IT », Andreas Rudin, 28 septembre 2023",
-              "url": null
-            },
-            {
-              "key": "cit07_klimast_2023",
-              "label": "Candidature Klimastiftung revamp-it 2023",
-              "detail": "Verein revamp-it, candidature à la Klimastiftung Schweiz « Utilisation circulaire fonctionnelle d'appareils IT », état 31.08.2023",
-              "url": null
-            },
-            {
               "key": "cit08_modelle_md",
-              "label": "Notes sur les modèles reconvertis (revamp-it / ReCreaZZZ)",
-              "detail": "Liste des modèles de moniteur reconvertis à ce jour, avec notes techniques sur les ponts diviseurs, état 26.02.2025",
+              "label": "Liste interne des modèles (atelier)",
+              "detail": "Liste tenue à jour des modèles de moniteurs retrofités avec documentation standby — statut atelier, juin 2026",
               "url": null
             },
             {
@@ -7149,6 +7055,53 @@
               "url": "https://barologic.ch"
             }
           ]
+        },
+        "documentMeta": {
+          "project": "Monitor-Upcycling zu Wand- und Deckenleuchten",
+          "sponsor": "Fonds d’innovation Swico · Étape 2",
+          "preparedBy": "Verein revamp-it",
+          "asOf": "15.06.2026",
+          "versionLabel": "État au",
+          "projectLabel": "Projet",
+          "sponsorLabel": "Financement",
+          "preparedByLabel": "Établi par"
+        },
+        "executiveSummary": {
+          "eyebrow": "RÉSUMÉ",
+          "title": "Synthèse pour décideurs",
+          "paragraphs": [
+            "Revamp-IT transforme des moniteurs LED déclassés en luminaires muraux et plafonniers — produits à l’atelier social Werkraum 4 (fondation zsge), accompagnés scientifiquement par la ZHAW (ACV selon ISO 14044, projet 132.351 INNO-EE).",
+            "Mi-juin 2026 : l’étape 2 du fonds Swico est en cours (budget 65’000 CHF brut, dont 15’000 CHF Innosuisse à la ZHAW). Douze modèles de moniteurs retrofités avec succès ; cinq avec solution standby documentée. Premier guide modèle entièrement photo-documenté (Lenovo L2251pwd) en ligne depuis le 28 mai 2026.",
+            "Avant le rapport final Swico (30.06.2026) : coûts unitaires fiables de la petite série et retours des installations pilotes restent en suspens. Le rapport ACV ZHAW est en finalisation (remise 18.06.2026) ; présentation des résultats fin mai. Prochain jalon public : présentation Swico le 03.07.2026."
+          ],
+          "highlights": [
+            {
+              "label": "Phase",
+              "value": "Étape 2 · petite série"
+            },
+            {
+              "label": "Budget étape 2",
+              "value": "65'000 CHF"
+            },
+            {
+              "label": "Modèles retrofités",
+              "value": "12 réussis"
+            },
+            {
+              "label": "Prochaine échéance",
+              "value": "30.06.2026"
+            }
+          ]
+        },
+        "ui": {
+          "step": "Étape {n}",
+          "source": "Source :",
+          "citationAria": "Source {n}",
+          "badges": {
+            "detail": "DÉTAIL",
+            "plan": "PLAN",
+            "scope": "PORTÉE"
+          }
         }
       },
       "wirkung": {
@@ -7226,6 +7179,57 @@
           "body": "Ce que vous venez de lire, c'est l'argument. Le plan d'affaires contient les preuves — statut des étapes, budget, partenaires, sources. Ou consultez les guides ouverts pour construire vous-même une lampe.",
           "primary": "Voir le plan d'affaires et les sources",
           "secondary": "Construire la vôtre"
+        }
+      },
+      "evidence": {
+        "eyebrow": "POUR PARTENAIRES & BAILLEURS",
+        "status": {
+          "title": "Où en sommes-nous ?",
+          "body": "Aperçu compact : production, jalons, échéances.",
+          "cta": "Voir le statut"
+        },
+        "businessplan": {
+          "title": "Briefing complet",
+          "body": "Preuves : économie, partenaires, risques, code source.",
+          "cta": "Ouvrir le plan"
+        }
+      },
+      "nextStep": {
+        "applications": {
+          "eyebrow": "SUITE",
+          "title": "Ce qui existe déjà",
+          "body": "Un modèle documenté en photos — douze autres en file d’attente.",
+          "cta": "Galerie"
+        },
+        "gallery": {
+          "eyebrow": "SUITE",
+          "title": "Construire soi-même",
+          "body": "Guides ouverts et code source — étape par étape.",
+          "cta": "Guides"
+        },
+        "buildYourOwn": {
+          "eyebrow": "SUITE",
+          "title": "Comprendre l’impact",
+          "body": "Environnement, science et open hardware — sans chiffres marketing.",
+          "cta": "Impact"
+        },
+        "wirkung": {
+          "eyebrow": "SUITE",
+          "title": "Briefing étayé",
+          "body": "Plan d’affaires avec sources, photos et questions ouvertes.",
+          "cta": "Plan d’affaires"
+        },
+        "lenovoL2251pwd": {
+          "eyebrow": "SUITE",
+          "title": "Lampe finie dans la galerie",
+          "body": "Le résultat parmi les autres modèles retrofités.",
+          "cta": "Galerie"
+        },
+        "businessplan": {
+          "eyebrow": "SUITE",
+          "title": "État actuel du projet",
+          "body": "Chiffres, jalons et échéances — sans relire tout le plan.",
+          "cta": "Voir le statut"
         }
       }
     }

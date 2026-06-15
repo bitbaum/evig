@@ -16,6 +16,7 @@ import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/config/routes'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
+import { navItemDescription, navItemLabel, type NavTranslator } from '@/components/layout/header/nav-i18n'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -176,7 +177,7 @@ export function MobileMenu({
         <nav className="flex-1 overflow-y-auto px-6 py-6">
           <ul className="space-y-1">
             {primaryItems.map((item) => {
-              const itemLabel = item.nameKey ? t(item.nameKey as never) : item.name
+              const itemLabel = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
               return (
                 <li key={item.name}>
                   {item.subItems ? (
@@ -213,12 +214,12 @@ export function MobileMenu({
                       >
                         <ul className="mt-1 ml-4 space-y-1 border-l-2 border-subtle dark:border-white/6 pl-4">
                           {item.subItems.filter(sub => !sub.isSection).map((subItem) => {
-                            const subLabel = subItem.nameKey ? t(subItem.nameKey as never) : subItem.name
+                            const subLabel = subItem.nameKey ? navItemLabel(t as NavTranslator, subItem.nameKey) : subItem.name
                             if (subItem.featured && subItem.featuredIcon) {
                               const FeaturedIcon = subItem.featuredIcon
                               const badge = DESIGN_TOKENS.iconBadges[subItem.featuredTheme ?? 'marketplace']
                               const featuredDesc = subItem.descriptionKey
-                                ? t(`items.${subItem.descriptionKey}` as never)
+                                ? navItemDescription(t as NavTranslator, subItem.descriptionKey)
                                 : subItem.description
                               return (
                                 <li key={subItem.name}>
@@ -340,7 +341,7 @@ export function MobileMenu({
             <div className="mt-6 pt-6 border-t border-subtle dark:border-white/6">
               <ul className="space-y-1">
                 {actionItems.map((item) => {
-                  const actionLabel = item.nameKey ? t(item.nameKey as never) : item.name
+                  const actionLabel = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
                   return (
                     <li key={item.name}>
                       <Button

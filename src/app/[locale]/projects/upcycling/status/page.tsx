@@ -1,6 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server'
-import { ArrowRight, CheckCircle2, CircleDot, Circle, Clock } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
+import { CheckCircle2, CircleDot, Circle, Clock } from 'lucide-react'
 import {
   UPCYCLING_STATUS,
   type MilestoneKey,
@@ -11,6 +10,7 @@ import {
   formatSnapshotDate,
   pickNextDeadline,
 } from '@/lib/domain/upcycling-status-helpers'
+import { UpcyclingPageHeader } from '../UpcyclingPageHeader'
 import { cn } from '@/lib/utils'
 import { ogFor } from '../og-images'
 
@@ -22,7 +22,8 @@ export const revalidate = 3600
  * /projects/upcycling/status — public progress snapshot.
  *
  * Single job: "where is the project right now?" Header + production +
- * timeline + a single tail nudge to /businessplan for deep context.
+ * timeline. Outbound navigation is handled by the layout next-step band
+ * (businessplan → status is the reverse lane).
  *
  * Everything that previously lived here (project brief, economics,
  * partners, open questions) moved to its proper home:
@@ -63,12 +64,6 @@ type StatusMessages = {
     intro: string
     labels: Record<MilestoneStatus, string>
     items: { key: MilestoneKey; date: string; label: string }[]
-  }
-  nextLink: {
-    eyebrow: string
-    title: string
-    body: string
-    cta: string
   }
 }
 
@@ -111,7 +106,6 @@ export default async function UpcyclingStatusPage() {
       />
       <Production section={m.production} numbers={status.production} />
       <Timeline section={m.timeline} statuses={status.milestoneStatuses} />
-      <NextLink link={m.nextLink} />
     </article>
   )
 }
@@ -138,24 +132,26 @@ function Header({
   deadlineMessage: string | null
 }) {
   return (
-    <header className="border-b border-subtle bg-surface-base">
-      <div className="mx-auto max-w-5xl px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-          <div className="ui-public-eyebrow">{eyebrow}</div>
-          <time
-            dateTime={snapshotIso}
-            className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
-          >
-            {snapshot.label} {snapshotDateLabel}
-          </time>
-        </div>
-        <h1 className="ui-public-display-lg mt-3">{title}</h1>
-        <p className="ui-public-section-lede mt-4">{intro}</p>
-        {nextDeadline && deadlineMessage && (
-          <DeadlineChip nextDeadline={nextDeadline} message={deadlineMessage} />
-        )}
-      </div>
-    </header>
+    <UpcyclingPageHeader
+      eyebrow={eyebrow}
+      title={title}
+      intro={intro}
+      belowIntro={
+        <>
+          <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+            <time
+              dateTime={snapshotIso}
+              className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary"
+            >
+              {snapshot.label} {snapshotDateLabel}
+            </time>
+          </div>
+          {nextDeadline && deadlineMessage && (
+            <DeadlineChip nextDeadline={nextDeadline} message={deadlineMessage} />
+          )}
+        </>
+      }
+    />
   )
 }
 
@@ -319,31 +315,3 @@ function Timeline({
   )
 }
 
-/* ─── Tail nudge ─────────────────────────────────────────────────
- * Status is a snapshot; the deep narrative (economics, market, risks,
- * partners) lives in /businessplan. This is the single outbound link
- * — exactly one place to go next.
- */
-
-function NextLink({ link }: { link: StatusMessages['nextLink'] }) {
-  return (
-    <section className="bg-canvas">
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <Link
-          href="/projects/upcycling/businessplan"
-          className="group flex flex-col gap-3 rounded-lg border border-subtle bg-surface-base p-6 transition-colors hover:border-default sm:flex-row sm:items-center sm:gap-6"
-        >
-          <div className="flex-1 min-w-0">
-            <div className="ui-public-eyebrow">{link.eyebrow}</div>
-            <p className="mt-2 text-lg font-semibold text-text-primary">{link.title}</p>
-            <p className="mt-1 text-sm text-text-secondary">{link.body}</p>
-          </div>
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-action transition-all group-hover:gap-2 shrink-0">
-            {link.cta}
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
-        </Link>
-      </div>
-    </section>
-  )
-}

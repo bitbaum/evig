@@ -14,6 +14,7 @@ import {
   ChevronDown,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
 
 /**
  * Mobile-first guide renderer.
@@ -163,7 +164,7 @@ export function GuideBody({ data }: { data: GuideData }) {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-4 sm:pt-10 pb-10 sm:pb-16">
           {/* Back link with 44px tap target on phone */}
           <Link
-            href="/projects/upcycling"
+            href={UPCYCLING_ROUTES.landing}
             className="inline-flex items-center gap-2 -ml-2 px-2 min-h-[44px] sm:min-h-[36px] py-2 text-xs font-mono uppercase tracking-[0.18em] text-text-tertiary hover:text-text-primary"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />

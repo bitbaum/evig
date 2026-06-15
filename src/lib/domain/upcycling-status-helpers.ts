@@ -1,4 +1,5 @@
 import type { MilestoneKey } from '@/data/upcycling-status'
+import { UPCYCLING_GUIDE_PATH_PREFIX, UPCYCLING_ROUTES } from '@/config/upcycling-routes'
 
 export interface MilestoneTimelineItem {
   key: MilestoneKey
@@ -69,13 +70,13 @@ export function formatSnapshotDate(iso: string, locale: string): string {
 
 /** Sub-nav active state — guide pages live under build-your-own in IA. */
 export function isUpcyclingSubNavActive(pathname: string, href: string): boolean {
-  if (href === '/projects/upcycling') {
-    return pathname === '/projects/upcycling'
+  if (href === UPCYCLING_ROUTES.landing) {
+    return pathname === UPCYCLING_ROUTES.landing
   }
-  if (href === '/projects/upcycling/build-your-own') {
+  if (href === UPCYCLING_ROUTES.buildYourOwn) {
     return (
       pathname.startsWith(href)
-      || pathname.startsWith('/projects/upcycling/lenovo')
+      || pathname.startsWith(UPCYCLING_GUIDE_PATH_PREFIX)
     )
   }
   return pathname.startsWith(href)

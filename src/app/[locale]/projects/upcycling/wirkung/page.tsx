@@ -1,6 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 import { ArrowRight, ExternalLink, BookOpen } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
+import { UpcyclingPageHeader } from '../UpcyclingPageHeader'
 import { ogFor } from '../og-images'
 
 /**
@@ -89,34 +91,7 @@ export default async function UpcyclingWirkungPage() {
       <Scientific section={m.scientific} />
       <OpenHardware section={m.openHardware} />
       <Circularity section={m.circularity} />
-      <NextSteps section={m.nextSteps} />
     </article>
-  )
-}
-
-/* ─── 5. Next steps — actionable exit ─────────────────────────────── */
-
-function NextSteps({ section }: { section: WirkungCopy['nextSteps'] }) {
-  return (
-    <section className="border-t border-subtle bg-canvas">
-      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
-        <div className="ui-public-eyebrow">{section.eyebrow}</div>
-        <h2 className="ui-public-display-md mt-3">{section.title}</h2>
-        <p className="ui-public-section-lede mx-auto mt-4">{section.body}</p>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/projects/upcycling/businessplan" className="ui-public-cta">
-            {section.primary}
-          </Link>
-          <Link
-            href="/projects/upcycling/build-your-own"
-            className="ui-public-cta-ghost inline-flex items-center gap-2"
-          >
-            {section.secondary}
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
-    </section>
   )
 }
 
@@ -131,15 +106,7 @@ function Header({
   title: string
   intro: string
 }) {
-  return (
-    <header className="border-b border-subtle bg-surface-base">
-      <div className="mx-auto max-w-5xl px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
-        <div className="ui-public-eyebrow">{eyebrow}</div>
-        <h1 className="ui-public-display-lg mt-3">{title}</h1>
-        <p className="ui-public-section-lede mt-4 max-w-3xl">{intro}</p>
-      </div>
-    </header>
-  )
+  return <UpcyclingPageHeader eyebrow={eyebrow} title={title} intro={intro} />
 }
 
 /* ─── 1. Environment ────────────────────────────────────────────── */
@@ -288,7 +255,7 @@ function OpenHardware({ section }: { section: WirkungCopy['openHardware'] }) {
 
         <div className="mt-8 flex flex-wrap items-center gap-4 sm:gap-6">
           <Link
-            href="/projects/upcycling/build-your-own"
+            href={UPCYCLING_ROUTES.buildYourOwn}
             className="inline-flex items-center gap-2 text-sm font-semibold text-action hover:gap-3 transition-all"
           >
             <BookOpen className="h-4 w-4" aria-hidden="true" />

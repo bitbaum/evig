@@ -1,4 +1,11 @@
 import { getTranslations } from 'next-intl/server'
+import {
+  UPCYCLING_NAV_LABEL_KEYS,
+  UPCYCLING_NAV_ROUTE_KEYS,
+  UPCYCLING_ROUTES,
+} from '@/config/upcycling-routes'
+import { UpcyclingInterestBand } from './UpcyclingInterestBand'
+import { UpcyclingNextStepBand } from './UpcyclingNextStepBand'
 import { UpcyclingSubNav } from './UpcyclingSubNav'
 
 /**
@@ -22,6 +29,12 @@ type SubNavMessages = {
   status: string
 }
 
+type InterestMessages = {
+  eyebrow: string
+  heading: string
+  body: string
+}
+
 export default async function UpcyclingLayout({
   children,
 }: {
@@ -29,23 +42,27 @@ export default async function UpcyclingLayout({
 }) {
   const t = await getTranslations('projects')
   const nav = t.raw('upcycling.nav') as SubNavMessages
+  const interest = t.raw('upcycling.interestCta') as InterestMessages
+  const nextStep = t.raw('upcycling.nextStep') as Record<
+    string,
+    { eyebrow: string; title: string; body: string; cta: string }
+  >
 
-  // Nav order matches reading depth: visual / exploratory pages first,
-  // then evidence pages (wirkung → businessplan → status snapshot).
-  const items = [
-    { href: '/projects/upcycling',                label: nav.overview },
-    { href: '/projects/upcycling/applications',   label: nav.applications },
-    { href: '/projects/upcycling/gallery',        label: nav.gallery },
-    { href: '/projects/upcycling/build-your-own', label: nav.buildYourOwn },
-    { href: '/projects/upcycling/wirkung',        label: nav.wirkung },
-    { href: '/projects/upcycling/businessplan',   label: nav.businessPlan },
-    { href: '/projects/upcycling/status',         label: nav.status },
-  ]
+  const items = UPCYCLING_NAV_ROUTE_KEYS.map((routeKey) => ({
+    href: UPCYCLING_ROUTES[routeKey],
+    label: nav[UPCYCLING_NAV_LABEL_KEYS[routeKey]],
+  }))
 
   return (
     <>
       <UpcyclingSubNav items={items} brand={nav.brand} />
       {children}
+      <UpcyclingNextStepBand messages={nextStep} />
+      <UpcyclingInterestBand
+        eyebrow={interest.eyebrow}
+        heading={interest.heading}
+        body={interest.body}
+      />
     </>
   )
 }

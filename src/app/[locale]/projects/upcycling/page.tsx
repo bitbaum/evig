@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
+import Image from 'next/image'
 import {
-  Lightbulb,
   ArrowRight,
   Layers,
   Image as ImageIcon,
@@ -8,13 +8,18 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
 import {
-  ProjectHero,
+  UPCYCLING_EXPLORE_ROUTE_KEYS,
+  UPCYCLING_ROUTES,
+} from '@/config/upcycling-routes'
+import { orderPublishedGuides, UPCYCLING_GUIDE_ROUTES } from '@/data/upcycling-guides'
+import {
   ProjectNeedsSection,
   type NeedsSectionLabels,
 } from '@/components/projects'
-import type { ProjectPageConfig } from '@/components/projects'
 import { UpcyclingInterestCTA } from './UpcyclingInterestCTA'
+import { UpcyclingLandingHero } from './UpcyclingLandingHero'
 import { ogFor } from './og-images'
 
 type GuideItem = {
@@ -33,23 +38,39 @@ type ExploreCard = {
   cta: string
 }
 
+type EvidenceCardCopy = { title: string; body: string; cta: string }
+
 type PageMessages = {
   meta: { title: string; description: string }
-  hero: { title: string; description: string; cta1: string; cta2: string }
+  hero: {
+    title: string
+    description: string
+    cta1: string
+    cta2: string
+    photoAlt: string
+  }
   interestCta: { eyebrow: string; heading: string; body: string }
-  briefLink: { eyebrow: string; title: string; body: string; cta: string }
+  evidence: {
+    eyebrow: string
+    status: EvidenceCardCopy
+    businessplan: EvidenceCardCopy
+  }
   guides: {
     eyebrow: string
     title: string
     intro: string
     openCta: string
     items: GuideItem[]
-    /** Rendered as a subdued companion card when only one guide exists yet —
-     *  signals progress without inventing a fake guide. */
     moreComing: { title: string; body: string; cta: string }
   }
   explore: { eyebrow: string; title: string; intro: string; cards: ExploreCard[] }
   needs: NeedsSectionLabels
+}
+
+const EXPLORE_ICONS: Record<ExploreCard['key'], LucideIcon> = {
+  applications: Layers,
+  gallery: ImageIcon,
+  buildYourOwn: Wrench,
 }
 
 export async function generateMetadata() {
@@ -66,60 +87,57 @@ export default async function UpcyclingPage() {
   const t = await getTranslations('projects')
   const p = t.raw('upcycling') as PageMessages
 
-  const config: ProjectPageConfig = {
-    hero: {
-      title: p.hero.title,
-      description: p.hero.description,
-      icon: Lightbulb,
-      ctas: [
-        // Primary CTA leads INTO the mini-site (applications is the most
-        // visual sub-page). Users were missing the sub-experience entirely
-        // when both hero CTAs sent them off the project page.
-        { text: p.hero.cta1, href: '/projects/upcycling/applications', variant: 'primary' },
-        { text: p.hero.cta2, href: '/get-involved', variant: 'outline' },
-      ],
-    },
-    sections: [],
-    metadata: { title: p.meta.title, description: p.meta.description },
-  }
-
-  // Page order: Hero → Explore (where to go) → Guides (what we've published) →
-  // Needs (how to help) → Interest (stay informed) → Status link (the
-  // funder-grade proof). Removed: IdeasSection (duplicated /wirkung),
-  // AiBrainstormSection (read as scaffolding, cited fabricated partners),
-  // generic 3-action CallToAction at the bottom (duplicated Needs).
   return (
     <div className="min-h-screen">
-      {config.hero && <ProjectHero hero={config.hero} />}
+      <UpcyclingLandingHero
+        title={p.hero.title}
+        description={p.hero.description}
+        cta1={p.hero.cta1}
+        cta2={p.hero.cta2}
+        photoAlt={p.hero.photoAlt}
+      />
       <ExploreSection explore={p.explore} />
       <GuidesSection guides={p.guides} />
       <ProjectNeedsSection slug="upcycling" labels={p.needs} />
       <InterestSection interestCta={p.interestCta} />
-      <BriefLink brief={p.briefLink} />
+      <EvidenceSection evidence={p.evidence} />
     </div>
   )
 }
 
-function BriefLink({ brief }: { brief: PageMessages['briefLink'] }) {
+function EvidenceSection({ evidence }: { evidence: PageMessages['evidence'] }) {
   return (
-    <section className="border-t border-subtle bg-canvas py-12 sm:py-14">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/projects/upcycling/businessplan"
-          className="group flex flex-col gap-3 rounded-lg border border-subtle bg-surface-base p-6 transition-colors hover:border-default sm:flex-row sm:items-center sm:gap-6"
-        >
-          <div className="flex-1">
-            <div className="ui-public-eyebrow">{brief.eyebrow}</div>
-            <p className="mt-2 text-lg font-semibold text-text-primary">{brief.title}</p>
-            <p className="mt-1 text-sm text-text-secondary">{brief.body}</p>
-          </div>
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all shrink-0">
-            {brief.cta}
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
-        </Link>
+    <section className="border-t border-subtle bg-surface-raised py-12 sm:py-14">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="ui-public-eyebrow">{evidence.eyebrow}</div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <EvidenceCard
+            href={UPCYCLING_ROUTES.status}
+            copy={evidence.status}
+          />
+          <EvidenceCard
+            href={UPCYCLING_ROUTES.businessplan}
+            copy={evidence.businessplan}
+          />
+        </div>
       </div>
     </section>
+  )
+}
+
+function EvidenceCard({ href, copy }: { href: string; copy: EvidenceCardCopy }) {
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col gap-2 rounded-lg border border-subtle bg-surface-base p-5 transition-colors hover:border-default"
+    >
+      <p className="text-base font-semibold text-text-primary">{copy.title}</p>
+      <p className="text-sm text-text-secondary">{copy.body}</p>
+      <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
+        {copy.cta}
+        <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+      </span>
+    </Link>
   )
 }
 
@@ -138,15 +156,6 @@ function InterestSection({ interestCta }: { interestCta: PageMessages['interestC
   )
 }
 
-const EXPLORE_META: Record<
-  ExploreCard['key'],
-  { href: string; icon: LucideIcon }
-> = {
-  applications: { href: '/projects/upcycling/applications',   icon: Layers },
-  gallery:      { href: '/projects/upcycling/gallery',        icon: ImageIcon },
-  buildYourOwn: { href: '/projects/upcycling/build-your-own', icon: Wrench },
-}
-
 function ExploreSection({ explore }: { explore: PageMessages['explore'] }) {
   if (!explore?.cards?.length) return null
   return (
@@ -160,24 +169,36 @@ function ExploreSection({ explore }: { explore: PageMessages['explore'] }) {
 
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
           {explore.cards.map((card) => {
-            const meta = EXPLORE_META[card.key]
-            if (!meta) return null
-            const Icon = meta.icon
+            if (!UPCYCLING_EXPLORE_ROUTE_KEYS.includes(card.key)) return null
+            const Icon = EXPLORE_ICONS[card.key]
+            const href = UPCYCLING_ROUTES[card.key]
+            const imageSrc = UPCYCLING_ASSETS.explore[card.key]
             return (
               <Link
                 key={card.key}
-                href={meta.href}
-                className="group flex flex-col rounded-lg border border-subtle bg-surface-raised p-6 transition-colors hover:border-default"
+                href={href}
+                className="group flex flex-col overflow-hidden rounded-lg border border-subtle bg-surface-raised transition-colors hover:border-default"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-action-muted/15">
-                  <Icon className="h-5 w-5 text-action" aria-hidden="true" />
+                <div className="relative aspect-[16/10] border-b border-subtle bg-surface-base">
+                  <Image
+                    src={imageSrc}
+                    alt=""
+                    fill
+                    sizes="(min-width: 640px) 30vw, 100vw"
+                    className="object-cover"
+                  />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-text-primary">{card.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{card.description}</p>
-                <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
-                  {card.cta}
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </span>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-action-muted/15">
+                    <Icon className="h-5 w-5 text-action" aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-text-primary">{card.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">{card.description}</p>
+                  <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
+                    {card.cta}
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </span>
+                </div>
               </Link>
             )
           })}
@@ -188,11 +209,9 @@ function ExploreSection({ explore }: { explore: PageMessages['explore'] }) {
 }
 
 function GuidesSection({ guides }: { guides: PageMessages['guides'] }) {
-  if (!guides?.items?.length) return null
-  // Single-guide state: pair the real guide with a "more coming" companion
-  // card so visitors see momentum (not "only one thing exists") — honest
-  // about what's published, transparent about what's queued.
-  const isSingle = guides.items.length === 1
+  const items = orderPublishedGuides(guides?.items ?? [])
+  if (!items.length) return null
+  const isSingle = items.length === 1
   return (
     <section className="bg-canvas border-t border-subtle py-16 sm:py-20">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -201,23 +220,40 @@ function GuidesSection({ guides }: { guides: PageMessages['guides'] }) {
         <p className="ui-public-section-lede mt-3">{guides.intro}</p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {guides.items.map((guide) => (
-            <Link
-              key={guide.slug}
-              href={guide.href}
-              className="group flex flex-col rounded-lg border border-subtle bg-surface-base p-6 transition-colors hover:border-default"
-            >
-              <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-                {guide.publishedAt}
-              </div>
-              <h3 className="mt-3 text-lg font-semibold text-text-primary">{guide.model}</h3>
-              <p className="mt-2 text-sm text-text-secondary">{guide.summary}</p>
-              <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
-                {guides.openCta}
-                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-              </span>
-            </Link>
-          ))}
+          {items.map((guide) => {
+            const href = UPCYCLING_GUIDE_ROUTES[guide.slug as keyof typeof UPCYCLING_GUIDE_ROUTES] ?? guide.href
+            const showPhoto = guide.slug === 'lenovo-l2251pwd'
+            return (
+              <Link
+                key={guide.slug}
+                href={href}
+                className="group flex flex-col overflow-hidden rounded-lg border border-subtle bg-surface-base transition-colors hover:border-default"
+              >
+                {showPhoto && (
+                  <div className="relative aspect-[16/10] border-b border-subtle">
+                    <Image
+                      src={UPCYCLING_ASSETS.gallery.lenovoPoster}
+                      alt=""
+                      fill
+                      sizes="(min-width: 640px) 45vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+                    {guide.publishedAt}
+                  </div>
+                  <h3 className="mt-3 text-lg font-semibold text-text-primary">{guide.model}</h3>
+                  <p className="mt-2 text-sm text-text-secondary">{guide.summary}</p>
+                  <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action group-hover:gap-2 transition-all">
+                    {guides.openCta}
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </span>
+                </div>
+              </Link>
+            )
+          })}
           {isSingle && guides.moreComing && (
             <div className="flex flex-col rounded-lg border border-dashed border-subtle bg-canvas p-6">
               <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
@@ -225,7 +261,7 @@ function GuidesSection({ guides }: { guides: PageMessages['guides'] }) {
               </div>
               <p className="mt-3 text-sm text-text-secondary">{guides.moreComing.body}</p>
               <Link
-                href="/projects/upcycling/build-your-own"
+                href={UPCYCLING_ROUTES.buildYourOwn}
                 className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-action hover:gap-2 transition-all"
               >
                 {guides.moreComing.cta}

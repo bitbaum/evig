@@ -12,6 +12,7 @@ import Heading from '@/components/ui/Heading'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import type { NavigationItem } from '@/config/navigation'
 import type { NavigationGroup } from './utils'
+import { navItemDescription, navItemLabel, type NavTranslator } from './nav-i18n'
 
 interface MegaMenuContentProps {
   groups: NavigationGroup[]
@@ -31,11 +32,10 @@ export function MegaMenuContent({
   return (
     <div
       className={cn(
-        "mt-2 bg-surface-base rounded-2xl shadow-2xl shadow-neutral-200/50 dark:shadow-black/40",
-        "border border-subtle dark:border-white/6",
-        "overflow-hidden",
-        "animate-in fade-in slide-in-from-top-2 duration-200",
-        hasMultipleGroups ? "p-0" : "p-2"
+        'mt-2 bg-surface-base rounded-2xl border border-subtle',
+        'overflow-hidden',
+        'animate-in fade-in slide-in-from-top-2 duration-200',
+        hasMultipleGroups ? 'p-0' : 'p-2',
       )}
     >
       {hasMultipleGroups ? (
@@ -50,7 +50,12 @@ export function MegaMenuContent({
 type TFn = ReturnType<typeof useTranslations<'nav'>>
 
 function getLabel(item: NavigationItem, t: TFn): string {
-  return item.nameKey ? t(item.nameKey as never) : item.name
+  return item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
+}
+
+function getDescription(item: NavigationItem, t: TFn): string | undefined {
+  if (item.descriptionKey) return navItemDescription(t as NavTranslator, item.descriptionKey)
+  return item.description
 }
 
 function MultiColumnLayout({
@@ -136,7 +141,7 @@ function FeaturedCard({
           </div>
           {(item.descriptionKey || item.description) && (
             <p className="mt-1 text-sm text-text-secondary line-clamp-2">
-              {item.descriptionKey ? t(`items.${item.descriptionKey}` as never) : item.description}
+              {getDescription(item, t)}
             </p>
           )}
         </div>
@@ -159,7 +164,8 @@ function SingleColumnLayout({
   // hero card on top so the menu has a clear focal point. Rest of the list
   // follows below.
   const featured = items.find((it) => it.featured)
-  const rest = items.filter((it) => !it.featured)
+  const footerLink = items.find((it) => it.nameKey === 'sectionAllProjects')
+  const rest = items.filter((it) => !it.featured && it.nameKey !== 'sectionAllProjects')
   return (
     <div className={cn(featured ? 'p-4' : 'py-2')}>
       {featured && (
@@ -188,14 +194,26 @@ function SingleColumnLayout({
               {subItem.external && <ExternalLink className="w-3 h-3 text-text-secondary" />}
             </div>
             {(subItem.descriptionKey || subItem.description) && (
-              <p className="mt-0.5 text-sm text-text-secondary">
-                {subItem.descriptionKey ? t(`items.${subItem.descriptionKey}` as never) : subItem.description}
+              <p className="mt-0.5 text-sm text-text-secondary line-clamp-2">
+                {getDescription(subItem, t)}
               </p>
             )}
           </div>
           <ArrowRight className="w-4 h-4 text-text-muted dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
         </Link>
       ))}
+      {footerLink && (
+        <div className="mt-2 border-t border-subtle pt-2 px-2">
+          <Link
+            href={footerLink.href}
+            onClick={onClose}
+            className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary hover:text-action hover:bg-surface-raised transition-colors"
+          >
+            {getLabel(footerLink, t)}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
@@ -230,7 +248,7 @@ function MenuLink({
         </div>
         {(item.descriptionKey || item.description) && (
           <p className="mt-1 text-sm text-text-secondary line-clamp-2">
-            {item.descriptionKey ? t(`items.${item.descriptionKey}` as never) : item.description}
+            {getDescription(item, t)}
           </p>
         )}
       </div>

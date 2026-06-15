@@ -1,7 +1,11 @@
 import { getTranslations } from 'next-intl/server'
+import Image from 'next/image'
 import { Github, ArrowRight, ExternalLink } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import { MonitorLampPlaceholder } from '../MonitorLampPlaceholder'
+import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
+import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
+import { orderPublishedGuides } from '@/data/upcycling-guides'
+import { UpcyclingPageHeader } from '../UpcyclingPageHeader'
 import { ogFor } from '../og-images'
 
 /**
@@ -70,43 +74,46 @@ export async function generateMetadata() {
 export default async function UpcyclingBuildYourOwnPage() {
   const t = await getTranslations('projects')
   const m = t.raw('upcycling.buildYourOwn') as PageMessages
+  const guides = orderPublishedGuides(m.guides.items)
 
   return (
     <article className="bg-canvas">
-      <header className="border-b border-subtle bg-surface-base">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-12 pb-10 sm:pt-16 sm:pb-14">
-          <div className="grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-center">
-            <div>
-              <div className="ui-public-eyebrow">{m.eyebrow}</div>
-              <h1 className="ui-public-display-lg mt-3">{m.title}</h1>
-              <p className="ui-public-section-lede mt-4">{m.intro}</p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href={m.source.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ui-public-cta inline-flex items-center gap-2"
-                >
-                  <Github className="h-4 w-4" aria-hidden="true" />
-                  {m.source.repoCta}
-                </a>
-                <Link
-                  href="/projects/upcycling/gallery"
-                  className="ui-public-cta-ghost inline-flex items-center gap-2"
-                >
-                  {m.guides.openCta}
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="aspect-[4/3] overflow-hidden rounded-lg border border-subtle">
-              <MonitorLampPlaceholder variant="cool" seed={7} className="h-full w-full" />
-            </div>
+      <UpcyclingPageHeader
+        eyebrow={m.eyebrow}
+        title={m.title}
+        intro={m.intro}
+        belowIntro={
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href={m.source.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ui-public-cta inline-flex items-center gap-2"
+            >
+              <Github className="h-4 w-4" aria-hidden="true" />
+              {m.source.repoCta}
+            </a>
+            <Link
+              href={UPCYCLING_ROUTES.gallery}
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
+            >
+              {m.guides.openCta}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
-        </div>
-      </header>
+        }
+        media={
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-subtle">
+            <Image
+              src={UPCYCLING_ASSETS.lenovoGuide.stepFrameRemoved}
+              alt=""
+              fill
+              sizes="(min-width: 768px) 40vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+        }
+      />
 
       {/* Why open — the philosophical core in one paragraph. The audit
           flagged the previous treatment (pull-quote + 3 numbered pillars +
@@ -128,11 +135,11 @@ export default async function UpcyclingBuildYourOwnPage() {
           <h2 className="ui-public-display-md">{m.guides.title}</h2>
           <p className="ui-public-section-lede mt-4 max-w-3xl">{m.guides.intro}</p>
 
-          {m.guides.items.length === 0 ? (
+          {guides.length === 0 ? (
             <p className="mt-10 text-sm text-text-tertiary">{m.guides.empty}</p>
           ) : (
             <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-              {m.guides.items.map((g) => (
+              {guides.map((g) => (
                 <li key={g.slug}>
                   <Link
                     href={g.href}
@@ -157,7 +164,7 @@ export default async function UpcyclingBuildYourOwnPage() {
                   </Link>
                 </li>
               ))}
-              {m.guides.items.length === 1 && m.guides.moreComing && (
+              {guides.length === 1 && m.guides.moreComing && (
                 <li>
                   <div className="flex h-full flex-col rounded-lg border border-dashed border-subtle bg-canvas p-6">
                     <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">

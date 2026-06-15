@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-06-15
-last_modified_summary: Added auth stack (JWT sessions, shared admin login) and onboarding checklist pointers
+last_modified_summary: Added Monitor-Upcycling mini-site SSOT pointer; nav i18n items.* convention
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -86,5 +86,11 @@ scripts/db/migrations/    # Migration scripts (PROTECTED)
 - **Notifications:** central `notifyUsers()` pipeline — see `docs/ARCHITECTURE_DEBT.md` (#2 closed)
 
 ---
+
+## Monitor-Upcycling mini-site
+
+Public sub-site at `/projects/upcycling/*`. Routes, reading flow, gallery, business plan i18n, and scripts: **`docs/projects/upcycling.md`**.
+
+Nav dropdown labels for projects live under **`nav.items.*`** in locale files; use `nav-i18n.ts` helpers in header components.
 
 **Last Updated**: 2026-06-15

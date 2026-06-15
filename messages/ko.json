@@ -4037,7 +4037,8 @@
         "title": "Monitor-Upcycling",
         "description": "저희는 폐기된 컴퓨터 모니터를 고품질의 실용적인 조명으로 변모시킵니다. 전자 폐기물을 방지하고, 사회적 기업에 의미 있는 일자리를 창출하며, 스위스 시장을 위한 순환 가능한 제품을 개발하는 Revamp-IT 의 혁신적인 시범 프로젝트입니다.",
         "cta1": "프로젝트 둘러보기",
-        "cta2": "파트너 되기"
+        "cta2": "파트너 되기",
+        "photoAlt": "완성된 모니터 램프(Lenovo L2251pwd), Werkraum 4 공방, 2026년 5월"
       },
       "needs": {
         "title": "필요한 것들",
@@ -4115,7 +4116,7 @@
           {
             "key": "gallery",
             "title": "갤러리",
-            "description": "모든 모니터 모델과 스타일에 걸쳐 이미 개조된 조명들 — 용도별로 필터링 가능합니다.",
+            "description": "실사로 기록한 개조 — 대기 중인 모델도 명확히 표시.",
             "cta": "갤러리 열기"
           },
           {
@@ -4173,7 +4174,7 @@
       "gallery": {
         "meta": {
           "title": "갤러리 | 모니터 업사이클링 | RevampIT",
-          "description": "개조된 모니터 조명 갤러리 — 기능적인 작업등에서 예술 작품까지. 활용 분야별로 필터링할 수 있습니다."
+          "description": "업사이클 모니터 램프 갤러리 — 실사 또는 대기 표시."
         },
         "eyebrow": "갤러리 · 모니터 업사이클링",
         "title": "이미 만들어진 작품들",
@@ -4192,7 +4193,8 @@
           "title": "당신이 촬영 — 우리는 계속 기록합니다.",
           "body": "우리가 직접 촬영하지 않은 모델은 SVG 스케치로 남아 있습니다. 취리히에서 작업장 사진 촬영을 즐기시는 분, 연락 주세요.",
           "cta": "함께하기"
-        }
+        },
+        "statsLine": "기록 {documented} · 대기 {queued}"
       },
       "buildYourOwn": {
         "meta": {
@@ -4457,7 +4459,7 @@
             {
               "key": "scale",
               "date": "2027년",
-              "label": "확장 단계 II — 모델 라인업 및 유통"
+              "label": "확대 2단계 — 추가 모델 및 판매"
             }
           ]
         },
@@ -4485,12 +4487,6 @@
         "successTitle": "등록되었습니다.",
         "successBody": "다음 마일스톤 때 메일을 보내드립니다."
       },
-      "briefLink": {
-        "eyebrow": "프로젝트 브리핑",
-        "title": "후원자 및 파트너를 위한 종합 브리핑",
-        "body": "접근 방식, 다음 단계, 미해결 질문(경제성 포함), 오픈 소스 코드 — 모두 사업 계획에 있습니다.",
-        "cta": "종합 브리핑 열기"
-      },
       "businessPlan": {
         "meta": {
           "title": "사업 계획 — 모니터 업사이클을 통한 벽면·천장 조명",
@@ -4499,6 +4495,10 @@
         "nav": {
           "label": "목차",
           "items": [
+            {
+              "id": "zusammenfassung",
+              "label": "요약"
+            },
             {
               "id": "status",
               "label": "현재 상태"
@@ -4554,9 +4554,9 @@
           ]
         },
         "hero": {
-          "eyebrow": "사업 계획",
+          "eyebrow": "사업 계획 · 2단계",
           "title": "폐기된 컴퓨터 모니터로 만드는 벽면·천장 조명.",
-          "intro": "현재 스위스 IT 재활용 흐름으로 들어가는 화면들의 여전히 작동하는 LCD 백라이트를 벽면·천장 조명으로 개조합니다. 이 페이지는 마케팅 서사가 아닌, 2026년 6월 시점에 실제로 존재하는 것과 그 출처를 담은 정직한 근거 버전입니다.",
+          "intro": "자금 제공자, 파트너, 자문 위원회를 위해 현황, 제품, 시장, 재정, 미해결 질문을 정리한 문서입니다. 모든 수치와 이름은 출처가 있습니다 — 마케팅 버전이 아닙니다.",
           "heroImageAlt": "벽면 패널로 점등된 개조 후 Lenovo L2251pwd 모니터, 2026년 5월 28일 작업대 촬영",
           "heroVideo": "/projects/upcycling/businessplan/hero-finished.mp4",
           "heroPoster": "/projects/upcycling/businessplan/hero-finished-poster.jpg"
@@ -4564,7 +4564,7 @@
         "status": {
           "eyebrow": "현재 상태 · 2026년 6월",
           "title": "프로젝트의 현재 위치.",
-          "intro": "1단계 완료, 2단계 마무리 단계. ZHAW의 학술 평가는 병행 진행 중이며, 보고서는 2026년 6월 18일자입니다.",
+          "intro": "1단계 완료, 2단계 마무리 단계. 소량 생산과 파일럿 설치 진행 중; ZHAW LCA 보고서 마무리 중(제출 18.06.2026).",
           "kpis": [
             {
               "label": "단계 상태",
@@ -4670,68 +4670,33 @@
         },
         "lieferanten": {
           "eyebrow": "공급 · 자재 흐름",
-          "title": "투입 자재는 이미 확보 — Euro 팔레트 150개를 보관 중.",
-          "intro": "프로젝트 시작 전부터 Revamp-IT는 폐기 IT 하드웨어를 체계적으로 수집해 왔습니다. 2023년 기준 Euro 팔레트 150개를 보유하고 있으며, 그중 약 30개에 업사이클 대상 화면이 있습니다.",
+          "title": "원자재: 퇴역 모니터.",
+          "intro": "LED 백라이트가 있는 작동 화면(보통 19–24인치)이 필요합니다. Revamp-IT는 취리히에서 퇴역 IT 하드웨어를 수집; 현재 모니터 재고로 2단계 소량 생산 가능.",
           "stockBreakdown": {
-            "title": "창고에 무엇이 있는가",
-            "subtitle": "수집된 Euro 팔레트 150개 분석",
+            "title": "현장 관련 장비",
+            "subtitle": "모니터 업사이클링 중심 — 전체 재고 조사 아님",
             "rows": [
               {
-                "label": "다양한 크기·연식의 완성 PC",
-                "value": "ca. 40 Paletten"
-              },
-              {
-                "label": "프린터·복합기",
-                "value": "ca. 30 Paletten"
-              },
-              {
-                "label": "모니터·TV·올인원",
-                "value": "ca. 30 Paletten",
+                "label": "모니터, TV, 올인원",
+                "value": "소량 생산 충당",
                 "emphasis": true,
-                "note": "← 조명 업사이클의 투입 자재"
+                "note": "← 직접 투입"
               },
               {
-                "label": "서버 랙·서버 케이스",
-                "value": "ca. 15 Paletten"
-              },
-              {
-                "label": "씬 클라이언트·미니 컴퓨터",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "PC 케이스",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "케이블",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "키보드",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "스캐너",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "네트워크 장비",
-                "value": "ca. 5 Paletten"
-              },
-              {
-                "label": "기타 장비·부품",
-                "value": "ca. 5 Paletten"
+                "label": "선호 기술",
+                "value": "LED 백라이트",
+                "note": "밝기 높음, 개조 공수 적음"
               }
             ],
-            "cite": "cit06_qa_swico_2023"
+            "cite": "cit04_kurzbericht_e1"
           },
           "channels": {
             "title": "앞으로의 화면 공급원",
             "items": [
               {
                 "label": "revamp-it 보유 재고",
-                "body": "모니터·TV·올인원 30 팔레트가 이미 정리·분류 — 2단계 소량 생산에 충분합니다.",
-                "cite": "cit06_qa_swico_2023"
+                "body": "현장에서 수집·분류한 모니터 재고로 2단계 소량 생산 충당.",
+                "cite": "cit04_kurzbericht_e1"
               },
               {
                 "label": "ERZ Entsorgung + Recycling Zürich",
@@ -4743,7 +4708,7 @@
               {
                 "label": "Swico Recycling 시스템 (스케일업 옵션)",
                 "body": "비전: 스위스 재활용으로 들어오는 모든 모니터와 TV를 자재 회수 전에 업사이클 적합성 사전 검사.",
-                "cite": "cit07_klimast_2023",
+                "cite": "cit14_swico_recycling",
                 "linkLabel": "Swico Recycling",
                 "linkUrl": "https://www.swico.ch/de/recycling/"
               }
@@ -4820,27 +4785,27 @@
         "kunden": {
           "eyebrow": "고객 · 판매",
           "title": "모니터로 만든 벽면·천장 조명을 누가 살까.",
-          "intro": "1단계 작업과 Swico 회신(2023-09-28)에서 네 개의 타깃 세그먼트가 도출되었습니다 — 디자이너 시장이 아니라 전문 조명 구매 행동.",
+          "intro": "1단계 작업과 잠재 구매자 대화에서 네 가지 세그먼트 — 전문 조명 조달이지 디자이너 시장이 아님.",
           "segments": [
             {
               "label": "B2B 직판 — 대규모 사무실 보유 기업",
               "body": "은행, 보험사, 공공 행정. 계단실과 부속 공간 시범 설치 후 구매 카탈로그 편입.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "label": "가구·인테리어 기업",
               "body": "스위스 인테리어 업체와 협업해 업사이클 조명을 라인업에 추가 — 스토리이자 아시아 대량 생산의 지속 가능한 대안으로.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "label": "DIY 매장",
               "body": "Brilliant 패널처럼 기존 유통 채널을 통해. 마케팅 부담 크고 마진 좁음 — 추후 스케일업 옵션.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             },
             {
               "label": "부동산 회사 (리모델링/신축)",
               "body": "리모델링/신축 시 신규 제품 대신 업사이클 조명 직접 사용. 자산 관리 회사·건축 사무소를 통한 접근.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             }
           ],
           "pilotPlan": {
@@ -4985,7 +4950,7 @@
                 "date": "18.05. – 24.05.2026"
               },
               {
-                "label": "결과 발표",
+                "label": "결과 발표(완료)",
                 "date": "25.05. – 31.05.2026"
               },
               {
@@ -5034,7 +4999,7 @@
         "partner": {
           "eyebrow": "파트너",
           "title": "누가 무엇을 기여하는가 — 확인 가능한 이름만.",
-          "intro": "이 목록은 프로젝트 문서에 이름으로 등장하는 조직과 개인만 포함합니다. 가상의 또는 추측에 의한 파트너는 표시하지 않습니다.",
+          "intro": "2단계에서 실제 기여하는 조직과 사람 — 2023년 구 신청 서류의 이름은 제외.",
           "groups": [
             {
               "title": "주요 파트너",
@@ -5047,7 +5012,7 @@
                 {
                   "name": "Werkraum 4 (Stiftung zsge)",
                   "role": "생산 파트너. 동행 지원하에 클라이언트를 고용. 라벨 recyclingArt + lerski.",
-                  "cite": "cit07_klimast_2023",
+                  "cite": "cit19_werkraum4",
                   "linkLabel": "werkraum4.ch",
                   "linkUrl": "https://www.werkraum4.ch"
                 },
@@ -5093,7 +5058,7 @@
                 {
                   "name": "Swico Recycling",
                   "role": "스위스 전국 수거 시스템. 자재 사전 선별의 스케일업 파트너.",
-                  "cite": "cit07_klimast_2023",
+                  "cite": "cit14_swico_recycling",
                   "linkLabel": "swico.ch/de/recycling",
                   "linkUrl": "https://www.swico.ch/de/recycling/"
                 }
@@ -5148,53 +5113,6 @@
                   "cite": "cit01_innolink"
                 }
               ]
-            },
-            {
-              "title": "외부 전문가 네트워크",
-              "intro": "2023년 Klimastiftung 지원서 — 수리 및 오픈 하드웨어 커뮤니티.",
-              "items": [
-                {
-                  "name": "Balz Krügel (Reparabel)",
-                  "role": "수리 전문성",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Roland Bamert (Barologic / Revita repair)",
-                  "role": "전기 공학 + 적합성",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Rolf Huber (Reparaturia, Oerlikon)",
-                  "role": "수리 커뮤니티",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Karel Kulhavy",
-                  "role": "OpenSource Hardware Ronja 개발자",
-                  "cite": "cit07_klimast_2023",
-                  "linkLabel": "ronja.twibright.com",
-                  "linkUrl": "http://ronja.twibright.com"
-                },
-                {
-                  "name": "Hasan Hüseyin Isik",
-                  "role": "메카트로닉스 혁신",
-                  "cite": "cit07_klimast_2023",
-                  "linkLabel": "isikinnovations.com",
-                  "linkUrl": "https://isikinnovations.com"
-                },
-                {
-                  "name": "Martin Flüeler (Winnetui Atelier-Werkstatt Schwerzenbach)",
-                  "role": "오픈 아틀리에 워크숍",
-                  "cite": "cit07_klimast_2023"
-                },
-                {
-                  "name": "Schweizerische Gesellschaft für Mechatronische Kunst",
-                  "role": "예술·기술 네트워크",
-                  "cite": "cit07_klimast_2023",
-                  "linkLabel": "mechatronicart.ch",
-                  "linkUrl": "https://mechatronicart.ch"
-                }
-              ]
             }
           ],
           "klimastNote": "Klimastiftung Schweiz는 프로젝트를 긍정적으로 평가했지만 2단계 결과가 나올 때까지 자금 지원을 보류하고 있습니다. 이 때문에 여기서는 자금 제공자로 표시하지 않습니다.",
@@ -5220,7 +5138,7 @@
             {
               "label": "학술 분석 (ZHAW LCA)",
               "status": "진행 중",
-              "body": "보고서 작성은 2026-06-18까지, 발표는 2026년 5월 말 완료. SimaPro 모델링은 5월 중순에 완료.",
+              "body": "SimaPro 모델링과 ZHAW 결과 발표는 2026년 5월 완료. 서면 보고서는 18.06.2026까지 확정.",
               "cite": "cit05_zhaw_gantt"
             },
             {
@@ -5294,7 +5212,7 @@
               "status": "모델 수치",
               "amount": "30–50'000 CHF",
               "note": "소량 생산 판매로 예산화된 비중. 실제 수치는 2단계 평가와 함께.",
-              "cite": "cit06_qa_swico_2023"
+              "cite": "cit04_kurzbericht_e1"
             }
           ]
         },
@@ -5340,7 +5258,7 @@
         "belege": {
           "eyebrow": "출처 · 참고자료",
           "title": "모든 수치, 모든 주장 — 출처와 함께.",
-          "intro": "내부 문서 또는 외부 링크, 원문 그대로 인용 가능. 누락된 부분이 있거나 주장을 검증하려면 연락해 주세요.",
+          "intro": "2026년 6월 기준 유효한 출처만: 최신 Swico 서한, ZHAW 계획, 개정 1단계 보고(2026년 3월), 공방 문서. 구 신청 폴더는 포함하지 않음.",
           "citations": [
             {
               "key": "cit01_innolink",
@@ -5373,21 +5291,9 @@
               "url": null
             },
             {
-              "key": "cit06_qa_swico_2023",
-              "label": "Swico 질의서, revamp-it 응답 2023-09-28",
-              "detail": "Verein revamp-it, «IT 기기의 기능적 순환 이용» 신청에 대한 Swico 질의서 응답, Andreas Rudin, 2023년 9월 28일",
-              "url": null
-            },
-            {
-              "key": "cit07_klimast_2023",
-              "label": "Klimastiftung 신청 revamp-it 2023",
-              "detail": "Verein revamp-it, Klimastiftung Schweiz 신청 «IT 기기의 기능적 순환 이용», 2023년 8월 31일 시점",
-              "url": null
-            },
-            {
               "key": "cit08_modelle_md",
-              "label": "개조 모델 정보 (revamp-it / ReCreaZZZ)",
-              "detail": "지금까지 개조한 모니터 모델과 전압 분배기 기술 메모, 2025년 2월 26일 시점",
+              "label": "내부 모델 목록(공방)",
+              "detail": "대기 모드 문서화를 포함한 개조 성공 모델의 유지 목록 — 공방 현황, 2026년 6월",
               "url": null
             },
             {
@@ -5463,6 +5369,53 @@
               "url": "https://barologic.ch"
             }
           ]
+        },
+        "documentMeta": {
+          "project": "Monitor-Upcycling zu Wand- und Deckenleuchten",
+          "sponsor": "Swico 혁신 기금 · 2단계",
+          "preparedBy": "Verein revamp-it",
+          "asOf": "15.06.2026",
+          "versionLabel": "기준일",
+          "projectLabel": "프로젝트",
+          "sponsorLabel": "자금",
+          "preparedByLabel": "작성"
+        },
+        "executiveSummary": {
+          "eyebrow": "요약",
+          "title": "의사결정자용 요약",
+          "paragraphs": [
+            "Revamp-IT는 퇴역 LED 모니터를 벽·천장 램프로 개조 — 사회적 작업장 Werkraum 4(zsge 재단)에서 생산, ZHAW 과학적 지원(ISO 14044 LCA, 프로젝트 132.351 INNO-EE).",
+            "2026년 6월 중순: Swico 2단계 진행 중(예산 65’000 CHF, 15’000 CHF Innosuisse→ZHAW). 12개 모델 개조 성공, 5개는 대기 모드 우회 문서화. 첫 완전 사진 가이드(Lenovo L2251pwd) 2026년 5월 28일 공개.",
+            "Swico 최종 보고(30.06.2026) 전: 소량 생산의 신뢰할 단가와 파일럿 설치 결과 미확정. ZHAW LCA 보고서 마무리 중(제출 18.06.2026); 결과 발표는 5월 말 완료. 다음 공개 이정표: Swico 발표 03.07.2026."
+          ],
+          "highlights": [
+            {
+              "label": "단계",
+              "value": "2단계 · 소량"
+            },
+            {
+              "label": "2단계 예산",
+              "value": "65'000 CHF"
+            },
+            {
+              "label": "개조 모델",
+              "value": "12 성공"
+            },
+            {
+              "label": "다음 기한",
+              "value": "30.06.2026"
+            }
+          ]
+        },
+        "ui": {
+          "step": "단계 {n}",
+          "source": "출처:",
+          "citationAria": "출처 {n}",
+          "badges": {
+            "detail": "상세",
+            "plan": "계획",
+            "scope": "범위"
+          }
         }
       },
       "wirkung": {
@@ -5540,6 +5493,57 @@
           "body": "방금 읽은 것은 주장입니다. 사업계획서에는 증거가 있습니다 — 단계 상태, 예산, 파트너, 출처. 또는 오픈 가이드를 보고 직접 램프를 만들어 보세요.",
           "primary": "사업계획서와 출처 보기",
           "secondary": "직접 만들기"
+        }
+      },
+      "evidence": {
+        "eyebrow": "파트너 및 후원자",
+        "status": {
+          "title": "현재 위치",
+          "body": "생산, 마일스톤, 마감 요약.",
+          "cta": "상태"
+        },
+        "businessplan": {
+          "title": "전체 브리핑",
+          "body": "경제성, 파트너, 리스크, 소스 코드.",
+          "cta": "사업 계획"
+        }
+      },
+      "nextStep": {
+        "applications": {
+          "eyebrow": "다음",
+          "title": "이미 만든 것",
+          "body": "실사 1모델 — 12개 더 대기.",
+          "cta": "갤러리"
+        },
+        "gallery": {
+          "eyebrow": "다음",
+          "title": "직접 만들기",
+          "body": "오픈 가이드와 소스 — 단계별.",
+          "cta": "가이드"
+        },
+        "buildYourOwn": {
+          "eyebrow": "다음",
+          "title": "영향 이해",
+          "body": "환경, 과학, 오픈 하드웨어 — 과장 없이.",
+          "cta": "영향"
+        },
+        "wirkung": {
+          "eyebrow": "다음",
+          "title": "근거 있는 브리핑",
+          "body": "출처, 사진, 열린 질문.",
+          "cta": "사업 계획"
+        },
+        "lenovoL2251pwd": {
+          "eyebrow": "다음",
+          "title": "갤러리의 완성품",
+          "body": "다른 모델과 함께 보기.",
+          "cta": "갤러리"
+        },
+        "businessplan": {
+          "eyebrow": "다음",
+          "title": "현재 프로젝트 현황",
+          "body": "숫자, 마일스톤, 마감 — 전체 사업계획을 다시 읽지 않고.",
+          "cta": "상태 보기"
         }
       }
     }
