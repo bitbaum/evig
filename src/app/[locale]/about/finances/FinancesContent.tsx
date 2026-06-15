@@ -106,40 +106,40 @@ export default function FinancesContent() {
           <>
             {/* Key Metrics Cards */}
             {latest && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div className="bg-surface-base rounded-xl p-6 border">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                <article className="ui-public-card">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-text-secondary">{t('metrics.totalRevenue', { year: latest.year })}</span>
+                    <span className="ui-public-card-label mt-0 mb-0">{t('metrics.totalRevenue', { year: latest.year })}</span>
                     {previous && <TrendIndicator current={latest.totals.total} previous={previous.totals.total} />}
                   </div>
-                  <p className="text-2xl font-bold text-text-primary">{formatCHF(latest.totals.total)}</p>
-                </div>
+                  <p className="text-2xl font-bold text-text-primary tabular-nums">{formatCHF(latest.totals.total)}</p>
+                </article>
 
-                <div className="bg-surface-base rounded-xl p-6 border">
+                <article className="ui-public-card">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-text-secondary flex items-center gap-1">
+                    <span className="ui-public-card-label mt-0 mb-0 flex items-center gap-1">
                       <TrendingUp className="w-4 h-4" />
                       {t('metrics.selfFinancing')}
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-action">{latest.derived.eigenfinanzierungPct}%</p>
-                  <p className="text-xs text-text-secondary mt-1">
+                  <p className="text-2xl font-bold text-action tabular-nums">{latest.derived.eigenfinanzierungPct}%</p>
+                  <p className="ui-public-meta mt-1">
                     {formatCHF(latest.derived.earnedTotal)} {t('metrics.selfFinancingEarned')}
                   </p>
-                </div>
+                </article>
 
-                <div className="bg-surface-base rounded-xl p-6 border">
+                <article className="ui-public-card">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-text-secondary flex items-center gap-1">
+                    <span className="ui-public-card-label mt-0 mb-0 flex items-center gap-1">
                       <Heart className="w-4 h-4" />
                       {t('metrics.donationsFunding')}
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-text-primary">{formatCHF(latest.derived.donationsTotal)}</p>
-                  <p className="text-xs text-text-secondary mt-1">
+                  <p className="text-2xl font-bold text-text-primary tabular-nums">{formatCHF(latest.derived.donationsTotal)}</p>
+                  <p className="ui-public-meta mt-1">
                     {(100 - latest.derived.eigenfinanzierungPct).toFixed(1)}% {t('metrics.donationsPct')}
                   </p>
-                </div>
+                </article>
               </div>
             )}
 
@@ -159,7 +159,7 @@ export default function FinancesContent() {
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-100">
+                  <tbody className="divide-y divide-subtle">
                     {tableRows.map(row => (
                       <tr key={row.key} className="hover:bg-surface-raised">
                         <td className="px-6 py-3 text-text-secondary">{t(`table.${row.labelKey}` as Parameters<typeof t>[0])}</td>

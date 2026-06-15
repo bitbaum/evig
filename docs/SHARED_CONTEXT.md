@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-06-15
-last_modified_summary: Added Monitor-Upcycling mini-site SSOT pointer; nav i18n items.* convention
+last_modified_summary: Deploy SSOT — push-to-deploy to revampit.orangecat.ch (husky + GitHub Actions)
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -30,7 +30,7 @@ last_modified_summary: Added Monitor-Upcycling mini-site SSOT pointer; nav i18n 
 | Auth | Auth.js v5, Credentials, JWT sessions | Same login for `/dashboard` and `/admin` — see `docs/UNIFIED_AUTH.md` |
 | E-commerce | Custom (inventory-based) | Integrated |
 | Database | PostgreSQL (Neon prod; Docker 5433 local), Redis (6380), Meilisearch (7700) | Drizzle ORM |
-| Deploy | Vercel, Docker, GitHub Actions | |
+| Deploy | Hetzner (revampit.orangecat.ch), push-to-deploy; Vercel disabled | See `docs/COMMANDS.md` |
 
 ---
 

@@ -6,8 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { buttonClass } from "@/components/ui/button-class";
-import { ChevronRight, Home, Package, ShoppingCart, Tag } from "lucide-react";
+import { ChevronRight, Home, Package, ShoppingCart } from "lucide-react";
 import Heading from "@/components/ui/Heading";
 import {
   SHOP_CATEGORIES,
@@ -187,8 +186,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-action text-white py-12 sm:py-16">
+      <section className="border-b border-subtle py-10 sm:py-14 bg-surface-base">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             category={category}
@@ -196,14 +194,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             homeLabel={t("category.breadcrumbHome")}
             shopLabel={t("search.breadcrumbShop")}
           />
-          <Heading level={1} className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            {category.name}
-          </Heading>
-          <p className="text-lg text-action-text max-w-2xl">
+          <div className="ui-public-eyebrow mt-4">{t("search.breadcrumbShop").toUpperCase()}</div>
+          <h1 className="ui-public-display-md mt-3">{category.name}</h1>
+          <p className="ui-public-section-lede mt-4 max-w-2xl">
             {t("category.heroSubtitle", { categoryNameLower: category.name.toLowerCase() })}
           </p>
           {category.count !== undefined && (
-            <p className="mt-4 text-action-text">
+            <p className="ui-public-meta mt-4">
               {t("category.productCount", { count: category.count })}
             </p>
           )}
@@ -254,31 +251,31 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="text-center mt-8">
                 <Link
                   href={`/shop?category=${encodeURIComponent(category.name)}`}
-                  className={buttonClass({ variant: 'primary', size: 'lg' })}
+                  className="ui-public-cta inline-flex items-center gap-2"
                 >
-                  <ShoppingCart className="w-4 h-4" />
+                  <ShoppingCart className="w-4 h-4" aria-hidden="true" />
                   {t('category.showAllProducts', { count: inventoryResult.total })}
                 </Link>
               </div>
             )}
           </div>
         ) : (
-          <div className="card-shell p-8 text-center">
+          <div className="ui-public-card p-12 text-center">
             <div className="max-w-md mx-auto">
               <div className="w-16 h-16 rounded-full bg-action-muted text-action flex items-center justify-center mx-auto mb-4">
-                <Package className="w-8 h-8" />
+                <Package className="w-8 h-8" aria-hidden="true" />
               </div>
-              <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">
+              <h2 className="ui-public-display-md mb-2">
                 {t("category.productsLoading")}
-              </Heading>
-              <p className="text-text-secondary mb-6">
+              </h2>
+              <p className="ui-public-section-lede mb-6">
                 {t("category.productsComingSoon", { categoryName: category.name })}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href={ROUTES.public.marketplace} className={buttonClass({ variant: 'primary', size: 'lg' })}>
+                <Link href={ROUTES.public.marketplace} className="ui-public-cta inline-flex items-center justify-center">
                   {t("category.goToShop")}
                 </Link>
-                <Link href={ROUTES.public.shop} className={buttonClass({ variant: 'outline', size: 'lg' })}>
+                <Link href={ROUTES.public.shop} className="ui-public-cta-ghost inline-flex items-center justify-center">
                   {t("category.allShopOptions")}
                 </Link>
               </div>

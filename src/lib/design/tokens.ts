@@ -12,21 +12,21 @@
 
 // Unified button classes — same across all themes for visual discipline
 const PRIMARY_BTN =
-  'bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400'
+  'bg-action hover:bg-action-hover text-action-text'
 
 const SECONDARY_BTN =
-  'border-neutral-300 dark:border-white/10 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/6'
+  'border-subtle text-text-secondary hover:bg-surface-raised'
 
-const FOCUS_GREEN = 'focus-visible:outline-primary-600'
+const FOCUS_GREEN = 'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action'
 
 // Two-color icon badge system:
 // Green = brand identity (content, mission, community, knowledge)
 // Orange = commerce identity (marketplace, workshops, repairers)
-const GREEN_BADGE = { bg: 'bg-primary-100 dark:bg-primary-500/15', text: 'text-primary-600 dark:text-primary-400' }
+const GREEN_BADGE = { bg: 'bg-action-muted', text: 'text-action' }
 const ORANGE_BADGE = { bg: 'bg-secondary-100/70 dark:bg-secondary-500/15', text: 'text-secondary-600 dark:text-secondary-400' }
 
 // Two-color hover system matching badge system
-const GREEN_HOVER = 'group-hover:text-primary-600 dark:group-hover:text-primary-400'
+const GREEN_HOVER = 'group-hover:text-action'
 const ORANGE_HOVER = 'group-hover:text-secondary-500 dark:group-hover:text-secondary-400'
 
 export const DESIGN_TOKENS = {
@@ -121,8 +121,8 @@ export const DESIGN_TOKENS = {
       home:        GREEN_HOVER,
     },
     border: {
-      default:  'border-neutral-200 dark:border-white/6',
-      featured: 'border-primary-300 dark:border-primary-500/30 ring-1 ring-primary-200 dark:ring-primary-500/20',
+      default:  'border-subtle',
+      featured: 'border-action/30 ring-1 ring-action/20',
     },
   },
 } as const

@@ -16,8 +16,8 @@ interface EmptyStateProps {
 
 export function EmptyState({
   icon: Icon,
-  iconBg = 'bg-neutral-100 dark:bg-neutral-700',
-  iconColor = 'text-neutral-500 dark:text-neutral-400',
+  iconBg = 'bg-surface-raised',
+  iconColor = 'text-text-tertiary',
   title,
   description,
   action,
@@ -38,11 +38,11 @@ export function EmptyState({
       >
         <Icon className={cn('w-7 h-7', iconColor)} aria-hidden="true" />
       </div>
-      <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
         {title}
       </Heading>
       {description && (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm mx-auto">
+        <p className="text-sm text-text-tertiary mb-6 max-w-sm mx-auto">
           {description}
         </p>
       )}

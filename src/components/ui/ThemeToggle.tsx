@@ -30,9 +30,9 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       suppressHydrationWarning
       className={cn(
         'p-2 rounded-lg transition-colors',
-        'text-neutral-500 dark:text-neutral-400',
-        'hover:text-neutral-700 dark:hover:text-neutral-200',
-        'hover:bg-neutral-100 dark:hover:bg-white/6',
+        'text-text-tertiary',
+        'hover:text-text-secondary',
+        'hover:bg-surface-raised',
         className,
       )}
     >

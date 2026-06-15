@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+# Push main → deploy experimental site (revampit.orangecat.ch) in background.
+# Requires .env.selfhost.local + SSH to ubuntu@167.233.22.31
+# Log: /tmp/push-deploy-revampit.log
+
+if git symbolic-ref --short HEAD 2>/dev/null | grep -qx main; then
+  REPO_ROOT="$(git rev-parse --show-toplevel)"
+  if [ -f "$REPO_ROOT/.env.selfhost.local" ]; then
+    (
+      sleep 5
+      env -u CI -u VERCEL bash "$REPO_ROOT/scripts/selfhost-deploy-revampit.sh"
+    ) >> /tmp/push-deploy-revampit.log 2>&1 &
+    disown 2>/dev/null || true
+    echo "[push-deploy] revampit → /tmp/push-deploy-revampit.log"
+  else
+    echo "[push-deploy] skipped — add .env.selfhost.local (see docs/COMMANDS.md)"
+  fi
+fi

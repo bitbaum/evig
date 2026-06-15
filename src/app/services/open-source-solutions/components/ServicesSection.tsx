@@ -4,8 +4,8 @@
  * Reusable section for displaying services/features
  * 
  * Created: 2025-12-17
- * Last Modified: 2025-12-17
- * Last Modified Summary: Created reusable services section component
+ * Last Modified: 2026-06-15
+ * Last Modified Summary: ui-public-card replaces shadow-lg on static feature cards
  */
 
 import { Feature } from '../data'
@@ -27,7 +27,7 @@ export function ServicesSection({ features }: ServicesSectionProps) {
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
-              <div key={index} className="bg-surface-base rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border">
+              <div key={index} className="ui-public-card">
                 <div className="flex items-start mb-6">
                   <div className="p-3 bg-success-100 rounded-lg text-success-600 mr-4">
                     <Icon className="w-8 h-8" />

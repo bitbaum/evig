@@ -80,14 +80,14 @@ export default async function FAQPage({ params }: FAQPageProps) {
       />
       <section className="py-12 sm:py-16">
         <PageShell maxWidth="5xl" py="">
-
-            <div className="space-y-8 sm:space-y-10">
+            <div className="space-y-10 sm:space-y-12">
               {groups.map((group) => (
                 <section key={group.category}>
-                  <Heading level={2} className="text-lg sm:text-xl text-text-primary mb-3 sm:mb-4">
+                  <div className="ui-public-eyebrow mb-3">{group.category.toUpperCase()}</div>
+                  <Heading level={2} className="ui-public-display-md mb-4">
                     {group.category}
                   </Heading>
-                  <div className="divide-y divide-neutral-200 dark:divide-white/6 rounded-xl border bg-surface-base">
+                  <div className="divide-y divide-subtle rounded-2xl border border-subtle bg-surface-base overflow-hidden">
                     {group.items.map((item, idx) => (
                       <details key={idx} className="group p-4 sm:p-5 open:bg-surface-raised/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
@@ -118,11 +118,11 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-surface-raised border text-xs sm:text-sm">
-              <p className="text-text-primary">
+            <div className="ui-public-band mt-10 sm:mt-12 p-6 sm:p-8 rounded-2xl text-sm">
+              <p className="ui-public-prose-strong">
                 {t('notListed')}
                 <span className="ml-2">
-                  <Link href="/contact" className="text-action hover:text-action underline font-medium">
+                  <Link href="/contact" className="text-action hover:underline underline-offset-2 font-medium">
                     {t('contactTeam')}
                   </Link>
                 </span>

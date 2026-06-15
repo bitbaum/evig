@@ -128,20 +128,23 @@ export default function CreatePeerRepairPage() {
   }
 
   return (
-    <PageShell maxWidth="3xl">
-        <Link
-          href={ROUTES.public.itHilfe}
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('backToList')}
-        </Link>
-
-        <div className="mb-8">
+    <div className="bg-canvas min-h-screen">
+      <section className="border-b border-subtle py-10 sm:py-14">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <Link
+            href={ROUTES.public.itHilfe}
+            className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6 px-2 py-1 min-h-touch rounded-sm focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
+          >
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+            {t('backToList')}
+          </Link>
           <div className="ui-public-eyebrow">{t('eyebrow')}</div>
-          <Heading level={1} className="ui-public-display-md mt-3">{t('title')}</Heading>
+          <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
           <p className="ui-public-section-lede mt-4">{t('description')}</p>
         </div>
+      </section>
+
+      <PageShell maxWidth="3xl" py="py-8 sm:py-12">
 
         {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
 
@@ -324,6 +327,7 @@ export default function CreatePeerRepairPage() {
             </>
           )}
         </form>
-    </PageShell>
+      </PageShell>
+    </div>
   )
 }

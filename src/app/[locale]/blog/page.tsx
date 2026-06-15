@@ -171,20 +171,20 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       </div>
 
       {/* Footer CTA */}
-      <div className="bg-surface-raised border-t border mt-12 sm:mt-16 py-8 sm:py-12">
+      <div className="ui-public-band mt-12 sm:mt-16">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div>
-              <Heading level={3} className="text-lg sm:text-xl font-bold text-text-primary mb-2">
+              <h3 className="ui-public-display-md">
                 {t('footerCta.title')}
-              </Heading>
-              <p className="text-sm sm:text-base text-text-secondary">
+              </h3>
+              <p className="ui-public-section-lede mt-2">
                 {t('footerCta.description')}
               </p>
             </div>
             <Link
               href="/blog/submit"
-              className={buttonClass({ variant: 'primary', className: 'whitespace-nowrap' })}
+              className="ui-public-cta whitespace-nowrap"
             >
               {t('footerCta.button')}
             </Link>

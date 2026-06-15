@@ -4,8 +4,8 @@
  * Reusable section for displaying comparison groups
  * 
  * Created: 2025-12-17
- * Last Modified: 2025-12-17
- * Last Modified Summary: Created reusable comparison section component
+ * Last Modified: 2026-06-15
+ * Last Modified Summary: ui-public-card replaces shadow-lg on static comparison cards
  */
 
 import { Comparison } from '../data'
@@ -26,7 +26,7 @@ export function ComparisonSection({ title, comparisons }: ComparisonSectionProps
       </h3>
       <div className="space-y-8 sm:space-y-12">
         {comparisons.map((comparison, index) => (
-          <div key={index} className="bg-surface-raised rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border">
+          <div key={index} className="ui-public-card">
             <h4 className={cn('text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-center', getTextColor('neutral', 'primary'))}>
               {comparison.category}
             </h4>

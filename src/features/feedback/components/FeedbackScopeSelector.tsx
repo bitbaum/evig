@@ -23,7 +23,7 @@ export function FeedbackScopeSelector({
 }: FeedbackScopeSelectorProps) {
   return (
     <div className="space-y-2">
-      <div className="text-xs font-medium text-neutral-700">Umfang der Rückmeldung:</div>
+      <div className="text-xs font-medium text-text-secondary">Umfang der Rückmeldung:</div>
       <div className="flex flex-wrap gap-1">
         {(Object.keys(SCOPE_CONFIG) as FeedbackScope[]).map((scopeKey) => {
           const config = SCOPE_CONFIG[scopeKey]
@@ -46,7 +46,7 @@ export function FeedbackScopeSelector({
                 "flex items-center justify-center space-x-1",
                 feedbackScope === scopeKey
                   ? config.activeClasses
-                  : "bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-50"
+                  : "bg-surface-base border text-text-secondary hover:bg-surface-raised"
               )}
             >
               <span className="text-sm">{config.emoji}</span>
@@ -57,7 +57,7 @@ export function FeedbackScopeSelector({
       </div>
 
       {feedbackScope === 'element' && (
-        <div className="text-xs text-neutral-600 bg-neutral-50 p-2 rounded">
+        <div className="text-xs text-text-secondary bg-surface-raised p-2 rounded">
           {isElementSelectionMode ? (
             <div className="flex items-center justify-between">
               <span>Element-Auswahl aktiv - klicken Sie auf Elemente</span>

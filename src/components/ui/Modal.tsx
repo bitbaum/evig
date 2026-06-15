@@ -123,16 +123,16 @@ export function Modal({
           aria-modal="true"
           aria-labelledby="modal-title"
           tabIndex={-1}
-          className={`relative bg-white dark:bg-neutral-800 rounded-xl shadow-xl ${SIZE_CLASSES[size]} w-full p-4 sm:p-6 focus:outline-hidden ${className}`}
+          className={`relative card-shell ${SIZE_CLASSES[size]} w-full p-4 sm:p-6 focus:outline-hidden ${className}`}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <Heading id="modal-title" level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
+            <Heading id="modal-title" level={3} className="text-lg font-semibold text-text-primary">
               {title}
             </Heading>
             <button
               onClick={onClose}
-              className="-mr-2 sm:-mr-1 inline-flex items-center justify-center w-11 h-11 sm:w-8 sm:h-8 rounded-lg text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+              className="-mr-2 sm:-mr-1 inline-flex items-center justify-center w-11 h-11 sm:w-8 sm:h-8 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-surface-raised transition-colors"
               aria-label={t('close')}
             >
               <X className="w-5 h-5" />

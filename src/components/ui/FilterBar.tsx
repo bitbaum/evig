@@ -13,21 +13,21 @@ interface FilterBarProps {
 
 const colorVariants = {
   green: {
-    active: 'bg-primary-600 text-white transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
+    active: 'bg-action text-action-text',
+    inactive: 'bg-surface-raised text-text-secondary hover:bg-surface-overlay hover:text-text-primary',
   },
   blue: {
-    active: 'bg-primary-600 text-white transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
+    active: 'bg-action text-action-text',
+    inactive: 'bg-surface-raised text-text-secondary hover:bg-surface-overlay hover:text-text-primary',
   },
   purple: {
-    active: 'bg-primary-600 text-white transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
+    active: 'bg-action text-action-text',
+    inactive: 'bg-surface-raised text-text-secondary hover:bg-surface-overlay hover:text-text-primary',
   },
   orange: {
-    active: 'bg-secondary-600 text-white transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
-  }
+    active: 'bg-secondary-600 text-white',
+    inactive: 'bg-surface-raised text-text-secondary hover:bg-surface-overlay hover:text-text-primary',
+  },
 }
 
 const FilterBarComponent: React.FC<FilterBarProps> = ({
@@ -42,7 +42,7 @@ const FilterBarComponent: React.FC<FilterBarProps> = ({
     <div className={`max-w-3xl mx-auto text-center ${className}`}>
       {filters.map((filter, index) => (
         <div key={filter.key} className={`flex flex-wrap justify-center gap-3 ${index === 0 ? 'mb-8' : 'mb-12'}`}>
-          <div className="flex items-center text-neutral-600 mr-4 mb-2">
+          <div className="flex items-center text-text-secondary mr-4 mb-2">
             <Filter className="w-4 h-4 mr-2" />
             <span className="text-sm font-medium">{filter.label}:</span>
           </div>

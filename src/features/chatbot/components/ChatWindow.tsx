@@ -3,7 +3,6 @@
 import { ChatMessage } from './ChatMessage'
 import { LoadingIndicator } from './LoadingIndicator'
 import { ChatInput } from './ChatInput'
-import { cn } from '@/lib/utils'
 import { getMessage } from '@/lib/chatbot-language'
 import type { ChatMessage as ChatMessageType } from '../hooks/useChatbot'
 import type { NavigationSuggestion, Language } from '@/lib/suggestion-utils'
@@ -39,8 +38,7 @@ export function ChatWindow({
 
   return (
     <>
-      {/* Chat Messages */}
-      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-neutral-50/50 dark:bg-neutral-900/50">
+      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-surface-raised">
         {messages.map((message) => (
           <ChatMessage
             key={message.id}
@@ -56,8 +54,7 @@ export function ChatWindow({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="p-4 border-t border-neutral-100 bg-white rounded-b-2xl">
+      <div className="p-4 border-t border-subtle bg-surface-base rounded-b-2xl">
         <ChatInput
           ref={inputRef}
           value={inputValue}

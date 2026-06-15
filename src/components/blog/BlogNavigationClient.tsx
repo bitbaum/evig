@@ -79,7 +79,7 @@ export default function BlogNavigationClient({
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                 selectedCategorySlugs.length === 0
-                  ? "bg-surface-overlay dark:bg-surface-raised text-white dark:text-text-primary"
+                  ? "bg-surface-overlay text-text-inverted"
                   : "bg-surface-raised text-text-secondary hover:bg-surface-overlay"
               )}
             >
@@ -98,7 +98,7 @@ export default function BlogNavigationClient({
                     className={cn(
                       "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                       selected
-                        ? "text-white"
+                        ? "text-text-inverted"
                         : "bg-surface-raised text-text-secondary hover:bg-surface-overlay"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
@@ -115,9 +115,9 @@ export default function BlogNavigationClient({
 
                   {/* Tooltip with description */}
                   {category.description && (
-                    <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-2 bg-surface-overlay text-white text-xs rounded-lg whitespace-nowrap z-10 transition-all max-w-xs text-center">
+                    <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-2 bg-surface-overlay text-text-inverted text-xs rounded-lg whitespace-nowrap z-10 transition-all max-w-xs text-center">
                       {category.description}
-                      <span className="absolute left-1/2 -translate-x-1/2 bottom-full border-4 border-transparent border-b-neutral-900" />
+                      <span className="absolute left-1/2 -translate-x-1/2 bottom-full border-4 border-transparent border-b-surface-overlay" />
                     </div>
                   )}
                 </div>
@@ -171,7 +171,7 @@ export default function BlogNavigationClient({
                 className={cn(
                   "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                   selectedCategorySlugs.length === 0
-                    ? "bg-surface-overlay dark:bg-surface-raised text-white dark:text-text-primary"
+                    ? "bg-surface-overlay text-text-inverted"
                     : "bg-surface-raised text-text-secondary"
                 )}
               >
@@ -190,7 +190,7 @@ export default function BlogNavigationClient({
                     className={cn(
                       "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
                       selected
-                        ? "text-white"
+                        ? "text-text-inverted"
                         : "bg-surface-raised text-text-secondary"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}

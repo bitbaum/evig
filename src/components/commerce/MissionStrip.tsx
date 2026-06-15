@@ -47,7 +47,7 @@ export async function MissionStrip({ className }: MissionStripProps) {
             </div>
             <p className="text-sm text-text-secondary leading-snug">
               <strong className="text-text-primary">{t('anchor')}</strong>
-              <span className="block sm:inline sm:ml-1 text-text-secondary dark:text-text-muted">
+              <span className="block sm:inline sm:ml-1 text-text-muted">
                 {t('subAnchor')}
               </span>
             </p>
@@ -60,14 +60,14 @@ export async function MissionStrip({ className }: MissionStripProps) {
               <span className="font-semibold text-text-primary tabular-nums">
                 {stats.soldDevices || stats.totalDevices}+
               </span>
-              <span className="text-text-secondary dark:text-text-muted">{t('devicesRehomed')}</span>
+              <span className="text-text-muted">{t('devicesRehomed')}</span>
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Leaf className="h-4 w-4 text-action" aria-hidden="true" />
               <span className="font-semibold text-text-primary tabular-nums">
                 ~{stats.co2SavedTons} t
               </span>
-              <span className="text-text-secondary dark:text-text-muted">{t('co2Avoided')}</span>
+              <span className="text-text-muted">{t('co2Avoided')}</span>
               <Link
                 href="/transparenz/co2"
                 className="text-xs text-action hover:underline underline-offset-2 ml-1"
@@ -76,7 +76,7 @@ export async function MissionStrip({ className }: MissionStripProps) {
               </Link>
             </span>
             {!stats.live && (
-              <span className="text-xs text-text-tertiary dark:text-text-tertiary italic">
+              <span className="text-xs text-text-tertiary italic">
                 {t('estimateNote')}
               </span>
             )}

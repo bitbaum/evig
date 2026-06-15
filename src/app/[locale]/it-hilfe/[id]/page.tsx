@@ -77,6 +77,7 @@ export default function ITHilfeDetailPage() {
   const { request } = detail
 
   return (
+    <div className="bg-canvas min-h-screen">
     <PageShell maxWidth="4xl">
         {/* Back link */}
         <Link
@@ -264,5 +265,6 @@ export default function ITHilfeDetailPage() {
         onClose={detail.cancelPendingConfirm}
       />
     </PageShell>
+    </div>
   )
 }

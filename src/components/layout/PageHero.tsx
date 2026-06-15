@@ -43,7 +43,7 @@ export function PageHero({
     <div
       className={cn(
         'bg-surface-base',
-        'border-b border-subtle dark:border-white/6',
+        'border-b border-subtle',
         // Generous vertical rhythm for display heroes; standard for site.
         isDisplay ? 'py-20 sm:py-28 lg:py-36' : 'py-16 sm:py-20 lg:py-24',
         className,

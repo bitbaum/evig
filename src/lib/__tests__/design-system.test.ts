@@ -25,7 +25,7 @@ import {
 
 describe('getTextColor', () => {
   it('returns dark text on white background (WCAG contrast)', () => {
-    expect(getTextColor('white')).toBe('text-neutral-900')
+    expect(getTextColor('white')).toBe('text-text-primary')
   })
 
   it('returns white text on primary (green) background', () => {
@@ -53,7 +53,7 @@ describe('getTextColor', () => {
   })
 
   it('returns neutral-900 on neutral background', () => {
-    expect(getTextColor('neutral')).toBe('text-neutral-900')
+    expect(getTextColor('neutral')).toBe('text-text-primary')
   })
 
   it('defaults to primary variant when no variant specified', () => {
@@ -64,17 +64,17 @@ describe('getTextColor', () => {
 
   it('returns secondary text variant', () => {
     const result = getTextColor('white', 'secondary')
-    expect(result).toBe('text-neutral-700')
+    expect(result).toBe('text-text-secondary')
   })
 
   it('returns muted text variant', () => {
     const result = getTextColor('white', 'muted')
-    expect(result).toBe('text-neutral-600')
+    expect(result).toBe('text-text-tertiary')
   })
 
   it('returns white text on dark background', () => {
     const result = getTextColor('dark')
-    expect(result).toBe('text-white')
+    expect(result).toBe('text-text-inverted')
   })
 
   it('returns a non-empty string', () => {
@@ -88,12 +88,12 @@ describe('getTextColor', () => {
 // ============================================================================
 
 describe('getBackgroundColor', () => {
-  it('returns bg-white for white', () => {
-    expect(getBackgroundColor('white')).toBe('bg-white')
+  it('returns bg-surface-base for white', () => {
+    expect(getBackgroundColor('white')).toBe('bg-surface-base')
   })
 
-  it('returns bg-neutral-50 for neutral', () => {
-    expect(getBackgroundColor('neutral')).toBe('bg-neutral-50')
+  it('returns bg-surface-raised for neutral', () => {
+    expect(getBackgroundColor('neutral')).toBe('bg-surface-raised')
   })
 
   it('returns bg-primary-600 for primary', () => {
@@ -112,8 +112,8 @@ describe('getBackgroundColor', () => {
     expect(getBackgroundColor('warning')).toBe('bg-warning-500')
   })
 
-  it('returns bg-neutral-900 for dark background', () => {
-    expect(getBackgroundColor('dark')).toBe('bg-neutral-900')
+  it('returns bg-surface-page for dark background', () => {
+    expect(getBackgroundColor('dark')).toBe('bg-surface-page')
   })
 
   it('returns a Tailwind class string', () => {
@@ -126,20 +126,20 @@ describe('getBackgroundColor', () => {
 // ============================================================================
 
 describe('getBorderColor', () => {
-  it('returns border-neutral-200 for white', () => {
-    expect(getBorderColor('white')).toBe('border-neutral-200')
+  it('returns border-subtle for white', () => {
+    expect(getBorderColor('white')).toBe('border-subtle')
   })
 
-  it('returns border-neutral-300 for neutral', () => {
-    expect(getBorderColor('neutral')).toBe('border-neutral-300')
+  it('returns border-default for neutral', () => {
+    expect(getBorderColor('neutral')).toBe('border-default')
   })
 
   it('returns border-primary-700 for primary', () => {
     expect(getBorderColor('primary')).toBe('border-primary-700')
   })
 
-  it('returns border-neutral-700 for dark background', () => {
-    expect(getBorderColor('dark')).toBe('border-neutral-700')
+  it('returns border-subtle for dark background', () => {
+    expect(getBorderColor('dark')).toBe('border-subtle')
   })
 
   it('returns a Tailwind border class', () => {
@@ -174,14 +174,14 @@ describe('getStatusColors', () => {
 
   it('returns info colors', () => {
     const result = getStatusColors('info')
-    expect(result.bg).toBe('bg-neutral-50')
-    expect(result.text).toBe('text-neutral-800')
+    expect(result.bg).toBe('bg-surface-raised')
+    expect(result.text).toBe('text-text-primary')
   })
 
   it('returns neutral colors', () => {
     const result = getStatusColors('neutral')
-    expect(result.bg).toBe('bg-neutral-50')
-    expect(result.text).toBe('text-neutral-800')
+    expect(result.bg).toBe('bg-surface-raised')
+    expect(result.text).toBe('text-text-primary')
   })
 
   it('each status result has bg, text, border, icon', () => {
@@ -202,9 +202,9 @@ describe('getStatusColors', () => {
 describe('getButtonVariant', () => {
   it('returns primary button classes', () => {
     const result = getButtonVariant('primary')
-    expect(result.bg).toBe('bg-primary-600')
-    expect(result.text).toBe('text-white')
-    expect(result.hover).toBe('hover:bg-primary-700')
+    expect(result.bg).toBe('bg-action')
+    expect(result.text).toBe('text-action-text')
+    expect(result.hover).toBe('hover:bg-action-hover')
   })
 
   it('returns secondary button classes', () => {
@@ -216,7 +216,7 @@ describe('getButtonVariant', () => {
   it('returns outline-solid button classes (transparent bg)', () => {
     const result = getButtonVariant('outline')
     expect(result.bg).toBe('bg-transparent')
-    expect(result.text).toBe('text-neutral-700')
+    expect(result.text).toBe('text-text-secondary')
   })
 
   it('returns ghost button classes', () => {

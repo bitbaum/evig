@@ -6,9 +6,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Button } from "@/components/ui/button";
-import { buttonClass } from "@/components/ui/button-class";
-import { Search, Package, ChevronRight, Home, ArrowLeft, Tag } from "lucide-react";
-import Heading from "@/components/ui/Heading";
+import { Search, Package, ChevronRight, Home, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   SHOP_CATEGORIES,
@@ -152,22 +150,20 @@ function SearchResults({
 }) {
   if (products.length === 0) {
     return (
-      <div className="card-shell p-8 text-center">
+      <div className="ui-public-card p-8 text-center">
         <div className="max-w-md mx-auto">
           <div className="w-16 h-16 rounded-full bg-action-muted text-action flex items-center justify-center mx-auto mb-4">
-            <Search className="w-8 h-8" />
+            <Search className="w-8 h-8" aria-hidden="true" />
           </div>
-          <Heading level={2} className="text-xl font-semibold text-text-primary mb-2">
-            {noResultsLabel}
-          </Heading>
-          <p className="text-text-secondary mb-6">{noResultsHintLabel}</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href={ROUTES.public.marketplace} className={buttonClass({ variant: 'primary', size: 'lg' })}>
-              <Package className="w-5 h-5" />
+          <h2 className="ui-public-display-md mb-2">{noResultsLabel}</h2>
+          <p className="ui-public-section-lede mb-6">{noResultsHintLabel}</p>
+          <div className="ui-public-cta-row">
+            <Link href={ROUTES.public.marketplace} className="ui-public-cta inline-flex items-center gap-2">
+              <Package className="w-5 h-5" aria-hidden="true" />
               {goToShopLabel}
             </Link>
-            <Link href={ROUTES.public.shop} className={buttonClass({ variant: 'outline', size: 'lg' })}>
-              <ArrowLeft className="w-5 h-5" />
+            <Link href={ROUTES.public.shop} className="ui-public-cta-ghost inline-flex items-center gap-2">
+              <ArrowLeft className="w-5 h-5" aria-hidden="true" />
               {allShopOptionsLabel}
             </Link>
           </div>
@@ -178,7 +174,7 @@ function SearchResults({
 
   return (
     <div>
-      <p className="text-sm text-text-tertiary mb-4">{foundCountLabel}</p>
+      <p className="ui-public-meta mb-4">{foundCountLabel}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -206,15 +202,14 @@ function NoQueryState({
     <div className="space-y-8">
       {/* Popular searches */}
       <div>
-        <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
-          {popularSearchesLabel}
-        </Heading>
+        <div className="ui-public-eyebrow mb-3">{popularSearchesLabel.toUpperCase()}</div>
+        <h2 className="ui-public-display-md mb-4">{popularSearchesLabel}</h2>
         <div className="flex flex-wrap gap-2">
           {POPULAR_SEARCHES.map((search) => (
             <Link
               key={search.slug}
               href={getSearchUrl(search.name)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base border rounded-full text-sm font-medium text-text-secondary hover:bg-action-muted hover:border-strong dark:hover:border-action hover:text-action transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-surface-base border border-subtle rounded-full text-sm font-medium text-text-secondary hover:bg-action-muted hover:border-default hover:text-action transition-colors"
             >
               <Search className="w-4 h-4" />
               {search.name}
@@ -225,30 +220,29 @@ function NoQueryState({
 
       {/* Browse by category */}
       <div>
-        <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
-          {browseByCategoryLabel}
-        </Heading>
+        <div className="ui-public-eyebrow mb-3">{browseByCategoryLabel.toUpperCase()}</div>
+        <h2 className="ui-public-display-md mb-4">{browseByCategoryLabel}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {SHOP_CATEGORIES.slice(0, 9).map((category) => (
             <Link
               key={category.slug}
               href={getCategoryUrl(category.slug)}
-              className="flex items-center gap-3 p-4 card-shell hover:border-strong transition-all group"
+              className="ui-public-card flex-row items-center gap-3 group p-4"
             >
-              <div className="w-10 h-10 rounded-lg bg-surface-raised text-text-secondary flex items-center justify-center group-hover:bg-action-muted dark:group-hover:bg-action-muted group-hover:text-action transition-colors">
-                <Package className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-lg bg-surface-raised text-text-secondary flex items-center justify-center group-hover:bg-action-muted group-hover:text-action transition-colors">
+                <Package className="w-5 h-5" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-text-primary truncate group-hover:text-action transition-colors">
+                <p className="ui-public-card-title truncate group-hover:text-action transition-colors">
                   {category.name}
                 </p>
                 {category.count !== undefined && (
-                  <p className="text-sm text-text-tertiary">
+                  <p className="ui-public-meta">
                     {productCountLabel(category.count)}
                   </p>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-text-muted dark:text-text-secondary group-hover:text-action transition-colors" />
+              <ChevronRight className="w-5 h-5 text-text-muted group-hover:text-action transition-colors" aria-hidden="true" />
             </Link>
           ))}
         </div>
@@ -279,8 +273,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-action text-white py-12 sm:py-16">
+      <section className="border-b border-subtle py-10 sm:py-14 bg-surface-base">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             query={query}
@@ -289,16 +282,19 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
             searchLabel={t("search.breadcrumbSearch")}
             searchWithQueryLabel={query ? t("search.breadcrumbSearchWithQuery", { query }) : ""}
           />
-          <Heading level={1} className="text-3xl sm:text-4xl font-bold mb-6 text-center">
+          <div className="ui-public-eyebrow mt-4">{t("search.breadcrumbSearch").toUpperCase()}</div>
+          <h1 className="ui-public-display-md mt-3 text-center">
             {query ? t("search.heroTitleWithQuery", { query }) : t("search.heroTitle")}
-          </Heading>
-          <Suspense fallback={<div className="h-16" />}>
-            <SearchForm
-              initialQuery={query}
-              placeholder={t("search.placeholder")}
-              submitLabel={t("search.submitButton")}
-            />
-          </Suspense>
+          </h1>
+          <div className="mt-8">
+            <Suspense fallback={<div className="h-16" />}>
+              <SearchForm
+                initialQuery={query}
+                placeholder={t("search.placeholder")}
+                submitLabel={t("search.submitButton")}
+              />
+            </Suspense>
+          </div>
         </div>
       </section>
 

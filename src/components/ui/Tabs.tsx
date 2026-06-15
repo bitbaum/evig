@@ -21,7 +21,7 @@ export function Tabs({ tabs, defaultValue, children, className }: TabsProps) {
 
   return (
     <div className={cn('w-full', className)}>
-      <div className="flex space-x-1 bg-neutral-100 dark:bg-neutral-800 p-1 rounded-lg mb-6">
+      <div className="flex space-x-1 bg-surface-raised p-1 rounded-lg mb-6">
         {tabs.map((tab) => (
           <button
             key={tab.value}
@@ -29,8 +29,8 @@ export function Tabs({ tabs, defaultValue, children, className }: TabsProps) {
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors flex-1',
               activeTab === tab.value
-                ? 'bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200'
+                ? 'bg-surface-base text-text-primary'
+                : 'text-text-tertiary hover:text-text-primary'
             )}
           >
             {tab.icon}

@@ -71,7 +71,7 @@ export default function RevampCopilot() {
         <div
           className={cn(
             "fixed z-[610]",
-            "bg-white rounded-2xl shadow-2xl dark:shadow-black/50 border border-neutral-200/80 backdrop-blur-sm",
+            "bg-surface-base rounded-2xl border border-default backdrop-blur-sm",
             "transition-all duration-300 ease-in-out",
             // Mobile: full width with margins, bottom-aligned
             "w-[calc(100%-2rem)] max-w-sm sm:w-96",

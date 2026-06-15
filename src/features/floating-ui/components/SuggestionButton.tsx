@@ -108,7 +108,7 @@ export default function SuggestionButton() {
               pointerEvents: 'none'
             }}
           >
-            <div className="absolute top-20 left-4 sm:left-4 right-4 sm:right-auto bg-primary-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-xs sm:max-w-xs">
+            <div className="absolute top-20 left-4 sm:left-4 right-4 sm:right-auto bg-action text-action-text px-4 py-3 rounded-lg text-sm font-medium max-w-xs sm:max-w-xs">
               <div className="flex items-center space-x-2">
                 <span>{'\uD83C\uDFAF'}</span>
                 <div>
@@ -124,7 +124,7 @@ export default function SuggestionButton() {
                       <div className="font-medium mb-1">Ausgewählte Elemente:</div>
                       <div className="space-y-1 max-h-20 overflow-y-auto">
                         {selectedElements.slice(0, 3).map((el, index) => (
-                          <div key={index} className="bg-primary-500 bg-opacity-30 rounded px-2 py-1 text-xs truncate">
+                          <div key={index} className="bg-action-hover/30 rounded px-2 py-1 text-xs truncate">
                             {el.elementType}: {el.elementText.substring(0, 30)}...
                           </div>
                         ))}
@@ -142,7 +142,7 @@ export default function SuggestionButton() {
               <Button
                 variant="primary"
                 onClick={() => setIsElementSelectionMode(false)}
-                className="bg-primary-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-primary-700 active:bg-primary-800 transition-colors touch-manipulation"
+                className="px-4 py-3 sm:px-3 sm:py-2 touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 Fertig ({selectedElements.length})
@@ -153,7 +153,7 @@ export default function SuggestionButton() {
                   setIsElementSelectionMode(false)
                   resetToPageScope()
                 }}
-                className="bg-neutral-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-neutral-700 active:bg-neutral-800 transition-colors touch-manipulation"
+                className="px-4 py-3 sm:px-3 sm:py-2 touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 Abbrechen
@@ -174,18 +174,18 @@ export default function SuggestionButton() {
             aria-labelledby="suggestion-panel-title"
             data-suggestion-panel
             className={cn(
-              "bg-white shadow-2xl dark:shadow-black/50 border border-neutral-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
+              "card-shell rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
               "w-[calc(100%-2rem)] max-w-sm sm:w-80 md:w-96",
-              isElementSelectionMode && "ring-2 ring-primary-500 ring-opacity-50 pointer-events-auto"
+              isElementSelectionMode && "ring-2 ring-action ring-opacity-50 pointer-events-auto"
             )}
             style={{ pointerEvents: 'auto' }}
           >
             {/* Header */}
-            <div className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-white/[0.06] px-4 py-3 flex-shrink-0">
+            <div className="bg-surface-raised border-b border-subtle px-4 py-3 flex-shrink-0">
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
-                  <Edit3 className="w-4 h-4 text-primary-600" />
-                  <Heading level={3} id="suggestion-panel-title" className="font-semibold text-neutral-900 text-sm">
+                  <Edit3 className="w-4 h-4 text-action" />
+                  <Heading level={3} id="suggestion-panel-title" className="font-semibold text-text-primary text-sm">
                     {t('cta')}
                   </Heading>
                 </div>
@@ -193,14 +193,14 @@ export default function SuggestionButton() {
                   variant="ghost"
                   size="icon"
                   onClick={closePanelAndReset}
-                  className="text-neutral-500 hover:text-neutral-600 active:bg-neutral-200 transition-colors p-2 sm:p-1 hover:bg-neutral-100 rounded-full touch-manipulation"
+                  className="text-text-tertiary hover:text-text-secondary touch-manipulation"
                   aria-label="Panel schliessen"
                 >
                   <X className="w-5 h-5 sm:w-4 sm:h-4" />
                 </Button>
               </div>
-              <div className="mt-2 text-xs text-neutral-600">
-                Aktuelle Seite: <span className="font-medium text-neutral-900">
+              <div className="mt-2 text-xs text-text-tertiary">
+                Aktuelle Seite: <span className="font-medium text-text-primary">
                   {getCurrentPageInfo().path === '/' ? 'Startseite' : getCurrentPageInfo().title}
                 </span>
               </div>
@@ -229,16 +229,15 @@ export default function SuggestionButton() {
                     />
 
                     <div>
-                      <label htmlFor="suggestion" className="block text-xs font-medium text-neutral-700 mb-1">
+                      <label htmlFor="suggestion" className="block text-xs font-medium text-text-secondary mb-1">
                         Ihr Verbesserungsvorschlag *
                       </label>
                       <Textarea
                         ref={textareaRef}
                         id="suggestion"
                         className={cn(
-                          "w-full px-2 py-1.5 border rounded focus:outline-none focus:ring-1 focus:border-transparent resize-none text-xs transition-colors",
-                          config.focusRing,
-                          submitError ? "border-error-500" : "border-neutral-300"
+                          "resize-none text-xs",
+                          submitError && "border-error-500"
                         )}
                         rows={3}
                         maxLength={500}
@@ -255,11 +254,11 @@ export default function SuggestionButton() {
                       />
                       <div className="flex justify-between items-center mt-0.5">
                         {feedbackScope === 'element' && selectedElements.length > 0 && (
-                          <p className="text-xs text-primary-600">
+                          <p className="text-xs text-action">
                             {'\uD83C\uDFAF'} {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt
                           </p>
                         )}
-                        <p className="text-xs text-neutral-500 ml-auto">
+                        <p className="text-xs text-text-muted ml-auto">
                           {textValue.length}/500
                         </p>
                       </div>
@@ -275,7 +274,7 @@ export default function SuggestionButton() {
                         ref={contactRef}
                         type="text"
                         id="contact"
-                        className="w-full px-2 py-1 border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 text-xs"
+                        className="text-xs"
                         placeholder="Name/E-Mail (optional)"
                         autoComplete="off"
                       />
@@ -288,9 +287,9 @@ export default function SuggestionButton() {
                         size="sm"
                         disabled={isSubmitting || !textValue.trim() || (feedbackScope === 'element' && selectedElements.length === 0)}
                         className={cn(
-                          "flex-1 py-1 px-2 rounded text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+                          "flex-1 text-xs",
                           config.buttonBg,
-                          "text-white"
+                          "text-action-text"
                         )}
                       >
                         {isSubmitting ? 'Sendet...' : 'Senden'}
@@ -302,13 +301,13 @@ export default function SuggestionButton() {
                         size="sm"
                         onClick={closePanelAndReset}
                         disabled={isSubmitting}
-                        className="px-2 py-1 text-xs rounded border-neutral-300 hover:bg-neutral-50 border"
+                        className="text-xs"
                       >
                         Abbrechen
                       </Button>
                     </div>
 
-                    <div className="text-xs text-neutral-400 text-center">
+                    <div className="text-xs text-text-muted text-center">
                       ESC schliesst | Ctrl+Enter sendet
                     </div>
                   </form>
@@ -317,7 +316,7 @@ export default function SuggestionButton() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-neutral-200 px-4 py-3 bg-neutral-50 flex-shrink-0">
+            <div className="border-t border-subtle px-4 py-3 bg-surface-raised flex-shrink-0">
             </div>
           </div>
         </div>
@@ -334,14 +333,14 @@ export default function SuggestionButton() {
         onClick={() => { setIsExpanded(true); uiEvents.emit('openSuggestion') }}
         className={cn(
           "group relative",
-          "bg-primary-100 dark:bg-primary-900/30 hover:bg-primary-600 text-primary-600 dark:text-primary-400 hover:text-white",
-          "w-12 h-12 sm:w-12 sm:h-12 rounded-full shadow-lg hover:shadow-xl",
+          "bg-action-muted hover:bg-action text-action hover:text-action-text",
+          "w-12 h-12 sm:w-12 sm:h-12 rounded-full shadow-xs",
           "transition-all duration-300 ease-out",
-          "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface-page",
           "flex items-center justify-center",
-          "border-2 border-white shadow-black/10",
+          "border border-subtle",
           "hover:scale-110 active:scale-95 touch-manipulation",
-          isExpanded && "ring-2 ring-primary-500 ring-offset-2"
+          isExpanded && "ring-2 ring-action ring-offset-2"
         )}
         aria-label={t('open')}
         aria-expanded={isExpanded}

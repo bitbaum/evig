@@ -1,6 +1,6 @@
 # Design System — The Final Solution
 
-**Last updated:** 2026-06-04 (commits `0c62f5c7`, `48fb78a0`)
+**Last updated:** 2026-06-15 (Phase 4 lint graduation + floating-ui/chatbot token migration)
 
 ## TL;DR
 
@@ -88,7 +88,7 @@ When writing or reviewing component code:
 | Divider lines | `divide-subtle`, `border-subtle` | `divide-neutral-100 dark:divide-white/[0.04]` |
 | Input border | (just `border`) | `border-neutral-300 dark:border-white/[0.08]` |
 | Focus ring | `ring-action` | `ring-primary-500` |
-| Primary button bg | `bg-action hover:bg-action-hover text-text-inverted` | `bg-primary-600 dark:bg-primary-500 ...` |
+| Primary button bg | `bg-action hover:bg-action-hover text-action-text` | `bg-primary-600 dark:bg-primary-500 ...` |
 | Subtle "active" chip | `bg-action-muted text-action` | `bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-300` |
 
 **Form controls (`<input>`, `<select>`, `<textarea>`):** never write raw
@@ -119,59 +119,70 @@ Reference migrated file: `src/app/admin/appointments/page.tsx`.
 
 ## Migration backlog
 
-Updated 2026-06-04 after commits `dc746eab` (CC.1) and `0f7999cf` (CC.2):
+Updated 2026-06-15 after OrangeCat/FleetCrown audit + Phase 0 SSOT migration:
 
-| Pattern | Count | Status |
+| Pattern | Approx. count | Status |
 |---|---|---|
-| Raw `<select>` in feature code | **0** | ✅ Done. ESLint warns on any new occurrence. |
-| Raw `<textarea>` in feature code | **0** | ✅ Done. ESLint warns on any new occurrence. |
-| Raw text `<input>` in feature code | low | Most done. A few stay raw deliberately (CommandBar search has custom chrome). |
-| `bg-white` (palette) | hundreds | Medium — auto-handled by global override; visual works but tokens are cleaner. Migrate during routine refactors. |
-| `text-neutral-X` (palette) | hundreds | Medium |
-| `bg-primary-X` (palette) | hundreds | Medium |
-| Explicit `dark:` variants | hundreds | Low — they work, just verbose; remove during routine refactors. |
+| Raw `<select>` in feature code | **0** | Done. ESLint warns on new occurrences. |
+| Raw `<textarea>` in feature code | **0** | Done. |
+| Raw text `<input>` in feature code | low | Most done; CommandBar search stays raw. |
+| Semantic token classes (`text-text-*`, `bg-surface-*`, `bg-action`, `ui-public-*`) | **~6,100** | Primary API — growing. |
+| Legacy palette + explicit `dark:` in feature code | **~169 → ~40** | Phase 2–4 sweep; chatbot/floating-ui migrated 2026-06-15. |
+| `shadow-lg` / `shadow-xl` on static surfaces | **~48** | ESLint warns on new occurrences; overlays/modals exempt. |
+| **Phase 0** — SSOT adapters | done 2026-06-15 | `design-system.ts`, `tokens.ts`, `config/ui/buttons.ts`, core UI kit |
+| **Phase 3b** — Shop + IT-Hilfe | done 2026-06-15 | shop overview/search/product/category, IT-Hilfe my/offers/create/accept/detail |
+| **Phase 4** — Lint graduation | partial 2026-06-15 | `[locale]/**` palette+shadow rules → **error**; chatbot/floating-ui/cookie migrated |
 
-Run `npm run lint` to see current warning count.
+Run `npm run lint` to see palette-class warnings (new rules as of 2026-06-15).
 
-**Result**: every form control in the codebase routes through the
-Input/Select/Textarea primitives → semantic tokens → automatic
-light/dark theming. The BB.6 bug class is structurally extinct.
+### RevampIT vs OrangeCat — key differences
 
-## Tailwind 4 + shadcn — the deferred upgrades
+OrangeCat found semantic border utilities (`border-default`) not wired into
+Tailwind. **RevampIT already wires them** via Tailwind v4 `@theme`
+(`border-subtle`, `border-default`, `border-strong` in `globals.css`).
 
-Both were attempted in the BB session. **Tailwind 4 upgrade failed at the
-auto-converter step**: the upgrade tool wraps `.dark .X { ... }` override
-blocks into `@utility dark { ... }`, but the project's globals.css has
-250+ such overrides including selectors with colons (`.dark .hover:bg-X`).
-Tailwind 4 rejects those as invalid utility names. The upgrade was rolled
-back.
+The RevampIT gap was different: **SSOT split** — `globals.css` was semantic
+while `design-system.ts`, `tokens.ts`, and `config/ui/buttons.ts` still
+exported palette scales into every `<Button>`, `<Card>`, and marketing
+component. Phase 0 fixes that adapter layer.
 
-The real prerequisite for Tailwind 4 is to **restructure the dark-mode
-override block in globals.css first**. Two options:
+**Do not blind-codemod:**
+- Commerce orange (`secondary-*`) ≠ semantic `action` (green). Marketplace
+  icon badges and hovers keep `secondary-*` intentionally.
+- Status badges keep `error-*` / `warning-*` / `success-*` palette scales.
+- `accent` / hover tints are not interchangeable with `action-muted`.
 
-1. Replace the overrides with the new `@custom-variant dark` + plain
-   CSS selectors (which Tailwind 4 supports natively).
-2. Eliminate the overrides entirely by completing the palette → semantic
-   token migration. Once everything uses semantic tokens, the
-   "compat layer" for `bg-white`/`text-neutral-X` becomes unnecessary.
+### Migration phases (recommended order)
 
-Option 2 is the strategically better path — finish what we started.
+1. **Phase 0 — SSOT adapters** (done 2026-06-15): `design-system.ts`,
+   `tokens.ts`, `config/ui/buttons.ts`, core UI (`Stepper`, `Modal`,
+   `Pagination`).
+2. **Phase 1 — UI kit remainder**: `FilterBar`, `Tabs`, `EmptyState`,
+   `ConfirmDialog`, `status-banner`, floating-ui, chatbot.
+3. **Phase 2 — Feature/marketing pages**: sweep remaining ~1,200 legacy
+   refs; one surface per commit.
+4. **Phase 3 — Public discipline**: adopt `ui-public-*` utilities on every
+   `[locale]/*` marketing page (homepage/upcycling/techniker are reference).
+5. **Phase 4 — Lint graduation** (partial 2026-06-15): `[locale]/**` routes enforce
+   palette + shadow rules as ESLint **errors**; chatbot, floating-ui, cookie
+   banner migrated to semantic tokens. Remaining: admin/dashboard surfaces.
+6. **Phase 5 — Full graduation**: palette warnings → errors project-wide when
+   count < 50; delete legacy `--color-*` aliases from `globals.css`.
 
-Order of operations when ready:
+Reference pages: `src/app/[locale]/page.tsx`, `projects/upcycling/page.tsx`,
+`techniker/[id]/TechnikerProfileView.tsx`, `src/app/admin/appointments/page.tsx`.
 
-1. Sweep the codebase converting `bg-white`/`text-neutral-X`/etc. to
-   semantic tokens. Each commit one surface; visual diff per commit.
-2. When the dark-mode override block is no longer needed (or
-   substantially smaller), restructure what's left to `@custom-variant`
-   style.
-3. THEN run `npx @tailwindcss/upgrade`.
-4. shadcn/ui adoption stays optional — the existing primitives already
-   consume semantic tokens correctly, so the bug-prevention goal is met
-   without shadcn. Worth doing if the team welcomes the Radix peer-dep
-   weight, but it's polish, not structure.
+## Tailwind 4 — current state
 
-Estimated effort: 8-15 hours of focused surface migration before
-Tailwind 4 is safe to attempt again.
+RevampIT runs **Tailwind CSS v4** with `@import 'tailwindcss'`,
+`@custom-variant dark`, and `@theme` token wiring in `globals.css`. The
+2026-06-04 note about a failed upgrade is **obsolete** — the restructure
+(`@custom-variant` + semantic tokens) is complete.
+
+Remaining work is **finishing the palette → semantic migration** in feature
+code, not another Tailwind upgrade. shadcn/ui remains optional; existing
+primitives in `src/components/ui/` are sufficient when they consume
+`designPrimitive`.
 
 ## Why this works
 

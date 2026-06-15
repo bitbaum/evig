@@ -66,13 +66,17 @@ export default async function ContactPage() {
       {/* Contact Information Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          <div className="text-center mb-10">
+            <div className="ui-public-eyebrow">{t('hero.title').toUpperCase()}</div>
+            <Heading level={2} className="ui-public-display-md mt-3 sr-only">{t('hero.title')}</Heading>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
             {contactInfo.map((info, index) => (
-              <div key={index} className="bg-action-muted rounded-xl p-4 sm:p-6 text-center">
+              <article key={index} className="ui-public-card text-center bg-action-muted/30 border-action/20">
                 <div className="flex justify-center mb-3 sm:mb-4">
-                  <info.icon className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
+                  <info.icon className="w-6 h-6 sm:w-8 sm:h-8 text-action" aria-hidden="true" />
                 </div>
-                <Heading level={3} className="text-base sm:text-lg font-semibold text-action mb-2">{info.title}</Heading>
+                <h3 className="ui-public-card-title text-action">{info.title}</h3>
                 {info.link ? (
                   <a
                     href={info.link}
@@ -81,18 +85,22 @@ export default async function ContactPage() {
                     {info.value}
                   </a>
                 ) : (
-                  <p className="text-text-secondary">{info.value}</p>
+                  <p className="ui-public-card-body whitespace-pre-line">{info.value}</p>
                 )}
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-raised/50">
+      <section className="ui-public-band py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="ui-public-eyebrow mb-3">{t('form.title').toUpperCase()}</div>
+              <Heading level={2} className="ui-public-display-md mb-6 text-center">{t('form.title')}</Heading>
+            </div>
             <ContactForm />
           </div>
         </div>
@@ -102,7 +110,10 @@ export default async function ContactPage() {
       <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
-            <Heading level={2} className="mb-6 sm:mb-8 text-center">{t('map.title')}</Heading>
+            <div className="text-center mb-8">
+              <div className="ui-public-eyebrow">{t('map.title').toUpperCase()}</div>
+              <Heading level={2} className="ui-public-display-md mt-3">{t('map.title')}</Heading>
+            </div>
             <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden border">
               <iframe
                 src={LOCATIONS.store.googleMapsEmbedUrl}

@@ -38,13 +38,13 @@ export default function BlogHero({ post }: BlogHeroProps) {
         <div className="order-1 lg:order-2">
           {/* Category Badge */}
           {post.category && (
-            <span className="inline-block px-3 py-1 bg-action text-white text-sm font-semibold rounded-sm mb-4 uppercase tracking-wide">
+            <span className="inline-block px-3 py-1 bg-action text-action-text text-sm font-semibold rounded-sm mb-4 uppercase tracking-wide">
               {post.category}
             </span>
           )}
 
           {/* Title */}
-          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-text-primary mb-4 leading-tight group-hover:text-action dark:group-hover:text-action transition-colors">
+          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-text-primary mb-4 leading-tight group-hover:text-action transition-colors">
             {post.title}
           </Heading>
 

@@ -5,8 +5,8 @@
  * Ensures WCAG AA compliance and consistent design across the app
  * 
  * Created: 2025-12-17
- * Last Modified: 2025-12-17
- * Last Modified Summary: Initial design system utilities for contrast-safe colors
+ * Last Modified: 2026-06-15
+ * Last Modified Summary: Migrate designPrimitive + surface/button helpers to semantic tokens (FleetCrown/x.ai discipline)
  */
 
 /**
@@ -27,25 +27,24 @@ export const contrastSafeColors = {
   // White backgrounds
   white: {
     text: {
-      primary: 'text-neutral-900',      // High contrast on white
-      secondary: 'text-neutral-700',    // Medium contrast
-      muted: 'text-neutral-600',       // Muted but WCAG AA safe on white
-      inverse: 'text-neutral-900',      // Same as primary
+      primary: 'text-text-primary',
+      secondary: 'text-text-secondary',
+      muted: 'text-text-tertiary',
+      inverse: 'text-text-primary',
     },
-    bg: 'bg-white',
-    border: 'border-neutral-200',
+    bg: 'bg-surface-base',
+    border: 'border-subtle',
   },
-  
-  // Neutral/Light gray backgrounds (bg-neutral-50)
+
   neutral: {
     text: {
-      primary: 'text-neutral-900',      // High contrast
-      secondary: 'text-neutral-700',
-      muted: 'text-neutral-600',       // WCAG AA safe on neutral-50
-      inverse: 'text-neutral-900',
+      primary: 'text-text-primary',
+      secondary: 'text-text-secondary',
+      muted: 'text-text-tertiary',
+      inverse: 'text-text-primary',
     },
-    bg: 'bg-neutral-50',
-    border: 'border-neutral-300',
+    bg: 'bg-surface-raised',
+    border: 'border-default',
   },
   
   // Primary green backgrounds
@@ -124,14 +123,14 @@ export const contrastSafeColors = {
   // Dark backgrounds
   dark: {
     text: {
-      primary: 'text-white',
-      secondary: 'text-neutral-200',
-      muted: 'text-neutral-400',
-      inverse: 'text-white',
-      onDark: 'text-white',
+      primary: 'text-text-inverted',
+      secondary: 'text-text-secondary',
+      muted: 'text-text-muted',
+      inverse: 'text-text-inverted',
+      onDark: 'text-text-inverted',
     },
-    bg: 'bg-neutral-900',
-    border: 'border-neutral-700',
+    bg: 'bg-surface-page',
+    border: 'border-subtle',
   },
 } as const
 
@@ -185,16 +184,16 @@ export const statusColors = {
     icon: 'text-error-600 dark:text-error-400',
   },
   info: {
-    bg: 'bg-neutral-50',
-    text: 'text-neutral-800',
-    border: 'border-neutral-200',
-    icon: 'text-neutral-600',
+    bg: 'bg-surface-raised',
+    text: 'text-text-primary',
+    border: 'border-subtle',
+    icon: 'text-text-secondary',
   },
   neutral: {
-    bg: 'bg-neutral-50',
-    text: 'text-neutral-800',
-    border: 'border-neutral-200',
-    icon: 'text-neutral-600',
+    bg: 'bg-surface-raised',
+    text: 'text-text-primary',
+    border: 'border-subtle',
+    icon: 'text-text-secondary',
   },
 } as const
 
@@ -210,10 +209,10 @@ export function getStatusColors(status: keyof typeof statusColors) {
  */
 export const buttonVariants = {
   primary: {
-    bg: 'bg-primary-600',
-    hover: 'hover:bg-primary-700',
-    text: 'text-white',
-    border: 'border-primary-700',
+    bg: 'bg-action',
+    hover: 'hover:bg-action-hover',
+    text: 'text-action-text',
+    border: 'border-transparent',
   },
   secondary: {
     bg: 'bg-secondary-500',
@@ -223,14 +222,14 @@ export const buttonVariants = {
   },
   outline: {
     bg: 'bg-transparent',
-    hover: 'hover:bg-neutral-50',
-    text: 'text-neutral-700',
-    border: 'border-neutral-300',
+    hover: 'hover:bg-surface-raised',
+    text: 'text-text-secondary',
+    border: 'border-subtle',
   },
   ghost: {
     bg: 'bg-transparent',
-    hover: 'hover:bg-neutral-100',
-    text: 'text-neutral-700',
+    hover: 'hover:bg-surface-raised',
+    text: 'text-text-secondary',
     border: 'border-transparent',
   },
   success: {
@@ -259,25 +258,25 @@ export function getButtonVariant(variant: keyof typeof buttonVariants) {
  */
 export const containerVariants = {
   default: {
-    bg: 'bg-white',
-    text: 'text-neutral-900',
-    border: 'border-neutral-200',
+    bg: 'bg-surface-base',
+    text: 'text-text-primary',
+    border: 'border-subtle',
   },
   elevated: {
-    bg: 'bg-white',
-    text: 'text-neutral-900',
-    border: 'border-neutral-200',
-    shadow: 'shadow-lg',
+    bg: 'bg-surface-base',
+    text: 'text-text-primary',
+    border: 'border-subtle',
+    shadow: 'shadow-xs',
   },
   subtle: {
-    bg: 'bg-neutral-50',
-    text: 'text-neutral-900',
-    border: 'border-neutral-200',
+    bg: 'bg-surface-raised',
+    text: 'text-text-primary',
+    border: 'border-subtle',
   },
   primary: {
-    bg: 'bg-primary-50 dark:bg-primary-900/20',
-    text: 'text-neutral-900',
-    border: 'border-primary-200 dark:border-primary-800/30',
+    bg: 'bg-action-muted',
+    text: 'text-text-primary',
+    border: 'border-action/20',
   },
 } as const
 
@@ -326,19 +325,19 @@ export const touchTarget = {
 export const designPrimitive = {
   // Focus ring — primary green, consistent with brand
   focus:
-    'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950',
+    'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface-page',
 
   // ── Typography ────────────────────────────────────────────────────────────
   // x.ai style: tight tracking, high contrast, scale discipline
   type: {
-    pageTitle:   'text-2xl font-bold tracking-tight text-neutral-900 dark:text-white',
-    sectionTitle:'text-sm font-semibold tracking-tight text-neutral-900 dark:text-white',
-    subTitle:    'text-sm font-medium text-neutral-700 dark:text-neutral-300',
-    body:        'text-sm text-neutral-600 dark:text-neutral-300',
-    meta:        'text-xs text-neutral-500 dark:text-neutral-400',
-    smallMeta:   'text-xs text-neutral-400 dark:text-neutral-500',
-    tableHeader: 'text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500',
-    stat:        'text-2xl font-bold tabular-nums text-neutral-900 dark:text-white',
+    pageTitle:   'text-2xl font-bold tracking-tight text-text-primary',
+    sectionTitle:'text-sm font-semibold tracking-tight text-text-primary',
+    subTitle:    'text-sm font-medium text-text-secondary',
+    body:        'text-sm text-text-secondary',
+    meta:        'text-xs text-text-tertiary',
+    smallMeta:   'text-xs text-text-muted',
+    tableHeader: 'text-xs font-medium uppercase tracking-wider text-text-muted',
+    stat:        'text-2xl font-bold tabular-nums text-text-primary',
   },
 
   // ── Surfaces ──────────────────────────────────────────────────────────────
@@ -357,15 +356,12 @@ export const designPrimitive = {
     'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
 
   button: {
-    // In dark mode the brand pulse goes brighter (primary-500 #22c55e) and the
-    // text flips to near-black for WCAG AA contrast. Plain `text-white` on
-    // primary-600 was reading as 3.1:1 — looked green-washed.
-    default:     'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:text-neutral-950 dark:hover:bg-primary-400',
-    primary:     'bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:text-neutral-950 dark:hover:bg-primary-400',
-    outline:     'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-white/8 dark:bg-transparent dark:text-white dark:hover:bg-white/4',
-    outlineLight:'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
-    secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-white/6 dark:text-white dark:hover:bg-white/10',
-    ghost:       'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/4 dark:hover:text-white',
+    default:     'bg-action text-action-text hover:bg-action-hover',
+    primary:     'bg-action text-action-text hover:bg-action-hover',
+    outline:     'border border-subtle bg-surface-base text-text-primary hover:bg-surface-raised',
+    outlineLight:'border border-white/70 bg-transparent text-white hover:bg-white hover:text-text-primary',
+    secondary:   'bg-surface-raised text-text-primary hover:bg-surface-overlay',
+    ghost:       'bg-transparent text-text-secondary hover:bg-surface-raised hover:text-text-primary',
     destructive:         'bg-error-600 text-white hover:bg-error-700',
     'destructive-ghost': 'bg-transparent text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-900/20',
     'destructive-outline':'border border-error-200 text-error-700 hover:bg-error-50 dark:border-error-800 dark:text-error-400 dark:hover:bg-error-900/20',
@@ -384,10 +380,10 @@ export const designPrimitive = {
     'inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium transition-colors',
 
   badge: {
-    default:     'border-transparent bg-primary-600 text-white',
-    secondary:   'border-transparent bg-neutral-100 text-neutral-700 dark:bg-white/8 dark:text-neutral-300',
+    default:     'border-transparent bg-action text-action-text',
+    secondary:   'border-transparent bg-surface-raised text-text-secondary',
     destructive: 'border-transparent bg-error-600 text-white',
-    outline:     'border-neutral-300 text-neutral-700 dark:border-white/12 dark:text-neutral-400',
+    outline:     'border-subtle text-text-secondary',
     success:     'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/10 dark:text-primary-400',
     warning:     'border-warning-200 bg-warning-50 text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-400',
     info:        'border-neutral-200 bg-neutral-50 text-neutral-800 dark:border-neutral-500/30 dark:bg-neutral-500/10 dark:text-neutral-400',
@@ -417,11 +413,11 @@ export const designPrimitive = {
   // ── Tables ────────────────────────────────────────────────────────────────
   // x.ai: very subtle row separators, no heavy borders
   table: {
-    thead: 'border-b border-neutral-200 bg-neutral-50 dark:border-white/6 dark:bg-transparent',
-    th:    'px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500',
-    tr:    'border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-white/4 dark:hover:bg-white/2',
-    td:    'px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300',
-    empty: 'py-12 text-center text-sm text-neutral-500 dark:text-neutral-400',
+    thead: 'border-b border-subtle bg-surface-raised',
+    th:    'px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-text-muted',
+    tr:    'border-b border-subtle transition-colors hover:bg-surface-raised',
+    td:    'px-4 py-3 text-sm text-text-secondary',
+    empty: 'py-12 text-center text-sm text-text-tertiary',
   },
 } as const
 

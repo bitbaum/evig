@@ -5,12 +5,9 @@ import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Heart, Coffee, Users, Shield } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { ROUTES } from '@/config/routes'
-import { PageShell } from '@/components/layout/PageShell'
 
 interface SupportPageProps {
   params: Promise<{ locale: string }>
@@ -34,6 +31,12 @@ export default async function SupportPage({ params }: SupportPageProps) {
 
   const promiseItems = t.raw('promise.items') as string[]
 
+  const pillars = [
+    { icon: Shield, title: t('pillars.noAds.title'), description: t('pillars.noAds.description') },
+    { icon: Users, title: t('pillars.communityDriven.title'), description: t('pillars.communityDriven.description') },
+    { icon: Heart, title: t('pillars.qualityFirst.title'), description: t('pillars.qualityFirst.description') },
+  ]
+
   return (
     <>
       <PageHero
@@ -43,89 +46,76 @@ export default async function SupportPage({ params }: SupportPageProps) {
         subtitle={t('hero.subtitle')}
       />
 
-      <PageShell maxWidth="4xl" py="py-12 sm:py-16">
-        {/* Three pillars */}
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted rounded-full mb-3 sm:mb-4">
-              <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
-            </div>
-            <Heading level={3} className="text-base sm:text-lg text-text-primary mb-2">
-              {t('pillars.noAds.title')}
-            </Heading>
-            <p className="text-text-secondary">{t('pillars.noAds.description')}</p>
-          </div>
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted rounded-full mb-3 sm:mb-4">
-              <Users className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
-            </div>
-            <Heading level={3} className="text-base sm:text-lg text-text-primary mb-2">
-              {t('pillars.communityDriven.title')}
-            </Heading>
-            <p className="text-text-secondary">{t('pillars.communityDriven.description')}</p>
-          </div>
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-action-muted rounded-full mb-3 sm:mb-4">
-              <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
-            </div>
-            <Heading level={3} className="text-base sm:text-lg text-text-primary mb-2">
-              {t('pillars.qualityFirst.title')}
-            </Heading>
-            <p className="text-text-secondary">{t('pillars.qualityFirst.description')}</p>
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-4">
+            {pillars.map((pillar) => (
+              <article key={pillar.title} className="ui-public-card text-center">
+                <pillar.icon className="w-8 h-8 text-action mx-auto" aria-hidden="true" />
+                <h3 className="ui-public-card-title mt-4">{pillar.title}</h3>
+                <p className="ui-public-card-body">{pillar.description}</p>
+              </article>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Our Promise */}
-        <div className="bg-surface-raised rounded-lg p-6 sm:p-8 mb-8 sm:mb-12">
-          <Heading level={2} className="text-xl sm:text-2xl text-text-primary mb-3 sm:mb-4">
-            {t('promise.title')}
-          </Heading>
-          <div className="prose prose-lg text-text-secondary">
+      <section className="ui-public-band py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">{t('promise.title').toUpperCase()}</div>
+          <h2 className="ui-public-display-md mt-4">{t('promise.title')}</h2>
+          <div className="ui-public-body-lg mt-6 space-y-4">
             <p>{t('promise.intro')}</p>
             <p>{t('promise.enables')}</p>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-left">
               {promiseItems.map((item, i) => (
-                <li key={i}>✅ {item}</li>
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-action" aria-hidden="true">✓</span>
+                  <span>{item}</span>
+                </li>
               ))}
             </ul>
           </div>
         </div>
+      </section>
 
-        {/* Support Options */}
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
-          <div className="border-2 border rounded-lg p-6 sm:p-8 hover:border-action transition-colors">
-            <div className="flex items-center gap-3 mb-3 sm:mb-4">
-              <Coffee className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
-              <Heading level={3} className="text-xl sm:text-2xl text-text-primary">
-                {t('oneTime.title')}
-              </Heading>
-            </div>
-            <p className="text-text-secondary mb-6">{t('oneTime.description')}</p>
-            <Button as="a" href="https://ko-fi.com/revampit" target="_blank" rel="noopener noreferrer" variant="primary" className="w-full">
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-4">
+          <article className="ui-public-card">
+            <Coffee className="w-8 h-8 text-action mb-4" aria-hidden="true" />
+            <h3 className="ui-public-card-title">{t('oneTime.title')}</h3>
+            <p className="ui-public-card-body">{t('oneTime.description')}</p>
+            <a
+              href="https://ko-fi.com/revampit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ui-public-cta mt-6 w-full text-center"
+            >
               {t('oneTime.cta')}
-            </Button>
-          </div>
+            </a>
+          </article>
 
-          <div className="border-2 border-action rounded-lg p-6 sm:p-8 bg-action-muted">
-            <div className="flex items-center gap-3 mb-3 sm:mb-4">
-              <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-action" />
-              <Heading level={3} className="text-xl sm:text-2xl text-text-primary">
-                {t('monthly.title')}
-              </Heading>
-            </div>
-            <p className="text-text-secondary mb-6">{t('monthly.description')}</p>
-            <Button as="a" href="https://github.com/sponsors/revampit" target="_blank" rel="noopener noreferrer" variant="primary" className="w-full">
+          <article className="ui-public-card border-action/30 bg-action-muted/20">
+            <Heart className="w-8 h-8 text-action mb-4" aria-hidden="true" />
+            <h3 className="ui-public-card-title">{t('monthly.title')}</h3>
+            <p className="ui-public-card-body">{t('monthly.description')}</p>
+            <a
+              href="https://github.com/sponsors/revampit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ui-public-cta mt-6 w-full text-center"
+            >
               {t('monthly.cta')}
-            </Button>
-          </div>
+            </a>
+          </article>
         </div>
+      </section>
 
-        {/* Other Ways */}
-        <div className="text-center py-8 border-t border">
-          <Heading level={3} className="text-xl text-text-primary mb-4">
-            {t('otherWays.title')}
-          </Heading>
-          <div className="flex flex-wrap justify-center gap-3">
+      <section className="ui-public-band py-16 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">{t('otherWays.title').toUpperCase()}</div>
+          <h2 className="ui-public-display-md mt-4">{t('otherWays.title')}</h2>
+          <div className="ui-public-cta-row mt-8">
             <Link href={ROUTES.public.blogSubmit} className="ui-public-cta-ghost">
               {t('otherWays.submitPost')}
             </Link>
@@ -141,15 +131,11 @@ export default async function SupportPage({ params }: SupportPageProps) {
               {t('otherWays.shareArticle')}
             </Link>
           </div>
-        </div>
-
-        {/* Thank You */}
-        <div className="text-center py-8">
-          <p className="text-lg text-text-secondary">
+          <p className="ui-public-section-lede mt-10 mx-auto">
             <strong>{t('thanks')}</strong>
           </p>
         </div>
-      </PageShell>
+      </section>
     </>
   )
 }

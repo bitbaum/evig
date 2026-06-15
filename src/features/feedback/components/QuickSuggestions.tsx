@@ -19,7 +19,7 @@ export function QuickSuggestions({
 
   return (
     <div className="space-y-2">
-      <div className="text-xs font-medium text-neutral-700">Schnellvorschläge:</div>
+      <div className="text-xs font-medium text-text-secondary">Schnellvorschläge:</div>
       <div className="flex flex-wrap gap-1">
         {suggestions.map((suggestion, index) => (
           <Button
@@ -28,7 +28,7 @@ export function QuickSuggestions({
             variant="outline"
             size="sm"
             onClick={() => onQuickSuggestion(suggestion)}
-            className="h-6 px-2 text-xs bg-neutral-50 hover:bg-neutral-100 border-neutral-200 text-neutral-600 hover:text-neutral-800"
+            className="h-6 px-2 text-xs"
           >
             {suggestion}
           </Button>

@@ -1,0 +1,67 @@
+name: Deploy (experimental site)
+
+# Push to main → build + rsync to revampit.orangecat.ch (Vercel-equivalent UX).
+# One-time setup (Settings → Secrets → Actions):
+#   HETZNER_SSH_PRIVATE_KEY — private key for ubuntu@167.233.22.31
+#   SELFHOST_ENV            — full contents of .env.selfhost.local (multiline OK)
+# Without those secrets the job logs a notice and exits cleanly.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-selfhost-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: revampit.orangecat.ch
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HETZNER_SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_PRIVATE_KEY }}
+      SELFHOST_ENV: ${{ secrets.SELFHOST_ENV }}
+    steps:
+      - name: Check secrets configured
+        id: secrets
+        run: |
+          if [ -z "$HETZNER_SSH_PRIVATE_KEY" ] || [ -z "$SELFHOST_ENV" ]; then
+            echo "::notice::HETZNER_SSH_PRIVATE_KEY and/or SELFHOST_ENV not set — skipping self-host deploy. Push from a machine with .env.selfhost.local still deploys via the pre-push hook."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout code
+        if: steps.secrets.outputs.configured == 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: steps.secrets.outputs.configured == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.secrets.outputs.configured == 'true'
+        run: npm ci
+
+      - name: Write selfhost env
+        if: steps.secrets.outputs.configured == 'true'
+        run: |
+          printf '%s' "$SELFHOST_ENV" > .env.selfhost.local
+          chmod 600 .env.selfhost.local
+
+      - name: Setup SSH
+        if: steps.secrets.outputs.configured == 'true'
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$HETZNER_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 167.233.22.31 >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        if: steps.secrets.outputs.configured == 'true'
+        run: bash scripts/selfhost-deploy-revampit.sh

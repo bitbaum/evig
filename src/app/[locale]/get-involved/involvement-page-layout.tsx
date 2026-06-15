@@ -1,10 +1,8 @@
 import { ReactNode } from 'react'
 import { Link } from '@/i18n/navigation'
-import { buttonClass } from '@/components/ui/button-class'
 import { getTranslations } from 'next-intl/server'
-import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
-import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
+import { PageHero } from '@/components/layout/PageHero'
+import { Users } from 'lucide-react'
 
 interface InvolvementPageLayoutProps {
   title: string
@@ -22,44 +20,39 @@ export async function InvolvementPageLayout({
   ctaHref
 }: InvolvementPageLayoutProps) {
   const t = await getTranslations('getInvolved.cta')
+  const tEye = await getTranslations('common.eyebrows')
 
   return (
     <main className="min-h-screen">
-      <ResponsiveHero title={title} description={description}>
-        <a
-          href={ctaHref}
-          className={`${responsiveButtons.primary} bg-surface-base text-action hover:bg-action-muted text-center`}
-        >
-          {ctaText}
-        </a>
-      </ResponsiveHero>
+      <PageHero
+        theme="getInvolved"
+        icon={Users}
+        title={title}
+        subtitle={description}
+      >
+        <div className="ui-public-cta-row mt-8">
+          <a href={ctaHref} className="ui-public-cta">
+            {ctaText}
+          </a>
+        </div>
+      </PageHero>
 
-      {/* Content Section */}
-      <section className={responsiveSpacing.section}>
-        <div className={`${responsiveSpacing.container} mx-auto`}>
-          <div className="max-w-4xl mx-auto">
-            {children}
-          </div>
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          {children}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-surface-raised`}>
-        <div className={`${responsiveSpacing.container} mx-auto text-center`}>
-          <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbMedium}`}>
-            {t('readyHeading')}
-          </Heading>
-          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-text-secondary`}>
-            {t('readyBody')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/get-involved/kontakt" className={buttonClass({ variant: 'primary', className: responsiveButtons.large })}>
+      <section className="border-t border-subtle py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="ui-public-eyebrow">{tEye('ready')}</div>
+          <h2 className="ui-public-display-lg mt-4">{t('readyHeading')}</h2>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('readyBody')}</p>
+          <div className="ui-public-cta-row mt-10">
+            <Link href="/get-involved/kontakt" className="ui-public-cta">
               {t('expressInterestBtn')}
             </Link>
-            <Link
-              href="/get-involved"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-action text-action hover:bg-action-muted`}
-            >
+            <Link href="/get-involved" className="ui-public-cta-ghost">
               {t('exploreOptionsBtn')}
             </Link>
           </div>

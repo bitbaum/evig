@@ -26,7 +26,7 @@ export function FeedbackScopeSelector({
 }: FeedbackScopeSelectorProps) {
   return (
     <div className="space-y-3">
-      <label className="block text-xs font-medium text-neutral-700">
+      <label className="block text-xs font-medium text-text-secondary">
         Feedback-Bereich *
       </label>
       <div className="grid grid-cols-1 gap-2">
@@ -49,8 +49,8 @@ export function FeedbackScopeSelector({
               className={cn(
                 "w-full px-3 py-2.5 text-xs rounded-lg border-2 transition-all duration-200",
                 isActive
-                  ? `${config.bgColor} ${config.borderColor} ${config.textColor} shadow-md transform scale-[1.02]`
-                  : "bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300"
+                  ? `${config.bgColor} ${config.borderColor} ${config.textColor} transform scale-[1.02]`
+                  : "bg-surface-base border text-text-secondary hover:bg-surface-raised hover:border-strong"
               )}
             >
               <div className="flex items-center space-x-3">
@@ -75,17 +75,12 @@ export function FeedbackScopeSelector({
       </div>
 
       {feedbackScope === 'element' && (
-        <div className="mt-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
+        <div className="mt-3 p-3 bg-surface-raised border border-subtle rounded-lg">
           <Button
             type="button"
             variant={isElementSelectionMode ? 'primary' : 'outline'}
             onClick={toggleElementSelection}
-            className={cn(
-              "w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200",
-              isElementSelectionMode
-                ? "bg-primary-600 text-white border-primary-600 shadow-md"
-                : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400"
-            )}
+            className="w-full"
           >
             <div className="flex items-center justify-center space-x-2">
               <span>{'\uD83C\uDFAF'}</span>
@@ -98,18 +93,18 @@ export function FeedbackScopeSelector({
           </Button>
 
           {selectedElements.length > 0 && !isElementSelectionMode && (
-            <div className="mt-2 p-2 bg-white rounded border border-neutral-200">
-              <p className="text-xs font-medium text-neutral-800 mb-1">
+            <div className="mt-2 p-2 bg-surface-base rounded border border-subtle">
+              <p className="text-xs font-medium text-text-primary mb-1">
                 {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt
               </p>
               <div className="space-y-1">
                 {selectedElements.slice(0, 2).map((el, index) => (
-                  <div key={index} className="text-xs text-neutral-700 bg-neutral-50 px-2 py-1 rounded truncate">
+                  <div key={index} className="text-xs text-text-secondary bg-surface-raised px-2 py-1 rounded truncate">
                     {el.elementType}: {el.elementText.substring(0, 25)}...
                   </div>
                 ))}
                 {selectedElements.length > 2 && (
-                  <div className="text-xs text-neutral-600 italic">
+                  <div className="text-xs text-text-muted italic">
                     +{selectedElements.length - 2} weitere...
                   </div>
                 )}
@@ -118,7 +113,7 @@ export function FeedbackScopeSelector({
           )}
 
           {isElementSelectionMode && (
-            <div className="mt-2 text-xs text-neutral-700 bg-neutral-100 p-2 rounded">
+            <div className="mt-2 text-xs text-text-secondary bg-surface-overlay p-2 rounded">
               Klicken Sie auf Elemente der Seite, um sie auszuwählen
             </div>
           )}

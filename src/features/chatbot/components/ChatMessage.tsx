@@ -26,10 +26,10 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
       message.type === 'user' ? "justify-end" : "justify-start"
     )}>
       <div className={cn(
-        "max-w-[85%] p-3 rounded-2xl shadow-sm",
+        "max-w-[85%] p-3 rounded-2xl",
         message.type === 'user'
-          ? "bg-primary-700 text-white rounded-br-md"
-          : "bg-white text-neutral-800 rounded-bl-md border border-neutral-100"
+          ? "bg-action text-action-text rounded-br-md"
+          : "bg-surface-base text-text-primary rounded-bl-md border border-subtle"
       )}>
         <p className="text-sm leading-relaxed">{message.content}</p>
         
@@ -41,21 +41,21 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
                 key={idx}
                 variant="ghost"
                 onClick={() => onSuggestionClick(suggestion)}
-                className="flex items-center justify-between w-full text-left p-2.5 text-xs bg-gradient-to-r from-neutral-50 to-neutral-50/30 hover:from-primary-50 hover:to-primary-50 rounded-lg border border-neutral-200/50 hover:border-primary-300/50 text-neutral-700 hover:text-neutral-900 transition-all duration-200 group"
+                className="flex items-center justify-between w-full text-left p-2.5 text-xs bg-surface-raised hover:bg-action-muted rounded-lg border border-subtle hover:border-strong text-text-secondary hover:text-text-primary transition-all duration-200 group"
               >
                 <div className="flex-1">
                   <div className="font-medium flex items-center">
                     {suggestion.label}
                   </div>
                   {suggestion.description && (
-                    <div className="text-neutral-500 mt-0.5 text-xs">{suggestion.description}</div>
+                    <div className="text-text-muted mt-0.5 text-xs">{suggestion.description}</div>
                   )}
                 </div>
                 <div className="flex items-center ml-2">
                   {suggestion.external ? (
-                    <ExternalLink className="w-3 h-3 text-neutral-500 group-hover:text-primary-600 transition-colors" />
+                    <ExternalLink className="w-3 h-3 text-text-tertiary group-hover:text-action transition-colors" />
                   ) : (
-                    <ArrowRight className="w-3 h-3 text-neutral-500 group-hover:text-primary-600 transition-colors" />
+                    <ArrowRight className="w-3 h-3 text-text-tertiary group-hover:text-action transition-colors" />
                   )}
                 </div>
               </Button>

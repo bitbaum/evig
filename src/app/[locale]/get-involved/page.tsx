@@ -7,8 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Heart, Recycle, Users, Zap, Globe } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'
-import { responsiveTypography, responsiveSpacing, responsiveButtons, responsiveGrid } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
@@ -87,26 +85,21 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </PageHero>
 
       {/* Core Values Section */}
-      <section id="learn-more" className={`${responsiveSpacing.section} bg-surface-raised`}>
-        <div className={`${responsiveSpacing.container} mx-auto`}>
-          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
-            {t('coreValues.heading')}
-          </Heading>
-          <div className={responsiveGrid.cards}>
+      <section id="learn-more" className="ui-public-band py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="ui-public-eyebrow">{t('coreValues.heading').toUpperCase()}</div>
+            <h2 className="ui-public-display-lg mt-4">{t('coreValues.heading')}</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {coreValueItems.map((value, index) => {
               const Icon = CORE_VALUE_ICONS[index]
               return (
-                <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-strong transition-all duration-300`}>
-                  <div className={`text-action ${responsiveSpacing.mbMedium}`}>
-                    <Icon className="w-10 h-10 sm:w-12 sm:h-12" />
-                  </div>
-                  <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
-                    {value.title}
-                  </Heading>
-                  <p className={`${responsiveTypography.body} text-text-secondary`}>
-                    {value.description}
-                  </p>
-                </div>
+                <article key={index} className="ui-public-card">
+                  <Icon className="w-8 h-8 text-action" aria-hidden="true" />
+                  <h3 className="ui-public-card-title mt-4">{value.title}</h3>
+                  <p className="ui-public-card-body">{value.description}</p>
+                </article>
               )
             })}
           </div>
@@ -114,90 +107,83 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* Involvement Options */}
-      <section id="get-started" className={responsiveSpacing.section}>
-        <div className={`${responsiveSpacing.container} mx-auto`}>
-          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
-            {t('options.heading')}
-          </Heading>
-          <div className={responsiveGrid.cards}>
+      <section id="get-started" className="py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="ui-public-eyebrow">{t('options.heading').toUpperCase()}</div>
+            <h2 className="ui-public-display-lg mt-4">{t('options.heading')}</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {optionItems.map((option, index) => (
-              <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-strong transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}>
-                <div className={`text-action ${responsiveSpacing.mbMedium}`}>
-                  <Users className="w-10 h-10 sm:w-12 sm:h-12" />
-                </div>
-                <Heading level={3} className={`${responsiveTypography.cardTitle} ${responsiveSpacing.mbSmall}`}>
-                  {option.title}
-                </Heading>
-                <p className={`${responsiveTypography.body} text-text-secondary ${responsiveSpacing.mbMedium} grow`}>
-                  {option.description}
-                </p>
-                <ul className={`space-y-2 sm:space-y-3 ${responsiveSpacing.mbMedium}`}>
+              <article key={index} className="ui-public-card flex flex-col h-full">
+                <Users className="w-8 h-8 text-action" aria-hidden="true" />
+                <h3 className="ui-public-card-title mt-4">{option.title}</h3>
+                <p className="ui-public-card-body grow">{option.description}</p>
+                <ul className="mt-4 space-y-2">
                   {option.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start text-text-secondary">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-action shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li key={featureIndex} className="flex items-start text-sm text-text-secondary">
+                      <svg className="w-4 h-4 mr-2 text-action shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className={responsiveTypography.small}>{feature}</span>
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Button as="a" href={INVOLVEMENT_HREFS[index]} variant="primary" className={`${responsiveButtons.primary} w-full mt-auto`}>
+                <Button as="a" href={INVOLVEMENT_HREFS[index]} variant="primary" className="w-full mt-6">
                   {option.cta}
                 </Button>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className={`${responsiveSpacing.section} bg-surface-raised`}>
-        <div className={`${responsiveSpacing.container} mx-auto`}>
-          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
-            {t('testimonials.heading')}
-          </Heading>
-          <div className="max-w-3xl mx-auto">
+      <section className="ui-public-band py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <div className="ui-public-eyebrow">{t('testimonials.heading').toUpperCase()}</div>
+            <h2 className="ui-public-display-lg mt-4">{t('testimonials.heading')}</h2>
+          </div>
+          <div className="space-y-4">
             {testimonialItems.map((testimonial, index) => (
-              <div key={index} className={`card-shell ${responsiveSpacing.cardPadding}`}>
-                <div className={`text-action ${responsiveSpacing.mbSmall}`}>
-                  <Heart className="w-6 h-6 sm:w-8 sm:h-8" />
-                </div>
-                <blockquote className={`${responsiveTypography.lead} text-text-secondary ${responsiveSpacing.mbMedium} italic`}>
-                  &ldquo;{testimonial.quote}&rdquo;
-                </blockquote>
-                <div className={`${responsiveTypography.cardTitle} font-semibold`}>{testimonial.author}</div>
-                <div className={`${responsiveTypography.body} text-text-tertiary`}>{testimonial.role}</div>
-              </div>
+              <blockquote key={index} className="ui-public-card">
+                <Heart className="w-6 h-6 text-action mb-3" aria-hidden="true" />
+                <p className="ui-public-body-lg italic">&ldquo;{testimonial.quote}&rdquo;</p>
+                <footer className="mt-4">
+                  <div className="ui-public-prose-strong">{testimonial.author}</div>
+                  <div className="ui-public-meta">{testimonial.role}</div>
+                </footer>
+              </blockquote>
             ))}
           </div>
         </div>
       </section>
 
       {/* Partner Institutions */}
-      <section className={responsiveSpacing.section}>
-        <div className={`${responsiveSpacing.container} mx-auto`}>
-          <Heading level={2} className={`${responsiveTypography.section} text-center ${responsiveSpacing.mbLarge}`}>
-            {t('partners.heading')}
-          </Heading>
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {partnerNames.map((name, index) => (
-                <a
-                  key={index}
-                  href={PARTNER_URLS[index]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center ${responsiveSpacing.cardPadding} card-shell hover:border-strong transition-all duration-300 group`}
-                >
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-action shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className={`${responsiveTypography.body} text-text-secondary group-hover:text-action dark:group-hover:text-action transition-colors duration-300`}>
-                    {name}
-                  </span>
-                </a>
-              ))}
-            </div>
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <div className="ui-public-eyebrow">{t('partners.heading').toUpperCase()}</div>
+            <h2 className="ui-public-display-lg mt-4">{t('partners.heading')}</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {partnerNames.map((name, index) => (
+              <a
+                key={index}
+                href={PARTNER_URLS[index]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ui-public-card flex-row items-center gap-3 hover:border-strong group"
+              >
+                <svg className="w-5 h-5 text-action shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="ui-public-card-body mt-0 group-hover:text-action transition-colors">
+                  {name}
+                </span>
+              </a>
+            ))}
           </div>
         </div>
       </section>

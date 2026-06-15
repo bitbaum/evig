@@ -130,7 +130,7 @@ interface FilterSelectProps {
 function FilterSelect({ id, label, labelAll, value, onChange, options }: FilterSelectProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-xs font-medium text-text-secondary mb-2">
+      <label htmlFor={id} className="ui-public-card-label block mb-2 mt-0">
         {label}
       </label>
       <Select id={id} value={value} onChange={(e) => onChange(e.target.value)}>

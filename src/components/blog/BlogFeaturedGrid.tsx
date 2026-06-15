@@ -45,7 +45,7 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
               )}
 
               {/* Title */}
-              <Heading level={3} className="text-xl font-bold text-text-primary mb-2 leading-snug group-hover:text-action dark:group-hover:text-action transition-colors line-clamp-3">
+              <Heading level={3} className="text-xl font-bold text-text-primary mb-2 leading-snug group-hover:text-action transition-colors line-clamp-3">
                 {post.title}
               </Heading>
 

@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic'
 
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import { buttonClass } from '@/components/ui/button-class'
 import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG, MEMBERSHIP } from '@/config/org'
@@ -68,94 +67,82 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
 
   return (
     <div className="bg-canvas">
-      {/* Compact header */}
-      <div className="bg-surface-raised border-b border-subtle dark:border-white/6 py-8 sm:py-12">
+      <section className="border-b border-subtle py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <Award className="w-10 h-10 text-action mx-auto mb-4" />
-          <Heading level={1} className="text-2xl sm:text-3xl text-text-primary mb-3">
-            {t('hero.title')}
-          </Heading>
-          <p className="text-text-secondary max-w-xl mx-auto">
-            {t('hero.body')}
-          </p>
+          <div className="ui-public-eyebrow">{t('hero.title').toUpperCase()}</div>
+          <Award className="w-10 h-10 text-action mx-auto mt-6 mb-4" aria-hidden="true" />
+          <h1 className="ui-public-display-lg">{t('hero.title')}</h1>
+          <p className="ui-public-section-lede mt-6 mx-auto">{t('hero.body')}</p>
         </div>
-      </div>
+      </section>
 
       {/* What you get */}
-      <div className="py-10 sm:py-14">
+      <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             {whatYouGet.map((item, index) => {
               const Icon = WHAT_YOU_GET_ICONS[index]
               return (
-                <div key={index} className="bg-surface-raised rounded-xl p-5 border border-subtle">
+                <article key={index} className="ui-public-card">
                   <Icon className="h-6 w-6 text-action mb-3" aria-hidden="true" />
-                  <Heading level={3} className="text-base text-text-primary">{item.title}</Heading>
-                  <p className="mt-1.5 text-sm text-text-secondary">{item.description}</p>
-                </div>
+                  <h3 className="ui-public-card-title">{item.title}</h3>
+                  <p className="ui-public-card-body">{item.description}</p>
+                </article>
               )
             })}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Form or status */}
-      <div className="ui-public-band py-10 sm:py-14">
+      <section className="ui-public-band py-10 sm:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
           <div className="card-shell p-6 sm:p-8">
             {status.isMember ? (
               <div className="text-center">
-                <CheckCircle className="w-12 h-12 text-action mx-auto mb-4" />
-                <Heading level={2} className="text-xl text-text-primary mb-2">{t('member.title')}</Heading>
-                <p className="text-text-secondary mb-1">
-                  {t('member.thanks')}
-                </p>
+                <CheckCircle className="w-12 h-12 text-action mx-auto mb-4" aria-hidden="true" />
+                <Heading level={2} className="ui-public-display-md mb-2">{t('member.title')}</Heading>
+                <p className="ui-public-section-lede">{t('member.thanks')}</p>
                 {status.memberSince && (
-                  <p className="text-sm text-text-tertiary mb-6">
+                  <p className="ui-public-meta mt-2 mb-6">
                     {t('member.since', { date: new Date(status.memberSince).toLocaleDateString(locale) })}
                   </p>
                 )}
-                <Link
-                  href="/dashboard"
-                  className={buttonClass({ variant: 'primary', size: 'sm' })}
-                >
-                  <UserIcon className="h-4 w-4" />
+                <Link href="/dashboard" className="ui-public-cta inline-flex items-center gap-2">
+                  <UserIcon className="h-4 w-4" aria-hidden="true" />
                   {t('member.dashboard')}
                 </Link>
               </div>
             ) : (
               <>
                 <div className="text-center mb-6">
-                  <Heading level={2} className="text-xl text-text-primary">
-                    {t('form.heading')}
-                  </Heading>
-                  <p className="text-sm text-text-tertiary mt-1">
-                    {t('form.subtitle')}
-                  </p>
+                  <Heading level={2} className="ui-public-display-md">{t('form.heading')}</Heading>
+                  <p className="ui-public-meta mt-2">{t('form.subtitle')}</p>
                 </div>
                 <MembershipApplicationForm />
               </>
             )}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* FAQ */}
-      <div className="py-10 sm:py-14">
+      <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <Heading level={2} className="text-xl text-text-primary text-center mb-8">
-            {t('faq.heading')}
-          </Heading>
+          <div className="text-center mb-8">
+            <div className="ui-public-eyebrow">{t('faq.heading').toUpperCase()}</div>
+            <Heading level={2} className="ui-public-display-md mt-3">{t('faq.heading')}</Heading>
+          </div>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <div key={index} className="bg-surface-raised rounded-lg p-5 border border-subtle">
-                <Heading level={3} className="text-sm font-bold text-text-primary">{item.question}</Heading>
-                <p className="mt-1.5 text-sm text-text-secondary">{item.answer}</p>
-              </div>
+              <article key={index} className="ui-public-card">
+                <h3 className="ui-public-card-title text-base">{item.question}</h3>
+                <p className="ui-public-card-body">{item.answer}</p>
+              </article>
             ))}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

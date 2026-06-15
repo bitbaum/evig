@@ -80,10 +80,33 @@ npm run test:all       # Run all tests
 
 ## Deployment
 
+Experimental site: **https://revampit.orangecat.ch** (Hetzner self-host).  
+Production domain revamp-it.ch is still the legacy Joomla site.
+
+### Automatic (like Vercel on Neon)
+
+| Trigger | What happens |
+|---------|----------------|
+| `git push origin main` (local) | Pre-push hook builds + deploys in background → `/tmp/push-deploy-revampit.log` |
+| `git push origin main` (GitHub) | Actions workflow `.github/workflows/deploy-selfhost.yml` (needs secrets, see below) |
+
+Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or recreate from Neon/Vercel env.
+
+**One-time GitHub secrets** (Settings → Secrets → Actions) for CI deploy when you push from anywhere:
+
+| Secret | Value |
+|--------|--------|
+| `HETZNER_SSH_PRIVATE_KEY` | Private key for `ubuntu@167.233.22.31` |
+| `SELFHOST_ENV` | Full contents of `.env.selfhost.local` |
+
+### Manual
+
 ```bash
-npm run ship           # Full ship process (build, test, deploy)
-npm run deploy         # Deploy to production
-npm run migrate-to-prod # Run database migrations in production
+npm run deploy          # same as deploy:selfhost
+npm run deploy:selfhost # build standalone → rsync → restart revampit-app
+npm run ship            # quality gate (typecheck, lint, build, tests)
+npm run deploy:vercel   # legacy Vercel script (project disabled)
+npm run migrate-to-prod # database migrations (Neon)
 ```
 
 ---
@@ -107,4 +130,5 @@ npm run prod:down      # Stop production containers
 ---
 
 **Last Updated**: 2026-06-15  
+**Last Modified Summary**: Push-to-deploy docs (husky pre-push + GitHub Actions); `npm run deploy` → self-host.  
 **Source**: `package.json`

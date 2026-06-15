@@ -19,10 +19,10 @@ interface PaginationProps {
 const btnClass = (active: boolean, disabled = false) =>
   `inline-flex items-center justify-center min-w-11 min-h-11 w-9 h-9 text-sm rounded-md transition-colors ${
     disabled
-      ? 'text-neutral-300 dark:text-neutral-600 cursor-not-allowed'
+      ? 'text-text-muted cursor-not-allowed'
       : active
-      ? 'bg-primary-600 text-white font-medium'
-      : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/6'
+      ? 'bg-action text-action-text font-medium'
+      : 'text-text-secondary hover:bg-surface-raised'
   }`
 
 /** Build a page href by replacing or appending the `page` param in `hrefBase` */
@@ -119,8 +119,8 @@ export function Pagination({
   const pageList = Array.from(pages).sort((a, b) => a - b)
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-neutral-100 dark:border-white/6">
-      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-subtle">
+      <p className="text-sm text-text-tertiary">
         {from}–{to} {t('of')} {totalItems}
       </p>
       <div className="flex items-center gap-1">
@@ -136,7 +136,7 @@ export function Pagination({
               <div key={page} className="flex items-center gap-1">
                 {prev && page - prev > 1 && (
                   <span
-                    className="min-w-11 text-center text-sm text-neutral-400"
+                    className="min-w-11 text-center text-sm text-text-muted"
                     aria-label={t('morePages')}
                   >
                     …
@@ -149,7 +149,7 @@ export function Pagination({
         </div>
 
         {/* Mobile: show current/total instead of page buttons */}
-        <span className="sm:hidden text-sm text-neutral-600 px-2">
+        <span className="sm:hidden text-sm text-text-tertiary px-2">
           {currentPage} / {totalPages}
         </span>
 

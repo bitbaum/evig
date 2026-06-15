@@ -13,25 +13,25 @@ export const BUTTONS = {
 
   // Variants (for marketplace)
   marketplace: {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-    secondary: 'bg-white text-primary-600 border-2 border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500',
-    outline: 'bg-transparent text-primary-600 border border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500',
-    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500',
+    primary: `${designPrimitive.button.primary} focus-visible:ring-action`,
+    secondary: `${designPrimitive.button.outline} focus-visible:ring-action`,
+    outline: 'bg-transparent text-action border border-action hover:bg-action-muted focus-visible:ring-action',
+    ghost: 'bg-transparent text-action hover:bg-action-muted focus-visible:ring-action',
   },
 
   // Variants (for IT-Hilfe)
   itHilfe: {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-    secondary: 'bg-white text-primary-600 border-2 border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500',
-    outline: 'bg-transparent text-primary-600 border border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500',
-    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500',
+    primary: `${designPrimitive.button.primary} focus-visible:ring-action`,
+    secondary: `${designPrimitive.button.outline} focus-visible:ring-action`,
+    outline: 'bg-transparent text-action border border-action hover:bg-action-muted focus-visible:ring-action',
+    ghost: 'bg-transparent text-action hover:bg-action-muted focus-visible:ring-action',
   },
 
   // Common variants
   common: {
-    danger: 'bg-error-600 text-white hover:bg-error-700 focus:ring-error-500',
-    success: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-    neutral: 'bg-neutral-200 text-neutral-800 hover:bg-neutral-300 focus:ring-neutral-500',
+    danger: `${designPrimitive.button.destructive} focus-visible:ring-error-500`,
+    success: `${designPrimitive.button.primary} focus-visible:ring-action`,
+    neutral: `${designPrimitive.button.secondary} focus-visible:ring-action`,
   },
 
   // Generic app button primitive variants

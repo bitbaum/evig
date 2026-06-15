@@ -29,21 +29,21 @@ const StepperComponent: React.FC<StepperProps> = ({
     <nav aria-label={t('progressLabel')} className={cn('w-full', className)}>
       {/* Mobile view - compact */}
       <div className="sm:hidden">
-        <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm font-medium text-text-tertiary">
           {t('stepOf', { current: currentStep + 1, total: steps.length })}
         </p>
-        <p className="text-lg font-semibold text-neutral-900 dark:text-white mt-1">
+        <p className="text-lg font-semibold text-text-primary mt-1">
           {steps[currentStep]?.label}
         </p>
         {steps[currentStep]?.description && (
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+          <p className="text-sm text-text-tertiary mt-1">
             {steps[currentStep].description}
           </p>
         )}
         {/* Progress bar */}
-        <div className="mt-4 h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
+        <div className="mt-4 h-2 bg-surface-overlay rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary-600 transition-all duration-300"
+            className="h-full bg-action transition-all duration-300"
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
@@ -78,10 +78,10 @@ const StepperComponent: React.FC<StepperProps> = ({
                 <span
                   className={cn(
                     'flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200',
-                    isCompleted && 'bg-primary-600 border-primary-600',
-                    isCurrent && 'border-primary-600 bg-white dark:bg-neutral-800',
-                    !isCompleted && !isCurrent && 'border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800',
-                    isClickable && 'group-hover:border-primary-500 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20'
+                    isCompleted && 'bg-action border-action',
+                    isCurrent && 'border-action bg-surface-base',
+                    !isCompleted && !isCurrent && 'border-default bg-surface-base',
+                    isClickable && 'group-hover:border-action group-hover:bg-action-muted'
                   )}
                 >
                   {isCompleted ? (
@@ -90,8 +90,8 @@ const StepperComponent: React.FC<StepperProps> = ({
                     <span
                       className={cn(
                         'text-sm font-semibold',
-                        isCurrent && 'text-primary-600',
-                        !isCurrent && 'text-neutral-500 dark:text-neutral-400'
+                        isCurrent && 'text-action',
+                        !isCurrent && 'text-text-muted'
                       )}
                     >
                       {index + 1}
@@ -104,15 +104,15 @@ const StepperComponent: React.FC<StepperProps> = ({
                   <p
                     className={cn(
                       'text-sm font-medium',
-                      isCompleted && 'text-primary-600',
-                      isCurrent && 'text-primary-600',
-                      !isCompleted && !isCurrent && 'text-neutral-500 dark:text-neutral-400'
+                      isCompleted && 'text-action',
+                      isCurrent && 'text-action',
+                      !isCompleted && !isCurrent && 'text-text-muted'
                     )}
                   >
                     {step.label}
                   </p>
                   {step.description && (
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5">
+                    <p className="text-xs text-text-tertiary mt-0.5">
                       {step.description}
                     </p>
                   )}
@@ -124,7 +124,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                 <div
                   className={cn(
                     'flex-1 h-0.5 mx-4 transition-colors duration-200',
-                    isCompleted ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-700'
+                    isCompleted ? 'bg-action' : 'bg-surface-overlay'
                   )}
                 />
               )}

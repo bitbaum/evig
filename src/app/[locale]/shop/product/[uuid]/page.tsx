@@ -6,7 +6,6 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { buttonClass } from '@/components/ui/button-class'
 import { ChevronRight, Home, Package, ShoppingCart, Shield, Tag, Layers } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -129,15 +128,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <Link href="/" className="hover:text-action transition-colors">
               <Home className="w-4 h-4" />
             </Link>
-            <ChevronRight className="w-4 h-4 text-text-muted dark:text-text-secondary" />
+            <ChevronRight className="w-4 h-4 text-text-muted" />
             <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">Shop</Link>
             {product.category && (
               <>
-                <ChevronRight className="w-4 h-4 text-text-muted dark:text-text-secondary" />
+                <ChevronRight className="w-4 h-4 text-text-muted" />
                 <span className="text-text-primary font-medium truncate max-w-[200px]">{product.category}</span>
               </>
             )}
-            <ChevronRight className="w-4 h-4 text-text-muted dark:text-text-secondary" />
+            <ChevronRight className="w-4 h-4 text-text-muted" />
             <span className="text-text-primary font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
         </PageShell>
@@ -171,7 +170,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <p className="text-sm font-semibold text-action uppercase tracking-wider mb-1">
                 {product.brand}
               </p>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary leading-tight">
+              <Heading level={1} className="ui-public-display-md leading-tight">
                 {product.title}
               </Heading>
               {product.description && (
@@ -252,7 +251,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </Button>
               <Link
                 href="/shop#ladenlokal"
-                className={buttonClass({ variant: 'outline', size: 'lg', className: 'flex-1' })}
+                className="ui-public-cta-ghost inline-flex flex-1 items-center justify-center"
               >
                 {t('product.buyInStore')}
               </Link>

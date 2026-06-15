@@ -45,14 +45,14 @@ const VARIANT_STYLES = {
     icon: 'text-secondary-500',
   },
   success: {
-    title: 'text-primary-600 dark:text-primary-400',
-    button: 'bg-primary-600 hover:bg-primary-700',
-    icon: 'text-primary-500',
+    title: 'text-action',
+    button: 'bg-action hover:bg-action-hover text-action-text',
+    icon: 'text-action',
   },
   default: {
-    title: 'text-neutral-900 dark:text-white',
-    button: 'bg-primary-600 hover:bg-primary-700',
-    icon: 'text-neutral-600',
+    title: 'text-text-primary',
+    button: 'bg-action hover:bg-action-hover text-action-text',
+    icon: 'text-text-secondary',
   },
 }
 
@@ -99,12 +99,12 @@ export function ConfirmDialog({
 
       {/* Content */}
       <div className="mb-6">
-        <p className="text-neutral-700 dark:text-neutral-300 mb-2">
+        <p className="text-text-secondary mb-2">
           {message}
         </p>
         {itemName && (
-          <div className="p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
-            <p className="font-medium text-neutral-900 dark:text-white">
+          <div className="p-3 bg-surface-raised rounded-lg">
+            <p className="font-medium text-text-primary">
               {itemName}
             </p>
           </div>

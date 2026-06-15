@@ -47,7 +47,7 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
                 )}
 
                 {/* Title */}
-                <Heading level={3} className="text-lg font-bold text-text-primary mb-2 leading-snug group-hover:text-action dark:group-hover:text-action transition-colors line-clamp-2">
+                <Heading level={3} className="text-lg font-bold text-text-primary mb-2 leading-snug group-hover:text-action transition-colors line-clamp-2">
                   {post.title}
                 </Heading>
 

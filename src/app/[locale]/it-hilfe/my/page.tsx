@@ -88,26 +88,30 @@ export default function MyRequestsPage() {
   }
 
   return (
-    <PageShell maxWidth="5xl">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div>
-            <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
-            <p className="text-text-secondary mt-1">
-              {t('description')}
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <Button as={Link} href={ROUTES.public.itHilfeMyOffers} variant="outline">
-              <Heart className="w-4 h-4" />
-              {t('myOffersButton')}
-            </Button>
-            <Button as={Link} href={ROUTES.public.itHilfeCreate} variant="primary">
-              <Plus className="w-4 h-4" />
-              {t('newRequestButton')}
-            </Button>
+    <div className="bg-canvas min-h-screen">
+      <section className="border-b border-subtle py-10 sm:py-14">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <div className="ui-public-eyebrow">IT-HILFE</div>
+              <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
+              <p className="ui-public-meta mt-2">{t('description')}</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button as={Link} href={ROUTES.public.itHilfeMyOffers} variant="outline">
+                <Heart className="w-4 h-4" aria-hidden="true" />
+                {t('myOffersButton')}
+              </Button>
+              <Link href={ROUTES.public.itHilfeCreate} className="ui-public-cta inline-flex items-center gap-2">
+                <Plus className="w-4 h-4" aria-hidden="true" />
+                {t('newRequestButton')}
+              </Link>
+            </div>
           </div>
         </div>
+      </section>
+
+      <PageShell maxWidth="5xl" py="py-8 sm:py-12">
 
         {/* Status Filter */}
         <div className="card-shell p-4 mb-6">
@@ -149,19 +153,17 @@ export default function MyRequestsPage() {
 
         {/* Requests List */}
         {requests.length === 0 && !fetchError ? (
-          <div className="card-shell p-12 text-center">
-            <FileText className="w-16 h-16 text-text-muted mx-auto mb-4" />
-            <Heading level={3} className="text-xl text-text-primary mb-2">
+          <div className="ui-public-card p-12 text-center">
+            <FileText className="w-16 h-16 text-text-muted mx-auto mb-4" aria-hidden="true" />
+            <h3 className="ui-public-display-md mb-2">
               {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
-            </Heading>
-            <p className="text-text-secondary mb-6">
-              {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
-            </p>
+            </h3>
+            <p className="ui-public-section-lede mb-6">{statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}</p>
             {!statusFilter && (
-              <Button as={Link} href={ROUTES.public.itHilfeCreate} variant="primary" size="lg">
-                <Plus className="w-5 h-5" />
+              <Link href={ROUTES.public.itHilfeCreate} className="ui-public-cta inline-flex items-center gap-2">
+                <Plus className="w-5 h-5" aria-hidden="true" />
                 {t('createButton')}
-              </Button>
+              </Link>
             )}
           </div>
         ) : (
@@ -243,6 +245,7 @@ export default function MyRequestsPage() {
             })}
           </div>
         )}
-    </PageShell>
+      </PageShell>
+    </div>
   )
 }

@@ -13,7 +13,7 @@ env:
 
 jobs:
   # Quality checks - runs on all branches and PRs
-  # Note: Vercel automatically deploys when code is merged to main branch
+  # Self-host deploy: .github/workflows/deploy-selfhost.yml on push to main
   quality:
     name: Code Quality Checks
     runs-on: ubuntu-latest
