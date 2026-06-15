@@ -1,6 +1,7 @@
 'use client'
 
 import { Link, usePathname } from '@/i18n/navigation'
+import { isUpcyclingSubNavActive } from '@/lib/domain/upcycling-status-helpers'
 import { cn } from '@/lib/utils'
 
 /**
@@ -39,10 +40,7 @@ export function UpcyclingSubNav({ items, brand }: { items: Item[]; brand: string
 
         <ul className="-mb-px flex flex-1 items-center gap-1 overflow-x-auto">
           {items.map((item) => {
-            const isActive =
-              item.href === '/projects/upcycling'
-                ? pathname === '/projects/upcycling'
-                : pathname.startsWith(item.href)
+            const isActive = isUpcyclingSubNavActive(pathname, item.href)
             return (
               <li key={item.href} className="shrink-0">
                 <Link

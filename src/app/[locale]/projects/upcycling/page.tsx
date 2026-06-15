@@ -105,7 +105,7 @@ function BriefLink({ brief }: { brief: PageMessages['briefLink'] }) {
     <section className="border-t border-subtle bg-canvas py-12 sm:py-14">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <Link
-          href="/projects/upcycling/status"
+          href="/projects/upcycling/businessplan"
           className="group flex flex-col gap-3 rounded-lg border border-subtle bg-surface-base p-6 transition-colors hover:border-default sm:flex-row sm:items-center sm:gap-6"
         >
           <div className="flex-1">
