@@ -247,7 +247,7 @@ export function DataEntryTabs({
         type="button"
         variant="ghost"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-action-muted/50-hover/30 h-auto rounded-none"
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-action-muted/40 h-auto rounded-none"
       >
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-action" />
