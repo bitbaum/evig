@@ -9,31 +9,29 @@
  * to standalone decisions; the decisions table tracks them via
  * `protocol_id` + `action_item_id` (migration 086).
  *
- * Two states:
- *   - No linked decision yet → "Als Entscheidung verschieben" CTA. Clicking
- *     POSTs to /api/decisions with protocol_id + action_item_id + voting_method=
- *     'thumbs_up_down' + title from the action item description.
- *   - Linked decision exists → inline status badge + link to the standalone
- *     decision page. Full voting/closure/task-creation continues there.
- *
- * Why not embed the full voting widget here?
- *   The standalone decision system supports 7 voting methods (consent,
- *   approval, dot, score, simple_majority, ranked_choice, thumbs_up_down).
- *   Each has its own validation + tally + commenting + transitions UX. Trying
- *   to render that inline alongside ~5 other action items per protocol is
- *   visual noise. The bridge surfaces the *link* and a *summary*; the actual
- *   ballot lives at /admin/decisions/[id] like every other decision.
+ * Flow:
+ *   1. No linked decision → "Als Entscheidung verschieben"
+ *   2. Decision open → status + link to /admin/decisions/[id]
+ *   3. Decision closed + approved → one-click "Aufgabe erstellen" (linked task)
+ *   4. Task linked → link to /admin/tasks/[id]
  */
 
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Loader2, Sparkles } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle2,
+  ExternalLink,
+  ListChecks,
+  Loader2,
+  Sparkles,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
-import { DECISION_STATUS_CONFIG, type DecisionStatus } from '@/config/decisions'
+import { DECISION_STATUS, DECISION_STATUS_CONFIG, type DecisionStatus } from '@/config/decisions'
 import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
 
 interface DecisionBridgeProps {
@@ -42,6 +40,7 @@ interface DecisionBridgeProps {
   actionItemDescription: string
   linkedDecision: ProtocolDecisionSummary | undefined
   isProtocolCreator: boolean
+  onRefresh: () => void
 }
 
 type DecisionStatusToken = DecisionStatus
@@ -60,33 +59,93 @@ export default function DecisionBridge({
   actionItemDescription,
   linkedDecision,
   isProtocolCreator,
+  onRefresh,
 }: DecisionBridgeProps) {
   const router = useRouter()
   const [creating, setCreating] = useState(false)
+  const [creatingTask, setCreatingTask] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  if (linkedDecision?.linkedTaskId) {
+    return (
+      <Link
+        href={`/admin/tasks/${linkedDecision.linkedTaskId}`}
+        className="inline-flex items-center gap-1 text-xs text-action hover:text-action"
+      >
+        <CheckCircle2 className="w-3.5 h-3.5" />
+        Aufgabe verknüpft
+        <ExternalLink className="w-3 h-3" />
+      </Link>
+    )
+  }
 
   if (linkedDecision) {
     const status = linkedDecision.status as DecisionStatusToken
     const statusConfig = DECISION_STATUS_CONFIG[status]
     const isThumbs = linkedDecision.votingMethod === 'thumbs_up_down'
+    const canCreateTask = linkedDecision.isClosed
+      && linkedDecision.status !== DECISION_STATUS.CANCELLED
+      && linkedDecision.outcomePassed !== false
+      && isProtocolCreator
+
+    const handleCreateTask = async () => {
+      setCreatingTask(true)
+      setError(null)
+      try {
+        const res = await apiFetch<{ taskId: string }>(
+          `/api/decisions/${linkedDecision.id}/create-task`,
+          { method: 'POST' },
+        )
+        if (!res.success) {
+          throw new Error(res.error || 'Aufgabe konnte nicht erstellt werden')
+        }
+        onRefresh()
+        router.refresh()
+      } catch (err) {
+        setError(getErrorMessage(err))
+      } finally {
+        setCreatingTask(false)
+      }
+    }
 
     return (
-      <div className="flex items-center gap-2 flex-wrap text-xs">
-        <StatusBadge variant={STATUS_BADGE_VARIANT[status]} size="sm">
-          {statusConfig?.label ?? status}
-        </StatusBadge>
-        {isThumbs && (linkedDecision.votesUp > 0 || linkedDecision.votesDown > 0) && (
-          <span className="text-text-tertiary">
-            👍 {linkedDecision.votesUp} · 👎 {linkedDecision.votesDown}
-          </span>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2 flex-wrap text-xs">
+          <StatusBadge variant={STATUS_BADGE_VARIANT[status]} size="sm">
+            {statusConfig?.label ?? status}
+          </StatusBadge>
+          {isThumbs && (linkedDecision.votesUp > 0 || linkedDecision.votesDown > 0) && (
+            <span className="text-text-tertiary">
+              👍 {linkedDecision.votesUp} · 👎 {linkedDecision.votesDown}
+            </span>
+          )}
+          <Link
+            href={`/admin/decisions/${linkedDecision.id}`}
+            className="inline-flex items-center gap-1 text-action hover:text-action-hover transition-colors"
+          >
+            Zur Entscheidung
+            <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+        {error && <p className="text-xs text-error-600">{error}</p>}
+        {canCreateTask && (
+          <Button
+            onClick={handleCreateTask}
+            disabled={creatingTask}
+            variant="ghost"
+            size="sm"
+            className="inline-flex items-center gap-1 text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
+          >
+            {creatingTask
+              ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              : <ListChecks className="w-3.5 h-3.5" />
+            }
+            Aufgabe erstellen
+          </Button>
         )}
-        <Link
-          href={`/admin/decisions/${linkedDecision.id}`}
-          className="inline-flex items-center gap-1 text-action hover:text-action-hover transition-colors"
-        >
-          Zur Entscheidung
-          <ArrowRight className="w-3 h-3" />
-        </Link>
+        {linkedDecision.isClosed && linkedDecision.outcomePassed === false && (
+          <p className="text-xs text-text-tertiary">Abgelehnt — keine Folgeaufgabe vorgeschlagen.</p>
+        )}
       </div>
     )
   }
@@ -103,12 +162,8 @@ export default function DecisionBridge({
     setCreating(true)
     setError(null)
 
-    // Title = first ~80 chars of description (action items are short; full
-    // description goes in the decision description so reviewers get the
-    // context). Trim trailing punctuation that often comes from AI
-    // extraction (period, ellipsis, semicolon).
     const trimmed = actionItemDescription.trim().replace(/[.;…]+$/, '')
-    const title = trimmed.length <= 80 ? trimmed : trimmed.slice(0, 77) + '…'
+    const title = trimmed.length <= 80 ? trimmed : `${trimmed.slice(0, 77)}…`
 
     try {
       const res = await apiFetch<{ id: string }>('/api/decisions', {
@@ -120,8 +175,6 @@ export default function DecisionBridge({
           votingMethod: 'thumbs_up_down',
           protocolId,
           actionItemId,
-          // Open for voting immediately — the protocol-creator workflow
-          // assumes the action item IS the proposal, not a draft.
           initialStatus: 'voting',
         },
       })
@@ -130,6 +183,7 @@ export default function DecisionBridge({
         throw new Error(res.error || 'Entscheidung konnte nicht erstellt werden')
       }
 
+      onRefresh()
       router.refresh()
     } catch (err) {
       setError(getErrorMessage(err))

@@ -100,8 +100,9 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     return {
       unlinkedTasks: counts.unlinkedTasks,
       openDecisions: counts.openDecisions,
+      closedDecisionsWithoutTask: counts.closedDecisionsWithoutTask,
       unresolvedAssignees: counts.unresolvedAssignees,
-      hasAny: counts.unlinkedTasks > 0 || counts.openDecisions > 0 || counts.unresolvedAssignees > 0,
+      hasAny: counts.unlinkedTasks > 0 || counts.openDecisions > 0 || counts.closedDecisionsWithoutTask > 0 || counts.unresolvedAssignees > 0,
     }
   }, [notes, actionLinks, protocolDecisions])
 
@@ -354,6 +355,9 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
               )}
               {finalizeBlockers.openDecisions > 0 && (
                 <li>{finalizeBlockers.openDecisions} {pluralDe(finalizeBlockers.openDecisions, 'Entscheidung', 'Entscheidungen')} offen — Abstimmung oder Abschluss fehlt.</li>
+              )}
+              {finalizeBlockers.closedDecisionsWithoutTask > 0 && (
+                <li>{finalizeBlockers.closedDecisionsWithoutTask} {pluralDe(finalizeBlockers.closedDecisionsWithoutTask, 'angenommene Entscheidung', 'angenommene Entscheidungen')} ohne Folgeaufgabe im Aufgaben-System.</li>
               )}
               {finalizeBlockers.unresolvedAssignees > 0 && (
                 <li>{finalizeBlockers.unresolvedAssignees} {pluralDe(finalizeBlockers.unresolvedAssignees, 'Personen-Zuordnung', 'Personen-Zuordnungen')} ungeklärt — Aufgaben werden ohne Team-Verknüpfung erstellt.</li>

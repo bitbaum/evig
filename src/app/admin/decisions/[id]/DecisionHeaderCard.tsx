@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 import { ROUTES } from '@/config/routes';
-import { ClipboardPlus } from 'lucide-react';
+import { ClipboardPlus, FileText, Loader2 } from 'lucide-react';
 import {
   DECISION_STATUS,
   DECISION_STATUS_CONFIG,
@@ -13,7 +15,7 @@ import {
   EDITABLE_STATUSES,
   type DecisionStatus,
 } from '@/config/decisions';
-import { Link2, Check, Mail } from 'lucide-react';
+import { Link2, Check, CheckCircle2, Mail } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { Button } from '@/components/ui/button';
@@ -21,6 +23,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { adminSurface, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import { formatDateShort } from '@/lib/date-formats';
+import { apiFetch } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/utils/error';
 import BeschlussPdfExport from '@/components/decisions/BeschlussPdfExport';
 import type { DecisionDetail } from './types';
 import { useDecisionHeaderCard } from '@/hooks/useDecisionHeaderCard';
@@ -45,6 +49,8 @@ export default function DecisionHeaderCard({
   onDeleteSuccess,
   onError,
 }: Props) {
+  const [creatingFollowUpTask, setCreatingFollowUpTask] = useState(false);
+
   const {
     showCloseInput,
     closeSummary,
@@ -70,6 +76,28 @@ export default function DecisionHeaderCard({
   const methodConf = VOTING_METHOD_CONFIG[decision.votingMethod];
   const validTargets = VALID_TRANSITIONS[decision.status] || [];
   const canDelete = decision.creator.id === currentUserId || isSuperAdmin;
+  const canCreateFollowUpTask = decision.status === DECISION_STATUS.CLOSED
+    && !decision.linkedTaskId
+    && decision.outcomePassed !== false
+    && Boolean(decision.protocolId);
+
+  async function handleCreateFollowUpTask() {
+    setCreatingFollowUpTask(true);
+    onError('');
+    try {
+      const result = await apiFetch<{ taskId: string }>(
+        `/api/decisions/${decision.id}/create-task`,
+        { method: 'POST' },
+      );
+      if (!result.success || !result.data?.taskId) {
+        throw new Error(result.error || 'Aufgabe konnte nicht erstellt werden');
+      }
+      window.location.href = `/admin/tasks/${result.data.taskId}`;
+    } catch (err) {
+      onError(getErrorMessage(err));
+      setCreatingFollowUpTask(false);
+    }
+  }
 
   return (
     <div className={cn(adminSurface.card, 'p-4 md:p-6')}>
@@ -91,6 +119,15 @@ export default function DecisionHeaderCard({
           <span className={adminType.meta}>
             {decision.creator.email} · {formatDateShort(decision.createdAt)}
           </span>
+          {decision.protocolId && (
+            <Link
+              href={`/admin/protocols/${decision.protocolId}`}
+              className="inline-flex items-center gap-1 rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-action hover:text-action-hover"
+            >
+              <FileText className="h-3 w-3" />
+              Aus Protokoll
+            </Link>
+          )}
         </div>
 
         {/* Action Buttons */}
@@ -172,25 +209,39 @@ export default function DecisionHeaderCard({
                   aiOutcomeNarrative: decision.aiOutcomeNarrative,
                 }}
               />
-              {/* Spawn a follow-up task pre-filled from the decision outcome.
-                  Closed decisions used to be a dead-end — the bridge to the
-                  task system existed only inside the protocol-embedded
-                  decision flow. This Link reuses TaskFormClient's existing
-                  ?title=&description= prefill so no new endpoint is needed. */}
-              <AdminButton
-                href={`${ROUTES.admin.taskNew}?${new URLSearchParams({
-                  title: `Folge aus: ${decision.title}`,
-                  description: [
-                    decision.outcomeSummary,
-                    decision.outcomeSummary ? '' : null,
-                    `(Aus Entscheid: ${decision.title})`,
-                  ].filter(Boolean).join('\n'),
-                }).toString()}`}
-                variant="secondary"
-              >
-                <ClipboardPlus className="w-4 h-4" />
-                Aufgabe erstellen
-              </AdminButton>
+              {decision.linkedTaskId ? (
+                <AdminButton variant="secondary" href={`/admin/tasks/${decision.linkedTaskId}`}>
+                  <CheckCircle2 className="w-4 h-4" />
+                  Folgeaufgabe öffnen
+                </AdminButton>
+              ) : canCreateFollowUpTask ? (
+                <AdminButton
+                  variant="secondary"
+                  onClick={handleCreateFollowUpTask}
+                  disabled={creatingFollowUpTask}
+                >
+                  {creatingFollowUpTask
+                    ? <Loader2 className="w-4 h-4 animate-spin" />
+                    : <ClipboardPlus className="w-4 h-4" />
+                  }
+                  Aufgabe erstellen
+                </AdminButton>
+              ) : (
+                <AdminButton
+                  href={`${ROUTES.admin.taskNew}?${new URLSearchParams({
+                    title: `Folge aus: ${decision.title}`,
+                    description: [
+                      decision.outcomeSummary,
+                      decision.outcomeSummary ? '' : null,
+                      `(Aus Entscheid: ${decision.title})`,
+                    ].filter(Boolean).join('\n'),
+                  }).toString()}`}
+                  variant="secondary"
+                >
+                  <ClipboardPlus className="w-4 h-4" />
+                  Aufgabe manuell
+                </AdminButton>
+              )}
             </>
           )}
           {canDelete && (

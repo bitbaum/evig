@@ -7,9 +7,11 @@
 
 import { db } from '@/db';
 import { sql, getTableName } from 'drizzle-orm';
-import { decisions, decisionVotes, decisionComments } from '@/db/schema/misc';
+import { decisions, decisionVotes, decisionComments, protocolActionLinks } from '@/db/schema/misc';
 import { users } from '@/db/schema/auth';
 import { logger } from '@/lib/logger';
+import { RELATED_TYPES } from '@/config/notifications';
+import { getDecisionOutcomePassed } from './protocol-decision-tasks';
 import {
   EDITABLE_STATUSES,
   DECISION_STATUS,
@@ -27,6 +29,7 @@ const dTable = getTableName(decisions);
 const dvTable = getTableName(decisionVotes);
 const dcTable = getTableName(decisionComments);
 const uTable = getTableName(users);
+const palTable = getTableName(protocolActionLinks);
 
 // ---- DB Row Interfaces ----
 
@@ -55,6 +58,8 @@ export interface DbDecisionRow {
   closed_by: string | null;
   cancel_reason: string | null;
   allow_public_voting: boolean;
+  protocol_id: string | null;
+  action_item_id: string | null;
   created_by: string;
   created_at: string;
   updated_at: string;
@@ -234,9 +239,27 @@ export async function getDecisionById(id: string, requestingUserId: string) {
     WHERE decision_id = ${id} AND user_id = ${requestingUserId}
   `);
 
+  let linkedTaskId: string | null = null;
+  if (d.protocol_id && d.action_item_id) {
+    const linkedTask = await db.execute(sql`
+      SELECT linked_task_id
+      FROM ${sql.raw(palTable)}
+      WHERE protocol_id = ${d.protocol_id}
+        AND action_item_id = ${d.action_item_id}
+        AND link_type = ${RELATED_TYPES.TASK}
+        AND linked_task_id IS NOT NULL
+      LIMIT 1
+    `);
+    linkedTaskId = (linkedTask.rows[0] as unknown as { linked_task_id: string } | undefined)?.linked_task_id ?? null;
+  }
+
   return {
     ...mapDecisionBase(d),
     allowPublicVoting: d.allow_public_voting ?? false,
+    protocolId: d.protocol_id ?? null,
+    actionItemId: d.action_item_id ?? null,
+    linkedTaskId,
+    outcomePassed: getDecisionOutcomePassed(d.outcome, d.voting_method),
     revealedAt: d.revealed_at,
     closedAt: d.closed_at,
     closedBy: d.closed_by,
@@ -347,6 +370,8 @@ export interface ProtocolDecisionSummary {
   votesUp: number;
   votesDown: number;
   isClosed: boolean;
+  outcomePassed: boolean | null;
+  linkedTaskId: string | null;
 }
 
 export async function getDecisionsByProtocolId(
@@ -358,8 +383,18 @@ export async function getDecisionsByProtocolId(
       d.action_item_id,
       d.status,
       d.voting_method,
+      d.outcome,
       COUNT(*) FILTER (WHERE dv.vote_data->>'choice' = 'up')   AS up,
-      COUNT(*) FILTER (WHERE dv.vote_data->>'choice' = 'down') AS down
+      COUNT(*) FILTER (WHERE dv.vote_data->>'choice' = 'down') AS down,
+      (
+        SELECT pal.linked_task_id
+        FROM ${sql.raw(palTable)} pal
+        WHERE pal.protocol_id = d.protocol_id
+          AND pal.action_item_id = d.action_item_id
+          AND pal.link_type = ${RELATED_TYPES.TASK}
+          AND pal.linked_task_id IS NOT NULL
+        LIMIT 1
+      ) AS linked_task_id
     FROM ${sql.raw(dTable)} d
     LEFT JOIN decision_votes dv ON dv.decision_id = d.id
     WHERE d.protocol_id = ${protocolId}
@@ -372,8 +407,10 @@ export async function getDecisionsByProtocolId(
       action_item_id: string;
       status: string;
       voting_method: string;
+      outcome: Record<string, unknown> | null;
       up: string | number;
       down: string | number;
+      linked_task_id: string | null;
     };
     return {
       id: row.id,
@@ -383,6 +420,8 @@ export async function getDecisionsByProtocolId(
       votesUp: Number(row.up || 0),
       votesDown: Number(row.down || 0),
       isClosed: row.status === DECISION_STATUS.CLOSED || row.status === DECISION_STATUS.CANCELLED,
+      outcomePassed: getDecisionOutcomePassed(row.outcome, row.voting_method),
+      linkedTaskId: row.linked_task_id,
     };
   });
 }

@@ -1,4 +1,5 @@
 import { PROTOCOL_STATUSES } from '@/config/protocols'
+import { DECISION_STATUS } from '@/config/decisions'
 import type { ProtocolStatus } from '@/config/protocols'
 import type { ActionLinkRecord, StructuredNotes } from '@/lib/schemas/protocols'
 import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
@@ -11,6 +12,7 @@ export interface ProtocolReviewCounts {
   unlinkedTasks: number
   decisions: number
   openDecisions: number
+  closedDecisionsWithoutTask: number
   infos: number
   unresolvedAssignees: number
   followUps: number
@@ -52,12 +54,18 @@ export function getProtocolReviewCounts(
     unlinkedTasks: tasks.filter((item) => !linkedActionIds.has(item.id)).length,
     decisions: decisions.length,
     openDecisions: decisions.filter((item) => {
-      if (linkedActionIds.has(item.id)) return false
       const linkedDecision = decisionsByActionItem.get(item.id)
       // No standalone decision yet → counts as open (needs proposing)
       if (!linkedDecision) return true
       // Standalone decision exists but isn't closed/cancelled → still open
       return !linkedDecision.isClosed
+    }).length,
+    closedDecisionsWithoutTask: decisions.filter((item) => {
+      const linkedDecision = decisionsByActionItem.get(item.id)
+      if (!linkedDecision) return false
+      return linkedDecision.status === DECISION_STATUS.CLOSED
+        && linkedDecision.outcomePassed !== false
+        && !linkedDecision.linkedTaskId
     }).length,
     infos: actionItems.filter((item) => item.item_type === 'info').length,
     unresolvedAssignees: tasks.filter((item) => item.assigned_to_name && !item.assigned_to_id).length,
@@ -125,7 +133,7 @@ export function getProtocolReviewChecklist(input: {
       description: isFinalized
         ? 'Das Protokoll ist abgeschlossen und bleibt als Quelle nachvollziehbar.'
         : 'Erst abschliessen, wenn Struktur, Entscheidungen und Aufgaben stimmen.',
-      state: isFinalized ? 'done' : counts.unlinkedTasks > 0 || counts.openDecisions > 0 ? 'pending' : hasNotes ? 'active' : 'blocked',
+      state: isFinalized ? 'done' : counts.unlinkedTasks > 0 || counts.openDecisions > 0 || counts.closedDecisionsWithoutTask > 0 ? 'pending' : hasNotes ? 'active' : 'blocked',
     },
   ]
 }

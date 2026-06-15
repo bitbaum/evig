@@ -139,10 +139,6 @@ export const TABLE_NAMES = {
   MEETING_PROTOCOLS: 'meeting_protocols',
   PROTOCOL_ACTION_LINKS: 'protocol_action_links',
 
-  // Protocol-level decision voting (inline in action items)
-  PROTOCOL_DECISION_VOTES: 'protocol_decision_votes',
-  PROTOCOL_DECISION_OUTCOMES: 'protocol_decision_outcomes',
-
   // Team Decisions & Voting (standalone system)
   DECISIONS: 'decisions',
   DECISION_VOTES: 'decision_votes',

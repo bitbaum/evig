@@ -265,6 +265,7 @@ function ActionRow({
   linkedDecision,
   isProtocolCreator,
   onCreateTask,
+  onRefresh,
 }: ActionRowProps) {
   return (
     <div className="px-4 py-3 flex items-start justify-between gap-4">
@@ -324,6 +325,7 @@ function ActionRow({
             actionItemDescription={item.description}
             linkedDecision={linkedDecision}
             isProtocolCreator={isProtocolCreator}
+            onRefresh={onRefresh}
           />
         ) : null}
       </div>

@@ -57,6 +57,7 @@ describe('protocol review helpers', () => {
       unlinkedTasks: 1,
       decisions: 1,
       openDecisions: 1,
+      closedDecisionsWithoutTask: 0,
       unresolvedAssignees: 1,
       followUps: 1,
     })

@@ -12,14 +12,12 @@ import {
   MEETING_TYPES,
   PROTOCOL_VISIBILITY,
   INPUT_METHODS,
-  DECISION_VOTE_TYPES,
 } from '@/config/protocols';
 import type {
   MeetingType,
   ProtocolStatus,
   ProtocolVisibility,
   InputMethod,
-  DecisionResult,
 } from '@/config/protocols';
 
 // Derive enums from config
@@ -217,21 +215,8 @@ export interface ActionLinkRecord {
 }
 
 // ============================================================
-// Decision Voting Schemas
+// AI task proposals (protocol processing prompts)
 // ============================================================
-
-const decisionVoteTypes = Object.values(DECISION_VOTE_TYPES) as [string, ...string[]];
-
-/** Vote on a decision action item */
-export const decisionVoteSchema = z.object({
-  action_item_id: z.string().min(1, 'Action Item ID erforderlich'),
-  vote_type: z.enum(decisionVoteTypes),
-});
-
-/** Close a decision manually */
-export const closeDecisionSchema = z.object({
-  action_item_id: z.string().min(1, 'Action Item ID erforderlich'),
-});
 
 /** AI-proposed task from an approved decision */
 export const proposedTaskSchema = z.object({
@@ -244,32 +229,4 @@ export const proposedTaskSchema = z.object({
 
 export const proposedTaskListSchema = z.array(proposedTaskSchema);
 
-export type DecisionVoteInput = z.infer<typeof decisionVoteSchema>;
-export type CloseDecisionInput = z.infer<typeof closeDecisionSchema>;
 export type ProposedTask = z.infer<typeof proposedTaskSchema>;
-
-/** Decision vote database record */
-export interface DecisionVoteRecord {
-  id: string;
-  protocol_id: string;
-  action_item_id: string;
-  voter_id: string;
-  vote_type: 'up' | 'down';
-  created_at: string;
-}
-
-/** Decision outcome database record */
-export interface DecisionOutcomeRecord {
-  id: string;
-  protocol_id: string;
-  action_item_id: string;
-  is_closed: boolean;
-  closed_by: string | null;
-  closed_at: string | null;
-  result: DecisionResult;
-  votes_up: number;
-  votes_down: number;
-  proposed_tasks: ProposedTask[] | null;
-  proposal_model: string | null;
-  tasks_created: boolean;
-}

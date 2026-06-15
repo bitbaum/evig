@@ -37,4 +37,8 @@ export interface DecisionDetail {
   creator: { id: string; email: string };
   createdAt: string;
   allowPublicVoting: boolean;
+  protocolId: string | null;
+  actionItemId: string | null;
+  linkedTaskId: string | null;
+  outcomePassed: boolean | null;
 }

@@ -76,8 +76,6 @@ jest.mock('drizzle-orm', () => {
 jest.mock('@/db/schema/misc', () => ({
   meetingProtocols: { id: 'meetingProtocols' },
   protocolActionLinks: { id: 'protocolActionLinks' },
-  protocolDecisionVotes: { id: 'protocolDecisionVotes' },
-  protocolDecisionOutcomes: { id: 'protocolDecisionOutcomes' },
 }))
 
 jest.mock('@/db/schema/auth', () => ({
@@ -451,13 +449,11 @@ describe('deleteProtocol', () => {
     expect(result).toEqual({ deleted: true })
   })
 
-  it('runs 4 DELETEs inside a transaction and returns { deleted: true }', async () => {
+  it('runs 2 DELETEs inside a transaction and returns { deleted: true }', async () => {
     mockDbExecute.mockResolvedValueOnce({
       rows: [{ id: PROTOCOL_ID, created_by: CREATOR_ID }],
     })
     mockTxExecute
-      .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [] })
 
@@ -465,7 +461,7 @@ describe('deleteProtocol', () => {
 
     expect(result).toEqual({ deleted: true })
     expect(mockDbTransaction).toHaveBeenCalledTimes(1)
-    expect(mockTxExecute).toHaveBeenCalledTimes(4)
+    expect(mockTxExecute).toHaveBeenCalledTimes(2)
   })
 })
 

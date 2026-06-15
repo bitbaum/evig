@@ -37,12 +37,14 @@ import {
   CheckCircle2,
   Send,
   Edit,
+  FileText,
 } from 'lucide-react'
 import TaskActionsClient from './TaskActionsClient'
 import { TaskRequestResponseButtons } from './TaskRequestResponseButtons'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
 import { auth } from '@/auth'
+import { getTaskProtocolSource } from '@/lib/services/protocol-decision-tasks'
 
 export const metadata: Metadata = {
   title: 'Aufgabe Details',
@@ -143,11 +145,12 @@ export default async function TaskDetailPage({
     notFound()
   }
 
-  const [session, completions, flags, requests] = await Promise.all([
+  const [session, completions, flags, requests, protocolSource] = await Promise.all([
     auth(),
     getCompletions(id),
     getAttentionFlags(id),
     getRequests(id),
+    getTaskProtocolSource(id),
   ])
 
   const activeFlags = flags.filter((f) => !f.is_resolved)
@@ -203,6 +206,22 @@ export default async function TaskDetailPage({
           </Link>
         </div>
       </div>
+
+      {protocolSource && (
+        <div className="rounded-lg border border-subtle bg-surface-raised px-4 py-3 flex items-center gap-3">
+          <FileText className="w-4 h-4 text-action shrink-0" />
+          <p className="text-sm text-text-secondary">
+            Aus Protokoll{' '}
+            <Link
+              href={`/admin/protocols/${protocolSource.protocolId}`}
+              className="font-medium text-action hover:text-action-hover"
+            >
+              {protocolSource.protocolTitle}
+            </Link>
+            {protocolSource.meetingDate ? ` · ${formatDateShort(protocolSource.meetingDate)}` : ''}
+          </p>
+        </div>
+      )}
 
       {/* Status Badges */}
       <div className="flex items-center gap-3">

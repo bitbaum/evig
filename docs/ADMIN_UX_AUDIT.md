@@ -43,12 +43,12 @@ These are real wins but each is medium-to-large with risk of breaking a workflow
 
 | Item | Effort | Why defer |
 |---|---|---|
-| Timecards inline day-edit (delete aside panel) | medium | Layout rewrite; risk of breaking mobile flow |
-| Tasks form: 11 fields → 5 | medium | Need to know which fields admin actually uses |
+| ~~Timecards inline day-edit (delete aside panel)~~ | ~~medium~~ | **Done** — Phase AC (`TimecardDayEditor` inline) |
+| ~~Tasks form: 11 fields → 5~~ | ~~medium~~ | **Done** — Phase AE |
 | Protocols input wizard → single form | medium | Need to verify staff actually have raw content ready (vs benefit from guided flow) |
-| Protocols decision voting → "approve + create tasks" 2-button | large | 4 API routes to consolidate; deep workflow change |
+| ~~Protocols decision voting → inline thumbs UI~~ | ~~large~~ | **Done (UI)** — `DecisionBridge` + standalone decisions (Phase AF); legacy API routes remain |
 | ProtocolDetailClient split by state | large | 357-line refactor; should follow a test-first approach |
-| Team form compression (compensation/talent/availability sections) | medium | HR adoption signal needed before cutting fields |
+| ~~Team form compression (default collapse secondary sections)~~ | ~~medium~~ | **Done (UX)** — Phase AF; field removal still needs HR input |
 
 ## Things that are actually well-done (don't regress)
 
@@ -84,9 +84,10 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | ~~Timecards: drop aside panel, inline day-edit grid~~ | ~~medium~~ | **Done** — `01b59d93` (`TimecardDayEditor` inline below month grid) |
 | ~~Tasks: delete standalone analytics page~~ | ~~medium~~ | **Done** — Phase AD redirect; stats on tasks list + `/admin/analytics` |
 | ~~Tasks: collapse new-task form 11 → 5 fields~~ | ~~medium~~ | **Done** — Phase AE: 5 core fields + Erweitert disclosure |
-| Protocols: kill DecisionActions voting flow → "approve + create tasks" 2-button | large | 4 API routes to consolidate |
+| ~~Protocols: kill DecisionActions inline voting~~ | ~~large~~ | **Done (UI)** — Phase AF: `DecisionBridge` promotes to `/admin/decisions/[id]`; legacy `/api/protocols/.../decisions/*` routes remain for API compat until removal |
+| Protocols: kill DecisionActions voting flow → "approve + create tasks" 2-button | large | Superseded by DecisionBridge + standalone decisions UX; legacy API cleanup still open |
 | Protocols: split ProtocolDetailClient (357 lines) by lifecycle state | large | Refactor; test-first approach |
-| Team: profile form compression (drop schema-first compensation fields) | medium | HR adoption signal needed |
+| ~~Team form compression (compensation/talent/availability sections)~~ | ~~medium~~ | **Done (UX)** — Phase AF: create shows Grunddaten only; edit auto-expands populated sections |
 | Team: separate "team roster" from "team culture" | large | New route + IA decision |
 
 ---
@@ -171,5 +172,51 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | AE.1 | Create form shows 5 core fields: Titel, Typ, Kategorie, Beschreibung, Priorität | ✓ |
 | AE.2 | Zuweisung, Anleitung, Dauer, Fälligkeit, Tags moved to collapsed Erweitert section | ✓ |
 | AE.3 | Edit mode auto-expands Erweitert when any advanced field is populated | ✓ |
+
+---
+
+## Execution log (Phase AF — dependabot + team form compression)
+
+**Date:** 2026-06-15  
+**Scope:** Close open Dependabot alerts; compress team profile create flow (fields unchanged).
+
+| # | Change | Result |
+|---|---|---|
+| AF.1 | npm overrides: `shell-quote@1.8.4` (CVE-2026-9277), `esbuild@0.28.1`, `uuid` → root `$uuid` (exceljs nested 8.3.2) | ✓ |
+| AF.2 | Team create form: only **Grunddaten** open by default; Vergütung/Talent/Verfügbarkeit/Notfall collapsed | ✓ |
+| AF.3 | Team edit form: auto-expands sections with existing data (mirrors Phase AE task form) | ✓ |
+| AF.4 | Audit: document `DecisionBridge` (QQ.6) as replacement for inline `DecisionActions` voting UI | ✓ |
+
+**Last modified:** 2026-06-15 — Phase AG tasks ↔ protocols ↔ decisions bridge.
+
+---
+
+## Execution log (Phase AG — tasks ↔ protocols ↔ decisions bridge)
+
+**Date:** 2026-06-15  
+**Scope:** Close the loop from protocol action item → vote → follow-up task.
+
+| # | Change | Result |
+|---|---|---|
+| AG.1 | `POST /api/decisions/[id]/create-task` — one-click follow-up task linked via `protocol_action_links` | ✓ |
+| AG.2 | `DecisionBridge` — closed approved decisions show inline **Aufgabe erstellen**; linked tasks show **Aufgabe verknüpft** | ✓ |
+| AG.3 | Decision detail — protocol link badge; one-click create when protocol-linked; **Folgeaufgabe öffnen** when linked | ✓ |
+| AG.4 | Task detail — **Aus Protokoll** provenance banner with link back to source protocol | ✓ |
+| AG.5 | Finalize dialog warns when accepted decisions lack follow-up tasks | ✓ |
+
+---
+
+## Execution log (Phase AH — legacy protocol decision cleanup, RR.3)
+
+**Date:** 2026-06-15  
+**Scope:** Remove dead `protocol_decision_*` code path after QQ.6 + Phase AG bridge.
+
+| # | Change | Result |
+|---|---|---|
+| AH.1 | Deleted `/api/protocols/[id]/decisions/*` (vote, close, propose, create-tasks, GET) | ✓ |
+| AH.2 | Removed `protocols-voting.ts` + tests; Drizzle schemas; `TABLE_NAMES` entries | ✓ |
+| AH.3 | Migration `087_drop_protocol_decision_legacy.sql` — drops legacy tables (apply per env) | ✓ |
+
+**Last modified:** 2026-06-15 — Phase AH legacy cleanup + Phase AG bridge.
 
 ---

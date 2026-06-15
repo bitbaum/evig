@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, integer, jsonb, timestamp, date, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, jsonb, timestamp, date, index } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 import { tasks } from './tasks'
 import { decisions } from './decisions'
@@ -60,56 +60,3 @@ export const protocolActionLinks = pgTable('protocol_action_links', {
 
 export type ProtocolActionLink = typeof protocolActionLinks.$inferSelect
 export type NewProtocolActionLink = typeof protocolActionLinks.$inferInsert
-
-// =============================================================================
-// PROTOCOL DECISION VOTES
-// =============================================================================
-// Individual votes on protocol decision items (thumbs up/down).
-
-export const protocolDecisionVotes = pgTable('protocol_decision_votes', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  protocolId: uuid('protocol_id').notNull().references(() => meetingProtocols.id, { onDelete: 'cascade' }),
-  actionItemId: text('action_item_id').notNull(),
-  voterId: uuid('voter_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  // CHECK (vote_type IN ('up','down')) — validated at app layer
-  voteType: text('vote_type').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-}, (table) => [
-  uniqueIndex('protocol_decision_votes_protocol_id_action_item_id_voter_id_key')
-    .on(table.protocolId, table.actionItemId, table.voterId),
-  index('idx_protocol_decision_votes_protocol').on(table.protocolId),
-  index('idx_protocol_decision_votes_action').on(table.protocolId, table.actionItemId),
-])
-
-export type ProtocolDecisionVote = typeof protocolDecisionVotes.$inferSelect
-export type NewProtocolDecisionVote = typeof protocolDecisionVotes.$inferInsert
-
-// =============================================================================
-// PROTOCOL DECISION OUTCOMES
-// =============================================================================
-// Aggregated decision state, AI proposals, and task creation tracking.
-
-export const protocolDecisionOutcomes = pgTable('protocol_decision_outcomes', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  protocolId: uuid('protocol_id').notNull().references(() => meetingProtocols.id, { onDelete: 'cascade' }),
-  actionItemId: text('action_item_id').notNull(),
-  isClosed: boolean('is_closed').notNull().default(false),
-  closedBy: uuid('closed_by').references(() => users.id),
-  closedAt: timestamp('closed_at', { withTimezone: true, mode: 'string' }),
-  // CHECK (result IN ('approved','rejected','pending')) — validated at app layer
-  result: text('result').notNull().default('pending'),
-  votesUp: integer('votes_up').notNull().default(0),
-  votesDown: integer('votes_down').notNull().default(0),
-  proposedTasks: jsonb('proposed_tasks'),
-  proposalModel: text('proposal_model'),
-  tasksCreated: boolean('tasks_created').notNull().default(false),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-}, (table) => [
-  uniqueIndex('protocol_decision_outcomes_protocol_id_action_item_id_key')
-    .on(table.protocolId, table.actionItemId),
-  index('idx_protocol_decision_outcomes_protocol').on(table.protocolId),
-])
-
-export type ProtocolDecisionOutcome = typeof protocolDecisionOutcomes.$inferSelect
-export type NewProtocolDecisionOutcome = typeof protocolDecisionOutcomes.$inferInsert

@@ -5,6 +5,58 @@ import { useRouter } from 'next/navigation'
 import { useTeamProfileMutations } from './useTeamProfiles'
 import type { TeamProfileFormProps } from './types'
 
+function resolveInitialOpenSections(
+  initialData: TeamProfileFormProps['initialData'],
+  isEdit: boolean,
+  isSuperAdmin: boolean | undefined,
+): Set<string> {
+  const open = new Set<string>(['basic'])
+
+  if (!isEdit || !initialData) {
+    return open
+  }
+
+  const hasCompensation = Boolean(
+    initialData.hourly_rate_cents != null
+    || initialData.salary_chf != null
+    || initialData.salary_effective_date
+    || initialData.end_date
+    || initialData.exit_reason
+    || initialData.ahv_number
+    || initialData.canton_tax_code
+    || (initialData.work_state && initialData.work_state !== 'active'),
+  )
+
+  const hasTalent = Boolean(
+    (initialData.skills?.length ?? 0) > 0
+    || (initialData.interests?.length ?? 0) > 0
+    || initialData.goals
+    || initialData.strengths
+    || initialData.development_areas,
+  )
+
+  const hasAvailability = Boolean(
+    initialData.availability
+    || initialData.working_hours
+    || (initialData.preferred_contact && initialData.preferred_contact !== 'email')
+    || initialData.phone,
+  )
+
+  const hasEmergency = Boolean(
+    initialData.emergency_contact_name
+    || initialData.emergency_contact_phone
+    || initialData.emergency_contact_relation,
+  )
+
+  if (hasCompensation) open.add('compensation')
+  if (hasTalent) open.add('talent')
+  if (hasAvailability) open.add('availability')
+  if (hasEmergency) open.add('emergency')
+  if (isSuperAdmin && initialData.hr_notes) open.add('hr')
+
+  return open
+}
+
 export interface TeamProfileFormState {
   user_id: string
   position: string
@@ -48,12 +100,9 @@ export function useTeamProfileForm({
   const router = useRouter()
   const { saving, error, createProfile, updateProfile, clearError } = useTeamProfileMutations()
 
-  const [openSections, setOpenSections] = useState<Set<string>>(() => {
-    const initial = new Set<string>()
-    initial.add('basic')
-    initial.add('talent')
-    return initial
-  })
+  const [openSections, setOpenSections] = useState<Set<string>>(() =>
+    resolveInitialOpenSections(initialData, !!isEdit, isSuperAdmin),
+  )
 
   const [form, setForm] = useState<TeamProfileFormState>({
     user_id: initialData?.user_id || '',

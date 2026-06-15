@@ -4,7 +4,7 @@
 
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
-import { meetingProtocols, protocolActionLinks, protocolDecisionVotes, protocolDecisionOutcomes } from '@/db/schema/misc'
+import { meetingProtocols, protocolActionLinks } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
 import { tasks } from '@/db/schema/tasks'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
@@ -22,8 +22,6 @@ import type {
 // Table name refs
 const mpTable = getTableName(meetingProtocols)
 const palTable = getTableName(protocolActionLinks)
-const pdvTable = getTableName(protocolDecisionVotes)
-const pdoTable = getTableName(protocolDecisionOutcomes)
 const uTable = getTableName(users)
 const tTable = getTableName(tasks)
 
@@ -339,12 +337,6 @@ export async function deleteProtocol(
   await db.transaction(async (tx) => {
     await tx.execute(sql`
       DELETE FROM ${sql.raw(palTable)} WHERE protocol_id = ${protocolId}
-    `)
-    await tx.execute(sql`
-      DELETE FROM ${sql.raw(pdvTable)} WHERE protocol_id = ${protocolId}
-    `)
-    await tx.execute(sql`
-      DELETE FROM ${sql.raw(pdoTable)} WHERE protocol_id = ${protocolId}
     `)
     await tx.execute(sql`
       DELETE FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}

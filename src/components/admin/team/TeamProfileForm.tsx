@@ -4,7 +4,9 @@
  * Team Profile Form Component
  *
  * Create/Edit form for team profiles.
- * Progressive disclosure with collapsible sections.
+ * Progressive disclosure: create shows Grunddaten only; secondary sections
+ * (Vergütung, Talent, Verfügbarkeit, Notfall) stay collapsed until opened.
+ * Edit mode auto-expands sections that already contain data.
  */
 
 import { useTranslations } from 'next-intl'

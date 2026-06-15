@@ -3,13 +3,13 @@
 **Last updated:** 2026-06-04 (after QQ session — partial progress on all three)
 
 **Session progress (QQ + RR commits, 2026-06-04/05):**
-- #1 (decision systems): ✓ DONE (UI cutover). Migration 086 applied to
-  prod Neon. `thumbs_up_down` voting method added. New `DecisionBridge`
-  component replaces inline thumbs voting — protocol action items
-  promote to standalone decisions via `POST /api/decisions` with
-  `protocol_id` + `action_item_id`. 0 protocol_decision_* rows existed
-  in prod so no data migration needed. Remaining: drop the legacy
-  routes + tables (new migration 087, separate commit).
+- #1 (decision systems): ✓ DONE. Migration 086 applied (protocol FK on
+  `decisions`). `DecisionBridge` + standalone voting cut over in QQ.6.
+  **Phase AG (2026-06-15):** `POST /api/decisions/[id]/create-task`
+  closes the loop to linked follow-up tasks. **RR.3 (2026-06-15):**
+  removed legacy `/api/protocols/[id]/decisions/*` routes,
+  `protocols-voting.ts`, and Drizzle schemas; apply migration
+  `087_drop_protocol_decision_legacy.sql` on each environment.
 - #2 (IT-Hilfe notifications): PARTIAL. Central `getEmailContent` in
   `notifications.ts` dispatches IT-Hilfe types to rich HTML templates
   (QQ.4 step 1). `accept-offer.ts` + offers POST migrated to
