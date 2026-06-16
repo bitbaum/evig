@@ -32,12 +32,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: 'Post Not Found | RevampIt Blog',
+      title: { absolute: 'Post not found | Revamp-IT Blog' },
     };
   }
 
   return {
-    title: `${post.title} | RevampIt Blog`,
+    title: { absolute: `${post.title} | Revamp-IT Blog` },
     description: post.excerpt || '',
     openGraph: {
       title: post.title,

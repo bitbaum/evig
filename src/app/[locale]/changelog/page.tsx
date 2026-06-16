@@ -5,7 +5,6 @@ import { ChangelogLatestBar } from '@/components/changelog/ChangelogLatestBar'
 import { ChangelogMobileNav } from '@/components/changelog/ChangelogMobileNav'
 import { ChangelogRelease } from '@/components/changelog/ChangelogRelease'
 import { ChangelogVersionRail } from '@/components/changelog/ChangelogVersionRail'
-import { ORG } from '@/config/org'
 import {
   buildChangelogNav,
   formatChangelogDateShort,
@@ -20,7 +19,7 @@ interface ChangelogPageProps {
 export async function generateMetadata({ params }: ChangelogPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'changelog' })
-  const title = `${t('meta.title')} | ${ORG.name}`
+  const title = t('meta.title')
   const description = t('meta.description')
   return {
     title,
