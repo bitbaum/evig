@@ -23,6 +23,33 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
+    id: 'v0-1-2',
+    version: '0.1.2',
+    date: '2026-06-16',
+    title: {
+      de: 'Self-Host-Deploy gehärtet',
+      en: 'Self-host deploy hardened',
+    },
+    changes: [
+      {
+        de: 'Produktionsziel eindeutig auf revampit.orangecat.ch dokumentiert; revamp-it.ch bleibt als Legacy-Domain markiert',
+        en: 'Production target clearly documented as revampit.orangecat.ch; revamp-it.ch remains marked as the legacy domain',
+      },
+      {
+        de: 'Deploy-Skript legt vor dem Aktivieren ein Release-Backup an und rollt bei fehlgeschlagenem Healthcheck automatisch zurück',
+        en: 'Deploy script now keeps a release backup before activation and automatically rolls back when the health check fails',
+      },
+      {
+        de: 'GitHub-Deploy-Workflow führt Lint und Typecheck vor dem Produktionsdeploy aus',
+        en: 'GitHub deploy workflow now runs lint and typecheck before production deploy',
+      },
+      {
+        de: 'Neuer /api/version-Endpunkt zeigt App-Version, Git-SHA und Build-Zeit für Monitoring und Deploy-Verifikation',
+        en: 'New /api/version endpoint exposes app version, git SHA, and build time for monitoring and deploy verification',
+      },
+    ],
+  },
+  {
     id: 'v0-1-1',
     version: '0.1.1',
     date: '2026-06-16',

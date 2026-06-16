@@ -48,6 +48,14 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         run: npm ci
 
+      - name: Run ESLint
+        if: steps.secrets.outputs.configured == 'true'
+        run: npm run lint
+
+      - name: Type check
+        if: steps.secrets.outputs.configured == 'true'
+        run: npm run typecheck
+
       - name: Write selfhost env
         if: steps.secrets.outputs.configured == 'true'
         run: |

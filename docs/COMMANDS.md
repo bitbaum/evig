@@ -88,7 +88,7 @@ Public legacy domain `revamp-it.ch` is still the old Joomla/Apache site and is n
 | Trigger | What happens |
 |---------|----------------|
 | `git push origin main` (local) | Pre-push hook builds + deploys in background → `/tmp/push-deploy-revampit.log` |
-| `git push origin main` (GitHub) | Actions workflow `.github/workflows/deploy-selfhost.yml` (needs secrets, see below) |
+| `git push origin main` (GitHub) | Actions workflow `.github/workflows/deploy-selfhost.yml` runs lint + typecheck, then deploys if secrets are set |
 
 Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or recreate from Neon/Vercel env.
 
@@ -103,10 +103,17 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 
 ```bash
 npm run deploy          # same as deploy:selfhost
-npm run deploy:selfhost # build standalone → rsync → restart revampit-app
+npm run deploy:selfhost # build standalone → release backup → activate → /api/health gate → rollback on failure
 npm run ship            # quality gate (typecheck, lint, build, tests)
 npm run deploy:vercel   # legacy Vercel script (project disabled)
 npm run migrate-to-prod # database migrations (Neon)
+```
+
+Operational checks:
+
+```bash
+curl https://revampit.orangecat.ch/api/health  # dependency health
+curl https://revampit.orangecat.ch/api/version # deployed version / git SHA
 ```
 
 ---

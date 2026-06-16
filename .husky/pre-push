@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Push main → deploy experimental site (revampit.orangecat.ch) in background.
+# Push main → deploy production app (revampit.orangecat.ch) in background.
 # Requires .env.selfhost.local + SSH to ubuntu@167.233.22.31
 # Log: /tmp/push-deploy-revampit.log
 

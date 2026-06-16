@@ -110,6 +110,7 @@ tina/__generated__
 # Uploaded files (development)
 public/uploads/
 *.sh
+!scripts/selfhost-deploy-revampit.sh
 ship
 cookies.txt
 daten/
