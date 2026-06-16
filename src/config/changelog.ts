@@ -40,12 +40,20 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
         en: 'Deploy script now keeps a release backup before activation and automatically rolls back when the health check fails',
       },
       {
+        de: 'Self-Host-Releases übernehmen serverlokale .env- und launch.sh-Dateien, damit Secrets und systemd-Startlogik nicht im Repository liegen',
+        en: 'Self-host releases inherit server-local .env and launch.sh files so secrets and systemd launch logic stay out of the repository',
+      },
+      {
         de: 'GitHub-Deploy-Workflow führt Lint und Typecheck vor dem Produktionsdeploy aus',
         en: 'GitHub deploy workflow now runs lint and typecheck before production deploy',
       },
       {
         de: 'Neuer /api/version-Endpunkt zeigt App-Version, Git-SHA und Build-Zeit für Monitoring und Deploy-Verifikation',
         en: 'New /api/version endpoint exposes app version, git SHA, and build time for monitoring and deploy verification',
+      },
+      {
+        de: 'Meilisearch läuft auf dem Hetzner-Server als localhost-only Docker-Service und /api/health meldet wieder healthy',
+        en: 'Meilisearch now runs on the Hetzner server as a localhost-only Docker service and /api/health reports healthy again',
       },
     ],
   },

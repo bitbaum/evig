@@ -116,6 +116,15 @@ curl https://revampit.orangecat.ch/api/health  # dependency health
 curl https://revampit.orangecat.ch/api/version # deployed version / git SHA
 ```
 
+Production dependencies on the Hetzner box:
+
+| Service | Runtime | Binding | Notes |
+|---------|---------|---------|-------|
+| `revampit-app` | systemd | `127.0.0.1:4004` behind Caddy | `/opt/revampit/app`, restarted by `scripts/selfhost-deploy-revampit.sh` |
+| `revampit_meilisearch` | Docker | `127.0.0.1:7700` | Required for healthy `/api/health`; master key is stored only in `/opt/revampit/app/.env` |
+
+The deploy script copies the server-local `.env` and `launch.sh` into each release before activation. Do not put those runtime secrets in git.
+
 ---
 
 ## Database

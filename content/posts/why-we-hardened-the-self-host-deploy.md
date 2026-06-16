@@ -23,6 +23,10 @@ Deshalb härten wir zuerst den vorhandenen Weg. Das Deploy-Skript baut weiterhin
 
 Zusätzlich gibt es einen `/api/version`-Endpunkt. Er zeigt App-Version, Git-SHA und Build-Zeit. Das ist klein, aber wichtig: Betrieb und Monitoring brauchen eine eindeutige Antwort auf die Frage, was wirklich live läuft.
 
+Ein Detail war dabei entscheidend: Runtime-Dateien wie `.env` und `launch.sh` gehören nicht in das Git-Repository, müssen aber in jedem aktivierten Release vorhanden sein. Das Deploy-Skript übernimmt diese Dateien deshalb serverlokal aus dem aktuellen App-Verzeichnis, bevor es ein neues Release startet.
+
+Auch Meilisearch ist jetzt wieder Teil des Betriebsbilds. Die App konnte ohne Meilisearch auf SQL-Suche zurückfallen, aber `/api/health` war dadurch nur `degraded`. Auf dem Hetzner-Server läuft Meilisearch deshalb als localhost-only Docker-Service mit einem serverlokalen Schlüssel.
+
 Der GitHub-Deploy-Workflow bekommt außerdem einen klareren Gate: Lint und Typecheck laufen vor dem Produktionsdeploy. Der lokale Push-Deploy bleibt praktisch, soll aber nicht die langfristige einzige Wahrheit sein. Der Zielzustand ist: GitHub baut, prüft und deployed; lokale Deploys bleiben ein manuelles Werkzeug für Ausnahmefälle.
 
 Was später kommen kann: Wenn wir viele Apps, Kundenumgebungen oder Self-Service-Deploys betreiben, kann eine Control Plane sinnvoll werden. Dann prüfen wir nüchtern Coolify, Dokploy oder Kamal. Bis dahin gilt: weniger Plattform, mehr verlässliche Betriebsdisziplin.
