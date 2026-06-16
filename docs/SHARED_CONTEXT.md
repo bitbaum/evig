@@ -30,7 +30,7 @@ last_modified_summary: Customer journeys IA — IT-Hilfe hub, techniker under /i
 | Auth | Auth.js v5, Credentials, JWT sessions | Same login for `/dashboard` and `/admin` — see `docs/UNIFIED_AUTH.md` |
 | E-commerce | Custom (inventory-based) | Integrated |
 | Database | PostgreSQL (Neon prod; Docker 5433 local), Redis (6380), Meilisearch (7700) | Drizzle ORM |
-| Deploy | Hetzner (revampit.orangecat.ch), push-to-deploy; Vercel disabled | See `docs/COMMANDS.md` |
+| Deploy | Hetzner production app (revampit.orangecat.ch), push-to-deploy; Vercel disabled | See `docs/COMMANDS.md` |
 
 ---
 

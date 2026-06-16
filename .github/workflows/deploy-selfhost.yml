@@ -1,6 +1,6 @@
-name: Deploy (experimental site)
+name: Deploy production app
 
-# Push to main → build + rsync to revampit.orangecat.ch (Vercel-equivalent UX).
+# Push to main → build + rsync to production app revampit.orangecat.ch.
 # One-time setup (Settings → Secrets → Actions):
 #   HETZNER_SSH_PRIVATE_KEY — private key for ubuntu@167.233.22.31
 #   SELFHOST_ENV            — full contents of .env.selfhost.local (multiline OK)

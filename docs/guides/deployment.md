@@ -75,7 +75,7 @@ Developer → Push to main → GitHub Actions (CI) → Vercel (Deploy) → Produ
 - **GitHub Actions:** Check `.github/workflows/ci.yml` status in GitHub
 - **Vercel Dashboard:** View deployments at [vercel.com/dashboard](https://vercel.com/dashboard)
 - **Deployment URLs:** 
-  - Production: `https://revampit.vercel.app`
+  - Current production app: `https://revampit.orangecat.ch`
   - Preview: Each PR gets a preview deployment URL
 
 ### Troubleshooting GitHub + Vercel Setup
@@ -308,7 +308,7 @@ Your website is live!
 🔗 Important Links (Click to Open)
 📁 GitHub Repository: https://github.com/yourusername/revampit
 🚀 Vercel Dashboard: https://vercel.com/dashboard  
-🌐 Live Website: https://revampit.vercel.app
+🌐 Production app: https://revampit.orangecat.ch
 ```
 
 ## 🚨 Troubleshooting
@@ -410,4 +410,4 @@ To update the scripts:
 
 **Happy Deploying!** 🚀
 
-Choose the method that best fits your workflow. For most teams, the GitHub + Vercel integration provides the best balance of automation, reliability, and ease of use. 
+Choose the method that best fits your workflow. For most teams, the GitHub + Vercel integration provides the best balance of automation, reliability, and ease of use.

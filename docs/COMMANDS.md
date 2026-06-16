@@ -80,8 +80,8 @@ npm run test:all       # Run all tests
 
 ## Deployment
 
-Experimental site: **https://revampit.orangecat.ch** (Hetzner self-host).  
-Production domain revamp-it.ch is still the legacy Joomla site.
+Production app: **https://revampit.orangecat.ch** (Hetzner self-host).
+Public legacy domain `revamp-it.ch` is still the old Joomla/Apache site and is not the production app.
 
 ### Automatic (like Vercel on Neon)
 

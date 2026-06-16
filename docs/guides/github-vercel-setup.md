@@ -158,7 +158,7 @@ Then create a PR on GitHub.
 
 ### Deployment URLs
 
-- **Production:** `https://revampit.vercel.app` (or your custom domain)
+- **Legacy Vercel production:** `https://revampit.vercel.app` (not the current production app; current app is `https://revampit.orangecat.ch`)
 - **Preview:** Unique URL per PR (e.g., `revampit-git-feature-branch.vercel.app`)
 
 ## 🚨 Troubleshooting

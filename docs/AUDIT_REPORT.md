@@ -306,7 +306,7 @@ Per session preference: Phase A–I landed in a single commit (`75ef7e96`). PR h
 
 ### Cumulative state after Phase A–O
 - **8 commits this session window:** `75ef7e96` (A–I) → `70745617` (env hotfix) → `5b0b1d3c` (env hotfix #2 + shop mission UX + CO₂ reconciliation) → `682de723` (J + M + N + O).
-- **Production live at `revampit.vercel.app`** (and per-deploy aliases). API + DB roundtrip confirmed via `vercel curl`. (`revamp-it.ch` is a future canonical domain — not active yet, ignore.)
+- Historical note: this audit predates the Hetzner cutover. The current production app is `revampit.orangecat.ch`; `revamp-it.ch` still serves the legacy Joomla/Apache site.
 
 ---
 
@@ -341,4 +341,4 @@ Per session preference: Phase A–I landed in a single commit (`75ef7e96`). PR h
 
 ### Cumulative state (Phase A–T)
 - 7 commits this session window: `75ef7e96` (A–I) · `70745617` (env hotfix) · `5b0b1d3c` (env hotfix #2 + UX) · `682de723` (J + M + N + O) · `badec29f` (docs) · `544ae5af` (P + Q + R + S + T) · plus this cleanup commit.
-- **All deployed Ready** at `revampit.vercel.app`. No outstanding errors. Typecheck clean. Umlaut linter clean.
+- Historical Vercel note: Vercel is no longer the active production target. Current production deploys use Hetzner self-hosting; see `docs/COMMANDS.md`.

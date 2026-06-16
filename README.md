@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000.svg)](https://nextjs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791.svg)](https://neon.tech/)
-[![Live](https://img.shields.io/badge/Live-revamp--it.ch-green.svg)](https://revamp-it.ch)
+[![Production](https://img.shields.io/badge/Production-revampit.orangecat.ch-green.svg)](https://revampit.orangecat.ch)
 
 Revamp-IT is a Swiss non-profit association (Verein) operating since 2003 in Zürich. We accept donated computers, refurbish them, and redistribute them — to people who can't reach the commercial channel, to schools and community projects, and through our marketplace. We also run repair workshops and an open IT-Hilfe (IT help) program so the people we serve learn to keep their devices running themselves. This repository is the platform we use to run all of it.
 
