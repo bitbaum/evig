@@ -66,7 +66,7 @@ function isConfigured(): boolean {
 }
 
 export const PAYREXX_SETUP_MESSAGE =
-  'Online-Zahlung wird gerade eingerichtet. Payrexx ist noch nicht aktiv. Bitte kontaktiere Revamp-IT, wenn du sofort bezahlen moechtest.';
+  'Online-Zahlung wird gerade eingerichtet. Payrexx ist noch nicht aktiv. Bitte kontaktiere Revamp-IT, wenn du sofort bezahlen möchtest.';
 
 export function isPayrexxCheckoutUnavailable(): boolean {
   return process.env.NODE_ENV === 'production' && !isConfigured();
