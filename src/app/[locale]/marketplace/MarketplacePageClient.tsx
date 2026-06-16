@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,7 @@ import { ROUTES } from '@/config/routes'
 
 export default function MarketplacePage() {
   const { data: session, status } = useSession()
+  const searchParams = useSearchParams()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const t = useTranslations('marketplace')
 
@@ -46,7 +48,11 @@ export default function MarketplacePage() {
     hasActiveFilters,
     totalPages,
     currentPage,
-  } = useMarketplaceListings()
+  } = useMarketplaceListings({
+    category: searchParams.get('category') ?? undefined,
+    sellerType: searchParams.get('seller_type') ?? undefined,
+    search: searchParams.get('search') ?? searchParams.get('q') ?? undefined,
+  })
 
   const activeFilterCount = [
     filters.category,

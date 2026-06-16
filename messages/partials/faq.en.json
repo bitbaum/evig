@@ -100,7 +100,7 @@
           {
             "q": "Do you stock refurbished devices?",
             "a": "Yes. We offer carefully checked and refurbished devices with warranty – transparently documented.",
-            "link": { "href": "/shop", "label": "Go to the Shop" }
+            "link": { "href": "/marketplace", "label": "Go to the Shop" }
           },
           {
             "q": "What is the REVAMPED certification?",

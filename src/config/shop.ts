@@ -1,8 +1,9 @@
 /**
- * Shop configuration
+ * Legacy shop configuration
  *
- * Single Source of Truth for shop categories and related config
- * Following dev guide: docs/development/DEV_GUIDE.md
+ * The public shop is the marketplace. These helpers exist for old imports and
+ * bookmarks only; new surfaces should use @/config/marketplace and
+ * ROUTES.public.marketplace directly.
  */
 
 export interface ShopCategory {
@@ -34,17 +35,17 @@ export const MARKETPLACE_LISTING_PLATFORM = {
 export type MarketplaceListingPlatform = typeof MARKETPLACE_LISTING_PLATFORM[keyof typeof MARKETPLACE_LISTING_PLATFORM];
 
 /**
- * Generate shop category URL from slug
+ * Generate marketplace category URL from a legacy shop slug.
  */
 export function getCategoryUrl(slug: string): string {
-  return `/shop/category/${slug}`;
+  return `/marketplace?category=${encodeURIComponent(slug)}`;
 }
 
 /**
- * Generate search URL from query
+ * Generate marketplace search URL from query.
  */
 export function getSearchUrl(query: string): string {
-  return `/shop/search?q=${encodeURIComponent(query)}`;
+  return `/marketplace?search=${encodeURIComponent(query)}`;
 }
 
 /**
@@ -150,7 +151,7 @@ export const POPULAR_SEARCHES: PopularSearch[] = [
  */
 export const SHOP_QUICK_LINKS: QuickLink[] = [
   { name: "Produkte verkaufen", href: "/marketplace/sell" },
-  { name: "Gutscheine", href: "/shop/category/gutscheine" },
+  { name: "Gutscheine", href: "/marketplace?search=gutscheine" },
 ];
 
 /**

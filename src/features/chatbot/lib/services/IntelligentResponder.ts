@@ -196,7 +196,7 @@ export class IntelligentResponder {
             'en': 'In our online shop you\'ll find carefully refurbished computers with REVAMPED certification. All devices are tested and come with a warranty.'
           },
           suggestionConfigs: [
-            { key: 'shop', href: '/shop', options: { priority: 10 } },
+            { key: 'shop', href: '/marketplace', options: { priority: 10 } },
             { key: 'revamped', href: '/revamped', options: { priority: 9 } },
             { key: 'consultation', href: '/contact', options: { priority: 8 } }
           ]

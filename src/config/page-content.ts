@@ -15,7 +15,7 @@ export const MARKETPLACE_CONTENT = {
   sellerTypes: {
     all: 'Alle',
     revampit: `${ORG.name} Geräte`,
-    community: 'Community Inserate',
+    community: 'Marketplace',
   },
   filters: {
     allCategories: 'Alle',

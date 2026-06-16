@@ -1,14 +1,12 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/db'
-import { blogPosts, workshops, aiExtractedProducts, inventoryItems, listings, sellerProfiles } from '@/db/schema'
-import { eq, gt, and } from 'drizzle-orm'
+import { blogPosts, workshops, listings, sellerProfiles } from '@/db/schema'
+import { eq, gt } from 'drizzle-orm'
 import { locales, defaultLocale } from '@/i18n/routing'
 import { APP_URL } from '@/config/urls'
 import { ROUTES } from '@/config/routes'
 import { OSS_ALTERNATIVES } from '@/config/open-source-registry'
 import { LISTING_STATUS } from '@/config/marketplace'
-import { PRODUCT_STATUS } from '@/config/marketplace-status'
-import { APPROVAL_STATUS } from '@/config/approval-status'
 import { SERVICE_CONFIGS } from '@/app/[locale]/services/data'
 import { logger } from '@/lib/logger'
 
@@ -29,7 +27,6 @@ function url(path: string, locale: string): string {
  */
 const STATIC_PAGES: Array<{ path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]['changeFrequency'] }> = [
   { path: R.home,                                     priority: 1.0, changeFrequency: 'daily' },
-  { path: R.shop,                                     priority: 0.9, changeFrequency: 'daily' },
   { path: R.marketplace,                              priority: 0.9, changeFrequency: 'daily' },
   { path: R.workshops,                                priority: 0.8, changeFrequency: 'weekly' },
   { path: R.blog,                                     priority: 0.8, changeFrequency: 'daily' },
@@ -144,34 +141,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     logger.error('Sitemap: failed to fetch workshops', { error })
   }
 
-  // 7. Shop products (approved, visible in shop)
-  try {
-    const products = await db
-      .selectDistinct({ itemUuid: aiExtractedProducts.itemUuid, updatedAt: aiExtractedProducts.updatedAt })
-      .from(aiExtractedProducts)
-      .innerJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
-      .where(and(
-        eq(aiExtractedProducts.status, PRODUCT_STATUS.APPROVED),
-        eq(inventoryItems.marketplaceStatus, APPROVAL_STATUS.PUBLISHED),
-        gt(inventoryItems.quantityAvailable, 0)
-      ))
-
-    for (const product of products) {
-      if (!product.itemUuid) continue
-      for (const locale of locales) {
-        entries.push({
-          url: url(`/shop/product/${product.itemUuid}`, locale),
-          lastModified: product.updatedAt ? new Date(product.updatedAt) : undefined,
-          changeFrequency: 'weekly',
-          priority: 0.6,
-        })
-      }
-    }
-  } catch (error) {
-    logger.error('Sitemap: failed to fetch shop products', { error })
-  }
-
-  // 8. Active marketplace (P2P) listings
+  // 7. Active marketplace listings — canonical online shop inventory.
   try {
     const activeListings = await db
       .select({ id: listings.id, updatedAt: listings.updatedAt })

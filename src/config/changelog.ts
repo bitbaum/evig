@@ -27,25 +27,25 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: '0.1.3',
     date: '2026-06-16',
     title: {
-      de: 'Shop-Startseite auf Inventar ausgerichtet',
-      en: 'Shop landing page focused on inventory',
+      de: 'Shop auf Marktplatz vereinheitlicht',
+      en: 'Shop unified into marketplace',
     },
     changes: [
       {
-        de: 'Shop-Seite startet jetzt mit dem Revamp-IT Inventar, Suche und Kategorien statt mit einer Kanal-Auswahl',
-        en: 'Shop page now starts with Revamp-IT inventory, search, and categories instead of a channel picker',
+        de: '/shop, /shop/search, /shop/category/... und /shop/product/... leiten jetzt auf den kanonischen Marktplatz weiter',
+        en: '/shop, /shop/search, /shop/category/..., and /shop/product/... now redirect into the canonical marketplace',
       },
       {
-        de: 'Shopware ist als Fallback sichtbar, aber nicht mehr der gleichwertige Standard-Kaufpfad',
-        en: 'Shopware remains visible as a fallback, but is no longer presented as an equal default purchase path',
+        de: 'Navigation, Sitemap, Chatbot-Vorschlaege und Shop-URL-Helfer erzeugen keine neuen /shop-Links mehr',
+        en: 'Navigation, sitemap, chatbot suggestions, and shop URL helpers no longer generate new /shop links',
       },
       {
-        de: 'Reparatur-Anfrage und Techniker-/Werkstatt-Suche sind direkt vom Shop aus erreichbar',
-        en: 'Repair requests and technician/workshop discovery are directly reachable from the shop',
+        de: 'Revamp-IT-Inserate werden einheitlich anhand Flag oder Staff-E-Mail markiert; andere Anbieter werden neutral benannt',
+        en: 'Revamp-IT listings are consistently marked by explicit flag or staff email; other sellers use neutral labeling',
       },
       {
-        de: 'Shop-Metatitel nutzt einen absoluten Titel, damit Revamp-IT nicht doppelt im Browser-Title erscheint',
-        en: 'Shop metadata now uses an absolute title so Revamp-IT is not duplicated in the browser title',
+        de: 'Payrexx-Zahlungen stoppen in Produktion mit Setup-Meldung, solange kein Payrexx-Konto konfiguriert ist',
+        en: 'Payrexx-backed payments now stop in production with a setup message until a Payrexx account is configured',
       },
     ],
   },

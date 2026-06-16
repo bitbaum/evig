@@ -116,7 +116,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
               </p>
             </div>
             <div className="md:justify-self-end">
-              <Button as={Link} href="/shop#ladenlokal" variant="outline">
+              <Button as={Link} href="/contact" variant="outline">
                 {t('currentLocation.moreBtn')} <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
@@ -237,7 +237,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
           <div className="ui-public-eyebrow">{t('shopLinks.title').toUpperCase()}</div>
           <p className="ui-public-section-lede mt-4 mx-auto mb-8">{t('shopLinks.subtitle')}</p>
           <div className="ui-public-cta-row">
-            <Link href="/shop#ladenlokal" className="ui-public-cta-ghost">{t('shopLinks.currentStore')}</Link>
+            <Link href="/contact" className="ui-public-cta-ghost">{t('shopLinks.currentStore')}</Link>
             <Link href={ROUTES.public.shop} className="ui-public-cta-ghost">{t('shopLinks.shopOverview')}</Link>
             <Link href={ROUTES.public.marketplace} className="ui-public-cta">{t('shopLinks.onlineShop')}</Link>
           </div>

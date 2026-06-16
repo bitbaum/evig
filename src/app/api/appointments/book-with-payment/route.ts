@@ -21,6 +21,7 @@ import {
 import { validateBody, BookWithPaymentSchema } from '@/lib/schemas'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { APP_URL } from '@/config/urls'
+import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
 
 // POST /api/appointments/book-with-payment - Book service with immediate payment
 export async function POST(request: NextRequest) {
@@ -28,6 +29,10 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     if (!session?.user?.id) {
       return apiError(null, ERROR_MESSAGES.AUTHENTICATION_REQUIRED, 401)
+    }
+
+    if (isPayrexxCheckoutUnavailable()) {
+      return apiBadRequest(PAYREXX_SETUP_MESSAGE)
     }
 
     const body = await request.json()

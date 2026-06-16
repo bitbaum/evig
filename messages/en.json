@@ -29,8 +29,8 @@
     "linuxOpenSource": "Linux & Open Source",
     "webDevelopment": "Web Development",
     "openSourceSolutions": "Open Source Solutions",
-    "communityListings": "Community Listings",
-    "shopRevampIT": "RevampIT Shop",
+    "communityListings": "Marketplace",
+    "shopRevampIT": "Revamp-IT listings",
     "storeZurich": "Zürich Store",
     "createListing": "Create Listing",
     "myListings": "My Listings",
@@ -72,7 +72,7 @@
       "webDevDesc": "Websites with open source",
       "openSourceSolutionsDesc": "Consulting and implementation",
       "marketplaceDesc": "Buy, sell and IT help",
-      "communityListingsDesc": "Used IT from private sellers — 0% fees",
+      "communityListingsDesc": "Used IT from Revamp-IT and other sellers",
       "orgShopDesc": "Tested, refurbished devices",
       "storeDesc": "Browse in person and get advice",
       "createListingDesc": "Sell your own devices — for free",
@@ -113,8 +113,8 @@
       "openSourceSolutions": "Open-source solutions",
       "marketplace": "Marketplace",
       "buyDevices": "Buy devices",
-      "communityListings": "Community listings",
-      "orgShop": "Revamp-IT Shop",
+      "communityListings": "Marketplace",
+      "orgShop": "Revamp-IT listings",
       "store": "Zürich storefront",
       "sell": "Sell",
       "createListing": "Create listing",
@@ -832,8 +832,8 @@
     "searchButton": "Search",
     "sellerTypes": {
       "all": "All",
-      "revampit": "{orgName} devices",
-      "community": "Community listings"
+      "revampit": "{orgName}",
+      "community": "Other sellers"
     },
     "categories": {
       "10": "Laptops",
@@ -3690,7 +3690,7 @@
             "q": "Do you stock refurbished devices?",
             "a": "Yes. We offer carefully checked and refurbished devices with warranty – transparently documented.",
             "link": {
-              "href": "/shop",
+              "href": "/marketplace",
               "label": "Go to the Shop"
             }
           },

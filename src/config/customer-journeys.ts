@@ -25,12 +25,12 @@ export const CUSTOMER_JOURNEYS = {
       },
       {
         nameKey: 'shopRevampIT',
-        href: ROUTES.public.shop,
+        href: `${ROUTES.public.marketplace}?seller_type=revampit`,
         descriptionKey: 'orgShopDesc',
       },
       {
         nameKey: 'storeZurich',
-        href: `${ROUTES.public.shop}#ladenlokal`,
+        href: '/contact',
         descriptionKey: 'storeDesc',
       },
       {
@@ -110,5 +110,5 @@ export const JOURNEY_ENTRYPOINTS = {
   itHelpTechnicians: ROUTES.public.techniker,
   itHelpBrowseRequests: ROUTES.public.itHilfeBrowseRequests,
   becomeTechnician: ROUTES.public.profilTechniker,
-  orgShop: ROUTES.public.shop,
+  orgShop: `${ROUTES.public.marketplace}?seller_type=revampit`,
 } as const

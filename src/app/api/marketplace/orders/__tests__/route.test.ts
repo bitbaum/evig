@@ -102,6 +102,8 @@ jest.mock('@/lib/api/helpers', () => {
 const mockCreateGateway = jest.fn()
 
 jest.mock('@/lib/payments/payrexx-client', () => ({
+  PAYREXX_SETUP_MESSAGE: 'Online-Zahlung wird gerade eingerichtet.',
+  isPayrexxCheckoutUnavailable: jest.fn(() => false),
   createGateway: (...args: unknown[]) => mockCreateGateway(...args),
   captureTransaction: jest.fn().mockResolvedValue({ success: true }),
   cancelTransaction: jest.fn().mockResolvedValue({ success: true }),

@@ -13,7 +13,7 @@ interface Props {
 export function ProductCard({ product, stockOneLabel }: Props) {
   return (
     <Link
-      href={`/shop/product/${product.item_uuid}`}
+      href="/marketplace"
       className="group card-shell hover:border-strong transition-all overflow-hidden flex flex-col"
     >
       <div className="relative aspect-4/3 bg-surface-raised">

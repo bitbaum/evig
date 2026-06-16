@@ -13,7 +13,11 @@ import { COMMISSION_RATE, LISTING_STATUS, ORDER_STATUS } from '@/config/marketpl
 import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
-import { createGateway } from '@/lib/payments/payrexx-client';
+import {
+  PAYREXX_SETUP_MESSAGE,
+  isPayrexxCheckoutUnavailable,
+  createGateway,
+} from '@/lib/payments/payrexx-client';
 import { APP_URL } from '@/config/urls';
 import { sendCustomEmail, orderConfirmationBuyer, newOrderNotificationSeller } from '@/lib/email';
 
@@ -36,14 +40,28 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     if (!validation.success) return validation.error;
     const data = validation.data;
 
+    if (isPayrexxCheckoutUnavailable()) {
+      return apiBadRequest(PAYREXX_SETUP_MESSAGE);
+    }
+
     // All listing validation + order creation inside a single transaction
     // with FOR UPDATE lock to prevent TOCTOU race conditions
     const result = await db.transaction(async (tx) => {
       // Lock the listing row to prevent concurrent purchases
       const lockedRows = await tx.execute(
-        sql`SELECT id, seller_id, title, price_chf, payment_mode, delivery_options, shipping_cost_chf, status, is_revampit
+        sql`SELECT
+              ${listings.id} AS id,
+              ${listings.sellerId} AS seller_id,
+              ${listings.title} AS title,
+              ${listings.priceChf} AS price_chf,
+              ${listings.paymentMode} AS payment_mode,
+              ${listings.deliveryOptions} AS delivery_options,
+              ${listings.shippingCostChf} AS shipping_cost_chf,
+              ${listings.status} AS status,
+              (${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch') AS is_revampit
             FROM ${listings}
-            WHERE id = ${data.listing_id}
+            INNER JOIN ${users} ON ${users.id} = ${listings.sellerId}
+            WHERE ${listings.id} = ${data.listing_id}
             FOR UPDATE`
       );
 

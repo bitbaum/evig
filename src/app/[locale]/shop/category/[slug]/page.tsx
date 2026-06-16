@@ -1,308 +1,37 @@
-// SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles.
-// Must be before any import so Turbopack's static analysis picks it up.
-export const dynamic = 'force-dynamic'
+import { redirect } from '@/i18n/navigation'
+import { getLocale } from 'next-intl/server'
 
-import { Metadata } from "next";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ProductCard } from "@/components/shop/ProductCard";
-import { ChevronRight, Home, Package, ShoppingCart } from "lucide-react";
-import Heading from "@/components/ui/Heading";
-import {
-  SHOP_CATEGORIES,
-  getCategoryUrl,
-  type ShopCategory,
-} from "@/config/shop";
-import { ORG } from "@/config/org";
-import { getTranslations } from "next-intl/server";
-import { getInventoryProducts, type InventoryProduct } from "@/lib/services/inventory-service";
-import { ROUTES } from "@/config/routes";
-import { PageShell } from "@/components/layout/PageShell";
-
-interface CategoryPageProps {
-  params: Promise<{ locale: string; slug: string }>;
+const LEGACY_CATEGORY_MAP: Record<string, string> = {
+  'laptop-zubehoer': '10',
+  'business-laptops': '10',
+  'computer-komplettsysteme': '20',
+  'desktop-pcs': '20',
+  'mini-pcs': '20',
+  'drucker-fax-scanner': '40',
+  'monitor-beamer-kamera': '30',
+  'tastatur-maus-eingabegeraete': '60',
+  'mainboard-cpu-ram': '50',
+  'steckkarten': '50',
+  'gehaeuse-netzteile-usb-hubs': '70',
+  'festplatten-ssds-sticks': '50',
+  'laufwerke-medien': '70',
+  'externe-netzwerkgeraete': '80',
+  'soundgeraete-multimedia': '70',
+  'kabel-adapter-montage': '70',
 }
 
-/**
- * Find a category by slug (searches nested children too)
- */
-function findCategoryBySlug(
-  slug: string,
-  categories: ShopCategory[] = SHOP_CATEGORIES
-): { category: ShopCategory; parent?: ShopCategory } | null {
-  for (const cat of categories) {
-    if (cat.slug === slug) {
-      return { category: cat };
-    }
-    if (cat.children) {
-      for (const child of cat.children) {
-        if (child.slug === slug) {
-          return { category: child, parent: cat };
-        }
-      }
-    }
-  }
-  return null;
+interface LegacyShopCategoryRedirectProps {
+  params: Promise<{ slug: string }>
 }
 
-/**
- * Generate metadata for the category page
- */
-export async function generateMetadata({
+/** Legacy URL — map old shop category slugs to marketplace category filters. */
+export default async function LegacyShopCategoryRedirect({
   params,
-}: CategoryPageProps): Promise<Metadata> {
-  const { locale, slug } = await params;
-  const t = await getTranslations({ locale, namespace: "shop" });
-  const result = findCategoryBySlug(slug);
-
-  if (!result) {
-    return {
-      title: t("category.notFoundMeta", { orgName: ORG.name }),
-    };
-  }
-
-  const { category, parent } = result;
-  const title = parent
-    ? t("category.metaTitleWithParent", {
-        categoryName: category.name,
-        parentName: parent.name,
-        orgName: ORG.name,
-      })
-    : t("category.metaTitle", { categoryName: category.name, orgName: ORG.name });
-
-  const description = t("category.metaDesc", {
-    categoryNameLower: category.name.toLowerCase(),
-    orgName: ORG.name,
+}: LegacyShopCategoryRedirectProps) {
+  const [{ slug }, locale] = await Promise.all([params, getLocale()])
+  const category = LEGACY_CATEGORY_MAP[slug]
+  redirect({
+    href: category ? `/marketplace?category=${category}` : '/marketplace',
+    locale,
   })
-  return { title, description, openGraph: { title, description, type: 'website' } };
-}
-
-
-/**
- * Breadcrumb component
- */
-function Breadcrumbs({
-  category,
-  parent,
-  homeLabel,
-  shopLabel,
-}: {
-  category: ShopCategory;
-  parent?: ShopCategory;
-  homeLabel: string;
-  shopLabel: string;
-}) {
-  return (
-    <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center gap-2 text-sm text-text-tertiary">
-        <li>
-          <Link
-            href="/"
-            className="hover:text-action transition-colors flex items-center gap-1"
-          >
-            <Home className="w-4 h-4" />
-            <span className="sr-only sm:not-sr-only">{homeLabel}</span>
-          </Link>
-        </li>
-        <ChevronRight className="w-4 h-4 text-text-muted" />
-        <li>
-          <Link href={ROUTES.public.shop} className="hover:text-action transition-colors">
-            {shopLabel}
-          </Link>
-        </li>
-        {parent && (
-          <>
-            <ChevronRight className="w-4 h-4 text-text-muted" />
-            <li>
-              <Link
-                href={getCategoryUrl(parent.slug)}
-                className="hover:text-action transition-colors"
-              >
-                {parent.name}
-              </Link>
-            </li>
-          </>
-        )}
-        <ChevronRight className="w-4 h-4 text-text-muted" />
-        <li>
-          <span className="text-text-primary font-medium">{category.name}</span>
-        </li>
-      </ol>
-    </nav>
-  );
-}
-
-/**
- * Subcategory card component
- */
-function SubcategoryCard({
-  category,
-  productCountLabel,
-}: {
-  category: ShopCategory;
-  productCountLabel: (count: number) => string;
-}) {
-  return (
-    <Link
-      href={getCategoryUrl(category.slug)}
-      className="group block p-4 card-shell hover:border-strong transition-all"
-    >
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-action-muted text-action flex items-center justify-center group-hover:bg-action group-hover:text-white transition-colors">
-          <Package className="w-5 h-5" />
-        </div>
-        <div>
-          <Heading level={3} className="font-medium text-text-primary group-hover:text-action transition-colors">
-            {category.name}
-          </Heading>
-          {category.count !== undefined && (
-            <p className="text-sm text-text-tertiary">{productCountLabel(category.count)}</p>
-          )}
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-// ============================================================================
-export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { locale, slug } = await params;
-  const t = await getTranslations({ locale, namespace: "shop" });
-  const result = findCategoryBySlug(slug);
-
-  if (!result) {
-    notFound();
-  }
-
-  const { category, parent } = result;
-  const hasSubcategories = category.children && category.children.length > 0;
-
-  // Fetch real products for this category
-  const inventoryResult = await getInventoryProducts({
-    limit: 24,
-    offset: 0,
-    category: category.name,
-  }).catch(() => ({ products: [], total: 0, limit: 24, offset: 0 }))
-
-  return (
-    <>
-      <section className="border-b border-subtle py-10 sm:py-14 bg-surface-base">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs
-            category={category}
-            parent={parent}
-            homeLabel={t("category.breadcrumbHome")}
-            shopLabel={t("search.breadcrumbShop")}
-          />
-          <div className="ui-public-eyebrow mt-4">{t("search.breadcrumbShop").toUpperCase()}</div>
-          <h1 className="ui-public-display-md mt-3">{category.name}</h1>
-          <p className="ui-public-section-lede mt-4 max-w-2xl">
-            {t("category.heroSubtitle", { categoryNameLower: category.name.toLowerCase() })}
-          </p>
-          {category.count !== undefined && (
-            <p className="ui-public-meta mt-4">
-              {t("category.productCount", { count: category.count })}
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <PageShell py="py-8 sm:py-12">
-        {/* Subcategories */}
-        {hasSubcategories && (
-          <div className="mb-12">
-            <Heading level={2} className="text-xl font-semibold text-text-primary mb-4">
-              {t("category.subcategories")}
-            </Heading>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {category.children!.map((sub) => (
-                <SubcategoryCard
-                  key={sub.slug}
-                  category={sub}
-                  productCountLabel={(count) => t("category.categoryProductCount", { count })}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Products */}
-        {inventoryResult.products.length > 0 ? (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <Heading level={2} className="text-xl font-semibold text-text-primary">
-                {t("category.categoryProductCount", { count: inventoryResult.total })}
-              </Heading>
-              <Link
-                href={ROUTES.public.shop}
-                className="text-sm text-action hover:text-action font-medium flex items-center gap-1"
-              >
-                {t("category.allShopOptions")}
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {inventoryResult.products.map((product) => (
-                <ProductCard key={product.id} product={product} stockOneLabel={t('product.stockOne')} />
-              ))}
-            </div>
-            {inventoryResult.total > inventoryResult.products.length && (
-              <div className="text-center mt-8">
-                <Link
-                  href={`/shop?category=${encodeURIComponent(category.name)}`}
-                  className="ui-public-cta inline-flex items-center gap-2"
-                >
-                  <ShoppingCart className="w-4 h-4" aria-hidden="true" />
-                  {t('category.showAllProducts', { count: inventoryResult.total })}
-                </Link>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="ui-public-card p-12 text-center">
-            <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-action-muted text-action flex items-center justify-center mx-auto mb-4">
-                <Package className="w-8 h-8" aria-hidden="true" />
-              </div>
-              <h2 className="ui-public-display-md mb-2">
-                {t("category.productsLoading")}
-              </h2>
-              <p className="ui-public-section-lede mb-6">
-                {t("category.productsComingSoon", { categoryName: category.name })}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href={ROUTES.public.marketplace} className="ui-public-cta inline-flex items-center justify-center">
-                  {t("category.goToShop")}
-                </Link>
-                <Link href={ROUTES.public.shop} className="ui-public-cta-ghost inline-flex items-center justify-center">
-                  {t("category.allShopOptions")}
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Related categories */}
-        {parent && (
-          <div className="mt-12">
-            <Heading level={2} className="text-xl font-semibold text-text-primary mb-4">
-              {t("category.relatedIn", { parentName: parent.name })}
-            </Heading>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {parent.children!
-                .filter((c) => c.slug !== category.slug)
-                .map((sibling) => (
-                  <SubcategoryCard
-                    key={sibling.slug}
-                    category={sibling}
-                    productCountLabel={(count) => t("category.categoryProductCount", { count })}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
-      </PageShell>
-    </>
-  );
 }

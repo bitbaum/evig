@@ -30,6 +30,7 @@ export async function GET(
   try {
     const { id } = await params;
     if (!id) return apiNotFound('Inserat');
+    const revampitSellerCondition = sql`(${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch')`;
 
     // Increment view count (fire and forget)
     db.update(listings)
@@ -55,7 +56,7 @@ export async function GET(
           pickup_location: listings.pickupLocation,
           payment_mode: listings.paymentMode,
           status: listings.status,
-          is_revampit: listings.isRevampit,
+          is_revampit: revampitSellerCondition,
           view_count: listings.viewCount,
           favorite_count: listings.favoriteCount,
           created_at: listings.createdAt,

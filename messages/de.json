@@ -56,8 +56,8 @@
       "marketplace": "Marktplatz",
       "marketplaceDesc": "Kaufen, verkaufen und IT-Hilfe",
       "buyDevices": "Geräte kaufen",
-      "communityListings": "Community-Inserate",
-      "communityListingsDesc": "Gebrauchte IT von Privat — 0% Gebühren",
+      "communityListings": "Marktplatz",
+      "communityListingsDesc": "Gebrauchte IT von Revamp-IT und anderen Anbieter:innen",
       "orgShop": "Revamp-IT Shop",
       "orgShopDesc": "Geprüfte, aufbereitete Geräte",
       "store": "Ladenlokal Zürich",
@@ -144,8 +144,8 @@
     "linuxOpenSource": "Linux & Open Source",
     "webDevelopment": "Webentwicklung",
     "openSourceSolutions": "Open Source-Lösungen",
-    "communityListings": "Community-Inserate",
-    "shopRevampIT": "RevampIT Shop",
+      "communityListings": "Marktplatz",
+      "shopRevampIT": "Revamp-IT Inserate",
     "storeZurich": "Ladenlokal Zürich",
     "createListing": "Inserat erstellen",
     "myListings": "Meine Inserate",
@@ -306,7 +306,7 @@
   "home": {
     "meta": {
       "title": "Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz",
-      "description": "Refurbished IT kaufen, Community-Inserate entdecken und Techniker oder Werkstätten für Reparaturen finden."
+      "description": "Refurbished IT kaufen, Marktplatz entdecken und Techniker oder Werkstätten für Reparaturen finden."
     },
     "hero": {
       "title": "Alte Hardware. Neues Leben.",
@@ -744,8 +744,8 @@
     "searchButton": "Suchen",
     "sellerTypes": {
       "all": "Alle",
-      "revampit": "{orgName} Geräte",
-      "community": "Community Inserate"
+      "revampit": "{orgName}",
+      "community": "Andere Anbieter"
     },
     "categories": {
       "10": "Laptops",
@@ -7583,7 +7583,7 @@
             "q": "Habt ihr refurbished Geräte im Angebot?",
             "a": "Ja. Wir bieten sorgfältig geprüfte und aufbereitete Geräte mit Gewährleistung – transparent dokumentiert.",
             "link": {
-              "href": "/shop",
+              "href": "/marketplace",
               "label": "Zum Shop"
             }
           },

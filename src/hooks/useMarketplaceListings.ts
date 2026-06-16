@@ -52,7 +52,13 @@ export interface MarketplaceFilters {
   specDisplayMin: string
 }
 
-export function useMarketplaceListings() {
+interface InitialMarketplaceFilters {
+  category?: string
+  sellerType?: string
+  search?: string
+}
+
+export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters = {}) {
   const [listings, setListings] = useState<ListingItem[]>([])
   const [pagination, setPagination] = useState<Pagination>({
     total: 0,
@@ -63,18 +69,18 @@ export function useMarketplaceListings() {
   const [error, setError] = useState<string | null>(null)
 
   // Filters
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState(initialFilters.category ?? '')
   const [condition, setCondition] = useState('')
   const [delivery, setDelivery] = useState('')
   const [payment, setPayment] = useState('')
   const [sort, setSort] = useState('newest')
-  const [search, setSearch] = useState('')
-  const [searchInput, setSearchInput] = useState('')
+  const [search, setSearch] = useState(initialFilters.search ?? '')
+  const [searchInput, setSearchInput] = useState(initialFilters.search ?? '')
   const [priceMin, setPriceMin] = useState('')
   const [priceMax, setPriceMax] = useState('')
   const [priceError, setPriceError] = useState<string | null>(null)
   // Phase 1 additions
-  const [sellerType, setSellerType] = useState('')
+  const [sellerType, setSellerType] = useState(initialFilters.sellerType ?? '')
   const [gratisOnly, setGratisOnly] = useState(false)
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [specRamMin, setSpecRamMin] = useState('')

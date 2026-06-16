@@ -68,9 +68,11 @@ export const ROUTES = {
   },
   public: {
     home:                     '/',
-    shop:                     '/shop',
+    /** Online shop canonical route. Legacy /shop URLs redirect here. */
+    shop:                     '/marketplace',
     services:                 '/services',
-    shopSearch:               '/shop/search',
+    /** @deprecated Use ROUTES.public.marketplace with ?search=. */
+    shopSearch:               '/marketplace',
     marketplace:              '/marketplace',
     marketplaceSell:          '/marketplace/sell',
     marketplaceListing:       (id: string) => `/marketplace/${id}`,

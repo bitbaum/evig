@@ -16,6 +16,7 @@ import {
 } from '@/lib/payments/payment-flow'
 import { validateBody, WorkshopRegisterWithPaymentSchema } from '@/lib/schemas'
 import { APP_URL } from '@/config/urls'
+import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
 
 interface WorkshopRow {
   id: string
@@ -53,6 +54,10 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED)
+    }
+
+    if (isPayrexxCheckoutUnavailable()) {
+      return apiBadRequest(PAYREXX_SETUP_MESSAGE)
     }
 
     const workshopSlug = request.nextUrl.pathname.split('/')[3] // Extract slug from URL

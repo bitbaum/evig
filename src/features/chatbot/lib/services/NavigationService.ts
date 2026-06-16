@@ -263,7 +263,7 @@ export class NavigationService {
     if (queryLower.match(/(buy|shop|purchase|kaufen|bestellen)/)) {
       suggestions.push({
         label: language === 'de' ? '🛒 Refurbished Computer kaufen' : '🛒 Buy Refurbished Computers',
-        href: '/shop',
+        href: '/marketplace',
         description: language === 'de' ? 'Hochwertige aufbereitete Elektronik' : 'High-quality refurbished electronics',
         category: 'product',
         priority: 15
@@ -390,7 +390,7 @@ export class NavigationService {
     return [
       {
         label: language === 'de' ? '🛒 Online Shop besuchen' : '🛒 Visit Online Shop',
-        href: '/shop',
+        href: '/marketplace',
         description: language === 'de' ? '24/7 verfügbar' : '24/7 available',
         category: 'product',
         priority: 11
@@ -445,7 +445,7 @@ export class NavigationService {
     if (currentPage.startsWith('/services')) {
       suggestions.push({
         label: language === 'de' ? '🛒 Computer kaufen' : '🛒 Buy Computer',
-        href: '/shop',
+        href: '/marketplace',
         description: language === 'de' ? 'Alternative: Gebrauchten Computer kaufen' : 'Alternative: Buy refurbished computer',
         priority: 5
       })

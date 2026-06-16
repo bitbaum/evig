@@ -301,7 +301,7 @@ export class ResponseQualityService {
     suggestions = [
       {
         label: language === 'de' ? '🛒 Computer kaufen' : '🛒 Buy Computer',
-        href: '/shop',
+        href: '/marketplace',
         description: language === 'de' ? 'Refurbished Computer shop' : 'Refurbished computer shop',
         category: 'product',
         priority: 10

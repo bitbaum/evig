@@ -19,6 +19,7 @@ import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import { sanitizeInput } from '@/lib/security/sanitize';
 import { APP_URL } from '@/config/urls';
+import { isStaffEmail } from '@/lib/permissions';
 
 // ============================================================================
 // GET — Public browse
@@ -42,6 +43,7 @@ export async function GET(request: NextRequest) {
 
     // Build dynamic WHERE conditions
     const conditions: SQL[] = [eq(listings.status, LISTING_STATUS.ACTIVE)];
+    const revampitSellerCondition = sql`(${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch')`;
 
     if (filters.category) {
       conditions.push(eq(listings.category, filters.category));
@@ -66,9 +68,9 @@ export async function GET(request: NextRequest) {
       conditions.push(lte(listings.priceChf, String(filters.price_max)));
     }
     if (filters.seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT) {
-      conditions.push(eq(listings.isRevampit, true));
+      conditions.push(revampitSellerCondition);
     } else if (filters.seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY) {
-      conditions.push(eq(listings.isRevampit, false));
+      conditions.push(sql`NOT ${revampitSellerCondition}`);
     }
     if (filters.gratis_only) {
       conditions.push(eq(listings.priceChf, '0'));
@@ -125,7 +127,7 @@ export async function GET(request: NextRequest) {
         delivery_options: listings.deliveryOptions,
         payment_mode: listings.paymentMode,
         status: listings.status,
-        is_revampit: listings.isRevampit,
+        is_revampit: revampitSellerCondition,
         pickup_location: listings.pickupLocation,
         view_count: listings.viewCount,
         favorite_count: listings.favoriteCount,
@@ -212,6 +214,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const validation = validateBody(CreateListingSchema, body);
     if (!validation.success) return validation.error;
     const data = validation.data;
+    const isRevampitListing = isStaffEmail(session.user.email);
 
     // SECURITY: Sanitize user inputs
     const sanitizedTitle = sanitizeInput(data.title, { maxLength: 200 });
@@ -238,6 +241,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           pickupLocation: data.pickup_location || null,
           paymentMode: data.payment_mode,
           status: data.status,
+          isRevampit: isRevampitListing,
           conditionChecks: data.condition_checks ? data.condition_checks : null,
         })
         .returning({ id: listings.id });
@@ -306,7 +310,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         delivery_options: data.delivery_options,
         payment_mode: data.payment_mode,
         status: data.status || LISTING_STATUS.ACTIVE,
-        is_revampit: false,
+        is_revampit: isRevampitListing,
         is_verified: false,
         pickup_location: data.pickup_location || null,
         seller_name: session.user.name || null,

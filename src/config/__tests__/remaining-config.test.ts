@@ -440,18 +440,18 @@ import {
 } from '../shop'
 
 describe('getCategoryUrl', () => {
-  it('returns /shop/category/<slug>', () => {
-    expect(getCategoryUrl('laptops')).toBe('/shop/category/laptops')
+  it('returns a marketplace category URL', () => {
+    expect(getCategoryUrl('laptops')).toBe('/marketplace?category=laptops')
   })
 
   it('preserves the slug exactly', () => {
-    expect(getCategoryUrl('desktop-pcs')).toBe('/shop/category/desktop-pcs')
+    expect(getCategoryUrl('desktop-pcs')).toBe('/marketplace?category=desktop-pcs')
   })
 })
 
 describe('getSearchUrl', () => {
-  it('encodes the query as ?q=<encoded>', () => {
-    expect(getSearchUrl('laptop')).toBe('/shop/search?q=laptop')
+  it('encodes the query as ?search=<encoded>', () => {
+    expect(getSearchUrl('laptop')).toBe('/marketplace?search=laptop')
   })
 
   it('URL-encodes spaces and special characters', () => {
@@ -459,8 +459,8 @@ describe('getSearchUrl', () => {
     expect(url).toContain('%20')
   })
 
-  it('starts with /shop/search', () => {
-    expect(getSearchUrl('any')).toMatch(/^\/shop\/search/)
+  it('starts with /marketplace?search', () => {
+    expect(getSearchUrl('any')).toMatch(/^\/marketplace\?search=/)
   })
 })
 

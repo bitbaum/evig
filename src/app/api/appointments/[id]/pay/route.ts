@@ -15,6 +15,7 @@ import {
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { validateBody, PayAppointmentSchema } from '@/lib/schemas'
+import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
 
 // POST /api/appointments/[id]/pay - Pay for existing appointment
 export async function POST(request: NextRequest) {
@@ -22,6 +23,10 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     if (!session?.user?.id) {
       return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED)
+    }
+
+    if (isPayrexxCheckoutUnavailable()) {
+      return apiBadRequest(PAYREXX_SETUP_MESSAGE)
     }
 
     const appointmentId = request.nextUrl.pathname.split('/')[3] // Extract ID from URL

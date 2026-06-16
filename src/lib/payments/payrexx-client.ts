@@ -65,6 +65,13 @@ function isConfigured(): boolean {
   return !!(process.env.PAYREXX_INSTANCE && process.env.PAYREXX_API_SECRET);
 }
 
+export const PAYREXX_SETUP_MESSAGE =
+  'Online-Zahlung wird gerade eingerichtet. Payrexx ist noch nicht aktiv. Bitte kontaktiere Revamp-IT, wenn du sofort bezahlen moechtest.';
+
+export function isPayrexxCheckoutUnavailable(): boolean {
+  return process.env.NODE_ENV === 'production' && !isConfigured();
+}
+
 function getBaseUrl(): string {
   return `https://api.payrexx.com/v1.0/${process.env.PAYREXX_INSTANCE}`;
 }

@@ -20,6 +20,7 @@ export const GET = withAdmin('marketplace', async (request) => {
     const { status, category, seller_type, verified, reported, search, limit, offset } = validation.data
 
     const seller = alias(users, 'seller')
+    const revampitSellerCondition = sql`(${listings.isRevampit} = true OR lower(${seller.email}) LIKE '%@revamp-it.ch' OR lower(${seller.email}) LIKE '%@revampit.ch')`
 
     // Build conditions
     const conditions = []
@@ -33,9 +34,9 @@ export const GET = withAdmin('marketplace', async (request) => {
     }
 
     if (seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT) {
-      conditions.push(eq(listings.isRevampit, true))
+      conditions.push(revampitSellerCondition)
     } else if (seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY) {
-      conditions.push(eq(listings.isRevampit, false))
+      conditions.push(sql`NOT ${revampitSellerCondition}`)
     }
 
     if (verified === 'yes') {
@@ -71,7 +72,7 @@ export const GET = withAdmin('marketplace', async (request) => {
           category: listings.category,
           condition: listings.condition,
           status: listings.status,
-          is_revampit: listings.isRevampit,
+          is_revampit: revampitSellerCondition,
           verified_at: listings.verifiedAt,
           admin_notes: listings.adminNotes,
           created_at: listings.createdAt,

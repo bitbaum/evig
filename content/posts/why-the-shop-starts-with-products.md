@@ -1,6 +1,6 @@
 ---
-title: "Warum der Shop jetzt mit Produkten startet"
-excerpt: "Die Shop-Seite soll verkaufen, Vertrauen schaffen und Reparatur als sinnvolle Alternative sichtbar machen. Shopware bleibt ein Fallback, aber nicht der Standard."
+title: "Warum der Shop der Marktplatz ist"
+excerpt: "Shop bedeutet bei Revamp-IT ab jetzt Marktplatz: ein schneller Kaufpfad fuer gebrauchte Elektronik von Revamp-IT und anderen Anbieter:innen."
 author: "RevampIT Team"
 category: "Produkt"
 tags:
@@ -12,14 +12,16 @@ publishedAt: "2026-06-16"
 published: true
 ---
 
-Die Shop-Seite hatte ein falsches erstes Signal. Wer auf "Shop" klickt, erwartet Produkte, Suche, Kategorien und eine klare Kaufentscheidung. Stattdessen begann die Seite mit der Frage, welchen Kanal man nutzen möchte. Das machte unseren eigenen Shop, Shopware und das Ladenlokal gleich wichtig, obwohl sie nicht die gleiche Rolle haben.
+Die Shop-Frage hatte eine falsche Praemisse. Wir brauchen keine zweite Shop-Seite, die neben dem Marktplatz erklaert, wo man kaufen kann. Wer auf "Shop" klickt, will Produkte sehen, vergleichen und moeglichst schnell zur Kaufentscheidung kommen. Deshalb ist der Online-Shop jetzt der Marktplatz.
 
-Der neue Einstieg folgt einem einfachen Prinzip: Der primäre Pfad ist der Revamp-IT Shop. Er zeigt unser veröffentlichtes Inventar, bietet Suche und Kategorien und erklärt kurz, warum die Geräte vertrauenswürdig sind. Das Ladenlokal bleibt wichtig, aber als unterstützender Kaufpfad. Shopware bleibt sichtbar, aber als Fallback für ältere Einträge oder Übergangsfälle.
+Das reduziert kognitive Last. Es gibt einen kanonischen Ort fuer gebrauchte Elektronik: `/marketplace`. Alte `/shop`-URLs bleiben als Redirects erhalten, aber neue Navigation, Sitemap, Chatbot-Vorschlaege und interne Helfer zeigen auf den Marktplatz. Die Nutzer:innen landen direkt bei Suche, Filtern und Inseraten statt in einer Kanalauswahl.
 
-Aus Business-Sicht reduziert das Reibung. Der Shop soll nicht zuerst Organisationsgeschichte oder Kanallogik erklären, sondern Menschen zu geprüfter, bezahlbarer Hardware führen. Die vorhandenen Alternativen bleiben erreichbar, ohne den Hauptpfad zu verwässern.
+Aus Business-Sicht ist das der richtige Default. Der Marktplatz kann Revamp-IT-Inserate und Inserate anderer Anbieter:innen zusammenfuehren. Revamp-IT-Angebote werden als solche markiert, wenn sie explizit so geflaggt sind oder von einer Staff-Adresse unter `@revamp-it.ch` beziehungsweise `@revampit.ch` stammen. So entsteht ein einfacher mentaler Markt: alles durchsuchen, Quelle erkennen, kaufen.
 
-Aus Design-Sicht war die wichtigste Korrektur die Hierarchie. Ein Button oder Abschnitt muss ein Ergebnis versprechen: Produkte ansehen, suchen, Reparatur anfragen, Techniker finden. Vage Kanalwahl und gleichwertige Ausweichpfade sind schwächer als ein klarer Standard mit transparenten Nebenwegen.
+Aus Design-Sicht ist die Disziplin dieselbe wie bei unseren anderen gehärteten Oberflaechen: keine grossen Ausweichkarten, keine gleichwertigen Nebenpfade, keine unklaren CTA-Texte. Die erste Aufgabe ist Kaufen. Filtern, Suchen und Detailseiten muessen schnell sein und wenig erklaeren muessen.
 
-Aus Engineering-Sicht nutzt die Seite wieder die bestehenden Quellen: Inventar kommt aus dem Shop-Service, Reparatur führt zum bestehenden IT-Hilfe-Anfragefluss, Techniker und Werkstätten bleiben unter der kanonischen Route `/it-hilfe/techniker`. Die alte `/techniker`-Route ist nur noch ein Redirect. Damit bleibt die Reparatur-Logik an einer Stelle statt in mehreren konkurrierenden Oberflächen.
+Aus Engineering-Sicht entfernt die Entscheidung eine Fork. `/shop`, `/shop/search`, `/shop/category/...` und `/shop/product/...` sind Legacy-Eingaenge in den Marktplatz. Der Sitemap werden keine alten Shop-Produktseiten mehr hinzugefuegt. Die URL-Helfer erzeugen Marktplatz-URLs, damit neue Links nicht versehentlich die alte Architektur wiederbeleben.
 
-Die Reparatur-Anfrage ist bewusst direkt sichtbar: Wer kein neues Gerät kaufen muss, kann das Problem beschreiben. Die Anfrage bleibt im System und passende Techniker oder Werkstätten können reagieren. Das entspricht besser der Revamp-IT-Logik: kaufen, reparieren und weiterverwenden sind keine getrennten Welten, sondern ein gemeinsamer Kreislauf.
+Die andere grosse Nutzeraufgabe bleibt Reparatur und IT-Hilfe. Dort ist der kanonische Einstieg nicht ein neuer Parallelprozess, sondern `/it-hilfe/create` fuer Problem beschreiben und `/it-hilfe/techniker` fuer Techniker und Werkstaetten. Die Anfrage bleibt im System; Matching und Diagnose koennen darauf aufbauen.
+
+Weil Payrexx noch nicht produktiv eingerichtet ist, darf die Plattform bis zum Zahlungsklick funktionieren, aber keine Fake-Zahlungen in Produktion erzeugen. Marketplace-Checkout, Terminzahlung und Workshop-Zahlung stoppen deshalb mit einer klaren Setup-Meldung, bevor sie Inventar, Termine oder Plaetze veraendern. Das ist ehrlicher und sicherer als ein Demo-Payment, das wie echt aussieht.

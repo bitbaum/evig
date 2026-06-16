@@ -100,7 +100,7 @@
           {
             "q": "Habt ihr refurbished Geräte im Angebot?",
             "a": "Ja. Wir bieten sorgfältig geprüfte und aufbereitete Geräte mit Gewährleistung – transparent dokumentiert.",
-            "link": { "href": "/shop", "label": "Zum Shop" }
+            "link": { "href": "/marketplace", "label": "Zum Shop" }
           },
           {
             "q": "Was ist die REVAMPED-Zertifizierung?",

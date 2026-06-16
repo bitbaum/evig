@@ -49,7 +49,7 @@ last_modified_summary: Customer journeys IA — IT-Hilfe hub, techniker under /i
 - **Frontend**: http://localhost:3000
 - **Admin Dashboard**: http://localhost:3000/admin
 - **AI CMS Editor**: http://localhost:3000/ai-cms
-- **Shop**: http://localhost:3000/shop
+- **Shop / marketplace**: http://localhost:3000/marketplace
 
 ---
 
@@ -74,7 +74,7 @@ People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
 
 | Journey | Entry | Routes |
 |---------|--------|--------|
-| **Hardware** | Marktplatz → Kaufen & verkaufen | `/marketplace`, `/shop`, `/marketplace/sell` |
+| **Hardware** | Marktplatz → Kaufen & verkaufen | `/marketplace`, `/marketplace/sell` (`/shop/*` redirects here) |
 | **IT help** | Marktplatz → IT-Hilfe hub | `/it-hilfe` (hub), `/it-hilfe/create`, `/it-hilfe/techniker`, `/it-hilfe/anfragen` |
 
 Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav entries for “Hilfe suchen” vs “Techniker finden” — one hub, three paths inside.

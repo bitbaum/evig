@@ -13,8 +13,8 @@
     "searchButton": "Suchen",
     "sellerTypes": {
       "all": "Alle",
-      "revampit": "{orgName} Geräte",
-      "community": "Community Inserate"
+      "revampit": "{orgName}",
+      "community": "Andere Anbieter"
     },
     "categories": {
       "all": "Alle"

@@ -124,7 +124,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
         })
         const listingUrl =
           r.listingStatus === MARKETPLACE_STATUS.PUBLISHED && r.itemUuid
-            ? `/shop/product/${r.itemUuid}`
+            ? '/marketplace'
             : null
         const existing = byInventory.get(r.inventoryId)
         if (

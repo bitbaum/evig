@@ -1,17 +1,16 @@
 /**
- * Tests for config/shop.ts — shop URL helpers and category lookup.
+ * Tests for config/shop.ts — legacy shop URL helpers and category lookup.
  *
- * Mission-relevant: shop category URLs drive the navigation sidebar and
- * mega menu links. If getCategoryUrl produces the wrong path (e.g. missing
- * leading slash), shop links 404. If getSearchUrl doesn't encode the query,
- * searches with special characters break the URL.
+ * Mission-relevant: the public shop is the marketplace. These legacy helpers
+ * must keep generating marketplace URLs so old imports do not recreate a
+ * parallel /shop surface.
  *
  * Behaviors locked:
  *   getCategoryUrl
- *   - returns /shop/category/<slug>
+ *   - returns /marketplace?category=<slug>
  *
  *   getSearchUrl
- *   - returns /shop/search?q=<encoded-query>
+ *   - returns /marketplace?search=<encoded-query>
  *   - encodes spaces and special chars
  *
  *   getCategoryBySlug
@@ -26,8 +25,8 @@ import { getCategoryUrl, getSearchUrl, getCategoryBySlug } from '../shop'
 // ============================================================================
 
 describe('getCategoryUrl', () => {
-  it('returns the correct shop category path', () => {
-    expect(getCategoryUrl('laptop-zubehoer')).toBe('/shop/category/laptop-zubehoer')
+  it('returns the canonical marketplace category path', () => {
+    expect(getCategoryUrl('laptop-zubehoer')).toBe('/marketplace?category=laptop-zubehoer')
   })
 
   it('starts with a leading slash', () => {
@@ -46,8 +45,8 @@ describe('getCategoryUrl', () => {
 // ============================================================================
 
 describe('getSearchUrl', () => {
-  it('returns /shop/search?q=<query> for a simple term', () => {
-    expect(getSearchUrl('laptop')).toBe('/shop/search?q=laptop')
+  it('returns /marketplace?search=<query> for a simple term', () => {
+    expect(getSearchUrl('laptop')).toBe('/marketplace?search=laptop')
   })
 
   it('encodes spaces as %20', () => {
@@ -63,8 +62,8 @@ describe('getSearchUrl', () => {
     expect(url).toContain('%26')
   })
 
-  it('starts with /shop/search?q=', () => {
-    expect(getSearchUrl('monitor').startsWith('/shop/search?q=')).toBe(true)
+  it('starts with /marketplace?search=', () => {
+    expect(getSearchUrl('monitor').startsWith('/marketplace?search=')).toBe(true)
   })
 })
 

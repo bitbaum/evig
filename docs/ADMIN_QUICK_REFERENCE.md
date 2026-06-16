@@ -11,7 +11,7 @@ npm run setup-admins   # Create admin users
 ### Access Points
 - **Main Admin Dashboard**: http://localhost:3000/admin
 - **AI CMS Editor**: http://localhost:3000/ai-cms
-- **Shop Frontend**: http://localhost:3000/shop
+- **Shop / Marketplace Frontend**: http://localhost:3000/marketplace
 
 ### Admin Credentials
 - **CMS Admin**: admin@revampit.ch / Admin123!
@@ -97,6 +97,5 @@ npm run reset              # Full system reset
 ---
 
 **Remember**: Most common tasks can be done directly from the unified admin dashboard at http://localhost:3000/admin
-
 
 

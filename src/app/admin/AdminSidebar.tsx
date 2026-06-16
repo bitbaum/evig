@@ -252,7 +252,7 @@ export function AdminSidebar({
           <div className="space-y-0.5">
             {[
               { href: '/', icon: Home, label: t('linkHome') },
-              { href: '/shop', icon: Store, label: t('linkShop') },
+              { href: ROUTES.public.marketplace, icon: Store, label: t('linkShop') },
               { href: '/dashboard', icon: User, label: t('linkDashboard') },
             ].map(({ href, icon: Icon, label }) => (
               <Link

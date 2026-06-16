@@ -14,13 +14,12 @@ import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
 import Heading from '@/components/ui/Heading'
 import { buttonClass } from '@/components/ui/button-class'
 import { PageHero } from '@/components/layout/PageHero'
-import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'blog' })
-  const title = `${t('meta.title')} | ${ORG.name}`
+  const title = t('meta.title')
   const description = t('meta.description')
   return {
     title,
