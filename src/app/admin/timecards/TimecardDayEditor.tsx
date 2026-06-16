@@ -11,6 +11,10 @@ import {
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 
 /**
  * Inline day editor (replaces the right-aside detail panel).
@@ -107,18 +111,17 @@ function ActionChip({
   children: React.ReactNode
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant={primary ? 'primary' : 'outline'}
       onClick={onClick}
       className={cn(
-        'rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors',
-        primary
-          ? 'border-action bg-action text-white hover:bg-action-strong'
-          : 'border-subtle bg-surface-base text-text-secondary hover:border-strong hover:text-text-primary',
+        'rounded-full px-3.5 py-1.5 text-sm font-medium h-auto',
+        !primary && 'border-subtle bg-surface-base text-text-secondary hover:border-strong hover:text-text-primary',
       )}
     >
       {children}
-    </button>
+    </Button>
   )
 }
 
@@ -133,52 +136,49 @@ function DetailFields({
   return (
     <div className="mt-5 grid gap-4 border-t border-subtle pt-5 sm:grid-cols-2">
       <Field label={t('fieldStart')}>
-        <input
+        <Input
           type="time"
           value={entry.start_time ?? '09:00'}
           onChange={e => onPatch({ start_time: e.target.value })}
-          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         />
       </Field>
       <Field label={t('fieldEnd')}>
-        <input
+        <Input
           type="time"
           value={entry.end_time ?? '17:00'}
           onChange={e => onPatch({ end_time: e.target.value })}
-          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         />
       </Field>
       <Field label={t('fieldBreak')}>
-        <input
+        <Input
           type="number"
           min={0}
           max={240}
           step={15}
           value={entry.break_minutes ?? 0}
           onChange={e => onPatch({ break_minutes: Number(e.target.value) })}
-          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm tabular-nums focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+          className="tabular-nums"
         />
       </Field>
       <Field label={t('fieldCategory')}>
-        <select
+        <Select
           value={entry.category ?? 'other'}
           onChange={e => onPatch({ category: e.target.value as TimecardEntryCategory })}
-          className="w-full rounded-md border border-subtle bg-surface-base px-3 py-1.5 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
         >
           {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
             <option key={category} value={category}>
               {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
             </option>
           ))}
-        </select>
+        </Select>
       </Field>
       <Field label={t('fieldNote')} className="sm:col-span-2">
-        <textarea
+        <Textarea
           rows={2}
           value={entry.description ?? ''}
           onChange={e => onPatch({ description: e.target.value })}
           placeholder={t('fieldNotePlaceholder')}
-          className="w-full resize-none rounded-md border border-subtle bg-surface-base px-3 py-2 text-sm focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+          className="resize-none"
         />
       </Field>
     </div>

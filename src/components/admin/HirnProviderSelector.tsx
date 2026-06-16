@@ -184,7 +184,7 @@ export function HirnProviderSelector() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" aria-hidden="true" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-96 bg-surface-base rounded-2xl shadow-2xl border border z-50 overflow-hidden">
+          <div className="absolute right-0 top-full mt-2 w-96 bg-surface-base rounded-2xl shadow-xs border border z-50 overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-subtle">
               <div>

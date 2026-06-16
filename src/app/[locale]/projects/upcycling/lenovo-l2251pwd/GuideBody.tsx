@@ -14,6 +14,7 @@ import {
   ChevronDown,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
 
 /**
@@ -419,26 +420,28 @@ function HeroVideo({
         aria-label={title}
       />
       {showOverlay && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={toggle}
-          className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[1px] transition-colors hover:bg-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="absolute inset-0 flex h-auto w-full items-center justify-center rounded-none bg-black/20 backdrop-blur-[1px] transition-colors hover:bg-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           aria-label={labels.playVideo}
         >
-          <span className="flex items-center justify-center w-16 h-16 rounded-full bg-white/90 text-text-primary shadow-lg">
+          <span className="flex items-center justify-center w-16 h-16 rounded-full bg-surface-base/90 text-text-primary shadow-xs">
             <Play className="w-7 h-7 ml-0.5 fill-current" aria-hidden="true" />
           </span>
-        </button>
+        </Button>
       )}
       {playing && (
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={toggle}
-          className="absolute bottom-2 right-2 flex items-center justify-center w-11 h-11 rounded-full bg-black/40 text-white opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity"
+          className="absolute bottom-2 right-2 flex h-11 w-11 items-center justify-center rounded-full bg-black/40 p-0 text-white opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity"
           aria-label={labels.pauseVideo}
         >
           <Pause className="w-4 h-4 fill-current" aria-hidden="true" />
-        </button>
+        </Button>
       )}
     </div>
   )
@@ -474,8 +477,9 @@ function StepPhotoGroup({
         }
       >
         {images.map((img, i) => (
-          <button
+          <Button
             type="button"
+            variant="ghost"
             key={img.src}
             onClick={() => onOpen(images, i)}
             aria-label={
@@ -484,10 +488,8 @@ function StepPhotoGroup({
                 : labels.openPhoto
             }
             className={
-              // Mobile snap carousel: each child 85vw, snap to start.
-              // ≥sm: behaves as grid cell, full width.
               (isMulti ? 'shrink-0 w-[85vw] snap-start sm:w-auto sm:shrink ' : '') +
-              'relative aspect-[16/10] overflow-hidden rounded-md border border-subtle bg-surface-raised hover:border-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action transition-colors'
+              'relative block h-auto aspect-[16/10] overflow-hidden rounded-md border border-subtle bg-surface-raised p-0 hover:border-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action transition-colors'
             }
           >
             <Image
@@ -501,7 +503,7 @@ function StepPhotoGroup({
               }
               className="object-cover"
             />
-          </button>
+          </Button>
         ))}
       </div>
       {isMulti && (
@@ -586,14 +588,15 @@ function Lightbox({
         <span id={labelId} className="text-sm font-medium">
           {hasMany ? `${labels.photoCountLabel} ${activeIdx + 1} ${labels.photoCountOf} ${images.length}` : ''}
         </span>
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={onClose}
           aria-label={labels.closePhoto}
-          className="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-text-inverted/10 p-0 text-white hover:bg-text-inverted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-text-inverted"
         >
           <CloseIcon className="w-5 h-5" aria-hidden="true" />
-        </button>
+        </Button>
       </header>
 
       <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
@@ -613,12 +616,13 @@ function Lightbox({
       {hasMany && (
         <div className="flex items-center justify-center gap-2 py-4">
           {images.map((_, i) => (
-            <button
+            <Button
               key={i}
               type="button"
+              variant="ghost"
               onClick={() => onChangeIdx(i)}
-              className={`w-2 h-2 rounded-full transition-all ${
-                i === activeIdx ? 'w-6 bg-white' : 'bg-white/40'
+              className={`h-2 min-h-0 rounded-full p-0 transition-all ${
+                i === activeIdx ? 'w-6 bg-text-inverted' : 'w-2 bg-text-inverted/40'
               }`}
               aria-label={`${labels.photoCountLabel} ${i + 1}`}
             />
@@ -662,10 +666,11 @@ function StepProgress({
   return (
     <div className="fixed top-3 left-1/2 -translate-x-1/2 z-40 sm:top-4">
       <div className="relative">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setOpen((o) => !o)}
-          className="flex items-center gap-2 h-11 px-4 rounded-full bg-surface-base border border-default shadow-md text-sm font-medium text-text-primary backdrop-blur-sm hover:border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action"
+          className="flex h-11 items-center gap-2 rounded-full border border-default bg-surface-base px-4 text-sm font-medium text-text-primary shadow-xs backdrop-blur-sm hover:border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action"
           aria-expanded={open}
           aria-label={labels.jumpToStep}
         >
@@ -676,11 +681,11 @@ function StepProgress({
             className={`w-4 h-4 text-text-tertiary transition-transform ${open ? 'rotate-180' : ''}`}
             aria-hidden="true"
           />
-        </button>
+        </Button>
 
         {open && (
           <div
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-lg bg-surface-base border border-default shadow-xl py-2"
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-lg bg-surface-base border border-default shadow-xs py-2"
             role="menu"
           >
             {steps.map((s) => (

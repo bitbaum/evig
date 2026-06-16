@@ -78,7 +78,7 @@ export default function AppointmentsDashboard() {
     return (
       <div className="min-h-screen bg-surface-raised py-4 sm:py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl shadow-lg p-4 sm:p-8">
+          <div className="card-shell p-4 sm:p-8">
             <div className="animate-pulse">
               <div className="h-6 sm:h-8 bg-surface-overlay rounded-sm w-1/3 mb-4 sm:mb-6"></div>
               <div className="space-y-4">
@@ -139,7 +139,7 @@ export default function AppointmentsDashboard() {
         {appointments.length > 0 ? (
           <div className="space-y-4 sm:space-y-6">
             {appointments.map((appointment: ServiceAppointment) => (
-              <div key={appointment.id} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-transparent dark:border-white/6">
+              <div key={appointment.id} className="card-shell p-4 sm:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 sm:gap-4 flex-1">
                     <div className="p-2 sm:p-3 bg-surface-raised rounded-lg shrink-0">

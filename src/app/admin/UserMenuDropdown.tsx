@@ -86,7 +86,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
-        <div className="overflow-hidden rounded-xl border border bg-surface-base shadow-xl">
+        <div className="overflow-hidden rounded-xl border border bg-surface-base shadow-xs">
           <div className="border-b border bg-surface-raised px-4 py-3 dark:bg-surface-base/3">
             <p className="text-sm font-semibold text-text-primary truncate">
               {user?.name || 'Staff'}

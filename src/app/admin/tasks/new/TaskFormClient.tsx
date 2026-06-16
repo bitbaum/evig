@@ -170,10 +170,11 @@ export default function TaskFormClient({ task }: Props) {
         )}
 
         <div className="border-t border-subtle pt-4">
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={() => setAdvancedOpen(o => !o)}
-            className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary"
+            className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary h-auto px-0"
           >
             <ChevronRight
               className={cn('h-4 w-4 transition-transform', advancedOpen && 'rotate-90')}
@@ -183,7 +184,7 @@ export default function TaskFormClient({ task }: Props) {
             {!advancedOpen && hasAdvancedValues && (
               <span className="text-xs font-normal text-text-tertiary">(ausgefüllt)</span>
             )}
-          </button>
+          </Button>
 
           {advancedOpen && (
             <div className="mt-4 space-y-6">

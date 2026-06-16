@@ -55,7 +55,7 @@ const DOT_BY_COLOR: Record<DashboardCard['color'], string> = {
   warning: 'bg-warning-500',
   error: 'bg-error-500',
   secondary: 'bg-secondary-500',
-  neutral: 'bg-neutral-400',
+  neutral: 'bg-text-muted',
 }
 
 // Stable de-CH date for the header kicker. Server-rendered per request.

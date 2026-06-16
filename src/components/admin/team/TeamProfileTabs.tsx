@@ -175,13 +175,15 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
             const Icon = t.icon
             const isActive = tab === t.key
             return (
-              <button
+              <Button
                 key={t.key}
+                type="button"
+                variant="ghost"
                 onClick={() => goTo(t.key)}
                 role="tab"
                 aria-selected={isActive}
                 className={cn(
-                  'inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
+                  'inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap h-auto rounded-none',
                   isActive
                     ? 'border-action text-action'
                     : 'border-transparent text-text-secondary hover:text-text-primary hover:border-strong dark:hover:border-white/10',
@@ -189,7 +191,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
               >
                 <Icon className="w-4 h-4" />
                 {t.label}
-              </button>
+              </Button>
             )
           })}
         </nav>

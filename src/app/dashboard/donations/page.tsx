@@ -113,7 +113,7 @@ export default function DonationsDashboard() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl shadow-lg p-8 border border-subtle">
+          <div className="card-shell p-8">
             <div className="animate-pulse">
               <div className="h-8 bg-surface-overlay rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
@@ -180,7 +180,7 @@ export default function DonationsDashboard() {
             {donations.map((donation) => (
               <div
                 key={donation.id}
-                className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-subtle"
+                className="card-shell p-4 sm:p-6"
               >
                 <div className="flex items-start gap-4">
                   {/* Type Icon */}

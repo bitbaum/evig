@@ -32,7 +32,7 @@ export function BulkActionBar({
   const t = useTranslations('components.erfassung.bulkActionBar')
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-surface-base border-t border px-4 py-3 z-30 safe-area-inset-bottom shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 bg-surface-base border-t border px-4 py-3 z-30 safe-area-inset-bottom shadow-xs">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
         {/* Left: selection info */}
         <div className="flex items-center gap-3">

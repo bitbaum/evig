@@ -98,10 +98,10 @@ const eslintConfig = [
   },
   {
     rules: {
-      "no-restricted-syntax": ["warn", ...DESIGN_SYSTEM_SYNTAX],
+      "no-restricted-syntax": ["error", ...DESIGN_SYSTEM_SYNTAX],
     },
   },
-  // Public locale routes: palette + shadow violations are errors (Phase 4).
+  // Public locale routes: same strict rules (kept explicit for clarity in reviews).
   {
     files: ["src/app/[locale]/**/*.{ts,tsx}"],
     rules: {
@@ -111,6 +111,7 @@ const eslintConfig = [
   {
     files: [
       "src/components/ui/**/*.{ts,tsx}",
+      "src/components/admin/AdminButton.tsx",
       "src/**/__tests__/**/*.{ts,tsx}",
       "src/**/*.test.{ts,tsx}",
       "src/**/*.spec.{ts,tsx}",

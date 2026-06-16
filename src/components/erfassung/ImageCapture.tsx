@@ -252,7 +252,7 @@ export function ImageCapture({
                   size="icon"
                   onClick={clearImage}
                   disabled={state === 'analyzing'}
-                  className="absolute -top-2 -right-2 w-8 h-8 rounded-full shadow-lg"
+                  className="absolute -top-2 -right-2 w-8 h-8 rounded-full shadow-xs"
                 >
                   <X className="w-4 h-4" />
                 </Button>

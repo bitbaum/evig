@@ -180,7 +180,7 @@ export function EditSubmissionModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-surface-base dark:border dark:border-white/6 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-surface-base dark:border dark:border-white/6 rounded-lg shadow-xs max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b px-6 py-4 flex items-center justify-between">
           <Heading level={2} className="text-2xl">Einreichung bearbeiten</Heading>

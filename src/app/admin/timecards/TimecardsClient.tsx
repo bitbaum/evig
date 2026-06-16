@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Sparkles, ChevronRight } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
 import { formatTimecardDuration } from '@/config/timecards'
 import { NoScheduleNotice } from './NoScheduleNotice'
 import { TimecardDayEditor } from './TimecardDayEditor'
@@ -84,17 +85,18 @@ export function TimecardsClient({
           Tucked behind a single disclosure so they don't compete with
           the main calendar flow. ~95% of timecards do not need them. */}
       <section className="border-t border-subtle pt-6">
-        <button
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => setExtrasOpen(o => !o)}
-          className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary hover:text-text-secondary"
+          className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary hover:text-text-secondary h-auto px-0"
         >
           <ChevronRight
             className={`h-3.5 w-3.5 transition-transform ${extrasOpen ? 'rotate-90' : ''}`}
             aria-hidden="true"
           />
           {t('extrasToggle')}
-        </button>
+        </Button>
 
         {extrasOpen && (
           <div className="mt-5 space-y-5">
@@ -129,13 +131,14 @@ export function TimecardsClient({
               </div>
             </div>
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={tc.rebuildCurrentDraft}
-              className="text-sm text-text-tertiary underline-offset-2 hover:text-text-secondary hover:underline"
+              className="text-sm text-text-tertiary underline-offset-2 hover:text-text-secondary hover:underline h-auto px-0"
             >
               {t('extrasResetMonth')}
-            </button>
+            </Button>
           </div>
         )}
       </section>

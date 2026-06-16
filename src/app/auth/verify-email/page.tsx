@@ -66,7 +66,7 @@ function VerifyEmailContent() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-surface-base py-8 px-4 shadow-lg dark:shadow-black/30 rounded-lg sm:px-10">
+        <div className="card-shell py-8 px-4 sm:px-10">
           <div className="text-center">
             {status === 'loading' && (
               <div className="flex flex-col items-center">
@@ -138,7 +138,7 @@ function VerifyEmailFallback() {
         </div>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-surface-base py-8 px-4 shadow-lg dark:shadow-black/30 rounded-lg sm:px-10">
+        <div className="card-shell py-8 px-4 sm:px-10">
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-12 h-12 text-action animate-spin" />
           </div>

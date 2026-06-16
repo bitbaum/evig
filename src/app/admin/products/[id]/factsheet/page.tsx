@@ -165,7 +165,7 @@ export default function FactSheetPage() {
 
       {/* A4 Fact Sheet */}
       <div className="bg-surface-raised min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-surface-base">
-        <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-surface-base shadow-lg print:shadow-none">
+        <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-surface-base shadow-xs print:shadow-none">
 
           {/* Green Header Bar */}
           <div className="bg-action text-white px-8 py-4">

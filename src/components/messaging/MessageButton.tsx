@@ -46,7 +46,7 @@ export function MessageButton() {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 p-4 rounded-full shadow-lg hover:scale-105 z-40"
+        className="fixed bottom-6 right-6 p-4 rounded-full shadow-xs hover:scale-105 z-40"
         title={t('title')}
       >
         <MessageSquare className="w-6 h-6" />

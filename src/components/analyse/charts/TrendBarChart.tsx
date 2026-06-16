@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload, label }: {
     : 'N/A'
 
   return (
-    <div className="bg-surface-base p-3 border rounded-lg shadow-lg">
+    <div className="card-shell p-3">
       <p className="font-semibold mb-2">{label}</p>
       <div className="space-y-1 text-sm">
         <div className="flex justify-between gap-4">

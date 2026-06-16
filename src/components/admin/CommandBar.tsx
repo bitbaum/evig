@@ -296,7 +296,7 @@ export function CommandBar() {
       {/* Native dialog */}
       <dialog
         ref={dialogRef}
-        className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-2xl backdrop:bg-black/60"
+        className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
         onKeyDown={handleKeyDown}
         onClose={close}
         aria-label={t('openShortcut')}

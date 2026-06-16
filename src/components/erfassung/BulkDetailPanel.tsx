@@ -92,7 +92,7 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
       />
 
       {/* Panel */}
-      <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-surface-base z-50 shadow-2xl overflow-y-auto">
+      <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-surface-base z-50 shadow-xs overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b border px-4 py-3 flex items-center justify-between z-10">
           <div>

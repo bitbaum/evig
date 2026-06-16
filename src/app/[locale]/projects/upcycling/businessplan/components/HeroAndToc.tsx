@@ -1,4 +1,7 @@
+'use client'
+
 import type { BusinessPlan } from '../types'
+import { Select } from '@/components/ui/select'
 
 export function BusinessPlanHero({
   hero,
@@ -69,10 +72,14 @@ export function BusinessPlanMobileToc({ nav }: { nav: BusinessPlan['nav'] }) {
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary shrink-0">
             {nav.label}
           </span>
-          <select
-            className="flex-1 min-w-0 rounded-md border border-default bg-surface-base px-2 py-1.5 text-sm text-text-primary"
+          <Select
+            className="flex-1 min-w-0 text-sm"
             defaultValue=""
-            {...{ onchange: "if(this.value){location.hash=this.value}" }}
+            onChange={(e) => {
+              if (e.target.value) {
+                window.location.hash = e.target.value
+              }
+            }}
           >
             <option value="">— {nav.label} —</option>
             {nav.items.map((item) => (
@@ -80,7 +87,7 @@ export function BusinessPlanMobileToc({ nav }: { nav: BusinessPlan['nav'] }) {
                 {item.label}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       </div>
     </nav>

@@ -81,7 +81,7 @@ export function KPICard({
           {metric.formula && (
             <div className="relative">
               <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-              <div className="absolute right-0 top-6 w-64 p-2 bg-surface-base border rounded-lg shadow-lg text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+              <div className="absolute right-0 top-6 w-64 p-2 card-shell text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                 <strong>Formel:</strong> {metric.formula}
               </div>
             </div>

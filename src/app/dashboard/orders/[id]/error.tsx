@@ -20,7 +20,7 @@ export default function OrderDetailError({
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
-      <div className="max-w-md w-full bg-surface-base shadow-lg dark:shadow-black/30 rounded-lg p-6 text-center">
+      <div className="max-w-md w-full card-shell p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
         <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           Fehler beim Laden der Bestellung

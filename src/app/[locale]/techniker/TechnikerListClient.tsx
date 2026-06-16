@@ -103,11 +103,12 @@ export default function TechnikerListClient() {
         {/* Tier filter — text-only tab pills (no bg-action white) */}
         <div className="mb-5 flex flex-wrap gap-2 font-mono text-xs uppercase tracking-[0.14em]" role="group" aria-label={t('list.tierFilterLabel')}>
           {tierTabs.map((tab) => (
-            <button
+            <Button
               key={tab.value}
               type="button"
+              variant="ghost"
               onClick={() => setTierFilter(tab.value)}
-              className={`px-3 py-1.5 rounded-md border transition-colors ${
+              className={`px-3 py-1.5 rounded-md border transition-colors font-mono text-xs uppercase tracking-[0.14em] h-auto ${
                 tier === tab.value
                   ? 'border-strong bg-text-primary text-canvas'
                   : 'border text-text-secondary hover:border-strong'
@@ -115,7 +116,7 @@ export default function TechnikerListClient() {
               aria-pressed={tier === tab.value}
             >
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
 

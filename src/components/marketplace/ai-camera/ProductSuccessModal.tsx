@@ -29,7 +29,7 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
       <motion.div
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
-        className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-xl max-w-md w-full p-6 text-center"
+        className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-xs max-w-md w-full p-6 text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />

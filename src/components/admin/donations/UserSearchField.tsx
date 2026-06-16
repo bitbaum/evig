@@ -67,7 +67,7 @@ export function UserSearchField({
             )}
           </div>
           {userResults.length > 0 && (
-            <div className="absolute z-10 w-full mt-1 bg-surface-base border border rounded-lg shadow-lg max-h-48 overflow-y-auto">
+            <div className="absolute z-10 w-full mt-1 bg-surface-base border border rounded-lg shadow-xs max-h-48 overflow-y-auto">
               {userResults.map((user) => (
                 <Button
                   key={user.id}

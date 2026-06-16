@@ -73,7 +73,7 @@ export default function WorkshopsDashboard() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl shadow-lg p-8 border border-subtle">
+          <div className="card-shell p-8">
             <div className="animate-pulse">
               <div className="h-8 bg-surface-overlay rounded-sm w-1/3 mb-6"></div>
               <div className="space-y-4">
@@ -92,7 +92,7 @@ export default function WorkshopsDashboard() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl shadow-lg p-8 text-center border border-subtle">
+          <div className="card-shell p-8 text-center">
             <Heading level={1} className="text-2xl font-bold mb-4 text-text-primary">{t('loginRequired')}</Heading>
             <p className="mb-6 text-text-secondary">{t('loginDesc')}</p>
             <Button as={Link} href={ROUTES.public.login} variant="primary">
@@ -150,7 +150,7 @@ export default function WorkshopsDashboard() {
         {registrations.length > 0 ? (
           <div className="space-y-6">
             {registrations.map((registration: WorkshopRegistration) => (
-              <div key={registration.id} className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-subtle">
+              <div key={registration.id} className="card-shell p-4 sm:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <Heading level={3} className="text-xl font-semibold mb-2 text-text-primary">

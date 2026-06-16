@@ -70,7 +70,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
           />
 
           {/* Icon grid */}
-          <div className="absolute z-20 mt-2 w-full p-4 bg-surface-base border border rounded-xl shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute z-20 mt-2 w-full p-4 bg-surface-base border border rounded-xl shadow-xs max-h-80 overflow-y-auto">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {iconNames.map((iconName) => {
                 const IconComponent = SERVICE_ICONS[iconName].icon

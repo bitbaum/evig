@@ -53,7 +53,7 @@ export default function BlogSubmissionsClient() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl shadow-lg dark:shadow-black/30 p-8 border border-subtle">
+          <div className="card-shell p-8">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-surface-overlay rounded-sm w-1/3" />
               <div className="h-4 bg-surface-overlay rounded-sm w-full" />

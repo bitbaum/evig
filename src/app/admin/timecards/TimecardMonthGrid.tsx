@@ -8,6 +8,7 @@ import {
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { getEntryForDate } from '@/lib/team/timecard-utils'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 /**
  * Month grid for /admin/timecards.
@@ -45,13 +46,14 @@ export function TimecardMonthGrid({
           : undefined
 
         return (
-          <button
+          <Button
             key={date}
             type="button"
+            variant="ghost"
             onClick={() => onSelect(date)}
             title={categoryLabel}
             className={cn(
-              'group flex flex-col gap-1 rounded-lg border bg-surface-base px-3 py-2.5 text-left transition-colors',
+              'group flex h-auto w-full flex-col gap-1 rounded-lg border bg-surface-base px-3 py-2.5 text-left transition-colors',
               active
                 ? 'border-action ring-2 ring-action/15'
                 : 'border-subtle hover:border-strong',
@@ -79,7 +81,7 @@ export function TimecardMonthGrid({
             >
               {entry ? formatTimecardDuration(entry.duration_minutes) : '—'}
             </span>
-          </button>
+          </Button>
         )
       })}
     </div>

@@ -64,7 +64,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
       />
 
       {/* Panel */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-surface-base shadow-2xl flex flex-col animate-slide-in-right">
+      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-surface-base shadow-xs flex flex-col animate-slide-in-right">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border bg-action">
           <div className="flex items-center gap-3">

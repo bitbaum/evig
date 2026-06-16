@@ -6,6 +6,7 @@ import { Sparkles } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 
 /**
  * Inline "set up my schedule" prompt.
@@ -45,15 +46,17 @@ export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-subtle bg-surface-raised px-4 py-3">
       <p className="text-sm text-text-secondary">{t('noScheduleLine')}</p>
-      <button
+      <Button
         type="button"
+        variant="primary"
+        size="sm"
         onClick={applyDefault}
         disabled={isApplying}
-        className="inline-flex items-center gap-1.5 rounded-full border border-action bg-action px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-action-strong disabled:opacity-60"
+        className="inline-flex items-center gap-1.5 rounded-full h-auto"
       >
         <Sparkles className="h-3 w-3" aria-hidden="true" />
         {isApplying ? t('applyingSchedule') : t('applyStandardSchedule')}
-      </button>
+      </Button>
       <Link
         href={ROUTES.admin.team}
         className="text-xs text-text-tertiary underline-offset-2 hover:text-text-secondary hover:underline"

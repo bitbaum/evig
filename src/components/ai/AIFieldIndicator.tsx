@@ -87,7 +87,7 @@ export function AIFieldIndicator({
           />
 
           {/* Popover */}
-          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-surface-base rounded-lg shadow-lg border p-3">
+          <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-surface-base rounded-lg shadow-xs border p-3">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">

@@ -1,6 +1,6 @@
 # Design System — The Final Solution
 
-**Last updated:** 2026-06-15 (Phase 4 lint graduation + floating-ui/chatbot token migration)
+**Last updated:** 2026-06-16 (Phase 7 legacy CSS alias cleanup + Phases 5–6 commit)
 
 ## TL;DR
 
@@ -128,10 +128,12 @@ Updated 2026-06-15 after OrangeCat/FleetCrown audit + Phase 0 SSOT migration:
 | Raw text `<input>` in feature code | low | Most done; CommandBar search stays raw. |
 | Semantic token classes (`text-text-*`, `bg-surface-*`, `bg-action`, `ui-public-*`) | **~6,100** | Primary API — growing. |
 | Legacy palette + explicit `dark:` in feature code | **~169 → ~40** | Phase 2–4 sweep; chatbot/floating-ui migrated 2026-06-15. |
-| `shadow-lg` / `shadow-xl` on static surfaces | **~48** | ESLint warns on new occurrences; overlays/modals exempt. |
+| `shadow-lg` / `shadow-xl` on static surfaces | **~5** | ESLint warns on lg/xl/2xl; overlays use `shadow-xs`. |
 | **Phase 0** — SSOT adapters | done 2026-06-15 | `design-system.ts`, `tokens.ts`, `config/ui/buttons.ts`, core UI kit |
 | **Phase 3b** — Shop + IT-Hilfe | done 2026-06-15 | shop overview/search/product/category, IT-Hilfe my/offers/create/accept/detail |
 | **Phase 4** — Lint graduation | partial 2026-06-15 | `[locale]/**` palette+shadow rules → **error**; chatbot/floating-ui/cookie migrated |
+| **Phase 5** — Admin/dashboard sweep | done 2026-06-15 | Dashboard cards → `card-shell`; overlays → `shadow-xs`; chart tooltips migrated |
+| **Phase 6** — Raw control migration | done 2026-06-15 | Primitives only in feature code; ESLint design rules → **error** project-wide |
 
 Run `npm run lint` to see palette-class warnings (new rules as of 2026-06-15).
 
@@ -166,8 +168,12 @@ component. Phase 0 fixes that adapter layer.
 5. **Phase 4 — Lint graduation** (partial 2026-06-15): `[locale]/**` routes enforce
    palette + shadow rules as ESLint **errors**; chatbot, floating-ui, cookie
    banner migrated to semantic tokens. Remaining: admin/dashboard surfaces.
-6. **Phase 5 — Full graduation**: palette warnings → errors project-wide when
-   count < 50; delete legacy `--color-*` aliases from `globals.css`.
+6. **Phase 6 — Raw control migration** (done 2026-06-15): all feature code uses
+   `<Button>`, `<Input>`, `<Select>`, `<Textarea>`; design-system ESLint rules
+   are **errors** project-wide (`AdminButton` + `src/components/ui/` exempt).
+7. **Phase 7 — Legacy alias cleanup** (done 2026-06-15): removed duplicate
+   `:root` / `.dark` `--color-bg`, `--color-surface`, `--color-text`, etc.;
+   `@theme` palette scales (`primary-*`, `error-*`, …) remain for status badges.
 
 Reference pages: `src/app/[locale]/page.tsx`, `projects/upcycling/page.tsx`,
 `techniker/[id]/TechnikerProfileView.tsx`, `src/app/admin/appointments/page.tsx`.

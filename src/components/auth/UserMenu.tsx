@@ -172,7 +172,7 @@ export function UserMenu() {
             : "opacity-0 scale-95 pointer-events-none"
         )}
       >
-        <div className="bg-surface-base rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-subtle dark:border-white/6 overflow-hidden">
+        <div className="bg-surface-base rounded-2xl shadow-xs border border-subtle overflow-hidden">
           {/* User Info Header */}
           <div className="px-5 py-4 bg-surface-raised border-b border-subtle dark:border-white/6">
             <div className="flex items-center gap-3">

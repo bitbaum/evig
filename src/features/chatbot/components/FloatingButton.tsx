@@ -24,7 +24,7 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
       className={cn(
         "fixed z-[600] pointer-events-auto",
         "bg-primary-700 hover:bg-primary-600 dark:bg-primary-600 dark:hover:bg-primary-500",
-        "text-white rounded-full shadow-lg hover:shadow-xl",
+        "text-action-text rounded-full shadow-xs hover:opacity-90",
         "transition-all duration-300 ease-in-out transform hover:scale-105",
         "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
         "hover:scale-110 active:scale-95 touch-manipulation",
