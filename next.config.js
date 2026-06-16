@@ -114,6 +114,59 @@ const nextConfig = {
         destination: '/profil/techniker',
         permanent: true,
       },
+      // Shop - the online shop is the marketplace. Keep old URLs as
+      // hard redirects so crawlers and users do not render a parallel
+      // shop shell before landing on products.
+      {
+        source: '/shop',
+        destination: '/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|fr|it|es|ja|ko|ru)/shop',
+        destination: '/:locale/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/shop/search',
+        destination: '/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|fr|it|es|ja|ko|ru)/shop/search',
+        destination: '/:locale/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/shop/category/business-laptops',
+        destination: '/marketplace?category=10',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|fr|it|es|ja|ko|ru)/shop/category/business-laptops',
+        destination: '/:locale/marketplace?category=10',
+        permanent: true,
+      },
+      {
+        source: '/shop/category/:slug',
+        destination: '/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|fr|it|es|ja|ko|ru)/shop/category/:slug',
+        destination: '/:locale/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/:uuid',
+        destination: '/marketplace',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|fr|it|es|ja|ko|ru)/shop/product/:uuid',
+        destination: '/:locale/marketplace',
+        permanent: true,
+      },
     ];
   },
   webpack: (config, { isServer, dev }) => {
