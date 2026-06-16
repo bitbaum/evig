@@ -459,8 +459,8 @@
   },
   "shop": {
     "meta": {
-      "title": "Boutique — Matériel reconditionné",
-      "description": "Ordinateurs reconditionnés et vérifiés à des prix équitables. Avec garantie.",
+      "title": "Buy refurbished IT | Revamp-IT",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "productNotFound": "Produit introuvable",
       "productFallbackDesc": "{brand} {model} — inspecté et remis à neuf par {orgName}"
     },
@@ -496,9 +496,9 @@
     "empty": "Aucun produit trouvé",
     "verifiedBadge": "Vérifié",
     "page": {
-      "heroTitle": "Comment souhaitez-vous acheter ?",
-      "heroSubtitle": "Choisissez le canal qui vous convient le mieux : notre boutique en ligne, le canal Shopware ou notre magasin à Zurich.",
-      "metaDescription": "Choisissez comment faire vos achats chez {orgName} – boutique en ligne, canal Shopware ou magasin à Zurich.",
+      "heroTitle": "Buy refurbished IT directly from Revamp-IT",
+      "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
+      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "store": {
         "title": "Magasin (Zurich)",
         "tagline": "Conseil, découverte des appareils, emporter directement",
@@ -510,16 +510,17 @@
         "openOsm": "Ouvrir dans OpenStreetMap",
         "contact": "Contact",
         "mapsInfoTitle": "Pourquoi deux options de carte ?",
-        "mapsInfoBody": "OpenStreetMap est communautaire et respectueux de la vie privée. Google/Apple Maps offrent souvent une meilleure navigation, le trafic en direct et des points d'intérêt. Choisissez ce qui vous convient le mieux – la transparence et la liberté de choix nous tiennent à cœur."
+        "mapsInfoBody": "OpenStreetMap est communautaire et respectueux de la vie privée. Google/Apple Maps offrent souvent une meilleure navigation, le trafic en direct et des points d'intérêt. Choisissez ce qui vous convient le mieux – la transparence et la liberté de choix nous tiennent à cœur.",
+        "eyebrow": "In store"
       },
       "online": {
         "title": "Boutiques en ligne",
-        "tagline": "Choisissez entre notre boutique en ligne et le canal Shopware.",
+        "tagline": "Our own online shop is the default.",
         "benefit1": "Qualité vérifiée et garantie sur tous les canaux",
         "benefit2": "Prix équitables, choix durable",
         "benefit3": "Paiement sécurisé",
         "currentShop": "Boutique en ligne actuelle",
-        "shopwareShop": "Accéder à la boutique Shopware",
+        "shopwareShop": "Open Shopware",
         "onlineShop": "Boutique en ligne {orgName}",
         "multiShopTitle": "Plusieurs canaux de vente ?",
         "multiShopBody": "Notre boutique en ligne {orgName} vous offre le meilleur choix de matériel informatique reconditionné. Vous trouverez également notre catalogue sur Shopware et dans le système historique."
@@ -533,6 +534,34 @@
         "needTitle": "Vous avez besoin d'un appareil mais ne pouvez pas vous le permettre ?",
         "needBody": "Via le programme Compirat, nous fournissons, en collaboration avec Caritas Zurich, des appareils à des personnes aux moyens limités.",
         "needCta": "Voir Compirat"
+      },
+      "heroEyebrow": "Revamp-IT shop",
+      "trust": {
+        "qualityTitle": "Tested, cleaned, ready",
+        "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
+        "stockTitle": "{count} available products",
+        "stockBody": "Live from our published inventory."
+      },
+      "products": {
+        "eyebrow": "Our inventory",
+        "title": "Current products",
+        "body": "This is the primary Revamp-IT shop. Shopware remains only as a fallback when an older item is still better represented there.",
+        "allCta": "Browse all",
+        "emptyTitle": "No products are published right now",
+        "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
+      },
+      "repair": {
+        "eyebrow": "Repair before replacing",
+        "title": "Device broken? Describe the problem.",
+        "body": "Create a request with the symptoms, device type, and location. The request stays in the system and matching technicians or shops can respond.",
+        "requestCta": "Request repair",
+        "techniciansCta": "View technicians & shops"
+      },
+      "legacy": {
+        "eyebrow": "Fallback",
+        "title": "Shopware only when you need it",
+        "body": "Our own shop is the default. We keep the Shopware channel as a transition path and for older listings that may still live there.",
+        "cta": "Open Shopware"
       }
     },
     "search": {

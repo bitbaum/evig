@@ -6852,8 +6852,8 @@
   },
   "shop": {
     "meta": {
-      "title": "ショップ — リファービッシュ・ハードウェア",
-      "description": "検査済みの再生パソコンを公正な価格で。保証付き。",
+      "title": "Buy refurbished IT | Revamp-IT",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "productNotFound": "商品が見つかりません",
       "productFallbackDesc": "{brand} {model} — {orgName}により検査・整備済み"
     },
@@ -6889,9 +6889,9 @@
     "empty": "商品が見つかりませんでした",
     "verifiedBadge": "検査済み",
     "page": {
-      "heroTitle": "どのようにお買い物しますか？",
-      "heroSubtitle": "あなたに最適なチャンネルを選んでください：オンラインショップ、Shopwareショップ、またはチューリッヒの店舗。",
-      "metaDescription": "{orgName}でお買い物する方法を選んでください — オンラインショップ、Shopwareチャンネル、またはチューリッヒの店舗。",
+      "heroTitle": "Buy refurbished IT directly from Revamp-IT",
+      "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
+      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "store": {
         "title": "店舗（チューリッヒ）",
         "tagline": "相談、デバイスの確認、その場で持ち帰り",
@@ -6903,16 +6903,17 @@
         "openOsm": "OpenStreetMapで開く",
         "contact": "お問い合わせ",
         "mapsInfoTitle": "なぜ2つの地図オプションがあるのですか？",
-        "mapsInfoBody": "OpenStreetMapはコミュニティ主導でプライバシーに配慮しています。Google/Apple Mapsはナビゲーション、リアルタイム交通情報、スポット情報が充実しています。あなたに合ったものを選んでください — 透明性と選択の自由を大切にしています。"
+        "mapsInfoBody": "OpenStreetMapはコミュニティ主導でプライバシーに配慮しています。Google/Apple Mapsはナビゲーション、リアルタイム交通情報、スポット情報が充実しています。あなたに合ったものを選んでください — 透明性と選択の自由を大切にしています。",
+        "eyebrow": "In store"
       },
       "online": {
         "title": "オンラインショップ",
-        "tagline": "オンラインショップとShopwareチャンネルのどちらかを選んでください。",
+        "tagline": "Our own online shop is the default.",
         "benefit1": "すべてのチャンネルで検査済みの品質と保証",
         "benefit2": "公正な価格、持続可能な選択",
         "benefit3": "安全な支払い",
         "currentShop": "現在のオンラインショップ",
-        "shopwareShop": "Shopwareショップへ",
+        "shopwareShop": "Open Shopware",
         "onlineShop": "{orgName}オンラインショップ",
         "multiShopTitle": "複数のショップチャンネル？",
         "multiShopBody": "{orgName}オンラインショップは最高の品揃えのリファービッシュITハードウェアを提供します。Shopwareショップとレガシーシステムでも商品をご覧いただけます。"
@@ -6926,6 +6927,34 @@
         "needTitle": "機器が必要だけれど、購入が難しいですか?",
         "needBody": "Compirat プログラムを通じて、Caritas Zürich と協力し、経済的に余裕のない方々へ機器を提供しています。",
         "needCta": "Compirat を見る"
+      },
+      "heroEyebrow": "Revamp-IT shop",
+      "trust": {
+        "qualityTitle": "Tested, cleaned, ready",
+        "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
+        "stockTitle": "{count} available products",
+        "stockBody": "Live from our published inventory."
+      },
+      "products": {
+        "eyebrow": "Our inventory",
+        "title": "Current products",
+        "body": "This is the primary Revamp-IT shop. Shopware remains only as a fallback when an older item is still better represented there.",
+        "allCta": "Browse all",
+        "emptyTitle": "No products are published right now",
+        "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
+      },
+      "repair": {
+        "eyebrow": "Repair before replacing",
+        "title": "Device broken? Describe the problem.",
+        "body": "Create a request with the symptoms, device type, and location. The request stays in the system and matching technicians or shops can respond.",
+        "requestCta": "Request repair",
+        "techniciansCta": "View technicians & shops"
+      },
+      "legacy": {
+        "eyebrow": "Fallback",
+        "title": "Shopware only when you need it",
+        "body": "Our own shop is the default. We keep the Shopware channel as a transition path and for older listings that may still live there.",
+        "cta": "Open Shopware"
       }
     },
     "search": {

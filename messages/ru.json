@@ -446,8 +446,8 @@
   },
   "shop": {
     "meta": {
-      "title": "Магазин — восстановленное оборудование",
-      "description": "Проверенные восстановленные компьютеры по честным ценам. С гарантией.",
+      "title": "Buy refurbished IT | Revamp-IT",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "productNotFound": "Товар не найден",
       "productFallbackDesc": "{brand} {model} — проверено и восстановлено {orgName}"
     },
@@ -483,9 +483,9 @@
     "empty": "Товары не найдены",
     "verifiedBadge": "Проверено",
     "page": {
-      "heroTitle": "Как вы хотите делать покупки?",
-      "heroSubtitle": "Выберите канал, который вам больше подходит: наш онлайн-магазин, магазин на Shopware или наш магазин в Цюрихе.",
-      "metaDescription": "Выберите, как вы хотите делать покупки в {orgName} — онлайн-магазин, канал Shopware или магазин в Цюрихе.",
+      "heroTitle": "Buy refurbished IT directly from Revamp-IT",
+      "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
+      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "store": {
         "title": "Магазин (Цюрих)",
         "tagline": "Консультация, осмотр устройств, покупка с собой",
@@ -497,15 +497,16 @@
         "openOsm": "Открыть в OpenStreetMap",
         "contact": "Контакты",
         "mapsInfoTitle": "Почему два варианта карт?",
-        "mapsInfoBody": "OpenStreetMap создаётся сообществом и бережно относится к данным. Google/Apple Maps часто предлагают лучшую навигацию, информацию о трафике в реальном времени и точки интереса. Выберите то, что вам больше подходит — для нас важны прозрачность и свобода выбора."
+        "mapsInfoBody": "OpenStreetMap создаётся сообществом и бережно относится к данным. Google/Apple Maps часто предлагают лучшую навигацию, информацию о трафике в реальном времени и точки интереса. Выберите то, что вам больше подходит — для нас важны прозрачность и свобода выбора.",
+        "eyebrow": "In store"
       },
       "online": {
         "title": "Онлайн-магазины",
-        "tagline": "Выберите между нашим онлайн-магазином и каналом Shopware.",
+        "tagline": "Our own online shop is the default.",
         "benefit1": "Проверенное качество и гарантия во всех каналах",
         "benefit2": "Честные цены, устойчивый ассортимент",
         "benefit3": "Безопасная оплата",
-        "shopwareShop": "К магазину Shopware",
+        "shopwareShop": "Open Shopware",
         "onlineShop": "Онлайн-магазин {orgName}",
         "multiShopTitle": "Несколько каналов магазина?",
         "multiShopBody": "Наш онлайн-магазин {orgName} предлагает лучший выбор восстановленного IT-оборудования. Также наш ассортимент доступен в магазине Shopware и в устаревшей системе.",
@@ -520,6 +521,34 @@
         "needTitle": "Нужно устройство, но не можете себе его позволить?",
         "needBody": "В рамках программы Compirat мы вместе с Caritas Zürich передаём устройства людям с ограниченными средствами.",
         "needCta": "Посмотреть Compirat"
+      },
+      "heroEyebrow": "Revamp-IT shop",
+      "trust": {
+        "qualityTitle": "Tested, cleaned, ready",
+        "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
+        "stockTitle": "{count} available products",
+        "stockBody": "Live from our published inventory."
+      },
+      "products": {
+        "eyebrow": "Our inventory",
+        "title": "Current products",
+        "body": "This is the primary Revamp-IT shop. Shopware remains only as a fallback when an older item is still better represented there.",
+        "allCta": "Browse all",
+        "emptyTitle": "No products are published right now",
+        "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
+      },
+      "repair": {
+        "eyebrow": "Repair before replacing",
+        "title": "Device broken? Describe the problem.",
+        "body": "Create a request with the symptoms, device type, and location. The request stays in the system and matching technicians or shops can respond.",
+        "requestCta": "Request repair",
+        "techniciansCta": "View technicians & shops"
+      },
+      "legacy": {
+        "eyebrow": "Fallback",
+        "title": "Shopware only when you need it",
+        "body": "Our own shop is the default. We keep the Shopware channel as a transition path and for older listings that may still live there.",
+        "cta": "Open Shopware"
       }
     },
     "search": {

@@ -6852,8 +6852,8 @@
   },
   "shop": {
     "meta": {
-      "title": "쇼핑몰 — 리퍼비시 하드웨어",
-      "description": "검증된 재정비 컴퓨터를 합리적인 가격에. 보증 포함.",
+      "title": "Buy refurbished IT | Revamp-IT",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "productNotFound": "제품을 찾을 수 없습니다",
       "productFallbackDesc": "{brand} {model} — {orgName}가 검사 및 재건한 제품"
     },
@@ -6889,9 +6889,9 @@
     "empty": "제품을 찾을 수 없습니다",
     "verifiedBadge": "검증됨",
     "page": {
-      "heroTitle": "어떻게 쇼핑하시겠어요?",
-      "heroSubtitle": "귀하에게 가장 잘 맞는 채널을 선택하세요: 온라인 쇼핑몰, Shopware 쇼핑몰 또는 취리히 매장.",
-      "metaDescription": "{orgName}에서 어떻게 쇼핑할지 선택하세요 — 온라인 쇼핑몰, Shopware 채널 또는 취리히 매장.",
+      "heroTitle": "Buy refurbished IT directly from Revamp-IT",
+      "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
+      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "store": {
         "title": "매장 (취리히)",
         "tagline": "상담, 기기 직접 확인, 즉시 수령",
@@ -6903,16 +6903,17 @@
         "openOsm": "OpenStreetMap에서 열기",
         "contact": "문의",
         "mapsInfoTitle": "왜 두 가지 지도 옵션인가요?",
-        "mapsInfoBody": "OpenStreetMap은 커뮤니티 기반이고 데이터를 최소화합니다. Google/Apple Maps는 더 나은 내비게이션, 실시간 교통 정보, POI를 제공합니다. 귀하에게 가장 적합한 것을 선택하세요 — 투명성과 선택의 자유가 중요합니다."
+        "mapsInfoBody": "OpenStreetMap은 커뮤니티 기반이고 데이터를 최소화합니다. Google/Apple Maps는 더 나은 내비게이션, 실시간 교통 정보, POI를 제공합니다. 귀하에게 가장 적합한 것을 선택하세요 — 투명성과 선택의 자유가 중요합니다.",
+        "eyebrow": "In store"
       },
       "online": {
         "title": "온라인 쇼핑몰",
-        "tagline": "온라인 쇼핑몰과 Shopware 채널 중 선택하세요.",
+        "tagline": "Our own online shop is the default.",
         "benefit1": "모든 채널에서 검증된 품질과 보증",
         "benefit2": "합리적인 가격, 지속 가능한 선택",
         "benefit3": "안전한 결제",
         "currentShop": "현재 온라인 쇼핑몰",
-        "shopwareShop": "Shopware 쇼핑몰로 이동",
+        "shopwareShop": "Open Shopware",
         "onlineShop": "{orgName} 온라인 쇼핑몰",
         "multiShopTitle": "여러 쇼핑몰 채널?",
         "multiShopBody": "저희 {orgName} 온라인 쇼핑몰에서 재정비된 IT 하드웨어의 최고 선택을 제공합니다. 또는 Shopware 쇼핑몰과 레거시 시스템에서도 저희 상품을 찾을 수 있습니다."
@@ -6926,6 +6927,34 @@
         "needTitle": "기기가 필요하지만 구입이 어려우신가요?",
         "needBody": "Compirat 프로그램을 통해 Caritas Zürich 와 함께 형편이 어려운 분들에게 기기를 전달하고 있습니다.",
         "needCta": "Compirat 보기"
+      },
+      "heroEyebrow": "Revamp-IT shop",
+      "trust": {
+        "qualityTitle": "Tested, cleaned, ready",
+        "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
+        "stockTitle": "{count} available products",
+        "stockBody": "Live from our published inventory."
+      },
+      "products": {
+        "eyebrow": "Our inventory",
+        "title": "Current products",
+        "body": "This is the primary Revamp-IT shop. Shopware remains only as a fallback when an older item is still better represented there.",
+        "allCta": "Browse all",
+        "emptyTitle": "No products are published right now",
+        "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
+      },
+      "repair": {
+        "eyebrow": "Repair before replacing",
+        "title": "Device broken? Describe the problem.",
+        "body": "Create a request with the symptoms, device type, and location. The request stays in the system and matching technicians or shops can respond.",
+        "requestCta": "Request repair",
+        "techniciansCta": "View technicians & shops"
+      },
+      "legacy": {
+        "eyebrow": "Fallback",
+        "title": "Shopware only when you need it",
+        "body": "Our own shop is the default. We keep the Shopware channel as a transition path and for older listings that may still live there.",
+        "cta": "Open Shopware"
       }
     },
     "search": {

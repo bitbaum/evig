@@ -1,8 +1,8 @@
 {
   "shop": {
     "meta": {
-      "title": "Tienda — Hardware reacondicionado",
-      "description": "Ordenadores verificados y reacondicionados a precios justos. Con garantía."
+      "title": "Buy refurbished IT | Revamp-IT",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich."
     },
     "title": "Nuestra tienda",
     "subtitle": "Hardware reacondicionado verificado",
@@ -22,9 +22,9 @@
     "empty": "No se encontraron productos",
     "verifiedBadge": "Verificado",
     "page": {
-      "heroTitle": "¿Cómo quieres comprar?",
-      "heroSubtitle": "Elige el canal que mejor se adapte a ti: nuestra tienda en línea, la tienda Shopware o nuestra tienda física en Zúrich.",
-      "metaDescription": "Elige cómo quieres comprar en {orgName} — tienda en línea, canal Shopware o tienda física en Zúrich.",
+      "heroTitle": "Buy refurbished IT directly from Revamp-IT",
+      "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
+      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "store": {
         "title": "Tienda física (Zúrich)",
         "tagline": "Asesoría, ver dispositivos, llevártelos al momento",
@@ -36,19 +36,48 @@
         "openOsm": "Abrir en OpenStreetMap",
         "contact": "Contacto",
         "mapsInfoTitle": "¿Por qué dos opciones de mapa?",
-        "mapsInfoBody": "OpenStreetMap es de gestión comunitaria y minimiza el uso de datos. Google/Apple Maps suelen ofrecer mejor navegación, tráfico en tiempo real y puntos de interés. Elige lo que mejor te convenga — la transparencia y la libertad de elección son importantes para nosotros."
+        "mapsInfoBody": "OpenStreetMap es de gestión comunitaria y minimiza el uso de datos. Google/Apple Maps suelen ofrecer mejor navegación, tráfico en tiempo real y puntos de interés. Elige lo que mejor te convenga — la transparencia y la libertad de elección son importantes para nosotros.",
+        "eyebrow": "In store"
       },
       "online": {
         "title": "Tiendas en línea",
-        "tagline": "Elige entre nuestra tienda en línea y el canal Shopware.",
+        "tagline": "Our own online shop is the default.",
         "benefit1": "Calidad verificada y garantía en todos los canales",
         "benefit2": "Precios justos, selección sostenible",
         "benefit3": "Pago seguro",
         "currentShop": "Tienda en línea actual",
-        "shopwareShop": "Ir a la tienda Shopware",
+        "shopwareShop": "Open Shopware",
         "onlineShop": "Tienda en línea {orgName}",
         "multiShopTitle": "¿Varios canales de tienda?",
         "multiShopBody": "Nuestra tienda en línea {orgName} te ofrece la mejor selección de hardware TI reacondicionado. También puedes encontrar nuestro catálogo en la tienda Shopware y en el sistema legacy."
+      },
+      "heroEyebrow": "Revamp-IT shop",
+      "trust": {
+        "qualityTitle": "Tested, cleaned, ready",
+        "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
+        "stockTitle": "{count} available products",
+        "stockBody": "Live from our published inventory."
+      },
+      "products": {
+        "eyebrow": "Our inventory",
+        "title": "Current products",
+        "body": "This is the primary Revamp-IT shop. Shopware remains only as a fallback when an older item is still better represented there.",
+        "allCta": "Browse all",
+        "emptyTitle": "No products are published right now",
+        "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
+      },
+      "repair": {
+        "eyebrow": "Repair before replacing",
+        "title": "Device broken? Describe the problem.",
+        "body": "Create a request with the symptoms, device type, and location. The request stays in the system and matching technicians or shops can respond.",
+        "requestCta": "Request repair",
+        "techniciansCta": "View technicians & shops"
+      },
+      "legacy": {
+        "eyebrow": "Fallback",
+        "title": "Shopware only when you need it",
+        "body": "Our own shop is the default. We keep the Shopware channel as a transition path and for older listings that may still live there.",
+        "cta": "Open Shopware"
       }
     },
     "search": {

@@ -1,8 +1,8 @@
 {
   "shop": {
     "meta": {
-      "title": "Shop — Refurbished Hardware",
-      "description": "Geprüfte, aufgearbeitete Computer zu fairen Preisen. Mit Garantie."
+      "title": "Refurbished IT kaufen | Revamp-IT",
+      "description": "Geprüfte, aufgearbeitete Computer, Laptops, Monitore und Zubehör direkt aus dem Revamp-IT Shop in Zürich."
     },
     "title": "Unser Shop",
     "subtitle": "Geprüfte Refurbished-Hardware",
@@ -21,12 +21,10 @@
     },
     "empty": "Keine Produkte gefunden",
     "verifiedBadge": "Geprüft",
-
     "page": {
-      "heroTitle": "Wie möchtest du einkaufen?",
-      "heroSubtitle": "Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich.",
-      "metaDescription": "Wähle, wie du bei {orgName} einkaufen möchtest – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.",
-
+      "heroTitle": "Refurbished IT direkt von Revamp-IT kaufen",
+      "heroSubtitle": "Geprüfte Laptops, Computer, Monitore und Zubehör aus unserer eigenen Aufbereitung. Online ansehen, im Laden abholen oder direkt kaufen.",
+      "metaDescription": "Geprüfte, aufgearbeitete Computer, Laptops, Monitore und Zubehör direkt aus dem Revamp-IT Shop in Zürich.",
       "store": {
         "title": "Ladenlokal (Zürich)",
         "tagline": "Beratung, Geräte ansehen, direkt mitnehmen",
@@ -38,23 +36,50 @@
         "openOsm": "In OpenStreetMap öffnen",
         "contact": "Kontakt",
         "mapsInfoTitle": "Warum zwei Kartenoptionen?",
-        "mapsInfoBody": "OpenStreetMap ist community-getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live-Verkehr und POIs. Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig."
+        "mapsInfoBody": "OpenStreetMap ist community-getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live-Verkehr und POIs. Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig.",
+        "eyebrow": "Vor Ort"
       },
-
       "online": {
         "title": "Online-Shops",
-        "tagline": "Wähle zwischen unserem Online-Shop und dem Shopware-Kanal.",
+        "tagline": "Unser eigener Online-Shop ist der Standard.",
         "benefit1": "Geprüfte Qualität und Garantie in allen Kanälen",
         "benefit2": "Faire Preise, nachhaltige Auswahl",
         "benefit3": "Sichere Zahlung",
         "currentShop": "Aktueller Online-Shop",
-        "shopwareShop": "Zum Shopware-Shop",
+        "shopwareShop": "Shopware öffnen",
         "onlineShop": "{orgName} Online-Shop",
         "multiShopTitle": "Mehrere Shop-Kanäle?",
         "multiShopBody": "Unser {orgName} Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System."
+      },
+      "heroEyebrow": "Revamp-IT Shop",
+      "trust": {
+        "qualityTitle": "Geprüft, gereinigt, bereit",
+        "qualityBody": "Unsere Geräte werden aufbereitet, getestet und mit sinnvoller Software ausgeliefert.",
+        "stockTitle": "{count} verfügbare Produkte",
+        "stockBody": "Live aus unserem veröffentlichten Inventar."
+      },
+      "products": {
+        "eyebrow": "Unser Sortiment",
+        "title": "Aktuelle Produkte",
+        "body": "Das ist der primäre Revamp-IT Shop. Shopware bleibt nur ein Fallback, falls ein Produkt dort noch besser abgebildet ist.",
+        "allCta": "Alles durchsuchen",
+        "emptyTitle": "Aktuell sind keine Produkte veröffentlicht",
+        "emptyBody": "Das Inventar wird von der Werkstatt gepflegt. Schau später wieder vorbei oder kontaktiere uns direkt."
+      },
+      "repair": {
+        "eyebrow": "Reparatur statt Neukauf",
+        "title": "Gerät kaputt? Beschreibe das Problem.",
+        "body": "Erstelle eine Anfrage mit Fehlerbild, Gerätetyp und Standort. Die Anfrage bleibt im System und passende Techniker oder Werkstätten können sich melden.",
+        "requestCta": "Reparatur anfragen",
+        "techniciansCta": "Techniker & Werkstätten ansehen"
+      },
+      "legacy": {
+        "eyebrow": "Fallback",
+        "title": "Shopware nur wenn du es brauchst",
+        "body": "Unser eigener Shop ist der Standard. Den Shopware-Kanal behalten wir als Übergang und für Fälle, in denen dort noch ältere Einträge liegen.",
+        "cta": "Shopware öffnen"
       }
     },
-
     "search": {
       "metaTitleWithQuery": "Suche: \"{query}\" | {orgName} Shop",
       "metaDescWithQuery": "Suchergebnisse für \"{query}\" – nachhaltig aufbereitete IT-Geräte bei {orgName}.",
@@ -77,7 +102,6 @@
       "productCount": "{count} Produkte",
       "allCategories": "Alle Kategorien anzeigen →"
     },
-
     "category": {
       "notFoundMeta": "Kategorie nicht gefunden | {orgName} Shop",
       "metaTitle": "{categoryName} | {orgName} Shop",
@@ -94,18 +118,15 @@
       "relatedIn": "Weitere in {parentName}",
       "breadcrumbHome": "Start"
     },
-
     "loading": {
       "text": "Shop laden..."
     },
-
     "error": {
       "title": "Etwas ist schiefgelaufen",
       "body": "Beim Laden des Shops ist ein Fehler aufgetreten.",
       "retry": "Erneut versuchen",
       "backToShop": "Zurück zum Shop"
     },
-
     "header": {
       "skipToContent": "Zum Hauptinhalt springen",
       "skipToFooter": "Zur Fusszeile springen",
