@@ -32,6 +32,7 @@ import { ROUTES } from '@/config/routes'
 // =============================================================================
 
 interface MatchedHelper {
+  id: string
   userId: string
   name: string
   bio: string | null
@@ -195,6 +196,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
 
               {topMatches.map((helper, index) => {
                 const helperForCard = {
+                  id: helper.id,
                   userId: helper.userId,
                   name: helper.name,
                   bio: helper.bio,

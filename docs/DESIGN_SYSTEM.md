@@ -1,6 +1,6 @@
 # Design System — The Final Solution
 
-**Last updated:** 2026-06-16 (Phase 7 legacy CSS alias cleanup + Phases 5–6 commit)
+**Last updated:** 2026-06-16 (Megamenu unified x.ai pattern + Marktplatz IA cleanup)
 
 ## TL;DR
 
@@ -207,3 +207,17 @@ from warning to error.
 
 Nothing more should be needed for the "never worry about design bugs
 again" goal. Tailwind 4 + shadcn are polish, not structure.
+
+## Navigation megamenus (2026-06-16)
+
+Public header dropdowns follow one contract (x.ai-inspired, design-system strict):
+
+| Element | Pattern |
+|---|---|
+| Panel | `bg-surface-base`, `border-subtle`, `rounded-2xl` — no shadows |
+| Section label | Mono uppercase eyebrow (`font-mono text-[10px] tracking-[0.18em] text-text-tertiary`) |
+| Links | Title + one-line `text-text-secondary` description when `descriptionKey` is set in nav config |
+| Section footer | Mono “Overview →” linking to the section hub route |
+| Avoid | Hero cards, stacked description paragraphs, `primary-*` rings, `divide-neutral-*` |
+
+Structure SSOT: `src/config/navigation.tsx`. Rendering: `MegaMenuContent.tsx` (desktop) and `MobileMenu.tsx` (grouped sections). Labels: `nav.items.*` in locale messages.

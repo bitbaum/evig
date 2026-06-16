@@ -78,7 +78,7 @@
       "createListingDesc": "Sell your own devices — for free",
       "myListingsDesc": "Manage listings and sales",
       "findHelpDesc": "Community technicians near you",
-      "findTechnicianDesc": "Community and professional technicians",
+      "findTechnicianDesc": "Browse technician profiles and get in touch",
       "becomeTechnicianDesc": "Share IT knowledge and help others",
       "aboPoolsDesc": "Share digital subscriptions and split costs",
       "learnDesc": "Workshops, guides and resources",
@@ -156,6 +156,13 @@
       "projectCompirat": "Compirat",
       "projectCompiratDesc": "Historical PC refurbishing initiative.",
       "sectionAllProjects": "All projects",
+      "sectionBuySell": "Buy & sell",
+      "sectionItHelp": "IT help",
+      "requestHelp": "Request help",
+      "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "itHelpHub": "IT Help",
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
+      "viewSection": "Overview",
       "sectionDevices": "Devices",
       "sectionHelp": "Help"
     },
@@ -288,6 +295,7 @@
     "openingHoursMonday": "Mon: {hours}",
     "openingHoursTueFri": "Tue–Fri: {hours}",
     "transparency": "Transparency",
+    "changelog": "Changelog",
     "locations": {
       "store": "Store",
       "warehouse": "Warehouse",
@@ -298,35 +306,35 @@
   "home": {
     "meta": {
       "title": "Old Hardware. New Life. | Computer Repair & Linux in Switzerland",
-      "description": "Buy & sell used IT. Community-driven computer repair. Workshops on Linux, hardware and programming."
+      "description": "Buy refurbished IT, browse community listings, and find technicians or repair shops for repairs."
     },
     "hero": {
       "title": "Old Hardware. New Life.",
       "titlePrimary": "Old Hardware.",
       "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
-      "ctaDiscover": "Explore now",
+      "ctaDiscover": "Find repair help",
       "ctaAbout": "About us",
       "positioning": "Swiss circular-economy nonprofit since 2003",
       "titleSecondary": "New life.",
-      "lede": "We repair second-hand computers and bring them to people who need them.",
-      "sublede": "Swiss non-profit since 2003 — sustained by a community that repairs, passes on, and learns from each other.",
-      "ctaDonate": "Donate a device"
+      "lede": "Buy verified refurbished IT or find help when your device needs repair.",
+      "sublede": "Swiss non-profit since 2003 — with a shop, community marketplace, workshop, and technician network.",
+      "ctaDonate": "Buy refurbished IT"
     },
     "actions": {
       "heading": "What would you like to do?",
       "sell": {
-        "title": "Got an old device?",
-        "subtitle": "Sell or give it away in 2 minutes — free with no fees.",
-        "primaryLabel": "Browse marketplace",
-        "secondaryLabel": "Sell now",
-        "label": "01 / MARKETPLACE"
+        "title": "Need refurbished IT?",
+        "subtitle": "Verified devices from the RevampIT shop — local, transparent, and ready to use.",
+        "primaryLabel": "Go to shop",
+        "secondaryLabel": "Browse marketplace",
+        "label": "01 / SHOP"
       },
       "repair": {
         "title": "Computer broken?",
-        "subtitle": "Technicians near you can help — or offer repairs yourself.",
-        "primaryLabel": "Get help",
+        "subtitle": "Technicians and workshops near you can help — or offer repairs yourself.",
+        "primaryLabel": "Find technicians",
         "secondaryLabel": "Become a technician",
-        "label": "02 / IT HELP"
+        "label": "02 / REPAIR"
       },
       "learn": {
         "title": "Want to learn something new?",
@@ -336,7 +344,7 @@
         "label": "03 / WORKSHOPS"
       },
       "eyebrow": "THREE WAYS",
-      "subtitle": "Whether you want to get rid of an old device, buy an affordable one, or help with repairs — you're in the right place."
+      "subtitle": "Buy, repair, learn, or contribute — start with the job you need done today."
     },
     "proServices": {
       "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
@@ -443,10 +451,10 @@
     },
     "finalCta": {
       "eyebrow": "READY?",
-      "heading": "Give your computer a second life.",
-      "subtitle": "5 minutes of effort. We pick it up. You get a donation receipt. Your device ends up with someone who needs it.",
-      "button": "Donate a device",
-      "note": "Or contact us directly — info@revamp-it.ch"
+      "heading": "Need a device built to last?",
+      "subtitle": "The shop has verified refurbished IT. If something is broken, repair search connects you with suitable technicians and workshops.",
+      "button": "Go to shop",
+      "note": "Device donations still live under Get involved."
     }
   },
   "shop": {
@@ -3192,6 +3200,44 @@
         "generic": "Something went wrong. Please try again.",
         "network": "Network error. Please try again."
       }
+    },
+    "hub": {
+      "eyebrow": "IT Help",
+      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "subtitle": "RevampIT connects you with community technicians — free or fairly paid.",
+      "paths": {
+        "request": {
+          "title": "Request help",
+          "description": "Describe your issue and receive offers from technicians",
+          "cta": "Start a request →"
+        },
+        "technicians": {
+          "title": "Choose a technician",
+          "description": "Browse profiles and contact someone directly",
+          "cta": "Find technicians →"
+        },
+        "browse": {
+          "title": "Open requests",
+          "description": "Help as a technician — requests near you",
+          "cta": "Browse requests →"
+        }
+      },
+      "account": {
+        "myRequests": "My requests",
+        "myOffers": "My offers"
+      },
+      "offerHelp": {
+        "title": "Can you repair devices?",
+        "description": "Register as a technician and help people nearby.",
+        "cta": "Become a technician"
+      }
+    },
+    "browse": {
+      "title": "Open requests",
+      "subtitle": "For technicians offering help",
+      "backToHub": "Back to IT Help",
+      "createRequest": "Request help",
+      "requestCount": "{count, plural, one {# request} other {# requests}}"
     }
   },
   "blog": {
@@ -4568,7 +4614,8 @@
       "kulturlegi": "KulturLegi",
       "loadingError": "Error loading technicians. Please try again.",
       "availableEmpty": "Coming soon — be part of the first wave",
-      "emptyActionSecondary": "Request help anyway → IT Help"
+      "emptyActionSecondary": "Request help anyway → IT Help",
+      "backToHub": "Back to IT Help"
     },
     "detail": {
       "backToList": "All technicians",
@@ -10091,6 +10138,28 @@
         "aiPlaceholderEdit": "e.g. “Add a section about repair tips” or “Make the text more engaging”",
         "aiPlaceholderNew": "Describe the topic or idea for your blog article…"
       }
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "The latest fixes, features, and improvements shipping to the RevampIT platform."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "Live",
+      "title": "Changelog",
+      "subtitle": "The latest fixes, features, and improvements we ship to revampit.ch."
+    },
+    "latest": {
+      "label": "Latest"
+    },
+    "nav": {
+      "label": "Versions"
+    },
+    "command": {
+      "label": "Run locally",
+      "text": "npm run d"
     }
   }
 }

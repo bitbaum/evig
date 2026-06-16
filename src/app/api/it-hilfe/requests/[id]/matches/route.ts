@@ -25,6 +25,7 @@ interface RequestData {
 }
 
 interface HelperData {
+  id: string
   userId: string
   userName: string | null
   bio: string | null
@@ -150,6 +151,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Find potential helpers with at least one matching skill
     const helpersResult = await db
       .select({
+        id: repairerProfiles.id,
         userId: repairerProfiles.userId,
         userName: users.name,
         bio: repairerProfiles.description,
@@ -178,6 +180,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         )`
       ))
       .groupBy(
+        repairerProfiles.id,
         repairerProfiles.userId,
         users.name,
         repairerProfiles.description,
@@ -196,6 +199,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .map(helper => {
         const { score, reasons } = calculateMatchScore(requestData, helper)
         return {
+          id: helper.id,
           userId: helper.userId,
           name: helper.userName,
           bio: helper.bio,

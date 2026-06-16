@@ -6,6 +6,7 @@
     },
     "list": {
       "title": "Techniker",
+      "backToHub": "Zurück zur IT-Hilfe",
       "available": "{count, plural, one {# Techniker} other {# Techniker}} verfügbar",
       "availableEmpty": "Bald verfügbar — werde Teil der ersten Generation",
       "becomeTechnician": "Techniker werden",

@@ -163,7 +163,14 @@
       "projectCompiratDesc": "Initiative historique de remise à neuf de PC.",
       "sectionAllProjects": "Tous les projets",
       "sectionDevices": "Appareils",
-      "sectionHelp": "Aide"
+      "sectionHelp": "Aide",
+      "sectionBuySell": "Buy & sell",
+      "sectionItHelp": "IT help",
+      "requestHelp": "Request help",
+      "viewSection": "Overview",
+      "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "itHelpHub": "IT Help",
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "badge": {
       "new": "Nouveau"
@@ -288,6 +295,7 @@
     "openingHoursMonday": "Lun : {hours}",
     "openingHoursTueFri": "Mar–Ven : {hours}",
     "transparency": "Transparence",
+    "changelog": "Changelog",
     "locations": {
       "store": "Boutique",
       "warehouse": "Entrepôt",
@@ -3192,6 +3200,44 @@
         "generic": "Une erreur est survenue. Veuillez réessayer.",
         "network": "Erreur réseau. Veuillez réessayer."
       }
+    },
+    "hub": {
+      "eyebrow": "IT Help",
+      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "subtitle": "RevampIT connects you with community technicians — free or fairly paid.",
+      "paths": {
+        "request": {
+          "title": "Request help",
+          "description": "Describe your issue and receive offers from technicians",
+          "cta": "Start a request →"
+        },
+        "technicians": {
+          "title": "Choose a technician",
+          "description": "Browse profiles and contact someone directly",
+          "cta": "Find technicians →"
+        },
+        "browse": {
+          "title": "Open requests",
+          "description": "Help as a technician — requests near you",
+          "cta": "Browse requests →"
+        }
+      },
+      "account": {
+        "myRequests": "My requests",
+        "myOffers": "My offers"
+      },
+      "offerHelp": {
+        "title": "Can you repair devices?",
+        "description": "Register as a technician and help people nearby.",
+        "cta": "Become a technician"
+      }
+    },
+    "browse": {
+      "title": "Open requests",
+      "subtitle": "For technicians offering help",
+      "backToHub": "Back to IT Help",
+      "createRequest": "Request help",
+      "requestCount": "{count, plural, one {# request} other {# requests}}"
     }
   },
   "blog": {
@@ -4567,7 +4613,8 @@
       "community": "Communauté",
       "gratis": "Gratuit",
       "kulturlegi": "KulturLegi",
-      "loadingError": "Erreur lors du chargement des techniciens. Veuillez réessayer."
+      "loadingError": "Erreur lors du chargement des techniciens. Veuillez réessayer.",
+      "backToHub": "Back to IT Help"
     },
     "detail": {
       "backToList": "Tous les techniciens",
@@ -5100,6 +5147,21 @@
         ],
         "slug": "ltsp",
         "year": "2016"
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Discarded computer monitors are transformed into functional, sustainable lamps. A pilot project for the circular economy in collaboration with sheltered workshops and property partners.",
+        "category": "hardware",
+        "status": "ongoing",
+        "features": [
+          "Converting monitors into lamps",
+          "Small series & quality assurance",
+          "Collaboration with social enterprises",
+          "Ecological analyses (ZHAW)"
+        ],
+        "slug": "upcycling",
+        "year": "2025",
+        "readMoreLink": "/projects/upcycling"
       },
       {
         "title": "Monitor-Upcycling",

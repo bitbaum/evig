@@ -4,6 +4,44 @@
       "title": "IT-Hilfe — Kostenlose Community-Reparatur",
       "description": "Kostenlose IT-Unterstützung für Privatpersonen und gemeinnützige Organisationen. Community-Techniker helfen mit Computer, Laptop, WLAN und mehr."
     },
+    "hub": {
+      "eyebrow": "IT-Hilfe",
+      "title": "Computer reparieren, OS neu installieren, IT-Probleme lösen",
+      "subtitle": "RevampIT verbindet dich mit Community-Technikern — kostenlos oder fair vergütet.",
+      "paths": {
+        "request": {
+          "title": "Hilfe anfragen",
+          "description": "Problem beschreiben und Angebote von Technikern erhalten",
+          "cta": "Anfrage starten →"
+        },
+        "technicians": {
+          "title": "Techniker wählen",
+          "description": "Profile durchsuchen und direkt kontaktieren",
+          "cta": "Techniker finden →"
+        },
+        "browse": {
+          "title": "Offene Anfragen",
+          "description": "Als Techniker helfen — Anfragen in deiner Nähe",
+          "cta": "Anfragen ansehen →"
+        }
+      },
+      "account": {
+        "myRequests": "Meine Anfragen",
+        "myOffers": "Meine Angebote"
+      },
+      "offerHelp": {
+        "title": "Du kannst Geräte reparieren?",
+        "description": "Registriere dich als Techniker und hilf Menschen in deiner Nähe.",
+        "cta": "Techniker werden"
+      }
+    },
+    "browse": {
+      "title": "Offene Anfragen",
+      "subtitle": "Für Techniker, die helfen möchten",
+      "backToHub": "Zurück zur IT-Hilfe",
+      "createRequest": "Hilfe anfragen",
+      "requestCount": "{count, plural, one {# Anfrage} other {# Anfragen}}"
+    },
     "page": {
       "title": "IT-Hilfe",
       "requestCount": "{count, plural, one {# Anfrage} other {# Anfragen}}",

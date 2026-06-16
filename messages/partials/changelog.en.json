@@ -1,0 +1,24 @@
+{
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "The latest fixes, features, and improvements shipping to the RevampIT platform."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "Live",
+      "title": "Changelog",
+      "subtitle": "The latest fixes, features, and improvements we ship to revampit.ch."
+    },
+    "latest": {
+      "label": "Latest"
+    },
+    "nav": {
+      "label": "Versions"
+    },
+    "command": {
+      "label": "Run locally",
+      "text": "npm run d"
+    }
+  }
+}

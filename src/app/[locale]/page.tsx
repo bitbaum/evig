@@ -8,6 +8,7 @@ import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
+import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
 import { auth } from '@/auth'
 
 const OG_LOCALE_MAP: Record<string, string> = {
@@ -54,14 +55,14 @@ export default async function Home() {
       title: t('actions.sell.title'),
       body: t('actions.sell.subtitle'),
       ctaLabel: t('actions.sell.primaryLabel'),
-      ctaHref: ROUTES.public.marketplace,
+      ctaHref: JOURNEY_ENTRYPOINTS.orgShop,
     },
     {
       label: t('actions.repair.label'),
       title: t('actions.repair.title'),
       body: t('actions.repair.subtitle'),
       ctaLabel: t('actions.repair.primaryLabel'),
-      ctaHref: ROUTES.public.itHilfe,
+      ctaHref: JOURNEY_ENTRYPOINTS.itHelpTechnicians,
     },
     {
       label: t('actions.learn.label'),
@@ -79,9 +80,9 @@ export default async function Home() {
   ]
 
   const communityCards = [
-    { title: t('community.donate.title'),     body: t('community.donate.desc'),     href: ROUTES.public.donate,         ctaLabel: t('community.donate.cta') },
-    { title: t('community.volunteer.title'),  body: t('community.volunteer.desc'),  href: '/get-involved/volunteer',    ctaLabel: t('community.volunteer.cta') },
     { title: t('community.use.title'),        body: t('community.use.desc'),        href: ROUTES.public.shop,           ctaLabel: t('community.use.cta') },
+    { title: t('community.volunteer.title'),  body: t('community.volunteer.desc'),  href: '/get-involved/volunteer',    ctaLabel: t('community.volunteer.cta') },
+    { title: t('community.donate.title'),     body: t('community.donate.desc'),     href: ROUTES.public.donate,         ctaLabel: t('community.donate.cta') },
     { title: t('community.membership.title'), body: t('community.membership.desc'), href: ROUTES.public.mitgliedWerden, ctaLabel: t('community.membership.cta') },
   ]
 
@@ -139,10 +140,10 @@ export default async function Home() {
           <p className="ui-public-hero-sublede">{t('hero.sublede')}</p>
 
           <div className="ui-public-cta-row">
-            <Link href={ROUTES.public.donate} className="ui-public-cta">
+            <Link href={JOURNEY_ENTRYPOINTS.orgShop} className="ui-public-cta">
               {t('hero.ctaDonate')}
             </Link>
-            <Link href={ROUTES.public.marketplace} className="ui-public-cta-ghost">
+            <Link href={JOURNEY_ENTRYPOINTS.itHelpTechnicians} className="ui-public-cta-ghost">
               {t('hero.ctaDiscover')}
             </Link>
           </div>
@@ -258,7 +259,7 @@ export default async function Home() {
           <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('finalCta.subtitle')}</p>
           <div className="mt-10">
-            <Link href={ROUTES.public.donate} className="ui-public-cta-lg">
+            <Link href={JOURNEY_ENTRYPOINTS.orgShop} className="ui-public-cta-lg">
               {t('finalCta.button')}
             </Link>
           </div>

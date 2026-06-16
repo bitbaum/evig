@@ -124,7 +124,14 @@
       "projectCompiratDesc": "Iniciativa histórica de reacondicionamiento de PC.",
       "sectionAllProjects": "Todos los proyectos",
       "sectionDevices": "Aparatos",
-      "sectionHelp": "Ayuda"
+      "sectionHelp": "Ayuda",
+      "sectionBuySell": "Buy & sell",
+      "sectionItHelp": "IT help",
+      "requestHelp": "Request help",
+      "viewSection": "Overview",
+      "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "itHelpHub": "IT Help",
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -288,6 +295,7 @@
     "openingHoursMonday": "Lun: {hours}",
     "openingHoursTueFri": "Mar–Vie: {hours}",
     "transparency": "Transparencia",
+    "changelog": "Changelog",
     "locations": {
       "store": "Tienda",
       "warehouse": "Almacén",
@@ -2730,6 +2738,44 @@
         "generic": "Algo salió mal. Inténtalo de nuevo.",
         "network": "Error de red. Inténtalo de nuevo."
       }
+    },
+    "hub": {
+      "eyebrow": "IT Help",
+      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "subtitle": "RevampIT connects you with community technicians — free or fairly paid.",
+      "paths": {
+        "request": {
+          "title": "Request help",
+          "description": "Describe your issue and receive offers from technicians",
+          "cta": "Start a request →"
+        },
+        "technicians": {
+          "title": "Choose a technician",
+          "description": "Browse profiles and contact someone directly",
+          "cta": "Find technicians →"
+        },
+        "browse": {
+          "title": "Open requests",
+          "description": "Help as a technician — requests near you",
+          "cta": "Browse requests →"
+        }
+      },
+      "account": {
+        "myRequests": "My requests",
+        "myOffers": "My offers"
+      },
+      "offerHelp": {
+        "title": "Can you repair devices?",
+        "description": "Register as a technician and help people nearby.",
+        "cta": "Become a technician"
+      }
+    },
+    "browse": {
+      "title": "Open requests",
+      "subtitle": "For technicians offering help",
+      "backToHub": "Back to IT Help",
+      "createRequest": "Request help",
+      "requestCount": "{count, plural, one {# request} other {# requests}}"
     }
   },
   "knowhow": {

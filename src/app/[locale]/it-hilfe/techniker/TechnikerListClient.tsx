@@ -20,6 +20,7 @@ import { Select } from '@/components/ui/select'
 import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
 import { useTechnicianList } from '@/hooks/useTechnicianList'
+import { IT_HILFE } from '@/config/it-hilfe'
 import { ROUTES } from '@/config/routes'
 import { TechnicianCard } from './TechnicianCard'
 
@@ -60,6 +61,13 @@ export default function TechnikerListClient() {
       {/* ── Header — fleetcrown discipline ─────────────────────────── */}
       <section className="border-b border-subtle py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Link
+            href={ROUTES.public.itHilfe}
+            className="mb-6 inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-action"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            {t('list.backToHub')}
+          </Link>
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
               <div className="ui-public-eyebrow">{tEye('technicians')}</div>
@@ -71,7 +79,7 @@ export default function TechnikerListClient() {
               </p>
             </div>
             <Link
-              href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'}
+              href={session?.user ? ROUTES.public.profilTechniker : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
               className="ui-public-cta inline-flex items-center gap-2 md:justify-self-end"
             >
               <Wrench className="w-4 h-4" />
@@ -160,12 +168,12 @@ export default function TechnikerListClient() {
               action={
                 hasActiveFilters
                   ? { label: t('list.emptyActionFiltered'), onClick: clearFilters }
-                  : { label: t('list.emptyActionEmpty'), href: '/profil/techniker' }
+                  : { label: t('list.emptyActionEmpty'), href: ROUTES.public.profilTechniker }
               }
             />
             {!hasActiveFilters && (
               <p className="mt-4 text-center text-sm text-text-secondary">
-                <Link href={ROUTES.public.itHilfe} className="font-medium text-action hover:underline">
+                <Link href={IT_HILFE.routes.create} className="font-medium text-action hover:underline">
                   {t('list.emptyActionSecondary')}
                 </Link>
               </p>
@@ -202,7 +210,7 @@ export default function TechnikerListClient() {
             <h2 className="ui-public-display-md mt-3">{t('list.ctaTitle')}</h2>
             <p className="ui-public-section-lede mt-4 mx-auto">{t('list.ctaDescription')}</p>
             <div className="ui-public-cta-row mt-8">
-              <Link href="/auth/login?callbackUrl=/profil/techniker" className="ui-public-cta">
+              <Link href={`/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`} className="ui-public-cta">
                 {t('list.ctaCreateProfile')}
               </Link>
               <Link href={ROUTES.public.itHilfe} className="ui-public-cta-ghost">

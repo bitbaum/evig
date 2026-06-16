@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-15
-last_modified_summary: Deploy SSOT — push-to-deploy to revampit.orangecat.ch (husky + GitHub Actions)
+last_modified_date: 2026-06-16
+last_modified_summary: Customer journeys IA — IT-Hilfe hub, techniker under /it-hilfe/techniker
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -68,7 +68,18 @@ scripts/db/migrations/    # Migration scripts (PROTECTED)
 
 ---
 
-## Swiss Context
+## Customer journeys (public IA)
+
+People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
+
+| Journey | Entry | Routes |
+|---------|--------|--------|
+| **Hardware** | Marktplatz → Kaufen & verkaufen | `/marketplace`, `/shop`, `/marketplace/sell` |
+| **IT help** | Marktplatz → IT-Hilfe hub | `/it-hilfe` (hub), `/it-hilfe/create`, `/it-hilfe/techniker`, `/it-hilfe/anfragen` |
+
+Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav entries for “Hilfe suchen” vs “Techniker finden” — one hub, three paths inside.
+
+---
 
 - **Language**: Swiss High German ("ss" not "ß", "Velo" not "Fahrrad")
 - **Currency**: CHF (Swiss Francs)

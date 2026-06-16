@@ -124,7 +124,14 @@
       "projectCompiratDesc": "PC リファービッシュの歴史的取り組み。",
       "sectionAllProjects": "すべてのプロジェクト",
       "sectionDevices": "機器",
-      "sectionHelp": "サポート"
+      "sectionHelp": "サポート",
+      "sectionBuySell": "Buy & sell",
+      "sectionItHelp": "IT help",
+      "requestHelp": "Request help",
+      "viewSection": "Overview",
+      "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "itHelpHub": "IT Help",
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",
@@ -288,6 +295,7 @@
     "openingHoursMonday": "月: {hours}",
     "openingHoursTueFri": "火–金: {hours}",
     "transparency": "透明性",
+    "changelog": "Changelog",
     "locations": {
       "store": "店舗",
       "warehouse": "倉庫",
@@ -2730,6 +2738,44 @@
         "generic": "問題が発生しました。もう一度お試しください。",
         "network": "ネットワークエラー。もう一度お試しください。"
       }
+    },
+    "hub": {
+      "eyebrow": "IT Help",
+      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "subtitle": "RevampIT connects you with community technicians — free or fairly paid.",
+      "paths": {
+        "request": {
+          "title": "Request help",
+          "description": "Describe your issue and receive offers from technicians",
+          "cta": "Start a request →"
+        },
+        "technicians": {
+          "title": "Choose a technician",
+          "description": "Browse profiles and contact someone directly",
+          "cta": "Find technicians →"
+        },
+        "browse": {
+          "title": "Open requests",
+          "description": "Help as a technician — requests near you",
+          "cta": "Browse requests →"
+        }
+      },
+      "account": {
+        "myRequests": "My requests",
+        "myOffers": "My offers"
+      },
+      "offerHelp": {
+        "title": "Can you repair devices?",
+        "description": "Register as a technician and help people nearby.",
+        "cta": "Become a technician"
+      }
+    },
+    "browse": {
+      "title": "Open requests",
+      "subtitle": "For technicians offering help",
+      "backToHub": "Back to IT Help",
+      "createRequest": "Request help",
+      "requestCount": "{count, plural, one {# request} other {# requests}}"
     }
   },
   "knowhow": {

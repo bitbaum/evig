@@ -124,7 +124,14 @@
       "projectCompiratDesc": "PC 재정비의 역사적 활동.",
       "sectionAllProjects": "모든 프로젝트",
       "sectionDevices": "기기",
-      "sectionHelp": "도움말"
+      "sectionHelp": "도움말",
+      "sectionBuySell": "Buy & sell",
+      "sectionItHelp": "IT help",
+      "requestHelp": "Request help",
+      "viewSection": "Overview",
+      "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "itHelpHub": "IT Help",
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "언어",
     "missionHistory": "미션 & 역사",
@@ -288,6 +295,7 @@
     "openingHoursMonday": "월: {hours}",
     "openingHoursTueFri": "화–금: {hours}",
     "transparency": "투명성",
+    "changelog": "Changelog",
     "locations": {
       "store": "매장",
       "warehouse": "창고",
@@ -2730,6 +2738,44 @@
         "generic": "문제가 발생했습니다. 다시 시도해주세요.",
         "network": "네트워크 오류. 다시 시도해주세요."
       }
+    },
+    "hub": {
+      "eyebrow": "IT Help",
+      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "subtitle": "RevampIT connects you with community technicians — free or fairly paid.",
+      "paths": {
+        "request": {
+          "title": "Request help",
+          "description": "Describe your issue and receive offers from technicians",
+          "cta": "Start a request →"
+        },
+        "technicians": {
+          "title": "Choose a technician",
+          "description": "Browse profiles and contact someone directly",
+          "cta": "Find technicians →"
+        },
+        "browse": {
+          "title": "Open requests",
+          "description": "Help as a technician — requests near you",
+          "cta": "Browse requests →"
+        }
+      },
+      "account": {
+        "myRequests": "My requests",
+        "myOffers": "My offers"
+      },
+      "offerHelp": {
+        "title": "Can you repair devices?",
+        "description": "Register as a technician and help people nearby.",
+        "cta": "Become a technician"
+      }
+    },
+    "browse": {
+      "title": "Open requests",
+      "subtitle": "For technicians offering help",
+      "backToHub": "Back to IT Help",
+      "createRequest": "Request help",
+      "requestCount": "{count, plural, one {# request} other {# requests}}"
     }
   },
   "knowhow": {
@@ -7239,7 +7285,8 @@
       "community": "커뮤니티",
       "gratis": "무료",
       "kulturlegi": "KulturLegi",
-      "loadingError": "기술자를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요."
+      "loadingError": "기술자를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.",
+      "backToHub": "Back to IT Help"
     },
     "detail": {
       "backToList": "기술자 목록으로",

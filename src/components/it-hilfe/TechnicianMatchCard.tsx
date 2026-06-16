@@ -6,7 +6,7 @@
  * Renders a technician with the skill-match metadata + an inline "contact
  * me about this request" button. Used by TechnicianMapList on the IT-Hilfe
  * request detail page. The plain display variant (without contact button)
- * lives at src/app/[locale]/techniker/TechnicianCard.tsx and is what every
+ * lives at src/app/[locale]/it-hilfe/techniker/TechnicianCard.tsx and is what every
  * other surface uses.
  *
  * Was named HelperCard until QQQ.2 — renamed because there's no separate
@@ -24,6 +24,7 @@ import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { formatCentsToChf } from '@/lib/pricing'
 import { CONVERSATION_TYPES } from '@/config/database'
+import { ROUTES } from '@/config/routes'
 import type { Technician } from '@/types/technician'
 
 /**
@@ -33,7 +34,7 @@ import type { Technician } from '@/types/technician'
  * still ships the old key, will be normalized in QQQ.3).
  */
 export type TechnicianMatchInput = Pick<Technician,
-  | 'userId' | 'name' | 'bio'
+  | 'id' | 'userId' | 'name' | 'bio'
   | 'hourlyRateCents' | 'acceptsGratis' | 'acceptsKulturlegi'
   | 'postalCode' | 'city' | 'canton' | 'maxTravelKm'
   | 'skills'
@@ -111,7 +112,7 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
     <div className="card-shell p-6 hover:border-strong transition-all">
       {/* Helper Info */}
       <div className="mb-4">
-        <Link href={`/techniker/${helper.userId}`} className="hover:underline">
+        <Link href={ROUTES.public.technicianProfile(helper.id)} className="hover:underline">
           <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">{helper.name}</Heading>
         </Link>
         {helper.bio && (

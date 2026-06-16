@@ -2,29 +2,40 @@
   "home": {
     "meta": {
       "title": "Old Hardware. New Life. | Computer Repair & Linux in Switzerland",
-      "description": "Buy & sell used IT. Community-driven computer repair. Workshops on Linux, hardware and programming."
+      "description": "Buy refurbished IT, browse community listings, and find technicians or repair shops for repairs."
     },
     "hero": {
       "title": "Old Hardware. New Life.",
+      "titlePrimary": "Old Hardware.",
+      "titleSecondary": "New life.",
+      "lede": "Buy verified refurbished IT or find help when your device needs repair.",
+      "sublede": "Swiss non-profit since 2003 — with a shop, community marketplace, workshop, and technician network.",
       "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
-      "ctaDiscover": "Explore now",
-      "ctaAbout": "About us"
+      "ctaDonate": "Buy refurbished IT",
+      "ctaDiscover": "Find repair help",
+      "ctaAbout": "About us",
+      "positioning": "Swiss circular-economy nonprofit since 2003"
     },
     "actions": {
+      "eyebrow": "THREE WAYS",
       "heading": "What would you like to do?",
+      "subtitle": "Buy, repair, learn, or contribute — start with the job you need done today.",
       "sell": {
-        "title": "Got an old device?",
-        "subtitle": "Sell or give it away in 2 minutes — free with no fees.",
-        "primaryLabel": "Browse marketplace",
-        "secondaryLabel": "Sell now"
+        "label": "01 / SHOP",
+        "title": "Need refurbished IT?",
+        "subtitle": "Verified devices from the RevampIT shop — local, transparent, and ready to use.",
+        "primaryLabel": "Go to shop",
+        "secondaryLabel": "Browse marketplace"
       },
       "repair": {
+        "label": "02 / REPAIR",
         "title": "Computer broken?",
-        "subtitle": "Technicians near you can help — or offer repairs yourself.",
-        "primaryLabel": "Get help",
+        "subtitle": "Technicians and workshops near you can help — or offer repairs yourself.",
+        "primaryLabel": "Find technicians",
         "secondaryLabel": "Become a technician"
       },
       "learn": {
+        "label": "03 / WORKSHOPS",
         "title": "Want to learn something new?",
         "subtitle": "Hands-on workshops on Linux, hardware repair, programming and AI.",
         "primaryLabel": "View workshops",
@@ -35,30 +46,37 @@
       "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
       "linkLabel": "IT services"
     },
-    "impact": {
-      "title": "Our Impact",
-      "subtitle": "What we've achieved together",
-      "moreLink": "More about our impact"
-    },
     "community": {
+      "eyebrow": "GET INVOLVED",
       "heading": "Join the Community",
       "subtitle": "Use it, contribute, or support — every bit counts.",
       "use": {
         "title": "Use",
-        "desc": "Buy, sell, repair — for free"
+        "desc": "Buy, sell, repair — for free",
+        "cta": "To the shop"
       },
       "volunteer": {
         "title": "Volunteer",
-        "desc": "Share your knowledge as a volunteer technician"
+        "desc": "Share your knowledge as a volunteer technician",
+        "cta": "Get involved"
       },
       "donate": {
         "title": "Support",
-        "desc": "Donate devices or money to the association"
+        "desc": "Donate devices or money to the association",
+        "cta": "Donate now"
       },
       "membership": {
         "title": "Become a member",
-        "desc": "Vote and actively shape the association"
+        "desc": "Vote and actively shape the association",
+        "cta": "Become a member"
       }
+    },
+    "finalCta": {
+      "eyebrow": "READY?",
+      "heading": "Need a device built to last?",
+      "subtitle": "The shop has verified refurbished IT. If something is broken, repair search connects you with suitable technicians and workshops.",
+      "button": "Go to shop",
+      "note": "Device donations still live under Get involved."
     },
     "newsletter": {
       "title": "Stay up to date",

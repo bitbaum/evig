@@ -11,7 +11,6 @@ import {
   ChevronRight,
   Wrench,
   Heart,
-  Users,
 } from 'lucide-react'
 import { IT_HILFE } from '@/config/it-hilfe'
 import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard'
@@ -22,11 +21,13 @@ import { Input } from '@/components/ui/input'
 import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
 import { ROUTES } from '@/config/routes'
 import { ItHilfeFilters } from './ItHilfeFilters'
+import { ArrowLeft } from 'lucide-react'
 
-export default function ITHilfePage() {
+export default function ITHilfeBrowseRequestsPage() {
   const { data: session } = useSession()
-  const t = useTranslations('itHelp.page')
-  const tEye = useTranslations('common.eyebrows')
+  const t = useTranslations('itHelp.browse')
+  const tPage = useTranslations('itHelp.page')
+  const tHub = useTranslations('itHelp.hub')
 
   const {
     requests,
@@ -54,12 +55,19 @@ export default function ITHilfePage() {
       {/* ── Header ─────────────────────────────────────────────────── */}
       <section className="border-b border-subtle py-10 sm:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Link
+            href={ROUTES.public.itHilfe}
+            className="mb-6 inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-action"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            {t('backToHub')}
+          </Link>
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">IT-HILFE</div>
+              <div className="ui-public-eyebrow">{tHub('eyebrow')}</div>
               <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
-                {t('requestCount', { count: total })} · {t('tagline')}
+                {t('requestCount', { count: total })} · {t('subtitle')}
               </p>
             </div>
             <div className="flex flex-wrap gap-3 md:justify-self-end">
@@ -68,14 +76,7 @@ export default function ITHilfePage() {
                 className="ui-public-cta inline-flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                {t('getHelp')}
-              </Link>
-              <Link
-                href={IT_HILFE.routes.technicians}
-                className="ui-public-cta-ghost inline-flex items-center gap-2"
-              >
-                <Users className="w-4 h-4" />
-                {t('findTechnician')}
+                {t('createRequest')}
               </Link>
             </div>
           </div>
@@ -87,8 +88,8 @@ export default function ITHilfePage() {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder={t('searchPlaceholder')}
-                aria-label={t('searchAriaLabel')}
+                placeholder={tPage('searchPlaceholder')}
+                aria-label={tPage('searchAriaLabel')}
                 className="pl-10 pr-28 text-sm"
               />
               <Button
@@ -97,7 +98,7 @@ export default function ITHilfePage() {
                 size="sm"
                 className="absolute right-1.5 top-1/2 -translate-y-1/2"
               >
-                {t('searchButton')}
+                {tPage('searchButton')}
               </Button>
             </div>
           </form>
@@ -110,14 +111,14 @@ export default function ITHilfePage() {
           <div className="mb-6 flex flex-wrap gap-3">
             <Link href={IT_HILFE.routes.register} className="ui-public-cta-ghost inline-flex items-center gap-2">
               <Wrench className="w-4 h-4" />
-              {t('becomeTechnician')}
+              {tHub('offerHelp.cta')}
             </Link>
             <Link href={IT_HILFE.routes.my} className="ui-public-cta-ghost inline-flex items-center gap-2">
-              {t('myRequests')}
+              {tPage('myRequests')}
             </Link>
             <Link href={IT_HILFE.routes.myOffers} className="ui-public-cta-ghost inline-flex items-center gap-2">
               <Heart className="w-4 h-4" />
-              {t('myOffers')}
+              {tPage('myOffers')}
             </Link>
           </div>
         )}
@@ -138,18 +139,18 @@ export default function ITHilfePage() {
             message={error}
             variant="card"
             onRetry={() => retry()}
-            retryLabel={t('retryButton')}
+            retryLabel={tPage('retryButton')}
           />
         )}
 
         {!loading && !error && requests.length === 0 && (
           <EmptyState
             icon={Wrench}
-            title={t('emptyTitle')}
-            message={hasActiveFilters ? t('emptyMessageFiltered') : t('emptyMessageEmpty')}
+            title={tPage('emptyTitle')}
+            message={hasActiveFilters ? tPage('emptyMessageFiltered') : tPage('emptyMessageEmpty')}
             action={
               session?.user
-                ? { label: t('createRequestButton'), href: IT_HILFE.routes.create }
+                ? { label: tPage('createRequestButton'), href: IT_HILFE.routes.create }
                 : undefined
             }
           />
@@ -164,25 +165,25 @@ export default function ITHilfePage() {
         )}
 
         {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-2 pt-10" aria-label={t('pagination')}>
+          <nav className="flex items-center justify-center gap-2 pt-10" aria-label={tPage('pagination')}>
             <Button
               variant="outline"
               size="icon"
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              aria-label={t('prevPage')}
+              aria-label={tPage('prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
             <span className="ui-public-meta font-mono tabular-nums px-4" aria-current="page">
-              {t('pageOf', { current: currentPage, total: totalPages })}
+              {tPage('pageOf', { current: currentPage, total: totalPages })}
             </span>
             <Button
               variant="outline"
               size="icon"
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              aria-label={t('nextPage')}
+              aria-label={tPage('nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
@@ -192,18 +193,17 @@ export default function ITHilfePage() {
         {/* CTA — become technician */}
         {!session?.user && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
-            <div className="ui-public-eyebrow">{tEye('getInvolved')}</div>
-            <h2 className="ui-public-display-md mt-3">{t('ctaTitle')}</h2>
-            <p className="ui-public-section-lede mt-4 mx-auto">{t('ctaDescription')}</p>
+            <h2 className="ui-public-display-md">{tHub('offerHelp.title')}</h2>
+            <p className="ui-public-section-lede mt-4 mx-auto">{tHub('offerHelp.description')}</p>
             <div className="ui-public-cta-row mt-8">
               <Link
                 href={`/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
                 className="ui-public-cta"
               >
-                {t('ctaCreateProfile')}
+                {tHub('offerHelp.cta')}
               </Link>
               <Link href={ROUTES.public.itHilfe} className="ui-public-cta-ghost">
-                {t('ctaMoreInfo')}
+                {t('backToHub')}
               </Link>
             </div>
           </section>

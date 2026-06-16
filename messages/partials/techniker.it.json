@@ -6,6 +6,7 @@
     },
     "list": {
       "title": "Tecnici",
+      "backToHub": "Back to IT Help",
       "available": "{count, plural, one {# tecnico} other {# tecnici}} disponibili",
       "becomeTechnician": "Diventa tecnico",
       "searchPlaceholder": "Nome, città, descrizione...",

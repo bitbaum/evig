@@ -1,6 +1,7 @@
 import React from 'react'
-import { ShoppingBag, Wrench, Lightbulb, type LucideIcon } from 'lucide-react'
+import { type LucideIcon } from 'lucide-react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
+import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
 
 /**
  * Navigation Configuration - SSOT for all navigation data
@@ -11,8 +12,7 @@ import { ORG, EXTERNAL_LINKS } from '@/config/org'
  * - No "coming soon" items in nav (show when ready)
  * - Consolidated shop experience
  * - Progressive disclosure (simple → detailed)
- * - Featured items inside dropdowns get a hero-card treatment so the highest-value
- *   destinations (marketplace of things, marketplace of people) read as the primary action
+ * - Mega menus use mono section eyebrows + equal-weight link rows (x.ai pattern)
  */
 
 export interface NavigationItem {
@@ -55,10 +55,9 @@ export interface NavigationItem {
  *
  * Key decision: Shop + Marketplace (P2P) + IT-Hilfe live together under "Marktplatz" because
  * a customer looking for tech or help doesn't care about the organizational boundary between
- * RevampIT inventory vs community listings. Inside Marktplatz, two items are `featured`:
- *  - Community-Inserate (the marketplace of THINGS)
- *  - Techniker finden    (the marketplace of PEOPLE / repairers)
- * The featured pair renders as hero cards so visitors land on the right page without scanning.
+ * RevampIT inventory vs community listings. Inside Marktplatz, demand-side
+ * links come before supply-side links: buy from RevampIT/community first,
+ * find repairers next, then create listings or become a technician.
  */
 export const mainNavigation: NavigationItem[] = [
   {
@@ -104,9 +103,7 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'projectMonitorUpcycling',
         href: '/projects/upcycling',
         descriptionKey: 'projectMonitorUpcyclingDesc',
-        featured: true,
-        featuredIcon: Lightbulb,
-        featuredTheme: 'projects',
+        badge: 'new',
       },
       {
         name: 'Hardware-Entwicklung',
@@ -215,80 +212,8 @@ export const mainNavigation: NavigationItem[] = [
     nameKey: 'marketplace',
     href: '/marketplace',
     descriptionKey: 'marketplaceDesc',
-    badge: 'new',
     isMultiColumn: true,
-    // Two clear columns — "things" on the left, "people" on the right.
-    // Each column has one featured hero card so visitors orient at a glance:
-    //   ⤷ Geräte → marketplace of THINGS (Community-Inserate is the hero)
-    //   ⤷ Hilfe  → marketplace of PEOPLE (Techniker finden is the hero)
-    // Previous layout had 4 sections (Geräte kaufen, Verkaufen, IT-Hilfe,
-    // Abo-Tauschbörse) which obscured the things↔people dichotomy.
-    // Abo-Pools moved to Mitmachen — it's a resource-sharing engagement
-    // model, not a buy/sell marketplace flow.
-    subItems: [
-      // ─── Column 1: Geräte (things) ─────────────────────────────────
-      {
-        name: 'Geräte',
-        nameKey: 'sectionDevices',
-        href: '/marketplace',
-        isSection: true,
-      },
-      {
-        name: 'Community-Inserate',
-        nameKey: 'communityListings',
-        href: '/marketplace',
-        descriptionKey: 'communityListingsDesc',
-        featured: true,
-        featuredIcon: ShoppingBag,
-        featuredTheme: 'marketplace',
-      },
-      {
-        name: `${ORG.name} Shop`,
-        nameKey: 'shopRevampIT',
-        href: '/shop',
-        descriptionKey: 'orgShopDesc',
-      },
-      {
-        name: 'Ladenlokal Zürich',
-        nameKey: 'storeZurich',
-        href: '/shop#ladenlokal',
-        descriptionKey: 'storeDesc',
-      },
-      {
-        name: 'Inserat erstellen',
-        nameKey: 'createListing',
-        href: '/marketplace/sell',
-        descriptionKey: 'createListingDesc',
-      },
-      // ─── Column 2: Hilfe (people) ──────────────────────────────────
-      {
-        name: 'Hilfe',
-        nameKey: 'sectionHelp',
-        href: '/it-hilfe',
-        isSection: true,
-      },
-      {
-        name: 'Techniker finden',
-        nameKey: 'findTechnicians',
-        href: '/techniker',
-        descriptionKey: 'findTechnicianDesc',
-        featured: true,
-        featuredIcon: Wrench,
-        featuredTheme: 'repairers',
-      },
-      {
-        name: 'Hilfe suchen',
-        nameKey: 'findHelp',
-        href: '/it-hilfe',
-        descriptionKey: 'findHelpDesc',
-      },
-      {
-        name: 'Techniker werden',
-        nameKey: 'becomeTechnician',
-        href: '/profil/techniker',
-        descriptionKey: 'becomeTechnicianDesc',
-      },
-    ],
+    subItems: buildMarktplatzNavigationItems(),
   },
   {
     name: 'Lernen',

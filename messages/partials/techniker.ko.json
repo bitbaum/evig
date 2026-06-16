@@ -6,6 +6,7 @@
     },
     "list": {
       "title": "기술자",
+      "backToHub": "Back to IT Help",
       "available": "{count, plural, other {# 명의}} 기술자 이용 가능",
       "becomeTechnician": "기술자 되기",
       "searchPlaceholder": "이름, 도시, 설명...",

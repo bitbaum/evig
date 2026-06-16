@@ -69,6 +69,7 @@ export const ROUTES = {
   public: {
     home:                     '/',
     shop:                     '/shop',
+    services:                 '/services',
     shopSearch:               '/shop/search',
     marketplace:              '/marketplace',
     marketplaceSell:          '/marketplace/sell',
@@ -76,12 +77,14 @@ export const ROUTES = {
     marketplaceCheckout:      (id: string) => `/marketplace/checkout/${id}`,
     seller:                   (id: string) => `/sellers/${id}`,
     itHilfe:                  '/it-hilfe',
+    itHilfeBrowseRequests:    '/it-hilfe/anfragen',
     itHilfeCreate:            '/it-hilfe/create',
     itHilfeMy:                '/it-hilfe/my',
     itHilfeMyOffers:          '/it-hilfe/my/offers',
     itHilfeRequest:           (id: string) => `/it-hilfe/${id}`,
-    techniker:                '/techniker',
-    technicianProfile:        (id: string) => `/techniker/${id}`,
+    /** Technician directory — lives under IT-Hilfe hub (not a separate product). */
+    techniker:                '/it-hilfe/techniker',
+    technicianProfile:        (id: string) => `/it-hilfe/techniker/${id}`,
     blog:                     '/blog',
     blogPost:                 (slug: string) => `/blog/${slug}`,
     blogSubmit:               '/blog/submit',
@@ -103,5 +106,6 @@ export const ROUTES = {
     agb:                      '/agb',
     transparenz:              '/transparenz',
     mitgliedWerden:           '/mitglied-werden',
+    changelog:                '/changelog',
   },
 } as const

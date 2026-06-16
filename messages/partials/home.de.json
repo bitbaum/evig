@@ -2,29 +2,40 @@
   "home": {
     "meta": {
       "title": "Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz",
-      "description": "Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung."
+      "description": "Refurbished IT kaufen, Community-Inserate entdecken und Techniker oder Werkstätten für Reparaturen finden."
     },
     "hero": {
       "title": "Alte Hardware. Neues Leben.",
+      "titlePrimary": "Alte Hardware.",
+      "titleSecondary": "Neues Leben.",
+      "lede": "Kaufe geprüfte refurbished IT oder finde Hilfe, wenn dein Gerät repariert werden soll.",
+      "sublede": "Schweizer Non-Profit seit 2003 — mit Shop, Community-Marktplatz, Werkstatt und Techniker-Netzwerk.",
       "subtitle": "Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt.",
-      "ctaDiscover": "Jetzt entdecken",
-      "ctaAbout": "Über uns"
+      "ctaDonate": "Refurbished IT kaufen",
+      "ctaDiscover": "Reparatur finden",
+      "ctaAbout": "Über uns",
+      "positioning": "Schweizer Non-Profit für Kreislaufwirtschaft · seit 2003"
     },
     "actions": {
+      "eyebrow": "DREI WEGE",
       "heading": "Was möchtest du tun?",
+      "subtitle": "Kaufen, reparieren lassen, lernen oder mitmachen — der Einstieg richtet sich nach dem, was du gerade brauchst.",
       "sell": {
-        "title": "Altes Gerät übrig?",
-        "subtitle": "Verkaufe oder verschenke es in 2 Minuten — kostenlos und ohne Gebühren.",
-        "primaryLabel": "Marktplatz entdecken",
-        "secondaryLabel": "Jetzt verkaufen"
+        "label": "01 / SHOP",
+        "title": "Refurbished IT kaufen?",
+        "subtitle": "Geprüfte Geräte aus dem RevampIT Shop — lokal, transparent und sofort einsatzbereit.",
+        "primaryLabel": "Zum Shop",
+        "secondaryLabel": "Marktplatz ansehen"
       },
       "repair": {
+        "label": "02 / REPARATUR",
         "title": "Computer kaputt?",
-        "subtitle": "Techniker in deiner Nähe helfen — oder biete selbst Reparaturen an.",
-        "primaryLabel": "Hilfe finden",
+        "subtitle": "Techniker und Werkstätten in deiner Nähe helfen — oder biete selbst Reparaturen an.",
+        "primaryLabel": "Techniker finden",
         "secondaryLabel": "Techniker werden"
       },
       "learn": {
+        "label": "03 / WORKSHOPS",
         "title": "Etwas Neues lernen?",
         "subtitle": "Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.",
         "primaryLabel": "Workshops ansehen",
@@ -35,30 +46,37 @@
       "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
       "linkLabel": "IT-Dienstleistungen"
     },
-    "impact": {
-      "title": "Unsere Wirkung",
-      "subtitle": "Was wir gemeinsam erreicht haben",
-      "moreLink": "Mehr über unsere Wirkung"
-    },
     "community": {
+      "eyebrow": "MITMACHEN",
       "heading": "Werde Teil der Community",
       "subtitle": "Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.",
       "use": {
         "title": "Nutzen",
-        "desc": "Kaufen, verkaufen, reparieren — kostenlos"
+        "desc": "Kaufen, verkaufen, reparieren — kostenlos",
+        "cta": "Zum Shop"
       },
       "volunteer": {
         "title": "Mithelfen",
-        "desc": "Teile dein Wissen als freiwilliger Techniker"
+        "desc": "Teile dein Wissen als freiwilliger Techniker",
+        "cta": "Mitmachen"
       },
       "donate": {
         "title": "Unterstützen",
-        "desc": "Spende Geräte oder Geld für den Verein"
+        "desc": "Spende Geräte oder Geld für den Verein",
+        "cta": "Jetzt spenden"
       },
       "membership": {
         "title": "Mitglied werden",
-        "desc": "Stimme mit und gestalte den Verein aktiv"
+        "desc": "Stimme mit und gestalte den Verein aktiv",
+        "cta": "Mitglied werden"
       }
+    },
+    "finalCta": {
+      "eyebrow": "BEREIT?",
+      "heading": "Brauchst du ein Gerät, das länger hält?",
+      "subtitle": "Im Shop findest du geprüfte refurbished IT. Wenn etwas kaputt ist, führt dich die Reparatur-Suche zu passenden Technikern und Werkstätten.",
+      "button": "Zum Shop",
+      "note": "Geräte spenden bleibt möglich unter Mitmachen."
     },
     "newsletter": {
       "title": "Bleib auf dem Laufenden",

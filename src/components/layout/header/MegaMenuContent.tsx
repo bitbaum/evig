@@ -1,15 +1,20 @@
 'use client'
 
 /**
- * Mega menu dropdown content
+ * Mega menu dropdown — x.ai-inspired, design-system strict.
+ *
+ * Every dropdown uses the same contract:
+ *   • Mono uppercase section eyebrow (when grouped)
+ *   • Link rows: title + optional one-line description (when configured)
+ *   • Optional section overview link at the bottom of each column
+ *
+ * Descriptions come from navigation config + nav.items.*Desc i18n keys.
  */
 
 import { Link } from '@/i18n/navigation'
 import { ExternalLink, ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
-import Heading from '@/components/ui/Heading'
-import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import type { NavigationItem } from '@/config/navigation'
 import type { NavigationGroup } from './utils'
 import { navItemDescription, navItemLabel, type NavTranslator } from './nav-i18n'
@@ -19,6 +24,19 @@ interface MegaMenuContentProps {
   subItems: NavigationItem[]
   hasMultipleGroups: boolean
   onClose: () => void
+}
+
+type TFn = ReturnType<typeof useTranslations<'nav'>>
+
+function getLabel(item: NavigationItem, t: TFn): string {
+  return item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
+}
+
+function getDescription(item: NavigationItem, t: TFn): string | undefined {
+  if (item.descriptionKey) {
+    return navItemDescription(t as NavTranslator, item.descriptionKey)
+  }
+  return item.description
 }
 
 export function MegaMenuContent({
@@ -32,10 +50,9 @@ export function MegaMenuContent({
   return (
     <div
       className={cn(
-        'mt-2 bg-surface-base rounded-2xl border border-subtle',
-        'overflow-hidden',
+        'mt-2 overflow-hidden rounded-2xl border border-subtle bg-surface-base',
         'animate-in fade-in slide-in-from-top-2 duration-200',
-        hasMultipleGroups ? 'p-0' : 'p-2',
+        hasMultipleGroups ? 'p-0' : 'p-3',
       )}
     >
       {hasMultipleGroups ? (
@@ -47,17 +64,6 @@ export function MegaMenuContent({
   )
 }
 
-type TFn = ReturnType<typeof useTranslations<'nav'>>
-
-function getLabel(item: NavigationItem, t: TFn): string {
-  return item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
-}
-
-function getDescription(item: NavigationItem, t: TFn): string | undefined {
-  if (item.descriptionKey) return navItemDescription(t as NavTranslator, item.descriptionKey)
-  return item.description
-}
-
 function MultiColumnLayout({
   groups,
   onClose,
@@ -67,87 +73,20 @@ function MultiColumnLayout({
   onClose: () => void
   t: TFn
 }) {
-  // Dynamic grid columns based on number of sections
-  const gridCols = groups.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
+  const gridCols =
+    groups.length >= 3 ? 'lg:grid-cols-3' : groups.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
 
   return (
-    <div className={cn("grid divide-x divide-neutral-100 dark:divide-white/6", gridCols)}>
-      {groups.map((group, idx) => {
-        const featured = group.items.find((it) => it.featured)
-        const rest = group.items.filter((it) => !it.featured)
-        return (
-          <div key={idx} className="p-6 flex flex-col">
-            {group.section && (
-              <Heading level={3} className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-4">
-                {getLabel(group.section, t)}
-              </Heading>
-            )}
-            {featured && (
-              <FeaturedCard item={featured} onClose={onClose} t={t} />
-            )}
-            {rest.length > 0 && (
-              <ul className={cn('space-y-1', featured && 'mt-3')}>
-                {rest.map((subItem) => (
-                  <li key={subItem.name}>
-                    <MenuLink item={subItem} onClose={onClose} t={t} />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )
-      })}
+    <div className={cn('grid divide-y divide-subtle lg:divide-x lg:divide-y-0', gridCols)}>
+      {groups.map((group, idx) => (
+        <MegaMenuSection
+          key={idx}
+          group={group}
+          onClose={onClose}
+          t={t}
+        />
+      ))}
     </div>
-  )
-}
-
-function FeaturedCard({
-  item,
-  onClose,
-  t,
-}: {
-  item: NavigationItem
-  onClose: () => void
-  t: TFn
-}) {
-  const Icon = item.featuredIcon
-  const themeKey = item.featuredTheme ?? 'marketplace'
-  const badge = DESIGN_TOKENS.iconBadges[themeKey]
-  return (
-    <Link
-      href={item.href}
-      onClick={onClose}
-      className={cn(
-        'group block rounded-xl p-4',
-        'border border-primary-300 dark:border-primary-500/30',
-        'ring-1 ring-primary-200 dark:ring-primary-500/20',
-        'bg-surface-base hover:bg-surface-raised dark:hover:bg-surface-base/4',
-        'transition-colors duration-200'
-      )}
-      {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
-    >
-      <div className="flex items-start gap-3">
-        {Icon && (
-          <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', badge.bg)}>
-            <Icon className={cn('h-5 w-5', badge.text)} aria-hidden="true" />
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-text-primary group-hover:text-action transition-colors">
-              {getLabel(item, t)}
-            </span>
-            <ItemBadge badge={item.badge} />
-          </div>
-          {(item.descriptionKey || item.description) && (
-            <p className="mt-1 text-sm text-text-secondary line-clamp-2">
-              {getDescription(item, t)}
-            </p>
-          )}
-        </div>
-        <ArrowRight className="w-4 h-4 text-text-secondary group-hover:text-action group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
-      </div>
-    </Link>
   )
 }
 
@@ -160,65 +99,56 @@ function SingleColumnLayout({
   onClose: () => void
   t: TFn
 }) {
-  // Featured items (e.g. the active Monitor-Upcycling project) render as a
-  // hero card on top so the menu has a clear focal point. Rest of the list
-  // follows below.
-  const featured = items.find((it) => it.featured)
   const footerLink = items.find((it) => it.nameKey === 'sectionAllProjects')
-  const rest = items.filter((it) => !it.featured && it.nameKey !== 'sectionAllProjects')
+  const links = items.filter((it) => !it.isSection && it.nameKey !== 'sectionAllProjects')
+
   return (
-    <div className={cn(featured ? 'p-4' : 'py-2')}>
-      {featured && (
-        <div className="mb-2">
-          <FeaturedCard item={featured} onClose={onClose} t={t} />
-        </div>
-      )}
-      {rest.map((subItem) => (
-        <Link
-          key={subItem.name}
-          href={subItem.href}
-          onClick={onClose}
-          className={cn(
-            "group flex items-center gap-3 px-4 py-3 rounded-xl",
-            "transition-all duration-200",
-            "hover:bg-surface-raised dark:hover:bg-surface-base/4"
-          )}
-          {...(subItem.external && { target: "_blank", rel: "noopener noreferrer" })}
-        >
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <span className="font-medium text-text-primary group-hover:text-action dark:group-hover:text-action transition-colors">
-                {getLabel(subItem, t)}
-              </span>
-              <ItemBadge badge={subItem.badge} />
-              {subItem.external && <ExternalLink className="w-3 h-3 text-text-secondary" />}
-            </div>
-            {(subItem.descriptionKey || subItem.description) && (
-              <p className="mt-0.5 text-sm text-text-secondary line-clamp-2">
-                {getDescription(subItem, t)}
-              </p>
-            )}
-          </div>
-          <ArrowRight className="w-4 h-4 text-text-muted dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100" />
-        </Link>
-      ))}
+    <div>
+      <ul className="space-y-1">
+        {links.map((item) => (
+          <li key={item.nameKey ?? item.name}>
+            <MegaMenuLink item={item} onClose={onClose} t={t} />
+          </li>
+        ))}
+      </ul>
       {footerLink && (
-        <div className="mt-2 border-t border-subtle pt-2 px-2">
-          <Link
-            href={footerLink.href}
-            onClick={onClose}
-            className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary hover:text-action hover:bg-surface-raised transition-colors"
-          >
-            {getLabel(footerLink, t)}
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
+        <SectionOverviewLink item={footerLink} onClose={onClose} t={t} />
       )}
     </div>
   )
 }
 
-function MenuLink({
+function MegaMenuSection({
+  group,
+  onClose,
+  t,
+}: {
+  group: NavigationGroup
+  onClose: () => void
+  t: TFn
+}) {
+  return (
+    <div className="flex flex-col p-5 sm:p-6">
+      {group.section && (
+        <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+          {getLabel(group.section, t)}
+        </p>
+      )}
+      <ul className="space-y-1">
+        {group.items.map((item) => (
+          <li key={item.nameKey ?? item.name}>
+            <MegaMenuLink item={item} onClose={onClose} t={t} />
+          </li>
+        ))}
+      </ul>
+      {group.section && (
+        <SectionOverviewLink item={group.section} onClose={onClose} t={t} />
+      )}
+    </div>
+  )
+}
+
+function MegaMenuLink({
   item,
   onClose,
   t,
@@ -227,32 +157,69 @@ function MenuLink({
   onClose: () => void
   t: TFn
 }) {
+  const label = getLabel(item, t)
+  const description = getDescription(item, t)
+
   return (
     <Link
       href={item.href}
       onClick={onClose}
       className={cn(
-        "group flex items-start gap-3 p-3 -mx-3 rounded-xl",
-        "transition-all duration-200",
-        "hover:bg-surface-raised dark:hover:bg-surface-base/4"
+        'group flex items-start justify-between gap-3 rounded-lg px-3 py-3',
+        'transition-colors duration-200',
+        'hover:bg-surface-raised',
+        'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2',
       )}
-      {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
+      {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
     >
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="font-medium text-text-primary group-hover:text-action dark:group-hover:text-action transition-colors">
-            {getLabel(item, t)}
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2">
+          <span className="text-sm font-medium text-text-primary transition-colors group-hover:text-action">
+            {label}
           </span>
           <ItemBadge badge={item.badge} />
-          {item.external && <ExternalLink className="w-3 h-3 text-text-secondary" />}
-        </div>
-        {(item.descriptionKey || item.description) && (
-          <p className="mt-1 text-sm text-text-secondary line-clamp-2">
-            {getDescription(item, t)}
-          </p>
+          {item.external && (
+            <ExternalLink className="h-3 w-3 shrink-0 text-text-tertiary" aria-hidden="true" />
+          )}
+        </span>
+        {description && (
+          <span className="mt-0.5 block text-xs leading-snug text-text-secondary line-clamp-2">
+            {description}
+          </span>
         )}
-      </div>
-      <ArrowRight className="w-4 h-4 text-text-muted dark:text-text-secondary group-hover:text-action dark:group-hover:text-action group-hover:translate-x-0.5 transition-all opacity-0 group-hover:opacity-100 mt-1 shrink-0" />
+      </span>
+      <ArrowRight
+        className="mt-0.5 h-3.5 w-3.5 shrink-0 text-text-tertiary opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 group-hover:text-action"
+        aria-hidden="true"
+      />
+    </Link>
+  )
+}
+
+function SectionOverviewLink({
+  item,
+  onClose,
+  t,
+}: {
+  item: NavigationItem
+  onClose: () => void
+  t: TFn
+}) {
+  const overviewLabel = navItemLabel(t as NavTranslator, 'viewSection')
+
+  return (
+    <Link
+      href={item.href}
+      onClick={onClose}
+      className={cn(
+        'mt-4 inline-flex items-center gap-1.5 px-3 py-2',
+        'font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary',
+        'transition-colors hover:text-action',
+      )}
+      {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+    >
+      {overviewLabel}
+      <ArrowRight className="h-3 w-3" aria-hidden="true" />
     </Link>
   )
 }
@@ -260,14 +227,11 @@ function MenuLink({
 function ItemBadge({ badge }: { badge?: string }) {
   const t = useTranslations('nav.badge')
   if (!badge) return null
-  // `badge` in navigation config is an i18n key (e.g. "new"), not a literal.
-  // Render the translated text; fall back to the raw key on a miss so we
-  // never show empty space.
   const label = ((): string => {
     try { return t(badge as never) } catch { return badge }
   })()
   return (
-    <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-action-muted text-action rounded-full">
+    <span className="inline-flex shrink-0 items-center rounded-full bg-action-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-action">
       {label}
     </span>
   )

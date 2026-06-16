@@ -8,6 +8,7 @@ import { StarRating } from '@/components/ui/StarRating'
 import { Button } from '@/components/ui/button'
 import { type TechnicianProfile } from './types'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import { ROUTES } from '@/config/routes'
 import { formatCentsToChf } from '@/lib/pricing'
 
 interface TechnicianCardProps {
@@ -30,7 +31,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
               <User className="w-6 h-6 text-text-tertiary" />
             </div>
             <div>
-              <Link href={`/techniker/${technician.id}`} className="hover:underline">
+              <Link href={ROUTES.public.technicianProfile(technician.id)} className="hover:underline">
                 <Heading level={3} className="font-semibold text-text-primary">
                   {isProfessional
                     ? (technician.businessName ?? technician.name)
@@ -148,7 +149,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         </div>
 
         {/* CTA */}
-        <Button as={Link} href={`/techniker/${technician.id}`} variant="primary" className="w-full justify-center">
+        <Button as={Link} href={ROUTES.public.technicianProfile(technician.id)} variant="primary" className="w-full justify-center">
           {t('viewProfile')}
         </Button>
       </div>

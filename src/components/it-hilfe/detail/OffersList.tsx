@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { getOfferStatusById, getSkillById, OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
+import { ROUTES } from '@/config/routes'
 import type { Offer } from './types'
 
 interface OffersListProps {
@@ -64,7 +65,7 @@ export function OffersList({
                     {offer.repairerProfile ? (
                       <div className="flex items-center gap-2 text-sm">
                         <Link
-                          href={`/techniker/${offer.repairerProfile.id}`}
+                          href={ROUTES.public.technicianProfile(offer.repairerProfile.id)}
                           className="text-action hover:text-action font-medium"
                         >
                           {offer.repairerProfile.businessName || t('technicianProfileFallback')}

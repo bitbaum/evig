@@ -6,6 +6,7 @@
     },
     "list": {
       "title": "Technicians",
+      "backToHub": "Back to IT Help",
       "available": "{count, plural, one {# technician} other {# technicians}} available",
       "availableEmpty": "Coming soon — be part of the first wave",
       "becomeTechnician": "Become a technician",

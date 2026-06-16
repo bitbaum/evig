@@ -15,7 +15,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/config/routes'
-import { DESIGN_TOKENS } from '@/lib/design/tokens'
+import { groupItemsBySection } from '@/components/layout/header/utils'
 import { navItemDescription, navItemLabel, type NavTranslator } from '@/components/layout/header/nav-i18n'
 
 interface MobileMenuProps {
@@ -203,103 +203,62 @@ export function MobileMenu({
                         />
                       </Button>
 
-                      {/* Sub-items */}
+                      {/* Sub-items — grouped by section, same contract as desktop mega menu */}
                       <div
                         className={cn(
                           "overflow-hidden transition-all duration-300",
                           openDropdown === item.name
-                            ? "max-h-[1000px] opacity-100"
+                            ? "max-h-[1200px] opacity-100"
                             : "max-h-0 opacity-0"
                         )}
                       >
-                        <ul className="mt-1 ml-4 space-y-1 border-l-2 border-subtle dark:border-white/6 pl-4">
-                          {item.subItems.filter(sub => !sub.isSection).map((subItem) => {
-                            const subLabel = subItem.nameKey ? navItemLabel(t as NavTranslator, subItem.nameKey) : subItem.name
-                            if (subItem.featured && subItem.featuredIcon) {
-                              const FeaturedIcon = subItem.featuredIcon
-                              const badge = DESIGN_TOKENS.iconBadges[subItem.featuredTheme ?? 'marketplace']
-                              const featuredDesc = subItem.descriptionKey
-                                ? navItemDescription(t as NavTranslator, subItem.descriptionKey)
-                                : subItem.description
-                              return (
-                                <li key={subItem.name}>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    className={cn(
-                                      "group flex items-start gap-3 w-full text-left h-auto px-3 py-3 my-1.5",
-                                      "rounded-xl border border-primary-300 dark:border-primary-500/30",
-                                      "ring-1 ring-primary-200 dark:ring-primary-500/20",
-                                      "hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
-                                    )}
-                                    onClick={() => handleNavigation(subItem.href)}
-                                  >
-                                    <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg', badge.bg)}>
-                                      <FeaturedIcon className={cn('h-4 w-4', badge.text)} aria-hidden="true" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <div className="flex items-center gap-2">
-                                        <span className="text-sm font-semibold text-text-primary">{subLabel}</span>
-                                        {subItem.badge && (
-                                          <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
-                                            {badgeLabel(subItem.badge)}
-                                          </span>
-                                        )}
-                                      </div>
-                                      {featuredDesc && (
-                                        <p className="mt-0.5 text-xs text-text-secondary line-clamp-2">{featuredDesc}</p>
-                                      )}
-                                    </div>
-                                    <ArrowRight className="w-4 h-4 text-text-secondary shrink-0 mt-1" />
-                                  </Button>
-                                </li>
-                              )
+                        <div className="mt-2 ml-2 space-y-4 border-l border-subtle pl-4">
+                          {(() => {
+                            const groups = groupItemsBySection(item.subItems)
+                            const hasSections = groups.some((g) => g.section)
+                            if (hasSections) {
+                              return groups.map((group, groupIdx) => (
+                                <div key={groupIdx}>
+                                  {group.section && (
+                                    <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+                                      {group.section.nameKey
+                                        ? navItemLabel(t as NavTranslator, group.section.nameKey)
+                                        : group.section.name}
+                                    </p>
+                                  )}
+                                  <ul className="space-y-0.5">
+                                    {group.items.map((subItem) => (
+                                      <MobileSubLink
+                                        key={subItem.nameKey ?? subItem.name}
+                                        subItem={subItem}
+                                        t={t}
+                                        badgeLabel={badgeLabel}
+                                        onNavigate={handleNavigation}
+                                        onClose={onClose}
+                                      />
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))
                             }
                             return (
-                              <li key={subItem.name}>
-                                {subItem.external ? (
-                                  <a
-                                    href={subItem.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={cn(
-                                      "group flex items-center gap-2 py-2.5",
-                                      "text-sm text-text-secondary hover:text-text-primary dark:text-text-muted",
-                                      "transition-colors duration-200"
-                                    )}
-                                    onClick={onClose}
-                                  >
-                                    <span>{subLabel}</span>
-                                    {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
-                                        {badgeLabel(subItem.badge)}
-                                      </span>
-                                    )}
-                                    <ExternalLink className="w-3 h-3 text-text-tertiary" />
-                                  </a>
-                                ) : (
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    className={cn(
-                                      "group flex items-center gap-2 py-2.5 w-full text-left justify-start h-auto",
-                                      "text-sm text-text-secondary hover:text-text-primary dark:text-text-muted",
-                                      "transition-colors duration-200"
-                                    )}
-                                    onClick={() => handleNavigation(subItem.href)}
-                                  >
-                                    <span>{subLabel}</span>
-                                    {subItem.badge && (
-                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-action-muted text-action rounded-sm">
-                                        {badgeLabel(subItem.badge)}
-                                      </span>
-                                    )}
-                                  </Button>
-                                )}
-                              </li>
+                              <ul className="space-y-0.5">
+                                {item.subItems
+                                  .filter((sub) => !sub.isSection)
+                                  .map((subItem) => (
+                                    <MobileSubLink
+                                      key={subItem.nameKey ?? subItem.name}
+                                      subItem={subItem}
+                                      t={t}
+                                      badgeLabel={badgeLabel}
+                                      onNavigate={handleNavigation}
+                                      onClose={onClose}
+                                    />
+                                  ))}
+                              </ul>
                             )
-                          })}
-                        </ul>
+                          })()}
+                        </div>
                       </div>
                     </div>
                   ) : item.external ? (
@@ -441,5 +400,84 @@ export function MobileMenu({
       </div>
     </div>,
     document.body
+  )
+}
+
+function MobileSubLink({
+  subItem,
+  t,
+  badgeLabel,
+  onNavigate,
+  onClose,
+}: {
+  subItem: NavigationItem
+  t: ReturnType<typeof useTranslations<'nav'>>
+  badgeLabel: (key: string | undefined) => string | null
+  onNavigate: (href: string) => void
+  onClose: () => void
+}) {
+  const subLabel = subItem.nameKey ? navItemLabel(t as NavTranslator, subItem.nameKey) : subItem.name
+  const subDescription = subItem.descriptionKey
+    ? navItemDescription(t as NavTranslator, subItem.descriptionKey)
+    : subItem.description
+
+  if (subItem.external) {
+    return (
+      <li>
+        <a
+          href={subItem.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            'group block rounded-lg px-2 py-2.5',
+            'hover:bg-surface-raised transition-colors duration-200',
+          )}
+          onClick={onClose}
+        >
+          <span className="flex items-center gap-2 text-sm font-medium text-text-primary">
+            {subLabel}
+            {subItem.badge && (
+              <span className="rounded-full bg-action-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase text-action">
+                {badgeLabel(subItem.badge)}
+              </span>
+            )}
+            <ExternalLink className="h-3 w-3 text-text-tertiary" />
+          </span>
+          {subDescription && (
+            <span className="mt-0.5 block text-xs leading-snug text-text-secondary line-clamp-2">
+              {subDescription}
+            </span>
+          )}
+        </a>
+      </li>
+    )
+  }
+
+  return (
+    <li>
+      <Button
+        type="button"
+        variant="ghost"
+        className={cn(
+          'group flex h-auto w-full flex-col items-start justify-start rounded-lg px-2 py-2.5',
+          'hover:bg-surface-raised transition-colors duration-200',
+        )}
+        onClick={() => onNavigate(subItem.href)}
+      >
+        <span className="flex items-center gap-2 text-sm font-medium text-text-primary">
+          {subLabel}
+          {subItem.badge && (
+            <span className="rounded-full bg-action-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase text-action">
+              {badgeLabel(subItem.badge)}
+            </span>
+          )}
+        </span>
+        {subDescription && (
+          <span className="mt-0.5 block text-left text-xs leading-snug text-text-secondary line-clamp-2">
+            {subDescription}
+          </span>
+        )}
+      </Button>
+    </li>
   )
 }

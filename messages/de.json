@@ -71,7 +71,7 @@
       "findHelp": "Hilfe suchen",
       "findHelpDesc": "Community-Techniker in deiner Nähe",
       "findTechnician": "Techniker finden",
-      "findTechnicianDesc": "Community- und professionelle Techniker",
+      "findTechnicianDesc": "Techniker-Profile durchsuchen und kontaktieren",
       "becomeTechnician": "Techniker werden",
       "becomeTechnicianDesc": "IT-Wissen teilen und helfen",
       "learn": "Lernen",
@@ -123,6 +123,13 @@
       "projectCompirat": "Compirat",
       "projectCompiratDesc": "Historisches Projekt zur PC-Wiederaufbereitung.",
       "sectionAllProjects": "Alle Projekte",
+      "sectionBuySell": "Kaufen & verkaufen",
+      "sectionItHelp": "IT-Hilfe",
+      "requestHelp": "Hilfe anfragen",
+      "requestHelpDesc": "Problem schildern und passende Techniker finden",
+      "itHelpHub": "IT-Hilfe",
+      "itHelpHubDesc": "Reparieren, OS installieren, IT-Probleme lösen — ein Einstieg",
+      "viewSection": "Übersicht",
       "sectionDevices": "Geräte",
       "sectionHelp": "Hilfe"
     },
@@ -288,6 +295,7 @@
     "openingHoursMonday": "Mo: {hours}",
     "openingHoursTueFri": "Di–Fr: {hours}",
     "transparency": "Transparenz",
+    "changelog": "Changelog",
     "locations": {
       "store": "Verkaufsstelle",
       "warehouse": "Lager",
@@ -298,36 +306,36 @@
   "home": {
     "meta": {
       "title": "Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz",
-      "description": "Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung."
+      "description": "Refurbished IT kaufen, Community-Inserate entdecken und Techniker oder Werkstätten für Reparaturen finden."
     },
     "hero": {
       "title": "Alte Hardware. Neues Leben.",
       "titlePrimary": "Alte Hardware.",
       "titleSecondary": "Neues Leben.",
-      "lede": "Wir reparieren gebrauchte Computer und bringen sie zu Menschen, die sie brauchen.",
-      "sublede": "Schweizer Non-Profit seit 2003 — getragen von einer Community, die repariert, weitergibt und voneinander lernt.",
+      "lede": "Kaufe geprüfte refurbished IT oder finde Hilfe, wenn dein Gerät repariert werden soll.",
+      "sublede": "Schweizer Non-Profit seit 2003 — mit Shop, Community-Marktplatz, Werkstatt und Techniker-Netzwerk.",
       "subtitle": "Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt.",
-      "ctaDonate": "Gerät spenden",
-      "ctaDiscover": "Jetzt entdecken",
+      "ctaDonate": "Refurbished IT kaufen",
+      "ctaDiscover": "Reparatur finden",
       "ctaAbout": "Über uns",
       "positioning": "Schweizer Non-Profit für Kreislaufwirtschaft · seit 2003"
     },
     "actions": {
       "eyebrow": "DREI WEGE",
       "heading": "Was möchtest du tun?",
-      "subtitle": "Egal ob du ein altes Gerät loswerden, ein günstiges kaufen, oder bei Reparaturen helfen willst — du landest am richtigen Ort.",
+      "subtitle": "Kaufen, reparieren lassen, lernen oder mitmachen — der Einstieg richtet sich nach dem, was du gerade brauchst.",
       "sell": {
-        "label": "01 / MARKTPLATZ",
-        "title": "Altes Gerät übrig?",
-        "subtitle": "Verkaufe oder verschenke es in 2 Minuten — kostenlos und ohne Gebühren.",
-        "primaryLabel": "Marktplatz entdecken",
-        "secondaryLabel": "Jetzt verkaufen"
+        "label": "01 / SHOP",
+        "title": "Refurbished IT kaufen?",
+        "subtitle": "Geprüfte Geräte aus dem RevampIT Shop — lokal, transparent und sofort einsatzbereit.",
+        "primaryLabel": "Zum Shop",
+        "secondaryLabel": "Marktplatz ansehen"
       },
       "repair": {
-        "label": "02 / IT-HILFE",
+        "label": "02 / REPARATUR",
         "title": "Computer kaputt?",
-        "subtitle": "Techniker in deiner Nähe helfen — oder biete selbst Reparaturen an.",
-        "primaryLabel": "Hilfe finden",
+        "subtitle": "Techniker und Werkstätten in deiner Nähe helfen — oder biete selbst Reparaturen an.",
+        "primaryLabel": "Techniker finden",
         "secondaryLabel": "Techniker werden"
       },
       "learn": {
@@ -400,10 +408,10 @@
     },
     "finalCta": {
       "eyebrow": "BEREIT?",
-      "heading": "Schenk deinem Computer ein zweites Leben.",
-      "subtitle": "5 Minuten Aufwand. Wir holen ab. Du bekommst eine Spendenquittung. Dein Gerät landet bei jemandem, der es braucht.",
-      "button": "Gerät spenden",
-      "note": "Oder kontaktiere uns direkt — info@revamp-it.ch"
+      "heading": "Brauchst du ein Gerät, das länger hält?",
+      "subtitle": "Im Shop findest du geprüfte refurbished IT. Wenn etwas kaputt ist, führt dich die Reparatur-Suche zu passenden Technikern und Werkstätten.",
+      "button": "Zum Shop",
+      "note": "Geräte spenden bleibt möglich unter Mitmachen."
     },
     "newsletter": {
       "title": "Bleib auf dem Laufenden",
@@ -3184,6 +3192,44 @@
         "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
         "network": "Netzwerkfehler. Bitte erneut versuchen."
       }
+    },
+    "hub": {
+      "eyebrow": "IT-Hilfe",
+      "title": "Computer reparieren, OS neu installieren, IT-Probleme lösen",
+      "subtitle": "RevampIT verbindet dich mit Community-Technikern — kostenlos oder fair vergütet.",
+      "paths": {
+        "request": {
+          "title": "Hilfe anfragen",
+          "description": "Problem beschreiben und Angebote von Technikern erhalten",
+          "cta": "Anfrage starten →"
+        },
+        "technicians": {
+          "title": "Techniker wählen",
+          "description": "Profile durchsuchen und direkt kontaktieren",
+          "cta": "Techniker finden →"
+        },
+        "browse": {
+          "title": "Offene Anfragen",
+          "description": "Als Techniker helfen — Anfragen in deiner Nähe",
+          "cta": "Anfragen ansehen →"
+        }
+      },
+      "account": {
+        "myRequests": "Meine Anfragen",
+        "myOffers": "Meine Angebote"
+      },
+      "offerHelp": {
+        "title": "Du kannst Geräte reparieren?",
+        "description": "Registriere dich als Techniker und hilf Menschen in deiner Nähe.",
+        "cta": "Techniker werden"
+      }
+    },
+    "browse": {
+      "title": "Offene Anfragen",
+      "subtitle": "Für Techniker, die helfen möchten",
+      "backToHub": "Zurück zur IT-Hilfe",
+      "createRequest": "Hilfe anfragen",
+      "requestCount": "{count, plural, one {# Anfrage} other {# Anfragen}}"
     }
   },
   "blog": {
@@ -7350,7 +7396,8 @@
       "kulturlegi": "KulturLegi",
       "loadingError": "Fehler beim Laden der Techniker. Bitte versuche es erneut.",
       "availableEmpty": "Bald verfügbar — werde Teil der ersten Generation",
-      "emptyActionSecondary": "Hilfe trotzdem anfragen → IT-Hilfe"
+      "emptyActionSecondary": "Hilfe trotzdem anfragen → IT-Hilfe",
+      "backToHub": "Zurück zur IT-Hilfe"
     },
     "detail": {
       "backToList": "Alle Techniker",
@@ -10089,6 +10136,28 @@
         "aiPlaceholderEdit": "z.B. „Füge einen Abschnitt über Reparatur-Tipps hinzu“ oder „Mache den Text ansprechender“",
         "aiPlaceholderNew": "Beschreibe das Thema oder die Idee für deinen Blog-Artikel…"
       }
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "Neueste Fixes, Features und Verbesserungen an der RevampIT-Plattform."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "Live",
+      "title": "Changelog",
+      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir auf revampit.ch ausrollen."
+    },
+    "latest": {
+      "label": "Neueste"
+    },
+    "nav": {
+      "label": "Versionen"
+    },
+    "command": {
+      "label": "Lokal starten",
+      "text": "npm run d"
     }
   }
 }

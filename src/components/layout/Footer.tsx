@@ -165,6 +165,9 @@ export default function Footer() {
             <Link href={ROUTES.public.transparenz} className="hover:text-text-primary transition-colors">
               {tFooter('transparency')}
             </Link>
+            <Link href={ROUTES.public.changelog} className="hover:text-text-primary transition-colors">
+              {tFooter('changelog')}
+            </Link>
             <Link href={ROUTES.public.mitgliedWerden} className="hover:text-text-primary transition-colors">
               {tNav('membership')}
             </Link>

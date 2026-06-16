@@ -16,6 +16,7 @@
 import { Link } from '@/i18n/navigation'
 import { Phone, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 interface Props {
   technicianId: string
@@ -37,7 +38,7 @@ export function MatchedTechnicianCard({ technicianId, technicianName, technician
           <div className="flex items-center gap-2">
             <User className="w-5 h-5 text-text-tertiary shrink-0" aria-hidden="true" />
             <Link
-              href={`/techniker/${technicianId}`}
+              href={ROUTES.public.technicianProfile(technicianId)}
               className="text-text-primary font-semibold hover:text-action transition-colors"
             >
               {technicianName}

@@ -6,6 +6,7 @@
     },
     "list": {
       "title": "技術者",
+      "backToHub": "Back to IT Help",
       "available": "{count, plural, other {{count}名の技術者}}が利用可能",
       "becomeTechnician": "技術者になる",
       "searchPlaceholder": "名前、都市、説明...",

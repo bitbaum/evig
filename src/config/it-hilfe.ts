@@ -39,25 +39,21 @@ export const IT_HILFE = {
   description: 'Community-basierte IT-Unterstützung',
   tagline: 'Gemeinsam für digitale Nachhaltigkeit',
   routes: {
-    browse: '/it-hilfe',
+    /** Hub — choose how to get IT help */
+    hub: '/it-hilfe',
+    /** Browse open repair requests (for technicians offering help) */
+    browseRequests: '/it-hilfe/anfragen',
+    /** @deprecated Use browseRequests — kept for one release */
+    browse: '/it-hilfe/anfragen',
     create: '/it-hilfe/create',
-    /**
-     * Pre-fill the create form with a specific technician's id so the
-     * request is offered to them first. Used from /techniker/[id] CTAs.
-     */
     createForTechnician: (technicianId: string) => `/it-hilfe/create?technician=${technicianId}`,
     my: '/it-hilfe/my',
     myOffers: '/it-hilfe/my/offers',
     detail: (id: string) => `/it-hilfe/${id}`,
-    /**
-     * Public technician directory. "helpers" alias kept temporarily for
-     * any consumer importing the old key — both point at /techniker.
-     * Drop the alias once a grep for IT_HILFE.routes.helpers comes up
-     * empty (QQQ.4 onwards).
-     */
-    technicians: '/techniker',
-    /** @deprecated Use IT_HILFE.routes.technicians instead. */
-    helpers: '/techniker',
+    technicians: '/it-hilfe/techniker',
+    technicianProfile: (id: string) => `/it-hilfe/techniker/${id}`,
+    /** @deprecated Use technicians */
+    helpers: '/it-hilfe/techniker',
     register: '/profil/techniker',
   },
   api: {

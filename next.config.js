@@ -78,25 +78,35 @@ const nextConfig = {
         destination: '/admin/decisions/:id',
         permanent: false,
       },
-      // Techniker unification redirects
+      // Techniker — canonical paths live under IT-Hilfe hub
       {
         source: '/repairers',
-        destination: '/techniker',
+        destination: '/it-hilfe/techniker',
         permanent: true,
       },
       {
         source: '/repairers/:id',
-        destination: '/techniker/:id',
+        destination: '/it-hilfe/techniker/:id',
+        permanent: true,
+      },
+      {
+        source: '/techniker',
+        destination: '/it-hilfe/techniker',
+        permanent: true,
+      },
+      {
+        source: '/techniker/:id',
+        destination: '/it-hilfe/techniker/:id',
         permanent: true,
       },
       {
         source: '/it-hilfe/helfer',
-        destination: '/techniker',
+        destination: '/it-hilfe/techniker',
         permanent: true,
       },
       {
         source: '/it-hilfe/helfer/:id',
-        destination: '/techniker/:id',
+        destination: '/it-hilfe/techniker/:id',
         permanent: true,
       },
       {
