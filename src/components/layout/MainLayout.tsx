@@ -8,9 +8,11 @@ import { MessageButton } from '@/components/messaging/MessageButton'
 
 interface MainLayoutProps {
   children: ReactNode
+  /** Skip copilot + suggestion widgets on task-focused pages. */
+  leanChrome?: boolean
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout({ children, leanChrome = false }: MainLayoutProps) {
   return (
     <div className="min-h-screen bg-canvas">
       <Header />
@@ -21,11 +23,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       <Footer />
 
-      {/* AI Navigation Assistant - Bottom Right */}
-      <RevampCopilot />
-
-      {/* Comprehensive Page Improvement Suggestions - Right Side */}
-      <SuggestionButton />
+      {!leanChrome && (
+        <>
+          <RevampCopilot />
+          <SuggestionButton />
+        </>
+      )}
     </div>
   )
 } 

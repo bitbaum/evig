@@ -6,22 +6,23 @@ import MainLayout from './MainLayout'
 
 interface ConditionalMainLayoutProps {
   children: ReactNode
+  /** Hide floating assistants on focused task surfaces (dashboard, checkout). */
+  leanChrome?: boolean
 }
 
-export default function ConditionalMainLayout({ children }: ConditionalMainLayoutProps) {
+export default function ConditionalMainLayout({
+  children,
+  leanChrome = false,
+}: ConditionalMainLayoutProps) {
   const pathname = usePathname()
 
-  // Don't apply MainLayout to admin pages
   if (pathname?.startsWith('/admin')) {
     return <>{children}</>
   }
 
-  // Don't apply MainLayout to auth pages (they have their own layout)
-  // This prevents session checks from blocking auth page loads
   if (pathname?.startsWith('/auth')) {
     return <>{children}</>
   }
 
-  // Apply MainLayout to all other pages
-  return <MainLayout>{children}</MainLayout>
+  return <MainLayout leanChrome={leanChrome}>{children}</MainLayout>
 }

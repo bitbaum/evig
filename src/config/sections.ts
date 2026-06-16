@@ -321,7 +321,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
   // ---------------------------------------------------------------------------
   'seller-dashboard': {
     id: 'seller-dashboard',
-    path: '/dashboard/seller',
+    path: '/dashboard/listings',
     ui: {
       label: 'Seller Dashboard',
       description: 'Produkte und Verkäufe verwalten',
@@ -329,14 +329,14 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '🏪',
       color: 'secondary',
     },
-    visibility: { admin: false, dashboard: true, communityRole: 'seller' },
+    visibility: { admin: false, dashboard: false, communityRole: 'seller' },
     priority: 20,
     category: 'commerce',
   },
 
   'seller-onboarding': {
     id: 'seller-onboarding',
-    path: '/dashboard/seller',
+    path: '/marketplace/sell',
     ui: {
       label: `Auf ${ORG.name} verkaufen`,
       description: 'Eigene Produkte anbieten – Versand direkt an Käufer',

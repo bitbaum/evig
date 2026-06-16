@@ -13,6 +13,7 @@ import Heading from '@/components/ui/Heading'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { ORG } from '@/config/org'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { ROUTES } from '@/config/routes'
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -26,14 +27,18 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DashboardDecisionsPage() {
   const t = await getTranslations('dashboard.decisions')
   const session = await auth()
-  if (!session?.user?.email) redirect('/auth/signin')
+  if (!session?.user?.email) {
+    redirect(`${ROUTES.public.login}?callbackUrl=${encodeURIComponent('/dashboard/decisions')}`)
+  }
 
   const [userRow] = await db
     .select({ id: users.id })
     .from(users)
     .where(eq(users.email, session.user.email))
 
-  if (!userRow) redirect('/auth/signin')
+  if (!userRow) {
+    redirect(`${ROUTES.public.login}?callbackUrl=${encodeURIComponent('/dashboard/decisions')}`)
+  }
 
   let votingDecisions: Awaited<ReturnType<typeof getDecisions>>['decisions'] = []
   try {

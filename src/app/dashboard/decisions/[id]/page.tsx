@@ -23,6 +23,7 @@ import DashboardVotingClient from './DashboardVotingClient'
 import BackgroundSection from './BackgroundSection'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { ORG } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -33,17 +34,20 @@ export async function generateMetadata(): Promise<Metadata> {
 type Props = { params: Promise<{ id: string }> }
 
 export default async function DashboardDecisionPage({ params }: Props) {
-  const session = await auth()
-  if (!session?.user?.email) redirect('/auth/signin')
-
   const { id } = await params
+  const session = await auth()
+  if (!session?.user?.email) {
+    redirect(`${ROUTES.public.login}?callbackUrl=${encodeURIComponent(`/dashboard/decisions/${id}`)}`)
+  }
 
   const [userRow] = await db
     .select({ id: users.id })
     .from(users)
     .where(eq(users.email, session.user.email))
 
-  if (!userRow) redirect('/auth/signin')
+  if (!userRow) {
+    redirect(`${ROUTES.public.login}?callbackUrl=${encodeURIComponent(`/dashboard/decisions/${id}`)}`)
+  }
 
   const decision = await getDecisionById(id, userRow.id)
   if (!decision) notFound()

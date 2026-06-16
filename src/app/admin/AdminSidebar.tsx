@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -51,13 +51,30 @@ export function AdminSidebar({
   const labelFor = (id: string, fallback: string): string => {
     try { return tLabels(id as never) || fallback } catch { return fallback }
   }
-  const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(() => {
-    return new Set(['uebersicht', 'angebot', 'inhalte'])
-  })
-
   const groupedSections = getSidebarGroupsWithSections()
   const hirnSection = getHirnSection()
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
+
+  const isActive = (href: string) => {
+    if (href === '/admin') return pathname === '/admin'
+    return pathname.startsWith(href)
+  }
+
+  const groupHasActiveItem = (groupId: SidebarGroupId) => {
+    const group = groupedSections.find(g => g.group.id === groupId)
+    if (!group) return false
+    return group.sections.some(s => isActive(s.path) && accessibleSections.includes(s.id))
+  }
+
+  const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(() => {
+    const initial = new Set<SidebarGroupId>(['uebersicht', 'angebot', 'inhalte'])
+    for (const { group } of groupedSections) {
+      if (groupHasActiveItem(group.id)) {
+        initial.add(group.id)
+      }
+    }
+    return initial
+  })
 
   const toggleGroup = (groupId: SidebarGroupId) => {
     setExpandedGroups(prev => {
@@ -71,16 +88,17 @@ export function AdminSidebar({
     })
   }
 
-  const isActive = (href: string) => {
-    if (href === '/admin') return pathname === '/admin'
-    return pathname.startsWith(href)
-  }
-
-  const groupHasActiveItem = (groupId: SidebarGroupId) => {
-    const group = groupedSections.find(g => g.group.id === groupId)
-    if (!group) return false
-    return group.sections.some(s => isActive(s.path) && accessibleSections.includes(s.id))
-  }
+  useEffect(() => {
+    setExpandedGroups(prev => {
+      const next = new Set(prev)
+      for (const { group } of groupedSections) {
+        if (groupHasActiveItem(group.id)) {
+          next.add(group.id)
+        }
+      }
+      return next
+    })
+  }, [pathname, accessibleSections])
 
   return (
     <div

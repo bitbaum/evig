@@ -1,10 +1,10 @@
 'use client'
 
 import { LoginForm } from '@/components/auth/LoginForm'
+import { AuthenticatedRedirect } from '@/components/auth/AuthenticatedRedirect'
 import Link from 'next/link'
 import { Suspense, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Logo } from '@/components/ui/Logo'
@@ -24,27 +24,26 @@ function LoginFormFallback() {
 export default function LoginPage() {
   const t = useTranslations('auth.login')
   const { status } = useSession()
-  const router = useRouter()
 
   useEffect(() => {
     document.title = t('pageTitle')
   }, [t])
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.replace('/admin')
-    }
-  }, [status, router])
-
   if (status === 'loading' || status === 'authenticated') {
     return (
       <main className="min-h-screen flex items-center justify-center bg-surface-raised">
+        <Suspense fallback={null}>
+          <AuthenticatedRedirect />
+        </Suspense>
         <Loader2 className="w-8 h-8 animate-spin text-action" />
       </main>
     )
   }
   return (
     <main className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
+      <Suspense fallback={null}>
+        <AuthenticatedRedirect />
+      </Suspense>
       <div className="max-w-7xl mx-auto">
         {/* Back link */}
         <div className="mb-8">

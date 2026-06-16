@@ -160,7 +160,7 @@ export default function CreatePeerRepairPage() {
             }
             currentData={formData as unknown as Record<string, unknown>}
             variant="section"
-            defaultExpanded
+            defaultExpanded={false}
             className=""
           />
 
@@ -193,6 +193,18 @@ export default function CreatePeerRepairPage() {
             />
           )}
 
+          <ProblemDetailsSection
+            deviceBrand={formData.deviceBrand}
+            deviceModel={formData.deviceModel}
+            title={formData.title}
+            description={formData.description}
+            onDeviceBrandChange={(v) => updateField('deviceBrand', v)}
+            onDeviceModelChange={(v) => updateField('deviceModel', v)}
+            onTitleChange={(v) => updateField('title', v)}
+            onDescriptionChange={(v) => updateField('description', v)}
+            aiFieldMeta={aiFieldMeta}
+          />
+
           {/* Device Category */}
           <div className="card-shell p-6">
             <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionDevice')}</Heading>
@@ -220,20 +232,6 @@ export default function CreatePeerRepairPage() {
               })}
             </div>
           </div>
-
-          {formData.categoryId && (
-            <>
-              <ProblemDetailsSection
-                deviceBrand={formData.deviceBrand}
-                deviceModel={formData.deviceModel}
-                title={formData.title}
-                description={formData.description}
-                onDeviceBrandChange={(v) => updateField('deviceBrand', v)}
-                onDeviceModelChange={(v) => updateField('deviceModel', v)}
-                onTitleChange={(v) => updateField('title', v)}
-                onDescriptionChange={(v) => updateField('description', v)}
-                aiFieldMeta={aiFieldMeta}
-              />
 
               <ITHilfeImageUpload
                 imageUrls={formData.imageUrls}
@@ -324,8 +322,6 @@ export default function CreatePeerRepairPage() {
                   {loading ? t('submittingButton') : t('submitButton')}
                 </Button>
               </div>
-            </>
-          )}
         </form>
       </PageShell>
     </div>

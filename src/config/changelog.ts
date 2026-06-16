@@ -23,6 +23,41 @@ export interface ChangelogRelease {
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
+    id: 'v0-1-4',
+    version: '0.1.4',
+    date: '2026-06-16',
+    title: {
+      de: 'Weniger Klicks, schnellere Wege',
+      en: 'Fewer clicks, faster paths',
+    },
+    changes: [
+      {
+        de: 'Login und Registrierung respektieren wieder callbackUrl — Checkout und Deep Links landen nach Anmeldung am richtigen Ort',
+        en: 'Login and registration respect callbackUrl again — checkout and deep links return to the right place after sign-in',
+      },
+      {
+        de: 'Marktplatz-Checkout lädt Inserat serverseitig; kein Doppel-Spinner mehr durch Session- und API-Wasserfall',
+        en: 'Marketplace checkout loads listings on the server; no double spinner from session + API waterfall',
+      },
+      {
+        de: 'Dashboard hat persistente Schnellnavigation; schlankes Layout ohne schwebende Assistenten auf Aufgabenseiten',
+        en: 'Dashboard has persistent quick navigation; lean layout without floating assistants on task pages',
+      },
+      {
+        de: 'Legacy /shop/product/:uuid leitet bei Treffer direkt auf die Marktplatz-Inseratseite weiter',
+        en: 'Legacy /shop/product/:uuid redirects to the marketplace listing when a match exists',
+      },
+      {
+        de: 'IT-Hilfe-Anfrage: Problem beschreiben sofort sichtbar; AI-Hilfe standardmässig eingeklappt',
+        en: 'IT-Hilfe request: describe the problem immediately; AI assist collapsed by default',
+      },
+      {
+        de: 'Admin-Sidebar klappt die aktive Gruppe automatisch auf — ein Klick weniger pro Besuch',
+        en: 'Admin sidebar auto-expands the active group — one fewer click per visit',
+      },
+    ],
+  },
+  {
     id: 'v0-1-3',
     version: '0.1.3',
     date: '2026-06-16',

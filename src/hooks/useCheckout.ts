@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { COMMISSION_RATE } from '@/config/marketplace'
@@ -30,20 +28,19 @@ export interface ShippingAddress {
 }
 
 interface CheckoutErrors {
-  notFound: string
-  loadError: string
   orderError: string
   networkError: string
 }
 
-export function useCheckout(params: Promise<{ listingId: string }>, errors: CheckoutErrors) {
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
-
-  const [listing, setListing] = useState<ListingForCheckout | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+export function useCheckout(
+  initialListing: ListingForCheckout,
+  errors: CheckoutErrors,
+) {
+  const [listing] = useState(initialListing)
   const [error, setError] = useState<string | null>(null)
-  const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>('pickup')
+  const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>(() =>
+    initialListing.delivery_options === 'shipping' ? 'shipping' : 'pickup',
+  )
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
     name: '',
     street: '',
@@ -53,63 +50,8 @@ export function useCheckout(params: Promise<{ listingId: string }>, errors: Chec
   })
   const [creatingOrder, setCreatingOrder] = useState(false)
 
-  useEffect(() => {
-    if (sessionStatus === 'unauthenticated') {
-      router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
-      return
-    }
-    if (sessionStatus !== 'authenticated') return
-
-    const fetchListing = async () => {
-      try {
-        const { listingId } = await params
-        const result = await apiFetch<{
-          id: string
-          title: string
-          price_chf: number | string
-          delivery_options: string
-          shipping_cost_chf: number | string | null
-          payment_mode: string
-          pickup_location: string | null
-          images?: Array<{ url: string }>
-          seller_name: string
-          seller_display_name: string | null
-          seller_id: string
-          is_revampit: boolean
-        }>(`/api/listings/${listingId}`)
-
-        if (result.success && result.data) {
-          const l = result.data
-          const mapped: ListingForCheckout = {
-            id: l.id,
-            title: l.title,
-            price_chf: Number(l.price_chf),
-            delivery_options: l.delivery_options,
-            shipping_cost_chf: l.shipping_cost_chf ? Number(l.shipping_cost_chf) : null,
-            payment_mode: l.payment_mode,
-            pickup_location: l.pickup_location,
-            thumbnail: l.images?.[0]?.url || null,
-            seller_name: l.seller_display_name || l.seller_name,
-            seller_id: l.seller_id,
-            is_revampit: l.is_revampit ?? false,
-          }
-          setListing(mapped)
-          setDeliveryMethod(l.delivery_options === 'shipping' ? 'shipping' : 'pickup')
-        } else {
-          setError(result.error || errors.notFound)
-        }
-      } catch (err) {
-        logger.warn('Failed to load checkout listing', { error: err })
-        setError(errors.loadError)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchListing()
-  }, [params, sessionStatus, router, errors.notFound, errors.loadError])
-
   const handleCreateOrder = async () => {
-    if (!listing || creatingOrder) return
+    if (creatingOrder) return
     setCreatingOrder(true)
     setError(null)
 
@@ -136,11 +78,11 @@ export function useCheckout(params: Promise<{ listingId: string }>, errors: Chec
     }
   }
 
-  const shippingCost = deliveryMethod === 'shipping' && listing?.shipping_cost_chf
+  const shippingCost = deliveryMethod === 'shipping' && listing.shipping_cost_chf
     ? listing.shipping_cost_chf : 0
-  const totalAmount = (listing?.price_chf ?? 0) + shippingCost
+  const totalAmount = listing.price_chf + shippingCost
   const commission = Math.round(totalAmount * COMMISSION_RATE * 100) / 100
-  const canSelectDelivery = listing?.delivery_options === 'both'
+  const canSelectDelivery = listing.delivery_options === 'both'
   const postalCodeValid = /^\d{4}$/.test(shippingAddress.postal_code)
   const shippingFormValid = deliveryMethod !== 'shipping' || (
     shippingAddress.name.trim() !== '' &&
@@ -150,10 +92,7 @@ export function useCheckout(params: Promise<{ listingId: string }>, errors: Chec
   )
 
   return {
-    session,
-    sessionStatus,
     listing,
-    isLoading,
     error,
     deliveryMethod,
     shippingAddress,

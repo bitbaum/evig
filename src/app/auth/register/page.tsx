@@ -1,33 +1,29 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ORG } from '@/config/org'
 import { Logo } from '@/components/ui/Logo'
 import { RegistrationWizard } from '@/components/auth/RegistrationWizard'
+import { AuthenticatedRedirect } from '@/components/auth/AuthenticatedRedirect'
 
 export default function RegisterPage() {
   const t = useTranslations('auth.login')
   const { status } = useSession()
-  const router = useRouter()
 
   useEffect(() => {
     document.title = `Registrieren | ${ORG.name}`
   }, [])
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.replace('/admin')
-    }
-  }, [status, router])
-
   if (status === 'loading' || status === 'authenticated') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-raised">
+        <Suspense fallback={null}>
+          <AuthenticatedRedirect />
+        </Suspense>
         <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
     )
@@ -35,6 +31,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
+      <Suspense fallback={null}>
+        <AuthenticatedRedirect />
+      </Suspense>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <Link
