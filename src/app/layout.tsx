@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
 import { ORG } from "@/config/org";
 import { auth } from "@/auth";
@@ -9,12 +8,6 @@ import { auth } from "@/auth";
 // the auth/db layer. See src/env.ts for the full schema.
 import "@/env";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -39,7 +32,7 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="de" suppressHydrationWarning className={inter.variable}>
+    <html lang="de" suppressHydrationWarning>
       <body className="font-sans fix-text-rendering antialiased">
         <Providers session={session}>
           {children}
