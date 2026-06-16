@@ -46,7 +46,7 @@ if [ -d "$SRC/node_modules/@swc/helpers/esm" ]; then
 fi
 
 echo "=== rsync release → $REMOTE_RELEASE ==="
-ssh -o BatchMode=yes "$BOX" "mkdir -p '$REMOTE_RELEASE'"
+ssh -o BatchMode=yes "$BOX" "sudo mkdir -p '$REMOTE_RELEASE' && sudo chown -R \"\$(id -u):\$(id -g)\" '$REMOTE_RELEASES'"
 rsync -az --delete --partial \
   -e "ssh -o BatchMode=yes -o ServerAliveInterval=15" \
   --exclude '.env' --exclude 'launch.sh' \
@@ -61,15 +61,15 @@ set -euo pipefail
 NEXT="${APP}.next"
 PREV="${APP}.previous"
 
-rm -rf "$NEXT"
-cp -a "$RELEASE" "$NEXT"
-rm -rf "$PREV"
+sudo rm -rf "$NEXT"
+sudo cp -a "$RELEASE" "$NEXT"
+sudo rm -rf "$PREV"
 
-if [ -e "$APP" ] || [ -L "$APP" ]; then
-  mv "$APP" "$PREV"
+if sudo test -e "$APP" || sudo test -L "$APP"; then
+  sudo mv "$APP" "$PREV"
 fi
 
-mv "$NEXT" "$APP"
+sudo mv "$NEXT" "$APP"
 
 set +e
 sudo systemctl restart "${NAME}-app"
@@ -80,20 +80,20 @@ set -e
 
 if [ "$status" != "active" ] || [ "$code" -lt 200 ] || [ "$code" -ge 400 ]; then
   echo "rollback status=$status http=$code"
-  rm -rf "$APP"
-  if [ -e "$PREV" ] || [ -L "$PREV" ]; then
-    mv "$PREV" "$APP"
+  sudo rm -rf "$APP"
+  if sudo test -e "$PREV" || sudo test -L "$PREV"; then
+    sudo mv "$PREV" "$APP"
     sudo systemctl restart "${NAME}-app" || true
   fi
   exit 1
 fi
 
-rm -rf "$PREV"
+sudo rm -rf "$PREV"
 find "$RELEASES" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' \
   | sort -rn \
   | tail -n +6 \
   | cut -d' ' -f2- \
-  | xargs -r rm -rf
+  | xargs -r sudo rm -rf
 
 echo "status=$status http=$code"
 REMOTE
