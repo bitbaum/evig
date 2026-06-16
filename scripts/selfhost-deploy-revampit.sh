@@ -65,6 +65,14 @@ sudo rm -rf "$NEXT"
 sudo cp -a "$RELEASE" "$NEXT"
 sudo rm -rf "$PREV"
 
+if sudo test -f "$APP/.env"; then
+  sudo cp -a "$APP/.env" "$NEXT/.env"
+fi
+
+if sudo test -f "$APP/launch.sh"; then
+  sudo cp -a "$APP/launch.sh" "$NEXT/launch.sh"
+fi
+
 if sudo test -e "$APP" || sudo test -L "$APP"; then
   sudo mv "$APP" "$PREV"
 fi
