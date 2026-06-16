@@ -33,8 +33,8 @@ export const ORG = {
   motto: 'Technik ein zweites Leben geben',
   /** Short description */
   description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
-  /** Official website (canonical domain) */
-  website: 'https://revamp-it.ch',
+  /** Current production app URL. revamp-it.ch still serves the legacy Joomla site. */
+  website: 'https://revampit.orangecat.ch',
   /** Email domain */
   emailDomain: 'revamp-it.ch',
   /**
