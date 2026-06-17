@@ -84,10 +84,13 @@ sudo systemctl restart "${NAME}-app"
 sleep 5
 status="$(systemctl is-active "${NAME}-app")"
 code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 http://localhost:4004/api/health)"
+# Also gate on a real PAGE render — /api/health is an API route and stays 200
+# even when SSR crashes site-wide (e.g. a provider throwing during render).
+page="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 http://localhost:4004/)"
 set -e
 
-if [ "$status" != "active" ] || [ "$code" -lt 200 ] || [ "$code" -ge 400 ]; then
-  echo "rollback status=$status http=$code"
+if [ "$status" != "active" ] || [ "$code" -lt 200 ] || [ "$code" -ge 400 ] || [ "$page" -lt 200 ] || [ "$page" -ge 400 ]; then
+  echo "rollback status=$status http=$code page=$page"
   sudo rm -rf "$APP"
   if sudo test -e "$PREV" || sudo test -L "$PREV"; then
     sudo mv "$PREV" "$APP"
@@ -103,7 +106,7 @@ find "$RELEASES" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' \
   | cut -d' ' -f2- \
   | xargs -r sudo rm -rf
 
-echo "status=$status http=$code"
+echo "status=$status http=$code page=$page"
 REMOTE
 )
 

@@ -9,7 +9,6 @@
  * stay direct-buy / contact-seller), matching the Galaxus-vs-Ricardo split.
  */
 import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react'
-import { CartDrawer } from './CartDrawer'
 
 export interface CartItem {
   /** listing id */
@@ -95,12 +94,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items, hydrated, add, remove, clear, drawerOpen, openDrawer, closeDrawer])
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-      <CartDrawer />
-    </CartContext.Provider>
-  )
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
 
 export function useCart(): CartState {

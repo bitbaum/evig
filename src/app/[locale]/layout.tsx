@@ -8,6 +8,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { CookieBanner } from '@/components/ui/CookieBanner'
+import { CartDrawer } from '@/components/marketplace/cart/CartDrawer'
 import { ORG } from '@/config/org'
 import { routing, type Locale } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
@@ -64,6 +65,9 @@ export default async function LocaleLayout({
         {children}
       </ConditionalMainLayout>
       <CookieBanner />
+      {/* Cart drawer lives here (inside intl context) — cart state comes from
+          the root-level CartProvider, which is an ancestor of this layout. */}
+      <CartDrawer />
     </NextIntlClientProvider>
   )
 }
