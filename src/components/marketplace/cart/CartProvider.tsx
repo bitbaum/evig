@@ -9,6 +9,7 @@
  * stay direct-buy / contact-seller), matching the Galaxus-vs-Ricardo split.
  */
 import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react'
+import { CartDrawer } from './CartDrawer'
 
 export interface CartItem {
   /** listing id */
@@ -29,6 +30,10 @@ interface CartState {
   add: (item: CartItem) => void
   remove: (id: string) => void
   clear: () => void
+  /** Slide-in drawer visibility (shared by CartIcon trigger + CartDrawer). */
+  drawerOpen: boolean
+  openDrawer: () => void
+  closeDrawer: () => void
 }
 
 const CartContext = createContext<CartState | null>(null)
@@ -37,6 +42,7 @@ const STORAGE_KEY = 'revampit-cart-v1'
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [hydrated, setHydrated] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   // Load once on mount (client only).
   useEffect(() => {
@@ -69,6 +75,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((i) => i.id !== id))
   }, [])
   const clear = useCallback(() => setItems([]), [])
+  const openDrawer = useCallback(() => setDrawerOpen(true), [])
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
   const value = useMemo<CartState>(() => {
     const total = items.reduce((sum, i) => sum + (Number(i.priceChf) || 0), 0)
@@ -81,10 +89,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
       add,
       remove,
       clear,
+      drawerOpen,
+      openDrawer,
+      closeDrawer,
     }
-  }, [items, hydrated, add, remove, clear])
+  }, [items, hydrated, add, remove, clear, drawerOpen, openDrawer, closeDrawer])
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      <CartDrawer />
+    </CartContext.Provider>
+  )
 }
 
 export function useCart(): CartState {

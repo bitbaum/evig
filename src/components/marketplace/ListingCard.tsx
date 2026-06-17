@@ -11,11 +11,15 @@
  * meta eyebrow, never as a colored pill floating on the image.
  */
 
+import { type MouseEvent } from 'react'
+import { ShoppingCart, Check } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { normalizeConditionValue, ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
+import { Button } from '@/components/ui/button'
 import { ListingImage } from './ListingImage'
+import { useCart } from './cart/CartProvider'
 import { ORG } from '@/config/org'
 
 const CANONICAL_CONDITION_VALUES = new Set(ZUSTAND_OPTIONS.map(o => o.value))
@@ -65,41 +69,83 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
   ].filter(Boolean) as string[]
 
   const location = listing.pickup_location || listing.seller_city
+  // RevampIT stock is cart-eligible; community P2P listings stay direct-buy.
+  const showQuickAdd = listing.is_revampit && !isCompact && !isGratis
 
   return (
-    <Link
-      href={`/marketplace/${listing.id}`}
-      className={`group card-shell overflow-hidden hover:border-strong transition-colors block ${className}`}
-    >
-      <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-4/3'}`}>
-        <ListingImage
-          src={listing.thumbnail}
-          alt={listing.title}
-          fallbackIconSize={isCompact ? 'w-8 h-8' : 'w-12 h-12'}
-        />
-      </div>
+    // Container is the positioning context for the stretched link, so a real
+    // add-to-cart button can sit above it (valid HTML — no <button> in <a>).
+    <div className={`group card-shell relative overflow-hidden hover:border-strong transition-colors ${className}`}>
+      <Link
+        href={`/marketplace/${listing.id}`}
+        className="block after:absolute after:inset-0 after:content-['']"
+      >
+        <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-4/3'}`}>
+          <ListingImage
+            src={listing.thumbnail}
+            alt={listing.title}
+            fallbackIconSize={isCompact ? 'w-8 h-8' : 'w-12 h-12'}
+          />
+        </div>
 
-      <div className={isCompact ? 'p-3' : 'p-4'}>
-        {eyebrowParts.length > 0 && (
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mb-2 truncate">
-            {eyebrowParts.join(' · ')}
+        <div className={isCompact ? 'p-3' : 'p-4'}>
+          {eyebrowParts.length > 0 && (
+            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mb-2 truncate">
+              {eyebrowParts.join(' · ')}
+            </div>
+          )}
+
+          <h3 className={`font-semibold text-text-primary line-clamp-2 ${isCompact ? 'text-sm' : 'text-base'}`}>
+            {listing.title}
+          </h3>
+
+          <div className={`mt-3 font-mono tabular-nums ${isCompact ? 'text-base' : 'text-lg'} font-semibold text-text-primary`}>
+            {isGratis ? t('listing.free').toUpperCase() : formatCHF(Number(listing.price_chf))}
           </div>
-        )}
 
-        <h3 className={`font-semibold text-text-primary line-clamp-2 ${isCompact ? 'text-sm' : 'text-base'}`}>
-          {listing.title}
-        </h3>
-
-        <div className={`mt-3 font-mono tabular-nums ${isCompact ? 'text-base' : 'text-lg'} font-semibold text-text-primary`}>
-          {isGratis ? t('listing.free').toUpperCase() : formatCHF(Number(listing.price_chf))}
+          <div className="mt-3 pt-3 border-t border-subtle font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary truncate">
+            {sellerName}
+            {location && <> · {location}</>}
+          </div>
         </div>
+      </Link>
 
-        <div className="mt-3 pt-3 border-t border-subtle font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary truncate">
-          {sellerName}
-          {location && <> · {location}</>}
+      {showQuickAdd && (
+        <div className="relative z-[1] px-4 pb-4">
+          <CardQuickAdd listing={listing} />
         </div>
-      </div>
-    </Link>
+      )}
+    </div>
+  )
+}
+
+/** Compact add-to-cart for RevampIT browse cards. Stops link navigation. */
+function CardQuickAdd({ listing }: { listing: ListingCardData }) {
+  const t = useTranslations('marketplace.cart')
+  const { has, add, openDrawer } = useCart()
+  const inCart = has(listing.id)
+
+  const handleClick = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!inCart) {
+      add({
+        id: listing.id,
+        title: listing.title,
+        priceChf: Number(listing.price_chf),
+        thumbnail: listing.thumbnail,
+        category: listing.category,
+        condition: listing.condition,
+      })
+    }
+    openDrawer()
+  }
+
+  return (
+    <Button onClick={handleClick} variant={inCart ? 'outline' : 'primary'} size="sm" className="w-full gap-2">
+      {inCart ? <Check className="h-4 w-4" aria-hidden="true" /> : <ShoppingCart className="h-4 w-4" aria-hidden="true" />}
+      {inCart ? t('inCart') : t('addToCart')}
+    </Button>
   )
 }
 

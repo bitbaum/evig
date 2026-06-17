@@ -1072,7 +1072,8 @@
       "continueShopping": "Weiter einkaufen",
       "pickupNote": "Abholung in Zürich — kostenlos",
       "revampitOnly": "Nur Revamp-IT-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
-      "cartAriaLabel": "Warenkorb, {count} Artikel"
+      "cartAriaLabel": "Warenkorb, {count} Artikel",
+      "closeAriaLabel": "Warenkorb schliessen"
     }
   },
   "services": {
