@@ -133,6 +133,21 @@
   --text-sm-mobile--line-height: 1.5;
   --text-base-mobile: 1rem;
   --text-base-mobile--line-height: 1.6;
+
+  /* ─── Radius scale — x.ai-soft ─────────────────────────────────────────
+   * Subtle and consistent: controls ~6-8px, cards ~10-12px. The large end
+   * is compressed so nothing reads as a bubble/pill. This is the SSOT for
+   * radius — Tailwind v4 maps rounded-<x> → var(--radius-<x>), so editing
+   * here re-themes every rounded-* utility across the app at once.
+   * (rounded-full stays 9999px for avatars / icon circles.) */
+  --radius-xs:  0.25rem;   /* 4px  — tags, micro chips */
+  --radius-sm:  0.375rem;  /* 6px  — inputs, small controls */
+  --radius-md:  0.5rem;    /* 8px  — buttons, controls */
+  --radius-lg:  0.5rem;    /* 8px  — default surface radius */
+  --radius-xl:  0.625rem;  /* 10px — cards */
+  --radius-2xl: 0.75rem;   /* 12px — large cards / CTAs (was 16px) */
+  --radius-3xl: 0.875rem;  /* 14px — hero surfaces (was 24px) */
+  --radius-4xl: 1rem;      /* 16px — max */
 }
 
 /*
@@ -305,14 +320,14 @@
   /* CTA primary — RevampIT green; large tap target; opacity hover.
    * Text uses --accent-action-text which flips: white on dark-green (light mode),
    * near-black on bright-green (dark mode) — keeps WCAG AA contrast in both. */
-  @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
+  @apply inline-flex items-center justify-center rounded-md px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
   background: var(--accent-action);
   color: var(--accent-action-text);
   min-height: 48px;
 }
 @utility ui-public-cta-ghost {
   /* CTA ghost — bordered, secondary action. */
-  @apply inline-flex items-center justify-center rounded-2xl px-8 py-3.5 text-base font-semibold transition-colors;
+  @apply inline-flex items-center justify-center rounded-md px-8 py-3.5 text-base font-semibold transition-colors;
   border: 1px solid var(--border-default);
   color: var(--text-secondary);
   min-height: 48px;
@@ -548,7 +563,7 @@
     --hero-title-min:        2.75rem;        /* 44px — fits iPhone SE */
     --hero-title-fluid:      8.5vw;
     --hero-title-max:        5.75rem;        /* 92px */
-    --display-tracking:      -0.035em;
+    --display-tracking:      -0.045em;
     --text-micro:            0.625rem;       /* 10px */
     /* Mobile chrome safety */
     --mobile-safe-bottom:    env(safe-area-inset-bottom, 0px);

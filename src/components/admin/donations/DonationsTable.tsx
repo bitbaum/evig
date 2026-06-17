@@ -50,7 +50,7 @@ function getDonorDisplay(donation: Donation): string {
 
 export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: Props) {
   return (
-    <div className="bg-surface-base rounded-lg shadow-sm overflow-x-auto">
+    <div className="bg-surface-base rounded-lg border border-subtle overflow-x-auto">
       <table className="min-w-full divide-y divide-neutral-200">
         <thead className="bg-surface-raised">
           <tr>

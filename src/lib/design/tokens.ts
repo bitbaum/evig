@@ -1,12 +1,12 @@
 /**
  * Design System Tokens — SSOT for visual design
  *
- * Philosophy (xAI-inspired with RevampIT green + orange):
+ * Philosophy (xAI-inspired, RevampIT green):
  * - Dark-first: near-black surfaces, ultra-subtle borders
  * - Color appears in focused moments only: CTAs, icon accents
  * - Primary action = brand green (always)
  * - Secondary = ghost/outline (neutral, dark-aware)
- * - Two-color icon system: green (brand/content) + orange (commerce/marketplace)
+ * - Single-accent icon system: brand green only (orange retired from chrome)
  * - No rainbow per-section colors
  */
 
@@ -19,32 +19,32 @@ const SECONDARY_BTN =
 
 const FOCUS_GREEN = 'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action'
 
-// Two-color icon badge system:
-// Green = brand identity (content, mission, community, knowledge)
-// Orange = commerce identity (marketplace, workshops, repairers)
+// Single-accent icon badge system — green only. Orange is retired from chrome:
+// brand green is the sole accent, and commerce sections (marketplace, workshops,
+// repairers) no longer carry a separate orange identity. Keeps the chrome
+// monochrome; color is reserved for action + true semantics.
 const GREEN_BADGE = { bg: 'bg-action-muted', text: 'text-action' }
-const ORANGE_BADGE = { bg: 'bg-secondary-100/70 dark:bg-secondary-500/15', text: 'text-secondary-600 dark:text-secondary-400' }
 
-// Two-color hover system matching badge system
+// Hover accent — matches the badge system (green only).
 const GREEN_HOVER = 'group-hover:text-action'
-const ORANGE_HOVER = 'group-hover:text-secondary-500 dark:group-hover:text-secondary-400'
 
 export const DESIGN_TOKENS = {
-  // Icon badges — TWO brand colors only (green + orange). No rainbow.
-  // Green = brand/content identity; Orange = commerce/marketplace identity.
+  // Icon badges — brand green only. No rainbow, no per-section colors.
+  // (Every section maps to the same green badge — kept as a per-section map
+  // for API stability; a future DRY pass can collapse this to a constant.)
   iconBadges: {
-    marketplace: ORANGE_BADGE,
+    marketplace: GREEN_BADGE,
     itHilfe:     GREEN_BADGE,
     services:    GREEN_BADGE,
     about:       GREEN_BADGE,
     contact:     GREEN_BADGE,
     getInvolved: GREEN_BADGE,
-    workshops:   ORANGE_BADGE,
+    workshops:   GREEN_BADGE,
     blog:        GREEN_BADGE,
     faq:         GREEN_BADGE,
     space:       GREEN_BADGE,
     projects:    GREEN_BADGE,
-    repairers:   ORANGE_BADGE,
+    repairers:   GREEN_BADGE,
     knowhow:     GREEN_BADGE,
     home:        GREEN_BADGE,
   },
@@ -105,18 +105,18 @@ export const DESIGN_TOKENS = {
 
   cards: {
     hoverText: {
-      marketplace: ORANGE_HOVER,
+      marketplace: GREEN_HOVER,
       itHilfe:     GREEN_HOVER,
       services:    GREEN_HOVER,
       about:       GREEN_HOVER,
       contact:     GREEN_HOVER,
       getInvolved: GREEN_HOVER,
-      workshops:   ORANGE_HOVER,
+      workshops:   GREEN_HOVER,
       blog:        GREEN_HOVER,
       faq:         GREEN_HOVER,
       space:       GREEN_HOVER,
       projects:    GREEN_HOVER,
-      repairers:   ORANGE_HOVER,
+      repairers:   GREEN_HOVER,
       knowhow:     GREEN_HOVER,
       home:        GREEN_HOVER,
     },
