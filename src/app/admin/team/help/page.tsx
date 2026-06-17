@@ -15,7 +15,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection } from '@/lib/permissions'
 import { HELP_REQUEST_STATUS } from '@/config/activity'
 import { URGENCY } from '@/config/it-hilfe'
-import { HelpCircle, AlertTriangle, CheckCircle } from 'lucide-react'
+import { HelpCircle } from 'lucide-react'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminHeroStatus, type HeroKpi } from '@/components/admin/AdminHeroStatus'
@@ -105,7 +105,7 @@ function HelpRequestsHero({ stats }: { stats: HelpStats }) {
     return (
       <AdminHeroStatus
         tone="urgent"
-        icon={AlertTriangle}
+        icon="alert"
         headline={`${stats.urgent_open} dringende Anfrage${stats.urgent_open === 1 ? '' : 'n'} im Team`}
         sub="Kollege/Kollegin braucht jetzt Hilfe — übernimm oder vermittle."
         kpis={kpis}
@@ -116,7 +116,7 @@ function HelpRequestsHero({ stats }: { stats: HelpStats }) {
     return (
       <AdminHeroStatus
         tone="attention"
-        icon={HelpCircle}
+        icon="help"
         headline={`${stats.open} offene Anfrage${stats.open === 1 ? '' : 'n'}`}
         sub="Niemand hat sie übernommen. Auch wenn nicht dringend: jemand wartet."
         kpis={kpis}
@@ -126,7 +126,7 @@ function HelpRequestsHero({ stats }: { stats: HelpStats }) {
   return (
     <AdminHeroStatus
       tone="healthy"
-      icon={CheckCircle}
+      icon="checkCircle"
       headline="Keine offenen Hilfsanfragen."
       sub={`${stats.resolved_this_week} Anfrage${stats.resolved_this_week === 1 ? '' : 'n'} diese Woche gelöst.`}
       kpis={kpis}

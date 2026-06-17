@@ -77,7 +77,7 @@ export default async function AdminMediaPage() {
       */}
       <AdminHeroStatus
         tone="empty"
-        icon={ImageIcon}
+        icon="image"
         headline="Medienbibliothek ist noch leer"
         sub="Lade Bilder, Videos oder Dokumente hoch, um sie in Inhalten zu verwenden."
         kpis={[]}

@@ -21,8 +21,36 @@
 
 import { ComponentType, ReactNode } from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle2,
+  CheckCircle,
+  CheckSquare,
+  Clock,
+  AlertTriangle,
+  HelpCircle,
+  Image as ImageIcon,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+/**
+ * Icon registry — a Server Component CANNOT pass an icon *component* across the
+ * RSC boundary into this Client Component (React throws "Functions cannot be
+ * passed directly to Client Components"). Server callers must pass a string
+ * name from this registry instead. Client-Component callers may still pass a
+ * component directly (there is no serialization boundary for them).
+ */
+const HERO_ICONS = {
+  check: CheckCircle2,
+  checkCircle: CheckCircle,
+  checkSquare: CheckSquare,
+  clock: Clock,
+  alert: AlertTriangle,
+  help: HelpCircle,
+  image: ImageIcon,
+} as const
+
+export type HeroIconName = keyof typeof HERO_ICONS
 
 export type HeroTone = 'urgent' | 'attention' | 'empty' | 'healthy'
 
@@ -43,7 +71,11 @@ export type HeroCta = CtaOnClick | CtaLink
 
 export interface AdminHeroStatusProps {
   tone: HeroTone
-  icon: ComponentType<{ className?: string }>
+  /**
+   * Icon to render. Server Components MUST pass a {@link HeroIconName} string
+   * (e.g. "check"); Client Components may pass a component directly.
+   */
+  icon: HeroIconName | ComponentType<{ className?: string }>
   headline: string
   sub: string
   cta?: HeroCta
@@ -72,13 +104,14 @@ function isLinkCta(cta: HeroCta): cta is CtaLink {
 
 export function AdminHeroStatus({
   tone,
-  icon: Icon,
+  icon,
   headline,
   sub,
   cta,
   kpis,
   children,
 }: AdminHeroStatusProps) {
+  const Icon = typeof icon === 'string' ? HERO_ICONS[icon] : icon
   return (
     <div className={`rounded-xl border p-5 sm:p-6 ${TONE_SURFACE[tone]}`}>
       <div className="flex items-start gap-4">

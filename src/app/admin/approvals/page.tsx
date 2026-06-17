@@ -11,7 +11,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CheckSquare, Clock, CheckCircle2, FileText, Shield, ExternalLink } from 'lucide-react'
+import { CheckSquare, FileText, Shield, ExternalLink } from 'lucide-react'
 import { AdminHeroStatus, type HeroTone, type HeroKpi } from '@/components/admin/AdminHeroStatus'
 import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE, SUBMISSION_CONTENT_TYPE_LABELS } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
@@ -196,7 +196,7 @@ function ApprovalsHero({
     return (
       <AdminHeroStatus
         tone="healthy"
-        icon={CheckCircle2}
+        icon="check"
         headline="Keine offenen Freigaben."
         sub="Sobald jemand etwas einreicht, taucht es hier auf."
         kpis={kpis}
@@ -213,7 +213,7 @@ function ApprovalsHero({
   return (
     <AdminHeroStatus
       tone={tone}
-      icon={Clock}
+      icon="clock"
       headline={`${pending} Inhalt${pending === 1 ? '' : 'e'} warten auf Freigabe`}
       sub={sub}
       kpis={kpis}
