@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getLocale, getTranslations } from 'next-intl/server'
-import AppShell from '@/components/layout/AppShell'
 import { ORG } from '@/config/org'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,7 +25,9 @@ export default async function AuthLayout({
   const locale = await getLocale()
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      <AppShell>{children}</AppShell>
+      {/* Providers come from the root layout (correctly seeded with the server
+          session) — no second <Providers> wrapper here. See dashboard/layout.tsx. */}
+      {children}
     </NextIntlClientProvider>
   )
 }

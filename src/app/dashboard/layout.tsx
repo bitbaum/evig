@@ -3,7 +3,6 @@ import { getMessages, getLocale } from 'next-intl/server'
 import { auth } from '@/auth'
 import { isSuperAdmin } from '@/lib/permissions'
 import { getAllDashboardCards } from '@/config/dashboard'
-import AppShell from '@/components/layout/AppShell'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { DashboardNav } from '@/components/dashboard/DashboardNav'
 
@@ -23,12 +22,16 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      <AppShell>
-        <ConditionalMainLayout leanChrome>
-          <DashboardNav items={navItems} />
-          {children}
-        </ConditionalMainLayout>
-      </AppShell>
+      {/* Session/Theme/Csrf providers come from the root layout (src/app/layout.tsx),
+          seeded with the server session. We must NOT re-wrap in a second, unseeded
+          <Providers> here — that nested SessionProvider starts unauthenticated and
+          makes client pages (e.g. messages) false-redirect logged-in staff to /admin
+          (React #418 hydration mismatch). /admin works precisely because it never
+          double-wrapped. */}
+      <ConditionalMainLayout leanChrome>
+        <DashboardNav items={navItems} />
+        {children}
+      </ConditionalMainLayout>
     </NextIntlClientProvider>
   )
 }

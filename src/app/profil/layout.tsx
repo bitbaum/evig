@@ -1,6 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getLocale } from 'next-intl/server'
-import AppShell from '@/components/layout/AppShell'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 
 export default async function ProfilLayout({ children }: { children: React.ReactNode }) {
@@ -8,11 +7,11 @@ export default async function ProfilLayout({ children }: { children: React.React
   const locale = await getLocale()
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      <AppShell>
-        <ConditionalMainLayout>
-          {children}
-        </ConditionalMainLayout>
-      </AppShell>
+      {/* Providers come from the root layout (correctly seeded with the server
+          session) — no second <Providers> wrapper here. See dashboard/layout.tsx. */}
+      <ConditionalMainLayout>
+        {children}
+      </ConditionalMainLayout>
     </NextIntlClientProvider>
   )
 }
