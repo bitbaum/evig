@@ -1,11 +1,23 @@
 /**
  * Image Upload Utility
  *
- * Handles image upload to Vercel Blob storage for production
- * or local filesystem for development.
+ * Production: Hetzner Object Storage (S3-compatible) via the AWS S3 SDK.
+ * Development: local filesystem (public/uploads) when S3 isn't configured, so
+ * `next dev` still works without cloud credentials.
+ *
+ * Required env (production / self-host) — set in .env.selfhost.local:
+ *   S3_ENDPOINT           e.g. https://fsn1.your-objectstorage.com
+ *   S3_REGION             e.g. fsn1  (Hetzner location id)
+ *   S3_BUCKET             e.g. revampit-media
+ *   S3_ACCESS_KEY_ID
+ *   S3_SECRET_ACCESS_KEY
+ *   S3_PUBLIC_URL         public base URL for objects, e.g.
+ *                         https://revampit-media.fsn1.your-objectstorage.com
+ *
+ * (Vercel Blob is gone — RevampIT is Hetzner-only.)
  */
 
-import { put, del } from '@vercel/blob'
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { logger } from '@/lib/logger'
 import fs from 'fs'
 import path from 'path'
@@ -16,121 +28,114 @@ interface UploadResult {
   error?: string
 }
 
-/**
- * Check if blob storage is configured
- */
-export function isBlobConfigured(): boolean {
-  return !!process.env.BLOB_READ_WRITE_TOKEN
+// Read env dynamically (not at module load) so config can be set late and is
+// testable. publicUrl has any trailing slash stripped.
+function storageEnv() {
+  return {
+    endpoint: process.env.S3_ENDPOINT,
+    region: process.env.S3_REGION || 'auto',
+    bucket: process.env.S3_BUCKET,
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    publicUrl: process.env.S3_PUBLIC_URL?.replace(/\/$/, ''),
+  }
+}
+
+/** True when object storage is fully configured (production path). */
+export function isStorageConfigured(): boolean {
+  const e = storageEnv()
+  return Boolean(e.endpoint && e.bucket && e.accessKeyId && e.secretAccessKey && e.publicUrl)
+}
+
+let _s3: S3Client | null = null
+function s3(): S3Client {
+  if (!_s3) {
+    const e = storageEnv()
+    _s3 = new S3Client({
+      endpoint: e.endpoint,
+      region: e.region,
+      credentials: { accessKeyId: e.accessKeyId!, secretAccessKey: e.secretAccessKey! },
+      // Hetzner Object Storage works with virtual-hosted style; flip via env if
+      // a particular bucket/endpoint needs path-style.
+      forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+    })
+  }
+  return _s3
+}
+
+function decodeBase64(base64Data: string): { buffer: Buffer; contentType: string } {
+  const base64Content = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data
+  const buffer = Buffer.from(base64Content, 'base64')
+  let contentType = 'image/jpeg'
+  if (base64Data.startsWith('data:')) {
+    const match = base64Data.match(/data:([^;]+);/)
+    if (match) contentType = match[1]
+  }
+  return { buffer, contentType }
 }
 
 /**
- * Upload a base64 image to blob storage (production) or local filesystem (development)
- *
- * @param base64Data - Base64 encoded image (with or without data URL prefix)
- * @param filename - Desired filename (e.g., "I-260204-0001.jpg")
- * @param folder - Optional folder path (e.g., "products")
- * @returns Upload result with URL or error
+ * Upload a base64 image. Returns a public URL or an error.
+ * @param folder e.g. "products" / "listings"
  */
 export async function uploadImage(
   base64Data: string,
   filename: string,
-  folder: string = 'products'
+  folder: string = 'products',
 ): Promise<UploadResult> {
+  const key = `${folder}/${filename}`
+
   try {
-    // Remove data URL prefix if present
-    const base64Content = base64Data.includes(',')
-      ? base64Data.split(',')[1]
-      : base64Data
+    const { buffer, contentType } = decodeBase64(base64Data)
 
-    // Convert base64 to buffer
-    const buffer = Buffer.from(base64Content, 'base64')
-
-    // Determine content type from data URL or default to jpeg
-    let contentType = 'image/jpeg'
-    if (base64Data.startsWith('data:')) {
-      const match = base64Data.match(/data:([^;]+);/)
-      if (match) {
-        contentType = match[1]
-      }
+    if (isStorageConfigured()) {
+      const e = storageEnv()
+      await s3().send(
+        new PutObjectCommand({
+          Bucket: e.bucket,
+          Key: key,
+          Body: buffer,
+          ContentType: contentType,
+          ACL: 'public-read',
+          CacheControl: 'public, max-age=31536000, immutable',
+        }),
+      )
+      const url = `${e.publicUrl}/${key}`
+      logger.info('Image uploaded to object storage', { key, url, size: buffer.length })
+      return { success: true, url }
     }
 
-    // Check if blob storage is configured
-    if (isBlobConfigured()) {
-      // Production: Upload to Vercel Blob
-      const pathname = `${folder}/${filename}`
-
-      const blob = await put(pathname, buffer, {
-        access: 'public',
-        contentType,
-        addRandomSuffix: false, // Keep exact filename for predictability
-      })
-
-      logger.info('Image uploaded to blob storage', {
-        filename,
-        url: blob.url,
-        size: buffer.length,
-      })
-
-      return {
-        success: true,
-        url: blob.url,
-      }
-    } else {
-      // Development: Save to local filesystem
+    // Dev fallback: local filesystem (only works under `next dev`, never in a
+    // standalone production build).
+    if (process.env.NODE_ENV !== 'production') {
       const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder)
-
-      // Create directory if it doesn't exist
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true })
-      }
-
-      const filepath = path.join(uploadDir, filename)
-      fs.writeFileSync(filepath, buffer)
-
-      // Return URL relative to public folder
+      if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+      fs.writeFileSync(path.join(uploadDir, filename), buffer)
       const url = `/uploads/${folder}/${filename}`
-
-      logger.info('Image saved to local filesystem', {
-        filename,
-        filepath,
-        url,
-        size: buffer.length,
-      })
-
-      return {
-        success: true,
-        url,
-      }
+      logger.info('Image saved to local filesystem (dev)', { url, size: buffer.length })
+      return { success: true, url }
     }
+
+    logger.error('Image upload failed: object storage not configured (S3_* env vars missing)')
+    return { success: false, error: 'Bildspeicher ist nicht konfiguriert.' }
   } catch (error) {
     logger.error('Failed to upload image', { error, filename })
-
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown upload error',
-    }
+    return { success: false, error: error instanceof Error ? error.message : 'Unbekannter Fehler beim Upload' }
   }
 }
 
-/**
- * Delete an image from blob storage or local filesystem
- *
- * @param url - Full URL or path of the image to delete
- * @returns Success status
- */
+/** Delete an image by its stored URL (S3 object or local dev file). */
 export async function deleteImage(url: string): Promise<boolean> {
   try {
-    if (url.includes('blob.vercel-storage.com')) {
-      // Blob storage
-      await del(url)
-      logger.info('Image deleted from blob storage', { url })
+    const e = storageEnv()
+    if (e.publicUrl && url.startsWith(e.publicUrl)) {
+      const key = url.slice(e.publicUrl.length + 1) // strip "base/"
+      await s3().send(new DeleteObjectCommand({ Bucket: e.bucket, Key: key }))
+      logger.info('Image deleted from object storage', { key })
     } else if (url.startsWith('/uploads/')) {
-      // Local filesystem
       const filepath = path.join(process.cwd(), 'public', url)
-      if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath)
-        logger.info('Image deleted from local filesystem', { url, filepath })
-      }
+      if (fs.existsSync(filepath)) fs.unlinkSync(filepath)
+      logger.info('Image deleted from local filesystem', { url })
     }
     return true
   } catch (error) {
@@ -140,11 +145,8 @@ export async function deleteImage(url: string): Promise<boolean> {
 }
 
 /**
- * Generate a unique filename for a product image
- *
- * @param itemUuid - Product item UUID (e.g., "I-260204-0001")
- * @param index - Image index (for multiple images)
- * @returns Filename like "I-260204-0001_1.jpg"
+ * Generate a unique filename for a product image.
+ * @returns Filename like "I-260204-0001.jpg" or "I-260204-0001_1.jpg"
  */
 export function generateImageFilename(itemUuid: string, index: number = 0): string {
   const suffix = index > 0 ? `_${index}` : ''
