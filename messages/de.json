@@ -144,8 +144,8 @@
     "linuxOpenSource": "Linux & Open Source",
     "webDevelopment": "Webentwicklung",
     "openSourceSolutions": "Open Source-Lösungen",
-      "communityListings": "Marktplatz",
-      "shopRevampIT": "Revamp-IT Inserate",
+    "communityListings": "Marktplatz",
+    "shopRevampIT": "Revamp-IT Inserate",
     "storeZurich": "Ladenlokal Zürich",
     "createListing": "Inserat erstellen",
     "myListings": "Meine Inserate",
@@ -820,7 +820,11 @@
       "conditionMeaningFor": "Was bedeutet \"{condition}\" für {category}?",
       "loadError": "Fehler beim Laden des Inserats",
       "verified": "Verifiziert",
-      "free": "Gratis"
+      "free": "Gratis",
+      "trust": {
+        "verified": "Von Revamp-IT geprüft & getestet",
+        "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein"
+      }
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",

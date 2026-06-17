@@ -16,6 +16,7 @@ import { ListingImageGallery } from './ListingImageGallery'
 import { ListingInfoPanel } from './ListingInfoPanel'
 import { ListingActionButtons } from './ListingActionButtons'
 import { ListingSellerCard } from './ListingSellerCard'
+import { RevampitTrustStrip } from './RevampitTrustStrip'
 import { ListingDetails } from './ListingDetails'
 import { ReportModal } from './ReportModal'
 import { SimilarListings } from './SimilarListings'
@@ -122,6 +123,8 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             onShare={actions.handleShare}
             onShowReportModal={() => actions.setShowReportModal(true)}
           />
+
+          <RevampitTrustStrip listing={listing} isVerified={isVerified} />
 
           <ListingSellerCard listing={listing} sellerName={sellerName} />
 
