@@ -10,7 +10,8 @@ import { designPrimitive } from '@/lib/design-system'
  * Principles:
  * - Admin UIs are data-dense; headings must be much smaller than marketing pages
  * - Every design decision is a named export — no magic strings in components
- * - Color = meaning: green = create/success, red = danger, amber = warning, blue = info
+ * - Color = meaning only: green = create/success, red = danger, amber = warning.
+ *   Everything else is neutral (monochrome chrome — no decorative rainbow).
  */
 
 // ─── Typography ─────────────────────────────────────────────────────────────
@@ -84,16 +85,21 @@ export const adminIconBox = {
 
 // ─── Icon Box Colors ──────────────────────────────────────────────────────────
 
+// Monochrome admin chrome: only the three SEMANTIC colors carry meaning
+// (green = success/create, amber = warning, red = danger). Every other key is
+// neutral — the decorative rainbow (blue/purple/indigo/teal/orange) is retired.
+// Keys are kept for API stability; the non-semantic ones now render neutral.
+const NEUTRAL_ICON = 'bg-neutral-100 text-neutral-600 dark:bg-neutral-500/12 dark:text-neutral-400'
 export const adminIconColor = {
-  blue:   'bg-neutral-100 text-neutral-600 dark:bg-neutral-500/12 dark:text-neutral-400',
   green:  'bg-primary-100 text-primary-600 dark:bg-primary-500/12 dark:text-primary-400',
   amber:  'bg-warning-100 text-warning-600 dark:bg-warning-500/12 dark:text-warning-400',
   red:    'bg-error-100 text-error-600 dark:bg-error-500/12 dark:text-error-400',
-  purple: 'bg-purple-100 text-purple-600 dark:bg-purple-500/12 dark:text-purple-400',
-  indigo: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/12 dark:text-indigo-400',
-  teal:   'bg-teal-100 text-teal-600 dark:bg-teal-500/12 dark:text-teal-400',
+  blue:   NEUTRAL_ICON,
+  purple: NEUTRAL_ICON,
+  indigo: NEUTRAL_ICON,
+  teal:   NEUTRAL_ICON,
+  orange: NEUTRAL_ICON,
   gray:   'bg-neutral-100 text-neutral-600 dark:bg-white/6 dark:text-neutral-400',
-  orange: 'bg-orange-100 text-orange-600 dark:bg-orange-500/12 dark:text-orange-400',
 } as const
 
 export type AdminIconColorKey = keyof typeof adminIconColor

@@ -28,103 +28,35 @@ const GREEN_BADGE = { bg: 'bg-action-muted', text: 'text-action' }
 // Hover accent — matches the badge system (green only).
 const GREEN_HOVER = 'group-hover:text-action'
 
+// Section keys — SSOT list of public section identities. Theming is uniform
+// (a single green accent), so the maps below are generated from this list
+// rather than repeating an identical entry per section.
+export const SECTION_KEYS = [
+  'marketplace', 'itHilfe', 'services', 'about', 'contact', 'getInvolved',
+  'workshops', 'blog', 'faq', 'space', 'projects', 'repairers', 'knowhow', 'home',
+] as const
+
+export type ThemeKey = (typeof SECTION_KEYS)[number]
+
+/** Build a uniform per-section map from one value (every section shares it). */
+const bySection = <T>(value: T): Record<ThemeKey, T> =>
+  Object.fromEntries(SECTION_KEYS.map((k) => [k, value])) as Record<ThemeKey, T>
+
+// Icon badges, buttons, focus rings, and card-hover are brand-green only and
+// uniform across every section (no rainbow, no per-section colors). Generated
+// from SECTION_KEYS, so theming behaviour has exactly one place to change.
 export const DESIGN_TOKENS = {
-  // Icon badges — brand green only. No rainbow, no per-section colors.
-  // (Every section maps to the same green badge — kept as a per-section map
-  // for API stability; a future DRY pass can collapse this to a constant.)
-  iconBadges: {
-    marketplace: GREEN_BADGE,
-    itHilfe:     GREEN_BADGE,
-    services:    GREEN_BADGE,
-    about:       GREEN_BADGE,
-    contact:     GREEN_BADGE,
-    getInvolved: GREEN_BADGE,
-    workshops:   GREEN_BADGE,
-    blog:        GREEN_BADGE,
-    faq:         GREEN_BADGE,
-    space:       GREEN_BADGE,
-    projects:    GREEN_BADGE,
-    repairers:   GREEN_BADGE,
-    knowhow:     GREEN_BADGE,
-    home:        GREEN_BADGE,
-  },
-
+  iconBadges: bySection(GREEN_BADGE),
   buttons: {
-    // All primary buttons → brand green. Consistent. Unmistakably RevampIT.
-    primary: {
-      marketplace: PRIMARY_BTN,
-      itHilfe:     PRIMARY_BTN,
-      services:    PRIMARY_BTN,
-      about:       PRIMARY_BTN,
-      contact:     PRIMARY_BTN,
-      getInvolved: PRIMARY_BTN,
-      workshops:   PRIMARY_BTN,
-      blog:        PRIMARY_BTN,
-      faq:         PRIMARY_BTN,
-      space:       PRIMARY_BTN,
-      projects:    PRIMARY_BTN,
-      repairers:   PRIMARY_BTN,
-      knowhow:     PRIMARY_BTN,
-      home:        PRIMARY_BTN,
-    },
-    // All secondary buttons → ghost outline. Clean, dark-aware.
-    secondary: {
-      marketplace: SECONDARY_BTN,
-      itHilfe:     SECONDARY_BTN,
-      services:    SECONDARY_BTN,
-      about:       SECONDARY_BTN,
-      contact:     SECONDARY_BTN,
-      getInvolved: SECONDARY_BTN,
-      workshops:   SECONDARY_BTN,
-      blog:        SECONDARY_BTN,
-      faq:         SECONDARY_BTN,
-      space:       SECONDARY_BTN,
-      projects:    SECONDARY_BTN,
-      repairers:   SECONDARY_BTN,
-      knowhow:     SECONDARY_BTN,
-      home:        SECONDARY_BTN,
-    },
+    primary: bySection(PRIMARY_BTN),
+    secondary: bySection(SECONDARY_BTN),
   },
-
-  focusOutline: {
-    marketplace: FOCUS_GREEN,
-    itHilfe:     FOCUS_GREEN,
-    services:    FOCUS_GREEN,
-    about:       FOCUS_GREEN,
-    contact:     FOCUS_GREEN,
-    getInvolved: FOCUS_GREEN,
-    workshops:   FOCUS_GREEN,
-    blog:        FOCUS_GREEN,
-    faq:         FOCUS_GREEN,
-    space:       FOCUS_GREEN,
-    projects:    FOCUS_GREEN,
-    repairers:   FOCUS_GREEN,
-    knowhow:     FOCUS_GREEN,
-    home:        FOCUS_GREEN,
-  },
-
+  focusOutline: bySection(FOCUS_GREEN),
   cards: {
-    hoverText: {
-      marketplace: GREEN_HOVER,
-      itHilfe:     GREEN_HOVER,
-      services:    GREEN_HOVER,
-      about:       GREEN_HOVER,
-      contact:     GREEN_HOVER,
-      getInvolved: GREEN_HOVER,
-      workshops:   GREEN_HOVER,
-      blog:        GREEN_HOVER,
-      faq:         GREEN_HOVER,
-      space:       GREEN_HOVER,
-      projects:    GREEN_HOVER,
-      repairers:   GREEN_HOVER,
-      knowhow:     GREEN_HOVER,
-      home:        GREEN_HOVER,
-    },
+    hoverText: bySection(GREEN_HOVER),
     border: {
       default:  'border-subtle',
       featured: 'border-action/30 ring-1 ring-action/20',
     },
   },
 } as const
-
-export type ThemeKey = keyof typeof DESIGN_TOKENS.iconBadges
