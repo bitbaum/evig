@@ -4,17 +4,13 @@ import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
-  MARKETPLACE_CATEGORY_VALUES,
-  CATEGORY_ICONS,
   DELIVERY_OPTIONS,
   PAYMENT_MODES,
   MARKETPLACE_LIMITS,
-  MARKETPLACE_SELLER_TYPE,
   SPEC_FILTER_STATE_MAP,
   getSpecFiltersForCategory,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
-import { ORG } from '@/config/org'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -78,7 +74,7 @@ function RadioOption({
         name={name}
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 text-secondary-600 border-default focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
+        className="h-3.5 w-3.5 text-text-primary border-default focus:ring-action focus:ring-offset-0 shrink-0"
       />
       <span className="text-sm text-text-secondary group-hover:text-text-primary leading-snug">
         {label}
@@ -102,7 +98,7 @@ function CheckOption({
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 rounded-sm text-secondary-600 border-default focus:ring-secondary-500 focus:ring-offset-0 shrink-0"
+        className="h-3.5 w-3.5 rounded-sm text-text-primary border-default focus:ring-action focus:ring-offset-0 shrink-0"
       />
       <span className="text-sm text-text-secondary group-hover:text-text-primary leading-snug">
         {label}
@@ -143,60 +139,12 @@ export function MarketplaceFilterSidebar({
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="text-xs text-secondary-600 hover:text-secondary-700 font-medium h-auto px-0 bg-transparent hover:bg-transparent"
+            className="text-xs text-text-secondary hover:text-text-primary font-medium h-auto px-0 bg-transparent hover:bg-transparent"
           >
             {t('filters.clearFilters')}
           </Button>
         )}
       </div>
-
-      {/* Category */}
-      <FilterSection title={t('filters.categoryTitle')}>
-        <RadioOption
-          name="category"
-          checked={!filters.category}
-          onChange={() => { filters.setCategory(''); resetOffset() }}
-          label={t('categories.all')}
-        />
-        {MARKETPLACE_CATEGORY_VALUES.map((val) => (
-          <RadioOption
-            key={val}
-            name="category"
-            checked={filters.category === val}
-            onChange={() => { filters.setCategory(val); resetOffset() }}
-            label={
-              <>
-                {CATEGORY_ICONS[val] && (
-                  <span className="mr-1 text-base leading-none">{CATEGORY_ICONS[val]}</span>
-                )}
-                {t(`categories.${val}` as never)}
-              </>
-            }
-          />
-        ))}
-      </FilterSection>
-
-      {/* Seller type */}
-      <FilterSection title={t('filters.sellerTypeTitle')}>
-        <RadioOption
-          name="seller-type"
-          checked={!filters.sellerType}
-          onChange={() => { filters.setSellerType(''); resetOffset() }}
-          label={t('sellerTypes.all')}
-        />
-        <RadioOption
-          name="seller-type"
-          checked={filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT}
-          onChange={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.REVAMPIT); resetOffset() }}
-          label={t('sellerTypes.revampit', { orgName: ORG.name })}
-        />
-        <RadioOption
-          name="seller-type"
-          checked={filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY}
-          onChange={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.COMMUNITY); resetOffset() }}
-          label={t('sellerTypes.community')}
-        />
-      </FilterSection>
 
       {/* Condition */}
       <FilterSection title={t('filters.condition')}>

@@ -20,6 +20,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import { MarketplaceFilterSidebar } from '@/components/marketplace/MarketplaceFilterSidebar'
+import { MarketplaceFilterBar } from '@/components/marketplace/MarketplaceFilterBar'
 import { ActiveFilterChips } from '@/components/marketplace/ActiveFilterChips'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { Input } from '@/components/ui/input'
@@ -60,6 +61,19 @@ export default function MarketplacePage() {
     filters.delivery,
     filters.payment,
     filters.sellerType,
+    filters.priceMin,
+    filters.priceMax,
+    filters.gratisOnly ? 'gratis' : '',
+    filters.verifiedOnly ? 'verified' : '',
+    filters.specRamMin,
+    filters.specStorageMin,
+    filters.specDisplayMin,
+  ].filter(Boolean).length
+
+  const advancedFilterCount = [
+    filters.condition,
+    filters.delivery,
+    filters.payment,
     filters.priceMin,
     filters.priceMax,
     filters.gratisOnly ? 'gratis' : '',
@@ -158,22 +172,24 @@ export default function MarketplacePage() {
           </Select>
         </div>
 
-        {/* Active filter chips */}
+        {/* Unified filter bar — source + category in one surface */}
+        <MarketplaceFilterBar
+          filters={filters}
+          resetOffset={resetOffset}
+          onOpenAdvanced={() => setMobileFiltersOpen(true)}
+          activeAdvancedCount={advancedFilterCount}
+        />
+
+        {/* Secondary chips — condition, price, etc. (not duplicating source/category pills) */}
         <ActiveFilterChips
           filters={filters}
           resetOffset={resetOffset}
           clearFilters={clearFilters}
+          hidePrimary
         />
 
-        {/* 2-column layout */}
-        <div className="flex gap-8 items-start">
-          {/* Sidebar — desktop only */}
-          <aside className="hidden lg:block w-56 shrink-0 sticky top-20 pb-4">
-            <MarketplaceFilterSidebar {...sharedSidebarProps} />
-          </aside>
-
-          {/* Results area */}
-          <div className="flex-1 min-w-0">
+        {/* Results area — full width */}
+        <div className="min-w-0">
             {/* Results header */}
             <div className="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-subtle">
               <p className="ui-public-meta font-mono tabular-nums">
@@ -258,9 +274,7 @@ export default function MarketplacePage() {
               </nav>
             )}
           </div>
-        </div>
 
-        {/* ── Sign-in CTA — text-only fleetcrown discipline ───────── */}
         {status === 'unauthenticated' && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
             <div className="mx-auto max-w-2xl">
@@ -280,17 +294,17 @@ export default function MarketplacePage() {
         )}
       </div>
 
-      {/* ── Mobile filter drawer ──────────────────────────────────── */}
+      {/* Advanced filters sheet — all breakpoints */}
       {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={t('filters.label')}>
+        <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={t('filters.advanced')}>
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-surface-base flex flex-col border-l border-subtle">
+          <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-surface-base flex flex-col border-l border-strong">
             <div className="flex items-center justify-between p-4 border-b border-subtle shrink-0">
-              <span className="ui-public-eyebrow">{t('filters.label')}</span>
+              <span className="ui-public-eyebrow">{t('filters.advanced')}</span>
               <Button
                 type="button"
                 variant="ghost"

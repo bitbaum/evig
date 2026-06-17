@@ -79,8 +79,15 @@ export default function TechnikerListClient() {
               </p>
             </div>
             <Link
-              href={session?.user ? ROUTES.public.profilTechniker : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
+              href={ROUTES.public.itHilfeCreate}
               className="ui-public-cta inline-flex items-center gap-2 md:justify-self-end"
+            >
+              <Search className="w-4 h-4" />
+              {t('list.requestHelp')}
+            </Link>
+            <Link
+              href={session?.user ? ROUTES.public.profilTechniker : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
+              className="ui-public-cta-ghost inline-flex items-center gap-2 md:justify-self-end text-sm"
             >
               <Wrench className="w-4 h-4" />
               {t('list.becomeTechnician')}

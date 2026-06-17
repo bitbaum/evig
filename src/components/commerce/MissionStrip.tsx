@@ -33,7 +33,7 @@ export async function MissionStrip({ className }: MissionStripProps) {
     <section
       className={cn(
         'border-y border-subtle',
-        'bg-action-muted/60',
+        'bg-surface-raised/80',
         className,
       )}
       aria-label={t('ariaLabel')}

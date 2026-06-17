@@ -94,10 +94,10 @@ export function AIFormAssist<T = Record<string, unknown>>({
     refineFields(currentData, prompt)
   }
 
-  // Styles
+  // Styles — neutral surface; green only on submit button
   const containerClass = variant === 'section'
-    ? 'bg-action-muted rounded-xl border border-strong'
-    : 'rounded-lg border border-strong bg-action-muted'
+    ? 'rounded-xl border border-subtle bg-surface-raised'
+    : 'rounded-lg border border-subtle bg-surface-raised'
 
   const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4'
 
@@ -110,11 +110,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
         onClick={() => setIsExpanded(!isExpanded)}
         className={`w-full flex items-center justify-between ${padding} py-2.5 text-left h-auto rounded-none`}
       >
-        <span className="text-sm font-semibold text-action-text flex items-center gap-2">
+        <span className="text-sm font-semibold text-text-primary flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-action" />
           {t('heading')}
         </span>
-        <svg className={`w-4 h-4 text-action transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className={`w-4 h-4 text-text-tertiary transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </Button>
@@ -131,7 +131,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
           {/* Success feedback — persistent until next action, shows field count */}
           {success && !error && (
-            <div className="flex items-center gap-2 bg-action-muted border border-strong text-action px-3 py-2 rounded-lg text-sm">
+            <div className="flex items-center gap-2 border border-subtle bg-surface-base text-text-primary px-3 py-2 rounded-lg text-sm">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               <span>
                 {filledCount > 0

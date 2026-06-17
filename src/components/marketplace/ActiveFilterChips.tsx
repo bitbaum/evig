@@ -20,6 +20,8 @@ interface ActiveFilterChipsProps {
   filters: FiltersObj
   resetOffset: () => void
   clearFilters: () => void
+  /** When true, omit source/category chips (shown as pills in MarketplaceFilterBar). */
+  hidePrimary?: boolean
 }
 
 interface Chip {
@@ -32,11 +34,12 @@ function buildChips(
   filters: FiltersObj,
   resetOffset: () => void,
   orgName: string,
-  t: Translator
+  t: Translator,
+  hidePrimary: boolean,
 ): Chip[] {
   const chips: Chip[] = []
 
-  if (filters.category) {
+  if (!hidePrimary && filters.category) {
     const icon = CATEGORY_ICONS[filters.category]
     const label = t(`categories.${filters.category}` as never)
     chips.push({
@@ -46,7 +49,7 @@ function buildChips(
     })
   }
 
-  if (filters.sellerType) {
+  if (!hidePrimary && filters.sellerType) {
     chips.push({
       key: 'sellerType',
       label:
@@ -160,9 +163,10 @@ export function ActiveFilterChips({
   filters,
   resetOffset,
   clearFilters,
+  hidePrimary = false,
 }: ActiveFilterChipsProps) {
   const t = useTranslations('marketplace')
-  const chips = buildChips(filters, resetOffset, ORG.name, t)
+  const chips = buildChips(filters, resetOffset, ORG.name, t, hidePrimary)
 
   if (chips.length === 0) return null
 
@@ -171,7 +175,7 @@ export function ActiveFilterChips({
       {chips.map((chip) => (
         <span
           key={chip.key}
-          className="inline-flex items-center gap-1 rounded-full bg-secondary-50 border border-secondary-200 pl-3 pr-2 py-1 text-sm text-secondary-800 font-medium"
+          className="inline-flex items-center gap-1 rounded-md border border-default bg-surface-raised pl-2.5 pr-1.5 py-1 text-xs font-medium text-text-secondary"
         >
           {chip.label}
           <Button
@@ -180,7 +184,7 @@ export function ActiveFilterChips({
             size="icon"
             onClick={chip.onRemove}
             aria-label={t('chips.remove', { label: chip.label })}
-            className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full hover:bg-secondary-200 text-secondary-500 hover:text-secondary-700 h-auto p-0 bg-transparent"
+            className="ml-0.5 flex h-5 w-5 items-center justify-center rounded-sm text-text-muted hover:text-text-primary hover:bg-surface-overlay p-0 bg-transparent"
           >
             <X className="w-2.5 h-2.5" />
           </Button>

@@ -790,7 +790,8 @@
       "sellerTypeTitle": "Anbieter",
       "qualityTitle": "Qualität",
       "showResults": "Ergebnisse anzeigen",
-      "closeLabel": "Schliessen"
+      "closeLabel": "Schliessen",
+      "advanced": "Weitere Filter"
     },
     "listing": {
       "contact": "Verkäufer kontaktieren",
@@ -7393,6 +7394,7 @@
       "title": "Techniker",
       "available": "{count, plural, one {# Techniker} other {# Techniker}} verfügbar",
       "becomeTechnician": "Techniker werden",
+      "requestHelp": "Hilfe anfragen",
       "searchPlaceholder": "Name, Stadt, Beschreibung...",
       "searchAriaLabel": "Techniker suchen",
       "searchButton": "Suchen",
