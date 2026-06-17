@@ -202,13 +202,14 @@ const nextConfig = {
   },
   // Enable static optimization
   output: 'standalone',
+  // ESLint already runs on pre-commit (lint-staged) and in CI. Re-running it
+  // inside every `next build` only adds minutes — skip it here.
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: process.env.NODE_ENV === 'production',
-    // Single static-generation worker eliminates the parallel-worker React
-    // initialization race that causes "Cannot read properties of null (reading
-    // 'useContext')" on /_global-error with next-auth v5 beta.
-    cpus: 1,
   },
   // Add specific CSS handling
   sassOptions: {
