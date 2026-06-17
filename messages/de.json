@@ -824,7 +824,10 @@
       "trust": {
         "verified": "Von Revamp-IT geprüft & getestet",
         "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein"
-      }
+      },
+      "zoomOpen": "Vergrössern",
+      "zoomClose": "Schliessen",
+      "photoCount": "{count} Fotos"
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",
@@ -1053,6 +1056,22 @@
     "eyebrows": {
       "marketplace": "MARKTPLATZ",
       "getInvolved": "MITMACHEN"
+    },
+    "cart": {
+      "addToCart": "In den Warenkorb",
+      "inCart": "Im Warenkorb",
+      "title": "Warenkorb",
+      "empty": "Dein Warenkorb ist leer.",
+      "emptyCta": "Zum Marktplatz",
+      "remove": "Entfernen",
+      "subtotal": "Zwischensumme",
+      "total": "Total",
+      "checkout": "Zur Kasse",
+      "itemCount": "{count, plural, one {# Artikel} other {# Artikel}}",
+      "continueShopping": "Weiter einkaufen",
+      "pickupNote": "Abholung in Zürich — kostenlos",
+      "revampitOnly": "Nur Revamp-IT-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
+      "cartAriaLabel": "Warenkorb, {count} Artikel"
     }
   },
   "services": {

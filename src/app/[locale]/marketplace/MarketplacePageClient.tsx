@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { SORT_OPTIONS } from '@/config/marketplace'
 import { ListingCard, ListingCardGrid } from '@/components/marketplace/ListingCard'
+import { CartIcon } from '@/components/marketplace/cart/CartIcon'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
@@ -108,13 +109,16 @@ export default function MarketplacePage() {
                 {t('listingsAvailable', { count: pagination.total })}
               </p>
             </div>
-            <Link
-              href={sellHref}
-              className="ui-public-cta inline-flex items-center gap-2 md:justify-self-end"
-            >
-              <Plus className="w-4 h-4" />
-              {t('sell.label')}
-            </Link>
+            <div className="flex items-center gap-3 md:justify-self-end">
+              <CartIcon />
+              <Link
+                href={sellHref}
+                className="ui-public-cta inline-flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                {t('sell.label')}
+              </Link>
+            </div>
           </div>
 
           <form onSubmit={handleSearch} className="mt-8 max-w-2xl">

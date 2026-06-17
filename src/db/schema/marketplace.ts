@@ -179,7 +179,9 @@ export const marketplaceOrders = pgTable('marketplace_orders', {
   id: uuid('id').primaryKey().defaultRandom(),
   buyerId: uuid('buyer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   sellerId: uuid('seller_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+  // Single-item P2P orders set this directly; multi-item RevampIT cart orders
+  // leave it null and list their items in marketplace_order_items (089).
+  listingId: uuid('listing_id').references(() => listings.id, { onDelete: 'cascade' }),
 
   // Financial
   amountChf: decimal('amount_chf', { precision: 10, scale: 2 }).notNull(),
@@ -217,6 +219,27 @@ export const marketplaceOrders = pgTable('marketplace_orders', {
 
 export type MarketplaceOrder = typeof marketplaceOrders.$inferSelect
 export type NewMarketplaceOrder = typeof marketplaceOrders.$inferInsert
+
+// =============================================================================
+// MARKETPLACE ORDER ITEMS (089)
+// =============================================================================
+// Line items for a multi-item RevampIT cart order. Distinct from the legacy
+// Medusa `order_items` (which references the separate `orders` table).
+export const marketplaceOrderItems = pgTable('marketplace_order_items', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  orderId: uuid('order_id').notNull().references(() => marketplaceOrders.id, { onDelete: 'cascade' }),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'restrict' }),
+  title: text('title').notNull(),
+  unitPriceChf: decimal('unit_price_chf', { precision: 10, scale: 2 }).notNull(),
+  quantity: integer('quantity').notNull().default(1),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_marketplace_order_items_order').on(table.orderId),
+  index('idx_marketplace_order_items_listing').on(table.listingId),
+])
+
+export type MarketplaceOrderItem = typeof marketplaceOrderItems.$inferSelect
+export type NewMarketplaceOrderItem = typeof marketplaceOrderItems.$inferInsert
 
 // =============================================================================
 // SELLER PROFILES

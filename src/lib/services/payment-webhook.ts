@@ -6,9 +6,9 @@
  */
 
 import { db } from '@/db'
-import { marketplaceOrders, listings, users, paymentTransactions, workshopRegistrations, serviceAppointments } from '@/db/schema'
+import { marketplaceOrders, marketplaceOrderItems, listings, users, paymentTransactions, workshopRegistrations, serviceAppointments } from '@/db/schema'
 import { inventoryItems } from '@/db/schema/inventory'
-import { eq, and, sql } from 'drizzle-orm'
+import { eq, and, sql, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import {
@@ -38,7 +38,7 @@ interface MarketplaceOrder {
   id: string
   buyerId: string
   sellerId: string
-  listingId: string
+  listingId: string | null
   amountChf: string
   commissionChf: string
   sellerPayoutChf: string
@@ -118,17 +118,7 @@ function verifyTransactionAmount(paymentTx: PaymentTransaction, claim: WebhookAm
 export async function lookupPaymentByReferenceId(referenceId: string): Promise<PaymentLookupResult> {
   // Try marketplace order first
   const orderRows = await db
-    .select({
-      id: marketplaceOrders.id,
-      buyerId: marketplaceOrders.buyerId,
-      sellerId: marketplaceOrders.sellerId,
-      listingId: marketplaceOrders.listingId,
-      amountChf: marketplaceOrders.amountChf,
-      commissionChf: marketplaceOrders.commissionChf,
-      sellerPayoutChf: marketplaceOrders.sellerPayoutChf,
-      status: marketplaceOrders.status,
-      deliveryMethod: marketplaceOrders.deliveryMethod,
-    })
+    .select()
     .from(marketplaceOrders)
     .where(eq(marketplaceOrders.id, referenceId))
 
@@ -285,16 +275,25 @@ export async function handleMarketplacePayment(
           })
           .where(eq(marketplaceOrders.id, order.id))
 
-        // Restore listing to active
-        await tx
-          .update(listings)
-          .set({ status: LISTING_STATUS.ACTIVE })
-          .where(
-            and(
-              eq(listings.id, order.listingId),
-              eq(listings.status, LISTING_STATUS.RESERVED)
-            )
-          )
+        // Restore the reserved listing(s) to active. Single-item orders carry
+        // listingId; cart orders restore every item via marketplace_order_items.
+        if (order.listingId) {
+          await tx
+            .update(listings)
+            .set({ status: LISTING_STATUS.ACTIVE })
+            .where(and(eq(listings.id, order.listingId), eq(listings.status, LISTING_STATUS.RESERVED)))
+        } else {
+          const items = await tx
+            .select({ listingId: marketplaceOrderItems.listingId })
+            .from(marketplaceOrderItems)
+            .where(eq(marketplaceOrderItems.orderId, order.id))
+          if (items.length > 0) {
+            await tx
+              .update(listings)
+              .set({ status: LISTING_STATUS.ACTIVE })
+              .where(and(inArray(listings.id, items.map((i) => i.listingId)), eq(listings.status, LISTING_STATUS.RESERVED)))
+          }
+        }
       })
 
       logger.info('Marketplace order cancelled via Payrexx webhook', {
@@ -640,7 +639,9 @@ async function sendOrderEmails(order: {
   id: string
   buyerId: string
   sellerId: string
-  listingId: string
+  // null for multi-item cart orders — the join below then yields no row and the
+  // function returns early (cart-order email is a separate follow-up).
+  listingId: string | null
   amountChf: string
   commissionChf: string
   sellerPayoutChf: string

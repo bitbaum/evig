@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect, useCallback } from 'react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { Button } from '@/components/ui/button'
+import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { ListingImageData } from './types'
 import { useTranslations } from 'next-intl'
 
@@ -14,16 +16,59 @@ interface ListingImageGalleryProps {
 
 export function ListingImageGallery({ images, title, selectedImage, onSelectImage }: ListingImageGalleryProps) {
   const t = useTranslations('marketplace.listing')
+  const [zoomed, setZoomed] = useState(false)
+
+  const current = images[selectedImage]
+  const hasImage = Boolean(current?.url)
+
+  const step = useCallback(
+    (delta: number) => onSelectImage((selectedImage + delta + images.length) % images.length),
+    [selectedImage, images.length, onSelectImage],
+  )
+
+  // Keyboard: Esc closes, arrows navigate while zoomed.
+  useEffect(() => {
+    if (!zoomed) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setZoomed(false)
+      else if (e.key === 'ArrowRight') step(1)
+      else if (e.key === 'ArrowLeft') step(-1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [zoomed, step])
+
   return (
     <div className="space-y-3">
-      <div className="card-shell overflow-hidden">
-        <ListingImage
-          src={images[selectedImage]?.url}
-          alt={title}
-          className="w-full aspect-square object-cover"
-          fallbackIconSize="w-24 h-24"
-        />
+      <div className="card-shell group relative overflow-hidden">
+        {/* eslint-disable-next-line no-restricted-syntax -- full-bleed image zoom trigger, not a UI button; Button chrome (padding/height/inline-flex) would break the full-bleed image */}
+        <button
+          type="button"
+          onClick={() => hasImage && setZoomed(true)}
+          disabled={!hasImage}
+          aria-label={t('zoomOpen')}
+          className={`block w-full ${hasImage ? 'cursor-zoom-in' : 'cursor-default'}`}
+        >
+          <ListingImage
+            src={current?.url}
+            alt={title}
+            className="w-full aspect-square object-cover"
+            fallbackIconSize="w-24 h-24"
+          />
+          {hasImage && (
+            <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <ZoomIn className="h-3.5 w-3.5" aria-hidden="true" />
+              {t('zoomOpen')}
+            </span>
+          )}
+        </button>
+        {images.length > 1 && (
+          <span className="absolute top-2 right-2 rounded-md bg-black/60 px-2 py-0.5 text-xs text-white">
+            {t('photoCount', { count: images.length })}
+          </span>
+        )}
       </div>
+
       {/* Thumbnails */}
       {images.length > 1 && (
         <div className="flex gap-2 overflow-x-auto">
@@ -40,6 +85,55 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
               <ListingImage src={img.url} alt="" fallbackIconSize="w-4 h-4" />
             </Button>
           ))}
+        </div>
+      )}
+
+      {/* Lightbox */}
+      {zoomed && hasImage && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setZoomed(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setZoomed(false)}
+            aria-label={t('zoomClose')}
+            className="absolute right-4 top-4 text-white/80 hover:text-white"
+          >
+            <X className="h-7 w-7" aria-hidden="true" />
+          </Button>
+          {images.length > 1 && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={(e) => { e.stopPropagation(); step(-1) }}
+                aria-label={t('imageAriaLabel', { n: ((selectedImage - 1 + images.length) % images.length) + 1 })}
+                className="absolute left-2 sm:left-4 text-white/80 hover:text-white"
+              >
+                <ChevronLeft className="h-9 w-9" aria-hidden="true" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={(e) => { e.stopPropagation(); step(1) }}
+                aria-label={t('imageAriaLabel', { n: ((selectedImage + 1) % images.length) + 1 })}
+                className="absolute right-2 sm:right-4 text-white/80 hover:text-white"
+              >
+                <ChevronRight className="h-9 w-9" aria-hidden="true" />
+              </Button>
+            </>
+          )}
+          {/* Full-resolution view — plain img for unconstrained object-contain zoom. */}
+          <img
+            src={current!.url}
+            alt={title}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[90vh] max-w-[92vw] object-contain"
+          />
         </div>
       )}
     </div>

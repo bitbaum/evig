@@ -17,6 +17,7 @@ import { ListingInfoPanel } from './ListingInfoPanel'
 import { ListingActionButtons } from './ListingActionButtons'
 import { ListingSellerCard } from './ListingSellerCard'
 import { RevampitTrustStrip } from './RevampitTrustStrip'
+import { AddToCartButton } from '@/components/marketplace/cart/AddToCartButton'
 import { ListingDetails } from './ListingDetails'
 import { ReportModal } from './ReportModal'
 import { SimilarListings } from './SimilarListings'
@@ -102,6 +103,21 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
 
         <div className="space-y-4">
           <ListingInfoPanel listing={listing} isVerified={isVerified} isGratis={isGratis} />
+
+          {/* RevampIT stock = add-to-cart (primary). P2P listings keep the
+              direct buy / contact flow in ListingActionButtons below. */}
+          {listing.is_revampit && !isOwner && !isGratis && (
+            <AddToCartButton
+              item={{
+                id: listing.id,
+                title: listing.title,
+                priceChf: Number(listing.price_chf),
+                thumbnail: images[0]?.url || null,
+                category: listing.category,
+                condition: listing.condition,
+              }}
+            />
+          )}
 
           <ListingActionButtons
             listing={listing}

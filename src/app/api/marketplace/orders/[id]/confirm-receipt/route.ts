@@ -56,6 +56,8 @@ export const POST = withAuth<{ id: string }>(async (
       .where(eq(marketplaceOrders.id, orderId))
 
     if (!order) return apiNotFound('Bestellung')
+    const listingId = order.listingId
+    if (!listingId) return apiNotFound('Bestellung')
 
     if (order.buyerId !== session.user.id) {
       return apiForbidden('Nur der Käufer kann den Empfang bestätigen')
@@ -100,7 +102,7 @@ export const POST = withAuth<{ id: string }>(async (
       db
         .update(listings)
         .set({ status: LISTING_STATUS.SOLD })
-        .where(eq(listings.id, order.listingId)),
+        .where(eq(listings.id, listingId)),
       // Increment seller total_sold
       db
         .update(sellerProfiles)

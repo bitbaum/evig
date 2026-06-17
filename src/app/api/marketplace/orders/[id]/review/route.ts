@@ -66,6 +66,8 @@ export const POST = withAuth<{ id: string }>(async (
       .where(eq(marketplaceOrders.id, orderId))
 
     if (!order) return apiNotFound('Bestellung')
+    const listingId = order.listingId
+    if (!listingId) return apiNotFound('Bestellung')
 
     if (order.buyerId !== session.user.id) {
       return apiForbidden('Nur der Käufer kann eine Bewertung abgeben')
@@ -89,7 +91,7 @@ export const POST = withAuth<{ id: string }>(async (
       .where(and(
         eq(reviews.reviewerId, session.user.id),
         eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING),
-        eq(reviews.targetId, order.listingId),
+        eq(reviews.targetId, listingId),
         eq(reviews.bookingId, orderId),
       ))
       .limit(1)
@@ -108,7 +110,7 @@ export const POST = withAuth<{ id: string }>(async (
     const { reviewId } = await createReview({
       reviewerId: session.user.id,
       targetType: REVIEW_TARGET_TYPES.LISTING,
-      targetId: order.listingId,
+      targetId: listingId,
       bookingId: orderId,
       overallRating: rating,
       content: reviewContent,

@@ -196,12 +196,16 @@ export const PATCH = withAuth<{ id: string }>(async (
       .set(updateValues)
       .where(eq(marketplaceOrders.id, orderId));
 
+    // Single-item P2P orders carry a listing; cart orders (listing_id null) use
+    // marketplace_order_items and don't go through this per-listing transition.
+    const listingId = order.listingId
+
     // If completed: update listing + seller total_sold — independent, run in parallel
-    if (newStatus === ORDER_STATUS.COMPLETED) {
+    if (newStatus === ORDER_STATUS.COMPLETED && listingId) {
       await Promise.all([
         db.update(listings)
           .set({ status: LISTING_STATUS.SOLD })
-          .where(eq(listings.id, order.listingId)),
+          .where(eq(listings.id, listingId)),
         db.update(sellerProfiles)
           .set({ totalSold: sql`${sellerProfiles.totalSold} + 1` })
           .where(eq(sellerProfiles.userId, order.sellerId)),
@@ -209,12 +213,12 @@ export const PATCH = withAuth<{ id: string }>(async (
     }
 
     // If cancelled: restore listing to active
-    if (newStatus === ORDER_STATUS.CANCELLED) {
+    if (newStatus === ORDER_STATUS.CANCELLED && listingId) {
       await db
         .update(listings)
         .set({ status: LISTING_STATUS.ACTIVE })
         .where(and(
-          eq(listings.id, order.listingId),
+          eq(listings.id, listingId),
           eq(listings.status, LISTING_STATUS.RESERVED),
         ));
     }
