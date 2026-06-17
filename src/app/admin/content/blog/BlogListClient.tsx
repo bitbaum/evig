@@ -49,7 +49,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   }, [posts, search, statusFilter])
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
+    <div className="bg-surface-base rounded-xl border border-subtle overflow-hidden">
       {/* Filters */}
       <div className="px-6 py-4 border-b border">
         <div className="flex flex-wrap gap-3">
@@ -124,7 +124,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         post.is_published
-                          ? 'bg-action-muted text-action-muted'
+                          ? 'bg-action-muted text-action'
                           : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
                       }`}
                     >
