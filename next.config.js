@@ -202,11 +202,6 @@ const nextConfig = {
   },
   // Enable static optimization
   output: 'standalone',
-  // ESLint already runs on pre-commit (lint-staged) and in CI. Re-running it
-  // inside every `next build` only adds minutes — skip it here.
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: process.env.NODE_ENV === 'production',
