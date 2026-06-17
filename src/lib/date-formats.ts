@@ -6,6 +6,11 @@
  *
  * Locale: de-CH (Swiss German) — always use this, never de-DE.
  *
+ * Null-safe: every formatter accepts null/undefined/invalid input and returns
+ * an empty string rather than throwing. A single bad/missing date (e.g. a
+ * conversation with no messages yet → last_message_at = null) must never crash
+ * a whole page render.
+ *
  * Available formats:
  *   formatDate()             → "1. Januar 2026"
  *   formatDateNumeric()      → "01.01.2026"
@@ -21,45 +26,52 @@
 
 const LOCALE = 'de-CH'
 
-function toDate(date: Date | string): Date {
-  return typeof date === 'string' ? new Date(date) : date
+/** Value returned for missing or invalid dates. */
+const EMPTY = ''
+
+export type DateInput = Date | string | null | undefined
+
+/** Coerce input to a valid Date, or null for missing/invalid values. */
+function toValidDate(date: DateInput): Date | null {
+  if (date == null) return null
+  const d = typeof date === 'string' ? new Date(date) : date
+  return Number.isNaN(d.getTime()) ? null : d
 }
 
-/**
- * Format date with long month name: "1. Januar 2026"
- */
-export function formatDate(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+/** Null-safe core: format a valid date with the given options, else EMPTY. */
+function formatWith(
+  date: DateInput,
+  options: Intl.DateTimeFormatOptions | undefined,
+  kind: 'date' | 'time' = 'date',
+): string {
+  const d = toValidDate(date)
+  if (!d) return EMPTY
+  return kind === 'time'
+    ? d.toLocaleTimeString(LOCALE, options)
+    : d.toLocaleDateString(LOCALE, options)
+}
+
+/** Format date with long month name: "1. Januar 2026" */
+export function formatDate(date: DateInput): string {
+  return formatWith(date, { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
 /**
  * Format date compact (locale default): "1.1.2026"
  * Use for inline/table display where space is limited.
  */
-export function formatDateShort(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE)
+export function formatDateShort(date: DateInput): string {
+  return formatWith(date, undefined)
 }
 
-/**
- * Format date as numeric: "01.01.2026"
- */
-export function formatDateNumeric(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
+/** Format date as numeric: "01.01.2026" */
+export function formatDateNumeric(date: DateInput): string {
+  return formatWith(date, { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
-/**
- * Format date with time (long month): "1. Januar 2026, 14:30"
- */
-export function formatDateTime(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
+/** Format date with time (long month): "1. Januar 2026, 14:30" */
+export function formatDateTime(date: DateInput): string {
+  return formatWith(date, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -68,11 +80,9 @@ export function formatDateTime(date: Date | string): string {
   })
 }
 
-/**
- * Format date with time (numeric): "01.01.2026, 14:30"
- */
-export function formatDateTimeNumeric(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
+/** Format date with time (numeric): "01.01.2026, 14:30" */
+export function formatDateTimeNumeric(date: DateInput): string {
+  return formatWith(date, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -81,11 +91,9 @@ export function formatDateTimeNumeric(date: Date | string): string {
   })
 }
 
-/**
- * Format date with weekday: "Montag, 1. Januar 2026"
- */
-export function formatDateWithWeekday(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
+/** Format date with weekday: "Montag, 1. Januar 2026" */
+export function formatDateWithWeekday(date: DateInput): string {
+  return formatWith(date, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -93,11 +101,9 @@ export function formatDateWithWeekday(date: Date | string): string {
   })
 }
 
-/**
- * Format date with weekday and time: "Montag, 1. Januar 2026, 14:30"
- */
-export function formatDateTimeWithWeekday(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
+/** Format date with weekday and time: "Montag, 1. Januar 2026, 14:30" */
+export function formatDateTimeWithWeekday(date: DateInput): string {
+  return formatWith(date, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -107,40 +113,22 @@ export function formatDateTimeWithWeekday(date: Date | string): string {
   })
 }
 
-/**
- * Format time only: "14:30"
- */
-export function formatTime(date: Date | string): string {
-  return toDate(date).toLocaleTimeString(LOCALE, {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+/** Format time only: "14:30" */
+export function formatTime(date: DateInput): string {
+  return formatWith(date, { hour: '2-digit', minute: '2-digit' }, 'time')
 }
 
-/**
- * Format month and year: "Januar 2026"
- */
-export function formatDateMonth(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
-    year: 'numeric',
-    month: 'long',
-  })
+/** Format month and year: "Januar 2026" */
+export function formatDateMonth(date: DateInput): string {
+  return formatWith(date, { year: 'numeric', month: 'long' })
 }
 
-/**
- * Format short weekday: "Mo"
- */
-export function formatWeekdayShort(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, { weekday: 'short' })
+/** Format short weekday: "Mo" */
+export function formatWeekdayShort(date: DateInput): string {
+  return formatWith(date, { weekday: 'short' })
 }
 
-/**
- * Format date with long weekday, day, and month (no year): "Montag, 1. Januar"
- */
-export function formatDateLong(date: Date | string): string {
-  return toDate(date).toLocaleDateString(LOCALE, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  })
+/** Format date with long weekday, day, and month (no year): "Montag, 1. Januar" */
+export function formatDateLong(date: DateInput): string {
+  return formatWith(date, { weekday: 'long', day: 'numeric', month: 'long' })
 }
