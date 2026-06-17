@@ -27,7 +27,10 @@ set +a
 # 3 workers, box has 4) so the gate adds ~no wall-clock. We abort BEFORE rsync
 # if it fails, so a type error never ships.
 echo "=== typecheck (parallel with build) ==="
-npm run typecheck > /tmp/revampit-typecheck.log 2>&1 &
+# Use the build-INDEPENDENT config: the base tsconfig includes .next/types/**
+# which the build is still generating, so a parallel `npm run typecheck` would
+# race and fail with TS6053. typecheck:deploy excludes .next entirely.
+npm run typecheck:deploy > /tmp/revampit-typecheck.log 2>&1 &
 TYPECHECK_PID=$!
 
 echo "=== build $NAME@$RELEASE_SHA ==="

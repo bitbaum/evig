@@ -47,6 +47,7 @@
     "setup-deploy": "bash tools/deployment/setup-deploy-keybind.sh",
     "ship": "bash scripts/ship.sh",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:deploy": "tsc -p tsconfig.typecheck.json --noEmit",
     "migrate-to-prod": "./scripts/migrate-to-production.sh",
     "prod:build": "docker build -f Dockerfile.prod -t revampit-app:latest .",
     "prod:up": "docker compose -f docker-compose.prod.yml up -d",

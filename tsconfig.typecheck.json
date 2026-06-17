@@ -1,0 +1,22 @@
+{
+  "// purpose": "Build-INDEPENDENT typecheck config for the deploy gate. The base tsconfig.json includes .next/types/**, which only exist AFTER `next build`. The deploy runs this gate IN PARALLEL with the build, so it must not depend on build-generated files. Excludes .next and drops the .next/types includes; incremental off to avoid clobbering the base .tsbuildinfo.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "examples",
+    "packages",
+    "cms-api",
+    "tina",
+    "scripts",
+    "**/*.backup.*",
+    ".next"
+  ]
+}
