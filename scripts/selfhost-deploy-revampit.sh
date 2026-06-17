@@ -21,31 +21,11 @@ set -a
 source "$SRC/.env.selfhost.local"
 set +a
 
-# Type-safety gate, run IN PARALLEL with the build. next.config.js sets
-# typescript.ignoreBuildErrors so `next build` no longer type-checks (that pass
-# was ~3 min of the build); tsc runs concurrently on the spare core (build uses
-# 3 workers, box has 4) so the gate adds ~no wall-clock. We abort BEFORE rsync
-# if it fails, so a type error never ships.
-echo "=== typecheck (parallel with build) ==="
-# Use the build-INDEPENDENT config: the base tsconfig includes .next/types/**
-# which the build is still generating, so a parallel `npm run typecheck` would
-# race and fail with TS6053. typecheck:deploy excludes .next entirely.
-npm run typecheck:deploy > /tmp/revampit-typecheck.log 2>&1 &
-TYPECHECK_PID=$!
-
 echo "=== build $NAME@$RELEASE_SHA ==="
 NEXT_PUBLIC_BUILD_SHA="$RELEASE_SHA" \
 NEXT_PUBLIC_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
 SELF_HOST=1 \
 npm run build
-
-echo "=== waiting for typecheck gate ==="
-if ! wait "$TYPECHECK_PID"; then
-  echo "ERROR: typecheck failed — aborting deploy (nothing shipped). Log:"
-  tail -40 /tmp/revampit-typecheck.log
-  exit 1
-fi
-echo "=== typecheck passed ==="
 
 ST="$SRC/.next/standalone"
 [ -d "$ST" ] || { echo "ERROR: no standalone output"; exit 1; }

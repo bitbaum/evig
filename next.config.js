@@ -200,14 +200,6 @@ const nextConfig = {
     }
     return config;
   },
-  // Skip Next's in-build TypeScript pass (~3 min). Type-safety is enforced by
-  // `npm run typecheck`, which scripts/selfhost-deploy-revampit.sh runs IN
-  // PARALLEL with the build (on the spare core) and which aborts the deploy on
-  // any error. Same coverage, but the ~3.5min tsc overlaps the build instead of
-  // adding to it. Do NOT remove the deploy gate while keeping this flag.
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   // Enable static optimization
   output: 'standalone',
   // Ensure proper CSS handling
