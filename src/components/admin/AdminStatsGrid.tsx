@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
-import { adminIconBox, adminIconColor, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
+import { adminIconBox, adminIconColor, adminInteractive, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
 import { cn } from '@/lib/utils'
 
 export interface StatCardItem {
@@ -46,7 +46,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
 
         const cardClass = cn(
           'rounded-lg border border bg-surface-base p-4',
-          item.href && 'transition-colors hover:border-strong ${adminInteractive.rowHover}'
+          item.href && `transition-colors hover:border-strong ${adminInteractive.rowHover}`
         )
 
         const body = (

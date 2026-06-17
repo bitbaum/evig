@@ -8,6 +8,7 @@ import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { DropoffForm } from '@/components/donate/DropoffForm'
 import { CopyButton } from '@/components/community/CopyButton'
 import { BANK, LOCATIONS, CONTACT, OPENING_HOURS, ORG } from '@/config/org'
+import { DONATION_TIER_AMOUNTS } from '@/config/donations'
 import { getTranslations } from 'next-intl/server'
 
 interface DonatePageProps {
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: DonatePageProps): Promise<Met
   }
 }
 
-const TIER_AMOUNTS = [50, 100, 500] as const
+const TIER_AMOUNTS = DONATION_TIER_AMOUNTS
 
 export default async function DonatePage({ params }: DonatePageProps) {
   const { locale } = await params

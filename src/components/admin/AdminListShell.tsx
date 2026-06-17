@@ -18,6 +18,8 @@ export interface AdminListShellProps {
   /** Filter UI, rendered above the state area (always visible). */
   filters?: ReactNode
   loading: boolean
+  /** Optional custom loading UI (e.g. a skeleton grid). Defaults to a spinner. */
+  loadingSlot?: ReactNode
   error?: string | null
   /** Retry handler for the error state and the results-header refresh button. */
   onRetry?: () => void
@@ -25,7 +27,9 @@ export interface AdminListShellProps {
   isEmpty: boolean
   emptyIcon: LucideIcon
   emptyTitle: string
-  emptyDescription: string
+  emptyDescription?: string
+  /** Optional CTA in the empty state (e.g. a "create the first one" button). */
+  emptyAction?: ReactNode
   /** When filters are active, the empty state offers a reset link. */
   hasActiveFilters?: boolean
   onResetFilters?: () => void
@@ -38,12 +42,14 @@ export interface AdminListShellProps {
 export function AdminListShell({
   filters,
   loading,
+  loadingSlot,
   error,
   onRetry,
   isEmpty,
   emptyIcon: EmptyIcon,
   emptyTitle,
   emptyDescription,
+  emptyAction,
   hasActiveFilters = false,
   onResetFilters,
   resultsLabel,
@@ -71,17 +77,20 @@ export function AdminListShell({
           </div>
         </div>
       ) : loading ? (
-        <div className="rounded-xl border border-subtle bg-surface-base p-8 text-center">
-          <RefreshCw className="mx-auto mb-4 h-8 w-8 animate-spin text-text-tertiary" aria-hidden="true" />
-          <p className="text-text-tertiary">Wird geladen …</p>
-        </div>
+        loadingSlot ?? (
+          <div className="rounded-xl border border-subtle bg-surface-base p-8 text-center">
+            <RefreshCw className="mx-auto mb-4 h-8 w-8 animate-spin text-text-tertiary" aria-hidden="true" />
+            <p className="text-text-tertiary">Wird geladen …</p>
+          </div>
+        )
       ) : isEmpty ? (
         <div className="rounded-xl border border-subtle bg-surface-base p-12 text-center">
           <EmptyIcon className="mx-auto mb-4 h-12 w-12 text-text-muted" aria-hidden="true" />
           <Heading level={3} className="mb-2 text-lg font-medium text-text-primary">
             {emptyTitle}
           </Heading>
-          <p className="mb-4 text-text-tertiary">{emptyDescription}</p>
+          {emptyDescription && <p className="mb-4 text-text-tertiary">{emptyDescription}</p>}
+          {emptyAction}
           {hasActiveFilters && onResetFilters && (
             <Button
               variant="ghost"

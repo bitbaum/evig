@@ -21,6 +21,12 @@ export const DROPOFF_DEVICES_MIN_CHARS = 10
 export const DROPOFF_DEVICES_MAX_CHARS = 1000
 
 /**
+ * Suggested one-time monetary donation amounts (CHF) shown as quick-pick tiers
+ * on the public donate page. SSOT — the page must not hardcode these.
+ */
+export const DONATION_TIER_AMOUNTS = [50, 100, 500] as const
+
+/**
  * Optional notes field shared by every donation surface (drop-off form,
  * monetary donation admin notes, device donation admin notes). Single
  * limit keeps all four schemas honest.

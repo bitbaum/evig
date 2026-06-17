@@ -15,9 +15,10 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Pagination } from '@/components/ui/Pagination';
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
 import { AdminButton } from '@/components/admin/AdminButton';
+import { AdminListShell } from '@/components/admin/AdminListShell';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
-import { adminSurface, adminTable, adminType } from '@/lib/admin-ui';
+import { adminSurface, adminTable } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
 import { useDecisionList } from '@/hooks/useDecisionList';
@@ -66,40 +67,36 @@ export default function DecisionListClient({
         ]}
       />
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-2">
-        <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-auto">
-          <option value="">Alle Status</option>
-          {DECISION_STATUSES.map((s) => (
-            <option key={s} value={s}>{DECISION_STATUS_CONFIG[s].label}</option>
-          ))}
-        </Select>
-        <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="w-auto">
-          <option value="">Alle Typen</option>
-          {DECISION_TYPES.map((t) => (
-            <option key={t} value={t}>{DECISION_TYPE_CONFIG[t].label}</option>
-          ))}
-        </Select>
-      </div>
-
-      {/* Content */}
-      {loading ? (
-        <div className={cn(adminSurface.card, 'py-12 text-center', adminType.meta)}>Laden...</div>
-      ) : errorMessage ? (
-        <div className="rounded-lg border border-error-200 bg-error-50 dark:bg-error-900/20 dark:border-error-800 p-6 text-center">
-          <p className="text-sm font-medium text-error-700 dark:text-error-400">{errorMessage}</p>
-          <AdminButton variant="danger" className="mt-3" onClick={retry}>
-            Erneut versuchen
-          </AdminButton>
-        </div>
-      ) : decisions.length === 0 ? (
-        <div className={cn(adminSurface.card, 'py-12 text-center')}>
-          <p className={adminType.meta}>Keine Entscheidungen gefunden</p>
-          <AdminButton variant="action" href={ROUTES.admin.decisionNew} className="mt-3">
+      <AdminListShell
+        filters={
+          <div className="flex flex-wrap gap-2">
+            <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-auto">
+              <option value="">Alle Status</option>
+              {DECISION_STATUSES.map((s) => (
+                <option key={s} value={s}>{DECISION_STATUS_CONFIG[s].label}</option>
+              ))}
+            </Select>
+            <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="w-auto">
+              <option value="">Alle Typen</option>
+              {DECISION_TYPES.map((t) => (
+                <option key={t} value={t}>{DECISION_TYPE_CONFIG[t].label}</option>
+              ))}
+            </Select>
+          </div>
+        }
+        loading={loading}
+        error={errorMessage}
+        onRetry={retry}
+        isEmpty={decisions.length === 0}
+        emptyIcon={Vote}
+        emptyTitle="Keine Entscheidungen gefunden"
+        emptyAction={
+          <AdminButton variant="action" href={ROUTES.admin.decisionNew}>
             Ersten Vorschlag erstellen
           </AdminButton>
-        </div>
-      ) : (
+        }
+        resultsLabel={`${total} Entscheidung${total === 1 ? '' : 'en'}`}
+      >
         <div className={adminSurface.table}>
           <table className="w-full text-left">
             <thead className={adminTable.thead}>
@@ -163,20 +160,18 @@ export default function DecisionListClient({
               })}
             </tbody>
           </table>
-        </div>
-      )}
 
-      {!loading && !errorMessage && total > PAGE_SIZE && (
-        <div className={cn(adminSurface.card, 'overflow-hidden')}>
-          <Pagination
-            currentPage={page}
-            totalPages={Math.ceil(total / PAGE_SIZE)}
-            totalItems={total}
-            pageSize={PAGE_SIZE}
-            onPageChange={setPage}
-          />
+          {total > PAGE_SIZE && (
+            <Pagination
+              currentPage={page}
+              totalPages={Math.ceil(total / PAGE_SIZE)}
+              totalItems={total}
+              pageSize={PAGE_SIZE}
+              onPageChange={setPage}
+            />
+          )}
         </div>
-      )}
+      </AdminListShell>
 
       {deleteError && (
         <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-400">
