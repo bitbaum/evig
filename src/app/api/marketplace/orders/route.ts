@@ -7,7 +7,7 @@ import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingImages, marketplaceOrders, users } from '@/db/schema';
+import { listings, listingImages, marketplaceOrders, marketplaceOrderItems, users } from '@/db/schema';
 import { eq, and, sql, desc, count } from 'drizzle-orm';
 import { COMMISSION_RATE, LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace';
 import { ORG } from '@/config/org'
@@ -299,12 +299,27 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         shippingAddress: marketplaceOrders.shippingAddress,
         createdAt: marketplaceOrders.createdAt,
         updatedAt: marketplaceOrders.updatedAt,
-        listingTitle: listings.title,
-        thumbnail: sql<string | null>`(
-          SELECT ${listingImages.url} FROM ${listingImages}
-          WHERE ${listingImages.listingId} = ${listings.id}
-            AND ${listingImages.isPrimary} = true
-          LIMIT 1
+        // Single-item orders carry listings.title; cart orders (listingId null)
+        // have no listing row, so fall back to the first order-item's title.
+        listingTitle: sql<string | null>`COALESCE(${listings.title}, (
+          SELECT it.title FROM ${marketplaceOrderItems} it
+          WHERE it.order_id = ${marketplaceOrders.id}
+          ORDER BY it.created_at LIMIT 1
+        ))`,
+        // 0 for single-item orders, N for cart orders — lets the UI render
+        // "Title +N weitere".
+        itemCount: sql<number>`(
+          SELECT COUNT(*)::int FROM ${marketplaceOrderItems} it
+          WHERE it.order_id = ${marketplaceOrders.id}
+        )`,
+        thumbnail: sql<string | null>`COALESCE(
+          (SELECT ${listingImages.url} FROM ${listingImages}
+             WHERE ${listingImages.listingId} = ${listings.id}
+               AND ${listingImages.isPrimary} = true LIMIT 1),
+          (SELECT li.url FROM ${listingImages} li
+             JOIN ${marketplaceOrderItems} it ON it.listing_id = li.listing_id
+             WHERE it.order_id = ${marketplaceOrders.id} AND li.is_primary = true
+             ORDER BY it.created_at LIMIT 1)
         )`,
         counterpartyName: filters.role === 'seller'
           ? sql<string | null>`bu.name`
@@ -314,7 +329,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
           : marketplaceOrders.sellerId,
       })
       .from(marketplaceOrders)
-      .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+      .leftJoin(listings, eq(marketplaceOrders.listingId, listings.id))
       .innerJoin(
         sql`${users} bu`,
         sql`${marketplaceOrders.buyerId} = bu.id`

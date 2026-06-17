@@ -7,6 +7,7 @@
 
 'use client'
 
+import type { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -85,7 +86,7 @@ export function PendingPaymentBanner({ order }: { order: NonNullOrder }) {
         {order.role === 'buyer' && (
           <Button
             as={Link}
-            href={`/marketplace/checkout/${order.listingId}`}
+            href={order.listingId ? `/marketplace/checkout/${order.listingId}` : '/marketplace/cart'}
             variant="warning"
             size="sm"
             className="gap-2 mt-3"
@@ -124,33 +125,77 @@ export function StatusTimelineCard({ order }: { order: NonNullOrder }) {
 
 /* ─────────────────────────── Listing info ─────────────────────────── */
 
+/** One product row — links to the listing when it still exists. */
+function ArticleRow({ listingId, title, thumbnail, suffix, alt }: {
+  listingId: string | null
+  title: string
+  thumbnail: string | null
+  suffix?: ReactNode
+  alt: string
+}) {
+  const inner = (
+    <div className="flex gap-3">
+      <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
+        {thumbnail ? (
+          <Image src={thumbnail} alt={title || alt} width={64} height={64} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Package className="w-6 h-6 text-text-muted" />
+          </div>
+        )}
+      </div>
+      <div className="min-w-0">
+        <Heading level={3} className="font-medium text-text-primary">{title}</Heading>
+        {suffix}
+      </div>
+    </div>
+  )
+  return listingId
+    ? <Link href={`/marketplace/${listingId}`} className="block hover:opacity-80 transition-opacity">{inner}</Link>
+    : inner
+}
+
 export function ListingInfoCard({ order }: { order: NonNullOrder }) {
   const t = useTranslations('dashboard.orders')
   const deliveryLabel = DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod
+  const isCart = order.items.length > 0
   return (
     <div className={CARD_CLASS}>
-      <Heading level={2} className={SECTION_TITLE_CLASS}>{t('articleSection')}</Heading>
-      <Link
-        href={`/marketplace/${order.listingId}`}
-        className="flex gap-3 hover:opacity-80 transition-opacity"
-      >
-        <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
-          {order.thumbnail ? (
-            <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={64} height={64} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Package className="w-6 h-6 text-text-muted" />
-            </div>
-          )}
-        </div>
-        <div>
-          <Heading level={3} className="font-medium text-text-primary">{order.listingTitle}</Heading>
-          <p className="text-sm text-text-tertiary flex items-center gap-1 mt-1">
-            {order.deliveryMethod === 'shipping' ? <Truck className="w-3.5 h-3.5" /> : <MapPin className="w-3.5 h-3.5" />}
+      <Heading level={2} className={SECTION_TITLE_CLASS}>
+        {isCart ? t('articlesSection', { count: order.items.length }) : t('articleSection')}
+      </Heading>
+
+      {isCart ? (
+        <div className="space-y-3">
+          {order.items.map(item => (
+            <ArticleRow
+              key={item.id}
+              listingId={item.listingId}
+              title={item.title}
+              thumbnail={item.thumbnail}
+              alt={t('itemImage')}
+              suffix={<p className="text-sm font-mono tabular-nums text-text-tertiary mt-1">{formatCHF(Number(item.unitPriceChf))}</p>}
+            />
+          ))}
+          <p className="text-sm text-text-tertiary flex items-center gap-1 pt-1 border-t border-subtle">
+            <MapPin className="w-3.5 h-3.5" />
             {deliveryLabel}
           </p>
         </div>
-      </Link>
+      ) : (
+        <ArticleRow
+          listingId={order.listingId}
+          title={order.listingTitle}
+          thumbnail={order.thumbnail}
+          alt={t('itemImage')}
+          suffix={
+            <p className="text-sm text-text-tertiary flex items-center gap-1 mt-1">
+              {order.deliveryMethod === 'shipping' ? <Truck className="w-3.5 h-3.5" /> : <MapPin className="w-3.5 h-3.5" />}
+              {deliveryLabel}
+            </p>
+          }
+        />
+      )}
 
       {order.shippingAddress?.tracking_number && (
         <div className="mt-4 p-3 bg-surface-raised rounded-lg">
@@ -355,7 +400,9 @@ export function ActionsCard({
 
 export function ReviewCard({ order, onSubmitted }: { order: NonNullOrder; onSubmitted: () => void }) {
   const t = useTranslations('dashboard.orders')
-  if (order.role !== 'buyer' || order.status !== ORDER_STATUS.COMPLETED) return null
+  // Reviews are a P2P seller-trust signal targeting a single listing; multi-item
+  // RevampIT cart orders (items present, no single listingId) don't participate.
+  if (order.role !== 'buyer' || order.status !== ORDER_STATUS.COMPLETED || order.items.length > 0) return null
   const hasReview = Boolean(order.reviewedAt)
   return (
     <div className={`${CARD_CLASS} mt-6`}>

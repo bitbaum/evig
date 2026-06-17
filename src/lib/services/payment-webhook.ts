@@ -546,51 +546,83 @@ async function syncOrderToKivvi(
   order: MarketplaceOrder,
   payrexxTransactionId: string | null,
 ): Promise<void> {
-  // 1. Fetch listing details + buyer info + inventory item Kivvi ID
-  const rows = await db
-    .select({
-      listingTitle: listings.title,
-      priceChf: listings.priceChf,
-      buyerName: users.name,
-      buyerEmail: users.email,
-      inventoryItemId: listings.inventoryItemId,
-    })
-    .from(marketplaceOrders)
-    .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
-    .innerJoin(users, eq(marketplaceOrders.buyerId, users.id))
-    .where(eq(marketplaceOrders.id, order.id))
+  // Buyer info is always present (no listing dependency).
+  const [buyer] = await db
+    .select({ name: users.name, email: users.email })
+    .from(users)
+    .where(eq(users.id, order.buyerId))
     .limit(1)
 
-  const info = rows[0]
-  if (!info) {
-    logger.warn('Kivvi sync: could not fetch order details', { orderId: order.id })
-    return
-  }
-
-  // Look up the Kivvi inventory item ID (if this listing is backed by an inventory item)
-  let kivviInventoryItemId: string | undefined
-  if (info.inventoryItemId) {
-    const itemRows = await db
+  // Resolve the Kivvi inventory item id behind a listing (if it's backed by one).
+  const resolveKivviItemId = async (listingInventoryItemId: string | null): Promise<string | undefined> => {
+    if (!listingInventoryItemId) return undefined
+    const [row] = await db
       .select({ kivviInventoryItemId: inventoryItems.kivviInventoryItemId })
       .from(inventoryItems)
-      .where(eq(inventoryItems.id, info.inventoryItemId))
+      .where(eq(inventoryItems.id, listingInventoryItemId))
       .limit(1)
-    kivviInventoryItemId = itemRows[0]?.kivviInventoryItemId ?? undefined
+    return row?.kivviInventoryItemId ?? undefined
+  }
+
+  // 1. Build invoice line items. Single-item orders → one line priced at the
+  // full order amount (includes any shipping). Cart orders → one line per
+  // order item, each at its unit price.
+  const invoiceItems: { description: string; quantity: string; unitPrice: string; vatRate: string; kivviInventoryItemId?: string }[] = []
+  const kivviItemIdsToMarkSold: string[] = []
+
+  if (order.listingId) {
+    const [info] = await db
+      .select({ title: listings.title, inventoryItemId: listings.inventoryItemId })
+      .from(listings)
+      .where(eq(listings.id, order.listingId))
+      .limit(1)
+    if (!info) {
+      logger.warn('Kivvi sync: could not fetch listing for order', { orderId: order.id })
+      return
+    }
+    const kivviItemId = await resolveKivviItemId(info.inventoryItemId)
+    if (kivviItemId) kivviItemIdsToMarkSold.push(kivviItemId)
+    invoiceItems.push({
+      description: info.title,
+      quantity: '1',
+      unitPrice: order.amountChf,
+      vatRate: '8.1', // Standard Swiss MWST — marketplace items are CHF-priced incl. VAT
+      kivviInventoryItemId: kivviItemId,
+    })
+  } else {
+    const items = await db
+      .select({
+        title: marketplaceOrderItems.title,
+        unitPriceChf: marketplaceOrderItems.unitPriceChf,
+        quantity: marketplaceOrderItems.quantity,
+        inventoryItemId: listings.inventoryItemId,
+      })
+      .from(marketplaceOrderItems)
+      .leftJoin(listings, eq(marketplaceOrderItems.listingId, listings.id))
+      .where(eq(marketplaceOrderItems.orderId, order.id))
+      .orderBy(marketplaceOrderItems.createdAt)
+    if (items.length === 0) {
+      logger.warn('Kivvi sync: cart order has no items', { orderId: order.id })
+      return
+    }
+    for (const it of items) {
+      const kivviItemId = await resolveKivviItemId(it.inventoryItemId)
+      if (kivviItemId) kivviItemIdsToMarkSold.push(kivviItemId)
+      invoiceItems.push({
+        description: it.title,
+        quantity: String(it.quantity),
+        unitPrice: it.unitPriceChf,
+        vatRate: '8.1',
+        kivviInventoryItemId: kivviItemId,
+      })
+    }
   }
 
   // 2. Create Kivvi invoice
   const invoice = await createKivviInvoice({
-    contactName: info.buyerName || 'Unbekannter Käufer',
-    contactEmail: info.buyerEmail || undefined,
-    items: [
-      {
-        description: info.listingTitle,
-        quantity: '1',
-        unitPrice: order.amountChf,
-        vatRate: '8.1', // Standard Swiss MWST — marketplace items are CHF-priced incl. VAT
-        kivviInventoryItemId,
-      },
-    ],
+    contactName: buyer?.name || 'Unbekannter Käufer',
+    contactEmail: buyer?.email || undefined,
+    items: invoiceItems,
     notes: payrexxTransactionId
       ? `Payrexx Transaktion: ${payrexxTransactionId}`
       : undefined,
@@ -600,6 +632,7 @@ async function syncOrderToKivvi(
     orderId: order.id,
     kivviDocumentId: invoice.id,
     invoiceNumber: invoice.number,
+    lineItems: invoiceItems.length,
   })
 
   // 3. Mark invoice as sent → triggers GL: Debit 1100 AR / Credit 3000 Revenue + 2200 VAT
@@ -620,11 +653,11 @@ async function syncOrderToKivvi(
     amount: order.amountChf,
   })
 
-  // 5. Mark Kivvi inventory item as sold (fire-and-forget, best effort)
-  if (kivviInventoryItemId) {
-    updateKivviInventoryItem(kivviInventoryItemId, { status: 'sold' }).catch(err =>
+  // 5. Mark each backing Kivvi inventory item as sold (fire-and-forget, best effort)
+  for (const kivviItemId of kivviItemIdsToMarkSold) {
+    updateKivviInventoryItem(kivviItemId, { status: 'sold' }).catch(err =>
       logger.warn('Kivvi: failed to mark inventory item sold', {
-        kivviInventoryItemId,
+        kivviInventoryItemId: kivviItemId,
         error: err,
       })
     )
@@ -635,12 +668,30 @@ async function syncOrderToKivvi(
 // Email notifications
 // ============================================================================
 
+/**
+ * Resolve a human display title for an order. Single-item orders use the
+ * listing title; cart orders (listingId null) summarise their line items as
+ * "First item +N weitere".
+ */
+async function resolveOrderTitle(orderId: string, listingId: string | null): Promise<string | null> {
+  if (listingId) {
+    const [l] = await db.select({ title: listings.title }).from(listings).where(eq(listings.id, listingId))
+    return l?.title ?? null
+  }
+  const items = await db
+    .select({ title: marketplaceOrderItems.title })
+    .from(marketplaceOrderItems)
+    .where(eq(marketplaceOrderItems.orderId, orderId))
+    .orderBy(marketplaceOrderItems.createdAt)
+  if (items.length === 0) return null
+  return items.length === 1 ? items[0].title : `${items[0].title} +${items.length - 1} weitere Artikel`
+}
+
 async function sendOrderEmails(order: {
   id: string
   buyerId: string
   sellerId: string
-  // null for multi-item cart orders — the join below then yields no row and the
-  // function returns early (cart-order email is a separate follow-up).
+  // null for multi-item cart orders — title is then summarised from order items.
   listingId: string | null
   amountChf: string
   commissionChf: string
@@ -650,39 +701,30 @@ async function sendOrderEmails(order: {
   const orderUrl = `${APP_URL}/dashboard/orders/${order.id}`
   const deliveryLabel = DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod
 
-  // Fetch listing title + buyer info
-  const infoRows = await db
-    .select({
-      title: listings.title,
-      buyerName: users.name,
-      buyerEmail: users.email,
-    })
-    .from(marketplaceOrders)
-    .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
-    .innerJoin(users, eq(marketplaceOrders.buyerId, users.id))
-    .where(eq(marketplaceOrders.id, order.id))
+  const title = await resolveOrderTitle(order.id, order.listingId)
+  if (!title) {
+    logger.warn('Order email skipped: could not resolve title', { orderId: order.id })
+    return
+  }
 
-  const buyerInfo = infoRows[0]
-  if (!buyerInfo) return
+  // Buyer + seller looked up directly (no listing join — cart orders have none).
+  const [buyerInfo] = await db
+    .select({ name: users.name, email: users.email })
+    .from(users)
+    .where(eq(users.id, order.buyerId))
 
-  // Fetch seller info separately (different user join)
-  const sellerRows = await db
-    .select({
-      sellerName: users.name,
-      sellerEmail: users.email,
-    })
+  const [sellerInfo] = await db
+    .select({ name: users.name, email: users.email })
     .from(users)
     .where(eq(users.id, order.sellerId))
 
-  const sellerInfo = sellerRows[0]
-
   // Buyer confirmation
-  if (buyerInfo.buyerEmail) {
+  if (buyerInfo?.email) {
     await sendCustomEmail(
-      buyerInfo.buyerEmail,
+      buyerInfo.email,
       orderConfirmationBuyer({
-        recipientName: buyerInfo.buyerName || 'Käufer',
-        listingTitle: buyerInfo.title,
+        recipientName: buyerInfo.name || 'Käufer',
+        listingTitle: title,
         amountChf: formatCHF(Number(order.amountChf)),
         commissionChf: formatCHF(Number(order.commissionChf)),
         deliveryMethod: deliveryLabel,
@@ -692,16 +734,16 @@ async function sendOrderEmails(order: {
   }
 
   // Seller notification
-  if (sellerInfo?.sellerEmail) {
+  if (sellerInfo?.email) {
     await sendCustomEmail(
-      sellerInfo.sellerEmail,
+      sellerInfo.email,
       newOrderNotificationSeller({
-        recipientName: sellerInfo.sellerName || 'Verkäufer',
-        buyerName: buyerInfo.buyerName || 'Käufer',
-        listingTitle: buyerInfo.title,
+        recipientName: sellerInfo.name || 'Verkäufer',
+        buyerName: buyerInfo?.name || 'Käufer',
+        listingTitle: title,
         payoutAmountChf: formatCHF(Number(order.sellerPayoutChf)),
         deliveryMethod: deliveryLabel,
-        orderUrl: `${APP_URL}/dashboard/orders/${order.id}`,
+        orderUrl,
       })
     )
   }

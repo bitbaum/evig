@@ -6,11 +6,21 @@ import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { ORDER_STATUS } from '@/config/marketplace'
 
+export interface OrderLineItem {
+  id: string
+  listingId: string
+  title: string
+  unitPriceChf: number
+  quantity: number
+  thumbnail: string | null
+}
+
 export interface OrderDetail {
   id: string
   buyerId: string
   sellerId: string
-  listingId: string
+  /** null for multi-item cart orders — render `items` instead. */
+  listingId: string | null
   amountChf: number
   commissionChf: number
   sellerPayoutChf: number
@@ -32,6 +42,9 @@ export interface OrderDetail {
   updatedAt: string
   listingTitle: string
   thumbnail: string | null
+  /** 0 for single-item orders; N line items for cart orders. */
+  itemCount: number
+  items: OrderLineItem[]
   buyerName: string | null
   buyerEmail: string | null
   sellerName: string | null

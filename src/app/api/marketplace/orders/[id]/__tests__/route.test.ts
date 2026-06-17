@@ -132,6 +132,7 @@ jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
+  inArray: (a: unknown, b: unknown) => ({ __inArray: [a, b] }),
   sql: Object.assign(
     (_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }),
     { raw: (s: string) => ({ __raw: s }) }
@@ -160,6 +161,11 @@ jest.mock('@/db/schema', () => ({
     stripePaymentIntentId: 'mo_stripePaymentIntentId', reviewedAt: 'mo_reviewedAt',
     completedAt: 'mo_completedAt', deliveredAt: 'mo_deliveredAt',
     createdAt: 'mo_createdAt', updatedAt: 'mo_updatedAt',
+  },
+  marketplaceOrderItems: {
+    id: 'moi_id', orderId: 'moi_orderId', listingId: 'moi_listingId',
+    title: 'moi_title', unitPriceChf: 'moi_unitPriceChf', quantity: 'moi_quantity',
+    createdAt: 'moi_createdAt',
   },
   sellerProfiles: {
     id: 'sp_id', userId: 'sp_userId', totalSold: 'sp_totalSold',
@@ -246,10 +252,16 @@ function makeContext(id = 'order-1') {
 // ---------------------------------------------------------------------------
 
 function wireSelectReturning(orderData: unknown) {
+  // fetchOrderWithDetails: from → leftJoin(listings) → innerJoin → innerJoin → where
   const whereFn = jest.fn().mockResolvedValue(orderData ? [orderData] : [])
-  const innerJoinFn = jest.fn()
-  const fromFn = jest.fn().mockReturnValue({ innerJoin: innerJoinFn, where: whereFn })
-  innerJoinFn.mockReturnValue({ innerJoin: innerJoinFn, where: whereFn })
+  const chain: { leftJoin: jest.Mock; innerJoin: jest.Mock; where: jest.Mock } = {
+    leftJoin: jest.fn(),
+    innerJoin: jest.fn(),
+    where: whereFn,
+  }
+  chain.leftJoin.mockReturnValue(chain)
+  chain.innerJoin.mockReturnValue(chain)
+  const fromFn = jest.fn().mockReturnValue(chain)
   mockSelect.mockReturnValue({ from: fromFn })
 }
 

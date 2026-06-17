@@ -117,6 +117,7 @@ jest.mock('@/lib/logger', () => ({
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
+  inArray: (a: unknown, b: unknown) => ({ __inArray: [a, b] }),
   sql: Object.assign(
     (_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }),
     { raw: (s: string) => ({ __raw: s }) }
@@ -136,6 +137,11 @@ jest.mock('@/db/schema', () => ({
     amountChf: 'mo_amountChf', status: 'mo_status',
     payrexxTransactionId: 'mo_payrexxTransactionId',
     completedAt: 'mo_completedAt', deliveredAt: 'mo_deliveredAt', updatedAt: 'mo_updatedAt',
+  },
+  marketplaceOrderItems: {
+    id: 'moi_id', orderId: 'moi_orderId', listingId: 'moi_listingId',
+    title: 'moi_title', unitPriceChf: 'moi_unitPriceChf', quantity: 'moi_quantity',
+    createdAt: 'moi_createdAt',
   },
   sellerProfiles: {
     id: 'sp_id', userId: 'sp_userId', totalSold: 'sp_totalSold',
@@ -204,12 +210,30 @@ function makeContext(id = 'order-1') {
 // Helper: wire select chain
 // ---------------------------------------------------------------------------
 
-function wireSelectReturning(orderData: unknown) {
+function wireSelectReturning(orderData: unknown, items?: unknown[]) {
+  // Reset so re-wiring inside a test fully replaces the beforeEach setup
+  // (mockReturnValueOnce below would otherwise queue behind it).
+  mockSelect.mockReset()
+  // Order detail fetch: from → leftJoin(listings) → innerJoin → innerJoin → where
   const whereFn = jest.fn().mockResolvedValue(orderData ? [orderData] : [])
-  const innerJoinFn = jest.fn()
-  const fromFn = jest.fn().mockReturnValue({ innerJoin: innerJoinFn, where: whereFn })
-  innerJoinFn.mockReturnValue({ innerJoin: innerJoinFn, where: whereFn })
-  mockSelect.mockReturnValue({ from: fromFn })
+  const joinChain: { leftJoin: jest.Mock; innerJoin: jest.Mock; where: jest.Mock } = {
+    leftJoin: jest.fn(),
+    innerJoin: jest.fn(),
+    where: whereFn,
+  }
+  joinChain.leftJoin.mockReturnValue(joinChain)
+  joinChain.innerJoin.mockReturnValue(joinChain)
+  const orderFromFn = jest.fn().mockReturnValue(joinChain)
+
+  // Cart-order items fetch: from → where → orderBy
+  const orderByFn = jest.fn().mockResolvedValue(items ?? [])
+  const itemsWhereFn = jest.fn().mockReturnValue({ orderBy: orderByFn })
+  const itemsFromFn = jest.fn().mockReturnValue({ where: itemsWhereFn })
+
+  // First select() is the order fetch; a second (cart path only) is the items fetch.
+  mockSelect
+    .mockReturnValueOnce({ from: orderFromFn })
+    .mockReturnValue({ from: itemsFromFn })
 }
 
 // ---------------------------------------------------------------------------
@@ -297,5 +321,29 @@ describe('POST confirm-receipt — success', () => {
     await POST(makePostRequest(), makeContext())
     // Should call update for order, listing, and sellerProfiles (3 parallel updates)
     expect(mockUpdate).toHaveBeenCalledTimes(3)
+  })
+})
+
+describe('POST confirm-receipt — cart order (listingId null)', () => {
+  it('completes a multi-item cart order via order items', async () => {
+    wireSelectReturning(
+      { ...MOCK_ORDER, listingId: null, listingTitle: null },
+      [
+        { listingId: 'listing-a', title: 'MacBook Air' },
+        { listingId: 'listing-b', title: 'Dell Latitude' },
+      ],
+    )
+    const response = await POST(makePostRequest(), makeContext())
+    expect(response.status).toBe(200)
+    const body = await response.json()
+    expect(body.data.status).toBe('completed')
+    // order + listings(inArray) + sellerProfiles = 3 updates
+    expect(mockUpdate).toHaveBeenCalledTimes(3)
+  })
+
+  it('returns 404 when a cart order has no items', async () => {
+    wireSelectReturning({ ...MOCK_ORDER, listingId: null, listingTitle: null }, [])
+    const response = await POST(makePostRequest(), makeContext())
+    expect(response.status).toBe(404)
   })
 })

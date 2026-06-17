@@ -24,9 +24,10 @@ import { ROUTES } from '@/config/routes'
 
 interface OrderItem {
   id: string
-  listingId: string
+  listingId: string | null
   listingTitle: string
   thumbnail: string | null
+  itemCount: number
   amountChf: number
   status: string
   deliveryMethod: string
@@ -185,7 +186,12 @@ export default function DashboardOrdersPage() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <Heading level={3} className="font-medium text-text-primary truncate">{order.listingTitle}</Heading>
+                  <Heading level={3} className="font-medium text-text-primary truncate">
+                    {order.listingTitle}
+                    {order.itemCount > 1 && (
+                      <span className="text-text-tertiary font-normal"> {t('moreItems', { count: order.itemCount - 1 })}</span>
+                    )}
+                  </Heading>
                   <div className="flex items-center gap-3 mt-1 text-sm text-text-tertiary">
                     <span>{role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}: {order.counterpartyName}</span>
                     <span>{formatDateShort(order.createdAt)}</span>

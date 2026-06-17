@@ -15,14 +15,23 @@ import type { OrderStatus } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 
+interface OrderLine {
+  id: string
+  title: string
+  unitPriceChf: number
+  thumbnail: string | null
+}
+
 interface OrderSummary {
   id: string
-  listing_title: string
+  listingTitle: string
   thumbnail: string | null
-  amount_chf: number
+  amountChf: number
   status: string
-  delivery_method: string
-  counterparty_name: string | null
+  deliveryMethod: string
+  counterpartyName: string | null
+  itemCount: number
+  items: OrderLine[]
 }
 
 function CheckoutSuccessContent() {
@@ -70,21 +79,48 @@ function CheckoutSuccessContent() {
 
         {order && (
           <div className="bg-surface-raised rounded-xl p-4 mb-6 text-left">
-            <div className="flex gap-3">
-              <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-overlay">
-                {order.thumbnail ? (
-                  <Image src={order.thumbnail} alt={order.listing_title || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Package className="w-5 h-5 text-text-muted" />
+            {order.items.length > 0 ? (
+              // Cart order — list every line item, total below.
+              <div className="space-y-3">
+                {order.items.map(item => (
+                  <div key={item.id} className="flex gap-3">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-overlay">
+                      {item.thumbnail ? (
+                        <Image src={item.thumbnail} alt={item.title || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Package className="w-5 h-5 text-text-muted" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <Heading level={3} className="text-text-primary text-sm truncate">{item.title}</Heading>
+                      <p className="text-sm font-mono tabular-nums text-text-tertiary mt-0.5">{formatCHF(Number(item.unitPriceChf))}</p>
+                    </div>
                   </div>
-                )}
+                ))}
+                <div className="flex justify-between pt-2 border-t border-subtle">
+                  <span className="text-sm text-text-secondary">{t('totalLabel')}</span>
+                  <span className="text-lg font-bold text-action">{formatCHF(Number(order.amountChf))}</span>
+                </div>
               </div>
-              <div>
-                <Heading level={3} className="text-text-primary text-sm">{order.listing_title}</Heading>
-                <p className="text-lg font-bold text-action mt-0.5">{formatCHF(Number(order.amount_chf))}</p>
+            ) : (
+              <div className="flex gap-3">
+                <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-overlay">
+                  {order.thumbnail ? (
+                    <Image src={order.thumbnail} alt={order.listingTitle || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Package className="w-5 h-5 text-text-muted" />
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <Heading level={3} className="text-text-primary text-sm">{order.listingTitle}</Heading>
+                  <p className="text-lg font-bold text-action mt-0.5">{formatCHF(Number(order.amountChf))}</p>
+                </div>
               </div>
-            </div>
+            )}
             {statusConfig && (
               <div className="mt-3 flex items-center gap-2">
                 <span className="text-xs text-text-tertiary">{t('statusLabel')}</span>

@@ -956,6 +956,7 @@
         "description": "Deine Zahlung wurde autorisiert. Der Betrag wird erst freigegeben, wenn du den Empfang bestätigst.",
         "imageAlt": "Artikelbild",
         "statusLabel": "Status:",
+        "totalLabel": "Total",
         "viewOrder": "Bestellung ansehen",
         "continueShopping": "Weiter einkaufen"
       },
@@ -8102,6 +8103,8 @@
       "retryPayment": "Zahlung wiederholen",
       "orderTimeline": "Bestellverlauf",
       "articleSection": "Artikel",
+      "articlesSection": "Artikel ({count})",
+      "moreItems": "+{count} weitere",
       "trackingNumber": "Sendungsnummer: {number}",
       "trackShipment": "Sendung verfolgen",
       "priceSection": "Preisübersicht",

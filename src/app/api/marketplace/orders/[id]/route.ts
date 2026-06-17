@@ -8,8 +8,8 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db';
-import { listings, listingImages, marketplaceOrders, sellerProfiles, users } from '@/db/schema';
-import { eq, and, sql } from 'drizzle-orm';
+import { listings, listingImages, marketplaceOrders, marketplaceOrderItems, sellerProfiles, users } from '@/db/schema';
+import { eq, and, sql, inArray } from 'drizzle-orm';
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import type { OrderStatus } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
@@ -51,12 +51,25 @@ async function fetchOrderWithDetails(orderId: string) {
       reviewedAt: marketplaceOrders.reviewedAt,
       createdAt: marketplaceOrders.createdAt,
       updatedAt: marketplaceOrders.updatedAt,
-      listingTitle: listings.title,
-      thumbnail: sql<string | null>`(
-        SELECT ${listingImages.url} FROM ${listingImages}
-        WHERE ${listingImages.listingId} = ${listings.id}
-          AND ${listingImages.isPrimary} = true
-        LIMIT 1
+      // Cart orders (listingId null) have no listing row — fall back to the
+      // first order-item title and the first item's image.
+      listingTitle: sql<string | null>`COALESCE(${listings.title}, (
+        SELECT it.title FROM ${marketplaceOrderItems} it
+        WHERE it.order_id = ${marketplaceOrders.id}
+        ORDER BY it.created_at LIMIT 1
+      ))`,
+      itemCount: sql<number>`(
+        SELECT COUNT(*)::int FROM ${marketplaceOrderItems} it
+        WHERE it.order_id = ${marketplaceOrders.id}
+      )`,
+      thumbnail: sql<string | null>`COALESCE(
+        (SELECT ${listingImages.url} FROM ${listingImages}
+           WHERE ${listingImages.listingId} = ${listings.id}
+             AND ${listingImages.isPrimary} = true LIMIT 1),
+        (SELECT li.url FROM ${listingImages} li
+           JOIN ${marketplaceOrderItems} it ON it.listing_id = li.listing_id
+           WHERE it.order_id = ${marketplaceOrders.id} AND li.is_primary = true
+           ORDER BY it.created_at LIMIT 1)
       )`,
       buyerName: sql<string | null>`bu.name`,
       buyerEmail: sql<string | null>`bu.email`,
@@ -64,7 +77,7 @@ async function fetchOrderWithDetails(orderId: string) {
       sellerEmail: sql<string | null>`su.email`,
     })
     .from(marketplaceOrders)
-    .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+    .leftJoin(listings, eq(marketplaceOrders.listingId, listings.id))
     .innerJoin(
       sql`${users} bu`,
       sql`${marketplaceOrders.buyerId} = bu.id`
@@ -101,10 +114,31 @@ export const GET = withAuth<{ id: string }>(async (
 
     const role = order.buyerId === session.user.id ? 'buyer' : 'seller';
 
+    // Cart orders aggregate multiple line items; single-item orders have none.
+    const items = order.itemCount > 0
+      ? await db
+          .select({
+            id: marketplaceOrderItems.id,
+            listingId: marketplaceOrderItems.listingId,
+            title: marketplaceOrderItems.title,
+            unitPriceChf: marketplaceOrderItems.unitPriceChf,
+            quantity: marketplaceOrderItems.quantity,
+            thumbnail: sql<string | null>`(
+              SELECT ${listingImages.url} FROM ${listingImages}
+              WHERE ${listingImages.listingId} = ${marketplaceOrderItems.listingId}
+                AND ${listingImages.isPrimary} = true LIMIT 1
+            )`,
+          })
+          .from(marketplaceOrderItems)
+          .where(eq(marketplaceOrderItems.orderId, orderId))
+          .orderBy(marketplaceOrderItems.createdAt)
+      : [];
+
     return apiSuccess({
       ...order,
       role,
       counterpartyName: role === 'buyer' ? order.sellerName : order.buyerName,
+      items,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Laden der Bestellung');
@@ -196,29 +230,40 @@ export const PATCH = withAuth<{ id: string }>(async (
       .set(updateValues)
       .where(eq(marketplaceOrders.id, orderId));
 
-    // Single-item P2P orders carry a listing; cart orders (listing_id null) use
-    // marketplace_order_items and don't go through this per-listing transition.
+    // Single-item P2P orders carry a listing directly; cart orders (listing_id
+    // null) carry their listings in marketplace_order_items. Resolve the set of
+    // affected listing ids so completion/cancellation acts on all of them.
     const listingId = order.listingId
+    let affectedListingIds: string[] = []
+    if (listingId) {
+      affectedListingIds = [listingId]
+    } else {
+      const items = await db
+        .select({ listingId: marketplaceOrderItems.listingId })
+        .from(marketplaceOrderItems)
+        .where(eq(marketplaceOrderItems.orderId, orderId))
+      affectedListingIds = items.map(i => i.listingId)
+    }
 
-    // If completed: update listing + seller total_sold — independent, run in parallel
-    if (newStatus === ORDER_STATUS.COMPLETED && listingId) {
+    // If completed: mark listing(s) SOLD + bump seller total_sold (once per item).
+    if (newStatus === ORDER_STATUS.COMPLETED && affectedListingIds.length > 0) {
       await Promise.all([
         db.update(listings)
           .set({ status: LISTING_STATUS.SOLD })
-          .where(eq(listings.id, listingId)),
+          .where(inArray(listings.id, affectedListingIds)),
         db.update(sellerProfiles)
-          .set({ totalSold: sql`${sellerProfiles.totalSold} + 1` })
+          .set({ totalSold: sql`${sellerProfiles.totalSold} + ${affectedListingIds.length}` })
           .where(eq(sellerProfiles.userId, order.sellerId)),
       ])
     }
 
-    // If cancelled: restore listing to active
-    if (newStatus === ORDER_STATUS.CANCELLED && listingId) {
+    // If cancelled: restore reserved listing(s) to active
+    if (newStatus === ORDER_STATUS.CANCELLED && affectedListingIds.length > 0) {
       await db
         .update(listings)
         .set({ status: LISTING_STATUS.ACTIVE })
         .where(and(
-          eq(listings.id, listingId),
+          inArray(listings.id, affectedListingIds),
           eq(listings.status, LISTING_STATUS.RESERVED),
         ));
     }
@@ -248,7 +293,7 @@ export const PATCH = withAuth<{ id: string }>(async (
         counterpartyEmail,
         orderStatusUpdate({
           recipientName: counterpartyName || 'Nutzer',
-          listingTitle: order.listingTitle,
+          listingTitle: order.listingTitle || 'Artikel',
           newStatusLabel: statusConfig.label,
           actionHint: actionHints[newStatus] || '',
           orderUrl: `${APP_URL}/dashboard/orders/${orderId}`,

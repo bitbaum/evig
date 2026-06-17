@@ -13,8 +13,8 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
-import { listings, marketplaceOrders, sellerProfiles, users } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
+import { listings, marketplaceOrders, marketplaceOrderItems, sellerProfiles, users } from '@/db/schema'
+import { eq, sql, inArray } from 'drizzle-orm'
 import { ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
 import { captureTransaction } from '@/lib/payments/payrexx-client'
@@ -50,14 +50,30 @@ export const POST = withAuth<{ id: string }>(async (
         sellerEmail: sql<string | null>`su.email`,
       })
       .from(marketplaceOrders)
-      .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+      .leftJoin(listings, eq(marketplaceOrders.listingId, listings.id))
       .innerJoin(sql`${users} bu`, sql`${marketplaceOrders.buyerId} = bu.id`)
       .innerJoin(sql`${users} su`, sql`${marketplaceOrders.sellerId} = su.id`)
       .where(eq(marketplaceOrders.id, orderId))
 
     if (!order) return apiNotFound('Bestellung')
-    const listingId = order.listingId
-    if (!listingId) return apiNotFound('Bestellung')
+
+    // Single-item orders carry listingId; cart orders carry their listings in
+    // marketplace_order_items. Resolve affected listings + a display title.
+    let affectedListingIds: string[]
+    let displayTitle: string
+    if (order.listingId) {
+      affectedListingIds = [order.listingId]
+      displayTitle = order.listingTitle ?? 'Artikel'
+    } else {
+      const items = await db
+        .select({ listingId: marketplaceOrderItems.listingId, title: marketplaceOrderItems.title })
+        .from(marketplaceOrderItems)
+        .where(eq(marketplaceOrderItems.orderId, orderId))
+        .orderBy(marketplaceOrderItems.createdAt)
+      if (items.length === 0) return apiNotFound('Bestellung')
+      affectedListingIds = items.map(i => i.listingId)
+      displayTitle = items.length === 1 ? items[0].title : `${items[0].title} +${items.length - 1} weitere Artikel`
+    }
 
     if (order.buyerId !== session.user.id) {
       return apiForbidden('Nur der Käufer kann den Empfang bestätigen')
@@ -98,15 +114,15 @@ export const POST = withAuth<{ id: string }>(async (
           updatedAt: sql`NOW()`,
         })
         .where(eq(marketplaceOrders.id, orderId)),
-      // Mark listing as sold
+      // Mark listing(s) as sold
       db
         .update(listings)
         .set({ status: LISTING_STATUS.SOLD })
-        .where(eq(listings.id, listingId)),
-      // Increment seller total_sold
+        .where(inArray(listings.id, affectedListingIds)),
+      // Increment seller total_sold (once per item)
       db
         .update(sellerProfiles)
-        .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + 1` })
+        .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${affectedListingIds.length}` })
         .where(eq(sellerProfiles.userId, order.sellerId)),
     ])
 
@@ -120,7 +136,7 @@ export const POST = withAuth<{ id: string }>(async (
     createNotification(order.sellerId, {
       type: NOTIFICATION_TYPES.MARKETPLACE,
       title: 'Empfang bestätigt',
-      content: `Der Käufer hat den Erhalt von "${order.listingTitle}" bestätigt. Die Zahlung wurde freigegeben.`,
+      content: `Der Käufer hat den Erhalt von "${displayTitle}" bestätigt. Die Zahlung wurde freigegeben.`,
     }).catch((err) =>
       logger.error('Failed to create seller notification on receipt confirmation', {
         error: err,
@@ -135,7 +151,7 @@ export const POST = withAuth<{ id: string }>(async (
         orderReceiptConfirmed({
           recipientName: order.sellerName || 'Verkäufer',
           orderNumber: orderId,
-          listingTitle: order.listingTitle,
+          listingTitle: displayTitle,
           orderUrl: `${APP_URL}/dashboard/orders/${orderId}`,
         }),
       ).catch((err) =>
@@ -152,7 +168,7 @@ export const POST = withAuth<{ id: string }>(async (
         order.buyerEmail,
         orderReviewPrompt({
           recipientName: order.buyerName || 'Käufer',
-          listingTitle: order.listingTitle,
+          listingTitle: displayTitle,
           reviewUrl: `${APP_URL}/dashboard/orders/${orderId}`,
         }),
       ).catch((err) =>
