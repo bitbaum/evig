@@ -11,14 +11,13 @@ import { db } from '@/db'
 import { sql, getTableName, eq } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { PRODUCT_STATUS, MARKETPLACE_STATUS, INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
-import { MARKETPLACE_LISTING_PLATFORM } from '@/config/shop'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
+import { publishRevampitListing } from '@/lib/marketplace/publish-revampit-listing'
 import {
   aiExtractedProducts,
   inventoryItems,
   customerProfiles,
   productCustomerProfiles,
-  marketplaceListings,
   productImages,
 } from '@/db/schema/inventory'
 import { donations } from '@/db/schema/misc'
@@ -261,23 +260,7 @@ export async function createErfassungProduct(
     }
   }
 
-  // 7. Create marketplace listing if publishing to shop (skip if checklist-gated)
-  if (action === 'publish' && !options?.checklistGated) {
-    await tx
-      .insert(marketplaceListings)
-      .values({
-        inventoryItemId: inventoryItemId,
-        title: `${payload.hersteller} ${payload.produktname}`,
-        description: payload.kurzbeschreibung || '',
-        priceChf: String(payload.verkaufspreis),
-        platform: MARKETPLACE_LISTING_PLATFORM.INTERNAL,
-        status: MARKETPLACE_STATUS.PUBLISHED,
-        publishedAt: new Date().toISOString(),
-        createdBy: userId,
-      })
-  }
-
-  // 8. Handle image upload if provided
+  // 7. Handle image upload if provided
   let imageUrl: string | null = null
   if (payload.image) {
     const filename = generateImageFilename(itemUUID)
@@ -309,6 +292,14 @@ export async function createErfassungProduct(
         error: uploadResult.error,
       })
     }
+  }
+
+  // 8. Publish to the unified marketplace as a RevampIT listing (replaces the
+  // legacy marketplace_listings insert). inventory_items stays the stock record;
+  // the listings row is its public, buyable marketplace face. Skipped while the
+  // intake checklist gates publication.
+  if (action === 'publish' && !options?.checklistGated) {
+    await publishRevampitListing(tx, inventoryItemId)
   }
 
   return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId }

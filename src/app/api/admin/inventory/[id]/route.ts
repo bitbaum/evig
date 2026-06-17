@@ -14,8 +14,9 @@ import {
   productImages,
   productCustomerProfiles,
   customerProfiles,
-  marketplaceListings,
+  listings,
 } from '@/db/schema'
+import { removeListing } from '@/lib/search/meilisearch'
 import { eq, sql, inArray, and } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
@@ -121,16 +122,19 @@ export const DELETE = withAdmin<{ id: string }>('products', async (request, sess
         await tx.delete(productCustomerProfiles).where(eq(productCustomerProfiles.productId, productId))
         await tx.delete(productImages).where(eq(productImages.productId, productId))
 
-        // Delete marketplace listings via inventory item subquery
+        // Delete the unified-marketplace listing(s) for this product's
+        // inventory item(s) (images cascade), and drop them from search.
         const invIds = await tx
           .select({ id: inventoryItems.id })
           .from(inventoryItems)
           .where(eq(inventoryItems.aiProductId, productId))
 
         if (invIds.length > 0) {
-          await tx
-            .delete(marketplaceListings)
-            .where(inArray(marketplaceListings.inventoryItemId, invIds.map(r => r.id)))
+          const removedListings = await tx
+            .delete(listings)
+            .where(inArray(listings.inventoryItemId, invIds.map(r => r.id)))
+            .returning({ id: listings.id })
+          for (const l of removedListings) void removeListing(l.id)
         }
 
         await tx.delete(inventoryItems).where(eq(inventoryItems.aiProductId, productId))

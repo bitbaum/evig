@@ -6,12 +6,12 @@
  */
 
 import { db } from '@/db'
-import { aiExtractedProducts, inventoryItems, marketplaceListings, productImages } from '@/db/schema/inventory'
+import { aiExtractedProducts, inventoryItems, productImages } from '@/db/schema/inventory'
 import { eq, and } from 'drizzle-orm'
 import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 import { logger } from '@/lib/logger'
-import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
-import { MARKETPLACE_LISTING_PLATFORM } from '@/config/shop'
+import { PRODUCT_STATUS } from '@/config/marketplace-status'
+import { publishRevampitListing, unpublishRevampitListing } from '@/lib/marketplace/publish-revampit-listing'
 
 // ─── Publish/Unpublish ─────────────────────────────────────────────
 
@@ -26,20 +26,6 @@ export async function publishProduct(productId: string, userId: string): Promise
     .set({ status: PRODUCT_STATUS.APPROVED, updatedAt: new Date().toISOString() })
     .where(eq(aiExtractedProducts.id, productId))
 
-  // Get product info for listing
-  const [productInfo] = await db
-    .select({
-      brand: aiExtractedProducts.brand,
-      productName: aiExtractedProducts.productName,
-      shortDescription: aiExtractedProducts.shortDescription,
-      estimatedPriceChf: aiExtractedProducts.estimatedPriceChf,
-    })
-    .from(aiExtractedProducts)
-    .where(eq(aiExtractedProducts.id, productId))
-
-  if (!productInfo) return
-
-  // Get inventory item id
   const [inventoryItem] = await db
     .select({ id: inventoryItems.id })
     .from(inventoryItems)
@@ -47,41 +33,8 @@ export async function publishProduct(productId: string, userId: string): Promise
 
   if (!inventoryItem) return
 
-  const inventoryItemId = inventoryItem.id
-
-  // Check if listing exists
-  const [existingListing] = await db
-    .select({ id: marketplaceListings.id })
-    .from(marketplaceListings)
-    .where(
-      and(
-        eq(marketplaceListings.inventoryItemId, inventoryItemId),
-        eq(marketplaceListings.platform, MARKETPLACE_LISTING_PLATFORM.INTERNAL),
-      )
-    )
-
-  if (existingListing) {
-    await db
-      .update(marketplaceListings)
-      .set({
-        status: MARKETPLACE_STATUS.PUBLISHED,
-        publishedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      })
-      .where(eq(marketplaceListings.id, existingListing.id))
-  } else {
-    await db.insert(marketplaceListings).values({
-      inventoryItemId,
-      title: `${productInfo.brand} ${productInfo.productName}`,
-      description: productInfo.shortDescription || '',
-      priceChf: productInfo.estimatedPriceChf || '0',
-      platform: MARKETPLACE_LISTING_PLATFORM.INTERNAL,
-      status: MARKETPLACE_STATUS.PUBLISHED,
-      publishedAt: new Date().toISOString(),
-      createdBy: userId,
-    })
-  }
-
+  // Publish to the unified marketplace as a RevampIT listing.
+  await publishRevampitListing(db, inventoryItem.id)
   logger.info('Product published', { productId, publishedBy: userId })
 }
 
@@ -89,17 +42,13 @@ export async function publishProduct(productId: string, userId: string): Promise
  * Unpublish a product from the marketplace.
  */
 export async function unpublishProduct(productId: string, userId: string): Promise<void> {
-  // Find the inventory item for this product
   const [inventoryItem] = await db
     .select({ id: inventoryItems.id })
     .from(inventoryItems)
     .where(eq(inventoryItems.aiProductId, productId))
 
   if (inventoryItem) {
-    await db
-      .update(marketplaceListings)
-      .set({ status: MARKETPLACE_STATUS.DRAFT, updatedAt: new Date().toISOString() })
-      .where(eq(marketplaceListings.inventoryItemId, inventoryItem.id))
+    await unpublishRevampitListing(db, inventoryItem.id)
   }
 
   logger.info('Product unpublished', { productId, unpublishedBy: userId })
