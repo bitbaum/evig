@@ -81,7 +81,7 @@ export function TimecardsClient({
 
   // In month view a click both focuses the day (for the editor) and toggles
   return (
-    <article className="space-y-8 pb-12">
+    <article className="space-y-6 pb-12">
       <TimecardHeader
         monthLabel={tc.monthLabel}
         scheduleSummary={tc.scheduleSummary}
@@ -101,26 +101,8 @@ export function TimecardsClient({
 
       {!tc.hasSchedule && <NoScheduleNotice hasSchedule={tc.hasSchedule} />}
 
-      {/* Clock-in lives here — an optional, integral part of the tool. A
-          finished shift is written straight into this month's draft. */}
-      <ShiftWidget onClockOut={tc.addShiftEntry} />
-
-      {/* AI command box — the fastest path: describe the week in plain language
-          ("nur Di und Mi gearbeitet, Mi um 15 Uhr gegangen, sonst krank") and
-          it fills the right days, including absences. */}
-      <div className="space-y-2">
-        <AIFormAssist<TimecardAIResult>
-          formType="timecard"
-          variant="section"
-          defaultExpanded
-          currentData={currentData}
-          placeholder={t('aiPlaceholder')}
-          onFieldsFilled={tc.handleAIFieldsFilled}
-        />
-        <p className="px-1 text-xs text-text-tertiary">{t('aiExamples')}</p>
-      </div>
-
-      {/* View toggle + (month) selection hint */}
+      {/* View toggle + (month) selection hint — the calendar is the hero, so
+          the entry tools (clock-in, AI) sit BELOW it, not above. */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {view === 'month' ? (
           <p className="text-sm text-text-tertiary">{t('selectHint')}</p>
@@ -194,8 +176,23 @@ export function TimecardsClient({
         />
       )}
 
-      {/* Extras: month note + reset, behind a disclosure. (AI assist now lives
-          up top as a primary affordance.) */}
+      {/* Entry tools below the hero calendar: clock-in (compact) + the AI
+          assistant (collapsed by default so the calendar stays the focus). */}
+      <div className="space-y-3 border-t border-subtle pt-6">
+        <ShiftWidget onClockOut={tc.addShiftEntry} />
+        <div className="space-y-2">
+          <AIFormAssist<TimecardAIResult>
+            formType="timecard"
+            variant="section"
+            currentData={currentData}
+            placeholder={t('aiPlaceholder')}
+            onFieldsFilled={tc.handleAIFieldsFilled}
+          />
+          <p className="px-1 text-xs text-text-tertiary">{t('aiExamples')}</p>
+        </div>
+      </div>
+
+      {/* Extras: month note + reset, behind a disclosure. */}
       <section className="border-t border-subtle pt-6">
         <Button
           type="button"

@@ -1,112 +1,153 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { formatTimecardDuration } from '@/config/timecards'
+import { useCellSelection } from './useCellSelection'
 
 /**
- * HourRangePicker — pick a day's worked block by clicking/dragging across a
- * timeline of half-hour slots. This is the day-view counterpart to the month
- * grid: the SAME interaction (click a slot, drag to extend a contiguous range)
- * applied to hours instead of days, so the tool reads as one consistent system.
+ * HourRangePicker — pick a day's worked hours by selecting half-hour slots,
+ * using the SAME model as the month calendar (useCellSelection): click,
+ * Ctrl/Cmd-click for NON-ADJACENT slots, Shift-click or drag for a range.
  *
- * Unlike the month grid (an arbitrary set of days) a work block is ONE
- * contiguous range, so this picks a single [from, to] span. Selecting a range
- * reports start/end times via onChange; the caller turns that into the day's
- * entry. Break time is handled separately, so the displayed duration here is
- * gross (end − start) — the net is shown by the editor once break is applied.
+ * Non-adjacent selection = split shifts: select 09:00–12:00 and 13:00–17:00
+ * and the 12:00–13:00 gap becomes the break automatically. The picker reports:
+ *   start    = first selected slot
+ *   end      = end of the last selected slot
+ *   break    = minutes inside [start, end) that are NOT selected (the gaps)
+ *   duration = selected minutes (gross worked time)
+ *
+ * Controlled by the day's entry: the parent keys this component by date, so it
+ * re-seeds from the entry whenever the selected day changes.
  */
 
 const DAY_START_HOUR = 6
 const DAY_END_HOUR = 22
 const STEP_MINUTES = 30
-
 const SLOT_COUNT = ((DAY_END_HOUR - DAY_START_HOUR) * 60) / STEP_MINUTES
 
 function slotToTime(slotIndex: number): string {
   const mins = DAY_START_HOUR * 60 + slotIndex * STEP_MINUTES
-  const h = Math.floor(mins / 60)
-  const m = mins % 60
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+  return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`
 }
 
 function timeToSlot(time: string | null | undefined): number | null {
   if (!time || !/^\d{2}:\d{2}$/.test(time)) return null
   const [h, m] = time.split(':').map(Number)
-  const mins = h * 60 + m
-  const slot = (mins - DAY_START_HOUR * 60) / STEP_MINUTES
+  const slot = (h * 60 + m - DAY_START_HOUR * 60) / STEP_MINUTES
   if (slot < 0 || slot > SLOT_COUNT) return null
   return Math.round(slot)
+}
+
+/**
+ * Rebuild the set of worked slots from a stored entry. We know the span
+ * [start, end) and the worked duration, but not which middle slots were the
+ * break — so we drop the surplus slots from the midday window first (the usual
+ * lunch break), then from the end, leaving exactly duration/30 slots selected.
+ */
+function reconstructWorkedSlots(
+  start: string | null | undefined,
+  end: string | null | undefined,
+  durationMinutes: number,
+): number[] {
+  const from = timeToSlot(start)
+  const toExcl = timeToSlot(end)
+  if (from === null || toExcl === null || toExcl <= from) return []
+  const span = toExcl - from
+  const worked = Math.max(0, Math.min(span, Math.round(durationMinutes / STEP_MINUTES)))
+  const slots = new Set<number>()
+  for (let i = from; i < toExcl; i++) slots.add(i)
+  let toRemove = span - worked
+  const middayFrom = timeToSlot('12:00')
+  const middayTo = timeToSlot('14:00')
+  if (toRemove > 0 && middayFrom !== null && middayTo !== null) {
+    for (let i = middayFrom; i < middayTo && toRemove > 0; i++) {
+      if (slots.delete(i)) toRemove--
+    }
+  }
+  for (let i = toExcl - 1; i > from && toRemove > 0; i--) {
+    if (slots.delete(i)) toRemove--
+  }
+  return [...slots].sort((a, b) => a - b)
 }
 
 export function HourRangePicker({
   start,
   end,
+  durationMinutes,
   onChange,
 }: {
   start: string | null | undefined
   end: string | null | undefined
-  /** start/end as "HH:MM"; end is the exclusive boundary of the last slot. */
-  onChange: (start: string, end: string) => void
+  durationMinutes: number
+  /** start/end "HH:MM" (null when cleared), break + gross duration in minutes. */
+  onChange: (start: string | null, end: string | null, breakMinutes: number, durationMinutes: number) => void
 }) {
-  // Current selection as inclusive slot indices [from, to]. Derived from props
-  // so external edits (quick actions, AI) stay in sync.
-  const fromSlot = timeToSlot(start)
-  const toSlotExclusive = timeToSlot(end)
-  const selFrom = fromSlot
-  const selTo = toSlotExclusive !== null ? toSlotExclusive - 1 : null
-  const hasSelection = selFrom !== null && selTo !== null && selTo >= selFrom
+  const slotKeys = useMemo(() => Array.from({ length: SLOT_COUNT }, (_, i) => String(i)), [])
+  // Seed once (component is keyed by date upstream, so this runs per day).
+  const initial = useMemo(
+    () => reconstructWorkedSlots(start, end, durationMinutes).map(String),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  const sel = useCellSelection(slotKeys, initial)
 
-  const [dragging, setDragging] = useState(false)
-  const anchor = useRef<number | null>(null)
-
+  // Keep the latest onChange in a ref so the report-effect can depend only on
+  // the selection (an inline onChange from the parent would otherwise re-fire
+  // it every render and loop).
+  const onChangeRef = useRef(onChange)
   useEffect(() => {
-    if (!dragging) return
-    const stop = () => setDragging(false)
-    window.addEventListener('mouseup', stop)
-    return () => window.removeEventListener('mouseup', stop)
-  }, [dragging])
+    onChangeRef.current = onChange
+  })
 
-  const commit = (a: number, b: number) => {
-    const lo = Math.min(a, b)
-    const hi = Math.max(a, b)
-    onChange(slotToTime(lo), slotToTime(hi + 1))
-  }
+  // Report user-driven changes upward; skip the seed render so we don't loop.
+  const firstRun = useRef(true)
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false
+      return
+    }
+    const idxs = [...sel.selected].map(Number).sort((a, b) => a - b)
+    if (idxs.length === 0) {
+      onChangeRef.current(null, null, 0, 0)
+      return
+    }
+    const from = idxs[0]
+    const to = idxs[idxs.length - 1]
+    const worked = idxs.length * STEP_MINUTES
+    const span = (to - from + 1) * STEP_MINUTES
+    onChangeRef.current(slotToTime(from), slotToTime(to + 1), span - worked, worked)
+  }, [sel.selected])
+
+  const idxs = [...sel.selected].map(Number).sort((a, b) => a - b)
+  const hasSelection = idxs.length > 0
+  const from = hasSelection ? idxs[0] : 0
+  const to = hasSelection ? idxs[idxs.length - 1] : 0
+  const worked = idxs.length * STEP_MINUTES
+  const breakMinutes = hasSelection ? (to - from + 1) * STEP_MINUTES - worked : 0
 
   return (
     <div>
       <div
         role="grid"
         aria-label="Arbeitszeit wählen"
-        className="grid grid-cols-4 gap-1 select-none sm:grid-cols-8"
+        className="grid select-none grid-cols-4 gap-1 sm:grid-cols-6 md:grid-cols-8"
       >
-        {Array.from({ length: SLOT_COUNT }, (_, i) => {
-          const inRange = hasSelection && i >= (selFrom as number) && i <= (selTo as number)
+        {slotKeys.map((key, i) => {
+          const inRange = sel.selected.has(key)
           const isHourStart = (DAY_START_HOUR * 60 + i * STEP_MINUTES) % 60 === 0
           return (
             <Button
-              key={i}
+              key={key}
               type="button"
               variant="ghost"
               aria-pressed={inRange}
-              onMouseDown={e => {
-                if (e.button !== 0) return
-                e.preventDefault()
-                anchor.current = i
-                setDragging(true)
-                commit(i, i)
-              }}
-              onMouseEnter={() => {
-                if (!dragging || anchor.current === null) return
-                commit(anchor.current, i)
-              }}
-              onClick={() => {
-                // Plain click (no drag) selects a single 30-min slot.
-                if (!dragging) commit(i, i)
-              }}
+              onMouseDown={e => sel.onCellMouseDown(key, e)}
+              onMouseEnter={() => sel.onCellMouseEnter(key)}
+              onClick={e => sel.onCellClick(key, e)}
               className={cn(
-                'h-auto rounded-md border px-0 py-1.5 text-center font-mono text-xs tabular-nums transition-colors',
+                'h-auto rounded-md border px-0 py-2 text-center font-mono text-xs tabular-nums transition-colors',
                 inRange
                   ? 'border-action bg-action-muted text-action'
                   : isHourStart
@@ -123,12 +164,13 @@ export function HourRangePicker({
         {hasSelection ? (
           <>
             <span className="font-medium text-text-primary">
-              {slotToTime(selFrom as number)}–{slotToTime((selTo as number) + 1)}
+              {slotToTime(from)}–{slotToTime(to + 1)}
             </span>{' '}
-            · {formatTimecardDuration(((selTo as number) - (selFrom as number) + 1) * STEP_MINUTES)} brutto
+            · {formatTimecardDuration(worked)}
+            {breakMinutes > 0 && <> · {formatTimecardDuration(breakMinutes)} Pause</>}
           </>
         ) : (
-          'Ziehe über die Stunden, um die Arbeitszeit zu wählen.'
+          'Tippe oder ziehe über die Stunden. Ctrl/Cmd-Klick für geteilte Schichten (Lücke = Pause).'
         )}
       </p>
     </div>

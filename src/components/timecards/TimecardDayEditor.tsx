@@ -12,7 +12,6 @@ import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { HourRangePicker } from './HourRangePicker'
@@ -89,9 +88,13 @@ export function TimecardDayEditor({
       ) : (
         <div className="space-y-4 border-t border-subtle pt-5">
           <HourRangePicker
+            key={selectedDate}
             start={selectedEntry?.start_time ?? null}
             end={selectedEntry?.end_time ?? null}
-            onChange={(start, end) => onPatch({ start_time: start, end_time: end })}
+            durationMinutes={selectedEntry?.duration_minutes ?? 0}
+            onChange={(start, end, breakMinutes) =>
+              onPatch({ start_time: start, end_time: end, break_minutes: breakMinutes })
+            }
           />
           {hasEntry && <DetailFields entry={selectedEntry} onPatch={onPatch} />}
         </div>
@@ -134,17 +137,6 @@ function DetailFields({
   const t = useTranslations('admin.timecards')
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <Field label={t('fieldBreak')}>
-        <Input
-          type="number"
-          min={0}
-          max={240}
-          step={15}
-          value={entry.break_minutes ?? 0}
-          onChange={e => onPatch({ break_minutes: Number(e.target.value) })}
-          className="tabular-nums"
-        />
-      </Field>
       <Field label={t('fieldCategory')}>
         <Select
           value={entry.category ?? 'other'}
@@ -157,7 +149,7 @@ function DetailFields({
           ))}
         </Select>
       </Field>
-      <Field label={t('fieldNote')} className="sm:col-span-2">
+      <Field label={t('fieldNote')}>
         <Textarea
           rows={2}
           value={entry.description ?? ''}

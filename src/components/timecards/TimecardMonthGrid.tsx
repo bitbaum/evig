@@ -60,6 +60,13 @@ export function TimecardMonthGrid({
     return () => window.removeEventListener('mouseup', stop)
   }, [dragging])
 
+  // Weekday-aligned calendar: blanks pad the first row so the 1st lands under
+  // its weekday (Mon-first). A real month reads in ~6 rows — no endless scroll.
+  const firstDow = (() => {
+    const d = new Date(`${visibleDates[0]}T00:00:00.000Z`).getUTCDay()
+    return d === 0 ? 6 : d - 1
+  })()
+
   return (
     <div
       role="grid"
@@ -70,103 +77,120 @@ export function TimecardMonthGrid({
           onClearSelected()
         }
       }}
-      className="grid grid-cols-2 gap-2 rounded-lg select-none focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40 sm:grid-cols-4 md:grid-cols-7"
+      className="select-none rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40"
     >
-      {visibleDates.map(date => {
-        const entry = getEntryForDate(entries, date)
-        const isFocused = focusedDate === date
-        const isSelected = selected.has(date)
-        const d = new Date(`${date}T00:00:00.000Z`)
-        const weekdayLabel = new Intl.DateTimeFormat('de-CH', { weekday: 'short' }).format(d)
-        const dayNum = d.getUTCDate()
-        const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6
-        const absence = entry ? isAbsenceCategory(entry.category) : false
-        const categoryLabel = entry
-          ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory]
-          : undefined
-
-        return (
-          <Button
-            key={date}
-            type="button"
-            variant="ghost"
-            onMouseDown={e => {
-              // Modifier clicks (toggle/range) are handled in onClick — let them through.
-              if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
-              e.preventDefault()
-              dragged.current = false
-              setDragging(true)
-              onDaySelect(date, 'single')
-            }}
-            onMouseEnter={() => {
-              if (!dragging) return
-              dragged.current = true
-              onDaySelect(date, 'range')
-            }}
-            onClick={e => {
-              // Swallow the click that ends a drag so it doesn't reset to one day.
-              if (dragged.current) {
-                dragged.current = false
-                return
-              }
-              onDaySelect(
-                date,
-                e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single',
-              )
-            }}
-            onContextMenu={e => {
-              if (!onDayContextMenu) return
-              e.preventDefault()
-              // Right-clicking a day outside the current selection selects just
-              // it; right-clicking inside the selection keeps the whole batch.
-              if (!selected.has(date)) onDaySelect(date, 'single')
-              onDayContextMenu(date, { x: e.clientX, y: e.clientY })
-            }}
-            title={categoryLabel}
-            aria-pressed={isSelected}
+      <div className="mb-1 grid grid-cols-7 gap-1 sm:gap-1.5">
+        {WEEKDAY_LABELS.map((w, i) => (
+          <div
+            key={w}
             className={cn(
-              'group relative flex h-auto w-full flex-col gap-1 rounded-lg border bg-surface-base px-3 py-2.5 text-left transition-colors',
-              isSelected
-                ? 'border-action bg-action-muted'
-                : isFocused
-                  ? 'border-action ring-2 ring-action/15'
-                  : 'border-subtle hover:border-strong',
-              !entry && !isSelected && !isFocused && 'bg-canvas',
+              'py-1 text-center font-mono text-[0.6rem] uppercase tracking-wide sm:text-xs',
+              i >= 5 ? 'text-text-tertiary' : 'text-text-secondary',
             )}
           >
-            {isSelected && (
-              <span className="absolute right-1.5 top-1.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-action text-action-text">
-                <Check className="h-3 w-3" aria-hidden="true" />
-              </span>
-            )}
-            <div className="flex items-baseline justify-between">
+            {w}
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
+        {Array.from({ length: firstDow }).map((_, i) => (
+          <div key={`pad-${i}`} aria-hidden="true" />
+        ))}
+        {visibleDates.map(date => {
+          const entry = getEntryForDate(entries, date)
+          const isFocused = focusedDate === date
+          const isSelected = selected.has(date)
+          const d = new Date(`${date}T00:00:00.000Z`)
+          const dayNum = d.getUTCDate()
+          const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6
+          const absence = entry ? isAbsenceCategory(entry.category) : false
+          const categoryLabel = entry
+            ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory]
+            : undefined
+
+          return (
+            <Button
+              key={date}
+              type="button"
+              variant="ghost"
+              onMouseDown={e => {
+                // Modifier clicks (toggle/range) are handled in onClick — let them through.
+                if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
+                e.preventDefault()
+                dragged.current = false
+                setDragging(true)
+                onDaySelect(date, 'single')
+              }}
+              onMouseEnter={() => {
+                if (!dragging) return
+                dragged.current = true
+                onDaySelect(date, 'range')
+              }}
+              onClick={e => {
+                // Swallow the click that ends a drag so it doesn't reset to one day.
+                if (dragged.current) {
+                  dragged.current = false
+                  return
+                }
+                onDaySelect(
+                  date,
+                  e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single',
+                )
+              }}
+              onContextMenu={e => {
+                if (!onDayContextMenu) return
+                e.preventDefault()
+                // Right-clicking a day outside the current selection selects just
+                // it; right-clicking inside the selection keeps the whole batch.
+                if (!selected.has(date)) onDaySelect(date, 'single')
+                onDayContextMenu(date, { x: e.clientX, y: e.clientY })
+              }}
+              title={categoryLabel}
+              aria-pressed={isSelected}
+              className={cn(
+                'group relative flex h-auto min-h-[3.25rem] w-full min-w-0 flex-col items-start gap-0.5 rounded-md border px-1.5 py-1 text-left transition-colors sm:min-h-[4rem] sm:px-2 sm:py-1.5',
+                isSelected
+                  ? 'border-action bg-action-muted'
+                  : isFocused
+                    ? 'border-action ring-2 ring-action/15'
+                    : 'border-subtle hover:border-strong',
+                !entry && !isSelected && !isFocused && 'bg-canvas',
+              )}
+            >
+              {isSelected && (
+                <span className="absolute right-1 top-1 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-action text-action-text">
+                  <Check className="h-2.5 w-2.5" aria-hidden="true" />
+                </span>
+              )}
               <span
                 className={cn(
-                  'font-mono text-xs uppercase tracking-wide',
+                  'font-mono text-xs tabular-nums',
                   isWeekend ? 'text-text-tertiary' : 'text-text-secondary',
                 )}
               >
-                {weekdayLabel}
-              </span>
-              <span className="font-mono text-xs tabular-nums text-text-tertiary">
                 {String(dayNum).padStart(2, '0')}
               </span>
-            </div>
-            {absence ? (
-              <span className="text-sm font-medium leading-tight text-action">{categoryLabel}</span>
-            ) : (
-              <span
-                className={cn(
-                  'font-mono text-lg tabular-nums leading-tight',
-                  entry ? 'text-text-primary' : 'text-text-tertiary',
-                )}
-              >
-                {entry ? formatTimecardDuration(entry.duration_minutes) : '—'}
-              </span>
-            )}
-          </Button>
-        )
-      })}
+              {absence ? (
+                <span className="w-full truncate text-[0.65rem] font-medium leading-tight text-action sm:text-xs">
+                  {categoryLabel}
+                </span>
+              ) : (
+                <span
+                  className={cn(
+                    'font-mono text-sm tabular-nums leading-tight sm:text-base',
+                    entry ? 'text-text-primary' : 'text-text-tertiary',
+                  )}
+                >
+                  {entry ? formatTimecardDuration(entry.duration_minutes) : '·'}
+                </span>
+              )}
+            </Button>
+          )
+        })}
+      </div>
     </div>
   )
 }
+
+const WEEKDAY_LABELS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
