@@ -74,24 +74,34 @@ Kivitendo article numbers are **read-only historical references** for items impo
 
 Kivvi sync happens non-blocking after erfassung commits via `syncToKivvi()` in `src/lib/kivvi/client.ts`. If Kivvi is not configured (`KIVVI_API_URL` / `KIVVI_API_TOKEN` env vars missing), sync silently skips — expected in dev.
 
-### Storefront Architecture
+### Storefront Architecture (UNIFIED — updated 2026-06)
 
-RevampIT runs **two separate storefronts** — not a unified marketplace:
+There is **one storefront, one store**: the `listings` table (+ `listing_images`,
+`listing_specs`), served by `/api/listings` and rendered at `/marketplace`. Two
+*ingestion* pipelines feed that single store — keep them separate at the input
+layer, but they converge on one storage model (this is intentional, not a DRY
+violation):
 
 ```
-RevampIT Shop (internal stock)
-  erfassung → ai_extracted_products + inventory_items
-            → marketplace_listings (platform='internal')
-            → /api/shop/inventory/
+RevampIT shop stock (bulk staff entry)
+  /admin/erfassung → ai_extracted_products + inventory_items
+                   → publishRevampitListing()  → listings (is_revampit=TRUE, inventory_item_id set)
 
-P2P Marketplace (community)
-  /marketplace/sell → listings (is_revampit=false)
-                    → /api/listings/
+Community P2P (individuals + staff posting privately)
+  /marketplace/sell → POST /api/listings        → listings (is_revampit=FALSE)
 ```
 
-**The `listings` table has `is_revampit` and `inventory_item_id` columns, but these are unimplemented stubs.** RevampIT products do NOT appear in the P2P `listings` table. They are served exclusively via `marketplace_listings` + `/api/shop/inventory/`.
-
-Do not attempt to merge the two storefronts without a deliberate architectural decision — both schemas, routes, and UI pages are currently independent.
+- **`is_revampit` is the single source of truth** (a stored column). NEVER
+  re-derive it from the seller's `@revamp-it.ch` email — staff posting *private*
+  items are regular P2P sellers. The sell form always writes `is_revampit=false`;
+  only `publishRevampitListing` sets it true.
+- **`marketplace_listings` + `/api/shop/inventory` are legacy.** `marketplace_listings`
+  is dead for writes (orphan rows only); `/api/shop/inventory` now feeds only
+  admin product management, not the public storefront. `/shop/*` pages redirect
+  to `/marketplace`. These are slated for removal — do not build on them.
+- Erfassung MAY result in a published listing; a staff member posting privately
+  is nudged toward erfassung if it's clearly RevampIT stock, but can still post
+  as a private individual (`is_revampit=false`).
 
 ## Quick Start
 

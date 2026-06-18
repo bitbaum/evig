@@ -5,6 +5,40 @@ Swiss non-profit platform enabling free exchange of technology — used computer
 @~/.claude/CLAUDE.md
 @.claude/CLAUDE.md
 
+## Non-negotiable standards (the default for every change — don't wait to be told)
+
+The full rationale lives in the imported global standards above. In this repo,
+hold the line on all of it by default:
+
+- **First-principles, not analogy.** Solve the actual human problem; derive the
+  simplest correct design from constraints. Don't copy a pattern without knowing why.
+- **SSOT.** Every fact lives in exactly one place. Types derive from the Drizzle
+  schema; statuses/categories/labels/limits come from `src/config/*`. If a value
+  exists in two places, one is a bug (e.g. `is_revampit` must be the stored column,
+  never re-derived from email; conditions derive from one option list).
+- **DRY + SoC.** Extract on the 3rd repeat. Layers stay separate: `config/` = what
+  exists · `lib/` = domain logic (no HTTP/JSX) · `app/api/` = thin HTTP · components
+  = render only. Dashboard code must NOT import from `app/admin/*` — shared UI lives
+  in neutral `src/components/*`.
+- **No god files.** Split anything past ~300 lines; state/handlers go in hooks,
+  pure helpers in `*-utils.ts`.
+- **Config-driven, nothing hardcoded.** No hardcoded labels, categories, stats,
+  numbers, or magic strings in components — source from config/DB. (Stats: DB or
+  `org-numbers.defaults.ts`.)
+- **Design discipline — match OrangeCat / FleetCrown.** Semantic tokens + the
+  shared primitives (`Card`, `Button`, `Heading`, `IconBadge`, `Section`,
+  `EmptyState`, `Input`) only. NO arbitrary hex (`bg-[#…]`), NO inline style
+  colors, NO `shadow-lg/xl` on cards, NO stray one-off chrome. Green is for CTAs /
+  focus / sustainability semantics; chrome stays neutral. `grep -rn '\[#' src/`
+  must be empty.
+- **Modern + correct.** Latest stable framework features, strict TS (minimal
+  `any`), parameterized SQL via `TABLE_NAMES`/Drizzle, validate at boundaries,
+  handle loading/empty/error/success states.
+- **Keep the repo clean.** No dead code, no stray frankenstein tools assembled
+  from unrelated parts, no uncommitted/unpushed garbage. Remove what you replace.
+- **Keep docs true.** When behaviour changes, update the docs/CLAUDE.md in the same
+  change — stale docs are a defect.
+
 ## Stack
 
 | Layer | Technology |

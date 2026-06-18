@@ -37,11 +37,11 @@ export const listings = pgTable('listings', {
   // CHECK (status IN ('active', 'sold', 'reserved', 'draft', 'removed'))
   status: text('status').notNull().default('active'),
 
-  // RevampIT inventory link — STUB, currently unimplemented.
-  // These columns were designed for a future unified marketplace where RevampIT stock
-  // would appear alongside P2P listings. That was never built.
-  // RevampIT products are served via `marketplace_listings` (inventory.ts) + /api/shop/inventory/,
-  // NOT via this table. Do not write to these columns without first implementing that unified flow.
+  // RevampIT inventory link — LIVE (unified storefront). RevampIT shop stock is
+  // published into this `listings` table via lib/marketplace/publishRevampitListing
+  // (sets is_revampit=true + inventory_item_id). is_revampit is the single source
+  // of truth — never re-derive it from the seller's email. (Legacy
+  // marketplace_listings + /api/shop/inventory are being retired.)
   isRevampit: boolean('is_revampit').notNull().default(false),
   inventoryItemId: uuid('inventory_item_id').references(() => inventoryItems.id, { onDelete: 'set null' }),
 
