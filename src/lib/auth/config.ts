@@ -173,6 +173,32 @@ export function getAuthSecret(): string {
  * throwing — the pool is never actually used at build time.
  */
 export function getDbConfig() {
+  // Prefer DATABASE_URL — the single connection source (SSOT) for both the app
+  // (Drizzle) and auth. When present it wins over the legacy DB_*/AUTH_DB_*
+  // parts, so prod and dev each point at exactly one database. SSL is derived
+  // from the URL's sslmode (require → on; absent, e.g. localhost → off).
+  const url = process.env.DATABASE_URL
+  if (url && /^postgres(ql)?:\/\//.test(url)) {
+    try {
+      const u = new URL(url)
+      const sslmode = u.searchParams.get('sslmode')
+      const requireSsl = sslmode === 'require' || sslmode === 'verify-full' || sslmode === 'verify-ca'
+      return {
+        host: u.hostname,
+        port: u.port ? parseInt(u.port) : 5432,
+        database: decodeURIComponent(u.pathname.replace(/^\//, '')) || 'postgres',
+        user: decodeURIComponent(u.username),
+        password: decodeURIComponent(u.password),
+        ssl: requireSsl ? ({ rejectUnauthorized: false } as const) : (false as const),
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 5000,
+      }
+    } catch {
+      // Malformed URL — fall through to the DB_*/AUTH_DB_* parts below.
+    }
+  }
+
   const sslEnabled = process.env.DB_SSL !== 'false'
 
   const host = process.env.AUTH_DB_HOST || process.env.DB_HOST
