@@ -73,6 +73,15 @@ if sudo test -f "$APP/launch.sh"; then
   sudo cp -a "$APP/launch.sh" "$NEXT/launch.sh"
 fi
 
+# Preserve runtime user uploads across the whole-dir swap. /api/uploads writes
+# to public/uploads/<userId> at runtime; without copying it forward, every
+# deploy (which replaces the entire app dir) would orphan every uploaded image.
+# INTERIM measure until images move to S3/object storage — keeps them durable.
+if sudo test -d "$APP/public/uploads"; then
+  sudo mkdir -p "$NEXT/public"
+  sudo cp -a "$APP/public/uploads" "$NEXT/public/uploads"
+fi
+
 if sudo test -e "$APP" || sudo test -L "$APP"; then
   sudo mv "$APP" "$PREV"
 fi

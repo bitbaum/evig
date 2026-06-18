@@ -88,10 +88,14 @@ export async function updateProductImage(
     return null
   }
 
-  // Delete old blob if applicable
+  // Clean up the previous object only when the new upload landed at a different
+  // URL. Filenames are deterministic (<itemUuid>.jpg) so re-uploads usually
+  // overwrite in place (no-op here); this handles the rarer differing-key case.
+  // deleteImage() handles both the S3/Hetzner and local-fs backends.
+  // (Replaces a dead check for blob.vercel-storage.com — Vercel Blob is gone.)
   if (existingImage) {
     const oldUrl = existingImage.filePath
-    if (oldUrl.includes('blob.vercel-storage.com')) {
+    if (oldUrl && oldUrl !== uploadResult.url) {
       await deleteImage(oldUrl)
     }
 
