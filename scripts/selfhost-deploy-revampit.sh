@@ -30,6 +30,31 @@ npm run build
 ST="$SRC/.next/standalone"
 [ -d "$ST" ] || { echo "ERROR: no standalone output"; exit 1; }
 
+# ── Apply pending DB migrations to the PROD Postgres BEFORE activating ──────
+# Prod runs its own Postgres on the box (NOT Neon). Migrations live in the repo
+# and are tracked in schema_migrations. Apply any not-yet-recorded file, in
+# order, each in its own transaction with ON_ERROR_STOP — so the schema is ready
+# before the new code goes live. A failed migration aborts the deploy and leaves
+# the current release untouched. This is the guard against prod schema drift.
+# `prod_psql` pipes stdin SQL to the prod DB (host psql if present, else the
+# supabase-db container); extra psql flags are passed as args.
+prod_psql() {
+  ssh -o BatchMode=yes "$BOX" "LC_ALL=C; DB=\$(grep -E '^DATABASE_URL=' '$REMOTE_APP/.env' | cut -d= -f2- | tr -d '\"'); if command -v psql >/dev/null 2>&1; then psql \"\$DB\" $* ; else docker exec -i -e LC_ALL=C supabase-db psql -U postgres -d revampit $* ; fi"
+}
+echo "=== apply pending migrations → prod DB ==="
+applied_list="$(printf '' | prod_psql "-tAc 'SELECT filename FROM schema_migrations'" 2>/dev/null || true)"
+for mig in "$SRC"/scripts/db/migrations/*.sql; do
+  fname="$(basename "$mig")"
+  printf '%s\n' "$applied_list" | grep -qxF "$fname" && continue
+  echo "  → applying $fname"
+  if ! { echo "BEGIN;"; cat "$mig"; printf "INSERT INTO schema_migrations(filename) VALUES('%s') ON CONFLICT DO NOTHING; COMMIT;\n" "$fname"; } \
+       | prod_psql "-v ON_ERROR_STOP=1 -q"; then
+    echo "ERROR: migration $fname failed — aborting deploy (current release stays live)"
+    exit 1
+  fi
+done
+echo "  migrations up to date"
+
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 

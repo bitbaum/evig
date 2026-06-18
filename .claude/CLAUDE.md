@@ -41,25 +41,33 @@ revampit/
 | Layer | Technology | Port |
 |-------|------------|------|
 | Frontend | Next.js 16, TypeScript, Tailwind | 3000 |
-| **Main DB** | **Neon PostgreSQL (cloud)** | **Remote** |
+| **Prod DB** | **Self-hosted Postgres on Hetzner** (Supabase stack, `localhost:5432/revampit`) | On the app box |
+| **Dev DB** | Neon PostgreSQL (cloud) | Remote |
 | Search | Meilisearch | 7700 |
 | Payments | Payrexx (mock in dev) | — |
 
 ### Database Configuration
 
-**CRITICAL: This project uses Neon PostgreSQL (cloud), NOT local PostgreSQL.**
+**CRITICAL — prod and dev use DIFFERENT databases:**
 
-**.env.local MUST have:**
-```bash
-DATABASE_URL=postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require
-```
+- **Production** runs a **self-hosted Postgres on the Hetzner box**
+  (`DATABASE_URL=postgresql://…@localhost:5432/revampit` in
+  `/opt/revampit/app/.env`; Supabase `supabase-db` container). Neon is **not**
+  the prod app DB anymore.
+- **Local dev** `.env.local` still points `DATABASE_URL` at **Neon**.
 
-**To set up Neon:**
-1. Get connection string from https://console.neon.tech
-2. Run: `./switch-to-neon.sh` (will prompt for URL)
-3. Migrations run automatically
+**Consequences you MUST respect:**
+1. **Migrations must be applied to the PROD Hetzner DB** — applying only to
+   Neon (dev) leaves prod behind (this caused cart/IT-Hilfe/time-off to 500 in
+   prod, fixed 2026-06-18). The deploy applies pending migrations automatically;
+   to apply manually: ssh `ubuntu@167.233.22.31`, read `DATABASE_URL` from
+   `/opt/revampit/app/.env`, pipe the `.sql` to `psql "$DB"` in a transaction,
+   then record it in `schema_migrations`.
+2. **Auth is mid-cutover**: prod `.env` still has `AUTH_DB_HOST`/`DB_HOST`=Neon,
+   so NextAuth (users/accounts) still hits Neon while app data is on Hetzner —
+   a split-brain to finish (reconcile `users` → Hetzner, then flip the env).
 
-**Never assume local PostgreSQL.** Always check for `DATABASE_URL` in `.env.local`.
+**Never assume Neon for prod.** Check `DATABASE_URL` in the relevant `.env`.
 
 ### ERP Systems
 
