@@ -1,20 +1,22 @@
 /**
  * Image Upload Utility
  *
- * Production: Hetzner Object Storage (S3-compatible) via the AWS S3 SDK.
- * Development: local filesystem (public/uploads) when S3 isn't configured, so
- * `next dev` still works without cloud credentials.
+ * Production: any S3-compatible object storage via the AWS S3 SDK
+ * (Cloudflare R2 or Hetzner Object Storage). Development: local filesystem
+ * (public/uploads) when S3 isn't configured, so `next dev` works without creds.
  *
- * Required env (production / self-host) — set in .env.selfhost.local:
- *   S3_ENDPOINT           e.g. https://fsn1.your-objectstorage.com
- *   S3_REGION             e.g. fsn1  (Hetzner location id)
+ * Required runtime env (set in /opt/revampit/app/.env on the box):
+ *   S3_ENDPOINT           R2:      https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+ *                         Hetzner: https://fsn1.your-objectstorage.com
+ *   S3_REGION             R2: auto (default) · Hetzner: fsn1
  *   S3_BUCKET             e.g. revampit-media
- *   S3_ACCESS_KEY_ID
- *   S3_SECRET_ACCESS_KEY
+ *   S3_ACCESS_KEY_ID / S3_SECRET_ACCESS_KEY
  *   S3_PUBLIC_URL         public base URL for objects, e.g.
- *                         https://revampit-media.fsn1.your-objectstorage.com
- *
- * (Vercel Blob is gone — RevampIT is Hetzner-only.)
+ *                         R2: https://pub-<hash>.r2.dev  (or a custom domain)
+ * Optional:
+ *   S3_ACL                'public-read' (default) — set to 'none' for R2, which
+ *                         has no object ACLs (public access is a bucket setting).
+ *   S3_FORCE_PATH_STYLE   'true' if a bucket/endpoint needs path-style.
  */
 
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
@@ -90,13 +92,16 @@ export async function uploadImage(
 
     if (isStorageConfigured()) {
       const e = storageEnv()
+      // R2 has no object-level ACLs (public access is a bucket setting) — set
+      // S3_ACL=none there to omit the header. Hetzner keeps 'public-read'.
+      const acl = process.env.S3_ACL === 'none' ? undefined : process.env.S3_ACL || 'public-read'
       await s3().send(
         new PutObjectCommand({
           Bucket: e.bucket,
           Key: key,
           Body: buffer,
           ContentType: contentType,
-          ACL: 'public-read',
+          ...(acl ? { ACL: acl as 'public-read' } : {}),
           CacheControl: 'public, max-age=31536000, immutable',
         }),
       )
