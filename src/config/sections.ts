@@ -46,7 +46,6 @@ import {
   Lightbulb,
   MessageSquare,
   Clock,
-  Play,
   Wallet,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
@@ -494,20 +493,8 @@ export const SECTIONS: Record<string, SectionConfig> = {
     category: 'activities',
   },
 
-  'shift-log': {
-    id: 'shift-log',
-    path: '/dashboard/shift',
-    ui: {
-      label: 'Schicht starten',
-      description: 'Aktuelle Schicht erfassen – Tippen, fertig',
-      icon: Play,
-      emoji: '▶️',
-      color: 'success',
-    },
-    visibility: { admin: false, dashboard: true, requiresStaff: true },
-    priority: 5,
-    category: 'activities',
-  },
+  // (Clock-in/out is no longer a separate destination — it's an integral
+  //  widget inside the timecard tool. See 'my-timecards'.)
 
   'my-timecards': {
     id: 'my-timecards',

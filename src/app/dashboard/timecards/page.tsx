@@ -22,7 +22,6 @@
 
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { eq, desc } from 'drizzle-orm'
 import { auth } from '@/auth'
 import { db } from '@/db'
@@ -72,21 +71,13 @@ export default async function DashboardTimecardsPage() {
 
   return (
     <article className="mx-auto max-w-7xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
-      <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-            Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein
-          </p>
-          <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
-            Meine Zeiterfassung
-          </Heading>
-        </div>
-        <Link
-          href="/dashboard/shift"
-          className="inline-flex items-center justify-center rounded-md bg-action px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-action-strong"
-        >
-          Schicht starten
-        </Link>
+      <header className="border-b border-subtle pb-8">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein
+        </p>
+        <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+          Meine Zeiterfassung
+        </Heading>
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-8">

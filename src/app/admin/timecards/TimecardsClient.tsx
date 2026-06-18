@@ -14,6 +14,7 @@ import { TimecardDayEditor } from './TimecardDayEditor'
 import { TimecardHeader } from './TimecardHeader'
 import { TimecardMonthGrid } from './TimecardMonthGrid'
 import { TimecardBulkBar } from './TimecardBulkBar'
+import { ShiftWidget } from '@/components/timecards/ShiftWidget'
 import { useTimecardDraft } from './useTimecardDraft'
 import type { TimecardAIResult } from './types'
 
@@ -84,6 +85,10 @@ export function TimecardsClient({
       />
 
       {!tc.hasSchedule && <NoScheduleNotice hasSchedule={tc.hasSchedule} />}
+
+      {/* Clock-in lives here — an optional, integral part of the tool. A
+          finished shift is written straight into this month's draft. */}
+      <ShiftWidget onClockOut={tc.addShiftEntry} />
 
       {/* View toggle + (month) selection hint */}
       <div className="flex flex-wrap items-center justify-between gap-3">

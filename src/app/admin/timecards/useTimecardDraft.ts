@@ -462,6 +462,71 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     }
   }, [currentSavePayload, draft.selectedDate])
 
+  /**
+   * Add a clocked shift to the month draft and persist it immediately.
+   * Integral to the tool: the clock-in/out widget calls this so a finished
+   * shift lands in the SAME month timecard the user is editing (the old
+   * separate shift page wrote to a parallel WEEK card — fragmentation).
+   * Accumulates into the day's existing entry rather than clobbering it.
+   */
+  const addShiftEntry = useCallback(
+    async (shift: {
+      work_date: string
+      start_time: string
+      end_time: string
+      minutes: number
+      category: TimecardEntryCategory
+      description?: string
+    }) => {
+      const existing = getEntryForDate(periodEntries, shift.work_date)
+      const merged: TimecardEntryInput = existing
+        ? {
+            ...existing,
+            start_time: existing.start_time ?? shift.start_time,
+            end_time: shift.end_time,
+            duration_minutes: existing.duration_minutes + shift.minutes,
+            description:
+              [existing.description, shift.description].filter(Boolean).join(' · ') ||
+              existing.description,
+          }
+        : {
+            work_date: shift.work_date,
+            start_time: shift.start_time,
+            end_time: shift.end_time,
+            break_minutes: 0,
+            duration_minutes: shift.minutes,
+            category: shift.category,
+            source: 'manual',
+            description: shift.description ?? '',
+          }
+      const nextEntries = mergeEntries(periodEntries, [merged])
+
+      setIsSaving(true)
+      setSyncMessage(null)
+      setErrorMessage(null)
+      try {
+        const result = await apiFetch<Timecard>('/api/timecards', {
+          method: 'PUT',
+          body: {
+            period_type: currentPeriodRange.period_type,
+            period_start: currentPeriodRange.period_start,
+            period_end: currentPeriodRange.period_end,
+            notes: draft.notes || null,
+            entries: nextEntries,
+          },
+        })
+        if (!result.success || !result.data) throw new Error(result.error || 'shift_save_failed')
+        setDraft(toDraftState(result.data, shift.work_date))
+        setSyncMessage('Schicht gespeichert')
+      } catch {
+        setErrorMessage('Schicht konnte nicht gespeichert werden.')
+      } finally {
+        setIsSaving(false)
+      }
+    },
+    [periodEntries, currentPeriodRange, draft.notes],
+  )
+
   const submitDraft = useCallback(async () => {
     setIsSubmitting(true)
     setSyncMessage(null)
@@ -515,6 +580,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     bulkFillFromSchedule,
     bulkSetAbsence,
     bulkClear,
+    addShiftEntry,
     rebuildCurrentDraft,
     saveDraft,
     submitDraft,
