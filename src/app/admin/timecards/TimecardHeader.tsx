@@ -30,6 +30,7 @@ export function TimecardHeader({
   syncMessage,
   onSubmit,
   onSave,
+  onFillMonth,
 }: {
   monthLabel: string
   scheduleSummary: string
@@ -44,6 +45,7 @@ export function TimecardHeader({
   syncMessage: string | null
   onSubmit: () => void
   onSave: () => void
+  onFillMonth: () => void
 }) {
   const isSubmitted = status === 'submitted'
   const t = useTranslations('admin.timecards')
@@ -63,6 +65,16 @@ export function TimecardHeader({
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant={hasEntries ? 'ghost' : 'secondary'}
+            onClick={onFillMonth}
+            disabled={isLoadingDraft || isSubmitting}
+            className="text-sm"
+            title={t('fillMonthHint')}
+          >
+            {t('fillMonth')}
+          </Button>
           <Button
             type="button"
             variant="outline"

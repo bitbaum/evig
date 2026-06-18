@@ -58,6 +58,7 @@ export function TimecardsClient({
         isLoadingDraft={tc.isLoadingDraft}
         errorMessage={tc.errorMessage}
         syncMessage={tc.syncMessage}
+        onFillMonth={tc.fillMonthFromSchedule}
         onSubmit={tc.submitDraft}
         onSave={tc.saveDraft}
       />

@@ -12,6 +12,7 @@ import {
   summarizeWeeklySchedule,
   toISODate,
   WEEKDAY_IDS,
+  STANDARD_WEEKLY_SCHEDULE,
 } from '@/lib/team/schedule'
 import {
   getDaysInRange,
@@ -75,9 +76,20 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     () => new Intl.DateTimeFormat('de-CH', { month: 'long', year: 'numeric' }).format(currentDate),
     [currentDate],
   )
+  // For "fill the month", fall back to the standard Mon-Fri 09:00–17:00 plan
+  // when the user hasn't set a schedule yet — so the one-click fill works out
+  // of the box (the user can then adjust their schedule and re-fill).
+  const effectiveSchedule = useMemo(
+    () => (hasSchedule ? schedule : STANDARD_WEEKLY_SCHEDULE),
+    [hasSchedule, schedule],
+  )
+  const monthFillEntries = useMemo(
+    () => buildTimecardEntriesForMonth(effectiveSchedule, currentMonthStart),
+    [effectiveSchedule, currentMonthStart],
+  )
   const scheduleSummary = hasSchedule
     ? summarizeWeeklySchedule(schedule)
-    : 'Noch kein Standardschedule hinterlegt'
+    : 'Standard: Mo–Fr 09:00–17:00 (anpassbar)'
 
   const currentPeriodRange = useMemo(
     () => ({
@@ -136,6 +148,30 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
       selectedDate: nextSelected,
     }))
   }, [monthEntries, monthDates, updateCurrentDraft])
+
+  /**
+   * Fill the whole month from the (effective) schedule in one tap — the
+   * primary "I worked my normal hours this month" affordance. SMART, not
+   * destructive: only adds entries for weekdays that are still empty AND not
+   * already marked off in the notes, so manual edits + days-off survive.
+   * Uses the standard Mon-Fri 9–17 plan when no schedule is set.
+   */
+  const fillMonthFromSchedule = useCallback(() => {
+    updateCurrentDraft(current => {
+      const existingDates = new Set(current.entries.map(entry => entry.work_date))
+      const toAdd = monthFillEntries.filter(
+        entry =>
+          !existingDates.has(entry.work_date) &&
+          !current.notes.includes(getDisplayDate(entry.work_date)),
+      )
+      if (toAdd.length === 0) return current
+      return {
+        ...current,
+        entries: mergeEntries(current.entries, toAdd),
+        status: TIMECARD_STATUSES.DRAFT,
+      }
+    })
+  }, [monthFillEntries, updateCurrentDraft])
 
   const setSelectedDate = useCallback(
     (date: string) =>
@@ -370,6 +406,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     markSelectedDateOff,
     restoreSelectedDateFromSchedule,
     applyDefault9To17,
+    fillMonthFromSchedule,
     rebuildCurrentDraft,
     saveDraft,
     submitDraft,
