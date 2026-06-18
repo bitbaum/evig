@@ -16,6 +16,8 @@ export const UPCYCLING_ROUTES = {
   businessplan: `${UPCYCLING_BASE}/businessplan`,
   status: `${UPCYCLING_BASE}/status`,
   lenovoL2251pwd: `${UPCYCLING_BASE}/lenovo-l2251pwd`,
+  /** Interner, passwortgeschützter Akquise-Bereich (nicht in der öffentlichen Sub-Nav). */
+  dossier: `${UPCYCLING_BASE}/dossier`,
 } as const
 
 export type UpcyclingRouteKey = keyof typeof UPCYCLING_ROUTES
@@ -84,4 +86,6 @@ export const UPCYCLING_INTEREST_SKIP_PATHS = new Set<string>([
   UPCYCLING_ROUTES.landing,
   UPCYCLING_ROUTES.businessplan,
   UPCYCLING_ROUTES.status,
+  // Interner Bereich: keine öffentlichen Marketing-Bänder.
+  UPCYCLING_ROUTES.dossier,
 ])
