@@ -58,9 +58,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
               ${listings.deliveryOptions} AS delivery_options,
               ${listings.shippingCostChf} AS shipping_cost_chf,
               ${listings.status} AS status,
-              (${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch') AS is_revampit
+              ${listings.isRevampit} AS is_revampit
             FROM ${listings}
-            INNER JOIN ${users} ON ${users.id} = ${listings.sellerId}
             WHERE ${listings.id} = ${data.listing_id}
             FOR UPDATE`
       );

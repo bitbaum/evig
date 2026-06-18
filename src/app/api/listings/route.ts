@@ -19,7 +19,6 @@ import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import { sanitizeInput } from '@/lib/security/sanitize';
 import { APP_URL } from '@/config/urls';
-import { isStaffEmail } from '@/lib/permissions';
 
 // ============================================================================
 // GET — Public browse
@@ -43,7 +42,12 @@ export async function GET(request: NextRequest) {
 
     // Build dynamic WHERE conditions
     const conditions: SQL[] = [eq(listings.status, LISTING_STATUS.ACTIVE)];
-    const revampitSellerCondition = sql`(${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch')`;
+    // is_revampit is the single source of truth (set true only by the erfassung
+    // → publishRevampitListing path). Do NOT re-derive it from the seller's
+    // email: staff posting PRIVATE items via the sell form are regular P2P
+    // sellers — conflating staff-email with RevampIT wrongly waived commission
+    // and bypassed the payment guard at checkout.
+    const revampitSellerCondition = sql`${listings.isRevampit} = true`;
 
     if (filters.category) {
       conditions.push(eq(listings.category, filters.category));
@@ -214,7 +218,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const validation = validateBody(CreateListingSchema, body);
     if (!validation.success) return validation.error;
     const data = validation.data;
-    const isRevampitListing = isStaffEmail(session.user.email);
+    // The public sell form is the PRIVATE / P2P posting path — always
+    // is_revampit=false, even for @revamp-it.ch staff posting personal items.
+    // RevampIT shop stock becomes a listing only through the erfassung →
+    // publishRevampitListing pipeline (which sets is_revampit=true explicitly).
+    // Staff are nudged toward erfassung in the UI but may still post privately.
+    const isRevampitListing = false;
 
     // SECURITY: Sanitize user inputs
     const sanitizedTitle = sanitizeInput(data.title, { maxLength: 200 });

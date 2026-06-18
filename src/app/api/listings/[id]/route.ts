@@ -30,7 +30,8 @@ export async function GET(
   try {
     const { id } = await params;
     if (!id) return apiNotFound('Inserat');
-    const revampitSellerCondition = sql`(${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch')`;
+    // SSOT: trust the stored is_revampit column; never re-derive from email.
+    const revampitSellerCondition = sql`${listings.isRevampit} = true`;
 
     // Increment view count (fire and forget)
     db.update(listings)
