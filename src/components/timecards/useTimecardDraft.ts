@@ -285,6 +285,46 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [effectiveSchedule],
   )
 
+  // Shared entry builders — ONE definition each for "a scheduled work day" and
+  // "an absence day", used by both the month bulk actions and the day view, so
+  // the two surfaces produce identical data (SSOT/DRY).
+  const buildScheduleEntry = useCallback(
+    (date: string): TimecardEntryInput => {
+      const t = dayTemplateForDate(date)
+      return {
+        work_date: date,
+        start_time: t.start,
+        end_time: t.end,
+        break_minutes: t.break_minutes,
+        duration_minutes: calculateTimeRangeMinutes(t.start, t.end, t.break_minutes),
+        category: TIMECARD_ENTRY_CATEGORIES.ADMIN,
+        source: 'template',
+        description: '',
+      }
+    },
+    [dayTemplateForDate],
+  )
+
+  const buildAbsenceEntry = useCallback(
+    (date: string, category: TimecardEntryCategory): TimecardEntryInput => {
+      const paid = getAbsenceType(category)?.paid ?? true
+      const t = dayTemplateForDate(date)
+      // Paid absences (Ferien/Krank/…) count the day's scheduled hours;
+      // unpaid (Unbezahlt) records 0h but stays labelled.
+      return {
+        work_date: date,
+        start_time: paid ? t.start : null,
+        end_time: paid ? t.end : null,
+        break_minutes: paid ? t.break_minutes : 0,
+        duration_minutes: paid ? calculateTimeRangeMinutes(t.start, t.end, t.break_minutes) : 0,
+        category,
+        source: 'manual',
+        description: TIMECARD_ENTRY_CATEGORY_LABELS[category],
+      }
+    },
+    [dayTemplateForDate],
+  )
+
   const applyToSelected = useCallback(
     (build: (date: string) => TimecardEntryInput) => {
       if (selectedDates.length === 0) return
@@ -299,42 +339,15 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [selectedDates, updateCurrentDraft, clearSelection],
   )
 
-  const bulkFillFromSchedule = useCallback(() => {
-    applyToSelected(date => {
-      const t = dayTemplateForDate(date)
-      return {
-        work_date: date,
-        start_time: t.start,
-        end_time: t.end,
-        break_minutes: t.break_minutes,
-        duration_minutes: calculateTimeRangeMinutes(t.start, t.end, t.break_minutes),
-        category: TIMECARD_ENTRY_CATEGORIES.ADMIN,
-        source: 'template',
-        description: '',
-      }
-    })
-  }, [applyToSelected, dayTemplateForDate])
+  const bulkFillFromSchedule = useCallback(
+    () => applyToSelected(buildScheduleEntry),
+    [applyToSelected, buildScheduleEntry],
+  )
 
   const bulkSetAbsence = useCallback(
-    (category: TimecardEntryCategory) => {
-      const paid = getAbsenceType(category)?.paid ?? true
-      applyToSelected(date => {
-        const t = dayTemplateForDate(date)
-        // Paid absences (Ferien/Krank/…) count the day's scheduled hours;
-        // unpaid (Unbezahlt) records 0h but stays labelled.
-        return {
-          work_date: date,
-          start_time: t.start,
-          end_time: t.end,
-          break_minutes: paid ? t.break_minutes : 0,
-          duration_minutes: paid ? calculateTimeRangeMinutes(t.start, t.end, t.break_minutes) : 0,
-          category,
-          source: 'manual',
-          description: TIMECARD_ENTRY_CATEGORY_LABELS[category],
-        }
-      })
-    },
-    [applyToSelected, dayTemplateForDate],
+    (category: TimecardEntryCategory) =>
+      applyToSelected(date => buildAbsenceEntry(date, category)),
+    [applyToSelected, buildAbsenceEntry],
   )
 
   const bulkClear = useCallback(() => {
@@ -412,57 +425,34 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [updateCurrentDraft],
   )
 
-  const markSelectedDateOff = useCallback(
-    (reason: string) => {
-      updateCurrentDraft(current => {
-        const note = `${getDisplayDate(current.selectedDate)}: ${reason}`
-        return {
-          ...current,
-          entries: current.entries.filter(entry => entry.work_date !== current.selectedDate),
-          notes: current.notes.includes(note)
-            ? current.notes
-            : [current.notes, note].filter(Boolean).join('\n'),
-          status: TIMECARD_STATUSES.DRAFT,
-        }
-      })
+  // ── Day-scope actions (the day view applies to the focused day) ────────
+  // Same builders as the month bulk actions → identical data, no note hacks.
+  const fillDayFromSchedule = useCallback(() => {
+    updateCurrentDraft(current => ({
+      ...current,
+      entries: mergeEntries(current.entries, [buildScheduleEntry(current.selectedDate)]),
+      status: TIMECARD_STATUSES.DRAFT,
+    }))
+  }, [updateCurrentDraft, buildScheduleEntry])
+
+  const setDayAbsence = useCallback(
+    (category: TimecardEntryCategory) => {
+      updateCurrentDraft(current => ({
+        ...current,
+        entries: mergeEntries(current.entries, [buildAbsenceEntry(current.selectedDate, category)]),
+        status: TIMECARD_STATUSES.DRAFT,
+      }))
     },
-    [updateCurrentDraft],
+    [updateCurrentDraft, buildAbsenceEntry],
   )
 
-  const restoreSelectedDateFromSchedule = useCallback(() => {
-    const templateEntry = getEntryForDate(monthEntries, draft.selectedDate)
+  const clearDay = useCallback(() => {
     updateCurrentDraft(current => ({
       ...current,
-      entries: templateEntry
-        ? mergeEntries(current.entries, [templateEntry])
-        : current.entries.filter(entry => entry.work_date !== current.selectedDate),
+      entries: current.entries.filter(entry => entry.work_date !== current.selectedDate),
       status: TIMECARD_STATUSES.DRAFT,
     }))
-  }, [monthEntries, draft.selectedDate, updateCurrentDraft])
-
-  /**
-   * Manual fallback: apply a vanilla 09:00–17:00 (60 min break, "admin"
-   * category) entry to the selected day, regardless of whether the user
-   * has a working_hours schedule. Used by the empty-day affordance —
-   * "if a day is empty and I click it, give me a one-tap apply-9-17."
-   */
-  const applyDefault9To17 = useCallback(() => {
-    const standardEntry: TimecardEntryInput = {
-      work_date: draft.selectedDate,
-      start_time: '09:00',
-      end_time: '17:00',
-      break_minutes: 60,
-      duration_minutes: calculateTimeRangeMinutes('09:00', '17:00', 60),
-      category: 'admin',
-      source: 'manual',
-      description: '',
-    }
-    updateCurrentDraft(current => ({
-      ...current,
-      entries: mergeEntries(current.entries, [standardEntry]),
-      status: TIMECARD_STATUSES.DRAFT,
-    }))
-  }, [draft.selectedDate, updateCurrentDraft])
+  }, [updateCurrentDraft])
 
   /**
    * Turn one raw AI entry into a valid, internally-consistent TimecardEntryInput
@@ -712,10 +702,11 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     setSelectedDate,
     setNotes,
     updateSelectedEntry,
-    markSelectedDateOff,
-    restoreSelectedDateFromSchedule,
-    applyDefault9To17,
     fillMonthFromSchedule,
+    // day-scope actions (day view)
+    fillDayFromSchedule,
+    setDayAbsence,
+    clearDay,
     // multi-select + bulk
     selectedDates,
     handleDaySelect,

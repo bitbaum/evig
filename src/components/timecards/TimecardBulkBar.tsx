@@ -1,16 +1,17 @@
 'use client'
 
-import { CalendarCheck, X, Trash2 } from 'lucide-react'
+import { CalendarCheck, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { TIMECARD_ABSENCE_TYPES } from '@/config/timecards'
 import type { TimecardEntryCategory } from '@/config/timecards'
+import { TimecardActions } from './TimecardActions'
 
 /**
  * Contextual action bar for the month grid — appears only when one or more
- * days are selected, so the affordance is discovered by selecting. One tap
- * applies an action to every selected day: fill from plan, mark any absence
- * type (config-driven from TIMECARD_ABSENCE_TYPES), or clear.
+ * days are selected, so the affordance is discovered by selecting. Wraps the
+ * shared TimecardActions (fill / absence / clear) with the selection count and
+ * a cancel control. The same TimecardActions render in the day view, keeping
+ * the two surfaces identical.
  */
 export function TimecardBulkBar({
   count,
@@ -35,31 +36,7 @@ export function TimecardBulkBar({
         {t('bulkSelected', { count })}
       </span>
 
-      <Button type="button" variant="primary" size="sm" onClick={onFillFromSchedule}>
-        {t('bulkFill')}
-      </Button>
-      {TIMECARD_ABSENCE_TYPES.map(absence => (
-        <Button
-          key={absence.value}
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => onSetAbsence(absence.value)}
-          title={absence.paid ? 'Bezahlte Abwesenheit (zählt geplante Stunden)' : 'Unbezahlt (0 Std.)'}
-        >
-          {absence.label}
-        </Button>
-      ))}
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={onClearDays}
-        className="text-text-tertiary hover:text-error-600"
-      >
-        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-        {t('bulkClear')}
-      </Button>
+      <TimecardActions onFill={onFillFromSchedule} onSetAbsence={onSetAbsence} onClear={onClearDays} />
 
       <Button
         type="button"

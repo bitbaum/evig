@@ -9,39 +9,35 @@ import {
   type TimecardEntryCategory,
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
-import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { HourRangePicker } from './HourRangePicker'
+import { TimecardActions } from './TimecardActions'
 
 /**
- * Day view — fine edits for ONE day. The centrepiece is the HourRangePicker:
- * the day-view counterpart to the month grid, where you pick the worked block
- * by dragging across a timeline of hours (the "select hours like you select
- * days" the user asked for). Break / category / note sit below.
+ * Day view — fine edits for ONE day. Mirrors the month surface exactly: the
+ * SAME action set (TimecardActions: fill from plan / structured absences /
+ * clear) sits at the top, scoped to this day. Below it, the HourRangePicker
+ * (the day-level counterpart to the calendar) is the star for work days;
+ * absence days show their label. Category + note round it out.
  *
- * Empty-day affordance: quick actions "Aus Schedule ausfüllen" (uses the
- * user's working_hours) and "9–17 ausfüllen" (manual fallback if no schedule).
- * Absence days (Krank/Ferien/…) show their label instead of the hour grid.
+ * The date itself lives in the view's nav bar, so it is NOT repeated here.
  */
 export function TimecardDayEditor({
   selectedDate,
   selectedEntry,
-  hasSchedule,
   onPatch,
-  onMarkOff,
-  onRestoreFromSchedule,
-  onApplyDefault9To17,
+  onFillDay,
+  onSetAbsence,
+  onClearDay,
 }: {
   selectedDate: string
   selectedEntry: TimecardEntryInput | undefined
-  hasSchedule: boolean
   onPatch: (patch: Partial<TimecardEntryInput>) => void
-  onMarkOff: (reason: string) => void
-  onRestoreFromSchedule: () => void
-  onApplyDefault9To17: () => void
+  onFillDay: () => void
+  onSetAbsence: (category: TimecardEntryCategory) => void
+  onClearDay: () => void
 }) {
   const t = useTranslations('admin.timecards')
   const hasEntry = !!selectedEntry
@@ -49,15 +45,14 @@ export function TimecardDayEditor({
 
   return (
     <section className="space-y-5 rounded-lg border border-subtle bg-surface-base p-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-            {hasEntry ? t('dayEditorHasEntry') : t('dayEditorNoEntry')}
-          </p>
-          <h2 className="mt-1 text-lg font-medium text-text-primary">
-            {getDisplayDate(selectedDate)}
-          </h2>
-        </div>
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          {hasEntry
+            ? isAbsence
+              ? TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]
+              : t('dayEditorHasEntry')
+            : t('dayEditorNoEntry')}
+        </p>
         {hasEntry && (
           <p className="font-mono text-xl tabular-nums text-text-primary">
             {formatTimecardDuration(selectedEntry.duration_minutes)}
@@ -65,26 +60,19 @@ export function TimecardDayEditor({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {!hasEntry && hasSchedule && (
-          <ActionChip onClick={onRestoreFromSchedule} primary>
-            {t('dayActionFillFromSchedule')}
-          </ActionChip>
-        )}
-        {!hasEntry && (
-          <ActionChip onClick={onApplyDefault9To17} primary={!hasSchedule}>
-            {t('dayActionFillDefault')}
-          </ActionChip>
-        )}
-        <ActionChip onClick={() => onMarkOff('frei')}>{t('dayActionFree')}</ActionChip>
-        <ActionChip onClick={() => onMarkOff('krank')}>{t('dayActionSick')}</ActionChip>
-      </div>
+      {/* Same actions as the month bulk bar, scoped to this day. */}
+      <TimecardActions
+        fillLabel={t('dayFill')}
+        onFill={onFillDay}
+        onSetAbsence={onSetAbsence}
+        onClear={onClearDay}
+      />
 
       {isAbsence ? (
-        <div className="border-t border-subtle pt-5 text-sm text-text-secondary">
+        <p className="border-t border-subtle pt-5 text-sm text-text-secondary">
           {TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]} —{' '}
           {formatTimecardDuration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
-        </div>
+        </p>
       ) : (
         <div className="space-y-4 border-t border-subtle pt-5">
           <HourRangePicker
@@ -100,30 +88,6 @@ export function TimecardDayEditor({
         </div>
       )}
     </section>
-  )
-}
-
-function ActionChip({
-  onClick,
-  primary,
-  children,
-}: {
-  onClick: () => void
-  primary?: boolean
-  children: React.ReactNode
-}) {
-  return (
-    <Button
-      type="button"
-      variant={primary ? 'primary' : 'outline'}
-      onClick={onClick}
-      className={cn(
-        'rounded-full px-3.5 py-1.5 text-sm font-medium h-auto',
-        !primary && 'border-subtle bg-surface-base text-text-secondary hover:border-strong hover:text-text-primary',
-      )}
-    >
-      {children}
-    </Button>
   )
 }
 

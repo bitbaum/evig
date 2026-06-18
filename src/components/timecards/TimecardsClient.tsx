@@ -169,11 +169,10 @@ export function TimecardsClient({
         <TimecardDayEditor
           selectedDate={tc.draft.selectedDate}
           selectedEntry={tc.selectedEntry}
-          hasSchedule={tc.hasSchedule}
           onPatch={tc.updateSelectedEntry}
-          onMarkOff={tc.markSelectedDateOff}
-          onRestoreFromSchedule={tc.restoreSelectedDateFromSchedule}
-          onApplyDefault9To17={tc.applyDefault9To17}
+          onFillDay={tc.fillDayFromSchedule}
+          onSetAbsence={tc.setDayAbsence}
+          onClearDay={tc.clearDay}
         />
       )}
 
