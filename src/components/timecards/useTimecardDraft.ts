@@ -7,6 +7,7 @@ import {
   sumTimecardMinutes,
   TIMECARD_ENTRY_CATEGORIES,
   TIMECARD_ENTRY_CATEGORY_LABELS,
+  getAbsenceType,
   type TimecardEntryCategory,
 } from '@/config/timecards'
 import {
@@ -179,25 +180,53 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     })
   }, [monthFillEntries, updateCurrentDraft])
 
-  // ── Multi-day selection + bulk actions ─────────────────────────────
-  // Select several days, then apply one action to all of them (fill from
-  // plan, mark Krank/Ferien/Feiertag, or clear). The day editor's focused
-  // day (selectedDate) is independent of this multi-selection.
+  // ── Day selection (spreadsheet model) + bulk actions ───────────────
+  // Plain click = select one day · Ctrl/Cmd-click = toggle (non-adjacent) ·
+  // Shift-click = range from the anchor · Delete = clear the selected days.
+  // The bulk bar then applies one action (fill from plan / an absence type /
+  // clear) to every selected day. selectedDate (focused day for the editor)
+  // tracks the last clicked day.
   const [selectedDates, setSelectedDates] = useState<string[]>([])
+  const [anchorDate, setAnchorDate] = useState<string | null>(null)
 
-  const toggleDateSelection = useCallback((date: string) => {
-    setSelectedDates(prev =>
-      prev.includes(date) ? prev.filter(d => d !== date) : [...prev, date],
-    )
+  const handleDaySelect = useCallback(
+    (date: string, mode: 'single' | 'toggle' | 'range') => {
+      updateCurrentDraft(current => ({ ...current, selectedDate: date }))
+      if (mode === 'toggle') {
+        setSelectedDates(prev =>
+          prev.includes(date) ? prev.filter(d => d !== date) : [...prev, date],
+        )
+        setAnchorDate(date)
+      } else if (mode === 'range' && anchorDate) {
+        const a = monthDates.indexOf(anchorDate)
+        const b = monthDates.indexOf(date)
+        if (a >= 0 && b >= 0) {
+          const [lo, hi] = a <= b ? [a, b] : [b, a]
+          setSelectedDates(monthDates.slice(lo, hi + 1))
+        } else {
+          setSelectedDates([date])
+          setAnchorDate(date)
+        }
+      } else {
+        setSelectedDates([date])
+        setAnchorDate(date)
+      }
+    },
+    [anchorDate, monthDates, updateCurrentDraft],
+  )
+
+  const clearSelection = useCallback(() => {
+    setSelectedDates([])
+    setAnchorDate(null)
   }, [])
-  const clearSelection = useCallback(() => setSelectedDates([]), [])
+
   const selectAllWeekdays = useCallback(() => {
-    setSelectedDates(
-      monthDates.filter(date => {
-        const wd = new Date(`${date}T00:00:00.000Z`).getUTCDay()
-        return wd !== 0 && wd !== 6
-      }),
-    )
+    const weekdays = monthDates.filter(date => {
+      const wd = new Date(`${date}T00:00:00.000Z`).getUTCDay()
+      return wd !== 0 && wd !== 6
+    })
+    setSelectedDates(weekdays)
+    setAnchorDate(weekdays[0] ?? null)
   }, [monthDates])
 
   /** Schedule (or standard 9–17) hours for a given date's weekday. */
@@ -245,14 +274,17 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
 
   const bulkSetAbsence = useCallback(
     (category: TimecardEntryCategory) => {
+      const paid = getAbsenceType(category)?.paid ?? true
       applyToSelected(date => {
         const t = dayTemplateForDate(date)
+        // Paid absences (Ferien/Krank/…) count the day's scheduled hours;
+        // unpaid (Unbezahlt) records 0h but stays labelled.
         return {
           work_date: date,
           start_time: t.start,
           end_time: t.end,
-          break_minutes: t.break_minutes,
-          duration_minutes: calculateTimeRangeMinutes(t.start, t.end, t.break_minutes),
+          break_minutes: paid ? t.break_minutes : 0,
+          duration_minutes: paid ? calculateTimeRangeMinutes(t.start, t.end, t.break_minutes) : 0,
           category,
           source: 'manual',
           description: TIMECARD_ENTRY_CATEGORY_LABELS[category],
@@ -272,6 +304,17 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     }))
     clearSelection()
   }, [selectedDates, updateCurrentDraft, clearSelection])
+
+  /** Delete/Backspace — clear the selected days' entries, KEEP the selection. */
+  const clearSelectedEntries = useCallback(() => {
+    if (selectedDates.length === 0) return
+    const set = new Set(selectedDates)
+    updateCurrentDraft(current => ({
+      ...current,
+      entries: current.entries.filter(entry => !set.has(entry.work_date)),
+      status: TIMECARD_STATUSES.DRAFT,
+    }))
+  }, [selectedDates, updateCurrentDraft])
 
   const setSelectedDate = useCallback(
     (date: string) =>
@@ -574,8 +617,9 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     fillMonthFromSchedule,
     // multi-select + bulk
     selectedDates,
-    toggleDateSelection,
+    handleDaySelect,
     clearSelection,
+    clearSelectedEntries,
     selectAllWeekdays,
     bulkFillFromSchedule,
     bulkSetAbsence,

@@ -3,14 +3,14 @@
 import { CalendarCheck, X, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { TIMECARD_ENTRY_CATEGORIES, TIMECARD_ENTRY_CATEGORY_LABELS } from '@/config/timecards'
+import { TIMECARD_ABSENCE_TYPES } from '@/config/timecards'
 import type { TimecardEntryCategory } from '@/config/timecards'
 
 /**
  * Contextual action bar for the month grid — appears only when one or more
  * days are selected, so the affordance is discovered by selecting. One tap
- * applies an action to every selected day: fill from plan, mark an absence
- * (Krank/Ferien/Feiertag), or clear.
+ * applies an action to every selected day: fill from plan, mark any absence
+ * type (config-driven from TIMECARD_ABSENCE_TYPES), or clear.
  */
 export function TimecardBulkBar({
   count,
@@ -38,15 +38,18 @@ export function TimecardBulkBar({
       <Button type="button" variant="primary" size="sm" onClick={onFillFromSchedule}>
         {t('bulkFill')}
       </Button>
-      <Button type="button" variant="outline" size="sm" onClick={() => onSetAbsence(TIMECARD_ENTRY_CATEGORIES.KRANK)}>
-        {TIMECARD_ENTRY_CATEGORY_LABELS.krank}
-      </Button>
-      <Button type="button" variant="outline" size="sm" onClick={() => onSetAbsence(TIMECARD_ENTRY_CATEGORIES.FERIEN)}>
-        {TIMECARD_ENTRY_CATEGORY_LABELS.ferien}
-      </Button>
-      <Button type="button" variant="outline" size="sm" onClick={() => onSetAbsence(TIMECARD_ENTRY_CATEGORIES.FEIERTAG)}>
-        {TIMECARD_ENTRY_CATEGORY_LABELS.feiertag}
-      </Button>
+      {TIMECARD_ABSENCE_TYPES.map(absence => (
+        <Button
+          key={absence.value}
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onSetAbsence(absence.value)}
+          title={absence.paid ? 'Bezahlte Abwesenheit (zählt geplante Stunden)' : 'Unbezahlt (0 Std.)'}
+        >
+          {absence.label}
+        </Button>
+      ))}
       <Button
         type="button"
         variant="ghost"

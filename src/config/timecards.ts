@@ -31,6 +31,7 @@ export const TIMECARD_STATUS_COLORS: Record<TimecardStatus, string> = {
 }
 
 export const TIMECARD_ENTRY_CATEGORIES = {
+  // Worked-time categories
   WORKSHOP: 'workshop',
   REPAIR: 'repair',
   INTAKE: 'intake',
@@ -41,11 +42,13 @@ export const TIMECARD_ENTRY_CATEGORIES = {
   MEETING: 'meeting',
   VOLUNTEERING: 'volunteering',
   OTHER: 'other',
-  // Absence categories — paid leave that counts as scheduled hours but is
-  // distinguishable from worked time for reporting/payroll.
-  KRANK: 'krank',
+  // Absence categories (Swiss timecard) — see TIMECARD_ABSENCE_TYPES.
   FERIEN: 'ferien',
+  KRANK: 'krank',
+  UNFALL: 'unfall',
   FEIERTAG: 'feiertag',
+  MILITAER: 'militaer',
+  UNBEZAHLT: 'unbezahlt',
 } as const
 
 export type TimecardEntryCategory =
@@ -53,18 +56,37 @@ export type TimecardEntryCategory =
 
 export const TIMECARD_ENTRY_CATEGORY_OPTIONS = Object.values(TIMECARD_ENTRY_CATEGORIES)
 
-/** Absence categories — represented as full scheduled-hour entries but not "worked". */
-export const TIMECARD_ABSENCE_CATEGORIES: readonly TimecardEntryCategory[] = [
-  TIMECARD_ENTRY_CATEGORIES.KRANK,
-  TIMECARD_ENTRY_CATEGORIES.FERIEN,
-  TIMECARD_ENTRY_CATEGORIES.FEIERTAG,
-]
+/**
+ * SSOT for absences (what a Swiss employee realistically records when NOT
+ * present). One entry here drives: the one-click bulk buttons, the day-editor
+ * quick actions, the grid label, and the paid/0h math — add a type and it
+ * appears everywhere. `paid` absences record the day's scheduled hours (paid
+ * leave still counts toward the month); unpaid ones record 0h but stay labelled
+ * so the day reads as a deliberate absence, not a gap.
+ */
+export const TIMECARD_ABSENCE_TYPES = [
+  { value: TIMECARD_ENTRY_CATEGORIES.FERIEN,    label: 'Ferien',     paid: true },
+  { value: TIMECARD_ENTRY_CATEGORIES.KRANK,     label: 'Krank',      paid: true },
+  { value: TIMECARD_ENTRY_CATEGORIES.UNFALL,    label: 'Unfall',     paid: true },
+  { value: TIMECARD_ENTRY_CATEGORIES.FEIERTAG,  label: 'Feiertag',   paid: true },
+  { value: TIMECARD_ENTRY_CATEGORIES.MILITAER,  label: 'Militär/ZS', paid: true },
+  { value: TIMECARD_ENTRY_CATEGORIES.UNBEZAHLT, label: 'Unbezahlt',  paid: false },
+] as const
+
+export type TimecardAbsenceType = typeof TIMECARD_ABSENCE_TYPES[number]
+
+export const TIMECARD_ABSENCE_CATEGORIES: readonly TimecardEntryCategory[] =
+  TIMECARD_ABSENCE_TYPES.map(a => a.value)
 
 export function isAbsenceCategory(category: string): boolean {
   return (TIMECARD_ABSENCE_CATEGORIES as readonly string[]).includes(category)
 }
 
-export const TIMECARD_ENTRY_CATEGORY_LABELS: Record<TimecardEntryCategory, string> = {
+export function getAbsenceType(category: string): TimecardAbsenceType | undefined {
+  return TIMECARD_ABSENCE_TYPES.find(a => a.value === category)
+}
+
+const WORK_CATEGORY_LABELS: Record<string, string> = {
   workshop: 'Workshop',
   repair: 'Reparatur',
   intake: 'Annahme',
@@ -75,10 +97,13 @@ export const TIMECARD_ENTRY_CATEGORY_LABELS: Record<TimecardEntryCategory, strin
   meeting: 'Meeting',
   volunteering: 'Freiwilligenarbeit',
   other: 'Andere',
-  krank: 'Krank',
-  ferien: 'Ferien',
-  feiertag: 'Feiertag',
 }
+
+// Built from the two SSOTs above — never hand-maintain absence labels twice.
+export const TIMECARD_ENTRY_CATEGORY_LABELS = {
+  ...WORK_CATEGORY_LABELS,
+  ...Object.fromEntries(TIMECARD_ABSENCE_TYPES.map(a => [a.value, a.label])),
+} as Record<TimecardEntryCategory, string>
 
 export const TIMECARD_ENTRY_SOURCES = {
   MANUAL: 'manual',

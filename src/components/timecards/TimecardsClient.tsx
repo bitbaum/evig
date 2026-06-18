@@ -59,12 +59,6 @@ export function TimecardsClient({
   }
 
   // In month view a click both focuses the day (for the editor) and toggles
-  // it in the multi-selection (for bulk actions).
-  const handleDayClick = (date: string) => {
-    tc.setSelectedDate(date)
-    tc.toggleDateSelection(date)
-  }
-
   return (
     <article className="space-y-8 pb-12">
       <TimecardHeader
@@ -125,7 +119,8 @@ export function TimecardsClient({
             entries={tc.periodEntries}
             focusedDate={tc.draft.selectedDate}
             selectedDates={tc.selectedDates}
-            onDayClick={handleDayClick}
+            onDaySelect={tc.handleDaySelect}
+            onClearSelected={tc.clearSelectedEntries}
           />
 
           <TimecardBulkBar

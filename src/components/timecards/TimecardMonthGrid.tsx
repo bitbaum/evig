@@ -26,18 +26,30 @@ export function TimecardMonthGrid({
   entries,
   focusedDate,
   selectedDates,
-  onDayClick,
+  onDaySelect,
+  onClearSelected,
 }: {
   visibleDates: string[]
   entries: TimecardEntryInput[]
   focusedDate: string
   selectedDates: string[]
-  onDayClick: (date: string) => void
+  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range') => void
+  onClearSelected: () => void
 }) {
   const selected = new Set(selectedDates)
 
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-7">
+    <div
+      role="grid"
+      tabIndex={0}
+      onKeyDown={e => {
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+          e.preventDefault()
+          onClearSelected()
+        }
+      }}
+      className="grid grid-cols-2 gap-2 rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40 sm:grid-cols-4 md:grid-cols-7"
+    >
       {visibleDates.map(date => {
         const entry = getEntryForDate(entries, date)
         const isFocused = focusedDate === date
@@ -56,7 +68,12 @@ export function TimecardMonthGrid({
             key={date}
             type="button"
             variant="ghost"
-            onClick={() => onDayClick(date)}
+            onClick={e =>
+              onDaySelect(
+                date,
+                e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single',
+              )
+            }
             title={categoryLabel}
             aria-pressed={isSelected}
             className={cn(

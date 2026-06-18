@@ -9495,7 +9495,7 @@
       "extrasResetMonth": "Monat aus Schedule neu aufbauen (löscht aktuelle Einträge)",
       "fillMonth": "Monat aus Plan füllen",
       "fillMonthHint": "Füllt alle leeren Werktage mit deinem Arbeitsplan (Standard Mo–Fr 09:00–17:00). Bestehende Einträge und freie Tage bleiben unverändert.",
-      "selectHint": "Tippe auf Tage, um sie auszuwählen und mehrere auf einmal zu bearbeiten.",
+      "selectHint": "Klick wählt einen Tag · Ctrl/Cmd+Klick wählt mehrere · Shift+Klick einen Bereich · Entf leert die Auswahl. Dann unten eine Aktion wählen.",
       "selectAllWeekdays": "Alle Werktage auswählen",
       "viewMonth": "Monat",
       "viewDay": "Tag",
