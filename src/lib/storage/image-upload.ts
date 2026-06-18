@@ -110,19 +110,17 @@ export async function uploadImage(
       return { success: true, url }
     }
 
-    // Dev fallback: local filesystem (only works under `next dev`, never in a
-    // standalone production build).
-    if (process.env.NODE_ENV !== 'production') {
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder)
-      if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
-      fs.writeFileSync(path.join(uploadDir, filename), buffer)
-      const url = `/uploads/${folder}/${filename}`
-      logger.info('Image saved to local filesystem (dev)', { url, size: buffer.length })
-      return { success: true, url }
-    }
-
-    logger.error('Image upload failed: object storage not configured (S3_* env vars missing)')
-    return { success: false, error: 'Bildspeicher ist nicht konfiguriert.' }
+    // Fallback (also production): local filesystem. In production this writes
+    // into public/uploads, which the deploy symlinks to a persistent directory
+    // (/opt/revampit/uploads) so images survive releases and are served by Next
+    // at /uploads/*. Free, self-hosted storage on the box where the DB also
+    // lives — set S3_* to switch to object storage with no code change.
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder)
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+    fs.writeFileSync(path.join(uploadDir, filename), buffer)
+    const url = `/uploads/${folder}/${filename}`
+    logger.info('Image saved to local filesystem', { url, size: buffer.length })
+    return { success: true, url }
   } catch (error) {
     logger.error('Failed to upload image', { error, filename })
     return { success: false, error: error instanceof Error ? error.message : 'Unbekannter Fehler beim Upload' }

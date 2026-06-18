@@ -98,14 +98,20 @@ if sudo test -f "$APP/launch.sh"; then
   sudo cp -a "$APP/launch.sh" "$NEXT/launch.sh"
 fi
 
-# Preserve runtime user uploads across the whole-dir swap. /api/uploads writes
-# to public/uploads/<userId> at runtime; without copying it forward, every
-# deploy (which replaces the entire app dir) would orphan every uploaded image.
-# INTERIM measure until images move to S3/object storage — keeps them durable.
-if sudo test -d "$APP/public/uploads"; then
-  sudo mkdir -p "$NEXT/public"
-  sudo cp -a "$APP/public/uploads" "$NEXT/public/uploads"
+# Durable user uploads: keep them in ONE stable directory outside the release
+# dirs and symlink it into each release's public/uploads, so every deploy shares
+# the same store (served by Next at /uploads/*). Free, self-hosted image
+# storage — set S3_* later to move to object storage without code changes.
+PERSIST_UPLOADS="$(dirname "$APP")/uploads"
+sudo mkdir -p "$PERSIST_UPLOADS"
+# One-time fold-in: if the current app had real (non-symlink) uploads, move them
+# into the persistent store before we switch to the symlink.
+if sudo test -d "$APP/public/uploads" && ! sudo test -L "$APP/public/uploads"; then
+  sudo cp -an "$APP/public/uploads/." "$PERSIST_UPLOADS/" 2>/dev/null || true
 fi
+sudo mkdir -p "$NEXT/public"
+sudo rm -rf "$NEXT/public/uploads"
+sudo ln -sfn "$PERSIST_UPLOADS" "$NEXT/public/uploads"
 
 if sudo test -e "$APP" || sudo test -L "$APP"; then
   sudo mv "$APP" "$PREV"
