@@ -52,20 +52,21 @@ revampit/
 
 - **Production** runs a **self-hosted Postgres on the Hetzner box**
   (`DATABASE_URL=postgresql://…@localhost:5432/revampit` in
-  `/opt/revampit/app/.env`; Supabase `supabase-db` container). Neon is **not**
-  the prod app DB anymore.
-- **Local dev** `.env.local` still points `DATABASE_URL` at **Neon**.
+  `/opt/revampit/app/.env`). **Neon is fully retired** (cutover completed
+  2026-06-18) — the prod `.env` no longer contains any `DB_*`/`AUTH_DB_*` Neon
+  vars; the app + auth both connect via `DATABASE_URL`.
+- **Local dev** `.env.local` points `DATABASE_URL` at its own DB (Neon for now).
+- **One connection source (SSOT):** `getDbConfig()` (src/lib/auth/config.ts)
+  prefers `DATABASE_URL`, so app (Drizzle) and auth (credentials) share one pool.
 
 **Consequences you MUST respect:**
-1. **Migrations must be applied to the PROD Hetzner DB** — applying only to
-   Neon (dev) leaves prod behind (this caused cart/IT-Hilfe/time-off to 500 in
-   prod, fixed 2026-06-18). The deploy applies pending migrations automatically;
-   to apply manually: ssh `ubuntu@167.233.22.31`, read `DATABASE_URL` from
+1. **Migrations must reach the PROD Hetzner DB.** The deploy
+   (`selfhost-deploy-revampit.sh`) auto-applies any unrecorded
+   `scripts/db/migrations/*.sql` to the prod DB before activating. To apply
+   manually: ssh `ubuntu@167.233.22.31`, read `DATABASE_URL` from
    `/opt/revampit/app/.env`, pipe the `.sql` to `psql "$DB"` in a transaction,
-   then record it in `schema_migrations`.
-2. **Auth is mid-cutover**: prod `.env` still has `AUTH_DB_HOST`/`DB_HOST`=Neon,
-   so NextAuth (users/accounts) still hits Neon while app data is on Hetzner —
-   a split-brain to finish (reconcile `users` → Hetzner, then flip the env).
+   then record it in `schema_migrations`. Extension/owner ops need
+   `sudo -u postgres psql -d revampit` (the app user isn't superuser).
 
 **Never assume Neon for prod.** Check `DATABASE_URL` in the relevant `.env`.
 
