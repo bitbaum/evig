@@ -16,6 +16,7 @@ import { TimecardHeader } from './TimecardHeader'
 import { TimecardMonthGrid } from './TimecardMonthGrid'
 import { TimecardBulkBar } from './TimecardBulkBar'
 import { ShiftWidget } from '@/components/timecards/ShiftWidget'
+import { TimeOffPanel } from './TimeOffPanel'
 import { useTimecardDraft } from './useTimecardDraft'
 import type { TimecardAIResult } from './types'
 
@@ -234,6 +235,8 @@ export function TimecardsClient({
           </div>
         )}
       </section>
+
+      <TimeOffPanel />
 
       <ContextMenu
         position={menuPos}

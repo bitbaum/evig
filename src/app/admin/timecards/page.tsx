@@ -7,6 +7,7 @@ import { teamProfiles } from '@/db/schema'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { requireSection } from '@/lib/admin/guards'
 import { TimecardsClient } from '@/components/timecards/TimecardsClient'
+import { TimeOffApprovals } from '@/components/admin/timecards/TimeOffApprovals'
 
 export const metadata: Metadata = {
   title: 'Zeitkarten',
@@ -34,6 +35,10 @@ export default async function TimecardsPage() {
         workingHours={profile?.workingHours ?? null}
         userName={session.user.name || session.user.email || 'Teammitglied'}
       />
+
+      <div className="mt-10 border-t border-subtle pt-8">
+        <TimeOffApprovals />
+      </div>
     </AdminPageWrapper>
   )
 }

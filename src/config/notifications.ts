@@ -46,6 +46,10 @@ export const NOTIFICATION_TYPES = {
   SERVICE_APPOINTMENT_ASSIGNED: 'service_appointment_assigned',
   SERVICE_APPOINTMENT_COMPLETED: 'service_appointment_completed',
 
+  // Time-off requests
+  TIME_OFF_REQUESTED: 'time_off_requested',
+  TIME_OFF_REVIEWED: 'time_off_reviewed',
+
   // Core
   MESSAGE: 'message',
   APPOINTMENT: 'appointment',
@@ -67,6 +71,8 @@ export const RELATED_TYPES = {
   WORKSHOP_PROPOSAL: 'workshop_proposal',
   MEMBERSHIP: 'membership',
   LISTING: 'listing',
+  TIME_OFF: 'time_off',
+  TIME_OFF_REVIEW: 'time_off_review',
 } as const
 
 export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
@@ -83,4 +89,6 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.WORKSHOP_PROPOSAL]: '/admin/workshops/proposals/',
   [RELATED_TYPES.MEMBERSHIP]: '/admin/membership/',
   [RELATED_TYPES.LISTING]: '/admin/marketplace/',
+  [RELATED_TYPES.TIME_OFF]: '/dashboard/timecards', // requester → their tool
+  [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/timecards', // approver → the queue
 }
