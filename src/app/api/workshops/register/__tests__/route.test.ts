@@ -158,7 +158,9 @@ function makeParallelChain(row: unknown) {
   const thenFn = jest.fn().mockImplementation((cb: (rows: unknown[]) => unknown) =>
     Promise.resolve(cb(row ? [row] : []))
   )
-  const limit = jest.fn().mockReturnValue({ then: thenFn })
+  // .limit(1).for('update') — the instance lookup locks its row.
+  const forUpdate = jest.fn().mockReturnValue({ then: thenFn })
+  const limit = jest.fn().mockReturnValue({ then: thenFn, for: forUpdate })
   const orderBy = jest.fn().mockReturnValue({ limit })
   const where = jest.fn().mockReturnValue({ then: thenFn, orderBy })
   const innerJoin = jest.fn().mockReturnValue({ where })

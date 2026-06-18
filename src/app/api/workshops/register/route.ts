@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
-import { eq, and, ne } from 'drizzle-orm'
+import { eq, and, ne, count } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
@@ -46,6 +46,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     type RegisterResult =
       | { kind: 'already' }
       | { kind: 'noInstance' }
+      | { kind: 'full' }
       | { kind: 'created'; registration: { id: string; createdAt: string | null }; instance: { id: string; startDate: string; location: string | null } }
 
     const txResult: RegisterResult = await db.transaction(async (tx) => {
@@ -66,6 +67,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           id: workshopInstances.id,
           startDate: workshopInstances.startDate,
           location: workshopInstances.location,
+          maxParticipants: workshopInstances.maxParticipants,
         })
         .from(workshopInstances)
         .where(and(
@@ -74,8 +76,24 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         ))
         .orderBy(workshopInstances.startDate)
         .limit(1)
+        // Lock the chosen instance so concurrent free registrations serialize
+        // on the capacity check below (free regs don't track current_participants
+        // like the paid path, so we count actual registrations instead).
+        .for('update')
 
       if (!instance) return { kind: 'noInstance' }
+
+      // Capacity check — count non-cancelled registrations against the cap.
+      if (instance.maxParticipants != null) {
+        const [{ taken }] = await tx
+          .select({ taken: count() })
+          .from(workshopRegistrations)
+          .where(and(
+            eq(workshopRegistrations.workshopInstanceId, instance.id),
+            ne(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CANCELLED),
+          ))
+        if (Number(taken) >= instance.maxParticipants) return { kind: 'full' }
+      }
 
       const [registration] = await tx
         .insert(workshopRegistrations)
@@ -98,6 +116,9 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     }
     if (txResult.kind === 'noInstance') {
       return apiBadRequest(ERROR_MESSAGES.NO_WORKSHOP_INSTANCES)
+    }
+    if (txResult.kind === 'full') {
+      return apiBadRequest('Workshop-Termin ist ausgebucht')
     }
 
     const { registration, instance } = txResult

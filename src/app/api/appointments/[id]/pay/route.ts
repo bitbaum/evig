@@ -14,6 +14,7 @@ import {
 } from '@/lib/payments/payment-flow'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { APP_URL } from '@/config/urls'
 import { validateBody, PayAppointmentSchema } from '@/lib/schemas'
 import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
 
@@ -109,8 +110,9 @@ export async function POST(request: NextRequest) {
       return apiBadRequest('Ungültiger Zahlungsbetrag')
     }
 
-    // Build redirect URLs
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    // Build redirect URLs — use the canonical APP_URL (SSOT) so prod redirects
+    // never fall back to localhost when NEXT_PUBLIC_BASE_URL is unset.
+    const baseUrl = APP_URL
 
     // Capitalize first letter of payment type for description
     const paymentTypeLabel = paymentType.charAt(0).toUpperCase() + paymentType.slice(1)
