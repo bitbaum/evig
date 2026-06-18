@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange } from 'lucide-react'
+import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, Trash2 } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { ContextMenu, type ContextMenuItem, type ContextMenuPosition } from '@/components/ui/context-menu'
 import { cn } from '@/lib/utils'
-import { formatTimecardDuration } from '@/config/timecards'
+import { formatTimecardDuration, TIMECARD_ABSENCE_TYPES } from '@/config/timecards'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { NoScheduleNotice } from './NoScheduleNotice'
 import { TimecardDayEditor } from './TimecardDayEditor'
@@ -41,7 +42,23 @@ export function TimecardsClient({
   const tc = useTimecardDraft({ workingHours })
   const [extrasOpen, setExtrasOpen] = useState(false)
   const [view, setView] = useState<'month' | 'day'>('month')
+  const [menuPos, setMenuPos] = useState<ContextMenuPosition | null>(null)
+  const [menuCount, setMenuCount] = useState(1)
   const t = useTranslations('admin.timecards')
+
+  // Right-click a day → the same bulk actions as the action bar, at the cursor.
+  const openDayMenu = (date: string, pos: ContextMenuPosition) => {
+    setMenuCount(tc.selectedDates.includes(date) ? tc.selectedDates.length : 1)
+    setMenuPos(pos)
+  }
+  const dayMenuItems: ContextMenuItem[] = [
+    { label: t('bulkFill'), icon: <CalendarCheck className="h-4 w-4" />, onSelect: tc.bulkFillFromSchedule },
+    ...TIMECARD_ABSENCE_TYPES.map(absence => ({
+      label: absence.label,
+      onSelect: () => tc.bulkSetAbsence(absence.value),
+    })),
+    { label: t('bulkClear'), icon: <Trash2 className="h-4 w-4" />, tone: 'danger' as const, separatorBefore: true, onSelect: tc.bulkClear },
+  ]
 
   // Context for the AI assistant: the schedule/date map (so "this week",
   // "Tuesday", "left at 3pm" resolve to real dated entries) plus the current
@@ -154,6 +171,7 @@ export function TimecardsClient({
             selectedDates={tc.selectedDates}
             onDaySelect={tc.handleDaySelect}
             onClearSelected={tc.clearSelectedEntries}
+            onDayContextMenu={openDayMenu}
           />
 
           <TimecardBulkBar
@@ -219,6 +237,13 @@ export function TimecardsClient({
           </div>
         )}
       </section>
+
+      <ContextMenu
+        position={menuPos}
+        items={dayMenuItems}
+        onClose={() => setMenuPos(null)}
+        header={t('bulkSelected', { count: menuCount })}
+      />
     </article>
   )
 }

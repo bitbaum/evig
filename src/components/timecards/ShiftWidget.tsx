@@ -143,7 +143,7 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
       )}
     >
       {active ? (
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.16em] text-action">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Schicht läuft
@@ -153,13 +153,15 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
               Start {hhmm(new Date(active.startedAt))} · {TIMECARD_ENTRY_CATEGORY_LABELS[active.category]}
             </p>
           </div>
-          <div className="flex flex-col gap-2 sm:max-w-xs sm:flex-1">
+          {/* Controls share one height (min-h-touch) so the row reads as one unit. */}
+          <div className="flex flex-col gap-2 sm:max-w-sm sm:flex-1">
             <Input
               type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Optional: Was machst du?"
               maxLength={500}
+              className="min-h-touch"
             />
             <div className="flex gap-2">
               <Button type="button" variant="primary" onClick={handleStop} disabled={submitting} className="flex-1 gap-2">
@@ -173,21 +175,27 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Jetzt arbeiten?</p>
             <p className="mt-1 text-sm text-text-secondary">Starte eine Schicht — sie landet direkt in dieser Zeitkarte.</p>
           </div>
-          <div className="flex items-end gap-2">
-            <label className="block">
+          {/* Select + button are height-matched (min-h-touch) and centre-aligned
+              so they sit as a single cohesive control, not two stray boxes. */}
+          <div className="flex items-stretch gap-2">
+            <label className="flex-1 sm:flex-none">
               <span className="sr-only">Kategorie</span>
-              <Select value={category} onChange={e => setCategory(e.target.value as TimecardEntryCategory)} className="w-40">
+              <Select
+                value={category}
+                onChange={e => setCategory(e.target.value as TimecardEntryCategory)}
+                className="min-h-touch w-full sm:w-48"
+              >
                 {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(c => (
                   <option key={c} value={c}>{TIMECARD_ENTRY_CATEGORY_LABELS[c]}</option>
                 ))}
               </Select>
             </label>
-            <Button type="button" variant="primary" onClick={handleStart} className="gap-2">
+            <Button type="button" variant="primary" onClick={handleStart} className="gap-2 whitespace-nowrap">
               <Play className="h-4 w-4" aria-hidden="true" />
               Schicht starten
             </Button>

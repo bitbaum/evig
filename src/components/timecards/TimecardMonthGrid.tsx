@@ -35,6 +35,7 @@ export function TimecardMonthGrid({
   selectedDates,
   onDaySelect,
   onClearSelected,
+  onDayContextMenu,
 }: {
   visibleDates: string[]
   entries: TimecardEntryInput[]
@@ -42,6 +43,7 @@ export function TimecardMonthGrid({
   selectedDates: string[]
   onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range') => void
   onClearSelected: () => void
+  onDayContextMenu?: (date: string, pos: { x: number; y: number }) => void
 }) {
   const selected = new Set(selectedDates)
 
@@ -111,6 +113,14 @@ export function TimecardMonthGrid({
                 date,
                 e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single',
               )
+            }}
+            onContextMenu={e => {
+              if (!onDayContextMenu) return
+              e.preventDefault()
+              // Right-clicking a day outside the current selection selects just
+              // it; right-clicking inside the selection keeps the whole batch.
+              if (!selected.has(date)) onDaySelect(date, 'single')
+              onDayContextMenu(date, { x: e.clientX, y: e.clientY })
             }}
             title={categoryLabel}
             aria-pressed={isSelected}
