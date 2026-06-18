@@ -36,7 +36,7 @@ const densityClass: Record<Density, string> = {
 const toneClass: Record<Tone, string> = {
   surface: 'bg-surface-base',
   tinted:  'bg-surface-raised',
-  inverse: 'bg-surface-overlay text-white',
+  inverse: 'bg-action text-white',
 }
 
 export function Section({

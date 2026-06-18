@@ -41,7 +41,7 @@ export default function CommunitySpaceSection() {
   const visionFeatures = t.raw('vision.features') as string[]
 
   return (
-    <section className="py-20 bg-surface-overlay text-white relative overflow-hidden">
+    <section className="py-20 bg-action text-white relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-action rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-action rounded-full blur-3xl" />

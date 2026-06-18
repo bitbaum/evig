@@ -56,7 +56,7 @@ export function ProductProfileFields({
                 <span className="text-lg sm:text-base">{profile.icon}</span>
                 <span>{profile.name_de}</span>
                 {/* Tooltip on hover - hidden on mobile */}
-                <span className="hidden sm:block invisible group-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-surface-overlay text-white text-xs rounded-lg whitespace-nowrap z-10 max-w-xs">
+                <span className="hidden sm:block invisible group-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 bg-surface-overlay text-text-primary text-xs rounded-lg whitespace-nowrap z-10 max-w-xs">
                   {profile.description}
                   <span className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-neutral-900" />
                 </span>
