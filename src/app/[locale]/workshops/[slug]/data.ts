@@ -21,6 +21,7 @@ export interface WorkshopDetail {
   short_description: string | null
   category: string | null
   duration: string | null
+  duration_minutes: number | null
   level: string | null
   max_participants: number
   price_cents: number
@@ -50,16 +51,32 @@ interface WorkshopInstanceRow {
   current_participants: string
 }
 
+/** Human German duration from minutes (matches the free-text `duration` column
+ *  style, e.g. "2 Tage"). Used when the legacy text column is empty — which it
+ *  always is for workshops created via the proposal-approval flow (that path
+ *  only fills the structured duration_minutes). */
+export function formatDurationDe(min: number | null): string | null {
+  if (!min || min <= 0) return null
+  if (min < 60) return `${min} Minuten`
+  const hours = min / 60
+  if (Number.isInteger(hours)) return `${hours} ${hours === 1 ? 'Stunde' : 'Stunden'}`
+  return `${hours.toFixed(1).replace('.', ',')} Stunden`
+}
+
 export async function getWorkshop(slug: string): Promise<WorkshopDetail | null> {
   try {
     const result = await query(
-      `SELECT id, slug, title, description, short_description, category, duration, level,
+      `SELECT id, slug, title, description, short_description, category, duration, duration_minutes, level,
               max_participants, price_cents, is_active, prerequisites, learning_objectives,
               target_audience, materials_provided, materials_required, created_at, updated_at
        FROM ${TABLE_NAMES.WORKSHOPS} WHERE slug = $1 AND is_active = true`,
       [slug]
     )
-    return (result.rows[0] as WorkshopDetail) || null
+    const row = result.rows[0] as WorkshopDetail | undefined
+    if (!row) return null
+    // Fall back to the structured duration when the legacy text column is empty.
+    if (!row.duration) row.duration = formatDurationDe(row.duration_minutes)
+    return row
   } catch (error) {
     logger.error('Error fetching workshop', { error })
     return null

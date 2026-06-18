@@ -7,6 +7,7 @@ import { eq, desc, asc, inArray, sql, and } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
 import WorkshopBrowseClient from './WorkshopBrowseClient'
+import { formatDurationDe } from './[slug]/data'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 import { type WorkshopInstanceStatus, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
@@ -42,6 +43,7 @@ async function getWorkshopsWithInstances(locale: string): Promise<WorkshopWithIn
         description: workshops.description,
         category: workshops.category,
         duration: workshops.duration,
+        duration_minutes: workshops.durationMinutes,
         level: workshops.level,
         title_i18n: workshops.titleI18n,
         description_i18n: workshops.descriptionI18n,
@@ -126,7 +128,7 @@ async function getWorkshopsWithInstances(locale: string): Promise<WorkshopWithIn
       title:       pickI18n(w.title,       w.title_i18n,       locale) ?? w.title,
       description: pickI18n(w.description, w.description_i18n, locale),
       category:    pickI18n(w.category,    w.category_i18n,    locale),
-      duration:    pickI18n(w.duration,    w.duration_i18n,    locale),
+      duration:    pickI18n(w.duration,    w.duration_i18n,    locale) ?? formatDurationDe(w.duration_minutes),
       level:       pickI18n(w.level,       w.level_i18n,       locale),
       max_participants: w.max_participants ?? 12,
       price_cents: w.price_cents ?? 0,

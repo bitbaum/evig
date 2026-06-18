@@ -91,9 +91,13 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
       status,
     } = body
 
-    // Check instance exists
+    // Check instance exists (and grab current dates to preserve duration below)
     const [existing] = await db
-      .select({ id: workshopInstances.id })
+      .select({
+        id: workshopInstances.id,
+        startDate: workshopInstances.startDate,
+        endDate: workshopInstances.endDate,
+      })
       .from(workshopInstances)
       .where(eq(workshopInstances.id, id))
 
@@ -110,6 +114,19 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
     if (maxParticipants !== undefined) update.maxParticipants = maxParticipants
     if (notes !== undefined) update.notes = notes
     if (status !== undefined) update.status = status
+
+    // When the start moves but no explicit end is given, shift the end by the
+    // same delta so the instance keeps its original duration. Without this,
+    // editing only the start time leaves the old endDate — which can land
+    // BEFORE the new start (negative-duration instance).
+    if (update.startDate && endDate === undefined && existing.startDate && existing.endDate) {
+      const oldStart = new Date(existing.startDate).getTime()
+      const oldEnd = new Date(existing.endDate).getTime()
+      const newStart = new Date(update.startDate as string).getTime()
+      if (Number.isFinite(oldStart) && Number.isFinite(oldEnd) && oldEnd > oldStart) {
+        update.endDate = new Date(newStart + (oldEnd - oldStart)).toISOString()
+      }
+    }
 
     if (Object.keys(update).length === 0) {
       return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
