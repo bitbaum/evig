@@ -3587,7 +3587,11 @@
     "theme": {
       "toLight": "Auf Hell umschalten",
       "toDark": "Auf Dunkel umschalten",
-      "toggle": "Theme umschalten"
+      "toggle": "Theme umschalten",
+      "label": "Farbschema",
+      "light": "Hell",
+      "system": "System",
+      "dark": "Dunkel"
     },
     "chatbot": {
       "open": "Revamp IT Assistent öffnen"

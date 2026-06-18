@@ -1,46 +1,68 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { useTranslations } from 'next-intl'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Monitor } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface ThemeToggleProps {
   className?: string
 }
 
+const OPTIONS = [
+  { value: 'light', icon: Sun, key: 'light' as const },
+  { value: 'system', icon: Monitor, key: 'system' as const },
+  { value: 'dark', icon: Moon, key: 'dark' as const },
+] as const
+
+/**
+ * Theme switcher — a 3-way segmented control (Hell / System / Dunkel).
+ * "System" follows the OS preference (enableSystem in ThemeProvider). All three
+ * buttons render on the server too, so the DOM is stable across hydration; only
+ * the active highlight is withheld until mounted (the selected theme is unknown
+ * on the server), which avoids the next-themes hydration-mismatch warning.
+ */
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  // next-themes' resolvedTheme is undefined during SSR + first client render,
-  // then fills in once the client reads localStorage. Returning null on the
-  // server would shift sibling layout vs the client (re-mount, console
-  // hydration warning). Instead we always render the same <button> shell so
-  // SSR and first client render match; we just hide the icon until the
-  // theme is known and lock the click handler. This keeps the surrounding
-  // DOM stable and removes the documented hydration mismatch warning.
-  const { resolvedTheme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const t = useTranslations('accessibility.theme')
-  const ready = Boolean(resolvedTheme)
-  const isDark = resolvedTheme === 'dark'
+  const [mounted, setMounted] = useState(false)
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only mount flag
+  useEffect(() => setMounted(true), [])
+  const current = mounted ? (theme ?? 'system') : undefined
 
   return (
-    <button
-      type="button"
-      onClick={() => ready && setTheme(isDark ? 'light' : 'dark')}
-      aria-label={ready ? (isDark ? t('toLight') : t('toDark')) : t('toggle')}
+    <div
+      role="radiogroup"
+      aria-label={t('label')}
       suppressHydrationWarning
       className={cn(
-        'p-2 rounded-lg transition-colors',
-        'text-text-tertiary',
-        'hover:text-text-secondary',
-        'hover:bg-surface-raised',
+        'inline-flex items-center gap-0.5 rounded-lg border border-subtle bg-surface-raised p-0.5',
         className,
       )}
     >
-      {/* Reserve icon space identically on SSR + client to avoid layout shift.
-          We render an icon span at fixed size; its child swaps once theme is known. */}
-      <span className="block w-4 h-4" aria-hidden={!ready}>
-        {ready && (isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
-      </span>
-    </button>
+      {OPTIONS.map(({ value, icon: Icon, key }) => {
+        const active = current === value
+        return (
+          <button
+            key={value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            aria-label={t(key)}
+            title={t(key)}
+            onClick={() => setTheme(value)}
+            className={cn(
+              'flex h-7 w-7 items-center justify-center rounded-md transition-colors',
+              active
+                ? 'bg-surface-base text-text-primary shadow-xs'
+                : 'text-text-tertiary hover:text-text-secondary',
+            )}
+          >
+            <Icon className="h-4 w-4" aria-hidden="true" />
+          </button>
+        )
+      })}
+    </div>
   )
 }
