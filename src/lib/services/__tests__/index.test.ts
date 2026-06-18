@@ -83,9 +83,6 @@ jest.mock('../inventory-service', () => ({
 jest.mock('../seller-service', () => ({
   getSellerDashboard: jest.fn(),
 }))
-jest.mock('../order-service', () => ({
-  createOrder: jest.fn(),
-}))
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)

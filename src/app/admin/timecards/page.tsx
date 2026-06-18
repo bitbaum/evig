@@ -6,7 +6,7 @@ import { db } from '@/db'
 import { teamProfiles } from '@/db/schema'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { requireSection } from '@/lib/admin/guards'
-import { TimecardsClient } from './TimecardsClient'
+import { TimecardsClient } from '@/components/timecards/TimecardsClient'
 
 export const metadata: Metadata = {
   title: 'Zeitkarten',

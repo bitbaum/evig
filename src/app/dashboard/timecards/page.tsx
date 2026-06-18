@@ -27,7 +27,7 @@ import { auth } from '@/auth'
 import { db } from '@/db'
 import { teamProfiles, timecards as timecardsTable } from '@/db/schema'
 import Heading from '@/components/ui/Heading'
-import { TimecardsClient } from '@/app/admin/timecards/TimecardsClient'
+import { TimecardsClient } from '@/components/timecards/TimecardsClient'
 import { TimecardHistorySidebar } from '@/components/dashboard/timecards/TimecardHistorySidebar'
 import { WeeklyScheduleEditor } from '@/components/timecards/WeeklyScheduleEditor'
 
