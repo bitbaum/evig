@@ -9494,7 +9494,17 @@
       "extrasAiPlaceholder": "z.B. 12. und 13. frei, sonst normal",
       "extrasResetMonth": "Monat aus Schedule neu aufbauen (löscht aktuelle Einträge)",
       "fillMonth": "Monat aus Plan füllen",
-      "fillMonthHint": "Füllt alle leeren Werktage mit deinem Arbeitsplan (Standard Mo–Fr 09:00–17:00). Bestehende Einträge und freie Tage bleiben unverändert."
+      "fillMonthHint": "Füllt alle leeren Werktage mit deinem Arbeitsplan (Standard Mo–Fr 09:00–17:00). Bestehende Einträge und freie Tage bleiben unverändert.",
+      "selectHint": "Tippe auf Tage, um sie auszuwählen und mehrere auf einmal zu bearbeiten.",
+      "selectAllWeekdays": "Alle Werktage auswählen",
+      "viewMonth": "Monat",
+      "viewDay": "Tag",
+      "dayPrev": "Vorheriger Tag",
+      "dayNext": "Nächster Tag",
+      "bulkSelected": "{count} Tage ausgewählt",
+      "bulkFill": "Aus Plan füllen",
+      "bulkClear": "Leeren",
+      "bulkCancel": "Auswahl aufheben"
     },
     "appointments": {
       "pageTitle": "Termine",

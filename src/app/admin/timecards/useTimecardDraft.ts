@@ -2,7 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
-import { TIMECARD_STATUSES, sumTimecardMinutes } from '@/config/timecards'
+import {
+  TIMECARD_STATUSES,
+  sumTimecardMinutes,
+  TIMECARD_ENTRY_CATEGORIES,
+  TIMECARD_ENTRY_CATEGORY_LABELS,
+  type TimecardEntryCategory,
+} from '@/config/timecards'
 import {
   buildTimecardEntriesForMonth,
   calculateTimeRangeMinutes,
@@ -172,6 +178,100 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
       }
     })
   }, [monthFillEntries, updateCurrentDraft])
+
+  // ── Multi-day selection + bulk actions ─────────────────────────────
+  // Select several days, then apply one action to all of them (fill from
+  // plan, mark Krank/Ferien/Feiertag, or clear). The day editor's focused
+  // day (selectedDate) is independent of this multi-selection.
+  const [selectedDates, setSelectedDates] = useState<string[]>([])
+
+  const toggleDateSelection = useCallback((date: string) => {
+    setSelectedDates(prev =>
+      prev.includes(date) ? prev.filter(d => d !== date) : [...prev, date],
+    )
+  }, [])
+  const clearSelection = useCallback(() => setSelectedDates([]), [])
+  const selectAllWeekdays = useCallback(() => {
+    setSelectedDates(
+      monthDates.filter(date => {
+        const wd = new Date(`${date}T00:00:00.000Z`).getUTCDay()
+        return wd !== 0 && wd !== 6
+      }),
+    )
+  }, [monthDates])
+
+  /** Schedule (or standard 9–17) hours for a given date's weekday. */
+  const dayTemplateForDate = useCallback(
+    (date: string): { start: string; end: string; break_minutes: number } => {
+      const wd = new Date(`${date}T00:00:00.000Z`).getUTCDay()
+      const weekday = WEEKDAY_IDS[wd === 0 ? 6 : wd - 1]
+      const day = effectiveSchedule.days[weekday]
+      return day.enabled
+        ? { start: day.start, end: day.end, break_minutes: day.break_minutes }
+        : { start: '09:00', end: '17:00', break_minutes: 60 }
+    },
+    [effectiveSchedule],
+  )
+
+  const applyToSelected = useCallback(
+    (build: (date: string) => TimecardEntryInput) => {
+      if (selectedDates.length === 0) return
+      const additions = selectedDates.map(build)
+      updateCurrentDraft(current => ({
+        ...current,
+        entries: mergeEntries(current.entries, additions),
+        status: TIMECARD_STATUSES.DRAFT,
+      }))
+      clearSelection()
+    },
+    [selectedDates, updateCurrentDraft, clearSelection],
+  )
+
+  const bulkFillFromSchedule = useCallback(() => {
+    applyToSelected(date => {
+      const t = dayTemplateForDate(date)
+      return {
+        work_date: date,
+        start_time: t.start,
+        end_time: t.end,
+        break_minutes: t.break_minutes,
+        duration_minutes: calculateTimeRangeMinutes(t.start, t.end, t.break_minutes),
+        category: TIMECARD_ENTRY_CATEGORIES.ADMIN,
+        source: 'template',
+        description: '',
+      }
+    })
+  }, [applyToSelected, dayTemplateForDate])
+
+  const bulkSetAbsence = useCallback(
+    (category: TimecardEntryCategory) => {
+      applyToSelected(date => {
+        const t = dayTemplateForDate(date)
+        return {
+          work_date: date,
+          start_time: t.start,
+          end_time: t.end,
+          break_minutes: t.break_minutes,
+          duration_minutes: calculateTimeRangeMinutes(t.start, t.end, t.break_minutes),
+          category,
+          source: 'manual',
+          description: TIMECARD_ENTRY_CATEGORY_LABELS[category],
+        }
+      })
+    },
+    [applyToSelected, dayTemplateForDate],
+  )
+
+  const bulkClear = useCallback(() => {
+    if (selectedDates.length === 0) return
+    const set = new Set(selectedDates)
+    updateCurrentDraft(current => ({
+      ...current,
+      entries: current.entries.filter(entry => !set.has(entry.work_date)),
+      status: TIMECARD_STATUSES.DRAFT,
+    }))
+    clearSelection()
+  }, [selectedDates, updateCurrentDraft, clearSelection])
 
   const setSelectedDate = useCallback(
     (date: string) =>
@@ -407,6 +507,14 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     restoreSelectedDateFromSchedule,
     applyDefault9To17,
     fillMonthFromSchedule,
+    // multi-select + bulk
+    selectedDates,
+    toggleDateSelection,
+    clearSelection,
+    selectAllWeekdays,
+    bulkFillFromSchedule,
+    bulkSetAbsence,
+    bulkClear,
     rebuildCurrentDraft,
     saveDraft,
     submitDraft,

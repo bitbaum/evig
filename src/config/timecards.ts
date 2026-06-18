@@ -41,12 +41,28 @@ export const TIMECARD_ENTRY_CATEGORIES = {
   MEETING: 'meeting',
   VOLUNTEERING: 'volunteering',
   OTHER: 'other',
+  // Absence categories — paid leave that counts as scheduled hours but is
+  // distinguishable from worked time for reporting/payroll.
+  KRANK: 'krank',
+  FERIEN: 'ferien',
+  FEIERTAG: 'feiertag',
 } as const
 
 export type TimecardEntryCategory =
   typeof TIMECARD_ENTRY_CATEGORIES[keyof typeof TIMECARD_ENTRY_CATEGORIES]
 
 export const TIMECARD_ENTRY_CATEGORY_OPTIONS = Object.values(TIMECARD_ENTRY_CATEGORIES)
+
+/** Absence categories — represented as full scheduled-hour entries but not "worked". */
+export const TIMECARD_ABSENCE_CATEGORIES: readonly TimecardEntryCategory[] = [
+  TIMECARD_ENTRY_CATEGORIES.KRANK,
+  TIMECARD_ENTRY_CATEGORIES.FERIEN,
+  TIMECARD_ENTRY_CATEGORIES.FEIERTAG,
+]
+
+export function isAbsenceCategory(category: string): boolean {
+  return (TIMECARD_ABSENCE_CATEGORIES as readonly string[]).includes(category)
+}
 
 export const TIMECARD_ENTRY_CATEGORY_LABELS: Record<TimecardEntryCategory, string> = {
   workshop: 'Workshop',
@@ -59,6 +75,9 @@ export const TIMECARD_ENTRY_CATEGORY_LABELS: Record<TimecardEntryCategory, strin
   meeting: 'Meeting',
   volunteering: 'Freiwilligenarbeit',
   other: 'Andere',
+  krank: 'Krank',
+  ferien: 'Ferien',
+  feiertag: 'Feiertag',
 }
 
 export const TIMECARD_ENTRY_SOURCES = {
