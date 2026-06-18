@@ -99,9 +99,11 @@ describe('RELATED_TYPE_HREFS', () => {
     }
   })
 
-  it('all routes end with / (ready for ID append)', () => {
+  it('all routes are ready for ID append (end with / or query =)', () => {
+    // Most hrefs are path bases (".../"); the conversation deep-link appends
+    // the id to a query param ("...?conversation="). Both are valid append points.
     for (const href of Object.values(RELATED_TYPE_HREFS)) {
-      expect(href).toMatch(/\/$/)
+      expect(href).toMatch(/[/=]$/)
     }
   })
 
