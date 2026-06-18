@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Sparkles, ChevronRight, ChevronLeft, CalendarDays, CalendarRange } from 'lucide-react'
+import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -43,12 +43,16 @@ export function TimecardsClient({
   const [view, setView] = useState<'month' | 'day'>('month')
   const t = useTranslations('admin.timecards')
 
+  // Context for the AI assistant: the schedule/date map (so "this week",
+  // "Tuesday", "left at 3pm" resolve to real dated entries) plus the current
+  // draft. The long `summary` string also flips AIFormAssist into refine mode,
+  // which is what sends this context to the model.
   const currentData = {
-    period_label: tc.monthLabel,
-    schedule: tc.scheduleSummary,
-    summary: `${userName}: ${formatTimecardDuration(tc.totalMinutes)} in diesem Monat. ${tc.periodEntries.length} Einträge.`,
-    entries: tc.periodEntries,
+    ...tc.aiContext,
+    schedule_summary: tc.scheduleSummary,
+    current_entries: tc.periodEntries,
     notes: tc.draft.notes,
+    summary: `${userName}: ${formatTimecardDuration(tc.totalMinutes)} in ${tc.monthLabel} erfasst, ${tc.periodEntries.length} Tage. Heute ist ${tc.aiContext.today} (${tc.aiContext.today_weekday}).`,
   }
 
   // Day-view navigation within the visible month.
@@ -84,6 +88,21 @@ export function TimecardsClient({
           finished shift is written straight into this month's draft. */}
       <ShiftWidget onClockOut={tc.addShiftEntry} />
 
+      {/* AI command box — the fastest path: describe the week in plain language
+          ("nur Di und Mi gearbeitet, Mi um 15 Uhr gegangen, sonst krank") and
+          it fills the right days, including absences. */}
+      <div className="space-y-2">
+        <AIFormAssist<TimecardAIResult>
+          formType="timecard"
+          variant="section"
+          defaultExpanded
+          currentData={currentData}
+          placeholder={t('aiPlaceholder')}
+          onFieldsFilled={tc.handleAIFieldsFilled}
+        />
+        <p className="px-1 text-xs text-text-tertiary">{t('aiExamples')}</p>
+      </div>
+
       {/* View toggle + (month) selection hint */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {view === 'month' ? (
@@ -114,6 +133,20 @@ export function TimecardsClient({
 
       {view === 'month' ? (
         <>
+          {/* Quick select entry points — pick a whole batch, then one bulk
+              action ("Alle auswählen" → "Leeren" empties the month). */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+              {t('selectLabel')}
+            </span>
+            <Button type="button" variant="ghost" size="sm" onClick={tc.selectAll} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
+              {t('selectAllDays')}
+            </Button>
+            <Button type="button" variant="ghost" size="sm" onClick={tc.selectAllWeekdays} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
+              {t('selectAllWeekdays')}
+            </Button>
+          </div>
+
           <TimecardMonthGrid
             visibleDates={tc.visibleDates}
             entries={tc.periodEntries}
@@ -130,12 +163,6 @@ export function TimecardsClient({
             onClearDays={tc.bulkClear}
             onCancel={tc.clearSelection}
           />
-
-          {tc.selectedDates.length > 1 && (
-            <Button type="button" variant="ghost" onClick={tc.selectAllWeekdays} className="h-auto px-0 text-sm text-text-tertiary hover:text-text-secondary">
-              {t('selectAllWeekdays')}
-            </Button>
-          )}
         </>
       ) : (
         <TimecardDayEditor
@@ -149,7 +176,8 @@ export function TimecardsClient({
         />
       )}
 
-      {/* Extras: notes + AI assist + reset, behind a disclosure. */}
+      {/* Extras: month note + reset, behind a disclosure. (AI assist now lives
+          up top as a primary affordance.) */}
       <section className="border-t border-subtle pt-6">
         <Button
           type="button"
@@ -179,23 +207,6 @@ export function TimecardsClient({
                 className="mt-1 resize-none"
               />
             </label>
-
-            <div className="rounded-lg border border-subtle bg-surface-base p-4">
-              <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
-                <Sparkles className="h-3.5 w-3.5 text-action" aria-hidden="true" />
-                {t('extrasAiAssist')}
-              </p>
-              <div className="mt-3">
-                <AIFormAssist<TimecardAIResult>
-                  formType="timecard"
-                  variant="section"
-                  defaultExpanded
-                  currentData={currentData}
-                  placeholder={t('extrasAiPlaceholder')}
-                  onFieldsFilled={tc.handleAIFieldsFilled}
-                />
-              </div>
-            </div>
 
             <Button
               type="button"

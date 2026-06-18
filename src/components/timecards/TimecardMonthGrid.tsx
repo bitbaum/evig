@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { Check } from 'lucide-react'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
@@ -15,11 +16,17 @@ import { Button } from '@/components/ui/button'
 /**
  * Month grid for the timecard editor.
  *
- * Clicking a day TOGGLES it in the multi-selection (and focuses it for the
- * day editor below). Selected days get an action-tinted border + check; the
- * focused day gets a ring. Absence days (Krank/Ferien/Feiertag) show the
- * absence label instead of a duration so they read at a glance; gaps render
- * "—" so the eye finds empty days immediately.
+ * Selection is spreadsheet-style:
+ *   - Plain click selects one day (and focuses it for the day editor below).
+ *   - Ctrl/Cmd-click toggles a day into a non-adjacent selection.
+ *   - Shift-click selects a range from the anchor.
+ *   - Click + DRAG across days selects that range in one gesture (the fast
+ *     path for "mark these 4 days") — mousedown starts, mouseenter extends,
+ *     mouseup anywhere ends.
+ *   - Delete/Backspace clears the selected days' entries.
+ * Selected days get an action-tinted border + check; the focused day gets a
+ * ring. Absence days (Krank/Ferien/…) show the label instead of a duration;
+ * gaps render "—" so the eye finds empty days immediately.
  */
 export function TimecardMonthGrid({
   visibleDates,
@@ -38,6 +45,19 @@ export function TimecardMonthGrid({
 }) {
   const selected = new Set(selectedDates)
 
+  // Drag-to-select. `dragging` enables mouseenter range-extension; `dragged`
+  // remembers a drag happened so the trailing click (which fires on mouseup)
+  // doesn't collapse the range back to a single day.
+  const [dragging, setDragging] = useState(false)
+  const dragged = useRef(false)
+
+  useEffect(() => {
+    if (!dragging) return
+    const stop = () => setDragging(false)
+    window.addEventListener('mouseup', stop)
+    return () => window.removeEventListener('mouseup', stop)
+  }, [dragging])
+
   return (
     <div
       role="grid"
@@ -48,7 +68,7 @@ export function TimecardMonthGrid({
           onClearSelected()
         }
       }}
-      className="grid grid-cols-2 gap-2 rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40 sm:grid-cols-4 md:grid-cols-7"
+      className="grid grid-cols-2 gap-2 rounded-lg select-none focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40 sm:grid-cols-4 md:grid-cols-7"
     >
       {visibleDates.map(date => {
         const entry = getEntryForDate(entries, date)
@@ -68,12 +88,30 @@ export function TimecardMonthGrid({
             key={date}
             type="button"
             variant="ghost"
-            onClick={e =>
+            onMouseDown={e => {
+              // Modifier clicks (toggle/range) are handled in onClick — let them through.
+              if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
+              e.preventDefault()
+              dragged.current = false
+              setDragging(true)
+              onDaySelect(date, 'single')
+            }}
+            onMouseEnter={() => {
+              if (!dragging) return
+              dragged.current = true
+              onDaySelect(date, 'range')
+            }}
+            onClick={e => {
+              // Swallow the click that ends a drag so it doesn't reset to one day.
+              if (dragged.current) {
+                dragged.current = false
+                return
+              }
               onDaySelect(
                 date,
                 e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single',
               )
-            }
+            }}
             title={categoryLabel}
             aria-pressed={isSelected}
             className={cn(

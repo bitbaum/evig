@@ -7,6 +7,9 @@ import {
   sumTimecardMinutes,
   TIMECARD_ENTRY_CATEGORIES,
   TIMECARD_ENTRY_CATEGORY_LABELS,
+  TIMECARD_ENTRY_CATEGORY_OPTIONS,
+  TIMECARD_ABSENCE_TYPES,
+  isAbsenceCategory,
   getAbsenceType,
   type TimecardEntryCategory,
 } from '@/config/timecards'
@@ -106,6 +109,39 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     }),
     [currentMonthStart, currentMonthEnd],
   )
+
+  // Context handed to the AI assistant so it can resolve natural-language input
+  // ("this week", "Tuesday", "left at 3pm") into concrete dated entries: today,
+  // a date→weekday map of the month, and the schedule's hours per weekday.
+  const aiContext = useMemo(() => {
+    const longWeekday = (iso: string) =>
+      new Intl.DateTimeFormat('de-CH', { weekday: 'long' }).format(new Date(`${iso}T00:00:00.000Z`))
+    const today = toISODate(currentDate)
+    // 2024-01-01 was a Monday → index 0 = Montag … 6 = Sonntag (WEEKDAY_IDS order)
+    const weekdayName = (index: number) =>
+      new Intl.DateTimeFormat('de-CH', { weekday: 'long' }).format(new Date(Date.UTC(2024, 0, 1 + index)))
+    return {
+      today,
+      today_weekday: longWeekday(today),
+      month_label: monthLabel,
+      calendar: monthDates.map(date => ({ date, weekday: longWeekday(date) })),
+      schedule_days: WEEKDAY_IDS.map((id, index) => {
+        const day = effectiveSchedule.days[id]
+        return {
+          weekday: weekdayName(index),
+          enabled: day.enabled,
+          start: day.start,
+          end: day.end,
+          break_minutes: day.break_minutes,
+        }
+      }),
+      absence_categories: TIMECARD_ABSENCE_TYPES.map(a => ({
+        value: a.value,
+        label: a.label,
+        paid: a.paid,
+      })),
+    }
+  }, [currentDate, monthLabel, monthDates, effectiveSchedule])
 
   // ── Draft state ────────────────────────────────────────────────────
   const [draft, setDraft] = useState<DraftState>(() =>
@@ -227,6 +263,13 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     })
     setSelectedDates(weekdays)
     setAnchorDate(weekdays[0] ?? null)
+  }, [monthDates])
+
+  /** Select every day of the month — the entry point for "empty everything" or
+   *  "the whole month was Ferien": select all, then pick a bulk action. */
+  const selectAll = useCallback(() => {
+    setSelectedDates(monthDates)
+    setAnchorDate(monthDates[0] ?? null)
   }, [monthDates])
 
   /** Schedule (or standard 9–17) hours for a given date's weekday. */
@@ -421,25 +464,83 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     }))
   }, [draft.selectedDate, updateCurrentDraft])
 
+  /**
+   * Turn one raw AI entry into a valid, internally-consistent TimecardEntryInput
+   * — never trust the model's arithmetic. We recompute durations ourselves and
+   * force absences onto the canonical paid/unpaid shape (same rules as the bulk
+   * absence action), so a malformed AI response can't produce an entry that
+   * fails server validation on save.
+   */
+  const sanitizeAIEntry = useCallback(
+    (raw: unknown): TimecardEntryInput | null => {
+      if (!raw || typeof raw !== 'object') return null
+      const r = raw as Record<string, unknown>
+      const work_date = typeof r.work_date === 'string' ? r.work_date : ''
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(work_date)) return null
+      const category = (
+        (TIMECARD_ENTRY_CATEGORY_OPTIONS as string[]).includes(String(r.category))
+          ? String(r.category)
+          : TIMECARD_ENTRY_CATEGORIES.ADMIN
+      ) as TimecardEntryCategory
+      const tpl = dayTemplateForDate(work_date)
+      const desc = typeof r.description === 'string' ? r.description.slice(0, 500) : ''
+
+      if (isAbsenceCategory(category)) {
+        const paid = getAbsenceType(category)?.paid ?? true
+        return {
+          work_date,
+          start_time: paid ? tpl.start : null,
+          end_time: paid ? tpl.end : null,
+          break_minutes: paid ? tpl.break_minutes : 0,
+          duration_minutes: paid
+            ? calculateTimeRangeMinutes(tpl.start, tpl.end, tpl.break_minutes)
+            : 0,
+          category,
+          source: 'ai_assisted',
+          description: desc || TIMECARD_ENTRY_CATEGORY_LABELS[category],
+        }
+      }
+
+      const isHHMM = (v: unknown): v is string => typeof v === 'string' && /^\d{2}:\d{2}$/.test(v)
+      const start = isHHMM(r.start_time) ? r.start_time : tpl.start
+      const end = isHHMM(r.end_time) ? r.end_time : tpl.end
+      const brk = typeof r.break_minutes === 'number' && r.break_minutes >= 0 ? r.break_minutes : tpl.break_minutes
+      return {
+        work_date,
+        start_time: start,
+        end_time: end,
+        break_minutes: brk,
+        duration_minutes: calculateTimeRangeMinutes(start, end, brk),
+        category,
+        source: 'ai_assisted',
+        description: desc,
+      }
+    },
+    [dayTemplateForDate],
+  )
+
   const handleAIFieldsFilled = useCallback(
     (
       data: Partial<TimecardAIResult>,
       _metadata: Record<string, AIFieldMetadataEntry>,
     ) => {
       updateCurrentDraft(current => {
-        const nextEntries = Array.isArray(data.entries)
-          ? mergeEntries(current.entries, data.entries)
+        const incoming = Array.isArray(data.entries)
+          ? (data.entries.map(sanitizeAIEntry).filter(Boolean) as TimecardEntryInput[])
+          : []
+        const nextEntries = incoming.length
+          ? mergeEntries(current.entries, incoming)
           : current.entries
         return {
           ...current,
           entries: nextEntries,
           notes: typeof data.notes === 'string' ? data.notes : current.notes,
           status: TIMECARD_STATUSES.DRAFT,
-          selectedDate: nextEntries[0]?.work_date || current.selectedDate,
+          selectedDate: incoming[0]?.work_date || current.selectedDate,
         }
       })
     },
-    [updateCurrentDraft],
+    [updateCurrentDraft, sanitizeAIEntry],
   )
 
   // ── Network ────────────────────────────────────────────────────────
@@ -621,6 +722,9 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     clearSelection,
     clearSelectedEntries,
     selectAllWeekdays,
+    selectAll,
+    // ai
+    aiContext,
     bulkFillFromSchedule,
     bulkSetAbsence,
     bulkClear,

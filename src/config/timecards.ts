@@ -126,7 +126,9 @@ export type TimecardPeriodType = typeof TIMECARD_PERIOD_TYPES[keyof typeof TIMEC
 export const TIMECARD_PERIOD_TYPE_OPTIONS = Object.values(TIMECARD_PERIOD_TYPES)
 
 export const TIMECARD_LIMITS = {
-  MIN_ENTRY_MINUTES: 1,
+  // 0 (not 1) so an unpaid absence (Unbezahlt) can be recorded as a labelled
+  // 0-minute marker day — it counts no paid time but still shows on the card.
+  MIN_ENTRY_MINUTES: 0,
   MAX_ENTRY_MINUTES: 16 * 60,
   MAX_DAILY_MINUTES: 24 * 60,
   MAX_PERIOD_ENTRIES: 100,

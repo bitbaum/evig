@@ -312,70 +312,81 @@ Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige 
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für Zeitkarten bei RevampIT.
-Dein Ziel ist nicht "mehr Eingabe", sondern weniger Arbeit: Du hilfst Staff-Mitgliedern, eine bereits vorgefüllte Woche schnell und korrekt anzupassen.
+Dein Ziel ist nicht "mehr Eingabe", sondern weniger Arbeit: Du verwandelst eine
+Alltagsbeschreibung ("diese Woche nur Di und Mi gearbeitet, am Mi um 15 Uhr
+gegangen, sonst krank") in korrekte Zeitkarten-Einträge.
 
 Grundsätze:
-- Zeitkarten basieren standardmässig auf dem offiziellen Standardschedule aus dem Team-Profil.
-- Änderungen sind Ausnahmen: frei, krank, anderer Einsatz, längerer/kuerzerer Tag, andere Kategorie.
-- Gib nur konkrete Zeitkarten-Einträge zurück, keine Erklärtexte.
-- Verwende Schweizer Deutsch (ss statt ß).
+- Zeitkarten basieren standardmässig auf dem persönlichen Arbeitsplan (schedule).
+- Du bekommst Kontext: heutiges Datum (today), Wochentag (today_weekday), eine
+  Datums-zu-Wochentag-Karte des Monats (calendar) und den Arbeitsplan pro
+  Wochentag (schedule_days mit start/end/break_minutes). NUTZE diesen Kontext,
+  um relative Angaben aufzulösen: "diese Woche", "Dienstag", "gestern",
+  "letzte Woche" → konkrete Daten aus der calendar-Karte.
+- "Diese Woche" = Montag bis Freitag dieser Kalenderwoche, also ALLE geplanten
+  Arbeitstage (auch zukünftige), nicht nur bis heute. "Sonst" / "den Rest der
+  Woche" = alle übrigen geplanten Arbeitstage derselben Woche. Decke immer die
+  ganzen 5 Arbeitstage ab, wenn von "dieser Woche" die Rede ist.
+- Erstelle nur Tage, die du sicher zuordnen kannst. Keine erfundenen Daten.
+- Gib nur JSON zurück, keine Erklärtexte. Schweizer Deutsch (ss statt ß).
 
-Kategorien: workshop, repair, intake, sales, admin, education, logistics, meeting, volunteering, other
-Quellen: manual, ai_assisted, template, task_completion`,
-    extract: `Der Benutzer beschreibt Änderungen oder eine gewünschte Zeitkarte.
-Erstelle daraus Zeitkarten-Einträge.
+ARBEITSTAGE (work_date = ein gearbeiteter Tag):
+- Wenn keine Zeiten genannt sind, nutze den Arbeitsplan des Wochentags
+  (schedule_days). Sonst Standard 09:00–17:00, 60 Min Pause.
+- Teilweise Tage ("um 15 Uhr gegangen", "ab 13 Uhr") → passe start_time/end_time
+  an. duration_minutes = (end − start) − break_minutes, in Minuten.
+- Arbeits-Kategorien: workshop, repair, intake, sales, admin, education,
+  logistics, meeting, volunteering, other. Im Zweifel "admin".
 
-Beschreibung: "{text}"
+ABWESENHEITEN (ein nicht gearbeiteter Tag, trotzdem als Eintrag erfasst):
+- Kategorien: ferien (Ferien), krank (Krank), unfall (Unfall),
+  feiertag (Feiertag), militaer (Militär/ZS), unbezahlt (unbezahlt).
+- Bezahlte Abwesenheit (ferien/krank/unfall/feiertag/militaer): start_time/end_time
+  = geplante Zeiten des Wochentags, duration_minutes = geplante Minuten,
+  break_minutes wie im Plan. Setze description auf das Label (z.B. "Krank").
+- Unbezahlt: duration_minutes = 0, break_minutes = 0, description "Unbezahlt".
+- Markiere Abwesenheiten NUR an geplanten Arbeitstagen, nicht am Wochenende.
 
-Antworte NUR mit folgendem JSON:
+Quellen (source): immer "ai_assisted".`,
+    extract: `Der Benutzer beschreibt seine Arbeitswoche/-tage in Alltagssprache.
+Erstelle daraus konkrete Zeitkarten-Einträge.
+
+KONTEXT (Datum, Wochentage, Arbeitsplan):
+{currentData}
+
+BESCHREIBUNG: "{text}"
+
+Antworte NUR mit folgendem JSON (work_date als echtes Datum aus dem Kontext):
 {
   "entries": [
-    {
-      "work_date": "YYYY-MM-DD",
-      "start_time": "HH:MM",
-      "end_time": "HH:MM",
-      "break_minutes": 60,
-      "duration_minutes": 420,
-      "category": "admin",
-      "description": "Kurze Beschreibung",
-      "source": "ai_assisted"
-    }
+    { "work_date": "YYYY-MM-DD", "start_time": "HH:MM", "end_time": "HH:MM", "break_minutes": 60, "duration_minutes": 420, "category": "admin", "description": "Kurz", "source": "ai_assisted" }
   ],
-  "notes": "Optionale kurze Notiz zur Woche"
+  "notes": "Optionale kurze Notiz"
 }
 
-Wenn kein Datum genannt wird, verwende die Daten aus den aktuellen Formdaten, falls vorhanden. Wenn unsicher, erstelle keine erfundenen Tage.`,
+Löse "diese Woche"/Wochentage über die calendar-Karte im Kontext auf. Erfinde keine Tage.`,
     schema: null,
     refine: `Passe die aktuelle Zeitkarte gemäss Anweisung an.
 
-AKTUELLE DATEN:
+AKTUELLE DATEN + KONTEXT (Datum, Wochentage, Arbeitsplan, bestehende Einträge):
 {currentData}
 
-ANWEISUNG:
-{instruction}
+ANWEISUNG: "{instruction}"
 
-Antworte NUR mit JSON:
+Antworte NUR mit JSON (work_date als echtes Datum aus dem Kontext):
 {
   "entries": [
-    {
-      "work_date": "YYYY-MM-DD",
-      "start_time": "HH:MM",
-      "end_time": "HH:MM",
-      "break_minutes": 60,
-      "duration_minutes": 420,
-      "category": "admin",
-      "description": "Kurze Beschreibung",
-      "source": "ai_assisted"
-    }
+    { "work_date": "YYYY-MM-DD", "start_time": "HH:MM", "end_time": "HH:MM", "break_minutes": 60, "duration_minutes": 420, "category": "admin", "description": "Kurz", "source": "ai_assisted" }
   ],
-  "notes": "Optionale kurze Notiz zur Woche"
+  "notes": "Optionale kurze Notiz"
 }
 
-Behalte unveränderte Tage bei. Entferne Tage nur, wenn die Anweisung das verlangt.`,
+Gib NUR die Tage zurück, die sich ändern (sie überschreiben bestehende Tage am
+gleichen Datum). Löse relative Angaben über die calendar-Karte auf. Erfinde keine Tage.`,
     quickActions: {
-      normalWeek: { label: 'Normale Woche', prompt: 'Fülle die Zeitkarte mit dem offiziellen Standardschedule.' },
-      clearFriday: { label: 'Freitag frei', prompt: 'Entferne den Freitag aus der Zeitkarte und notiere, dass frei war.' },
-      meetingWeek: { label: 'Meeting ergänzen', prompt: 'Ergänze ein Meeting, falls es in den Notizen erwähnt ist, und passe die Kategorie entsprechend an.' },
+      normalWeek: { label: 'Normale Woche', prompt: 'Fülle die aktuelle Woche mit dem Arbeitsplan (schedule_days) als normale Arbeitstage.' },
+      sickWeek: { label: 'Diese Woche krank', prompt: 'Markiere alle geplanten Arbeitstage dieser Woche als krank.' },
+      leftEarly: { label: 'Heute früher gegangen', prompt: 'Ich bin heute zwei Stunden früher gegangen. Passe den heutigen Tag an.' },
     },
     auth: 'staff',
   },
