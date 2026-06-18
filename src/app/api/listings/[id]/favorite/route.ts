@@ -11,7 +11,6 @@ import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { listings, listingFavorites } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
-import { LISTING_STATUS } from '@/config/marketplace';
 
 export const POST = withAuth<{ id: string }>(async (
   request: NextRequest,
@@ -22,11 +21,13 @@ export const POST = withAuth<{ id: string }>(async (
     const listingId = context?.params?.id;
     if (!listingId) return apiNotFound('Inserat');
 
-    // Check listing exists and is active
+    // Check the listing exists — any status. We must NOT require ACTIVE here:
+    // a buyer needs to un-favorite an item after it sells/reserves, and the
+    // favorites list already filters out removed listings for display.
     const [listing] = await db
       .select({ id: listings.id })
       .from(listings)
-      .where(and(eq(listings.id, listingId), eq(listings.status, LISTING_STATUS.ACTIVE)));
+      .where(eq(listings.id, listingId));
     if (!listing) return apiNotFound('Inserat');
 
     // Check if already favorited

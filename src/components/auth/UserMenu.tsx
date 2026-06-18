@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
+import { NotificationBell } from '@/components/admin/NotificationBell'
 
 /**
  * UserMenu Component
@@ -125,7 +126,10 @@ export function UserMenu() {
   ]
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="flex items-center gap-1">
+      {/* Notification bell — visible to every logged-in user, not just staff */}
+      <NotificationBell />
+      <div className="relative" ref={menuRef}>
       <Button
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
@@ -265,6 +269,7 @@ export function UserMenu() {
             </Button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )

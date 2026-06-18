@@ -63,6 +63,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
     // --- Collect all user data ---
     const [
       profile,
+      userProfile,
       listings,
       ordersAsBuyer,
       ordersAsSeller,
@@ -78,6 +79,13 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
         `SELECT id, email, name, created_at, updated_at
            FROM ${TABLE_NAMES.USERS}
           WHERE id = $1`,
+        [userId],
+      ),
+      // The richest personal data (address, phone, mobile, bio, canton,
+      // interests) lives in user_profiles — required for a complete DSG/DSGVO
+      // export, not just the users row.
+      safeQuery(
+        `SELECT * FROM ${TABLE_NAMES.USER_PROFILES} WHERE user_id = $1`,
         [userId],
       ),
       safeQuery(
@@ -133,6 +141,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
           `Diese Datei enthält alle personenbezogenen Daten, die ${ORG.name} zu deinem Konto gespeichert hat.`,
       },
       profile: profile[0] ?? null,
+      userProfile: userProfile[0] ?? null,
       listings,
       orders: {
         asBuyer: ordersAsBuyer,

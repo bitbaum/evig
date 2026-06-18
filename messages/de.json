@@ -8475,7 +8475,8 @@
       "backToDashboard": "Zurück zum Dashboard",
       "editProfile": "Profil bearbeiten",
       "account": {
-        "passwordNote": "Passwort ändern wird über die Profil-Seite verwaltet (wird später hier integriert)"
+        "passwordNote": "Passwort ändern wird über die Profil-Seite verwaltet (wird später hier integriert)",
+        "deleteRequestBody": "Ich möchte mein Konto ({email}) löschen. Bitte bestätigt die Löschung meiner personenbezogenen Daten."
       },
       "privacy": {
         "dataExportTitle": "Datenschutz & Export",

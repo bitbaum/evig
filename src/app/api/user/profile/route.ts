@@ -36,7 +36,9 @@ async function getOrCreateProfileDrizzle(userId: string) {
 export const GET = withAuth(async (request, session) => {
   try {
     const profile = await getOrCreateProfileDrizzle(session.user.id)
-    return apiSuccess({ profile })
+    // Include the user's community role so the dashboard profile page can show
+    // the service-provider section (the client reads result.data.role).
+    return apiSuccess({ profile, role: session.user.role })
   } catch (error) {
     return apiError(error, 'Profil konnte nicht geladen werden')
   }

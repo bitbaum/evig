@@ -76,7 +76,7 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.TASK]: '/admin/tasks/',
   [RELATED_TYPES.PROTOCOL]: '/admin/protocols/',
   [RELATED_TYPES.DECISION]: '/admin/decisions/',
-  [RELATED_TYPES.CONVERSATION]: '/messages/',
+  [RELATED_TYPES.CONVERSATION]: '/dashboard/messages?conversation=',
   [RELATED_TYPES.APPOINTMENT]: '/dashboard/appointments/',
   [RELATED_TYPES.IT_HILFE]: '/it-hilfe/',
   [RELATED_TYPES.WORKSHOP]: '/admin/workshops/',

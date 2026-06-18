@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { serviceAppointments, serviceTypes } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
@@ -96,6 +96,12 @@ export const POST = withAuth(async (
         .limit(1)
       if (serviceRow) {
         service_type_id = serviceRow.id
+      } else {
+        // A slug was provided but matched no service type. Fail loudly rather
+        // than silently inserting an appointment with NULL service_type_id
+        // (which loses price/name/approval). Catches config↔DB slug drift.
+        logger.warn('Appointment booking: unknown serviceSlug', { serviceSlug, userId: session.user.id })
+        return apiBadRequest('Unbekannte Dienstleistung')
       }
     }
 

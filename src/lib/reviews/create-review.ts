@@ -117,17 +117,17 @@ async function updateHelperRating(requestId: string): Promise<void> {
       total_reviews = sub.review_count
     FROM (
       SELECT
-        o.user_id AS helper_user_id,
+        o.helper_id AS helper_user_id,
         AVG(r.overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(r.id)::int AS review_count
       FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
       JOIN ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} o ON o.request_id = r.target_id AND o.status = ${OFFER_STATUS.ACCEPTED}
       WHERE r.target_type = ${REVIEW_TARGET_TYPES.IT_HILFE} AND r.status = ${REVIEW_STATUS.PUBLISHED}
-      GROUP BY o.user_id
+      GROUP BY o.helper_id
     ) sub
     WHERE ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id = sub.helper_user_id
     AND EXISTS (
-      SELECT 1 FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} WHERE request_id = ${requestId} AND status = ${OFFER_STATUS.ACCEPTED} AND user_id = ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id
+      SELECT 1 FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} WHERE request_id = ${requestId} AND status = ${OFFER_STATUS.ACCEPTED} AND helper_id = ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id
     )
   `)
   logger.info('Updated helper rating', { requestId, rows: result.rowCount })

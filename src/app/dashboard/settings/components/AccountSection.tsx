@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
 import { SETTINGS_CONFIG } from '@/config/profile'
+import { CONTACT } from '@/config/org'
 import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 
@@ -100,8 +101,12 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         <p className="text-sm text-text-secondary mb-4">
           {labels.deleteAccountWarning}
         </p>
+        {/* Account deletion is handled manually by staff (no self-serve cascade
+            delete yet). The button opens a pre-filled deletion request to
+            support so it performs a real action instead of being inert. */}
         <Button
-          type="button"
+          as="a"
+          href={`mailto:${CONTACT.supportEmail}?subject=${encodeURIComponent(labels.deleteAccount)}&body=${encodeURIComponent(t('deleteRequestBody', { email }))}`}
           variant="destructive-outline"
         >
           <Trash2 className="w-4 h-4" />

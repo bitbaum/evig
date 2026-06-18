@@ -38,18 +38,22 @@ export const GET = withAuth(async (
     const whereCondition = and(...conditions)
 
     const result = await db
+      // Output keys are snake_case to match the client contract (ConversationList
+      // `Conversation` type + dashboard/messages page + the sibling
+      // /api/messages/conversations endpoint). participant1/2 + unreadCount1/2 are
+      // kept for the per-user unread resolution below.
       .select({
         id: conversations.id,
         type: conversations.type,
-        contextId: conversations.contextId,
+        context_id: conversations.contextId,
         participant1: conversations.participant1,
         participant2: conversations.participant2,
-        lastMessageAt: conversations.lastMessageAt,
-        lastMessagePreview: conversations.lastMessagePreview,
+        last_message_at: conversations.lastMessageAt,
+        last_message_preview: conversations.lastMessagePreview,
         unreadCount1: conversations.unreadCount1,
         unreadCount2: conversations.unreadCount2,
-        otherUserName: sql<string>`CASE WHEN ${conversations.participant1} = ${session.user.id} THEN u2.name ELSE u1.name END`,
-        otherUserId: sql<string>`CASE WHEN ${conversations.participant1} = ${session.user.id} THEN ${conversations.participant2} ELSE ${conversations.participant1} END`,
+        other_user_name: sql<string>`CASE WHEN ${conversations.participant1} = ${session.user.id} THEN u2.name ELSE u1.name END`,
+        other_user_id: sql<string>`CASE WHEN ${conversations.participant1} = ${session.user.id} THEN ${conversations.participant2} ELSE ${conversations.participant1} END`,
       })
       .from(conversations)
       .leftJoin(

@@ -120,6 +120,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
           portfolio_images,
           verification_documents,
           is_verified,
+          status,
           verification_date,
           created_at,
           updated_at
@@ -146,6 +147,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
           ${application.portfolio_images},
           ${application.verification_documents},
           true,
+          'active',
           CURRENT_TIMESTAMP,
           CURRENT_TIMESTAMP,
           CURRENT_TIMESTAMP
@@ -172,6 +174,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
           portfolio_images = EXCLUDED.portfolio_images,
           verification_documents = EXCLUDED.verification_documents,
           is_verified = true,
+          status = 'active',
           verification_date = CURRENT_TIMESTAMP,
           updated_at = CURRENT_TIMESTAMP
       `)

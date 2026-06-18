@@ -37,7 +37,7 @@ export const SERVICE_CONFIGS: ServiceConfig[] = [
   // Hardware Services
   {
     key: 'computerRepair',
-    slug: 'computer-repair',
+    slug: 'computer-repair-upgrades',
     icon: Wrench,
     href: '/services/computer-repair-upgrades',
     available: true,
@@ -45,7 +45,7 @@ export const SERVICE_CONFIGS: ServiceConfig[] = [
   },
   {
     key: 'dataRecovery',
-    slug: 'data-recovery',
+    slug: 'data-recovery-transfer',
     icon: HardDrive,
     href: '/services/data-recovery-transfer',
     available: true,
@@ -69,7 +69,7 @@ export const SERVICE_CONFIGS: ServiceConfig[] = [
   },
   {
     key: 'linuxOpenSource',
-    slug: 'linux-installation',
+    slug: 'linux-open-source',
     icon: Server,
     href: '/services/linux-open-source',
     available: true,

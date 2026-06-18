@@ -237,8 +237,8 @@ export default function AppointmentsDashboard() {
         ) : (
           <EmptyState
             icon={Calendar}
-            iconBg="bg-teal-50 dark:bg-teal-900/20"
-            iconColor="text-teal-500 dark:text-teal-400"
+            iconBg="bg-action-muted"
+            iconColor="text-action"
             title={t('emptyTitle')}
             description={isRepairerView ? t('emptyDescRepairer') : t('emptyDesc')}
             action={
