@@ -29,6 +29,7 @@ import { teamProfiles, timecards as timecardsTable } from '@/db/schema'
 import Heading from '@/components/ui/Heading'
 import { TimecardsClient } from '@/app/admin/timecards/TimecardsClient'
 import { TimecardHistorySidebar } from '@/components/dashboard/timecards/TimecardHistorySidebar'
+import { WeeklyScheduleEditor } from '@/components/timecards/WeeklyScheduleEditor'
 
 export const metadata: Metadata = {
   title: 'Meine Zeiterfassung',
@@ -81,7 +82,8 @@ export default async function DashboardTimecardsPage() {
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-8">
-        <div className="min-w-0">
+        <div className="min-w-0 space-y-6">
+          <WeeklyScheduleEditor workingHours={profile?.workingHours ?? null} />
           <TimecardsClient
             workingHours={profile?.workingHours ?? null}
             userName={session.user.name || session.user.email || 'Du'}
