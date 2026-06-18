@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
   formatTimecardDuration,
+  isAbsenceCategory,
   type TimecardEntryCategory,
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
@@ -15,25 +15,17 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { HourRangePicker } from './HourRangePicker'
 
 /**
- * Inline day editor (replaces the right-aside detail panel).
+ * Day view — fine edits for ONE day. The centrepiece is the HourRangePicker:
+ * the day-view counterpart to the month grid, where you pick the worked block
+ * by dragging across a timeline of hours (the "select hours like you select
+ * days" the user asked for). Break / category / note sit below.
  *
- * Default state is collapsed — just the date header, the day's hours,
- * and three quick actions (Frei / Krank / Anpassen). The full time
- * range + category + note fields only expand when the user taps
- * "Anpassen" — most days are normal and need zero edits.
- *
- * Empty-day affordance: if no entry exists for the selected date,
- * the quick actions include "Aus Schedule ausfüllen" (uses the user's
- * working_hours) and "9–17 ausfüllen" (a manual one-tap fallback if
- * no schedule is set). This is the path the user complained about:
- * "if a day is not filled and I click on it, there should be an
- * option to autofill it with my schedule or with 9-17."
- *
- * No card border around the whole component — let the parent control
- * spacing. The editor surfaces as a thin sticky panel underneath the
- * month grid.
+ * Empty-day affordance: quick actions "Aus Schedule ausfüllen" (uses the
+ * user's working_hours) and "9–17 ausfüllen" (manual fallback if no schedule).
+ * Absence days (Krank/Ferien/…) show their label instead of the hour grid.
  */
 export function TimecardDayEditor({
   selectedDate,
@@ -53,11 +45,11 @@ export function TimecardDayEditor({
   onApplyDefault9To17: () => void
 }) {
   const t = useTranslations('admin.timecards')
-  const [expanded, setExpanded] = useState(false)
   const hasEntry = !!selectedEntry
+  const isAbsence = hasEntry && isAbsenceCategory(selectedEntry.category)
 
   return (
-    <section className="rounded-lg border border-subtle bg-surface-base p-5">
+    <section className="space-y-5 rounded-lg border border-subtle bg-surface-base p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
@@ -74,7 +66,7 @@ export function TimecardDayEditor({
         )}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         {!hasEntry && hasSchedule && (
           <ActionChip onClick={onRestoreFromSchedule} primary>
             {t('dayActionFillFromSchedule')}
@@ -87,15 +79,22 @@ export function TimecardDayEditor({
         )}
         <ActionChip onClick={() => onMarkOff('frei')}>{t('dayActionFree')}</ActionChip>
         <ActionChip onClick={() => onMarkOff('krank')}>{t('dayActionSick')}</ActionChip>
-        {hasEntry && (
-          <ActionChip onClick={() => setExpanded(e => !e)}>
-            {expanded ? t('dayActionAdjustClose') : t('dayActionAdjust')}
-          </ActionChip>
-        )}
       </div>
 
-      {expanded && hasEntry && (
-        <DetailFields entry={selectedEntry} onPatch={onPatch} />
+      {isAbsence ? (
+        <div className="border-t border-subtle pt-5 text-sm text-text-secondary">
+          {TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]} —{' '}
+          {formatTimecardDuration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
+        </div>
+      ) : (
+        <div className="space-y-4 border-t border-subtle pt-5">
+          <HourRangePicker
+            start={selectedEntry?.start_time ?? null}
+            end={selectedEntry?.end_time ?? null}
+            onChange={(start, end) => onPatch({ start_time: start, end_time: end })}
+          />
+          {hasEntry && <DetailFields entry={selectedEntry} onPatch={onPatch} />}
+        </div>
       )}
     </section>
   )
@@ -134,21 +133,7 @@ function DetailFields({
 }) {
   const t = useTranslations('admin.timecards')
   return (
-    <div className="mt-5 grid gap-4 border-t border-subtle pt-5 sm:grid-cols-2">
-      <Field label={t('fieldStart')}>
-        <Input
-          type="time"
-          value={entry.start_time ?? '09:00'}
-          onChange={e => onPatch({ start_time: e.target.value })}
-        />
-      </Field>
-      <Field label={t('fieldEnd')}>
-        <Input
-          type="time"
-          value={entry.end_time ?? '17:00'}
-          onChange={e => onPatch({ end_time: e.target.value })}
-        />
-      </Field>
+    <div className="grid gap-4 sm:grid-cols-2">
       <Field label={t('fieldBreak')}>
         <Input
           type="number"
