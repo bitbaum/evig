@@ -330,4 +330,4 @@ But for now, **one server handles everything** beautifully! 🚀
 ./scripts/migrate-to-production.sh [server-ip] revampit.ch
 ```
 
-**That's it!** Your entire application moves from Vercel to Frauenfeld with one command. 🎯
+**(Historical.)** This was the one-command path planned for the move off Vercel. The cutover is done — production now runs on the self-hosted Hetzner box and deploys via `git push origin main` (GitHub Actions → `revampit.orangecat.ch`). See `docs/guides/deployment.md`. 🎯
