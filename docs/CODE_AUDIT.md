@@ -6,6 +6,8 @@ last_modified_summary: Autonomous design system gradient+shadow compliance pass 
 
 # RevampIT Code Audit Findings
 
+> **⚠️ HISTORICAL SNAPSHOT.** Some entries reference the retired Neon Postgres setup (e.g. "Neon cold start" fixes). Production is now self-hosted Postgres 17 on Hetzner; see `docs/SHARED_CONTEXT.md`. Findings are kept as a historical record.
+
 **Last Audit Date**: 2026-06-01 (autonomous maintenance pass)
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.

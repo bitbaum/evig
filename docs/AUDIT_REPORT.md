@@ -1,5 +1,7 @@
 # Codebase Audit Report
 
+> **⚠️ HISTORICAL SNAPSHOT (2026-06-03).** Infra statements here are point-in-time and now stale: production no longer uses Vercel (deploys run via GitHub Actions → self-hosted Hetzner box) or Neon (prod DB is self-hosted Postgres 17 on Hetzner). See `docs/SHARED_CONTEXT.md`, `docs/guides/deployment.md`, and `docs/DISASTER_RECOVERY.md` for current reality. Kept as a historical record.
+
 **Date:** 2026-06-03 (updated through Phase I execution)
 **Auditor:** Claude Code (codebase-audit skill + targeted phases)
 **Branch:** main

@@ -33,7 +33,7 @@ Curated reference for engineers, operators, and contributors. Everything in this
 
 ## Operations
 
-- [MIGRATIONS.md](./MIGRATIONS.md) — canonical migration path (`scripts/db/migrations/`), naming, idempotency rules, Neon application
+- [MIGRATIONS.md](./MIGRATIONS.md) — canonical migration path (`scripts/db/migrations/`), naming, idempotency rules, applied to the prod self-hosted Hetzner Postgres on deploy (tracked in `schema_migrations`)
 - [EMAIL_SETUP.md](./EMAIL_SETUP.md) — Listmonk + Brevo configuration
 - [RELIABILITY.md](./RELIABILITY.md) — uptime expectations, on-call practices
 - [CODE_AUDIT.md](./CODE_AUDIT.md) — running list of known issues being worked on

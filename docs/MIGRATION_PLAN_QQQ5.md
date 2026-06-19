@@ -1,7 +1,15 @@
 # QQQ.5 — DB Table + Column Rename Plan
 
-**Status**: Planned. Not executed yet. Touches the live Neon prod DB —
-needs explicit team sign-off before running.
+**Last Updated:** 2026-06-19
+
+**Status**: Planned. Not executed yet. Touches the live prod DB — needs
+explicit team sign-off before running.
+
+> Note: this plan was written pre-cutover (when prod ran on Neon). Prod is
+> now the self-hosted Postgres 17 on the Hetzner box
+> (`DATABASE_URL=…@localhost:5432/revampit`); the target of this migration
+> is that Hetzner DB. Operational references below have been updated
+> accordingly.
 
 ## Goal
 
@@ -97,7 +105,7 @@ Mock data, route tests that hard-code column names in expectations.
 
 ## Deploy choreography
 
-Postgres `RENAME` is metadata-only on Neon — near-instant, exclusive
+Postgres `RENAME` is metadata-only — near-instant, exclusive
 lock for milliseconds. The risk is the **inflight queries** racing
 the rename. Plan:
 
@@ -106,9 +114,12 @@ the rename. Plan:
 2. **Confirm dev/staging works** end-to-end against a copy of prod with
    migration applied.
 3. **Maintenance window** (off-hours, 5 min):
-   - Pause Vercel deploys.
-   - Apply migration directly to prod Neon via `\i` or migration runner.
-   - Immediately deploy the matching code.
+   - The deploy (GitHub Actions) auto-applies the migration to the prod
+     Hetzner DB before activating the new release — so shipping the
+     matching code applies the rename. To apply manually instead: ssh
+     `ubuntu@167.233.22.31`, read `DATABASE_URL` from
+     `/opt/revampit/app/.env`, and run the migration via `psql "$DATABASE_URL"`.
+   - Immediately deploy the matching code (if applied manually).
    - Verify smoke tests (login, browse /techniker, create IT-Hilfe
      request, accept offer).
 4. **Rollback plan** if anything breaks:
@@ -129,7 +140,7 @@ margin.
 
 ## Estimated cost
 
-- **Plan + dry-run on local Neon branch**: ~2 hours
+- **Plan + dry-run on a local/dev DB copy**: ~2 hours
 - **Code update + tests pass**: ~4 hours
 - **Maintenance window**: ~5 min DB + 5 min deploy + 10 min smoke test
 
@@ -139,5 +150,5 @@ margin.
    (dual-name shim during transition)?
 2. Do we keep the original `REPAIRER_PROFILES` config key name as an
    alias for one release, or hard-cut?
-3. Approval to apply the migration to prod Neon (the same kind of
-   explicit sign-off given for migration 086 in the past).
+3. Approval to apply the migration to the prod Hetzner DB (the same kind
+   of explicit sign-off given for migration 086 in the past).

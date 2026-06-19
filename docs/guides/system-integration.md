@@ -17,7 +17,7 @@ This report provides a comprehensive analysis of the Revamp-it website system, c
 - **Backend:** Strapi 4.17.1 (Headless CMS)
 - **Database:** PostgreSQL 14.5 (containerized)
 - **Containerization:** Docker with Docker Compose
-- **Deployment:** Vercel (production), Docker (local development)
+- **Deployment:** Self-hosted on the Hetzner box (systemd `revampit-app`, deployed via GitHub Actions → rsync); Docker (local development). Vercel is no longer used.
 
 ### Architecture Health: **🟡 Partially Operational**
 

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-15
-last_modified_summary: Added i18n:businessplan and Monitor-Upcycling mini-site doc pointer
+last_modified_date: 2026-06-19
+last_modified_summary: Deploy/DB ground truth — push-to-deploy via GitHub Actions to Hetzner, Neon/Vercel references corrected
 ---
 
 # RevampIT Commands Reference (SSOT)
@@ -83,14 +83,14 @@ npm run test:all       # Run all tests
 Production app: **https://revampit.orangecat.ch** (Hetzner self-host).
 Public legacy domain `revamp-it.ch` is still the old Joomla/Apache site and is not the production app.
 
-### Automatic (like Vercel on Neon)
+### Automatic (push-to-deploy)
 
 | Trigger | What happens |
 |---------|----------------|
 | `git push origin main` (local) | Pre-push hook builds + deploys in background → `/tmp/push-deploy-revampit.log` |
 | `git push origin main` (GitHub) | Actions workflow `.github/workflows/deploy-selfhost.yml` runs lint + typecheck, then deploys if secrets are set |
 
-Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or recreate from Neon/Vercel env.
+Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or recreate from the prod `/opt/revampit/app/.env`.
 
 **One-time GitHub secrets** (Settings → Secrets → Actions) for CI deploy when you push from anywhere:
 
@@ -105,8 +105,8 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 npm run deploy          # same as deploy:selfhost
 npm run deploy:selfhost # build standalone → release backup → activate → /api/health gate → rollback on failure
 npm run ship            # quality gate (typecheck, lint, build, tests)
-npm run deploy:vercel   # legacy Vercel script (project disabled)
-npm run migrate-to-prod # database migrations (Neon)
+npm run deploy:vercel   # legacy Vercel script (Vercel retired — not used for prod)
+npm run migrate-to-prod # database migrations against the prod self-hosted Hetzner Postgres
 ```
 
 Operational checks:
@@ -145,6 +145,6 @@ npm run prod:down      # Stop production containers
 
 ---
 
-**Last Updated**: 2026-06-15  
-**Last Modified Summary**: Push-to-deploy docs (husky pre-push + GitHub Actions); `npm run deploy` → self-host.  
+**Last Updated**: 2026-06-19  
+**Last Modified Summary**: Corrected stale Neon/Vercel references; push-to-deploy via GitHub Actions → self-hosted Hetzner.  
 **Source**: `package.json`

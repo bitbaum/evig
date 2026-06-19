@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-16
-last_modified_summary: Customer journeys IA — IT-Hilfe hub, techniker under /it-hilfe/techniker
+last_modified_date: 2026-06-19
+last_modified_summary: DB/deploy/storage ground truth — Neon retired for prod+auth, self-hosted Hetzner Postgres, Cloudflare R2
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -29,8 +29,9 @@ last_modified_summary: Customer journeys IA — IT-Hilfe hub, techniker under /i
 | Backend | Next.js API Routes | — |
 | Auth | Auth.js v5, Credentials, JWT sessions | Same login for `/dashboard` and `/admin` — see `docs/UNIFIED_AUTH.md` |
 | E-commerce | Custom (inventory-based) | Integrated |
-| Database/Search | PostgreSQL (Neon prod; Docker 5433 local), Redis (6380), Meilisearch (7700) | Drizzle ORM; production Meilisearch runs as localhost-only Docker container `revampit_meilisearch` on Hetzner |
-| Deploy | Hetzner production app (revampit.orangecat.ch), push-to-deploy; Vercel disabled | See `docs/COMMANDS.md` |
+| Database/Search | PostgreSQL (prod: self-hosted Postgres 17 on Hetzner via `DATABASE_URL`; dev: Neon cloud / Docker 5433 local), Redis (6380), Meilisearch (7700) | Drizzle ORM; auth shares the same `DATABASE_URL` pool (no separate AUTH_DB — Neon fully retired for prod + auth). Production Meilisearch runs as localhost-only Docker container `revampit_meilisearch` on Hetzner |
+| Deploy | GitHub Actions → self-hosted Hetzner app (revampit.orangecat.ch), systemd `revampit-app`; Vercel not used | See `docs/COMMANDS.md` |
+| Storage | Cloudflare R2 (S3-compatible, bucket `revampit-media`) for product/listing images; `public/uploads` local fallback | Configured via `S3_*` env vars |
 
 ---
 
@@ -104,4 +105,4 @@ Public sub-site at `/projects/upcycling/*`. Routes, reading flow, gallery, busin
 
 Nav dropdown labels for projects live under **`nav.items.*`** in locale files; use `nav-i18n.ts` helpers in header components.
 
-**Last Updated**: 2026-06-15
+**Last Updated**: 2026-06-19

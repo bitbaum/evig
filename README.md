@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000.svg)](https://nextjs.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791.svg)](https://neon.tech/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Self--hosted-336791.svg)](https://www.postgresql.org/)
 [![Production](https://img.shields.io/badge/Production-revampit.orangecat.ch-green.svg)](https://revampit.orangecat.ch)
 
 Revamp-IT is a Swiss non-profit association (Verein) operating since 2003 in Zürich. We accept donated computers, refurbish them, and redistribute them — to people who can't reach the commercial channel, to schools and community projects, and through our marketplace. We also run repair workshops and an open IT-Hilfe (IT help) program so the people we serve learn to keep their devices running themselves. This repository is the platform we use to run all of it.
@@ -36,7 +36,7 @@ The platform is the operational backbone for all five. It is open-source ([MIT](
 
 ## Architecture
 
-The application is a single Next.js 16 app with App Router for both pages and API routes. Data lives in a Neon-hosted PostgreSQL, accessed through Drizzle ORM. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email is delivered via Listmonk with Nodemailer / Brevo as fallback.
+The application is a single Next.js 16 app with App Router for both pages and API routes. In production, data lives in a self-hosted PostgreSQL 17 on the Hetzner box (Neon is fully retired for prod and auth; dev may still use Neon), accessed through Drizzle ORM. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter, sharing the same connection pool as the app via `DATABASE_URL`. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email is delivered via Listmonk with Nodemailer / Brevo as fallback. Product/listing images are stored in Cloudflare R2 (S3-compatible).
 
 ### TABLE_NAMES as Single Source of Truth
 
@@ -91,15 +91,16 @@ These are enforced, not suggested:
 | Layer | Technology |
 |-------|------------|
 | Framework | Next.js 16 (App Router), React 18, TypeScript 5, Tailwind 3 |
-| Database | Neon PostgreSQL (cloud), Drizzle ORM |
-| Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter |
+| Database | PostgreSQL (prod: self-hosted on Hetzner; dev: Neon cloud), Drizzle ORM |
+| Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter (shares the app `DATABASE_URL` pool) |
 | Search | Meilisearch |
 | Payments | Payrexx (Swiss-based; ZKB / Twint / card) |
 | Email | Listmonk (primary), Nodemailer / Brevo (fallback) |
+| Storage | Cloudflare R2 (S3-compatible) for product/listing images |
 | Rate limiting | Redis (upstash) |
 | AI | HIRN (in-house provider stack: Groq → OpenRouter → Ollama cascade) |
 | Testing | Jest (7,500+ tests), Playwright (E2E) |
-| CI/CD | GitHub Actions, Vercel |
+| CI/CD | GitHub Actions → self-hosted Hetzner deploy (systemd `revampit-app`) |
 
 <details>
 <summary><strong>Quick Start</strong></summary>
@@ -107,7 +108,7 @@ These are enforced, not suggested:
 ### Prerequisites
 
 - Node.js 20+
-- A Neon PostgreSQL account (free tier works)
+- A PostgreSQL database (a Neon free-tier account works for local dev)
 - Optional: Meilisearch, Redis, Listmonk for full feature coverage
 
 ### Setup
@@ -125,7 +126,7 @@ npm run dev                    # Next.js on :3000
 
 At minimum, configure:
 
-- `DATABASE_URL` -- Neon PostgreSQL connection string (sslmode=require)
+- `DATABASE_URL` -- PostgreSQL connection string (for local dev, a Neon URL with `sslmode=require` works; prod points at the self-hosted Hetzner Postgres)
 - `AUTH_SECRET` -- 32+ char random string for NextAuth JWT signing
 - `PAYREXX_INSTANCE` / `PAYREXX_API_SECRET` / `PAYREXX_WEBHOOK_SECRET` -- payment integration
 - `LISTMONK_URL` + Listmonk credentials -- email delivery
@@ -161,7 +162,7 @@ Defined in `.github/workflows/ci.yml`:
 2. **Auth Smoke Test** -- Playwright, runs conditionally
 3. **Unit Tests** -- Jest, PR only
 
-Vercel handles production deployment on merge to `main`.
+On merge to `main`, the `.github/workflows/deploy-selfhost.yml` workflow lints, type-checks, builds the Next standalone bundle, rsyncs it to the Hetzner box, and restarts the systemd `revampit-app` service (with a page-render rollback gate). Vercel is not used for production.
 
 ## Project Structure
 

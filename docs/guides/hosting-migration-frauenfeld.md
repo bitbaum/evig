@@ -1,5 +1,7 @@
 # Hosting Migration Guide: Vercel → Datacenter Thurgau (Frauenfeld)
 
+> **✅ COMPLETED / HISTORICAL.** This guide planned the move off Vercel to self-hosting. The cutover is done — production now runs on a self-hosted Hetzner box (`revampit.orangecat.ch`), deployed via GitHub Actions (see `docs/guides/deployment.md`). Kept for historical reference; details below (Frauenfeld/Docker specifics) may differ from the final Hetzner setup.
+
 **Created:** 2026-01-05  
 **Last Modified:** 2026-01-05  
 **Last Modified Summary:** Initial migration guide for moving from Vercel to Datacenter Thurgau in Frauenfeld

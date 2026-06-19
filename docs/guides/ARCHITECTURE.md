@@ -1,5 +1,7 @@
 # RevampIT Architecture Guide
 
+> **⚠️ HISTORICAL / SUPERSEDED.** Describes an earlier architecture (Strapi CMS / Vercel). Current production is a single Next.js app on a self-hosted Hetzner box (Postgres 17 local, Cloudflare R2 images, GitHub Actions deploy). See `docs/SHARED_CONTEXT.md` and `docs/guides/deployment.md`.
+
 ## Overview
 
 RevampIT uses a modern, scalable architecture designed for sustainability, performance, and ease of content management by non-technical users.

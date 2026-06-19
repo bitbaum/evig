@@ -1,5 +1,7 @@
 # Database Audit — RevampIT (Neon Postgres)
 
+> **⚠️ HISTORICAL (pre-2026-06 cutover).** This audit describes the retired Neon Postgres setup. Production is now self-hosted Postgres 17 on Hetzner; backups are on Cloudflare R2 (see `docs/DISASTER_RECOVERY.md` and `scripts/ops/README.md`). Kept for historical reference.
+
 **Date:** 2026-06-03
 **Auditors:** 4-expert panel via parallel subagents (schema, performance, ops, security)
 **Database:** Neon Postgres production (`ep-wild-firefly-agqw8118` region `eu-central-1`)

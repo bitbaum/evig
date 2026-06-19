@@ -1,8 +1,17 @@
 # Production-Ready Checklist: RevampIT Migration to Frauenfeld
 
 **Created:** 2026-01-05
-**Last Modified:** 2026-01-05
-**Last Modified Summary:** Complete production migration automation
+**Last Modified:** 2026-06-19
+**Last Modified Summary:** Status note — cutover already happened to the Hetzner box; single DATABASE_URL pool
+
+> **ℹ️ Status (2026-06-19):** The cutover to production has already happened. Live
+> prod runs on the **self-hosted Hetzner box** (`revampit.orangecat.ch`, ssh
+> `ubuntu@167.233.22.31`) — app + self-hosted Postgres 17 on one server, deployed via
+> GitHub Actions → rsync → systemd, with nightly backups to Cloudflare R2. The
+> Frauenfeld / Datacenter Thurgau plan below was the original target and did not
+> ship as written; treat it as historical context, not the current runbook. For the
+> current flow see `scripts/selfhost-deploy-revampit.sh`, `scripts/ops/README.md`,
+> and `docs/DISASTER_RECOVERY.md`.
 
 ---
 
@@ -52,6 +61,12 @@ cp environment.example .env
 # Edit .env with your production values (database passwords, email settings, etc.)
 nano .env
 ```
+
+> **DB env vars:** prod uses a **single `DATABASE_URL`** for both the app (Drizzle)
+> and auth (NextAuth + @auth/pg-adapter) — `getDbConfig()` prefers it and shares one
+> pool. There is **no** separate `AUTH_DB_*` / auth database to configure (that split
+> pattern is retired). On the live box it points at the local Postgres:
+> `DATABASE_URL=postgresql://…@localhost:5432/revampit`.
 
 ### Step 2: Get Server from Datacenter Thurgau
 1. Contact **Datacenter Thurgau** (+41 71 440 66 60)

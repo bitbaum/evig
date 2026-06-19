@@ -1,413 +1,210 @@
 # RevampIT Deployment Guide
 
-**Created:** 2024-12-29  
-**Last Modified:** 2025-01-XX  
-**Last Modified Summary:** Added GitHub Actions + Vercel automated deployment setup
+**Created:** 2024-12-29
+**Last Updated:** 2026-06-19
+**Summary:** Production deploys run via GitHub Actions → Hetzner self-host. Vercel is retired.
 
-This guide covers multiple deployment methods for RevampIT:
-1. **GitHub + Vercel (Recommended)** - Automated CI/CD from main branch
-2. **Manual CLI Deployment** - Local deployment using scripts
+Production runs on a **self-hosted Next.js standalone build on a Hetzner box**
+(`ubuntu@167.233.22.31`), served at **`https://revampit.orangecat.ch`** behind
+`systemd` (`revampit-app`). **Vercel is no longer used for production.**
 
-## 🚀 Method 1: GitHub + Vercel Automated Deployment (Recommended)
-
-This is the recommended approach for production deployments. Every push to the `main` branch automatically triggers:
-- Code quality checks (linting, type checking)
-- Build verification
-- Automatic deployment to Vercel
-
-### Initial Setup
-
-1. **Connect GitHub Repository to Vercel:**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "Add New Project"
-   - Import your GitHub repository
-   - Configure project settings:
-     - Framework Preset: Next.js
-     - Root Directory: `/` (project root)
-     - Build Command: `npm run build`
-     - Output Directory: `.next`
-     - Install Command: `npm ci`
-
-2. **Configure Environment Variables:**
-   - In Vercel project settings, add all required environment variables
-   - These should match your `.env.local` file (but never commit secrets!)
-   - Required variables:
-     - `NEXTAUTH_URL` - Production URL
-     - `NEXTAUTH_SECRET` - Secure random string
-     - `AUTH_DB_*` - Database connection strings
-     - Any other environment variables your app needs
-
-3. **Verify Vercel Configuration:**
-   - The `vercel.json` file is already configured to deploy from `main` branch
-   - Vercel will automatically detect pushes to `main` and deploy
-
-4. **GitHub Actions CI/CD:**
-   - The repository includes `.github/workflows/ci.yml` for automated checks
-   - Runs on every push and pull request
-   - Ensures code quality before deployment
-
-### How It Works
-
-1. **Developer pushes to main branch:**
-   ```bash
-   git push origin main
-   ```
-
-2. **GitHub Actions runs:**
-   - Linting and type checking
-   - Build verification
-   - Test execution (if configured)
-
-3. **Vercel automatically deploys:**
-   - Detects the push to `main` branch
-   - Builds the application
-   - Deploys to production
-   - Provides deployment URL
-
-### Deployment Workflow
-
-```
-Developer → Push to main → GitHub Actions (CI) → Vercel (Deploy) → Production
-```
-
-### Monitoring Deployments
-
-- **GitHub Actions:** Check `.github/workflows/ci.yml` status in GitHub
-- **Vercel Dashboard:** View deployments at [vercel.com/dashboard](https://vercel.com/dashboard)
-- **Deployment URLs:** 
-  - Current production app: `https://revampit.orangecat.ch`
-  - Preview: Each PR gets a preview deployment URL
-
-### Troubleshooting GitHub + Vercel Setup
-
-**Vercel not deploying automatically:**
-- Verify GitHub integration in Vercel project settings
-- Check that `vercel.json` has `"main": true` in git.deploymentEnabled
-- Ensure repository is properly connected in Vercel
-
-**Build failures:**
-- Check Vercel build logs in dashboard
-- Verify all environment variables are set
-- Ensure `package.json` build script is correct
-
-**GitHub Actions failing:**
-- Check workflow logs in GitHub Actions tab
-- Fix linting/type errors locally first
-- Ensure Node.js version matches (currently 20)
+There is exactly **one** production deploy method: **push to `main`**. GitHub
+Actions does the rest.
 
 ---
 
-## 🛠️ Method 2: Manual CLI Deployment
+## The deploy flow
 
-This guide will help you set up the **fully automated** deployment system using local scripts. Just type `w` + Enter and your website deploys automatically - no prompts, no questions, zero manual steps!
+```
+Developer
+   │  git push origin main
+   ▼
+GitHub Actions  (.github/workflows/deploy-selfhost.yml)
+   │  npm ci → npm run lint → npm run typecheck
+   │  write .env.selfhost.local (from SELFHOST_ENV secret)
+   │  set up SSH (from HETZNER_SSH_PRIVATE_KEY secret)
+   │  bash scripts/selfhost-deploy-revampit.sh
+   ▼
+Build standalone output in the runner
+   │
+   ▼
+Apply unrecorded scripts/db/migrations/*.sql to PROD Postgres  (before activating)
+   │
+   ▼
+rsync release → ubuntu@167.233.22.31:/opt/revampit/releases/<id>
+   │  swap /opt/revampit/app → release
+   │  systemctl restart revampit-app
+   ▼
+Health gate: GET /api/health  AND  real page render on http://localhost:4004/
+   │
+   ├─ pass → live at https://revampit.orangecat.ch
+   └─ fail → auto-rollback to /opt/revampit/app.previous
+```
 
-## 🚀 Quick Start
+`concurrency: cancel-in-progress` is set on the workflow, so two pushes in quick
+succession won't clobber each other — the older run is cancelled and the latest
+push wins.
 
-1. **Run the setup script:**
-   ```bash
-   ./setup-deploy-keybind.sh
-   ```
+---
 
-2. **Choose your preferred method (recommended: option 5 - All of the above)**
+## How it works (step by step)
 
-3. **Install prerequisites:**
-   ```bash
-   # Install Vercel CLI
-   npm install -g vercel
-   
-   # Install GitHub CLI (Ubuntu/Debian)
-   sudo apt install gh
-   
-   # Login to services
-   vercel login
-   gh auth login
-   vercel link
-   ```
+### Trigger
 
-4. **Test the deployment:**
-   ```bash
-   # Try any of these:
-   w                    # Short alias
-   deploy              # Descriptive alias
-   npm run deploy      # NPM script
-   ./deploy.sh         # Direct execution
-   ```
+Any push to `main` starts the **"Deploy production app"** workflow
+(`.github/workflows/deploy-selfhost.yml`). Nothing else deploys to production.
 
-## 🎯 What You Get
+### What GitHub Actions runs
 
-### Instant Deployment
-- Press `w` or `Ctrl+W` to deploy
-- Fully automated best-practices workflow
-- Real-time status updates with colors
-- Automatic error handling and retries
+1. **Checkout** the pushed commit.
+2. **Setup Node 20** (with npm cache).
+3. **`npm ci`** — clean install.
+4. **`npm run lint`** — ESLint. A failure here fails the workflow and **nothing
+   is deployed**.
+5. **`npm run typecheck`** — TypeScript. Same: failure aborts the deploy.
+6. **Write `.env.selfhost.local`** from the `SELFHOST_ENV` repo secret
+   (`chmod 600`).
+7. **Setup SSH** from the `HETZNER_SSH_PRIVATE_KEY` repo secret, and add the
+   Hetzner host to `known_hosts`.
+8. **Run `bash scripts/selfhost-deploy-revampit.sh`** — the actual deploy.
 
-### Smart Workflow
-- ✅ Auto-commits uncommitted changes (with timestamp)
-- ✅ Auto-creates feature branches (avoids direct main pushes)
-- ✅ Runs linting and build tests
-- ✅ Auto-creates and merges Pull Requests (with GitHub CLI)
-- ✅ Monitors Vercel deployment with retries
-- ✅ Shows deployment status and logs
-- ✅ **Zero prompts - completely automated!**
+If either required secret is missing, the workflow logs a notice and exits
+cleanly without deploying (see Troubleshooting).
 
-### Error Handling
-- Automatic retry on deployment failures (up to 3 times)
-- Detailed error messages with troubleshooting hints
-- Deployment log monitoring
-- Graceful fallback to manual steps
+### What the deploy script does
 
-### Complete Transparency
-- ✅ **See actual command output** from linting and builds
-- ✅ **View real-time git commands** being executed  
-- ✅ **Get clickable links** to GitHub, PRs, and deployments
-- ✅ **Monitor live deployment** with Vercel dashboard links
-- ✅ **Verify every step** - no hidden processes
-- ✅ **Copy commands** to run manually if needed
+`scripts/selfhost-deploy-revampit.sh`:
 
-## 🔧 Setup Options Explained
+1. **Builds the Next.js standalone output** locally in the runner.
+2. **Applies pending DB migrations to PROD first.** Any
+   `scripts/db/migrations/*.sql` not yet recorded in the `schema_migrations`
+   table on the production Hetzner Postgres is applied **before** the new release
+   is activated. A migration failure aborts the deploy (the running release is
+   left untouched).
+3. **Rsyncs the release** to `/opt/revampit/releases/<id>` on
+   `ubuntu@167.233.22.31`.
+4. **Swaps the symlink** `/opt/revampit/app` → the new release.
+5. **Restarts the service**: `systemctl restart revampit-app`.
+6. **Health-gates** the new release on **both**:
+   - `GET /api/health`, and
+   - a real page render on `http://localhost:4004/`.
 
-### Option 1: Bash Key Binding
-- Press `Ctrl+W` in bash terminal to deploy
-- Works in any bash terminal session
-- Requires restart or `source ~/.bashrc`
+   If **either** check fails, it **auto-rolls back** to
+   `/opt/revampit/app.previous` and restarts, so a bad build never stays live.
 
-### Option 2: Terminal Aliases
-- Type `w` or `deploy` in any terminal
-- Works from any directory
-- Simple and intuitive
+**Persistent uploads:** user uploads live in `/opt/revampit/uploads` and are
+symlinked into each release's `public/uploads`, so they survive release swaps.
 
-### Option 3: Tmux Key Binding
-- Press `tmux-prefix + w` to deploy
-- Great for tmux users
-- Requires tmux configuration reload
+---
 
-### Option 4: Desktop Entry
-- Creates system application entry
-- Can be bound to global keyboard shortcuts
-- Works system-wide, not just in terminal
+## Required GitHub repo secrets
 
-### Option 5: All Methods
-- **Recommended**: Sets up all options above
-- Maximum flexibility
-- Use whatever method suits the moment
+Set these once under **Settings → Secrets and variables → Actions → New
+repository secret**:
 
-## 📋 Prerequisites Setup
+| Secret | Purpose |
+|--------|---------|
+| `HETZNER_SSH_PRIVATE_KEY` | Private SSH key for `ubuntu@167.233.22.31`. Used to rsync the release and run remote `systemctl` commands. |
+| `SELFHOST_ENV` | Full contents of `.env.selfhost.local` (multiline). Written to disk in the runner so the build/deploy has the production env. |
 
-### Required Tools
+Without both, the workflow skips the deploy and logs a notice.
+
+To set a secret via the GitHub CLI instead of the dashboard:
 
 ```bash
-# Node.js and npm (should be installed)
-node --version
-npm --version
-
-# Install Vercel CLI globally
-npm install -g vercel
-
-# Login to Vercel
-vercel login
-
-# Link your project to Vercel
-vercel link
+gh secret set HETZNER_SSH_PRIVATE_KEY < /path/to/private_key
+gh secret set SELFHOST_ENV < /path/to/.env.selfhost.local
 ```
 
-### Optional but Recommended
+---
+
+## Monitoring a deploy
+
+- **GitHub Actions tab** → "Deploy production app" run. Each step (lint,
+  typecheck, deploy) shows live logs.
+- Or from the CLI:
+  ```bash
+  gh run list --workflow=deploy-selfhost.yml
+  gh run watch          # follow the latest run
+  ```
+- A deploy is **only** done when the workflow's Deploy step finishes green — that
+  means the health gate passed on the box. **Never report a feature as deployed
+  before the run is green.**
+
+---
+
+## Manual deploy (in a pinch)
+
+The local `.husky/pre-push` hook is **disabled** (`exit 0`) — CI owns production
+deploys. If you must deploy from a developer machine (e.g. Actions is down), and
+you have a valid `.env.selfhost.local` (gitignored) plus SSH access to the box:
 
 ```bash
-# Install GitHub CLI for automatic PR handling
-sudo apt install gh
-
-# Login to GitHub
-gh auth login
-
-# Test GitHub access
-gh repo view
+npm run deploy:selfhost
 ```
 
-## 🔍 How It Works
-
-### The Deployment Process
-
-1. **Pre-flight Checks**
-   - Verifies git repository
-   - Checks for uncommitted changes
-   - Prompts for commit message if needed
-
-2. **Branch Management**
-   - Creates feature branch if on main
-   - Handles branch naming conventions
-   - Follows git workflow best practices
-
-3. **Quality Checks**
-   - Runs `npm run lint`
-   - Runs `npm run build`
-   - Exits on build failures
-
-4. **Git Operations**
-   - Pushes branch to origin
-   - Creates Pull Request (if GitHub CLI available)
-   - Auto-merges PR
-   - Updates main branch
-
-5. **Deployment Monitoring**
-   - Monitors Vercel deployment status
-   - Shows real-time progress
-   - Displays deployment logs
-   - Retries on failures
-
-6. **Success Summary**
-   - Shows deployment URL
-   - Lists completed actions
-   - Provides next steps
-
-## 🎨 Terminal Output
-
-The script provides colorful, clear output:
-- 🟢 **Green**: Success messages
-- 🔵 **Blue**: Information and progress
-- 🟡 **Yellow**: Warnings
-- 🔴 **Red**: Errors
-
-Example output with **complete transparency**:
-```
-🚀 RevampIT Automated Deployment
-==================================================
-🚀 Starting fully automated deployment process...
-📅 Started at: Sun Dec 29 15:30:45 CET 2024
-📁 Repository: yourusername/revampit
-👉 GitHub: https://github.com/yourusername/revampit
-
-🔧 Running Quality Checks
-==================================================
-🔍 Running ESLint (you can see the actual output)...
-Command: npm run lint
-----------------------------------------
-✅ Linting passed!
-
-🏗️  Running build test (you can see the actual output)...
-Command: npm run build
-----------------------------------------
-✅ Build successful!
-
-📤 Git Operations  
-==================================================
-Command: git push origin feature/auto-deploy-20241229-153045
-----------------------------------------
-✅ Branch pushed successfully!
-👉 View branch on GitHub: https://github.com/yourusername/revampit/tree/feature/auto-deploy-20241229-153045
-
-🔍 Monitoring Vercel Deployment
-==================================================
-👉 Monitor deployment live at: https://vercel.com/dashboard
-Command: vercel ls --limit 3
-----------------------------------------
-🎉 Deployment successful!
-Your website is live!
-
-🎉 Deployment Complete!
-==================================================
-🔗 Important Links (Click to Open)
-📁 GitHub Repository: https://github.com/yourusername/revampit
-🚀 Vercel Dashboard: https://vercel.com/dashboard  
-🌐 Production app: https://revampit.orangecat.ch
-```
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-**"Command not found: w"**
-- Run `source ~/.bashrc` or restart terminal
-- Verify setup completed successfully
-
-**"Not in a git repository"**
-- Ensure you're in the project directory
-- Check if `.git` folder exists
-
-**"Build failed"**
-- Fix linting/build errors first
-- Run `npm run lint` and `npm run build` manually
-
-**"GitHub CLI not available"**
-- Install with: `sudo apt install gh`
-- Or manually create PRs as instructed
-
-**Deployment monitoring fails**
-- Install Vercel CLI: `npm install -g vercel`
-- Login: `vercel login`
-- Link project: `vercel link`
-
-### Getting Help
-
-1. Check the detailed documentation: `docs/DEPLOYMENT.md`
-2. Run with verbose output: `./deploy.sh --help`
-3. Check script logs and error messages
-4. Ensure all prerequisites are installed
-
-## 🔄 Updates and Maintenance
-
-The deployment scripts are designed to be:
-- **Self-contained**: All logic in the scripts
-- **Maintainable**: Clear functions and comments
-- **Extensible**: Easy to modify for your needs
-- **Robust**: Error handling and recovery
-
-To update the scripts:
-1. Modify `deploy.sh` or `setup-deploy-keybind.sh`
-2. Test changes with `./deploy.sh`
-3. Update this documentation if needed
-
-## 📚 Additional Resources
-
-- [Full Deployment Documentation](docs/DEPLOYMENT.md)
-- [Vercel CLI Documentation](https://vercel.com/docs/cli)
-- [GitHub CLI Documentation](https://cli.github.com/manual/)
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Project README](README.md)
+This runs the same `scripts/selfhost-deploy-revampit.sh` locally: build →
+migrate → rsync → restart → health gate → rollback on failure. Prefer pushing to
+`main` whenever possible so lint/typecheck and concurrency control still apply.
 
 ---
 
-## 🔄 Choosing Your Deployment Method
+## Troubleshooting
 
-### When to Use GitHub + Vercel (Method 1) ✅ Recommended
+### Workflow fails at the Lint or Type check step
 
-**Best for:**
-- Production deployments
-- Team collaboration
-- Automated CI/CD pipelines
-- Multiple developers
-- Long-term maintenance
+The deploy never started — nothing changed in production. Fix locally and push
+again:
 
-**Advantages:**
-- ✅ Fully automated - no manual steps
-- ✅ Built-in preview deployments for PRs
-- ✅ Automatic rollback on failures
-- ✅ Deployment history and logs
-- ✅ No local dependencies required
-- ✅ Works for all team members
+```bash
+npm run lint
+npm run typecheck
+```
 
-### When to Use Manual CLI (Method 2)
+### Workflow skips with a "secrets not set" notice
 
-**Best for:**
-- Quick local testing
-- Development workflows
-- Single developer projects
-- Custom deployment scripts
-- Learning/debugging
+`HETZNER_SSH_PRIVATE_KEY` and/or `SELFHOST_ENV` is missing or empty. Add both
+repo secrets (see above) and re-run the workflow.
 
-**Advantages:**
-- ✅ Full control over deployment process
-- ✅ Can test locally before pushing
-- ✅ Useful for debugging deployment issues
-- ✅ Works offline (after initial setup)
+### SSH / "Permission denied" or host key errors in the Deploy step
 
-### Recommendation
+- The `HETZNER_SSH_PRIVATE_KEY` secret is wrong, truncated, or for the wrong key
+  pair. Re-set it with the correct private key for `ubuntu@167.233.22.31`.
+- If the box's host key changed, the `ssh-keyscan` step still runs each time, so
+  stale `known_hosts` isn't usually the cause — focus on the key value.
 
-**For production:** Use **Method 1 (GitHub + Vercel)** - it's the industry standard, fully automated, and requires zero maintenance once set up.
+### Deploy aborts during migrations
 
-**For development:** Use **Method 2 (Manual CLI)** when you need to test deployments locally or debug issues.
+A `scripts/db/migrations/*.sql` failed to apply to the PROD Hetzner Postgres. The
+running release is **left in place** (no swap happened). Read the workflow logs
+for the failing SQL, fix the migration, and push again. To apply/inspect
+manually: `ssh ubuntu@167.233.22.31`, read `DATABASE_URL` from
+`/opt/revampit/app/.env`, and run the `.sql` against `psql "$DATABASE_URL"` in a
+transaction, then record it in `schema_migrations`.
+
+### Release deployed but auto-rolled back
+
+The health gate failed — either `GET /api/health` or the real page render on
+`http://localhost:4004/` didn't succeed, so the script reverted to
+`/opt/revampit/app.previous`. Production is still on the previous good release.
+Check the workflow logs and the service:
+
+```bash
+ssh ubuntu@167.233.22.31
+journalctl -u revampit-app -n 100 --no-pager
+systemctl status revampit-app
+```
+
+Common causes: a runtime env var missing from `SELFHOST_ENV`, a component that
+throws during SSR on the home page, or a migration that changed schema the new
+code didn't expect.
 
 ---
 
-**Happy Deploying!** 🚀
+## Related
 
-Choose the method that best fits your workflow. For most teams, the GitHub + Vercel integration provides the best balance of automation, reliability, and ease of use.
+- Workflow: `.github/workflows/deploy-selfhost.yml`
+- Deploy script: `scripts/selfhost-deploy-revampit.sh`
+- DB / prod environment notes: project `CLAUDE.md` → "Database Configuration"
+- GitHub secrets reference: `docs/guides/github-vercel-setup.md` (legacy filename;
+  see note at its top)

@@ -45,7 +45,9 @@ Edit `.env.local` with your configuration:
 NEXT_PUBLIC_API_URL=http://localhost:3001
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-# Database (for frontend if needed)
+# Database — DATABASE_URL is the single connection source (app + auth share this pool).
+# For local dev, point it at your own Postgres (local Docker, or a Neon cloud URL with sslmode=require).
+# Production uses a self-hosted Postgres 17 on the Hetzner box (Neon is fully retired for prod + auth).
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/revampit_db
 ```
 

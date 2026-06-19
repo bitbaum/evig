@@ -1,5 +1,7 @@
 # RevampIT Backend & Content Management Guide
 
+> **⚠️ HISTORICAL / SUPERSEDED.** Describes an earlier architecture (Strapi CMS / Vercel). Current production is a single Next.js app on a self-hosted Hetzner box (Postgres 17 local, Cloudflare R2 images, GitHub Actions deploy). See `docs/SHARED_CONTEXT.md` and `docs/guides/deployment.md`.
+
 **Last Updated**: September 2025  
 **Status**: ✅ **WORKING SYSTEM** - Custom CMS API Operational
 
