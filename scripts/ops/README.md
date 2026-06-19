@@ -66,3 +66,39 @@ ssh "$BOX" '
 # verify with a one-off run
 ssh "$BOX" 'sudo systemctl start revampit-backup.service && journalctl -u revampit-backup.service -n 20 --no-pager'
 ```
+
+## Self-hosted crons (`run-cron.sh` + `revampit-cron@<job>.timer`)
+
+The 4 cron jobs that ran on Vercel before the cutover are now systemd timers on
+the box (Vercel no longer runs anything). `run-cron.sh <endpoint>` curls
+`http://localhost:4004/api/cron/<endpoint>` with `Authorization: Bearer
+$CRON_SECRET` (read from `/opt/revampit/app/.env`) and fails non-zero on any
+non-200, so a failed run shows up in `systemctl`/journald.
+
+| Timer | Endpoint | Schedule (UTC) |
+|---|---|---|
+| `revampit-cron@close-decisions.timer`         | `/api/cron/close-decisions`         | 00:00 |
+| `revampit-cron@close-it-hilfe-requests.timer` | `/api/cron/close-it-hilfe-requests` | 01:00 |
+| `revampit-cron@prune-audit-log.timer`         | `/api/cron/prune-audit-log`         | 02:00 |
+| `revampit-cron@wake-recurring-tasks.timer`    | `/api/cron/wake-recurring-tasks`    | 07:00 |
+
+`CRON_SECRET` must be set in `/opt/revampit/app/.env` (without it the routes skip
+auth and are publicly triggerable). It is preserved across deploys (the deploy
+excludes `.env` from rsync and copies the existing one forward).
+
+### Install / update on the box
+
+```bash
+BOX=ubuntu@167.233.22.31
+rsync -az -e ssh scripts/ops/run-cron.sh "$BOX:/tmp/" && \
+  ssh "$BOX" 'sudo mv /tmp/run-cron.sh /opt/revampit/ops/ && sudo chmod +x /opt/revampit/ops/run-cron.sh'
+rsync -az -e ssh scripts/ops/revampit-cron@*.service scripts/ops/revampit-cron@*.timer "$BOX:/tmp/"
+ssh "$BOX" '
+  sudo mv /tmp/revampit-cron@*.service /tmp/revampit-cron@*.timer /etc/systemd/system/
+  sudo systemctl daemon-reload
+  for j in close-decisions close-it-hilfe-requests prune-audit-log wake-recurring-tasks; do
+    sudo systemctl enable --now "revampit-cron@$j.timer"
+  done
+'
+# one-off test: sudo systemctl start revampit-cron@close-decisions.service && journalctl -u revampit-cron@close-decisions.service -n5
+```
