@@ -205,7 +205,6 @@ export function Header() {
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         navigationItems={mainNavigation}
-        triggerRef={mobileMenuTriggerRef}
       />
     </>
   )

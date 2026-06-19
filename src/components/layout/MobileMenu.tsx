@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from '@/i18n/navigation'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { useRouter } from 'next/navigation'
 import { X, ChevronDown, ExternalLink, ArrowRight } from 'lucide-react'
 import { createPortal } from 'react-dom'
@@ -22,7 +23,6 @@ interface MobileMenuProps {
   isOpen: boolean
   onClose: () => void
   navigationItems: NavigationItem[]
-  triggerRef?: React.RefObject<HTMLButtonElement | null>
 }
 
 /**
@@ -33,7 +33,6 @@ export function MobileMenu({
   isOpen,
   onClose,
   navigationItems,
-  triggerRef,
 }: MobileMenuProps) {
   const router = useRouter()
   const { data: session } = useSession()
@@ -47,7 +46,9 @@ export function MobileMenu({
     if (!key) return null
     try { return tBadge(key as never) } catch { return key }
   }
-  const menuPanelRef = useRef<HTMLDivElement>(null)
+  // Escape-to-close, initial focus, focus restore (to the hamburger trigger)
+  // and the Tab trap all live in the shared hook; attach its ref to the panel.
+  const menuPanelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
 
@@ -57,30 +58,15 @@ export function MobileMenu({
     return () => cancelAnimationFrame(frame)
   }, [])
 
-  // Handle escape key
+  // Lock body scroll while the menu is open.
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose()
-      }
-    }
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [isOpen, onClose])
-
-  // Handle body scroll lock and focus
-  useEffect(() => {
-    if (isOpen) {
-      menuPanelRef.current?.focus()
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-      triggerRef?.current?.focus()
-    }
+    if (!isOpen) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.overflow = prevOverflow
     }
-  }, [isOpen, triggerRef])
+  }, [isOpen])
 
   const handleNavigation = (href: string) => {
     if (href === '#') return
