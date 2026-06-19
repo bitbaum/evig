@@ -36,7 +36,10 @@ jest.mock('@/lib/api/middleware', () => ({
 
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
+const mockInnerJoin = jest.fn()
 
+// Route chain: db.select({...}).from(listings).innerJoin(users, eq(...))
+// innerJoin is the terminal awaited step and resolves to the row array.
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
@@ -45,10 +48,11 @@ jest.mock('@/db', () => ({
 
 jest.mock('@/db/schema', () => ({
   listings: {
-    id: 'l_id', status: 'l_status', verifiedAt: 'l_verifiedAt', isRevampit: 'l_isRevampit',
+    id: 'l_id', status: 'l_status', verifiedAt: 'l_verifiedAt', isRevampit: 'l_isRevampit', sellerId: 'l_sellerId',
   },
   listingReports: { status: 'lr_status' },
   marketplaceOrders: { status: 'mo_status', amountChf: 'mo_amountChf' },
+  users: { id: 'u_id', email: 'u_email' },
 }))
 
 jest.mock('drizzle-orm', () => ({
@@ -56,6 +60,7 @@ jest.mock('drizzle-orm', () => ({
     (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
     { raw: (s: string) => ({ __raw: s }) }
   ),
+  eq: (...args: unknown[]) => ({ __eq: args }),
 }))
 
 jest.mock('@/config/database', () => ({
@@ -113,8 +118,9 @@ function makeRequest() {
 beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
-  // select().from() — terminal; from resolves directly
-  mockFrom.mockResolvedValue([MOCK_ROW])
+  // select().from().innerJoin() — innerJoin is terminal and resolves the rows
+  mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
+  mockInnerJoin.mockResolvedValue([MOCK_ROW])
 })
 
 // ============================================================================
@@ -142,7 +148,7 @@ describe('GET /api/admin/marketplace/stats — authenticated', () => {
   })
 
   it('returns 500 when DB throws', async () => {
-    mockFrom.mockRejectedValueOnce(new Error('DB error'))
+    mockInnerJoin.mockRejectedValueOnce(new Error('DB error'))
     const response = await GET(makeRequest())
     expect(response.status).toBe(500)
   })

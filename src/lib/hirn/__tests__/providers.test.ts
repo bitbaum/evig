@@ -278,8 +278,10 @@ describe('getDefaultChatProvider', () => {
     )
     mockGroqIsAvailable.mockResolvedValue(false) // override beforeEach default (true)
 
+    // User-facing message is intentionally German (Swiss app). Assert on the
+    // stable lead-in, not the volatile "Geprüft: <provider list>" tail.
     await expect(getDefaultChatProvider()).rejects.toThrow(
-      'No available AI providers configured'
+      'Kein KI-Anbieter verfügbar'
     )
   })
 

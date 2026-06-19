@@ -20,8 +20,6 @@ interface LogEntry {
 }
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV === 'development'
-
   private formatLog(level: LogLevel, message: string, data?: unknown): LogEntry {
     return {
       level,
@@ -32,8 +30,13 @@ class Logger {
   }
 
   private shouldLog(level: LogLevel): boolean {
+    // Read NODE_ENV lazily at call-time rather than caching it at construction.
+    // NODE_ENV never changes mid-process, so runtime behaviour is identical to a
+    // captured field — but reading it here keeps both branches testable instead
+    // of freezing whatever NODE_ENV happened to be at import time.
+    const isDevelopment = process.env.NODE_ENV === 'development'
     // In production, only log warnings and errors
-    if (!this.isDevelopment && level === LogLevel.DEBUG) {
+    if (!isDevelopment && level === LogLevel.DEBUG) {
       return false
     }
     return true

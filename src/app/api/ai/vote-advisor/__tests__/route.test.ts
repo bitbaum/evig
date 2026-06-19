@@ -36,8 +36,26 @@ jest.mock('@/lib/api/helpers', () => {
     apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string, details?: unknown) => NextResponse.json({ success: false, error: msg, details }, { status: 400 }),
+    apiRateLimited: (msg = 'Rate limited') => NextResponse.json({ success: false, error: msg }, { status: 429 }),
   }
 })
+
+// Rate limiters use real module-level LRU state that persists across tests in
+// the suite — without mocking, the per-IP limit (5/hour) trips after a handful
+// of cases and short-circuits the route. Mock them to always allow.
+const mockVoteAdvisorIp = jest.fn((..._args: unknown[]) => true)
+const mockVoteAdvisorGlobal = jest.fn((..._args: unknown[]) => true)
+jest.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: {
+    voteAdvisorIp: (...args: unknown[]) => mockVoteAdvisorIp(...args),
+    voteAdvisorGlobal: (...args: unknown[]) => mockVoteAdvisorGlobal(...args),
+  },
+  getClientIdentifier: () => 'test-client',
+}))
+
+jest.mock('@/config/error-messages', () => ({
+  ERROR_MESSAGES: { INVALID_REQUEST: 'Ungültige Anfrage' },
+}))
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
@@ -69,6 +87,8 @@ function makeRequest(body: unknown) {
 beforeEach(() => {
   jest.resetAllMocks()
   mockCallWithFallback.mockResolvedValue(MOCK_AI_RESULT)
+  mockVoteAdvisorIp.mockReturnValue(true)
+  mockVoteAdvisorGlobal.mockReturnValue(true)
 })
 
 // ============================================================================

@@ -7,7 +7,8 @@
  *
  * Behaviors locked:
  *   debug
- *   - does NOT call console.log in non-development env (NODE_ENV=test)
+ *   - calls console.log ONLY in development (NODE_ENV=development)
+ *   - is a no-op in non-development env (jest forces NODE_ENV=test)
  *
  *   info
  *   - calls console.log with [INFO] prefix
@@ -46,14 +47,35 @@ afterEach(() => {
 // ============================================================================
 
 describe('logger.debug', () => {
+  // jest forces NODE_ENV=test, where debug() is a no-op. shouldLog() reads
+  // NODE_ENV lazily, so flipping it to 'development' here exercises the active
+  // branch; we restore it afterwards so other suites see the original value.
+  let originalNodeEnv: string | undefined
+
+  beforeEach(() => {
+    originalNodeEnv = process.env.NODE_ENV
+  })
+
+  afterEach(() => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = originalNodeEnv
+  })
+
+  it('is a no-op in non-development env (NODE_ENV=test)', () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'test'
+    logger.debug('debug message')
+
+    expect(consoleLog).not.toHaveBeenCalled()
+  })
+
   it('calls console.log in development environment', () => {
-    // .env sets NODE_ENV=development, loaded by next/jest — debug is active in tests
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development'
     logger.debug('debug message')
 
     expect(consoleLog).toHaveBeenCalledTimes(1)
   })
 
-  it('includes [DEBUG] prefix in output', () => {
+  it('includes [DEBUG] prefix in output (development)', () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development'
     logger.debug('trace message')
 
     const firstArg = consoleLog.mock.calls[0][0] as string
@@ -182,7 +204,18 @@ describe('logError convenience function', () => {
 })
 
 describe('logDebug convenience function', () => {
+  let originalNodeEnv: string | undefined
+
+  beforeEach(() => {
+    originalNodeEnv = process.env.NODE_ENV
+  })
+
+  afterEach(() => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = originalNodeEnv
+  })
+
   it('calls console.log in development environment', () => {
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development'
     logDebug('via convenience')
 
     expect(consoleLog).toHaveBeenCalledTimes(1)

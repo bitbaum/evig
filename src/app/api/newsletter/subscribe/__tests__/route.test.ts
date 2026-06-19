@@ -221,7 +221,12 @@ describe('POST /api/newsletter/subscribe — new subscriber', () => {
 })
 
 describe('POST /api/newsletter/subscribe — email failure', () => {
-  it('returns 502 when sendEmail resolves with success=false (does not swallow silent failure)', async () => {
+  it('degrades gracefully (200, confirmed:false, "Bestätigung folgt") and logs a warning when sendEmail fails', async () => {
+    // Contract: the DB row was already inserted as pending before the email
+    // send, so a failed confirmation email must NOT surface as a scary 502 the
+    // user can't act on. The route returns 200 and records the failure via
+    // logger.warn so the silent-failure-is-logged guarantee stays locked.
+    const { logger } = jest.requireMock('@/lib/logger')
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
 
     const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
@@ -230,10 +235,12 @@ describe('POST /api/newsletter/subscribe — email failure', () => {
       headers: { 'Content-Type': 'application/json' },
     })
     const response = await POST(req)
-    expect(response.status).toBe(502)
+    expect(response.status).toBe(200)
     const body = await response.json()
-    expect(body.success).toBe(false)
-    expect(body.error).toMatch(/Bestätigungs-E-Mail/i)
+    expect(body.success).toBe(true)
+    expect(body.data.confirmed).toBe(false)
+    expect(body.data.message).toMatch(/Bestätigung folgt/i)
+    expect(logger.warn).toHaveBeenCalled()
   })
 })
 

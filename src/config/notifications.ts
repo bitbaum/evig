@@ -89,6 +89,9 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.WORKSHOP_PROPOSAL]: '/admin/workshops/proposals/',
   [RELATED_TYPES.MEMBERSHIP]: '/admin/membership/',
   [RELATED_TYPES.LISTING]: '/admin/marketplace/',
-  [RELATED_TYPES.TIME_OFF]: '/dashboard/timecards', // requester → their tool
-  [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/timecards', // approver → the queue
+  // timecards has no [id] detail page — land on the flat queue and pass the
+  // request id as a harmless query param (same append pattern as CONVERSATION),
+  // so relatedHref() can't produce a broken "/dashboard/timecards<id>" path.
+  [RELATED_TYPES.TIME_OFF]: '/dashboard/timecards?id=', // requester → their tool
+  [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/timecards?id=', // approver → the queue
 }

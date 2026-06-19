@@ -129,6 +129,17 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
+// publishRevampitListing is the unified-marketplace publish helper. create-product
+// delegates to it on `action='publish'` (it replaced the old inline
+// marketplace_listings insert). Its own DB chains are covered by its own tests;
+// here we only assert that create-product calls it for publish and skips it when
+// checklist-gated, so a no-op spy is the correct seam.
+const mockPublishRevampitListing = jest.fn().mockResolvedValue('listing-1')
+
+jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
+  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing.apply(null, args),
+}))
+
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
@@ -246,20 +257,20 @@ describe('createErfassungProduct — action/status', () => {
     expect(result.inventoryId).toBe('inventory-1')
   })
 
-  it('publish action → inserts marketplace listing (3 inserts total)', async () => {
-    mockTxExecute.mockResolvedValueOnce({ rows: [{ count: '0' }] }) // UUID
-    mockTxInsert
-      .mockReturnValueOnce(makeInsertChain([{ id: 'product-1' }]))   // product
-      .mockReturnValueOnce(makeInsertChain([{ id: 'inventory-1' }])) // inventory
-      .mockReturnValueOnce(makeInsertChain([]))                       // marketplace listing
+  it('publish action → delegates to publishRevampitListing (2 own inserts)', async () => {
+    setupMinimalDraft()
 
     const result = await createErfassungProduct(makePayload({ action: 'publish' }), 'user-1', mockTx as never)
 
-    expect(mockTxInsert).toHaveBeenCalledTimes(3)
+    // create-product itself inserts only product + inventory; the marketplace
+    // listing is created by publishRevampitListing (mocked here).
+    expect(mockTxInsert).toHaveBeenCalledTimes(2)
+    expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
+    expect(mockPublishRevampitListing).toHaveBeenCalledWith(mockTx, 'inventory-1')
     expect(result.productId).toBe('product-1')
   })
 
-  it('checklistGated + publish → skips marketplace listing (2 inserts only)', async () => {
+  it('checklistGated + publish → skips publishRevampitListing (2 inserts only)', async () => {
     setupMinimalDraft()
 
     await createErfassungProduct(
@@ -269,8 +280,9 @@ describe('createErfassungProduct — action/status', () => {
       { checklistGated: true },
     )
 
-    // checklistGated overrides publish → no marketplace listing insert
+    // checklistGated overrides publish → no marketplace listing
     expect(mockTxInsert).toHaveBeenCalledTimes(2)
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
   })
 })
 

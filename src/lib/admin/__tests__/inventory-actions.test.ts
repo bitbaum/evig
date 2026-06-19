@@ -109,6 +109,18 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
+// publishProduct/unpublishProduct now delegate the actual listing create/refresh/
+// remove to the unified-marketplace helpers (the old inline marketplace_listings
+// insert/update is gone). Those helpers have their own tests; here we only assert
+// the orchestration: inventory lookup → delegate (or skip when not found).
+const mockPublishRevampitListing = jest.fn().mockResolvedValue('listing-1')
+const mockUnpublishRevampitListing = jest.fn().mockResolvedValue(undefined)
+
+jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
+  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing.apply(null, args),
+  unpublishRevampitListing: (...args: unknown[]) => mockUnpublishRevampitListing.apply(null, args),
+}))
+
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
@@ -133,49 +145,25 @@ beforeEach(() => {
 // ============================================================================
 
 describe('publishProduct', () => {
-  it('returns early (no insert/update on listing) when productInfo not found', async () => {
-    // update (status change) → then productInfo select returns []
-    mockDbSelect
-      .mockReturnValueOnce(makeChain([]))  // productInfo → not found
+  it('approves the product but skips publishing when inventoryItem not found', async () => {
+    // First (and only) select is the inventory-item lookup → not found.
+    mockDbSelect.mockReturnValueOnce(makeChain([]))
 
     await publishProduct('product-1', 'user-1')
 
-    expect(mockDbInsert).not.toHaveBeenCalled()
-    // only 1 update (status change), no listing update
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1) // status update still runs
+    // Status approval still runs, but no listing is created.
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1) // status approval
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
   })
 
-  it('returns early when inventoryItem not found', async () => {
-    mockDbSelect
-      .mockReturnValueOnce(makeChain([{ brand: 'Dell', productName: 'Latitude', shortDescription: 'Laptop', estimatedPriceChf: '299' }]))
-      .mockReturnValueOnce(makeChain([]))  // inventoryItem → not found
+  it('delegates to publishRevampitListing when inventoryItem found', async () => {
+    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1' }])) // inventory item
 
     await publishProduct('product-1', 'user-1')
 
-    expect(mockDbInsert).not.toHaveBeenCalled()
-  })
-
-  it('updates existing listing when one exists', async () => {
-    mockDbSelect
-      .mockReturnValueOnce(makeChain([{ brand: 'Dell', productName: 'Latitude', shortDescription: '', estimatedPriceChf: '299' }]))
-      .mockReturnValueOnce(makeChain([{ id: 'inv-1' }]))          // inventory item
-      .mockReturnValueOnce(makeChain([{ id: 'listing-existing' }]))  // existing listing
-
-    await publishProduct('product-1', 'user-1')
-
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2) // status + listing
-    expect(mockDbInsert).not.toHaveBeenCalled()
-  })
-
-  it('creates new listing when none exists', async () => {
-    mockDbSelect
-      .mockReturnValueOnce(makeChain([{ brand: 'HP', productName: 'EliteBook', shortDescription: '', estimatedPriceChf: '250' }]))
-      .mockReturnValueOnce(makeChain([{ id: 'inv-1' }]))  // inventory item
-      .mockReturnValueOnce(makeChain([]))                  // no existing listing
-
-    await publishProduct('product-1', 'user-1')
-
-    expect(mockDbInsert).toHaveBeenCalledTimes(1)
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1) // status approval
+    expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
+    expect(mockPublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1')
   })
 })
 
@@ -184,20 +172,21 @@ describe('publishProduct', () => {
 // ============================================================================
 
 describe('unpublishProduct', () => {
-  it('updates listing to DRAFT when inventory item found', async () => {
+  it('delegates to unpublishRevampitListing when inventory item found', async () => {
     mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1' }]))
 
     await unpublishProduct('product-1', 'user-1')
 
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
+    expect(mockUnpublishRevampitListing).toHaveBeenCalledTimes(1)
+    expect(mockUnpublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1')
   })
 
-  it('skips DB update when inventory item not found', async () => {
+  it('skips unpublish when inventory item not found', async () => {
     mockDbSelect.mockReturnValueOnce(makeChain([]))
 
     await unpublishProduct('product-1', 'user-1')
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
+    expect(mockUnpublishRevampitListing).not.toHaveBeenCalled()
   })
 })
 
@@ -243,8 +232,9 @@ describe('updateProductImage', () => {
     expect(mockDbInsert).not.toHaveBeenCalled()
   })
 
-  it('deletes old Vercel blob when replacing an existing image', async () => {
-    const oldUrl = 'https://abc.blob.vercel-storage.com/old.jpg'
+  it('deletes the old object when the new upload lands at a different URL', async () => {
+    // Upload resolves to cdn.example.com/product.jpg (beforeEach default); old key differs.
+    const oldUrl = 'https://other-cdn.com/old.jpg'
     mockDbSelect
       .mockReturnValueOnce(makeChain([{ id: 'img-1', filePath: oldUrl }]))
       .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
@@ -254,9 +244,12 @@ describe('updateProductImage', () => {
     expect(mockDeleteImage).toHaveBeenCalledWith(oldUrl)
   })
 
-  it('does NOT call deleteImage for non-Vercel URLs', async () => {
+  it('does NOT call deleteImage when the re-upload overwrites the same URL', async () => {
+    // Deterministic <itemUuid>.jpg keys mean a re-upload usually returns the same
+    // URL — no stale object to clean up.
+    const sameUrl = 'https://cdn.example.com/product.jpg'
     mockDbSelect
-      .mockReturnValueOnce(makeChain([{ id: 'img-1', filePath: 'https://other-cdn.com/old.jpg' }]))
+      .mockReturnValueOnce(makeChain([{ id: 'img-1', filePath: sameUrl }]))
       .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
 
     await updateProductImage('prod-1', 'base64data', 'user-1')

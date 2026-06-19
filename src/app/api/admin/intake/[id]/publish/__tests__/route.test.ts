@@ -111,6 +111,16 @@ jest.mock('@/lib/intake/timeline', () => ({
   appendIntakeEvent: (...args: unknown[]) => mockAppendIntakeEvent.apply(null, args),
 }))
 
+// The route delegates the actual listing create/refresh to publishRevampitListing
+// (it replaced the old inline marketplace_listings insert). That helper runs its
+// own DB chains inside the tx and is covered by its own tests; here we mock it so
+// the route test exercises only the route's orchestration + gating.
+const mockPublishRevampitListing = jest.fn()
+
+jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
+  publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing.apply(null, args),
+}))
+
 jest.mock('@/lib/api/helpers', () => {
   const { NextResponse } = jest.requireActual('next/server')
   return {
@@ -184,6 +194,7 @@ beforeEach(() => {
     return cb(tx)
   })
   mockAppendIntakeEvent.mockResolvedValue(undefined)
+  mockPublishRevampitListing.mockResolvedValue('listing-1')
 
   mockValidateBody.mockReturnValue({ success: true, data: { price_chf: 299 } })
 

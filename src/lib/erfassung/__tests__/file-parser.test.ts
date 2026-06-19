@@ -5,6 +5,11 @@
  * and product validation from file input.
  */
 
+// exceljs is only used by parseExcel; these tests exercise parseCSV only.
+// Stub it so Jest never loads exceljs' ESM-only `uuid` dependency (which isn't
+// transformed and otherwise crashes the whole suite at import time).
+jest.mock('exceljs', () => ({ Workbook: class {} }))
+
 // Mock next/server
 jest.mock('next/server', () => ({
   NextRequest: class {},
