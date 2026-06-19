@@ -43,8 +43,6 @@
     "test:all": "npm run test && npm run test:e2e",
     "deploy": "bash scripts/selfhost-deploy-revampit.sh",
     "deploy:selfhost": "bash scripts/selfhost-deploy-revampit.sh",
-    "deploy:vercel": "bash tools/deployment/deploy.sh",
-    "setup-deploy": "bash tools/deployment/setup-deploy-keybind.sh",
     "ship": "bash scripts/ship.sh",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "migrate-to-prod": "./scripts/migrate-to-production.sh",
