@@ -776,7 +776,8 @@
       "sellerTypeTitle": "Seller",
       "qualityTitle": "Quality",
       "showResults": "Show results",
-      "closeLabel": "Close"
+      "closeLabel": "Close",
+      "advanced": "More filters"
     },
     "listing": {
       "contact": "Contact seller",
@@ -805,7 +806,14 @@
       "conditionMeaningFor": "What does \"{condition}\" mean for {category}?",
       "loadError": "Error loading listing",
       "verified": "Verified",
-      "free": "Free"
+      "free": "Free",
+      "trust": {
+        "verified": "Checked & tested by Revamp-IT",
+        "mission": "Reused, not discarded — non-profit association"
+      },
+      "zoomOpen": "Zoom in",
+      "zoomClose": "Close",
+      "photoCount": "{count} photos"
     },
     "empty": "No listings found",
     "conditions": {
@@ -957,7 +965,8 @@
         "imageAlt": "Item image",
         "statusLabel": "Status:",
         "viewOrder": "View order",
-        "continueShopping": "Continue shopping"
+        "continueShopping": "Continue shopping",
+        "totalLabel": "Total"
       },
       "ownListingDesc": "You cannot buy your own listing.",
       "backToListingLink": "Back to listing",
@@ -1056,6 +1065,23 @@
     "eyebrows": {
       "marketplace": "MARKETPLACE",
       "getInvolved": "GET INVOLVED"
+    },
+    "cart": {
+      "addToCart": "Add to cart",
+      "inCart": "In cart",
+      "title": "Cart",
+      "empty": "Your cart is empty.",
+      "emptyCta": "Browse the marketplace",
+      "remove": "Remove",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Checkout",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "continueShopping": "Continue shopping",
+      "pickupNote": "Pickup in Zurich — free",
+      "revampitOnly": "Only Revamp-IT devices can be added to the cart. Community listings are purchased directly.",
+      "cartAriaLabel": "Cart, {count} items",
+      "closeAriaLabel": "Close cart"
     }
   },
   "services": {
@@ -3569,7 +3595,11 @@
     "theme": {
       "toLight": "Switch to light theme",
       "toDark": "Switch to dark theme",
-      "toggle": "Toggle theme"
+      "toggle": "Toggle theme",
+      "label": "Color scheme",
+      "light": "Light",
+      "system": "System",
+      "dark": "Dark"
     },
     "chatbot": {
       "open": "Open Revamp IT assistant"
@@ -4644,7 +4674,8 @@
       "loadingError": "Error loading technicians. Please try again.",
       "availableEmpty": "Coming soon — be part of the first wave",
       "emptyActionSecondary": "Request help anyway → IT Help",
-      "backToHub": "Back to IT Help"
+      "backToHub": "Back to IT Help",
+      "requestHelp": "Request help"
     },
     "detail": {
       "backToList": "All technicians",
@@ -8106,7 +8137,9 @@
       "errorLoading": "Error loading order",
       "errorConfirmReceipt": "Could not confirm receipt",
       "errorUpdateStatus": "Could not update status",
-      "networkError": "Network error"
+      "networkError": "Network error",
+      "articlesSection": "Items ({count})",
+      "moreItems": "+{count} more"
     },
     "listings": {
       "pageTitle": "My Listings",
@@ -8448,7 +8481,8 @@
       "backToDashboard": "Back to Dashboard",
       "editProfile": "Edit Profile",
       "account": {
-        "passwordNote": "Password change is managed via the Profile page (will be integrated here later)"
+        "passwordNote": "Password change is managed via the Profile page (will be integrated here later)",
+        "deleteRequestBody": "I would like to delete my account ({email}). Please confirm the deletion of my personal data."
       },
       "privacy": {
         "dataExportTitle": "Privacy & Export",
@@ -9464,7 +9498,25 @@
       "extrasMonthCommentPlaceholder": "Optional — e.g. holiday, sick day, special shift.",
       "extrasAiAssist": "AI assistant",
       "extrasAiPlaceholder": "e.g. 12th and 13th off, otherwise normal",
-      "extrasResetMonth": "Rebuild month from schedule (drops current entries)"
+      "extrasResetMonth": "Rebuild month from schedule (drops current entries)",
+      "dayAbsenceCounted": "counted",
+      "dayFill": "Fill day from schedule",
+      "aiPlaceholder": "Describe your week in your own words …",
+      "aiExamples": "e.g. «Only worked Tue and Wed this week, left Wed at 3 pm, otherwise sick» · «Vacation next Friday» · «Left 2 hours early today»",
+      "fillMonth": "Fill month from schedule",
+      "fillMonthHint": "Fills all empty workdays with your work schedule (default Mon–Fri 09:00–17:00). Existing entries and days off stay unchanged.",
+      "selectHint": "Click selects a day · Drag selects several · Ctrl/Cmd+click for individual · Shift+click for a range · Del clears. Then choose an action below.",
+      "selectLabel": "Quick select",
+      "selectAllDays": "Whole month",
+      "selectAllWeekdays": "All workdays",
+      "viewMonth": "Month",
+      "viewDay": "Day",
+      "dayPrev": "Previous day",
+      "dayNext": "Next day",
+      "bulkSelected": "{count} days selected",
+      "bulkFill": "Fill from schedule",
+      "bulkClear": "Clear",
+      "bulkCancel": "Cancel selection"
     },
     "appointments": {
       "pageTitle": "Appointments",
