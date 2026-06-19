@@ -74,7 +74,7 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'Unsere Wirkung',
-        nameKey: 'ourImpact',
+        nameKey: 'impact',
         href: '/about/impact',
         descriptionKey: 'impactDesc',
       },
@@ -158,7 +158,7 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Hardware
       {
         name: 'Hardware',
-        nameKey: 'sectionHardware',
+        nameKey: 'hardware',
         href: '/services',
         isSection: true,
       },
@@ -183,7 +183,7 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Software
       {
         name: 'Software',
-        nameKey: 'sectionSoftware',
+        nameKey: 'software',
         href: '/services',
         isSection: true,
       },
@@ -195,7 +195,7 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'Webentwicklung',
-        nameKey: 'webDevelopment',
+        nameKey: 'webDev',
         href: '/services/web-design-development',
         descriptionKey: 'webDevDesc',
       },
@@ -259,13 +259,13 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Engagement
       {
         name: 'Engagement',
-        nameKey: 'sectionEngagement',
+        nameKey: 'engagement',
         href: '/get-involved',
         isSection: true,
       },
       {
         name: 'Freiwilligenarbeit',
-        nameKey: 'volunteering',
+        nameKey: 'volunteer',
         href: '/get-involved/volunteer',
         descriptionKey: 'volunteerDesc',
       },
@@ -277,14 +277,14 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'Wiedereinstieg',
-        nameKey: 'workReintegration',
+        nameKey: 'reintegration',
         href: '/get-involved/work-reintegration',
         descriptionKey: 'reintegrationDesc',
       },
       // Section: Unterstützen
       {
         name: 'Unterstützen',
-        nameKey: 'sectionSupport',
+        nameKey: 'support',
         href: '/get-involved',
         isSection: true,
       },
@@ -312,7 +312,7 @@ export const mainNavigation: NavigationItem[] = [
       // "Mitmachen" (volunteer time, donate, share resources).
       {
         name: 'Mitgliedschaft',
-        nameKey: 'sectionMembership',
+        nameKey: 'membership',
         href: '/mitglied-werden',
         isSection: true,
       },

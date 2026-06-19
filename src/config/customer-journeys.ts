@@ -24,12 +24,12 @@ export const CUSTOMER_JOURNEYS = {
         descriptionKey: 'communityListingsDesc',
       },
       {
-        nameKey: 'shopRevampIT',
+        nameKey: 'orgShop',
         href: `${ROUTES.public.marketplace}?seller_type=revampit`,
         descriptionKey: 'orgShopDesc',
       },
       {
-        nameKey: 'storeZurich',
+        nameKey: 'store',
         href: '/contact',
         descriptionKey: 'storeDesc',
       },
