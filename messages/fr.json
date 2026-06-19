@@ -776,7 +776,8 @@
       "sellerTypeTitle": "Vendeur",
       "qualityTitle": "Qualité",
       "showResults": "Afficher les résultats",
-      "closeLabel": "Fermer"
+      "closeLabel": "Fermer",
+      "advanced": "Plus de filtres"
     },
     "listing": {
       "contact": "Contacter le vendeur",
@@ -805,7 +806,14 @@
       "conditionMeaningFor": "Que signifie \"{condition}\" pour {category}?",
       "loadError": "Erreur lors du chargement de l'annonce",
       "verified": "Vérifié",
-      "free": "Gratuit"
+      "free": "Gratuit",
+      "trust": {
+        "verified": "Vérifié et testé par Revamp-IT",
+        "mission": "Réemployé plutôt que jeté — association à but non lucratif"
+      },
+      "zoomOpen": "Agrandir",
+      "zoomClose": "Fermer",
+      "photoCount": "{count} photos"
     },
     "empty": "Aucune annonce trouvée",
     "conditions": {
@@ -957,7 +965,8 @@
         "imageAlt": "Image de l'article",
         "statusLabel": "Statut:",
         "viewOrder": "Voir la commande",
-        "continueShopping": "Continuer les achats"
+        "continueShopping": "Continuer les achats",
+        "totalLabel": "Total"
       },
       "ownListingDesc": "Vous ne pouvez pas acheter votre propre annonce.",
       "backToListingLink": "Retour à l'annonce",
@@ -1056,6 +1065,23 @@
     "eyebrows": {
       "marketplace": "MARCHÉ",
       "getInvolved": "PARTICIPER"
+    },
+    "cart": {
+      "addToCart": "Ajouter au panier",
+      "inCart": "Dans le panier",
+      "title": "Panier",
+      "empty": "Votre panier est vide.",
+      "emptyCta": "Vers la marketplace",
+      "remove": "Retirer",
+      "subtotal": "Sous-total",
+      "total": "Total",
+      "checkout": "Passer à la caisse",
+      "itemCount": "{count, plural, one {# article} other {# articles}}",
+      "continueShopping": "Continuer les achats",
+      "pickupNote": "Retrait à Zurich — gratuit",
+      "revampitOnly": "Seuls les appareils Revamp-IT peuvent être ajoutés au panier. Les annonces de la communauté s'achètent directement.",
+      "cartAriaLabel": "Panier, {count} articles",
+      "closeAriaLabel": "Fermer le panier"
     }
   },
   "services": {
@@ -3570,7 +3596,11 @@
     "theme": {
       "toLight": "Passer en mode clair",
       "toDark": "Passer en mode sombre",
-      "toggle": "Basculer le thème"
+      "toggle": "Basculer le thème",
+      "label": "Thème de couleurs",
+      "light": "Clair",
+      "system": "Système",
+      "dark": "Sombre"
     },
     "chatbot": {
       "open": "Ouvrir l'assistant Revamp IT"
@@ -4643,7 +4673,10 @@
       "gratis": "Gratuit",
       "kulturlegi": "KulturLegi",
       "loadingError": "Erreur lors du chargement des techniciens. Veuillez réessayer.",
-      "backToHub": "Back to IT Help"
+      "backToHub": "Back to IT Help",
+      "requestHelp": "Demander de l'aide",
+      "availableEmpty": "Bientôt disponible — rejoignez la première génération",
+      "emptyActionSecondary": "Demander quand même de l'aide → Aide informatique"
     },
     "detail": {
       "backToList": "Tous les techniciens",
@@ -8119,7 +8152,9 @@
       "errorLoading": "Erreur lors du chargement de la commande",
       "errorConfirmReceipt": "Impossible de confirmer la réception",
       "errorUpdateStatus": "Impossible de mettre à jour le statut",
-      "networkError": "Erreur réseau"
+      "networkError": "Erreur réseau",
+      "articlesSection": "Articles ({count})",
+      "moreItems": "+{count} de plus"
     },
     "listings": {
       "pageTitle": "Mes annonces",
@@ -8461,7 +8496,8 @@
       "backToDashboard": "Retour au tableau de bord",
       "editProfile": "Modifier le profil",
       "account": {
-        "passwordNote": "La modification du mot de passe est gérée depuis la page Profil (sera intégrée ici ultérieurement)"
+        "passwordNote": "La modification du mot de passe est gérée depuis la page Profil (sera intégrée ici ultérieurement)",
+        "deleteRequestBody": "Je souhaite supprimer mon compte ({email}). Merci de confirmer la suppression de mes données personnelles."
       },
       "privacy": {
         "dataExportTitle": "Protection des données et export",
@@ -9477,7 +9513,25 @@
       "extrasMonthCommentPlaceholder": "Optionnel — p.ex. vacances, maladie, intervention spéciale.",
       "extrasAiAssist": "Assistant IA",
       "extrasAiPlaceholder": "p.ex. 12 et 13 off, sinon normal",
-      "extrasResetMonth": "Reconstruire le mois depuis l'horaire (supprime les entrées actuelles)"
+      "extrasResetMonth": "Reconstruire le mois depuis l'horaire (supprime les entrées actuelles)",
+      "dayAbsenceCounted": "comptabilisé",
+      "dayFill": "Remplir le jour selon le plan",
+      "aiPlaceholder": "Décrivez votre semaine avec vos propres mots …",
+      "aiExamples": "p. ex. « Travaillé seulement mardi et mercredi cette semaine, parti mercredi à 15 h, sinon malade » · « Vacances vendredi prochain » · « Parti 2 heures plus tôt aujourd'hui »",
+      "fillMonth": "Remplir le mois selon le plan",
+      "fillMonthHint": "Remplit tous les jours ouvrables vides avec votre plan de travail (par défaut lun–ven 09:00–17:00). Les entrées existantes et les jours de congé restent inchangés.",
+      "selectHint": "Un clic sélectionne un jour · Glisser en sélectionne plusieurs · Ctrl/Cmd+clic pour un seul · Maj+clic pour une plage · Suppr efface. Choisissez ensuite une action ci-dessous.",
+      "selectLabel": "Sélection rapide",
+      "selectAllDays": "Tout le mois",
+      "selectAllWeekdays": "Tous les jours ouvrables",
+      "viewMonth": "Mois",
+      "viewDay": "Jour",
+      "dayPrev": "Jour précédent",
+      "dayNext": "Jour suivant",
+      "bulkSelected": "{count} jours sélectionnés",
+      "bulkFill": "Remplir selon le plan",
+      "bulkClear": "Effacer",
+      "bulkCancel": "Annuler la sélection"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",
@@ -10180,6 +10234,28 @@
         "aiPlaceholderEdit": "p.ex. « Ajoute une section sur les conseils de réparation » ou « Rends le texte plus engageant »",
         "aiPlaceholderNew": "Décris le sujet ou l'idée de ton article de blog…"
       }
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "Journal des modifications",
+      "description": "Derniers correctifs, fonctionnalités et améliorations de la plateforme RevampIT."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "En direct",
+      "title": "Journal des modifications",
+      "subtitle": "Les derniers correctifs, fonctionnalités et améliorations que nous déployons sur revampit.ch."
+    },
+    "latest": {
+      "label": "Plus récent"
+    },
+    "nav": {
+      "label": "Versions"
+    },
+    "command": {
+      "label": "Démarrer en local",
+      "text": "npm run d"
     }
   }
 }
