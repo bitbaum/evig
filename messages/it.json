@@ -503,7 +503,11 @@
     "theme": {
       "toLight": "Passa al tema chiaro",
       "toDark": "Passa al tema scuro",
-      "toggle": "Cambia tema"
+      "toggle": "Cambia tema",
+      "label": "Schema di colori",
+      "light": "Chiaro",
+      "system": "Sistema",
+      "dark": "Scuro"
     },
     "chatbot": {
       "open": "Apri l'assistente Revamp IT"
@@ -3006,7 +3010,8 @@
       "sellerTypeTitle": "Venditore",
       "qualityTitle": "Qualità",
       "showResults": "Mostra risultati",
-      "closeLabel": "Chiudi"
+      "closeLabel": "Chiudi",
+      "advanced": "Altri filtri"
     },
     "listing": {
       "contact": "Contatta il venditore",
@@ -3035,7 +3040,14 @@
       "conditionMeaningFor": "Cosa significa \"{condition}\" per {category}?",
       "loadError": "Errore nel caricamento dell'annuncio",
       "verified": "Verificato",
-      "free": "Gratis"
+      "free": "Gratis",
+      "trust": {
+        "verified": "Verificato e testato da Revamp-IT",
+        "mission": "Riutilizzato anziché smaltito — associazione senza scopo di lucro"
+      },
+      "zoomOpen": "Ingrandisci",
+      "zoomClose": "Chiudi",
+      "photoCount": "{count} foto"
     },
     "listing_actions": {
       "payment_info": "Pagamento diretto tra acquirente e venditore",
@@ -3165,7 +3177,8 @@
         "imageAlt": "Immagine articolo",
         "statusLabel": "Stato:",
         "viewOrder": "Visualizza ordine",
-        "continueShopping": "Continua a fare acquisti"
+        "continueShopping": "Continua a fare acquisti",
+        "totalLabel": "Totale"
       },
       "ownListingDesc": "non puoi acquistare il tuo stesso annuncio.",
       "backToListingLink": "Torna all'annuncio",
@@ -3264,6 +3277,23 @@
     "eyebrows": {
       "marketplace": "MARKETPLACE",
       "getInvolved": "PARTECIPA"
+    },
+    "cart": {
+      "addToCart": "Aggiungi al carrello",
+      "inCart": "Nel carrello",
+      "title": "Carrello",
+      "empty": "Il tuo carrello è vuoto.",
+      "emptyCta": "Vai al marketplace",
+      "remove": "Rimuovi",
+      "subtotal": "Subtotale",
+      "total": "Totale",
+      "checkout": "Vai alla cassa",
+      "itemCount": "{count, plural, one {# articolo} other {# articoli}}",
+      "continueShopping": "Continua lo shopping",
+      "pickupNote": "Ritiro a Zurigo — gratuito",
+      "revampitOnly": "Solo i dispositivi Revamp-IT possono essere aggiunti al carrello. Gli annunci della community si acquistano direttamente.",
+      "cartAriaLabel": "Carrello, {count} articoli",
+      "closeAriaLabel": "Chiudi il carrello"
     }
   },
   "membership": {
@@ -7314,7 +7344,11 @@
       "community": "Community",
       "gratis": "Gratis",
       "kulturlegi": "KulturLegi",
-      "loadingError": "Errore nel caricamento dei tecnici. Riprova."
+      "loadingError": "Errore nel caricamento dei tecnici. Riprova.",
+      "requestHelp": "Richiedi aiuto",
+      "availableEmpty": "Presto disponibile — entra a far parte della prima generazione",
+      "emptyActionSecondary": "Richiedi comunque aiuto → Aiuto informatico",
+      "backToHub": "Torna all'aiuto informatico"
     },
     "detail": {
       "backToList": "Tutti i tecnici",
@@ -8103,7 +8137,9 @@
       "errorLoading": "Errore nel caricamento dell'ordine",
       "errorConfirmReceipt": "Impossibile confermare la ricezione",
       "errorUpdateStatus": "Impossibile aggiornare lo stato",
-      "networkError": "Errore di rete"
+      "networkError": "Errore di rete",
+      "articlesSection": "Articoli ({count})",
+      "moreItems": "+{count} altri"
     },
     "listings": {
       "pageTitle": "I miei annunci",
@@ -8445,7 +8481,8 @@
       "backToDashboard": "Torna alla dashboard",
       "editProfile": "Modifica profilo",
       "account": {
-        "passwordNote": "La modifica della password viene gestita tramite la pagina del profilo (verrà integrata qui in seguito)"
+        "passwordNote": "La modifica della password viene gestita tramite la pagina del profilo (verrà integrata qui in seguito)",
+        "deleteRequestBody": "Desidero eliminare il mio account ({email}). Vi prego di confermare la cancellazione dei miei dati personali."
       },
       "privacy": {
         "dataExportTitle": "Privacy ed esportazione",
@@ -9335,6 +9372,28 @@
     },
     "localeFallback": {
       "notice": "L'area amministrativa è disponibile solo in tedesco."
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "Ultime correzioni, funzionalità e miglioramenti della piattaforma RevampIT."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "Live",
+      "title": "Changelog",
+      "subtitle": "Le ultime correzioni, funzionalità e miglioramenti che distribuiamo su revampit.ch."
+    },
+    "latest": {
+      "label": "Più recenti"
+    },
+    "nav": {
+      "label": "Versioni"
+    },
+    "command": {
+      "label": "Avvia in locale",
+      "text": "npm run d"
     }
   }
 }
