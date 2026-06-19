@@ -1,4 +1,5 @@
 import nextConfig from "eslint-config-next";
+import reactHooks from "eslint-plugin-react-hooks";
 
 // ─── Design system enforcement rules ────────────────────────────────────────
 // Why: the BB.6 bug ("white text on grey dropdown") happened because feature
@@ -89,6 +90,12 @@ const eslintConfig = [
   },
   ...nextConfig,
   {
+    // Re-register react-hooks here so these overrides resolve the plugin in the
+    // SAME config object — eslint-config-next only registers it inside a
+    // files-scoped object, so a bare global rules object errors with
+    // "could not find plugin react-hooks". Same module instance as next's, so
+    // no "redefine" conflict.
+    plugins: { "react-hooks": reactHooks },
     rules: {
       "@next/next/no-img-element": "off",
       "react/no-unescaped-entities": "off",
