@@ -5517,7 +5517,7 @@
     },
     "upcycling": {
       "meta": {
-        "title": "Monitor-Upcycling | RevampIT",
+        "title": "Monitor-Upcycling",
         "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft, soziale Integration in geschützten Werkstätten und Ressourcenschonung – mit offenen Anleitungen und wissenschaftlicher Begleitung."
       },
       "hero": {
@@ -5616,7 +5616,7 @@
       },
       "applications": {
         "meta": {
-          "title": "Einsatzbereiche | Monitor-Upcycling | RevampIT",
+          "title": "Einsatzbereiche | Monitor-Upcycling",
           "description": "Funktionale Wand- und Deckenleuchten aus ausgemusterten Computermonitoren — für Treppenhäuser, Büros, Schulen und Wohnräume."
         },
         "eyebrow": "EINSATZBEREICHE · MONITOR-UPCYCLING",
@@ -5660,7 +5660,7 @@
       },
       "gallery": {
         "meta": {
-          "title": "Galerie | Monitor-Upcycling | RevampIT",
+          "title": "Galerie | Monitor-Upcycling",
           "description": "Galerie der umgebauten Monitor-Leuchten — dokumentiert mit echten Fotos oder ehrlich als Warteschlange markiert."
         },
         "eyebrow": "GALERIE · MONITOR-UPCYCLING",
@@ -5685,7 +5685,7 @@
       },
       "buildYourOwn": {
         "meta": {
-          "title": "Selber bauen | Monitor-Upcycling | RevampIT",
+          "title": "Selber bauen | Monitor-Upcycling",
           "description": "Open-Source-Hardware: alle Anleitungen, Schaltpläne und Materialien, um eine Monitor-Leuchte selbst zu bauen. MIT-Lizenz, frei nutzbar weltweit."
         },
         "eyebrow": "SELBER BAUEN · MONITOR-UPCYCLING",
@@ -5739,7 +5739,7 @@
       },
       "lenovo_l2251pwd": {
         "meta": {
-          "title": "Lenovo L2251pwd — Monitor zur Leuchte | Monitor-Upcycling | RevampIT",
+          "title": "Lenovo L2251pwd — Monitor zur Leuchte | Monitor-Upcycling",
           "description": "Schritt-für-Schritt-Anleitung: Lenovo L2251pwd-Monitor zerlegen, LCD entfernen und Elektronik zur eigenständigen Leuchte überbrücken."
         },
         "back": "← Zurück zur Übersicht",
@@ -5884,7 +5884,7 @@
       },
       "status": {
         "meta": {
-          "title": "Status & Wirkung | Monitor-Upcycling | RevampIT",
+          "title": "Status & Wirkung | Monitor-Upcycling",
           "description": "Wo das Monitor-Upcycling-Projekt heute steht: Produktionsfortschritt, Wirkungs-Schätzung (final per ZHAW-Ökobilanz), Meilensteine und Partner-Ökosystem."
         },
         "eyebrow": "STATUS · MONITOR-UPCYCLING",

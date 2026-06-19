@@ -4107,7 +4107,7 @@
     },
     "upcycling": {
       "meta": {
-        "title": "Monitor-Upcycling | RevampIT",
+        "title": "Monitor-Upcycling",
         "description": "Da monitor per computer dismessi nascono lampade funzionali e sostenibili. Un progetto pilota per l'economia circolare, l'integrazione sociale in officine protette e il risparmio di risorse – con istruzioni aperte e accompagnamento scientifico."
       },
       "hero": {
@@ -4206,7 +4206,7 @@
       },
       "applications": {
         "meta": {
-          "title": "Ambiti d'uso | Upcycling di monitor | RevampIT",
+          "title": "Ambiti d'uso | Upcycling di monitor",
           "description": "Plafoniere e applique funzionali da monitor dismessi — per vani scala, uffici, scuole e ambienti abitativi."
         },
         "eyebrow": "AMBITI D'USO · UPCYCLING DI MONITOR",
@@ -4250,7 +4250,7 @@
       },
       "gallery": {
         "meta": {
-          "title": "Galleria | Upcycling di monitor | RevampIT",
+          "title": "Galleria | Upcycling di monitor",
           "description": "Galleria di lampade monitor upcycled — foto reali o coda indicata onestamente."
         },
         "eyebrow": "GALLERIA · UPCYCLING DI MONITOR",
@@ -4275,7 +4275,7 @@
       },
       "buildYourOwn": {
         "meta": {
-          "title": "Costruisci da sé | Upcycling di monitor | RevampIT",
+          "title": "Costruisci da sé | Upcycling di monitor",
           "description": "Hardware open source: tutte le guide, gli schemi e i materiali per costruire da sé una lampada da monitor. Licenza MIT, utilizzabile liberamente in tutto il mondo."
         },
         "eyebrow": "COSTRUISCI DA SÉ · UPCYCLING DI MONITOR",
@@ -4329,7 +4329,7 @@
       },
       "lenovo_l2251pwd": {
         "meta": {
-          "title": "Lenovo L2251pwd — Da monitor a lampada | Upcycling di monitor | RevampIT",
+          "title": "Lenovo L2251pwd — Da monitor a lampada | Upcycling di monitor",
           "description": "Guida passo per passo: smontare il monitor Lenovo L2251pwd, rimuovere l'LCD e ponticellare l'elettronica per ottenere una lampada autonoma."
         },
         "back": "← Torna alla panoramica",
@@ -4474,7 +4474,7 @@
       },
       "status": {
         "meta": {
-          "title": "Stato e impatto | Upcycling di monitor | RevampIT",
+          "title": "Stato e impatto | Upcycling di monitor",
           "description": "A che punto è oggi il progetto di upcycling dei monitor: avanzamento della produzione, stima dell'impatto (definitiva con il bilancio ecologico ZHAW), tappe e ecosistema di partner."
         },
         "eyebrow": "STATO · UPCYCLING DI MONITOR",

@@ -5841,7 +5841,7 @@
     },
     "upcycling": {
       "meta": {
-        "title": "Monitor-Upcycling | RevampIT",
+        "title": "Monitor-Upcycling",
         "description": "Des écrans d'ordinateur mis au rebut deviennent des luminaires fonctionnels et durables. Un projet pilote pour l'économie circulaire, l'intégration sociale dans des ateliers protégés et la préservation des ressources – avec des guides ouverts et un accompagnement scientifique."
       },
       "hero": {
@@ -5940,7 +5940,7 @@
       },
       "applications": {
         "meta": {
-          "title": "Domaines d'utilisation | Upcycling d'écrans | RevampIT",
+          "title": "Domaines d'utilisation | Upcycling d'écrans",
           "description": "Luminaires muraux et plafonniers fonctionnels à partir de moniteurs déclassés — pour cages d'escalier, bureaux, écoles et espaces de vie."
         },
         "eyebrow": "DOMAINES D'UTILISATION · UPCYCLING D'ÉCRANS",
@@ -5984,7 +5984,7 @@
       },
       "gallery": {
         "meta": {
-          "title": "Galerie | Upcycling d'écrans | RevampIT",
+          "title": "Galerie | Upcycling d'écrans",
           "description": "Galerie de lampes monitor upcyclées — photos réelles ou file d’attente indiquée clairement."
         },
         "eyebrow": "GALERIE · UPCYCLING D'ÉCRANS",
@@ -6009,7 +6009,7 @@
       },
       "buildYourOwn": {
         "meta": {
-          "title": "Construire soi-même | Upcycling d'écrans | RevampIT",
+          "title": "Construire soi-même | Upcycling d'écrans",
           "description": "Matériel open source : tous les guides, schémas électriques et matériaux pour construire soi-même un luminaire à partir d'un écran. Licence MIT, libre d'utilisation dans le monde entier."
         },
         "eyebrow": "CONSTRUIRE SOI-MÊME · UPCYCLING D'ÉCRANS",
@@ -6063,7 +6063,7 @@
       },
       "lenovo_l2251pwd": {
         "meta": {
-          "title": "Lenovo L2251pwd — De l'écran au luminaire | Upcycling d'écrans | RevampIT",
+          "title": "Lenovo L2251pwd — De l'écran au luminaire | Upcycling d'écrans",
           "description": "Guide pas-à-pas : démonter un écran Lenovo L2251pwd, retirer l'écran LCD et ponter l'électronique pour en faire un luminaire autonome."
         },
         "back": "← Retour à l'aperçu",
@@ -6208,7 +6208,7 @@
       },
       "status": {
         "meta": {
-          "title": "Statut et impact | Upcycling d'écrans | RevampIT",
+          "title": "Statut et impact | Upcycling d'écrans",
           "description": "Où en est aujourd'hui le projet d'upcycling d'écrans : avancement de la production, estimation de l'impact (chiffres définitifs via l'analyse de cycle de vie ZHAW), jalons et écosystème de partenaires."
         },
         "eyebrow": "STATUT · UPCYCLING D'ÉCRANS",

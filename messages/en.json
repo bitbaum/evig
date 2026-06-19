@@ -5773,7 +5773,7 @@
     },
     "upcycling": {
       "meta": {
-        "title": "Monitor Upcycling | RevampIT",
+        "title": "Monitor Upcycling",
         "description": "Discarded computer monitors are transformed into functional, sustainable lamps. A pilot project for circular economy, social integration in sheltered workshops and resource conservation – with open instructions and scientific support."
       },
       "hero": {
@@ -5872,7 +5872,7 @@
       },
       "applications": {
         "meta": {
-          "title": "Use cases | Monitor upcycling | RevampIT",
+          "title": "Use cases | Monitor upcycling",
           "description": "Functional wall and ceiling lights from decommissioned computer monitors — for stairwells, offices, schools and living spaces."
         },
         "eyebrow": "USE CASES · MONITOR UPCYCLING",
@@ -5916,7 +5916,7 @@
       },
       "gallery": {
         "meta": {
-          "title": "Gallery | Monitor upcycling | RevampIT",
+          "title": "Gallery | Monitor upcycling",
           "description": "Gallery of upcycled monitor lamps — documented with real photos or honestly marked as queued."
         },
         "eyebrow": "GALLERY · MONITOR UPCYCLING",
@@ -5941,7 +5941,7 @@
       },
       "buildYourOwn": {
         "meta": {
-          "title": "Build your own | Monitor upcycling | RevampIT",
+          "title": "Build your own | Monitor upcycling",
           "description": "Open-source hardware: every guide, schematic and bill of materials for building a monitor lamp yourself. MIT licensed, free to use worldwide."
         },
         "eyebrow": "BUILD YOUR OWN · MONITOR UPCYCLING",
@@ -5995,7 +5995,7 @@
       },
       "lenovo_l2251pwd": {
         "meta": {
-          "title": "Lenovo L2251pwd — monitor to lamp | Monitor upcycling | RevampIT",
+          "title": "Lenovo L2251pwd — monitor to lamp | Monitor upcycling",
           "description": "Step-by-step guide: disassemble a Lenovo L2251pwd monitor, remove the LCD, and bridge the electronics into a standalone lamp."
         },
         "back": "← Back to overview",
@@ -6140,7 +6140,7 @@
       },
       "status": {
         "meta": {
-          "title": "Status & Impact | Monitor Upcycling | RevampIT",
+          "title": "Status & Impact | Monitor Upcycling",
           "description": "Where the monitor-upcycling project stands today: production progress, impact estimate (final figures via ZHAW life-cycle assessment), milestones and partner ecosystem."
         },
         "eyebrow": "STATUS · MONITOR UPCYCLING",
