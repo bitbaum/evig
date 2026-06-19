@@ -51,12 +51,12 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'techniker.seller' })
 
   if (!UUID_RE.test(id)) {
-    return { title: `${t('meta.titleFallback')} | ${ORG.name}` }
+    return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } }
   }
 
   const seller = await getSellerMeta(id)
   if (!seller) {
-    return { title: `${t('meta.titleFallback')} | ${ORG.name}` }
+    return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } }
   }
 
   const name = seller.display_name || seller.user_name || ORG.name
@@ -68,7 +68,7 @@ export async function generateMetadata({
     : null
 
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: {
       title,

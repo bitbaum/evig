@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: HardwareRecyclingPageProps): 
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'services.hardwareRecycling' })
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
+    title: { absolute: `${t('meta.title')} | ${ORG.name}` },
     description: t('meta.description'),
     openGraph: {
       title: `${t('meta.ogTitle')} | ${ORG.name}`,

@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'workshops.meta' })
   return {
-    title: `${t('title')} | ${ORG.name}`,
+    title: { absolute: `${t('title')} | ${ORG.name}` },
     description: t('description'),
     openGraph: {
       title: `${t('title')} | ${ORG.name}`,

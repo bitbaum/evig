@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: TechnicalExpertsPageProps): P
   const title = `${t('technicalExperts.meta.title')} | ${ORG.name}`
   const description = t('technicalExperts.meta.description')
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
   }

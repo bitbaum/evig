@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: RevampedPageProps): Promise<M
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'revamped' })
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
+    title: { absolute: `${t('meta.title')} | ${ORG.name}` },
     description: t('meta.description'),
     openGraph: {
       title: `${t('meta.title')} | ${ORG.name}`,

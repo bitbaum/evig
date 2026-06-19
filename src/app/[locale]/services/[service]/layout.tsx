@@ -10,7 +10,7 @@ export async function generateMetadata({
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'services.meta' })
   return {
-    title: `${t('serviceDetailTitle')} | ${ORG.name}`,
+    title: { absolute: `${t('serviceDetailTitle')} | ${ORG.name}` },
     description: t('serviceDetailDesc'),
   }
 }

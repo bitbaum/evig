@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { ORG } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: `AI-Powered Sustainable Computer Builds | ${ORG.name}`,
+  title: { absolute: `AI-Powered Sustainable Computer Builds | ${ORG.name}` },
   description: 'Revolutionary AI system that scans global inventory networks to build custom computers using primarily used and refurbished components. 100% sustainable builds with global parts sourcing.',
   keywords: [
     'sustainable computer build',

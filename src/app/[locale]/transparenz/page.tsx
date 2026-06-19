@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: TransparenzPageProps): Promis
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'transparenz' })
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
+    title: { absolute: `${t('meta.title')} | ${ORG.name}` },
     description: t('meta.description', { orgName: ORG.name }),
     openGraph: {
       title: `${t('meta.title')} | ${ORG.name}`,

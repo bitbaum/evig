@@ -23,23 +23,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id, locale } = await params
   const t = await getTranslations({ locale, namespace: 'techniker' })
 
-  if (!UUID_RE.test(id)) return { title: `${t('meta.title')} | ${ORG.name}` }
+  if (!UUID_RE.test(id)) return { title: { absolute: `${t('meta.title')} | ${ORG.name}` } }
 
   try {
     const tech = await getTechnicianById(id)
-    if (!tech) return { title: `${t('meta.title')} | ${ORG.name}` }
+    if (!tech) return { title: { absolute: `${t('meta.title')} | ${ORG.name}` } }
     const tierLabel = tech.profileTier === 'professional' ? t('detail.professional') : t('detail.community')
     const displayName = tech.name ?? t('meta.title')
     const title = `${displayName} – ${tierLabel} | ${ORG.name}`
     const description = tech.bio ?? `${displayName} · ${tierLabel} · ${ORG.name}`
     return {
-      title,
+      title: { absolute: title },
       description,
       openGraph: { title, description, type: 'website' },
     }
   } catch (err) {
     logger.warn('Failed to generate technician metadata', { error: err })
-    return { title: `${t('meta.title')} | ${ORG.name}` }
+    return { title: { absolute: `${t('meta.title')} | ${ORG.name}` } }
   }
 }
 

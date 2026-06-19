@@ -24,7 +24,7 @@ export async function generateMetadata({
   const title = `${t('meta.title')} | ${ORG.name}`
   const description = t('meta.description')
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: t.raw('meta.keywords') as string[],
     openGraph: { title, description, type: 'website' },

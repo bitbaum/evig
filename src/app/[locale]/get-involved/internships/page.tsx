@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: InternshipsPageProps): Promis
   const title = `${t('internships.meta.title')} | ${ORG.name}`
   const description = t('internships.meta.description')
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
   }

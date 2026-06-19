@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: VolunteerPageProps): Promise<
   const title = `${t('volunteer.meta.title')} | ${ORG.name}`
   const description = t('volunteer.meta.description')
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
   }

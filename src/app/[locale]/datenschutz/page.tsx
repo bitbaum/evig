@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: DatenschutzPageProps): Promis
   const title = `${t('meta.title')} | ${ORG.name}`
   const description = t('meta.description', { orgName: ORG.name })
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
   }

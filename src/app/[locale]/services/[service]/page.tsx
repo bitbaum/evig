@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   if (!service) {
     return {
-      title: `Service Not Found | ${ORG.name}`,
+      title: { absolute: `Service Not Found | ${ORG.name}` },
       description: 'The requested service could not be found.',
     }
   }
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   // Special SEO metadata for data recovery
   if (slug === 'data-recovery-transfer') {
     return {
-      title: `Data Recovery & Transfer Services Zurich | ${ORG.name}`,
+      title: { absolute: `Data Recovery & Transfer Services Zurich | ${ORG.name}` },
       description: 'Professional data recovery and transfer services in Zurich. Recover data from old computers, transfer files between devices, access legacy media (floppy disks, ZIP drives, MO drives). Base fee CHF 30.',
       keywords: [
         'data recovery zurich',
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   }
 
   return {
-    title: `${service.name} | ${ORG.name}`,
+    title: { absolute: `${service.name} | ${ORG.name}` },
     description: service.description,
     openGraph: {
       title: `${service.name} | ${ORG.name}`,

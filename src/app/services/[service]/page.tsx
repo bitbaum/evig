@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   if (slug === 'data-recovery-transfer') {
     const city = LOCATIONS.store.city
     return {
-      title: `Data Recovery & Transfer Services ${city} | ${ORG.name}`,
+      title: { absolute: `Data Recovery & Transfer Services ${city} | ${ORG.name}` },
       description: `Professional data recovery and transfer services in ${city}. Recover data from old computers, transfer files between devices, access legacy media (floppy disks, ZIP drives, MO drives). Base fee CHF 30.`,
       keywords: [
         'data recovery zurich',

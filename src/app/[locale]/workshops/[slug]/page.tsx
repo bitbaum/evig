@@ -31,14 +31,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!workshop) {
     return {
-      title: `${t('detail.notFound')} | ${ORG.name}`,
+      title: { absolute: `${t('detail.notFound')} | ${ORG.name}` },
     }
   }
 
   const description = workshop.short_description || workshop.description || undefined
 
   return {
-    title: `${workshop.title} | ${ORG.name} ${t('meta.title')}`,
+    title: { absolute: `${workshop.title} | ${ORG.name} ${t('meta.title')}` },
     description,
     openGraph: {
       title: `${workshop.title} | ${ORG.name} ${t('meta.title')}`,

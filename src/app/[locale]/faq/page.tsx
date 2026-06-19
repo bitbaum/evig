@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: FAQPageProps): Promise<Metada
   const title = `${t('meta.title')} | ${ORG.name}`
   const description = t('meta.description')
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
   }

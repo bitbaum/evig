@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PartnershipsPageProps): Promi
   const title = `${t('partnerships.meta.title')} | ${ORG.name}`
   const description = t('partnerships.meta.description')
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
   }

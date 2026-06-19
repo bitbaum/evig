@@ -23,13 +23,13 @@ export async function generateMetadata({
   const alternative = getAlternativeById(slug)
 
   if (!alternative) {
-    return { title: `${t('detail.notFound')} | ${ORG.name}` }
+    return { title: { absolute: `${t('detail.notFound')} | ${ORG.name}` } }
   }
 
   const category = getCategoryById(alternative.categoryId)
 
   return {
-    title: `${alternative.name} — ${alternative.tagline} | ${ORG.name}`,
+    title: { absolute: `${alternative.name} — ${alternative.tagline} | ${ORG.name}` },
     description: alternative.description.slice(0, 160),
     openGraph: {
       title: `${alternative.name} — ${t('detail.openSourceAlternative')} | ${ORG.name}`,
