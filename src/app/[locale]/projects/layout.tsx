@@ -12,7 +12,9 @@ export async function generateMetadata({
   return {
     title: {
       template: `%s | ${ORG.name} ${t('templateSuffix')}`,
-      default: `${t('layoutTitle')} | ${ORG.name}`,
+      // Bare — the parent [locale] template (`%s | ORG`) appends the brand.
+      // Including it here too rendered "… | Revamp-IT | Revamp-IT".
+      default: t('layoutTitle'),
     },
     description: t('description'),
   }

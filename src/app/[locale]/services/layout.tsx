@@ -12,7 +12,7 @@ export async function generateMetadata({
   const title = `${t('layoutTitle')} | ${ORG.name}`
   const description = t('description')
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: {
       title,
