@@ -503,7 +503,11 @@
     "theme": {
       "toLight": "Cambiar a modo claro",
       "toDark": "Cambiar a modo oscuro",
-      "toggle": "Cambiar tema"
+      "toggle": "Cambiar tema",
+      "label": "Esquema de color",
+      "light": "Claro",
+      "system": "Sistema",
+      "dark": "Oscuro"
     },
     "chatbot": {
       "open": "Abrir el asistente de Revamp IT"
@@ -3006,7 +3010,8 @@
       "sellerTypeTitle": "Vendedor",
       "qualityTitle": "Calidad",
       "showResults": "Mostrar resultados",
-      "closeLabel": "Cerrar"
+      "closeLabel": "Cerrar",
+      "advanced": "Más filtros"
     },
     "listing": {
       "contact": "Contactar al vendedor",
@@ -3035,7 +3040,14 @@
       "conditionMeaningFor": "¿Qué significa \"{condition}\" para {category}?",
       "loadError": "Error al cargar el anuncio",
       "verified": "Verificado",
-      "free": "Gratis"
+      "free": "Gratis",
+      "trust": {
+        "verified": "Verificado y probado por Revamp-IT",
+        "mission": "Reutilizado en lugar de desechado — asociación sin ánimo de lucro"
+      },
+      "zoomOpen": "Ampliar",
+      "zoomClose": "Cerrar",
+      "photoCount": "{count} fotos"
     },
     "listing_actions": {
       "payment_info": "Pago directo entre comprador y vendedor",
@@ -3165,7 +3177,8 @@
         "imageAlt": "Imagen del artículo",
         "statusLabel": "Estado:",
         "viewOrder": "Ver pedido",
-        "continueShopping": "Seguir comprando"
+        "continueShopping": "Seguir comprando",
+        "totalLabel": "Total"
       },
       "ownListingDesc": "No puedes comprar tu propio anuncio.",
       "backToListingLink": "Volver al anuncio",
@@ -3264,6 +3277,23 @@
     "eyebrows": {
       "marketplace": "MERCADO",
       "getInvolved": "PARTICIPAR"
+    },
+    "cart": {
+      "addToCart": "Añadir al carrito",
+      "inCart": "En el carrito",
+      "title": "Carrito",
+      "empty": "Tu carrito está vacío.",
+      "emptyCta": "Ir al marketplace",
+      "remove": "Quitar",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Finalizar compra",
+      "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
+      "continueShopping": "Seguir comprando",
+      "pickupNote": "Recogida en Zúrich — gratis",
+      "revampitOnly": "Solo los dispositivos de Revamp-IT pueden añadirse al carrito. Los anuncios de la comunidad se compran directamente.",
+      "cartAriaLabel": "Carrito, {count} artículos",
+      "closeAriaLabel": "Cerrar el carrito"
     }
   },
   "membership": {
@@ -7314,7 +7344,11 @@
       "community": "Comunidad",
       "gratis": "Gratis",
       "kulturlegi": "KulturLegi",
-      "loadingError": "Error al cargar los técnicos. Por favor, inténtalo de nuevo."
+      "loadingError": "Error al cargar los técnicos. Por favor, inténtalo de nuevo.",
+      "requestHelp": "Solicitar ayuda",
+      "availableEmpty": "Disponible pronto — únete a la primera generación",
+      "emptyActionSecondary": "Solicitar ayuda de todos modos → Ayuda informática",
+      "backToHub": "Volver a Ayuda informática"
     },
     "detail": {
       "backToList": "Todos los técnicos",
@@ -8103,7 +8137,9 @@
       "errorLoading": "Error al cargar el pedido",
       "errorConfirmReceipt": "No se pudo confirmar la recepción",
       "errorUpdateStatus": "No se pudo actualizar el estado",
-      "networkError": "Error de red"
+      "networkError": "Error de red",
+      "articlesSection": "Artículos ({count})",
+      "moreItems": "+{count} más"
     },
     "listings": {
       "pageTitle": "Mis anuncios",
@@ -8445,7 +8481,8 @@
       "backToDashboard": "Volver al panel",
       "editProfile": "Editar perfil",
       "account": {
-        "passwordNote": "El cambio de contraseña se gestiona desde la página de perfil (se integrará aquí más adelante)"
+        "passwordNote": "El cambio de contraseña se gestiona desde la página de perfil (se integrará aquí más adelante)",
+        "deleteRequestBody": "Deseo eliminar mi cuenta ({email}). Por favor, confirmad la eliminación de mis datos personales."
       },
       "privacy": {
         "dataExportTitle": "Privacidad y exportación",
@@ -9335,6 +9372,28 @@
     },
     "localeFallback": {
       "notice": "El área de administración solo está disponible en alemán."
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "Registro de cambios",
+      "description": "Últimas correcciones, funciones y mejoras de la plataforma RevampIT."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "En vivo",
+      "title": "Registro de cambios",
+      "subtitle": "Las últimas correcciones, funciones y mejoras que desplegamos en revampit.ch."
+    },
+    "latest": {
+      "label": "Más recientes"
+    },
+    "nav": {
+      "label": "Versiones"
+    },
+    "command": {
+      "label": "Iniciar en local",
+      "text": "npm run d"
     }
   }
 }
