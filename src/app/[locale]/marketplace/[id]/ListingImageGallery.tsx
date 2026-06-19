@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { ListingImageData } from './types'
 import { useTranslations } from 'next-intl'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 interface ListingImageGalleryProps {
   images: ListingImageData[]
@@ -26,12 +27,15 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
     [selectedImage, images.length, onSelectImage],
   )
 
-  // Keyboard: Esc closes, arrows navigate while zoomed.
+  // Esc-to-close, initial focus, focus restore and the Tab trap live in the
+  // shared hook; attach its ref to the lightbox below.
+  const lightboxRef = useFocusTrap<HTMLDivElement>(zoomed, () => setZoomed(false))
+
+  // Arrow keys navigate between images while zoomed.
   useEffect(() => {
     if (!zoomed) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setZoomed(false)
-      else if (e.key === 'ArrowRight') step(1)
+      if (e.key === 'ArrowRight') step(1)
       else if (e.key === 'ArrowLeft') step(-1)
     }
     window.addEventListener('keydown', onKey)
@@ -91,10 +95,13 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
       {/* Lightbox */}
       {zoomed && hasImage && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+          ref={lightboxRef}
+          tabIndex={-1}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 focus:outline-none"
           onClick={() => setZoomed(false)}
           role="dialog"
           aria-modal="true"
+          aria-label={title}
         >
           <Button
             variant="ghost"
