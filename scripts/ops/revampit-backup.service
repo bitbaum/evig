@@ -1,0 +1,11 @@
+[Unit]
+Description=RevampIT nightly DB + uploads backup to R2 (revampit-backups)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Runs as root so it can read the root-owned /opt/revampit/app/.env.
+ExecStart=/opt/revampit/ops/backup-db-to-r2.sh
+# A backup must never wedge the box; cap the run.
+TimeoutStartSec=900

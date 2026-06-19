@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the RevampIT backup nightly
+
+[Timer]
+# 03:30 UTC daily; Persistent catches up a run missed while the box was off.
+OnCalendar=*-*-* 03:30:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
