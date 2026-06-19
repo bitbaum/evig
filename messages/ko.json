@@ -6853,7 +6853,7 @@
   },
   "shop": {
     "meta": {
-      "title": "Buy refurbished IT | Revamp-IT",
+      "title": "Buy refurbished IT",
       "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "productNotFound": "제품을 찾을 수 없습니다",
       "productFallbackDesc": "{brand} {model} — {orgName}가 검사 및 재건한 제품"

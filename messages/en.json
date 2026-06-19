@@ -460,7 +460,7 @@
   },
   "shop": {
     "meta": {
-      "title": "Buy refurbished IT | Revamp-IT",
+      "title": "Buy refurbished IT",
       "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
       "productNotFound": "Product not found",
       "productFallbackDesc": "{brand} {model} — inspected and refurbished by {orgName}"
