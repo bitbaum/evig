@@ -4,20 +4,16 @@
  * Shared Modal wrapper component
  *
  * Provides consistent backdrop, header with title/close button,
- * escape-to-close, click-outside-to-close, initial-focus, focus
- * restoration on close, and a focus trap that cycles Tab inside
- * the dialog.
- *
- * The trap is intentionally minimal (no `focus-trap-react` dep);
- * it covers the common case — modals contain a few interactive
- * elements, not a treeview. If a future modal needs more complex
- * focus management, swap to a tested library here only.
+ * click-outside-to-close, and accessible focus management
+ * (escape-to-close, initial focus, focus restoration on close, and a
+ * Tab trap) via the shared `useFocusTrap` hook.
  */
 
-import { useEffect, useCallback, useRef, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 const SIZE_CLASSES = {
   sm: 'max-w-sm',
@@ -35,9 +31,6 @@ interface ModalProps {
   size?: keyof typeof SIZE_CLASSES
 }
 
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
 export function Modal({
   isOpen,
   onClose,
@@ -47,61 +40,7 @@ export function Modal({
   size = 'md',
 }: ModalProps) {
   const t = useTranslations('common')
-  const dialogRef = useRef<HTMLDivElement>(null)
-  // Track the element that was focused when the modal opened so we can
-  // restore focus on close. Without this, keyboard users land back at the
-  // top of the page every time.
-  const previousFocusRef = useRef<HTMLElement | null>(null)
-
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose()
-        return
-      }
-      if (e.key === 'Tab' && dialogRef.current) {
-        const focusables = dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-        if (focusables.length === 0) return
-        const first = focusables[0]
-        const last = focusables[focusables.length - 1]
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault()
-          last.focus()
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault()
-          first.focus()
-        }
-      }
-    },
-    [onClose],
-  )
-
-  useEffect(() => {
-    if (!isOpen) return
-
-    // Remember whoever opened the modal so we can return focus on close.
-    previousFocusRef.current = document.activeElement as HTMLElement | null
-
-    document.addEventListener('keydown', handleKeyDown)
-
-    // Move focus into the dialog. Prefer the first focusable element
-    // (typically a form input or close button) so screen readers
-    // announce the modal contents immediately.
-    const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-    const target = focusables?.[0] ?? dialogRef.current
-    target?.focus()
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      // Restore focus to whatever opened the modal — only if that
-      // element is still in the document (e.g. the trigger wasn't
-      // unmounted while the modal was open).
-      const prev = previousFocusRef.current
-      if (prev && document.body.contains(prev)) {
-        prev.focus()
-      }
-    }
-  }, [isOpen, handleKeyDown])
+  const dialogRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
 
   if (!isOpen) return null
 

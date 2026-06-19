@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { formatCHF } from '@/config/marketplace'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { useCart } from './CartProvider'
 
 /**
@@ -18,18 +19,19 @@ export function CartDrawer() {
   const t = useTranslations('marketplace.cart')
   const { items, total, count, drawerOpen, closeDrawer, remove } = useCart()
 
-  // Esc closes; lock body scroll while open.
+  // Escape-to-close, initial focus, focus restore and the Tab trap all live in
+  // the shared hook; attach its ref to the panel below.
+  const panelRef = useFocusTrap<HTMLDivElement>(drawerOpen, closeDrawer)
+
+  // Lock body scroll while the drawer is open.
   useEffect(() => {
     if (!drawerOpen) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeDrawer() }
-    window.addEventListener('keydown', onKey)
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
-      window.removeEventListener('keydown', onKey)
       document.body.style.overflow = prevOverflow
     }
-  }, [drawerOpen, closeDrawer])
+  }, [drawerOpen])
 
   if (!drawerOpen) return null
 
@@ -38,8 +40,8 @@ export function CartDrawer() {
       {/* Scrim */}
       <div className="absolute inset-0 bg-black/50" onClick={closeDrawer} aria-hidden="true" />
 
-      {/* Panel */}
-      <div className="relative flex h-full w-full max-w-sm flex-col border-l border-strong bg-surface-base">
+      {/* Panel — tabIndex=-1 so the trap can focus it when no child is focusable. */}
+      <div ref={panelRef} tabIndex={-1} className="relative flex h-full w-full max-w-sm flex-col border-l border-strong bg-surface-base focus:outline-none">
         <header className="flex items-center justify-between border-b border-subtle px-5 py-4">
           <h2 className="flex items-center gap-2 text-base font-semibold text-text-primary">
             <ShoppingCart className="h-5 w-5" aria-hidden="true" />
