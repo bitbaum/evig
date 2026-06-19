@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
   return {
-    title: `${t('decisionsTitle')} | ${ORG.name} Dashboard`,
+    title: { absolute: `${t('decisionsTitle')} | ${ORG.name} Dashboard` },
     description: t('decisionsDesc'),
   }
 }

@@ -28,7 +28,7 @@ import { ROUTES } from '@/config/routes'
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
-  return { title: `${t('decisionDetailTitle')} | ${ORG.name} Dashboard` }
+  return { title: { absolute: `${t('decisionDetailTitle')} | ${ORG.name} Dashboard` } }
 }
 
 type Props = { params: Promise<{ id: string }> }

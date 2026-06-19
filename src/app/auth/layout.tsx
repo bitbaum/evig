@@ -9,7 +9,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
       template: `%s | ${ORG.name}`,
-      default: `${t('accountTitle')} | ${ORG.name}`,
+      // Bare — the parent root template (`%s | ORG`) appends the brand;
+      // embedding it here too would render "… | Revamp-IT | Revamp-IT".
+      default: t('accountTitle'),
     },
     description: t('accountDesc'),
     robots: { index: false, follow: false },
