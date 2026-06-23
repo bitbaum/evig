@@ -1,6 +1,8 @@
 # Admin UX audit — first principles (Musk lens)
 
-**Date:** 2026-06-03
+**Date:** 2026-06-03  
+**Last Modified:** 2026-06-23  
+**Last Modified Summary:** Protocols capture/recording lives on `main` (RecordButton + multi-source SourceUploader + DecisionBridge); stale `claude/protocols-ux-recording` branch removed; action-items summary banner added.
 **Scope:** `/admin/timecards`, `/admin/team`, `/admin/tasks`, `/admin/protocols`
 **Method:** 4 parallel expert subagents, each examining one section through the lens of "make requirements less dumb → delete the process step → simplify → reduce cycle time."
 

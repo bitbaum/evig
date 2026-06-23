@@ -117,7 +117,7 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /1 Aufgaben erstellen/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Alle 1 Aufgabe erstellen/i }))
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
