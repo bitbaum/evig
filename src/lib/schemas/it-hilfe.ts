@@ -86,6 +86,7 @@ export const itHilfeRequestSchema = z.object({
     .optional(),
   /** Up to 10 image URLs. URLs validated as well-formed http(s). */
   imageUrls: z.array(z.string().url('Ungültige Bild-URL')).max(10, 'Maximal 10 Bilder erlaubt').optional(),
+  preferredTechnicianId: z.string().uuid('Ungültige Techniker-ID').optional().nullable(),
   /** AI-generated diagnosis text — optional companion to description. */
   aiDiagnosis: z.string().max(5000, 'AI-Diagnose darf maximal 5000 Zeichen lang sein').optional().nullable(),
   // For anonymous submissions: a logged-out visitor supplies their email

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-06-19
-last_modified_summary: DB/deploy/storage ground truth — Neon retired for prod+auth, self-hosted Hetzner Postgres, Cloudflare R2
+last_modified_summary: Unified technician SSOT (repairer_profiles); migration 095; legacy helper API consolidated
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -77,6 +77,25 @@ People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
 |---------|--------|--------|
 | **Hardware** | Marktplatz → Kaufen & verkaufen | `/marketplace`, `/marketplace/sell` (`/shop/*` redirects here) |
 | **IT help** | Marktplatz → IT-Hilfe hub | `/it-hilfe` (hub), `/it-hilfe/create`, `/it-hilfe/techniker`, `/it-hilfe/anfragen` |
+
+**Technician → request flow:** From a public profile (`/it-hilfe/techniker/[id]`), “Anfrage stellen” opens `/it-hilfe/create?technician=<profileId>`. The request stores `preferred_technician_id` (migration `092_it_hilfe_preferred_technician.sql`); that technician is notified directly and listed first on the request detail match panel. The request stays open to other offers until one is accepted. Request owners see the preferred technician in the detail sidebar.
+
+**Technician onboarding:** `/profil/techniker` shows a completeness banner until skills, canton, and location (PLZ or city) are set (`src/lib/domain/technician-profile.ts`). Same banner appears on `/it-hilfe/anfragen` for logged-in technicians with incomplete profiles.
+
+**Browse requests (`/it-hilfe/anfragen`):** Filters include category, canton, urgency, budget, skill, service type, and (for match-ready technicians) “match my skills” — API param `matchMySkills=true` overlaps the requester's `skills_needed` with the logged-in user's `user_skills`.
+
+**Technician profile SSOT (unified 2026-06):**
+
+| Layer | SSOT |
+|-------|------|
+| DB table | `repairer_profiles` (+ `user_skills`) — `helper_profiles` merged by migration 061, dropped by 073 |
+| Public list/detail | `GET /api/technicians`, `GET /api/technicians/[id]` — **`id` = `repairer_profiles.id` (profile UUID)** |
+| Self-service edit | `GET/PUT /api/user/technician-profile` |
+| Profile tier | `REPAIRER_PROFILE_TIER` in `src/config/repairer-status.ts` (`community` \| `professional`) |
+| Domain logic | `src/lib/services/technician-service.ts`, `src/lib/domain/technician-profile.ts` |
+| Legacy (410 Gone) | List routes `/api/it-hilfe/helpers`, `/api/repairers`, `/api/it-hilfe/helper/*` — use successors in `IT_HILFE.api`; `/api/it-hilfe/helpers/[id]` still proxies detail |
+
+Migration `095_backfill_repairer_profiles_from_user_skills.sql` creates missing `repairer_profiles` rows for users with `user_skills` only (safe after 073).
 
 Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav entries for “Hilfe suchen” vs “Techniker finden” — one hub, three paths inside.
 

@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic'
-
 import ITHilfeHubClient from './ITHilfeHubClient'
 
 export default function ITHilfeHubPage() {

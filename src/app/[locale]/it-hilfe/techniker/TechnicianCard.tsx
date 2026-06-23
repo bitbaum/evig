@@ -40,7 +40,9 @@ export function TechnicianCard({ technician }: { technician: Technician }) {
   ].filter(Boolean) as string[]
 
   // Stats meta — rating · jobs count
-  const hasStats = technician.averageRating != null || technician.totalJobsCompleted > 0
+  const rating = technician.averageRating
+  const hasRating = rating != null && rating > 0
+  const hasStats = hasRating || technician.totalJobsCompleted > 0
 
   return (
     <Link
@@ -78,13 +80,13 @@ export function TechnicianCard({ technician }: { technician: Technician }) {
         <div className="mt-4 pt-3 border-t border-subtle space-y-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
           {hasStats && (
             <div className="tabular-nums">
-              {technician.averageRating != null && (
+              {hasRating && (
                 <span>
-                  ★ {technician.averageRating.toFixed(1)}
+                  ★ {rating.toFixed(1)}
                   {technician.totalReviews > 0 && ` (${technician.totalReviews})`}
                 </span>
               )}
-              {technician.averageRating != null && technician.totalJobsCompleted > 0 && ' · '}
+              {hasRating && technician.totalJobsCompleted > 0 && ' · '}
               {technician.totalJobsCompleted > 0 && (
                 <span>{t('list.jobs', { count: technician.totalJobsCompleted })}</span>
               )}

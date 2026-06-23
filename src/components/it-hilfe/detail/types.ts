@@ -19,6 +19,9 @@ export interface ITHilfeRequest {
   imageUrls: string[]
   status: string
   matchedOfferId: string | null
+  preferredTechnicianId: string | null
+  preferredTechnicianName: string | null
+  preferredTechnicianCity: string | null
   matchedHelperId: string | null
   /**
    * Display name of the matched helper. Available to anyone viewing the

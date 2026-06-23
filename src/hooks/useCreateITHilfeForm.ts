@@ -23,7 +23,11 @@ interface AIFormFields {
   diagnosis: string
 }
 
-export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: string) {
+export function useCreateITHilfeForm(
+  errorCreateFailed: string,
+  errorGeneric: string,
+  preferredTechnicianId: string = '',
+) {
   const { data: session, status } = useSession()
   const router = useRouter()
 
@@ -42,7 +46,10 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
   // to manage" CTA instead.
   const [existingAccountAttached, setExistingAccountAttached] = useState(false)
   const [submittedRequestId, setSubmittedRequestId] = useState<string | null>(null)
-  const [formData, setFormData] = useState<ITHilfeCreateFormData>(INITIAL_IT_HILFE_FORM)
+  const [formData, setFormData] = useState<ITHilfeCreateFormData>(() => ({
+    ...INITIAL_IT_HILFE_FORM,
+    preferredTechnicianId,
+  }))
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
 
   // No auth gate here. Logged-out visitors can submit; the form shows an

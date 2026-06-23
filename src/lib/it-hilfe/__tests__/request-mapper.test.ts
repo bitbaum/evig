@@ -37,6 +37,7 @@ const baseRow: RequestRow = {
   image_urls: ['/uploads/a.jpg'],
   status: 'open',
   matched_offer_id: null,
+  preferred_technician_id: 'tech-profile-1',
   offer_count: 3,
   ai_diagnosis: 'Likely a power supply issue.',
   completed_at: null,
@@ -72,10 +73,23 @@ describe('mapRequestListRow', () => {
     expect(result.serviceType).toBe('flexible')
     expect(result.status).toBe('open')
     expect(result.matchedOfferId).toBeNull()
+    expect(result.preferredTechnicianId).toBe('tech-profile-1')
+    expect(result.preferredTechnicianName).toBeNull()
+    expect(result.preferredTechnicianCity).toBeNull()
     expect(result.offerCount).toBe(3)
     expect(result.expiresAt).toBe('2026-12-31T23:59:59Z')
     expect(result.createdAt).toBe('2026-01-01T10:00:00Z')
     expect(result.updatedAt).toBe('2026-01-01T10:00:00Z')
+  })
+
+  it('maps preferred technician display fields when present', () => {
+    const result = mapRequestListRow({
+      ...baseRow,
+      preferred_technician_name: 'George',
+      preferred_technician_city: 'Zürich',
+    })
+    expect(result.preferredTechnicianName).toBe('George')
+    expect(result.preferredTechnicianCity).toBe('Zürich')
   })
 
   it('does NOT expose requester_email (list route is public to all helpers)', () => {

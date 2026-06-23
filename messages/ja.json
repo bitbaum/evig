@@ -2447,6 +2447,12 @@
       "filterBudgetAll": "すべて",
       "filterBudgetFree": "無料 / コミュニティ",
       "filterBudgetPaid": "予算あり",
+      "filterSkill": "スキル",
+      "filterSkillAll": "すべてのスキル",
+      "filterServiceType": "サポート形式",
+      "filterServiceTypeAll": "すべて",
+      "filterMatchMySkills": "自分のスキルに合う依頼のみ",
+      "filterMatchMySkillsHint": "自分のスキルのうち1つ以上が必要な公開依頼を表示します。",
       "pagination": "ページナビゲーション",
       "prevPage": "前のページ",
       "nextPage": "次のページ",
@@ -2503,6 +2509,12 @@
       "planRoute": "ルートを確認",
       "noMatchesYet": "まだ技術者が見つかりません。依頼は公開されています。",
       "topMatch": "トップマッチ",
+      "preferredTechnician": "あなたの選択",
+      "preferredTechnicianSidebar": {
+        "title": "希望の技術者",
+        "description": "{name} にサポートを依頼しました。",
+        "viewProfile": "プロフィールを見る"
+      },
       "matchPercent": "{percent}%マッチ",
       "confirmWithdraw": "本当に申し出を取り下げますか？",
       "errorWithdraw": "取り下げエラー",
@@ -2536,6 +2548,11 @@
       "eyebrow": "新しいリクエスト",
       "title": "修理リクエストを作成",
       "description": "デバイスを選択して、問題を説明してください。コミュニティが助けます。",
+      "preferredTechnician": {
+        "eyebrow": "選択した技術者",
+        "description": "この技術者に依頼が通知されます。他の適合する技術者も、あなたが承諾するまで申し出を送れます。",
+        "viewProfile": "プロフィールを見る"
+      },
       "createdTitle": "リクエストを作成しました！",
       "createdRedirect": "まもなくリダイレクトされます...",
       "sectionDevice": "何を修理しますか？",
@@ -3265,6 +3282,23 @@
     "eyebrows": {
       "marketplace": "マーケット",
       "getInvolved": "参加する"
+    },
+    "cart": {
+      "addToCart": "カートに追加",
+      "inCart": "カート内",
+      "title": "カート",
+      "empty": "カートは空です。",
+      "emptyCta": "マーケットプレイスを見る",
+      "remove": "削除",
+      "subtotal": "小計",
+      "total": "合計",
+      "checkout": "購入手続きへ",
+      "itemCount": "{count}点の商品",
+      "continueShopping": "買い物を続ける",
+      "pickupNote": "チューリッヒで無料受け取り",
+      "revampitOnly": "Revamp-ITの商品だけカートに追加できます。コミュニティ出品は直接購入します。",
+      "cartAriaLabel": "カート、{count}点の商品",
+      "closeAriaLabel": "カートを閉じる"
     }
   },
   "membership": {
@@ -9103,7 +9137,14 @@
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "skillRequired": "少なくとも 1 つのスキルを選択してください。"
+      "skillRequired": "少なくとも 1 つのスキルを選択してください。",
+      "completeness": {
+        "title": "プロフィールが未完成です",
+        "description": "これらを入力すると、マッチする依頼を見つけ、通知を受け取れます。",
+        "gapSkills": "スキルを1つ以上選択",
+        "gapCanton": "州（カントン）を入力",
+        "gapLocation": "郵便番号または市区町村を入力"
+      }
     }
   },
   "vote": {

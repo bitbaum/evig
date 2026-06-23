@@ -19,6 +19,8 @@ import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import { Input } from '@/components/ui/input'
 import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
+import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus'
+import { TechnicianProfileCompletenessBanner } from '@/components/it-hilfe/TechnicianProfileCompletenessBanner'
 import { ROUTES } from '@/config/routes'
 import { ItHilfeFilters } from './ItHilfeFilters'
 import { ArrowLeft } from 'lucide-react'
@@ -49,6 +51,9 @@ export default function ITHilfeBrowseRequestsPage() {
     retry,
     limit,
   } = useITHilfeRequests()
+
+  const { gaps, hasProfile, isMatchReady, loading: profileStatusLoading } = useTechnicianProfileStatus()
+  const showCompletenessBanner = session?.user && hasProfile && gaps.length > 0 && !profileStatusLoading
 
   return (
     <div className="bg-canvas min-h-screen">
@@ -123,6 +128,10 @@ export default function ITHilfeBrowseRequestsPage() {
           </div>
         )}
 
+        {showCompletenessBanner && (
+          <TechnicianProfileCompletenessBanner gaps={gaps} linkToProfileSections />
+        )}
+
         <ItHilfeFilters
           sort={sort}
           setSort={setSort}
@@ -130,6 +139,8 @@ export default function ITHilfeBrowseRequestsPage() {
           setFilter={setFilter}
           hasActiveFilters={hasActiveFilters}
           clearFilters={clearFilters}
+          defaultExpanded
+          matchMySkillsAvailable={Boolean(session?.user && isMatchReady)}
         />
 
         {loading && <LoadingSkeleton count={limit} />}

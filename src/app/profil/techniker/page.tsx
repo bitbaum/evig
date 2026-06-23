@@ -28,6 +28,8 @@ import {
   type ITSkill,
 } from '@/config/it-hilfe'
 import { useTechnicianProfile } from '@/hooks/useTechnicianProfile'
+import { getTechnicianProfileGaps } from '@/lib/domain/technician-profile'
+import { TechnicianProfileCompletenessBanner } from '@/components/it-hilfe/TechnicianProfileCompletenessBanner'
 
 export default function TechnikerProfilPage() {
   const t = useTranslations('profil.techniker')
@@ -44,6 +46,8 @@ export default function TechnikerProfilPage() {
     handleServiceTypeToggle,
     handleSave,
   } = useTechnicianProfile(t('saveFailed'))
+
+  const profileGaps = getTechnicianProfileGaps(profile)
 
   if (authStatus === 'loading' || loading) {
     return (
@@ -88,8 +92,12 @@ export default function TechnikerProfilPage() {
           </div>
         )}
 
+        {profileGaps.length > 0 && (
+          <TechnicianProfileCompletenessBanner gaps={profileGaps} linkToProfileSections />
+        )}
+
         {/* Skills Selection */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
+        <div id="skills" className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6 scroll-mt-24">
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-action" />
             {t('skills.heading')}
@@ -167,7 +175,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Location */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
+        <div id="location" className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6 scroll-mt-24">
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-action" />
             {t('location.heading')}

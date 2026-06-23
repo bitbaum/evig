@@ -1,55 +1,19 @@
 /**
  * @jest-environment node
  *
- * Tests for GET /api/it-hilfe/helpers/[id]
- *
- * Mission-relevant: helper profile is a public, cached route — UUID validation
- * and not-found handling prevent noise from bots hitting arbitrary IDs.
- *
- * Behaviors locked:
- *   GET /api/it-hilfe/helpers/[id]
- *   - returns 400 for invalid UUID
- *   - returns 404 when helper not found
- *   - returns 200 with helper profile
- *   - includes skills array (empty when no skills)
- *   - returns 500 when DB throws
+ * Tests for GET /api/it-hilfe/helpers/[id] (legacy proxy to technician-service)
  */
 
-// ---------------------------------------------------------------------------
-// Mocks
-// ---------------------------------------------------------------------------
-
-const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockInnerJoin = jest.fn()
-const mockLeftJoin = jest.fn()
-const mockWhere = jest.fn()
-const mockGroupBy = jest.fn()
-
-jest.mock('@/db', () => ({
-  db: {
-    select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
-  },
-}))
-
-jest.mock('@/db/schema', () => ({
-  repairerProfiles: { userId: 'rp_userId', description: 'rp_description', isActive: 'rp_isActive', profileTier: 'rp_profileTier', hourlyRateCents: 'rp_hourlyRateCents', acceptsGratis: 'rp_acceptsGratis', acceptsKulturlegi: 'rp_acceptsKulturlegi', serviceDeliveryTypes: 'rp_serviceDeliveryTypes', city: 'rp_city', canton: 'rp_canton', maxTravelKm: 'rp_maxTravelKm', isVerified: 'rp_isVerified', averageRating: 'rp_averageRating', totalJobsCompleted: 'rp_totalJobsCompleted', createdAt: 'rp_createdAt' },
-  userSkills: { skillId: 'us_skillId', userId: 'us_userId' },
-  users: { id: 'u_id', name: 'u_name' },
-}))
-
-jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
-  eq: jest.fn().mockReturnValue({ __eq: true }),
-  and: jest.fn().mockReturnValue({ __and: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'sql' }), { raw: jest.fn(), join: jest.fn() }),
+jest.mock('@/lib/services/technician-service', () => ({
+  getTechnicianByIdOrUserId: jest.fn(),
+  TECHNICIAN_UUID_RE: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
 }))
 
 jest.mock('@/lib/api/helpers', () => {
   const { NextResponse } = jest.requireActual('next/server')
   return {
     apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }),
-    apiError: (err: unknown, msg: string, status = 500) =>
+    apiError: (_err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiNotFound: (entity: string) =>
       NextResponse.json({ success: false, error: `${entity} nicht gefunden` }, { status: 404 }),
@@ -66,40 +30,37 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
-// ---------------------------------------------------------------------------
-// Imports (after mocks)
-// ---------------------------------------------------------------------------
-
 import { NextRequest } from 'next/server'
 import { GET } from '../route'
+import { getTechnicianByIdOrUserId } from '@/lib/services/technician-service'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 
-// ---------------------------------------------------------------------------
-// Fixtures
-// ---------------------------------------------------------------------------
+const mockGet = getTechnicianByIdOrUserId as jest.MockedFunction<typeof getTechnicianByIdOrUserId>
 
 const VALID_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
-const INVALID_ID = 'not-a-uuid'
 
-const MOCK_HELPER = {
-  userId: VALID_UUID,
+const MOCK_TECHNICIAN = {
+  id: VALID_UUID,
+  userId: 'user-1',
   name: 'Hans Müller',
   bio: 'Ich helfe gerne',
   hourlyRateCents: null,
+  averageRating: null,
+  totalJobsCompleted: 0,
+  totalReviews: 0,
+  profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
+  city: 'Zürich',
+  postalCode: '8000',
+  canton: 'Zürich',
   acceptsGratis: true,
   acceptsKulturlegi: true,
-  serviceTypes: ['remote'],
-  locationCity: 'Zürich',
-  locationCanton: 'ZH',
-  maxTravelKm: 20,
   isVerified: false,
-  averageRating: null,
-  totalHelpsCompleted: 0,
+  serviceDeliveryTypes: ['remote'],
+  maxTravelKm: 20,
+  responseTimeHours: 24,
   createdAt: '2026-01-01',
-  skills: ['wifi', 'linux'],
-}
-
-function makeRequest(id = VALID_UUID) {
-  return new NextRequest(`http://localhost/api/it-hilfe/helpers/${id}`)
+  skills: ['wifi_setup', 'linux_install'],
+  services: [],
 }
 
 function makeContext(id = VALID_UUID) {
@@ -108,68 +69,54 @@ function makeContext(id = VALID_UUID) {
 
 beforeEach(() => {
   jest.resetAllMocks()
-  mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
-  mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
-  mockLeftJoin.mockReturnValue({ where: mockWhere })
-  mockWhere.mockReturnValue({ groupBy: mockGroupBy })
-  mockGroupBy.mockResolvedValue([MOCK_HELPER])
+  mockGet.mockResolvedValue(MOCK_TECHNICIAN)
 })
 
-// ============================================================================
-// GET /api/it-hilfe/helpers/[id]
-// ============================================================================
-
-describe('GET /api/it-hilfe/helpers/[id] — validation', () => {
+describe('GET /api/it-hilfe/helpers/[id]', () => {
   it('returns 400 for invalid UUID', async () => {
-    const response = await GET(makeRequest(INVALID_ID), makeContext(INVALID_ID))
+    const response = await GET(
+      new NextRequest(`http://localhost/api/it-hilfe/helpers/not-a-uuid`),
+      makeContext('not-a-uuid'),
+    )
     expect(response.status).toBe(400)
   })
 
-  it('returns 400 for empty-ish id', async () => {
-    const response = await GET(makeRequest('abc'), makeContext('abc'))
-    expect(response.status).toBe(400)
-  })
-})
-
-describe('GET /api/it-hilfe/helpers/[id] — not found', () => {
-  it('returns 404 when helper not found', async () => {
-    mockGroupBy.mockResolvedValueOnce([])
-    const response = await GET(makeRequest(), makeContext())
+  it('returns 404 when technician not found', async () => {
+    mockGet.mockResolvedValueOnce(null)
+    const response = await GET(
+      new NextRequest(`http://localhost/api/it-hilfe/helpers/${VALID_UUID}`),
+      makeContext(),
+    )
     expect(response.status).toBe(404)
   })
-})
 
-describe('GET /api/it-hilfe/helpers/[id] — success', () => {
-  it('returns 200 with helper profile', async () => {
-    const response = await GET(makeRequest(), makeContext())
-    expect(response.status).toBe(200)
+  it('returns 404 for professional tier (legacy route is community-only)', async () => {
+    mockGet.mockResolvedValueOnce({ ...MOCK_TECHNICIAN, profileTier: REPAIRER_PROFILE_TIER.PROFESSIONAL })
+    const response = await GET(
+      new NextRequest(`http://localhost/api/it-hilfe/helpers/${VALID_UUID}`),
+      makeContext(),
+    )
+    expect(response.status).toBe(404)
   })
 
-  it('returns helper data in response', async () => {
-    const response = await GET(makeRequest(), makeContext())
+  it('returns legacy helper shape for community profile', async () => {
+    const response = await GET(
+      new NextRequest(`http://localhost/api/it-hilfe/helpers/${VALID_UUID}`),
+      makeContext(),
+    )
     const body = await response.json()
+    expect(response.status).toBe(200)
     expect(body.data.helper.name).toBe('Hans Müller')
     expect(body.data.helper.locationCity).toBe('Zürich')
+    expect(body.data.helper.skills).toEqual(['wifi_setup', 'linux_install'])
   })
 
-  it('includes skills array', async () => {
-    const response = await GET(makeRequest(), makeContext())
-    const body = await response.json()
-    expect(body.data.helper.skills).toEqual(['wifi', 'linux'])
-  })
-
-  it('returns empty skills array when no skills', async () => {
-    mockGroupBy.mockResolvedValueOnce([{ ...MOCK_HELPER, skills: null }])
-    const response = await GET(makeRequest(), makeContext())
-    const body = await response.json()
-    expect(body.data.helper.skills).toEqual([])
-  })
-})
-
-describe('GET /api/it-hilfe/helpers/[id] — errors', () => {
-  it('returns 500 when DB throws', async () => {
-    mockGroupBy.mockRejectedValueOnce(new Error('DB error'))
-    const response = await GET(makeRequest(), makeContext())
+  it('returns 500 when service throws', async () => {
+    mockGet.mockRejectedValueOnce(new Error('DB error'))
+    const response = await GET(
+      new NextRequest(`http://localhost/api/it-hilfe/helpers/${VALID_UUID}`),
+      makeContext(),
+    )
     expect(response.status).toBe(500)
   })
 })

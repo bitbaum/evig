@@ -38,6 +38,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
         serviceTypes: repairerProfiles.serviceDeliveryTypes,
         postalCode: repairerProfiles.postalCode,
         city: repairerProfiles.city,
+        canton: repairerProfiles.canton,
         maxTravelKm: repairerProfiles.maxTravelKm,
         isActive: repairerProfiles.isActive,
         profileTier: repairerProfiles.profileTier,
@@ -58,22 +59,36 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
           skills: skillRows.map((r) => r.skillId),
           bio: profileRow.bio || '',
           hourlyRateCents: profileRow.hourlyRateCents,
-          acceptsGratis: profileRow.acceptsGratis,
-          acceptsKulturlegi: profileRow.acceptsKulturlegi,
+          acceptsGratis: profileRow.acceptsGratis ?? true,
+          acceptsKulturlegi: profileRow.acceptsKulturlegi ?? true,
           serviceTypes: profileRow.serviceTypes || ['flexible'],
           postalCode: profileRow.postalCode || '',
           city: profileRow.city || '',
-          // canton not available on repairer_profiles yet
-          canton: '',
-          maxTravelKm: profileRow.maxTravelKm,
-          isActive: profileRow.isActive,
+          canton: profileRow.canton || '',
+          maxTravelKm: profileRow.maxTravelKm ?? 10,
+          isActive: profileRow.isActive ?? false,
           profileTier: profileRow.profileTier,
         }
-      : null
+      : skillRows.length > 0
+        ? {
+            skills: skillRows.map((r) => r.skillId),
+            bio: '',
+            hourlyRateCents: null,
+            acceptsGratis: true,
+            acceptsKulturlegi: true,
+            serviceTypes: ['flexible'],
+            postalCode: '',
+            city: '',
+            canton: '',
+            maxTravelKm: 10,
+            isActive: false,
+            profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
+          }
+        : null
 
     return apiSuccess({
       profile,
-      hasProfile: !!profile,
+      hasProfile: !!profileRow,
     })
   } catch (error) {
     logger.error('Error fetching technician profile', { error })
@@ -100,6 +115,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
       serviceTypes,
       postalCode,
       city,
+      canton,
       maxTravelKm,
       isActive,
     } = validation.data
@@ -117,6 +133,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
         acceptsKulturlegi,
         serviceDeliveryTypes: serviceTypes.length > 0 ? serviceTypes : undefined,
         city: city || '',
+        canton: canton || null,
         postalCode: postalCode || '',
         // required NOT NULL columns — use empty strings as placeholder for community users
         phone: '',
@@ -135,6 +152,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
           acceptsKulturlegi,
           serviceDeliveryTypes: serviceTypes.length > 0 ? serviceTypes : null,
           city: city || '',
+          canton: canton || null,
           postalCode: postalCode || '',
           maxTravelKm,
           isActive,

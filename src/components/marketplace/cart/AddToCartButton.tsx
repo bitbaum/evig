@@ -12,7 +12,7 @@ import { useCart, type CartItem } from './CartProvider'
  */
 export function AddToCartButton({ item, className }: { item: CartItem; className?: string }) {
   const t = useTranslations('marketplace.cart')
-  const { has, add } = useCart()
+  const { has, add, openDrawer } = useCart()
 
   if (has(item.id)) {
     return (
@@ -24,7 +24,15 @@ export function AddToCartButton({ item, className }: { item: CartItem; className
   }
 
   return (
-    <Button onClick={() => add(item)} variant="primary" size="lg" className={`w-full ${className ?? ''}`}>
+    <Button
+      onClick={() => {
+        add(item)
+        openDrawer()
+      }}
+      variant="primary"
+      size="lg"
+      className={`w-full ${className ?? ''}`}
+    >
       <ShoppingCart className="h-5 w-5" aria-hidden="true" />
       {t('addToCart')}
     </Button>

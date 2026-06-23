@@ -3,6 +3,8 @@
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { SWISS_CANTONS } from '@/config/swiss-cantons'
 
 interface Props {
   postalCode: string
@@ -55,13 +57,17 @@ export function LocationSection({
           <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('canton')}
           </label>
-          <Input
-            type="text"
+          <Select
             value={canton}
             onChange={(e) => onCantonChange(e.target.value)}
-            placeholder={t('canton')}
-            className="px-4 border-default rounded-lg"
-          />
+          >
+            <option value="">{t('cantonPlaceholder')}</option>
+            {SWISS_CANTONS.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </Select>
         </div>
       </div>
     </div>

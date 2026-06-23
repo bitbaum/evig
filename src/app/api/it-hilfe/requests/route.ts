@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { sql, getTableName, SQL } from 'drizzle-orm'
+import { sql, getTableName, SQL, and, eq } from 'drizzle-orm'
 import { itHilfeRequests } from '@/db/schema/itHilfe'
+import { userSkills } from '@/db/schema/itHilfe'
+import { repairerProfiles } from '@/db/schema/services'
 import { users } from '@/db/schema/auth'
 import { apiError, apiSuccess, apiSuccessCached, apiBadRequest, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -49,6 +51,7 @@ export async function GET(request: NextRequest) {
     const budgetType = searchParams.get('budgetType')
     const serviceType = searchParams.get('serviceType')
     const skill = searchParams.get('skill')
+    const matchMySkills = searchParams.get('matchMySkills') === 'true'
     const search = searchParams.get('search')
     const status = searchParams.get('status') || REQUEST_STATUS.OPEN
     const { limit, offset } = parsePagination(request, IT_HILFE_PAGINATION)
@@ -96,6 +99,27 @@ export async function GET(request: NextRequest) {
       conditions.push(sql`${skill} = ANY(r.skills_needed)`)
     }
 
+    if (matchMySkills) {
+      const session = await auth()
+      if (!session?.user?.id) {
+        conditions.push(sql`false`)
+      } else {
+        const skillRows = await db
+          .select({ skillId: userSkills.skillId })
+          .from(userSkills)
+          .where(eq(userSkills.userId, session.user.id))
+        const mySkills = skillRows.map((r) => r.skillId)
+        if (mySkills.length === 0) {
+          conditions.push(sql`false`)
+        } else {
+          conditions.push(sql`r.skills_needed IS NOT NULL AND r.skills_needed && ARRAY[${sql.join(
+            mySkills.map((s) => sql`${s}`),
+            sql`, `,
+          )}]::text[]`)
+        }
+      }
+    }
+
     // Text search across title, description, device brand/model
     if (search && search.trim().length >= 2) {
       const searchPattern = `%${search.trim()}%`
@@ -133,6 +157,9 @@ export async function GET(request: NextRequest) {
       status,
       category,
       canton,
+      skill,
+      serviceType,
+      matchMySkills,
       count: requests.length,
       total,
     })
@@ -223,7 +250,22 @@ export async function POST(request: NextRequest) {
       deviceModel = null,
       imageUrls = [],
       aiDiagnosis = null,
+      preferredTechnicianId = null,
     } = validatedData
+
+    let preferredTechnicianUserId: string | null = null
+    if (preferredTechnicianId) {
+      const [preferred] = await db
+        .select({ userId: repairerProfiles.userId })
+        .from(repairerProfiles)
+        .where(and(
+          eq(repairerProfiles.id, preferredTechnicianId),
+          eq(repairerProfiles.isActive, true),
+          eq(repairerProfiles.isVerified, true),
+        ))
+      if (!preferred) return apiBadRequest('Der gewählte Techniker ist nicht mehr verfügbar')
+      preferredTechnicianUserId = preferred.userId
+    }
 
     // Resolve the requester: existing session OR find-or-create by email
     let requesterId: string
@@ -267,6 +309,7 @@ export async function POST(request: NextRequest) {
       skillsNeeded: skillsNeeded && skillsNeeded.length > 0 ? skillsNeeded : null,
       imageUrls: imageUrls.length > 0 ? imageUrls : null,
       aiDiagnosis: aiDiagnosis || null,
+      preferredTechnicianId: preferredTechnicianId || null,
     }).returning({ id: itHilfeRequests.id })
 
     const requestId = insertedRow.id
@@ -347,6 +390,7 @@ export async function POST(request: NextRequest) {
       serviceType: serviceType ?? 'flexible',
       skillsNeeded: skillsNeeded || [],
       aiDiagnosis: aiDiagnosis || null,
+      preferredTechnicianUserId,
       includeRequesterConfirmation: !isNewAnonymousUser,
     })
 

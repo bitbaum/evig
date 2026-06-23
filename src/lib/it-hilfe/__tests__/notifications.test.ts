@@ -201,6 +201,24 @@ describe('sendRequestCreatedNotifications', () => {
     expect(mockDbSelect).not.toHaveBeenCalled()
   })
 
+  it('notifies an explicitly selected technician even without matching skills', async () => {
+    sendRequestCreatedNotifications({
+      ...BASE_PARAMS,
+      skillsNeeded: [],
+      preferredTechnicianUserId: 'george-user',
+    })
+    await flushAsync()
+
+    expect(mockNotifyUsers).toHaveBeenCalledWith(
+      ['george-user'],
+      expect.objectContaining({
+        type: NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST,
+        title: expect.stringContaining('Direkte Anfrage'),
+      }),
+    )
+    expect(mockDbSelect).not.toHaveBeenCalled()
+  })
+
   it('fans out to matched helpers via single notifyUsers call', async () => {
     mockDbSelect.mockImplementation(() =>
       makeChain([

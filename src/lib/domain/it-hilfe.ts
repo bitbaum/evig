@@ -25,6 +25,7 @@ export function transformITHilfeFormToPayload(formData: ITHilfeCreateFormData) {
     skillsNeeded: formData.skillsNeeded,
     imageUrls: formData.imageUrls.length > 0 ? formData.imageUrls : undefined,
     aiDiagnosis: formData.aiDiagnosis || null,
+    preferredTechnicianId: formData.preferredTechnicianId || undefined,
     // Only include when non-empty so the schema's .optional() field is
     // truly absent for authenticated submissions.
     ...(formData.submitterEmail ? { submitterEmail: formData.submitterEmail } : {}),

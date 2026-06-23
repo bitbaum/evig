@@ -55,11 +55,11 @@ export function CookieBanner() {
       aria-label={t('title')}
       className="fixed inset-x-0 bottom-0 z-9998 border-t-2 border-subtle bg-surface-base"
     >
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <p className="text-sm text-text-secondary">
+      <div className="mx-auto grid max-w-6xl gap-2 px-3 py-3 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
+        <p className="text-xs leading-relaxed text-text-secondary sm:text-sm">
           {t('description')}
         </p>
-        <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="flex shrink-0 items-center justify-end gap-3">
           <Link
             href="/datenschutz"
             className="text-center text-sm font-medium text-action underline hover:text-action-hover"

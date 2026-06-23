@@ -2960,6 +2960,12 @@
       "filterBudgetAll": "Alle",
       "filterBudgetFree": "Gratis / Community",
       "filterBudgetPaid": "Mit Budget",
+      "filterSkill": "Skill",
+      "filterSkillAll": "Alle Skills",
+      "filterServiceType": "Art der Hilfe",
+      "filterServiceTypeAll": "Alle Arten",
+      "filterMatchMySkills": "Nur Anfragen zu meinen Skills",
+      "filterMatchMySkillsHint": "Zeigt offene Anfragen, die mindestens einen deiner Skills benötigen.",
       "pagination": "Seitennavigation",
       "prevPage": "Vorherige Seite",
       "nextPage": "Nächste Seite",
@@ -3016,6 +3022,12 @@
       "planRoute": "Route planen",
       "noMatchesYet": "Noch keine Techniker gefunden. Deine Anfrage ist öffentlich sichtbar.",
       "topMatch": "Top Match",
+      "preferredTechnician": "Deine Wahl",
+      "preferredTechnicianSidebar": {
+        "title": "Bevorzugter Techniker",
+        "description": "Du hast Hilfe von {name} angefragt.",
+        "viewProfile": "Profil ansehen"
+      },
       "matchPercent": "{percent}% Match",
       "confirmWithdraw": "Angebot wirklich zurückziehen?",
       "errorWithdraw": "Fehler beim Zurückziehen",
@@ -3049,6 +3061,11 @@
       "eyebrow": "NEUE ANFRAGE",
       "title": "Reparaturanfrage erstellen",
       "description": "Wähle ein Gerät und beschreibe dein Problem. Die Community hilft dir.",
+      "preferredTechnician": {
+        "eyebrow": "Ausgewählter Techniker",
+        "description": "Deine Anfrage wird diesem Techniker mitgeteilt. Andere passende Techniker können ebenfalls Angebote senden — bis du eines annimmst.",
+        "viewProfile": "Profil ansehen"
+      },
       "createdTitle": "Anfrage erstellt!",
       "createdRedirect": "Du wirst gleich weitergeleitet...",
       "sectionDevice": "Was möchtest du reparieren?",
@@ -3078,7 +3095,8 @@
       "locationHeading": "Wo bist du?",
       "postalCode": "PLZ",
       "city": "Stadt",
-      "canton": "Kanton"
+      "canton": "Kanton",
+      "cantonPlaceholder": "Kanton wählen"
     },
     "myRequests": {
       "title": "Meine Reparaturanfragen",
@@ -9138,7 +9156,14 @@
       "cancel": "Abbrechen",
       "save": "Speichern",
       "saving": "Speichert...",
-      "skillRequired": "Bitte wähle mindestens einen Skill aus."
+      "skillRequired": "Bitte wähle mindestens einen Skill aus.",
+      "completeness": {
+        "title": "Profil noch nicht vollständig",
+        "description": "Ergänze diese Angaben, damit du passende Anfragen findest und Benachrichtigungen erhältst.",
+        "gapSkills": "Mindestens einen Skill auswählen",
+        "gapCanton": "Kanton angeben",
+        "gapLocation": "PLZ oder Ort angeben"
+      }
     }
   },
   "vote": {

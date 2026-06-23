@@ -28,6 +28,7 @@ interface RequestData {
   skillsNeeded?: string[]
   imageUrls?: string[]
   aiDiagnosis?: string
+  preferredTechnicianId?: string | null
 }
 
 interface UseEditITHilfeFormErrors {
@@ -93,6 +94,7 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
         skillsNeeded: r.skillsNeeded || [],
         imageUrls: r.imageUrls || [],
         aiDiagnosis: r.aiDiagnosis || '',
+        preferredTechnicianId: r.preferredTechnicianId || '',
         // Edit flow is always authenticated; submitterEmail is for the
         // anonymous-create path only. Empty preserves the form-type shape.
         submitterEmail: '',

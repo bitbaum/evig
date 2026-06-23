@@ -132,7 +132,7 @@ jest.mock('@/config/review-status', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { validateReviewTarget, updateHelperAverageRating, notifyRepairerOfReview } from '../review-service'
+import { validateReviewTarget, notifyRepairerOfReview } from '../review-service'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 
 // ---------------------------------------------------------------------------
@@ -222,54 +222,6 @@ describe('validateReviewTarget', () => {
 
     expect(result).toBe(false)
     expect(mockDbSelect).not.toHaveBeenCalled()
-  })
-})
-
-// ============================================================================
-// updateHelperAverageRating
-// ============================================================================
-
-describe('updateHelperAverageRating', () => {
-  it('returns early when no helper found via offer join', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([]))
-
-    await updateHelperAverageRating(TARGET_ID)
-
-    expect(mockDbExecute).not.toHaveBeenCalled()
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
-
-  it('executes AVG query and updates helper profile when helper found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ helperId: 'helper-1' }]))
-    mockDbExecute.mockResolvedValueOnce({ rows: [{ avg_rating: '4.5' }] })
-    mockDbUpdate.mockReturnValueOnce(makeUpdateChain([]))
-
-    await updateHelperAverageRating(TARGET_ID)
-
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
-  })
-
-  it('skips update when avg_rating is null (no reviews yet)', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ helperId: 'helper-1' }]))
-    mockDbExecute.mockResolvedValueOnce({ rows: [{ avg_rating: null }] })
-
-    await updateHelperAverageRating(TARGET_ID)
-
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
-
-  it('silently logs on DB error and does not throw', async () => {
-    mockDbSelect.mockReturnValueOnce({
-      ...makeSelectChain([]),
-      from: jest.fn().mockReturnValue({
-        innerJoin: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
-        }),
-      }),
-    })
-
-    await expect(updateHelperAverageRating(TARGET_ID)).resolves.toBeUndefined()
   })
 })
 

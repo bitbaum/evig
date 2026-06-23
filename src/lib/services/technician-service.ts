@@ -11,6 +11,9 @@ import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 
+export const TECHNICIAN_UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -37,6 +40,7 @@ export interface TechnicianDetail {
   profileTier: string           // coerced: default 'community'
   city: string | null
   postalCode: string | null
+  canton: string | null
   acceptsGratis: boolean        // coerced: default false
   acceptsKulturlegi: boolean    // coerced: default false
   isVerified: boolean           // coerced: default false
@@ -70,6 +74,7 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
       profileTier: repairerProfiles.profileTier,
       city: repairerProfiles.city,
       postalCode: repairerProfiles.postalCode,
+      canton: repairerProfiles.canton,
       acceptsGratis: repairerProfiles.acceptsGratis,
       acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
       isVerified: repairerProfiles.isVerified,
@@ -100,6 +105,7 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
       repairerProfiles.profileTier,
       repairerProfiles.city,
       repairerProfiles.postalCode,
+      repairerProfiles.canton,
       repairerProfiles.acceptsGratis,
       repairerProfiles.acceptsKulturlegi,
       repairerProfiles.isVerified,
@@ -147,8 +153,25 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
     acceptsKulturlegi: profile.acceptsKulturlegi ?? false,
     isVerified: profile.isVerified ?? false,
     // profileTier has a default so treat null as the default tier
-    profileTier: profile.profileTier ?? 'community',
+    profileTier: profile.profileTier ?? REPAIRER_PROFILE_TIER.COMMUNITY,
     skills: profile.skills || [],
     services,
   }
+}
+
+/**
+ * Resolve a technician by repairer_profiles.id (canonical) or legacy userId.
+ * Public URLs and create-flow query params MUST use profile id.
+ */
+export async function getTechnicianByIdOrUserId(id: string): Promise<TechnicianDetail | null> {
+  const byProfileId = await getTechnicianById(id)
+  if (byProfileId) return byProfileId
+
+  const [profile] = await db
+    .select({ profileId: repairerProfiles.id })
+    .from(repairerProfiles)
+    .where(and(eq(repairerProfiles.userId, id), eq(repairerProfiles.isActive, true)))
+
+  if (!profile) return null
+  return getTechnicianById(profile.profileId)
 }

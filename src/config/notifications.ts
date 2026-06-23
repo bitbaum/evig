@@ -2,7 +2,8 @@
  * Notification Configuration (SSOT)
  *
  * All notification types and navigation hrefs live here.
- * DB CHECK constraint must match these types — see migration 039.
+ * DB CHECK constraint must match these types — see migration 093
+ * (and src/config/notifications.ts when adding new types).
  */
 
 export const NOTIFICATION_TYPES = {

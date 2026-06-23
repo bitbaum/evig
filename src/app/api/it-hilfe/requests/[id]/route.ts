@@ -37,6 +37,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const matchedOffer = alias(itHilfeOffers, 'matched_offer')
     const helperUser = alias(users, 'matched_helper_user')
     const helperProfile = alias(repairerProfiles, 'matched_helper_profile')
+    const preferredProfile = alias(repairerProfiles, 'preferred_technician_profile')
+    const preferredUser = alias(users, 'preferred_technician_user')
     const [row] = await db
       .select({
         id: itHilfeRequests.id,
@@ -59,6 +61,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         image_urls: itHilfeRequests.imageUrls,
         status: itHilfeRequests.status,
         matched_offer_id: itHilfeRequests.matchedOfferId,
+        preferred_technician_id: itHilfeRequests.preferredTechnicianId,
+        preferred_technician_name: preferredUser.name,
+        preferred_technician_city: preferredProfile.city,
         matched_helper_id: matchedOffer.helperId,
         matched_helper_name: helperUser.name,
         matched_helper_phone: helperProfile.phone,
@@ -76,6 +81,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .leftJoin(matchedOffer, eq(itHilfeRequests.matchedOfferId, matchedOffer.id))
       .leftJoin(helperUser, eq(matchedOffer.helperId, helperUser.id))
       .leftJoin(helperProfile, eq(matchedOffer.helperId, helperProfile.userId))
+      .leftJoin(preferredProfile, eq(itHilfeRequests.preferredTechnicianId, preferredProfile.id))
+      .leftJoin(preferredUser, eq(preferredProfile.userId, preferredUser.id))
       .where(eq(itHilfeRequests.id, id))
 
     if (!row) {

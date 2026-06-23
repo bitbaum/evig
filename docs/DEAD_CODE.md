@@ -1,8 +1,8 @@
 # Dead Code Inventory
 
 **Created:** 2026-06-07  
-**Last Modified:** 2026-06-15  
-**Last Modified Summary:** Removed orphaned onboarding info page pair; noted deletion in inventory
+**Last Modified:** 2026-06-19  
+**Last Modified Summary:** Legacy list API proxies now return 410 Gone; IT_HILFE.api.helpers removed
 
 Code that has zero importers in `src/` and is a candidate for removal in
 a future cleanup PR. Listed here instead of deleted because the team
@@ -51,25 +51,26 @@ that's a different thing and is still in use.
 - `REPAIRER_AVAILABILITY_TYPE.BLOCKED` in `src/config/repairer-status.ts`
   — defined but never referenced.
 
-### Technician API proxies + singular `/helper/` routes (QQQ.3)
+### Technician API proxies + singular `/helper/` routes (QQQ.3) — 410 Gone (2026-06-19)
 
-Zero src/ consumers confirmed via grep across hooks/components/apps.
-Marked `@deprecated` in their route files so any future import
-surfaces a warning. Drop these once a quarterly grep confirms still
-unused:
+List endpoints below no longer proxy; they return **410 Gone** via
+`src/lib/api/deprecated-endpoint.ts` with `Link: rel="successor-version"`.
+Per-resource routes under `/api/repairers/[id]/` remain for booking/availability.
 
-- `src/app/api/repairers/route.ts` — proxy → /api/technicians?tier=professional
-- `src/app/api/it-hilfe/helpers/route.ts` — proxy → /api/technicians?tier=community
-- `src/app/api/it-hilfe/helper/my-offers/route.ts` — duplicate of /api/it-hilfe/my-offers
-- `src/app/api/it-hilfe/helper/matching-requests/route.ts` — no caller
-- `IT_HILFE.api.helpers` in `src/config/it-hilfe.ts` — orphan config string
+- `src/app/api/repairers/route.ts` → use `/api/technicians?tier=professional`
+- `src/app/api/it-hilfe/helpers/route.ts` → use `/api/technicians?tier=community`
+- `src/app/api/it-hilfe/helper/my-offers/route.ts` → use `/api/it-hilfe/my-offers`
+- `src/app/api/it-hilfe/helper/matching-requests/route.ts` → use `/api/it-hilfe/requests?matchMySkills=true`
+- ~~`IT_HILFE.api.helpers`~~ — removed; use `IT_HILFE.api.technicians` / `technician(id)`
 - `IT_HILFE.routes.helpers` in `src/config/it-hilfe.ts` — renamed to
   `routes.technicians`, old key kept as one-release alias
 
-### Possibly orphaned, not yet reverified
+### Removed 2026-06-23
 
-- `src/components/technicians/` — 193 lines (TechnicianCard, types,
-  index). Zero importers at last check, but kept aside.
+- `src/components/technicians/` — duplicate TechnicianCard (zero importers; live card at
+  `src/app/[locale]/it-hilfe/techniker/TechnicianCard.tsx`)
+
+### Possibly orphaned, not yet reverified
 
 ## How to re-verify before deletion
 

@@ -148,6 +148,23 @@
       "createError": "作成エラー",
       "unexpectedError": "予期しないエラーが発生しました"
     },
+    "cart": {
+      "addToCart": "カートに追加",
+      "inCart": "カート内",
+      "title": "カート",
+      "empty": "カートは空です。",
+      "emptyCta": "マーケットプレイスを見る",
+      "remove": "削除",
+      "subtotal": "小計",
+      "total": "合計",
+      "checkout": "購入手続きへ",
+      "itemCount": "{count}点の商品",
+      "continueShopping": "買い物を続ける",
+      "pickupNote": "チューリッヒで無料受け取り",
+      "revampitOnly": "Revamp-ITの商品だけカートに追加できます。コミュニティ出品は直接購入します。",
+      "cartAriaLabel": "カート、{count}点の商品",
+      "closeAriaLabel": "カートを閉じる"
+    },
     "checkout": {
       "title": "安全な支払い",
       "backToListing": "出品に戻る",

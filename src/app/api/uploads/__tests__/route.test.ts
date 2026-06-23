@@ -26,18 +26,19 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }))
 
-// Mock file system operations
-jest.mock('fs/promises', () => ({
-  mkdir: jest.fn().mockResolvedValue(undefined),
-  writeFile: jest.fn().mockResolvedValue(undefined),
+const mockUploadImageBuffer = jest.fn()
+
+jest.mock('@/lib/storage/image-upload', () => ({
+  uploadImageBuffer: (...args: unknown[]) => mockUploadImageBuffer(...args),
 }))
 
 // Mock sharp
 jest.mock('sharp', () => {
   const chain = {
+    metadata: jest.fn().mockResolvedValue({ format: 'jpeg' }),
     resize: jest.fn().mockReturnThis(),
     webp: jest.fn().mockReturnThis(),
-    toFile: jest.fn().mockResolvedValue(undefined),
+    toBuffer: jest.fn().mockResolvedValue(Buffer.from('optimized')),
   }
   return jest.fn().mockReturnValue(chain)
 })
@@ -77,6 +78,10 @@ jest.mock('@/config/limits', () => ({
   FILE_SIZE_LIMITS: { UPLOAD_MAX: 10 * 1024 * 1024 }, // 10MB
 }))
 
+jest.mock('@/config/marketplace', () => ({
+  MARKETPLACE_LIMITS: { MAX_IMAGES: 8 },
+}))
+
 import { NextRequest } from 'next/server'
 import { POST } from '../route'
 
@@ -103,8 +108,11 @@ function makeRequest(formData: FormData): NextRequest {
 }
 
 beforeEach(() => {
-  jest.resetAllMocks()
+  jest.clearAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
+  mockUploadImageBuffer.mockImplementation((_buffer: Buffer, filename: string, folder: string) =>
+    Promise.resolve({ success: true, url: `https://media.example/${folder}/${filename}` }),
+  )
 })
 
 describe('POST /api/uploads — unauthenticated', () => {
@@ -145,15 +153,15 @@ describe('POST /api/uploads — validation', () => {
     expect(res.status).toBe(400)
   })
 
-  it('returns 400 when more than 5 files are uploaded', async () => {
+  it('returns 400 when more than 8 files are uploaded', async () => {
     const formData = new FormData()
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 9; i++) {
       formData.append('files', makeJpegFile(`photo${i}.jpg`))
     }
     const res = await POST(makeRequest(formData))
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body.error).toBe('Maximal 5 Bilder erlaubt')
+    expect(body.error).toBe('Maximal 8 Bilder erlaubt')
   })
 })
 
@@ -171,6 +179,8 @@ describe('POST /api/uploads — success', () => {
     expect(body.data.images[0]).toHaveProperty('original')
     expect(body.data.images[0]).toHaveProperty('thumbnail')
     expect(body.data.images[0]).toHaveProperty('medium')
+    expect(body.data.urls[0]).toMatch(/^https:\/\/media\.example\/users\/user-1\//)
+    expect(mockUploadImageBuffer).toHaveBeenCalledTimes(3)
   })
 
   it('returns 200 with multiple uploaded files', async () => {
