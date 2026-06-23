@@ -35,6 +35,9 @@ export const itHilfeRequests = pgTable('it_hilfe_requests', {
   serviceType: varchar('service_type', { length: 20 }).default('flexible'),
   skillsNeeded: text('skills_needed').array(),
   imageUrls: text('image_urls').array(),
+  // Optional technician explicitly chosen from a public profile. The request
+  // remains visible to other eligible technicians until an offer is accepted.
+  preferredTechnicianId: uuid('preferred_technician_id').references(() => repairerProfiles.id, { onDelete: 'set null' }),
 
   // Status tracking
   status: varchar('status', { length: 30 }).default('open'),
@@ -66,6 +69,7 @@ export const itHilfeRequests = pgTable('it_hilfe_requests', {
   index('idx_peer_repair_requests_postal_code').on(table.postalCode),
   index('idx_peer_repair_requests_canton').on(table.canton),
   index('idx_peer_repair_requests_created').on(table.createdAt),
+  index('idx_it_hilfe_requests_preferred_technician').on(table.preferredTechnicianId),
   index('idx_peer_repair_requests_browse').on(table.status, table.canton, table.createdAt),
 ])
 

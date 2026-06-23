@@ -30,6 +30,11 @@ interface UploadResult {
   error?: string
 }
 
+interface BufferUploadOptions {
+  contentType: string
+  cacheControl?: string
+}
+
 // Read env dynamically (not at module load) so config can be set late and is
 // testable. publicUrl has any trailing slash stripped.
 function storageEnv() {
@@ -85,24 +90,34 @@ export async function uploadImage(
   filename: string,
   folder: string = 'products',
 ): Promise<UploadResult> {
+  const { buffer, contentType } = decodeBase64(base64Data)
+  return uploadImageBuffer(buffer, filename, folder, { contentType })
+}
+
+/**
+ * Upload an already validated image buffer to the configured object store.
+ * Multipart routes use this directly to avoid a base64 round trip.
+ */
+export async function uploadImageBuffer(
+  buffer: Buffer,
+  filename: string,
+  folder: string = 'products',
+  options: BufferUploadOptions,
+): Promise<UploadResult> {
   const key = `${folder}/${filename}`
 
   try {
-    const { buffer, contentType } = decodeBase64(base64Data)
-
     if (isStorageConfigured()) {
       const e = storageEnv()
-      // R2 has no object-level ACLs (public access is a bucket setting) — set
-      // S3_ACL=none there to omit the header. Hetzner keeps 'public-read'.
       const acl = process.env.S3_ACL === 'none' ? undefined : process.env.S3_ACL || 'public-read'
       await s3().send(
         new PutObjectCommand({
           Bucket: e.bucket,
           Key: key,
           Body: buffer,
-          ContentType: contentType,
+          ContentType: options.contentType,
           ...(acl ? { ACL: acl as 'public-read' } : {}),
-          CacheControl: 'public, max-age=31536000, immutable',
+          CacheControl: options.cacheControl || 'public, max-age=31536000, immutable',
         }),
       )
       const url = `${e.publicUrl}/${key}`
@@ -110,11 +125,8 @@ export async function uploadImage(
       return { success: true, url }
     }
 
-    // Fallback (also production): local filesystem. In production this writes
-    // into public/uploads, which the deploy symlinks to a persistent directory
-    // (/opt/revampit/uploads) so images survive releases and are served by Next
-    // at /uploads/*. Free, self-hosted storage on the box where the DB also
-    // lives — set S3_* to switch to object storage with no code change.
+    // Local development fallback. Production should always configure S3_*;
+    // the fallback keeps `next dev` usable without cloud credentials.
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder)
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
     fs.writeFileSync(path.join(uploadDir, filename), buffer)

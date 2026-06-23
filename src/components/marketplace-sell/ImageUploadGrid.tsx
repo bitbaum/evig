@@ -63,8 +63,11 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
         ref={fileInputRef}
         type="file"
         multiple
-        accept="image/*"
-        onChange={(e) => e.target.files && onUpload(e.target.files)}
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        onChange={(e) => {
+          if (e.target.files?.length) onUpload(e.target.files)
+          e.target.value = ''
+        }}
         className="hidden"
       />
     </div>

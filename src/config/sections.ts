@@ -398,10 +398,10 @@ export const SECTIONS: Record<string, SectionConfig> = {
   // ---------------------------------------------------------------------------
   'repairer-dashboard': {
     id: 'repairer-dashboard',
-    path: '/profil/techniker',
+    path: '/it-hilfe/anfragen',
     ui: {
-      label: 'Techniker-Profil',
-      description: 'Techniker-Profil und Dienstleistungen verwalten',
+      label: 'Reparatur-Anfragen',
+      description: 'Passende Reparaturaufträge finden und Hilfe anbieten',
       icon: Wrench,
       emoji: '🔧',
       color: 'warning',

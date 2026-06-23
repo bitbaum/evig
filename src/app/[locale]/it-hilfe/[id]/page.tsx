@@ -149,7 +149,11 @@ export default function ITHilfeDetailPage() {
             {/* Technician Map */}
             {request.status === REQUEST_STATUS.OPEN && (
               <div className="card-shell p-6">
-                <TechnicianMapList requestId={request.id} requestTitle={request.title} />
+                <TechnicianMapList
+                  requestId={request.id}
+                  requestTitle={request.title}
+                  requestCanton={request.canton}
+                />
               </div>
             )}
 

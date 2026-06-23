@@ -11,6 +11,8 @@ import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { getCategoryById, MATCH_SCORES, BUDGET_TIER } from '@/config/it-hilfe'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql'
 
 interface RequestData {
   id: string
@@ -22,6 +24,7 @@ interface RequestData {
   budgetType: string
   budgetTier: string | null
   serviceType: string | null
+  preferredTechnicianId: string | null
 }
 
 interface HelperData {
@@ -140,6 +143,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         budgetType: itHilfeRequests.budgetType,
         budgetTier: itHilfeRequests.budgetTier,
         serviceType: itHilfeRequests.serviceType,
+        preferredTechnicianId: itHilfeRequests.preferredTechnicianId,
       })
       .from(itHilfeRequests)
       .where(eq(itHilfeRequests.id, id))
@@ -148,7 +152,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return apiNotFound('Anfrage')
     }
 
-    // Find potential helpers with at least one matching skill
+    const skillsNeeded = requestData.skillsNeeded ?? []
+    const skillMatch = technicianHasSkillMatch(skillsNeeded)
+    const skillOrPreferred = requestData.preferredTechnicianId
+      ? sql`(${repairerProfiles.id} = ${requestData.preferredTechnicianId} OR ${skillMatch})`
+      : skillMatch
+
+    const tierFilter = requestData.preferredTechnicianId
+      ? sql`(${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY} OR ${repairerProfiles.id} = ${requestData.preferredTechnicianId})`
+      : eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.COMMUNITY)
+
+    // Find verified active community technicians. Preferred profile is included
+    // even when professional-tier (direct request from public profile).
     const helpersResult = await db
       .select({
         id: repairerProfiles.id,
@@ -171,13 +186,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(and(
         eq(repairerProfiles.isActive, true),
-        eq(repairerProfiles.profileTier, 'community'),
+        eq(repairerProfiles.isVerified, true),
         ne(repairerProfiles.userId, requestData.requesterId),
-        sql`EXISTS (
-          SELECT 1 FROM ${userSkills} us2
-          WHERE us2.user_id = ${repairerProfiles.userId}
-          AND us2.skill_id = ANY(${requestData.skillsNeeded || []}::text[])
-        )`
+        tierFilter,
+        skillOrPreferred,
       ))
       .groupBy(
         repairerProfiles.id,
@@ -212,12 +224,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           skills: helper.skills || [],
           averageRating: helper.averageRating,
           totalHelpsCompleted: helper.totalHelpsCompleted || 0,
+          isPreferred: helper.id === requestData.preferredTechnicianId,
           matchScore: score,
           matchReasons: reasons,
         }
       })
-      .filter(helper => helper.matchScore > 0) // Only return helpers with some match
-      .sort((a, b) => b.matchScore - a.matchScore)
+      .filter(helper => helper.isPreferred || helper.matchScore > 0)
+      .sort((a, b) => Number(b.isPreferred) - Number(a.isPreferred) || b.matchScore - a.matchScore)
       .slice(0, 10) // Top 10 matches
 
     logger.info('Found matching helpers', {

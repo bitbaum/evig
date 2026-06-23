@@ -5,6 +5,7 @@ import { eq, and, sql, desc, ne } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { HELPER_STATUS } from '@/config/helper-status'
 
 // GET /api/admin/it-hilfe/helpers - List all helper profiles
@@ -16,7 +17,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
     const skill = searchParams.get('skill')
     const { limit, offset } = parsePagination(request)
 
-    const conditions: ReturnType<typeof eq>[] = [eq(repairerProfiles.profileTier, 'community')]
+    const conditions: ReturnType<typeof eq>[] = [eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.COMMUNITY)]
 
     if (status === HELPER_STATUS.ACTIVE) {
       conditions.push(eq(repairerProfiles.isActive, true))

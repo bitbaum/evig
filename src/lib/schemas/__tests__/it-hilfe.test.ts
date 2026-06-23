@@ -138,6 +138,17 @@ describe('itHilfeRequestSchema', () => {
     expect(result.success).toBe(true)
   })
 
+  it('accepts a preferred technician UUID and rejects malformed IDs', () => {
+    expect(itHilfeRequestSchema.safeParse({
+      ...valid,
+      preferredTechnicianId: 'a6ba5051-fed3-4689-8150-e3f352c05535',
+    }).success).toBe(true)
+    expect(itHilfeRequestSchema.safeParse({
+      ...valid,
+      preferredTechnicianId: 'george',
+    }).success).toBe(false)
+  })
+
   it('rejects non-integer maxBudgetCents', () => {
     const result = itHilfeRequestSchema.safeParse({ ...valid, maxBudgetCents: 50.5 })
     expect(result.success).toBe(false)

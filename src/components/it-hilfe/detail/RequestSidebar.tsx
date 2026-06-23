@@ -15,6 +15,7 @@ import {
   Wrench,
   Users,
   Pencil,
+  Star,
 } from 'lucide-react'
 import { formatDate } from '@/lib/date-formats'
 import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe'
@@ -138,6 +139,33 @@ export function RequestSidebar({
           </div>
         </div>
       </div>
+
+      {/* Preferred technician (owner only) */}
+      {request.isOwner && request.preferredTechnicianId && request.preferredTechnicianName && (
+        <div className="card-shell p-6">
+          <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
+            {t('preferredTechnicianSidebar.title')}
+          </Heading>
+          <div className="flex items-start gap-3">
+            <Star className="w-5 h-5 text-action mt-0.5 shrink-0" aria-hidden="true" />
+            <div>
+              <p className="font-medium text-text-primary">{request.preferredTechnicianName}</p>
+              {request.preferredTechnicianCity && (
+                <p className="text-sm text-text-secondary">{request.preferredTechnicianCity}</p>
+              )}
+              <p className="text-sm text-text-tertiary mt-1">
+                {t('preferredTechnicianSidebar.description', { name: request.preferredTechnicianName })}
+              </p>
+              <Link
+                href={ROUTES.public.technicianProfile(request.preferredTechnicianId)}
+                className="inline-block mt-3 text-sm text-action hover:underline"
+              >
+                {t('preferredTechnicianSidebar.viewProfile')}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Requester Info */}
       <div className="card-shell p-6">

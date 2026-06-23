@@ -18,6 +18,9 @@ import {
   URGENCY_LEVELS,
   SWISS_CANTONS,
   SORT_OPTIONS,
+  getAllSkills,
+  SERVICE_TYPES,
+  SERVICE_TYPE,
 } from '@/config/it-hilfe'
 import type { ITHilfeFilters as ITHilfeFiltersValue } from '@/hooks/useITHilfeRequests'
 
@@ -25,16 +28,32 @@ interface Props {
   sort: string
   setSort: (sort: string) => void
   filters: ITHilfeFiltersValue
-  setFilter: (key: keyof ITHilfeFiltersValue, value: string) => void
+  setFilter: (key: keyof ITHilfeFiltersValue, value: string | boolean) => void
   hasActiveFilters: boolean
   clearFilters: () => void
+  /** When true, filter panel starts expanded (browse page default). */
+  defaultExpanded?: boolean
+  /** Show "match my skills" toggle for logged-in technicians. */
+  matchMySkillsAvailable?: boolean
 }
 
 export function ItHilfeFilters({
-  sort, setSort, filters, setFilter, hasActiveFilters, clearFilters,
+  sort,
+  setSort,
+  filters,
+  setFilter,
+  hasActiveFilters,
+  clearFilters,
+  defaultExpanded = false,
+  matchMySkillsAvailable = false,
 }: Props) {
   const t = useTranslations('itHelp.page')
-  const [showFilters, setShowFilters] = useState(false)
+  const [showFilters, setShowFilters] = useState(defaultExpanded)
+
+  const skillOptions = getAllSkills().map((s) => ({ value: s.id, label: s.name }))
+  const serviceTypeOptions = SERVICE_TYPES
+    .filter((st) => st.id !== SERVICE_TYPE.FLEXIBLE)
+    .map((st) => ({ value: st.id, label: st.name }))
 
   return (
     <div className="mb-6 card-shell p-4">
@@ -73,7 +92,7 @@ export function ItHilfeFilters({
 
       {showFilters && (
         <div id="filter-panel" className="mt-4 pt-4 border-t border-subtle">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <FilterSelect
               label={t('filterCategory')}
               labelAll={t('filterCategoryAll')}
@@ -109,14 +128,45 @@ export function ItHilfeFilters({
                 { value: 'paid', label: t('filterBudgetPaid') },
               ]}
             />
+            <FilterSelect
+              label={t('filterSkill')}
+              labelAll={t('filterSkillAll')}
+              id="filter-skill"
+              value={filters.skill}
+              onChange={(v) => setFilter('skill', v)}
+              options={skillOptions}
+            />
+            <FilterSelect
+              label={t('filterServiceType')}
+              labelAll={t('filterServiceTypeAll')}
+              id="filter-service-type"
+              value={filters.serviceType}
+              onChange={(v) => setFilter('serviceType', v)}
+              options={serviceTypeOptions}
+            />
           </div>
+
+          {matchMySkillsAvailable && (
+            <div className="mt-4 pt-4 border-t border-subtle">
+              <label className="flex cursor-pointer items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={filters.matchMySkills}
+                  onChange={(e) => setFilter('matchMySkills', e.target.checked)}
+                  className="h-4 w-4 rounded-sm border-default text-action focus:ring-action"
+                />
+                <span className="text-sm text-text-secondary">{t('filterMatchMySkills')}</span>
+              </label>
+              <p className="mt-1 text-xs text-text-tertiary">{t('filterMatchMySkillsHint')}</p>
+            </div>
+          )}
         </div>
       )}
     </div>
   )
 }
 
-/* ── DRY helper for the four identical select+label blocks ── */
+/* ── DRY helper for the identical select+label blocks ── */
 
 interface FilterSelectProps {
   id: string

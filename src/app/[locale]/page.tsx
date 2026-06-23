@@ -1,6 +1,3 @@
-// SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
-
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
@@ -9,7 +6,6 @@ import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
 import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
-import { auth } from '@/auth'
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -47,8 +43,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Home() {
   const t = await getTranslations('home')
-  await auth()
-
   const actionCards = [
     {
       label: t('actions.sell.label'),
@@ -62,7 +56,7 @@ export default async function Home() {
       title: t('actions.repair.title'),
       body: t('actions.repair.subtitle'),
       ctaLabel: t('actions.repair.primaryLabel'),
-      ctaHref: JOURNEY_ENTRYPOINTS.itHelpTechnicians,
+      ctaHref: JOURNEY_ENTRYPOINTS.itHelpRequest,
     },
     {
       label: t('actions.learn.label'),

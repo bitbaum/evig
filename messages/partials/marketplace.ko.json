@@ -148,6 +148,23 @@
       "createError": "생성 오류",
       "unexpectedError": "예기치 않은 오류가 발생했습니다"
     },
+    "cart": {
+      "addToCart": "장바구니에 추가",
+      "inCart": "장바구니에 있음",
+      "title": "장바구니",
+      "empty": "장바구니가 비어 있습니다.",
+      "emptyCta": "마켓플레이스 둘러보기",
+      "remove": "삭제",
+      "subtotal": "소계",
+      "total": "합계",
+      "checkout": "결제하기",
+      "itemCount": "상품 {count}개",
+      "continueShopping": "쇼핑 계속하기",
+      "pickupNote": "취리히에서 무료 픽업",
+      "revampitOnly": "Revamp-IT 기기만 장바구니에 추가할 수 있습니다. 커뮤니티 상품은 직접 구매합니다.",
+      "cartAriaLabel": "장바구니, 상품 {count}개",
+      "closeAriaLabel": "장바구니 닫기"
+    },
     "checkout": {
       "title": "안전한 결제",
       "backToListing": "판매 목록으로 돌아가기",

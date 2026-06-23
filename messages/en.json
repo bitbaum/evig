@@ -2968,6 +2968,12 @@
       "filterBudgetAll": "All",
       "filterBudgetFree": "Free / Community",
       "filterBudgetPaid": "With budget",
+      "filterSkill": "Skill",
+      "filterSkillAll": "All skills",
+      "filterServiceType": "Help type",
+      "filterServiceTypeAll": "All types",
+      "filterMatchMySkills": "Only requests matching my skills",
+      "filterMatchMySkillsHint": "Shows open requests that need at least one of your skills.",
       "pagination": "Page navigation",
       "prevPage": "Previous page",
       "nextPage": "Next page",
@@ -3024,6 +3030,12 @@
       "planRoute": "Get directions",
       "noMatchesYet": "No technicians found yet. Your request is publicly visible.",
       "topMatch": "Top Match",
+      "preferredTechnician": "Your choice",
+      "preferredTechnicianSidebar": {
+        "title": "Preferred technician",
+        "description": "You requested help from {name}.",
+        "viewProfile": "View profile"
+      },
       "matchPercent": "{percent}% Match",
       "confirmWithdraw": "Really withdraw this offer?",
       "errorWithdraw": "Error withdrawing offer",
@@ -3057,6 +3069,11 @@
       "eyebrow": "NEW REQUEST",
       "title": "Create a repair request",
       "description": "Choose a device and describe your problem. The community will help.",
+      "preferredTechnician": {
+        "eyebrow": "Selected technician",
+        "description": "This technician will be notified about your request. Other matching technicians can still send offers until you accept one.",
+        "viewProfile": "View profile"
+      },
       "createdTitle": "Request created!",
       "createdRedirect": "You'll be redirected shortly...",
       "sectionDevice": "What would you like to repair?",
@@ -3086,7 +3103,8 @@
       "locationHeading": "Where are you?",
       "postalCode": "Postal code",
       "city": "City",
-      "canton": "Canton"
+      "canton": "Canton",
+      "cantonPlaceholder": "Select canton"
     },
     "myRequests": {
       "title": "My repair requests",
@@ -9140,7 +9158,14 @@
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "skillRequired": "Please select at least one skill."
+      "skillRequired": "Please select at least one skill.",
+      "completeness": {
+        "title": "Profile not complete yet",
+        "description": "Add these details so you can find matching requests and receive notifications.",
+        "gapSkills": "Select at least one skill",
+        "gapCanton": "Add your canton",
+        "gapLocation": "Add postal code or city"
+      }
     }
   },
   "vote": {

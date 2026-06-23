@@ -52,10 +52,18 @@ describe('NOTIFICATION_TYPES', () => {
   })
 
   it('IT-Hilfe types have expected values', () => {
+    expect(NOTIFICATION_TYPES.IT_HILFE_REQUEST_CONFIRMATION).toBe('it_hilfe_request_confirmation')
+    expect(NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST).toBe('it_hilfe_matching_request')
     expect(NOTIFICATION_TYPES.IT_HILFE_NEW_OFFER).toBe('it_hilfe_new_offer')
     expect(NOTIFICATION_TYPES.IT_HILFE_OFFER_ACCEPTED).toBe('it_hilfe_offer_accepted')
     expect(NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED).toBe('it_hilfe_offer_rejected')
     expect(NOTIFICATION_TYPES.IT_HILFE_REQUEST_COMPLETED).toBe('it_hilfe_request_completed')
+    expect(NOTIFICATION_TYPES.IT_HILFE_REVIEW_RECEIVED).toBe('it_hilfe_review_received')
+  })
+
+  it('time-off types have expected values', () => {
+    expect(NOTIFICATION_TYPES.TIME_OFF_REQUESTED).toBe('time_off_requested')
+    expect(NOTIFICATION_TYPES.TIME_OFF_REVIEWED).toBe('time_off_reviewed')
   })
 
   it('blog submission type has expected value', () => {

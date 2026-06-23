@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
 import { FILE_SIZE_LIMITS } from '@/config/limits'
+import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
+import { uploadImageBuffer } from '@/lib/storage/image-upload'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,7 +18,8 @@ interface ImageUrls {
 
 // POST /api/uploads
 // Accepts multipart/form-data with one or more image files under field name "files"
-// Stores locally under public/uploads/<userId>/ and returns public URLs
+// Stores in configured object storage (Cloudflare R2 in production), with a
+// local public/uploads fallback for development, and returns public URLs.
 // Generates optimized thumbnail (200x200) and medium (800x600) versions as webp
 export const POST = withAuth(async (request, session) => {
   try {
@@ -35,12 +36,9 @@ export const POST = withAuth(async (request, session) => {
       return apiBadRequest('Keine Dateien hochgeladen')
     }
 
-    if (files.length > 5) {
-      return apiBadRequest('Maximal 5 Bilder erlaubt')
+    if (files.length > MARKETPLACE_LIMITS.MAX_IMAGES) {
+      return apiBadRequest(`Maximal ${MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erlaubt`)
     }
-
-    const uploadBaseDir = path.join(process.cwd(), 'public', 'uploads', session.user.id)
-    await mkdir(uploadBaseDir, { recursive: true })
 
     const urls: string[] = []
     const imageUrls: ImageUrls[] = []
@@ -84,12 +82,18 @@ export const POST = withAuth(async (request, session) => {
         return apiBadRequest('Nur JPEG, PNG, WebP und GIF sind erlaubt')
       }
       const fileName = `${base}_${timestamp}_${i}${ext}`
-      const filePath = path.join(uploadBaseDir, fileName)
+      // Decode once before storing. This rejects files whose browser MIME and
+      // extension claim to be an image but whose bytes are not an image.
+      await sharp(buffer).metadata()
 
-      // Save original
-      await writeFile(filePath, buffer)
-
-      const originalUrl = `/uploads/${userPath}/${encodeURIComponent(fileName)}`
+      const folder = `users/${userPath}`
+      const originalUpload = await uploadImageBuffer(buffer, fileName, folder, {
+        contentType: file.type,
+      })
+      if (!originalUpload.success || !originalUpload.url) {
+        throw new Error(originalUpload.error || 'Originalbild konnte nicht gespeichert werden')
+      }
+      const originalUrl = originalUpload.url
       urls.push(originalUrl)
 
       // Generate optimized versions
@@ -98,21 +102,29 @@ export const POST = withAuth(async (request, session) => {
 
       try {
         // Thumbnail: 200x200, cover crop
-        await sharp(buffer)
+        const thumbnail = await sharp(buffer)
           .resize(200, 200, { fit: 'cover' })
           .webp({ quality: 80 })
-          .toFile(path.join(uploadBaseDir, thumbName))
+          .toBuffer()
 
         // Medium: 800x600, fit inside
-        await sharp(buffer)
+        const medium = await sharp(buffer)
           .resize(800, 600, { fit: 'inside', withoutEnlargement: true })
           .webp({ quality: 85 })
-          .toFile(path.join(uploadBaseDir, mediumName))
+          .toBuffer()
+
+        const [thumbUpload, mediumUpload] = await Promise.all([
+          uploadImageBuffer(thumbnail, thumbName, folder, { contentType: 'image/webp' }),
+          uploadImageBuffer(medium, mediumName, folder, { contentType: 'image/webp' }),
+        ])
+        if (!thumbUpload.success || !thumbUpload.url || !mediumUpload.success || !mediumUpload.url) {
+          throw new Error('Optimierte Bildgrössen konnten nicht gespeichert werden')
+        }
 
         imageUrls.push({
           original: originalUrl,
-          thumbnail: `/uploads/${userPath}/${encodeURIComponent(thumbName)}`,
-          medium: `/uploads/${userPath}/${encodeURIComponent(mediumName)}`,
+          thumbnail: thumbUpload.url,
+          medium: mediumUpload.url,
         })
       } catch (err) {
         logger.warn('Image optimization failed, using original', { fileName, error: err })

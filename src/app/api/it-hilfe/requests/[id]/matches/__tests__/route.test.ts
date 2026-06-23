@@ -20,8 +20,8 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', categoryId: 'ihr_categoryId', skillsNeeded: 'ihr_skillsNeeded', canton: 'ihr_canton', budgetAmountCents: 'ihr_budgetAmountCents', budgetType: 'ihr_budgetType', budgetTier: 'ihr_budgetTier', serviceType: 'ihr_serviceType' },
-  repairerProfiles: { id: 'rp_id', userId: 'rp_userId', isActive: 'rp_isActive', profileTier: 'rp_profileTier', description: 'rp_description', hourlyRateCents: 'rp_hourlyRateCents', acceptsGratis: 'rp_acceptsGratis', acceptsKulturlegi: 'rp_acceptsKulturlegi', serviceDeliveryTypes: 'rp_serviceDeliveryTypes', canton: 'rp_canton', city: 'rp_city', averageRating: 'rp_averageRating', totalJobsCompleted: 'rp_totalJobsCompleted' },
+  itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', categoryId: 'ihr_categoryId', skillsNeeded: 'ihr_skillsNeeded', canton: 'ihr_canton', budgetAmountCents: 'ihr_budgetAmountCents', budgetType: 'ihr_budgetType', budgetTier: 'ihr_budgetTier', serviceType: 'ihr_serviceType', preferredTechnicianId: 'ihr_preferredTechnicianId' },
+  repairerProfiles: { id: 'rp_id', userId: 'rp_userId', isActive: 'rp_isActive', isVerified: 'rp_isVerified', profileTier: 'rp_profileTier', description: 'rp_description', hourlyRateCents: 'rp_hourlyRateCents', acceptsGratis: 'rp_acceptsGratis', acceptsKulturlegi: 'rp_acceptsKulturlegi', serviceDeliveryTypes: 'rp_serviceDeliveryTypes', canton: 'rp_canton', city: 'rp_city', averageRating: 'rp_averageRating', totalJobsCompleted: 'rp_totalJobsCompleted' },
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
   users: { id: 'u_id', name: 'u_name' },
 }))
@@ -59,6 +59,14 @@ jest.mock('@/config/it-hilfe', () => ({
   BUDGET_TIER: { GRATIS: 'gratis', KULTURLEGI: 'kulturlegi', PAID: 'paid', FREE: 'free' },
 }))
 
+jest.mock('@/config/repairer-status', () => ({
+  REPAIRER_PROFILE_TIER: { COMMUNITY: 'community', PROFESSIONAL: 'professional' },
+}))
+
+jest.mock('@/lib/it-hilfe/sql', () => ({
+  technicianHasSkillMatch: jest.fn().mockReturnValue({ __skillMatch: true }),
+}))
+
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
 const VALID_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
@@ -73,9 +81,11 @@ const MOCK_REQUEST_DATA = {
   budgetType: 'free',
   budgetTier: null,
   serviceType: 'remote',
+  preferredTechnicianId: null,
 }
 
 const MOCK_HELPER = {
+  id: 'helper-profile-1',
   userId: 'helper-1',
   userName: 'Helper Alice',
   bio: 'Experienced technician',

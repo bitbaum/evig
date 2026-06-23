@@ -10,9 +10,7 @@ import { NextRequest } from 'next/server'
 import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { getTechnicianById } from '@/lib/services/technician-service'
-
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+import { getTechnicianById, TECHNICIAN_UUID_RE } from '@/lib/services/technician-service'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -27,7 +25,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params
 
-    if (!UUID_RE.test(id)) {
+    if (!TECHNICIAN_UUID_RE.test(id)) {
       return apiBadRequest('Ungültige Techniker-ID')
     }
 

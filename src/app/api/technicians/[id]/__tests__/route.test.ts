@@ -10,6 +10,7 @@
 const mockGetTechnicianById = jest.fn()
 
 jest.mock('@/lib/services/technician-service', () => ({
+  ...jest.requireActual('@/lib/services/technician-service'),
   getTechnicianById: (...args: unknown[]) => mockGetTechnicianById(...args),
 }))
 

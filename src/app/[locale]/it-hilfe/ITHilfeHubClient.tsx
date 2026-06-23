@@ -18,21 +18,19 @@ export default function ITHilfeHubClient() {
 
   const paths = [
     {
+      icon: ClipboardList,
+      title: t('paths.request.title'),
+      description: t('paths.request.description'),
+      href: IT_HILFE.routes.create,
+      cta: t('paths.request.cta'),
+      primary: true,
+    },
+    {
       icon: Users,
       title: t('paths.technicians.title'),
       description: t('paths.technicians.description'),
       href: ROUTES.public.techniker,
       cta: t('paths.technicians.cta'),
-      primary: true,
-    },
-    {
-      icon: ClipboardList,
-      title: t('paths.request.title'),
-      description: t('paths.request.description'),
-      href: session?.user
-        ? IT_HILFE.routes.create
-        : `/auth/login?callbackUrl=${encodeURIComponent(IT_HILFE.routes.create)}`,
-      cta: t('paths.request.cta'),
       primary: false,
     },
     {
@@ -66,7 +64,7 @@ export default function ITHilfeHubClient() {
                 <Link
                   key={path.href}
                   href={path.href}
-                  className="ui-public-start-card group"
+                  className={path.primary ? 'ui-public-start-card group border-action/30' : 'ui-public-start-card group'}
                 >
                   <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-action-muted">
                     <Icon className="h-5 w-5 text-action" aria-hidden="true" />

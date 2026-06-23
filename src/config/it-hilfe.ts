@@ -60,12 +60,11 @@ export const IT_HILFE = {
     requests: '/api/it-hilfe/requests',
     myRequests: '/api/it-hilfe/my-requests',
     myOffers: '/api/it-hilfe/my-offers',
-    /**
-     * @deprecated Orphaned config entry — no src/ consumer. The endpoint
-     * itself (/api/it-hilfe/helpers) is also deprecated; use
-     * /api/technicians directly. Tracked in docs/DEAD_CODE.md.
-     */
-    helpers: '/api/it-hilfe/helpers',
+    /** Unified public technician list (SSOT) */
+    technicians: '/api/technicians',
+    technician: (id: string) => `/api/technicians/${id}`,
+    /** Self-service community/professional profile edit */
+    technicianProfile: '/api/user/technician-profile',
   },
 } as const
 
@@ -92,7 +91,7 @@ export const CLAIM_TOKEN_TTL_MS = CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000
 
 /**
  * Pagination policy for every IT-Hilfe list endpoint
- * (requests, my-requests, my-offers, helper/my-offers, helper/matching-requests).
+ * (requests, my-requests, my-offers). Legacy helper/* list routes return 410 Gone.
  * Centralised so a single edit changes every paged surface.
  */
 export const IT_HILFE_PAGINATION = {

@@ -17,6 +17,7 @@ import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { getSkillIds } from '@/config/it-hilfe'
 import { REPAIRER_STATUS } from '@/config/repairer-status'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
+import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql'
 
 /**
  * GET /api/technicians
@@ -85,11 +86,7 @@ export async function GET(request: NextRequest) {
 
     // Skills filter via subquery (avoids blowing up GROUP BY)
     if (skills.length > 0) {
-      conditions.push(sql`EXISTS (
-        SELECT 1 FROM ${userSkills}
-        WHERE ${userSkills.userId} = ${repairerProfiles.userId}
-        AND ${userSkills.skillId} = ANY(${skills}::text[])
-      )`)
+      conditions.push(technicianHasSkillMatch(skills))
     }
 
     if (canton) conditions.push(eq(repairerProfiles.canton, canton))

@@ -1,86 +1,41 @@
 /**
- * IT-Hilfe Single Helper API
- * GET /api/it-hilfe/helpers/[id] - Get helper profile details (public)
+ * @deprecated Use GET /api/technicians/[id] instead.
+ *
+ * Legacy IT-Hilfe helper detail — kept for external callers.
+ * `id` is repairer_profiles.id (profile UUID). Legacy userId lookups
+ * are supported for one release via getTechnicianByIdOrUserId().
  */
 
 import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { repairerProfiles } from '@/db/schema'
-import { userSkills, users } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import { getTechnicianByIdOrUserId, TECHNICIAN_UUID_RE } from '@/lib/services/technician-service'
+import { toLegacyHelperProfile } from '@/lib/it-hilfe/legacy-helper-response'
 
 interface RouteParams {
   params: Promise<{ id: string }>
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(_request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params
 
-    // Validate UUID format
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+    if (!TECHNICIAN_UUID_RE.test(id)) {
       return apiBadRequest('Ungültige Helfer-ID')
     }
 
-    // Get helper profile with user info and skills
-    const [helper] = await db
-      .select({
-        userId: repairerProfiles.userId,
-        name: users.name,
-        bio: repairerProfiles.description,
-        hourlyRateCents: repairerProfiles.hourlyRateCents,
-        acceptsGratis: repairerProfiles.acceptsGratis,
-        acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
-        serviceTypes: repairerProfiles.serviceDeliveryTypes,
-        locationCity: repairerProfiles.city,
-        locationCanton: repairerProfiles.canton,
-        maxTravelKm: repairerProfiles.maxTravelKm,
-        isVerified: repairerProfiles.isVerified,
-        averageRating: repairerProfiles.averageRating,
-        totalHelpsCompleted: repairerProfiles.totalJobsCompleted,
-        createdAt: repairerProfiles.createdAt,
-        skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
-      })
-      .from(repairerProfiles)
-      .innerJoin(users, eq(repairerProfiles.userId, users.id))
-      .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
-      .where(and(
-        eq(repairerProfiles.userId, id),
-        eq(repairerProfiles.isActive, true),
-        eq(repairerProfiles.profileTier, 'community'),
-      ))
-      .groupBy(
-        repairerProfiles.userId,
-        users.name,
-        repairerProfiles.description,
-        repairerProfiles.hourlyRateCents,
-        repairerProfiles.acceptsGratis,
-        repairerProfiles.acceptsKulturlegi,
-        repairerProfiles.serviceDeliveryTypes,
-        repairerProfiles.city,
-        repairerProfiles.canton,
-        repairerProfiles.maxTravelKm,
-        repairerProfiles.isVerified,
-        repairerProfiles.averageRating,
-        repairerProfiles.totalJobsCompleted,
-        repairerProfiles.createdAt,
-      )
+    const technician = await getTechnicianByIdOrUserId(id)
 
-    if (!helper) {
+    if (!technician || technician.profileTier !== REPAIRER_PROFILE_TIER.COMMUNITY) {
       return apiNotFound('Helfer-Profil')
     }
 
-    logger.info('Fetched helper profile', { helperId: id })
+    logger.info('Fetched legacy helper profile', { profileId: technician.id, lookupId: id })
 
-    // Helper profiles are public and semi-static — cache 60s, stale 30s
     return apiSuccessCached({
-      helper: {
-        ...helper,
-        skills: helper.skills || [],
-      },
+      helper: toLegacyHelperProfile(technician),
     }, 60, 30)
   } catch (error) {
     logger.error('Error fetching helper profile', { error })

@@ -11,7 +11,7 @@ import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE } from '@/config/approval-stat
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
-import { REPAIRER_APPLICATION_STATUS } from '@/config/repairer-status'
+import { REPAIRER_APPLICATION_STATUS, REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { DECISION_STATUS } from '@/config/decisions'
 import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
 import { logger } from '@/lib/logger'
@@ -109,7 +109,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)} WHERE is_staff = true`),
-    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(rpTable)} WHERE is_active = true AND profile_tier = 'community'`),
+    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(rpTable)} WHERE is_active = true AND profile_tier = ${REPAIRER_PROFILE_TIER.COMMUNITY}`),
 
     // Action items — count + oldest unresolved
     db.execute(sql`

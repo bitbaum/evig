@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
@@ -22,10 +23,15 @@ import {
 import { logger } from '@/lib/logger'
 import { getSkillById, REVAMPIT_STORE } from '@/config/it-hilfe'
 import { getCantonCoordinates } from '@/config/canton-coordinates'
-import LeafletMap, { type MapMarker } from '@/components/map/LeafletMap'
+import type { MapMarker } from '@/components/map/LeafletMap'
 import { TechnicianMatchCard } from './TechnicianMatchCard'
 import Heading from '@/components/ui/Heading'
 import { ROUTES } from '@/config/routes'
+
+const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), {
+  ssr: false,
+  loading: () => <div className="h-full min-h-[400px] animate-pulse rounded-lg bg-surface-raised" />,
+})
 
 // =============================================================================
 // TYPES
@@ -45,18 +51,21 @@ interface MatchedHelper {
   skills: string[]
   matchScore: number
   matchReasons: string[]
+  isPreferred?: boolean
 }
 
 interface TechnicianMapListProps {
   requestId: string
   requestTitle?: string
+  /** Requester's canton — used for map markers when a helper profile has no canton set. */
+  requestCanton?: string
 }
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
 
-export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapListProps) {
+export function TechnicianMapList({ requestId, requestTitle, requestCanton }: TechnicianMapListProps) {
   const t = useTranslations('itHelp.detail')
   const [matches, setMatches] = useState<MatchedHelper[]>([])
   const [loading, setLoading] = useState(true)
@@ -103,8 +112,9 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
   // Add helper markers (use canton coordinates as approximation)
   // Deterministic offset from userId to avoid overlap without re-render jitter
   for (const helper of matches) {
-    if (helper.canton) {
-      const coords = getCantonCoordinates(helper.canton)
+    const cantonForMap = helper.canton || requestCanton
+    if (cantonForMap) {
+      const coords = getCantonCoordinates(cantonForMap)
       if (coords) {
         const hash = helper.userId.charCodeAt(0) + helper.userId.charCodeAt(helper.userId.length - 1)
         const offsetLat = ((hash % 50) - 25) * 0.001
@@ -115,8 +125,8 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
           lng: coords.lng + offsetLng,
           label: helper.name,
           description: helper.city
-            ? `${helper.city}, ${helper.canton}`
-            : helper.canton,
+            ? `${helper.city}, ${cantonForMap}`
+            : cantonForMap,
           type: 'helper',
         })
       }
@@ -212,6 +222,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                 }
 
                 const matchPercentage = Math.round((helper.matchScore / maxScore) * 100)
+                const showTopMatchBadge = index === 0 && !helper.isPreferred && helper.matchScore > 0
 
                 return (
                   <div
@@ -220,24 +231,32 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     onMouseEnter={() => setHighlightedHelperId(helper.userId)}
                     onMouseLeave={() => setHighlightedHelperId(null)}
                   >
-                    {index === 0 && (
+                    {helper.isPreferred && (
+                      <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-action">
+                        {t('preferredTechnician')}
+                      </div>
+                    )}
+
+                    {showTopMatchBadge && (
                       <div className="absolute -top-2 -right-2 z-10 bg-warning-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-xs">
                         <Award className="w-3 h-3" />
                         {t('topMatch')}
                       </div>
                     )}
 
-                    <div className="mb-2">
-                      <div className="flex items-center justify-between text-xs text-text-secondary mb-1">
-                        <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
+                    {!helper.isPreferred && helper.matchScore > 0 && (
+                      <div className="mb-2">
+                        <div className="flex items-center justify-between text-xs text-text-secondary mb-1">
+                          <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
+                        </div>
+                        <div className="w-full bg-surface-overlay rounded-full h-1.5">
+                          <div
+                            className="bg-action h-1.5 rounded-full transition-all"
+                            style={{ width: `${matchPercentage}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="w-full bg-surface-overlay rounded-full h-1.5">
-                        <div
-                          className="bg-action h-1.5 rounded-full transition-all"
-                          style={{ width: `${matchPercentage}%` }}
-                        />
-                      </div>
-                    </div>
+                    )}
 
                     {helper.matchReasons.length > 0 && (
                       <div className="mb-3 flex flex-wrap gap-1">

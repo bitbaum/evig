@@ -183,7 +183,7 @@ export function buildTechnikerProfileMeta(
   ].filter(Boolean)
 
   const statsParts = [
-    technician.averageRating != null
+    technician.averageRating != null && technician.averageRating > 0
       ? `★ ${technician.averageRating.toFixed(1)}${
           technician.totalReviews > 0 ? ` ${detail.reviews({ count: technician.totalReviews })}` : ''
         }`

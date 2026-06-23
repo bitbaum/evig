@@ -41,6 +41,8 @@ interface NotifyParams {
   serviceType: string
   skillsNeeded: string[]
   aiDiagnosis: string | null
+  /** User id behind the technician profile explicitly chosen by requester. */
+  preferredTechnicianUserId?: string | null
   /**
    * When true (default), sends the standard request-confirmation
    * notification to the requester. Set to false when the caller is
@@ -121,30 +123,54 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
       })
     })
 
-  // 3. Matching helper notifications — fan-out via single notifyUsers call.
+  // 3. Explicitly selected technician — notify regardless of tier or skill
+  // overlap. This is the contract behind "Anfrage stellen" on a profile.
+  if (params.preferredTechnicianUserId && params.preferredTechnicianUserId !== params.requesterId) {
+    notifyUsers([params.preferredTechnicianUserId], {
+      type: NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST,
+      title: `Direkte Anfrage: ${params.title}`,
+      content: 'Jemand hat dich für eine IT-Hilfe Anfrage ausgewählt.',
+      related_type: RELATED_TYPES.IT_HILFE,
+      related_id: params.requestId,
+      metadata: {
+        helperName: 'Techniker',
+        requestTitle: params.title,
+        categoryName,
+        urgencyName,
+        canton: params.canton,
+        serviceTypeName,
+        matchingSkills: params.skillsNeeded.map(sid => getSkillById(sid)?.name || sid).join('|'),
+        requestUrl,
+      },
+    }).catch(err => {
+      logger.warn('Failed to notify preferred technician', { error: err, requestId: params.requestId })
+    })
+  }
+
+  // 4. Other matching technicians — fan-out via single notifyUsers call.
   if (params.skillsNeeded.length === 0) return
+
+  const matchingConditions = [
+    eq(repairerProfiles.isActive, true),
+    eq(repairerProfiles.isVerified, true),
+    ne(repairerProfiles.userId, params.requesterId),
+    inArray(userSkills.skillId, params.skillsNeeded),
+  ]
+  if (params.preferredTechnicianUserId) {
+    matchingConditions.push(ne(repairerProfiles.userId, params.preferredTechnicianUserId))
+  }
 
   db
     .select({
       userId: repairerProfiles.userId,
       name: users.name,
-      matchingSkills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} = ANY(${params.skillsNeeded}::text[]))`,
+      matchingSkills: sql<string[]>`ARRAY_AGG(${userSkills.skillId})`,
     })
     .from(repairerProfiles)
     .innerJoin(users, eq(repairerProfiles.userId, users.id))
     .innerJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
     .where(
-      and(
-        eq(repairerProfiles.isActive, true),
-        // Only verified helpers receive skill-match fan-out. Unverified
-        // self-registered profiles must wait for admin approval before
-        // they get notified — same rule as the public /api/technicians
-        // list endpoint.
-        eq(repairerProfiles.isVerified, true),
-        eq(repairerProfiles.profileTier, 'community'),
-        ne(repairerProfiles.userId, params.requesterId),
-        inArray(userSkills.skillId, params.skillsNeeded),
-      ),
+      and(...matchingConditions),
     )
     .groupBy(repairerProfiles.userId, users.name)
     .then(helpersResult => {

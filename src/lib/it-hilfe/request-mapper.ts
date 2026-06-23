@@ -26,6 +26,9 @@ export interface RequestRow {
   image_urls: string[] | null
   status: string
   matched_offer_id: string | null
+  preferred_technician_id?: string | null
+  preferred_technician_name?: string | null
+  preferred_technician_city?: string | null
   offer_count: number
   ai_diagnosis?: string | null
   completed_at?: string | null
@@ -63,6 +66,9 @@ export function mapRequestListRow(row: RequestRow) {
     imageUrls: row.image_urls || [],
     status: row.status,
     matchedOfferId: row.matched_offer_id,
+    preferredTechnicianId: row.preferred_technician_id ?? null,
+    preferredTechnicianName: row.preferred_technician_name ?? null,
+    preferredTechnicianCity: row.preferred_technician_city ?? null,
     matchedHelperId: row.matched_helper_id ?? null,
     /**
      * Helper name is non-sensitive — same value already shows on the

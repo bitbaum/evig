@@ -11,6 +11,9 @@ export interface ITHilfeFilters {
   canton: string
   urgency: string
   budgetType: string
+  skill: string
+  serviceType: string
+  matchMySkills: boolean
 }
 
 const EMPTY_FILTERS: ITHilfeFilters = {
@@ -18,6 +21,9 @@ const EMPTY_FILTERS: ITHilfeFilters = {
   canton: '',
   urgency: '',
   budgetType: '',
+  skill: '',
+  serviceType: '',
+  matchMySkills: false,
 }
 
 export function useITHilfeRequests() {
@@ -41,6 +47,9 @@ export function useITHilfeRequests() {
       if (filters.canton) params.set('canton', filters.canton)
       if (filters.urgency) params.set('urgency', filters.urgency)
       if (filters.budgetType) params.set('budgetType', filters.budgetType)
+      if (filters.skill) params.set('skill', filters.skill)
+      if (filters.serviceType) params.set('serviceType', filters.serviceType)
+      if (filters.matchMySkills) params.set('matchMySkills', 'true')
       if (search) params.set('search', search)
       if (sort) params.set('sort', sort)
       params.set('limit', String(PAGINATION.PUBLIC))
@@ -73,7 +82,7 @@ export function useITHilfeRequests() {
     setOffset(0)
   }
 
-  const setFilter = (key: keyof ITHilfeFilters, value: string) => {
+  const setFilter = (key: keyof ITHilfeFilters, value: string | boolean) => {
     setFilters(prev => ({ ...prev, [key]: value }))
     setOffset(0)
   }
@@ -91,7 +100,14 @@ export function useITHilfeRequests() {
   const goToPage = (page: number) => setOffset((page - 1) * PAGINATION.PUBLIC)
 
   const hasActiveFilters = !!(
-    filters.category || filters.canton || filters.urgency || filters.budgetType || search
+    filters.category
+    || filters.canton
+    || filters.urgency
+    || filters.budgetType
+    || filters.skill
+    || filters.serviceType
+    || filters.matchMySkills
+    || search
   )
 
   return {

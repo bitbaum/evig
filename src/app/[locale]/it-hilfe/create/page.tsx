@@ -1,5 +1,7 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+import useSWR from 'swr'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -26,6 +28,7 @@ import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { useCreateITHilfeForm } from '@/hooks/useCreateITHilfeForm'
 import { PageShell } from '@/components/layout/PageShell'
 import { ROUTES } from '@/config/routes'
+import { apiFetch } from '@/lib/api/client'
 
 interface AIFormFields {
   categoryId: string
@@ -40,6 +43,16 @@ interface AIFormFields {
 
 export default function CreatePeerRepairPage() {
   const t = useTranslations('itHelp.create')
+  const tTechniker = useTranslations('techniker')
+  const searchParams = useSearchParams()
+  const preferredTechnicianId = searchParams.get('technician') || ''
+  const { data: preferredTechnicianResult } = useSWR(
+    preferredTechnicianId ? `/api/technicians/${preferredTechnicianId}` : null,
+    (url: string) => apiFetch<{ technician: { id: string; name: string | null; city: string | null; isVerified: boolean } }>(url),
+  )
+  const preferredTechnician = preferredTechnicianResult?.success
+    ? preferredTechnicianResult.data?.technician ?? null
+    : null
 
   const {
     status,
@@ -56,7 +69,7 @@ export default function CreatePeerRepairPage() {
     handleCategorySelect,
     handleSkillToggle,
     handleSubmit,
-  } = useCreateITHilfeForm(t('errorCreateFailed'), t('errorGeneric'))
+  } = useCreateITHilfeForm(t('errorCreateFailed'), t('errorGeneric'), preferredTechnicianId)
 
   if (status === 'loading') {
     return (
@@ -147,6 +160,36 @@ export default function CreatePeerRepairPage() {
       <PageShell maxWidth="3xl" py="py-8 sm:py-12">
 
         {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
+
+        {preferredTechnician && (
+          <section className="mb-6 rounded-xl border border-action/30 bg-action-muted p-4" aria-labelledby="preferred-technician">
+            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-action">
+              {t('preferredTechnician.eyebrow')}
+            </div>
+            <div className="mt-2 flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <Heading id="preferred-technician" level={2} className="text-base text-text-primary">
+                  {preferredTechnician.name}
+                </Heading>
+                {preferredTechnician.city && (
+                  <p className="mt-1 text-sm text-text-secondary">{preferredTechnician.city}</p>
+                )}
+                <p className="mt-2 text-sm text-text-secondary">{t('preferredTechnician.description')}</p>
+              </div>
+              <div className="flex flex-col items-end gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-action">
+                  {preferredTechnician.isVerified ? tTechniker('detail.verified') : tTechniker('detail.community')}
+                </span>
+                <Link
+                  href={ROUTES.public.technicianProfile(preferredTechnician.id)}
+                  className="text-sm text-action hover:underline"
+                >
+                  {t('preferredTechnician.viewProfile')}
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* AI-assist LEADS the form — describe the problem in plain words and

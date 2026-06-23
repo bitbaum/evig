@@ -68,6 +68,13 @@ export function CheckoutPageClient({
 
   return (
     <div className="max-w-3xl mx-auto">
+      <nav aria-label={t('title')} className="mb-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-text-tertiary">
+        <span>{t('summary.title')}</span>
+        <span aria-hidden="true">/</span>
+        <span className="text-action">{t('delivery.title')}</span>
+        <span aria-hidden="true">/</span>
+        <span>{t('title')}</span>
+      </nav>
       <Link
         href={ROUTES.public.marketplaceListing(listing.id)}
         className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors"
@@ -141,6 +148,7 @@ export function CheckoutPageClient({
                   <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.name')}</label>
                   <Input
                     type="text"
+                    autoComplete="name"
                     value={shippingAddress.name}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
                     placeholder={t('address.namePlaceholder')}
@@ -150,6 +158,7 @@ export function CheckoutPageClient({
                   <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.street')}</label>
                   <Input
                     type="text"
+                    autoComplete="street-address"
                     value={shippingAddress.street}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
                     placeholder={t('address.streetPlaceholder')}
@@ -160,6 +169,9 @@ export function CheckoutPageClient({
                     <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.postalCode')}</label>
                     <Input
                       type="text"
+                      inputMode="numeric"
+                      autoComplete="postal-code"
+                      pattern="[0-9]{4}"
                       value={shippingAddress.postal_code}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value }))}
                       maxLength={4}
@@ -174,6 +186,7 @@ export function CheckoutPageClient({
                     <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.city')}</label>
                     <Input
                       type="text"
+                      autoComplete="address-level2"
                       value={shippingAddress.city}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
                       placeholder={t('address.cityPlaceholder')}
@@ -184,29 +197,6 @@ export function CheckoutPageClient({
             </div>
           )}
 
-          {error && (
-            <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4 text-error-700 dark:text-error-300">
-              {error}
-            </div>
-          )}
-
-          <Button
-            onClick={handleCreateOrder}
-            disabled={creatingOrder || !shippingFormValid}
-            className="w-full gap-2 py-3 px-6 font-semibold text-lg"
-          >
-            {creatingOrder ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                {t('payment.redirect')}
-              </>
-            ) : (
-              <>
-                <Shield className="w-5 h-5" />
-                {t('payment.proceed')}
-              </>
-            )}
-          </Button>
         </div>
 
         <div className="lg:col-span-2">
@@ -275,6 +265,32 @@ export function CheckoutPageClient({
                 {t('buyerProtection')}
               </p>
             </div>
+
+            {error && (
+              <div role="alert" className="mt-4 rounded-lg border border-error-500/30 bg-error-500/10 p-3 text-sm text-error-600">
+                {error}
+              </div>
+            )}
+
+            <Button
+              onClick={handleCreateOrder}
+              disabled={creatingOrder || !shippingFormValid}
+              variant="primary"
+              size="lg"
+              className="mt-5 w-full gap-2 font-semibold"
+            >
+              {creatingOrder ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+                  {t('payment.redirect')}
+                </>
+              ) : (
+                <>
+                  <Shield className="h-5 w-5" aria-hidden="true" />
+                  {t('payment.proceed')}
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </div>
