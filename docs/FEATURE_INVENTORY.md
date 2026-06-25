@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-19
-last_modified_summary: Initial SSOT inventory with post-Phase-1 status; notification href smoke test added
+last_modified_date: 2026-06-25
+last_modified_summary: Phase 2 IT-Hilfe E2E coverage and inventory status updates
 ---
 
 # Feature Inventory (SSOT)
@@ -28,7 +28,7 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | Phase | Scope | Status |
 |-------|-------|--------|
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`); href smoke test in `tests/e2e/notification-hrefs.spec.ts` |
-| **2** | IT-Hilfe, marketplace, workshops, services E2E | 🟡 Partial (Playwright specs exist; full matrix not run) |
+| **2** | IT-Hilfe, marketplace, workshops, services E2E | 🟡 IT-Hilfe hub/browse/journey specs in `tests/e2e/it-hilfe.spec.ts` |
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ⬜ Not started |
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Local (timecard + Playwright infra uncommitted) |
 
@@ -57,30 +57,30 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Actor | Status |
 |---|---------|-------|-------|--------|
-| 13 | IT-Hilfe hub | `/it-hilfe` | Public | ✅ |
-| 14 | Create help request | `/it-hilfe/create` | Public | 🟡 |
-| 15 | Create with preferred technician | `/it-hilfe/create?technician=<profileId>` | Public | ✅ (PR #163) |
-| 16 | Browse open requests | `/it-hilfe/anfragen` | Public / Techniker | 🟡 |
-| 17 | Filters (skill, service type, match skills) | `/it-hilfe/anfragen` | Techniker | 🟡 |
-| 18 | Request detail | `/it-hilfe/[id]` | Public | 🟡 |
+| 13 | IT-Hilfe hub | `/it-hilfe` | Public | ✅ (E2E hub paths) |
+| 14 | Create help request | `/it-hilfe/create` | Public | ✅ (E2E form load) |
+| 15 | Create with preferred technician | `/it-hilfe/create?technician=<profileId>` | Public | ✅ |
+| 16 | Browse open requests | `/it-hilfe/anfragen` | Public / Techniker | ✅ (E2E browse) |
+| 17 | Filters (skill, service type, match skills) | `/it-hilfe/anfragen` | Techniker | 🟡 (E2E category filter) |
+| 18 | Request detail | `/it-hilfe/[id]` | Public | 🟡 (journey E2E) |
 | 19 | Owner edit request | `/it-hilfe/[id]/edit` | Owner | ⬜ |
 | 20 | Preferred technician sidebar | request detail | Owner | 🟡 |
-| 21 | Match panel | request detail + API matches | Techniker | 🟡 |
-| 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | ⬜ |
-| 23 | Accept / decline offer | API offers accept/decline | Owner | ⬜ |
+| 21 | Match panel | request detail + API matches | Techniker | ⬜ |
+| 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | 🟡 (journey E2E API) |
+| 23 | Accept / decline offer | API offers accept/decline | Owner | 🟡 (journey E2E accept) |
 | 24 | Withdraw offer | API | Techniker | ⬜ |
 | 25 | My requests | `/it-hilfe/my` | Requester | ⬜ |
 | 26 | My offers | `/it-hilfe/my/offers` | Techniker | ⬜ |
 | 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ⬜ |
-| 28 | Technician directory | `/it-hilfe/techniker` | Public | 🟡 |
-| 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | 🟡 |
+| 28 | Technician directory | `/it-hilfe/techniker` | Public | ✅ (E2E list load) |
+| 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | ⬜ |
 | 30 | Technician self-service profile | `/profil/techniker` | Techniker | ⬜ |
 | 31 | Completeness banner | profil + anfragen | Techniker | ⬜ |
 | 32 | Dashboard techniker overview | `/dashboard/techniker` | Techniker | ⬜ |
-| 33 | Reviews after completion | API confirm-review | Both | ⬜ |
-| 34 | Notifications (new offer, match, etc.) | bell → `/it-hilfe/[id]` | Both | ✅ (single-email pipeline) |
+| 33 | Reviews after completion | API confirm-review | Both | 🟡 (journey E2E review) |
+| 34 | Notifications (new offer, match, etc.) | bell → `/it-hilfe/[id]` | Both | ✅ |
 | 35 | Admin IT-Hilfe moderation | `/admin/it-hilfe` | Staff | ⬜ |
-| 36 | Legacy `/techniker` redirect | → `/it-hilfe/techniker` | Public | ⬜ |
+| 36 | Legacy `/techniker` redirect | → `/it-hilfe/techniker` | Public | ✅ (E2E) |
 
 ---
 
@@ -280,7 +280,7 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 ## Recommended test order (next)
 
 1. **Commit + deploy** Phase 4 local work (timecards, Playwright, migration 094).
-2. **Phase 2 — IT-Hilfe E2E** (#13–36): create → offer → accept → complete → review (`tests/e2e/it-hilfe.spec.ts` extend).
+2. **Phase 2 — IT-Hilfe E2E** (#13–36): `npm run test:e2e:it-hilfe` — journey needs `AUTH_TEST_TECHNICIAN_EMAIL` + password (distinct from requester).
 3. **Phase 2 — Marketplace + workshops** smoke matrix.
 4. **Phase 3 — Staff surfaces** (protocols, tasks, decisions).
 5. **Phase 4 cleanup** — terminology pass (Techniker vs Reparateur), CI fixes.

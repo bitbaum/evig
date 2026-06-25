@@ -112,8 +112,18 @@ export function LoginForm() {
         )}
 
         {errorMessage && (
-          <div id="login-error" className="mb-6">
+          <div id="login-error" className="mb-6 space-y-3">
             <StatusBanner variant="error">{errorMessage}</StatusBanner>
+            {errorMessage.includes('bestätige') && email.trim() && (
+              <p className="text-sm text-text-secondary">
+                <Link
+                  href={`${ROUTES.public.register}?email=${encodeURIComponent(email.trim())}`}
+                  className="text-action hover:underline font-medium"
+                >
+                  Bestätigungscode eingeben oder erneut senden
+                </Link>
+              </p>
+            )}
           </div>
         )}
 

@@ -237,5 +237,6 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | 4.6 | Migration `094_timecard_notification_types.sql` | ✓ |
 | 4.7 | Phase 1 closure: `tests/e2e/notification-hrefs.spec.ts` smoke-tests every `RELATED_TYPE_HREFS` base (no HTTP 404) | ✓ |
 | 4.8 | `docs/FEATURE_INVENTORY.md` — living 155-item audit SSOT | ✓ |
+| 4.9 | Phase 2 IT-Hilfe: hub/anfragen E2E split, full journey spec, Techniker terminology in complete/review APIs | ✓ |
 
 ---

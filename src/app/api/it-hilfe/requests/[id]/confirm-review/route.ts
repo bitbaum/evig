@@ -109,7 +109,7 @@ export const POST = withAuth<{ id: string }>(async (
       .innerJoin(users, eq(itHilfeOffers.helperId, users.id))
       .where(eq(itHilfeOffers.id, row.matchedOfferId))
 
-    if (!offer) return apiBadRequest('Helfer nicht gefunden')
+    if (!offer) return apiBadRequest('Techniker nicht gefunden')
 
     // Guard against duplicate reviews at the DB layer as well
     const existingId = await findDuplicateReview(session.user.id, REVIEW_TARGET_TYPES.IT_HILFE, id)
@@ -120,7 +120,7 @@ export const POST = withAuth<{ id: string }>(async (
     // The recommendation flag is encoded into the review content so existing
     // review surfaces render it without requiring a schema change.
     const recommendationLine = recommended
-      ? '\n\n[Empfehlung: Ja, diesen Helfer gerne weiter]'
+      ? '\n\n[Empfehlung: Ja, diesen Techniker gerne weiter]'
       : '\n\n[Empfehlung: Nein]'
     const content = (reviewText || 'Hilfe erfolgreich abgeschlossen.') + recommendationLine
 
@@ -179,7 +179,7 @@ export const POST = withAuth<{ id: string }>(async (
     notifyReviewReceived({
       recipientIds: [offer.helperId],
       requestId: id,
-      helperName: offer.helperName || 'Helfer',
+      helperName: offer.helperName || 'Techniker',
       requestTitle: row.title,
       rating,
       reviewText,

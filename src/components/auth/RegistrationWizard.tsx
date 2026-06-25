@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -88,17 +88,23 @@ export function RegistrationWizard() {
     return new URLSearchParams(window.location.search).get('ref') ?? undefined
   })
 
+  const [prefillEmail] = useState<string | undefined>(() => {
+    if (typeof window === 'undefined') return undefined
+    return new URLSearchParams(window.location.search).get('email') ?? undefined
+  })
+
   const [emailSendFailed, setEmailSendFailed] = useState(false)
   const savedData = useState(() => loadPersistedState())[0]
 
   const [currentStep, setCurrentStep] = useState(() => {
     if (savedData?.userId && !savedData?.emailVerified) return 1
+    if (prefillEmail) return 1
     return 0
   })
 
   const [state, setState] = useState<RegistrationState>(() => ({
     name: savedData?.name || '',
-    email: savedData?.email || '',
+    email: savedData?.email || prefillEmail || '',
     password: '',
     confirmPassword: '',
     acceptTerms: false,
@@ -116,6 +122,15 @@ export function RegistrationWizard() {
     { label: t('stepAccountLabel'), description: t('stepAccountDesc') },
     { label: t('stepVerifyLabel'), description: t('stepVerifyDesc') },
   ]
+
+  const prefillResentRef = useRef(false)
+  useEffect(() => {
+    if (!prefillEmail || prefillResentRef.current || currentStep !== 1) return
+    prefillResentRef.current = true
+    void resendCode(prefillEmail).then(sent => {
+      if (!sent) setEmailSendFailed(true)
+    })
+  }, [prefillEmail, currentStep, resendCode])
 
   // Step 1: Account Creation
   const handleAccountNext = async () => {

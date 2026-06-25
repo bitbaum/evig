@@ -1,8 +1,8 @@
 # RevampIT Unified Authentication System
 
 **Created:** 2025-12-02  
-**Last Modified:** 2026-06-15  
-**Last Modified Summary:** Rewritten to match the live Auth.js v5 stack — JWT sessions, email verification, password reset, staff permissions, and shared admin/user auth.
+**Last Modified:** 2026-06-25  
+**Last Modified Summary:** Password reset now verifies email; register resumes unverified accounts; forgot-password surfaces SMTP failures for known users.
 
 ---
 
@@ -121,11 +121,16 @@ New users are redirected to `/dashboard/profile` (`pages.newUser`).
 ```
 
 - Token stored in verification infrastructure (`db-verification.ts`)
-- Default TTL: 1 hour
-- Enumeration-safe: same response whether email exists or not
+- Default TTL: 1 hour; creating a new token clears stale rows for that email
+- **Successful reset sets `emailVerified`** — proves mailbox control (fixes IT-Hilfe claim + forgot-password users stuck at login)
+- Unknown email: generic success (enumeration-safe). Known email + SMTP failure: **503** with actionable message
 - Email via `passwordReset` template
 
 Also used by IT-Hilfe anonymous-post claim flow (password-set link for unclaimed accounts).
+
+**Unverified existing account at register:** `registerUser()` resumes setup (updates password, resends 6-digit code) instead of blocking with "account exists".
+
+**Ops unlock:** `npx tsx scripts/dev/auth-unlock-user.ts <email> --verify-email` (see script header).
 
 ### 5. Onboarding (dashboard)
 

@@ -346,6 +346,7 @@ describe('createPasswordResetToken', () => {
   it('calls db.insert once', async () => {
     await createPasswordResetToken(EMAIL)
 
+    expect(mockDbDelete).toHaveBeenCalledTimes(1)
     expect(mockDbInsert).toHaveBeenCalledTimes(1)
   })
 
@@ -436,6 +437,10 @@ describe('updateUserPassword', () => {
     const result = await updateUserPassword(EMAIL, 'new-hash')
 
     expect(result.success).toBe(true)
+    const chain = mockDbUpdate.mock.results[0].value as { set: jest.Mock }
+    const setArg = chain.set.mock.calls[0][0] as Record<string, unknown>
+    expect(setArg.passwordHash).toBe('new-hash')
+    expect(setArg.emailVerified).toBeDefined()
   })
 
   it('returns { success: false } on DB error (does not throw)', async () => {

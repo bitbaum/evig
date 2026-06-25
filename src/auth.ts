@@ -142,7 +142,9 @@ export const authConfig = {
           }
 
           if (!user.password_hash) {
-            throw new Error('Dieses Konto verwendet eine andere Anmeldemethode')
+            throw new Error(
+              'Für dieses Konto ist noch kein Passwort gesetzt. Nutze «Passwort vergessen», um dein Konto zu aktivieren.',
+            )
           }
 
           // Verify password
@@ -372,9 +374,38 @@ export interface RegisterResult {
     name: string | null
     emailVerified: boolean
     emailSent: boolean
+    /** True when an existing unverified account was resumed (not a new insert). */
+    resumed?: boolean
   }
   error?: string
   errors?: string[]
+}
+
+async function sendRegistrationVerificationEmail(
+  email: string,
+  name: string | null | undefined,
+  isStaff: boolean,
+  userId: string,
+): Promise<boolean> {
+  try {
+    const verificationCode = await createVerificationCode(email)
+    const templateName = isStaff ? 'staffVerificationCode' : 'verificationCode'
+    const emailResult = await sendEmail(
+      email,
+      templateName,
+      name || DEFAULT_USER_NAME_FALLBACK,
+      verificationCode,
+    )
+    if (!emailResult.success) {
+      logger.error('Email send returned failure', { error: emailResult.error, email, userId })
+      return false
+    }
+    logger.info('Verification code sent', { email, userId, isStaff })
+    return true
+  } catch (emailError) {
+    logger.error('Failed to send verification email', { error: emailError, userId })
+    return false
+  }
 }
 
 export async function registerUser(data: {
@@ -402,7 +433,44 @@ export async function registerUser(data: {
   // Check if user already exists
   const existingUser = await getUserByEmail(email)
   if (existingUser) {
-    return { success: false, error: 'Ein Konto mit dieser E-Mail-Adresse existiert bereits' }
+    if (existingUser.emailVerified) {
+      return { success: false, error: 'Ein Konto mit dieser E-Mail-Adresse existiert bereits' }
+    }
+
+    // Unverified account — resume setup: update password/name, resend code.
+    // Covers abandoned registration and users who try to "register again".
+    if (!existingUser.password_hash) {
+      return {
+        success: false,
+        error:
+          'Für diese E-Mail existiert ein Konto ohne Passwort. Nutze «Passwort vergessen», um dein Konto zu aktivieren.',
+      }
+    }
+
+    const password_hash = await hashPassword(password)
+    await updateUser(existingUser.id, {
+      password_hash,
+      name: name ?? existingUser.name ?? undefined,
+    })
+
+    const emailSent = await sendRegistrationVerificationEmail(
+      email,
+      name ?? existingUser.name,
+      Boolean(existingUser.is_staff),
+      existingUser.id,
+    )
+
+    return {
+      success: true,
+      data: {
+        userId: existingUser.id,
+        email: existingUser.email,
+        name: name ?? existingUser.name,
+        emailVerified: false,
+        emailSent,
+        resumed: true,
+      },
+    }
   }
 
   // Hash password
@@ -430,21 +498,12 @@ export async function registerUser(data: {
     }
 
     // Generate 6-digit verification code and send email
-    // Staff members get a different template with team-focused messaging
-    let emailSent = false
-    try {
-      const verificationCode = await createVerificationCode(email)
-      const templateName = is_staff ? 'staffVerificationCode' : 'verificationCode'
-      const emailResult = await sendEmail(email, templateName, name || DEFAULT_USER_NAME_FALLBACK, verificationCode)
-      if (!emailResult.success) {
-        logger.error('Email send returned failure', { error: emailResult.error, email, userId: user.id })
-      } else {
-        emailSent = true
-        logger.info('Verification code sent', { email, userId: user.id, isStaff: is_staff })
-      }
-    } catch (emailError) {
-      logger.error('Failed to send verification email', { error: emailError, userId: user.id })
-    }
+    const emailSent = await sendRegistrationVerificationEmail(
+      email,
+      name,
+      is_staff,
+      user.id,
+    )
 
     return {
       success: true,

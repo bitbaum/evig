@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
     // through to the same generic success response — enumeration
     // protection requires not surfacing the failure to the caller.
     const resetUrl = getPasswordResetUrl(resetToken)
+    let emailDelivered = false
     try {
       const sendResult = await sendEmail(
         email,
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest) {
         resetUrl,
       )
       if (sendResult.success) {
+        emailDelivered = true
         logger.info('Password reset email sent', { email })
       } else {
         logger.error('Failed to send password reset email (resolved)', {
@@ -77,6 +79,16 @@ export async function POST(request: NextRequest) {
         error: emailError,
         email,
       })
+    }
+
+    if (!emailDelivered) {
+      // User is known to exist (they submitted their own email). Surface
+      // delivery failure so they are not stuck behind a false success message.
+      return apiError(
+        new Error('Password reset email not delivered'),
+        'E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut oder kontaktiere uns unter kontakt@revamp-it.ch.',
+        503,
+      )
     }
 
     return apiSuccess({

@@ -176,13 +176,23 @@ describe('POST /api/auth/forgot-password — user found', () => {
     )
   })
 
-  it('returns 200 even when sendEmail throws (enumeration protection)', async () => {
+  it('returns 503 when sendEmail throws for a known user', async () => {
     mockSendEmail.mockRejectedValueOnce(new Error('SMTP error'))
     const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(503)
   })
 
-  it('logs an error (not info) when sendEmail resolves { success: false } — silent SMTP failure must not be logged as success', async () => {
+  it('returns 503 when sendEmail resolves { success: false } for a known user', async () => {
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
+
+    const response = await POST(makeRequest({ email: 'hans@example.com' }))
+    expect(response.status).toBe(503)
+    const body = await response.json()
+    expect(body.success).toBe(false)
+    expect(body.error).toMatch(/E-Mail konnte nicht gesendet werden/)
+  })
+
+  it('logs an error when sendEmail resolves { success: false }', async () => {
     // sendEmail catches its own errors and resolves { success: false }
     // rather than throwing. The old try/catch only caught rejections, so
     // a silent send failure logged "Password reset email sent" (false
@@ -194,7 +204,7 @@ describe('POST /api/auth/forgot-password — user found', () => {
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
 
     const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(200) // user-facing response unchanged (enumeration protection)
+    expect(response.status).toBe(503)
 
     // The success-path info log must NOT fire on a resolved failure.
     expect(logger.info).not.toHaveBeenCalledWith(

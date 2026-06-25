@@ -79,7 +79,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     if (offer.helperId !== session.user.id) {
       return apiForbidden(
-        'Nur der zugewiesene Helfer kann die Anfrage als abgeschlossen markieren',
+        'Nur der zugewiesene Techniker kann die Anfrage als abgeschlossen markieren',
       )
     }
 

@@ -206,22 +206,22 @@ export async function createPasswordResetToken(
   email: string,
   expiresInMs: number = PASSWORD_RESET_TOKEN_DEFAULT_TTL_MS,
 ): Promise<string> {
-  // Generate a secure random token
   const token = randomBytes(32).toString('hex')
-
   const expires = new Date(Date.now() + expiresInMs)
+  const lowerEmail = email.toLowerCase()
 
+  // One active reset flow per email — stale tokens (including expired
+  // verification codes sharing this table) must not leave the user clicking
+  // an old link while a fresh reset was requested.
   await db
-    .insert(verificationTokens)
-    .values({
-      identifier: email.toLowerCase(),
-      token,
-      expires: expires.toISOString(),
-    })
-    .onConflictDoUpdate({
-      target: [verificationTokens.identifier, verificationTokens.token],
-      set: { expires: expires.toISOString() },
-    })
+    .delete(verificationTokens)
+    .where(eq(verificationTokens.identifier, lowerEmail))
+
+  await db.insert(verificationTokens).values({
+    identifier: lowerEmail,
+    token,
+    expires: expires.toISOString(),
+  })
 
   return token
 }
@@ -269,6 +269,10 @@ export async function updateUserPassword(email: string, passwordHash: string): P
       .update(users)
       .set({
         passwordHash,
+        // Clicking a reset link proves mailbox control — same bar as
+        // verify-code. Without this, IT-Hilfe claim + forgot-password users
+        // set a password but login still rejects with "confirm your email".
+        emailVerified: sql`NOW()`.mapWith(String),
         updatedAt: sql`NOW()`.mapWith(String),
       })
       .where(eq(users.email, email.toLowerCase()))
