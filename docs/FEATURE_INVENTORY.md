@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_summary: IT-Hilfe dual-persona journey; service repair + upcycling in inventory matrix
+last_modified_summary: GitHub E2E secrets set; 209/209 prod pass; CSRF + ISO 14044 smoke fixes
 ---
 
 # Feature Inventory (SSOT)
@@ -50,7 +50,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke (admin routes); deep CRUD 🟡 |
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Terminology open; CI inventory wired (needs secrets) |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
-| **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 186/186 prod |
+| **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 209/209 prod |
 
 ---
 
@@ -112,7 +112,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 38 | Listing detail | `/marketplace/[id]` | ⬜ |
 | 39 | Search (Meilisearch) | `/marketplace?search=` | ✅ inventory E2E |
 | 40 | Cart | `/marketplace/cart` | ✅ inventory E2E |
-| 41 | Checkout (Payrexx) | `/marketplace/checkout/[listingId]` | 🟡 dynamic when listing exists |
+| 41 | Checkout (Payrexx) | `/marketplace/checkout/[listingId]` | ✅ journey E2E (full flow when Payrexx active) |
 | 42 | Create / edit listing | `/marketplace/sell` | ✅ inventory E2E |
 | 43 | My listings | `/dashboard/listings` | ✅ inventory E2E |
 | 44 | Seller dashboard | `/dashboard/seller` | ✅ inventory E2E |
@@ -302,10 +302,10 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 ## Recommended test order (next)
 
 1. **Run dual-persona inventory on every deploy:** automatic via GitHub Actions (`post-deploy-e2e` job) when `AUTH_TEST_USER_PASSWORD` + `AUTH_TEST_ADMIN_PASSWORD` are set; manual: `npm run test:e2e:inventory:prod`.
-2. **Deep journeys** (API + multi-step): marketplace checkout payment, workshop register — IT-Hilfe offer/accept ✅ (`test:e2e:it-hilfe:journey`).
+2. **Deep journeys** (API + multi-step): workshop register — IT-Hilfe ✅ · marketplace checkout ✅ (`test:e2e:marketplace:journey`; full Payrexx payment when `PAYREXX_INSTANCE` set on prod).
 3. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified`.
 4. **Expand matrix** — dynamic detail pages when no prod data (#38, #52, #79, #86).
 
-**E2E commands:** `npm run test:e2e:inventory` · `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe` · `npm run test:e2e:user-admin` · `npm run test:e2e:auth`
+**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:user-admin`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

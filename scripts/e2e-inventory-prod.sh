@@ -41,3 +41,6 @@ npx playwright test tests/e2e/feature-inventory.spec.ts --project=chromium --rep
 
 echo "=== IT-Hilfe dual-persona journey → ${BASE_URL} ==="
 npx playwright test tests/e2e/it-hilfe-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Marketplace checkout journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/marketplace-checkout-journey.spec.ts --project=chromium --reporter=line

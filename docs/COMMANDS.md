@@ -77,7 +77,7 @@ npm run test:e2e:inventory # Dual-persona feature inventory (user + admin)
 npm run test:e2e:inventory:prod # Same, with prod health wait (CI / post-deploy)
 npm run test:e2e:user-admin # Legacy quick smoke (subset)
 npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
-npm run test:e2e:it-hilfe:journey # Admin+user offer/accept/complete flow
+npm run test:e2e:marketplace:journey # User sells, admin buys (Payrexx when configured)
 npm run test:e2e:ui    # Playwright with UI
 npm run test:all       # Run all tests
 ```

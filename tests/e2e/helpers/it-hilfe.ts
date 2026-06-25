@@ -1,5 +1,6 @@
 import type { APIRequestContext } from '@playwright/test'
 import { OFFER_MIN_CHARS } from '../../../src/config/it-hilfe'
+import { csrfPost } from './api-csrf'
 
 export interface ItHilfeRequestPayload {
   categoryId: string
@@ -32,35 +33,6 @@ interface ApiEnvelope<T> {
   success: boolean
   data?: T
   error?: string
-}
-
-async function getApiCsrfToken(request: APIRequestContext): Promise<string> {
-  const read = () =>
-    request
-      .storageState()
-      .then(state =>
-        state.cookies.find(c => c.name === '__Host-csrf' || c.name === 'csrf')?.value,
-      )
-
-  let token = await read()
-  if (token) return token
-
-  await request.get('/dashboard')
-  token = await read()
-  if (!token) throw new Error('CSRF cookie missing — visit a GET page before API POST')
-  return token
-}
-
-async function csrfPost(
-  request: APIRequestContext,
-  path: string,
-  data?: unknown,
-): Promise<Awaited<ReturnType<APIRequestContext['post']>>> {
-  const csrfToken = await getApiCsrfToken(request)
-  return request.post(path, {
-    data,
-    headers: { 'x-csrf-token': csrfToken },
-  })
 }
 
 async function parseApi<T>(response: Awaited<ReturnType<APIRequestContext['post']>>): Promise<T> {
