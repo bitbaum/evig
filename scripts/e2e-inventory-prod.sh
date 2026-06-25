@@ -62,3 +62,6 @@ npx playwright test tests/e2e/it-hilfe-preferred-technician-journey.spec.ts --pr
 
 echo "=== Intake pipeline staff journey → ${BASE_URL} ==="
 npx playwright test tests/e2e/intake-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Admin tasks staff journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/tasks-journey.spec.ts --project=chromium --reporter=line

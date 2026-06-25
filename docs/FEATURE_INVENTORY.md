@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_summary: Intake pipeline staff journey E2E (create → checklist gate → publish); timecards + preferred techniker journeys
+last_modified_summary: Admin tasks staff journey E2E; intake pipeline journey; selling_price_chf detail fix
 ---
 
 # Feature Inventory (SSOT)
@@ -37,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** 209/209 inventory + journeys green; **intake pipeline journey** green (2026-06-25, commit `3108e859`).
+**Last prod run:** inventory + journeys green incl. **tasks** + **intake** (2026-06-25).
 
 ---
 
@@ -47,7 +47,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 |-------|-------|--------|
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
 | **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Journeys for IT-Hilfe, marketplace, workshops; full Payrexx payment when configured 🟡 |
-| **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke; intake pipeline journey E2E 🟡 |
+| **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke; intake + tasks journey E2E 🟡 |
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | ✅ Techniker SSOT; community visibility; CI auth + migration drift gates |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
 | **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 209/209 prod |
@@ -241,7 +241,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 125 | Intake pipeline | `/admin/intake` | ✅ inventory + journey E2E |
 | 126 | Locations | `/admin/locations/*` | ✅ inventory E2E |
 | 127 | Admin services config | `/admin/services/*` | ✅ inventory E2E |
-| 128 | Tasks + projects | `/admin/tasks/*` | ✅ inventory E2E |
+| 128 | Tasks + projects | `/admin/tasks/*` | ✅ inventory + journey E2E |
 | 129 | Protocols (AI meeting notes) | `/admin/protocols/*` | ✅ inventory E2E |
 | 130 | Team HR | `/admin/team/*` | ✅ inventory E2E |
 | 131 | Team approvals | `/admin/team/approvals` | ✅ inventory E2E |
@@ -307,6 +307,6 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 3. **Phase 4 cleanup** — terminology ✅ · community visibility ✅ · CI auth/migration gates ✅
 4. **Expand matrix** — dynamic detail pages: discovery + empty-state fallbacks ✅
 
-**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe:preferred:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey` · `npm run test:e2e:timecards:journey` · `npm run test:e2e:intake:journey`
+**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe:preferred:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey` · `npm run test:e2e:timecards:journey` · `npm run test:e2e:intake:journey` · `npm run test:e2e:tasks:journey`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)
