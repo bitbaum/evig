@@ -1,7 +1,8 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_summary: CMS blog journey E2E; phase 3 complete (decisions + CMS journeys)
+last_modified_date: 2026-06-19
+last_modified_summary: Full prod inventory green; protocols strict-mode fix; IT-Hilfe E2E rate-limit bypass
 ---
 
 # Feature Inventory (SSOT)
