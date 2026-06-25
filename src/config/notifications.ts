@@ -51,6 +51,10 @@ export const NOTIFICATION_TYPES = {
   TIME_OFF_REQUESTED: 'time_off_requested',
   TIME_OFF_REVIEWED: 'time_off_reviewed',
 
+  // Timecards
+  TIMECARD_SUBMITTED: 'timecard_submitted',
+  TIMECARD_REVIEWED: 'timecard_reviewed',
+
   // Core
   MESSAGE: 'message',
   APPOINTMENT: 'appointment',
@@ -74,6 +78,8 @@ export const RELATED_TYPES = {
   LISTING: 'listing',
   TIME_OFF: 'time_off',
   TIME_OFF_REVIEW: 'time_off_review',
+  TIMECARD: 'timecard',
+  TIMECARD_REVIEW: 'timecard_review',
 } as const
 
 export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
@@ -90,11 +96,13 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.IT_HILFE]: '/it-hilfe/',
   [RELATED_TYPES.WORKSHOP]: '/admin/workshops/instances/',
   [RELATED_TYPES.WORKSHOP_PROPOSAL]: '/admin/workshops/proposals/',
-  [RELATED_TYPES.MEMBERSHIP]: '/admin/membership/',
-  [RELATED_TYPES.LISTING]: '/admin/marketplace/',
+  [RELATED_TYPES.MEMBERSHIP]: '/admin/membership?id=',
+  [RELATED_TYPES.LISTING]: '/admin/marketplace?listing=',
   // timecards has no [id] detail page — land on the flat queue and pass the
   // request id as a harmless query param (same append pattern as CONVERSATION),
   // so relatedHref() can't produce a broken "/dashboard/timecards<id>" path.
   [RELATED_TYPES.TIME_OFF]: '/dashboard/timecards?id=', // requester → their tool
   [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/timecards?id=', // approver → the queue
+  [RELATED_TYPES.TIMECARD]: '/dashboard/timecards?id=',
+  [RELATED_TYPES.TIMECARD_REVIEW]: '/admin/team/approvals?id=',
 }

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-06-19
-last_modified_summary: Phase 3 admin link fixes, IT-Hilfe single-notification pipeline, permission aliases
+last_modified_summary: FEATURE_INVENTORY SSOT added; Phase 1 notification href smoke test
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -107,6 +107,12 @@ Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav 
 - **Error Messages**: Use German for user-facing, English for logs
 
 **Detailed Rules**: See `.cursor/rules/swiss-context.mdc`
+
+---
+
+## Feature inventory (audit SSOT)
+
+- **`docs/FEATURE_INVENTORY.md`** — 155-item route/capability matrix with status (✅/🟡/❌/⬜), phase tracker, known broken links. Update when fixing or verifying a surface.
 
 ---
 

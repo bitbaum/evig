@@ -18,6 +18,8 @@
  *   HELPER_STATUS + HELPER_STATUS_LABELS — values and Swiss-German labels
  */
 
+import fs from 'node:fs'
+import path from 'node:path'
 import { NOTIFICATION_TYPES, RELATED_TYPES, RELATED_TYPE_HREFS } from '../notifications'
 import {
   PAYMENT_STATUS,
@@ -64,6 +66,11 @@ describe('NOTIFICATION_TYPES', () => {
   it('time-off types have expected values', () => {
     expect(NOTIFICATION_TYPES.TIME_OFF_REQUESTED).toBe('time_off_requested')
     expect(NOTIFICATION_TYPES.TIME_OFF_REVIEWED).toBe('time_off_reviewed')
+  })
+
+  it('timecard types have expected values', () => {
+    expect(NOTIFICATION_TYPES.TIMECARD_SUBMITTED).toBe('timecard_submitted')
+    expect(NOTIFICATION_TYPES.TIMECARD_REVIEWED).toBe('timecard_reviewed')
   })
 
   it('blog submission type has expected value', () => {
@@ -122,6 +129,43 @@ describe('RELATED_TYPE_HREFS', () => {
   it('IT_HILFE maps to it-hilfe route', () => {
     expect(RELATED_TYPE_HREFS[RELATED_TYPES.IT_HILFE]).toBe('/it-hilfe/')
   })
+
+  it('LISTING uses marketplace query deep link (no [id] admin route)', () => {
+    expect(RELATED_TYPE_HREFS[RELATED_TYPES.LISTING]).toBe('/admin/marketplace?listing=')
+  })
+
+  it('MEMBERSHIP uses membership list query deep link (no [id] admin route)', () => {
+    expect(RELATED_TYPE_HREFS[RELATED_TYPES.MEMBERSHIP]).toBe('/admin/membership?id=')
+  })
+})
+
+const APP_DIR = path.join(__dirname, '../../app')
+
+/** Static check: each notification href base maps to an existing App Router page shell */
+describe('RELATED_TYPE_HREFS route shells', () => {
+  const cases: Array<{ type: string; pagePath: string }> = [
+    { type: RELATED_TYPES.TASK, pagePath: 'admin/tasks/[id]/page.tsx' },
+    { type: RELATED_TYPES.PROTOCOL, pagePath: 'admin/protocols/[id]/page.tsx' },
+    { type: RELATED_TYPES.DECISION, pagePath: 'admin/decisions/[id]/page.tsx' },
+    { type: RELATED_TYPES.CONVERSATION, pagePath: 'dashboard/messages/page.tsx' },
+    { type: RELATED_TYPES.APPOINTMENT, pagePath: 'dashboard/appointments/[id]/page.tsx' },
+    { type: RELATED_TYPES.IT_HILFE, pagePath: '[locale]/it-hilfe/[id]/page.tsx' },
+    { type: RELATED_TYPES.WORKSHOP, pagePath: 'admin/workshops/instances/[id]/page.tsx' },
+    { type: RELATED_TYPES.WORKSHOP_PROPOSAL, pagePath: 'admin/workshops/proposals/[id]/page.tsx' },
+    { type: RELATED_TYPES.MEMBERSHIP, pagePath: 'admin/membership/page.tsx' },
+    { type: RELATED_TYPES.LISTING, pagePath: 'admin/marketplace/page.tsx' },
+    { type: RELATED_TYPES.TIME_OFF, pagePath: 'dashboard/timecards/page.tsx' },
+    { type: RELATED_TYPES.TIME_OFF_REVIEW, pagePath: 'admin/timecards/page.tsx' },
+    { type: RELATED_TYPES.TIMECARD, pagePath: 'dashboard/timecards/page.tsx' },
+    { type: RELATED_TYPES.TIMECARD_REVIEW, pagePath: 'admin/team/approvals/page.tsx' },
+  ]
+
+  for (const { type, pagePath } of cases) {
+    it(`${type} href base has page shell at ${pagePath}`, () => {
+      expect(RELATED_TYPE_HREFS[type]).toBeTruthy()
+      expect(fs.existsSync(path.join(APP_DIR, pagePath))).toBe(true)
+    })
+  }
 })
 
 // ============================================================================

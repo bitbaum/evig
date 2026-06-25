@@ -7,6 +7,7 @@
 
 import { TIMECARD_STATUSES } from '@/config/timecards'
 import type { Timecard, TimecardEntryInput } from '@/lib/schemas/timecards'
+import { normalizeEntry } from '@/lib/team/timecard-utils'
 import type { DraftState } from './types'
 
 export function createDraft(entries: TimecardEntryInput[], selectedDate: string): DraftState {
@@ -20,7 +21,7 @@ export function createDraft(entries: TimecardEntryInput[], selectedDate: string)
 
 export function toDraftState(timecard: Timecard, fallbackSelectedDate: string): DraftState {
   return {
-    entries: timecard.entries,
+    entries: timecard.entries.map(entry => normalizeEntry(entry)),
     notes: timecard.notes ?? '',
     status: timecard.status as DraftState['status'],
     selectedDate:

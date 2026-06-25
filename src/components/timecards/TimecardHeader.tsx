@@ -64,7 +64,11 @@ export function TimecardHeader({
           <p className="mt-2 text-sm text-text-tertiary">{scheduleSummary}</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-stretch gap-2 sm:items-end">
+          {!isSubmitted && hasEntries && (
+            <p className="text-xs text-text-tertiary text-right max-w-xs">{t('submitHint')}</p>
+          )}
+          <div className="flex items-center gap-2">
           <Button
             type="button"
             variant={hasEntries ? 'ghost' : 'secondary'}
@@ -93,6 +97,7 @@ export function TimecardHeader({
           >
             {isSubmitting ? t('submitting') : isSubmitted ? t('resubmit') : t('submit')}
           </Button>
+          </div>
         </div>
       </div>
 

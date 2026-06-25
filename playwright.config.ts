@@ -1,10 +1,16 @@
 import { defineConfig, devices } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const authFile = path.join(__dirname, 'tests/e2e/.auth/user.json');
+const savedSession = fs.existsSync(authFile) ? authFile : undefined;
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: './tests',
+  globalSetup: './tests/e2e/global-setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -17,8 +23,11 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3002',
+    /* Base URL — prefer running dev on 3001 when reuseExistingServer is set */
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
+
+    /* Reuse saved session from tests/e2e/.auth/user.json when present (local dev) */
+    storageState: process.env.PLAYWRIGHT_STORAGE_STATE || savedSession,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -44,12 +53,14 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: [
-    {
-      command: 'npx next dev --port 3002',
-      port: 3002,
-      reuseExistingServer: !process.env.CI,
-      timeout: 120000,
-    }
-  ],
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : [
+        {
+          command: 'npx next dev --port 3001',
+          port: 3001,
+          reuseExistingServer: !process.env.CI,
+          timeout: 120000,
+        },
+      ],
 });

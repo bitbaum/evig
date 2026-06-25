@@ -7,10 +7,10 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { createNotification } from '@/lib/services/notifications'
+import { createNotification, notifyUsers } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { SUPER_ADMIN_EMAILS } from '@/lib/permissions'
 import { getTimeOffKindLabel, TIME_OFF_STATUSES } from '@/config/time-off'
+import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
 import type {
   CreateTimeOffInput,
   ReviewTimeOffInput,
@@ -52,24 +52,19 @@ export async function createTimeOffRequest(
   const id = insert.rows[0].id
   const [created] = await getRequestsByIds([id])
 
-  // Notify approvers (super admins) — they can grant the request.
+  // Notify approvers (staff with timecards permission) — in-app + email.
   try {
-    const approvers = await query<{ id: string }>(
-      `SELECT id FROM ${U} WHERE lower(email) = ANY($1) AND id <> $2`,
-      [SUPER_ADMIN_EMAILS.map(e => e.toLowerCase()), userId],
-    )
+    const approverIds = await getTimecardApproverIds(userId)
     const label = getTimeOffKindLabel(input.kind)
-    await Promise.all(
-      approvers.rows.map(a =>
-        createNotification(a.id, {
-          type: NOTIFICATION_TYPES.TIME_OFF_REQUESTED,
-          title: 'Neuer Abwesenheitsantrag',
-          content: `${created.user_name || created.user_email || 'Ein Teammitglied'} beantragt ${label} (${formatRange(created)}).`,
-          related_type: RELATED_TYPES.TIME_OFF_REVIEW,
-          related_id: id,
-        }),
-      ),
-    )
+    if (approverIds.length > 0) {
+      await notifyUsers(approverIds, {
+        type: NOTIFICATION_TYPES.TIME_OFF_REQUESTED,
+        title: 'Neuer Abwesenheitsantrag',
+        content: `${created.user_name || created.user_email || 'Ein Teammitglied'} beantragt ${label} (${formatRange(created)}).`,
+        related_type: RELATED_TYPES.TIME_OFF_REVIEW,
+        related_id: id,
+      })
+    }
   } catch (error) {
     logger.error('time-off: notify approvers failed', { error, requestId: id })
   }

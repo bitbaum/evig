@@ -20,6 +20,7 @@ Curated reference for engineers, operators, and contributors. Everything in this
 
 ## Product surfaces
 
+- [FEATURE_INVENTORY.md](./FEATURE_INVENTORY.md) — 155-item feature/route audit matrix (living SSOT)
 - [BLOG_SYSTEM.md](./BLOG_SYSTEM.md) — content pipeline + approval flow
 - [PROJECT_PAGES_GUIDE.md](./PROJECT_PAGES_GUIDE.md) — community project pages
 - [SERVICE_PAGES_GUIDE.md](./SERVICE_PAGES_GUIDE.md) — paid service pages

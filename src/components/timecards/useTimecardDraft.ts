@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import {
   TIMECARD_STATUSES,
@@ -65,6 +66,7 @@ import type { DraftState, TimecardAIResult } from './types'
  * the hook's return value.
  */
 export function useTimecardDraft({ workingHours }: { workingHours: string | null }) {
+  const t = useTranslations('admin.timecards')
   // ── Schedule + period window ───────────────────────────────────────
   const schedule = useMemo(() => parseWeeklySchedule(workingHours), [workingHours])
   const hasSchedule = useMemo(
@@ -166,7 +168,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     period_start: currentPeriodRange.period_start,
     period_end: currentPeriodRange.period_end,
     notes: draft.notes || null,
-    entries: periodEntries,
+    entries: periodEntries.map(entry => normalizeEntry(entry)),
   }
 
   // ── Mutators ───────────────────────────────────────────────────────
@@ -672,13 +674,13 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
       })
       if (!result.success || !result.data) throw new Error(result.error || 'submit_failed')
       setDraft(toDraftState(result.data, draft.selectedDate))
-      setSyncMessage('Zur Prüfung gesendet')
+      setSyncMessage(t('submitSuccess'))
     } catch {
-      setErrorMessage('Zeitkarte konnte nicht eingereicht werden.')
+      setErrorMessage(t('submitError'))
     } finally {
       setIsSubmitting(false)
     }
-  }, [currentSavePayload, draft.selectedDate])
+  }, [currentSavePayload, draft.selectedDate, t])
 
   return {
     // schedule

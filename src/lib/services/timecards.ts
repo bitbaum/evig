@@ -2,9 +2,9 @@ import { db } from '@/db'
 import { teamProfiles, timecards, timecardEntries, users } from '@/db/schema'
 import { and, asc, eq, gte, lte, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { createNotification } from '@/lib/services/notifications'
+import { createNotification, notifyUsers } from '@/lib/services/notifications'
 import { logActivity } from '@/lib/activity'
-import { NOTIFICATION_TYPES } from '@/config/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { TIMECARD_STATUSES, type TimecardStatus } from '@/config/timecards'
 import {
   buildTimecardEntriesForMonth,
@@ -24,6 +24,7 @@ import {
   type TimecardSaveInput,
   type TimecardReviewActionInput,
 } from '@/lib/schemas/timecards'
+import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
 
 export interface TimecardWithEntries extends Timecard {
   entries: TimecardEntry[]
@@ -456,7 +457,25 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
     subjectLabel: `${saved.period_start} – ${saved.period_end}`,
   })
 
-  return (await fetchTimecardWithEntries(db, saved.id)) ?? saved
+  const submitted = (await fetchTimecardWithEntries(db, saved.id)) ?? saved
+  const displayName = submitted.user_name || submitted.user_email || 'Ein Teammitglied'
+
+  try {
+    const approverIds = await getTimecardApproverIds(userId)
+    if (approverIds.length > 0) {
+      await notifyUsers(approverIds, {
+        type: NOTIFICATION_TYPES.TIMECARD_SUBMITTED,
+        title: 'Neue Zeitkarte eingereicht',
+        content: `${displayName} hat die Zeitkarte für ${submitted.period_start} – ${submitted.period_end} zur Prüfung eingereicht.`,
+        related_type: RELATED_TYPES.TIMECARD_REVIEW,
+        related_id: submitted.id,
+      })
+    }
+  } catch (error) {
+    logger.warn('Failed to notify timecard approvers', { error, timecardId: saved.id })
+  }
+
+  return submitted
 }
 
 export async function reviewTimecard(
@@ -502,12 +521,12 @@ export async function reviewTimecard(
     .where(eq(timecards.id, timecardId))
 
   await createNotification(timecard.userId, {
-    type: NOTIFICATION_TYPES.SYSTEM,
+    type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
     title: parsed.data.status === TIMECARD_STATUSES.APPROVED ? 'Zeitkarte genehmigt' : 'Zeitkarte benötigt Anpassung',
     content: parsed.data.status === TIMECARD_STATUSES.APPROVED
       ? `Deine Zeitkarte für ${timecard.periodStart} bis ${timecard.periodEnd} wurde genehmigt.`
       : `Deine Zeitkarte für ${timecard.periodStart} bis ${timecard.periodEnd} wurde zurückgewiesen. ${parsed.data.review_notes ?? ''}`.trim(),
-    related_type: 'timecard',
+    related_type: RELATED_TYPES.TIMECARD,
     related_id: timecardId,
   }).catch(err => logger.warn('Failed to notify timecard review', { error: err, timecardId }))
 

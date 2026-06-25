@@ -1,8 +1,8 @@
 # Admin UX audit — first principles (Musk lens)
 
 **Date:** 2026-06-03  
-**Last Modified:** 2026-06-23  
-**Last Modified Summary:** Protocols capture/recording lives on `main` (RecordButton + multi-source SourceUploader + DecisionBridge); stale `claude/protocols-ux-recording` branch removed; action-items summary banner added.
+**Last Modified:** 2026-06-25  
+**Last Modified Summary:** Timecard submit notifies approvers (in-app + email); submit UX hint + clearer button label; Playwright smoke tests for appointments/payment return.
 **Scope:** `/admin/timecards`, `/admin/team`, `/admin/tasks`, `/admin/protocols`
 **Method:** 4 parallel expert subagents, each examining one section through the lens of "make requirements less dumb → delete the process step → simplify → reduce cycle time."
 
@@ -220,5 +220,22 @@ Per the audit reports, the highest-leverage further changes are non-trivial and 
 | AH.3 | Migration `087_drop_protocol_decision_legacy.sql` — drops legacy tables (apply per env) | ✓ |
 
 **Last modified:** 2026-06-15 — Phase AH legacy cleanup + Phase AG bridge.
+
+---
+
+## Execution log (Phase 4 — timecard notifications + E2E smoke)
+
+**Date:** 2026-06-25
+
+| # | Change | Result |
+|---|---|---|
+| 4.1 | `submitTimecard` → `notifyUsers` to staff with `timecards` / `timecard-approvals` permission (in-app + email) | ✓ |
+| 4.2 | `reviewTimecard` → typed `timecard_reviewed` notification + email to submitter | ✓ |
+| 4.3 | Time-off approver fan-out aligned with same approver SSOT (was super-admin emails only) | ✓ |
+| 4.4 | Submit UX: «Zur Prüfung einreichen», hint text, success copy | ✓ |
+| 4.5 | Playwright: `/dashboard/appointments`, payment return banners, admin appointments | ✓ |
+| 4.6 | Migration `094_timecard_notification_types.sql` | ✓ |
+| 4.7 | Phase 1 closure: `tests/e2e/notification-hrefs.spec.ts` smoke-tests every `RELATED_TYPE_HREFS` base (no HTTP 404) | ✓ |
+| 4.8 | `docs/FEATURE_INVENTORY.md` — living 155-item audit SSOT | ✓ |
 
 ---

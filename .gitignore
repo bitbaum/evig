@@ -47,6 +47,7 @@ next-env.d.ts
 # test results and reports
 test-results/
 playwright-report/
+tests/e2e/.auth/
 coverage/
 
 # screenshots and temporary images

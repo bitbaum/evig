@@ -44,9 +44,19 @@ export function formatShortDateRange(date: Date): string {
   return new Intl.DateTimeFormat('de-CH', { day: '2-digit', month: '2-digit' }).format(date)
 }
 
+/** Postgres TIME columns may return HH:MM:SS — API/schema expect HH:MM. */
+export function normalizeTimeToHHMM(value: string | null | undefined): string | null {
+  if (!value) return null
+  const match = value.match(/^(\d{1,2}):(\d{2})/)
+  if (!match) return null
+  return `${match[1].padStart(2, '0')}:${match[2]}`
+}
+
 export function normalizeEntry(entry: TimecardEntryInput): TimecardEntryInput {
   return {
     ...entry,
+    start_time: normalizeTimeToHHMM(entry.start_time),
+    end_time: normalizeTimeToHHMM(entry.end_time),
     break_minutes: entry.break_minutes ?? 0,
     category: entry.category ?? 'other',
     source: entry.source ?? 'manual',
