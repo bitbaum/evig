@@ -2,8 +2,8 @@
 
 **Scope:** Recovery of the production stack running on the single Hetzner box
 (`ubuntu@167.233.22.31`): Postgres, file uploads, and the Next.js app. The DB
-recovery source is the **nightly off-box backup in Cloudflare R2** — there is no
-Neon, no PITR, no Vercel.
+recovery source is the **nightly off-box backup in Cloudflare R2** — no cloud
+hosted DB PITR; app deploys via GitHub Actions (not Vercel).
 
 ## Architecture at a glance
 
@@ -252,5 +252,5 @@ Run a restore drill **once per quarter**:
 
 ---
 
-**Last reviewed:** 2026-06-19 — rewritten for the self-hosted Hetzner + R2 architecture (Neon + Vercel retired).
+**Last reviewed:** 2026-06-25 — self-hosted Hetzner + R2 architecture; cloud DB retired.
 **Next drill due:** 2026-09-19.

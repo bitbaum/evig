@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-25
-last_modified_summary: Phase 2 IT-Hilfe E2E coverage and inventory status updates
+last_modified_summary: Database SSOT cleanup; user/admin E2E smoke; inventory status refresh
 ---
 
 # Feature Inventory (SSOT)
@@ -27,10 +27,11 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | Phase | Scope | Status |
 |-------|-------|--------|
-| **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`); href smoke test in `tests/e2e/notification-hrefs.spec.ts` |
-| **2** | IT-Hilfe, marketplace, workshops, services E2E | 🟡 IT-Hilfe hub/browse/journey specs in `tests/e2e/it-hilfe.spec.ts` |
+| **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
+| **2** | IT-Hilfe, marketplace, workshops, services E2E | 🟡 IT-Hilfe specs exist; marketplace/workshops not systematic |
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ⬜ Not started |
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Local (timecard + Playwright infra uncommitted) |
+| **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done locally (`.env.local` → Docker 5433; ops → SSH tunnel) |
 
 ---
 
@@ -39,17 +40,17 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | # | Feature | Route / API | Status |
 |---|---------|-------------|--------|
 | 1 | Register | `/auth/register` | ⬜ |
-| 2 | Login (credentials) | `/auth/login` | ✅ |
-| 3 | Email verification | `/auth/verify-email`, `/api/auth/verify-code` | ⬜ |
-| 4 | Forgot / reset password | `/auth/forgot-password` | ⬜ |
+| 2 | Login (credentials) | `/auth/login` | ✅ (prod E2E both accounts) |
+| 3 | Email verification | `/auth/verify-email`, `/api/auth/verify-code` | 🟡 (butaeff was unverified on Hetzner — fixed ops) |
+| 4 | Forgot / reset password | `/auth/forgot-password` | 🟡 (SMTP 503 fix local) |
 | 5 | Logout | session | ✅ |
-| 6 | Profile (personal) | `/dashboard/profile` | ⬜ |
+| 6 | Profile (personal) | `/dashboard/profile` | ✅ (user E2E) |
 | 7 | Settings (notifications, privacy) | `/dashboard/settings` | ⬜ |
 | 8 | Export my data (GDPR) | `/api/user/export-data` | ⬜ |
 | 9 | Onboarding checklist | `/dashboard` (OnboardingChecklist) | ⬜ |
 | 10 | Invite friends / referral | `/invite`, `/api/referral/invite` | ⬜ |
 | 11 | Membership application | `/mitglied-werden`, `/dashboard/membership` | ⬜ |
-| 12 | Staff vs user same login | `/dashboard` + `/admin` | ✅ |
+| 12 | Staff vs user same login | `/dashboard` + `/admin` | ✅ (user blocked from `/admin`; admin full access) |
 
 ---
 
@@ -74,12 +75,12 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ⬜ |
 | 28 | Technician directory | `/it-hilfe/techniker` | Public | ✅ (E2E list load) |
 | 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | ⬜ |
-| 30 | Technician self-service profile | `/profil/techniker` | Techniker | ⬜ |
+| 30 | Technician self-service profile | `/profil/techniker` | Techniker | ✅ (user + admin E2E) |
 | 31 | Completeness banner | profil + anfragen | Techniker | ⬜ |
 | 32 | Dashboard techniker overview | `/dashboard/techniker` | Techniker | ⬜ |
 | 33 | Reviews after completion | API confirm-review | Both | 🟡 (journey E2E review) |
 | 34 | Notifications (new offer, match, etc.) | bell → `/it-hilfe/[id]` | Both | ✅ |
-| 35 | Admin IT-Hilfe moderation | `/admin/it-hilfe` | Staff | ⬜ |
+| 35 | Admin IT-Hilfe moderation | `/admin/it-hilfe` | Staff | ✅ (admin E2E) |
 | 36 | Legacy `/techniker` redirect | → `/it-hilfe/techniker` | Public | ✅ (E2E) |
 
 ---
@@ -143,14 +144,14 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | 75 | Unified technician list | `/api/technicians` | ✅ SSOT |
 | 76 | Appointment booking form | AppointmentBookingForm | ⬜ |
 | 77 | Pay for appointment | `/api/appointments/[id]/pay` | ✅ (return banner) |
-| 78 | My appointments (list) | `/dashboard/appointments` | ✅ |
+| 78 | My appointments (list) | `/dashboard/appointments` | ✅ (user E2E) |
 | 79 | Appointment detail | `/dashboard/appointments/[id]` | ✅ (was ❌ 404) |
 | 80 | Repairer view appointments | `/dashboard/appointments?role=repairer` | ⬜ |
 | 81 | Inline edit/cancel on list | appointments page | ⬜ |
 | 82 | My bookings (alternate UI) | `/dashboard/bookings` | ✅ → redirects to appointments |
 | 83 | Booking detail | `/dashboard/bookings/[id]` | ✅ → redirects to appointments |
 | 84 | Rate completed booking | appointments detail | ⬜ |
-| 85 | Admin appointments queue | `/admin/appointments` | ✅ |
+| 85 | Admin appointments queue | `/admin/appointments` | ✅ (admin E2E) |
 | 86 | Admin appointment detail | `/admin/appointments/[id]` | ✅ (was ❌ 404) |
 | 87 | Assign repairer to appointment | API assign | ⬜ |
 | 88 | Repairer applications | `/admin/repairer-applications` | ⬜ |
@@ -163,7 +164,7 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
-| 91 | Messages inbox | `/dashboard/messages` | ⬜ |
+| 91 | Messages inbox | `/dashboard/messages` | ✅ (user E2E) |
 | 92 | Send message | `/api/messages` | ⬜ |
 | 93 | Notification bell | all pages | ✅ |
 | 94 | Notification deep links | `RELATED_TYPE_HREFS` | ✅ (smoke test + membership/listing query fix) |
@@ -215,7 +216,7 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
-| 122 | Admin dashboard | `/admin` | ⬜ |
+| 122 | Admin dashboard | `/admin` | ✅ (admin E2E) |
 | 123 | Device intake / Erfassung | `/admin/erfassung` | ⬜ |
 | 124 | Products / inventory | `/admin/products`, factsheet | ⬜ |
 | 125 | Intake pipeline | `/admin/intake` | ⬜ |
@@ -225,10 +226,10 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | 129 | Protocols (AI meeting notes) | `/admin/protocols/*` | ⬜ |
 | 130 | Team HR | `/admin/team/*` | ⬜ |
 | 131 | Team approvals | `/admin/team/approvals` | 🟡 (timecard review href) |
-| 132 | Users admin | `/admin/users/[id]` | ⬜ |
+| 132 | Users admin | `/admin/users/[id]` | ✅ (admin list E2E) |
 | 133 | Membership approvals | `/admin/membership` | ⬜ |
-| 134 | Timecards (staff submit) | `/dashboard/timecards` | 🟡 (HH:MM fix local) |
-| 135 | Timecards (admin queue) | `/admin/timecards` | 🟡 (approver notify local) |
+| 134 | Timecards (staff submit) | `/dashboard/timecards` | ✅ (admin E2E) |
+| 135 | Timecards (admin queue) | `/admin/timecards` | ✅ (admin E2E) |
 | 136 | Shift view | `/dashboard/shift` | ⬜ |
 | 137 | Time off requests | API `time-off/*` | 🟡 |
 | 138 | Payroll | `/admin/payroll` | ⬜ |
@@ -270,6 +271,8 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | Repairer vs Techniker labels mixed | Confusion | P1 | ❌ Open |
 | Service-booking payment UI orphaned | Incomplete paid flow | P1 | ✅ Removed |
 | Community techniker `is_verified=false` hidden | Profile invisible | P1 | ⬜ |
+| Dev `.env.local` pointed at retired cloud DB while prod uses Hetzner | Wrong data during local ops | P0 | ✅ Fixed — Docker 5433 locally; `.env.selfhost.local` → SSH tunnel |
+| Prod vs dev DB drift (butaeff unverified on Hetzner only) | Login failures on prod | P0 | ✅ Fixed ops (verify + password + lockout clear) |
 | Auth smoke CI fails (MissingSecret) | CI noise | P3 | ❌ Open |
 | Migration drift CI (vector ext) | CI noise | P3 | ❌ Open |
 | Timecard submit 400 (TIME format) | Submit blocked | P1 | 🟡 Fixed locally |
@@ -279,10 +282,12 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 ## Recommended test order (next)
 
-1. **Commit + deploy** Phase 4 local work (timecards, Playwright, migration 094).
-2. **Phase 2 — IT-Hilfe E2E** (#13–36): `npm run test:e2e:it-hilfe` — journey needs `AUTH_TEST_TECHNICIAN_EMAIL` + password (distinct from requester).
-3. **Phase 2 — Marketplace + workshops** smoke matrix.
-4. **Phase 3 — Staff surfaces** (protocols, tasks, decisions).
-5. **Phase 4 cleanup** — terminology pass (Techniker vs Reparateur), CI fixes.
+1. **Commit + deploy** uncommitted work: timecards, Playwright (`user-admin-flows`, auth helper), DB SSOT docs/env fixes, migration 094 if not on prod.
+2. **Phase 2 — IT-Hilfe journey** (#18–27): `npm run test:e2e:it-hilfe` with two distinct accounts.
+3. **Phase 2 — Marketplace + workshops** (#37–67): cart, checkout, workshop register smoke matrix.
+4. **Phase 3 — Staff surfaces** (#122–143 except done): protocols, tasks, decisions, erfassung.
+5. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified` visibility (#273).
+
+**E2E commands:** `npm run test:e2e:user-admin` · `npm run test:e2e:it-hilfe` · `npm run test:e2e:auth`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

@@ -1,6 +1,6 @@
 -- Migration: 035_org_numbers
 -- Creates org_numbers table for shared organizational metrics (SSOT)
--- Both revampit and revamp-info share this table via the same Neon DB
+-- Both revampit and revamp-info share this table via the same Postgres DB
 
 CREATE TABLE IF NOT EXISTS org_numbers (
   key TEXT PRIMARY KEY,

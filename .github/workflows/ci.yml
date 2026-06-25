@@ -83,12 +83,12 @@ jobs:
   # Migration drift check — applies every SQL migration in scripts/db/migrations/
   # to a throwaway Postgres container in order, asserts no errors, and reports the
   # final table count. Catches non-idempotent migrations, broken sequences, and
-  # accidental order-dependence before they hit Neon. Non-blocking advisory:
+  # accidental order-dependence before they hit production. Non-blocking advisory:
   # `continue-on-error: true` so a CI hiccup doesn't block merges — but the run
   # surfaces immediately in the Actions UI.
   #
-  # Why this exists: schema_migrations tracking is bootstrapped on Neon (083) but
-  # we still have no automated apply step. Drift between merged-but-unapplied
+  # Why this exists: schema_migrations tracking is bootstrapped (migration 083) but
+  # we still have no automated apply step against prod. Drift between merged-but-unapplied
   # migrations and the live DB grows invisibly without this gate.
   migrations:
     name: Migration Drift Check

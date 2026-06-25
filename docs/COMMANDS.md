@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-06-19
-last_modified_summary: Deploy/DB ground truth — push-to-deploy via GitHub Actions to Hetzner, Neon/Vercel references corrected
+last_modified_summary: E2E commands; DB SSOT Hetzner-only
 ---
 
 # RevampIT Commands Reference (SSOT)
@@ -72,6 +72,9 @@ npm run test           # Jest unit tests
 npm run test:watch     # Jest watch mode
 npm run test:coverage  # Jest with coverage
 npm run test:e2e       # Playwright E2E tests
+npm run test:e2e:auth  # Auth login smoke (needs AUTH_TEST_EMAIL/PASSWORD)
+npm run test:e2e:user-admin  # User + admin flow smoke (prod or local)
+npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
 npm run test:e2e:ui    # Playwright with UI
 npm run test:all       # Run all tests
 ```

@@ -140,10 +140,7 @@ describe('getDbConfig', () => {
     delete process.env.DB_NAME
     delete process.env.DB_USER
     delete process.env.DB_PASSWORD
-    delete process.env.AUTH_DB_HOST
-    delete process.env.AUTH_DB_NAME
-    delete process.env.AUTH_DB_USER
-    delete process.env.AUTH_DB_PASSWORD
+    delete process.env.DATABASE_URL
     ;(process.env as Record<string, string>).NODE_ENV = 'test'
   })
 
@@ -179,20 +176,17 @@ describe('getDbConfig', () => {
     expect(config.max).toBe(20) // production pool size
   })
 
-  it('AUTH_DB_* prefix overrides DB_* (auth-specific connection)', () => {
+  it('prefers DATABASE_URL over DB_* parts', () => {
     process.env.DB_HOST = 'shared.example.com'
     process.env.DB_NAME = 'shared-db'
     process.env.DB_USER = 'shared-user'
     process.env.DB_PASSWORD = 'shared-pw'
-    process.env.AUTH_DB_HOST = 'auth.example.com'
-    process.env.AUTH_DB_NAME = 'auth-db'
-    process.env.AUTH_DB_USER = 'auth-user'
-    process.env.AUTH_DB_PASSWORD = 'auth-pw'
+    process.env.DATABASE_URL = 'postgresql://url-user:url-pass@url.example.com:5432/url-db'
     const config = getDbConfig()
-    expect(config.host).toBe('auth.example.com')
-    expect(config.database).toBe('auth-db')
-    expect(config.user).toBe('auth-user')
-    expect(config.password).toBe('auth-pw')
+    expect(config.host).toBe('url.example.com')
+    expect(config.database).toBe('url-db')
+    expect(config.user).toBe('url-user')
+    expect(config.password).toBe('url-pass')
   })
 
   it('disables SSL when DB_SSL=false', () => {

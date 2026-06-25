@@ -1,89 +1,72 @@
 # RevampIT Unified Environment Configuration
-# Copy this file to .env and fill in your values
+# Copy this file to .env.local and fill in your values
 
 # ==========================================
-# MAIN APPLICATION (Next.js Frontend)
+# MAIN APPLICATION (Next.js)
 # ==========================================
 
-# NextAuth.js Configuration
-NEXTAUTH_URL=http://localhost:3000
-# Generate a secure secret: openssl rand -base64 64
-NEXTAUTH_SECRET=your-super-secret-nextauth-key-change-in-production-min-32-chars
+# Auth.js — generate: openssl rand -base64 64
+AUTH_SECRET=your-super-secret-auth-key-change-in-production-min-32-chars
+NEXTAUTH_URL=http://localhost:3001
+NEXTAUTH_SECRET=your-super-secret-auth-key-change-in-production-min-32-chars
 
-# Database for NextAuth (same as CMS API)
-AUTH_DB_HOST=localhost
-AUTH_DB_PORT=5433
-AUTH_DB_NAME=revampit_cms
-AUTH_DB_USER=postgres
-AUTH_DB_PASSWORD=postgres
+# Database — SSOT: DATABASE_URL (app + auth share one pool)
+# Local dev: Docker Postgres from docker-compose.yml (port 5433)
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/revampit_cms
 
-# Optional Redis for Auth rate limiter/lockout
-REDIS_URL=redis://localhost:6380
-ENABLE_REDIS_RATE_LIMITER=true
-# Generate a secure secret: openssl rand -base64 32
-MEILI_MASTER_KEY=masterKey_change_in_production
-MEILI_PORT=7700
-
-# ==========================================
-# CMS API (Express Backend)
-# ==========================================
-
-# Server Configuration
-PORT=3001
-NODE_ENV=development
-
-# Database Configuration
+# Optional discrete parts (used when DATABASE_URL is unset)
 DB_HOST=localhost
 DB_PORT=5433
 DB_NAME=revampit_cms
 DB_USER=postgres
 DB_PASSWORD=postgres
+DB_SSL=false
 
-# JWT Configuration
-# Generate a secure secret: openssl rand -base64 64
+# Optional Redis for auth rate limiter/lockout
+REDIS_URL=redis://localhost:6380
+ENABLE_REDIS_RATE_LIMITER=true
+MEILI_MASTER_KEY=masterKey_change_in_production
+MEILI_PORT=7700
+
+# ==========================================
+# SERVER
+# ==========================================
+
+PORT=3001
+NODE_ENV=development
 JWT_SECRET=your-super-secret-jwt-key-change-in-production-min-32-chars
 JWT_EXPIRES_IN=24h
-
-# CORS Configuration
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3001
+NEXT_PUBLIC_SITE_URL=http://localhost:3001
 
 # Feature flags
 ENABLE_CMS=false
 NEXT_PUBLIC_ENABLE_ROLE_SELECTION_ON_REGISTER=false
 
-# Admin Setup (Optional - for setup scripts)
-# If not set, secure random passwords will be generated
+# Admin bootstrap (setup scripts only)
 # ADMIN_PASSWORD=your-secure-admin-password-here
-# ADMIN_PASSWORD_FILE=/path/to/secure/password/file (optional - for saving generated passwords)
 
-# Email Configuration (Production)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-SMTP_FROM=noreply@revamp-it.ch
+# Email — local dev uses Mailpit (docker-compose port 1025 / UI 8025)
+EMAIL_HOST=localhost
+EMAIL_PORT=1025
+EMAIL_SECURE=false
+EMAIL_USER=
+EMAIL_PASS=
+EMAIL_FROM=noreply@revamp-it.ch
 
-# Email Configuration (Development - uses Ethereal)
-ETHEREAL_USER=test@example.com
-ETHEREAL_PASS=test
-
-# File Upload Configuration
+# File uploads (local fallback)
 UPLOAD_DIR=./uploads
 MAX_FILE_SIZE=10485760
 
 # ==========================================
+# PRODUCTION OPS (optional — gitignored)
+# ==========================================
+# See .env.selfhost.local.example for Hetzner prod access via SSH tunnel.
+
+# ==========================================
 # SECURITY NOTES
 # ==========================================
-#
-# 1. NEVER commit .env files to version control
-# 2. Use strong, unique passwords for all services
-# 3. Generate JWT secrets using: openssl rand -base64 32
-# 4. Use different databases for different environments
-# 5. Configure proper firewall rules in production
-# 6. Use HTTPS in production (required for secure cookies)
-# 7. Set NODE_ENV=production in production
-# 8. Use environment-specific database names
-#
-# ==========================================
-
+# 1. NEVER commit .env.local or .env.selfhost.local
+# 2. Prod DB: self-hosted Postgres 17 on Hetzner (not cloud-hosted)
+# 3. Dev DB: local Docker (npm run services:up)
+# 4. Use HTTPS in production (required for secure cookies)

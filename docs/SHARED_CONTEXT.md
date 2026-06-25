@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-19
-last_modified_summary: FEATURE_INVENTORY SSOT added; Phase 1 notification href smoke test
+last_modified_date: 2026-06-25
+last_modified_summary: Database SSOT — Hetzner Postgres only; local Docker dev on 5433
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -29,7 +29,7 @@ last_modified_summary: FEATURE_INVENTORY SSOT added; Phase 1 notification href s
 | Backend | Next.js API Routes | — |
 | Auth | Auth.js v5, Credentials, JWT sessions | Same login for `/dashboard` and `/admin` — see `docs/UNIFIED_AUTH.md` |
 | E-commerce | Custom (inventory-based) | Integrated |
-| Database/Search | PostgreSQL (prod: self-hosted Postgres 17 on Hetzner via `DATABASE_URL`; dev: Neon cloud / Docker 5433 local), Redis (6380), Meilisearch (7700) | Drizzle ORM; auth shares the same `DATABASE_URL` pool (no separate AUTH_DB — Neon fully retired for prod + auth). Production Meilisearch runs as localhost-only Docker container `revampit_meilisearch` on Hetzner |
+| Database/Search | PostgreSQL (prod: self-hosted Postgres 17 on Hetzner via `DATABASE_URL`; dev: Docker on port 5433), Redis (6380), Meilisearch (7700) | Drizzle ORM; auth shares the same `DATABASE_URL` pool — no separate auth DB |
 | Deploy | GitHub Actions → self-hosted Hetzner app (revampit.orangecat.ch), systemd `revampit-app`; Vercel not used | See `docs/COMMANDS.md` |
 | Storage | Cloudflare R2 (S3-compatible, bucket `revampit-media`) for product/listing images; `public/uploads` local fallback | Configured via `S3_*` env vars |
 
@@ -37,11 +37,17 @@ last_modified_summary: FEATURE_INVENTORY SSOT added; Phase 1 notification href s
 
 ## Database Configuration
 
-| Database | Port | Name | User | Password Env Var |
-|----------|------|------|------|------------------|
-| Main | 5433 | `revampit_cms` | postgres | `$POSTGRES_PASSWORD` |
-| Redis | 6380 | - | - | - |
-| Meilisearch | 7700 | - | - | - |
+| Environment | Host | Port | Database | Notes |
+|-------------|------|------|----------|-------|
+| **Local dev** | `localhost` | 5433 | `revampit_cms` | `npm run services:up` (Docker) |
+| **Production** | `localhost` (on box) | 5432 | `revampit` | Hetzner self-hosted; ops via SSH tunnel — see `.env.selfhost.local.example` |
+
+**SSOT:** `DATABASE_URL` only. No `AUTH_DB_*` split.
+
+| Service | Port |
+|---------|------|
+| Redis | 6380 |
+| Meilisearch | 7700 |
 
 ---
 

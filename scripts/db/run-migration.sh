@@ -16,9 +16,8 @@
 #     re-invocation, already-recorded files are skipped.
 #
 # Targets the LOCAL development PostgreSQL (Docker on localhost:5433 by
-# default). To apply migrations to Neon production, run the file
-# directly via psql against $DATABASE_URL — the schema_migrations table
-# exists there too so the same skip-if-applied logic works.
+# default). To apply migrations to production (Hetzner), run via psql against
+# $DATABASE_URL on the box — schema_migrations tracks applied files there too.
 # ============================================================================
 
 set -euo pipefail

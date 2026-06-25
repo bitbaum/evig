@@ -197,10 +197,10 @@ fi
 
 # Database connectivity
 echo "Database Connectivity:"
-if PGPASSWORD="$AUTH_DB_PASSWORD" psql -h "$AUTH_DB_HOST" -p "$AUTH_DB_PORT" -U "$AUTH_DB_USER" -d "$AUTH_DB_NAME" -c "SELECT 1;" --quiet --no-align --tuples-only > /dev/null 2>&1; then
-    echo "  ✅ CMS Database: Connected"
+if PGPASSWORD="${DB_PASSWORD:-postgres}" psql -h "${DB_HOST:-localhost}" -p "${DB_PORT:-5433}" -U "${DB_USER:-postgres}" -d "${DB_NAME:-revampit_cms}" -c "SELECT 1;" --quiet --no-align --tuples-only > /dev/null 2>&1; then
+    echo "  ✅ Postgres: Connected"
 else
-    echo "  ❌ CMS Database: Disconnected"
+    echo "  ❌ Postgres: Disconnected"
 fi
 
 # Services

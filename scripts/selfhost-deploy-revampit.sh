@@ -31,7 +31,7 @@ ST="$SRC/.next/standalone"
 [ -d "$ST" ] || { echo "ERROR: no standalone output"; exit 1; }
 
 # ── Apply pending DB migrations to the PROD Postgres BEFORE activating ──────
-# Prod runs its own Postgres on the box (NOT Neon). Migrations live in the repo
+# Prod runs its own Postgres on the box. Migrations live in the repo
 # and are tracked in schema_migrations. Apply any not-yet-recorded file, in
 # order, each in its own transaction with ON_ERROR_STOP — so the schema is ready
 # before the new code goes live. A failed migration aborts the deploy and leaves

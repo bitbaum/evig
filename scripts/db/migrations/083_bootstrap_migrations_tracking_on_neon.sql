@@ -2,11 +2,11 @@
 --
 -- Migration 075 introduced the `schema_migrations` table along with a
 -- backfill of pre-075 filenames. That migration was authored but never
--- applied to Neon — verified 2026-06-03 via:
+-- applied to production — verified 2026-06-03 via:
 --   SELECT EXISTS (SELECT 1 FROM pg_tables WHERE tablename='schema_migrations')
 --     → returned `f`
 -- Without this table, scripts/db/run-migration.sh can't skip-if-applied,
--- and a Neon restore-from-backup would re-attempt every migration —
+-- and a restore-from-backup would re-attempt every migration —
 -- pre-077 ones aren't idempotent so they'd fail on duplicate CREATE TABLE.
 --
 -- This migration:
@@ -14,8 +14,7 @@
 --   2. Backfills every migration filename present in scripts/db/migrations/
 --      as "applied" (ON CONFLICT DO NOTHING so re-runs are safe).
 --
--- Apply this BEFORE adding any new migrations to Neon. After this lands,
--- run-migration.sh will skip already-tracked files and only apply new ones.
+-- After this lands, run-migration.sh skips already-tracked files and only applies new ones.
 
 CREATE TABLE IF NOT EXISTS schema_migrations (
   filename TEXT PRIMARY KEY,

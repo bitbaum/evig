@@ -173,10 +173,8 @@ export function getAuthSecret(): string {
  * throwing — the pool is never actually used at build time.
  */
 export function getDbConfig() {
-  // Prefer DATABASE_URL — the single connection source (SSOT) for both the app
-  // (Drizzle) and auth. When present it wins over the legacy DB_*/AUTH_DB_*
-  // parts, so prod and dev each point at exactly one database. SSL is derived
-  // from the URL's sslmode (require → on; absent, e.g. localhost → off).
+  // Prefer DATABASE_URL — single connection source (SSOT) for app + auth.
+  // SSL is derived from the URL sslmode (require → on; localhost → off).
   const url = process.env.DATABASE_URL
   if (url && /^postgres(ql)?:\/\//.test(url)) {
     try {
@@ -195,16 +193,16 @@ export function getDbConfig() {
         connectionTimeoutMillis: 5000,
       }
     } catch {
-      // Malformed URL — fall through to the DB_*/AUTH_DB_* parts below.
+      // Malformed URL — fall through to DB_* parts below.
     }
   }
 
   const sslEnabled = process.env.DB_SSL !== 'false'
 
-  const host = process.env.AUTH_DB_HOST || process.env.DB_HOST
-  const database = process.env.AUTH_DB_NAME || process.env.DB_NAME
-  const user = process.env.AUTH_DB_USER || process.env.DB_USER
-  const password = process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD
+  const host = process.env.DB_HOST
+  const database = process.env.DB_NAME
+  const user = process.env.DB_USER
+  const password = process.env.DB_PASSWORD
 
   // During build, DB env vars are absent — return placeholder config.
   // The pool won't actually connect; routes only execute at request time.
@@ -219,7 +217,7 @@ export function getDbConfig() {
       // Real runtime with missing config — fail loud
       throw new Error(
         `Missing required database config: ${missing.join(', ')}. ` +
-        `Set these in .env.local (or prefixed with AUTH_DB_ for auth-specific overrides).`
+        `Set DATABASE_URL or DB_HOST/DB_NAME/DB_USER/DB_PASSWORD in .env.local.`
       )
     }
     // Build time or dev without DB — return placeholder so module evaluation succeeds
@@ -238,7 +236,7 @@ export function getDbConfig() {
 
   return {
     host,
-    port: parseInt(process.env.AUTH_DB_PORT || process.env.DB_PORT || '5432'),
+    port: parseInt(process.env.DB_PORT || '5432'),
     database,
     user,
     password,

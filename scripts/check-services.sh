@@ -46,7 +46,7 @@ check_database() {
 
     echo -n "Checking $service_name... "
 
-    if PGPASSWORD="$AUTH_DB_PASSWORD" psql -h "$host" -p "$port" -U "$user" -d "$db" -c "SELECT 1;" --quiet --no-align --tuples-only > /dev/null 2>&1; then
+    if PGPASSWORD="${DB_PASSWORD:-postgres}" psql -h "$host" -p "$port" -U "$user" -d "$db" -c "SELECT 1;" --quiet --no-align --tuples-only > /dev/null 2>&1; then
         echo -e "${GREEN}✅ Connected${NC}"
         return 0
     else
@@ -80,7 +80,7 @@ fi
 all_healthy=true
 
 # Check CMS database
-if ! check_database "${AUTH_DB_HOST:-localhost}" "${AUTH_DB_PORT:-5433}" "${AUTH_DB_USER:-postgres}" "${AUTH_DB_NAME:-revampit_cms}" "CMS Database"; then
+if ! check_database "${DB_HOST:-localhost}" "${DB_PORT:-5433}" "${DB_USER:-postgres}" "${DB_NAME:-revampit_cms}" "Postgres"; then
     all_healthy=false
 fi
 

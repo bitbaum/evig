@@ -1,7 +1,7 @@
 -- Migration 084: Performance indexes the audit flagged as missing
 --
 -- 2026-06-03 DB audit found 3 composites declared in migration 074 that
--- never landed on Neon, plus 1 new gap (fundraising_foundations is 67 MB
+-- never landed on production, plus 1 new gap (fundraising_foundations is 67 MB
 -- / 16k rows — our largest table — doing 534 ms sequential scans).
 --
 -- All four are CREATE INDEX IF NOT EXISTS so safe to re-run, and they're

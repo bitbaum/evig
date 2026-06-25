@@ -18,6 +18,20 @@ export function hasTechnicianTestCredentials(): boolean {
 /** Session file from `npx playwright codegen --save-storage=tests/e2e/.auth/user.json` */
 export const SAVED_SESSION_PATH = 'tests/e2e/.auth/user.json'
 
+const LOGIN_SUBMIT = /sign in|anmelden|se connecter|accedi|iniciar sesión/i
+
+function stripLocalePrefix(pathname: string): string {
+  return pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/'
+}
+
+function pathMatchesCallback(pathname: string, callbackUrl: string): boolean {
+  const target = callbackUrl.startsWith('http')
+    ? new URL(callbackUrl).pathname
+    : callbackUrl
+  if (pathname === target || pathname.endsWith(target)) return true
+  return stripLocalePrefix(pathname) === stripLocalePrefix(target)
+}
+
 /** Log in via the credentials form (same flow as auth-smoke / timecards e2e). */
 export async function loginWithCredentials(
   page: Page,
@@ -26,15 +40,18 @@ export async function loginWithCredentials(
   password = DEFAULT_PASSWORD,
 ) {
   await page.context().clearCookies()
-  await page.goto(`/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`)
-  await page.waitForLoadState('networkidle')
+  const localePrefix = callbackUrl.match(/^\/([a-z]{2})\//)?.[1] || 'de'
+  await page.goto(
+    `/${localePrefix}/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+  )
+  await page.waitForLoadState('domcontentloaded')
   await page.locator('#email').fill(email)
   await page.locator('#password').fill(password)
-  await page.getByRole('button', { name: 'Anmelden' }).click()
-  await page.waitForURL(url => {
-    const path = url.pathname
-    return path === callbackUrl || path.startsWith(callbackUrl)
-  })
+  await page.getByRole('button', { name: LOGIN_SUBMIT }).click()
+  await page.waitForURL(
+    url => pathMatchesCallback(url.pathname, callbackUrl),
+    { timeout: 60_000 },
+  )
 }
 
 /**
@@ -48,14 +65,14 @@ export async function ensureAuthenticated(
   password = DEFAULT_PASSWORD,
 ) {
   await page.goto(callbackUrl)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
   if (page.url().includes('/auth/login')) {
     await page.locator('#email').fill(email)
     await page.locator('#password').fill(password)
-    await page.getByRole('button', { name: 'Anmelden' }).click()
-    await page.waitForURL(url => {
-      const path = url.pathname
-      return path === callbackUrl || path.startsWith(callbackUrl)
-    })
+    await page.getByRole('button', { name: LOGIN_SUBMIT }).click()
+    await page.waitForURL(
+      url => pathMatchesCallback(url.pathname, callbackUrl),
+      { timeout: 60_000 },
+    )
   }
 }

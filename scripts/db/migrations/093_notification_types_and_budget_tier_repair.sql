@@ -1,4 +1,4 @@
--- Migration 093: Repair schema drift on Neon/prod
+-- Migration 093: Repair schema drift on production Postgres
 --
 -- 1. budget_tier — migration 049 was recorded but the column was missing on
 --    some databases. Idempotent re-apply.

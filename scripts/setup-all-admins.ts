@@ -20,13 +20,16 @@ function loadEnvFile(filePath: string) {
 loadEnvFile(path.join(process.cwd(), '.env.local'))
 loadEnvFile(path.join(process.cwd(), '.env'))
 
-function getDbConfig() {
+function getDbConfig(): { connectionString?: string; host?: string; port?: number; database?: string; user?: string; password?: string; ssl?: false | { rejectUnauthorized: boolean } } {
+  if (process.env.DATABASE_URL) {
+    return { connectionString: process.env.DATABASE_URL }
+  }
   return {
-    host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
-    port: Number(process.env.AUTH_DB_PORT || process.env.DB_PORT || 5432),
-    database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit',
-    user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
-    password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT || 5433),
+    database: process.env.DB_NAME || 'revampit_cms',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
     ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   }
 }

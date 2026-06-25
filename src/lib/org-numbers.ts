@@ -2,7 +2,7 @@
  * Organizational Numbers — Server-only Data Layer
  *
  * Provides DB access to reconciled organizational numbers stored in the
- * shared Neon database (org_numbers table). Both revampit and revamp-info
+ * shared Postgres database (org_numbers table). Both revampit and revamp-info
  * share this data source.
  *
  * For client components: import from '@/lib/org-numbers.defaults' instead.

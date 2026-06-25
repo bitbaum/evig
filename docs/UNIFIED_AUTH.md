@@ -30,7 +30,7 @@ There is **no separate admin token system**. Staff sign in through the same `/au
 | Auth framework | Auth.js v5 (NextAuth) |
 | Provider | Credentials (email + password) only |
 | Session strategy | **JWT** (signed cookie, not DB sessions) |
-| Database | PostgreSQL (Neon in production; Docker locally) |
+| Database | PostgreSQL (Hetzner prod; Docker locally) |
 | ORM | Drizzle |
 | Password hashing | bcrypt (12 rounds) |
 | Email | Listmonk → SMTP fallback via `sendEmail()` |

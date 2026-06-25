@@ -14,7 +14,7 @@
  * that consume these files would display German text, which is exactly the
  * bug that motivated this refactor.
  *
- * Numbers sourced from org-numbers SSOT (shared Neon DB).
+ * Numbers sourced from org-numbers SSOT (Postgres org_numbers table).
  * Last reconciled: 2026-06-08
  */
 

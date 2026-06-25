@@ -15,7 +15,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 // Get database configuration from centralized config
 const dbConfig = {
   ...getDbConfig(),
-  // Keep pool conservative for Neon to avoid connection saturation under load.
+  // Pool size tuned for self-hosted Postgres (Hetzner prod + local Docker dev).
   max: parseInt(process.env.DB_POOL_MAX || '10', 10),
   idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS || '30000', 10),
   connectionTimeoutMillis: parseInt(process.env.DB_CONNECT_TIMEOUT_MS || '10000', 10),

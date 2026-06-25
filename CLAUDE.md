@@ -45,7 +45,7 @@ hold the line on all of it by default:
 |-------|-----------|
 | Framework | Next.js 16, TypeScript 5.3 |
 | Styling | Tailwind CSS 3.4 |
-| Database | Prod: self-hosted Postgres on Hetzner (`localhost/revampit`); Dev: Neon. Drizzle ORM |
+| Database | PostgreSQL (prod: self-hosted on Hetzner; dev: Docker on 5433), Drizzle ORM |
 | Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter |
 | Search | Meilisearch |
 | Payments | Payrexx |

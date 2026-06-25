@@ -2,7 +2,7 @@
 
 **Created:** 2026-01-05  
 **Last Modified:** 2026-06-19  
-**Last Modified Summary:** Updated production deployment section — self-hosted Postgres 17 on Hetzner (Neon retired), single shared DATABASE_URL pool, R2 backups
+**Last Modified Summary:** Updated production deployment section — self-hosted Postgres 17 on Hetzner, single shared DATABASE_URL pool, R2 backups
 
 ---
 
@@ -314,8 +314,7 @@ Next.js Dev Server (port 3000)
 
 Production is **not** serverless. The app and its database run on a single
 self-hosted Hetzner server (`revampit.orangecat.ch`, ssh `ubuntu@167.233.22.31`),
-deployed via GitHub Actions → build → rsync → systemd (no Vercel). **Neon is fully
-retired** for prod and auth.
+deployed via GitHub Actions → build → rsync → systemd (no Vercel).
 
 ```
 Next.js standalone server (systemd service on the Hetzner box)
@@ -325,11 +324,10 @@ Next.js standalone server (systemd service on the Hetzner box)
 Database (Production)
 ├── Self-hosted Postgres 17 on the SAME box
 │     DATABASE_URL=postgresql://…@localhost:5432/revampit
-├── getDbConfig() prefers DATABASE_URL → ONE pool shared by app + auth
-│     (the old split AUTH_DB_* / separate auth DB pattern is retired)
-└── Nightly off-box backup to the private Cloudflare R2 bucket
-      `revampit-backups` via systemd `revampit-backup.timer`
-      (see scripts/ops/README.md and docs/DISASTER_RECOVERY.md) — NOT Neon PITR
+├── getDbConfig() uses DATABASE_URL → ONE pool shared by app + auth
+└── Nightly off-box backup to Cloudflare R2 (`revampit-backups`)
+      via systemd `revampit-backup.timer`
+      (see scripts/ops/README.md and docs/DISASTER_RECOVERY.md)
 ```
 
 ---

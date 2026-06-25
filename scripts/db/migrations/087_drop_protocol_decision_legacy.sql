@@ -2,7 +2,7 @@
 --
 -- The protocol-decision UI bridge (RR.2) cut over to the standalone
 -- `decisions` table via FK columns added in migration 086. Pre-cutover
--- audit confirmed 0 rows in both legacy tables in prod Neon, so this
+-- audit confirmed 0 rows in both legacy tables in prod, so this
 -- drop is data-loss-free.
 --
 -- Before running this migration, the corresponding code must already

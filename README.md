@@ -36,7 +36,7 @@ The platform is the operational backbone for all five. It is open-source ([MIT](
 
 ## Architecture
 
-The application is a single Next.js 16 app with App Router for both pages and API routes. In production, data lives in a self-hosted PostgreSQL 17 on the Hetzner box (Neon is fully retired for prod and auth; dev may still use Neon), accessed through Drizzle ORM. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter, sharing the same connection pool as the app via `DATABASE_URL`. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email is delivered via Listmonk with Nodemailer / Brevo as fallback. Product/listing images are stored in Cloudflare R2 (S3-compatible).
+The application is a single Next.js 16 app with App Router for both pages and API routes. In production, data lives in self-hosted PostgreSQL 17 on the Hetzner box, accessed through Drizzle ORM via `DATABASE_URL`. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter, sharing the same connection pool as the app. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email is delivered via Listmonk with Nodemailer / Brevo as fallback. Product/listing images are stored in Cloudflare R2 (S3-compatible).
 
 ### TABLE_NAMES as Single Source of Truth
 
@@ -91,7 +91,7 @@ These are enforced, not suggested:
 | Layer | Technology |
 |-------|------------|
 | Framework | Next.js 16 (App Router), React 18, TypeScript 5, Tailwind 3 |
-| Database | PostgreSQL (prod: self-hosted on Hetzner; dev: Neon cloud), Drizzle ORM |
+| Database | PostgreSQL (prod: Hetzner self-hosted; dev: Docker 5433), Drizzle ORM |
 | Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter (shares the app `DATABASE_URL` pool) |
 | Search | Meilisearch |
 | Payments | Payrexx (Swiss-based; ZKB / Twint / card) |
@@ -108,7 +108,7 @@ These are enforced, not suggested:
 ### Prerequisites
 
 - Node.js 20+
-- A PostgreSQL database (a Neon free-tier account works for local dev)
+- A PostgreSQL database — local Docker via `npm run services:up` (port 5433)
 - Optional: Meilisearch, Redis, Listmonk for full feature coverage
 
 ### Setup
@@ -126,7 +126,7 @@ npm run dev                    # Next.js on :3000
 
 At minimum, configure:
 
-- `DATABASE_URL` -- PostgreSQL connection string (for local dev, a Neon URL with `sslmode=require` works; prod points at the self-hosted Hetzner Postgres)
+- `DATABASE_URL` -- PostgreSQL connection string (`postgresql://postgres:postgres@localhost:5433/revampit_cms` for local Docker; prod uses Hetzner — see `.env.selfhost.local.example`)
 - `AUTH_SECRET` -- 32+ char random string for NextAuth JWT signing
 - `PAYREXX_INSTANCE` / `PAYREXX_API_SECRET` / `PAYREXX_WEBHOOK_SECRET` -- payment integration
 - `LISTMONK_URL` + Listmonk credentials -- email delivery

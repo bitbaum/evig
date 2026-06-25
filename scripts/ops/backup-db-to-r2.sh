@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Nightly OFF-BOX backup. The prod Postgres now lives only on this Hetzner box
-# (Neon retired), so this is the single copy's safety net: dump the DB and tar
+# Nightly OFF-BOX backup. Prod Postgres lives on this Hetzner box only —
+# this is the off-box safety net: dump the DB and tar the local uploads dir,
 # the local uploads dir, then push both to the PRIVATE R2 bucket
 # `revampit-backups`. Retention is enforced in the uploader (RETENTION_DAYS).
 #

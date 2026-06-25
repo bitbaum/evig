@@ -14,7 +14,7 @@ Thanks for the interest. This document covers the practical workflow for shippin
 ## Prerequisites
 
 - Node.js **20+**
-- A Postgres instance — easiest path is a free [Neon](https://neon.tech) project; the production app runs on Neon
+- A Postgres instance — start local Docker with `npm run services:up` (port 5433). Production runs on self-hosted Postgres 17 on Hetzner.
 - (Optional, for full feature coverage) Meilisearch, Redis (upstash), Listmonk
 
 ## Local setup

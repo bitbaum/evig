@@ -7,7 +7,7 @@ installed onto the box once with the block below; re-run it after editing.
 
 ## Nightly backups → R2 (`backup-db-to-r2.sh`)
 
-The prod Postgres lives only on the Hetzner box now (Neon retired), so a nightly
+The prod Postgres lives on the Hetzner box only, so a nightly
 off-box copy is the safety net. The job `pg_dump`s the DB (custom format) and
 tars `/opt/revampit/uploads`, then pushes both to the **private** R2 bucket
 `revampit-backups` with 30-day retention. Credentials are read from the app's

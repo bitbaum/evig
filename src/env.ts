@@ -43,8 +43,7 @@ const serverEnvSchema = z.object({
   JWT_SECRET: z.string().optional(),
 
   // --- Database --------------------------------------------------------------
-  // One of DATABASE_URL (Neon / production) or DB_HOST+DB_NAME+DB_USER+DB_PASSWORD
-  // (local Docker development) must be set. PRESENCE-only validation;
+  // DATABASE_URL (Hetzner prod / SSH tunnel) or DB_HOST+… (local Docker on 5433).
   // getDbConfig parses the URL/host and reports a clearer error if malformed.
   DATABASE_URL: z.string().optional(),
   DB_HOST: z.string().optional(),
