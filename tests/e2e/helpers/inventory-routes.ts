@@ -4,6 +4,14 @@
  */
 
 import { ROUTES } from '@/config/routes'
+import { UPCYCLING_NAV_ROUTE_KEYS, UPCYCLING_ROUTES } from '@/config/upcycling-routes'
+
+/** Service slugs that expose `/services/[slug]/repair` booking pages. */
+const SERVICE_REPAIR_SLUGS = [
+  'computer-repair-upgrades',
+  'data-recovery-transfer',
+  'linux-open-source',
+] as const
 
 export interface InventoryRoute {
   id: number
@@ -56,7 +64,25 @@ export const PUBLIC_ROUTES: InventoryRoute[] = [
   { id: 56, label: 'Propose workshop', path: ROUTES.public.workshopsPropose },
   { id: 68, label: 'Services landing', path: ROUTES.public.services },
   { id: 69, label: 'Service category', path: '/services/hardware-recycling' },
+  ...SERVICE_REPAIR_SLUGS.map(slug => ({
+    id: 70,
+    label: `Book repair (${slug})`,
+    path: `/services/${slug}/repair`,
+    urlPattern: /\/services\/[^/]+\/repair/,
+  })),
   { id: 71, label: 'Open-source solutions', path: '/services/open-source-solutions' },
+  ...UPCYCLING_NAV_ROUTE_KEYS.map(key => ({
+    id: 116,
+    label: `Upcycling ${key}`,
+    path: UPCYCLING_ROUTES[key],
+    urlPattern: /\/projects\/upcycling/,
+  })),
+  {
+    id: 116,
+    label: 'Upcycling Lenovo guide',
+    path: UPCYCLING_ROUTES.lenovoL2251pwd,
+    urlPattern: /\/projects\/upcycling/,
+  },
   { id: 101, label: 'Blog index', path: ROUTES.public.blog },
   { id: 103, label: 'Blog submit', path: ROUTES.public.blogSubmit },
   { id: 112, label: 'Donate hardware', path: ROUTES.public.donate },

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_summary: Post-deploy + CI wiring for dual-persona inventory E2E
+last_modified_summary: IT-Hilfe dual-persona journey; service repair + upcycling in inventory matrix
 ---
 
 # Feature Inventory (SSOT)
@@ -46,7 +46,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | Phase | Scope | Status |
 |-------|-------|--------|
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
-| **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Inventory smoke (186 routes); journey/API flows 🟡 |
+| **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Inventory smoke + IT-Hilfe journey; payment/API flows 🟡 |
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke (admin routes); deep CRUD 🟡 |
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Terminology open; CI inventory wired (needs secrets) |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
@@ -86,8 +86,8 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 19 | Owner edit request | `/it-hilfe/[id]/edit` | Owner | ⬜ |
 | 20 | Preferred technician sidebar | request detail | Owner | 🟡 |
 | 21 | Match panel | request detail + API matches | Techniker | ⬜ |
-| 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | 🟡 (journey E2E API) |
-| 23 | Accept / decline offer | API offers accept/decline | Owner | 🟡 (journey E2E accept) |
+| 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | ✅ dual-persona journey E2E |
+| 23 | Accept / decline offer | API offers accept/decline | Owner | ✅ journey accept |
 | 24 | Withdraw offer | API | Techniker | ⬜ |
 | 25 | My requests | `/it-hilfe/my` | Requester | ✅ inventory E2E |
 | 26 | My offers | `/it-hilfe/my/offers` | Techniker | ✅ inventory E2E |
@@ -155,7 +155,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 |---|---------|-------|--------|
 | 68 | Services landing | `/services` | ✅ inventory E2E |
 | 69 | Service category pages | `/services/[service]` | ✅ inventory E2E |
-| 70 | Book repair for device type | `/services/[service]/repair` | 🟡 not in matrix yet |
+| 70 | Book repair for device type | `/services/[service]/repair` | ✅ inventory E2E (3 slugs) |
 | 71 | Open-source solutions subsite | `/services/open-source-solutions` | ✅ inventory E2E |
 | 72 | Book via repairer profile | `/api/repairers/[id]/book` | 🟡 Legacy API |
 | 73 | Repairer availability | `/api/repairers/[id]/availability` | ⬜ |
@@ -222,7 +222,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 113 | My donations | `/dashboard/donations` | ✅ inventory E2E |
 | 114 | Admin donations | `/admin/donations` | ✅ inventory E2E |
 | 115 | Projects (admin) | `/admin/projects`, `[slug]` | ✅ list; slug dynamic 🟡 |
-| 116 | Upcycling mini-site | `/projects/upcycling/*` | ⬜ not in matrix |
+| 116 | Upcycling mini-site | `/projects/upcycling/*` | ✅ inventory E2E (nav + guide) |
 | 117 | Get involved pages | `/get-involved/*` | ✅ donate path |
 | 118 | Legal pages | impressum, datenschutz, agb, transparenz | ✅ inventory E2E |
 | 119 | FAQ, contact, support | `/faq`, `/contact`, `/support` | ✅ inventory E2E |
@@ -302,10 +302,10 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 ## Recommended test order (next)
 
 1. **Run dual-persona inventory on every deploy:** automatic via GitHub Actions (`post-deploy-e2e` job) when `AUTH_TEST_USER_PASSWORD` + `AUTH_TEST_ADMIN_PASSWORD` are set; manual: `npm run test:e2e:inventory:prod`.
-2. **Deep journeys** (API + multi-step): IT-Hilfe offer/accept (#22–23), marketplace checkout payment, workshop register.
+2. **Deep journeys** (API + multi-step): marketplace checkout payment, workshop register — IT-Hilfe offer/accept ✅ (`test:e2e:it-hilfe:journey`).
 3. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified`.
-4. **Expand matrix** — dynamic detail pages (#38, #52, #79, #86), `/services/*/repair`, upcycling subsite.
+4. **Expand matrix** — dynamic detail pages when no prod data (#38, #52, #79, #86).
 
-**E2E commands:** `npm run test:e2e:inventory` · `npm run test:e2e:it-hilfe` · `npm run test:e2e:user-admin` · `npm run test:e2e:auth`
+**E2E commands:** `npm run test:e2e:inventory` · `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe` · `npm run test:e2e:user-admin` · `npm run test:e2e:auth`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

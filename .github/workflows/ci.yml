@@ -87,7 +87,6 @@ jobs:
     name: Dual-Persona Inventory Smoke
     runs-on: ubuntu-latest
     needs: quality
-    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

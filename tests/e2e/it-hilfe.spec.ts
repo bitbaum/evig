@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test'
 import {
   loginWithCredentials,
+  getRequesterCredentials,
+  getTechnicianCredentials,
   hasTechnicianTestCredentials,
-  TECHNICIAN_TEST_EMAIL,
-  TECHNICIAN_TEST_PASSWORD,
 } from './helpers/auth'
 import {
   acceptItHilfeOffer,
@@ -129,20 +129,23 @@ test.describe('IT-Hilfe full journey (API + UI)', () => {
 
   test.skip(
     !hasTechnicianTestCredentials(),
-    'Set AUTH_TEST_TECHNICIAN_EMAIL + AUTH_TEST_TECHNICIAN_PASSWORD (different from requester)',
+    'Set AUTH_TEST_USER_PASSWORD + AUTH_TEST_ADMIN_PASSWORD, or AUTH_TEST_TECHNICIAN_*',
   )
 
   test('create → offer → accept → complete → review', async ({ page }) => {
+    const requester = getRequesterCredentials()
+    const techniker = getTechnicianCredentials()
+
     // 1. Requester creates request
-    await loginWithCredentials(page, '/dashboard')
+    await loginWithCredentials(page, '/dashboard', requester.email, requester.password)
     const { requestId } = await createItHilfeRequest(page.request)
 
     // 2. Technician submits offer
     await loginWithCredentials(
       page,
       `/it-hilfe/${requestId}`,
-      TECHNICIAN_TEST_EMAIL,
-      TECHNICIAN_TEST_PASSWORD,
+      techniker.email,
+      techniker.password,
     )
     const { offerId } = await submitItHilfeOffer(page.request, requestId)
 
@@ -153,7 +156,7 @@ test.describe('IT-Hilfe full journey (API + UI)', () => {
     )).toBeVisible({ timeout: 15000 })
 
     // 3. Requester accepts offer
-    await loginWithCredentials(page, `/it-hilfe/${requestId}`)
+    await loginWithCredentials(page, `/it-hilfe/${requestId}`, requester.email, requester.password)
     await acceptItHilfeOffer(page.request, requestId, offerId)
     let status = (await fetchItHilfeRequest(page.request, requestId)).status
     expect(status).toBe('matched')
@@ -164,15 +167,15 @@ test.describe('IT-Hilfe full journey (API + UI)', () => {
     await loginWithCredentials(
       page,
       `/it-hilfe/${requestId}`,
-      TECHNICIAN_TEST_EMAIL,
-      TECHNICIAN_TEST_PASSWORD,
+      techniker.email,
+      techniker.password,
     )
     await completeItHilfeRequest(page.request, requestId)
     status = (await fetchItHilfeRequest(page.request, requestId)).status
     expect(status).toBe('completed')
 
     // 5. Requester confirms review
-    await loginWithCredentials(page, `/it-hilfe/${requestId}`)
+    await loginWithCredentials(page, `/it-hilfe/${requestId}`, requester.email, requester.password)
     await confirmItHilfeReview(page.request, requestId)
     const final = await fetchItHilfeRequest(page.request, requestId)
     expect(final.status).toBe('completed')

@@ -38,3 +38,6 @@ export AUTH_TEST_ADMIN_EMAIL="${AUTH_TEST_ADMIN_EMAIL:-georgy.butaev@revamp-it.c
 
 echo "=== dual-persona inventory smoke → ${BASE_URL} ==="
 npx playwright test tests/e2e/feature-inventory.spec.ts --project=chromium --reporter=line
+
+echo "=== IT-Hilfe dual-persona journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/it-hilfe-journey.spec.ts --project=chromium --reporter=line
