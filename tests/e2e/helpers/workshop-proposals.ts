@@ -74,3 +74,30 @@ export async function fetchWorkshopProposalAdmin(
   const data = await parseApi<{ proposal: { status: string; title: string } }>(response)
   return data.proposal
 }
+
+const E2E_PROPOSAL_TITLE_PREFIX = 'E2E Workshop-Vorschlag'
+
+interface AdminProposalListItem {
+  id: string
+  status: string
+  proposerEmail: string | null
+  title: string
+}
+
+/** Reject stale E2E proposals so the 3 pending/approved quota does not block reruns. */
+export async function clearE2EWorkshopProposalQuota(
+  request: APIRequestContext,
+  proposerEmail: string,
+): Promise<void> {
+  const response = await request.get(
+    `/api/admin/workshops/proposals?status=all&q=${encodeURIComponent(E2E_PROPOSAL_TITLE_PREFIX)}&limit=50`,
+  )
+  const data = await parseApi<{ items: AdminProposalListItem[] }>(response)
+  const email = proposerEmail.toLowerCase()
+
+  for (const item of data.items) {
+    if ((item.proposerEmail ?? '').toLowerCase() !== email) continue
+    if (item.status !== 'pending' && item.status !== 'approved') continue
+    await reviewWorkshopProposal(request, item.id, 'reject', 'E2E cleanup — quota reset')
+  }
+}

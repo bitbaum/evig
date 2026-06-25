@@ -13,6 +13,7 @@ import {
   loginWithCredentials,
 } from './helpers/auth'
 import {
+  clearE2EWorkshopProposalQuota,
   fetchWorkshopProposalAdmin,
   reviewWorkshopProposal,
   submitWorkshopProposal,
@@ -35,6 +36,9 @@ test.describe('Workshop proposal dual-persona journey', () => {
     let approveTitle = ''
 
     try {
+      await loginWithCredentials(page, '/admin/workshops', admin.email, admin.password)
+      await clearE2EWorkshopProposalQuota(page.request, user.email)
+
       await loginWithCredentials(page, '/workshops/propose', user.email, user.password)
       ;({ proposalId: approveId, title: approveTitle } = await submitWorkshopProposal(
         page.request,
