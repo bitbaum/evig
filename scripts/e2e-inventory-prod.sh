@@ -44,3 +44,9 @@ npx playwright test tests/e2e/it-hilfe-journey.spec.ts --project=chromium --repo
 
 echo "=== Marketplace checkout journey → ${BASE_URL} ==="
 npx playwright test tests/e2e/marketplace-checkout-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Workshops registration journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/workshops-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Service repair appointment journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/service-appointment-journey.spec.ts --project=chromium --reporter=line

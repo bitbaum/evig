@@ -2,7 +2,7 @@
  * Booking Status Configuration
  *
  * SSOT for booking/appointment lifecycle status labels and badges.
- * Used by: customer bookings, repairer bookings, admin booking views
+ * Used by: customer bookings, technician bookings, admin booking views
  *
  * The booking lifecycle:
  *   requested → accepted → quoted → quote_approved → in_progress → completed
@@ -10,9 +10,11 @@
  *                       → rejected
  *   Any state → cancelled
  *
- * Repairer view uses simplified aliases:
+ * Technician view uses simplified aliases:
  *   pending = requested, confirmed = accepted/quote_approved
  */
+
+import { TECHNICIAN_LABEL } from '@/config/terminology'
 
 export const BOOKING_STATUS = {
   REQUESTED: 'requested',
@@ -46,7 +48,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   [BOOKING_STATUS.ACCEPTED]: {
     label: 'Angenommen',
     color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
-    description: 'Reparateur hat angenommen',
+    description: `${TECHNICIAN_LABEL} hat angenommen`,
   },
   [BOOKING_STATUS.QUOTED]: {
     label: 'Angebot erhalten',
@@ -76,7 +78,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   [BOOKING_STATUS.REJECTED]: {
     label: 'Abgelehnt',
     color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300',
-    description: 'Reparateur hat abgelehnt',
+    description: `${TECHNICIAN_LABEL} hat abgelehnt`,
   },
   [BOOKING_STATUS.CANCELLED]: {
     label: 'Storniert',

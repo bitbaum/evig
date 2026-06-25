@@ -1,5 +1,10 @@
 import type { APIRequestContext } from '@playwright/test'
 import { csrfDelete, csrfPatch, csrfPost } from './api-csrf'
+import {
+  PAYREXX_WEBHOOK_PATH,
+  isPayrexxHostedUrl,
+  isPayrexxMockRedirectUrl,
+} from '@/config/payrexx'
 
 interface ApiEnvelope<T> {
   success: boolean
@@ -123,13 +128,13 @@ export async function simulatePayrexxReservedWebhook(
   const { createHmac } = await import('node:crypto')
   const signature = createHmac('sha256', secret).update(body).digest('hex')
 
-  const response = await request.fetch('/api/payments/payrexx-webhook', {
+  const response = await request.fetch(PAYREXX_WEBHOOK_PATH, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'payrexx-signature': signature,
     },
-    body,
+    data: body,
   })
 
   if (!response.ok()) {
@@ -139,9 +144,9 @@ export async function simulatePayrexxReservedWebhook(
 }
 
 export function isMockPayrexxUrl(paymentUrl: string): boolean {
-  return paymentUrl.includes('/api/payments/payrexx-mock-redirect')
+  return isPayrexxMockRedirectUrl(paymentUrl)
 }
 
 export function isHostedPayrexxUrl(paymentUrl: string): boolean {
-  return paymentUrl.includes('payrexx.com') || paymentUrl.includes('payrexx.ch')
+  return isPayrexxHostedUrl(paymentUrl)
 }

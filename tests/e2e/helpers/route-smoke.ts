@@ -70,14 +70,29 @@ export interface DynamicSmokeIds {
   adminTaskId?: string
 }
 
+function firstApiRow(json: unknown, keys: string[]): Record<string, unknown> | undefined {
+  const data = (json as { data?: unknown })?.data
+  if (Array.isArray(data) && data.length > 0) {
+    return data[0] as Record<string, unknown>
+  }
+  if (data && typeof data === 'object') {
+    for (const key of keys) {
+      const nested = (data as Record<string, unknown>)[key]
+      if (Array.isArray(nested) && nested.length > 0) {
+        return nested[0] as Record<string, unknown>
+      }
+    }
+  }
+  return undefined
+}
+
 export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   const ids: DynamicSmokeIds = {}
 
   try {
     const listings = await page.request.get('/api/listings?limit=1&status=active')
     if (listings.ok()) {
-      const json = await listings.json()
-      const row = json?.data?.[0] ?? json?.listings?.[0]
+      const row = firstApiRow(await listings.json(), ['items', 'listings'])
       if (row?.id) ids.listingId = String(row.id)
     }
   } catch {
@@ -87,8 +102,7 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   try {
     const requests = await page.request.get('/api/it-hilfe/requests?limit=1')
     if (requests.ok()) {
-      const json = await requests.json()
-      const row = json?.data?.[0] ?? json?.requests?.[0]
+      const row = firstApiRow(await requests.json(), ['requests'])
       if (row?.id) ids.itHilfeRequestId = String(row.id)
     }
   } catch {
@@ -98,8 +112,7 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   try {
     const tech = await page.request.get('/api/technicians?limit=1')
     if (tech.ok()) {
-      const json = await tech.json()
-      const row = json?.data?.[0] ?? json?.technicians?.[0]
+      const row = firstApiRow(await tech.json(), ['technicians'])
       const id = row?.id ?? row?.profileId
       if (id) ids.technicianProfileId = String(id)
     }
@@ -108,10 +121,9 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   }
 
   try {
-    const workshops = await page.request.get('/api/workshops?limit=1')
+    const workshops = await page.request.get('/api/workshops?limit=1&active=true')
     if (workshops.ok()) {
-      const json = await workshops.json()
-      const row = json?.data?.[0] ?? json?.workshops?.[0]
+      const row = firstApiRow(await workshops.json(), ['workshops'])
       if (row?.slug) ids.workshopSlug = String(row.slug)
     }
   } catch {
@@ -121,8 +133,7 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   try {
     const appts = await page.request.get('/api/appointments?limit=1')
     if (appts.ok()) {
-      const json = await appts.json()
-      const row = json?.data?.[0] ?? json?.appointments?.[0]
+      const row = firstApiRow(await appts.json(), ['appointments'])
       if (row?.id) ids.appointmentId = String(row.id)
     }
   } catch {
@@ -132,9 +143,11 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   try {
     const adminAppts = await page.request.get('/api/admin/appointments?limit=1')
     if (adminAppts.ok()) {
-      const json = await adminAppts.json()
-      const row = json?.data?.[0] ?? json?.appointments?.[0]
-      if (row?.id) ids.adminAppointmentId = String(row.id)
+      const row = firstApiRow(await adminAppts.json(), ['appointments'])
+      if (row?.id) {
+        ids.adminAppointmentId = String(row.id)
+        ids.appointmentId ??= String(row.id)
+      }
     }
   } catch {
     /* optional */
@@ -143,8 +156,7 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   try {
     const blog = await page.request.get('/api/blog/posts?limit=1')
     if (blog.ok()) {
-      const json = await blog.json()
-      const row = json?.data?.[0] ?? json?.posts?.[0]
+      const row = firstApiRow(await blog.json(), ['posts'])
       if (row?.slug) ids.blogSlug = String(row.slug)
     }
   } catch {

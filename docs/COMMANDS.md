@@ -78,6 +78,8 @@ npm run test:e2e:inventory:prod # Same, with prod health wait (CI / post-deploy)
 npm run test:e2e:user-admin # Legacy quick smoke (subset)
 npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
 npm run test:e2e:marketplace:journey # User sells, admin buys (Payrexx when configured)
+npm run test:e2e:workshops:journey # Free register + paid Payrexx readiness (dual-persona)
+npm run test:e2e:service:journey # User books repair, admin assigns techniker (dual-persona)
 npm run test:e2e:ui    # Playwright with UI
 npm run test:all       # Run all tests
 ```
@@ -110,7 +112,9 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 | `AUTH_TEST_ADMIN_EMAIL` | Optional override for admin persona (defaults to georgy) |
 | `AUTH_TEST_EMAIL` / `AUTH_TEST_PASSWORD` | Legacy single-account auth smoke (`test:e2e:auth`) |
 
-After each successful deploy, **Dual-persona inventory smoke** runs automatically when the two password secrets are set (routes + IT-Hilfe journey). Manual re-run: `npm run test:e2e:inventory:prod`.
+After each successful deploy, **Dual-persona inventory smoke** runs automatically when the two password secrets are set (routes + IT-Hilfe + marketplace + workshops + service journeys). Manual re-run: `npm run test:e2e:inventory:prod`.
+
+Payrexx go-live checklist: `docs/operations/PAYREXX_SETUP.md` · config SSOT: `src/config/payrexx.ts`.
 
 ### Manual
 

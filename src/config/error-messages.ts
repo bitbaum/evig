@@ -5,6 +5,8 @@
  * Following dev guide: docs/development/DEV_GUIDE.md
  */
 
+import { TECHNICIAN_LABEL, technicianNotFoundMessage } from '@/config/terminology'
+
 export const ERROR_MESSAGES = {
   // Authentication & Authorization
   UNAUTHORIZED: 'Nicht authentifiziert',
@@ -22,7 +24,7 @@ export const ERROR_MESSAGES = {
   CERTIFICATION_ALREADY_VERIFIED: 'Diese Zertifizierung wurde bereits verifiziert',
   WORKSHOP_NOT_FOUND: 'Workshop nicht gefunden',
   LOCATION_NOT_FOUND: 'Ort nicht gefunden',
-  REPAIRER_NOT_FOUND: 'Reparateur nicht gefunden',
+  REPAIRER_NOT_FOUND: technicianNotFoundMessage(),
   REVIEW_NOT_FOUND: 'Bewertung nicht gefunden',
   LISTING_NOT_FOUND: 'Inserat nicht gefunden',
   REPORT_NOT_FOUND: 'Meldung nicht gefunden',
@@ -32,7 +34,7 @@ export const ERROR_MESSAGES = {
   INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste nicht vollständig — alle Pflichtpunkte müssen abgehakt sein',
   INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
   INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
-  REPAIRER_APPLICATION_NOT_FOUND: 'Reparateur-Bewerbung nicht gefunden',
+  REPAIRER_APPLICATION_NOT_FOUND: `${TECHNICIAN_LABEL}-Bewerbung nicht gefunden`,
   WORKSHOP_PROPOSAL_NOT_FOUND: 'Workshop-Vorschlag nicht gefunden',
   POOL_NOT_FOUND: 'Pool nicht gefunden',
   DIENSTLEISTUNG_NOT_FOUND: 'Dienstleistung nicht gefunden',

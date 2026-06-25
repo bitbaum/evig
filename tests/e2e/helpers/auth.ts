@@ -60,12 +60,20 @@ function stripLocalePrefix(pathname: string): string {
   return pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/'
 }
 
-function pathMatchesCallback(pathname: string, callbackUrl: string): boolean {
-  const target = callbackUrl.startsWith('http')
-    ? new URL(callbackUrl).pathname
-    : callbackUrl
-  if (pathname === target || pathname.endsWith(target)) return true
-  return stripLocalePrefix(pathname) === stripLocalePrefix(target)
+function pathMatchesCallback(pathname: string, search: string, callbackUrl: string): boolean {
+  const parsed = callbackUrl.startsWith('http')
+    ? new URL(callbackUrl)
+    : null
+  const targetPath = parsed ? parsed.pathname : callbackUrl.split('?')[0]
+  const targetSearch = parsed ? parsed.search : callbackUrl.includes('?')
+    ? callbackUrl.slice(callbackUrl.indexOf('?'))
+    : ''
+
+  if (pathname === targetPath || pathname.endsWith(targetPath)) {
+    if (!targetSearch || search === targetSearch) return true
+  }
+  return stripLocalePrefix(pathname) === stripLocalePrefix(targetPath) &&
+    (!targetSearch || search === targetSearch)
 }
 
 /** Log in via the credentials form (same flow as auth-smoke / timecards e2e). */
@@ -85,7 +93,7 @@ export async function loginWithCredentials(
   await page.locator('#password').fill(password)
   await page.getByRole('button', { name: LOGIN_SUBMIT }).click()
   await page.waitForURL(
-    url => pathMatchesCallback(url.pathname, callbackUrl),
+    url => pathMatchesCallback(url.pathname, url.search, callbackUrl),
     { timeout: 60_000 },
   )
 }
@@ -107,7 +115,7 @@ export async function ensureAuthenticated(
     await page.locator('#password').fill(password)
     await page.getByRole('button', { name: LOGIN_SUBMIT }).click()
     await page.waitForURL(
-      url => pathMatchesCallback(url.pathname, callbackUrl),
+      url => pathMatchesCallback(url.pathname, url.search, callbackUrl),
       { timeout: 60_000 },
     )
   }

@@ -139,13 +139,13 @@ export const PATCH = withAuth<{ id: string }>(async (
       // Permission errors vs validation errors
       const permissionErrors = [
         'Kein Zugriff auf diesen Termin',
-        'Nur der Reparateur kann annehmen',
-        'Nur der Reparateur kann ablehnen',
-        'Nur der Reparateur kann Angebote erstellen',
+        'Nur der Techniker kann annehmen',
+        'Nur der Techniker kann ablehnen',
+        'Nur der Techniker kann Angebote erstellen',
         'Nur der Kunde kann Angebote bestätigen',
         'Nur der Kunde kann Angebote ablehnen',
-        'Nur der Reparateur kann starten',
-        'Nur der Reparateur kann abschliessen',
+        'Nur der Techniker kann starten',
+        'Nur der Techniker kann abschliessen',
         'Nur der Kunde kann Angaben bearbeiten',
         'Nur der Kunde kann bewerten',
       ]

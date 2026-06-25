@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-19
-last_modified_summary: GitHub E2E secrets set; 209/209 prod pass; CSRF + ISO 14044 smoke fixes
+last_modified_date: 2026-06-25
+last_modified_summary: Phase 4 terminology + community visibility; service journey E2E; dynamic ID discovery fix
 ---
 
 # Feature Inventory (SSOT)
@@ -37,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** 209/209 passed (208 inventory + IT-Hilfe journey, 2026-06-25).
+**Last prod run:** 209/209 inventory + IT-Hilfe (2026-06-25); marketplace + workshops journeys wired in `test:e2e:inventory:prod`.
 
 ---
 
@@ -46,9 +46,9 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | Phase | Scope | Status |
 |-------|-------|--------|
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
-| **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Inventory smoke + IT-Hilfe journey; payment/API flows 🟡 |
+| **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Journeys for IT-Hilfe, marketplace, workshops; full Payrexx payment when configured 🟡 |
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke (admin routes); deep CRUD 🟡 |
-| **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Terminology open; CI inventory wired (needs secrets) |
+| **4** | Cleanup: dead code, terminology, CI, timecard notify | ✅ Techniker SSOT; community visibility; dynamic discovery 🟡 CI auth/migration noise |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
 | **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 209/209 prod |
 
@@ -131,8 +131,8 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 |---|---------|-------|-------|--------|
 | 51 | Workshop catalog | `/workshops` | Public | ✅ inventory E2E |
 | 52 | Workshop detail + instances | `/workshops/[slug]` | Public | 🟡 dynamic when workshop exists |
-| 53 | Register (free) | `/api/workshops/register` | User | ⬜ API-only |
-| 54 | Register with payment | `/api/workshops/[slug]/register-with-payment` | User | 🟡 |
+| 53 | Register (free) | `/api/workshops/register` | User | ✅ workshops journey E2E |
+| 54 | Register with payment | `/api/workshops/[slug]/register-with-payment` | User | 🟡 Payrexx-not-ready UI in journey; full payment when configured |
 | 55 | My workshops | `/dashboard/workshops` | User | ✅ inventory E2E |
 | 56 | Propose a workshop | `/workshops/propose` | User | ✅ inventory E2E |
 | 57 | Admin workshop templates | `/admin/workshops` | Staff | ✅ inventory E2E |
@@ -144,7 +144,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 63 | Registrations management | API admin registrations | Staff | ⬜ |
 | 64 | Materials per workshop | API materials | Staff | ⬜ |
 | 65 | Workshop reviews (public) | workshop detail | Public | ⬜ |
-| 66 | Cancel registration | API | User | ⬜ |
+| 66 | Cancel registration | API | User | ✅ workshops journey cleanup |
 | 67 | Notification: proposal approved | → admin workshops | User | 🟡 |
 
 ---
@@ -161,18 +161,18 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 73 | Repairer availability | `/api/repairers/[id]/availability` | ⬜ |
 | 74 | Repairer ratings | `/api/repairers/[id]/ratings` | ⬜ |
 | 75 | Unified technician list | `/api/technicians` | ✅ SSOT |
-| 76 | Appointment booking form | AppointmentBookingForm | ⬜ |
+| 76 | Appointment booking (services) | `POST /api/appointments` | ✅ service journey E2E |
 | 77 | Pay for appointment | `/api/appointments/[id]/pay` | ✅ (return banner) |
 | 78 | My appointments (list) | `/dashboard/appointments` | ✅ (user E2E) |
-| 79 | Appointment detail | `/dashboard/appointments/[id]` | ✅ (was ❌ 404) |
-| 80 | Repairer view appointments | `/dashboard/appointments?role=repairer` | ✅ inventory E2E |
+| 79 | Appointment detail | `/dashboard/appointments/[id]` | ✅ service journey E2E |
+| 80 | Repairer view appointments | `/dashboard/appointments?role=repairer` | ✅ service journey E2E |
 | 81 | Inline edit/cancel on list | appointments page | ⬜ |
 | 82 | My bookings (alternate UI) | `/dashboard/bookings` | ✅ → redirects to appointments |
 | 83 | Booking detail | `/dashboard/bookings/[id]` | ✅ → redirects to appointments |
 | 84 | Rate completed booking | appointments detail | ⬜ |
 | 85 | Admin appointments queue | `/admin/appointments` | ✅ (admin E2E) |
-| 86 | Admin appointment detail | `/admin/appointments/[id]` | ✅ (was ❌ 404) |
-| 87 | Assign repairer to appointment | API assign | ⬜ |
+| 86 | Admin appointment detail | `/admin/appointments/[id]` | ✅ service journey E2E |
+| 87 | Assign repairer to appointment | API assign | ✅ service journey E2E |
 | 88 | Repairer applications | `/admin/repairer-applications` | ✅ inventory E2E |
 | 89 | Orphan paid booking UI | `components/payments/service-booking/` | ✅ Removed |
 | 90 | Orphan book-with-payment API | `/api/appointments/book-with-payment` | ✅ Removed |
@@ -264,7 +264,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 
 | # | Feature | Notes | Status |
 |---|---------|-------|--------|
-| 144 | Payrexx webhooks | marketplace + workshops + appointments | 🟡 |
+| 144 | Payrexx webhooks | marketplace + workshops + appointments | 🟡 SSOT `src/config/payrexx.ts`; setup `docs/operations/PAYREXX_SETUP.md` |
 | 145 | Meilisearch indexing | listings search | ⬜ |
 | 146 | R2 image uploads | `/api/uploads` | ⬜ |
 | 147 | AI form assist | IT-Hilfe create, protocols | ⬜ |
@@ -287,9 +287,9 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | No `/admin/appointments/[id]` | Admin links 404 | P0 | ✅ Fixed |
 | Appointments vs Bookings duplicate UX | User confusion | P0 | ✅ Unified |
 | `RELATED_TYPE_HREFS` broken paths | Bell links 404 | P0 | ✅ Fixed (incl. membership + marketplace query params) |
-| Repairer vs Techniker labels mixed | Confusion | P1 | ❌ Open |
+| Repairer vs Techniker labels mixed | Confusion | P1 | ✅ SSOT `src/config/terminology.ts` |
 | Service-booking payment UI orphaned | Incomplete paid flow | P1 | ✅ Removed |
-| Community techniker `is_verified=false` hidden | Profile invisible | P1 | ⬜ |
+| Community techniker `is_verified=false` hidden | Profile invisible | P1 | ✅ Community active profiles public (`technician-visibility.ts`) |
 | Dev `.env.local` pointed at retired cloud DB while prod uses Hetzner | Wrong data during local ops | P0 | ✅ Fixed — Docker 5433 locally; `.env.selfhost.local` → SSH tunnel |
 | Prod vs dev DB drift (butaeff unverified on Hetzner only) | Login failures on prod | P0 | ✅ Fixed ops (verify + password + lockout clear) |
 | Auth smoke CI fails (MissingSecret) | CI noise | P3 | ❌ Open |
@@ -303,9 +303,9 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 
 1. **Run dual-persona inventory on every deploy:** automatic via GitHub Actions (`post-deploy-e2e` job) when `AUTH_TEST_USER_PASSWORD` + `AUTH_TEST_ADMIN_PASSWORD` are set; manual: `npm run test:e2e:inventory:prod`.
 2. **Deep journeys** (API + multi-step): workshop register — IT-Hilfe ✅ · marketplace checkout ✅ (`test:e2e:marketplace:journey`; full Payrexx payment when `PAYREXX_INSTANCE` set on prod).
-3. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified`.
-4. **Expand matrix** — dynamic detail pages when no prod data (#38, #52, #79, #86).
+3. **Phase 4 cleanup** — terminology ✅ · community visibility ✅ · CI auth/migration gates 🟡
+4. **Expand matrix** — dynamic detail pages: discovery + empty-state fallbacks ✅
 
-**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:user-admin`
+**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:service:journey`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

@@ -15,7 +15,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { getSkillIds } from '@/config/it-hilfe'
-import { REPAIRER_STATUS } from '@/config/repairer-status'
+import { technicianListConditionsForTier } from '@/lib/domain/technician-visibility'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql'
 
@@ -58,24 +58,10 @@ export async function GET(request: NextRequest) {
 
     // --- Build WHERE conditions ---
     //
-    // The public endpoint surfaces ONLY verified helpers. Anyone can
-    // register a profile via /profil/techniker, but an admin must
-    // approve them before they appear in /techniker, the IT-Hilfe
-    // helper map, /repairers, or skill-match notifications. Admin
-    // surfaces use /api/admin/it-hilfe/helpers (separate query) and
-    // can see unverified profiles by passing status filters there.
-    const conditions: SQL[] = [
-      eq(repairerProfiles.isActive, true),
-      eq(repairerProfiles.isVerified, true),
-    ]
-
-    // Tier filter — 'professional' maps to status='active'; 'community' maps to profile_tier='community'
-    if (tier === REPAIRER_PROFILE_TIER.COMMUNITY) {
-      conditions.push(eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.COMMUNITY))
-    } else if (tier === REPAIRER_PROFILE_TIER.PROFESSIONAL) {
-      conditions.push(eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.PROFESSIONAL))
-      conditions.push(sql`${repairerProfiles.status} = ${REPAIRER_STATUS.ACTIVE}`)
-    }
+    // Community profiles: visible when active (no admin verify gate).
+    // Professional profiles: active + verified + status active.
+    // See lib/domain/technician-visibility.ts
+    const conditions: SQL[] = technicianListConditionsForTier(tier)
 
     if (q) {
       const pattern = `%${q}%`

@@ -29,6 +29,15 @@ MEILI_MASTER_KEY=masterKey_change_in_production
 MEILI_PORT=7700
 
 # ==========================================
+# PAYREXX (online payments — optional in dev)
+# ==========================================
+# SSOT: src/config/payrexx.ts · Setup: docs/operations/PAYREXX_SETUP.md
+# Dev: leave unset → mock redirect at /api/payments/payrexx-mock-redirect
+# PAYREXX_INSTANCE=your_instance_name
+# PAYREXX_API_SECRET=your_api_secret
+# PAYREXX_WEBHOOK_SECRET=your_webhook_signing_secret
+
+# ==========================================
 # SERVER
 # ==========================================
 

@@ -1,18 +1,25 @@
 /**
  * Payrexx API Client — Thin wrapper for reservation-based escrow payments.
  *
- * Uses HMAC-SHA256 auth per Payrexx docs. When PAYREXX_INSTANCE env var is
- * missing, all methods return mock data pointing to our dev mock redirect route.
- *
- * Env vars:
- *   PAYREXX_INSTANCE  — Payrexx instance name (e.g. "revampit")
- *   PAYREXX_API_SECRET — API secret for HMAC signature
+ * Config SSOT: `src/config/payrexx.ts` · Setup: `docs/operations/PAYREXX_SETUP.md`
  */
 
 import crypto from 'crypto';
 import { logger } from '@/lib/logger';
 import { PAYMENT_STATUS } from '@/config/payment-status';
+import {
+  PAYREXX_API_BASE,
+  PAYREXX_ENV,
+  PAYREXX_MOCK_REDIRECT_PATH,
+  isPayrexxConfigured,
+} from '@/config/payrexx';
 import { APP_URL } from '@/config/urls';
+
+export {
+  PAYREXX_SETUP_MESSAGE,
+  isPayrexxCheckoutUnavailable,
+  isPayrexxConfigured,
+} from '@/config/payrexx';
 
 /**
  * Payrexx transaction status values (external API contract).
@@ -61,19 +68,8 @@ export interface PayrexxTransactionResult {
 // Mock mode detection
 // ============================================================================
 
-function isConfigured(): boolean {
-  return !!(process.env.PAYREXX_INSTANCE && process.env.PAYREXX_API_SECRET);
-}
-
-export const PAYREXX_SETUP_MESSAGE =
-  'Online-Zahlung wird gerade eingerichtet. Payrexx ist noch nicht aktiv. Bitte kontaktiere Revamp-IT, wenn du sofort bezahlen möchtest.';
-
-export function isPayrexxCheckoutUnavailable(): boolean {
-  return process.env.NODE_ENV === 'production' && !isConfigured();
-}
-
 function getBaseUrl(): string {
-  return `https://api.payrexx.com/v1.0/${process.env.PAYREXX_INSTANCE}`;
+  return `${PAYREXX_API_BASE}/${process.env[PAYREXX_ENV.INSTANCE]}`;
 }
 
 // ============================================================================
@@ -81,7 +77,7 @@ function getBaseUrl(): string {
 // ============================================================================
 
 function sign(queryString: string): string {
-  const secret = process.env.PAYREXX_API_SECRET!;
+  const secret = process.env[PAYREXX_ENV.API_SECRET]!;
   return crypto
     .createHmac('sha256', secret)
     .update(queryString)
@@ -103,8 +99,8 @@ async function apiRequest<T>(
   path: string,
   params: Record<string, string> = {}
 ): Promise<T> {
-  const instance = process.env.PAYREXX_INSTANCE!;
-  const url = `https://api.payrexx.com/v1.0/${path}?instance=${instance}`;
+  const instance = process.env[PAYREXX_ENV.INSTANCE]!;
+  const url = `${PAYREXX_API_BASE}/${path}?instance=${instance}`;
   const body = buildSignedParams(params);
 
   const response = await fetch(url, {
@@ -132,7 +128,7 @@ async function apiRequest<T>(
  * Returns the gateway ID and hosted payment page link.
  */
 export async function createGateway(params: PayrexxGatewayParams): Promise<PayrexxGateway> {
-  if (!isConfigured()) {
+  if (!isPayrexxConfigured()) {
     return createMockGateway(params);
   }
 
@@ -164,7 +160,7 @@ export async function createGateway(params: PayrexxGatewayParams): Promise<Payre
  * Capture a reserved transaction (releases held funds to merchant).
  */
 export async function captureTransaction(transactionId: string, amount: number): Promise<PayrexxTransactionResult> {
-  if (!isConfigured()) {
+  if (!isPayrexxConfigured()) {
     logger.info('Mock: Payrexx capture', { transactionId, amount });
     return { id: Number(transactionId), status: PAYREXX_TRANSACTION_STATUS.CONFIRMED };
   }
@@ -183,7 +179,7 @@ export async function captureTransaction(transactionId: string, amount: number):
  * Cancel a reserved transaction (releases the hold back to buyer).
  */
 export async function cancelTransaction(transactionId: string): Promise<PayrexxTransactionResult> {
-  if (!isConfigured()) {
+  if (!isPayrexxConfigured()) {
     logger.info('Mock: Payrexx cancel', { transactionId });
     return { id: Number(transactionId), status: PAYMENT_STATUS.CANCELLED };
   }
@@ -201,7 +197,7 @@ export async function cancelTransaction(transactionId: string): Promise<PayrexxT
  * Refund a captured transaction.
  */
 export async function refundTransaction(transactionId: string, amount: number): Promise<PayrexxTransactionResult> {
-  if (!isConfigured()) {
+  if (!isPayrexxConfigured()) {
     logger.info('Mock: Payrexx refund', { transactionId, amount });
     return { id: Number(transactionId), status: PAYMENT_STATUS.REFUNDED };
   }
@@ -232,7 +228,7 @@ function createMockGateway(params: PayrexxGatewayParams): PayrexxGateway {
     cancelUrl: params.cancelRedirectUrl,
   });
 
-  const link = `${APP_URL}/api/payments/payrexx-mock-redirect?${mockParams.toString()}`;
+  const link = `${APP_URL}${PAYREXX_MOCK_REDIRECT_PATH}?${mockParams.toString()}`;
 
   logger.info('Mock Payrexx gateway created', {
     gatewayId: mockId,

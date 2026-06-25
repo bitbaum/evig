@@ -21,8 +21,9 @@ import {
   handleMarketplacePayment,
   handleGenericPayment,
 } from '@/lib/services/payment-webhook';
+import { PAYREXX_ENV, isPayrexxConfigured } from '@/config/payrexx';
 
-const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
+const PAYREXX_WEBHOOK_SECRET = process.env[PAYREXX_ENV.WEBHOOK_SECRET];
 
 /**
  * Verify Payrexx webhook signature using HMAC-SHA256.
@@ -30,8 +31,8 @@ const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
  */
 async function verifyPayrexxSignature(rawBody: string, signature: string | null): Promise<boolean> {
   // Dev mock mode: only skip in local development when Payrexx is explicitly not configured
-  if (process.env.NODE_ENV === 'development' && !process.env.PAYREXX_INSTANCE) {
-    logger.warn('Payrexx webhook: dev mode — skipping signature verification (no PAYREXX_INSTANCE set)');
+  if (process.env.NODE_ENV === 'development' && !isPayrexxConfigured()) {
+    logger.warn('Payrexx webhook: dev mode — skipping signature verification (no Payrexx instance configured)');
     return true;
   }
 

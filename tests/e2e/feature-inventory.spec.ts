@@ -17,6 +17,7 @@ import {
   USER_DASHBOARD_ROUTES,
   dynamicAdminRoutes,
   dynamicUserRoutes,
+  emptyStateFallbackRoutes,
 } from './helpers/inventory-routes'
 import {
   discoverDynamicIds,
@@ -94,12 +95,18 @@ describePersona(
 
     test('#dynamic user — discovered IDs', async () => {
       const routes = dynamicUserRoutes(getIds())
-      if (routes.length === 0) {
-        test.skip(true, 'No dynamic IDs discovered from API')
+      const fallbacks = emptyStateFallbackRoutes(getIds())
+      if (routes.length === 0 && fallbacks.length === 0) {
+        test.skip(true, 'No dynamic or fallback routes')
         return
       }
       for (const route of routes) {
         await test.step(`#${route.id} ${route.label}`, async () => {
+          await smokeAuthenticatedRoute(getPage(), route.path, route.urlPattern)
+        })
+      }
+      for (const route of fallbacks) {
+        await test.step(`#${route.id} fallback ${route.label}`, async () => {
           await smokeAuthenticatedRoute(getPage(), route.path, route.urlPattern)
         })
       }
@@ -141,6 +148,12 @@ describePersona(
       const adminRoutes = dynamicAdminRoutes(getIds())
       for (const route of adminRoutes) {
         await test.step(`#${route.id} ${route.label}`, async () => {
+          await smokeAuthenticatedRoute(getPage(), route.path, route.urlPattern)
+        })
+      }
+      const fallbacks = emptyStateFallbackRoutes(getIds())
+      for (const route of fallbacks) {
+        await test.step(`#${route.id} fallback ${route.label}`, async () => {
           await smokeAuthenticatedRoute(getPage(), route.path, route.urlPattern)
         })
       }

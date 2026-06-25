@@ -17,6 +17,7 @@ import { validateBody } from '@/lib/schemas'
 import { uuidSchema } from '@/lib/schemas/common'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { TECHNICIAN_LABEL, technicianNotFoundMessage } from '@/config/terminology'
 import { logger } from '@/lib/logger'
 import { notifyUsers } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
@@ -58,7 +59,7 @@ export const POST = withAdmin<{ id: string }>('appointments-admin', async (
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
       .where(eq(repairerProfiles.userId, repairer_id))
 
-    if (!repairerRow) return apiBadRequest('Repairer nicht gefunden oder nicht aktiv')
+    if (!repairerRow) return apiBadRequest(technicianNotFoundMessage() + ' oder nicht aktiv')
 
     // Assign + move into the repairer's active queue (accepted).
     await db
@@ -85,7 +86,7 @@ export const POST = withAdmin<{ id: string }>('appointments-admin', async (
       repairerId: repairerRow.userId,
     })
 
-    return apiSuccess({ message: 'Repairer zugewiesen' })
+    return apiSuccess({ message: `${TECHNICIAN_LABEL} zugewiesen` })
   } catch (error) {
     logger.error('Error assigning appointment', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

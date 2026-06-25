@@ -176,3 +176,24 @@ export function dynamicAdminRoutes(ids: DynamicSmokeIds): InventoryRoute[] {
   }
   return routes
 }
+
+/** When dynamic IDs are missing, smoke parent surfaces (empty-state OK). */
+export function emptyStateFallbackRoutes(ids: DynamicSmokeIds): InventoryRoute[] {
+  const routes: InventoryRoute[] = []
+  if (!ids.listingId) {
+    routes.push({ id: 38, label: 'Marketplace browse (no listing id)', path: '/marketplace' })
+  }
+  if (!ids.workshopSlug) {
+    routes.push({ id: 52, label: 'Workshop catalog (no slug)', path: '/workshops' })
+  }
+  if (!ids.appointmentId) {
+    routes.push({ id: 79, label: 'Appointments list (no detail id)', path: '/dashboard/appointments' })
+  }
+  if (!ids.adminAppointmentId) {
+    routes.push({ id: 86, label: 'Admin appointments list (no detail id)', path: '/admin/appointments' })
+  }
+  if (!ids.technicianProfileId) {
+    routes.push({ id: 29, label: 'Technician directory (no profile id)', path: '/it-hilfe/techniker' })
+  }
+  return routes
+}

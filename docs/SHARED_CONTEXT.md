@@ -142,7 +142,9 @@ Three separate booking domains (intentional SoC):
 
 Legacy `/dashboard/bookings/*` → permanent redirect to `/dashboard/appointments/*`.
 
-Payrexx return banners: `PaymentReturnBanner` + `src/lib/payments/payment-return.ts`.
+**User-facing label SSOT:** `src/config/terminology.ts` — always **Techniker** in UI/messages (DB may still use `repairer_*`).
+
+Payrexx: config SSOT `src/config/payrexx.ts` · setup `docs/operations/PAYREXX_SETUP.md`. Return banners: `PaymentReturnBanner` + `src/lib/payments/payment-return.ts`.
 
 **Marketplace RevampIT stock:** add to cart → `/marketplace/cart` → `POST /api/marketplace/cart/checkout`. P2P listings use direct checkout per listing.
 
@@ -154,4 +156,4 @@ Public sub-site at `/projects/upcycling/*`. Routes, reading flow, gallery, busin
 
 Nav dropdown labels for projects live under **`nav.items.*`** in locale files; use `nav-i18n.ts` helpers in header components.
 
-**Last Updated**: 2026-06-19
+**Last Updated**: 2026-06-25
