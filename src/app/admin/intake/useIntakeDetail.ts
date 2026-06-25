@@ -26,7 +26,7 @@ export function useIntakeDetail() {
       const result = await apiFetch<DetailData>(`/api/admin/intake/${id}`)
       if (result.success && result.data) {
         setDetail(result.data)
-        setPublishPrice(result.data.selling_price_chf || 0)
+        setPublishPrice(Number(result.data.selling_price_chf) || 0)
       }
     } finally {
       setDetailLoading(false)

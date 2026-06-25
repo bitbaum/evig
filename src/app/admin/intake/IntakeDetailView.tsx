@@ -242,8 +242,10 @@ export function IntakeDetailView({
         <div className="border-2 border-strong bg-action-muted rounded-lg p-4 text-center">
           <Check className="w-8 h-8 text-action mx-auto mb-2" />
           <p className="font-medium text-action">{t('publishedConfirm')}</p>
-          {detail.selling_price_chf && (
-            <p className="text-sm text-action mt-1">{t('publishedPrice', { price: detail.selling_price_chf.toFixed(2) })}</p>
+          {detail.selling_price_chf != null && (
+            <p className="text-sm text-action mt-1">
+              {t('publishedPrice', { price: Number(detail.selling_price_chf).toFixed(2) })}
+            </p>
           )}
         </div>
       )}
