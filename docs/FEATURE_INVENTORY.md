@@ -37,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** 186/186 passed (2026-06-25).
+**Last prod run:** 209/209 passed (208 inventory + IT-Hilfe journey, 2026-06-25).
 
 ---
 

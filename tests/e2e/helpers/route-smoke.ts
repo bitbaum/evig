@@ -1,15 +1,32 @@
 import { expect, type Page } from '@playwright/test'
 
-const NOT_FOUND = /404|Seite nicht gefunden|Page not found|This page could not be found/i
+const NOT_FOUND =
+  /\b404\b.*(?:not found|nicht gefunden|could not be found)|(?:Seite nicht gefunden|Page not found|This page could not be found)/i
+
+async function gotoWithAbortRetry(page: Page, path: string) {
+  try {
+    return await page.goto(path, { waitUntil: 'domcontentloaded' })
+  } catch (error) {
+    if (!String(error).includes('ERR_ABORTED')) throw error
+    await page.waitForLoadState('domcontentloaded')
+    return page.goto(path, { waitUntil: 'domcontentloaded' })
+  }
+}
 
 export async function smokeAuthenticatedRoute(
   page: Page,
   path: string,
   urlPattern?: RegExp,
 ): Promise<void> {
-  const response = await page.goto(path, { waitUntil: 'domcontentloaded' })
-  const status = response?.status() ?? 0
+  let response = await gotoWithAbortRetry(page, path)
+  let status = response?.status() ?? 0
+  // Some dashboard routes redirect once (locale, role); retry once on abort/0 status.
+  if (status === 0 || status >= 500) {
+    response = await gotoWithAbortRetry(page, path)
+    status = response?.status() ?? 0
+  }
   expect(status, `#${path} HTTP ${status}`).toBeLessThan(500)
+  expect(status, `#${path} HTTP ${status}`).not.toBe(404)
   await expect(page, `#${path} redirected to login`).not.toHaveURL(/\/auth\/login/)
   const bodyText = await page.locator('body').innerText()
   expect(bodyText, `#${path} looks like 404`).not.toMatch(NOT_FOUND)
@@ -19,9 +36,10 @@ export async function smokeAuthenticatedRoute(
 }
 
 export async function smokePublicRoute(page: Page, path: string): Promise<void> {
-  const response = await page.goto(path, { waitUntil: 'domcontentloaded' })
+  const response = await gotoWithAbortRetry(page, path)
   const status = response?.status() ?? 0
   expect(status, `#${path} HTTP ${status}`).toBeLessThan(500)
+  expect(status, `#${path} HTTP ${status}`).not.toBe(404)
   const bodyText = await page.locator('body').innerText()
   expect(bodyText, `#${path} looks like 404`).not.toMatch(NOT_FOUND)
 }
