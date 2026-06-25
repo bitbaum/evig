@@ -22,6 +22,7 @@ import {
   IT_HILFE_PAGINATION,
 } from '@/config/it-hilfe'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
+import { isE2ETestAccountEmail } from '@/config/e2e-test-accounts'
 import { sanitizeInput } from '@/lib/security/sanitize'
 import { itHilfeRequestSchema, validateAndRespond } from '@/lib/schemas/it-hilfe'
 import { type RequestRow, mapRequestListRow } from '@/lib/it-hilfe/request-mapper'
@@ -201,12 +202,17 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     const sessionUserId = session?.user?.id ?? null
+    const sessionEmail = session?.user?.email ?? null
 
-    // SECURITY: Rate limiting — 5 requests per hour per identity (user or IP)
+    // SECURITY: Rate limiting — 5 requests per hour per identity (user or IP).
+    // E2E prod accounts are exempt so dual-persona inventory can run back-to-back.
     const rateLimitKey = sessionUserId
       ? `${sessionUserId}:it-hilfe-create`
       : `${getClientIdentifier(request)}:it-hilfe-create-anon`
-    if (!rateLimiters.itHilfeCreate(rateLimitKey)) {
+    if (
+      !isE2ETestAccountEmail(sessionEmail) &&
+      !rateLimiters.itHilfeCreate(rateLimitKey)
+    ) {
       return apiBadRequest('Zu viele Anfragen. Bitte warte 1 Stunde.')
     }
 

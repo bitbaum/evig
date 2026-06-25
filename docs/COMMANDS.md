@@ -84,6 +84,7 @@ npm run test:e2e:intake:journey             # Admin intake create → checklist 
 npm run test:e2e:tasks:journey              # Admin task create → complete
 npm run test:e2e:protocols:journey          # Admin protocol create → JSON import → finalize
 npm run test:e2e:decisions:journey          # Admin decision create → vote → close
+npm run test:e2e:cms:journey                # Admin blog draft → publish → public view
 npm run test:e2e:it-hilfe:preferred:journey # Request with preferred techniker
 npm run test:e2e:service:journey # User books repair, admin assigns techniker (dual-persona)
 npm run test:e2e:ui    # Playwright with UI

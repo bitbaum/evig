@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_summary: Admin decisions journey E2E (create → vote → close); phase 3 tracker
+last_modified_summary: CMS blog journey E2E; phase 3 complete (decisions + CMS journeys)
 ---
 
 # Feature Inventory (SSOT)
@@ -37,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** inventory + journeys green incl. **decisions**, protocols, tasks, intake (2026-06-19).
+**Last prod run:** full inventory + journeys green incl. decisions, CMS blog (2026-06-19); IT-Hilfe rate-limit bypass for E2E accounts deployed for reliable re-runs.
 
 ---
 
@@ -47,7 +47,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 |-------|-------|--------|
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
 | **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Journeys for IT-Hilfe, marketplace, workshops; full Payrexx payment when configured 🟡 |
-| **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke; intake + tasks + protocols + decisions journey E2E 🟡 |
+| **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke + journey E2E (intake, tasks, protocols, decisions, CMS blog) |
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | ✅ Techniker SSOT; community visibility; CI auth + migration drift gates |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
 | **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 209/209 prod |
@@ -211,7 +211,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 102 | Blog post | `/blog/[slug]` | 🟡 dynamic |
 | 103 | Submit blog post | `/blog/submit` | ✅ inventory E2E |
 | 104 | My submissions | `/dashboard/blog-submissions` | ✅ inventory E2E |
-| 105 | Admin blog CMS | `/admin/content/blog/*` | ✅ inventory E2E |
+| 105 | Admin blog CMS | `/admin/content/blog/*` | ✅ journey E2E (draft → publish → public) |
 | 106 | Static pages CMS | `/admin/content/pages/*` | ✅ inventory E2E |
 | 107 | Categories | `/admin/content/categories/*` | ✅ inventory E2E |
 | 108 | Media library | `/admin/content/media` | ✅ inventory E2E |
@@ -308,6 +308,6 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 3. **Phase 4 cleanup** — terminology ✅ · community visibility ✅ · CI auth/migration gates ✅
 4. **Expand matrix** — dynamic detail pages: discovery + empty-state fallbacks ✅
 
-**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe:preferred:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey` · `npm run test:e2e:timecards:journey` · `npm run test:e2e:intake:journey` · `npm run test:e2e:tasks:journey` · `npm run test:e2e:protocols:journey` · `npm run test:e2e:decisions:journey`
+**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe:preferred:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey` · `npm run test:e2e:timecards:journey` · `npm run test:e2e:intake:journey` · `npm run test:e2e:tasks:journey` · `npm run test:e2e:protocols:journey` · `npm run test:e2e:decisions:journey` · `npm run test:e2e:cms:journey`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)
