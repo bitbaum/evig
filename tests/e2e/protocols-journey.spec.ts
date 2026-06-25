@@ -64,7 +64,7 @@ test.describe('Admin protocols staff journey', () => {
     await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible({
       timeout: 15000,
     })
-    await expect(page.getByText('Zur Überprüfung')).toBeVisible()
+    await expect(page.getByRole('main').getByText('Zur Überprüfung').first()).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Zusammenfassung' })).toBeVisible()
     await expect(page.getByText(summary)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Protokoll abschliessen' })).toBeVisible()
