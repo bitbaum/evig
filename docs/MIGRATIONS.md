@@ -4,6 +4,24 @@
 
 **Last Updated:** 2026-06-19
 
+## CI drift check
+
+Pull requests and pushes to `main` run the **Migration Drift Check** job in `.github/workflows/ci.yml`:
+
+1. Spins up `pgvector/pgvector:pg17` (Hirn RAG needs `CREATE EXTENSION vector`).
+2. Runs `scripts/db/apply-migrations-ci.sh`, which applies every file in `scripts/db/migrations/*.sql` in `sort -V` order (skips superseded duplicate `005_messaging_system.sql`).
+3. Fails the job if any migration errors — catches fresh-DB breakage before deploy.
+
+Local repro:
+
+```bash
+docker run --rm -d --name mig -e POSTGRES_PASSWORD=ci -e POSTGRES_DB=revampit_drift -p 54328:5432 pgvector/pgvector:pg17
+PGHOST=localhost PGPORT=54328 PGUSER=postgres PGPASSWORD=ci PGDATABASE=revampit_drift \
+  bash scripts/db/apply-migrations-ci.sh
+```
+
+Production still uses `scripts/db/run-migration.sh` (tracked via `schema_migrations`); the CI script is a **full replay** on an empty database, not the prod runner.
+
 ## TL;DR
 
 | Where | What | Status |

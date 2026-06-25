@@ -8,12 +8,25 @@
 -- Make existing required columns optional so profiles can be auto-created
 -- with minimal data (just user_id + display_name)
 
-ALTER TABLE seller_profiles
-  ALTER COLUMN business_type DROP NOT NULL,
-  ALTER COLUMN address DROP NOT NULL,
-  ALTER COLUMN city DROP NOT NULL,
-  ALTER COLUMN postal_code DROP NOT NULL,
-  ALTER COLUMN phone DROP NOT NULL;
+-- Make existing required columns optional when present (002b schema may omit some)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'seller_profiles' AND column_name = 'business_type') THEN
+    ALTER TABLE seller_profiles ALTER COLUMN business_type DROP NOT NULL;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'seller_profiles' AND column_name = 'address') THEN
+    ALTER TABLE seller_profiles ALTER COLUMN address DROP NOT NULL;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'seller_profiles' AND column_name = 'city') THEN
+    ALTER TABLE seller_profiles ALTER COLUMN city DROP NOT NULL;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'seller_profiles' AND column_name = 'postal_code') THEN
+    ALTER TABLE seller_profiles ALTER COLUMN postal_code DROP NOT NULL;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'seller_profiles' AND column_name = 'phone') THEN
+    ALTER TABLE seller_profiles ALTER COLUMN phone DROP NOT NULL;
+  END IF;
+END $$;
 
 -- Add P2P-specific columns (idempotent)
 ALTER TABLE seller_profiles

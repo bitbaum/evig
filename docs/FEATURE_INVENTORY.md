@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-25
-last_modified_summary: Phase 4 terminology + community visibility; service journey E2E; dynamic ID discovery fix
+last_modified_date: 2026-06-19
+last_modified_summary: Workshop proposal E2E (#61–62); CI migration drift gate (104 migrations on pgvector); idempotent fixes for fresh-DB apply
 ---
 
 # Feature Inventory (SSOT)
@@ -37,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** 209/209 inventory + IT-Hilfe (2026-06-25); marketplace + workshops journeys wired in `test:e2e:inventory:prod`.
+**Last prod run:** 209/209 inventory + IT-Hilfe; marketplace + workshops + service + **workshop proposal** journeys green (2026-06-19).
 
 ---
 
@@ -48,7 +48,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
 | **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Journeys for IT-Hilfe, marketplace, workshops; full Payrexx payment when configured 🟡 |
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke (admin routes); deep CRUD 🟡 |
-| **4** | Cleanup: dead code, terminology, CI, timecard notify | ✅ Techniker SSOT; community visibility; dynamic discovery 🟡 CI auth/migration noise |
+| **4** | Cleanup: dead code, terminology, CI, timecard notify | ✅ Techniker SSOT; community visibility; CI auth + migration drift gates |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
 | **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 209/209 prod |
 
@@ -139,13 +139,13 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 58 | Create workshop | `/admin/workshops/new` | Staff | ✅ inventory E2E |
 | 59 | Workshop instances list | `/admin/workshops/instances` | Staff | ✅ inventory E2E |
 | 60 | Instance detail / edit | `/admin/workshops/instances/[id]` | Staff | ✅ (notification href) |
-| 61 | Proposal review | `/admin/workshops/proposals/[id]` | Staff | ⬜ |
-| 62 | Approve proposal | API approve | Staff | ⬜ |
+| 61 | Proposal review | `/admin/workshops/proposals/[id]` | Staff | ✅ proposal journey E2E |
+| 62 | Approve proposal | API approve | Staff | ✅ proposal journey E2E |
 | 63 | Registrations management | API admin registrations | Staff | ⬜ |
 | 64 | Materials per workshop | API materials | Staff | ⬜ |
 | 65 | Workshop reviews (public) | workshop detail | Public | ⬜ |
 | 66 | Cancel registration | API | User | ✅ workshops journey cleanup |
-| 67 | Notification: proposal approved | → admin workshops | User | 🟡 |
+| 67 | Notification: proposal approved | → admin workshops | User | 🟡 in-app on approve (journey API) |
 
 ---
 
@@ -292,8 +292,8 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | Community techniker `is_verified=false` hidden | Profile invisible | P1 | ✅ Community active profiles public (`technician-visibility.ts`) |
 | Dev `.env.local` pointed at retired cloud DB while prod uses Hetzner | Wrong data during local ops | P0 | ✅ Fixed — Docker 5433 locally; `.env.selfhost.local` → SSH tunnel |
 | Prod vs dev DB drift (butaeff unverified on Hetzner only) | Login failures on prod | P0 | ✅ Fixed ops (verify + password + lockout clear) |
-| Auth smoke CI fails (MissingSecret) | CI noise | P3 | ❌ Open |
-| Migration drift CI (vector ext) | CI noise | P3 | ❌ Open |
+| Auth smoke CI fails (MissingSecret) | CI noise | P3 | ✅ Uses admin dual-persona fallback; skip when no secrets |
+| Migration drift CI (vector ext) | CI noise | P3 | ✅ pgvector/pg17 + `apply-migrations-ci.sh` (104 migrations on fresh DB) |
 | Timecard submit 400 (TIME format) | Submit blocked | P1 | 🟡 Fixed locally |
 | Timecard approver email missing | Approvers not notified | P1 | 🟡 Fixed locally |
 
@@ -303,9 +303,9 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 
 1. **Run dual-persona inventory on every deploy:** automatic via GitHub Actions (`post-deploy-e2e` job) when `AUTH_TEST_USER_PASSWORD` + `AUTH_TEST_ADMIN_PASSWORD` are set; manual: `npm run test:e2e:inventory:prod`.
 2. **Deep journeys** (API + multi-step): workshop register — IT-Hilfe ✅ · marketplace checkout ✅ (`test:e2e:marketplace:journey`; full Payrexx payment when `PAYREXX_INSTANCE` set on prod).
-3. **Phase 4 cleanup** — terminology ✅ · community visibility ✅ · CI auth/migration gates 🟡
+3. **Phase 4 cleanup** — terminology ✅ · community visibility ✅ · CI auth/migration gates ✅
 4. **Expand matrix** — dynamic detail pages: discovery + empty-state fallbacks ✅
 
-**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:service:journey`
+**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

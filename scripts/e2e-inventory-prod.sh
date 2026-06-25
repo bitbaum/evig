@@ -50,3 +50,6 @@ npx playwright test tests/e2e/workshops-journey.spec.ts --project=chromium --rep
 
 echo "=== Service repair appointment journey → ${BASE_URL} ==="
 npx playwright test tests/e2e/service-appointment-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Workshop proposal review journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/workshop-proposal-journey.spec.ts --project=chromium --reporter=line

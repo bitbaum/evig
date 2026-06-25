@@ -35,8 +35,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS trg_prevent_location_approval_update ON location_approvals;
-CREATE TRIGGER trg_prevent_location_approval_update
-  BEFORE UPDATE ON location_approvals
-  FOR EACH ROW
-  EXECUTE FUNCTION prevent_location_approval_update();
+DO $$
+BEGIN
+  IF to_regclass('public.location_approvals') IS NOT NULL THEN
+    DROP TRIGGER IF EXISTS trg_prevent_location_approval_update ON location_approvals;
+    CREATE TRIGGER trg_prevent_location_approval_update
+      BEFORE UPDATE ON location_approvals
+      FOR EACH ROW
+      EXECUTE FUNCTION prevent_location_approval_update();
+  END IF;
+END $$;
