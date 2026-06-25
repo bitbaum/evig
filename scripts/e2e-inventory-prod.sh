@@ -68,3 +68,6 @@ npx playwright test tests/e2e/tasks-journey.spec.ts --project=chromium --reporte
 
 echo "=== Admin protocols staff journey → ${BASE_URL} ==="
 npx playwright test tests/e2e/protocols-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Admin decisions staff journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/decisions-journey.spec.ts --project=chromium --reporter=line
