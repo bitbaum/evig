@@ -37,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** 209/209 inventory + IT-Hilfe; marketplace + workshops + service + **workshop proposal** journeys green (2026-06-19).
+**Last prod run:** 209/209 inventory + journeys green; **intake pipeline journey** green (2026-06-25, commit `3108e859`).
 
 ---
 
@@ -296,6 +296,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | Migration drift CI (vector ext) | CI noise | P3 | ✅ pgvector/pg17 + `apply-migrations-ci.sh` (104 migrations on fresh DB) |
 | Timecard submit 400 (TIME format) | Submit blocked | P1 | ✅ API normalizes HH:MM:SS → HH:MM |
 | Timecard approver email missing | Approvers not notified | P1 | ✅ notifyUsers on submit (journey E2E) |
+| Intake detail crash after publish (`selling_price_chf.toFixed`) | Published device detail 500 | P1 | ✅ Number() coerce in IntakeDetailView |
 
 ---
 
