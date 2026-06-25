@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-25
-last_modified_summary: Database SSOT cleanup; user/admin E2E smoke; inventory status refresh
+last_modified_summary: Dual-persona inventory E2E (186 routes, user + admin on prod)
 ---
 
 # Feature Inventory (SSOT)
@@ -19,7 +19,25 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 **Architecture note (not a violation):** IT-Hilfe (`it_hilfe_requests`), Workshops (registrations), and Service appointments (`service_appointments`) are **separate domains**. The SSOT violation that was fixed: duplicate `/dashboard/appointments` vs `/dashboard/bookings` for the same `service_appointments` entity.
 
-**Route SSOT:** `src/config/service-appointments.ts` · Notification hrefs: `src/config/notifications.ts`
+**Route SSOT:** `src/config/routes.ts` · Notification hrefs: `src/config/notifications.ts`
+
+**Dual-persona E2E (how we verify):** Every navigable surface is smoke-tested from **both accounts**:
+
+| Persona | Account | Checks |
+|---------|---------|--------|
+| **User** | `butaeff@gmail.com` (non-admin) | Dashboard, public pages, IT-Hilfe/marketplace/workshops — **must be blocked from `/admin/*`** |
+| **Admin** | `georgy.butaev@revamp-it.ch` (super-admin) | All admin routes **plus** the same user + public routes |
+
+```bash
+PLAYWRIGHT_BASE_URL=https://revampit.orangecat.ch \
+AUTH_TEST_USER_EMAIL=butaeff@gmail.com AUTH_TEST_USER_PASSWORD='…' \
+AUTH_TEST_ADMIN_EMAIL=georgy.butaev@revamp-it.ch AUTH_TEST_ADMIN_PASSWORD='…' \
+npm run test:e2e:inventory
+```
+
+Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
+
+**Last prod run:** 186/186 passed (2026-06-25).
 
 ---
 
@@ -28,10 +46,11 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | Phase | Scope | Status |
 |-------|-------|--------|
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
-| **2** | IT-Hilfe, marketplace, workshops, services E2E | 🟡 IT-Hilfe specs exist; marketplace/workshops not systematic |
-| **3** | Staff: protocols, tasks, decisions, intake, CMS | ⬜ Not started |
-| **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Local (timecard + Playwright infra uncommitted) |
-| **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done locally (`.env.local` → Docker 5433; ops → SSH tunnel) |
+| **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Inventory smoke (186 routes); journey/API flows 🟡 |
+| **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke (admin routes); deep CRUD 🟡 |
+| **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Terminology + CI open |
+| **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
+| **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 186/186 prod |
 
 ---
 
@@ -39,18 +58,18 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route / API | Status |
 |---|---------|-------------|--------|
-| 1 | Register | `/auth/register` | ⬜ |
-| 2 | Login (credentials) | `/auth/login` | ✅ (prod E2E both accounts) |
-| 3 | Email verification | `/auth/verify-email`, `/api/auth/verify-code` | 🟡 (butaeff was unverified on Hetzner — fixed ops) |
-| 4 | Forgot / reset password | `/auth/forgot-password` | 🟡 (SMTP 503 fix local) |
+| 1 | Register | `/auth/register` | ✅ inventory E2E |
+| 2 | Login (credentials) | `/auth/login` | ✅ |
+| 3 | Email verification | `/auth/verify-email`, `/api/auth/verify-code` | 🟡 page exists; code flow not E2E |
+| 4 | Forgot / reset password | `/auth/forgot-password` | ✅ inventory E2E |
 | 5 | Logout | session | ✅ |
-| 6 | Profile (personal) | `/dashboard/profile` | ✅ (user E2E) |
-| 7 | Settings (notifications, privacy) | `/dashboard/settings` | ⬜ |
-| 8 | Export my data (GDPR) | `/api/user/export-data` | ⬜ |
-| 9 | Onboarding checklist | `/dashboard` (OnboardingChecklist) | ⬜ |
-| 10 | Invite friends / referral | `/invite`, `/api/referral/invite` | ⬜ |
-| 11 | Membership application | `/mitglied-werden`, `/dashboard/membership` | ⬜ |
-| 12 | Staff vs user same login | `/dashboard` + `/admin` | ✅ (user blocked from `/admin`; admin full access) |
+| 6 | Profile (personal) | `/dashboard/profile` | ✅ |
+| 7 | Settings (notifications, privacy) | `/dashboard/settings` | ✅ inventory E2E |
+| 8 | Export my data (GDPR) | `/api/user/export-data` | ⬜ API-only |
+| 9 | Onboarding checklist | `/dashboard` (OnboardingChecklist) | ✅ inventory E2E |
+| 10 | Invite friends / referral | `/invite`, `/api/referral/invite` | ✅ page; API ⬜ |
+| 11 | Membership application | `/mitglied-werden`, `/dashboard/membership` | ✅ inventory E2E |
+| 12 | Staff vs user same login | `/dashboard` + `/admin` | ✅ user blocked from all admin routes |
 
 ---
 
@@ -70,14 +89,14 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | 🟡 (journey E2E API) |
 | 23 | Accept / decline offer | API offers accept/decline | Owner | 🟡 (journey E2E accept) |
 | 24 | Withdraw offer | API | Techniker | ⬜ |
-| 25 | My requests | `/it-hilfe/my` | Requester | ⬜ |
-| 26 | My offers | `/it-hilfe/my/offers` | Techniker | ⬜ |
+| 25 | My requests | `/it-hilfe/my` | Requester | ✅ inventory E2E |
+| 26 | My offers | `/it-hilfe/my/offers` | Techniker | ✅ inventory E2E |
 | 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ⬜ |
 | 28 | Technician directory | `/it-hilfe/techniker` | Public | ✅ (E2E list load) |
 | 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | ⬜ |
 | 30 | Technician self-service profile | `/profil/techniker` | Techniker | ✅ (user + admin E2E) |
 | 31 | Completeness banner | profil + anfragen | Techniker | ⬜ |
-| 32 | Dashboard techniker overview | `/dashboard/techniker` | Techniker | ⬜ |
+| 32 | Dashboard techniker overview | `/dashboard/techniker` | Techniker | ✅ inventory E2E |
 | 33 | Reviews after completion | API confirm-review | Both | 🟡 (journey E2E review) |
 | 34 | Notifications (new offer, match, etc.) | bell → `/it-hilfe/[id]` | Both | ✅ |
 | 35 | Admin IT-Hilfe moderation | `/admin/it-hilfe` | Staff | ✅ (admin E2E) |
@@ -91,18 +110,18 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 |---|---------|-------|--------|
 | 37 | Browse listings | `/marketplace` | ✅ |
 | 38 | Listing detail | `/marketplace/[id]` | ⬜ |
-| 39 | Search (Meilisearch) | `/marketplace?search=` | ⬜ |
-| 40 | Cart | `/marketplace/cart` | 🟡 |
-| 41 | Checkout (Payrexx) | `/marketplace/checkout/[listingId]` | 🟡 (payment return banner) |
-| 42 | Create / edit listing | `/marketplace/sell` | ⬜ |
-| 43 | My listings | `/dashboard/listings` | ⬜ |
-| 44 | Seller dashboard | `/dashboard/seller` | ⬜ |
-| 45 | My orders (buyer) | `/dashboard/orders`, `/dashboard/orders/[id]` | ⬜ |
-| 46 | Favorites | `/dashboard/favorites` | ⬜ |
-| 47 | Seller public page | `/sellers/[id]` | ⬜ |
-| 48 | Listing reports | API | ⬜ |
-| 49 | Admin marketplace moderation | `/admin/marketplace` | ⬜ |
-| 50 | Legacy `/shop/*` redirects | → marketplace | ⬜ |
+| 39 | Search (Meilisearch) | `/marketplace?search=` | ✅ inventory E2E |
+| 40 | Cart | `/marketplace/cart` | ✅ inventory E2E |
+| 41 | Checkout (Payrexx) | `/marketplace/checkout/[listingId]` | 🟡 dynamic when listing exists |
+| 42 | Create / edit listing | `/marketplace/sell` | ✅ inventory E2E |
+| 43 | My listings | `/dashboard/listings` | ✅ inventory E2E |
+| 44 | Seller dashboard | `/dashboard/seller` | ✅ inventory E2E |
+| 45 | My orders (buyer) | `/dashboard/orders`, `/dashboard/orders/[id]` | ✅ list; detail dynamic 🟡 |
+| 46 | Favorites | `/dashboard/favorites` | ✅ inventory E2E |
+| 47 | Seller public page | `/sellers/[id]` | 🟡 dynamic when seller exists |
+| 48 | Listing reports | API | ⬜ API-only |
+| 49 | Admin marketplace moderation | `/admin/marketplace` | ✅ inventory E2E |
+| 50 | Legacy `/shop/*` redirects | → marketplace | ✅ inventory E2E |
 
 ---
 
@@ -110,15 +129,15 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Actor | Status |
 |---|---------|-------|-------|--------|
-| 51 | Workshop catalog | `/workshops` | Public | ⬜ |
-| 52 | Workshop detail + instances | `/workshops/[slug]` | Public | ⬜ |
-| 53 | Register (free) | `/api/workshops/register` | User | ⬜ |
+| 51 | Workshop catalog | `/workshops` | Public | ✅ inventory E2E |
+| 52 | Workshop detail + instances | `/workshops/[slug]` | Public | 🟡 dynamic when workshop exists |
+| 53 | Register (free) | `/api/workshops/register` | User | ⬜ API-only |
 | 54 | Register with payment | `/api/workshops/[slug]/register-with-payment` | User | 🟡 |
-| 55 | My workshops | `/dashboard/workshops` | User | ⬜ |
-| 56 | Propose a workshop | `/workshops/propose` | User | ⬜ |
-| 57 | Admin workshop templates | `/admin/workshops` | Staff | ⬜ |
-| 58 | Create workshop | `/admin/workshops/new` | Staff | ⬜ |
-| 59 | Workshop instances list | `/admin/workshops/instances` | Staff | ⬜ |
+| 55 | My workshops | `/dashboard/workshops` | User | ✅ inventory E2E |
+| 56 | Propose a workshop | `/workshops/propose` | User | ✅ inventory E2E |
+| 57 | Admin workshop templates | `/admin/workshops` | Staff | ✅ inventory E2E |
+| 58 | Create workshop | `/admin/workshops/new` | Staff | ✅ inventory E2E |
+| 59 | Workshop instances list | `/admin/workshops/instances` | Staff | ✅ inventory E2E |
 | 60 | Instance detail / edit | `/admin/workshops/instances/[id]` | Staff | ✅ (notification href) |
 | 61 | Proposal review | `/admin/workshops/proposals/[id]` | Staff | ⬜ |
 | 62 | Approve proposal | API approve | Staff | ⬜ |
@@ -134,10 +153,10 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
-| 68 | Services landing | `/services` | ⬜ |
-| 69 | Service category pages | `/services/[service]` | ⬜ |
-| 70 | Book repair for device type | `/services/[service]/repair` | ⬜ |
-| 71 | Open-source solutions subsite | `/services/open-source-solutions` | ⬜ |
+| 68 | Services landing | `/services` | ✅ inventory E2E |
+| 69 | Service category pages | `/services/[service]` | ✅ inventory E2E |
+| 70 | Book repair for device type | `/services/[service]/repair` | 🟡 not in matrix yet |
+| 71 | Open-source solutions subsite | `/services/open-source-solutions` | ✅ inventory E2E |
 | 72 | Book via repairer profile | `/api/repairers/[id]/book` | 🟡 Legacy API |
 | 73 | Repairer availability | `/api/repairers/[id]/availability` | ⬜ |
 | 74 | Repairer ratings | `/api/repairers/[id]/ratings` | ⬜ |
@@ -146,7 +165,7 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | 77 | Pay for appointment | `/api/appointments/[id]/pay` | ✅ (return banner) |
 | 78 | My appointments (list) | `/dashboard/appointments` | ✅ (user E2E) |
 | 79 | Appointment detail | `/dashboard/appointments/[id]` | ✅ (was ❌ 404) |
-| 80 | Repairer view appointments | `/dashboard/appointments?role=repairer` | ⬜ |
+| 80 | Repairer view appointments | `/dashboard/appointments?role=repairer` | ✅ inventory E2E |
 | 81 | Inline edit/cancel on list | appointments page | ⬜ |
 | 82 | My bookings (alternate UI) | `/dashboard/bookings` | ✅ → redirects to appointments |
 | 83 | Booking detail | `/dashboard/bookings/[id]` | ✅ → redirects to appointments |
@@ -154,7 +173,7 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | 85 | Admin appointments queue | `/admin/appointments` | ✅ (admin E2E) |
 | 86 | Admin appointment detail | `/admin/appointments/[id]` | ✅ (was ❌ 404) |
 | 87 | Assign repairer to appointment | API assign | ⬜ |
-| 88 | Repairer applications | `/admin/repairer-applications` | ⬜ |
+| 88 | Repairer applications | `/admin/repairer-applications` | ✅ inventory E2E |
 | 89 | Orphan paid booking UI | `components/payments/service-booking/` | ✅ Removed |
 | 90 | Orphan book-with-payment API | `/api/appointments/book-with-payment` | ✅ Removed |
 
@@ -176,9 +195,9 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
-| 96 | Decisions list (dashboard) | `/dashboard/decisions` | ⬜ |
-| 97 | Decision detail + vote | `/dashboard/decisions/[id]` | ⬜ |
-| 98 | Admin decisions CRUD | `/admin/decisions/*` | ⬜ |
+| 96 | Decisions list (dashboard) | `/dashboard/decisions` | ✅ inventory E2E |
+| 97 | Decision detail + vote | `/dashboard/decisions/[id]` | 🟡 dynamic |
+| 98 | Admin decisions CRUD | `/admin/decisions/*` | ✅ list + new; detail dynamic 🟡 |
 | 99 | Voting (standalone system) | API `decisions/*` | ⬜ |
 | 100 | Create task from decision | API | ⬜ |
 
@@ -188,26 +207,26 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
-| 101 | Blog index | `/blog` | ⬜ |
-| 102 | Blog post | `/blog/[slug]` | ⬜ |
-| 103 | Submit blog post | `/blog/submit` | ⬜ |
-| 104 | My submissions | `/dashboard/blog-submissions` | ⬜ |
-| 105 | Admin blog CMS | `/admin/content/blog/*` | ⬜ |
-| 106 | Static pages CMS | `/admin/content/pages/*` | ⬜ |
-| 107 | Categories | `/admin/content/categories/*` | ⬜ |
-| 108 | Media library | `/admin/content/media` | ⬜ |
-| 109 | Content submissions queue | `/admin/content/submissions` | ⬜ |
-| 110 | Approvals hub | `/admin/approvals` | ⬜ |
-| 111 | Reviews moderation | `/admin/reviews` | ⬜ |
-| 112 | Donate hardware | `/get-involved/donate` | ⬜ |
-| 113 | My donations | `/dashboard/donations` | ⬜ |
-| 114 | Admin donations | `/admin/donations` | ⬜ |
-| 115 | Projects (admin) | `/admin/projects`, `[slug]` | ⬜ |
-| 116 | Upcycling mini-site | `/projects/upcycling/*` | ⬜ |
-| 117 | Get involved pages | `/get-involved/*` | ⬜ |
-| 118 | Legal pages | impressum, datenschutz, agb, transparenz | ⬜ |
-| 119 | FAQ, contact, support | `/faq`, `/contact`, `/support` | ⬜ |
-| 120 | Changelog | `/changelog` | ⬜ |
+| 101 | Blog index | `/blog` | ✅ inventory E2E |
+| 102 | Blog post | `/blog/[slug]` | 🟡 dynamic |
+| 103 | Submit blog post | `/blog/submit` | ✅ inventory E2E |
+| 104 | My submissions | `/dashboard/blog-submissions` | ✅ inventory E2E |
+| 105 | Admin blog CMS | `/admin/content/blog/*` | ✅ inventory E2E |
+| 106 | Static pages CMS | `/admin/content/pages/*` | ✅ inventory E2E |
+| 107 | Categories | `/admin/content/categories/*` | ✅ inventory E2E |
+| 108 | Media library | `/admin/content/media` | ✅ inventory E2E |
+| 109 | Content submissions queue | `/admin/content/submissions` | ✅ inventory E2E |
+| 110 | Approvals hub | `/admin/approvals` | ✅ inventory E2E |
+| 111 | Reviews moderation | `/admin/reviews` | ✅ inventory E2E |
+| 112 | Donate hardware | `/get-involved/donate` | ✅ inventory E2E |
+| 113 | My donations | `/dashboard/donations` | ✅ inventory E2E |
+| 114 | Admin donations | `/admin/donations` | ✅ inventory E2E |
+| 115 | Projects (admin) | `/admin/projects`, `[slug]` | ✅ list; slug dynamic 🟡 |
+| 116 | Upcycling mini-site | `/projects/upcycling/*` | ⬜ not in matrix |
+| 117 | Get involved pages | `/get-involved/*` | ✅ donate path |
+| 118 | Legal pages | impressum, datenschutz, agb, transparenz | ✅ inventory E2E |
+| 119 | FAQ, contact, support | `/faq`, `/contact`, `/support` | ✅ inventory E2E |
+| 120 | Changelog | `/changelog` | ✅ inventory E2E |
 | 121 | Newsletter subscribe | API | ⬜ |
 
 ---
@@ -217,27 +236,27 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
 | 122 | Admin dashboard | `/admin` | ✅ (admin E2E) |
-| 123 | Device intake / Erfassung | `/admin/erfassung` | ⬜ |
-| 124 | Products / inventory | `/admin/products`, factsheet | ⬜ |
-| 125 | Intake pipeline | `/admin/intake` | ⬜ |
-| 126 | Locations | `/admin/locations/*` | ⬜ |
-| 127 | Admin services config | `/admin/services/*` | ⬜ |
-| 128 | Tasks + projects | `/admin/tasks/*` | ⬜ |
-| 129 | Protocols (AI meeting notes) | `/admin/protocols/*` | ⬜ |
-| 130 | Team HR | `/admin/team/*` | ⬜ |
-| 131 | Team approvals | `/admin/team/approvals` | 🟡 (timecard review href) |
-| 132 | Users admin | `/admin/users/[id]` | ✅ (admin list E2E) |
-| 133 | Membership approvals | `/admin/membership` | ⬜ |
-| 134 | Timecards (staff submit) | `/dashboard/timecards` | ✅ (admin E2E) |
-| 135 | Timecards (admin queue) | `/admin/timecards` | ✅ (admin E2E) |
-| 136 | Shift view | `/dashboard/shift` | ⬜ |
-| 137 | Time off requests | API `time-off/*` | 🟡 |
-| 138 | Payroll | `/admin/payroll` | ⬜ |
-| 139 | Analytics | `/admin/analytics` | ⬜ |
-| 140 | Analyse | `/admin/analyse/*` | ⬜ |
-| 141 | Hirn AI admin | `/admin/hirn` | ⬜ |
-| 142 | Settings | `/admin/settings` | ⬜ |
-| 143 | Permission requests | admin team help | ⬜ |
+| 123 | Device intake / Erfassung | `/admin/erfassung` | ✅ inventory E2E |
+| 124 | Products / inventory | `/admin/products`, factsheet | ✅ list; detail dynamic 🟡 |
+| 125 | Intake pipeline | `/admin/intake` | ✅ inventory E2E |
+| 126 | Locations | `/admin/locations/*` | ✅ inventory E2E |
+| 127 | Admin services config | `/admin/services/*` | ✅ inventory E2E |
+| 128 | Tasks + projects | `/admin/tasks/*` | ✅ inventory E2E |
+| 129 | Protocols (AI meeting notes) | `/admin/protocols/*` | ✅ inventory E2E |
+| 130 | Team HR | `/admin/team/*` | ✅ inventory E2E |
+| 131 | Team approvals | `/admin/team/approvals` | ✅ inventory E2E |
+| 132 | Users admin | `/admin/users/[id]` | ✅ list; detail dynamic 🟡 |
+| 133 | Membership approvals | `/admin/membership` | ✅ inventory E2E |
+| 134 | Timecards (staff submit) | `/dashboard/timecards` | ✅ inventory E2E |
+| 135 | Timecards (admin queue) | `/admin/timecards` | ✅ inventory E2E |
+| 136 | Shift view | `/dashboard/shift` | ✅ inventory E2E |
+| 137 | Time off requests | API `time-off/*` | 🟡 API-only |
+| 138 | Payroll | `/admin/payroll` | ✅ inventory E2E |
+| 139 | Analytics | `/admin/analytics` | ✅ inventory E2E |
+| 140 | Analyse | `/admin/analyse/*` | ✅ inventory E2E |
+| 141 | Hirn AI admin | `/admin/hirn` | ✅ inventory E2E |
+| 142 | Settings | `/admin/settings` | ✅ inventory E2E |
+| 143 | Permission requests | admin team help | ✅ inventory E2E |
 
 ---
 
@@ -282,12 +301,11 @@ Living inventory of RevampIT product surfaces. Use this to track audit progress,
 
 ## Recommended test order (next)
 
-1. **Commit + deploy** uncommitted work: timecards, Playwright (`user-admin-flows`, auth helper), DB SSOT docs/env fixes, migration 094 if not on prod.
-2. **Phase 2 — IT-Hilfe journey** (#18–27): `npm run test:e2e:it-hilfe` with two distinct accounts.
-3. **Phase 2 — Marketplace + workshops** (#37–67): cart, checkout, workshop register smoke matrix.
-4. **Phase 3 — Staff surfaces** (#122–143 except done): protocols, tasks, decisions, erfassung.
-5. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified` visibility (#273).
+1. **Run dual-persona inventory on every deploy:** `npm run test:e2e:inventory` (186 routes, user + admin).
+2. **Deep journeys** (API + multi-step): IT-Hilfe offer/accept (#22–23), marketplace checkout payment, workshop register.
+3. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified`.
+4. **Expand matrix** — dynamic detail pages (#38, #52, #79, #86), `/services/*/repair`, upcycling subsite.
 
-**E2E commands:** `npm run test:e2e:user-admin` · `npm run test:e2e:it-hilfe` · `npm run test:e2e:auth`
+**E2E commands:** `npm run test:e2e:inventory` · `npm run test:e2e:it-hilfe` · `npm run test:e2e:user-admin` · `npm run test:e2e:auth`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

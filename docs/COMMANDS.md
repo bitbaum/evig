@@ -73,7 +73,8 @@ npm run test:watch     # Jest watch mode
 npm run test:coverage  # Jest with coverage
 npm run test:e2e       # Playwright E2E tests
 npm run test:e2e:auth  # Auth login smoke (needs AUTH_TEST_EMAIL/PASSWORD)
-npm run test:e2e:user-admin  # User + admin flow smoke (prod or local)
+npm run test:e2e:inventory # Dual-persona feature inventory (user + admin)
+npm run test:e2e:user-admin # Legacy quick smoke (subset)
 npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
 npm run test:e2e:ui    # Playwright with UI
 npm run test:all       # Run all tests
