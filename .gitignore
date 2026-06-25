@@ -114,6 +114,7 @@ public/uploads/
 *.sh
 !scripts/selfhost-deploy-revampit.sh
 !scripts/e2e-inventory-prod.sh
+!scripts/db/apply-migrations-ci.sh
 ship
 cookies.txt
 daten/
