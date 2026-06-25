@@ -43,6 +43,7 @@
     "test:e2e:it-hilfe": "playwright test tests/e2e/it-hilfe.spec.ts",
     "test:e2e:user-admin": "playwright test tests/e2e/user-admin-flows.spec.ts",
     "test:e2e:inventory": "playwright test tests/e2e/feature-inventory.spec.ts",
+    "test:e2e:inventory:prod": "bash scripts/e2e-inventory-prod.sh",
     "test:e2e:ui": "playwright test --ui",
     "test:all": "npm run test && npm run test:e2e",
     "deploy": "bash scripts/selfhost-deploy-revampit.sh",

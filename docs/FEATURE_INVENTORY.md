@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-25
-last_modified_summary: Dual-persona inventory E2E (186 routes, user + admin on prod)
+last_modified_date: 2026-06-19
+last_modified_summary: Post-deploy + CI wiring for dual-persona inventory E2E
 ---
 
 # Feature Inventory (SSOT)
@@ -48,7 +48,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | **1** | Appointment 404s, bookings redirect, notification hrefs | ✅ Done (deployed `9dcd3ab3`) |
 | **2** | IT-Hilfe, marketplace, workshops, services E2E | ✅ Inventory smoke (186 routes); journey/API flows 🟡 |
 | **3** | Staff: protocols, tasks, decisions, intake, CMS | ✅ Inventory smoke (admin routes); deep CRUD 🟡 |
-| **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Terminology + CI open |
+| **4** | Cleanup: dead code, terminology, CI, timecard notify | 🟡 Terminology open; CI inventory wired (needs secrets) |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
 | **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 186/186 prod |
 
@@ -301,7 +301,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 
 ## Recommended test order (next)
 
-1. **Run dual-persona inventory on every deploy:** `npm run test:e2e:inventory` (186 routes, user + admin).
+1. **Run dual-persona inventory on every deploy:** automatic via GitHub Actions (`post-deploy-e2e` job) when `AUTH_TEST_USER_PASSWORD` + `AUTH_TEST_ADMIN_PASSWORD` are set; manual: `npm run test:e2e:inventory:prod`.
 2. **Deep journeys** (API + multi-step): IT-Hilfe offer/accept (#22–23), marketplace checkout payment, workshop register.
 3. **Phase 4 cleanup** — terminology (Techniker vs Reparateur), CI auth/migration gates, community `is_verified`.
 4. **Expand matrix** — dynamic detail pages (#38, #52, #79, #86), `/services/*/repair`, upcycling subsite.

@@ -74,6 +74,7 @@ npm run test:coverage  # Jest with coverage
 npm run test:e2e       # Playwright E2E tests
 npm run test:e2e:auth  # Auth login smoke (needs AUTH_TEST_EMAIL/PASSWORD)
 npm run test:e2e:inventory # Dual-persona feature inventory (user + admin)
+npm run test:e2e:inventory:prod # Same, with prod health wait (CI / post-deploy)
 npm run test:e2e:user-admin # Legacy quick smoke (subset)
 npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
 npm run test:e2e:ui    # Playwright with UI
@@ -102,6 +103,13 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 |--------|--------|
 | `HETZNER_SSH_PRIVATE_KEY` | Private key for `ubuntu@167.233.22.31` |
 | `SELFHOST_ENV` | Full contents of `.env.selfhost.local` |
+| `AUTH_TEST_USER_PASSWORD` | Non-admin E2E account (`butaeff@gmail.com`) — post-deploy + CI inventory |
+| `AUTH_TEST_ADMIN_PASSWORD` | Staff E2E account (`georgy.butaev@revamp-it.ch`) — post-deploy + CI inventory |
+| `AUTH_TEST_USER_EMAIL` | Optional override for user persona (defaults to butaeff) |
+| `AUTH_TEST_ADMIN_EMAIL` | Optional override for admin persona (defaults to georgy) |
+| `AUTH_TEST_EMAIL` / `AUTH_TEST_PASSWORD` | Legacy single-account auth smoke (`test:e2e:auth`) |
+
+After each successful deploy, **Dual-persona inventory smoke** runs automatically when the two password secrets are set (186 routes, user + admin). Manual re-run: `npm run test:e2e:inventory:prod`.
 
 ### Manual
 
@@ -150,5 +158,5 @@ npm run prod:down      # Stop production containers
 ---
 
 **Last Updated**: 2026-06-19  
-**Last Modified Summary**: Corrected stale Neon/Vercel references; push-to-deploy via GitHub Actions → self-hosted Hetzner.  
+**Last Modified Summary**: Post-deploy dual-persona inventory in GitHub Actions; E2E secret docs.  
 **Source**: `package.json`
