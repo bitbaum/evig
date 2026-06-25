@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-19
-last_modified_summary: Protocols staff journey E2E (JSON import → finalize); tasks + intake journeys
+last_modified_date: 2026-06-25
+last_modified_summary: Dependabot security bumps (nodemailer 9, Sentry/OTel, js-yaml, cms-core uuid)
 ---
 
 # Feature Inventory (SSOT)
@@ -297,6 +297,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | Timecard submit 400 (TIME format) | Submit blocked | P1 | ✅ API normalizes HH:MM:SS → HH:MM |
 | Timecard approver email missing | Approvers not notified | P1 | ✅ notifyUsers on submit (journey E2E) |
 | Intake detail crash after publish (`selling_price_chf.toFixed`) | Published device detail 500 | P1 | ✅ Number() coerce in IntakeDetailView |
+| Dependabot open alerts (nodemailer, OTel, js-yaml, cms-core uuid) | Supply-chain risk | P2 | ✅ Bumped deps + npm overrides (`npm audit` 0) |
 
 ---
 
