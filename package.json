@@ -48,6 +48,7 @@
     "test:e2e:timecards:journey": "playwright test tests/e2e/timecard-journey.spec.ts",
     "test:e2e:intake:journey": "playwright test tests/e2e/intake-journey.spec.ts",
     "test:e2e:tasks:journey": "playwright test tests/e2e/tasks-journey.spec.ts",
+    "test:e2e:protocols:journey": "playwright test tests/e2e/protocols-journey.spec.ts",
     "test:e2e:it-hilfe:preferred:journey": "playwright test tests/e2e/it-hilfe-preferred-technician-journey.spec.ts",
     "test:e2e:service:journey": "playwright test tests/e2e/service-appointment-journey.spec.ts",
     "test:e2e:user-admin": "playwright test tests/e2e/user-admin-flows.spec.ts",
