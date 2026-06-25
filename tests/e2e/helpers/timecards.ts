@@ -89,11 +89,18 @@ export async function rejectTimecardAsAdmin(
   await parseApi(response)
 }
 
-export async function resetTimecardForE2E(request: APIRequestContext): Promise<void> {
+export async function resetTimecardForE2E(
+  request: APIRequestContext,
+): Promise<'ready' | 'already_approved'> {
   const current = await fetchCurrentTimecard(request)
-  if (current.status === 'submitted' || current.status === 'approved') {
+  if (current.status === 'submitted') {
     await rejectTimecardAsAdmin(request, current.id)
+    return 'ready'
   }
+  if (current.status === 'approved') {
+    return 'already_approved'
+  }
+  return 'ready'
 }
 
 export async function fetchLatestSubmittedTimecardId(

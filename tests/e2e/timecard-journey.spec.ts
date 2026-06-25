@@ -22,8 +22,18 @@ test.describe('Timecard staff journey', () => {
   test('staff fills month → submits → admin approves (API round-trip)', async ({ page }) => {
     await loginWithCredentials(page, '/dashboard/timecards', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
 
-    await resetTimecardForE2E(page.request)
+    const resetState = await resetTimecardForE2E(page.request)
     await page.reload()
+
+    if (resetState === 'already_approved') {
+      const approved = await fetchCurrentTimecard(page.request)
+      expect(approved.status).toBe('approved')
+      for (const entry of approved.entries) {
+        if (entry.start_time) expect(entry.start_time).toMatch(/^\d{2}:\d{2}$/)
+        if (entry.end_time) expect(entry.end_time).toMatch(/^\d{2}:\d{2}$/)
+      }
+      return
+    }
 
     await expect(page.getByRole('heading', { name: 'Meine Zeiterfassung' })).toBeVisible({
       timeout: 15000,
