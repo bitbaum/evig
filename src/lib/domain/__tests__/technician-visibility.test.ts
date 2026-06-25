@@ -2,8 +2,11 @@
  * Tests for lib/domain/technician-visibility.ts
  */
 
-import { technicianListConditionsForTier } from '@/lib/domain/technician-visibility'
-import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import {
+  canAcceptDirectItHilfeRequest,
+  technicianListConditionsForTier,
+} from '@/lib/domain/technician-visibility'
+import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
@@ -36,5 +39,37 @@ describe('technicianListConditionsForTier', () => {
   it('returns professional verified+active conditions', () => {
     const conditions = technicianListConditionsForTier(REPAIRER_PROFILE_TIER.PROFESSIONAL)
     expect(conditions).toHaveLength(4)
+  })
+})
+
+describe('canAcceptDirectItHilfeRequest', () => {
+  it('allows active community profiles without is_verified', () => {
+    expect(
+      canAcceptDirectItHilfeRequest({
+        isActive: true,
+        profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
+        isVerified: false,
+        status: REPAIRER_STATUS.PENDING,
+      }),
+    ).toBe(true)
+  })
+
+  it('requires verified active professional profiles', () => {
+    expect(
+      canAcceptDirectItHilfeRequest({
+        isActive: true,
+        profileTier: REPAIRER_PROFILE_TIER.PROFESSIONAL,
+        isVerified: true,
+        status: REPAIRER_STATUS.ACTIVE,
+      }),
+    ).toBe(true)
+    expect(
+      canAcceptDirectItHilfeRequest({
+        isActive: true,
+        profileTier: REPAIRER_PROFILE_TIER.PROFESSIONAL,
+        isVerified: false,
+        status: REPAIRER_STATUS.ACTIVE,
+      }),
+    ).toBe(false)
   })
 })

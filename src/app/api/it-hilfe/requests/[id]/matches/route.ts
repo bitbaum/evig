@@ -13,6 +13,7 @@ import { logger } from '@/lib/logger'
 import { getCategoryById, MATCH_SCORES, BUDGET_TIER } from '@/config/it-hilfe'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql'
+import { publicTechnicianListCondition } from '@/lib/domain/technician-visibility'
 
 interface RequestData {
   id: string
@@ -185,11 +186,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
       .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(and(
-        eq(repairerProfiles.isActive, true),
-        eq(repairerProfiles.isVerified, true),
         ne(repairerProfiles.userId, requestData.requesterId),
         tierFilter,
         skillOrPreferred,
+        publicTechnicianListCondition(),
       ))
       .groupBy(
         repairerProfiles.id,

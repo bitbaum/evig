@@ -79,6 +79,8 @@ npm run test:e2e:user-admin # Legacy quick smoke (subset)
 npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
 npm run test:e2e:marketplace:journey # User sells, admin buys (Payrexx when configured)
 npm run test:e2e:workshops:proposal:journey # User proposes, admin approve/reject
+npm run test:e2e:timecards:journey          # Staff submit + admin approve (TIME round-trip)
+npm run test:e2e:it-hilfe:preferred:journey # Request with preferred techniker
 npm run test:e2e:service:journey # User books repair, admin assigns techniker (dual-persona)
 npm run test:e2e:ui    # Playwright with UI
 npm run test:all       # Run all tests

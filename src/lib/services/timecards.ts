@@ -14,6 +14,7 @@ import {
   parseWeeklySchedule,
   type WeeklySchedule,
 } from '@/lib/team/schedule'
+import { normalizeTimeToHHMM } from '@/lib/team/timecard-utils'
 import {
   timecardPeriodQuerySchema,
   timecardSaveSchema,
@@ -147,8 +148,8 @@ async function fetchTimecardWithEntries(client: TimecardDbClient, timecardId: st
     timecard_id: entry.timecard_id,
     user_id: entry.user_id,
     work_date: entry.work_date,
-    start_time: entry.start_time ?? null,
-    end_time: entry.end_time ?? null,
+    start_time: normalizeTimeToHHMM(entry.start_time) ?? null,
+    end_time: normalizeTimeToHHMM(entry.end_time) ?? null,
     break_minutes: entry.break_minutes ?? 0,
     duration_minutes: entry.duration_minutes,
     category: entry.category,

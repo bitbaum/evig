@@ -57,6 +57,8 @@ export async function expectAdminRouteBlocked(page: Page, path: string): Promise
 
 export interface DynamicSmokeIds {
   listingId?: string
+  orderId?: string
+  sellerId?: string
   itHilfeRequestId?: string
   technicianProfileId?: string
   workshopSlug?: string
@@ -94,6 +96,8 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
     if (listings.ok()) {
       const row = firstApiRow(await listings.json(), ['items', 'listings'])
       if (row?.id) ids.listingId = String(row.id)
+      const seller = row?.seller_id ?? row?.sellerId
+      if (seller) ids.sellerId = String(seller)
     }
   } catch {
     /* optional */
@@ -112,9 +116,21 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
   try {
     const tech = await page.request.get('/api/technicians?limit=1')
     if (tech.ok()) {
-      const row = firstApiRow(await tech.json(), ['technicians'])
-      const id = row?.id ?? row?.profileId
-      if (id) ids.technicianProfileId = String(id)
+      const body = (await tech.json()) as { data?: { technicians?: Array<{ id?: string }> } }
+      const row = body.data?.technicians?.[0]
+      if (row?.id) ids.technicianProfileId = String(row.id)
+    }
+  } catch {
+    /* optional */
+  }
+
+  try {
+    const orders = await page.request.get('/api/marketplace/orders?limit=1')
+    if (orders.ok()) {
+      const row = firstApiRow(await orders.json(), ['items'])
+      if (row?.id) ids.orderId = String(row.id)
+      const seller = row?.seller_id ?? row?.sellerId
+      if (seller) ids.sellerId = String(seller)
     }
   } catch {
     /* optional */
@@ -158,6 +174,36 @@ export async function discoverDynamicIds(page: Page): Promise<DynamicSmokeIds> {
     if (blog.ok()) {
       const row = firstApiRow(await blog.json(), ['posts'])
       if (row?.slug) ids.blogSlug = String(row.slug)
+    }
+  } catch {
+    /* optional */
+  }
+
+  try {
+    const users = await page.request.get('/api/admin/users?limit=1')
+    if (users.ok()) {
+      const row = firstApiRow(await users.json(), ['users', 'items'])
+      if (row?.id) ids.adminUserId = String(row.id)
+    }
+  } catch {
+    /* optional */
+  }
+
+  try {
+    const decisions = await page.request.get('/api/decisions?limit=1')
+    if (decisions.ok()) {
+      const row = firstApiRow(await decisions.json(), ['decisions', 'items'])
+      if (row?.id) ids.adminDecisionId = String(row.id)
+    }
+  } catch {
+    /* optional */
+  }
+
+  try {
+    const tasks = await page.request.get('/api/admin/tasks?limit=1')
+    if (tasks.ok()) {
+      const row = firstApiRow(await tasks.json(), ['tasks', 'items'])
+      if (row?.id) ids.adminTaskId = String(row.id)
     }
   } catch {
     /* optional */

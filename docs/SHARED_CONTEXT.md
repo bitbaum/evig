@@ -84,7 +84,7 @@ People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
 | **Hardware** | Marktplatz → Kaufen & verkaufen | `/marketplace`, `/marketplace/sell` (`/shop/*` redirects here) |
 | **IT help** | Marktplatz → IT-Hilfe hub | `/it-hilfe` (hub), `/it-hilfe/create`, `/it-hilfe/techniker`, `/it-hilfe/anfragen` |
 
-**Technician → request flow:** From a public profile (`/it-hilfe/techniker/[id]`), “Anfrage stellen” opens `/it-hilfe/create?technician=<profileId>`. The request stores `preferred_technician_id` (migration `092_it_hilfe_preferred_technician.sql`); that technician is notified directly and listed first on the request detail match panel. The request stays open to other offers until one is accepted. Request owners see the preferred technician in the detail sidebar.
+**Technician → request flow:** From a public profile (`/it-hilfe/techniker/[id]`), “Anfrage stellen” opens `/it-hilfe/create?technician=<profileId>`. The request stores `preferred_technician_id` (migration `092_it_hilfe_preferred_technician.sql`); that technician is notified directly and listed first on the request detail match panel. Direct selection uses the same visibility rules as the public directory (`canAcceptDirectItHilfeRequest` in `src/lib/domain/technician-visibility.ts` — community active profiles need not be `is_verified`). The request stays open to other offers until one is accepted.
 
 **Technician onboarding:** `/profil/techniker` shows a completeness banner until skills, canton, and location (PLZ or city) are set (`src/lib/domain/technician-profile.ts`). Same banner appears on `/it-hilfe/anfragen` for logged-in technicians with incomplete profiles.
 

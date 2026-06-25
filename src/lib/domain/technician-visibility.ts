@@ -42,3 +42,19 @@ export function technicianListConditionsForTier(tier: string): SQL[] {
   }
   return [publicTechnicianListCondition()]
 }
+
+/** Direct request from /it-hilfe/techniker/[id] or ?technician= — same rules as public list. */
+export function canAcceptDirectItHilfeRequest(profile: {
+  isActive: boolean | null
+  profileTier: string | null
+  isVerified: boolean | null
+  status: string | null
+}): boolean {
+  if (!profile.isActive) return false
+  if (profile.profileTier === REPAIRER_PROFILE_TIER.COMMUNITY) return true
+  return (
+    profile.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL &&
+    profile.isVerified === true &&
+    profile.status === REPAIRER_STATUS.ACTIVE
+  )
+}

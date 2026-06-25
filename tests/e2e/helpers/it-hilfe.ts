@@ -45,10 +45,14 @@ async function parseApi<T>(response: Awaited<ReturnType<APIRequestContext['post'
 
 export async function createItHilfeRequest(
   request: APIRequestContext,
-  overrides: Partial<ItHilfeRequestPayload> = {},
+  overrides: Partial<ItHilfeRequestPayload> & { preferredTechnicianId?: string } = {},
 ): Promise<{ requestId: string }> {
-  const payload = buildTestRequestPayload(overrides)
-  const response = await csrfPost(request, '/api/it-hilfe/requests', payload)
+  const { preferredTechnicianId, ...payloadOverrides } = overrides
+  const payload = buildTestRequestPayload(payloadOverrides)
+  const body = preferredTechnicianId
+    ? { ...payload, preferredTechnicianId }
+    : payload
+  const response = await csrfPost(request, '/api/it-hilfe/requests', body)
   const data = await parseApi<{ requestId: string }>(response)
   if (!data.requestId) throw new Error('createItHilfeRequest: missing requestId')
   return { requestId: data.requestId }
@@ -106,8 +110,55 @@ export async function confirmItHilfeReview(
 export async function fetchItHilfeRequest(
   request: APIRequestContext,
   requestId: string,
-): Promise<{ status: string; reviewedAt: string | null }> {
+): Promise<{
+  status: string
+  reviewedAt: string | null
+  preferredTechnicianId: string | null
+  preferredTechnicianName: string | null
+}> {
   const response = await request.get(`/api/it-hilfe/requests/${requestId}`)
-  const data = await parseApi<{ request: { status: string; reviewedAt?: string | null } }>(response)
-  return { status: data.request.status, reviewedAt: data.request.reviewedAt ?? null }
+  const data = await parseApi<{
+    request: {
+      status: string
+      reviewedAt?: string | null
+      preferredTechnicianId?: string | null
+      preferredTechnicianName?: string | null
+    }
+  }>(response)
+  return {
+    status: data.request.status,
+    reviewedAt: data.request.reviewedAt ?? null,
+    preferredTechnicianId: data.request.preferredTechnicianId ?? null,
+    preferredTechnicianName: data.request.preferredTechnicianName ?? null,
+  }
+}
+
+export async function getSessionUserId(request: APIRequestContext): Promise<string> {
+  const response = await request.get('/api/auth/session')
+  const json = (await response.json()) as { user?: { id?: string } }
+  const id = json?.user?.id
+  if (!id) throw new Error('Session user id missing')
+  return id
+}
+
+export async function resolveTechnicianProfileIdForUser(
+  request: APIRequestContext,
+  userId: string,
+): Promise<string> {
+  const response = await request.get('/api/technicians?limit=100')
+  const data = await parseApi<{
+    technicians: Array<{ id: string; userId: string }>
+  }>(response)
+  const match = data.technicians.find(t => t.userId === userId)
+  if (!match?.id) throw new Error(`No technician profile for user ${userId}`)
+  return match.id
+}
+
+export async function fetchItHilfeMatches(
+  request: APIRequestContext,
+  requestId: string,
+): Promise<Array<{ id: string; isPreferred: boolean }>> {
+  const response = await request.get(`/api/it-hilfe/requests/${requestId}/matches`)
+  const data = await parseApi<{ matches: Array<{ id: string; isPreferred: boolean }> }>(response)
+  return data.matches ?? []
 }

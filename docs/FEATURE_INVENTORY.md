@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_summary: Workshop proposal E2E (#61–62); CI migration drift gate (104 migrations on pgvector); idempotent fixes for fresh-DB apply
+last_modified_summary: Timecard TIME normalize + journey E2E; IT-Hilfe preferred techniker fix + journey; dynamic ID discovery (orders, sellers, admin detail)
 ---
 
 # Feature Inventory (SSOT)
@@ -79,13 +79,13 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 |---|---------|-------|-------|--------|
 | 13 | IT-Hilfe hub | `/it-hilfe` | Public | ✅ (E2E hub paths) |
 | 14 | Create help request | `/it-hilfe/create` | Public | ✅ (E2E form load) |
-| 15 | Create with preferred technician | `/it-hilfe/create?technician=<profileId>` | Public | ✅ |
+| 15 | Create with preferred technician | `/it-hilfe/create?technician=<profileId>` | Public | ✅ preferred journey E2E |
 | 16 | Browse open requests | `/it-hilfe/anfragen` | Public / Techniker | ✅ (E2E browse) |
 | 17 | Filters (skill, service type, match skills) | `/it-hilfe/anfragen` | Techniker | 🟡 (E2E category filter) |
-| 18 | Request detail | `/it-hilfe/[id]` | Public | 🟡 (journey E2E) |
+| 18 | Request detail | `/it-hilfe/[id]` | Public | ✅ journey + preferred E2E |
 | 19 | Owner edit request | `/it-hilfe/[id]/edit` | Owner | ⬜ |
-| 20 | Preferred technician sidebar | request detail | Owner | 🟡 |
-| 21 | Match panel | request detail + API matches | Techniker | ⬜ |
+| 20 | Preferred technician sidebar | request detail | Owner | ✅ preferred journey E2E |
+| 21 | Match panel | request detail + API matches | Techniker | ✅ preferred first in matches API |
 | 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | ✅ dual-persona journey E2E |
 | 23 | Accept / decline offer | API offers accept/decline | Owner | ✅ journey accept |
 | 24 | Withdraw offer | API | Techniker | ⬜ |
@@ -93,7 +93,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 26 | My offers | `/it-hilfe/my/offers` | Techniker | ✅ inventory E2E |
 | 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ⬜ |
 | 28 | Technician directory | `/it-hilfe/techniker` | Public | ✅ (E2E list load) |
-| 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | ⬜ |
+| 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | ✅ dynamic inventory + preferred journey |
 | 30 | Technician self-service profile | `/profil/techniker` | Techniker | ✅ (user + admin E2E) |
 | 31 | Completeness banner | profil + anfragen | Techniker | ⬜ |
 | 32 | Dashboard techniker overview | `/dashboard/techniker` | Techniker | ✅ inventory E2E |
@@ -109,16 +109,16 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | # | Feature | Route | Status |
 |---|---------|-------|--------|
 | 37 | Browse listings | `/marketplace` | ✅ |
-| 38 | Listing detail | `/marketplace/[id]` | ⬜ |
+| 38 | Listing detail | `/marketplace/[id]` | ✅ dynamic inventory |
 | 39 | Search (Meilisearch) | `/marketplace?search=` | ✅ inventory E2E |
 | 40 | Cart | `/marketplace/cart` | ✅ inventory E2E |
 | 41 | Checkout (Payrexx) | `/marketplace/checkout/[listingId]` | ✅ journey E2E (full flow when Payrexx active) |
 | 42 | Create / edit listing | `/marketplace/sell` | ✅ inventory E2E |
 | 43 | My listings | `/dashboard/listings` | ✅ inventory E2E |
 | 44 | Seller dashboard | `/dashboard/seller` | ✅ inventory E2E |
-| 45 | My orders (buyer) | `/dashboard/orders`, `/dashboard/orders/[id]` | ✅ list; detail dynamic 🟡 |
+| 45 | My orders (buyer) | `/dashboard/orders`, `/dashboard/orders/[id]` | ✅ list + dynamic detail |
 | 46 | Favorites | `/dashboard/favorites` | ✅ inventory E2E |
-| 47 | Seller public page | `/sellers/[id]` | 🟡 dynamic when seller exists |
+| 47 | Seller public page | `/sellers/[id]` | ✅ dynamic inventory |
 | 48 | Listing reports | API | ⬜ API-only |
 | 49 | Admin marketplace moderation | `/admin/marketplace` | ✅ inventory E2E |
 | 50 | Legacy `/shop/*` redirects | → marketplace | ✅ inventory E2E |
@@ -247,8 +247,8 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 131 | Team approvals | `/admin/team/approvals` | ✅ inventory E2E |
 | 132 | Users admin | `/admin/users/[id]` | ✅ list; detail dynamic 🟡 |
 | 133 | Membership approvals | `/admin/membership` | ✅ inventory E2E |
-| 134 | Timecards (staff submit) | `/dashboard/timecards` | ✅ inventory E2E |
-| 135 | Timecards (admin queue) | `/admin/timecards` | ✅ inventory E2E |
+| 134 | Timecards (staff submit) | `/dashboard/timecards` | ✅ inventory + journey E2E |
+| 135 | Timecards (admin queue) | `/admin/timecards` | ✅ inventory + journey E2E |
 | 136 | Shift view | `/dashboard/shift` | ✅ inventory E2E |
 | 137 | Time off requests | API `time-off/*` | 🟡 API-only |
 | 138 | Payroll | `/admin/payroll` | ✅ inventory E2E |
@@ -294,8 +294,8 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | Prod vs dev DB drift (butaeff unverified on Hetzner only) | Login failures on prod | P0 | ✅ Fixed ops (verify + password + lockout clear) |
 | Auth smoke CI fails (MissingSecret) | CI noise | P3 | ✅ Uses admin dual-persona fallback; skip when no secrets |
 | Migration drift CI (vector ext) | CI noise | P3 | ✅ pgvector/pg17 + `apply-migrations-ci.sh` (104 migrations on fresh DB) |
-| Timecard submit 400 (TIME format) | Submit blocked | P1 | 🟡 Fixed locally |
-| Timecard approver email missing | Approvers not notified | P1 | 🟡 Fixed locally |
+| Timecard submit 400 (TIME format) | Submit blocked | P1 | ✅ API normalizes HH:MM:SS → HH:MM |
+| Timecard approver email missing | Approvers not notified | P1 | ✅ notifyUsers on submit (journey E2E) |
 
 ---
 
@@ -306,6 +306,6 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 3. **Phase 4 cleanup** — terminology ✅ · community visibility ✅ · CI auth/migration gates ✅
 4. **Expand matrix** — dynamic detail pages: discovery + empty-state fallbacks ✅
 
-**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey`
+**E2E commands:** `npm run test:e2e:inventory:prod` · `npm run test:e2e:it-hilfe:journey` · `npm run test:e2e:it-hilfe:preferred:journey` · `npm run test:e2e:marketplace:journey` · `npm run test:e2e:workshops:journey` · `npm run test:e2e:workshops:proposal:journey` · `npm run test:e2e:service:journey` · `npm run test:e2e:timecards:journey`
 
 See also: [`ARCHITECTURE_DEBT.md`](./ARCHITECTURE_DEBT.md) · [`ADMIN_UX_AUDIT.md`](./ADMIN_UX_AUDIT.md)

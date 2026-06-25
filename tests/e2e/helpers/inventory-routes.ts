@@ -163,8 +163,17 @@ export function dynamicUserRoutes(ids: DynamicSmokeIds): InventoryRoute[] {
     routes.push({ id: 79, label: 'Appointment detail', path: `/dashboard/appointments/${ids.appointmentId}` })
     routes.push({ id: 83, label: 'Booking detail redirect', path: `/dashboard/bookings/${ids.appointmentId}`, urlPattern: /appointments/ })
   }
+  if (ids.orderId) {
+    routes.push({ id: 45, label: 'Order detail', path: `/dashboard/orders/${ids.orderId}` })
+  }
+  if (ids.sellerId) {
+    routes.push({ id: 47, label: 'Seller public page', path: `/sellers/${ids.sellerId}` })
+  }
   if (ids.blogSlug) {
     routes.push({ id: 102, label: 'Blog post', path: ROUTES.public.blogPost(ids.blogSlug) })
+  }
+  if (ids.adminDecisionId) {
+    routes.push({ id: 97, label: 'Decision detail', path: `/dashboard/decisions/${ids.adminDecisionId}` })
   }
   return routes
 }
@@ -173,6 +182,15 @@ export function dynamicAdminRoutes(ids: DynamicSmokeIds): InventoryRoute[] {
   const routes: InventoryRoute[] = []
   if (ids.adminAppointmentId) {
     routes.push({ id: 86, label: 'Admin appointment detail', path: ROUTES.admin.appointment(ids.adminAppointmentId) })
+  }
+  if (ids.adminUserId) {
+    routes.push({ id: 132, label: 'Admin user detail', path: `/admin/users/${ids.adminUserId}` })
+  }
+  if (ids.adminDecisionId) {
+    routes.push({ id: 98, label: 'Admin decision detail', path: `/admin/decisions/${ids.adminDecisionId}` })
+  }
+  if (ids.adminTaskId) {
+    routes.push({ id: 128, label: 'Admin task detail', path: `/admin/tasks/${ids.adminTaskId}` })
   }
   return routes
 }
@@ -194,6 +212,9 @@ export function emptyStateFallbackRoutes(ids: DynamicSmokeIds): InventoryRoute[]
   }
   if (!ids.technicianProfileId) {
     routes.push({ id: 29, label: 'Technician directory (no profile id)', path: '/it-hilfe/techniker' })
+  }
+  if (!ids.orderId) {
+    routes.push({ id: 45, label: 'Orders list (no detail id)', path: '/dashboard/orders' })
   }
   return routes
 }

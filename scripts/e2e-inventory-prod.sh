@@ -53,3 +53,9 @@ npx playwright test tests/e2e/service-appointment-journey.spec.ts --project=chro
 
 echo "=== Workshop proposal review journey → ${BASE_URL} ==="
 npx playwright test tests/e2e/workshop-proposal-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== Timecard submit + approve journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/timecard-journey.spec.ts --project=chromium --reporter=line
+
+echo "=== IT-Hilfe preferred technician journey → ${BASE_URL} ==="
+npx playwright test tests/e2e/it-hilfe-preferred-technician-journey.spec.ts --project=chromium --reporter=line

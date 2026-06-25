@@ -26,6 +26,7 @@ import { sanitizeInput } from '@/lib/security/sanitize'
 import { itHilfeRequestSchema, validateAndRespond } from '@/lib/schemas/it-hilfe'
 import { type RequestRow, mapRequestListRow } from '@/lib/it-hilfe/request-mapper'
 import { sendRequestCreatedNotifications } from '@/lib/it-hilfe/notifications'
+import { canAcceptDirectItHilfeRequest } from '@/lib/domain/technician-visibility'
 import { findOrCreateAnonymousUser } from '@/lib/it-hilfe/find-or-create-anonymous-user'
 import { createPasswordResetToken } from '@/lib/auth/db-verification'
 import { sendCustomEmail } from '@/lib/email'
@@ -256,14 +257,18 @@ export async function POST(request: NextRequest) {
     let preferredTechnicianUserId: string | null = null
     if (preferredTechnicianId) {
       const [preferred] = await db
-        .select({ userId: repairerProfiles.userId })
+        .select({
+          userId: repairerProfiles.userId,
+          isActive: repairerProfiles.isActive,
+          profileTier: repairerProfiles.profileTier,
+          isVerified: repairerProfiles.isVerified,
+          status: repairerProfiles.status,
+        })
         .from(repairerProfiles)
-        .where(and(
-          eq(repairerProfiles.id, preferredTechnicianId),
-          eq(repairerProfiles.isActive, true),
-          eq(repairerProfiles.isVerified, true),
-        ))
-      if (!preferred) return apiBadRequest('Der gewählte Techniker ist nicht mehr verfügbar')
+        .where(eq(repairerProfiles.id, preferredTechnicianId))
+      if (!preferred || !canAcceptDirectItHilfeRequest(preferred)) {
+        return apiBadRequest('Der gewählte Techniker ist nicht mehr verfügbar')
+      }
       preferredTechnicianUserId = preferred.userId
     }
 
