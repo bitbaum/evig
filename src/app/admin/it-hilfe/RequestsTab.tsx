@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { ROUTES } from '@/config/routes'
 import { formatDateShort } from '@/lib/date-formats'
 import {
   DEVICE_CATEGORIES, URGENCY_LEVELS, REQUEST_STATUSES,
@@ -86,7 +87,7 @@ export function RequestsTab({
             {requests?.items.map(r => (
               <tr key={r.id} className={adminTable.tr}>
                 <td className="px-4 py-3">
-                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
+                  <a href={ROUTES.public.itHilfeRequest(r.id)} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
                     {r.title} <ExternalLink className="w-3 h-3 shrink-0" />
                   </a>
                 </td>

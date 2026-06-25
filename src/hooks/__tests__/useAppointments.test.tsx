@@ -155,34 +155,3 @@ describe('useAppointments — login redirect preserves role', () => {
     )
   })
 })
-
-// ============================================================================
-// payment-success URL cleanup preserves role
-// ============================================================================
-
-describe('useAppointments — payment-success URL cleanup', () => {
-  it('strips ?payment=success but preserves ?role=repairer', async () => {
-    // A repairer who clicks the email + completes a payment shouldn't
-    // be bumped from repairer-mode to customer-mode just because the
-    // payment-success cleanup ran. The hook routes the URL replace
-    // through the role-preserved callbackUrl.
-    mockSearchParams.set('payment', 'success')
-    mockSearchParams.set('role', 'repairer')
-
-    renderHook(() => useAppointments(ERRORS))
-
-    await waitFor(() => expect(mockRouterReplace).toHaveBeenCalled())
-    expect(mockRouterReplace).toHaveBeenCalledWith(
-      '/dashboard/appointments?role=repairer',
-    )
-  })
-
-  it('strips ?payment=success to plain /dashboard/appointments when no role', async () => {
-    mockSearchParams.set('payment', 'success')
-
-    renderHook(() => useAppointments(ERRORS))
-
-    await waitFor(() => expect(mockRouterReplace).toHaveBeenCalled())
-    expect(mockRouterReplace).toHaveBeenCalledWith('/dashboard/appointments')
-  })
-})

@@ -1,8 +1,8 @@
 # Architecture Debt — Parallel Implementations + Spaghetti Patterns
 
 **Created:** 2026-06-04  
-**Last Modified:** 2026-06-15  
-**Last Modified Summary:** Marked #2 (IT-Hilfe notifications) resolved; all three debt items closed
+**Last Modified:** 2026-06-19  
+**Last Modified Summary:** Phase 3 — admin dashboard 404 links, workshop notification hrefs, IT-Hilfe single-email notifications
 
 **Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
@@ -168,8 +168,17 @@ change existing enums.
 - **Marketplace listings split** (`inventory.marketplace_listings` vs
   `marketplace.listings`) is intentional — RevampIT shop vs P2P
   marketplace are two storefronts by design. Documented in CLAUDE.md.
-- **Repairer profiles vs IT-Hilfe helpers** are separate by design —
-  different verification/payment models. Could be documented better.
+- **Service appointment dashboard routes** — unified under
+  `src/config/service-appointments.ts` (`/dashboard/appointments/*`).
+  Legacy `/dashboard/bookings/*` permanent-redirects; notification bell
+  and customer emails deep-link to `/dashboard/appointments/[id]`.
+  Admin detail at `/admin/appointments/[id]`. Pay flow:
+  `POST /api/appointments` → quote → `POST /api/appointments/[id]/pay`.
+  Payrexx return UX via `PaymentReturnBanner` + `usePaymentReturnBanner`.
+- **Marketplace RevampIT checkout** — cart is the primary path;
+  listing detail no longer shows a duplicate “buy now” for shop stock.
+- **IT-Hilfe browse link** — technician dashboards use
+  `IT_HILFE.routes.browseRequests` (not deprecated `browse` alias).
 - **Escaped-bracket directory artifact** at
   `src/app/api/admin/repairer-applications/\[id\]/` is a filesystem
   ghost from a past `cp`/git operation. Contains empty `reject/` and

@@ -55,24 +55,11 @@ export function useAppointments(errors: ErrorMessages) {
   const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [paymentSuccess, setPaymentSuccess] = useState(
-    () => searchParams.get('payment') === 'success'
-  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
   const [editDescription, setEditDescription] = useState('')
   const [editPreferredDate, setEditPreferredDate] = useState('')
   const [saving, setSaving] = useState(false)
-
-  // Strip the ?payment=success param from the URL after capturing it into
-  // state. Preserve ?role on the cleaned URL so a repairer who deep-links
-  // via the email + a successful payment doesn't get bumped to
-  // customer-mode after the banner shows.
-  useEffect(() => {
-    if (searchParams.get('payment') === 'success') {
-      router.replace(callbackUrl)
-    }
-  }, [searchParams, router, callbackUrl])
 
   const fetchAppointments = async () => {
     const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl)
@@ -155,14 +142,12 @@ export function useAppointments(errors: ErrorMessages) {
     appointments,
     loading,
     error,
-    paymentSuccess,
     editingId,
     pendingCancelId,
     editDescription,
     editPreferredDate,
     saving,
     sessionStatus,
-    setPaymentSuccess,
     setEditingId,
     setPendingCancelId,
     setEditDescription,

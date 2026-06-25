@@ -13,6 +13,7 @@ import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
 import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
 import { APP_URL } from '@/config/urls'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 
 // ============================================================================
 // Types
@@ -234,7 +235,7 @@ export async function sendAppointmentNotification(
       party.repairer_name || 'Techniker',
       actionData.quoted_price_chf!,
       actionData.diagnosis_notes || null,
-      baseUrl + '/dashboard/bookings'
+      baseUrl + SERVICE_APPOINTMENT_ROUTES.detail(appointmentId)
     )
     sendCustomEmail(party.customer_email, emailContent).catch(err => {
       logger.error('Failed to send quote email', { error: err, appointmentId })
@@ -245,7 +246,7 @@ export async function sendAppointmentNotification(
       party.repairer_name || 'Techniker',
       statusLabel,
       serviceName,
-      baseUrl + '/dashboard/bookings'
+      baseUrl + SERVICE_APPOINTMENT_ROUTES.detail(appointmentId)
     )
     sendCustomEmail(party.customer_email, emailContent).catch(err => {
       logger.error('Failed to send status email to customer', { error: err, appointmentId })

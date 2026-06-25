@@ -8,10 +8,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiF
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { OFFER_STATUS } from '@/config/it-hilfe'
-import { sendCustomEmail } from '@/lib/email'
-import { itHilfeOfferRejected } from '@/lib/email/templates/it-hilfe'
-import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
-import { APP_URL } from '@/config/urls'
+import { notifyOfferDeclined } from '@/lib/it-hilfe/notifications'
 
 interface RouteParams {
   params: Promise<{ id: string; offerId: string }>
@@ -96,27 +93,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       helperId: offer.helperId,
     })
 
-    // Send rejection email (fire-and-forget). sendCustomEmail resolves
-    // {success:false} on SMTP failure rather than throwing; bare-catch
-    // misses that mode. Same fix class.
-    const requestUrl = `${APP_URL}/it-hilfe/${id}`
-    sendCustomEmail(
-      offer.helperEmail,
-      itHilfeOfferRejected(offer.helperName || 'Techniker', requestData.title, requestUrl)
-    )
-      .then(r => {
-        if (!r.success) {
-          logger.warn('Failed to send offer declined email (resolved)', { error: r.error, helperId: offer.helperId })
-        }
-      })
-      .catch(err => logger.warn('Failed to send offer declined email (rejected)', { error: err, helperId: offer.helperId }))
-
-    // In-app notification for helper
-    sendItHilfeNotification({
+    notifyOfferDeclined({
       recipientIds: [offer.helperId],
-      title: 'Angebot abgelehnt',
-      content: `Dein Angebot für "${requestData.title}" wurde abgelehnt.`,
       requestId: id,
+      helperName: offer.helperName || 'Techniker',
+      requestTitle: requestData.title,
     })
 
     return apiSuccess({

@@ -105,6 +105,16 @@ export function getBookingStatusLabel(status: string): string {
   return BOOKING_STATUS_BADGES[status]?.label ?? status
 }
 
+/** Statuses where the customer can initiate Payrexx checkout. */
+export const PAYABLE_BOOKING_STATUSES: readonly BookingStatus[] = [
+  BOOKING_STATUS.QUOTE_APPROVED,
+  BOOKING_STATUS.IN_PROGRESS,
+] as const
+
+export function isPayableBookingStatus(status: string): boolean {
+  return (PAYABLE_BOOKING_STATUSES as readonly string[]).includes(status)
+}
+
 /**
  * Urgency levels for booking requests
  */

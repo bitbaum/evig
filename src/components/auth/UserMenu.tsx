@@ -16,7 +16,6 @@ import {
   Shield,
   Store,
   MessageSquare,
-  Wrench,
   BadgeCheck,
   Gift,
 } from 'lucide-react'
@@ -121,7 +120,6 @@ export function UserMenu() {
     [
       { href: '/dashboard/appointments', icon: Calendar, label: t('myAppointments') },
       { href: '/dashboard/workshops', icon: Calendar, label: t('myWorkshops') },
-      { href: '/dashboard/bookings', icon: Wrench, label: t('myBookings') },
     ],
   ]
 

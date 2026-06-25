@@ -165,7 +165,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
           key: `listing-${l.id}`,
           label: l.title,
           sub: l.status,
-          href: ROUTES.admin.listing(l.id),
+          href: `${ROUTES.admin.marketplace}?listing=${l.id}`,
           icon: <Monitor className="w-4 h-4" />,
           group: 'Inserate',
         })
@@ -219,6 +219,7 @@ export function CommandBar() {
     if (!dialog) return
     if (open) {
       dialog.showModal()
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset search when dialog opens
       setQuery('')
       setActiveIdx(0)
       setTimeout(() => inputRef.current?.focus(), 0)

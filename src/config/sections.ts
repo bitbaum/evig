@@ -49,6 +49,7 @@ import {
   Wallet,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 
 // =============================================================================
 // SECTION TYPES
@@ -287,7 +288,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
 
   appointments: {
     id: 'appointments',
-    path: '/dashboard/appointments',
+    path: SERVICE_APPOINTMENT_ROUTES.list,
     ui: {
       label: 'Service-Termine',
       description: 'Termin bei der Revamp-IT Werkstatt buchen',
@@ -297,21 +298,6 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: false, dashboard: true },
     priority: 11,
-    category: 'activities',
-  },
-
-  bookings: {
-    id: 'bookings',
-    path: '/dashboard/bookings',
-    ui: {
-      label: 'Peer-Buchungen',
-      description: 'Reparaturaufträge mit Community-Technikern verfolgen',
-      icon: Wrench,
-      emoji: '🛠️',
-      color: 'error',
-    },
-    visibility: { admin: false, dashboard: true },
-    priority: 12,
     category: 'activities',
   },
 
@@ -613,7 +599,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
 
   'appointments-admin': {
     id: 'appointments-admin',
-    path: '/admin/appointments',
+    path: SERVICE_APPOINTMENT_ROUTES.adminList,
     ui: {
       label: 'Termine',
       description: 'Service-Termine prüfen und zuweisen',

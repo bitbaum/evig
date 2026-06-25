@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Link, useRouter } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
 import { useCart } from '@/components/marketplace/cart/CartProvider'
 import { apiFetch } from '@/lib/api/client'
 import { formatCHF } from '@/config/marketplace'
@@ -64,6 +65,8 @@ export function CartPageClient() {
         <span aria-hidden="true">/</span>
         <span>3 {tCheckout('title')}</span>
       </nav>
+
+      <PaymentReturnBanner namespace="marketplace.cart" cleanPath="/marketplace/cart" />
 
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>

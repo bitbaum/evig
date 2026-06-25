@@ -15,10 +15,7 @@ import {
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
-import { sendCustomEmail } from '@/lib/email'
-import { itHilfeCompleted } from '@/lib/email/templates/it-hilfe'
-import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
-import { APP_URL } from '@/config/urls'
+import { notifyRequestCompleted } from '@/lib/it-hilfe/notifications'
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -133,30 +130,12 @@ export const POST = withAuth<{ id: string }>(async (
       helperId: session.user.id,
     })
 
-    // Notify requester (in-app + email, fire-and-forget)
-    sendItHilfeNotification({
+    notifyRequestCompleted({
       recipientIds: [row.requesterId],
-      title: 'Hilfe abgeschlossen - bitte bestätigen',
-      content:
-        'Die Hilfe wurde als abgeschlossen markiert. Bitte bestätige und gib eine Bewertung ab.',
       requestId: id,
+      requesterName: row.requesterName || 'Anfragender',
+      requestTitle: row.title,
     })
-
-    // sendCustomEmail resolves {success:false} on SMTP failure rather
-    // than throwing; bare-catch misses that mode. Same fix class.
-    const requestUrl = `${APP_URL}/it-hilfe/${id}`
-    sendCustomEmail(
-      row.requesterEmail,
-      itHilfeCompleted(row.requesterName || 'Anfragender', row.title, requestUrl),
-    )
-      .then((r) => {
-        if (!r.success) {
-          logger.warn('Failed to send itHilfeCompleted email (resolved)', { error: r.error, requestId: id })
-        }
-      })
-      .catch((err) =>
-        logger.warn('Failed to send itHilfeCompleted email (rejected)', { error: err, requestId: id }),
-      )
 
     return apiSuccess({ message: 'Anfrage als abgeschlossen markiert' })
   } catch (error) {

@@ -380,7 +380,7 @@ export default function TechnikerProfilPage() {
         {/* Save Button */}
         <div className="flex justify-end gap-4">
           <Link
-            href={IT_HILFE.routes.browse}
+            href={IT_HILFE.routes.browseRequests}
             className="px-6 py-3 text-text-secondary border border-default rounded-lg hover:bg-surface-raised transition-colors"
           >
             {t('cancel')}

@@ -38,6 +38,7 @@ import {
   type PaymentData,
   type RegistrationUIStatus,
 } from './index'
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
 
 interface WorkshopRegistrationFormProps {
   workshop: Workshop
@@ -300,6 +301,10 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   // Default: Registration form
   return (
     <div>
+      <PaymentReturnBanner
+        namespace="workshops.registration"
+        cleanPath={`/workshops/${workshop.slug}`}
+      />
       <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('registerHeading')}</Heading>
 
       <WorkshopInstanceCard

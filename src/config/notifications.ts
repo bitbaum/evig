@@ -78,15 +78,17 @@ export const RELATED_TYPES = {
 
 export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
 
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
+
 /** Maps `related_type` to the base route for navigation in NotificationBell */
 export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.TASK]: '/admin/tasks/',
   [RELATED_TYPES.PROTOCOL]: '/admin/protocols/',
   [RELATED_TYPES.DECISION]: '/admin/decisions/',
   [RELATED_TYPES.CONVERSATION]: '/dashboard/messages?conversation=',
-  [RELATED_TYPES.APPOINTMENT]: '/dashboard/appointments/',
+  [RELATED_TYPES.APPOINTMENT]: SERVICE_APPOINTMENT_ROUTES.notificationBase,
   [RELATED_TYPES.IT_HILFE]: '/it-hilfe/',
-  [RELATED_TYPES.WORKSHOP]: '/admin/workshops/',
+  [RELATED_TYPES.WORKSHOP]: '/admin/workshops/instances/',
   [RELATED_TYPES.WORKSHOP_PROPOSAL]: '/admin/workshops/proposals/',
   [RELATED_TYPES.MEMBERSHIP]: '/admin/membership/',
   [RELATED_TYPES.LISTING]: '/admin/marketplace/',

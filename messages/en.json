@@ -924,6 +924,9 @@
       "loadError": "Error loading listing",
       "orderError": "Could not create order",
       "networkError": "Network error creating the order",
+      "paymentSuccess": "Payment successful! Your order is confirmed.",
+      "paymentFailed": "Payment failed. Please try again.",
+      "paymentCancelled": "Payment cancelled.",
       "ownListing": "Your own listing",
       "title": "Secure payment",
       "delivery": {
@@ -1080,6 +1083,9 @@
       "itemCount": "{count, plural, one {# item} other {# items}}",
       "continueShopping": "Continue shopping",
       "pickupNote": "Pickup in Zurich — free",
+      "paymentSuccess": "Payment successful! Your order is confirmed.",
+      "paymentFailed": "Payment failed. Please try again.",
+      "paymentCancelled": "Payment cancelled.",
       "revampitOnly": "Only Revamp-IT devices can be added to the cart. Community listings are purchased directly.",
       "cartAriaLabel": "Cart, {count} items",
       "closeAriaLabel": "Close cart"
@@ -2431,6 +2437,9 @@
       "registerFree": "Register for workshop",
       "registerPaid": "Register & pay",
       "paymentNote": "Secure payment via our payment provider.",
+      "paymentSuccess": "Payment successful! Your workshop registration is confirmed.",
+      "paymentFailed": "Payment failed. Please try again.",
+      "paymentCancelled": "Payment cancelled.",
       "confirmationNote": "You will receive a confirmation email with all details."
     },
     "reviews": {
@@ -8102,7 +8111,10 @@
       "cancel": "Cancel",
       "saving": "Saving…",
       "save": "Save",
-      "paymentSuccess": "Payment successful! Your appointment is confirmed."
+      "paymentSuccess": "Payment successful! Your appointment is confirmed.",
+      "paymentFailed": "Payment failed. Please try again.",
+      "paymentCancelled": "Payment cancelled.",
+      "viewDetails": "View details"
     },
     "orders": {
       "pageTitle": "My Orders",
@@ -8387,6 +8399,11 @@
       "loadError": "Error loading",
       "networkError": "Network error",
       "actionError": "Action failed",
+      "payNow": "Pay now",
+      "payError": "Could not start payment",
+      "paymentSuccess": "Payment successful! Your appointment is confirmed.",
+      "paymentFailed": "Payment failed. Please try again.",
+      "paymentCancelled": "Payment cancelled.",
       "detail": {
         "backToBookings": "Back to bookings",
         "bookingId": "Booking #",

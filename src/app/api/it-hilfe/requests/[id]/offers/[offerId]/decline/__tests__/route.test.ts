@@ -71,18 +71,8 @@ jest.mock('@/config/it-hilfe', () => ({
 }))
 
 jest.mock('@/lib/it-hilfe/notifications', () => ({
-  sendItHilfeNotification: jest.fn().mockResolvedValue(undefined),
+  notifyOfferDeclined: jest.fn(),
 }))
-
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-}))
-
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeOfferRejected: jest.fn().mockReturnValue({}),
-}))
-
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }))
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
 

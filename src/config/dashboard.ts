@@ -144,6 +144,7 @@ export const DASHBOARD_ROUTES = {
   APPOINTMENTS: SECTIONS.appointments?.path ?? '/dashboard/appointments',
     SELLER: SECTIONS['my-listings']?.path ?? '/dashboard/listings',
   REPAIRER: SECTIONS['repairer-dashboard']?.path ?? '/profil/techniker',
+  TECHNICIAN_HUB: '/dashboard/techniker',
   REPAIRER_BOOKINGS: '/dashboard/appointments',
   REPAIRER_SERVICES: '/profil/techniker',
   REPAIRER_ONBOARDING: SECTIONS['repairer-onboarding']?.path ?? '/profil/techniker',

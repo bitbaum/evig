@@ -5,8 +5,7 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { formatDateTime } from '@/lib/date-formats'
-import { APPOINTMENT_STATUS } from '@/config/appointment-status'
-import { BOOKING_STATUS } from '@/config/booking-status'
+import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
 import { URGENCY } from '@/config/it-hilfe'
 import { Modal } from '@/components/ui/Modal'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -15,15 +14,25 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 import { useAppointments, type ServiceAppointment } from '@/hooks/useAppointments'
 
 function getStatusIcon(status: string) {
   switch (status) {
-    case APPOINTMENT_STATUS.CONFIRMED: return <CheckCircle className="w-5 h-5 text-success-600" />
-    case APPOINTMENT_STATUS.COMPLETED: return <CheckCircle className="w-5 h-5 text-action" />
-    case APPOINTMENT_STATUS.REQUESTED: return <AlertCircle className="w-5 h-5 text-warning-600" />
-    case APPOINTMENT_STATUS.CANCELLED: return <XCircle className="w-5 h-5 text-error-600" />
-    default: return <AlertCircle className="w-5 h-5 text-text-tertiary" />
+    case BOOKING_STATUS.COMPLETED:
+      return <CheckCircle className="w-5 h-5 text-action" />
+    case BOOKING_STATUS.IN_PROGRESS:
+    case BOOKING_STATUS.ACCEPTED:
+    case BOOKING_STATUS.QUOTE_APPROVED:
+      return <CheckCircle className="w-5 h-5 text-success-600" />
+    case BOOKING_STATUS.QUOTED:
+      return <AlertCircle className="w-5 h-5 text-warning-600" />
+    case BOOKING_STATUS.CANCELLED:
+    case BOOKING_STATUS.REJECTED:
+      return <XCircle className="w-5 h-5 text-error-600" />
+    default:
+      return <AlertCircle className="w-5 h-5 text-warning-600" />
   }
 }
 
@@ -41,10 +50,10 @@ export default function AppointmentsDashboard() {
   const t = useTranslations('dashboard.appointments')
 
   const {
-    appointments, loading, error, paymentSuccess,
+    appointments, loading, error,
     editingId, pendingCancelId, editDescription, editPreferredDate, saving,
     sessionStatus,
-    setPaymentSuccess, setEditingId, setPendingCancelId,
+    setEditingId, setPendingCancelId,
     setEditDescription, setEditPreferredDate,
     doCancel, openEdit, saveEdit,
     isRepairerView,
@@ -55,14 +64,7 @@ export default function AppointmentsDashboard() {
   })
 
   function getStatusText(status: string) {
-    switch (status) {
-      case APPOINTMENT_STATUS.REQUESTED: return t('statusRequested')
-      case APPOINTMENT_STATUS.CONFIRMED: return t('statusConfirmed')
-      case BOOKING_STATUS.IN_PROGRESS: return t('statusInProgress')
-      case APPOINTMENT_STATUS.COMPLETED: return t('statusCompleted')
-      case APPOINTMENT_STATUS.CANCELLED: return t('statusCancelled')
-      default: return status
-    }
+    return getBookingStatusLabel(status)
   }
 
   function getUrgencyLabel(urgency: string) {
@@ -112,23 +114,7 @@ export default function AppointmentsDashboard() {
           </Heading>
         </div>
 
-        {paymentSuccess && (
-          <div className="bg-action-muted border border-strong rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-action shrink-0" />
-              <p className="text-action font-medium">{t('paymentSuccess')}</p>
-            </div>
-            <Button
-              onClick={() => setPaymentSuccess(false)}
-              variant="ghost"
-              size="icon"
-              className="text-action hover:text-action text-lg leading-none"
-              aria-label="Schliessen"
-            >
-              ×
-            </Button>
-          </div>
-        )}
+        <PaymentReturnBanner namespace="dashboard.appointments" cleanPath={SERVICE_APPOINTMENT_ROUTES.list} />
 
         {error && (
           <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 mb-6">
@@ -170,7 +156,7 @@ export default function AppointmentsDashboard() {
                   </div>
                 </div>
 
-                {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
+                {appointment.status === BOOKING_STATUS.REQUESTED && (
                   <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-warning-800 dark:text-warning-300">
                       <AlertCircle className="w-5 h-5 mr-2 shrink-0" />
@@ -180,7 +166,8 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status === APPOINTMENT_STATUS.CONFIRMED && (
+                {(appointment.status === BOOKING_STATUS.ACCEPTED
+                  || appointment.status === BOOKING_STATUS.QUOTE_APPROVED) && (
                   <div className="bg-success-50 dark:bg-success-500/10 border-2 border-success-200 dark:border-success-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-success-800 dark:text-success-300">
                       <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
@@ -190,7 +177,26 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status === APPOINTMENT_STATUS.COMPLETED && (
+                {appointment.status === BOOKING_STATUS.QUOTED && (
+                  <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-warning-800 dark:text-warning-300">
+                      <AlertCircle className="w-5 h-5 mr-2 shrink-0" />
+                      <span className="font-medium text-sm sm:text-base">{t('statusRequested')}</span>
+                    </div>
+                    <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">{t('confirmedDesc')}</p>
+                  </div>
+                )}
+
+                {appointment.status === BOOKING_STATUS.IN_PROGRESS && (
+                  <div className="bg-action-muted/10 border border-subtle dark:border-action/30 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-action">
+                      <Clock className="w-5 h-5 mr-2 shrink-0" />
+                      <span className="font-medium text-sm sm:text-base">{t('statusInProgress')}</span>
+                    </div>
+                  </div>
+                )}
+
+                {appointment.status === BOOKING_STATUS.COMPLETED && (
                   <div className="bg-action-muted/10 border border-subtle dark:border-action/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-action">
                       <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
@@ -202,7 +208,7 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status === APPOINTMENT_STATUS.CANCELLED && (
+                {appointment.status === BOOKING_STATUS.CANCELLED && (
                   <div className="bg-error-50 dark:bg-error-500/10 border-2 border-error-200 dark:border-error-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-error-800 dark:text-error-300">
                       <XCircle className="w-5 h-5 mr-2 shrink-0" />
@@ -211,26 +217,31 @@ export default function AppointmentsDashboard() {
                   </div>
                 )}
 
-                {appointment.status !== APPOINTMENT_STATUS.CANCELLED && (
-                  <div className="mt-4 flex gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setPendingCancelId(appointment.id)}
-                    >
-                      {t('cancelButton')}
-                    </Button>
-                    {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Button as={Link} href={SERVICE_APPOINTMENT_ROUTES.detail(appointment.id)} variant="primary" size="sm">
+                    {t('viewDetails')}
+                  </Button>
+                  {appointment.status !== BOOKING_STATUS.CANCELLED && (
+                    <>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openEdit(appointment)}
+                        onClick={() => setPendingCancelId(appointment.id)}
                       >
-                        {t('editButton')}
+                        {t('cancelButton')}
                       </Button>
-                    )}
-                  </div>
-                )}
+                      {appointment.status === BOOKING_STATUS.REQUESTED && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openEdit(appointment)}
+                        >
+                          {t('editButton')}
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             ))}
           </div>

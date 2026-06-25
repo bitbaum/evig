@@ -90,18 +90,8 @@ jest.mock('@/lib/reviews/create-review', () => ({
 }))
 
 jest.mock('@/lib/it-hilfe/notifications', () => ({
-  sendItHilfeNotification: jest.fn().mockResolvedValue(undefined),
+  notifyReviewReceived: jest.fn(),
 }))
-
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-}))
-
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeReviewReceived: jest.fn().mockReturnValue({}),
-}))
-
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }))
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
@@ -180,10 +170,8 @@ describe('POST /api/it-hilfe/requests/[id]/confirm-review', () => {
     const reviews = jest.requireMock('@/lib/reviews/create-review') as { createReview: jest.Mock; findDuplicateReview: jest.Mock }
     reviews.createReview.mockResolvedValue({ reviewId: 'review-1' })
     reviews.findDuplicateReview.mockResolvedValue(null)
-    const email = jest.requireMock('@/lib/email') as { sendCustomEmail: jest.Mock }
-    email.sendCustomEmail.mockResolvedValue({ success: true })
-    const notif = jest.requireMock('@/lib/it-hilfe/notifications') as { sendItHilfeNotification: jest.Mock }
-    notif.sendItHilfeNotification.mockResolvedValue(undefined)
+    const notif = jest.requireMock('@/lib/it-hilfe/notifications') as { notifyReviewReceived: jest.Mock }
+    notif.notifyReviewReceived.mockImplementation(() => undefined)
   })
 
   it('returns 401 when not authenticated', async () => {

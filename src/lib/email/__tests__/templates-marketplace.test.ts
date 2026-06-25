@@ -17,7 +17,7 @@ import {
   listingReviewNotification,
 } from '../templates/marketplace'
 
-const ORDER_URL = 'https://revamp-it.ch/marketplace/orders/123'
+const ORDER_URL = 'https://revamp-it.ch/dashboard/orders/123'
 const LISTING_URL = 'https://revamp-it.ch/marketplace/listings/456'
 
 // ─── listingPublishedConfirmation ─────────────────────────────────────────────
@@ -209,7 +209,7 @@ describe('orderReceiptConfirmed', () => {
 
 describe('orderReviewPrompt', () => {
   // OrderReviewPromptData: { recipientName, listingTitle, reviewUrl }
-  const REVIEW_URL = 'https://revamp-it.ch/marketplace/orders/123/review'
+  const REVIEW_URL = 'https://revamp-it.ch/dashboard/orders/123/review'
 
   it('returns { subject, html, text }', () => {
     const email = orderReviewPrompt({ recipientName: 'Sophie', listingTitle: 'MacBook Air', reviewUrl: REVIEW_URL })
@@ -228,7 +228,7 @@ describe('orderReviewPrompt', () => {
 
 describe('orderReviewReceived', () => {
   // OrderReviewReceivedData: { recipientName, listingTitle, rating, content, reviewUrl }
-  const REVIEW_URL = 'https://revamp-it.ch/marketplace/orders/123/review'
+  const REVIEW_URL = 'https://revamp-it.ch/dashboard/orders/123/review'
 
   it('returns { subject, html, text }', () => {
     const email = orderReviewReceived({ recipientName: 'Tom', listingTitle: 'MacBook Air', rating: 5, content: 'Super!', reviewUrl: REVIEW_URL })

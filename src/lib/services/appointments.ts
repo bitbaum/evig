@@ -110,6 +110,22 @@ export async function listAppointments(filter: AppointmentListFilter) {
   }
 }
 
+export type AppointmentRow = Awaited<ReturnType<typeof listAppointments>>['appointments'][number]
+
+/** Single appointment by id — same column shape as listAppointments. */
+export async function getAppointmentById(id: string): Promise<AppointmentRow | null> {
+  const [row] = await db
+    .select(APPOINTMENT_SELECT_COLS)
+    .from(serviceAppointments)
+    .leftJoin(customer, eq(serviceAppointments.userId, customer.id))
+    .leftJoin(repairer, eq(serviceAppointments.repairerId, repairer.id))
+    .leftJoin(repairerProfiles, eq(serviceAppointments.repairerProfileId, repairerProfiles.id))
+    .leftJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
+    .where(eq(serviceAppointments.id, id))
+    .limit(1)
+  return row ?? null
+}
+
 export interface AppointmentStats {
   total: number
   requested: number

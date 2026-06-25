@@ -7,9 +7,10 @@
  * Re-exports all sub-module functions so existing consumers don't break.
  *
  * Used by:
- * - /api/appointments/book-with-payment
  * - /api/workshops/[slug]/register-with-payment
  * - /api/appointments/[id]/pay
+ * - /api/marketplace/orders
+ * - /api/marketplace/cart/checkout
  */
 
 import { logger } from '@/lib/logger'

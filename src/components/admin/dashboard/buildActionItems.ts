@@ -1,4 +1,5 @@
 import type { DashboardStats, ActionItem } from './types'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 
 export function buildActionItems(
   stats: DashboardStats,
@@ -31,12 +32,12 @@ export function buildActionItems(
     })
   }
 
-  if (stats.pendingAppointments > 0 && canAccessSection('services')) {
+  if (stats.pendingAppointments > 0 && canAccessSection('appointments-admin')) {
     items.push({
       type: 'warning',
       label: `${stats.pendingAppointments} Termin${stats.pendingAppointments > 1 ? 'e' : ''} ausstehend`,
       count: stats.pendingAppointments,
-      href: '/admin/services/appointments',
+      href: SERVICE_APPOINTMENT_ROUTES.adminList,
       actionLabel: 'Ansehen',
       oldestAt: stats.pendingAppointmentsOldest,
     })
@@ -56,7 +57,7 @@ export function buildActionItems(
     })
   }
 
-  if (stats.urgentItHilfe > 0) {
+  if (stats.urgentItHilfe > 0 && canAccessSection('it-hilfe-admin')) {
     items.push({
       type: 'urgent',
       label: `${stats.urgentItHilfe} dringende IT-Hilfe-Anfrage${stats.urgentItHilfe > 1 ? 'n' : ''}`,

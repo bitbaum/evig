@@ -12,9 +12,9 @@ import {
   centsToDisplay,
   DEFAULT_AUTO_RELEASE_DAYS
 } from '@/lib/payments/payment-flow'
-import { APPOINTMENT_STATUS } from '@/config/appointment-status'
-import { BOOKING_STATUS } from '@/config/booking-status'
+import { isPayableBookingStatus } from '@/config/booking-status'
 import { APP_URL } from '@/config/urls'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 import { validateBody, PayAppointmentSchema } from '@/lib/schemas'
 import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
 
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
         user_id: serviceAppointments.userId,
         status: serviceAppointments.status,
         price_charged_cents: serviceAppointments.priceChargedCents,
+        quoted_price_chf: serviceAppointments.quotedPriceChf,
         service_price_cents: serviceTypes.priceCents,
         service_name: serviceTypes.name,
         service_slug: serviceTypes.slug,
@@ -69,14 +70,15 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized('Du kannst nur für deine eigenen Termine bezahlen')
     }
 
-    // Check if appointment is in payable status
-    const payableStatuses: string[] = [APPOINTMENT_STATUS.CONFIRMED, BOOKING_STATUS.IN_PROGRESS]
-    if (!payableStatuses.includes(appointment.status!)) {
+    if (!isPayableBookingStatus(appointment.status!)) {
       return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`)
     }
 
     // Determine payment amount
-    let paymentAmountCents = appointment.price_charged_cents || appointment.service_price_cents || 0
+    const quotedCents = appointment.quoted_price_chf != null
+      ? Math.round(Number(appointment.quoted_price_chf) * 100)
+      : null
+    let paymentAmountCents = appointment.price_charged_cents ?? quotedCents ?? appointment.service_price_cents ?? 0
 
     if (paymentType === 'deposit') {
       // 30% deposit
@@ -133,17 +135,9 @@ export async function POST(request: NextRequest) {
         appointmentType: 'service_payment'
       },
       serviceAppointmentId: appointmentId,
-      successRedirectUrl: `${baseUrl}/dashboard/appointments?payment=success`,
-      // The previous failed/cancelled URLs included `/${appointmentId}`, but
-      // no /dashboard/appointments/[id] page exists in src/app/dashboard/
-      // appointments — only the list at /dashboard/appointments/page.tsx.
-      // So Payrexx-redirected failed/cancelled payments 404'd. Land them
-      // on the same list page as the success path; useAppointments doesn't
-      // currently render banners for failed/cancelled (only `success`),
-      // but the user can at least see their PENDING_PAYMENT appointment in
-      // the list and know payment didn't complete.
-      failedRedirectUrl: `${baseUrl}/dashboard/appointments?payment=failed`,
-      cancelRedirectUrl: `${baseUrl}/dashboard/appointments?payment=cancelled`,
+      successRedirectUrl: `${baseUrl}${SERVICE_APPOINTMENT_ROUTES.detail(appointmentId)}?payment=success`,
+      failedRedirectUrl: `${baseUrl}${SERVICE_APPOINTMENT_ROUTES.detail(appointmentId)}?payment=failed`,
+      cancelRedirectUrl: `${baseUrl}${SERVICE_APPOINTMENT_ROUTES.detail(appointmentId)}?payment=cancelled`,
       purpose: `${paymentTypeLabel}: ${appointment.service_name}`,
       transactionMetadata: {
         paymentType,
@@ -151,20 +145,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Update appointment status if this completes the payment
-    if (paymentType === 'full' || paymentType === 'remaining') {
-      await db
-        .update(serviceAppointments)
-        .set({
-          status: sql`CASE
-            WHEN ${serviceAppointments.status} = ${APPOINTMENT_STATUS.CONFIRMED} THEN ${APPOINTMENT_STATUS.COMPLETED}
-            ELSE ${serviceAppointments.status}
-          END`,
-          updatedAt: sql`CURRENT_TIMESTAMP`,
-        })
-        .where(eq(serviceAppointments.id, appointmentId))
-    }
-
+    // Status transitions after payment are handled by the Payrexx webhook.
     return apiSuccess({
       appointmentId,
       paymentUrl: paymentResult.paymentUrl,

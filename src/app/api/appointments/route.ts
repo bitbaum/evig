@@ -13,6 +13,7 @@ import { BOOKING_STATUS } from '@/config/booking-status'
 import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 import { ROUTES } from '@/config/routes'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 import { TABLE_NAMES } from '@/config/database'
 import { listAppointments, notifyRepairerOfAssignment } from '@/lib/services/appointments'
 import { notifyAllStaff } from '@/lib/services/notifications'
@@ -211,7 +212,7 @@ function notifyAdminsOfNewBooking(
       'Reparatur',
       description,
       urgency || URGENCY_DEFAULT,
-      APP_URL + ROUTES.admin.appointments,
+      APP_URL + SERVICE_APPOINTMENT_ROUTES.adminList,
     )
     // sendCustomEmail resolves { success: false } on failure rather than
     // throw — catch both modes per the documented swallow pattern.

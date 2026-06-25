@@ -18,7 +18,7 @@ import {
 import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client'
-import { APPOINTMENT_STATUS } from '@/config/appointment-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
 import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
 import { APP_URL } from '@/config/urls'
 import type { DeliveryOption } from '@/config/marketplace'
@@ -403,7 +403,7 @@ export async function handleGenericPayment(
           await tx
             .update(serviceAppointments)
             .set({
-              status: APPOINTMENT_STATUS.CONFIRMED,
+              status: BOOKING_STATUS.IN_PROGRESS,
               updatedAt: sql`CURRENT_TIMESTAMP`,
             })
             .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
@@ -486,7 +486,7 @@ export async function handleGenericPayment(
           await tx
             .update(serviceAppointments)
             .set({
-              status: APPOINTMENT_STATUS.CANCELLED,
+              status: BOOKING_STATUS.QUOTE_APPROVED,
               updatedAt: sql`CURRENT_TIMESTAMP`,
             })
             .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))

@@ -152,7 +152,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       title: 'Neue Workshop-Anmeldung',
       content: `${session.user.name || session.user.email} hat sich für «${workshop.title}» angemeldet.`,
       related_type: RELATED_TYPES.WORKSHOP,
-      related_id: workshop.id,
+      related_id: instance.id,
     }).catch(() => {})
 
     return apiSuccess({

@@ -6,6 +6,7 @@ import {
   Wrench,
 } from 'lucide-react'
 import type { DashboardStats, FulfillAction } from './types'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 
 export function buildFulfillActions(
   stats: DashboardStats,
@@ -31,7 +32,7 @@ export function buildFulfillActions(
     })
   }
 
-  if (stats.urgentItHilfe > 0 && canAccessSection('it-hilfe')) {
+  if (stats.urgentItHilfe > 0 && canAccessSection('it-hilfe-admin')) {
     actions.push({
       label: 'IT-Hilfe zuweisen',
       href: '/admin/it-hilfe',
@@ -40,10 +41,10 @@ export function buildFulfillActions(
     })
   }
 
-  if (stats.pendingAppointments > 0 && canAccessSection('services')) {
+  if (stats.pendingAppointments > 0 && canAccessSection('appointments-admin')) {
     actions.push({
       label: 'Termine bestätigen',
-      href: '/admin/services/appointments',
+      href: SERVICE_APPOINTMENT_ROUTES.adminList,
       icon: Calendar,
       count: stats.pendingAppointments,
     })

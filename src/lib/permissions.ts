@@ -113,8 +113,10 @@ export interface StaffUser {
  * Maps old permission names to new ones
  */
 const PERMISSION_ALIASES: Record<string, string> = {
-  finances: 'finanzen', // Old finances -> new finanzen
-  'workshops-admin': 'workshops', // Old 'workshops' stored in DB maps to new canonical id
+  finances: 'finanzen',
+  'workshops-admin': 'workshops',
+  'it-hilfe': 'it-hilfe-admin',
+  services: 'appointments-admin',
 }
 
 /**

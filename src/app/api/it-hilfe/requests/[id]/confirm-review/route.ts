@@ -16,10 +16,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, REVIEW_MIN_CHARS } from '@/config/it-hilfe'
-import { sendCustomEmail } from '@/lib/email'
-import { itHilfeReviewReceived } from '@/lib/email/templates/it-hilfe'
-import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
-import { APP_URL } from '@/config/urls'
+import { notifyReviewReceived } from '@/lib/it-hilfe/notifications'
 import { createReview, findDuplicateReview } from '@/lib/reviews/create-review'
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -179,35 +176,14 @@ export const POST = withAuth<{ id: string }>(async (
       rating,
     })
 
-    // Thank-you notification + email to helper
-    sendItHilfeNotification({
+    notifyReviewReceived({
       recipientIds: [offer.helperId],
-      title: 'Du hast eine Bewertung erhalten',
-      content: `Vielen Dank für deine Hilfe! Du hast ${rating}/5 Sterne für "${row.title}" erhalten.`,
       requestId: id,
+      helperName: offer.helperName || 'Helfer',
+      requestTitle: row.title,
+      rating,
+      reviewText,
     })
-
-    // sendCustomEmail resolves {success:false} on SMTP failure rather
-    // than throwing; bare-catch misses that mode. Same fix class.
-    const requestUrl = `${APP_URL}/it-hilfe/${id}`
-    sendCustomEmail(
-      offer.helperEmail,
-      itHilfeReviewReceived(
-        offer.helperName || 'Helfer',
-        row.title,
-        rating,
-        reviewText,
-        requestUrl,
-      ),
-    )
-      .then((r) => {
-        if (!r.success) {
-          logger.warn('Failed to send itHilfeReviewReceived email (resolved)', { error: r.error, requestId: id })
-        }
-      })
-      .catch((err) =>
-        logger.warn('Failed to send itHilfeReviewReceived email (rejected)', { error: err, requestId: id }),
-      )
 
     return apiSuccess({
       message: 'Bewertung erfolgreich abgegeben',

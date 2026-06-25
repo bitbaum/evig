@@ -2,7 +2,7 @@
 
 **Created:** 2026-06-07  
 **Last Modified:** 2026-06-19  
-**Last Modified Summary:** Legacy list API proxies now return 410 Gone; IT_HILFE.api.helpers removed
+**Last Modified Summary:** Removed service-booking orphan; documented live pay path
 
 Code that has zero importers in `src/` and is a candidate for removal in
 a future cleanup PR. Listed here instead of deleted because the team
@@ -13,20 +13,12 @@ turned back on.
 
 ## Verified orphaned (last checked: 2026-06-15)
 
-### Payment / service-booking flow (~590 lines)
+### ~~Payment / service-booking flow (~590 lines)~~ — REMOVED 2026-06-19
 
-The on-frontend payment flow for service appointments. The page that
-would have hosted it was never wired up; the API route was only called
-from the orphaned hook.
-
-- `src/components/payments/service-booking/` — 9 files
-  - `BookingForm.tsx`, `ErrorView.tsx`, `PaymentView.tsx`, `ProcessingView.tsx`,
-    `ServiceBookingPayment.tsx`, `SuccessView.tsx`, `index.ts`, `types.ts`,
-    `useServiceBooking.ts`
-- `src/components/payments/CurrencySelector.tsx` — only imported by the
-  orphaned `BookingForm.tsx`
-- `src/app/api/appointments/book-with-payment/` — only called by the
-  orphaned `useServiceBooking.ts`
+Was orphaned: `service-booking/` UI, `CurrencySelector`, `book-with-payment` API,
+`useCustomerBookings`. Live service payment path is book via `POST /api/appointments`,
+then pay via `POST /api/appointments/[id]/pay` from `/dashboard/appointments/[id]`.
+Routes SSOT: `src/config/service-appointments.ts`.
 
 ### ~~Onboarding info page (~330 lines)~~ — REMOVED 2026-06-15
 

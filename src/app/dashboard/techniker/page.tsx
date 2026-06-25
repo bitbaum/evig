@@ -112,7 +112,7 @@ export default async function TechnikerDashboardPage() {
               {t('editProfile')}
             </Link>
             <Link
-              href={IT_HILFE.routes.browse}
+              href={IT_HILFE.routes.browseRequests}
               className="px-4 py-2 text-sm bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
             >
               {t('allRequests')}
@@ -174,7 +174,7 @@ export default async function TechnikerDashboardPage() {
                 </p>
               </div>
               <Link
-                href={IT_HILFE.routes.browse}
+                href={IT_HILFE.routes.browseRequests}
                 className="text-xs text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 font-medium"
               >
                 {t('viewAll')}
@@ -243,7 +243,7 @@ export default async function TechnikerDashboardPage() {
                     {t('noOffers')}
                   </p>
                   <Link
-                    href={IT_HILFE.routes.browse}
+                    href={IT_HILFE.routes.browseRequests}
                     className="text-sm text-cyan-600 hover:underline mt-2 inline-block"
                   >
                     {t('browseRequests')}
@@ -290,7 +290,7 @@ export default async function TechnikerDashboardPage() {
             ✏️ {t('editProfile')}
           </Link>
           <Link
-            href={IT_HILFE.routes.browse}
+            href={IT_HILFE.routes.browseRequests}
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium',
               'bg-surface-base border',

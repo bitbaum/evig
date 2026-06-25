@@ -916,6 +916,9 @@
       "loadError": "Fehler beim Laden des Inserats",
       "orderError": "Bestellung konnte nicht erstellt werden",
       "networkError": "Netzwerkfehler beim Erstellen der Bestellung",
+      "paymentSuccess": "Zahlung erfolgreich! Deine Bestellung ist bestätigt.",
+      "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
+      "paymentCancelled": "Zahlung abgebrochen.",
       "ownListing": "Eigenes Inserat",
       "title": "Sichere Zahlung",
       "delivery": {
@@ -1072,6 +1075,9 @@
       "itemCount": "{count, plural, one {# Artikel} other {# Artikel}}",
       "continueShopping": "Weiter einkaufen",
       "pickupNote": "Abholung in Zürich — kostenlos",
+      "paymentSuccess": "Zahlung erfolgreich! Deine Bestellung ist bestätigt.",
+      "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
+      "paymentCancelled": "Zahlung abgebrochen.",
       "revampitOnly": "Nur Revamp-IT-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
       "cartAriaLabel": "Warenkorb, {count} Artikel",
       "closeAriaLabel": "Warenkorb schliessen"
@@ -2423,6 +2429,9 @@
       "registerFree": "Für Workshop anmelden",
       "registerPaid": "Anmelden & bezahlen",
       "paymentNote": "Sichere Zahlung über unseren Zahlungsanbieter.",
+      "paymentSuccess": "Zahlung erfolgreich! Deine Workshop-Anmeldung ist bestätigt.",
+      "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
+      "paymentCancelled": "Zahlung abgebrochen.",
       "confirmationNote": "Du erhältst eine Bestätigungs-E-Mail mit allen Details."
     },
     "reviews": {
@@ -8100,7 +8109,10 @@
       "cancel": "Abbrechen",
       "saving": "Speichern…",
       "save": "Speichern",
-      "paymentSuccess": "Zahlung erfolgreich! Dein Termin ist bestätigt."
+      "paymentSuccess": "Zahlung erfolgreich! Dein Termin ist bestätigt.",
+      "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
+      "paymentCancelled": "Zahlung abgebrochen.",
+      "viewDetails": "Details ansehen"
     },
     "orders": {
       "pageTitle": "Meine Bestellungen",
@@ -8385,6 +8397,11 @@
       "loadError": "Fehler beim Laden",
       "networkError": "Netzwerkfehler",
       "actionError": "Aktion fehlgeschlagen",
+      "payNow": "Jetzt bezahlen",
+      "payError": "Zahlung konnte nicht gestartet werden",
+      "paymentSuccess": "Zahlung erfolgreich! Dein Termin ist bestätigt.",
+      "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
+      "paymentCancelled": "Zahlung abgebrochen.",
       "detail": {
         "backToBookings": "Zurück zu Buchungen",
         "bookingId": "Auftrag #",

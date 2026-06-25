@@ -9,7 +9,6 @@ import {
   MessageSquare,
   Send,
   Shield,
-  ShoppingCart,
   Loader2,
   Share2,
   Check,
@@ -17,7 +16,7 @@ import {
 } from 'lucide-react'
 import type { ListingDetail } from './types'
 import { useTranslations } from 'next-intl'
-import { formatCHF, LISTING_STATUS } from '@/config/marketplace'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 interface ListingActionButtonsProps {
   listing: ListingDetail
@@ -94,23 +93,17 @@ export function ListingActionButtons({
         </div>
       )}
 
-      {/* RevampIT direct purchase — only when ACTIVE */}
+      {/* RevampIT trust strip — checkout is via cart (AddToCartButton above) */}
       {!isOwner && isRevampit && isAvailable && (
-        <>
-          <div className="bg-action-muted border border-strong rounded-lg p-4 space-y-2">
-            <div className="flex items-center gap-2 text-action font-medium text-sm">
-              <Shield className="w-4 h-4" aria-hidden="true" />
-              {t('revampitTrustTitle')}
-            </div>
-            <p className="text-xs text-action">
-              {t('revampitTrustDesc')}
-            </p>
+        <div className="bg-action-muted border border-strong rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2 text-action font-medium text-sm">
+            <Shield className="w-4 h-4" aria-hidden="true" />
+            {t('revampitTrustTitle')}
           </div>
-          <Button as={Link} href={`/marketplace/checkout/${listing.id}`} variant="primary" size="lg" className="w-full">
-            <ShoppingCart className="w-5 h-5" aria-hidden="true" />
-            {t('buyNow')} — {formatCHF(Number(listing.price_chf))}
-          </Button>
-        </>
+          <p className="text-xs text-action">
+            {t('revampitTrustDesc')}
+          </p>
+        </div>
       )}
 
       {/* P2P payment info */}

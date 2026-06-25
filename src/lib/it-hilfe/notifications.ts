@@ -214,16 +214,8 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
 }
 
 /**
- * Generic IT-Hilfe lifecycle notification — used by routes that need a
- * simple "thing changed" alert without one of the typed templates above.
- * The central pipeline picks the generic notificationEmail() template
- * since no metadata.requestUrl is supplied.
- *
- * Kept as a thin wrapper because the 4 remaining callers (offer
- * decline, request status change, complete, confirm-review) each pass
- * a custom title + content and don't fit one of the typed templates
- * cleanly. Migrating them individually would require a NOTIFICATION_TYPES
- * entry + template per event class — diminishing returns.
+ * Generic IT-Hilfe lifecycle notification — in-app only (generic email template).
+ * Prefer typed helpers below when a rich email template exists.
  */
 export function sendItHilfeNotification(params: {
   recipientIds: string[]
@@ -239,5 +231,81 @@ export function sendItHilfeNotification(params: {
     related_id: params.requestId,
   }).catch(err => {
     logger.warn('Failed to send IT-Hilfe lifecycle notification', { error: err, requestId: params.requestId })
+  })
+}
+
+/** Requester: helper marked request complete — confirm + review (single email). */
+export function notifyRequestCompleted(params: {
+  recipientIds: string[]
+  requestId: string
+  requesterName: string
+  requestTitle: string
+}): void {
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
+  notifyUsers(params.recipientIds, {
+    type: NOTIFICATION_TYPES.IT_HILFE_REQUEST_COMPLETED,
+    title: 'Hilfe abgeschlossen - bitte bestätigen',
+    content: 'Die Hilfe wurde als abgeschlossen markiert. Bitte bestätige und gib eine Bewertung ab.',
+    related_type: RELATED_TYPES.IT_HILFE,
+    related_id: params.requestId,
+    metadata: {
+      requesterName: params.requesterName,
+      requestTitle: params.requestTitle,
+      requestUrl,
+    },
+  }).catch(err => {
+    logger.warn('Failed to send IT-Hilfe request completed notification', { error: err, requestId: params.requestId })
+  })
+}
+
+/** Helper: requester declined their offer (single email). */
+export function notifyOfferDeclined(params: {
+  recipientIds: string[]
+  requestId: string
+  helperName: string
+  requestTitle: string
+}): void {
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
+  notifyUsers(params.recipientIds, {
+    type: NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED,
+    title: 'Angebot abgelehnt',
+    content: `Dein Angebot für "${params.requestTitle}" wurde abgelehnt.`,
+    related_type: RELATED_TYPES.IT_HILFE,
+    related_id: params.requestId,
+    metadata: {
+      helperName: params.helperName,
+      requestTitle: params.requestTitle,
+      requestUrl,
+    },
+  }).catch(err => {
+    logger.warn('Failed to send IT-Hilfe offer declined notification', { error: err, requestId: params.requestId })
+  })
+}
+
+/** Helper: requester left a review (single email). */
+export function notifyReviewReceived(params: {
+  recipientIds: string[]
+  requestId: string
+  helperName: string
+  requestTitle: string
+  rating: number
+  reviewText: string
+}): void {
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
+  notifyUsers(params.recipientIds, {
+    type: NOTIFICATION_TYPES.IT_HILFE_REVIEW_RECEIVED,
+    title: 'Du hast eine Bewertung erhalten',
+    content: `Vielen Dank für deine Hilfe! Du hast ${params.rating}/5 Sterne für "${params.requestTitle}" erhalten.`,
+    related_type: RELATED_TYPES.IT_HILFE,
+    related_id: params.requestId,
+    metadata: {
+      helperName: params.helperName,
+      requestTitle: params.requestTitle,
+      requestUrl,
+      rating: String(params.rating),
+      reviewText: params.reviewText,
+    },
+  }).catch(err => {
+    logger.warn('Failed to send IT-Hilfe review received notification', { error: err, requestId: params.requestId })
   })
 }

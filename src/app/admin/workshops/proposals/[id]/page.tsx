@@ -1,7 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import Link from 'next/link';
+import Link from 'next/link'
+import { ROUTES } from '@/config/routes';
 import { Button } from '@/components/ui/button';
 import {
   ArrowLeft,
@@ -24,7 +25,6 @@ import { formatPriceCents } from '@/config/marketplace';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import Heading from '@/components/admin/AdminHeading';
 import { useWorkshopProposalDetail } from '@/hooks/useWorkshopProposalDetail';
-import { ROUTES } from '@/config/routes';
 
 export default function WorkshopProposalDetailPage() {
   const params = useParams();
@@ -258,7 +258,7 @@ export default function WorkshopProposalDetailPage() {
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
                 <Heading level={3} className="font-semibold mb-3">Erstellter Workshop</Heading>
                 <Link
-                  href={`/admin/workshops/${proposal.created_workshop.id}`}
+                  href={ROUTES.admin.workshops}
                   className="flex items-center gap-2 text-sm text-action hover:text-action font-medium"
                 >
                   <ExternalLink className="w-4 h-4 shrink-0" />

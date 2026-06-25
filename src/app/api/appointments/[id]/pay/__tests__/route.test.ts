@@ -81,7 +81,18 @@ jest.mock('@/config/appointment-status', () => ({
 }))
 
 jest.mock('@/config/booking-status', () => ({
-  BOOKING_STATUS: { REQUESTED: 'requested', IN_PROGRESS: 'in_progress' },
+  BOOKING_STATUS: {
+    REQUESTED: 'requested',
+    QUOTE_APPROVED: 'quote_approved',
+    IN_PROGRESS: 'in_progress',
+  },
+  isPayableBookingStatus: (status: string) => ['quote_approved', 'in_progress'].includes(status),
+}))
+
+jest.mock('@/config/service-appointments', () => ({
+  SERVICE_APPOINTMENT_ROUTES: {
+    detail: (id: string) => `/dashboard/appointments/${id}`,
+  },
 }))
 
 jest.mock('@/lib/payments/payment-flow', () => ({
@@ -106,8 +117,9 @@ const MOCK_SESSION = {
 const MOCK_APPOINTMENT = {
   id: 'appt-1',
   user_id: 'user-1',
-  status: 'confirmed',
+  status: 'quote_approved',
   price_charged_cents: 5000,
+  quoted_price_chf: 50,
   service_price_cents: 5000,
   service_name: 'Laptop Repair',
   service_slug: 'laptop-repair',
@@ -297,12 +309,7 @@ describe('POST /api/appointments/[id]/pay — success', () => {
     expect(body.data.message).toMatch(/treuhänderisch/)
   })
 
-  it('failed/cancelled redirect URLs land on the list page, not the nonexistent /dashboard/appointments/[id]', async () => {
-    // The previous URLs included `/${appointmentId}`, but no
-    // /dashboard/appointments/[id] page exists — only the list at
-    // /dashboard/appointments/page.tsx. So Payrexx-redirected
-    // failed/cancelled payments 404'd. This test locks in the fix
-    // (matching shape to the success URL).
+  it('redirect URLs land on appointment detail page with payment query params', async () => {
     const req = new NextRequest('http://localhost/api/appointments/appt-1/pay', {
       method: 'POST',
       body: JSON.stringify({ useEscrow: false, autoReleaseDays: 7, paymentType: 'full' }),
@@ -312,10 +319,8 @@ describe('POST /api/appointments/[id]/pay — success', () => {
 
     const { processPaymentWithoutInvoice } = jest.requireMock('@/lib/payments/payment-flow')
     const callArgs = processPaymentWithoutInvoice.mock.calls[0][0]
-    expect(callArgs.successRedirectUrl).toMatch(/\/dashboard\/appointments\?payment=success$/)
-    expect(callArgs.failedRedirectUrl).toMatch(/\/dashboard\/appointments\?payment=failed$/)
-    expect(callArgs.cancelRedirectUrl).toMatch(/\/dashboard\/appointments\?payment=cancelled$/)
-    expect(callArgs.failedRedirectUrl).not.toMatch(/\/appointments\/appt-1/)
-    expect(callArgs.cancelRedirectUrl).not.toMatch(/\/appointments\/appt-1/)
+    expect(callArgs.successRedirectUrl).toMatch(/\/dashboard\/appointments\/appt-1\?payment=success$/)
+    expect(callArgs.failedRedirectUrl).toMatch(/\/dashboard\/appointments\/appt-1\?payment=failed$/)
+    expect(callArgs.cancelRedirectUrl).toMatch(/\/dashboard\/appointments\/appt-1\?payment=cancelled$/)
   })
 })

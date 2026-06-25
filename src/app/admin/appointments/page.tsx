@@ -1,17 +1,11 @@
 /**
  * Admin Appointments — list of all service bookings
  *
- * The admin-side counterpart to the user "Termin buchen" flow. New bookings
- * arrive here in status `requested`; the stat cards above the table are
- * one-click filters (same pattern as /admin/tasks).
- *
- * Detail/edit lives on the existing /api/appointments/[id] PATCH route; a
- * dedicated detail page is intentionally out of scope for this iteration.
- * The row inline shows enough for triage (customer, service, urgency,
- * created date) and admins act via email or by assigning a repairer.
+ * Detail view: {@link SERVICE_APPOINTMENT_ROUTES.adminDetail} (assign repairer, triage).
  */
 
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { adminTable } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import { Calendar, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
@@ -24,6 +18,7 @@ import {
   getUrgencyBadge,
 } from '@/config/booking-status'
 import { ROUTES } from '@/config/routes'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 import { formatDateShort } from '@/lib/date-formats'
 import { listAppointments, getAppointmentStats, listActiveRepairers } from '@/lib/services/appointments'
 import { AssignRepairerSelect } from './AssignRepairerSelect'
@@ -149,9 +144,12 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                   return (
                     <tr key={row.id} className={adminTable.tr}>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-text-primary">
+                        <Link
+                          href={SERVICE_APPOINTMENT_ROUTES.adminDetail(row.id)}
+                          className="font-medium text-text-primary hover:text-action"
+                        >
                           {row.customer_name || row.customer_email}
-                        </div>
+                        </Link>
                         {row.customer_name && (
                           <div className="text-xs text-text-tertiary">
                             {row.customer_email}

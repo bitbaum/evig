@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-06-19
-last_modified_summary: Unified technician SSOT (repairer_profiles); migration 095; legacy helper API consolidated
+last_modified_summary: Phase 3 admin link fixes, IT-Hilfe single-notification pipeline, permission aliases
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -115,6 +115,24 @@ Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav 
 - **SSOT:** `docs/UNIFIED_AUTH.md` — registration, verify-code, password reset, staff permissions
 - **Live onboarding:** `OnboardingChecklist` on `/dashboard` (`src/lib/domain/onboarding.ts`)
 - **Notifications:** central `notifyUsers()` pipeline — see `docs/ARCHITECTURE_DEBT.md` (#2 closed)
+
+---
+
+## Service appointments vs IT-Hilfe vs workshops
+
+Three separate booking domains (intentional SoC):
+
+| Domain | User routes | Payment |
+|--------|-------------|---------|
+| **Service appointments** (org repair) | `/dashboard/appointments/*` — SSOT: `src/config/service-appointments.ts` | Book: `POST /api/appointments`; pay after quote: `POST /api/appointments/[id]/pay` |
+| **IT-Hilfe** (peer help) | `/it-hilfe/*`, `/dashboard/techniker` | No Payrexx on request flow |
+| **Workshops** | `/workshops/[slug]`, `/dashboard/workshops` | Free: `POST /api/workshops/register`; paid: `register-with-payment` |
+
+Legacy `/dashboard/bookings/*` → permanent redirect to `/dashboard/appointments/*`.
+
+Payrexx return banners: `PaymentReturnBanner` + `src/lib/payments/payment-return.ts`.
+
+**Marketplace RevampIT stock:** add to cart → `/marketplace/cart` → `POST /api/marketplace/cart/checkout`. P2P listings use direct checkout per listing.
 
 ---
 

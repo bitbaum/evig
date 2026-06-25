@@ -1,5 +1,5 @@
 /**
- * Presentation cards for the /dashboard/bookings/[id] page.
+ * Presentation cards for the service appointment detail page (`/dashboard/appointments/[id]`).
  *
  * Pure JSX + props. Each card maps one "slot" of the booking detail
  * page; page.tsx composes them. State + actions live in
@@ -14,6 +14,7 @@ import {
   CheckCircle,
   Clock,
   Home,
+  CreditCard,
   Loader2,
   MapPin,
   Phone,
@@ -33,6 +34,7 @@ import {
   type BookingStatus,
   getBookingStatusBadge,
   getUrgencyBadge,
+  isPayableBookingStatus,
 } from '@/config/booking-status'
 import type { AppointmentDetail, BookingDetailState } from './useBookingDetail'
 
@@ -110,6 +112,21 @@ export function BookingHeaderCard({ appointment, state }: HeaderProps) {
       )}
 
       <div className="flex gap-2 flex-wrap">
+        {state.isCustomer
+          && isPayableBookingStatus(appointment.status)
+          && (appointment.quoted_price_chf != null || appointment.status === BOOKING_STATUS.IN_PROGRESS) && (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => state.handlePay()}
+            disabled={state.actionLoading}
+          >
+            {state.actionLoading
+              ? <Loader2 className="w-4 h-4 animate-spin" />
+              : <CreditCard className="w-4 h-4" />}
+            {t('payNow')}
+          </Button>
+        )}
         {canRate && !state.showRating && (
           <Button variant="outline" size="sm" onClick={() => state.setShowRating(true)}>
             <Star className="w-4 h-4" />

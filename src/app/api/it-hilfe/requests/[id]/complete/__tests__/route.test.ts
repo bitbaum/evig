@@ -80,18 +80,8 @@ jest.mock('@/config/it-hilfe', () => ({
 }))
 
 jest.mock('@/lib/it-hilfe/notifications', () => ({
-  sendItHilfeNotification: jest.fn().mockResolvedValue(undefined),
+  notifyRequestCompleted: jest.fn(),
 }))
-
-jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-}))
-
-jest.mock('@/lib/email/templates/it-hilfe', () => ({
-  itHilfeCompleted: jest.fn().mockReturnValue({}),
-}))
-
-jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }))
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
@@ -152,10 +142,8 @@ describe('POST /api/it-hilfe/requests/[id]/complete', () => {
       return fn({ update: txUpdate, execute: txExecute })
     })
     // Re-establish fire-and-forget mocks cleared by resetAllMocks
-    const email = jest.requireMock('@/lib/email') as { sendCustomEmail: jest.Mock }
-    email.sendCustomEmail.mockResolvedValue({ success: true })
-    const notif = jest.requireMock('@/lib/it-hilfe/notifications') as { sendItHilfeNotification: jest.Mock }
-    notif.sendItHilfeNotification.mockResolvedValue(undefined)
+    const notif = jest.requireMock('@/lib/it-hilfe/notifications') as { notifyRequestCompleted: jest.Mock }
+    notif.notifyRequestCompleted.mockImplementation(() => undefined)
   })
 
   it('returns 401 when not authenticated', async () => {

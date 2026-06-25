@@ -8,7 +8,7 @@ export const ROUTES = {
   admin: {
     dashboard:          '/admin',
     erfassung:          '/admin/erfassung',
-    erfassungNew:       '/admin/erfassung/new',
+    erfassungNew:       '/admin/erfassung',
     products:           '/admin/products',
     product:            (id: string) => `/admin/products/${id}`,
     productFactsheet:   (id: string) => `/admin/products/${id}/factsheet`,

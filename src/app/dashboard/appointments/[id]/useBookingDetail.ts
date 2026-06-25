@@ -1,5 +1,5 @@
 /**
- * State + actions hook for the /dashboard/bookings/[id] page.
+ * State + actions hook for `/dashboard/appointments/[id]`.
  *
  * Owns the appointment fetch, action mutations, and the rating-form
  * local state. Extracted from page.tsx as part of the QQ.3 split so
@@ -63,6 +63,7 @@ export interface BookingDetailState {
   setReview: (v: string) => void
   clearError: () => void
   handleAction: (action: string, extra?: Record<string, unknown>) => Promise<void>
+  handlePay: () => Promise<void>
 }
 
 export function useBookingDetail(id: string): BookingDetailState {
@@ -97,13 +98,14 @@ export function useBookingDetail(id: string): BookingDetailState {
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
-      router.push('/auth/login')
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(`/dashboard/appointments/${id}`)}`)
       return
     }
     if (sessionStatus === 'authenticated') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- data load when session ready
       fetchAppointment()
     }
-  }, [sessionStatus, router, fetchAppointment])
+  }, [sessionStatus, router, fetchAppointment, id])
 
   const handleAction = useCallback(async (action: string, extra?: Record<string, unknown>) => {
     setActionLoading(true)
@@ -127,6 +129,26 @@ export function useBookingDetail(id: string): BookingDetailState {
     }
   }, [id, fetchAppointment, t])
 
+  const handlePay = useCallback(async () => {
+    setActionLoading(true)
+    setError(null)
+    try {
+      const result = await apiFetch<{ paymentUrl: string }>(`/api/appointments/${id}/pay`, {
+        method: 'POST',
+        body: { useEscrow: false, autoReleaseDays: 7, paymentType: 'full' },
+      })
+      if (result.success && result.data?.paymentUrl) {
+        window.location.href = result.data.paymentUrl
+        return
+      }
+      setError(result.error || t('payError'))
+    } catch {
+      setError(t('networkError'))
+    } finally {
+      setActionLoading(false)
+    }
+  }, [id, t])
+
   const isCustomer = !!session?.user?.id && session.user.id === appointment?.user_id
   const clearError = useCallback(() => setError(null), [])
 
@@ -145,5 +167,6 @@ export function useBookingDetail(id: string): BookingDetailState {
     setReview,
     clearError,
     handleAction,
+    handlePay,
   }
 }

@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import { useCheckout, type ListingForCheckout } from '@/hooks/useCheckout'
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
 import { ROUTES } from '@/config/routes'
 
 interface CheckoutPageClientProps {
@@ -68,6 +69,10 @@ export function CheckoutPageClient({
 
   return (
     <div className="max-w-3xl mx-auto">
+      <PaymentReturnBanner
+        namespace="marketplace.checkout"
+        cleanPath={ROUTES.public.marketplaceCheckout(listing.id)}
+      />
       <nav aria-label={t('title')} className="mb-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-text-tertiary">
         <span>{t('summary.title')}</span>
         <span aria-hidden="true">/</span>
