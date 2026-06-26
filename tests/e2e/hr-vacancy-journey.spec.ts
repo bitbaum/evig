@@ -23,7 +23,7 @@ test.describe('HR vacancy journey', () => {
 
   test.skip(!ADMIN_TEST_PASSWORD, 'Set AUTH_TEST_ADMIN_PASSWORD')
 
-  test('admin publish → guest apply → admin hire → team profile', async ({ page }) => {
+  test('admin publish → guest apply → admin hire → team profile', async ({ page, browser }) => {
     const title = buildE2EVacancyTitle()
     const applicantEmail = `e2e-hr-${Date.now()}@example.test`
     const applicantName = 'E2E Bewerber'
@@ -37,8 +37,21 @@ test.describe('HR vacancy journey', () => {
     expect(published.status).toBe('published')
     expect(published.slug).toBeTruthy()
 
-    const application = await applyToVacancy(page.request, published.slug, applicantEmail, applicantName)
-    expect(application.id).toBeTruthy()
+    const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001'
+    const guestContext = await browser.newContext({ baseURL })
+    try {
+      const guestPage = await guestContext.newPage()
+      await guestPage.goto(ROUTES.public.careers)
+      const application = await applyToVacancy(
+        guestPage.request,
+        published.slug,
+        applicantEmail,
+        applicantName,
+      )
+      expect(application.id).toBeTruthy()
+    } finally {
+      await guestContext.close()
+    }
 
     const apps = await listApplicationsForPosting(page.request, draft.id)
     const match = apps.find((a) => a.applicant_email === applicantEmail.toLowerCase())

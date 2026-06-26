@@ -62,16 +62,14 @@ export async function applyToVacancy(
   applicantEmail: string,
   applicantName: string,
 ): Promise<{ id: string }> {
-  const response = await request.post(`/api/careers/${slug}/apply`, {
-    data: {
-      applicant_name: applicantName,
-      applicant_email: applicantEmail,
-      source: 'website',
-      track_responses: {
-        motivation: 'E2E Bewerbung — ich möchte bei RevampIT Freiwilligenarbeit leisten.',
-        hours_per_week: 4,
-        skills: ['Hardware'],
-      },
+  const response = await csrfPost(request, `/api/careers/${slug}/apply`, {
+    applicant_name: applicantName,
+    applicant_email: applicantEmail,
+    source: 'website',
+    track_responses: {
+      motivation: 'E2E Bewerbung — ich möchte bei RevampIT Freiwilligenarbeit leisten.',
+      hours_per_week: 4,
+      skills: ['Hardware'],
     },
   })
   return parseApi<{ id: string }>(response)

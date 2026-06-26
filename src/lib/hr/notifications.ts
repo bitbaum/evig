@@ -2,8 +2,6 @@ import { createNotification, notifyAllStaff } from '@/lib/services/notifications
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { sendCustomEmail } from '@/lib/email'
 import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import { APP_URL } from '@/config/urls'
 
 export async function notifyStaffNewApplication(
   applicationId: string,
@@ -57,8 +55,4 @@ export async function notifyApplicantStatusChange(
       text: `Status deiner Bewerbung für «${postingTitle}»: ${statusLabel}.`,
     })
   }
-}
-
-export function publicVacancyUrl(slug: string): string {
-  return `${APP_URL}${ROUTES.public.careerPosting(slug)}`
 }

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { ORG } from '@/config/org'
 import { getVacancyBySlug } from '@/lib/services/hr-vacancies'
 import { PUBLIC_VACANCY_STATUSES, type VacancyStatus } from '@/config/hr-vacancies'
-import { publicVacancyUrl } from '@/lib/hr/notifications'
+import { publicVacancyUrl } from '@/lib/hr/public-urls'
 import CareerDetailClient from './CareerDetailClient'
 
 interface PageProps {
