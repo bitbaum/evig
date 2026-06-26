@@ -88,6 +88,7 @@ export interface TeamProfileFormState {
   canton_tax_code: string
   work_state: string
   is_active: boolean
+  show_on_about: boolean
 }
 
 export function useTeamProfileForm({
@@ -138,6 +139,7 @@ export function useTeamProfileForm({
     canton_tax_code: initialData?.canton_tax_code || '',
     work_state: initialData?.work_state || 'active',
     is_active: initialData?.is_active ?? true,
+    show_on_about: initialData?.show_on_about ?? false,
   })
 
   const [skillInput, setSkillInput] = useState('')

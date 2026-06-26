@@ -96,6 +96,21 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
           Inaktive Profile werden in der Liste ausgegraut angezeigt
         </p>
       </div>
+
+      <div>
+        <label className="flex items-center gap-2 text-sm font-medium text-text-secondary">
+          <input
+            type="checkbox"
+            checked={form.show_on_about}
+            onChange={(e) => onChange('show_on_about', e.target.checked)}
+            className="rounded-sm border-default"
+          />
+          Auf About-Seite anzeigen
+        </label>
+        <p className="text-xs text-text-tertiary mt-1">
+          Nur für benannte Leitungspersonen — kein vollständiges Teamverzeichnis
+        </p>
+      </div>
     </div>
   )
 }

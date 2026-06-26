@@ -55,7 +55,10 @@ export const NOTIFICATION_TYPES = {
   TIMECARD_SUBMITTED: 'timecard_submitted',
   TIMECARD_REVIEWED: 'timecard_reviewed',
 
-  // Core
+  // HR / Careers
+  JOB_APPLICATION_RECEIVED: 'job_application_received',
+  JOB_APPLICATION_STATUS: 'job_application_status',
+  VACANCY_PUBLISHED: 'vacancy_published',
   MESSAGE: 'message',
   APPOINTMENT: 'appointment',
   MARKETPLACE: 'marketplace',
@@ -80,6 +83,8 @@ export const RELATED_TYPES = {
   TIME_OFF_REVIEW: 'time_off_review',
   TIMECARD: 'timecard',
   TIMECARD_REVIEW: 'timecard_review',
+  JOB_APPLICATION: 'job_application',
+  JOB_VACANCY: 'job_vacancy',
 } as const
 
 export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
@@ -105,4 +110,6 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/timecards?id=', // approver → the queue
   [RELATED_TYPES.TIMECARD]: '/dashboard/timecards?id=',
   [RELATED_TYPES.TIMECARD_REVIEW]: '/admin/team/approvals?id=',
+  [RELATED_TYPES.JOB_APPLICATION]: '/admin/hr/applications/',
+  [RELATED_TYPES.JOB_VACANCY]: '/admin/hr/vacancies/',
 }

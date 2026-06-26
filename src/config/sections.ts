@@ -827,6 +827,40 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'personen',
   },
 
+  'hr-vacancies': {
+    id: 'hr-vacancies',
+    path: '/admin/hr/vacancies',
+    ui: {
+      label: 'Offene Stellen',
+      description: 'Stellen ausschreiben, pausieren und teilen',
+      icon: ClipboardList,
+      emoji: '📋',
+      color: 'primary',
+      mobileBottomNavLabel: 'Stellen',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 201.5,
+    category: 'management',
+    sidebarGroup: 'personen',
+  },
+
+  'hr-applications': {
+    id: 'hr-applications',
+    path: '/admin/hr/applications',
+    ui: {
+      label: 'Bewerbungen',
+      description: 'Bewerbungs-Pipeline und Einstellungen',
+      icon: FileText,
+      emoji: '📝',
+      color: 'info',
+      mobileBottomNavLabel: 'Bewer.',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 201.6,
+    category: 'management',
+    sidebarGroup: 'personen',
+  },
+
   timecards: {
     id: 'timecards',
     path: '/admin/timecards',

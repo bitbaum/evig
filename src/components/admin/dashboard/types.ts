@@ -29,6 +29,8 @@ export interface DashboardStats {
   urgentItHilfeOldest: string | null
   pendingRepairerApplications: number
   pendingRepairerApplicationsOldest: string | null
+  pendingJobApplications: number
+  pendingJobApplicationsOldest: string | null
   overdueTasks: number
   overdueTasksOldest: string | null
   openDecisions: number

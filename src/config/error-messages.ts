@@ -100,6 +100,7 @@ export const ERROR_MESSAGES = {
   DECISION_UPDATE_FAILED: 'Fehler beim Aktualisieren der Entscheidung',
   DECISION_NOT_EDITABLE: 'Entscheidung kann in diesem Status nicht bearbeitet werden',
   DECISION_INVALID_TRANSITION: 'Ungültiger Statusübergang',
+  INVALID_STATUS_TRANSITION: 'Ungültiger Statuswechsel',
   VOTE_NOT_IN_VOTING_PHASE: 'Abstimmung ist nicht in der Abstimmungsphase',
   VOTE_NOT_PARTICIPANT: 'Nicht zur Teilnahme an dieser Abstimmung berechtigt',
   VOTE_INVALID_DATA: 'Ungültige Abstimmungsdaten',

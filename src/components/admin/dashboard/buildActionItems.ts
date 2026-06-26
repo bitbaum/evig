@@ -90,6 +90,17 @@ export function buildActionItems(
     })
   }
 
+  if (stats.pendingJobApplications > 0 && canAccessSection('hr-applications')) {
+    items.push({
+      type: 'warning',
+      label: `${stats.pendingJobApplications} HR-Bewerbung${stats.pendingJobApplications > 1 ? 'en' : ''} (neu)`,
+      count: stats.pendingJobApplications,
+      href: '/admin/hr/applications',
+      actionLabel: 'Prüfen',
+      oldestAt: stats.pendingJobApplicationsOldest,
+    })
+  }
+
   if (stats.pendingRepairerApplications > 0) {
     items.push({
       type: 'warning',

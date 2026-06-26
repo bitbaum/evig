@@ -117,6 +117,8 @@ const PERMISSION_ALIASES: Record<string, string> = {
   'workshops-admin': 'workshops',
   'it-hilfe': 'it-hilfe-admin',
   services: 'appointments-admin',
+  'hr-vacancies': 'team',
+  'hr-applications': 'team',
 }
 
 /**

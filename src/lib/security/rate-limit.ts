@@ -102,6 +102,9 @@ export const rateLimiters = {
   // recover the user's actual password.
   passwordChange: createRateLimiter(ONE_HOUR_MS, 5),
 
+  // HR job applications: 10 per hour per email/IP
+  jobApplicationCreate: createRateLimiter(ONE_HOUR_MS, 10),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(FIFTEEN_MINUTES_MS, 100)
 };

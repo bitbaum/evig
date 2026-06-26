@@ -49,7 +49,7 @@ export default async function InternshipsPage({ params }: InternshipsPageProps) 
       title={t('internships.title')}
       description={t('internships.description')}
       ctaText={t('internships.ctaText')}
-      ctaHref="/get-involved/kontakt?thema=praktikum"
+      ctaHref="/karriere?track=intern"
     >
       <div className="space-y-16">
         {/* Overview Section */}

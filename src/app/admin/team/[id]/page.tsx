@@ -65,6 +65,7 @@ interface ProfileData {
   canton_tax_code: string | null
   work_state: string
   is_active: boolean
+  show_on_about: boolean
   created_at: string
   updated_at: string
 }
@@ -110,6 +111,7 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
         tp.work_state
         ${sensitiveColumns},
         tp.is_active,
+        tp.show_on_about,
         tp.created_at,
         tp.updated_at
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp

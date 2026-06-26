@@ -49,7 +49,7 @@ export default async function WorkReintegrationPage({ params }: WorkReintegratio
       title={t('workReintegration.title')}
       description={t('workReintegration.description')}
       ctaText={t('workReintegration.ctaText')}
-      ctaHref="/get-involved/kontakt?thema=wiedereinstieg"
+      ctaHref="/karriere?track=reintegration"
     >
       <div className="space-y-16">
         {/* Overview Section */}

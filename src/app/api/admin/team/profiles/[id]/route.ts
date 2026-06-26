@@ -61,6 +61,7 @@ export const GET = withAdmin<{ id: string }>('team', async (request, session, co
       exit_reason: teamProfiles.exitReason,
       work_state: teamProfiles.workState,
       is_active: teamProfiles.isActive,
+      show_on_about: teamProfiles.showOnAbout,
       created_at: teamProfiles.createdAt,
       updated_at: teamProfiles.updatedAt,
     }
@@ -146,6 +147,7 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
     if (data.emergency_contact_phone !== undefined) update.emergencyContactPhone = data.emergency_contact_phone
     if (data.emergency_contact_relation !== undefined) update.emergencyContactRelation = data.emergency_contact_relation
     if (data.is_active !== undefined) update.isActive = data.is_active
+    if (data.show_on_about !== undefined) update.showOnAbout = data.show_on_about
 
     // Lifecycle fields — admin-level (not just super admin)
     if (data.end_date !== undefined) update.endDate = data.end_date

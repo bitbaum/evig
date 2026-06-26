@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-25
-last_modified_summary: Database SSOT — Hetzner Postgres only; local Docker dev on 5433
+last_modified_date: 2026-06-19
+last_modified_summary: HR talent lifecycle — /karriere, admin vacancies/applications, hire→team_profiles
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -104,6 +104,19 @@ People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
 Migration `095_backfill_repairer_profiles_from_user_skills.sql` creates missing `repairer_profiles` rows for users with `user_skills` only (safe after 073).
 
 Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav entries for “Hilfe suchen” vs “Techniker finden” — one hub, three paths inside.
+
+**HR / careers (talent lifecycle):**
+
+| Layer | SSOT |
+|-------|------|
+| Public | `/karriere`, `/karriere/[slug]` — `ROUTES.public.careers` |
+| Admin | `/admin/hr/vacancies`, `/admin/hr/applications` — permission: `team` |
+| Config | `src/config/hr-vacancies.ts`, `src/config/hr-application-status.ts` |
+| DB | `job_postings`, `job_applications`, `job_application_events` (migration 097) |
+| Hire bridge | `POST /api/admin/hr/applications/[id]/hire` → `team_profiles` |
+| Runbook | `docs/HR_RUNBOOK.md` |
+
+Get-involved pages (volunteer, intern, reintegration) link to filtered `/karriere?track=…`. Team roster stays internal; About may show `show_on_about` leads only.
 
 ---
 

@@ -68,6 +68,9 @@ export const teamProfileSchema = z.object({
 
   // Status (legacy boolean — new code should prefer work_state)
   is_active: z.boolean().optional().default(true),
+
+  /** Show name/role on public About page (named leads only) */
+  show_on_about: z.boolean().optional().default(false),
 })
 
 // =============================================================================
@@ -171,6 +174,7 @@ export interface TeamProfile {
   canton_tax_code: string | null
   work_state: string
   is_active: boolean
+  show_on_about: boolean
   created_at: string
   updated_at: string
 }

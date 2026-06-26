@@ -1,8 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-06-19
-last_modified_date: 2026-06-19
-last_modified_summary: Full prod inventory green; protocols strict-mode fix; IT-Hilfe E2E rate-limit bypass
+last_modified_summary: HR talent lifecycle — vacancies, applications, /karriere, hire→team_profiles
 ---
 
 # Feature Inventory (SSOT)
@@ -38,7 +37,7 @@ npm run test:e2e:inventory
 
 Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/feature-inventory.spec.ts`
 
-**Last prod run:** full inventory + journeys green incl. decisions, CMS blog (2026-06-19); IT-Hilfe rate-limit bypass for E2E accounts deployed for reliable re-runs.
+**Last prod run:** `npm run test:e2e:inventory:prod` green — 208 inventory + all journeys incl. decisions, CMS blog, protocols (2026-06-19).
 
 ---
 
@@ -52,6 +51,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | **4** | Cleanup: dead code, terminology, CI, timecard notify | ✅ Techniker SSOT; community visibility; CI auth + migration drift gates |
 | **DB** | Hetzner-only Postgres SSOT; single `DATABASE_URL` pool | ✅ Done |
 | **E2E** | Dual-persona inventory (`test:e2e:inventory`) | ✅ 209/209 prod |
+| **HR** | Vacancies, applications, hire journey | 🟡 journey E2E added |
 
 ---
 
@@ -258,6 +258,28 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 141 | Hirn AI admin | `/admin/hirn` | ✅ inventory E2E |
 | 142 | Settings | `/admin/settings` | ✅ inventory E2E |
 | 143 | Permission requests | admin team help | ✅ inventory E2E |
+
+---
+
+## HR — Talent lifecycle (#HR)
+
+| # | Feature | Route / API | Status |
+|---|---------|-------------|--------|
+| HR-1 | Public careers list | `/karriere` | 🟡 inventory + journey E2E |
+| HR-2 | Vacancy detail + apply | `/karriere/[slug]` | 🟡 journey E2E |
+| HR-3 | Guest apply + track forms | `POST /api/careers/[slug]/apply` | ✅ all 5 tracks (Zod SSOT) |
+| HR-4 | CV upload (PDF) | `POST /api/careers/upload-cv` | 🟡 employee track |
+| HR-5 | Admin vacancies CRUD | `/admin/hr/vacancies/*` | 🟡 inventory E2E |
+| HR-6 | Publish / pause / fill | `POST …/transition` | ✅ journey E2E |
+| HR-7 | Application inbox | `/admin/hr/applications` | 🟡 inventory E2E |
+| HR-8 | Pipeline stages + hire | `POST …/hire` → `team_profiles` | ✅ journey E2E |
+| HR-9 | Onboarding tasks on hire | config `ONBOARDING_TASK_TEMPLATES` | ✅ |
+| HR-10 | Get-involved → careers links | `/get-involved/*?track=` | ✅ volunteer/intern/reintegration |
+| HR-11 | About named leads | `team_profiles.show_on_about` | 🟡 admin toggle |
+| HR-12 | Retention policy | `scripts/maintenance/hr-application-retention.ts` | 🟡 manual/cron |
+| HR-13 | Funnel stats | `GET /api/admin/hr/stats` | 🟡 |
+
+Config SSOT: `src/config/hr-vacancies.ts`, `src/config/hr-application-status.ts` · Runbook: `docs/HR_RUNBOOK.md`
 
 ---
 

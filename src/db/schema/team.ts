@@ -70,6 +70,7 @@ export const teamProfiles = pgTable('team_profiles', {
 
   // Status & timestamps
   isActive: boolean('is_active').default(true),
+  showOnAbout: boolean('show_on_about').notNull().default(false),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [

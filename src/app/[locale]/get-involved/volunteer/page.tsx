@@ -49,7 +49,7 @@ export default async function VolunteerPage({ params }: VolunteerPageProps) {
       title={t('volunteer.title')}
       description={t('volunteer.description')}
       ctaText={t('volunteer.ctaText')}
-      ctaHref="/get-involved/kontakt?thema=freiwilligenarbeit"
+      ctaHref="/karriere?track=volunteer"
     >
       <div className="space-y-16">
         {/* Overview Section */}

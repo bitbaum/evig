@@ -54,6 +54,7 @@ interface ProfileData {
   emergency_contact_relation: string | null
   hr_notes: string | null
   is_active: boolean
+  show_on_about: boolean
   // Lifecycle (visible to any team admin)
   end_date: string | null
   exit_reason: string | null
@@ -106,7 +107,8 @@ async function getProfile(id: string, includeSensitive = false): Promise<Profile
         tp.end_date,
         tp.exit_reason,
         tp.work_state,
-        tp.is_active${sensitiveColumns}
+        tp.is_active,
+        tp.show_on_about${sensitiveColumns}
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp
        JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
        WHERE tp.id = $1`,
