@@ -17,7 +17,7 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
-import { ArrowLeft, User, Clock, Activity, Edit2, Mail, Calendar, Phone } from 'lucide-react'
+import { ArrowLeft, User, Clock, Activity, Edit2, Mail, Calendar, Phone, CheckSquare, Globe } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
@@ -25,6 +25,7 @@ import { adminInteractive } from '@/lib/admin-ui'
 import { TeamProfileView } from './TeamProfileView'
 import { TeamProfileTimecardsTab } from './TeamProfileTimecardsTab'
 import { TeamProfileActivityTab } from './TeamProfileActivityTab'
+import { TeamProfileTasksTab } from './TeamProfileTasksTab'
 import { TeamLeavePeriodsCard } from './TeamLeavePeriodsCard'
 import type { TeamProfileWithUser } from '@/lib/schemas/team'
 import { Button } from '@/components/ui/button'
@@ -36,13 +37,9 @@ import {
 } from '@/config/team'
 import { formatDateShort } from '@/lib/date-formats'
 
-type TabKey = 'uebersicht' | 'zeiterfassung' | 'aktivitaet'
+type TabKey = 'uebersicht' | 'aufgaben' | 'zeiterfassung' | 'aktivitaet'
 
-const TABS: Array<{ key: TabKey; label: string; icon: typeof User }> = [
-  { key: 'uebersicht', label: 'Überblick', icon: User },
-  { key: 'zeiterfassung', label: 'Zeiterfassung', icon: Clock },
-  { key: 'aktivitaet', label: 'Aktivität', icon: Activity },
-]
+const TAB_KEYS: TabKey[] = ['uebersicht', 'aufgaben', 'zeiterfassung', 'aktivitaet']
 
 interface Props {
   profile: TeamProfileWithUser
@@ -50,7 +47,7 @@ interface Props {
 }
 
 function parseTabKey(value: string | null): TabKey {
-  if (value === 'zeiterfassung' || value === 'aktivitaet') return value
+  if (value && TAB_KEYS.includes(value as TabKey)) return value as TabKey
   return 'uebersicht'
 }
 
@@ -83,6 +80,13 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
     ? profile.user_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
     : profile.user_email[0].toUpperCase()
   const displayName = profile.user_name || profile.user_email.split('@')[0]
+
+  const tabMeta: Record<TabKey, { label: string; icon: typeof User }> = {
+    uebersicht: { label: t('tabs.overview'), icon: User },
+    aufgaben: { label: t('tabs.tasks'), icon: CheckSquare },
+    zeiterfassung: { label: t('tabs.timecards'), icon: Clock },
+    aktivitaet: { label: t('tabs.activity'), icon: Activity },
+  }
 
   return (
     <div className="space-y-4">
@@ -148,6 +152,12 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
                     {getEmploymentTypeLabel(profile.employment_type)}
                   </span>
                 )}
+                {profile.show_on_about && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-action-muted px-2.5 py-1 text-xs font-medium text-action">
+                    <Globe className="h-3 w-3" />
+                    {t('showOnAbout')}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -171,15 +181,16 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
       {/* Tab bar */}
       <div className="flex items-center justify-between gap-3 border-b border">
         <nav className="flex -mb-px overflow-x-auto" role="tablist" aria-label="Profilbereiche">
-          {TABS.map(t => {
-            const Icon = t.icon
-            const isActive = tab === t.key
+          {TAB_KEYS.map((key) => {
+            const meta = tabMeta[key]
+            const Icon = meta.icon
+            const isActive = tab === key
             return (
               <Button
-                key={t.key}
+                key={key}
                 type="button"
                 variant="ghost"
-                onClick={() => goTo(t.key)}
+                onClick={() => goTo(key)}
                 role="tab"
                 aria-selected={isActive}
                 className={cn(
@@ -190,7 +201,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
                 )}
               >
                 <Icon className="w-4 h-4" />
-                {t.label}
+                {meta.label}
               </Button>
             )
           })}
@@ -204,6 +215,9 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
             profile={profile}
             isSuperAdmin={isSuperAdmin}
           />
+        )}
+        {tab === 'aufgaben' && (
+          <TeamProfileTasksTab userId={profile.user_id} />
         )}
         {tab === 'zeiterfassung' && (
           <TeamProfileTimecardsTab userId={profile.user_id} />

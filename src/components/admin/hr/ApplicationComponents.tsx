@@ -1,19 +1,25 @@
 'use client'
 
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import {
-  APPLICATION_STATUS_OPTIONS,
   APPLICATION_STATUS_LABELS,
   getApplicationStatusBadge,
+  isHireableApplicationStatus,
+  isTerminalApplicationStatus,
   type ApplicationStatus,
 } from '@/config/hr-application-status'
+import { getApplicationSourceLabel } from '@/config/hr-vacancies'
 import { getRoleTrackLabel } from '@/config/hr-vacancies'
+import { ROUTES } from '@/config/routes'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { cn } from '@/lib/utils'
 import type { ApplicationListItem } from './types'
-import { ChevronDown, ChevronUp, UserCheck, XCircle, ArrowRight } from 'lucide-react'
+import { ChevronDown, ChevronUp, UserCheck, XCircle, ArrowRight, ExternalLink } from 'lucide-react'
 
 function formatRelativeDate(iso: string): string {
   const date = new Date(iso)
@@ -46,9 +52,9 @@ export function ApplicationFilters({
         className="sm:w-48"
       >
         <option value="all">Alle Status</option>
-        {APPLICATION_STATUS_OPTIONS.map((s) => (
-          <option key={s} value={s}>
-            {APPLICATION_STATUS_LABELS[s]}
+        {Object.entries(APPLICATION_STATUS_LABELS).map(([value, label]) => (
+          <option key={value} value={value}>
+            {label}
           </option>
         ))}
       </Select>
@@ -82,13 +88,14 @@ export function ApplicationCard({
   onReject,
   onHire,
 }: CardProps) {
+  const t = useTranslations('admin.hr.applications')
   const badge = getApplicationStatusBadge(application.status)
   const busy = actionLoading === application.id
-  const canHire = ['new', 'screening', 'interview', 'offer'].includes(application.status)
-  const canAdvance = !['hired', 'rejected', 'withdrawn'].includes(application.status)
+  const canHire = isHireableApplicationStatus(application.status)
+  const canAdvance = !isTerminalApplicationStatus(application.status)
 
   return (
-    <div className="bg-surface-base rounded-lg border border overflow-hidden">
+    <div className="bg-surface-base rounded-lg border border-subtle overflow-hidden">
       <Button
         type="button"
         variant="ghost"
@@ -107,7 +114,7 @@ export function ApplicationCard({
           <p className="font-semibold text-text-primary">{application.applicant_name}</p>
           <p className="text-sm text-text-secondary">{application.applicant_email}</p>
           {application.posting_title && (
-            <p className="text-sm text-text-muted mt-1">Stelle: {application.posting_title}</p>
+            <p className="text-sm text-text-muted mt-1">{t('postingLabel')}: {application.posting_title}</p>
           )}
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">
@@ -119,20 +126,33 @@ export function ApplicationCard({
       </Button>
 
       {expanded && (
-        <div className="border-t border px-4 sm:px-5 py-4 space-y-4">
-          {application.applicant_phone && (
-            <p className="text-sm"><span className="text-text-muted">Telefon:</span> {application.applicant_phone}</p>
+        <div className="border-t border-subtle px-4 sm:px-5 py-4 space-y-4">
+          {application.hired_team_profile_id && (
+            <Link
+              href={`${ROUTES.admin.team}/${application.hired_team_profile_id}`}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-action hover:underline"
+            >
+              <ExternalLink className="w-4 h-4" />
+              {t('openTeamProfile')}
+            </Link>
           )}
-          <p className="text-sm"><span className="text-text-muted">Quelle:</span> {application.source}</p>
+
+          {application.applicant_phone && (
+            <p className="text-sm"><span className="text-text-muted">{t('phone')}:</span> {application.applicant_phone}</p>
+          )}
+          <p className="text-sm">
+            <span className="text-text-muted">{t('source')}:</span>{' '}
+            {getApplicationSourceLabel(application.source)}
+          </p>
           {application.admin_notes && (
-            <p className="text-sm whitespace-pre-wrap"><span className="text-text-muted">Notizen:</span> {application.admin_notes}</p>
+            <p className="text-sm whitespace-pre-wrap"><span className="text-text-muted">{t('notes')}:</span> {application.admin_notes}</p>
           )}
           {application.rejection_reason && (
-            <p className="text-sm text-error-700"><span className="font-medium">Ablehnung:</span> {application.rejection_reason}</p>
+            <p className="text-sm text-error-700"><span className="font-medium">{t('rejection')}:</span> {application.rejection_reason}</p>
           )}
 
           <details className="text-sm">
-            <summary className="cursor-pointer text-text-muted">Track-Antworten anzeigen</summary>
+            <summary className="cursor-pointer text-text-muted">{t('trackResponses')}</summary>
             <pre className="mt-2 p-3 bg-surface-raised rounded-lg overflow-auto text-xs">
               {JSON.stringify(application.track_responses, null, 2)}
             </pre>
@@ -142,19 +162,19 @@ export function ApplicationCard({
             {canAdvance && (
               <Button size="sm" variant="secondary" disabled={busy} onClick={onAdvance}>
                 <ArrowRight className="w-4 h-4" />
-                Nächste Stufe
+                {t('advance')}
               </Button>
             )}
             {canHire && (
               <Button size="sm" variant="primary" disabled={busy} onClick={onHire}>
                 <UserCheck className="w-4 h-4" />
-                Einstellen
+                {t('hire')}
               </Button>
             )}
-            {!['hired', 'rejected', 'withdrawn'].includes(application.status) && (
+            {!isTerminalApplicationStatus(application.status) && (
               <Button size="sm" variant="ghost" disabled={busy} onClick={onReject}>
                 <XCircle className="w-4 h-4" />
-                Ablehnen
+                {t('reject')}
               </Button>
             )}
           </div>
@@ -171,60 +191,76 @@ interface DialogProps {
     rejectionReason: string
     adminNotes: string
   }
+  isLoading?: boolean
   onChange: (patch: Partial<{ rejectionReason: string; adminNotes: string }>) => void
   onSubmit: () => void
   onClose: () => void
 }
 
-export function ApplicationActionDialog({ dialog, onChange, onSubmit, onClose }: DialogProps) {
+export function ApplicationActionDialog({
+  dialog,
+  isLoading,
+  onChange,
+  onSubmit,
+  onClose,
+}: DialogProps) {
+  const t = useTranslations('admin.hr.applications')
+
   const title =
     dialog.type === 'hire'
-      ? 'Person einstellen?'
+      ? t('dialog.hireTitle')
       : dialog.type === 'reject'
-        ? 'Bewerbung ablehnen'
-        : 'Status weiterleiten'
+        ? t('dialog.rejectTitle')
+        : t('dialog.advanceTitle')
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-surface-base rounded-xl border border max-w-md w-full p-6 space-y-4">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        {dialog.type === 'advance' && dialog.targetStatus && (
-          <p className="text-sm text-text-secondary">
-            Neuer Status: {APPLICATION_STATUS_LABELS[dialog.targetStatus]}
-          </p>
-        )}
-        {dialog.type === 'hire' && (
-          <p className="text-sm text-text-secondary">
-            Es wird ein Team-Profil erstellt, Onboarding-Aufgaben angelegt und die Stelle als besetzt markiert.
-          </p>
-        )}
-        {dialog.type === 'reject' && (
-          <div>
-            <label className="text-sm font-medium">Grund *</label>
-            <Textarea
-              className="mt-1"
-              rows={3}
-              value={dialog.rejectionReason}
-              onChange={(e) => onChange({ rejectionReason: e.target.value })}
-            />
-          </div>
-        )}
+  const message =
+    dialog.type === 'hire'
+      ? t('dialog.hireMessage')
+      : dialog.type === 'reject'
+        ? t('dialog.rejectMessage')
+        : dialog.targetStatus
+          ? t('dialog.advanceMessage', { status: APPLICATION_STATUS_LABELS[dialog.targetStatus] })
+          : ''
+
+  const details = (
+    <div className="space-y-3">
+      {dialog.type === 'reject' && (
         <div>
-          <label className="text-sm font-medium">Interne Notiz (optional)</label>
+          <label className="text-sm font-medium">{t('dialog.rejectionReason')}</label>
           <Textarea
             className="mt-1"
-            rows={2}
-            value={dialog.adminNotes}
-            onChange={(e) => onChange({ adminNotes: e.target.value })}
+            rows={3}
+            value={dialog.rejectionReason}
+            onChange={(e) => onChange({ rejectionReason: e.target.value })}
           />
         </div>
-        <div className="flex justify-end gap-2">
-          <Button variant="ghost" onClick={onClose}>Abbrechen</Button>
-          <Button variant="primary" onClick={onSubmit}>
-            {dialog.type === 'hire' ? 'Einstellen' : 'Bestätigen'}
-          </Button>
-        </div>
+      )}
+      <div>
+        <label className="text-sm font-medium">{t('dialog.adminNotes')}</label>
+        <Textarea
+          className="mt-1"
+          rows={2}
+          value={dialog.adminNotes}
+          onChange={(e) => onChange({ adminNotes: e.target.value })}
+        />
       </div>
     </div>
+  )
+
+  return (
+    <ConfirmDialog
+      isOpen
+      title={title}
+      message={message}
+      details={details}
+      confirmLabel={
+        dialog.type === 'hire' ? t('hire') : t('dialog.confirm')
+      }
+      cancelLabel={t('dialog.cancel')}
+      isLoading={isLoading}
+      variant={dialog.type === 'reject' ? 'danger' : dialog.type === 'hire' ? 'success' : 'default'}
+      onConfirm={onSubmit}
+      onClose={onClose}
+    />
   )
 }

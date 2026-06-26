@@ -4,12 +4,9 @@
 
 import { db } from '@/db'
 import { jobApplications, jobApplicationEvents, jobPostings } from '@/db/schema/hr-vacancies'
-import { teamProfiles, users } from '@/db/schema'
+import { users } from '@/db/schema'
 import { tasks } from '@/db/schema/tasks'
 import { eq, and, desc, ilike, or, count } from 'drizzle-orm'
-import { APPLICATION_STATUS, type ApplicationStatus } from '@/config/hr-application-status'
-import { VACANCY_STATUS } from '@/config/hr-vacancies'
-import { ONBOARDING_TASK_TEMPLATES, type RoleTrack } from '@/config/hr-vacancies'
 import {
   canTransitionApplication,
 } from '@/lib/domain/hr/application-transitions'
@@ -19,8 +16,19 @@ import {
 } from '@/lib/domain/hr/hire'
 import { canApplyToVacancy } from '@/lib/domain/hr/vacancy-transitions'
 import type { HireApplicationInput, SubmitApplicationInput } from '@/lib/schemas/hr-vacancies'
-import { TASK_CATEGORIES, TASK_PRIORITIES, TASK_TYPES } from '@/config/tasks'
+import { TASK_CATEGORIES, TASK_PRIORITIES, TASK_TYPES, TASK_STATUSES } from '@/config/tasks'
 import { getVacancyById, transitionVacancy } from '@/lib/services/hr-vacancies'
+import {
+  createTeamProfileForHire,
+  findTeamProfileIdByUserId,
+  promoteUserToStaff,
+} from '@/lib/services/team-profiles'
+import {
+  APPLICATION_STATUS,
+  HIREABLE_APPLICATION_STATUSES,
+  type ApplicationStatus,
+} from '@/config/hr-application-status'
+import { VACANCY_STATUS, ONBOARDING_TASK_TEMPLATES, type RoleTrack } from '@/config/hr-vacancies'
 
 export interface ApplicationRow {
   id: string
@@ -248,12 +256,7 @@ export async function hireApplication(
   if (application.status === APPLICATION_STATUS.HIRED) {
     return { ok: false, error: 'already_hired' }
   }
-  const hireable: ApplicationStatus[] = [
-    APPLICATION_STATUS.NEW,
-    APPLICATION_STATUS.SCREENING,
-    APPLICATION_STATUS.INTERVIEW,
-    APPLICATION_STATUS.OFFER,
-  ]
+  const hireable = HIREABLE_APPLICATION_STATUSES
   if (!hireable.includes(application.status as ApplicationStatus)) {
     return { ok: false, error: 'invalid_status_for_hire' }
   }
@@ -266,13 +269,8 @@ export async function hireApplication(
 
   const userId = userResult.userId
 
-  const [existingProfile] = await db
-    .select({ id: teamProfiles.id })
-    .from(teamProfiles)
-    .where(eq(teamProfiles.userId, userId))
-    .limit(1)
-
-  if (existingProfile) {
+  const existingProfileId = await findTeamProfileIdByUserId(userId)
+  if (existingProfileId) {
     return { ok: false, error: 'profile_exists' }
   }
 
@@ -281,42 +279,34 @@ export async function hireApplication(
     application.track_responses,
   )
 
-  const [profile] = await db
-    .insert(teamProfiles)
-    .values({
-      userId,
-      position: options.position ?? posting.title,
-      department: posting.department,
-      employmentType: employmentTypeForRoleTrack(posting.role_track),
-      startDate: options.start_date ?? posting.start_date ?? null,
-      contractHours: options.contract_hours ?? posting.hours_per_week ?? null,
-      skills: extracted.skills,
-      goals: extracted.goals,
-      developmentAreas: extracted.developmentAreas,
-      phone: application.applicant_phone,
-      isActive: true,
-      workState: 'active',
-    })
-    .returning({ id: teamProfiles.id })
+  const { id: profileId } = await createTeamProfileForHire({
+    userId,
+    position: options.position ?? posting.title,
+    department: posting.department,
+    employmentType: employmentTypeForRoleTrack(posting.role_track),
+    startDate: options.start_date ?? posting.start_date ?? null,
+    contractHours: options.contract_hours ?? posting.hours_per_week ?? null,
+    skills: extracted.skills,
+    goals: extracted.goals,
+    developmentAreas: extracted.developmentAreas,
+    phone: application.applicant_phone,
+  })
 
-  await db
-    .update(users)
-    .set({ isStaff: true, updatedAt: new Date().toISOString() })
-    .where(eq(users.id, userId))
+  await promoteUserToStaff(userId)
 
   const now = new Date().toISOString()
   await db
     .update(jobApplications)
     .set({
       status: APPLICATION_STATUS.HIRED,
-      hiredTeamProfileId: profile.id,
+      hiredTeamProfileId: profileId,
       reviewedBy: actorUserId,
       reviewedAt: now,
       updatedAt: now,
     })
     .where(eq(jobApplications.id, applicationId))
 
-  await logEvent(applicationId, 'hired', actorUserId, { teamProfileId: profile.id })
+  await logEvent(applicationId, 'hired', actorUserId, { teamProfileId: profileId })
 
   if (options.spawn_onboarding_tasks !== false) {
     const templates = ONBOARDING_TASK_TEMPLATES[posting.role_track as RoleTrack] ?? []
@@ -329,7 +319,7 @@ export async function hireApplication(
         priority: TASK_PRIORITIES.NORMAL,
         assignedTo: userId,
         createdBy: actorUserId,
-        currentStatus: 'requested',
+        currentStatus: TASK_STATUSES.REQUESTED,
       })
     }
   }
@@ -338,7 +328,7 @@ export async function hireApplication(
 
   const updated = await getApplicationById(applicationId)
   return updated
-    ? { ok: true, teamProfileId: profile.id, application: updated }
+    ? { ok: true, teamProfileId: profileId, application: updated }
     : { ok: false, error: 'update_failed' }
 }
 

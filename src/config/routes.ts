@@ -37,7 +37,11 @@ export const ROUTES = {
     hrVacancyNew:       '/admin/hr/vacancies/new',
     hrVacancy:            (id: string) => `/admin/hr/vacancies/${id}`,
     hrApplications:     '/admin/hr/applications',
+    hrApplicationsForPosting: (postingId: string) =>
+      `/admin/hr/applications?job_posting_id=${encodeURIComponent(postingId)}`,
     hrApplication:        (id: string) => `/admin/hr/applications/${id}`,
+    tasksForUser:       (userId: string) =>
+      `/admin/tasks?assigned_to=${encodeURIComponent(userId)}`,
     workshops:          '/admin/workshops',
     workshopsNew:       '/admin/workshops/new',
     workshopsInstances: '/admin/workshops/instances',

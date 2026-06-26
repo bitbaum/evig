@@ -35,6 +35,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const status = searchParams.get('status');
     const taskType = searchParams.get('type');
     const projectId = searchParams.get('project_id');
+    const assignedTo = searchParams.get('assigned_to');
     const includeArchived = searchParams.get('include_archived') === 'true';
 
     // Build conditions
@@ -44,6 +45,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     if (status) conditions.push(eq(tasks.currentStatus, status));
     if (taskType) conditions.push(eq(tasks.taskType, taskType));
     if (projectId) conditions.push(eq(tasks.projectId, projectId));
+    if (assignedTo) conditions.push(eq(tasks.assignedTo, assignedTo));
 
     const taskRows = await db
       .select({

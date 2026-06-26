@@ -31,6 +31,8 @@ export interface DashboardStats {
   pendingRepairerApplicationsOldest: string | null
   pendingJobApplications: number
   pendingJobApplicationsOldest: string | null
+  pendingTimecardApprovals: number
+  pendingTimecardApprovalsOldest: string | null
   overdueTasks: number
   overdueTasksOldest: string | null
   openDecisions: number

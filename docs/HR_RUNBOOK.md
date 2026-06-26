@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-19
-last_modified_summary: Initial HR runbook — vacancies, applications, hire, retention
+last_modified_date: 2026-06-26
+last_modified_summary: HR admin cohesion — stats grid, hire→profile links, team tasks tab, dashboard timecard queue
 ---
 
 # HR & Talent Lifecycle Runbook
@@ -46,9 +46,20 @@ Volunteer guide for posting roles, reviewing applications, and hiring into the t
 ## Review applications
 
 1. **Personen** → **Bewerbungen**
-2. Filter by pipeline stage (Neu → Sichtung → Gespräch → Angebot)
+2. Filter by pipeline stage (Neu → Sichtung → Gespräch → Angebot) or by vacancy (`?job_posting_id=…` from the vacancy card)
 3. Expand a row for track-specific answers and CV reference
 4. **Nächste Stufe**, **Ablehnen** (with reason), or **Einstellen**
+5. After hire: use **Team-Profil öffnen** in the success banner or on the application card
+
+### Cross-links
+
+| From | To |
+|------|-----|
+| Vacancy card (Bewerbungen count) | Filtered application inbox |
+| Hired application | Team profile (`/admin/team/[id]`) |
+| Team profile → **Aufgaben** tab | Onboarding tasks + link to `/admin/tasks?assigned_to=…` |
+| Team profile → **Zeiterfassung** | Timecards + approvals queue |
+| Admin dashboard | New applications + pending timecard approvals |
 
 ### Hire action
 

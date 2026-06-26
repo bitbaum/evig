@@ -22,6 +22,7 @@ import {
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schemas/team'
+import { createTeamProfileManual, findTeamProfileIdByUserId } from '@/lib/services/team-profiles'
 
 /**
  * GET /api/admin/team/profiles
@@ -150,53 +151,12 @@ export const POST = withAdmin('team', async (request, session) => {
       return apiBadRequest(ERROR_MESSAGES.USER_NOT_FOUND)
     }
 
-    // Check if profile already exists for this user
-    const [existingProfile] = await db
-      .select({ id: teamProfiles.id })
-      .from(teamProfiles)
-      .where(eq(teamProfiles.userId, data.user_id))
-
-    if (existingProfile) {
+    const existingProfileId = await findTeamProfileIdByUserId(data.user_id)
+    if (existingProfileId) {
       return apiBadRequest('Für diesen Benutzer existiert bereits ein Team-Profil')
     }
 
-    // Insert new profile
-    const [created] = await db
-      .insert(teamProfiles)
-      .values({
-        userId: data.user_id,
-        position: data.position || null,
-        department: data.department || null,
-        employmentType: data.employment_type || null,
-        startDate: data.start_date || null,
-        contractHours: data.contract_hours || null,
-        skills: data.skills || [],
-        interests: data.interests || [],
-        goals: data.goals || null,
-        strengths: data.strengths || null,
-        developmentAreas: data.development_areas || null,
-        availability: data.availability || null,
-        workingHours: data.working_hours || null,
-        preferredContact: data.preferred_contact || 'email',
-        phone: data.phone || null,
-        emergencyContactName: data.emergency_contact_name || null,
-        emergencyContactPhone: data.emergency_contact_phone || null,
-        emergencyContactRelation: data.emergency_contact_relation || null,
-        hrNotes: data.hr_notes || null,
-        isActive: data.is_active ?? true,
-        // Lifecycle fields — admin-level
-        endDate: data.end_date || null,
-        exitReason: data.exit_reason || null,
-        workState: data.work_state || 'active',
-        // Sensitive fields — already stripped above for non-super-admin,
-        // so these are no-ops in that path
-        hourlyRateCents: data.hourly_rate_cents ?? null,
-        salaryChf: data.salary_chf != null ? String(data.salary_chf) : null,
-        salaryEffectiveDate: data.salary_effective_date || null,
-        ahvNumber: data.ahv_number || null,
-        cantonTaxCode: data.canton_tax_code || null,
-      })
-      .returning({ id: teamProfiles.id })
+    const created = await createTeamProfileManual(data, { stripSensitive: !isSuperAdminUser })
 
     logger.info('Team profile created', {
       profileId: created.id,

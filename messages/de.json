@@ -8667,6 +8667,9 @@
       "intake": "Geräte-Eingang",
       "reviews": "Bewertungen",
       "analytics": "Analyse",
+      "hr": "HR",
+      "vacancies": "Offene Stellen",
+      "applications": "Bewerbungen",
       "kennzahlen": "Kennzahlen",
       "wirkung": "Wirkung",
       "transparenz": "Transparenz",
@@ -9334,6 +9337,62 @@
         "refresh": "Aktualisieren",
         "retry": "Erneut versuchen",
         "clearFilters": "Filter zurücksetzen"
+      },
+      "tabs": {
+        "overview": "Überblick",
+        "tasks": "Aufgaben",
+        "timecards": "Zeiterfassung",
+        "activity": "Aktivität"
+      },
+      "showOnAbout": "Auf Über-uns sichtbar"
+    },
+    "hr": {
+      "vacancies": {
+        "title": "Offene Stellen",
+        "description": "Stellen veröffentlichen, pausieren und mit Bewerbern verknüpfen",
+        "new": "Neue Stelle",
+        "empty": "Keine Stellen gefunden",
+        "searchPlaceholder": "Suche nach Titel oder Slug…",
+        "statusFilter": "Status",
+        "resultsCount": "{count, plural, one {# Stelle} other {# Stellen}}",
+        "stats": {
+          "published": "Veröffentlicht",
+          "pendingApplications": "Neue Bewerbungen",
+          "drafts": "Entwürfe",
+          "filled": "Besetzt"
+        }
+      },
+      "applications": {
+        "title": "Bewerbungen",
+        "description": "Pipeline von der Sichtung bis zur Einstellung",
+        "manageVacancies": "Stellen verwalten",
+        "teamProfiles": "Team-Profile",
+        "openTeamProfile": "Team-Profil öffnen",
+        "empty": "Keine Bewerbungen in diesem Filter",
+        "searchPlaceholder": "Name oder E-Mail…",
+        "statusFilter": "Status",
+        "resultsCount": "{count, plural, one {# Bewerbung} other {# Bewerbungen}}",
+        "postingLabel": "Stelle",
+        "phone": "Telefon",
+        "source": "Quelle",
+        "notes": "Notizen",
+        "rejection": "Ablehnung",
+        "trackResponses": "Track-Antworten anzeigen",
+        "advance": "Nächste Stufe",
+        "hire": "Einstellen",
+        "reject": "Ablehnen",
+        "dialog": {
+          "hireTitle": "Person einstellen?",
+          "hireMessage": "Es wird ein Team-Profil erstellt, Onboarding-Aufgaben angelegt und die Stelle als besetzt markiert.",
+          "rejectTitle": "Bewerbung ablehnen",
+          "rejectMessage": "Die Bewerbung wird abgelehnt. Der Grund wird gespeichert.",
+          "advanceTitle": "Status weiterleiten",
+          "advanceMessage": "Neuer Status: {status}",
+          "rejectionReason": "Grund *",
+          "adminNotes": "Interne Notiz (optional)",
+          "confirm": "Bestätigen",
+          "cancel": "Abbrechen"
+        }
       }
     },
     "protocols": {

@@ -13,6 +13,7 @@ import {
   type VacancyStatus,
   type RoleTrack,
 } from '@/config/hr-vacancies'
+import { APPLICATION_STATUS } from '@/config/hr-application-status'
 import { canTransitionVacancy } from '@/lib/domain/hr/vacancy-transitions'
 import type { CreateVacancyInput, UpdateVacancyInput } from '@/lib/schemas/hr-vacancies'
 
@@ -268,7 +269,7 @@ export async function countPendingApplications(): Promise<number> {
   const [row] = await db
     .select({ cnt: count() })
     .from(jobApplications)
-    .where(eq(jobApplications.status, 'new'))
+    .where(eq(jobApplications.status, APPLICATION_STATUS.NEW))
   return Number(row?.cnt ?? 0)
 }
 

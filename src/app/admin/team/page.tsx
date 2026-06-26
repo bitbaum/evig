@@ -18,6 +18,7 @@ import { logger } from '@/lib/logger'
 import { Users, UserPlus, Briefcase, Crown, Shield } from 'lucide-react'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
+import { ROUTES } from '@/config/routes'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { TeamListClient } from './TeamListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -113,10 +114,19 @@ export default async function TeamPage() {
       icon={Users}
       iconColor="purple"
       actions={
-        <Link href="/admin/team/new" className={buttonClass({ variant: 'primary' })}>
-          <UserPlus className="w-5 h-5" />
-          Profil erstellen
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href={ROUTES.admin.hrApplications} className={buttonClass({ variant: 'outline', size: 'sm' })}>
+            <Briefcase className="w-4 h-4" />
+            Bewerbungen
+          </Link>
+          <Link href={ROUTES.admin.hrVacancies} className={buttonClass({ variant: 'outline', size: 'sm' })}>
+            Offene Stellen
+          </Link>
+          <Link href="/admin/team/new" className={buttonClass({ variant: 'primary' })}>
+            <UserPlus className="w-5 h-5" />
+            Profil erstellen
+          </Link>
+        </div>
       }
     >
       {/* Staff without profiles — promoted to the top so adding a member

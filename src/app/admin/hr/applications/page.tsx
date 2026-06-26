@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { getHrFunnelStats } from '@/lib/services/hr-analytics'
 import HrApplicationsPageClient from './HrApplicationsPageClient'
 
 export const metadata: Metadata = {
@@ -6,6 +8,17 @@ export const metadata: Metadata = {
   description: 'HR-Bewerbungs-Pipeline',
 }
 
-export default function HrApplicationsPage() {
-  return <HrApplicationsPageClient />
+export default async function HrApplicationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ job_posting_id?: string }>
+}) {
+  const params = await searchParams
+  const stats = await getHrFunnelStats()
+
+  return (
+    <Suspense fallback={null}>
+      <HrApplicationsPageClient stats={stats} initialPostingFilter={params.job_posting_id} />
+    </Suspense>
+  )
 }

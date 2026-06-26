@@ -29,6 +29,7 @@ const SEGMENT_KEYS: Record<string, string> = {
   new: 'new', edit: 'edit', create: 'create',
   // Admin routes added since the SSOT was last touched
   protocols: 'protocols', tasks: 'tasks', decisions: 'decisions',
+  hr: 'hr', vacancies: 'vacancies', applications: 'applications',
   projects: 'projects', timecards: 'timecards', payroll: 'payroll',
   donations: 'donations', membership: 'membership', intake: 'intake',
   reviews: 'reviews', analytics: 'analytics', kennzahlen: 'kennzahlen',

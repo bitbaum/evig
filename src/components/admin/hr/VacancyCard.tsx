@@ -20,6 +20,7 @@ import {
   getVacancyStatusLabel,
   type VacancyStatus,
 } from '@/config/hr-vacancies'
+import { getDepartmentLabel } from '@/config/team'
 import { cn } from '@/lib/utils'
 import type { VacancyListItem } from './types'
 
@@ -42,9 +43,10 @@ export function VacancyCard({
 }: Props) {
   const busy = actionLoading === vacancy.id
   const status = vacancy.status as VacancyStatus
+  const applicationCount = vacancy.application_count ?? 0
 
   return (
-    <div className="bg-surface-base rounded-lg border border p-4 sm:p-5 space-y-4">
+    <div className="bg-surface-base rounded-lg border border-subtle p-4 sm:p-5 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -58,7 +60,7 @@ export function VacancyCard({
             </span>
             <span className="text-xs text-text-muted">{getRoleTrackLabel(vacancy.role_track)}</span>
             {vacancy.department && (
-              <span className="text-xs text-text-muted">{vacancy.department}</span>
+              <span className="text-xs text-text-muted">{getDepartmentLabel(vacancy.department)}</span>
             )}
           </div>
           <Link
@@ -71,10 +73,20 @@ export function VacancyCard({
             <p className="text-sm text-text-secondary mt-1 line-clamp-2">{vacancy.summary}</p>
           )}
         </div>
-        <div className="flex items-center gap-2 text-sm text-text-muted shrink-0">
-          <Users className="w-4 h-4" />
-          {vacancy.application_count ?? 0} Bewerbungen
-        </div>
+        {applicationCount > 0 ? (
+          <Link
+            href={ROUTES.admin.hrApplicationsForPosting(vacancy.id)}
+            className="flex items-center gap-2 text-sm text-action hover:underline shrink-0"
+          >
+            <Users className="w-4 h-4" />
+            {applicationCount} Bewerbungen
+          </Link>
+        ) : (
+          <div className="flex items-center gap-2 text-sm text-text-muted shrink-0">
+            <Users className="w-4 h-4" />
+            0 Bewerbungen
+          </div>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-2">

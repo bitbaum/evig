@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 import {
@@ -10,20 +11,29 @@ import {
 } from '@/config/hr-application-status'
 import type { ApplicationActionDialogState, ApplicationListItem } from './types'
 
-export function useHrApplications() {
+export function useHrApplications(initialPostingFilter?: string) {
+  const searchParams = useSearchParams()
+  const postingFromUrl = searchParams.get('job_posting_id') ?? initialPostingFilter ?? ''
+
   const [applications, setApplications] = useState<ApplicationListItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'all'>(APPLICATION_STATUS.NEW)
   const [searchQuery, setSearchQuery] = useState('')
+  const [postingFilter] = useState(postingFromUrl)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [hireProfileUrl, setHireProfileUrl] = useState<string | null>(null)
   const [actionDialog, setActionDialog] = useState<ApplicationActionDialogState | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
-  const showSuccess = (msg: string) => {
+  const showSuccess = (msg: string, profileUrl?: string) => {
     setSuccessMessage(msg)
-    setTimeout(() => setSuccessMessage(null), UI_FEEDBACK_MS.SUCCESS)
+    setHireProfileUrl(profileUrl ?? null)
+    setTimeout(() => {
+      setSuccessMessage(null)
+      setHireProfileUrl(null)
+    }, UI_FEEDBACK_MS.SUCCESS * 2)
   }
 
   const fetchApplications = useCallback(async () => {
@@ -33,6 +43,7 @@ export function useHrApplications() {
       const params = new URLSearchParams()
       if (statusFilter !== 'all') params.set('status', statusFilter)
       if (searchQuery) params.set('search', searchQuery)
+      if (postingFilter) params.set('job_posting_id', postingFilter)
       const qs = params.toString()
       const result = await apiFetch<{ applications: ApplicationListItem[] }>(
         `/api/admin/hr/applications${qs ? `?${qs}` : ''}`,
@@ -44,11 +55,13 @@ export function useHrApplications() {
     } finally {
       setLoading(false)
     }
-  }, [statusFilter, searchQuery])
+  }, [statusFilter, searchQuery, postingFilter])
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     fetchApplications()
   }, [fetchApplications])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const openAdvanceDialog = (applicationId: string, currentStatus: ApplicationStatus) => {
     const nextOptions = APPLICATION_FORWARD_TRANSITIONS[currentStatus]
@@ -91,7 +104,6 @@ export function useHrApplications() {
     if (type === 'reject' && !rejectionReason.trim()) return
 
     setActionLoading(applicationId)
-    closeDialog()
 
     try {
       if (type === 'hire') {
@@ -100,7 +112,8 @@ export function useHrApplications() {
           { method: 'POST', body: JSON.stringify({ spawn_onboarding_tasks: true }) },
         )
         if (!result.success) throw new Error(result.error || 'Einstellung fehlgeschlagen')
-        showSuccess('Person eingestellt — Team-Profil erstellt')
+        closeDialog()
+        showSuccess('Person eingestellt — Team-Profil erstellt', result.data?.team_profile_url)
       } else if (targetStatus) {
         const result = await apiFetch(`/api/admin/hr/applications/${applicationId}/transition`, {
           method: 'POST',
@@ -111,6 +124,7 @@ export function useHrApplications() {
           }),
         })
         if (!result.success) throw new Error(result.error || 'Aktualisierung fehlgeschlagen')
+        closeDialog()
         showSuccess('Status aktualisiert')
       }
       await fetchApplications()
@@ -130,8 +144,10 @@ export function useHrApplications() {
     setStatusFilter,
     searchQuery,
     setSearchQuery,
+    postingFilter,
     actionLoading,
     successMessage,
+    hireProfileUrl,
     actionDialog,
     setActionDialog,
     expandedId,

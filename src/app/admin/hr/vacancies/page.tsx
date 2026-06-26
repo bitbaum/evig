@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { getHrFunnelStats } from '@/lib/services/hr-analytics'
 import HrVacanciesPageClient from './HrVacanciesPageClient'
 
 export const metadata: Metadata = {
@@ -6,6 +8,7 @@ export const metadata: Metadata = {
   description: 'HR-Stellenausschreibungen verwalten',
 }
 
-export default function HrVacanciesPage() {
-  return <HrVacanciesPageClient />
+export default async function HrVacanciesPage() {
+  const stats = await getHrFunnelStats()
+  return <HrVacanciesPageClient stats={stats} />
 }

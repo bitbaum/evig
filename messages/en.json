@@ -8669,6 +8669,9 @@
       "intake": "Intake",
       "reviews": "Reviews",
       "analytics": "Analytics",
+      "hr": "HR",
+      "vacancies": "Vacancies",
+      "applications": "Applications",
       "kennzahlen": "Metrics",
       "wirkung": "Impact",
       "transparenz": "Transparency",
@@ -9336,6 +9339,62 @@
         "refresh": "Refresh",
         "retry": "Try again",
         "clearFilters": "Clear filters"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "tasks": "Tasks",
+        "timecards": "Timecards",
+        "activity": "Activity"
+      },
+      "showOnAbout": "Visible on About page"
+    },
+    "hr": {
+      "vacancies": {
+        "title": "Open roles",
+        "description": "Publish, pause and link vacancies to applicants",
+        "new": "New role",
+        "empty": "No vacancies found",
+        "searchPlaceholder": "Search by title or slug…",
+        "statusFilter": "Status",
+        "resultsCount": "{count, plural, one {# vacancy} other {# vacancies}}",
+        "stats": {
+          "published": "Published",
+          "pendingApplications": "New applications",
+          "drafts": "Drafts",
+          "filled": "Filled"
+        }
+      },
+      "applications": {
+        "title": "Applications",
+        "description": "Pipeline from screening to hire",
+        "manageVacancies": "Manage vacancies",
+        "teamProfiles": "Team profiles",
+        "openTeamProfile": "Open team profile",
+        "empty": "No applications in this filter",
+        "searchPlaceholder": "Name or email…",
+        "statusFilter": "Status",
+        "resultsCount": "{count, plural, one {# application} other {# applications}}",
+        "postingLabel": "Role",
+        "phone": "Phone",
+        "source": "Source",
+        "notes": "Notes",
+        "rejection": "Rejection",
+        "trackResponses": "Show track responses",
+        "advance": "Next stage",
+        "hire": "Hire",
+        "reject": "Reject",
+        "dialog": {
+          "hireTitle": "Hire this person?",
+          "hireMessage": "Creates a team profile, onboarding tasks and marks the vacancy as filled.",
+          "rejectTitle": "Reject application",
+          "rejectMessage": "The application will be rejected. The reason is stored.",
+          "advanceTitle": "Advance status",
+          "advanceMessage": "New status: {status}",
+          "rejectionReason": "Reason *",
+          "adminNotes": "Internal note (optional)",
+          "confirm": "Confirm",
+          "cancel": "Cancel"
+        }
       }
     },
     "protocols": {

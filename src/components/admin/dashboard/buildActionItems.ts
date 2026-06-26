@@ -101,6 +101,17 @@ export function buildActionItems(
     })
   }
 
+  if (stats.pendingTimecardApprovals > 0 && canAccessSection('timecard-approvals')) {
+    items.push({
+      type: 'warning',
+      label: `${stats.pendingTimecardApprovals} Zeitkarte${stats.pendingTimecardApprovals > 1 ? 'n' : ''} zur Freigabe`,
+      count: stats.pendingTimecardApprovals,
+      href: '/admin/team/approvals',
+      actionLabel: 'Freigeben',
+      oldestAt: stats.pendingTimecardApprovalsOldest,
+    })
+  }
+
   if (stats.pendingRepairerApplications > 0) {
     items.push({
       type: 'warning',

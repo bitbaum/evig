@@ -5,16 +5,11 @@
 import { db } from '@/db'
 import { jobApplications } from '@/db/schema/hr-vacancies'
 import { and, inArray, lt } from 'drizzle-orm'
-import { APPLICATION_STATUS } from '@/config/hr-application-status'
+import { APPLICATION_STATUS, OPEN_APPLICATION_STATUSES } from '@/config/hr-application-status'
 import { HR_APPLICATION_RETENTION_DAYS } from '@/config/hr-vacancies'
 import { logger } from '@/lib/logger'
 
-const OPEN_STATUSES = [
-  APPLICATION_STATUS.NEW,
-  APPLICATION_STATUS.SCREENING,
-  APPLICATION_STATUS.INTERVIEW,
-  APPLICATION_STATUS.OFFER,
-] as const
+const OPEN_STATUSES = OPEN_APPLICATION_STATUSES
 
 const ARCHIVE_REASON = 'Automatisch archiviert (Aufbewahrungsfrist abgelaufen)'
 

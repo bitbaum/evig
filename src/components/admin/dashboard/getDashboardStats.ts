@@ -7,6 +7,7 @@ import {
   inventoryItems, workshopRegistrations,
 } from '@/db/schema'
 import { jobApplications } from '@/db/schema/hr-vacancies'
+import { timecards } from '@/db/schema/timecards'
 import { blogPosts, blogSubmissions } from '@/db/schema/content'
 import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE } from '@/config/approval-status'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
@@ -14,6 +15,7 @@ import { LISTING_STATUS } from '@/config/marketplace'
 import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
 import { REPAIRER_APPLICATION_STATUS, REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { APPLICATION_STATUS } from '@/config/hr-application-status'
+import { TIMECARD_STATUSES } from '@/config/timecards'
 import { DECISION_STATUS } from '@/config/decisions'
 import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
 import { logger } from '@/lib/logger'
@@ -31,6 +33,7 @@ const blogSubTable = getTableName(blogSubmissions)
 const itHilfeTable = getTableName(itHilfeRequests)
 const repairerAppTable = getTableName(repairerApplications)
 const jobApplicationsTable = getTableName(jobApplications)
+const timecardsTable = getTableName(timecards)
 const tasksTable = getTableName(tasks)
 const decisionsTable = getTableName(decisions)
 const inventoryTable = getTableName(inventoryItems)
@@ -93,6 +96,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     itHilfeRes,
     repairerRes,
     jobApplicationsRes,
+    timecardsRes,
     tasksRes,
     decisionsRes,
     listingsRes,
@@ -153,6 +157,11 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(jobApplicationsTable)}
       WHERE status = ${APPLICATION_STATUS.NEW}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(submitted_at) AS oldest
+      FROM ${sql.raw(timecardsTable)}
+      WHERE status = ${TIMECARD_STATUSES.SUBMITTED}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(due_date) AS oldest
@@ -262,6 +271,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
   const itHilfe = rowCountAndOldest(itHilfeRes, 'urgentItHilfe')
   const repairer = rowCountAndOldest(repairerRes, 'pendingRepairerApplications')
   const jobApps = rowCountAndOldest(jobApplicationsRes, 'pendingJobApplications')
+  const timecardApprovals = rowCountAndOldest(timecardsRes, 'pendingTimecardApprovals')
   const overdueTasksData = rowCountAndOldest(tasksRes, 'overdueTasks')
 
   // Listings (special shape)
@@ -295,6 +305,8 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     pendingRepairerApplicationsOldest: repairer.oldest,
     pendingJobApplications: jobApps.count,
     pendingJobApplicationsOldest: jobApps.oldest,
+    pendingTimecardApprovals: timecardApprovals.count,
+    pendingTimecardApprovalsOldest: timecardApprovals.oldest,
     overdueTasks: overdueTasksData.count,
     overdueTasksOldest: overdueTasksData.oldest,
     openDecisions: rowCount(decisionsRes, 'openDecisions'),

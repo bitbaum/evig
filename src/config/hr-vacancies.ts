@@ -103,6 +103,17 @@ export type ApplicationSource = typeof APPLICATION_SOURCES[keyof typeof APPLICAT
 
 export const APPLICATION_SOURCE_OPTIONS = Object.values(APPLICATION_SOURCES)
 
+export const APPLICATION_SOURCE_LABELS: Record<ApplicationSource, string> = {
+  website: 'Website',
+  referral: 'Empfehlung',
+  get_involved: 'Mitmachen-Seite',
+  other: 'Sonstiges',
+}
+
+export function getApplicationSourceLabel(source: string): string {
+  return APPLICATION_SOURCE_LABELS[source as ApplicationSource] ?? source
+}
+
 // ─── Legal / UX copy (Swiss German) ────────────────────────────────────────
 
 export const HR_TRACK_DISCLAIMERS: Partial<Record<RoleTrack, string>> = {

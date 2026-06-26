@@ -70,10 +70,4 @@ export interface VacancyFormData {
   seo_description: string
 }
 
-export interface HrFunnelStats {
-  byStatus: Record<string, number>
-  byTrack: Record<string, number>
-  bySource: Record<string, number>
-  publishedVacancies: number
-  pendingApplications: number
-}
+export type { HrFunnelStats } from '@/lib/types/hr'

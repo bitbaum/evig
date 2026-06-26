@@ -4,13 +4,23 @@
 
 import { db } from '@/db'
 import { jobApplications, jobPostings } from '@/db/schema/hr-vacancies'
-import { eq, sql, count } from 'drizzle-orm'
+import { eq, count } from 'drizzle-orm'
 import { VACANCY_STATUS } from '@/config/hr-vacancies'
 import { APPLICATION_STATUS } from '@/config/hr-application-status'
-import type { HrFunnelStats } from '@/components/admin/hr/types'
+import type { HrFunnelStats } from '@/lib/types/hr'
+
+export type { HrFunnelStats } from '@/lib/types/hr'
 
 export async function getHrFunnelStats(): Promise<HrFunnelStats> {
-  const [statusRows, trackRows, sourceRows, publishedRow, pendingRow] = await Promise.all([
+  const [
+    statusRows,
+    trackRows,
+    sourceRows,
+    publishedRow,
+    pendingRow,
+    draftVacanciesRow,
+    filledVacanciesRow,
+  ] = await Promise.all([
     db
       .select({ status: jobApplications.status, cnt: count() })
       .from(jobApplications)
@@ -32,6 +42,14 @@ export async function getHrFunnelStats(): Promise<HrFunnelStats> {
       .select({ cnt: count() })
       .from(jobApplications)
       .where(eq(jobApplications.status, APPLICATION_STATUS.NEW)),
+    db
+      .select({ cnt: count() })
+      .from(jobPostings)
+      .where(eq(jobPostings.status, VACANCY_STATUS.DRAFT)),
+    db
+      .select({ cnt: count() })
+      .from(jobPostings)
+      .where(eq(jobPostings.status, VACANCY_STATUS.FILLED)),
   ])
 
   const byStatus: Record<string, number> = {}
@@ -49,5 +67,17 @@ export async function getHrFunnelStats(): Promise<HrFunnelStats> {
     bySource,
     publishedVacancies: Number(publishedRow[0]?.cnt ?? 0),
     pendingApplications: Number(pendingRow[0]?.cnt ?? 0),
+    draftVacancies: Number(draftVacanciesRow[0]?.cnt ?? 0),
+    filledVacancies: Number(filledVacanciesRow[0]?.cnt ?? 0),
   }
+}
+
+export async function countSubmittedTimecardsPendingReview(): Promise<number> {
+  const { timecards } = await import('@/db/schema/timecards')
+  const { TIMECARD_STATUSES } = await import('@/config/timecards')
+  const [row] = await db
+    .select({ cnt: count() })
+    .from(timecards)
+    .where(eq(timecards.status, TIMECARD_STATUSES.SUBMITTED))
+  return Number(row?.cnt ?? 0)
 }

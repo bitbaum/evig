@@ -1,6 +1,7 @@
 import {
   APPLICATION_FORWARD_TRANSITIONS,
   APPLICATION_STATUS,
+  isHireableApplicationStatus,
   TERMINAL_APPLICATION_STATUSES,
   type ApplicationStatus,
 } from '@/config/hr-application-status'
@@ -13,5 +14,5 @@ export function canTransitionApplication(from: ApplicationStatus, to: Applicatio
 }
 
 export function canHireApplication(status: ApplicationStatus): boolean {
-  return status === APPLICATION_STATUS.OFFER || status === APPLICATION_STATUS.INTERVIEW
+  return isHireableApplicationStatus(status)
 }
