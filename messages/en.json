@@ -5379,10 +5379,6 @@
       "title": "Our Projects",
       "subtitle": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
     },
-    "section": {
-      "title": "Our Projects",
-      "subtitle": "From open-source software to community initiatives – explore our varied projects."
-    },
     "filter": {
       "label": "Filter by category:",
       "all": "All"
@@ -5404,101 +5400,72 @@
       {
         "title": "Kivitendo Mode CH",
         "description": "Since July 2015, revamp-it has been a premium partner of the Kivitendo project. From 2005, we searched — first for our own needs, then to satisfy our customers — for a software solution for accounting, resource, and customer management.",
-        "category": "software",
-        "status": "active",
         "features": [
           "Premium partnership since 2015",
           "Accounting and resource management",
           "Customer management",
           "Open-source ERP system"
-        ],
-        "slug": "kivitendo",
-        "year": "2015"
+        ]
       },
       {
         "title": "Verein Linuxola",
         "description": "Linuxola was founded on December 2, 2005 by eight people from various regions of Switzerland. The organization's purpose is to provide our partners in Africa with access to information technology and a connection to global digital commons.",
-        "category": "community",
-        "status": "active",
         "features": [
           "Swiss founding with 8 people",
           "Focus on Africa partnerships",
           "Access to information technology",
           "Connection to digital commons"
-        ],
-        "slug": "linuxola",
-        "year": "2005"
+        ]
       },
       {
         "title": "FreieComputer.ch",
         "description": "The Swiss label for computers with pre-installed free software and guaranteed support! revamp-it, together with the engaged open-source community, contributed to the creation of this label.",
-        "category": "community",
-        "status": "active",
         "features": [
           "Swiss label for free software",
           "Pre-installed open-source software",
           "Guaranteed support",
           "Community support"
-        ],
-        "slug": "freiecomputer",
-        "year": "2010"
+        ]
       },
       {
         "title": "Compirat",
         "description": "Compirat is a collaboration between Caritas Zurich and revamp-it. Thanks to Compirat, people with limited means in the canton of Zurich have the opportunity to learn computing near their homes.",
-        "category": "community",
-        "status": "active",
         "features": [
           "Partnership with Caritas Zurich",
           "Support for people with limited means",
           "Computer courses in the canton of Zurich",
           "Local learning opportunities"
-        ],
-        "slug": "compirat",
-        "year": "2018"
+        ]
       },
       {
         "title": "Hardware Development",
         "description": "Hardware development work at revamp-it focuses on discovering new possibilities for decommissioned computer hardware, optimizing energy and resource consumption, and creating guides for assembling open-source hardware.",
-        "category": "hardware",
-        "status": "ongoing",
         "features": [
           "Upcycling decommissioned hardware",
           "Energy and resource optimization",
           "Open-source hardware guides",
           "Sustainable development"
-        ],
-        "slug": "hardware",
-        "year": "2020"
+        ]
       },
       {
         "title": "LTSP - Linux Terminal Server Project",
         "description": "The Linux Terminal Server Project focuses on harnessing the power of a fast, powerful server connected via a network to older, slower computers. This allows multiple users to work simultaneously on their clients connected to the same server.",
-        "category": "software",
-        "status": "active",
         "features": [
           "Network-based server solution",
           "Efficient use of older hardware",
           "Multi-user computing",
           "Resource optimization"
-        ],
-        "slug": "ltsp",
-        "year": "2016"
+        ]
       },
       {
         "title": "Monitor-Upcycling",
         "description": "Discarded computer monitors are transformed into functional, sustainable lamps. A pilot project for the circular economy in collaboration with sheltered workshops and property partners.",
-        "category": "hardware",
-        "status": "ongoing",
         "features": [
           "Converting monitors into lamps",
           "Small series & quality assurance",
           "Collaboration with social enterprises",
           "Ecological analyses (ZHAW)"
-        ],
-        "slug": "upcycling",
-        "year": "2025",
-        "readMoreLink": "/projects/upcycling"
+        ]
       }
     ],
     "freiecomputer": {

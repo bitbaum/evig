@@ -6,22 +6,24 @@ import { Filter, Rocket } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ProjectCard, type ProjectItem } from './ProjectCard'
+import { ProjectCard } from './ProjectCard'
+import { PROJECTS, PROJECT_CATEGORIES, type ProjectCategory, type ProjectStrings } from './data'
 
 export default function ProjectsPage() {
   const t = useTranslations('projects')
 
-  const items = t.raw('items') as ProjectItem[]
-  const categoryKeys = ['software', 'hardware', 'community'] as const
-  type CategoryKey = typeof categoryKeys[number]
+  const [selectedCategory, setSelectedCategory] = useState<ProjectCategory | null>(null)
 
-  const [selectedCategory, setSelectedCategory] = useState<CategoryKey | null>(null)
+  // Pair each project's structural config (SSOT) with its translated strings by
+  // canonical index — translations carry no structural fields to corrupt.
+  const strings = t.raw('items') as ProjectStrings[]
+  const projects = PROJECTS.map((p, i) => ({ ...p, ...strings[i] }))
 
   const filteredItems = selectedCategory
-    ? items.filter(p => p.category === selectedCategory)
-    : items
+    ? projects.filter(p => p.category === selectedCategory)
+    : projects
 
-  const handleToggle = (key: CategoryKey) => {
+  const handleToggle = (key: ProjectCategory) => {
     setSelectedCategory(prev => (prev === key ? null : key))
   }
 
@@ -36,16 +38,6 @@ export default function ProjectsPage() {
 
       <section className="py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-          {/* Section header */}
-          <div className="max-w-2xl mx-auto text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mb-3">
-              {t('section.title')}
-            </h2>
-            <p className="text-base sm:text-lg text-text-tertiary">
-              {t('section.subtitle')}
-            </p>
-          </div>
 
           {/* Filter row */}
           <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mb-10 sm:mb-12">
@@ -65,7 +57,7 @@ export default function ProjectsPage() {
             >
               {t('filter.all')}
             </Button>
-            {categoryKeys.map((key) => (
+            {PROJECT_CATEGORIES.map((key) => (
               <Button
                 key={key}
                 variant="ghost"
@@ -92,10 +84,10 @@ export default function ProjectsPage() {
           {/* Result count */}
           <p className="text-center mt-8 text-xs text-text-muted">
             {selectedCategory === null
-              ? t('results', { count: filteredItems.length, total: items.length })
+              ? t('results', { count: filteredItems.length, total: PROJECTS.length })
               : t('resultsFiltered', {
                   count: filteredItems.length,
-                  total: items.length,
+                  total: PROJECTS.length,
                   category: t(`categories.${selectedCategory}`),
                 })}
           </p>

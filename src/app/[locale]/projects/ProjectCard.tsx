@@ -1,42 +1,26 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { ArrowRight, CheckCircle2, Calendar, Code, Globe, Users, Wrench, Layers, Server, Lightbulb } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Calendar } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
+import type { ProjectView } from './data'
 
-export type ProjectItem = {
-  title: string
-  description: string
-  category: 'software' | 'hardware' | 'community'
-  status: 'active' | 'ongoing'
-  features: string[]
-  slug: string
-  year: string
-}
-
-const ICON_BY_SLUG: Record<string, LucideIcon> = {
-  kivitendo:    Code,
-  linuxola:     Globe,
-  freiecomputer: Layers,
-  compirat:     Users,
-  hardware:     Wrench,
-  ltsp:         Server,
-  upcycling:    Lightbulb,
-}
-
-export function ProjectCard({ project, index = 0 }: { project: ProjectItem; index?: number }) {
+export function ProjectCard({ project, index = 0 }: { project: ProjectView; index?: number }) {
   const t = useTranslations('projects')
-  const Icon = ICON_BY_SLUG[project.slug] ?? Layers
+  const Icon = project.icon
   const iconBadge = DESIGN_TOKENS.iconBadges.projects
+
+  // Structural facts (slug/category/status/year/icon) come from the config
+  // SSOT; title/description/features are the project's translatable strings.
+  const { title, description, features } = project
 
   return (
     <Link
       href={`/projects/${project.slug}`}
-      aria-label={`${project.title} — ${t('learnMore')}`}
+      aria-label={`${title} — ${t('learnMore')}`}
       className={cn(
         designPrimitive.surface.card,
         'group flex flex-col animate-fade-in-up',
@@ -57,7 +41,7 @@ export function ProjectCard({ project, index = 0 }: { project: ProjectItem; inde
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <h3 className="text-base font-semibold text-text-primary truncate">
-                {project.title}
+                {title}
               </h3>
               <span className={cn(
                 designPrimitive.badgeBase,
@@ -75,13 +59,13 @@ export function ProjectCard({ project, index = 0 }: { project: ProjectItem; inde
 
         {/* Description */}
         <p className="text-sm text-text-secondary mb-4 grow leading-relaxed">
-          {project.description}
+          {description}
         </p>
 
         {/* Features */}
-        {project.features.length > 0 && (
+        {features.length > 0 && (
           <ul className="space-y-2 mb-5">
-            {project.features.map((feat, i) => (
+            {features.map((feat, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-text-tertiary">
                 <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-action" />
                 <span>{feat}</span>

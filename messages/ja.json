@@ -3391,10 +3391,6 @@
       "title": "私たちのプロジェクト",
       "subtitle": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。"
     },
-    "section": {
-      "title": "私たちのプロジェクト",
-      "subtitle": "Open Sourceソフトウェアからコミュニティイニシアチブまで — 私たちの多様なプロジェクトを発見してください。"
-    },
     "filter": {
       "label": "カテゴリーで絞り込み：",
       "all": "すべて"
@@ -3416,10 +3412,6 @@
       {
         "title": "Kivitendo Modus CH",
         "description": "2015年7月以来、revamp-itはKivitendoプロジェクトのプレミアムパートナーです。2005年から、当初は自社目的のために、やがて顧客のニーズを満たすために、会計、リソース、顧客管理のためのソフトウェアソリューションを探し始めました。",
-        "readMoreLink": "/projects/kivitendo",
-        "category": "ソフトウェアプロジェクト",
-        "status": "アクティブ",
-        "year": "2015",
         "features": [
           "2015年からのプレミアムパートナーシップ",
           "会計とリソース管理",
@@ -3430,10 +3422,6 @@
       {
         "title": "Linuxola団体",
         "description": "Linuxola団体は2005年12月2日にスイスの様々な地域からの8人によって設立されました。組織の目的は、アフリカのパートナーに情報技術へのアクセスとグローバルなデジタルコモンズへの接続を提供することです。",
-        "readMoreLink": "/projects/linuxola",
-        "category": "コミュニティプロジェクト",
-        "status": "アクティブ",
-        "year": "2005",
         "features": [
           "8名によるスイス設立",
           "アフリカパートナーシップに注力",
@@ -3444,10 +3432,6 @@
       {
         "title": "FreieComputer.ch",
         "description": "事前インストール済みのフリーソフトウェアと保証されたサポートを持つコンピューターのスイスラベル！revamp-itは積極的なOpen Sourceコミュニティとともにこのラベルの誕生に貢献しました。",
-        "readMoreLink": "/projects/freiecomputer",
-        "category": "コミュニティプロジェクト",
-        "status": "アクティブ",
-        "year": "2010",
         "features": [
           "フリーソフトウェアのスイスラベル",
           "事前インストール済みOpen Sourceソフトウェア",
@@ -3458,10 +3442,6 @@
       {
         "title": "Compirat",
         "description": "Compiratはカリタスチューリッヒとrevamp-itの協力プロジェクトです。Compiratの支援により、チューリッヒ州の限られた資力を持つ人々が自宅近くでコンピューターの使い方を学ぶ機会を得られます。",
-        "readMoreLink": "/projects/compirat",
-        "category": "コミュニティプロジェクト",
-        "status": "アクティブ",
-        "year": "2018",
         "features": [
           "カリタスチューリッヒとのパートナーシップ",
           "限られた資力を持つ人々への支援",
@@ -3472,10 +3452,6 @@
       {
         "title": "ハードウェア開発",
         "description": "revamp-itのハードウェア開発作業は、廃棄されたコンピューターハードウェアの新たな可能性を発見し、エネルギーとリソースの消費を最適化し、Open Sourceハードウェアの組み立てガイドを作成することに焦点を当てています。",
-        "readMoreLink": "/projects/hardware",
-        "category": "ハードウェアプロジェクト",
-        "status": "進行中",
-        "year": "2020",
         "features": [
           "廃棄ハードウェアのアップサイクル",
           "エネルギーとリソースの最適化",
@@ -3486,10 +3462,6 @@
       {
         "title": "LTSP — Linux Terminal Server Project",
         "description": "Linux Terminal Server Projectは、ネットワークを通じて古くて遅いコンピューターに接続された高速で強力なサーバーの性能を活用することに焦点を当てています。これにより、同じサーバーに接続したクライアントで複数のユーザーが同時に作業できます。",
-        "readMoreLink": "/projects/ltsp",
-        "category": "ソフトウェアプロジェクト",
-        "status": "アクティブ",
-        "year": "2016",
         "features": [
           "ネットワークベースのサーバーソリューション",
           "古いハードウェアの効率的な利用",
@@ -3500,16 +3472,12 @@
       {
         "title": "Monitor-Upcycling",
         "description": "廃棄されたコンピュータモニターが機能的で持続可能なランプに変身します。保護されたワークショップや不動産パートナーとの協力による循環型経済のパイロットプロジェクト – オープンな指示書と科学的支援付き。",
-        "category": "hardware",
-        "status": "ongoing",
-        "year": "2025",
         "features": [
           "モニターをランプに変換",
           "小規模シリーズと品質保証",
           "社会企業との協力",
           "ZHAWによる生態学的分析"
-        ],
-        "readMoreLink": "/projects/upcycling"
+        ]
       }
     ],
     "freiecomputer": {
