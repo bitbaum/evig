@@ -10,6 +10,7 @@
  */
 
 import { ROUTES } from '@/config/routes'
+import { EXTERNAL_LINKS } from '@/config/org'
 import type { NavigationItem } from '@/config/navigation'
 
 export const CUSTOMER_JOURNEYS = {
@@ -19,9 +20,12 @@ export const CUSTOMER_JOURNEYS = {
     hubHref: ROUTES.public.marketplace,
     items: [
       {
+        // The official RevampIT storefront is the external Shopware shop;
+        // the internal /marketplace is the community P2P listing surface.
         nameKey: 'orgShop',
-        href: `${ROUTES.public.marketplace}?seller_type=revampit`,
+        href: EXTERNAL_LINKS.shopware,
         descriptionKey: 'orgShopDesc',
+        external: true,
       },
       {
         nameKey: 'communityListings',
@@ -77,12 +81,13 @@ export function buildMarktplatzNavigationItems(): NavigationItem[] {
     nameKey: string
     href: string
     descriptionKey: string
-  }, index: number): NavigationItem => ({
+    external?: boolean
+  }): NavigationItem => ({
     name: item.nameKey,
     nameKey: item.nameKey,
     href: item.href,
     descriptionKey: item.descriptionKey,
-    featured: index === 0,
+    external: item.external,
   })
 
   return [

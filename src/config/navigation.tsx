@@ -1,5 +1,4 @@
 import React from 'react'
-import { type LucideIcon } from 'lucide-react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
 import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
 import { buildServicesNavigationItems } from '@/config/services-nav'
@@ -30,12 +29,6 @@ export interface NavigationItem {
   icon?: React.ReactNode
   isMultiColumn?: boolean
   dropdownAlignment?: 'left' | 'center' | 'right'
-  /** Marks this dropdown item as the section's hero entry — rendered as a larger card. */
-  featured?: boolean
-  /** Lucide icon shown inside the hero card when `featured` is true. */
-  featuredIcon?: LucideIcon
-  /** Optional theme key for icon-badge tinting on featured tiles (matches DESIGN_TOKENS.iconBadges). */
-  featuredTheme?: 'marketplace' | 'repairers' | 'projects'
 }
 
 /**

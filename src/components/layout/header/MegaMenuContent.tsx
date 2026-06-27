@@ -165,21 +165,15 @@ function MegaMenuLink({
       href={item.href}
       onClick={onClose}
       className={cn(
-        item.featured
-          ? 'group mb-2 flex items-start justify-between gap-3 rounded-lg border border-subtle bg-surface-raised px-4 py-4'
-          : 'group flex items-start justify-between gap-3 rounded-lg px-3 py-2.5',
-        'transition-colors duration-200',
-        item.featured ? 'hover:border-strong' : 'hover:bg-surface-raised',
+        'group flex items-start justify-between gap-3 rounded-lg px-3 py-2.5',
+        'transition-colors duration-200 hover:bg-surface-raised',
         'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2',
       )}
       {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
     >
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
-          <span className={cn(
-            'font-medium text-text-primary transition-colors group-hover:text-action',
-            item.featured ? 'text-[15px]' : 'text-sm',
-          )}>
+          <span className="text-sm font-medium text-text-primary transition-colors group-hover:text-action">
             {label}
           </span>
           <ItemBadge badge={item.badge} />
@@ -188,10 +182,7 @@ function MegaMenuLink({
           )}
         </span>
         {description && (
-          <span className={cn(
-            'mt-0.5 block leading-snug text-text-secondary line-clamp-2',
-            item.featured ? 'text-sm' : 'text-xs',
-          )}>
+          <span className="mt-0.5 block text-xs leading-snug text-text-secondary line-clamp-2">
             {description}
           </span>
         )}
@@ -221,7 +212,7 @@ function SectionOverviewLink({
       onClick={onClose}
       className={cn(
         'mt-4 inline-flex items-center gap-1.5 px-3 py-2',
-        'font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary',
+        'font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary',
         'transition-colors hover:text-action',
       )}
       {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
