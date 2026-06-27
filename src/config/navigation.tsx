@@ -2,6 +2,7 @@ import React from 'react'
 import { type LucideIcon } from 'lucide-react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
 import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
+import { buildServicesNavigationItems } from '@/config/services-nav'
 
 /**
  * Navigation Configuration - SSOT for all navigation data
@@ -154,58 +155,8 @@ export const mainNavigation: NavigationItem[] = [
     href: '/services',
     descriptionKey: 'servicesDesc',
     isMultiColumn: true,
-    subItems: [
-      // Section: Hardware
-      {
-        name: 'Hardware',
-        nameKey: 'hardware',
-        href: '/services',
-        isSection: true,
-      },
-      {
-        name: 'Reparatur & Upgrades',
-        nameKey: 'repairUpgrades',
-        href: '/services/computer-repair-upgrades',
-        descriptionKey: 'repairUpgradesDesc',
-      },
-      {
-        name: 'Datenrettung',
-        nameKey: 'dataRecovery',
-        href: '/services/data-recovery-transfer',
-        descriptionKey: 'dataRecoveryDesc',
-      },
-      {
-        name: 'Hardware-Recycling',
-        nameKey: 'hardwareRecycling',
-        href: '/services/hardware-recycling',
-        descriptionKey: 'hardwareRecyclingDesc',
-      },
-      // Section: Software
-      {
-        name: 'Software',
-        nameKey: 'software',
-        href: '/services',
-        isSection: true,
-      },
-      {
-        name: 'Linux & Open Source',
-        nameKey: 'linuxOpenSource',
-        href: '/services/linux-open-source',
-        descriptionKey: 'linuxOpenSourceDesc',
-      },
-      {
-        name: 'Webentwicklung',
-        nameKey: 'webDev',
-        href: '/services/web-design-development',
-        descriptionKey: 'webDevDesc',
-      },
-      {
-        name: 'Open Source-Lösungen',
-        nameKey: 'openSourceSolutions',
-        href: '/services/open-source-solutions',
-        descriptionKey: 'openSourceSolutionsDesc',
-      },
-    ],
+    // Derived from SERVICE_CONFIGS (services SSOT) — see buildServicesNavigationItems.
+    subItems: buildServicesNavigationItems(),
   },
   {
     name: 'Marktplatz',
