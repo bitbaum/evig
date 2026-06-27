@@ -78,20 +78,22 @@ export default function TechnikerListClient() {
                   : t('list.available', { count: pagination.total })}
               </p>
             </div>
-            <Link
-              href={ROUTES.public.itHilfeCreate}
-              className="ui-public-cta inline-flex items-center gap-2 md:justify-self-end"
-            >
-              <Search className="w-4 h-4" />
-              {t('list.requestHelp')}
-            </Link>
-            <Link
-              href={session?.user ? ROUTES.public.profilTechniker : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
-              className="ui-public-cta-ghost inline-flex items-center gap-2 md:justify-self-end text-sm"
-            >
-              <Wrench className="w-4 h-4" />
-              {t('list.becomeTechnician')}
-            </Link>
+            <div className="flex flex-col items-start gap-3 md:items-end">
+              <Link
+                href={ROUTES.public.itHilfeCreate}
+                className="ui-public-cta inline-flex items-center gap-2 md:justify-self-end"
+              >
+                <Search className="w-4 h-4" />
+                {t('list.requestHelp')}
+              </Link>
+              <Link
+                href={session?.user ? ROUTES.public.profilTechniker : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
+                className="inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-action"
+              >
+                <Wrench className="w-4 h-4" />
+                {t('list.becomeTechnician')}
+              </Link>
+            </div>
           </div>
 
           <form onSubmit={handleSearch} className="mt-8 max-w-2xl">
@@ -210,18 +212,17 @@ export default function TechnikerListClient() {
           </nav>
         )}
 
-        {/* CTA for non-logged-in */}
+        {/* Supplier CTA stays secondary to the requester path. */}
         {!session?.user && (
-          <section className="mt-16 border-t border-subtle pt-16 text-center">
-            <div className="ui-public-eyebrow">{tEye('getInvolved')}</div>
-            <h2 className="ui-public-display-md mt-3">{t('list.ctaTitle')}</h2>
-            <p className="ui-public-section-lede mt-4 mx-auto">{t('list.ctaDescription')}</p>
-            <div className="ui-public-cta-row mt-8">
+          <section className="mt-12 border-t border-subtle pt-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="ui-public-eyebrow">{tEye('getInvolved')}</div>
+                <h2 className="mt-2 text-lg font-semibold text-text-primary">{t('list.ctaTitle')}</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary">{t('list.ctaDescription')}</p>
+              </div>
               <Link href={`/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`} className="ui-public-cta">
                 {t('list.ctaCreateProfile')}
-              </Link>
-              <Link href={ROUTES.public.itHilfe} className="ui-public-cta-ghost">
-                {t('list.ctaToITHelp')}
               </Link>
             </div>
           </section>

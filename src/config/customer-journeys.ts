@@ -19,19 +19,14 @@ export const CUSTOMER_JOURNEYS = {
     hubHref: ROUTES.public.marketplace,
     items: [
       {
-        nameKey: 'communityListings',
-        href: ROUTES.public.marketplace,
-        descriptionKey: 'communityListingsDesc',
-      },
-      {
         nameKey: 'orgShop',
         href: `${ROUTES.public.marketplace}?seller_type=revampit`,
         descriptionKey: 'orgShopDesc',
       },
       {
-        nameKey: 'store',
-        href: '/contact',
-        descriptionKey: 'storeDesc',
+        nameKey: 'communityListings',
+        href: ROUTES.public.marketplace,
+        descriptionKey: 'communityListingsDesc',
       },
       {
         nameKey: 'createListing',
@@ -46,19 +41,14 @@ export const CUSTOMER_JOURNEYS = {
     hubHref: ROUTES.public.itHilfe,
     items: [
       {
-        nameKey: 'findTechnician',
-        href: ROUTES.public.techniker,
-        descriptionKey: 'findTechnicianDesc',
-      },
-      {
         nameKey: 'requestHelp',
         href: ROUTES.public.itHilfeCreate,
         descriptionKey: 'requestHelpDesc',
       },
       {
-        nameKey: 'services',
-        href: ROUTES.public.services,
-        descriptionKey: 'servicesDesc',
+        nameKey: 'findTechnician',
+        href: ROUTES.public.techniker,
+        descriptionKey: 'findTechnicianDesc',
       },
       {
         nameKey: 'becomeTechnician',
@@ -87,11 +77,12 @@ export function buildMarktplatzNavigationItems(): NavigationItem[] {
     nameKey: string
     href: string
     descriptionKey: string
-  }): NavigationItem => ({
+  }, index: number): NavigationItem => ({
     name: item.nameKey,
     nameKey: item.nameKey,
     href: item.href,
     descriptionKey: item.descriptionKey,
+    featured: index === 0,
   })
 
   return [

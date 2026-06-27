@@ -50,9 +50,9 @@ export function MegaMenuContent({
   return (
     <div
       className={cn(
-        'mt-2 overflow-hidden rounded-2xl border border-subtle bg-surface-base',
+        'mt-2 overflow-hidden rounded-xl border border-subtle bg-surface-base shadow-sm',
         'animate-in fade-in slide-in-from-top-2 duration-200',
-        hasMultipleGroups ? 'p-0' : 'p-3',
+        hasMultipleGroups ? 'p-0' : 'p-2',
       )}
     >
       {hasMultipleGroups ? (
@@ -128,7 +128,7 @@ function MegaMenuSection({
   t: TFn
 }) {
   return (
-    <div className="flex flex-col p-5 sm:p-6">
+    <div className="flex flex-col p-4 sm:p-5">
       {group.section && (
         <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
           {getLabel(group.section, t)}
@@ -165,16 +165,21 @@ function MegaMenuLink({
       href={item.href}
       onClick={onClose}
       className={cn(
-        'group flex items-start justify-between gap-3 rounded-lg px-3 py-3',
+        item.featured
+          ? 'group mb-2 flex items-start justify-between gap-3 rounded-lg border border-subtle bg-surface-raised px-4 py-4'
+          : 'group flex items-start justify-between gap-3 rounded-lg px-3 py-2.5',
         'transition-colors duration-200',
-        'hover:bg-surface-raised',
+        item.featured ? 'hover:border-strong' : 'hover:bg-surface-raised',
         'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2',
       )}
       {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
     >
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
-          <span className="text-sm font-medium text-text-primary transition-colors group-hover:text-action">
+          <span className={cn(
+            'font-medium text-text-primary transition-colors group-hover:text-action',
+            item.featured ? 'text-[15px]' : 'text-sm',
+          )}>
             {label}
           </span>
           <ItemBadge badge={item.badge} />
@@ -183,7 +188,10 @@ function MegaMenuLink({
           )}
         </span>
         {description && (
-          <span className="mt-0.5 block text-xs leading-snug text-text-secondary line-clamp-2">
+          <span className={cn(
+            'mt-0.5 block leading-snug text-text-secondary line-clamp-2',
+            item.featured ? 'text-sm' : 'text-xs',
+          )}>
             {description}
           </span>
         )}

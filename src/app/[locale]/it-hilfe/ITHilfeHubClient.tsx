@@ -16,22 +16,21 @@ export default function ITHilfeHubClient() {
   const { data: session } = useSession()
   const t = useTranslations('itHelp.hub')
 
-  const paths = [
-    {
-      icon: ClipboardList,
-      title: t('paths.request.title'),
-      description: t('paths.request.description'),
-      href: IT_HILFE.routes.create,
-      cta: t('paths.request.cta'),
-      primary: true,
-    },
+  const primaryPath = {
+    icon: ClipboardList,
+    title: t('paths.request.title'),
+    description: t('paths.request.description'),
+    href: IT_HILFE.routes.create,
+    cta: t('paths.request.cta'),
+  } as const
+
+  const secondaryPaths = [
     {
       icon: Users,
       title: t('paths.technicians.title'),
       description: t('paths.technicians.description'),
       href: ROUTES.public.techniker,
       cta: t('paths.technicians.cta'),
-      primary: false,
     },
     {
       icon: Search,
@@ -39,9 +38,10 @@ export default function ITHilfeHubClient() {
       description: t('paths.browse.description'),
       href: ROUTES.public.itHilfeBrowseRequests,
       cta: t('paths.browse.cta'),
-      primary: false,
     },
   ] as const
+
+  const PrimaryIcon = primaryPath.icon
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -57,14 +57,34 @@ export default function ITHilfeHubClient() {
 
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-4 md:grid-cols-3">
-            {paths.map((path) => {
+          <Link
+            href={primaryPath.href}
+            className="group grid gap-6 rounded-xl border border-action/30 bg-surface-base p-6 transition-colors hover:border-action sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center"
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-action-muted">
+                <PrimaryIcon className="h-5 w-5 text-action" aria-hidden="true" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-text-primary transition-colors group-hover:text-action sm:text-2xl">
+                  {primaryPath.title}
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
+                  {primaryPath.description}
+                </p>
+              </div>
+            </div>
+            <span className="ui-public-cta justify-self-start lg:justify-self-end">{primaryPath.cta}</span>
+          </Link>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {secondaryPaths.map((path) => {
               const Icon = path.icon
               return (
                 <Link
                   key={path.href}
                   href={path.href}
-                  className={path.primary ? 'ui-public-start-card group border-action/30' : 'ui-public-start-card group'}
+                  className="ui-public-start-card group"
                 >
                   <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-action-muted">
                     <Icon className="h-5 w-5 text-action" aria-hidden="true" />

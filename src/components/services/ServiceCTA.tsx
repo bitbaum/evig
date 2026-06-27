@@ -16,13 +16,14 @@ interface ServiceCTAProps {
 
 export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: ServiceCTAProps) {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-action text-white">
-      <div className="container mx-auto px-4 sm:px-6 text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Bereit loszulegen?</h2>
-        <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-action-text">
+    <section className="border-t border-subtle bg-surface-base py-12 sm:py-16">
+      <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+        <div className="ui-public-eyebrow">Termin</div>
+        <h2 className="mt-3 text-2xl font-semibold text-text-primary sm:text-3xl">Bereit loszulegen?</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
           Buchen Sie jetzt Ihren Termin für unsere {serviceTitle} Dienstleistungen.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           {serviceSlug && (
             <AppointmentBookingForm
               serviceSlug={serviceSlug}
@@ -32,13 +33,13 @@ export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: Servi
           )}
           <Link
             href="/contact"
-            className="inline-block bg-surface-base text-action px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-action-muted transition-colors duration-300 text-base sm:text-lg min-h-touch touch-target"
+            className="ui-public-cta-ghost"
           >
             Kontakt
           </Link>
           <Link
             href="/services"
-            className="inline-block border-2 border-white text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-surface-base/20 transition-colors duration-300 text-base sm:text-lg min-h-touch touch-target"
+            className="text-sm text-text-secondary transition-colors hover:text-action"
           >
             Zurück zu Services
           </Link>
@@ -47,4 +48,3 @@ export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: Servi
     </section>
   )
 }
-

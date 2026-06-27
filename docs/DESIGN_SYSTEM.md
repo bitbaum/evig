@@ -27,9 +27,14 @@ the whole UI green.
 
 - Theme switching is a single cyclic icon button (`light -> dark -> system`), not a three-button segmented control.
 - Public display headings use zero letter spacing and restrained `font-semibold` weights. Avoid `text-6xl+` except for true hero/detail numbers with proven mobile fit.
+- Public navigation is organized by user jobs, not internal modules. `Marktplatz` contains the two customer jobs only: buy/sell hardware and request IT help. Professional services stay under `Dienstleistungen`; supplier paths such as becoming a technician are secondary.
+- In mega menus, the first item in each section is the primary action and may render as a featured row. Keep each menu section to roughly 3 links; avoid unrelated catch-all columns.
 - Marketplace creation must expose photos and fulfillment up front: use `ImageUploadGrid` for listing photos and the delivery card selector for `pickup`, `shipping`, and `both`.
+- RevampIT-owned stock published from inventory uses `REVAMPIT_LISTING_DELIVERY` as the SSOT for public fulfillment. Cart checkout must offer the same pickup/shipping model as listing checkout.
 - Marketplace listing grids and seller profile listing grids share `ListingCard`; do not hand-roll duplicate product cards.
 - Public seller and technician profiles should be useful overview pages: avatar/initial, location, trust/status, concise stats, then inventory/services. Keep these profile surfaces flat and reusable.
+- IT-help pages prioritize requester actions. `Hilfe anfragen` is the default path; technician browsing is secondary; technician registration belongs visually below requester flows.
+- Service listing cards are selection surfaces. They should have one primary row-level action (`Mehr erfahren` / detail), while booking happens on service detail pages.
 
 ## The token system
 

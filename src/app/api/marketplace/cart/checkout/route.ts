@@ -2,7 +2,7 @@
  * POST /api/marketplace/cart/checkout
  *
  * Multi-item checkout for the RevampIT shop cart. Creates ONE marketplace order
- * (seller = the Revamp-IT org account, pickup, 0 commission) with N
+ * (seller = the Revamp-IT org account, 0 commission) with N
  * marketplace_order_items, reserves every listing, and opens a single Payrexx
  * gateway for the total. Only is_revampit listings are accepted — community P2P
  * listings use the single-item /api/marketplace/orders flow.
@@ -13,7 +13,7 @@ import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { db } from '@/db'
 import { listings, marketplaceOrders, marketplaceOrderItems } from '@/db/schema'
 import { eq, inArray, sql } from 'drizzle-orm'
-import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
+import { LISTING_STATUS, ORDER_STATUS, REVAMPIT_LISTING_DELIVERY } from '@/config/marketplace'
 import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger'
 import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable, createGateway } from '@/lib/payments/payrexx-client'
@@ -23,6 +23,14 @@ import { z } from 'zod'
 
 const CartCheckoutSchema = z.object({
   listing_ids: z.array(z.string().uuid()).min(1).max(50),
+  delivery_method: z.enum(['pickup', 'shipping']).default('pickup'),
+  shipping_address: z.object({
+    name: z.string().min(1),
+    street: z.string().min(1),
+    city: z.string().min(1),
+    postal_code: z.string().regex(/^\d{4}$/),
+    country: z.string().default('CH'),
+  }).optional().nullable(),
 })
 
 class CartError extends Error {}
@@ -43,6 +51,10 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const parsed = CartCheckoutSchema.safeParse(body)
     if (!parsed.success) return apiBadRequest('Ungültiger Warenkorb')
     ids = [...new Set(parsed.data.listing_ids)]
+    const deliveryMethod = parsed.data.delivery_method
+    if (deliveryMethod === 'shipping' && !parsed.data.shipping_address) {
+      return apiBadRequest('Lieferadresse erforderlich')
+    }
 
     if (isPayrexxCheckoutUnavailable()) return apiBadRequest(PAYREXX_SETUP_MESSAGE)
 
@@ -66,7 +78,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         if (r.seller_id === session.user.id) throw new CartError('Du kannst dein eigenes Inserat nicht kaufen')
       }
 
-      const totalChf = Math.round(rows.reduce((s, r) => s + Number(r.price_chf), 0) * 100) / 100
+      const itemsTotalChf = Math.round(rows.reduce((s, r) => s + Number(r.price_chf), 0) * 100) / 100
+      const shippingChf = deliveryMethod === 'shipping' && REVAMPIT_LISTING_DELIVERY.shippingCostChf
+        ? Number(REVAMPIT_LISTING_DELIVERY.shippingCostChf)
+        : 0
+      const totalChf = Math.round((itemsTotalChf + shippingChf) * 100) / 100
 
       const [order] = await tx
         .insert(marketplaceOrders)
@@ -78,7 +94,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           commissionChf: '0',
           sellerPayoutChf: String(totalChf),
           status: ORDER_STATUS.PENDING_PAYMENT,
-          deliveryMethod: 'pickup',
+          deliveryMethod,
+          shippingAddress: deliveryMethod === 'shipping' ? parsed.data.shipping_address : null,
           paymentProvider: 'payrexx',
         })
         .returning({ id: marketplaceOrders.id })

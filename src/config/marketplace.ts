@@ -105,7 +105,7 @@ export const DELIVERY_LABELS: Record<DeliveryOption, string> = {
  */
 export const REVAMPIT_LISTING_DELIVERY = {
   options: 'both',
-  shippingCostChf: null,
+  shippingCostChf: '12.00',
   pickupLocation: 'Revamp-IT Zürich',
 } as const satisfies {
   options: DeliveryOption

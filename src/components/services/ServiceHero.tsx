@@ -14,15 +14,19 @@ interface ServiceHeroProps {
 
 export default function ServiceHero({ hero }: ServiceHeroProps) {
   return (
-    <section className="relative bg-action text-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 relative">
+    <section className="border-b border-subtle bg-surface-base py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
-          <Heading level={1} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">{hero.title}</Heading>
-          <Heading level={2} className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 md:mb-8 text-action-text">{hero.subtitle}</Heading>
-          <p className="text-base sm:text-lg md:text-xl text-action-text">{hero.description}</p>
+          <div className="ui-public-eyebrow">Service</div>
+          <Heading level={1} className="mt-3 text-3xl font-semibold leading-tight text-text-primary sm:text-4xl md:text-4xl lg:text-4xl">
+            {hero.title}
+          </Heading>
+          <Heading level={2} className="mt-4 text-lg font-medium leading-relaxed text-text-secondary sm:text-xl">
+            {hero.subtitle}
+          </Heading>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">{hero.description}</p>
         </div>
       </div>
     </section>
   )
 }
-

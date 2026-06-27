@@ -2,7 +2,7 @@
 
 **Created**: 2025-01-27  
 **Last Modified**: 2026-06-27  
-**Last Modified Summary**: Added current mobile marketplace/profile/header guidance and compact display scale rules
+**Last Modified Summary**: Added current mobile marketplace/profile/header guidance, compact display scale rules, and task-first IA constraints
 
 ## Overview
 
@@ -17,6 +17,12 @@ This document describes the centralized responsive design system that ensures co
 **Mobile-First**: All styles are designed mobile-first, then enhanced for larger screens.
 
 **Task-First Mobile**: On transactional pages, global chrome must not bury the task. Keep mobile headers compact, collapse secondary navigation into menus/sheets, and surface the page's primary action within the first viewport.
+
+**One Primary Path**: Buyer/requester pages must make one next action visually dominant. Examples:
+- `/it-hilfe`: primary = submit a request; technician browsing and open requests are secondary.
+- `/it-hilfe/techniker`: primary = request help; becoming a technician is a secondary supplier path.
+- `/marketplace/cart`: primary = review delivery and pay; pickup/shipping options are one review step, not separate pages.
+- `/services`: primary = choose the right service; service detail pages handle booking.
 
 ## Core Utilities
 
@@ -164,6 +170,7 @@ import { ResponsiveHeading, ResponsiveText } from '@/components/layout/Responsiv
 4. **Update the system** when you need site-wide changes, not individual pages
 5. **Use one control per setting** on mobile. Theme mode is one cyclic button; advanced filters live in a sheet; long nav lists live behind the menu.
 6. **Use shared commerce/profile primitives**. Marketplace grids use `ListingCard`; seller/technician profiles use the same flat profile rhythm instead of nested cards.
+7. **Do not duplicate module boundaries in mobile nav**. Keep user-facing choices job-based: buy/sell hardware, request IT help, book professional services, learn, contribute.
 
 ## Examples
 
@@ -171,7 +178,6 @@ See these files for examples:
 - `src/app/get-involved/page.tsx` - Uses ResponsiveSection
 - `src/components/layout/ResponsiveHero.tsx` - Hero implementation
 - `src/components/services/ServiceHero.tsx` - Service-specific hero
-
 
 
 
