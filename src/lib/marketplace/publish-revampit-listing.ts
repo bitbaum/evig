@@ -24,6 +24,7 @@ import {
   MARKETPLACE_CATEGORY_VALUES,
   LISTING_CONDITIONS,
   LISTING_STATUS,
+  REVAMPIT_LISTING_DELIVERY,
 } from '@/config/marketplace'
 import { logger } from '@/lib/logger'
 
@@ -159,7 +160,9 @@ export async function publishRevampitListing(
         condition,
         brand: data.brand ?? null,
         model: data.productName ?? null,
-        deliveryOptions: 'pickup',
+        deliveryOptions: REVAMPIT_LISTING_DELIVERY.options,
+        shippingCostChf: REVAMPIT_LISTING_DELIVERY.shippingCostChf,
+        pickupLocation: REVAMPIT_LISTING_DELIVERY.pickupLocation,
         paymentMode: 'secure',
         status: LISTING_STATUS.ACTIVE,
       })
@@ -187,12 +190,12 @@ export async function publishRevampitListing(
     category,
     condition,
     price_chf: Number(priceChf),
-    delivery_options: 'pickup',
+    delivery_options: REVAMPIT_LISTING_DELIVERY.options,
     payment_mode: 'secure',
     status: LISTING_STATUS.ACTIVE,
     is_revampit: true,
     is_verified: false,
-    pickup_location: null,
+    pickup_location: REVAMPIT_LISTING_DELIVERY.pickupLocation,
     seller_name: REVAMPIT_SELLER_NAME,
     seller_city: null,
     view_count: 0,

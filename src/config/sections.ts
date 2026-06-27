@@ -531,8 +531,8 @@ export const SECTIONS: Record<string, SectionConfig> = {
     id: 'erfassung',
     path: '/admin/erfassung',
     ui: {
-      label: 'Erfassung',
-      description: 'Produktdaten nach Geräte-Eingang erfassen',
+      label: 'Inventar-Erfassung',
+      description: 'Interne Produktdaten erfassen und RevampIT-Bestand veröffentlichen',
       icon: ScanLine,
       emoji: '📝',
       color: 'primary',

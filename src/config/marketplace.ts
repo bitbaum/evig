@@ -96,6 +96,23 @@ export const DELIVERY_LABELS: Record<DeliveryOption, string> = {
   both:     'Abholung & Versand',
 };
 
+/**
+ * Defaults for RevampIT-owned inventory when it is exposed as a public listing.
+ *
+ * Public sellers choose delivery per listing. Internal stock enters through
+ * intake/erfassung, so the publish helper needs one SSOT instead of hard-coded
+ * pickup-only values.
+ */
+export const REVAMPIT_LISTING_DELIVERY = {
+  options: 'both',
+  shippingCostChf: null,
+  pickupLocation: 'Revamp-IT Zürich',
+} as const satisfies {
+  options: DeliveryOption
+  shippingCostChf: string | null
+  pickupLocation: string
+}
+
 // ============================================================================
 // Payment Modes
 // ============================================================================
