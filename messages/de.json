@@ -669,6 +669,7 @@
       "stepPreview": "Vorschau",
       "sectionPhotos": "Fotos",
       "imagesLabel": "Bilder",
+      "imagesHelp": "Gute Fotos verkaufen schneller. Das erste Bild ist das Hauptbild",
       "mainImage": "Hauptbild",
       "preview": {
         "backToEdit": "Zurück zur Bearbeitung",
@@ -706,6 +707,11 @@
         "sectionCategoryCondition": "Kategorie & Zustand",
         "sectionDelivery": "Lieferung & Zahlung",
         "delivery": "Lieferung",
+        "deliveryHelp": {
+          "pickup": "Käufer holt das Gerät vor Ort ab.",
+          "shipping": "Du verschickst per Post oder Paketdienst.",
+          "both": "Käufer kann zwischen Abholung und Versand wählen."
+        },
         "payment": "Zahlungsart",
         "shippingCost": "Versandkosten (CHF)",
         "pickupLocation": "Abholstandort",
@@ -7518,6 +7524,7 @@
         "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
       },
       "backToMarketplace": "Zurück zum Marketplace",
+      "publicProfile": "Verkäuferprofil",
       "memberSince": "Mitglied seit {date}",
       "listings": "Inserate",
       "sold": "Verkauft",
@@ -8673,7 +8680,8 @@
       "kennzahlen": "Kennzahlen",
       "wirkung": "Wirkung",
       "transparenz": "Transparenz",
-      "appointments": "Termine"
+      "appointments": "Termine",
+      "repairerApplications": "Techniker-Freigaben"
     },
     "currencySelector": {
       "selectCurrency": "Währung wählen",
@@ -9998,10 +10006,11 @@
       "recentlyVisited": "Zuletzt besucht"
     },
     "userMenu": {
-      "darkMode": "Dark Mode",
+      "darkMode": "Erscheinungsbild",
       "toWebsite": "Zur Website",
       "signOut": "Abmelden",
-      "adminArea": "Admin-Bereich"
+      "adminArea": "Admin-Bereich",
+      "staffFallback": "Teammitglied"
     },
     "notifications": {
       "title": "Benachrichtigungen",
@@ -10244,6 +10253,7 @@
       "betrieb": "Organisation",
       "analyse-group": "Analyse",
       "personen": "Personen",
+      "teamhr": "Team & HR",
       "system-group": "System",
       "dashboard": "Dashboard",
       "profile": "Mein Profil",
@@ -10264,9 +10274,11 @@
       "shift-log": "Schicht starten",
       "my-timecards": "Meine Zeiterfassung",
       "intake": "Geräte-Eingang",
+      "erfassung": "Erfassung",
       "products": "Produkte",
       "marketplace": "Marketplace",
       "it-hilfe-admin": "IT-Hilfe",
+      "repairer-applications": "Techniker-Freigaben",
       "workshops-admin": "Workshops",
       "services": "Dienstleistungen",
       "appointments-admin": "Termine",
@@ -10282,11 +10294,12 @@
       "analytics": "Analytics",
       "donations": "Spenden",
       "users": "Benutzer",
-      "team": "Team & HR",
+      "team": "Team-Profile",
       "timecards": "Zeitkarten",
-      "timecard-approvals": "Freigaben",
+      "timecard-approvals": "Zeitkarten-Freigaben",
       "payroll": "Lohnlauf",
       "finanzen": "Finanzen",
+      "analyse-hub": "Analyse-Übersicht",
       "kennzahlen": "Kennzahlen",
       "wirkung": "Wirkung",
       "transparenz": "Transparenz",

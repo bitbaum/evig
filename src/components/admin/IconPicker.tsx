@@ -89,7 +89,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     title={label}
                     className={`flex flex-col items-center justify-center p-2 rounded-lg h-auto ${isSelected
                       ? 'bg-action-muted border-2 border-action'
-                      : '${adminInteractive.rowHover} border-2 border-transparent'
+                      : `${adminInteractive.rowHover} border-2 border-transparent`
                     }`}
                   >
                     <IconComponent

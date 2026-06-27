@@ -278,9 +278,9 @@
     var(--hero-title-fluid),
     var(--hero-title-max)
   );
-  line-height: 0.95;
-  letter-spacing: var(--display-tracking);
-  @apply font-bold;
+  line-height: 1;
+  letter-spacing: 0;
+  @apply font-semibold;
   color: var(--text-primary);
 }
 @utility ui-public-hero-title-fade {
@@ -308,7 +308,7 @@
 }
 @utility ui-public-hero-lede {
   /* Hero lede — primary subtitle, comfortable reading line-length. */
-  @apply mx-auto mt-6 sm:mt-8 max-w-2xl text-xl sm:text-2xl leading-tight tracking-tight;
+  @apply mx-auto mt-6 sm:mt-8 max-w-2xl text-lg sm:text-xl leading-snug;
   color: var(--text-secondary);
 }
 @utility ui-public-hero-sublede {
@@ -320,14 +320,14 @@
   /* CTA primary — RevampIT green; large tap target; opacity hover.
    * Text uses --accent-action-text which flips: white on dark-green (light mode),
    * near-black on bright-green (dark mode) — keeps WCAG AA contrast in both. */
-  @apply inline-flex items-center justify-center rounded-md px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
+  @apply inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90 active:opacity-80;
   background: var(--accent-action);
   color: var(--accent-action-text);
   min-height: 48px;
 }
 @utility ui-public-cta-ghost {
   /* CTA ghost — bordered, secondary action. */
-  @apply inline-flex items-center justify-center rounded-md px-8 py-3.5 text-base font-semibold transition-colors;
+  @apply inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold transition-colors;
   border: 1px solid var(--border-default);
   color: var(--text-secondary);
   min-height: 48px;
@@ -389,27 +389,27 @@
 }
 @utility ui-public-display-lg {
   /* Display headings for sections below the hero. */
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: 1.05;
-  letter-spacing: -0.025em;
-  @apply font-bold;
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+  @apply font-semibold;
   color: var(--text-primary);
 }
 @utility ui-public-display-md {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  @apply font-bold;
+  font-size: clamp(1.375rem, 3vw, 2rem);
+  line-height: 1.14;
+  letter-spacing: 0;
+  @apply font-semibold;
   color: var(--text-primary);
 }
 @utility ui-public-section-lede {
   /* Section lede — text alongside a section title. */
-  @apply max-w-2xl text-lg sm:text-xl leading-relaxed;
+  @apply max-w-2xl text-base sm:text-lg leading-relaxed;
   color: var(--text-secondary);
 }
 @utility ui-public-card {
   /* Surface card — fleetcrown-style content card for sections. */
-  @apply flex flex-col rounded-2xl p-6 text-left;
+  @apply flex flex-col rounded-lg p-6 text-left;
   border: 1px solid var(--border-subtle);
   background: var(--surface-base);
   transition: border-color 200ms ease;
@@ -466,7 +466,7 @@
 /* Large final-CTA — RevampIT brand green (accent action), sized for the
  * page-end "decide now" moment. Larger than the standard hero CTA. */
 @utility ui-public-cta-lg {
-  @apply inline-flex items-center justify-center rounded-2xl px-12 py-4 text-xl font-semibold transition-opacity hover:opacity-90 active:opacity-80;
+  @apply inline-flex items-center justify-center rounded-lg px-8 py-4 text-base font-semibold transition-opacity hover:opacity-90 active:opacity-80;
   background: var(--accent-action);
   color: var(--accent-action-text);
   min-height: 56px;
@@ -476,7 +476,7 @@
  * ui-public-card but tuned for "click here to start" affordance: title,
  * body, and an underlined link at the bottom. No icons. */
 @utility ui-public-start-card {
-  @apply flex min-h-[260px] flex-col rounded-2xl p-6 text-left transition-colors;
+  @apply flex min-h-[260px] flex-col rounded-lg p-6 text-left transition-colors;
   border: 1px solid var(--border-subtle);
   background: var(--surface-base);
   &:hover { border-color: var(--border-default); }
@@ -498,7 +498,7 @@
  * Geräte gerettet"). Fluid sized so it dominates the viewport without
  * overflowing on small screens. Tabular numerals so digits don't wobble. */
 @utility ui-public-stat-display {
-  @apply font-semibold leading-none tracking-tight tabular-nums;
+  @apply font-semibold leading-none tabular-nums;
   color: var(--text-primary);
   font-size: clamp(3.5rem, 12vw, 8rem);
 }
@@ -560,10 +560,10 @@
     --accent-action-text:    #ffffff;                        /* text ON action surfaces */
 
     /* Fluid display type — single SSOT, used by .ui-public-hero-title */
-    --hero-title-min:        2.75rem;        /* 44px — fits iPhone SE */
-    --hero-title-fluid:      8.5vw;
-    --hero-title-max:        5.75rem;        /* 92px */
-    --display-tracking:      -0.045em;
+    --hero-title-min:        2.25rem;        /* 36px — fits iPhone SE */
+    --hero-title-fluid:      7vw;
+    --hero-title-max:        4.75rem;        /* 76px */
+    --display-tracking:      0;
     --text-micro:            0.625rem;       /* 10px */
     /* Mobile chrome safety */
     --mobile-safe-bottom:    env(safe-area-inset-bottom, 0px);

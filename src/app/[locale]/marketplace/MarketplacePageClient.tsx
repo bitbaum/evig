@@ -83,6 +83,7 @@ export default function MarketplacePage() {
     filters.specStorageMin,
     filters.specDisplayMin,
   ].filter(Boolean).length
+  const skeletonCount = Math.min(pagination.limit, 6)
 
   const sharedSidebarProps = {
     filters,
@@ -211,7 +212,7 @@ export default function MarketplacePage() {
               </Select>
             </div>
 
-            {isLoading && <LoadingSkeleton count={pagination.limit} />}
+            {isLoading && <LoadingSkeleton count={skeletonCount} />}
 
             {error && !isLoading && (
               <ErrorAlert

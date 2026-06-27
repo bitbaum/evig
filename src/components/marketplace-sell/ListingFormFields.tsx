@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { MapPin, PackageCheck, Truck } from 'lucide-react'
 import {
   MARKETPLACE_LIMITS,
   DELIVERY_OPTIONS,
@@ -14,6 +15,7 @@ import {
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { SpecFields } from './SpecFields'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -220,21 +222,41 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Section header: Delivery & payment */}
       <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">{t('sectionDelivery')}</h2>
 
-      {/* Delivery + Payment */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1">
-            {t('delivery')}
-          </label>
-          <Select
-            value={formData.deliveryOptions}
-            onChange={(e) => update('deliveryOptions', e.target.value)}
-          >
-            {DELIVERY_OPTIONS.map(opt => (
-              <option key={opt} value={opt}>{DELIVERY_LABELS[opt]}</option>
-            ))}
-          </Select>
+      <div>
+        <p className="mb-2 block text-sm font-medium text-text-secondary">
+          {t('delivery')}
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {DELIVERY_OPTIONS.map((opt) => {
+            const active = formData.deliveryOptions === opt
+            const Icon = opt === 'pickup' ? MapPin : opt === 'shipping' ? Truck : PackageCheck
+            return (
+              <Button
+                key={opt}
+                type="button"
+                variant="ghost"
+                onClick={() => update('deliveryOptions', opt)}
+                aria-pressed={active}
+                className={`h-auto justify-start rounded-lg border p-3 text-left transition-colors ${
+                  active
+                    ? 'border-action bg-action-muted text-text-primary'
+                    : 'border-subtle bg-surface-base text-text-secondary hover:border-strong hover:bg-surface-base'
+                }`}
+              >
+                <span className="block">
+                  <Icon className={`mb-3 h-4 w-4 ${active ? 'text-action' : 'text-text-tertiary'}`} aria-hidden="true" />
+                  <span className="block text-sm font-semibold">{DELIVERY_LABELS[opt]}</span>
+                  <span className="mt-1 block text-xs leading-relaxed text-text-tertiary">
+                    {t(`deliveryHelp.${opt}` as never)}
+                  </span>
+                </span>
+              </Button>
+            )
+          })}
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('payment')}

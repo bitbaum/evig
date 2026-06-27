@@ -91,7 +91,7 @@ export function LoginForm() {
     <div className="w-full max-w-md mx-auto">
       <div className="card-shell rounded-2xl p-6 sm:p-8">
         <div className="text-center mb-8">
-          <Heading level={1} className="text-2xl font-bold mb-2 text-text-primary">
+          <Heading level={1} variant="admin" className="mb-2 text-center text-[2rem] font-semibold leading-tight text-text-primary sm:text-[2.25rem]">
             {t('heading')}
           </Heading>
           <p className="text-sm sm:text-base text-text-muted">

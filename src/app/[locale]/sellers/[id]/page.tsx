@@ -14,13 +14,12 @@ import {
   Calendar,
   ShoppingBag,
 } from 'lucide-react'
-import { getConditionBadge } from '@/config/erfassung/conditions'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { formatCHF } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { ListingCard } from '@/components/marketplace/ListingCard'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 
@@ -133,18 +132,21 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       </Link>
 
       {/* Seller Header */}
-      <div className="card-shell p-6 mb-6">
-        <div className="flex items-start gap-4">
-          <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center shrink-0">
+      <div className="mb-8 border-b border-subtle pb-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-subtle bg-action-muted flex items-center justify-center">
             {seller.avatar_url ? (
-              <Image src={seller.avatar_url} alt={displayName} width={64} height={64} className="w-16 h-16 rounded-full object-cover" />
+              <Image src={seller.avatar_url} alt={displayName} width={80} height={80} className="h-20 w-20 object-cover" />
             ) : (
-              <User className="w-8 h-8 text-action" />
+              <User className="h-9 w-9 text-action" />
             )}
           </div>
           <div className="flex-1">
-            <Heading level={1} className="text-2xl text-text-primary">{displayName}</Heading>
-            <div className="flex items-center gap-4 mt-2 text-sm text-text-tertiary">
+            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+              {t('seller.publicProfile')}
+            </div>
+            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">{displayName}</Heading>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-text-tertiary">
               {seller.city && (
                 <span className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
@@ -157,37 +159,37 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               </span>
             </div>
             {seller.bio && (
-              <p className="mt-3 text-text-secondary text-sm">{seller.bio}</p>
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-secondary">{seller.bio}</p>
             )}
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-subtle">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-text-primary">
+        <div className="mt-8 grid grid-cols-3 divide-x divide-subtle rounded-lg border border-subtle bg-surface-base">
+          <div className="p-4">
+            <div className="font-mono text-xl font-semibold tabular-nums text-text-primary">
               {seller.total_listings}
             </div>
-            <div className="text-xs text-text-tertiary">{t('seller.listings')}</div>
+            <div className="mt-1 text-xs text-text-tertiary">{t('seller.listings')}</div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-text-primary">
+          <div className="p-4">
+            <div className="font-mono text-xl font-semibold tabular-nums text-text-primary">
               {seller.total_sold}
             </div>
-            <div className="text-xs text-text-tertiary">{t('seller.sold')}</div>
+            <div className="mt-1 text-xs text-text-tertiary">{t('seller.sold')}</div>
           </div>
-          <div className="text-center">
+          <div className="p-4">
             {rating && Number(rating) > 0 ? (
-              <div className="flex items-center justify-center gap-1">
+              <div className="flex items-center gap-1">
                 <Star className="w-5 h-5 text-warning-400 fill-warning-400" />
-                <span className="text-2xl font-bold text-text-primary">
+                <span className="font-mono text-xl font-semibold tabular-nums text-text-primary">
                   {Number(rating).toFixed(1)}
                 </span>
               </div>
             ) : (
-              <div className="text-2xl font-bold text-text-muted">—</div>
+              <div className="font-mono text-xl font-semibold text-text-muted">—</div>
             )}
-            <div className="text-xs text-text-tertiary">
+            <div className="mt-1 text-xs text-text-tertiary">
               {reviewCount > 0 ? t('seller.ratingsCount', { count: reviewCount }) : t('seller.noRatings')}
             </div>
           </div>
@@ -208,44 +210,28 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             description={t('seller.noListingsDescription')}
           />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {seller.listings.map((listing) => {
-              const conditionInfo = getConditionBadge(listing.condition)
-              return (
-                <Link
-                  key={listing.id}
-                  href={ROUTES.public.marketplaceListing(listing.id)}
-                  className="group card-shell overflow-hidden hover:border-strong transition-all"
-                >
-                  <div className="relative aspect-4/3">
-                    {listing.thumbnail ? (
-                      <img
-                        src={listing.thumbnail}
-                        alt={listing.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-surface-raised flex items-center justify-center">
-                        <Package className="w-12 h-12 text-text-muted dark:text-text-tertiary" />
-                      </div>
-                    )}
-                    <div className="absolute top-2 left-2">
-                      <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${conditionInfo.color}`}>
-                        {conditionInfo.label}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-action transition-colors">
-                      {listing.title}
-                    </Heading>
-                    <p className="text-lg font-bold text-text-primary">
-                      {formatCHF(Number(listing.price_chf))}
-                    </p>
-                  </div>
-                </Link>
-              )
-            })}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {seller.listings.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                listing={{
+                  id: listing.id,
+                  title: listing.title,
+                  price_chf: listing.price_chf,
+                  category: listing.category,
+                  condition: listing.condition,
+                  is_revampit: false,
+                  pickup_location: null,
+                  view_count: listing.view_count,
+                  favorite_count: listing.favorite_count,
+                  seller_name: displayName,
+                  seller_display_name: displayName,
+                  seller_rating: rating,
+                  seller_city: seller.city,
+                  thumbnail: listing.thumbnail,
+                }}
+              />
+            ))}
           </div>
         )}
       </div>

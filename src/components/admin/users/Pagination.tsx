@@ -86,7 +86,7 @@ export function Pagination({
               className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium ${
                 page === p
                   ? ''
-                  : '${adminInteractive.rowHover} text-text-secondary'
+                  : `${adminInteractive.rowHover} text-text-secondary`
               }`}
             >
               {p}

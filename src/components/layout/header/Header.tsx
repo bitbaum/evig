@@ -122,7 +122,7 @@ export function Header() {
         )}
       >
         <div className="max-w-7xl mx-auto">
-          <nav className="flex items-center justify-between h-16 px-6 lg:px-8">
+          <nav className="flex items-center justify-between h-16 px-3 sm:px-6 lg:px-8">
             {/* Logo */}
             <div className="shrink-0">
               <Logo className="h-10" />
@@ -172,10 +172,7 @@ export function Header() {
             </div>
 
             {/* Mobile Right Side - Auth + Menu */}
-            <div className="lg:hidden flex items-center gap-2">
-              {/* Theme Toggle - Mobile */}
-              <ThemeToggle />
-              {/* User Menu - Mobile */}
+            <div className="lg:hidden flex items-center gap-1.5">
               <UserMenu />
               {/* Mobile Menu Button */}
               <Button

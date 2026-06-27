@@ -38,23 +38,23 @@ export async function MissionStrip({ className }: MissionStripProps) {
       )}
       aria-label={t('ariaLabel')}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6 sm:py-4 lg:px-8">
+        <div className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-center">
           {/* Mission anchor */}
-          <div className="flex items-start sm:items-center gap-3 min-w-0">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-action-muted/15">
-              <Recycle className="h-4 w-4 text-action" />
+          <div className="flex min-w-0 items-center gap-2.5">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-action-muted/15">
+              <Recycle className="h-3.5 w-3.5 text-action" />
             </div>
-            <p className="text-sm text-text-secondary leading-snug">
+            <p className="text-xs leading-snug text-text-secondary sm:text-sm">
               <strong className="text-text-primary">{t('anchor')}</strong>
-              <span className="block sm:inline sm:ml-1 text-text-muted">
+              <span className="hidden text-text-muted sm:inline sm:ml-1">
                 {t('subAnchor')}
               </span>
             </p>
           </div>
 
           {/* Live stats — devices + CO₂ */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm shrink-0">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-9 text-xs sm:shrink-0 sm:pl-0 sm:text-sm">
             <span className="inline-flex items-center gap-1.5">
               <Heart className="h-4 w-4 text-action" aria-hidden="true" />
               <span className="font-semibold text-text-primary tabular-nums">

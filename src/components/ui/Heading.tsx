@@ -24,18 +24,18 @@ const adminScale = {
 } as const
 
 const siteScale = {
-  1: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight',
-  2: 'text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight',
-  3: 'text-xl sm:text-2xl font-bold tracking-tight',
-  4: 'text-lg sm:text-xl md:text-2xl font-bold',
+  1: 'text-3xl sm:text-4xl md:text-5xl font-semibold',
+  2: 'text-2xl sm:text-3xl font-semibold',
+  3: 'text-xl sm:text-2xl font-semibold',
+  4: 'text-lg sm:text-xl font-semibold',
 } as const
 
 // True display: huge, tight, confident. Reserved for one headline per page.
 const displayScale = {
-  1: 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tighter leading-[1.05]',
-  2: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.1]',
-  3: 'text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight',
-  4: 'text-xl sm:text-2xl md:text-3xl font-bold tracking-tight',
+  1: 'text-4xl sm:text-5xl md:text-6xl font-semibold leading-[1.05]',
+  2: 'text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.1]',
+  3: 'text-2xl sm:text-3xl font-semibold',
+  4: 'text-xl sm:text-2xl font-semibold',
 } as const
 
 const tagMap = {

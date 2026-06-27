@@ -1,6 +1,6 @@
 # Design System — The Final Solution
 
-**Last updated:** 2026-06-16 (Megamenu unified x.ai pattern + Marktplatz IA cleanup)
+**Last updated:** 2026-06-27 (Marketplace/profile UX pass, compact type scale, single-button theme toggle)
 
 ## TL;DR
 
@@ -22,6 +22,14 @@ The colour direction: **achromatic surfaces + RevampIT green only on
 action elements** (primary buttons, links, focus rings, key icons).
 Everything else neutral. This preserves the brand pulse without making
 the whole UI green.
+
+## 2026-06-27 UI/UX Guardrails
+
+- Theme switching is a single cyclic icon button (`light -> dark -> system`), not a three-button segmented control.
+- Public display headings use zero letter spacing and restrained `font-semibold` weights. Avoid `text-6xl+` except for true hero/detail numbers with proven mobile fit.
+- Marketplace creation must expose photos and fulfillment up front: use `ImageUploadGrid` for listing photos and the delivery card selector for `pickup`, `shipping`, and `both`.
+- Marketplace listing grids and seller profile listing grids share `ListingCard`; do not hand-roll duplicate product cards.
+- Public seller and technician profiles should be useful overview pages: avatar/initial, location, trust/status, concise stats, then inventory/services. Keep these profile surfaces flat and reusable.
 
 ## The token system
 

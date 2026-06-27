@@ -189,6 +189,19 @@ export const adminInteractive = {
   avatarInactive:  'bg-surface-overlay text-text-secondary',
 } as const
 
+// ─── Chrome (layout shell) ────────────────────────────────────────────────────
+
+export const adminChrome = {
+  /** Sticky admin top bar — matches public header pattern */
+  topBar:
+    'sticky top-0 z-40 border-b border bg-surface-base/90 backdrop-blur-xs',
+  /** Primary action link in the top bar (e.g. Zur Website) */
+  websiteLink:
+    'hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30 sm:flex',
+  /** Vertical divider between header action clusters */
+  actionDivider: 'hidden h-5 w-px bg-surface-overlay dark:bg-surface-base/10 sm:block',
+} as const
+
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
 export const adminForm = {

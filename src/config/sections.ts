@@ -8,7 +8,7 @@
  * DRY: No duplication between admin.ts and dashboard.ts
  * SoC: Section definitions separate from rendering logic
  *
- * Last Updated: 2026-01-27
+ * Last Updated: 2026-06-19
  */
 
 import type { LucideIcon } from 'lucide-react'
@@ -47,6 +47,8 @@ import {
   MessageSquare,
   Clock,
   Wallet,
+  ScanLine,
+  UserCheck,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
@@ -146,13 +148,14 @@ export type SectionCategory =
  * Sidebar group IDs for admin navigation
  */
 export type SidebarGroupId =
-  | 'uebersicht'   // Overview: Dashboard, Freigaben
-  | 'angebot'      // Offerings: Produkte, Dienstleistungen, Workshops, Standorte
-  | 'inhalte'      // Content: Blog & Seiten, Bewertungen
-  | 'betrieb'      // Operations: Aufgaben
-  | 'analyse'      // Analytics: Finanzen, Kennzahlen, Wirkung, Transparenz, Analytics
-  | 'personen'     // People: Team & HR, Benutzer
-  | 'system'       // System: Einstellungen
+  | 'uebersicht'   // Today: Dashboard, approval queues
+  | 'angebot'      // Operations: intake, marketplace, IT-Hilfe, workshops
+  | 'inhalte'      // Content: blog, reviews, projects
+  | 'betrieb'      // Organisation: tasks, protocols, decisions
+  | 'analyse'      // Analytics hub + financial / impact reporting
+  | 'personen'     // Membership & user accounts
+  | 'teamhr'       // Team profiles, HR pipeline, time & payroll
+  | 'system'       // System configuration
 
 /**
  * Sidebar group configuration
@@ -170,7 +173,8 @@ export interface SidebarGroup {
  * - Heute:        Dashboard + Freigaben — "what needs attention today"
  * - Betrieb:      Operational tools — device intake, marketplace, IT-Hilfe, workshops, services
  * - Organisation: Governance & internal content — decisions, protocols, blog/approvals
- * - Personen:     People management — membership, users, team
+ * - Personen:     Membership & platform users
+ * - Team & HR:    Team profiles, recruiting, timecards, payroll
  * - Analyse:      Analytics & reporting — financials, KPIs, impact
  * - System:       Configuration
  */
@@ -205,10 +209,15 @@ export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
     label: 'Personen',
     priority: 5,
   },
+  teamhr: {
+    id: 'teamhr',
+    label: 'Team & HR',
+    priority: 6,
+  },
   system: {
     id: 'system',
     label: 'System',
-    priority: 6,
+    priority: 7,
   },
 }
 
@@ -509,9 +518,27 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: PackageCheck,
       emoji: '📋',
       color: 'primary',
+      mobileBottomNavLabel: 'Eingang',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 99,
+    category: 'management',
+    sidebarGroup: 'angebot',
+    mobileBottomNavOrder: 3,
+  },
+
+  erfassung: {
+    id: 'erfassung',
+    path: '/admin/erfassung',
+    ui: {
+      label: 'Erfassung',
+      description: 'Produktdaten nach Geräte-Eingang erfassen',
+      icon: ScanLine,
+      emoji: '📝',
+      color: 'primary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 99.5,
     category: 'management',
     sidebarGroup: 'angebot',
   },
@@ -561,6 +588,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 100.7,
+    category: 'management',
+    sidebarGroup: 'angebot',
+  },
+
+  'repairer-applications': {
+    id: 'repairer-applications',
+    path: '/admin/repairer-applications',
+    ui: {
+      label: 'Techniker-Freigaben',
+      description: 'Techniker-Bewerbungen prüfen und freigeben',
+      icon: UserCheck,
+      emoji: '🪛',
+      color: 'warning',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 100.8,
     category: 'management',
     sidebarGroup: 'angebot',
   },
@@ -686,11 +729,13 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: CheckSquare,
       emoji: '✅',
       color: 'success',
+      mobileBottomNavLabel: 'Freigaben',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 106,
     category: 'management',
     sidebarGroup: 'uebersicht',
+    mobileBottomNavOrder: 2,
   },
 
   membership: {
@@ -723,7 +768,6 @@ export const SECTIONS: Record<string, SectionConfig> = {
     priority: 130,
     category: 'management',
     sidebarGroup: 'betrieb',
-    mobileBottomNavOrder: 2,
   },
 
   protocols: {
@@ -751,13 +795,11 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: Vote,
       emoji: '🗳️',
       color: 'info',
-      mobileBottomNavLabel: 'Entscheide',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 132,
     category: 'management',
     sidebarGroup: 'betrieb',
-    mobileBottomNavOrder: 3,
   },
 
   analytics: {
@@ -765,15 +807,15 @@ export const SECTIONS: Record<string, SectionConfig> = {
     path: '/admin/analytics',
     ui: {
       label: 'Analytics',
-      description: 'Statistiken und Auswertungen',
+      description: 'Statistiken und Auswertungen (Legacy)',
       icon: BarChart3,
       emoji: '📈',
       color: 'info',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    // Legacy route — use Analyse-Übersicht (/admin/analyse) instead.
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 107,
     category: 'management',
-    sidebarGroup: 'analyse',
   },
 
   donations: {
@@ -815,7 +857,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     id: 'team',
     path: '/admin/team',
     ui: {
-      label: 'Team & HR',
+      label: 'Team-Profile',
       description: 'Mitarbeiter, Freiwillige, Praktikanten',
       icon: UserCog,
       emoji: '👔',
@@ -824,7 +866,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201,
     category: 'sensitive',
-    sidebarGroup: 'personen',
+    sidebarGroup: 'teamhr',
   },
 
   'hr-vacancies': {
@@ -836,12 +878,11 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: ClipboardList,
       emoji: '📋',
       color: 'primary',
-      mobileBottomNavLabel: 'Stellen',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201.5,
     category: 'management',
-    sidebarGroup: 'personen',
+    sidebarGroup: 'teamhr',
   },
 
   'hr-applications': {
@@ -853,12 +894,11 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: FileText,
       emoji: '📝',
       color: 'info',
-      mobileBottomNavLabel: 'Bewer.',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201.6,
     category: 'management',
-    sidebarGroup: 'personen',
+    sidebarGroup: 'teamhr',
   },
 
   timecards: {
@@ -874,23 +914,23 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 202,
     category: 'management',
-    sidebarGroup: 'personen',
+    sidebarGroup: 'teamhr',
   },
 
   'timecard-approvals': {
     id: 'timecard-approvals',
     path: '/admin/team/approvals',
     ui: {
-      label: 'Freigaben',
+      label: 'Zeitkarten-Freigaben',
       description: 'Eingereichte Zeitkarten im Stapel prüfen',
       icon: CheckSquare,
       emoji: '✅',
       color: 'success',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
-    priority: 203,
+    priority: 2,
     category: 'management',
-    sidebarGroup: 'personen',
+    sidebarGroup: 'uebersicht',
   },
 
   payroll: {
@@ -907,12 +947,27 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 204,
     category: 'management',
-    sidebarGroup: 'personen',
+    sidebarGroup: 'teamhr',
   },
 
   // ---------------------------------------------------------------------------
   // ANALYSE - Analytics and reporting sections (moved from Hirn)
   // ---------------------------------------------------------------------------
+  'analyse-hub': {
+    id: 'analyse-hub',
+    path: '/admin/analyse',
+    ui: {
+      label: 'Analyse-Übersicht',
+      description: 'Kennzahlen, Finanzen und Wirkung auf einen Blick',
+      icon: BarChart3,
+      emoji: '📊',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 149,
+    category: 'analyse',
+    sidebarGroup: 'analyse',
+  },
   finanzen: {
     id: 'finanzen',
     path: '/admin/analyse/finanzen',
@@ -1099,6 +1154,7 @@ export const SENSITIVITY_REASONS: Record<string, string> = {
   users: 'Enthält personenbezogene Daten und Kontoinformationen',
   team: 'Enthält Mitarbeiter- und HR-Daten',
   finances: 'Enthält vertrauliche Finanzdaten',
+  'analyse-hub': 'Enthält vertrauliche Kennzahlen und Finanzdaten',
   hirn: 'Enthält strategische Geschäftsinformationen',
   settings: 'Kann Systemkonfiguration ändern',
 }
@@ -1149,9 +1205,20 @@ export function getHirnSection(): SectionConfig | undefined {
  * `mobileBottomNavOrder: 1 | 2 | 3` and it shows up here automatically;
  * the rest stay one extra tap away via the "Mehr" button.
  */
-export function getMobileBottomNavSections(): SectionConfig[] {
+export function getMobileBottomNavSections(
+  accessibleSectionIds?: string[],
+): SectionConfig[] {
+  const allowed = accessibleSectionIds
+    ? new Set(accessibleSectionIds)
+    : null
+
   return Object.values(SECTIONS)
-    .filter((s): s is SectionConfig => typeof s.mobileBottomNavOrder === 'number')
+    .filter(
+      (s): s is SectionConfig =>
+        typeof s.mobileBottomNavOrder === 'number' &&
+        s.visibility.admin &&
+        (allowed === null || allowed.has(s.id)),
+    )
     .sort((a, b) => (a.mobileBottomNavOrder ?? 0) - (b.mobileBottomNavOrder ?? 0))
 }
 

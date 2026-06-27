@@ -1,8 +1,8 @@
 # Responsive Design System
 
 **Created**: 2025-01-27  
-**Last Modified**: 2025-01-27  
-**Last Modified Summary**: Created centralized responsive design system for maintainable mobile-first styling
+**Last Modified**: 2026-06-27  
+**Last Modified Summary**: Added current mobile marketplace/profile/header guidance and compact display scale rules
 
 ## Overview
 
@@ -15,6 +15,8 @@ This document describes the centralized responsive design system that ensures co
 **Component-Based**: Use reusable components that handle responsive styling automatically, rather than manual class management.
 
 **Mobile-First**: All styles are designed mobile-first, then enhanced for larger screens.
+
+**Task-First Mobile**: On transactional pages, global chrome must not bury the task. Keep mobile headers compact, collapse secondary navigation into menus/sheets, and surface the page's primary action within the first viewport.
 
 ## Core Utilities
 
@@ -39,6 +41,8 @@ import { responsiveTypography, responsiveSpacing, responsiveButtons, responsiveG
 <p className={responsiveTypography.body}>Content</p>
 // Result: text-sm sm:text-base
 ```
+
+Current public pages should prefer `ui-public-display-md` / `ui-public-display-lg` for major headings. These utilities are intentionally restrained, use zero letter spacing, and are safer on mobile than ad hoc `text-6xl` or `tracking-tight` stacks.
 
 ### Spacing
 
@@ -158,6 +162,8 @@ import { ResponsiveHeading, ResponsiveText } from '@/components/layout/Responsiv
 2. **Import utilities** when you need custom responsive behavior
 3. **Don't mix** manual responsive classes with the system (unless necessary)
 4. **Update the system** when you need site-wide changes, not individual pages
+5. **Use one control per setting** on mobile. Theme mode is one cyclic button; advanced filters live in a sheet; long nav lists live behind the menu.
+6. **Use shared commerce/profile primitives**. Marketplace grids use `ListingCard`; seller/technician profiles use the same flat profile rhythm instead of nested cards.
 
 ## Examples
 
@@ -165,7 +171,6 @@ See these files for examples:
 - `src/app/get-involved/page.tsx` - Uses ResponsiveSection
 - `src/components/layout/ResponsiveHero.tsx` - Hero implementation
 - `src/components/services/ServiceHero.tsx` - Service-specific hero
-
 
 
 

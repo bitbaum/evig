@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/navigation'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, Star, Wrench } from 'lucide-react'
 import { getServiceTypeById, getSkillById, IT_HILFE } from '@/config/it-hilfe'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { ROUTES } from '@/config/routes'
@@ -43,6 +43,8 @@ interface TechnikerProfileViewProps {
 export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfileViewProps) {
   const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
   const ctaHref = IT_HILFE.routes.createForTechnician(technician.id)
+  const displayName = technician.name ?? copy.community
+  const initial = displayName.trim().charAt(0).toUpperCase() || 'T'
 
   const skillLabels = technician.skills
     .map((id) => getSkillById(id)?.name)
@@ -64,25 +66,61 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
         </Link>
 
         <header className="mt-8 border-b border-subtle pb-8">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
-            {meta.eyebrow}
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-subtle bg-action-muted font-mono text-3xl font-semibold text-action">
+              {initial}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+                {meta.eyebrow}
+              </div>
+              <h1 className="ui-public-display-md mt-3">{displayName}</h1>
+
+              {meta.locationLine && (
+                <p className="mt-3 flex items-center gap-2 text-sm text-text-secondary">
+                  <MapPin className="h-4 w-4 text-text-tertiary" aria-hidden="true" />
+                  {meta.locationLine}
+                </p>
+              )}
+
+              {meta.pricingLine && (
+                <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary tabular-nums">
+                  {meta.pricingLine}
+                </p>
+              )}
+            </div>
           </div>
-          <h1 className="ui-public-display-md mt-3">{technician.name}</h1>
 
-          {meta.statsLine && (
-            <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary tabular-nums">
-              {meta.statsLine}
-            </p>
-          )}
-
-          {meta.locationLine && (
-            <p className="mt-2 text-sm text-text-secondary">{meta.locationLine}</p>
-          )}
-
-          {meta.pricingLine && (
-            <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary tabular-nums">
-              {meta.pricingLine}
-            </p>
+          {(meta.statsLine || technician.isVerified || skillLabels.length > 0) && (
+            <dl className="mt-8 grid grid-cols-1 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              {technician.isVerified && (
+                <div className="flex items-center gap-3 p-4">
+                  <BadgeCheck className="h-4 w-4 text-action" aria-hidden="true" />
+                  <div>
+                    <dt className="text-xs text-text-tertiary">{copy.verified}</dt>
+                    <dd className="text-sm font-medium text-text-primary">{isPro ? copy.professional : copy.community}</dd>
+                  </div>
+                </div>
+              )}
+              {meta.statsLine && (
+                <div className="flex items-center gap-3 p-4">
+                  <Star className="h-4 w-4 text-text-tertiary" aria-hidden="true" />
+                  <div>
+                    <dt className="text-xs text-text-tertiary">{copy.contact}</dt>
+                    <dd className="font-mono text-xs uppercase tracking-[0.12em] text-text-primary">{meta.statsLine}</dd>
+                  </div>
+                </div>
+              )}
+              {skillLabels.length > 0 && (
+                <div className="flex items-center gap-3 p-4">
+                  <Wrench className="h-4 w-4 text-text-tertiary" aria-hidden="true" />
+                  <div>
+                    <dt className="text-xs text-text-tertiary">{copy.skills}</dt>
+                    <dd className="line-clamp-1 text-sm font-medium text-text-primary">{skillLabels.slice(0, 3).join(' · ')}</dd>
+                  </div>
+                </div>
+              )}
+            </dl>
           )}
 
           <div className="mt-8">

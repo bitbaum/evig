@@ -677,6 +677,7 @@
       "stepPreview": "Preview",
       "sectionPhotos": "Photos",
       "imagesLabel": "Images",
+      "imagesHelp": "Good photos sell faster. The first image is the main image",
       "mainImage": "Main image",
       "preview": {
         "backToEdit": "Back to editing",
@@ -714,6 +715,11 @@
         "sectionCategoryCondition": "Category & Condition",
         "sectionDelivery": "Delivery & Payment",
         "delivery": "Delivery",
+        "deliveryHelp": {
+          "pickup": "Buyer collects the device locally.",
+          "shipping": "You ship by post or parcel service.",
+          "both": "Buyer can choose pickup or shipping."
+        },
         "payment": "Payment method",
         "shippingCost": "Shipping cost (CHF)",
         "pickupLocation": "Pickup location",
@@ -4731,6 +4737,7 @@
     },
     "seller": {
       "backToMarketplace": "Back to Marketplace",
+      "publicProfile": "Seller profile",
       "memberSince": "Member since {date}",
       "listings": "Listings",
       "sold": "Sold",
@@ -8675,7 +8682,8 @@
       "kennzahlen": "Metrics",
       "wirkung": "Impact",
       "transparenz": "Transparency",
-      "appointments": "Appointments"
+      "appointments": "Appointments",
+      "repairerApplications": "Technician approvals"
     },
     "currencySelector": {
       "selectCurrency": "Select currency",
@@ -10002,10 +10010,11 @@
       "recentlyVisited": "Recently visited"
     },
     "userMenu": {
-      "darkMode": "Dark mode",
+      "darkMode": "Appearance",
       "toWebsite": "To website",
       "signOut": "Sign out",
-      "adminArea": "Admin area"
+      "adminArea": "Admin area",
+      "staffFallback": "Team member"
     },
     "notifications": {
       "title": "Notifications",
@@ -10248,6 +10257,7 @@
       "betrieb": "Organisation",
       "analyse-group": "Analytics",
       "personen": "People",
+      "teamhr": "Team & HR",
       "system-group": "System",
       "dashboard": "Dashboard",
       "profile": "My profile",
@@ -10268,9 +10278,11 @@
       "shift-log": "Start shift",
       "my-timecards": "My timecards",
       "intake": "Device intake",
+      "erfassung": "Data entry",
       "products": "Products",
       "marketplace": "Marketplace",
       "it-hilfe-admin": "IT help",
+      "repairer-applications": "Technician approvals",
       "workshops-admin": "Workshops",
       "services": "Services",
       "appointments-admin": "Appointments",
@@ -10286,11 +10298,12 @@
       "analytics": "Analytics",
       "donations": "Donations",
       "users": "Users",
-      "team": "Team & HR",
+      "team": "Team profiles",
       "timecards": "Timecards",
-      "timecard-approvals": "Approvals",
+      "timecard-approvals": "Timecard approvals",
       "payroll": "Payroll",
       "finanzen": "Finance",
+      "analyse-hub": "Analytics overview",
       "kennzahlen": "KPIs",
       "wirkung": "Impact",
       "transparenz": "Transparency",

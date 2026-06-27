@@ -141,8 +141,8 @@ export function MobileMenu({
         </div>
 
         {/* Experimental Site Banner */}
-        <div className="mx-6 mt-4">
-          <div className="flex items-center gap-2 px-4 py-3 bg-warning-50 dark:bg-warning-500/10 border border-warning-100 dark:border-warning-500/20 rounded-xl text-sm text-warning-700 dark:text-warning-400">
+        <div className="mx-4 mt-3 sm:mx-6">
+          <div className="flex items-center gap-2 rounded-lg border border-warning-100 bg-warning-50 px-3 py-2 text-xs text-warning-700 dark:border-warning-500/20 dark:bg-warning-500/10 dark:text-warning-400">
             <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse shrink-0" />
             <span>
               {t('experimentalBanner')} –
@@ -160,7 +160,7 @@ export function MobileMenu({
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-6 py-6">
+        <nav className="flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           <ul className="space-y-1">
             {primaryItems.map((item) => {
               const itemLabel = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
@@ -174,8 +174,8 @@ export function MobileMenu({
                         variant="ghost"
                         className={cn(
                           "flex w-full items-center justify-between py-3 px-4 -mx-4 h-auto",
-                          "text-base font-medium text-text-primary",
-                          "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
+                          "text-sm font-medium text-text-primary",
+                          "rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                         )}
                         onClick={() => handleDropdownToggle(item.name)}
                         aria-expanded={openDropdown === item.name}
@@ -254,8 +254,8 @@ export function MobileMenu({
                       rel="noopener noreferrer"
                       className={cn(
                         "flex items-center gap-2 py-3 px-4 -mx-4",
-                        "text-base font-medium text-text-primary",
-                        "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
+                        "text-sm font-medium text-text-primary",
+                        "rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                       )}
                       onClick={onClose}
                     >
@@ -268,8 +268,8 @@ export function MobileMenu({
                       variant="ghost"
                       className={cn(
                         "block w-full text-left py-3 px-4 -mx-4 h-auto justify-start",
-                        "text-base font-medium text-text-primary",
-                        "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
+                        "text-sm font-medium text-text-primary",
+                        "rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
                       )}
                       onClick={() => handleNavigation(item.href)}
                     >

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { X, Loader2, ImagePlus } from 'lucide-react'
+import { X, Loader2, ImagePlus, Camera } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
@@ -17,13 +17,21 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
   const tCommon = useTranslations('common')
 
   return (
-    <div>
-      <label className="block text-sm font-medium text-text-secondary mb-2">
-        {t('imagesLabel')} <span className="text-xs text-text-tertiary ml-1">({tCommon('optional')}, {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
-      </label>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="rounded-lg border border-subtle bg-surface-raised p-3 sm:p-4">
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div>
+          <label className="block text-sm font-semibold text-text-primary">
+            {t('imagesLabel')}
+          </label>
+          <p className="mt-1 text-xs text-text-tertiary">
+            {t('imagesHelp')} · {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES}
+          </p>
+        </div>
+        <Camera className="mt-0.5 h-4 w-4 shrink-0 text-action" aria-hidden="true" />
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {images.map((url, idx) => (
-          <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border">
+          <div key={idx} className="relative aspect-square overflow-hidden rounded-lg border border-subtle bg-surface-base">
             <img src={url} alt={t('imageAlt', { index: idx + 1 })} className="w-full h-full object-cover" />
             <Button
               variant="destructive"
@@ -46,14 +54,14 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
             variant="ghost"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
-            className="aspect-square rounded-lg border-2 border-dashed border-default flex flex-col items-center justify-center gap-1 text-text-tertiary hover:text-text-secondary hover:border-strong h-auto bg-transparent hover:bg-transparent"
+            className="aspect-square h-auto flex-col gap-2 rounded-lg border-2 border-dashed border-default bg-surface-base text-text-tertiary hover:border-action hover:bg-surface-base hover:text-action"
           >
             {isUploading ? (
               <Loader2 className="w-6 h-6 animate-spin" />
             ) : (
               <>
-                <ImagePlus className="w-6 h-6" />
-                <span className="text-xs">{tCommon('upload')}</span>
+                <ImagePlus className="h-6 w-6" />
+                <span className="text-xs font-medium">{tCommon('upload')}</span>
               </>
             )}
           </Button>

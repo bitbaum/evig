@@ -11,7 +11,6 @@ import {
   LogOut,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { ROUTES } from '@/config/routes'
 
 interface UserMenuDropdownProps {
@@ -25,6 +24,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
   const t = useTranslations('admin.userMenu')
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+  const displayName = user?.name || t('staffFallback')
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -51,47 +51,45 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
       <Button
         variant="ghost"
         onClick={() => setUserMenuOpen(!userMenuOpen)}
-        className={`flex items-center gap-3 p-1.5 pr-3 rounded-full transition-all duration-200 ${
-          userMenuOpen
-            ? 'bg-surface-raised'
-            : '${adminInteractive.rowHover}'
+        className={`flex items-center gap-3 rounded-full p-1.5 pr-3 transition-all duration-200 ${
+          userMenuOpen ? 'bg-surface-raised' : adminInteractive.rowHover
         }`}
         aria-expanded={userMenuOpen}
         aria-haspopup="true"
       >
-        <div className="w-9 h-9 bg-action rounded-full flex items-center justify-center">
-          <span className="text-white font-medium text-sm">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-action">
+          <span className="text-sm font-medium text-white">
             {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'S'}
           </span>
         </div>
-        <div className="text-right hidden sm:block">
+        <div className="hidden text-right sm:block">
           <p className="text-sm font-medium text-text-primary">
-            {user?.name || 'Staff'}
+            {displayName}
           </p>
           <p className="text-xs text-text-secondary">
             {user?.email}
           </p>
         </div>
         <ChevronDown
-          className={`w-4 h-4 text-text-tertiary transition-transform duration-200 hidden sm:block ${
+          className={`hidden h-4 w-4 text-text-tertiary transition-transform duration-200 sm:block ${
             userMenuOpen ? 'rotate-180' : ''
           }`}
         />
       </Button>
 
       <div
-        className={`absolute right-0 mt-2 w-64 transition-all duration-200 ease-out origin-top-right ${
+        className={`absolute right-0 mt-2 w-64 origin-top-right transition-all duration-200 ease-out ${
           userMenuOpen
-            ? 'opacity-100 scale-100 pointer-events-auto'
-            : 'opacity-0 scale-95 pointer-events-none'
+            ? 'pointer-events-auto scale-100 opacity-100'
+            : 'pointer-events-none scale-95 opacity-0'
         }`}
       >
         <div className="overflow-hidden rounded-xl border border bg-surface-base shadow-xs">
           <div className="border-b border bg-surface-raised px-4 py-3 dark:bg-surface-base/3">
-            <p className="text-sm font-semibold text-text-primary truncate">
-              {user?.name || 'Staff'}
+            <p className="truncate text-sm font-semibold text-text-primary">
+              {displayName}
             </p>
-            <p className="text-xs text-text-secondary truncate">
+            <p className="truncate text-xs text-text-secondary">
               {user?.email}
             </p>
           </div>
@@ -100,16 +98,11 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             <Link
               href={ROUTES.public.home}
               onClick={() => setUserMenuOpen(false)}
-              className={`flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors ${adminInteractive.rowHoverSubtle}`}
+              className={`flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors ${adminInteractive.rowHoverSubtle} lg:hidden`}
             >
-              <ExternalLink className="w-4 h-4 text-text-tertiary" />
+              <ExternalLink className="h-4 w-4 text-text-tertiary" />
               {t('toWebsite')}
             </Link>
-
-            <div className="flex w-full items-center justify-between px-4 py-1.5 text-sm text-text-secondary">
-              <span>{t('darkMode')}</span>
-              <ThemeToggle />
-            </div>
           </div>
 
           <div className="border-t border py-2">
@@ -119,9 +112,9 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
                 setUserMenuOpen(false)
                 signOut({ callbackUrl: '/' })
               }}
-              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-text-secondary hover:bg-error-50 dark:hover:bg-error-900/20 hover:text-error-600 dark:hover:text-error-400 transition-colors"
+              className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors hover:bg-error-50 hover:text-error-600 dark:hover:bg-error-900/20 dark:hover:text-error-400"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="h-4 w-4" />
               {t('signOut')}
             </Button>
           </div>

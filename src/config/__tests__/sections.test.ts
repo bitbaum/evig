@@ -57,6 +57,7 @@ import {
   getSensitivityReason,
   getSectionsByCategory,
   getSidebarGroupsWithSections,
+  getMobileBottomNavSections,
   getHirnSection,
   SECTIONS,
 } from '../sections'

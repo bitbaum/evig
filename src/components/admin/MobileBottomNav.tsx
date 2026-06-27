@@ -7,11 +7,12 @@ import { Button } from '@/components/ui/button'
 import { getMobileBottomNavSections } from '@/config/sections'
 
 interface MobileBottomNavProps {
+  accessibleSections: string[]
   onMenuClick: () => void
 }
 
 /**
- * Admin mobile bottom nav — three sections + Mehr (opens full sidebar).
+ * Admin mobile bottom nav — three permission-filtered sections + Mehr.
  *
  * Items are derived from `sections.ts` via `mobileBottomNavOrder`. To
  * change what shows up here, flag the section with `mobileBottomNavOrder:
@@ -19,9 +20,9 @@ interface MobileBottomNavProps {
  * label that fits the bar. The SSOT stays in one file; nothing about
  * this component knows which routes are "important enough."
  */
-export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
+export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const items = getMobileBottomNavSections()
+  const items = getMobileBottomNavSections(accessibleSections)
   const t = useTranslations('admin.sidebar')
   const tLabels = useTranslations('admin.sectionLabels')
   // Same fallback pattern as AdminSidebar — i18n label, then SSOT DE fallback.

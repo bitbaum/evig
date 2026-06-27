@@ -119,6 +119,9 @@ const PERMISSION_ALIASES: Record<string, string> = {
   services: 'appointments-admin',
   'hr-vacancies': 'team',
   'hr-applications': 'team',
+  erfassung: 'intake',
+  'repairer-applications': 'it-hilfe-admin',
+  'analyse-hub': 'finanzen',
 }
 
 /**
@@ -147,6 +150,9 @@ export function canAccessSection(
   // Check reverse alias (if user has old permission, grant access to new section)
   const reverseAlias = Object.entries(PERMISSION_ALIASES).find(([, v]) => v === section)
   if (reverseAlias && user.staff_permissions.includes(reverseAlias[0])) return true
+
+  // Analyse hub is also reachable for Hirn-only staff (matches requireAnySection on /admin/analyse)
+  if (section === 'analyse-hub' && user.staff_permissions.includes('hirn')) return true
 
   return false
 }

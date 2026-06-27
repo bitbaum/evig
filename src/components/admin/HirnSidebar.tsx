@@ -126,7 +126,7 @@ export function HirnSidebar({
                 className={`w-full flex items-center gap-2 p-2 rounded-lg text-left h-auto justify-start ${
                   currentSessionId === session.sessionId
                     ? 'bg-action-muted text-action'
-                    : '${adminInteractive.rowHover} text-text-secondary'
+                    : `${adminInteractive.rowHover} text-text-secondary`
                 }`}
               >
                 <MessageSquare className="w-4 h-4 shrink-0" />

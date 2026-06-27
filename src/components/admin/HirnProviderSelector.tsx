@@ -231,7 +231,7 @@ export function HirnProviderSelector() {
                               isSelected
                                 ? 'bg-action-muted border-2 border-strong'
                                 : canSelect
-                                ? '${adminInteractive.rowHover} border-2 border-transparent'
+                                ? `${adminInteractive.rowHover} border-2 border-transparent`
                                 : 'opacity-50 cursor-not-allowed border-2 border-transparent'
                             }`}
                           >
