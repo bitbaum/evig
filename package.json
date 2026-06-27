@@ -26,6 +26,7 @@
     "lint": "eslint .",
     "lint:umlauts": "bash scripts/lint-umlauts.sh src",
     "compliance:ssot": "node scripts/ssot-audit.mjs",
+    "test:i18n": "jest src/config/__tests__/i18n-array-parity.test.ts src/config/__tests__/nav-i18n-keys.test.ts src/config/__tests__/no-brand-suffix-in-message-titles.test.ts",
     "compliance:i18n": "node scripts/i18n-audit.mjs",
     "compliance:i18n-hardcoded": "node scripts/i18n-hardcoded-audit.mjs",
     "compliance:i18n-leaks": "node scripts/i18n-leaks.mjs --check",

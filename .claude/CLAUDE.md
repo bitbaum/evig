@@ -202,9 +202,30 @@ This is the #1 most common mistake. EVERY German word with ä, ö, ü MUST use t
 **Run `npm run lint:umlauts` to catch ASCII umlaut violations.**
 **ALWAYS run this before committing German text changes.**
 
-### 5. Organization Data — SSOT
-All org-level data (name, addresses, phone, email, hours, URLs) lives in
-`src/config/org.ts`. Never hardcode these values elsewhere — import from org.ts.
+### 4b. Translation (i18n) SSOT — messages hold STRINGS ONLY
+
+`messages/<locale>.json` are translatable human sentences and NOTHING else.
+Anything language-independent must NEVER live in a message file:
+
+- **Structure → config.** Slugs, routes/hrefs, enum keys (status/category/type),
+  icon names, ordering, ids, counts/numbers used as data, booleans, CSS classes.
+  These live in `src/config/*` or a route-local `data.ts` and are paired to
+  translations by stable index/key. (Reference: `src/app/[locale]/projects/data.ts`
+  + `messages.*.projects.items` — structure in config, only title/description/
+  features in messages.) Putting structure in messages let translators corrupt
+  slugs → `/projects/undefined`, and bloats next-intl's typed-key union.
+- **Org data → org.ts.** Emails, phone, addresses, hours, org URLs come from
+  `src/config/org.ts` (see §5), never baked into a translated string.
+- **Arrays are fragile.** The DE deep-merge fallback (`src/i18n/request.ts`)
+  replaces arrays wholesale — there is NO per-element fallback. NEVER iterate a
+  translation array and index a config array by the loop index; iterate the
+  CONFIG array (it owns length + icon) and pull strings by key/index. A
+  desynced array length crashes that locale. Guarded by
+  `src/config/__tests__/i18n-array-parity.test.ts` (locale arrays must match DE
+  length + per-element keys) — keep it green.
+
+DE is canonical; other locales deep-merge over it. Don't hardcode user-facing
+strings in components — add a key. Run `npm run compliance:i18n` for parity.
 
 ### 6. Protected Files - NEVER Delete
 - `scripts/db/migrations/*`

@@ -61,6 +61,10 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         run: npm run typecheck
 
+      - name: i18n structure gate
+        if: steps.secrets.outputs.configured == 'true'
+        run: npm run test:i18n
+
       - name: Write selfhost env
         if: steps.secrets.outputs.configured == 'true'
         run: |

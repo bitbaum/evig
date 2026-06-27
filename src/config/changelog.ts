@@ -3,7 +3,7 @@
  *
  * Add a new entry at the top after each meaningful deploy. Keep bullets
  * concise and user-facing (fixes, features, improvements). UI chrome lives
- * in messages/partials/changelog.{locale}.json; release copy lives here.
+ * in the `changelog` namespace of messages/{locale}.json; release copy lives here.
  */
 
 export interface LocalizedCopy {
