@@ -68,8 +68,8 @@ export const SERVICE_CONFIGS: ServiceConfig[] = [
     categoryKey: 'software',
   },
   {
+    // Bespoke static page (no DB template / online booking) — no `slug`.
     key: 'linuxOpenSource',
-    slug: 'linux-open-source',
     icon: Server,
     href: '/services/linux-open-source',
     available: true,

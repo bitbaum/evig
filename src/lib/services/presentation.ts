@@ -15,16 +15,10 @@ import {
   HardDrive,
   Server,
   Database,
-  Archive,
-  CheckCircle2,
   Clock,
   Zap,
   FolderInput,
   Disc,
-  Globe,
-  Code,
-  Palette,
-  Shield,
   Wrench,
 } from 'lucide-react'
 import type { ServicePresentation, ServicePricing } from './types'
@@ -182,159 +176,6 @@ export const servicePresentation: Record<string, ServicePresentation> = {
         'VHS/Schallplatten: Preis auf Anfrage',
       ],
     },
-  },
-
-  'hardware-recycling': {
-    icon: Archive,
-    hero: {
-      title: 'Hardware-Recycling',
-      subtitle: 'Ein neues Leben für deine alte Ausrüstung',
-      description:
-        'Wir nehmen deine alte IT-Ausrüstung und geben ihr ein zweites Leben. Durch unsere verantwortungsvollen Recycling-Praktiken reduzieren wir Elektroschrott und machen Technologie für alle zugänglich.',
-    },
-    features: [
-      {
-        title: 'Verantwortungsvolle Entsorgung',
-        description:
-          'Wir arbeiten nur mit zertifizierten Recycling-Partnern zusammen, die strenge Umweltstandards einhalten.',
-        icon: Archive,
-      },
-      {
-        title: 'Sichere Datenlöschung',
-        description:
-          'Alle Geräte werden vor der Entsorgung oder dem Verkauf professionell von Daten befreit.',
-        icon: Shield,
-      },
-      {
-        title: 'Aufbereitung und Verkauf',
-        description:
-          'Funktionsfähige Geräte werden aufbereitet und zu erschwinglichen Preisen verkauft.',
-        icon: CheckCircle2,
-      },
-      {
-        title: 'Abholservice',
-        description:
-          'Für grössere Mengen bieten wir einen kostenlosen Abholservice in der Region Zürich an.',
-        icon: Clock,
-      },
-    ],
-    pricingOverride: {
-      base: 'Kostenlos',
-      details: [
-        'Kostenlose Annahme für die meisten Artikel',
-        'Für grössere Mengen Abholservice verfügbar',
-        'Spezielle Geräte: Bitte kontaktiere uns',
-      ],
-    },
-  },
-
-  'linux-open-source': {
-    icon: Server,
-    hero: {
-      title: 'Linux & Open Source Lösungen',
-      subtitle: 'Experten Open Source Support',
-      description:
-        'Wir helfen dir beim Übergang zu und der Wartung von Linux- und Open-Source-Software-Lösungen und bieten fachkundige Unterstützung und Schulung.',
-    },
-    features: [
-      {
-        title: 'Linux-Installation',
-        description:
-          'Von Desktop-Umgebungen bis zu Server-Konfigurationen - wir installieren und konfigurieren Linux-Systeme für alle Anwendungsfälle.',
-        icon: Server,
-      },
-      {
-        title: 'Migration-Unterstützung',
-        description:
-          'Hilfe beim Übergang von Windows zu Linux, einschliesslich Datenmigration und Software-Alternativen.',
-        icon: FolderInput,
-      },
-      {
-        title: 'Schulung und Support',
-        description:
-          'Umfassende Schulung und laufender Support, um sicherzustellen, dass du das Beste aus deinem Linux-System herausholst.',
-        icon: Clock,
-      },
-      {
-        title: 'Open Source Software',
-        description:
-          'Wir empfehlen und implementieren Open-Source-Alternativen zu proprietärer Software.',
-        icon: Code,
-      },
-    ],
-    pricingOverride: {
-      base: 'CHF 70/Stunde',
-      details: [
-        'Kostenlose Erstberatung',
-        'Individuelle Linux-Distributionen',
-        'Migrations-Unterstützung',
-        'Laufender Support verfügbar',
-      ],
-    },
-  },
-
-  'web-design-development': {
-    icon: Globe,
-    hero: {
-      title: 'Webdesign & Entwicklung',
-      subtitle: 'Moderne, nachhaltige Web-Lösungen',
-      description:
-        'Wir erstellen schnelle, schöne und funktionale Websites mit den neuesten Open-Source-Technologien. Von Landing Pages bis zu komplexen Webanwendungen liefern wir skalierbare Lösungen, die Performance und Nachhaltigkeit priorisieren.',
-    },
-    features: [
-      {
-        title: 'Moderner Stack',
-        description:
-          'Next.js 14+, React 18, TypeScript, Tailwind CSS - wir verwenden modernste Technologien für optimale Performance.',
-        icon: Code,
-      },
-      {
-        title: 'Open Source CMS',
-        description:
-          'Headless CMS-Lösungen mit Strapi, Payload oder TinaCMS für flexibles Content-Management.',
-        icon: Database,
-      },
-      {
-        title: 'Responsive Design',
-        description:
-          'Mobile-first-Ansatz, der sicherstellt, dass deine Website auf allen Geräten grossartig aussieht.',
-        icon: Palette,
-      },
-      {
-        title: 'Laufender Support',
-        description:
-          'Umfassende Wartung und Support, um deine Website sicher, aktuell und leistungsfähig zu halten.',
-        icon: Shield,
-      },
-    ],
-    pricingOverride: {
-      base: 'CHF 70/Stunde',
-      details: [
-        'Kostenlose Erstberatung',
-        'Open-Source-Technologien',
-        'Responsive Design inklusive',
-        'SEO-Optimierung',
-        'Laufender Support verfügbar',
-      ],
-    },
-  },
-
-  // Non-featured services (bookable but not on main page)
-  consultation: {
-    icon: Clock,
-    hero: {
-      title: 'Beratung',
-      subtitle: 'Technische Expertise für deine Fragen',
-      description:
-        'Persönliche Beratung zu Linux, Open-Source oder Hardware-Themen.',
-    },
-    features: [
-      {
-        title: 'Individuelle Beratung',
-        description: 'Persönliche Beratung zu deinen spezifischen Fragen und Anforderungen.',
-        icon: Clock,
-      },
-    ],
   },
 
   'custom-build': {
