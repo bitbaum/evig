@@ -967,6 +967,7 @@
         "imageAlt": "Artikelbild",
         "statusLabel": "Status:",
         "totalLabel": "Total",
+        "shippingAddress": "Lieferadresse",
         "viewOrder": "Bestellung ansehen",
         "continueShopping": "Weiter einkaufen"
       },

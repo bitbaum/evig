@@ -3183,7 +3183,8 @@
         "imageAlt": "상품 이미지",
         "statusLabel": "상태:",
         "viewOrder": "주문 보기",
-        "continueShopping": "쇼핑 계속하기"
+        "continueShopping": "쇼핑 계속하기",
+        "shippingAddress": "배송 주소"
       },
       "ownListingDesc": "자신의 판매 목록은 구매할 수 없습니다.",
       "backToListingLink": "판매 목록으로 돌아가기",

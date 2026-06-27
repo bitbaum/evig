@@ -3183,7 +3183,8 @@
         "imageAlt": "商品画像",
         "statusLabel": "ステータス:",
         "viewOrder": "注文を確認する",
-        "continueShopping": "ショッピングを続ける"
+        "continueShopping": "ショッピングを続ける",
+        "shippingAddress": "配送先住所"
       },
       "ownListingDesc": "自分の出品は購入できません。",
       "backToListingLink": "出品に戻る",

@@ -967,7 +967,8 @@
         "statusLabel": "Statut:",
         "viewOrder": "Voir la commande",
         "continueShopping": "Continuer les achats",
-        "totalLabel": "Total"
+        "totalLabel": "Total",
+        "shippingAddress": "Adresse de livraison"
       },
       "ownListingDesc": "Vous ne pouvez pas acheter votre propre annonce.",
       "backToListingLink": "Retour à l'annonce",

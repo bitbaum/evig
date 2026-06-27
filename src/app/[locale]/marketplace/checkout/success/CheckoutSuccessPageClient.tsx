@@ -5,13 +5,13 @@ import { useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { CheckCircle, Package, ArrowRight, Loader2 } from 'lucide-react'
+import { CheckCircle, Package, ArrowRight, Loader2, Truck, MapPin } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { formatCHF } from '@/config/marketplace'
+import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
 import { ORDER_STATUS_CONFIG } from '@/config/marketplace'
-import type { OrderStatus } from '@/config/marketplace'
+import type { OrderStatus, DeliveryOption, ShippingAddress } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 
@@ -29,6 +29,7 @@ interface OrderSummary {
   amountChf: number
   status: string
   deliveryMethod: string
+  shippingAddress: ShippingAddress | null
   counterpartyName: string | null
   itemCount: number
   items: OrderLine[]
@@ -129,6 +130,25 @@ function CheckoutSuccessContent() {
                 </span>
               </div>
             )}
+
+            <div className="mt-3 pt-3 border-t border-subtle">
+              <div className="flex items-center gap-2 text-sm text-text-secondary">
+                {order.deliveryMethod === 'shipping'
+                  ? <Truck className="w-4 h-4 text-text-tertiary shrink-0" />
+                  : <MapPin className="w-4 h-4 text-text-tertiary shrink-0" />}
+                {DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod}
+              </div>
+              {order.deliveryMethod === 'shipping' && order.shippingAddress && (
+                <div className="mt-2 text-sm text-text-secondary leading-snug">
+                  <p className="text-xs text-text-tertiary mb-0.5">{t('shippingAddress')}</p>
+                  {order.shippingAddress.name && <p>{order.shippingAddress.name}</p>}
+                  {order.shippingAddress.street && <p>{order.shippingAddress.street}</p>}
+                  {(order.shippingAddress.postal_code || order.shippingAddress.city) && (
+                    <p>{order.shippingAddress.postal_code} {order.shippingAddress.city}</p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
 

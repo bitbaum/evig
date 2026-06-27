@@ -3179,7 +3179,8 @@
         "statusLabel": "Estado:",
         "viewOrder": "Ver pedido",
         "continueShopping": "Seguir comprando",
-        "totalLabel": "Total"
+        "totalLabel": "Total",
+        "shippingAddress": "Dirección de envío"
       },
       "ownListingDesc": "No puedes comprar tu propio anuncio.",
       "backToListingLink": "Volver al anuncio",

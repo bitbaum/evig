@@ -976,7 +976,8 @@
         "statusLabel": "Status:",
         "viewOrder": "View order",
         "continueShopping": "Continue shopping",
-        "totalLabel": "Total"
+        "totalLabel": "Total",
+        "shippingAddress": "Delivery address"
       },
       "ownListingDesc": "You cannot buy your own listing.",
       "backToListingLink": "Back to listing",
