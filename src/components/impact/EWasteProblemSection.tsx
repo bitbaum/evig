@@ -31,12 +31,12 @@ function StatCard({ stat }: { stat: EWasteStat }) {
           <Heading level={3} className="text-lg font-semibold text-white/90 mb-2">
             {t(`stats.${stat.id}.label`)}
           </Heading>
-          <p className="text-sm text-white/70 mb-3">{t(`stats.${stat.id}.description`)}</p>
+          <p className="text-sm text-white/80 mb-3">{t(`stats.${stat.id}.description`)}</p>
           <a
             href={stat.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white/90 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-white/80 hover:text-white transition-colors"
           >
             <ExternalLink className="h-3 w-3" />
             {t(`stats.${stat.id}.source`)} ({stat.year})

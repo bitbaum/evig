@@ -19,7 +19,7 @@ const getPriorityColor = (priority: number) => {
     case 1: return 'bg-action text-white'
     case 2: return 'bg-action text-white'
     case 3: return 'bg-action text-white'
-    case 4: return 'bg-action text-action'
+    case 4: return 'bg-action text-white'
     default: return 'bg-action-muted text-action'
   }
 }
@@ -110,7 +110,7 @@ export default function ZeroWasteSolutionSection() {
                   </div>
                   <div>
                     <p className="font-semibold">{t('devicesSavedLabel')}</p>
-                    <p className="text-sm text-white/80">{t('devicesSavedDesc')}</p>
+                    <p className="text-sm text-white/90">{t('devicesSavedDesc')}</p>
                   </div>
                 </div>
 
@@ -120,7 +120,7 @@ export default function ZeroWasteSolutionSection() {
                   </div>
                   <div>
                     <p className="font-semibold">{t('reuseRateLabel')}</p>
-                    <p className="text-sm text-white/80">{t('reuseRateDesc')}</p>
+                    <p className="text-sm text-white/90">{t('reuseRateDesc')}</p>
                   </div>
                 </div>
 
@@ -130,7 +130,7 @@ export default function ZeroWasteSolutionSection() {
                   </div>
                   <div>
                     <p className="font-semibold">{t('co2Label')}</p>
-                    <p className="text-sm text-white/80">{t('co2Desc')}</p>
+                    <p className="text-sm text-white/90">{t('co2Desc')}</p>
                   </div>
                 </div>
               </div>
