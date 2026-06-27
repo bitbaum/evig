@@ -66,7 +66,10 @@ test.describe('Admin protocols staff journey', () => {
     })
     await expect(page.getByRole('main').getByText('Zur Überprüfung').first()).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Zusammenfassung' })).toBeVisible()
-    await expect(page.getByText(summary)).toBeVisible()
+    // Summary renders in more than one place on the detail page — scope to main
+    // and take the first match (mirrors the 'Zur Überprüfung' assertion above)
+    // so the assertion is not a strict-mode violation.
+    await expect(page.getByRole('main').getByText(summary).first()).toBeVisible()
     await expect(page.getByRole('button', { name: 'Protokoll abschliessen' })).toBeVisible()
 
     await finalizeProtocol(page.request, created.id)
