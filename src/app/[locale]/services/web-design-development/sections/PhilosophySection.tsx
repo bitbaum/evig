@@ -2,14 +2,12 @@ import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
-const RATING_COLORS = ['bg-action', 'bg-action', 'bg-info-500', 'bg-secondary-500', 'bg-warning-500', 'bg-error-500', 'bg-info-700', 'bg-surface-overlay']
 
 export async function PhilosophySection() {
   const t = await getTranslations('services.webDesign.philosophy')
 
-  const freedomRatings = RATING_KEYS.map((key, i) => ({
+  const freedomRatings = RATING_KEYS.map((key) => ({
     label: t(`ratings.${key}.label`),
-    color: RATING_COLORS[i],
     desc: t(`ratings.${key}.desc`),
   }))
 
@@ -41,8 +39,8 @@ export async function PhilosophySection() {
                   <p>{t('automationLiberation.text')}</p>
                 </div>
 
-                <div className="border-l-4 border-info-500 pl-4">
-                  <p className="font-semibold text-info-800 mb-2">{t('choiceNotCoercion.label')}</p>
+                <div className="border-l-4 border-action pl-4">
+                  <p className="font-semibold text-action mb-2">{t('choiceNotCoercion.label')}</p>
                   <p>{t('choiceNotCoercion.text')}</p>
                 </div>
 
@@ -57,20 +55,17 @@ export async function PhilosophySection() {
               <p className="text-text-secondary mb-4">
                 {t('ratingIntro')}
               </p>
-              <div className="space-y-3">
+              <ul className="space-y-3">
                 {freedomRatings.map((item, index) => (
-                  <div key={index} className="group">
-                    <div className="flex items-center space-x-3 mb-1">
-                      <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-action" aria-hidden="true"></span>
+                    <div>
                       <span className="text-sm font-medium text-text-secondary">{item.label}</span>
-                      <div className="flex-1 bg-surface-overlay rounded-full h-2">
-                        <div className={`${item.color} h-2 rounded-full transition-all duration-500`} style={{width: '95%'}}></div>
-                      </div>
+                      <p className="text-xs text-text-tertiary">{item.desc}</p>
                     </div>
-                    <p className="text-xs text-text-tertiary ml-6 mb-2">{item.desc}</p>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
               <div className="mt-6 p-4 bg-surface-base rounded-lg border border-strong">
                 <p className="text-sm text-action font-semibold mb-1">{t('commitment.label')}</p>
                 <p className="text-xs text-action">

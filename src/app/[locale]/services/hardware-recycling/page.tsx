@@ -165,15 +165,15 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
                 <div className="bg-surface-raised/50 rounded-xl p-6 sm:p-8">
-                  <div className="text-3xl sm:text-4xl font-bold text-action mb-2">100%</div>
+                  <Shield className="w-10 h-10 text-action mx-auto mb-3" />
                   <p className="text-sm sm:text-base text-text-secondary">{t('impact.dataSecurity')}</p>
                 </div>
                 <div className="bg-surface-raised/50 rounded-xl p-6 sm:p-8">
-                  <div className="text-3xl sm:text-4xl font-bold text-action mb-2">♻</div>
+                  <Recycle className="w-10 h-10 text-action mx-auto mb-3" />
                   <p className="text-sm sm:text-base text-text-secondary">{t('impact.sustainableProcesses')}</p>
                 </div>
                 <div className="bg-surface-raised/50 rounded-xl p-6 sm:p-8">
-                  <div className="text-3xl sm:text-4xl font-bold text-action mb-2">🌱</div>
+                  <Leaf className="w-10 h-10 text-action mx-auto mb-3" />
                   <p className="text-sm sm:text-base text-text-secondary">{t('impact.reducedEwaste')}</p>
                 </div>
               </div>
