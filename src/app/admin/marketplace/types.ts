@@ -1,5 +1,6 @@
 import { Package, AlertTriangle, ShoppingBag } from 'lucide-react'
 import type { OffsetPaginatedResponse } from '@/lib/api/types'
+import type { ShippingAddress } from '@/config/marketplace'
 
 export type { OffsetPaginatedResponse as PaginatedResponse }
 
@@ -47,10 +48,12 @@ export interface OrderRow {
   status: string
   total_cents: number
   delivery_method: string
+  shipping_address: ShippingAddress | null
   tracking_number: string | null
   created_at: string
-  listing_id: string
-  listing_title: string
+  listing_id: string | null
+  listing_title: string | null
+  item_count: number
   buyer_name: string | null
   buyer_email: string
   seller_name: string | null

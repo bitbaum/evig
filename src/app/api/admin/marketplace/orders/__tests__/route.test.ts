@@ -37,6 +37,7 @@ jest.mock('@/lib/api/middleware', () => ({
 
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
+const mockLeftJoin = jest.fn()
 const mockInnerJoin = jest.fn()
 const mockWhere = jest.fn()
 const mockOrderBy = jest.fn()
@@ -53,10 +54,12 @@ jest.mock('@/db', () => ({
 jest.mock('@/db/schema', () => ({
   marketplaceOrders: {
     id: 'mo_id', status: 'mo_status', amountChf: 'mo_amountChf',
-    deliveryMethod: 'mo_deliveryMethod', trackingNumber: 'mo_trackingNumber',
+    deliveryMethod: 'mo_deliveryMethod', shippingAddress: 'mo_shippingAddress',
+    trackingNumber: 'mo_trackingNumber',
     createdAt: 'mo_createdAt', updatedAt: 'mo_updatedAt',
-    listingId: 'mo_listingId', buyerId: 'mo_buyerId',
+    listingId: 'mo_listingId', buyerId: 'mo_buyerId', sellerId: 'mo_sellerId',
   },
+  marketplaceOrderItems: { orderId: 'moi_orderId' },
   listings: { id: 'l_id', title: 'l_title', sellerId: 'l_sellerId' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }))
@@ -129,10 +132,12 @@ beforeEach(() => {
   mockAuth.mockResolvedValue(MOCK_SESSION)
 
   // Count query: from().where() (sequential, first)
-  // Items query: from().innerJoin(x3).where().orderBy().limit().offset() (sequential, second)
+  // Items query: from().leftJoin(listings).innerJoin(buyer).innerJoin(seller)
+  //   .where().orderBy().limit().offset() (sequential, second)
   mockFrom
     .mockReturnValueOnce({ where: mockWhere })          // count query
-    .mockReturnValueOnce({ innerJoin: mockInnerJoin })  // items query
+    .mockReturnValueOnce({ leftJoin: mockLeftJoin })    // items query
+  mockLeftJoin.mockReturnValue({ innerJoin: mockInnerJoin })
   mockInnerJoin.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
   mockWhere
     .mockResolvedValueOnce([{ count: '1' }])            // count result

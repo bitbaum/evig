@@ -97,6 +97,22 @@ export const DELIVERY_LABELS: Record<DeliveryOption, string> = {
 };
 
 /**
+ * Shape of the `shipping_address` JSONB on marketplace_orders. Captured at
+ * checkout (name/street/postal_code/city/country); tracking_* are added later
+ * by the fulfilment/webhook flow. SSOT for every surface that reads the address
+ * (buyer order detail + admin fulfilment view).
+ */
+export interface ShippingAddress {
+  name?: string;
+  street?: string;
+  postal_code?: string;
+  city?: string;
+  country?: string;
+  tracking_number?: string;
+  tracking_url?: string;
+}
+
+/**
  * Defaults for RevampIT-owned inventory when it is exposed as a public listing.
  *
  * Public sellers choose delivery per listing. Internal stock enters through

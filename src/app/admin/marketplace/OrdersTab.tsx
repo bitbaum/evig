@@ -1,10 +1,12 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Truck, MapPin } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
-import { formatPrice, ORDER_STATUS_CONFIG } from '@/config/marketplace'
+import { formatPrice, ORDER_STATUS_CONFIG, DELIVERY_LABELS } from '@/config/marketplace'
+import type { DeliveryOption } from '@/config/marketplace'
 import { StatusBadge } from './StatusBadge'
 import type { OrderRow, PaginatedResponse } from './types'
 import { adminTable } from '@/lib/admin-ui'
@@ -37,6 +39,7 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
               <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.listing')}</th>
               <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.buyer')}</th>
               <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.seller')}</th>
+              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.delivery')}</th>
               <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.amount')}</th>
               <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
               <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
@@ -46,9 +49,26 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
             {orders?.items.map(o => (
               <tr key={o.id} className={adminTable.tr}>
                 <td className="px-4 py-3 font-mono text-xs text-text-secondary">{o.id.slice(0, 8)}</td>
-                <td className="px-4 py-3 font-medium text-text-primary">{o.listing_title}</td>
+                <td className="px-4 py-3 font-medium text-text-primary">{o.listing_title || t('cartItems', { count: o.item_count })}</td>
                 <td className="px-4 py-3 text-text-secondary">{o.buyer_name || o.buyer_email}</td>
                 <td className="px-4 py-3 text-text-secondary">{o.seller_name || o.seller_email}</td>
+                <td className="px-4 py-3 text-text-secondary align-top">
+                  <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                    {o.delivery_method === 'shipping'
+                      ? <Truck className="w-3.5 h-3.5 shrink-0" />
+                      : <MapPin className="w-3.5 h-3.5 shrink-0" />}
+                    {DELIVERY_LABELS[o.delivery_method as DeliveryOption] || o.delivery_method}
+                  </span>
+                  {o.delivery_method === 'shipping' && o.shipping_address && (
+                    <div className="mt-1 text-xs text-text-tertiary leading-tight">
+                      {o.shipping_address.name && <div>{o.shipping_address.name}</div>}
+                      {o.shipping_address.street && <div>{o.shipping_address.street}</div>}
+                      {(o.shipping_address.postal_code || o.shipping_address.city) && (
+                        <div>{o.shipping_address.postal_code} {o.shipping_address.city}</div>
+                      )}
+                    </div>
+                  )}
+                </td>
                 <td className="px-4 py-3 font-medium">{formatPrice(o.total_cents / 100)}</td>
                 <td className="px-4 py-3"><StatusBadge status={o.status} config={ORDER_STATUS_CONFIG} /></td>
                 <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(o.created_at)}</td>

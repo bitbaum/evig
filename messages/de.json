@@ -9904,10 +9904,12 @@
           "listing": "Inserat",
           "buyer": "Käufer",
           "seller": "Verkäufer",
+          "delivery": "Lieferung",
           "amount": "Betrag",
           "status": "Status",
           "date": "Datum"
         },
+        "cartItems": "{count, plural, one {# Artikel} other {# Artikel}}",
         "empty": "Keine Bestellungen gefunden",
         "countLabel": "{count, plural, one {# Bestellung} other {# Bestellungen}}"
       },
