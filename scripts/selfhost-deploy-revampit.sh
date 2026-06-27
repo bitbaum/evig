@@ -71,7 +71,7 @@ if [ -d "$SRC/node_modules/@swc/helpers/esm" ]; then
 fi
 
 echo "=== rsync release → $REMOTE_RELEASE ==="
-ssh -o BatchMode=yes "$BOX" "sudo mkdir -p '$REMOTE_RELEASE' && sudo chown -R \"\$(id -u):\$(id -g)\" '$REMOTE_RELEASES'"
+ssh -o BatchMode=yes "$BOX" "sudo mkdir -p '$REMOTE_RELEASE' && sudo chown \"\$(id -u):\$(id -g)\" '$REMOTE_RELEASES' && sudo chown -R \"\$(id -u):\$(id -g)\" '$REMOTE_RELEASE'"
 rsync -az --delete --partial \
   -e "ssh -o BatchMode=yes -o ServerAliveInterval=15" \
   --exclude '.env' --exclude 'launch.sh' \
