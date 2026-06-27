@@ -65,14 +65,18 @@ export default async function PartnershipsPage({ params }: PartnershipsPageProps
             {t('partnerships.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>
-            {benefits.map((benefit, index) => (
-              <BenefitCard
-                key={index}
-                icon={BENEFIT_ICONS[index]}
-                title={benefit.title}
-                description={benefit.description}
-              />
-            ))}
+            {BENEFIT_ICONS.map((Icon, index) => {
+              const benefit = benefits[index]
+              if (!benefit) return null
+              return (
+                <BenefitCard
+                  key={index}
+                  icon={Icon}
+                  title={benefit.title}
+                  description={benefit.description}
+                />
+              )
+            })}
           </BenefitCardGrid>
         </section>
 
