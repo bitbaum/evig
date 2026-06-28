@@ -504,7 +504,11 @@
     "theme": {
       "toLight": "ライトモードに切り替え",
       "toDark": "ダークモードに切り替え",
-      "toggle": "テーマを切り替え"
+      "toggle": "テーマを切り替え",
+      "label": "カラーテーマ",
+      "light": "ライト",
+      "system": "システム",
+      "dark": "ダーク"
     },
     "chatbot": {
       "open": "Revamp IT アシスタントを開く"
@@ -2582,7 +2586,8 @@
       "locationHeading": "お住まいの場所は？",
       "postalCode": "郵便番号",
       "city": "市区町村",
-      "canton": "州（カントン）"
+      "canton": "州（カントン）",
+      "cantonPlaceholder": "カントンを選択"
     },
     "myRequests": {
       "title": "マイ修理リクエスト",
@@ -2952,6 +2957,11 @@
           "categoryRequired": "カテゴリーは必須です",
           "conditionRequired": "状態は必須です",
           "locationRequired": "場所は必須です"
+        },
+        "deliveryHelp": {
+          "pickup": "購入者が現地でデバイスを引き取ります。",
+          "shipping": "郵便または宅配便で発送します。",
+          "both": "購入者は引き取りと配送のどちらかを選べます。"
         }
       },
       "basicInfo": {
@@ -2970,7 +2980,8 @@
       },
       "imageAlt": "商品写真 {index}",
       "removeImageLabel": "写真 {index} を削除",
-      "label": "出品する"
+      "label": "出品する",
+      "imagesHelp": "良い写真ほど早く売れます。最初の画像がメイン画像になります"
     },
     "listingsAvailable": "{count, plural, other {{count}件の出品}}が利用可能",
     "searchPlaceholder": "ラップトップ、モニター、スマートフォン...",
@@ -3024,7 +3035,8 @@
       "sellerTypeTitle": "出品者",
       "qualityTitle": "品質",
       "showResults": "結果を表示",
-      "closeLabel": "閉じる"
+      "closeLabel": "閉じる",
+      "advanced": "詳細フィルター"
     },
     "listing": {
       "contact": "販売者に連絡",
@@ -3053,7 +3065,14 @@
       "conditionMeaningFor": "{category}における「{condition}」とは？",
       "loadError": "リスト読み込みエラー",
       "verified": "検証済み",
-      "free": "無料"
+      "free": "無料",
+      "trust": {
+        "verified": "Revamp-ITが検査・テスト済み",
+        "mission": "廃棄せず再利用 — 非営利団体"
+      },
+      "zoomOpen": "拡大",
+      "zoomClose": "閉じる",
+      "photoCount": "{count}枚の写真"
     },
     "listing_actions": {
       "payment_info": "購入者と販売者の間の直接支払い",
@@ -3184,7 +3203,8 @@
         "statusLabel": "ステータス:",
         "viewOrder": "注文を確認する",
         "continueShopping": "ショッピングを続ける",
-        "shippingAddress": "配送先住所"
+        "shippingAddress": "配送先住所",
+        "totalLabel": "合計"
       },
       "ownListingDesc": "自分の出品は購入できません。",
       "backToListingLink": "出品に戻る",
@@ -3208,7 +3228,10 @@
       "pickupFree": "直接引き取り",
       "serviceFee": "サービス手数料（{rate}%）",
       "serviceFeeIncluded": "{amount}含む",
-      "total": "合計"
+      "total": "合計",
+      "paymentSuccess": "お支払いが完了しました！ご注文が確定しました。",
+      "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
+      "paymentCancelled": "お支払いがキャンセルされました。"
     },
     "checkout_success": {
       "title": "注文成功！",
@@ -3299,7 +3322,10 @@
       "pickupNote": "チューリッヒで無料受け取り",
       "revampitOnly": "Revamp-ITの商品だけカートに追加できます。コミュニティ出品は直接購入します。",
       "cartAriaLabel": "カート、{count}点の商品",
-      "closeAriaLabel": "カートを閉じる"
+      "closeAriaLabel": "カートを閉じる",
+      "paymentSuccess": "お支払いが完了しました！ご注文が確定しました。",
+      "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
+      "paymentCancelled": "お支払いがキャンセルされました。"
     }
   },
   "membership": {
@@ -7318,7 +7344,11 @@
       "community": "コミュニティ",
       "gratis": "無料",
       "kulturlegi": "KulturLegi（クルトゥーアレギ）",
-      "loadingError": "技術者の読み込みに失敗しました。もう一度お試しください。"
+      "loadingError": "技術者の読み込みに失敗しました。もう一度お試しください。",
+      "requestHelp": "サポートを依頼",
+      "availableEmpty": "まもなく利用可能 — 第一世代の一員になりましょう",
+      "emptyActionSecondary": "それでもサポートを依頼 → ITサポート",
+      "backToHub": "ITサポートに戻る"
     },
     "detail": {
       "backToList": "全技術者へ",
@@ -7361,7 +7391,8 @@
         "title": "{name} – RevampIT マーケットプレイスの出品者",
         "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
         "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
-      }
+      },
+      "publicProfile": "出品者プロフィール"
     }
   },
   "workshops": {
@@ -7581,7 +7612,10 @@
       "registerFree": "ワークショップに登録する",
       "registerPaid": "登録して支払う",
       "paymentNote": "決済プロバイダーを通じた安全な支払い。",
-      "confirmationNote": "詳細を記載した確認メールが届きます。"
+      "confirmationNote": "詳細を記載した確認メールが届きます。",
+      "paymentSuccess": "お支払いが完了しました！ワークショップのお申し込みが確定しました。",
+      "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
+      "paymentCancelled": "お支払いがキャンセルされました。"
     },
     "reviews": {
       "error": "レビューの読み込みエラー",
@@ -8053,7 +8087,10 @@
       "cancel": "キャンセル",
       "saving": "保存中…",
       "save": "保存",
-      "paymentSuccess": "お支払いが完了しました！予約が確認されました。"
+      "paymentSuccess": "お支払いが完了しました！予約が確認されました。",
+      "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
+      "paymentCancelled": "お支払いがキャンセルされました。",
+      "viewDetails": "詳細を見る"
     },
     "orders": {
       "pageTitle": "マイオーダー",
@@ -8107,7 +8144,9 @@
       "errorLoading": "注文の読み込みエラー",
       "errorConfirmReceipt": "受取を確認できませんでした",
       "errorUpdateStatus": "ステータスを更新できませんでした",
-      "networkError": "ネットワークエラー"
+      "networkError": "ネットワークエラー",
+      "articlesSection": "商品（{count}）",
+      "moreItems": "他{count}件"
     },
     "listings": {
       "pageTitle": "マイ出品",
@@ -8354,7 +8393,12 @@
         "completedAt": "完了日",
         "yourRating": "あなたの評価",
         "notFound": "予約が見つかりません"
-      }
+      },
+      "payNow": "今すぐ支払う",
+      "payError": "お支払いを開始できませんでした",
+      "paymentSuccess": "お支払いが完了しました！予約が確定しました。",
+      "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
+      "paymentCancelled": "お支払いがキャンセルされました。"
     },
     "membership": {
       "pageTitle": "会員資格",
@@ -8449,7 +8493,8 @@
       "backToDashboard": "ダッシュボードに戻る",
       "editProfile": "プロフィールを編集",
       "account": {
-        "passwordNote": "パスワードの変更はプロフィールページで管理されます (後ほどこちらに統合予定です)"
+        "passwordNote": "パスワードの変更はプロフィールページで管理されます (後ほどこちらに統合予定です)",
+        "deleteRequestBody": "アカウント（{email}）の削除を希望します。私の個人データの削除をご確認ください。"
       },
       "privacy": {
         "dataExportTitle": "プライバシーとエクスポート",
@@ -8603,7 +8648,11 @@
       "kennzahlen": "指標",
       "wirkung": "インパクト",
       "transparenz": "透明性",
-      "appointments": "予約"
+      "appointments": "予約",
+      "hr": "HR",
+      "vacancies": "求人",
+      "applications": "応募",
+      "repairerApplications": "技術者の承認"
     },
     "currencySelector": {
       "selectCurrency": "通貨を選択",
@@ -9164,11 +9213,60 @@
     "approvals": {
       "approve": "承認",
       "release": "公開",
-      "accept": "受け入れる"
+      "accept": "受け入れる",
+      "pageTitle": "承認",
+      "pageDescription": "ユーザーから提出されたコンテンツを確認・承認します"
     },
     "hirn": {
       "assistantSubtitle": "アシスタント",
-      "openFullscreen": "全画面で開く"
+      "openFullscreen": "全画面で開く",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "RevampITのAIアシスタント",
+      "sidebar": {
+        "newConversation": "新しい会話",
+        "documentsLabel": "ドキュメント",
+        "chunksLabel": "チャンク",
+        "conversationsHeading": "会話",
+        "emptyConversations": "会話がありません",
+        "messageCount": "{count, plural, one {#件のメッセージ} other {#件のメッセージ}}"
+      },
+      "chat": {
+        "title": "Hirn アシスタント",
+        "clear": "削除",
+        "welcomeTitle": "Hirnへようこそ",
+        "welcomeBody": "{orgName}について質問してください — ミッション、歴史、数値、サービス、価格を把握しており、喜んでお手伝いします。",
+        "inputPlaceholder": "質問を入力…",
+        "confirmDeleteTitle": "会話を削除",
+        "confirmDeleteMessage": "この会話を本当に削除しますか？",
+        "errorSendDefault": "送信エラー",
+        "errorEmptyResponse": "応答がありませんでした。",
+        "errorUnknown": "不明なエラー",
+        "errorDelete": "削除エラー",
+        "errorActionDefault": "操作に失敗しました"
+      },
+      "floatingButton": {
+        "open": "Hirn AIを開く",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "プロバイダーなし",
+        "panelTitle": "頭脳を選択",
+        "panelSubtitle": "どのAIが応答しますか？",
+        "categoryLocal": "ローカル",
+        "categoryLocalDescription": "あなたのコンピューター上",
+        "categoryFree": "無料 / 従量課金",
+        "categoryFreeDescription": "クラウドAPI",
+        "providerDescriptionOllama": "ローカル、無料、プライベート",
+        "providerDescriptionGroq": "無料、超高速",
+        "providerDescriptionOpenrouter": "多数のモデル、従量課金",
+        "activeBadge": "有効",
+        "saveKey": "キーを保存",
+        "apiKeyPrompt": "APIキーを入力",
+        "errorLoad": "読み込みエラー",
+        "errorGeneric": "エラー",
+        "errorSaveKey": "APIキーを保存できませんでした",
+        "footerHint": "有効なAPIキーを持つプロバイダーを選択してください"
+      }
     },
     "team": {
       "backToTeam": "チームに戻る",
@@ -9196,7 +9294,36 @@
       "emergencyContact": "緊急連絡先",
       "hrNotes": "HR メモ(機密)",
       "createdAt": "作成日",
-      "updatedAt": "更新日"
+      "updatedAt": "更新日",
+      "withoutProfileTitle": "{count}件がプロフィール未設定 · クリックで追加",
+      "withoutProfileMore": "他{count}件",
+      "footerNotice": "機密データ · {domain}のアドレスは自動的にスタッフとして認識されます",
+      "form": {
+        "sectionBasic": "基本情報",
+        "sectionCompensation": "報酬と雇用",
+        "sectionTalent": "スキルと成長",
+        "sectionAvailability": "稼働状況と連絡先",
+        "sectionEmergency": "緊急連絡先",
+        "sectionHrNotes": "HRメモ",
+        "userSelectTitle": "ユーザーを選択",
+        "userSelectPlaceholder": "ユーザーを選択…"
+      },
+      "list": {
+        "emptyHeading": "チームプロフィールが見つかりません",
+        "emptyWithFilters": "フィルター条件に一致するプロフィールはありません。",
+        "emptyNoFilters": "プロフィールを作成して始めましょう。",
+        "profilesCount": "{count, plural, one {#件のプロフィール} other {#件のプロフィール}}が見つかりました",
+        "refresh": "更新",
+        "retry": "再試行",
+        "clearFilters": "フィルターをリセット"
+      },
+      "tabs": {
+        "overview": "概要",
+        "tasks": "タスク",
+        "timecards": "勤怠記録",
+        "activity": "アクティビティ"
+      },
+      "showOnAbout": "「私たちについて」に表示"
     },
     "protocols": {
       "queueTitle": "AI レビューキュー",
@@ -9233,6 +9360,16 @@
         "copyPrompt": "プロンプトをコピー",
         "copied": "コピー済み",
         "promptTemplate": "あなたは会議の構造化担当です。次の会議の文字起こしを読み、以下のキーを持つ JSON として結果を返してください:\n  - participants: 参加者名のリスト\n  - topics: 議論項目のリスト(簡潔に)\n  - decisions: 行われた決定のリスト\n  - tasks: { description, assignee, dueDate } のリスト\n  - openQuestions: 未解決の質問のリスト\n\n文字起こし:\n---"
+      },
+      "pageTitle": "議事録",
+      "pageDescription": "会議の議事録とミーティングメモ",
+      "filters": {
+        "searchPlaceholder": "検索…",
+        "typeLabel": "種類：",
+        "statusLabel": "ステータス：",
+        "stepLabel": "ステップ：",
+        "attendeeLabel": "参加者：",
+        "all": "すべて"
       }
     },
     "categories": {
@@ -9263,7 +9400,14 @@
         "workshop": "ワークショップ",
         "service": "サービス",
         "other": "提出"
-      }
+      },
+      "greeting": "こんにちは、{firstName}さん。",
+      "roleSuperAdmin": "スーパー管理者",
+      "roleStaff": "スタッフ",
+      "attentionQueueTitle": "あなたの対応待ち",
+      "attentionQueueAllDone": "すべて完了 — 未対応のタスクはありません。",
+      "quickCreateTitle": "クイック作成",
+      "permissionRequestsTitle": "アクセス申請"
     },
     "projects": {
       "sidebar": "公開プロジェクト",
@@ -9346,6 +9490,844 @@
     },
     "localeFallback": {
       "notice": "管理エリアはドイツ語のみで利用可能です。"
+    },
+    "hr": {
+      "vacancies": {
+        "title": "求人",
+        "description": "求人を公開・停止し、応募者と紐付けます",
+        "new": "新規求人",
+        "empty": "求人が見つかりません",
+        "searchPlaceholder": "タイトルまたはスラッグで検索…",
+        "statusFilter": "ステータス",
+        "resultsCount": "{count, plural, one {#件の求人} other {#件の求人}}",
+        "stats": {
+          "published": "公開済み",
+          "pendingApplications": "新規応募",
+          "drafts": "下書き",
+          "filled": "充足済み"
+        }
+      },
+      "applications": {
+        "title": "応募",
+        "description": "選考から採用までのパイプライン",
+        "manageVacancies": "求人を管理",
+        "teamProfiles": "チームプロフィール",
+        "openTeamProfile": "チームプロフィールを開く",
+        "empty": "このフィルターには応募がありません",
+        "searchPlaceholder": "名前またはメール…",
+        "statusFilter": "ステータス",
+        "resultsCount": "{count, plural, one {#件の応募} other {#件の応募}}",
+        "postingLabel": "求人",
+        "phone": "電話",
+        "source": "経路",
+        "notes": "メモ",
+        "rejection": "不採用",
+        "trackResponses": "トラック回答を表示",
+        "advance": "次の段階へ",
+        "hire": "採用",
+        "reject": "不採用にする",
+        "dialog": {
+          "hireTitle": "この人を採用しますか？",
+          "hireMessage": "チームプロフィールが作成され、オンボーディングタスクが登録され、求人は充足済みとしてマークされます。",
+          "rejectTitle": "応募を不採用にする",
+          "rejectMessage": "応募は不採用となります。理由が保存されます。",
+          "advanceTitle": "ステータスを進める",
+          "advanceMessage": "新しいステータス：{status}",
+          "rejectionReason": "理由 *",
+          "adminNotes": "内部メモ（任意）",
+          "confirm": "確定",
+          "cancel": "キャンセル"
+        }
+      }
+    },
+    "timecards": {
+      "headerStatusSubmitted": "提出済み",
+      "headerStatusDraft": "下書き",
+      "headerDaysSuffix": "日",
+      "submit": "承認のため提出",
+      "submitting": "送信中…",
+      "resubmit": "再提出",
+      "submitSuccess": "承認のため送信しました — 承認チームに通知されます。",
+      "submitHint": "下書きを保存すると入力内容が保持されます。「承認のため提出」で承認に送信されます。",
+      "submitError": "タイムカードを提出できませんでした。",
+      "save": "保存",
+      "saving": "保存中…",
+      "noScheduleLine": "まだ標準スケジュールが設定されていません。",
+      "applyStandardSchedule": "月〜金 09〜17時を適用",
+      "applyingSchedule": "適用中…",
+      "setOwnSchedule": "独自の時間を設定",
+      "scheduleApplyFailed": "スケジュールを適用できませんでした。",
+      "gridIntro": "月間概要",
+      "gridPrefilledLabel": "スケジュールから自動入力",
+      "dayEditorHasEntry": "記録あり",
+      "dayEditorNoEntry": "記録なし",
+      "dayActionFillFromSchedule": "スケジュールから入力",
+      "dayActionFillDefault": "09:00〜17:00を入力",
+      "dayActionFree": "休み",
+      "dayActionSick": "病欠",
+      "dayActionAdjust": "調整",
+      "dayActionAdjustClose": "調整を閉じる",
+      "dayAbsenceCounted": "算入済み",
+      "dayFill": "計画から1日を入力",
+      "fieldStart": "開始",
+      "fieldEnd": "終了",
+      "fieldBreak": "休憩（分）",
+      "fieldCategory": "カテゴリー",
+      "fieldNote": "メモ",
+      "fieldNotePlaceholder": "この日が通常と異なる場合のみ",
+      "pageTitle": "タイムカード",
+      "pageDescription": "勤務時間を記録・提出・承認します",
+      "extrasToggle": "詳細設定 · コメント、テンプレートのリセット",
+      "extrasMonthComment": "月のコメント",
+      "extrasMonthCommentPlaceholder": "任意 — 例：休暇、病欠、特別業務。",
+      "extrasResetMonth": "スケジュールから月を再構築（現在の記録を削除）",
+      "aiPlaceholder": "今週の状況を自分の言葉で説明してください…",
+      "aiExamples": "例：「今週は火曜と水曜だけ勤務、水曜は15時に退社、それ以外は病欠」 ·「来週の金曜は休暇」 ·「今日は2時間早く退社」",
+      "fillMonth": "計画から月を入力",
+      "fillMonthHint": "空いているすべての平日を勤務計画（標準は月〜金 09:00〜17:00）で埋めます。既存の記録と休日は変更されません。",
+      "selectHint": "クリックで1日を選択 · ドラッグで複数選択 · Ctrl/Cmd+クリックで個別 · Shift+クリックで範囲 · Delキーでクリア。その後、下部でアクションを選択します。",
+      "selectLabel": "クイック選択",
+      "selectAllDays": "1か月全体",
+      "selectAllWeekdays": "すべての平日",
+      "viewMonth": "月",
+      "viewDay": "日",
+      "dayPrev": "前の日",
+      "dayNext": "次の日",
+      "bulkSelected": "{count}日を選択中",
+      "bulkFill": "計画から入力",
+      "bulkClear": "クリア",
+      "bulkCancel": "選択を解除"
+    },
+    "appointments": {
+      "pageTitle": "予約",
+      "pageDescription": "サービス予約を確認し、技術者を割り当てます"
+    },
+    "content": {
+      "pageTitle": "コンテンツ",
+      "pageDescription": "ブログ記事、ページ、メディアを管理します"
+    },
+    "decisions": {
+      "pageTitle": "意思決定",
+      "pageDescription": "チーム内の提案と投票"
+    },
+    "intake": {
+      "pageTitle": "デバイス受付",
+      "pageDescription": "デバイスを登録・確認・承認します",
+      "createForm": {
+        "title": "新しいデバイスを登録",
+        "tierLabel": "処理段階",
+        "aiTitle": "AIクイック入力",
+        "aiTabs": {
+          "text": "テキスト",
+          "voice": "音声",
+          "photo": "写真"
+        },
+        "textPlaceholder": "例：Dell Latitude E7470 i5 8GB 256GB SSD 良好な状態",
+        "analyze": "分析",
+        "startRecording": "録音を開始",
+        "stopRecording": "録音を停止",
+        "processingVoice": "音声を処理中…",
+        "transcription": "文字起こし：{text}",
+        "fields": {
+          "manufacturer": "メーカー",
+          "manufacturerPlaceholder": "例：Lenovo、Apple、Dell",
+          "productName": "製品名",
+          "productNamePlaceholder": "例：ThinkPad T480",
+          "shortDescription": "概要",
+          "shortDescriptionPlaceholder": "デバイスとその状態の簡単な説明",
+          "category": "カテゴリー",
+          "subcategory": "サブカテゴリー",
+          "condition": "状態",
+          "salesPrice": "推定販売価格（CHF）",
+          "choose": "選択…"
+        },
+        "donation": {
+          "isDonation": "これは寄付です",
+          "donorName": "寄付者の名前",
+          "donorEmail": "寄付者のメール",
+          "donorNotes": "寄付に関するメモ",
+          "optional": "任意",
+          "notesPlaceholder": "例：チューリッヒ拠点で引き渡し"
+        },
+        "saving": "保存中…",
+        "submit": "デバイスを登録"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "デバイス受付",
+            "description": "チェックリストと寄付"
+          },
+          {
+            "label": "登録",
+            "description": "製品データを入力"
+          },
+          {
+            "label": "ショップ掲載",
+            "description": "公開"
+          }
+        ],
+        "loading": "読み込み中…",
+        "backToPipeline": "← パイプラインに戻る",
+        "donation": "寄付",
+        "donationWithName": "寄付：{name}",
+        "inShop": "ショップ掲載中",
+        "changeTier": "段階を変更",
+        "refresh": "更新",
+        "progress": "進捗：{completed}/{total} 必須項目",
+        "markAllRequiredTitle": "すべての必須項目を「完了」にする",
+        "markAllRequired": "すべて問題なし",
+        "publishHeading": "ショップに公開",
+        "publishGate": "デバイスを公開する前に、チェックリストのすべての必須項目をチェックする必要があります。",
+        "sellingPriceLabel": "販売価格（CHF）",
+        "publishing": "公開中…",
+        "publishNow": "今すぐ公開",
+        "openFullErfassungTitle": "詳細を補完するため製品を登録画面で開く",
+        "openFullErfassung": "完全に登録",
+        "publishedConfirm": "このデバイスはショップに公開されています",
+        "publishedPrice": "価格：CHF {price}",
+        "tierChange": {
+          "heading": "段階を変更",
+          "warning": "チェックリストの進捗はすべてリセットされます。",
+          "newTierLabel": "新しい段階",
+          "reasonLabel": "理由 *",
+          "reasonPlaceholder": "例：デバイスは修理不可能",
+          "applying": "変更中…",
+          "apply": "段階を変更"
+        },
+        "timelineHeading": "履歴"
+      },
+      "pipeline": {
+        "newDevice": "新しいデバイス",
+        "filters": {
+          "allTiers": "すべての段階",
+          "allStatus": "すべてのステータス",
+          "allCategories": "すべてのカテゴリー",
+          "searchPlaceholder": "検索…"
+        },
+        "loading": "読み込み中…",
+        "empty": "パイプラインにデバイスがありません",
+        "createFirst": "最初のデバイスを登録",
+        "columns": {
+          "uuid": "UUID",
+          "device": "デバイス",
+          "tier": "段階",
+          "checklist": "チェックリスト",
+          "status": "ステータス",
+          "donation": "寄付",
+          "date": "日付"
+        },
+        "status": {
+          "published": "公開済み",
+          "ready": "準備完了",
+          "inProgress": "処理中"
+        },
+        "donationYes": "はい",
+        "hero": {
+          "kpis": {
+            "total": "合計",
+            "inProgress": "処理中",
+            "ready": "準備完了",
+            "published": "公開済み"
+          },
+          "ready": {
+            "headline": "{count, plural, one {#台のデバイス} other {#台のデバイス}}が公開準備完了",
+            "sub": "準備完了のデバイスはパイプラインで仕上がっています。公開すると一般に表示されます。",
+            "cta": "準備完了を表示"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {#台のデバイス} other {#台のデバイス}}が処理中",
+            "sub": "診断、テスト、または再生処理が進行中です。ステータスを最新に保ってください。",
+            "cta": "処理中を表示"
+          },
+          "empty": {
+            "headline": "パイプラインは空です",
+            "sub": "デバイスが入ると、ここに表示されます。最初の1台を登録しましょう。",
+            "cta": "新しいデバイスを登録"
+          },
+          "healthy": {
+            "headline": "パイプラインは良好です。",
+            "sub": "{published}台のデバイスが公開済みで、処理待ちはありません。"
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "必須項目",
+        "completedAt": "{date}に完了",
+        "addNote": "メモを追加",
+        "editNote": "メモを編集",
+        "notePlaceholder": "例：CPUストレステスト合格、最大75°C…",
+        "ariaUncheck": "{label}を取り消す",
+        "ariaCheck": "{label}をチェック"
+      }
+    },
+    "it-hilfe": {
+      "pageTitle": "ITサポート",
+      "pageDescription": "サポート依頼と技術者を管理します"
+    },
+    "locations": {
+      "pageTitle": "拠点管理",
+      "pageDescription": "イベント会場とその承認を管理します"
+    },
+    "marketplace": {
+      "pageTitle": "マーケットプレイス",
+      "pageDescription": "出品、通報、注文を管理します",
+      "tabs": {
+        "listings": "出品",
+        "reports": "通報",
+        "orders": "注文"
+      },
+      "hero": {
+        "kpis": {
+          "active": "有効",
+          "unverified": "未検証",
+          "openReports": "未処理の通報",
+          "revampit": "RevampITの出品"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {#件の未処理の通報} other {#件の未処理の通報}}を確認",
+          "sub": "通報された出品には判断が必要です — そうしないと購入者に表示され続けます。",
+          "cta": "通報を見る"
+        },
+        "attention": {
+          "headline": "{count, plural, one {#件の未検証の出品} other {#件の未検証の出品}}",
+          "sub": "新しい出品が公開承認を待っています — それまで一般には表示されません。",
+          "cta": "出品を確認"
+        },
+        "healthy": {
+          "headline": "マーケットプレイスは良好です。",
+          "sub": "{active}件の有効な出品、未処理の通報はありません。"
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "すべてのステータス",
+          "allCategories": "すべてのカテゴリー",
+          "allSellers": "すべての出品者",
+          "revampit": "RevampIT",
+          "community": "コミュニティ",
+          "verification": "検証",
+          "verified": "検証済み",
+          "unverified": "未検証",
+          "reports": "通報",
+          "reported": "通報済み",
+          "searchPlaceholder": "検索…"
+        },
+        "columns": {
+          "title": "タイトル",
+          "category": "カテゴリー",
+          "price": "価格",
+          "seller": "出品者",
+          "status": "ステータス",
+          "date": "日付",
+          "actions": "操作"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {#件の通報} other {#件の通報}}"
+        },
+        "actions": {
+          "view": "表示",
+          "edit": "編集",
+          "remove": "削除",
+          "verify": "検証",
+          "markVerified": "検証済みとしてマーク",
+          "removeVerification": "検証を解除",
+          "ok": "OK",
+          "notePlaceholder": "メモ（任意）"
+        },
+        "empty": "出品が見つかりません",
+        "countLabel": "{count, plural, one {#件の出品} other {#件の出品}}",
+        "removeConfirm": {
+          "title": "出品を削除",
+          "message": "出品「{title}」を本当に削除しますか？"
+        },
+        "unverifyConfirm": {
+          "title": "検証を解除",
+          "message": "検証を本当に解除しますか？"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "すべて"
+        },
+        "columns": {
+          "listing": "出品",
+          "reason": "理由",
+          "reporter": "通報者",
+          "date": "日付",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "sellerLabel": "出品者：{name}",
+        "statusOpen": "未処理",
+        "statusProcessed": "処理済み",
+        "edit": "編集",
+        "empty": "通報が見つかりません",
+        "countLabel": "{count, plural, one {#件の通報} other {#件の通報}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "すべてのステータス"
+        },
+        "columns": {
+          "orderId": "注文ID",
+          "listing": "出品",
+          "buyer": "購入者",
+          "seller": "出品者",
+          "delivery": "配送",
+          "amount": "金額",
+          "status": "ステータス",
+          "date": "日付"
+        },
+        "cartItems": "{count, plural, one {#点の商品} other {#点の商品}}",
+        "empty": "注文が見つかりません",
+        "countLabel": "{count, plural, one {#件の注文} other {#件の注文}}"
+      },
+      "editModal": {
+        "title": "出品を編集",
+        "statusLabel": "ステータス",
+        "adminNotesLabel": "管理者メモ",
+        "adminNotesPlaceholder": "内部メモ…"
+      },
+      "handleReportModal": {
+        "title": "通報を処理",
+        "actionLabel": "アクション",
+        "actionDismiss": "却下",
+        "actionWarnSeller": "出品者に警告",
+        "actionRemoveListing": "出品を削除",
+        "notesLabel": "メモ",
+        "notesPlaceholder": "理由…",
+        "execute": "実行"
+      }
+    },
+    "payroll": {
+      "pageTitle": "給与計算",
+      "pageDescription": "月を締め、時給を確定し、会計用のCSVをダウンロードします。"
+    },
+    "products": {
+      "pageTitle": "製品管理",
+      "pageDescription": "ショップ製品とその詳細を管理します"
+    },
+    "reviews": {
+      "pageTitle": "レビュー管理",
+      "pageDescription": "レビューをモデレートし管理します"
+    },
+    "services": {
+      "pageTitle": "サービスを管理",
+      "pageDescription": "サービス提供を作成・管理します"
+    },
+    "settings": {
+      "pageTitle": "設定",
+      "pageDescription": "システム構成と設定"
+    },
+    "tasks": {
+      "pageTitle": "タスク",
+      "pageDescription": "チームタスクを管理・調整します"
+    },
+    "users": {
+      "pageTitle": "ユーザーを管理",
+      "pageDescription": "ユーザーアカウントを表示し、権限を管理します"
+    },
+    "workshops": {
+      "pageTitle": "ワークショップ管理",
+      "pageDescription": "ワークショップの提案を承認・管理します"
+    },
+    "analytics": {
+      "pageTitle": "アナリティクス",
+      "pageDescription": "RevampITの統計と分析"
+    },
+    "donations": {
+      "pageTitle": "寄付",
+      "pageDescription": "金銭および現物の寄付を管理します"
+    },
+    "erfassung": {
+      "pageTitle": "登録",
+      "pageDescription": "製品データを登録し公開します"
+    },
+    "repairer-applications": {
+      "pageTitle": "技術者の応募",
+      "pageDescription": "応募を確認・管理します"
+    },
+    "analyse": {
+      "pageTitle": "分析",
+      "pageDescription": "概要とドリルダウン"
+    },
+    "membership": {
+      "pageTitle": "会員",
+      "pageDescription": "協会の会員を管理します"
+    },
+    "sidebar": {
+      "closeAria": "サイドバーを閉じる",
+      "navAria": "管理ナビゲーション",
+      "sensitiveLabel": "保護対象",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "AIアシスタント",
+      "websiteGroup": "ウェブサイト",
+      "linkHome": "ホーム",
+      "linkShop": "ショップ",
+      "linkDashboard": "マイページ",
+      "expandSidebarTitle": "サイドバーを展開",
+      "collapseSidebarTitle": "サイドバーを折りたたむ",
+      "openAria": "サイドバーを開く",
+      "mobileMore": "もっと見る"
+    },
+    "commandBar": {
+      "placeholder": "検索またはコマンド…",
+      "openShortcut": "コマンドバーを開く",
+      "noResults": "結果がありません",
+      "recentlyVisited": "最近表示した項目"
+    },
+    "userMenu": {
+      "darkMode": "外観",
+      "toWebsite": "ウェブサイトへ",
+      "signOut": "ログアウト",
+      "adminArea": "管理エリア",
+      "staffFallback": "チームメンバー"
+    },
+    "notifications": {
+      "title": "通知",
+      "empty": "新しい通知はありません",
+      "markAllRead": "すべて既読にする",
+      "markAllReadShort": "すべて既読",
+      "bellAriaLabel": "通知",
+      "bellAriaWithUnread": "通知（未読{count}件）",
+      "loadError": "通知を読み込めませんでした",
+      "retry": "再試行",
+      "loading": "読み込み中…",
+      "open": "開く",
+      "relativeJustNow": "たった今",
+      "relativeMinutes": "{count}分前",
+      "relativeHours": "{count}時間前",
+      "relativeDays": "{count, plural, one {#日前} other {#日前}}"
+    },
+    "forms": {
+      "cancel": "キャンセル",
+      "save": "保存",
+      "saving": "保存中…",
+      "create": "作成",
+      "creating": "作成中…",
+      "delete": "削除",
+      "deleting": "削除中…",
+      "edit": "編集",
+      "submit": "送信",
+      "submitting": "送信中…",
+      "close": "閉じる",
+      "confirm": "確定",
+      "back": "戻る",
+      "next": "次へ"
+    },
+    "status": {
+      "active": "有効",
+      "inactive": "無効",
+      "pending": "保留中",
+      "approved": "承認済み",
+      "rejected": "却下",
+      "archived": "アーカイブ済み",
+      "draft": "下書き",
+      "submitted": "提出済み",
+      "cancelled": "キャンセル済み",
+      "sold": "売却済み",
+      "reserved": "予約済み"
+    },
+    "empty": {
+      "noResults": "結果がありません",
+      "noDataYet": "まだデータがありません",
+      "tryDifferentFilter": "別のフィルターをお試しください"
+    },
+    "pagination": {
+      "page": "ページ",
+      "of": "/",
+      "prev": "前へ",
+      "next": "次へ",
+      "total": "{count}件"
+    },
+    "filters": {
+      "searchLabel": "検索",
+      "searchPlaceholder": "検索…",
+      "allOption": "すべて",
+      "clearFilters": "フィルターをリセット"
+    },
+    "iconPicker": {
+      "choose": "選択…",
+      "noneSelected": "アイコンが選択されていません"
+    },
+    "permissions": {
+      "request": {
+        "title": "アクセスを申請",
+        "subtitle": "アクセスが必要なエリアを選択してください。",
+        "sectionsLabel": "エリアを選択",
+        "reasonLabel": "理由",
+        "reasonPlaceholder": "なぜこれらのエリアへのアクセスが必要ですか？",
+        "submit": "申請を送信",
+        "submitting": "送信中…",
+        "successTitle": "申請を送信しました",
+        "successBody": "スーパー管理者が申請を確認します。",
+        "validationNoSections": "少なくとも1つのエリアを選択してください。",
+        "validationReasonTooShort": "理由を入力してください（10文字以上）。"
+      },
+      "manager": {
+        "heading": "権限申請（{count}）",
+        "empty": "保留中の権限申請はありません",
+        "loadError": "読み込みエラー",
+        "unknownError": "不明なエラー",
+        "processError": "処理エラー",
+        "genericError": "エラー",
+        "retry": "再試行",
+        "approve": "承認",
+        "reject": "却下",
+        "rejectionLabel": "却下の理由（任意）：",
+        "rejectionPlaceholder": "任意の却下理由…",
+        "confirmReject": "却下を確定"
+      },
+      "editor": {
+        "title": "権限を編集",
+        "superAdminLabel": "スーパー管理者ステータス",
+        "superAdminDescription": "ユーザー管理を含むすべてのエリアへのフルアクセス",
+        "superAdminHardcoded": "このユーザーはコアのスーパー管理者リストに含まれており、降格できません。",
+        "fullAccessLabel": "フルアクセス",
+        "fullAccessDescription": "すべてのエリアへのアクセス（スーパー管理者権限を除く）",
+        "individualHeading": "個別のエリア",
+        "sensitiveBadge": "機密",
+        "saveError": "保存エラー",
+        "unknownError": "不明なエラー",
+        "saving": "保存中…"
+      }
+    },
+    "itHilfe": {
+      "tabs": {
+        "requests": "依頼",
+        "helpers": "技術者"
+      },
+      "topActions": {
+        "reviewApplications": "応募を確認",
+        "newRequest": "新規依頼"
+      },
+      "hero": {
+        "kpis": {
+          "open": "未対応",
+          "activeTechniker": "アクティブな技術者",
+          "verified": "検証済み",
+          "resolutionRate": "解決率"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {#件の緊急依頼} other {#件の緊急依頼}}が待機中",
+          "sub": "迅速な対応により、サポートを求める人の離脱を防ぎます。",
+          "cta": "緊急を表示"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {#件の未対応依頼} other {#件の未対応依頼}}、ただしアクティブな技術者なし",
+          "sub": "誰かが依頼を引き受けられるよう、応募を承認してください。",
+          "cta": "応募を確認"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {#件の未対応依頼} other {#件の未対応依頼}}",
+          "sub": "{technikerCount}人のアクティブな技術者が引き受けられます。",
+          "cta": "依頼を見る"
+        },
+        "noTechniker": {
+          "headline": "まだアクティブな技術者がいません",
+          "sub": "システムが依頼を受け付けられるよう、応募を有効にしてください。",
+          "cta": "応募を確認"
+        },
+        "healthy": {
+          "headline": "すべて良好です。",
+          "sub": "合計{total}件の依頼、{percent}%が解決済み。"
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "すべてのステータス",
+          "allCategories": "すべてのカテゴリー",
+          "allUrgencies": "すべての緊急度",
+          "allCantons": "すべてのカントン",
+          "searchPlaceholder": "検索…"
+        },
+        "columns": {
+          "title": "タイトル",
+          "category": "カテゴリー",
+          "urgency": "緊急度",
+          "status": "ステータス",
+          "creator": "作成者",
+          "canton": "カントン",
+          "budget": "予算",
+          "offers": "オファー",
+          "date": "日付",
+          "actions": "操作"
+        },
+        "actions": {
+          "edit": "編集",
+          "createTask": "タスクを作成"
+        },
+        "empty": "依頼が見つかりません",
+        "countLabel": "{count, plural, one {#件の依頼} other {#件の依頼}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "すべての技術者",
+          "allCantons": "すべてのカントン"
+        },
+        "columns": {
+          "name": "名前",
+          "skills": "スキル",
+          "canton": "カントン",
+          "rate": "料金",
+          "status": "ステータス",
+          "helps": "サポート",
+          "actions": "操作"
+        },
+        "badges": {
+          "gratis": "無料",
+          "kulturlegi": "KulturLegi",
+          "suspended": "停止中",
+          "verified": "検証済み",
+          "active": "有効",
+          "inactive": "無効"
+        },
+        "actions": {
+          "verify": "検証",
+          "suspend": "停止",
+          "reactivate": "再開"
+        },
+        "empty": "技術者が見つかりません",
+        "countLabel": "{count, plural, one {#人の技術者} other {#人の技術者}}"
+      },
+      "editModal": {
+        "title": "依頼を編集",
+        "statusLabel": "ステータス",
+        "urgencyLabel": "緊急度",
+        "adminNotesLabel": "管理者メモ",
+        "adminNotesPlaceholder": "内部メモ…"
+      },
+      "helperActionModal": {
+        "titleVerify": "技術者を検証",
+        "titleSuspend": "技術者を停止",
+        "titleReactivate": "技術者を再開",
+        "titleDefault": "アクション",
+        "notesLabel": "メモ",
+        "notesPlaceholder": "理由（任意）…",
+        "confirm": "確定"
+      }
+    },
+    "editHistory": {
+      "empty": "管理者による編集はありません",
+      "changedFields": "変更されたフィールド：",
+      "showChanges": "変更を表示",
+      "noChanges": "変更なし",
+      "previousValue": "以前の値：",
+      "valueEmpty": "（空）",
+      "valueEmptyList": "（空のリスト）",
+      "valueTruncated": "…（省略）"
+    },
+    "sectionLabels": {
+      "uebersicht": "今日",
+      "angebot": "業務",
+      "inhalte": "コンテンツ",
+      "betrieb": "組織",
+      "analyse-group": "分析",
+      "personen": "人材",
+      "teamhr": "チーム＆HR",
+      "system-group": "システム",
+      "dashboard": "ダッシュボード",
+      "profile": "マイプロフィール",
+      "messages": "メッセージ",
+      "workshops": "マイワークショップ",
+      "appointments": "サービス予約",
+      "bookings": "ピア予約",
+      "seller-dashboard": "出品者ダッシュボード",
+      "my-listings": "マイ出品",
+      "my-orders": "マイ注文",
+      "favorites": "お気に入り",
+      "repairer-dashboard": "技術者プロフィール",
+      "repairer-onboarding": "技術者として提供",
+      "blog-submit": "記事を書く",
+      "blog-submissions": "マイ投稿",
+      "workshop-propose": "ワークショップを提案",
+      "user-donations": "マイ寄付",
+      "shift-log": "シフトを開始",
+      "my-timecards": "マイ勤怠記録",
+      "intake": "デバイス受付",
+      "erfassung": "登録",
+      "products": "製品",
+      "marketplace": "マーケットプレイス",
+      "it-hilfe-admin": "ITサポート",
+      "repairer-applications": "技術者の承認",
+      "workshops-admin": "ワークショップ",
+      "services": "サービス",
+      "appointments-admin": "予約",
+      "locations": "拠点",
+      "reviews": "レビュー",
+      "content": "ブログ＆ページ",
+      "projects": "公開プロジェクト",
+      "approvals": "承認",
+      "membership": "会員",
+      "tasks": "タスク",
+      "protocols": "議事録",
+      "decisions": "意思決定",
+      "analytics": "アナリティクス",
+      "donations": "寄付",
+      "users": "ユーザー",
+      "team": "チームプロフィール",
+      "timecards": "タイムカード",
+      "timecard-approvals": "タイムカードの承認",
+      "payroll": "給与計算",
+      "finanzen": "財務",
+      "analyse-hub": "分析概要",
+      "kennzahlen": "指標",
+      "wirkung": "インパクト",
+      "transparenz": "透明性",
+      "finances": "財務",
+      "hirn": "Hirn AI",
+      "settings": "設定",
+      "core": "概要",
+      "activities": "アクティビティ",
+      "commerce": "販売＆取引",
+      "management": "管理",
+      "sensitive": "機密",
+      "system": "システム",
+      "analyse": "分析",
+      "seller-onboarding": "出品者になる"
+    },
+    "errorPage": {
+      "title": "問題が発生しました",
+      "description": "管理ページの読み込み中にエラーが発生しました。",
+      "retry": "再試行"
+    },
+    "blog": {
+      "form": {
+        "newPost": "新しい記事",
+        "editPost": "記事を編集",
+        "newSubtitle": "新しいブログ記事を作成します",
+        "editSubtitle": "記事に変更を加えます",
+        "preview": "プレビュー",
+        "previewTitle": "公開済みの記事を見る",
+        "previewNotAvailable": "記事を先に公開する必要があります",
+        "publish": "公開",
+        "aiPlaceholderEdit": "例：「修理のヒントに関するセクションを追加して」や「文章をより魅力的にして」",
+        "aiPlaceholderNew": "ブログ記事のテーマやアイデアを説明してください…"
+      }
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "変更履歴",
+      "description": "RevampITプラットフォームの最新の修正、機能、改善。"
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "Live",
+      "title": "変更履歴",
+      "subtitle": "revampit.chに展開している最新の修正、機能、改善。"
+    },
+    "latest": {
+      "label": "最新"
+    },
+    "nav": {
+      "label": "バージョン"
+    },
+    "command": {
+      "label": "ローカルで起動",
+      "text": "npm run d"
     }
   }
 }

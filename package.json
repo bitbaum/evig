@@ -30,7 +30,7 @@
     "compliance:i18n": "node scripts/i18n-audit.mjs",
     "compliance:i18n-hardcoded": "node scripts/i18n-hardcoded-audit.mjs",
     "compliance:i18n-leaks": "node scripts/i18n-leaks.mjs --check",
-    "compliance": "npm run compliance:ssot && npm run compliance:i18n && npm run compliance:i18n-hardcoded && npm run compliance:i18n-leaks",
+    "compliance": "npm run compliance:ssot && npm run compliance:i18n && npm run compliance:i18n-hardcoded && npm run compliance:i18n-leaks && npm run compliance:i18n-stale",
     "i18n:missing": "node scripts/i18n-missing.mjs",
     "i18n:businessplan": "node scripts/i18n-businessplan-parity.mjs",
     "i18n:apply": "node scripts/i18n-apply.mjs",
@@ -79,7 +79,10 @@
     "transcription:bg": "[ -d services/transcription/.venv ] && (./services/transcription/start.sh &) || echo 'Transcription venv not found. Run: npm run transcription:setup'",
     "transcription:setup": "python3 -m venv services/transcription/.venv && services/transcription/.venv/bin/pip install faster-whisper flask",
     "transcribe:local": "node scripts/transcribe-local-audio.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "i18n:stale": "node scripts/i18n-stale.mjs",
+    "i18n:stale-update": "node scripts/i18n-stale.mjs --update",
+    "compliance:i18n-stale": "node scripts/i18n-stale.mjs"
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.1",

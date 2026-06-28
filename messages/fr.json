@@ -728,6 +728,11 @@
           "categoryRequired": "La catégorie est obligatoire",
           "conditionRequired": "L'état est obligatoire",
           "locationRequired": "Le lieu est obligatoire"
+        },
+        "deliveryHelp": {
+          "pickup": "L'acheteur vient chercher l'appareil sur place.",
+          "shipping": "Tu expédies par la poste ou par un service de colis.",
+          "both": "L'acheteur peut choisir entre le retrait et l'expédition."
         }
       },
       "basicInfo": {
@@ -745,7 +750,8 @@
         "locationPlaceholder": "Ex. Genève, Berne, Bâle"
       },
       "imageAlt": "Photo du produit {index}",
-      "removeImageLabel": "Supprimer la photo {index}"
+      "removeImageLabel": "Supprimer la photo {index}",
+      "imagesHelp": "De bonnes photos se vendent plus vite. La première image est l'image principale"
     },
     "filters": {
       "all": "Tous",
@@ -992,7 +998,10 @@
       "pickupFree": "Retrait",
       "serviceFee": "Frais de service ({rate}%)",
       "serviceFeeIncluded": "incl. {amount}",
-      "total": "Total"
+      "total": "Total",
+      "paymentSuccess": "Paiement réussi ! Ta commande est confirmée.",
+      "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
+      "paymentCancelled": "Paiement annulé."
     },
     "checkout_success": {
       "title": "Commande réussie !",
@@ -1083,7 +1092,10 @@
       "pickupNote": "Retrait à Zurich — gratuit",
       "revampitOnly": "Seuls les appareils Revamp-IT peuvent être ajoutés au panier. Les annonces de la communauté s'achètent directement.",
       "cartAriaLabel": "Panier, {count} articles",
-      "closeAriaLabel": "Fermer le panier"
+      "closeAriaLabel": "Fermer le panier",
+      "paymentSuccess": "Paiement réussi ! Ta commande est confirmée.",
+      "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
+      "paymentCancelled": "Paiement annulé."
     }
   },
   "services": {
@@ -2442,7 +2454,10 @@
       "registerFree": "S'inscrire a l'atelier",
       "registerPaid": "S'inscrire et payer",
       "paymentNote": "Paiement securise via notre prestataire de paiement.",
-      "confirmationNote": "Vous recevrez un e-mail de confirmation avec tous les details."
+      "confirmationNote": "Vous recevrez un e-mail de confirmation avec tous les details.",
+      "paymentSuccess": "Paiement réussi ! Ton inscription à l'atelier est confirmée.",
+      "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
+      "paymentCancelled": "Paiement annulé."
     },
     "reviews": {
       "error": "Erreur lors du chargement des avis",
@@ -2981,7 +2996,13 @@
       "emptyTitle": "Aucune demande trouvée",
       "emptyMessageFiltered": "Essayez d'autres filtres ou réinitialisez-les.",
       "emptyMessageEmpty": "Aucune demande d'aide informatique pour l'instant.",
-      "createRequestButton": "Créer une demande"
+      "createRequestButton": "Créer une demande",
+      "filterSkill": "Compétence",
+      "filterSkillAll": "Toutes les compétences",
+      "filterServiceType": "Type d'aide",
+      "filterServiceTypeAll": "Tous les types",
+      "filterMatchMySkills": "Uniquement les demandes correspondant à mes compétences",
+      "filterMatchMySkillsHint": "Affiche les demandes ouvertes nécessitant au moins une de tes compétences."
     },
     "detail": {
       "backToList": "Retour à la liste",
@@ -3051,7 +3072,13 @@
       "markCompletedTitle": "Aide terminée?",
       "markCompletedDesc": "Une fois la réparation ou l'aide terminée, marquez-la comme terminée. Le demandeur sera invité à vous laisser un avis.",
       "markCompletedSaving": "Enregistrement...",
-      "markCompletedButton": "Marquer comme terminé"
+      "markCompletedButton": "Marquer comme terminé",
+      "preferredTechnician": "Ton choix",
+      "preferredTechnicianSidebar": {
+        "title": "Technicien préféré",
+        "description": "Tu as demandé l'aide de {name}.",
+        "viewProfile": "Voir le profil"
+      }
     },
     "create": {
       "backToList": "Retour à la liste",
@@ -3087,7 +3114,13 @@
       "locationHeading": "Où êtes-vous ?",
       "postalCode": "Code postal",
       "city": "Ville",
-      "canton": "Canton"
+      "canton": "Canton",
+      "preferredTechnician": {
+        "eyebrow": "Technicien sélectionné",
+        "description": "Ta demande sera communiquée à ce technicien. D'autres techniciens correspondants peuvent également envoyer des offres — jusqu'à ce que tu en acceptes une.",
+        "viewProfile": "Voir le profil"
+      },
+      "cantonPlaceholder": "Choisir le canton"
     },
     "myRequests": {
       "title": "Mes demandes de réparation",
@@ -4721,7 +4754,8 @@
         "title": "{name} – Vendeur sur le marché RevampIT",
         "titleFallback": "Profil vendeur – Marché RevampIT",
         "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
-      }
+      },
+      "publicProfile": "Profil de vendeur"
     }
   },
   "support": {
@@ -8053,7 +8087,10 @@
       "cancel": "Annuler",
       "saving": "Enregistrement…",
       "save": "Enregistrer",
-      "paymentSuccess": "Paiement réussi! Votre rendez-vous est confirmé."
+      "paymentSuccess": "Paiement réussi! Votre rendez-vous est confirmé.",
+      "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
+      "paymentCancelled": "Paiement annulé.",
+      "viewDetails": "Voir les détails"
     },
     "orders": {
       "pageTitle": "Mes commandes",
@@ -8356,7 +8393,12 @@
         "completedAt": "Terminé le",
         "yourRating": "Votre évaluation",
         "notFound": "Réservation introuvable"
-      }
+      },
+      "payNow": "Payer maintenant",
+      "payError": "Le paiement n'a pas pu être démarré",
+      "paymentSuccess": "Paiement réussi ! Ton rendez-vous est confirmé.",
+      "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
+      "paymentCancelled": "Paiement annulé."
     },
     "membership": {
       "pageTitle": "Adhésion",
@@ -8606,7 +8648,11 @@
       "kennzahlen": "Indicateurs",
       "wirkung": "Impact",
       "transparenz": "Transparence",
-      "appointments": "Rendez-vous"
+      "appointments": "Rendez-vous",
+      "hr": "RH",
+      "vacancies": "Postes ouverts",
+      "applications": "Candidatures",
+      "repairerApplications": "Validations de techniciens"
     },
     "currencySelector": {
       "selectCurrency": "Choisir la devise",
@@ -9109,7 +9155,14 @@
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "skillRequired": "Veuillez sélectionner au moins une compétence."
+      "skillRequired": "Veuillez sélectionner au moins une compétence.",
+      "completeness": {
+        "title": "Profil pas encore complet",
+        "description": "Complète ces informations pour trouver des demandes pertinentes et recevoir des notifications.",
+        "gapSkills": "Sélectionner au moins une compétence",
+        "gapCanton": "Indiquer le canton",
+        "gapLocation": "Indiquer le code postal ou la localité"
+      }
     }
   },
   "vote": {
@@ -9263,7 +9316,14 @@
         "refresh": "Actualiser",
         "retry": "Réessayer",
         "clearFilters": "Réinitialiser les filtres"
-      }
+      },
+      "tabs": {
+        "overview": "Aperçu",
+        "tasks": "Tâches",
+        "timecards": "Saisie du temps",
+        "activity": "Activité"
+      },
+      "showOnAbout": "Visible sur la page À propos"
     },
     "protocols": {
       "queueTitle": "File d'attente de revue IA",
@@ -9486,7 +9546,10 @@
       "bulkSelected": "{count} jours sélectionnés",
       "bulkFill": "Remplir selon le plan",
       "bulkClear": "Effacer",
-      "bulkCancel": "Annuler la sélection"
+      "bulkCancel": "Annuler la sélection",
+      "submitSuccess": "Envoyé pour vérification — l'équipe de validation sera notifiée.",
+      "submitHint": "Enregistrer le brouillon conserve tes saisies ; « Soumettre pour vérification » envoie à la validation.",
+      "submitError": "La carte de temps n'a pas pu être soumise."
     },
     "appointments": {
       "pageTitle": "Rendez-vous",
@@ -9767,10 +9830,12 @@
           "seller": "Vendeur",
           "amount": "Montant",
           "status": "Statut",
-          "date": "Date"
+          "date": "Date",
+          "delivery": "Livraison"
         },
         "empty": "Aucune commande trouvée",
-        "countLabel": "{count, plural, one {# commande} other {# commandes}}"
+        "countLabel": "{count, plural, one {# commande} other {# commandes}}",
+        "cartItems": "{count, plural, one {# article} other {# articles}}"
       },
       "editModal": {
         "title": "Modifier l'annonce",
@@ -9870,7 +9935,8 @@
       "darkMode": "Mode sombre",
       "toWebsite": "Vers le site",
       "signOut": "Déconnexion",
-      "adminArea": "Espace admin"
+      "adminArea": "Espace admin",
+      "staffFallback": "Membre de l'équipe"
     },
     "notifications": {
       "title": "Notifications",
@@ -10169,7 +10235,11 @@
       "sensitive": "Sensible",
       "system": "Système",
       "analyse": "Analyse",
-      "seller-onboarding": "Devenir vendeur"
+      "seller-onboarding": "Devenir vendeur",
+      "teamhr": "Équipe & RH",
+      "erfassung": "Saisie",
+      "repairer-applications": "Validations de techniciens",
+      "analyse-hub": "Aperçu des analyses"
     },
     "errorPage": {
       "title": "Quelque chose a mal tourné",
@@ -10188,6 +10258,55 @@
         "publish": "Publier",
         "aiPlaceholderEdit": "p.ex. « Ajoute une section sur les conseils de réparation » ou « Rends le texte plus engageant »",
         "aiPlaceholderNew": "Décris le sujet ou l'idée de ton article de blog…"
+      }
+    },
+    "hr": {
+      "vacancies": {
+        "title": "Postes ouverts",
+        "description": "Publier, suspendre des postes et les associer aux candidats",
+        "new": "Nouveau poste",
+        "empty": "Aucun poste trouvé",
+        "searchPlaceholder": "Rechercher par titre ou slug…",
+        "statusFilter": "Statut",
+        "resultsCount": "{count, plural, one {# poste} other {# postes}}",
+        "stats": {
+          "published": "Publié",
+          "pendingApplications": "Nouvelles candidatures",
+          "drafts": "Brouillons",
+          "filled": "Pourvu"
+        }
+      },
+      "applications": {
+        "title": "Candidatures",
+        "description": "Pipeline du tri à l'embauche",
+        "manageVacancies": "Gérer les postes",
+        "teamProfiles": "Profils de l'équipe",
+        "openTeamProfile": "Ouvrir le profil de l'équipe",
+        "empty": "Aucune candidature dans ce filtre",
+        "searchPlaceholder": "Nom ou e-mail…",
+        "statusFilter": "Statut",
+        "resultsCount": "{count, plural, one {# candidature} other {# candidatures}}",
+        "postingLabel": "Poste",
+        "phone": "Téléphone",
+        "source": "Source",
+        "notes": "Notes",
+        "rejection": "Refus",
+        "trackResponses": "Afficher les réponses du suivi",
+        "advance": "Étape suivante",
+        "hire": "Embaucher",
+        "reject": "Refuser",
+        "dialog": {
+          "hireTitle": "Embaucher cette personne ?",
+          "hireMessage": "Un profil d'équipe sera créé, des tâches d'intégration seront générées et le poste sera marqué comme pourvu.",
+          "rejectTitle": "Refuser la candidature",
+          "rejectMessage": "La candidature sera refusée. Le motif sera enregistré.",
+          "advanceTitle": "Faire avancer le statut",
+          "advanceMessage": "Nouveau statut : {status}",
+          "rejectionReason": "Motif *",
+          "adminNotes": "Note interne (facultatif)",
+          "confirm": "Confirmer",
+          "cancel": "Annuler"
+        }
       }
     }
   },

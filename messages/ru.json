@@ -132,7 +132,11 @@
       "viewSection": "Overview",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
+      "computerRepair": "Ремонт и апгрейды",
+      "computerRepairDesc": "Возвращаем компьютеры к жизни",
+      "webDesign": "Веб-разработка",
+      "webDesignDesc": "Сайты на Open Source"
     },
     "language": "Язык",
     "missionHistory": "Миссия и история",
@@ -443,6 +447,11 @@
       "service2Desc": "Восстановление данных с повреждённых устройств",
       "service3Name": "Ремонт компьютеров",
       "service3Desc": "Ремонт и сборка винтажных компьютеров"
+    },
+    "impact": {
+      "title": "Наше влияние",
+      "subtitle": "Чего мы достигли вместе",
+      "moreLink": "Подробнее о нашем влиянии"
     }
   },
   "shop": {
@@ -715,6 +724,11 @@
           "categoryRequired": "Категория обязательна",
           "conditionRequired": "Состояние обязательно",
           "locationRequired": "Местоположение обязательно"
+        },
+        "deliveryHelp": {
+          "pickup": "Покупатель забирает устройство на месте.",
+          "shipping": "Вы отправляете почтой или курьерской службой.",
+          "both": "Покупатель может выбрать между самовывозом и доставкой."
         }
       },
       "basicInfo": {
@@ -732,7 +746,8 @@
         "locationPlaceholder": "например, Цюрих, Берн, Базель"
       },
       "imageAlt": "Фото товара {index}",
-      "removeImageLabel": "Удалить фото {index}"
+      "removeImageLabel": "Удалить фото {index}",
+      "imagesHelp": "Хорошие фотографии помогают продать быстрее. Первое изображение — главное"
     },
     "listingsAvailable": "{count, plural, one {# объявление} other {# объявлений}} доступно",
     "searchPlaceholder": "ноутбук, монитор, смартфон...",
@@ -786,7 +801,8 @@
       "sellerTypeTitle": "Продавец",
       "qualityTitle": "Качество",
       "showResults": "Показать результаты",
-      "closeLabel": "Закрыть"
+      "closeLabel": "Закрыть",
+      "advanced": "Другие фильтры"
     },
     "listing": {
       "contact": "Связаться с продавцом",
@@ -815,7 +831,14 @@
       "conditionMeaningFor": "Что означает «{condition}» для {category}?",
       "loadError": "Ошибка при загрузке объявления",
       "verified": "Проверено",
-      "free": "Бесплатно"
+      "free": "Бесплатно",
+      "trust": {
+        "verified": "Проверено и протестировано Revamp-IT",
+        "mission": "Повторно используется, а не выбрасывается — некоммерческая организация"
+      },
+      "zoomOpen": "Увеличить",
+      "zoomClose": "Закрыть",
+      "photoCount": "{count} фото"
     },
     "listing_actions": {
       "payment_info": "Прямая оплата между покупателем и продавцом",
@@ -910,7 +933,10 @@
       "pickupNote": "Бесплатный самовывоз в Цюрихе",
       "revampitOnly": "В корзину можно добавлять только устройства Revamp-IT. Товары сообщества покупаются напрямую.",
       "cartAriaLabel": "Корзина, товаров: {count}",
-      "closeAriaLabel": "Закрыть корзину"
+      "closeAriaLabel": "Закрыть корзину",
+      "paymentSuccess": "Оплата прошла успешно! Ваш заказ подтверждён.",
+      "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
+      "paymentCancelled": "Оплата отменена."
     },
     "checkout": {
       "loading": "Загрузка...",
@@ -962,7 +988,9 @@
         "imageAlt": "Изображение товара",
         "statusLabel": "Статус:",
         "viewOrder": "Посмотреть заказ",
-        "continueShopping": "Продолжить покупки"
+        "continueShopping": "Продолжить покупки",
+        "totalLabel": "Итого",
+        "shippingAddress": "Адрес доставки"
       },
       "ownListingDesc": "вы не можете купить собственное объявление.",
       "backToListingLink": "Вернуться к объявлению",
@@ -986,7 +1014,10 @@
       "pickupFree": "Самовывоз",
       "serviceFee": "Сервисный сбор ({rate}%)",
       "serviceFeeIncluded": "включая {amount}",
-      "total": "Итого"
+      "total": "Итого",
+      "paymentSuccess": "Оплата прошла успешно! Ваш заказ подтверждён.",
+      "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
+      "paymentCancelled": "Оплата отменена."
     },
     "checkout_success": {
       "title": "Заказ успешно оформлен!",
@@ -2409,7 +2440,10 @@
       "registerFree": "Записаться на воркшоп",
       "registerPaid": "Записаться и оплатить",
       "paymentNote": "Безопасная оплата через нашего платёжного провайдера.",
-      "confirmationNote": "Вы получите письмо с подтверждением и всеми деталями."
+      "confirmationNote": "Вы получите письмо с подтверждением и всеми деталями.",
+      "paymentSuccess": "Оплата прошла успешно! Ваша регистрация на воркшоп подтверждена.",
+      "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
+      "paymentCancelled": "Оплата отменена."
     },
     "reviews": {
       "error": "Ошибка при загрузке отзывов",
@@ -3081,7 +3115,8 @@
       "locationHeading": "Где вы находитесь?",
       "postalCode": "Индекс",
       "city": "Город",
-      "canton": "Кантон"
+      "canton": "Кантон",
+      "cantonPlaceholder": "Выберите кантон"
     },
     "myRequests": {
       "title": "Мои запросы на ремонт",
@@ -3251,6 +3286,44 @@
         "generic": "Что-то пошло не так. Попробуйте ещё раз.",
         "network": "Сетевая ошибка. Попробуйте ещё раз."
       }
+    },
+    "hub": {
+      "eyebrow": "IT-помощь",
+      "title": "Ремонт компьютеров, переустановка ОС, решение IT-проблем",
+      "subtitle": "RevampIT связывает вас с техниками сообщества — бесплатно или за справедливую оплату.",
+      "paths": {
+        "request": {
+          "title": "Запросить помощь",
+          "description": "Опишите проблему и получите предложения от техников",
+          "cta": "Создать запрос →"
+        },
+        "technicians": {
+          "title": "Выбрать техника",
+          "description": "Просмотрите профили и свяжитесь напрямую",
+          "cta": "Найти техника →"
+        },
+        "browse": {
+          "title": "Открытые запросы",
+          "description": "Помогайте как техник — запросы рядом с вами",
+          "cta": "Посмотреть запросы →"
+        }
+      },
+      "account": {
+        "myRequests": "Мои запросы",
+        "myOffers": "Мои предложения"
+      },
+      "offerHelp": {
+        "title": "Вы умеете ремонтировать устройства?",
+        "description": "Зарегистрируйтесь как техник и помогайте людям рядом с вами.",
+        "cta": "Стать техником"
+      }
+    },
+    "browse": {
+      "title": "Открытые запросы",
+      "subtitle": "Для техников, которые хотят помочь",
+      "backToHub": "Назад к IT-помощи",
+      "createRequest": "Запросить помощь",
+      "requestCount": "{count, plural, one {# запрос} few {# запроса} many {# запросов} other {# запроса}}"
     }
   },
   "blog": {
@@ -3553,7 +3626,11 @@
     "theme": {
       "toLight": "Переключить на светлую тему",
       "toDark": "Переключить на тёмную тему",
-      "toggle": "Сменить тему"
+      "toggle": "Сменить тему",
+      "label": "Цветовая схема",
+      "light": "Светлая",
+      "system": "Системная",
+      "dark": "Тёмная"
     },
     "chatbot": {
       "open": "Открыть ассистента Revamp IT"
@@ -4736,7 +4813,8 @@
   "notFound": {
     "title": "Страница не найдена",
     "description": "Запрашиваемая страница не существует или была перемещена.",
-    "goHome": "На главную"
+    "goHome": "На главную",
+    "reportProblem": "Сообщить о проблеме"
   },
   "error": {
     "title": "Что-то пошло не так",
@@ -7375,7 +7453,11 @@
       "community": "Сообщество",
       "gratis": "Бесплатно",
       "kulturlegi": "KulturLegi",
-      "loadingError": "Ошибка загрузки техников. Пожалуйста, попробуйте ещё раз."
+      "loadingError": "Ошибка загрузки техников. Пожалуйста, попробуйте ещё раз.",
+      "requestHelp": "Запросить помощь",
+      "availableEmpty": "Скоро будет доступно — станьте частью первого поколения",
+      "emptyActionSecondary": "Всё равно запросить помощь → IT-помощь",
+      "backToHub": "Назад к IT-помощи"
     },
     "detail": {
       "backToList": "Все техники",
@@ -7418,7 +7500,8 @@
       "noListingsDescription": "У этого продавца сейчас нет активных объявлений.",
       "loadingProfile": "Профиль загружается...",
       "sellerNotFound": "Продавец не найден",
-      "errorLoading": "Ошибка загрузки профиля"
+      "errorLoading": "Ошибка загрузки профиля",
+      "publicProfile": "Профиль продавца"
     }
   },
   "faq": {
@@ -7999,7 +8082,10 @@
       "cancel": "Отмена",
       "saving": "Сохранение…",
       "save": "Сохранить",
-      "paymentSuccess": "Оплата успешна! Ваша встреча подтверждена."
+      "paymentSuccess": "Оплата успешна! Ваша встреча подтверждена.",
+      "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
+      "paymentCancelled": "Оплата отменена.",
+      "viewDetails": "Посмотреть детали"
     },
     "orders": {
       "pageTitle": "Мои заказы",
@@ -8053,7 +8139,9 @@
       "errorLoading": "Ошибка загрузки заказа",
       "errorConfirmReceipt": "Не удалось подтвердить получение",
       "errorUpdateStatus": "Не удалось обновить статус",
-      "networkError": "Ошибка сети"
+      "networkError": "Ошибка сети",
+      "articlesSection": "Товары ({count})",
+      "moreItems": "+{count} ещё"
     },
     "listings": {
       "pageTitle": "Мои объявления",
@@ -8300,7 +8388,12 @@
         "completedAt": "Завершено",
         "yourRating": "Ваша оценка",
         "notFound": "Бронирование не найдено"
-      }
+      },
+      "payNow": "Оплатить сейчас",
+      "payError": "Не удалось начать оплату",
+      "paymentSuccess": "Оплата прошла успешно! Ваша запись подтверждена.",
+      "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
+      "paymentCancelled": "Оплата отменена."
     },
     "membership": {
       "pageTitle": "Членство",
@@ -8395,7 +8488,8 @@
       "backToDashboard": "Назад на панель управления",
       "editProfile": "Редактировать профиль",
       "account": {
-        "passwordNote": "Смена пароля управляется через страницу профиля (будет интегрирована здесь позже)"
+        "passwordNote": "Смена пароля управляется через страницу профиля (будет интегрирована здесь позже)",
+        "deleteRequestBody": "Я хочу удалить свой аккаунт ({email}). Пожалуйста, подтвердите удаление моих персональных данных."
       },
       "privacy": {
         "dataExportTitle": "Приватность и экспорт",
@@ -8549,7 +8643,11 @@
       "kennzahlen": "Показатели",
       "wirkung": "Воздействие",
       "transparenz": "Прозрачность",
-      "appointments": "Записи"
+      "appointments": "Записи",
+      "hr": "HR",
+      "vacancies": "Открытые вакансии",
+      "applications": "Заявки",
+      "repairerApplications": "Допуск техников"
     },
     "currencySelector": {
       "selectCurrency": "Выбрать валюту",
@@ -9109,11 +9207,60 @@
     "approvals": {
       "approve": "Одобрить",
       "release": "Опубликовать",
-      "accept": "Принять"
+      "accept": "Принять",
+      "pageTitle": "Согласования",
+      "pageDescription": "Проверка и согласование контента, отправленного пользователями"
     },
     "hirn": {
       "assistantSubtitle": "Ассистент",
-      "openFullscreen": "Открыть на весь экран"
+      "openFullscreen": "Открыть на весь экран",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "ИИ-ассистент для RevampIT",
+      "sidebar": {
+        "newConversation": "Новый разговор",
+        "documentsLabel": "Документы",
+        "chunksLabel": "Фрагменты",
+        "conversationsHeading": "Разговоры",
+        "emptyConversations": "Разговоров нет",
+        "messageCount": "{count, plural, one {# сообщение} few {# сообщения} many {# сообщений} other {# сообщения}}"
+      },
+      "chat": {
+        "title": "Hirn Assistant",
+        "clear": "Очистить",
+        "welcomeTitle": "Добро пожаловать в Hirn",
+        "welcomeBody": "Задавайте вопросы о {orgName} — я знаю нашу миссию, историю, цифры, услуги и цены и с радостью помогу вам.",
+        "inputPlaceholder": "Задайте вопрос…",
+        "confirmDeleteTitle": "Удалить разговор",
+        "confirmDeleteMessage": "Вы действительно хотите удалить этот разговор?",
+        "errorSendDefault": "Ошибка при отправке",
+        "errorEmptyResponse": "Ответ не получен.",
+        "errorUnknown": "Неизвестная ошибка",
+        "errorDelete": "Ошибка при удалении",
+        "errorActionDefault": "Действие не удалось"
+      },
+      "floatingButton": {
+        "open": "Открыть Hirn AI",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "Провайдер не выбран",
+        "panelTitle": "Выберите свой мозг",
+        "panelSubtitle": "Какой ИИ должен отвечать?",
+        "categoryLocal": "Локально",
+        "categoryLocalDescription": "На вашем компьютере",
+        "categoryFree": "Бесплатно / Оплата по факту",
+        "categoryFreeDescription": "Облачные API",
+        "providerDescriptionOllama": "Локально, бесплатно, приватно",
+        "providerDescriptionGroq": "Бесплатно, сверхбыстро",
+        "providerDescriptionOpenrouter": "Много моделей, оплата по факту",
+        "activeBadge": "Активно",
+        "saveKey": "Сохранить ключ",
+        "apiKeyPrompt": "Введите API-ключ",
+        "errorLoad": "Ошибка при загрузке",
+        "errorGeneric": "Ошибка",
+        "errorSaveKey": "Не удалось сохранить API-ключ",
+        "footerHint": "Выберите провайдера с активным API-ключом"
+      }
     },
     "team": {
       "backToTeam": "Назад к команде",
@@ -9141,7 +9288,36 @@
       "emergencyContact": "Контакт на случай экстренной ситуации",
       "hrNotes": "HR-заметки (конфиденциально)",
       "createdAt": "Создано",
-      "updatedAt": "Обновлено"
+      "updatedAt": "Обновлено",
+      "withoutProfileTitle": "{count} без профиля · один клик для добавления",
+      "withoutProfileMore": "+{count} ещё",
+      "footerNotice": "Конфиденциальные данные · адреса {domain} автоматически распознаются как сотрудники",
+      "form": {
+        "sectionBasic": "Основная информация",
+        "sectionCompensation": "Оплата и занятость",
+        "sectionTalent": "Навыки и развитие",
+        "sectionAvailability": "Доступность и контакт",
+        "sectionEmergency": "Экстренный контакт",
+        "sectionHrNotes": "Заметки HR",
+        "userSelectTitle": "Выбрать пользователя",
+        "userSelectPlaceholder": "Выберите пользователя…"
+      },
+      "list": {
+        "emptyHeading": "Профили команды не найдены",
+        "emptyWithFilters": "Ни один профиль не соответствует вашим фильтрам.",
+        "emptyNoFilters": "Создайте профиль, чтобы начать.",
+        "profilesCount": "Найдено {count, plural, one {# профиль} few {# профиля} many {# профилей} other {# профиля}}",
+        "refresh": "Обновить",
+        "retry": "Попробовать ещё раз",
+        "clearFilters": "Сбросить фильтры"
+      },
+      "tabs": {
+        "overview": "Обзор",
+        "tasks": "Задачи",
+        "timecards": "Учёт времени",
+        "activity": "Активность"
+      },
+      "showOnAbout": "Виден на странице «О нас»"
     },
     "protocols": {
       "queueTitle": "Очередь проверки ИИ",
@@ -9178,6 +9354,16 @@
         "copyPrompt": "Скопировать запрос",
         "copied": "Скопировано",
         "promptTemplate": "Вы — структуризатор встреч. Прочитайте следующий транскрипт встречи и верните результат в виде JSON со следующими ключами:\n  - participants: список имён участников\n  - topics: список пунктов обсуждения (кратко)\n  - decisions: список принятых решений\n  - tasks: список { description, assignee, dueDate }\n  - openQuestions: список открытых вопросов\n\nТранскрипт:\n---"
+      },
+      "pageTitle": "Протоколы",
+      "pageDescription": "Протоколы заседаний и заметки встреч",
+      "filters": {
+        "searchPlaceholder": "Поиск…",
+        "typeLabel": "Тип:",
+        "statusLabel": "Статус:",
+        "stepLabel": "Шаг:",
+        "attendeeLabel": "Участник:",
+        "all": "Все"
       }
     },
     "categories": {
@@ -9208,7 +9394,14 @@
         "workshop": "Мастер-класс",
         "service": "Услуга",
         "other": "Заявка"
-      }
+      },
+      "greeting": "Здравствуйте, {firstName}.",
+      "roleSuperAdmin": "Супер-админ",
+      "roleStaff": "Сотрудник",
+      "attentionQueueTitle": "На вашем столе",
+      "attentionQueueAllDone": "Всё готово — открытых задач нет.",
+      "quickCreateTitle": "Быстрое создание",
+      "permissionRequestsTitle": "Запросы доступа"
     },
     "projects": {
       "sidebar": "Публичные проекты",
@@ -9291,6 +9484,844 @@
     },
     "localeFallback": {
       "notice": "Административная панель доступна только на немецком языке."
+    },
+    "hr": {
+      "vacancies": {
+        "title": "Открытые вакансии",
+        "description": "Публикация, приостановка вакансий и связь с кандидатами",
+        "new": "Новая вакансия",
+        "empty": "Вакансии не найдены",
+        "searchPlaceholder": "Поиск по названию или slug…",
+        "statusFilter": "Статус",
+        "resultsCount": "{count, plural, one {# вакансия} few {# вакансии} many {# вакансий} other {# вакансии}}",
+        "stats": {
+          "published": "Опубликовано",
+          "pendingApplications": "Новые заявки",
+          "drafts": "Черновики",
+          "filled": "Закрыто"
+        }
+      },
+      "applications": {
+        "title": "Заявки",
+        "description": "Воронка от рассмотрения до найма",
+        "manageVacancies": "Управление вакансиями",
+        "teamProfiles": "Профили команды",
+        "openTeamProfile": "Открыть профиль команды",
+        "empty": "Нет заявок по этому фильтру",
+        "searchPlaceholder": "Имя или e-mail…",
+        "statusFilter": "Статус",
+        "resultsCount": "{count, plural, one {# заявка} few {# заявки} many {# заявок} other {# заявки}}",
+        "postingLabel": "Вакансия",
+        "phone": "Телефон",
+        "source": "Источник",
+        "notes": "Заметки",
+        "rejection": "Отказ",
+        "trackResponses": "Показать ответы по треку",
+        "advance": "Следующий этап",
+        "hire": "Нанять",
+        "reject": "Отклонить",
+        "dialog": {
+          "hireTitle": "Нанять человека?",
+          "hireMessage": "Будет создан профиль команды, добавлены задачи онбординга и вакансия отмечена как закрытая.",
+          "rejectTitle": "Отклонить заявку",
+          "rejectMessage": "Заявка будет отклонена. Причина будет сохранена.",
+          "advanceTitle": "Перевести статус",
+          "advanceMessage": "Новый статус: {status}",
+          "rejectionReason": "Причина *",
+          "adminNotes": "Внутренняя заметка (необязательно)",
+          "confirm": "Подтвердить",
+          "cancel": "Отмена"
+        }
+      }
+    },
+    "timecards": {
+      "headerStatusSubmitted": "Отправлено",
+      "headerStatusDraft": "Черновик",
+      "headerDaysSuffix": "дней",
+      "submit": "Отправить на проверку",
+      "submitting": "Отправка…",
+      "resubmit": "Отправить повторно",
+      "submitSuccess": "Отправлено на проверку — команда согласования будет уведомлена.",
+      "submitHint": "Сохранение черновика сохраняет ваши данные; «Отправить на проверку» отправляет на согласование.",
+      "submitError": "Не удалось отправить табель.",
+      "save": "Сохранить",
+      "saving": "Сохранение…",
+      "noScheduleLine": "У вас ещё нет стандартного расписания.",
+      "applyStandardSchedule": "Применить Пн–Пт 09–17",
+      "applyingSchedule": "Применение…",
+      "setOwnSchedule": "Задать своё расписание",
+      "scheduleApplyFailed": "Не удалось применить расписание.",
+      "gridIntro": "Обзор месяца",
+      "gridPrefilledLabel": "Предзаполнено из расписания",
+      "dayEditorHasEntry": "Запись",
+      "dayEditorNoEntry": "Нет записи",
+      "dayActionFillFromSchedule": "Заполнить из расписания",
+      "dayActionFillDefault": "Заполнить 09:00 – 17:00",
+      "dayActionFree": "Выходной",
+      "dayActionSick": "Больничный",
+      "dayActionAdjust": "Изменить",
+      "dayActionAdjustClose": "Закрыть изменение",
+      "dayAbsenceCounted": "засчитано",
+      "dayFill": "Заполнить день из плана",
+      "fieldStart": "Начало",
+      "fieldEnd": "Конец",
+      "fieldBreak": "Перерыв (мин)",
+      "fieldCategory": "Категория",
+      "fieldNote": "Заметка",
+      "fieldNotePlaceholder": "Только если этот день был другим",
+      "pageTitle": "Табели",
+      "pageDescription": "Учёт, отправка и согласование рабочего времени",
+      "extrasToggle": "Расширенно · Комментарий, сброс шаблона",
+      "extrasMonthComment": "Комментарий к месяцу",
+      "extrasMonthCommentPlaceholder": "Необязательно — напр. отпуск, болезнь, особое задание.",
+      "extrasResetMonth": "Перестроить месяц из расписания (удаляет текущие записи)",
+      "aiPlaceholder": "Опишите свою неделю своими словами …",
+      "aiExamples": "напр. «На этой неделе работал только во вторник и среду, в среду ушёл в 15 часов, остальное — больничный» · «В следующую пятницу отпуск» · «Сегодня ушёл на 2 часа раньше»",
+      "fillMonth": "Заполнить месяц из плана",
+      "fillMonthHint": "Заполняет все пустые рабочие дни вашим рабочим планом (по умолчанию Пн–Пт 09:00–17:00). Существующие записи и выходные дни остаются без изменений.",
+      "selectHint": "Клик выбирает день · Перетаскивание выбирает несколько · Ctrl/Cmd+клик по одному · Shift+клик диапазон · Del очищает. Затем выберите действие внизу.",
+      "selectLabel": "Быстрый выбор",
+      "selectAllDays": "Весь месяц",
+      "selectAllWeekdays": "Все рабочие дни",
+      "viewMonth": "Месяц",
+      "viewDay": "День",
+      "dayPrev": "Предыдущий день",
+      "dayNext": "Следующий день",
+      "bulkSelected": "Выбрано дней: {count}",
+      "bulkFill": "Заполнить из плана",
+      "bulkClear": "Очистить",
+      "bulkCancel": "Снять выбор"
+    },
+    "appointments": {
+      "pageTitle": "Записи",
+      "pageDescription": "Проверка сервисных записей и назначение мастеров"
+    },
+    "content": {
+      "pageTitle": "Контент",
+      "pageDescription": "Управление статьями блога, страницами и медиа"
+    },
+    "decisions": {
+      "pageTitle": "Решения",
+      "pageDescription": "Предложения и голосования в команде"
+    },
+    "intake": {
+      "pageTitle": "Приём устройств",
+      "pageDescription": "Регистрация, проверка и допуск устройств",
+      "createForm": {
+        "title": "Зарегистрировать новое устройство",
+        "tierLabel": "Этап обработки",
+        "aiTitle": "Быстрый ввод с ИИ",
+        "aiTabs": {
+          "text": "Текст",
+          "voice": "Голос",
+          "photo": "Фото"
+        },
+        "textPlaceholder": "напр. Dell Latitude E7470 i5 8GB 256GB SSD хорошее состояние",
+        "analyze": "Анализировать",
+        "startRecording": "Начать запись",
+        "stopRecording": "Остановить запись",
+        "processingVoice": "Обработка голоса…",
+        "transcription": "Транскрипция: {text}",
+        "fields": {
+          "manufacturer": "Производитель",
+          "manufacturerPlaceholder": "напр. Lenovo, Apple, Dell",
+          "productName": "Название продукта",
+          "productNamePlaceholder": "напр. ThinkPad T480",
+          "shortDescription": "Краткое описание",
+          "shortDescriptionPlaceholder": "Краткое описание устройства и его состояния",
+          "category": "Категория",
+          "subcategory": "Подкатегория",
+          "condition": "Состояние",
+          "salesPrice": "Ориентировочная цена продажи (CHF)",
+          "choose": "Выберите…"
+        },
+        "donation": {
+          "isDonation": "Это пожертвование",
+          "donorName": "Имя жертвователя",
+          "donorEmail": "E-mail жертвователя",
+          "donorNotes": "Заметки о пожертвовании",
+          "optional": "Необязательно",
+          "notesPlaceholder": "напр. Передано в офисе Цюрих"
+        },
+        "saving": "Сохранение…",
+        "submit": "Зарегистрировать устройство"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "Приём устройств",
+            "description": "Чек-лист и пожертвование"
+          },
+          {
+            "label": "Регистрация",
+            "description": "Ввод данных продукта"
+          },
+          {
+            "label": "В магазине",
+            "description": "Публикация"
+          }
+        ],
+        "loading": "Загрузка…",
+        "backToPipeline": "← Назад к воронке",
+        "donation": "Пожертвование",
+        "donationWithName": "Пожертвование: {name}",
+        "inShop": "В магазине",
+        "changeTier": "Изменить этап",
+        "refresh": "Обновить",
+        "progress": "Прогресс: {completed}/{total} обязательных пунктов",
+        "markAllRequiredTitle": "Отметить все обязательные пункты как «выполнено»",
+        "markAllRequired": "Всё в порядке",
+        "publishHeading": "Опубликовать в магазине",
+        "publishGate": "Все обязательные пункты чек-листа должны быть отмечены, прежде чем устройство можно опубликовать.",
+        "sellingPriceLabel": "Цена продажи (CHF)",
+        "publishing": "Публикация…",
+        "publishNow": "Опубликовать сейчас",
+        "openFullErfassungTitle": "Открыть продукт в регистрации, чтобы добавить детали",
+        "openFullErfassung": "Полная регистрация",
+        "publishedConfirm": "Это устройство опубликовано в магазине",
+        "publishedPrice": "Цена: CHF {price}",
+        "tierChange": {
+          "heading": "Изменить этап",
+          "warning": "Весь прогресс по чек-листу будет сброшен.",
+          "newTierLabel": "Новый этап",
+          "reasonLabel": "Обоснование *",
+          "reasonPlaceholder": "напр. Устройство не подлежит ремонту",
+          "applying": "Изменение…",
+          "apply": "Изменить этап"
+        },
+        "timelineHeading": "История"
+      },
+      "pipeline": {
+        "newDevice": "Новое устройство",
+        "filters": {
+          "allTiers": "Все этапы",
+          "allStatus": "Все статусы",
+          "allCategories": "Все категории",
+          "searchPlaceholder": "Поиск…"
+        },
+        "loading": "Загрузка…",
+        "empty": "Нет устройств в воронке",
+        "createFirst": "Зарегистрировать первое устройство",
+        "columns": {
+          "uuid": "UUID",
+          "device": "Устройство",
+          "tier": "Этап",
+          "checklist": "Чек-лист",
+          "status": "Статус",
+          "donation": "Пожертвование",
+          "date": "Дата"
+        },
+        "status": {
+          "published": "Опубликовано",
+          "ready": "Готово",
+          "inProgress": "В обработке"
+        },
+        "donationYes": "Да",
+        "hero": {
+          "kpis": {
+            "total": "Всего",
+            "inProgress": "В обработке",
+            "ready": "Готово",
+            "published": "Опубликовано"
+          },
+          "ready": {
+            "headline": "{count, plural, one {# устройство готово} few {# устройства готовы} many {# устройств готовы} other {# устройства готовы}} к публикации",
+            "sub": "Готовые устройства ждут в воронке. Публикация сделает их общедоступными.",
+            "cta": "Показать готовые"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {# устройство} few {# устройства} many {# устройств} other {# устройства}} в обработке",
+            "sub": "Идёт диагностика, тестирование или восстановление. Держите статус актуальным.",
+            "cta": "Показать в обработке"
+          },
+          "empty": {
+            "headline": "Воронка пуста",
+            "sub": "Как только устройство поступит, оно появится здесь. Зарегистрируйте первое.",
+            "cta": "Зарегистрировать новое устройство"
+          },
+          "healthy": {
+            "headline": "Воронка в порядке.",
+            "sub": "{published} устройств опубликовано, ничего не ждёт обработки."
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "Обязательный пункт",
+        "completedAt": "Выполнено {date}",
+        "addNote": "Добавить заметку",
+        "editNote": "Редактировать заметку",
+        "notePlaceholder": "напр. Стресс-тест CPU пройден, макс. 75 °C …",
+        "ariaUncheck": "Отменить {label}",
+        "ariaCheck": "Отметить {label}"
+      }
+    },
+    "it-hilfe": {
+      "pageTitle": "IT-помощь",
+      "pageDescription": "Управление запросами помощи и техниками"
+    },
+    "locations": {
+      "pageTitle": "Управление местами",
+      "pageDescription": "Управление площадками и их согласованиями"
+    },
+    "marketplace": {
+      "pageTitle": "Маркетплейс",
+      "pageDescription": "Управление объявлениями, жалобами и заказами",
+      "tabs": {
+        "listings": "Объявления",
+        "reports": "Жалобы",
+        "orders": "Заказы"
+      },
+      "hero": {
+        "kpis": {
+          "active": "Активные",
+          "unverified": "Непроверенные",
+          "openReports": "Открытые жалобы",
+          "revampit": "Объявления RevampIT"
+        },
+        "urgent": {
+          "headline": "Проверить {count, plural, one {# открытую жалобу} few {# открытые жалобы} many {# открытых жалоб} other {# открытой жалобы}}",
+          "sub": "По жалобам на объявления нужно принять решение — иначе покупатели будут видеть их и дальше.",
+          "cta": "Посмотреть жалобы"
+        },
+        "attention": {
+          "headline": "{count, plural, one {# непроверенное объявление} few {# непроверенных объявления} many {# непроверенных объявлений} other {# непроверенного объявления}}",
+          "sub": "Новые записи ждут активации — до тех пор они не публичны.",
+          "cta": "Проверить объявления"
+        },
+        "healthy": {
+          "headline": "Маркетплейс в порядке.",
+          "sub": "{active} активных объявлений, открытых жалоб нет."
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "Все статусы",
+          "allCategories": "Все категории",
+          "allSellers": "Все продавцы",
+          "revampit": "RevampIT",
+          "community": "Сообщество",
+          "verification": "Верификация",
+          "verified": "Проверено",
+          "unverified": "Не проверено",
+          "reports": "Жалобы",
+          "reported": "С жалобами",
+          "searchPlaceholder": "Поиск…"
+        },
+        "columns": {
+          "title": "Название",
+          "category": "Категория",
+          "price": "Цена",
+          "seller": "Продавец",
+          "status": "Статус",
+          "date": "Дата",
+          "actions": "Действия"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {# жалоба} few {# жалобы} many {# жалоб} other {# жалобы}}"
+        },
+        "actions": {
+          "view": "Просмотр",
+          "edit": "Редактировать",
+          "remove": "Удалить",
+          "verify": "Верифицировать",
+          "markVerified": "Отметить как проверенное",
+          "removeVerification": "Снять верификацию",
+          "ok": "OK",
+          "notePlaceholder": "Заметка (необязательно)"
+        },
+        "empty": "Объявления не найдены",
+        "countLabel": "{count, plural, one {# объявление} few {# объявления} many {# объявлений} other {# объявления}}",
+        "removeConfirm": {
+          "title": "Удалить объявление",
+          "message": "Действительно удалить объявление «{title}»?"
+        },
+        "unverifyConfirm": {
+          "title": "Снять верификацию",
+          "message": "Действительно снять верификацию?"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "Все"
+        },
+        "columns": {
+          "listing": "Объявление",
+          "reason": "Причина",
+          "reporter": "Заявитель",
+          "date": "Дата",
+          "status": "Статус",
+          "actions": "Действия"
+        },
+        "sellerLabel": "Продавец: {name}",
+        "statusOpen": "Открыто",
+        "statusProcessed": "Обработано",
+        "edit": "Редактировать",
+        "empty": "Жалобы не найдены",
+        "countLabel": "{count, plural, one {# жалоба} few {# жалобы} many {# жалоб} other {# жалобы}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "Все статусы"
+        },
+        "columns": {
+          "orderId": "ID заказа",
+          "listing": "Объявление",
+          "buyer": "Покупатель",
+          "seller": "Продавец",
+          "delivery": "Доставка",
+          "amount": "Сумма",
+          "status": "Статус",
+          "date": "Дата"
+        },
+        "cartItems": "{count, plural, one {# товар} few {# товара} many {# товаров} other {# товара}}",
+        "empty": "Заказы не найдены",
+        "countLabel": "{count, plural, one {# заказ} few {# заказа} many {# заказов} other {# заказа}}"
+      },
+      "editModal": {
+        "title": "Редактировать объявление",
+        "statusLabel": "Статус",
+        "adminNotesLabel": "Заметки администратора",
+        "adminNotesPlaceholder": "Внутренние заметки…"
+      },
+      "handleReportModal": {
+        "title": "Обработать жалобу",
+        "actionLabel": "Действие",
+        "actionDismiss": "Отклонить",
+        "actionWarnSeller": "Предупредить продавца",
+        "actionRemoveListing": "Удалить объявление",
+        "notesLabel": "Заметки",
+        "notesPlaceholder": "Обоснование…",
+        "execute": "Выполнить"
+      }
+    },
+    "payroll": {
+      "pageTitle": "Расчёт зарплаты",
+      "pageDescription": "Закрыть месяц, зафиксировать почасовые ставки и скачать CSV для бухгалтерии."
+    },
+    "products": {
+      "pageTitle": "Управление продуктами",
+      "pageDescription": "Управление продуктами магазина и их деталями"
+    },
+    "reviews": {
+      "pageTitle": "Управление отзывами",
+      "pageDescription": "Модерация и управление отзывами"
+    },
+    "services": {
+      "pageTitle": "Управление услугами",
+      "pageDescription": "Создавайте и управляйте вашими предложениями услуг"
+    },
+    "settings": {
+      "pageTitle": "Настройки",
+      "pageDescription": "Конфигурация системы и настройки"
+    },
+    "tasks": {
+      "pageTitle": "Задачи",
+      "pageDescription": "Управление и координация задач команды"
+    },
+    "users": {
+      "pageTitle": "Управление пользователями",
+      "pageDescription": "Просмотр учётных записей и управление правами"
+    },
+    "workshops": {
+      "pageTitle": "Управление воркшопами",
+      "pageDescription": "Согласование и управление предложениями воркшопов"
+    },
+    "analytics": {
+      "pageTitle": "Аналитика",
+      "pageDescription": "Статистика и отчёты для RevampIT"
+    },
+    "donations": {
+      "pageTitle": "Пожертвования",
+      "pageDescription": "Управление денежными и материальными пожертвованиями"
+    },
+    "erfassung": {
+      "pageTitle": "Регистрация",
+      "pageDescription": "Регистрация и публикация данных о продуктах"
+    },
+    "repairer-applications": {
+      "pageTitle": "Заявки мастеров",
+      "pageDescription": "Проверка и управление заявками"
+    },
+    "analyse": {
+      "pageTitle": "Анализ",
+      "pageDescription": "Обзор и детализация"
+    },
+    "membership": {
+      "pageTitle": "Участники",
+      "pageDescription": "Управление членами организации"
+    },
+    "sidebar": {
+      "closeAria": "Закрыть боковую панель",
+      "navAria": "Навигация администратора",
+      "sensitiveLabel": "Защищено",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "ИИ-ассистент",
+      "websiteGroup": "Веб-сайт",
+      "linkHome": "Главная",
+      "linkShop": "Магазин",
+      "linkDashboard": "Мой раздел",
+      "expandSidebarTitle": "Развернуть боковую панель",
+      "collapseSidebarTitle": "Свернуть боковую панель",
+      "openAria": "Открыть боковую панель",
+      "mobileMore": "Ещё"
+    },
+    "commandBar": {
+      "placeholder": "Поиск или команда…",
+      "openShortcut": "Открыть командную строку",
+      "noResults": "Нет результатов",
+      "recentlyVisited": "Недавно посещённые"
+    },
+    "userMenu": {
+      "darkMode": "Оформление",
+      "toWebsite": "На сайт",
+      "signOut": "Выйти",
+      "adminArea": "Раздел администратора",
+      "staffFallback": "Член команды"
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "empty": "Нет новых уведомлений",
+      "markAllRead": "Отметить все как прочитанные",
+      "markAllReadShort": "Все прочитаны",
+      "bellAriaLabel": "Уведомления",
+      "bellAriaWithUnread": "Уведомления ({count} непрочитанных)",
+      "loadError": "Не удалось загрузить уведомления",
+      "retry": "Попробовать ещё раз",
+      "loading": "Загрузка…",
+      "open": "Открыть",
+      "relativeJustNow": "Только что",
+      "relativeMinutes": "{count} мин. назад",
+      "relativeHours": "{count} ч. назад",
+      "relativeDays": "{count, plural, one {# день} few {# дня} many {# дней} other {# дня}} назад"
+    },
+    "forms": {
+      "cancel": "Отмена",
+      "save": "Сохранить",
+      "saving": "Сохранение…",
+      "create": "Создать",
+      "creating": "Создание…",
+      "delete": "Удалить",
+      "deleting": "Удаление…",
+      "edit": "Редактировать",
+      "submit": "Отправить",
+      "submitting": "Отправка…",
+      "close": "Закрыть",
+      "confirm": "Подтвердить",
+      "back": "Назад",
+      "next": "Далее"
+    },
+    "status": {
+      "active": "Активно",
+      "inactive": "Неактивно",
+      "pending": "Ожидает",
+      "approved": "Одобрено",
+      "rejected": "Отклонено",
+      "archived": "В архиве",
+      "draft": "Черновик",
+      "submitted": "Отправлено",
+      "cancelled": "Отменено",
+      "sold": "Продано",
+      "reserved": "Зарезервировано"
+    },
+    "empty": {
+      "noResults": "Нет результатов",
+      "noDataYet": "Данных пока нет",
+      "tryDifferentFilter": "Попробуйте другой фильтр"
+    },
+    "pagination": {
+      "page": "Страница",
+      "of": "из",
+      "prev": "Назад",
+      "next": "Далее",
+      "total": "{count} записей"
+    },
+    "filters": {
+      "searchLabel": "Поиск",
+      "searchPlaceholder": "Поиск…",
+      "allOption": "Все",
+      "clearFilters": "Сбросить фильтры"
+    },
+    "iconPicker": {
+      "choose": "Выберите…",
+      "noneSelected": "Иконка не выбрана"
+    },
+    "permissions": {
+      "request": {
+        "title": "Запросить доступ",
+        "subtitle": "Выберите разделы, к которым вам нужен доступ.",
+        "sectionsLabel": "Выбрать разделы",
+        "reasonLabel": "Обоснование",
+        "reasonPlaceholder": "Зачем вам нужен доступ к этим разделам?",
+        "submit": "Отправить запрос",
+        "submitting": "Отправляется…",
+        "successTitle": "Запрос отправлен",
+        "successBody": "Супер-админ рассмотрит ваш запрос.",
+        "validationNoSections": "Пожалуйста, выберите хотя бы один раздел.",
+        "validationReasonTooShort": "Пожалуйста, укажите причину (не менее 10 символов)."
+      },
+      "manager": {
+        "heading": "Запросы прав доступа ({count})",
+        "empty": "Нет ожидающих запросов прав доступа",
+        "loadError": "Ошибка при загрузке",
+        "unknownError": "Неизвестная ошибка",
+        "processError": "Ошибка при обработке",
+        "genericError": "Ошибка",
+        "retry": "Попробовать ещё раз",
+        "approve": "Одобрить",
+        "reject": "Отклонить",
+        "rejectionLabel": "Причина отказа (необязательно):",
+        "rejectionPlaceholder": "Необязательная причина отказа…",
+        "confirmReject": "Подтвердить отказ"
+      },
+      "editor": {
+        "title": "Редактировать права доступа",
+        "superAdminLabel": "Статус супер-админа",
+        "superAdminDescription": "Полный доступ ко всем разделам, включая управление пользователями",
+        "superAdminHardcoded": "Этот пользователь находится в основном списке супер-админов и не может быть понижен.",
+        "fullAccessLabel": "Полный доступ",
+        "fullAccessDescription": "Доступ ко всем разделам (без прав супер-админа)",
+        "individualHeading": "Отдельные разделы",
+        "sensitiveBadge": "Конфиденциально",
+        "saveError": "Ошибка при сохранении",
+        "unknownError": "Неизвестная ошибка",
+        "saving": "Сохраняется…"
+      }
+    },
+    "itHilfe": {
+      "tabs": {
+        "requests": "Запросы",
+        "helpers": "Техники"
+      },
+      "topActions": {
+        "reviewApplications": "Проверить заявки",
+        "newRequest": "Новый запрос"
+      },
+      "hero": {
+        "kpis": {
+          "open": "Открытые",
+          "activeTechniker": "Активные техники",
+          "verified": "Верифицировано",
+          "resolutionRate": "Доля решённых"
+        },
+        "urgent": {
+          "headline": "Ожидает {count, plural, one {# срочный запрос} few {# срочных запроса} many {# срочных запросов} other {# срочного запроса}}",
+          "sub": "Быстрая реакция не даёт тем, кто ищет помощь, уйти.",
+          "cta": "Показать срочные"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {# открытый запрос} few {# открытых запроса} many {# открытых запросов} other {# открытого запроса}}, но нет активных техников",
+          "sub": "Подтвердите заявки, чтобы кто-то мог взять запросы.",
+          "cta": "Проверить заявки"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {# открытый запрос} few {# открытых запроса} many {# открытых запросов} other {# открытого запроса}}",
+          "sub": "{technikerCount} активных техников могут их взять.",
+          "cta": "Посмотреть запросы"
+        },
+        "noTechniker": {
+          "headline": "Пока нет активных техников",
+          "sub": "Активируйте заявки, чтобы система могла принимать запросы.",
+          "cta": "Проверить заявки"
+        },
+        "healthy": {
+          "headline": "Всё в порядке.",
+          "sub": "Всего {total} запросов, {percent}% решено."
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "Все статусы",
+          "allCategories": "Все категории",
+          "allUrgencies": "Все приоритеты",
+          "allCantons": "Все кантоны",
+          "searchPlaceholder": "Поиск…"
+        },
+        "columns": {
+          "title": "Название",
+          "category": "Категория",
+          "urgency": "Приоритет",
+          "status": "Статус",
+          "creator": "Создатель",
+          "canton": "Кантон",
+          "budget": "Бюджет",
+          "offers": "Предложения",
+          "date": "Дата",
+          "actions": "Действия"
+        },
+        "actions": {
+          "edit": "Редактировать",
+          "createTask": "Создать задачу"
+        },
+        "empty": "Запросы не найдены",
+        "countLabel": "{count, plural, one {# запрос} few {# запроса} many {# запросов} other {# запроса}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "Все техники",
+          "allCantons": "Все кантоны"
+        },
+        "columns": {
+          "name": "Имя",
+          "skills": "Навыки",
+          "canton": "Кантон",
+          "rate": "Тариф",
+          "status": "Статус",
+          "helps": "Помощь",
+          "actions": "Действия"
+        },
+        "badges": {
+          "gratis": "Бесплатно",
+          "kulturlegi": "KulturLegi",
+          "suspended": "Заблокировано",
+          "verified": "Верифицировано",
+          "active": "Активно",
+          "inactive": "Неактивно"
+        },
+        "actions": {
+          "verify": "Верифицировать",
+          "suspend": "Заблокировать",
+          "reactivate": "Реактивировать"
+        },
+        "empty": "Техники не найдены",
+        "countLabel": "{count, plural, one {# техник} few {# техника} many {# техников} other {# техника}}"
+      },
+      "editModal": {
+        "title": "Редактировать запрос",
+        "statusLabel": "Статус",
+        "urgencyLabel": "Приоритет",
+        "adminNotesLabel": "Заметки администратора",
+        "adminNotesPlaceholder": "Внутренние заметки…"
+      },
+      "helperActionModal": {
+        "titleVerify": "Верифицировать техника",
+        "titleSuspend": "Заблокировать техника",
+        "titleReactivate": "Реактивировать техника",
+        "titleDefault": "Действие",
+        "notesLabel": "Заметки",
+        "notesPlaceholder": "Обоснование (необязательно)…",
+        "confirm": "Подтвердить"
+      }
+    },
+    "editHistory": {
+      "empty": "Нет изменений со стороны администраторов",
+      "changedFields": "Изменённые поля:",
+      "showChanges": "Показать изменения",
+      "noChanges": "Нет изменений",
+      "previousValue": "Предыдущее значение:",
+      "valueEmpty": "(пусто)",
+      "valueEmptyList": "(пустой список)",
+      "valueTruncated": "… (сокращено)"
+    },
+    "sectionLabels": {
+      "uebersicht": "Сегодня",
+      "angebot": "Деятельность",
+      "inhalte": "Контент",
+      "betrieb": "Организация",
+      "analyse-group": "Анализ",
+      "personen": "Люди",
+      "teamhr": "Команда и HR",
+      "system-group": "Система",
+      "dashboard": "Панель",
+      "profile": "Мой профиль",
+      "messages": "Сообщения",
+      "workshops": "Мои воркшопы",
+      "appointments": "Сервисные записи",
+      "bookings": "Peer-записи",
+      "seller-dashboard": "Панель продавца",
+      "my-listings": "Мои объявления",
+      "my-orders": "Мои заказы",
+      "favorites": "Избранное",
+      "repairer-dashboard": "Профиль техника",
+      "repairer-onboarding": "Предлагать услуги техника",
+      "blog-submit": "Написать статью",
+      "blog-submissions": "Мои публикации",
+      "workshop-propose": "Предложить воркшоп",
+      "user-donations": "Мои пожертвования",
+      "shift-log": "Начать смену",
+      "my-timecards": "Мой учёт времени",
+      "intake": "Приём устройств",
+      "erfassung": "Регистрация",
+      "products": "Продукты",
+      "marketplace": "Маркетплейс",
+      "it-hilfe-admin": "IT-помощь",
+      "repairer-applications": "Допуск техников",
+      "workshops-admin": "Воркшопы",
+      "services": "Услуги",
+      "appointments-admin": "Записи",
+      "locations": "Площадки",
+      "reviews": "Отзывы",
+      "content": "Блог и страницы",
+      "projects": "Публичные проекты",
+      "approvals": "Согласования",
+      "membership": "Членство",
+      "tasks": "Задачи",
+      "protocols": "Протоколы",
+      "decisions": "Решения",
+      "analytics": "Аналитика",
+      "donations": "Пожертвования",
+      "users": "Пользователи",
+      "team": "Профили команды",
+      "timecards": "Табели",
+      "timecard-approvals": "Согласование табелей",
+      "payroll": "Расчёт зарплаты",
+      "finanzen": "Финансы",
+      "analyse-hub": "Обзор анализа",
+      "kennzahlen": "Показатели",
+      "wirkung": "Влияние",
+      "transparenz": "Прозрачность",
+      "finances": "Финансы",
+      "hirn": "Hirn AI",
+      "settings": "Настройки",
+      "core": "Обзор",
+      "activities": "Активности",
+      "commerce": "Продажи и торговля",
+      "management": "Управление",
+      "sensitive": "Конфиденциально",
+      "system": "Система",
+      "analyse": "Анализ",
+      "seller-onboarding": "Стать продавцом"
+    },
+    "errorPage": {
+      "title": "Что-то пошло не так",
+      "description": "При загрузке страницы администратора произошла ошибка.",
+      "retry": "Попробовать ещё раз"
+    },
+    "blog": {
+      "form": {
+        "newPost": "Новая статья",
+        "editPost": "Редактировать статью",
+        "newSubtitle": "Создайте новую статью блога",
+        "editSubtitle": "Внесите изменения в статью",
+        "preview": "Предпросмотр",
+        "previewTitle": "Посмотреть опубликованную статью",
+        "previewNotAvailable": "Сначала статью нужно опубликовать",
+        "publish": "Опубликовать",
+        "aiPlaceholderEdit": "напр. «Добавь раздел с советами по ремонту» или «Сделай текст более привлекательным»",
+        "aiPlaceholderNew": "Опишите тему или идею для вашей статьи блога…"
+      }
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "Changelog",
+      "description": "Последние исправления, функции и улучшения платформы RevampIT."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "Live",
+      "title": "Changelog",
+      "subtitle": "Последние исправления, функции и улучшения, которые мы выкатываем на revampit.ch."
+    },
+    "latest": {
+      "label": "Последние"
+    },
+    "nav": {
+      "label": "Версии"
+    },
+    "command": {
+      "label": "Запустить локально",
+      "text": "npm run d"
     }
   }
 }

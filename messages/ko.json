@@ -504,7 +504,11 @@
     "theme": {
       "toLight": "라이트 모드로 전환",
       "toDark": "다크 모드로 전환",
-      "toggle": "테마 전환"
+      "toggle": "테마 전환",
+      "label": "색상 테마",
+      "light": "밝게",
+      "system": "시스템",
+      "dark": "어둡게"
     },
     "chatbot": {
       "open": "Revamp IT 어시스턴트 열기"
@@ -2582,7 +2586,8 @@
       "locationHeading": "어디에 계신가요?",
       "postalCode": "우편번호",
       "city": "도시",
-      "canton": "주(칸톤)"
+      "canton": "주(칸톤)",
+      "cantonPlaceholder": "주(칸톤) 선택"
     },
     "myRequests": {
       "title": "내 수리 요청",
@@ -2952,6 +2957,11 @@
           "categoryRequired": "카테고리는 필수입니다",
           "conditionRequired": "상태는 필수입니다",
           "locationRequired": "위치는 필수입니다"
+        },
+        "deliveryHelp": {
+          "pickup": "구매자가 현장에서 기기를 직접 수령합니다.",
+          "shipping": "우편 또는 택배로 발송합니다.",
+          "both": "구매자가 직접 수령과 배송 중에서 선택할 수 있습니다."
         }
       },
       "basicInfo": {
@@ -2970,7 +2980,8 @@
       },
       "imageAlt": "제품 사진 {index}",
       "removeImageLabel": "사진 {index} 삭제",
-      "label": "판매 등록"
+      "label": "판매 등록",
+      "imagesHelp": "좋은 사진은 더 빨리 판매됩니다. 첫 번째 이미지가 대표 이미지입니다"
     },
     "listingsAvailable": "{count, plural, other {# 개의}} 판매 목록 이용 가능",
     "searchPlaceholder": "노트북, 모니터, 스마트폰...",
@@ -3024,7 +3035,8 @@
       "sellerTypeTitle": "판매자",
       "qualityTitle": "품질",
       "showResults": "결과 보기",
-      "closeLabel": "닫기"
+      "closeLabel": "닫기",
+      "advanced": "추가 필터"
     },
     "listing": {
       "contact": "판매자 연락하기",
@@ -3053,7 +3065,14 @@
       "conditionMeaningFor": "{category}에서 \"{condition}\"은(는) 무엇을 의미하나요?",
       "loadError": "게시물 로드 오류",
       "verified": "검증됨",
-      "free": "무료"
+      "free": "무료",
+      "trust": {
+        "verified": "Revamp-IT가 검수 및 테스트 완료",
+        "mission": "폐기 대신 재사용 — 비영리 협회"
+      },
+      "zoomOpen": "확대",
+      "zoomClose": "닫기",
+      "photoCount": "사진 {count}장"
     },
     "listing_actions": {
       "payment_info": "구매자와 판매자 간 직접 결제",
@@ -3184,7 +3203,8 @@
         "statusLabel": "상태:",
         "viewOrder": "주문 보기",
         "continueShopping": "쇼핑 계속하기",
-        "shippingAddress": "배송 주소"
+        "shippingAddress": "배송 주소",
+        "totalLabel": "합계"
       },
       "ownListingDesc": "자신의 판매 목록은 구매할 수 없습니다.",
       "backToListingLink": "판매 목록으로 돌아가기",
@@ -3208,7 +3228,10 @@
       "pickupFree": "직접 수령",
       "serviceFee": "서비스 수수료 ({rate}%)",
       "serviceFeeIncluded": "{amount} 포함",
-      "total": "합계"
+      "total": "합계",
+      "paymentSuccess": "결제가 완료되었습니다! 주문이 확정되었습니다.",
+      "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
+      "paymentCancelled": "결제가 취소되었습니다."
     },
     "checkout_success": {
       "title": "주문 완료!",
@@ -3299,7 +3322,10 @@
       "pickupNote": "취리히에서 무료 픽업",
       "revampitOnly": "Revamp-IT 기기만 장바구니에 추가할 수 있습니다. 커뮤니티 상품은 직접 구매합니다.",
       "cartAriaLabel": "장바구니, 상품 {count}개",
-      "closeAriaLabel": "장바구니 닫기"
+      "closeAriaLabel": "장바구니 닫기",
+      "paymentSuccess": "결제가 완료되었습니다! 주문이 확정되었습니다.",
+      "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
+      "paymentCancelled": "결제가 취소되었습니다."
     }
   },
   "membership": {
@@ -7319,7 +7345,10 @@
       "gratis": "무료",
       "kulturlegi": "KulturLegi",
       "loadingError": "기술자를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.",
-      "backToHub": "Back to IT Help"
+      "backToHub": "Back to IT Help",
+      "requestHelp": "지원 요청",
+      "availableEmpty": "곧 제공됩니다 — 첫 번째 세대의 일원이 되어 보세요",
+      "emptyActionSecondary": "그래도 지원 요청하기 → IT 지원"
     },
     "detail": {
       "backToList": "기술자 목록으로",
@@ -7362,7 +7391,8 @@
         "title": "{name} – RevampIT Marketplace 의 판매자",
         "titleFallback": "판매자 프로필 – RevampIT Marketplace",
         "description": "RevampIT Marketplace 의 {name} – 활성 상품 {count} 개. 중고 기술 제품을 구매하고 순환 경제에 기여하세요."
-      }
+      },
+      "publicProfile": "판매자 프로필"
     }
   },
   "workshops": {
@@ -7582,7 +7612,10 @@
       "registerFree": "워크샵 등록",
       "registerPaid": "등록 및 결제",
       "paymentNote": "결제 제공업체를 통한 안전한 결제.",
-      "confirmationNote": "모든 세부 정보가 포함된 확인 이메일을 받게 됩니다."
+      "confirmationNote": "모든 세부 정보가 포함된 확인 이메일을 받게 됩니다.",
+      "paymentSuccess": "결제가 완료되었습니다! 워크숍 신청이 확정되었습니다.",
+      "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
+      "paymentCancelled": "결제가 취소되었습니다."
     },
     "reviews": {
       "error": "리뷰 로딩 오류",
@@ -8054,7 +8087,10 @@
       "cancel": "취소",
       "saving": "저장 중…",
       "save": "저장",
-      "paymentSuccess": "결제 성공! 예약이 확인되었습니다."
+      "paymentSuccess": "결제 성공! 예약이 확인되었습니다.",
+      "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
+      "paymentCancelled": "결제가 취소되었습니다.",
+      "viewDetails": "상세 보기"
     },
     "orders": {
       "pageTitle": "내 주문",
@@ -8108,7 +8144,9 @@
       "errorLoading": "주문 로딩 오류",
       "errorConfirmReceipt": "수령을 확인할 수 없습니다",
       "errorUpdateStatus": "상태를 업데이트할 수 없습니다",
-      "networkError": "네트워크 오류"
+      "networkError": "네트워크 오류",
+      "articlesSection": "품목 ({count})",
+      "moreItems": "+{count}개 더"
     },
     "listings": {
       "pageTitle": "내 상품",
@@ -8355,7 +8393,12 @@
         "completedAt": "완료일",
         "yourRating": "내 평가",
         "notFound": "예약을 찾을 수 없습니다"
-      }
+      },
+      "payNow": "지금 결제",
+      "payError": "결제를 시작할 수 없습니다",
+      "paymentSuccess": "결제가 완료되었습니다! 예약이 확정되었습니다.",
+      "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
+      "paymentCancelled": "결제가 취소되었습니다."
     },
     "membership": {
       "pageTitle": "회원 자격",
@@ -8450,7 +8493,8 @@
       "backToDashboard": "대시보드로 돌아가기",
       "editProfile": "프로필 편집",
       "account": {
-        "passwordNote": "비밀번호 변경은 프로필 페이지에서 관리됩니다 (추후 여기에 통합될 예정입니다)"
+        "passwordNote": "비밀번호 변경은 프로필 페이지에서 관리됩니다 (추후 여기에 통합될 예정입니다)",
+        "deleteRequestBody": "제 계정({email})을 삭제하고 싶습니다. 제 개인정보의 삭제를 확인해 주세요."
       },
       "privacy": {
         "dataExportTitle": "개인정보 보호 및 내보내기",
@@ -8604,7 +8648,11 @@
       "kennzahlen": "지표",
       "wirkung": "영향",
       "transparenz": "투명성",
-      "appointments": "예약"
+      "appointments": "예약",
+      "hr": "HR",
+      "vacancies": "채용 공고",
+      "applications": "지원서",
+      "repairerApplications": "기술자 승인"
     },
     "currencySelector": {
       "selectCurrency": "통화 선택",
@@ -9165,11 +9213,60 @@
     "approvals": {
       "approve": "승인",
       "release": "공개",
-      "accept": "수락"
+      "accept": "수락",
+      "pageTitle": "승인",
+      "pageDescription": "사용자가 제출한 콘텐츠를 검토하고 승인합니다"
     },
     "hirn": {
       "assistantSubtitle": "어시스턴트",
-      "openFullscreen": "전체 화면 열기"
+      "openFullscreen": "전체 화면 열기",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "RevampIT를 위한 AI 어시스턴트",
+      "sidebar": {
+        "newConversation": "새 대화",
+        "documentsLabel": "문서",
+        "chunksLabel": "청크",
+        "conversationsHeading": "대화",
+        "emptyConversations": "대화가 없습니다",
+        "messageCount": "{count, plural, one {메시지 #개} other {메시지 #개}}"
+      },
+      "chat": {
+        "title": "Hirn 어시스턴트",
+        "clear": "삭제",
+        "welcomeTitle": "Hirn에 오신 것을 환영합니다",
+        "welcomeBody": "{orgName}에 대해 질문해 보세요 — 저는 우리의 미션, 역사, 수치, 서비스, 가격을 알고 있으며 기꺼이 도와드립니다.",
+        "inputPlaceholder": "질문을 입력하세요…",
+        "confirmDeleteTitle": "대화 삭제",
+        "confirmDeleteMessage": "이 대화를 정말 삭제하시겠습니까?",
+        "errorSendDefault": "전송 중 오류가 발생했습니다",
+        "errorEmptyResponse": "응답을 받지 못했습니다.",
+        "errorUnknown": "알 수 없는 오류",
+        "errorDelete": "삭제 중 오류가 발생했습니다",
+        "errorActionDefault": "작업에 실패했습니다"
+      },
+      "floatingButton": {
+        "open": "Hirn AI 열기",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "프로바이더 없음",
+        "panelTitle": "두뇌를 선택하세요",
+        "panelSubtitle": "어떤 AI가 응답하길 원하시나요?",
+        "categoryLocal": "로컬",
+        "categoryLocalDescription": "내 컴퓨터에서",
+        "categoryFree": "무료 / 사용량 기반 과금",
+        "categoryFreeDescription": "클라우드 API",
+        "providerDescriptionOllama": "로컬, 무료, 비공개",
+        "providerDescriptionGroq": "무료, 초고속",
+        "providerDescriptionOpenrouter": "다양한 모델, 사용량 기반 과금",
+        "activeBadge": "활성",
+        "saveKey": "키 저장",
+        "apiKeyPrompt": "API 키 입력",
+        "errorLoad": "불러오는 중 오류가 발생했습니다",
+        "errorGeneric": "오류",
+        "errorSaveKey": "API 키를 저장할 수 없습니다",
+        "footerHint": "활성 API 키가 있는 프로바이더를 선택하세요"
+      }
     },
     "team": {
       "backToTeam": "팀으로 돌아가기",
@@ -9197,7 +9294,36 @@
       "emergencyContact": "비상 연락처",
       "hrNotes": "HR 메모 (기밀)",
       "createdAt": "생성일",
-      "updatedAt": "업데이트일"
+      "updatedAt": "업데이트일",
+      "withoutProfileTitle": "{count}명 프로필 없음 · 클릭 한 번으로 추가",
+      "withoutProfileMore": "+{count}명 더",
+      "footerNotice": "민감한 데이터 · {domain} 주소는 자동으로 직원으로 인식됩니다",
+      "form": {
+        "sectionBasic": "기본 정보",
+        "sectionCompensation": "보수 및 고용",
+        "sectionTalent": "역량 및 개발",
+        "sectionAvailability": "근무 가능 여부 및 연락처",
+        "sectionEmergency": "비상 연락처",
+        "sectionHrNotes": "HR 메모",
+        "userSelectTitle": "사용자 선택",
+        "userSelectPlaceholder": "사용자 선택…"
+      },
+      "list": {
+        "emptyHeading": "팀 프로필을 찾을 수 없습니다",
+        "emptyWithFilters": "필터 조건에 맞는 프로필이 없습니다.",
+        "emptyNoFilters": "시작하려면 프로필을 만드세요.",
+        "profilesCount": "{count, plural, one {프로필 #개} other {프로필 #개}} 발견",
+        "refresh": "새로고침",
+        "retry": "다시 시도",
+        "clearFilters": "필터 초기화"
+      },
+      "tabs": {
+        "overview": "개요",
+        "tasks": "작업",
+        "timecards": "근무 시간 기록",
+        "activity": "활동"
+      },
+      "showOnAbout": "소개 페이지에 표시"
     },
     "protocols": {
       "queueTitle": "AI 리뷰 대기열",
@@ -9234,6 +9360,16 @@
         "copyPrompt": "프롬프트 복사",
         "copied": "복사됨",
         "promptTemplate": "당신은 회의 구조화 도우미입니다. 다음 회의 전사본을 읽고 결과를 다음 키를 가진 JSON 으로 반환하세요:\n  - participants: 참석자 이름 목록\n  - topics: 논의 항목 목록 (짧게)\n  - decisions: 내려진 결정 목록\n  - tasks: { description, assignee, dueDate } 목록\n  - openQuestions: 미해결 질문 목록\n\n전사본:\n---"
+      },
+      "pageTitle": "회의록",
+      "pageDescription": "회의 기록 및 회의 메모",
+      "filters": {
+        "searchPlaceholder": "검색…",
+        "typeLabel": "유형:",
+        "statusLabel": "상태:",
+        "stepLabel": "단계:",
+        "attendeeLabel": "참석자:",
+        "all": "전체"
       }
     },
     "categories": {
@@ -9264,7 +9400,14 @@
         "workshop": "워크숍",
         "service": "서비스",
         "other": "제출 항목"
-      }
+      },
+      "greeting": "안녕하세요, {firstName}님.",
+      "roleSuperAdmin": "슈퍼 관리자",
+      "roleStaff": "스태프",
+      "attentionQueueTitle": "처리할 항목",
+      "attentionQueueAllDone": "모두 완료되었습니다 — 대기 중인 작업이 없습니다.",
+      "quickCreateTitle": "빠른 생성",
+      "permissionRequestsTitle": "접근 권한 요청"
     },
     "projects": {
       "sidebar": "공개 프로젝트",
@@ -9347,6 +9490,844 @@
     },
     "localeFallback": {
       "notice": "관리 영역은 독일어로만 제공됩니다."
+    },
+    "hr": {
+      "vacancies": {
+        "title": "채용 공고",
+        "description": "채용 공고를 게시, 일시 중지하고 지원자와 연결합니다",
+        "new": "새 채용 공고",
+        "empty": "채용 공고를 찾을 수 없습니다",
+        "searchPlaceholder": "제목 또는 슬러그로 검색…",
+        "statusFilter": "상태",
+        "resultsCount": "{count, plural, one {채용 공고 #건} other {채용 공고 #건}}",
+        "stats": {
+          "published": "게시됨",
+          "pendingApplications": "새 지원서",
+          "drafts": "초안",
+          "filled": "충원됨"
+        }
+      },
+      "applications": {
+        "title": "지원서",
+        "description": "서류 검토부터 채용까지의 파이프라인",
+        "manageVacancies": "채용 공고 관리",
+        "teamProfiles": "팀 프로필",
+        "openTeamProfile": "팀 프로필 열기",
+        "empty": "이 필터에 해당하는 지원서가 없습니다",
+        "searchPlaceholder": "이름 또는 이메일…",
+        "statusFilter": "상태",
+        "resultsCount": "{count, plural, one {지원서 #건} other {지원서 #건}}",
+        "postingLabel": "채용 공고",
+        "phone": "전화",
+        "source": "출처",
+        "notes": "메모",
+        "rejection": "불합격",
+        "trackResponses": "응답 추적 보기",
+        "advance": "다음 단계",
+        "hire": "채용",
+        "reject": "불합격 처리",
+        "dialog": {
+          "hireTitle": "이 지원자를 채용하시겠습니까?",
+          "hireMessage": "팀 프로필이 생성되고 온보딩 작업이 등록되며 채용 공고가 충원됨으로 표시됩니다.",
+          "rejectTitle": "지원서 불합격 처리",
+          "rejectMessage": "지원서가 불합격 처리됩니다. 사유가 저장됩니다.",
+          "advanceTitle": "상태 다음 단계로 진행",
+          "advanceMessage": "새 상태: {status}",
+          "rejectionReason": "사유 *",
+          "adminNotes": "내부 메모 (선택 사항)",
+          "confirm": "확인",
+          "cancel": "취소"
+        }
+      }
+    },
+    "timecards": {
+      "headerStatusSubmitted": "제출됨",
+      "headerStatusDraft": "초안",
+      "headerDaysSuffix": "일",
+      "submit": "검토를 위해 제출",
+      "submitting": "전송 중…",
+      "resubmit": "다시 제출",
+      "submitSuccess": "검토를 위해 전송되었습니다 — 승인 팀에 알림이 전송됩니다.",
+      "submitHint": "초안 저장은 입력 내용을 보관합니다. 「검토를 위해 제출」은 승인 단계로 전송합니다.",
+      "submitError": "근무 시간표를 제출할 수 없습니다.",
+      "save": "저장",
+      "saving": "저장 중…",
+      "noScheduleLine": "아직 기본 근무 일정이 없습니다.",
+      "applyStandardSchedule": "월–금 09–17 적용",
+      "applyingSchedule": "적용 중…",
+      "setOwnSchedule": "직접 시간 설정",
+      "scheduleApplyFailed": "근무 일정을 적용할 수 없습니다.",
+      "gridIntro": "월간 개요",
+      "gridPrefilledLabel": "근무 일정에서 미리 채워짐",
+      "dayEditorHasEntry": "입력 있음",
+      "dayEditorNoEntry": "입력 없음",
+      "dayActionFillFromSchedule": "근무 일정에서 채우기",
+      "dayActionFillDefault": "09:00 – 17:00 채우기",
+      "dayActionFree": "휴무",
+      "dayActionSick": "병가",
+      "dayActionAdjust": "조정",
+      "dayActionAdjustClose": "조정 닫기",
+      "dayAbsenceCounted": "산입됨",
+      "dayFill": "근무 일정에서 하루 채우기",
+      "fieldStart": "시작",
+      "fieldEnd": "종료",
+      "fieldBreak": "휴식 (분)",
+      "fieldCategory": "분류",
+      "fieldNote": "메모",
+      "fieldNotePlaceholder": "이 날이 평소와 달랐을 때만 입력",
+      "pageTitle": "근무 시간표",
+      "pageDescription": "근무 시간 기록, 제출 및 승인",
+      "extrasToggle": "고급 · 코멘트, 템플릿 초기화",
+      "extrasMonthComment": "월간 코멘트",
+      "extrasMonthCommentPlaceholder": "선택 사항 — 예: 휴가, 병가, 특별 업무.",
+      "extrasResetMonth": "근무 일정에서 월을 새로 구성 (현재 입력 내용 삭제)",
+      "aiPlaceholder": "이번 주를 본인의 말로 설명하세요 …",
+      "aiExamples": "예: 「이번 주는 화요일과 수요일만 근무했고, 수요일은 15시에 퇴근, 나머지는 병가」 · 「다음 금요일 휴가」 · 「오늘 2시간 일찍 퇴근」",
+      "fillMonth": "근무 일정에서 한 달 채우기",
+      "fillMonthHint": "비어 있는 모든 근무일을 근무 일정(기본 월–금 09:00–17:00)으로 채웁니다. 기존 입력과 휴무일은 변경되지 않습니다.",
+      "selectHint": "클릭은 하루 선택 · 드래그는 여러 날 선택 · Ctrl/Cmd+클릭은 개별 선택 · Shift+클릭은 범위 선택 · Del은 비우기. 그런 다음 아래에서 동작을 선택하세요.",
+      "selectLabel": "빠른 선택",
+      "selectAllDays": "전체 월",
+      "selectAllWeekdays": "모든 근무일",
+      "viewMonth": "월",
+      "viewDay": "일",
+      "dayPrev": "이전 날",
+      "dayNext": "다음 날",
+      "bulkSelected": "{count}일 선택됨",
+      "bulkFill": "근무 일정에서 채우기",
+      "bulkClear": "비우기",
+      "bulkCancel": "선택 해제"
+    },
+    "appointments": {
+      "pageTitle": "예약",
+      "pageDescription": "서비스 예약을 검토하고 수리 기사를 배정합니다"
+    },
+    "content": {
+      "pageTitle": "콘텐츠",
+      "pageDescription": "블로그 글, 페이지 및 미디어 관리"
+    },
+    "decisions": {
+      "pageTitle": "의사 결정",
+      "pageDescription": "팀 내 제안 및 투표"
+    },
+    "intake": {
+      "pageTitle": "기기 입고",
+      "pageDescription": "기기 등록, 점검 및 승인",
+      "createForm": {
+        "title": "새 기기 등록",
+        "tierLabel": "처리 단계",
+        "aiTitle": "AI 빠른 입력",
+        "aiTabs": {
+          "text": "텍스트",
+          "voice": "음성",
+          "photo": "사진"
+        },
+        "textPlaceholder": "예: Dell Latitude E7470 i5 8GB 256GB SSD 양호한 상태",
+        "analyze": "분석",
+        "startRecording": "녹음 시작",
+        "stopRecording": "녹음 중지",
+        "processingVoice": "음성 처리 중…",
+        "transcription": "전사: {text}",
+        "fields": {
+          "manufacturer": "제조사",
+          "manufacturerPlaceholder": "예: Lenovo, Apple, Dell",
+          "productName": "제품명",
+          "productNamePlaceholder": "예: ThinkPad T480",
+          "shortDescription": "간단한 설명",
+          "shortDescriptionPlaceholder": "기기와 그 상태에 대한 간단한 설명",
+          "category": "카테고리",
+          "subcategory": "하위 카테고리",
+          "condition": "상태",
+          "salesPrice": "예상 판매 가격 (CHF)",
+          "choose": "선택…"
+        },
+        "donation": {
+          "isDonation": "이것은 기부입니다",
+          "donorName": "기부자 이름",
+          "donorEmail": "기부자 이메일",
+          "donorNotes": "기부 관련 메모",
+          "optional": "선택 사항",
+          "notesPlaceholder": "예: 취리히 지점에서 전달됨"
+        },
+        "saving": "저장 중…",
+        "submit": "기기 등록"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "기기 입고",
+            "description": "체크리스트 및 기부"
+          },
+          {
+            "label": "등록",
+            "description": "제품 데이터 입력"
+          },
+          {
+            "label": "상점 게시",
+            "description": "게시하기"
+          }
+        ],
+        "loading": "로딩 중…",
+        "backToPipeline": "← 파이프라인으로 돌아가기",
+        "donation": "기부",
+        "donationWithName": "기부: {name}",
+        "inShop": "상점에 게시됨",
+        "changeTier": "등급 변경",
+        "refresh": "새로 고침",
+        "progress": "진행 상황: 필수 항목 {completed}/{total}개",
+        "markAllRequiredTitle": "모든 필수 항목을 '완료'로 설정",
+        "markAllRequired": "모두 이상 없음",
+        "publishHeading": "상점에 게시",
+        "publishGate": "기기를 게시하려면 체크리스트의 모든 필수 항목이 완료되어야 합니다.",
+        "sellingPriceLabel": "판매 가격 (CHF)",
+        "publishing": "게시 중…",
+        "publishNow": "지금 게시",
+        "openFullErfassungTitle": "상세 정보를 추가하려면 등록에서 제품 열기",
+        "openFullErfassung": "전체 등록하기",
+        "publishedConfirm": "이 기기는 상점에 게시되었습니다",
+        "publishedPrice": "가격: CHF {price}",
+        "tierChange": {
+          "heading": "등급 변경",
+          "warning": "모든 체크리스트 진행 상황이 초기화됩니다.",
+          "newTierLabel": "새 등급",
+          "reasonLabel": "사유 *",
+          "reasonPlaceholder": "예: 기기를 수리할 수 없음",
+          "applying": "변경 중…",
+          "apply": "등급 변경"
+        },
+        "timelineHeading": "이력"
+      },
+      "pipeline": {
+        "newDevice": "새 기기",
+        "filters": {
+          "allTiers": "모든 등급",
+          "allStatus": "모든 상태",
+          "allCategories": "모든 카테고리",
+          "searchPlaceholder": "검색…"
+        },
+        "loading": "로딩 중…",
+        "empty": "파이프라인에 기기가 없습니다",
+        "createFirst": "첫 기기 등록하기",
+        "columns": {
+          "uuid": "UUID",
+          "device": "기기",
+          "tier": "등급",
+          "checklist": "체크리스트",
+          "status": "상태",
+          "donation": "기부",
+          "date": "날짜"
+        },
+        "status": {
+          "published": "게시됨",
+          "ready": "준비됨",
+          "inProgress": "처리 중"
+        },
+        "donationYes": "예",
+        "hero": {
+          "kpis": {
+            "total": "전체",
+            "inProgress": "처리 중",
+            "ready": "준비됨",
+            "published": "게시됨"
+          },
+          "ready": {
+            "headline": "{count, plural, one {게시 준비된 기기 #대} other {게시 준비된 기기 #대}}",
+            "sub": "준비된 기기가 파이프라인에서 대기 중입니다. 게시하면 공개됩니다.",
+            "cta": "준비된 항목 보기"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {처리 중인 기기 #대} other {처리 중인 기기 #대}}",
+            "sub": "진단, 테스트 또는 재정비가 진행 중입니다. 상태를 최신으로 유지하세요.",
+            "cta": "처리 중 항목 보기"
+          },
+          "empty": {
+            "headline": "파이프라인이 비어 있습니다",
+            "sub": "기기가 들어오면 여기에 표시됩니다. 첫 기기를 등록하세요.",
+            "cta": "새 기기 등록하기"
+          },
+          "healthy": {
+            "headline": "파이프라인이 정상입니다.",
+            "sub": "{published}대의 기기가 게시되었으며, 처리 대기 중인 항목이 없습니다."
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "필수 항목",
+        "completedAt": "{date}에 완료됨",
+        "addNote": "메모 추가",
+        "editNote": "메모 편집",
+        "notePlaceholder": "예: CPU 스트레스 테스트 통과, 최대 75 °C …",
+        "ariaUncheck": "{label} 취소하기",
+        "ariaCheck": "{label} 완료 표시"
+      }
+    },
+    "it-hilfe": {
+      "pageTitle": "IT 지원",
+      "pageDescription": "지원 요청 및 기술자 관리"
+    },
+    "locations": {
+      "pageTitle": "장소 관리",
+      "pageDescription": "행사 장소 및 승인 관리"
+    },
+    "marketplace": {
+      "pageTitle": "마켓플레이스",
+      "pageDescription": "리스팅, 신고 및 주문 관리",
+      "tabs": {
+        "listings": "리스팅",
+        "reports": "신고",
+        "orders": "주문"
+      },
+      "hero": {
+        "kpis": {
+          "active": "활성",
+          "unverified": "미검증",
+          "openReports": "미처리 신고",
+          "revampit": "RevampIT 리스팅"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {미처리 신고 #건} other {미처리 신고 #건}} 검토",
+          "sub": "신고된 리스팅은 결정이 필요합니다 — 그렇지 않으면 구매자에게 계속 노출됩니다.",
+          "cta": "신고 보기"
+        },
+        "attention": {
+          "headline": "{count, plural, one {미검증 리스팅 #건} other {미검증 리스팅 #건}}",
+          "sub": "새 항목이 승인을 기다리고 있습니다 — 그때까지는 공개되지 않습니다.",
+          "cta": "리스팅 검토"
+        },
+        "healthy": {
+          "headline": "마켓플레이스가 정상입니다.",
+          "sub": "{active}개의 활성 리스팅, 미처리 신고 없음."
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "모든 상태",
+          "allCategories": "모든 카테고리",
+          "allSellers": "모든 판매자",
+          "revampit": "RevampIT",
+          "community": "커뮤니티",
+          "verification": "검증",
+          "verified": "검증됨",
+          "unverified": "미검증",
+          "reports": "신고",
+          "reported": "신고됨",
+          "searchPlaceholder": "검색…"
+        },
+        "columns": {
+          "title": "제목",
+          "category": "카테고리",
+          "price": "가격",
+          "seller": "판매자",
+          "status": "상태",
+          "date": "날짜",
+          "actions": "작업"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {신고 #건} other {신고 #건}}"
+        },
+        "actions": {
+          "view": "보기",
+          "edit": "편집",
+          "remove": "삭제",
+          "verify": "인증",
+          "markVerified": "검증됨으로 표시",
+          "removeVerification": "인증 해제",
+          "ok": "확인",
+          "notePlaceholder": "메모 (선택)"
+        },
+        "empty": "등록된 항목이 없습니다",
+        "countLabel": "{count, plural, one {항목 #개} other {항목 #개}}",
+        "removeConfirm": {
+          "title": "항목 삭제",
+          "message": "항목 „{title}\"을(를) 정말 삭제하시겠습니까?"
+        },
+        "unverifyConfirm": {
+          "title": "인증 해제",
+          "message": "인증을 정말 해제하시겠습니까?"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "전체"
+        },
+        "columns": {
+          "listing": "항목",
+          "reason": "사유",
+          "reporter": "신고자",
+          "date": "날짜",
+          "status": "상태",
+          "actions": "작업"
+        },
+        "sellerLabel": "판매자: {name}",
+        "statusOpen": "미처리",
+        "statusProcessed": "처리됨",
+        "edit": "편집",
+        "empty": "신고가 없습니다",
+        "countLabel": "{count, plural, one {신고 #건} other {신고 #건}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "모든 상태"
+        },
+        "columns": {
+          "orderId": "주문 ID",
+          "listing": "항목",
+          "buyer": "구매자",
+          "seller": "판매자",
+          "delivery": "배송",
+          "amount": "금액",
+          "status": "상태",
+          "date": "날짜"
+        },
+        "cartItems": "{count, plural, one {품목 #개} other {품목 #개}}",
+        "empty": "주문이 없습니다",
+        "countLabel": "{count, plural, one {주문 #건} other {주문 #건}}"
+      },
+      "editModal": {
+        "title": "항목 편집",
+        "statusLabel": "상태",
+        "adminNotesLabel": "관리자 메모",
+        "adminNotesPlaceholder": "내부 메모…"
+      },
+      "handleReportModal": {
+        "title": "신고 처리",
+        "actionLabel": "작업",
+        "actionDismiss": "기각",
+        "actionWarnSeller": "판매자 경고",
+        "actionRemoveListing": "항목 삭제",
+        "notesLabel": "메모",
+        "notesPlaceholder": "사유…",
+        "execute": "실행"
+      }
+    },
+    "payroll": {
+      "pageTitle": "급여 처리",
+      "pageDescription": "월을 마감하고 시급을 고정한 후 회계용 CSV를 다운로드합니다."
+    },
+    "products": {
+      "pageTitle": "제품 관리",
+      "pageDescription": "상점 제품과 세부 정보를 관리합니다"
+    },
+    "reviews": {
+      "pageTitle": "리뷰 관리",
+      "pageDescription": "리뷰를 검토하고 관리합니다"
+    },
+    "services": {
+      "pageTitle": "서비스 관리",
+      "pageDescription": "서비스 제공 항목을 생성하고 관리합니다"
+    },
+    "settings": {
+      "pageTitle": "설정",
+      "pageDescription": "시스템 구성 및 설정"
+    },
+    "tasks": {
+      "pageTitle": "작업",
+      "pageDescription": "팀 작업을 관리하고 조율합니다"
+    },
+    "users": {
+      "pageTitle": "사용자 관리",
+      "pageDescription": "사용자 계정을 조회하고 권한을 관리합니다"
+    },
+    "workshops": {
+      "pageTitle": "워크숍 관리",
+      "pageDescription": "워크숍 제안을 승인하고 관리합니다"
+    },
+    "analytics": {
+      "pageTitle": "Analytics",
+      "pageDescription": "RevampIT 통계 및 분석"
+    },
+    "donations": {
+      "pageTitle": "기부",
+      "pageDescription": "금전 및 현물 기부를 관리합니다"
+    },
+    "erfassung": {
+      "pageTitle": "등록",
+      "pageDescription": "제품 데이터를 등록하고 게시합니다"
+    },
+    "repairer-applications": {
+      "pageTitle": "수리 기술자 지원",
+      "pageDescription": "지원서를 검토하고 관리합니다"
+    },
+    "analyse": {
+      "pageTitle": "분석",
+      "pageDescription": "개요 및 상세 분석"
+    },
+    "membership": {
+      "pageTitle": "회원",
+      "pageDescription": "협회 회원을 관리합니다"
+    },
+    "sidebar": {
+      "closeAria": "사이드바 닫기",
+      "navAria": "관리자 내비게이션",
+      "sensitiveLabel": "보호됨",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "AI 어시스턴트",
+      "websiteGroup": "웹사이트",
+      "linkHome": "홈",
+      "linkShop": "상점",
+      "linkDashboard": "내 공간",
+      "expandSidebarTitle": "사이드바 펼치기",
+      "collapseSidebarTitle": "사이드바 접기",
+      "openAria": "사이드바 열기",
+      "mobileMore": "더보기"
+    },
+    "commandBar": {
+      "placeholder": "검색 또는 명령…",
+      "openShortcut": "명령 표시줄 열기",
+      "noResults": "결과 없음",
+      "recentlyVisited": "최근 방문"
+    },
+    "userMenu": {
+      "darkMode": "표시 모드",
+      "toWebsite": "웹사이트로",
+      "signOut": "로그아웃",
+      "adminArea": "관리자 영역",
+      "staffFallback": "팀원"
+    },
+    "notifications": {
+      "title": "알림",
+      "empty": "새 알림이 없습니다",
+      "markAllRead": "모두 읽음으로 표시",
+      "markAllReadShort": "모두 읽음",
+      "bellAriaLabel": "알림",
+      "bellAriaWithUnread": "알림 ({count}개 읽지 않음)",
+      "loadError": "알림을 불러올 수 없습니다",
+      "retry": "다시 시도",
+      "loading": "로딩 중…",
+      "open": "열기",
+      "relativeJustNow": "방금 전",
+      "relativeMinutes": "{count}분 전",
+      "relativeHours": "{count}시간 전",
+      "relativeDays": "{count, plural, one {#일 전} other {#일 전}}"
+    },
+    "forms": {
+      "cancel": "취소",
+      "save": "저장",
+      "saving": "저장 중…",
+      "create": "만들기",
+      "creating": "생성 중…",
+      "delete": "삭제",
+      "deleting": "삭제 중…",
+      "edit": "편집",
+      "submit": "제출",
+      "submitting": "전송 중…",
+      "close": "닫기",
+      "confirm": "확인",
+      "back": "뒤로",
+      "next": "다음"
+    },
+    "status": {
+      "active": "활성",
+      "inactive": "비활성",
+      "pending": "대기 중",
+      "approved": "승인됨",
+      "rejected": "거절됨",
+      "archived": "보관됨",
+      "draft": "초안",
+      "submitted": "제출됨",
+      "cancelled": "취소됨",
+      "sold": "판매됨",
+      "reserved": "예약됨"
+    },
+    "empty": {
+      "noResults": "결과 없음",
+      "noDataYet": "아직 데이터가 없습니다",
+      "tryDifferentFilter": "다른 필터를 사용해 보세요"
+    },
+    "pagination": {
+      "page": "페이지",
+      "of": "/",
+      "prev": "이전",
+      "next": "다음",
+      "total": "{count}개 항목"
+    },
+    "filters": {
+      "searchLabel": "검색",
+      "searchPlaceholder": "검색…",
+      "allOption": "전체",
+      "clearFilters": "필터 초기화"
+    },
+    "iconPicker": {
+      "choose": "선택…",
+      "noneSelected": "선택된 아이콘 없음"
+    },
+    "permissions": {
+      "request": {
+        "title": "접근 권한 요청",
+        "subtitle": "접근이 필요한 영역을 선택하세요.",
+        "sectionsLabel": "영역 선택",
+        "reasonLabel": "사유",
+        "reasonPlaceholder": "이 영역에 대한 접근이 왜 필요하신가요?",
+        "submit": "요청 보내기",
+        "submitting": "전송 중…",
+        "successTitle": "요청이 전송되었습니다",
+        "successBody": "슈퍼 관리자가 귀하의 요청을 검토할 것입니다.",
+        "validationNoSections": "최소 하나의 영역을 선택해 주세요.",
+        "validationReasonTooShort": "사유를 입력해 주세요(최소 10자)."
+      },
+      "manager": {
+        "heading": "권한 요청 ({count})",
+        "empty": "대기 중인 권한 요청이 없습니다",
+        "loadError": "불러오기 중 오류가 발생했습니다",
+        "unknownError": "알 수 없는 오류",
+        "processError": "처리 중 오류가 발생했습니다",
+        "genericError": "오류",
+        "retry": "다시 시도",
+        "approve": "승인",
+        "reject": "거절",
+        "rejectionLabel": "거절 사유 (선택 사항):",
+        "rejectionPlaceholder": "선택적 거절 사유…",
+        "confirmReject": "거절 확인"
+      },
+      "editor": {
+        "title": "권한 편집",
+        "superAdminLabel": "슈퍼 관리자 상태",
+        "superAdminDescription": "사용자 관리를 포함한 모든 영역에 대한 전체 접근 권한",
+        "superAdminHardcoded": "이 사용자는 핵심 슈퍼 관리자 목록에 있어 권한을 낮출 수 없습니다.",
+        "fullAccessLabel": "전체 접근",
+        "fullAccessDescription": "모든 영역에 대한 접근(슈퍼 관리자 권한 제외)",
+        "individualHeading": "개별 영역",
+        "sensitiveBadge": "민감",
+        "saveError": "저장 중 오류가 발생했습니다",
+        "unknownError": "알 수 없는 오류",
+        "saving": "저장 중…"
+      }
+    },
+    "itHilfe": {
+      "tabs": {
+        "requests": "요청",
+        "helpers": "기술자"
+      },
+      "topActions": {
+        "reviewApplications": "지원서 검토",
+        "newRequest": "새 요청"
+      },
+      "hero": {
+        "kpis": {
+          "open": "미처리",
+          "activeTechniker": "활동 중인 기술자",
+          "verified": "인증됨",
+          "resolutionRate": "해결률"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {긴급 요청 #건이} other {긴급 요청 #건이}} 대기 중입니다",
+          "sub": "신속한 대응은 도움을 구하는 사람들이 이탈하는 것을 막아줍니다.",
+          "cta": "긴급 요청 보기"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {미처리 요청 #건이} other {미처리 요청 #건이}} 있지만 활동 중인 기술자가 없습니다",
+          "sub": "누군가 요청을 맡을 수 있도록 지원서를 승인하세요.",
+          "cta": "지원서 검토"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {미처리 요청 #건} other {미처리 요청 #건}}",
+          "sub": "활동 중인 기술자 {technikerCount}명이 이를 맡을 수 있습니다.",
+          "cta": "요청 보기"
+        },
+        "noTechniker": {
+          "headline": "아직 활동 중인 기술자가 없습니다",
+          "sub": "시스템이 요청을 받을 수 있도록 지원서를 활성화하세요.",
+          "cta": "지원서 검토"
+        },
+        "healthy": {
+          "headline": "모든 것이 정상입니다.",
+          "sub": "총 {total}건의 요청 중 {percent}% 해결됨."
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "모든 상태",
+          "allCategories": "모든 카테고리",
+          "allUrgencies": "모든 긴급도",
+          "allCantons": "모든 주(Kanton)",
+          "searchPlaceholder": "검색…"
+        },
+        "columns": {
+          "title": "제목",
+          "category": "카테고리",
+          "urgency": "긴급도",
+          "status": "상태",
+          "creator": "작성자",
+          "canton": "주(Kanton)",
+          "budget": "예산",
+          "offers": "제안",
+          "date": "날짜",
+          "actions": "작업"
+        },
+        "actions": {
+          "edit": "편집",
+          "createTask": "작업 생성"
+        },
+        "empty": "요청을 찾을 수 없습니다",
+        "countLabel": "{count, plural, one {요청 #건} other {요청 #건}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "모든 기술자",
+          "allCantons": "모든 주(Kanton)"
+        },
+        "columns": {
+          "name": "이름",
+          "skills": "역량",
+          "canton": "주(Kanton)",
+          "rate": "요율",
+          "status": "상태",
+          "helps": "도움",
+          "actions": "작업"
+        },
+        "badges": {
+          "gratis": "무료",
+          "kulturlegi": "KulturLegi",
+          "suspended": "차단됨",
+          "verified": "인증됨",
+          "active": "활성",
+          "inactive": "비활성"
+        },
+        "actions": {
+          "verify": "인증",
+          "suspend": "차단",
+          "reactivate": "재활성화"
+        },
+        "empty": "기술자를 찾을 수 없습니다",
+        "countLabel": "{count, plural, one {기술자 #명} other {기술자 #명}}"
+      },
+      "editModal": {
+        "title": "요청 편집",
+        "statusLabel": "상태",
+        "urgencyLabel": "긴급도",
+        "adminNotesLabel": "관리자 메모",
+        "adminNotesPlaceholder": "내부 메모…"
+      },
+      "helperActionModal": {
+        "titleVerify": "기술자 인증",
+        "titleSuspend": "기술자 차단",
+        "titleReactivate": "기술자 재활성화",
+        "titleDefault": "작업",
+        "notesLabel": "메모",
+        "notesPlaceholder": "사유 (선택 사항)…",
+        "confirm": "확인"
+      }
+    },
+    "editHistory": {
+      "empty": "관리자에 의한 편집 없음",
+      "changedFields": "변경된 필드:",
+      "showChanges": "변경 사항 보기",
+      "noChanges": "변경 사항 없음",
+      "previousValue": "이전 값:",
+      "valueEmpty": "(비어 있음)",
+      "valueEmptyList": "(빈 목록)",
+      "valueTruncated": "… (생략됨)"
+    },
+    "sectionLabels": {
+      "uebersicht": "오늘",
+      "angebot": "운영",
+      "inhalte": "콘텐츠",
+      "betrieb": "조직",
+      "analyse-group": "분석",
+      "personen": "사람",
+      "teamhr": "팀 & HR",
+      "system-group": "시스템",
+      "dashboard": "대시보드",
+      "profile": "내 프로필",
+      "messages": "메시지",
+      "workshops": "내 워크숍",
+      "appointments": "서비스 예약",
+      "bookings": "피어 예약",
+      "seller-dashboard": "판매자 대시보드",
+      "my-listings": "내 상품",
+      "my-orders": "내 주문",
+      "favorites": "즐겨찾기",
+      "repairer-dashboard": "기술자 프로필",
+      "repairer-onboarding": "기술자로 등록",
+      "blog-submit": "글 작성",
+      "blog-submissions": "내 제출 글",
+      "workshop-propose": "워크숍 제안",
+      "user-donations": "내 기부",
+      "shift-log": "근무 시작",
+      "my-timecards": "내 근무 기록",
+      "intake": "기기 입고",
+      "erfassung": "등록",
+      "products": "제품",
+      "marketplace": "마켓플레이스",
+      "it-hilfe-admin": "IT 지원",
+      "repairer-applications": "기술자 승인",
+      "workshops-admin": "워크숍",
+      "services": "서비스",
+      "appointments-admin": "예약",
+      "locations": "위치",
+      "reviews": "리뷰",
+      "content": "블로그 & 페이지",
+      "projects": "공개 프로젝트",
+      "approvals": "승인",
+      "membership": "회원",
+      "tasks": "작업",
+      "protocols": "회의록",
+      "decisions": "결정",
+      "analytics": "애널리틱스",
+      "donations": "기부",
+      "users": "사용자",
+      "team": "팀 프로필",
+      "timecards": "근무 카드",
+      "timecard-approvals": "근무 카드 승인",
+      "payroll": "급여 정산",
+      "finanzen": "재무",
+      "analyse-hub": "분석 개요",
+      "kennzahlen": "지표",
+      "wirkung": "임팩트",
+      "transparenz": "투명성",
+      "finances": "재무",
+      "hirn": "Hirn AI",
+      "settings": "설정",
+      "core": "개요",
+      "activities": "활동",
+      "commerce": "판매 & 거래",
+      "management": "관리",
+      "sensitive": "민감",
+      "system": "시스템",
+      "analyse": "분석",
+      "seller-onboarding": "판매자 되기"
+    },
+    "errorPage": {
+      "title": "문제가 발생했습니다",
+      "description": "관리자 페이지를 불러오는 중 오류가 발생했습니다.",
+      "retry": "다시 시도"
+    },
+    "blog": {
+      "form": {
+        "newPost": "새 기사",
+        "editPost": "기사 편집",
+        "newSubtitle": "새 블로그 기사를 작성합니다",
+        "editSubtitle": "기사를 수정합니다",
+        "preview": "미리보기",
+        "previewTitle": "게시된 기사 보기",
+        "previewNotAvailable": "기사를 먼저 게시해야 합니다",
+        "publish": "게시",
+        "aiPlaceholderEdit": "예: „수리 팁에 대한 섹션을 추가해 줘“ 또는 „글을 더 매력적으로 만들어 줘“",
+        "aiPlaceholderNew": "블로그 기사의 주제나 아이디어를 설명해 주세요…"
+      }
+    }
+  },
+  "changelog": {
+    "meta": {
+      "title": "변경 로그",
+      "description": "RevampIT 플랫폼의 최신 수정 사항, 기능 및 개선 사항입니다."
+    },
+    "hero": {
+      "eyebrow": "RevampIT",
+      "badge": "라이브",
+      "title": "변경 로그",
+      "subtitle": "revampit.ch에 적용하는 최신 수정 사항, 기능 및 개선 사항입니다."
+    },
+    "latest": {
+      "label": "최신"
+    },
+    "nav": {
+      "label": "버전"
+    },
+    "command": {
+      "label": "로컬에서 시작",
+      "text": "npm run d"
     }
   }
 }

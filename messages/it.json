@@ -2463,7 +2463,13 @@
       "emptyTitle": "Nessuna richiesta trovata",
       "emptyMessageFiltered": "Prova altri filtri o reimpostali.",
       "emptyMessageEmpty": "Ancora nessuna richiesta di assistenza informatica.",
-      "createRequestButton": "Crea richiesta"
+      "createRequestButton": "Crea richiesta",
+      "filterSkill": "Competenza",
+      "filterSkillAll": "Tutte le competenze",
+      "filterServiceType": "Tipo di aiuto",
+      "filterServiceTypeAll": "Tutti i tipi",
+      "filterMatchMySkills": "Solo richieste relative alle mie competenze",
+      "filterMatchMySkillsHint": "Mostra le richieste aperte che richiedono almeno una delle tue competenze."
     },
     "detail": {
       "backToList": "Torna alla lista",
@@ -2533,7 +2539,13 @@
       "markCompletedTitle": "Aiuto completato?",
       "markCompletedDesc": "Una volta terminata la riparazione o l'aiuto, contrassegnalo come completato. Al richiedente verrà chiesto di lasciarti una recensione.",
       "markCompletedSaving": "Salvataggio...",
-      "markCompletedButton": "Segna come completato"
+      "markCompletedButton": "Segna come completato",
+      "preferredTechnician": "La tua scelta",
+      "preferredTechnicianSidebar": {
+        "title": "Tecnico preferito",
+        "description": "Hai richiesto l'aiuto di {name}.",
+        "viewProfile": "Vedi profilo"
+      }
     },
     "create": {
       "backToList": "Torna alla lista",
@@ -2569,7 +2581,13 @@
       "locationHeading": "Dove sei?",
       "postalCode": "Codice postale",
       "city": "Città",
-      "canton": "Cantone"
+      "canton": "Cantone",
+      "preferredTechnician": {
+        "eyebrow": "Tecnico selezionato",
+        "description": "La tua richiesta sarà comunicata a questo tecnico. Anche altri tecnici idonei possono inviare offerte, finché non ne accetti una.",
+        "viewProfile": "Vedi profilo"
+      },
+      "cantonPlaceholder": "Scegli il cantone"
     },
     "myRequests": {
       "title": "Le mie richieste di riparazione",
@@ -2939,6 +2957,11 @@
           "categoryRequired": "La categoria è obbligatoria",
           "conditionRequired": "Lo stato è obbligatorio",
           "locationRequired": "La posizione è obbligatoria"
+        },
+        "deliveryHelp": {
+          "pickup": "L'acquirente ritira il dispositivo sul posto.",
+          "shipping": "Spedisci tramite posta o corriere.",
+          "both": "L'acquirente può scegliere tra ritiro e spedizione."
         }
       },
       "basicInfo": {
@@ -2957,7 +2980,8 @@
       },
       "imageAlt": "Foto del prodotto {index}",
       "removeImageLabel": "Rimuovi foto {index}",
-      "label": "Pubblica annuncio"
+      "label": "Pubblica annuncio",
+      "imagesHelp": "Le belle foto vendono più velocemente. La prima immagine è quella principale"
     },
     "listingsAvailable": "{count, plural, one {# annuncio} other {# annunci}} disponibili",
     "searchPlaceholder": "Laptop, monitor, smartphone...",
@@ -3204,7 +3228,10 @@
       "pickupFree": "Ritiro",
       "serviceFee": "Commissione di servizio ({rate}%)",
       "serviceFeeIncluded": "incl. {amount}",
-      "total": "Totale"
+      "total": "Totale",
+      "paymentSuccess": "Pagamento riuscito! Il tuo ordine è confermato.",
+      "paymentFailed": "Pagamento non riuscito. Riprova.",
+      "paymentCancelled": "Pagamento annullato."
     },
     "checkout_success": {
       "title": "Ordine completato!",
@@ -3295,7 +3322,10 @@
       "pickupNote": "Ritiro a Zurigo — gratuito",
       "revampitOnly": "Solo i dispositivi Revamp-IT possono essere aggiunti al carrello. Gli annunci della community si acquistano direttamente.",
       "cartAriaLabel": "Carrello, {count} articoli",
-      "closeAriaLabel": "Chiudi il carrello"
+      "closeAriaLabel": "Chiudi il carrello",
+      "paymentSuccess": "Pagamento riuscito! Il tuo ordine è confermato.",
+      "paymentFailed": "Pagamento non riuscito. Riprova.",
+      "paymentCancelled": "Pagamento annullato."
     }
   },
   "membership": {
@@ -7361,7 +7391,8 @@
         "title": "{name} – Venditore sul Marketplace RevampIT",
         "titleFallback": "Profilo venditore – Marketplace RevampIT",
         "description": "{name} sul Marketplace RevampIT – {count} annunci attivi. Acquistare tecnologia usata e contribuire all'economia circolare."
-      }
+      },
+      "publicProfile": "Profilo del venditore"
     }
   },
   "workshops": {
@@ -7581,7 +7612,10 @@
       "registerFree": "Iscriviti al workshop",
       "registerPaid": "Iscriviti e paga",
       "paymentNote": "Pagamento sicuro tramite il nostro provider di pagamento.",
-      "confirmationNote": "Riceverai una email di conferma con tutti i dettagli."
+      "confirmationNote": "Riceverai una email di conferma con tutti i dettagli.",
+      "paymentSuccess": "Pagamento riuscito! La tua iscrizione al workshop è confermata.",
+      "paymentFailed": "Pagamento non riuscito. Riprova.",
+      "paymentCancelled": "Pagamento annullato."
     },
     "reviews": {
       "error": "Errore nel caricamento delle recensioni",
@@ -8053,7 +8087,10 @@
       "cancel": "Annulla",
       "saving": "Salvataggio…",
       "save": "Salva",
-      "paymentSuccess": "Pagamento riuscito! Il tuo appuntamento è confermato."
+      "paymentSuccess": "Pagamento riuscito! Il tuo appuntamento è confermato.",
+      "paymentFailed": "Pagamento non riuscito. Riprova.",
+      "paymentCancelled": "Pagamento annullato.",
+      "viewDetails": "Vedi dettagli"
     },
     "orders": {
       "pageTitle": "I miei ordini",
@@ -8356,7 +8393,12 @@
         "completedAt": "Completato il",
         "yourRating": "La tua valutazione",
         "notFound": "Prenotazione non trovata"
-      }
+      },
+      "payNow": "Paga ora",
+      "payError": "Impossibile avviare il pagamento",
+      "paymentSuccess": "Pagamento riuscito! Il tuo appuntamento è confermato.",
+      "paymentFailed": "Pagamento non riuscito. Riprova.",
+      "paymentCancelled": "Pagamento annullato."
     },
     "membership": {
       "pageTitle": "Membership",
@@ -8606,7 +8648,11 @@
       "kennzahlen": "Indicatori",
       "wirkung": "Impatto",
       "transparenz": "Trasparenza",
-      "appointments": "Appuntamenti"
+      "appointments": "Appuntamenti",
+      "hr": "HR",
+      "vacancies": "Posizioni aperte",
+      "applications": "Candidature",
+      "repairerApplications": "Approvazioni tecnici"
     },
     "currencySelector": {
       "selectCurrency": "Seleziona valuta",
@@ -9109,7 +9155,14 @@
       "cancel": "Cancel",
       "save": "Save",
       "saving": "Saving...",
-      "skillRequired": "La preghiamo di selezionare almeno una competenza."
+      "skillRequired": "La preghiamo di selezionare almeno una competenza.",
+      "completeness": {
+        "title": "Profilo non ancora completo",
+        "description": "Completa questi dati per trovare richieste adatte a te e ricevere notifiche.",
+        "gapSkills": "Seleziona almeno una competenza",
+        "gapCanton": "Indica il cantone",
+        "gapLocation": "Indica il CAP o la località"
+      }
     }
   },
   "vote": {
@@ -9160,11 +9213,60 @@
     "approvals": {
       "approve": "Approva",
       "release": "Rilascia",
-      "accept": "Accetta"
+      "accept": "Accetta",
+      "pageTitle": "Approvazioni",
+      "pageDescription": "Verifica e approva i contenuti inviati dagli utenti"
     },
     "hirn": {
       "assistantSubtitle": "Assistente",
-      "openFullscreen": "Apri a schermo intero"
+      "openFullscreen": "Apri a schermo intero",
+      "pageTitle": "Hirn AI",
+      "pageDescription": "Assistente IA per RevampIT",
+      "sidebar": {
+        "newConversation": "Nuova conversazione",
+        "documentsLabel": "Documenti",
+        "chunksLabel": "Chunk",
+        "conversationsHeading": "Conversazioni",
+        "emptyConversations": "Nessuna conversazione disponibile",
+        "messageCount": "{count, plural, one {# messaggio} other {# messaggi}}"
+      },
+      "chat": {
+        "title": "Hirn Assistant",
+        "clear": "Elimina",
+        "welcomeTitle": "Benvenuto in Hirn",
+        "welcomeBody": "Fai domande su {orgName} — conosco la nostra missione, la nostra storia, i dati, i servizi e i prezzi e sono felice di aiutarti.",
+        "inputPlaceholder": "Fai una domanda…",
+        "confirmDeleteTitle": "Elimina conversazione",
+        "confirmDeleteMessage": "Vuoi davvero eliminare questa conversazione?",
+        "errorSendDefault": "Errore durante l'invio",
+        "errorEmptyResponse": "Nessuna risposta ricevuta.",
+        "errorUnknown": "Errore sconosciuto",
+        "errorDelete": "Errore durante l'eliminazione",
+        "errorActionDefault": "Azione non riuscita"
+      },
+      "floatingButton": {
+        "open": "Apri Hirn AI",
+        "label": "Hirn AI"
+      },
+      "providers": {
+        "noneSelected": "Nessun provider",
+        "panelTitle": "Scegli il tuo cervello",
+        "panelSubtitle": "Quale IA deve rispondere?",
+        "categoryLocal": "Locale",
+        "categoryLocalDescription": "Sul tuo computer",
+        "categoryFree": "Gratis / Pay-per-use",
+        "categoryFreeDescription": "API cloud",
+        "providerDescriptionOllama": "Locale, gratuito, privato",
+        "providerDescriptionGroq": "Gratis, ultra-veloce",
+        "providerDescriptionOpenrouter": "Molti modelli, pay-per-use",
+        "activeBadge": "Attivo",
+        "saveKey": "Salva chiave",
+        "apiKeyPrompt": "Inserisci la chiave API",
+        "errorLoad": "Errore durante il caricamento",
+        "errorGeneric": "Errore",
+        "errorSaveKey": "Impossibile salvare la chiave API",
+        "footerHint": "Scegli un provider con una chiave API attiva"
+      }
     },
     "team": {
       "backToTeam": "Torna al team",
@@ -9192,7 +9294,36 @@
       "emergencyContact": "Contatto di emergenza",
       "hrNotes": "Note HR (riservate)",
       "createdAt": "Creato",
-      "updatedAt": "Aggiornato"
+      "updatedAt": "Aggiornato",
+      "withoutProfileTitle": "{count} senza profilo · un clic per aggiungere",
+      "withoutProfileMore": "+{count} altri",
+      "footerNotice": "Dati sensibili · gli indirizzi {domain} vengono riconosciuti automaticamente come Staff",
+      "form": {
+        "sectionBasic": "Informazioni di base",
+        "sectionCompensation": "Retribuzione e impiego",
+        "sectionTalent": "Competenze e sviluppo",
+        "sectionAvailability": "Disponibilità e contatto",
+        "sectionEmergency": "Contatto di emergenza",
+        "sectionHrNotes": "Note HR",
+        "userSelectTitle": "Seleziona utente",
+        "userSelectPlaceholder": "Scegli utente…"
+      },
+      "list": {
+        "emptyHeading": "Nessun profilo del team trovato",
+        "emptyWithFilters": "Nessun profilo corrisponde ai tuoi criteri di filtro.",
+        "emptyNoFilters": "Crea un profilo per iniziare.",
+        "profilesCount": "{count, plural, one {# profilo} other {# profili}} trovati",
+        "refresh": "Aggiorna",
+        "retry": "Riprova",
+        "clearFilters": "Reimposta filtri"
+      },
+      "tabs": {
+        "overview": "Panoramica",
+        "tasks": "Attività",
+        "timecards": "Rilevamento ore",
+        "activity": "Attività"
+      },
+      "showOnAbout": "Visibile su Chi siamo"
     },
     "protocols": {
       "queueTitle": "Coda di revisione AI",
@@ -9229,6 +9360,16 @@
         "copyPrompt": "Copia prompt",
         "copied": "Copiato",
         "promptTemplate": "Sei uno strutturatore di riunioni. Leggi la seguente trascrizione di riunione e restituisci il risultato in JSON con le chiavi:\n  - participants: elenco dei nomi dei partecipanti\n  - topics: elenco dei punti discussi (breve)\n  - decisions: elenco delle decisioni prese\n  - tasks: elenco { description, assignee, dueDate }\n  - openQuestions: elenco delle domande aperte\n\nTrascrizione:\n---"
+      },
+      "pageTitle": "Verbali",
+      "pageDescription": "Verbali delle sedute e note delle riunioni",
+      "filters": {
+        "searchPlaceholder": "Cerca…",
+        "typeLabel": "Tipo:",
+        "statusLabel": "Stato:",
+        "stepLabel": "Fase:",
+        "attendeeLabel": "Partecipante:",
+        "all": "Tutti"
       }
     },
     "categories": {
@@ -9259,7 +9400,14 @@
         "workshop": "Workshop",
         "service": "Servizio",
         "other": "Invio"
-      }
+      },
+      "greeting": "Ciao, {firstName}.",
+      "roleSuperAdmin": "Super Admin",
+      "roleStaff": "Staff",
+      "attentionQueueTitle": "Sulla tua scrivania",
+      "attentionQueueAllDone": "Tutto fatto — nessuna attività in sospeso.",
+      "quickCreateTitle": "Creazione rapida",
+      "permissionRequestsTitle": "Richieste di accesso"
     },
     "projects": {
       "sidebar": "Progetti pubblici",
@@ -9342,6 +9490,822 @@
     },
     "localeFallback": {
       "notice": "L'area amministrativa è disponibile solo in tedesco."
+    },
+    "hr": {
+      "vacancies": {
+        "title": "Posizioni aperte",
+        "description": "Pubblica, sospendi e collega le posizioni ai candidati",
+        "new": "Nuova posizione",
+        "empty": "Nessuna posizione trovata",
+        "searchPlaceholder": "Cerca per titolo o slug…",
+        "statusFilter": "Stato",
+        "resultsCount": "{count, plural, one {# posizione} other {# posizioni}}",
+        "stats": {
+          "published": "Pubblicate",
+          "pendingApplications": "Nuove candidature",
+          "drafts": "Bozze",
+          "filled": "Coperte"
+        }
+      },
+      "applications": {
+        "title": "Candidature",
+        "description": "Pipeline dalla selezione all'assunzione",
+        "manageVacancies": "Gestisci posizioni",
+        "teamProfiles": "Profili del team",
+        "openTeamProfile": "Apri profilo del team",
+        "empty": "Nessuna candidatura in questo filtro",
+        "searchPlaceholder": "Nome o e-mail…",
+        "statusFilter": "Stato",
+        "resultsCount": "{count, plural, one {# candidatura} other {# candidature}}",
+        "postingLabel": "Posizione",
+        "phone": "Telefono",
+        "source": "Fonte",
+        "notes": "Note",
+        "rejection": "Rifiuto",
+        "trackResponses": "Mostra le risposte di tracciamento",
+        "advance": "Fase successiva",
+        "hire": "Assumi",
+        "reject": "Rifiuta",
+        "dialog": {
+          "hireTitle": "Assumere la persona?",
+          "hireMessage": "Verrà creato un profilo del team, generate le attività di onboarding e la posizione sarà contrassegnata come coperta.",
+          "rejectTitle": "Rifiuta candidatura",
+          "rejectMessage": "La candidatura verrà rifiutata. Il motivo verrà salvato.",
+          "advanceTitle": "Avanza lo stato",
+          "advanceMessage": "Nuovo stato: {status}",
+          "rejectionReason": "Motivo *",
+          "adminNotes": "Nota interna (opzionale)",
+          "confirm": "Conferma",
+          "cancel": "Annulla"
+        }
+      }
+    },
+    "timecards": {
+      "headerStatusSubmitted": "Inviata",
+      "headerStatusDraft": "Bozza",
+      "headerDaysSuffix": "giorni",
+      "submit": "Invia per la verifica",
+      "submitting": "Invio…",
+      "resubmit": "Invia di nuovo",
+      "submitSuccess": "Inviata per la verifica — il team di approvazione verrà avvisato.",
+      "submitHint": "Salvare la bozza conserva le tue voci; «Invia per la verifica» le inoltra all'approvazione.",
+      "submitError": "Impossibile inviare la scheda orari.",
+      "save": "Salva",
+      "saving": "Salvataggio…",
+      "noScheduleLine": "Non hai ancora un orario standard.",
+      "applyStandardSchedule": "Applica lun–ven 09–17",
+      "applyingSchedule": "Applico…",
+      "setOwnSchedule": "Imposta orari personali",
+      "scheduleApplyFailed": "Impossibile applicare l'orario.",
+      "gridIntro": "Panoramica mensile",
+      "gridPrefilledLabel": "Precompilato dall'orario",
+      "dayEditorHasEntry": "Voce",
+      "dayEditorNoEntry": "Nessuna voce",
+      "dayActionFillFromSchedule": "Compila dall'orario",
+      "dayActionFillDefault": "Compila 09:00 – 17:00",
+      "dayActionFree": "Libero",
+      "dayActionSick": "Malattia",
+      "dayActionAdjust": "Modifica",
+      "dayActionAdjustClose": "Chiudi modifica",
+      "dayAbsenceCounted": "conteggiato",
+      "dayFill": "Compila il giorno dal piano",
+      "fieldStart": "Inizio",
+      "fieldEnd": "Fine",
+      "fieldBreak": "Pausa (min)",
+      "fieldCategory": "Categoria",
+      "fieldNote": "Nota",
+      "fieldNotePlaceholder": "Solo se questo giorno è stato diverso",
+      "pageTitle": "Schede orari",
+      "pageDescription": "Registra, invia e approva gli orari di lavoro",
+      "extrasToggle": "Avanzato · Commento, ripristina modello",
+      "extrasMonthComment": "Commento mensile",
+      "extrasMonthCommentPlaceholder": "Opzionale — ad es. vacanze, malattia, intervento speciale.",
+      "extrasResetMonth": "Ricostruisci il mese dall'orario (cancella le voci attuali)",
+      "aiPlaceholder": "Descrivi la tua settimana con parole tue …",
+      "aiExamples": "ad es. «Questa settimana ho lavorato solo mar e mer, mercoledì uscito alle 15, altrimenti malato» · «Venerdì prossimo vacanza» · «Oggi uscito 2 ore prima»",
+      "fillMonth": "Compila il mese dal piano",
+      "fillMonthHint": "Compila tutti i giorni lavorativi vuoti con il tuo piano di lavoro (predefinito lun–ven 09:00–17:00). Le voci esistenti e i giorni liberi restano invariati.",
+      "selectHint": "Il clic seleziona un giorno · Trascinare seleziona più giorni · Ctrl/Cmd+clic singoli · Maiusc+clic un intervallo · Canc svuota. Poi scegli un'azione qui sotto.",
+      "selectLabel": "Selezione rapida",
+      "selectAllDays": "Intero mese",
+      "selectAllWeekdays": "Tutti i giorni lavorativi",
+      "viewMonth": "Mese",
+      "viewDay": "Giorno",
+      "dayPrev": "Giorno precedente",
+      "dayNext": "Giorno successivo",
+      "bulkSelected": "{count} giorni selezionati",
+      "bulkFill": "Compila dal piano",
+      "bulkClear": "Svuota",
+      "bulkCancel": "Annulla selezione"
+    },
+    "appointments": {
+      "pageTitle": "Appuntamenti",
+      "pageDescription": "Verifica gli appuntamenti di servizio e assegna i riparatori"
+    },
+    "content": {
+      "pageTitle": "Contenuti",
+      "pageDescription": "Gestisci articoli del blog, pagine e media"
+    },
+    "decisions": {
+      "pageTitle": "Decisioni",
+      "pageDescription": "Proposte e votazioni nel team"
+    },
+    "intake": {
+      "pageTitle": "Entrata dispositivi",
+      "pageDescription": "Registra, verifica e approva i dispositivi",
+      "createForm": {
+        "title": "Registra nuovo dispositivo",
+        "tierLabel": "Livello di elaborazione",
+        "aiTitle": "Inserimento rapido con IA",
+        "aiTabs": {
+          "text": "Testo",
+          "voice": "Voce",
+          "photo": "Foto"
+        },
+        "textPlaceholder": "ad es. Dell Latitude E7470 i5 8GB 256GB SSD buono stato",
+        "analyze": "Analizza",
+        "startRecording": "Avvia registrazione",
+        "stopRecording": "Ferma registrazione",
+        "processingVoice": "Elaborazione vocale…",
+        "transcription": "Trascrizione: {text}",
+        "fields": {
+          "manufacturer": "Produttore",
+          "manufacturerPlaceholder": "es. Lenovo, Apple, Dell",
+          "productName": "Nome del prodotto",
+          "productNamePlaceholder": "es. ThinkPad T480",
+          "shortDescription": "Breve descrizione",
+          "shortDescriptionPlaceholder": "Breve descrizione del dispositivo e del suo stato",
+          "category": "Categoria",
+          "subcategory": "Sottocategoria",
+          "condition": "Stato",
+          "salesPrice": "Prezzo di vendita stimato (CHF)",
+          "choose": "Scegli…"
+        },
+        "donation": {
+          "isDonation": "Questa è una donazione",
+          "donorName": "Nome del/della donatore/donatrice",
+          "donorEmail": "E-mail del/della donatore/donatrice",
+          "donorNotes": "Note sulla donazione",
+          "optional": "Facoltativo",
+          "notesPlaceholder": "es. Consegnato presso la sede di Zurigo"
+        },
+        "saving": "Salvataggio…",
+        "submit": "Registra dispositivo"
+      },
+      "detail": {
+        "pipelineSteps": [
+          {
+            "label": "Geräte-Eingang",
+            "description": "Checkliste & Spende"
+          },
+          {
+            "label": "Erfassung",
+            "description": "Produktdaten eingeben"
+          },
+          {
+            "label": "Im Shop",
+            "description": "Veröffentlichen"
+          }
+        ],
+        "loading": "Caricamento…",
+        "backToPipeline": "← Torna alla pipeline",
+        "donation": "Donazione",
+        "donationWithName": "Donazione: {name}",
+        "inShop": "Nello shop",
+        "changeTier": "Cambia livello",
+        "refresh": "Aggiorna",
+        "progress": "Avanzamento: {completed}/{total} punti obbligatori",
+        "markAllRequiredTitle": "Imposta tutti i punti obbligatori su «completato»",
+        "markAllRequired": "Tutto in ordine",
+        "publishHeading": "Pubblica nello shop",
+        "publishGate": "Tutti i punti obbligatori della checklist devono essere spuntati prima di poter pubblicare il dispositivo.",
+        "sellingPriceLabel": "Prezzo di vendita (CHF)",
+        "publishing": "Pubblicazione…",
+        "publishNow": "Pubblica ora",
+        "openFullErfassungTitle": "Apri il prodotto nella registrazione per completare i dettagli",
+        "openFullErfassung": "Registrazione completa",
+        "publishedConfirm": "Questo dispositivo è pubblicato nello shop",
+        "publishedPrice": "Prezzo: CHF {price}",
+        "tierChange": {
+          "heading": "Cambia livello",
+          "warning": "Tutti i progressi della checklist verranno azzerati.",
+          "newTierLabel": "Nuovo livello",
+          "reasonLabel": "Motivazione *",
+          "reasonPlaceholder": "es. Il dispositivo non è riparabile",
+          "applying": "Modifica…",
+          "apply": "Cambia livello"
+        },
+        "timelineHeading": "Cronologia"
+      },
+      "pipeline": {
+        "newDevice": "Nuovo dispositivo",
+        "filters": {
+          "allTiers": "Tutti i livelli",
+          "allStatus": "Tutti gli stati",
+          "allCategories": "Tutte le categorie",
+          "searchPlaceholder": "Cerca…"
+        },
+        "loading": "Caricamento…",
+        "empty": "Nessun dispositivo nella pipeline",
+        "createFirst": "Registra il primo dispositivo",
+        "columns": {
+          "uuid": "UUID",
+          "device": "Dispositivo",
+          "tier": "Livello",
+          "checklist": "Checklist",
+          "status": "Stato",
+          "donation": "Donazione",
+          "date": "Data"
+        },
+        "status": {
+          "published": "Pubblicato",
+          "ready": "Pronto",
+          "inProgress": "In lavorazione"
+        },
+        "donationYes": "Sì",
+        "hero": {
+          "kpis": {
+            "total": "Totale",
+            "inProgress": "In lavorazione",
+            "ready": "Pronto",
+            "published": "Pubblicato"
+          },
+          "ready": {
+            "headline": "{count, plural, one {# dispositivo} other {# dispositivi}} pronti per la pubblicazione",
+            "sub": "I dispositivi pronti sono completi nella pipeline. La pubblicazione li rende pubblici.",
+            "cta": "Mostra pronti"
+          },
+          "inProgress": {
+            "headline": "{count, plural, one {# dispositivo} other {# dispositivi}} in lavorazione",
+            "sub": "Diagnosi, test o ricondizionamento in corso. Mantieni lo stato aggiornato.",
+            "cta": "Mostra in lavorazione"
+          },
+          "empty": {
+            "headline": "La pipeline è vuota",
+            "sub": "Non appena arriva un dispositivo, comparirà qui. Registra il primo.",
+            "cta": "Registra nuovo dispositivo"
+          },
+          "healthy": {
+            "headline": "Pipeline in buono stato.",
+            "sub": "{published} dispositivi pubblicati, niente in attesa di lavorazione."
+          }
+        }
+      },
+      "checklist": {
+        "requiredMarker": "Punto obbligatorio",
+        "completedAt": "Completato il {date}",
+        "addNote": "Aggiungi nota",
+        "editNote": "Modifica nota",
+        "notePlaceholder": "es. Stress test CPU superato, max. 75 °C …",
+        "ariaUncheck": "Annulla {label}",
+        "ariaCheck": "Spunta {label}"
+      }
+    },
+    "it-hilfe": {
+      "pageTitle": "Assistenza IT",
+      "pageDescription": "Gestisci richieste di aiuto e tecnici"
+    },
+    "locations": {
+      "pageTitle": "Gestione sedi",
+      "pageDescription": "Gestisci le sedi degli eventi e le relative autorizzazioni"
+    },
+    "marketplace": {
+      "pageTitle": "Marketplace",
+      "pageDescription": "Gestisci annunci, segnalazioni e ordini",
+      "tabs": {
+        "listings": "Annunci",
+        "reports": "Segnalazioni",
+        "orders": "Ordini"
+      },
+      "hero": {
+        "kpis": {
+          "active": "Attivi",
+          "unverified": "Non verificati",
+          "openReports": "Segnalazioni aperte",
+          "revampit": "Annunci RevampIT"
+        },
+        "urgent": {
+          "headline": "Esamina {count, plural, one {# segnalazione aperta} other {# segnalazioni aperte}}",
+          "sub": "Gli annunci segnalati richiedono una decisione, altrimenti gli acquirenti continuano a vederli.",
+          "cta": "Visualizza segnalazioni"
+        },
+        "attention": {
+          "headline": "{count, plural, one {# annuncio non verificato} other {# annunci non verificati}}",
+          "sub": "Nuove voci in attesa di approvazione, fino ad allora non sono pubbliche.",
+          "cta": "Esamina annunci"
+        },
+        "healthy": {
+          "headline": "Marketplace in buono stato.",
+          "sub": "{active} annunci attivi, nessuna segnalazione aperta."
+        }
+      },
+      "listings": {
+        "filters": {
+          "allStatus": "Tutti gli stati",
+          "allCategories": "Tutte le categorie",
+          "allSellers": "Tutti i venditori",
+          "revampit": "RevampIT",
+          "community": "Community",
+          "verification": "Verifica",
+          "verified": "Verificato",
+          "unverified": "Non verificato",
+          "reports": "Segnalazioni",
+          "reported": "Segnalato",
+          "searchPlaceholder": "Cerca…"
+        },
+        "columns": {
+          "title": "Titolo",
+          "category": "Categoria",
+          "price": "Prezzo",
+          "seller": "Venditore",
+          "status": "Stato",
+          "date": "Data",
+          "actions": "Azioni"
+        },
+        "badges": {
+          "rit": "RIT",
+          "reportCount": "{count, plural, one {# segnalazione} other {# segnalazioni}}"
+        },
+        "actions": {
+          "view": "Visualizza",
+          "edit": "Modifica",
+          "remove": "Rimuovi",
+          "verify": "Verifica",
+          "markVerified": "Segna come verificato",
+          "removeVerification": "Rimuovi verifica",
+          "ok": "OK",
+          "notePlaceholder": "Nota (facoltativa)"
+        },
+        "empty": "Nessun annuncio trovato",
+        "countLabel": "{count, plural, one {# annuncio} other {# annunci}}",
+        "removeConfirm": {
+          "title": "Rimuovi annuncio",
+          "message": "Rimuovere davvero l'annuncio „{title}\"?"
+        },
+        "unverifyConfirm": {
+          "title": "Rimuovi verifica",
+          "message": "Rimuovere davvero la verifica?"
+        }
+      },
+      "reports": {
+        "filters": {
+          "all": "Tutte"
+        },
+        "columns": {
+          "listing": "Annuncio",
+          "reason": "Motivo",
+          "reporter": "Segnalante",
+          "date": "Data",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "sellerLabel": "Venditore: {name}",
+        "statusOpen": "Aperta",
+        "statusProcessed": "Elaborata",
+        "edit": "Modifica",
+        "empty": "Nessuna segnalazione trovata",
+        "countLabel": "{count, plural, one {# segnalazione} other {# segnalazioni}}"
+      },
+      "orders": {
+        "filters": {
+          "allStatus": "Tutti gli stati"
+        },
+        "columns": {
+          "orderId": "ID ordine",
+          "listing": "Annuncio",
+          "buyer": "Acquirente",
+          "seller": "Venditore",
+          "delivery": "Consegna",
+          "amount": "Importo",
+          "status": "Stato",
+          "date": "Data"
+        },
+        "cartItems": "{count, plural, one {# articolo} other {# articoli}}",
+        "empty": "Nessun ordine trovato",
+        "countLabel": "{count, plural, one {# ordine} other {# ordini}}"
+      },
+      "editModal": {
+        "title": "Modifica annuncio",
+        "statusLabel": "Stato",
+        "adminNotesLabel": "Note amministratore",
+        "adminNotesPlaceholder": "Note interne…"
+      },
+      "handleReportModal": {
+        "title": "Gestisci segnalazione",
+        "actionLabel": "Azione",
+        "actionDismiss": "Respingi",
+        "actionWarnSeller": "Avvisa il venditore",
+        "actionRemoveListing": "Rimuovi annuncio",
+        "notesLabel": "Note",
+        "notesPlaceholder": "Motivazione…",
+        "execute": "Esegui"
+      }
+    },
+    "payroll": {
+      "pageTitle": "Elaborazione salari",
+      "pageDescription": "Chiudere il mese, congelare le tariffe orarie e scaricare il CSV per la contabilità."
+    },
+    "products": {
+      "pageTitle": "Gestione prodotti",
+      "pageDescription": "Gestisci i prodotti dello shop e i relativi dettagli"
+    },
+    "reviews": {
+      "pageTitle": "Gestione recensioni",
+      "pageDescription": "Moderare e gestire le recensioni"
+    },
+    "services": {
+      "pageTitle": "Gestisci i servizi",
+      "pageDescription": "Crea e gestisci le tue offerte di servizi"
+    },
+    "settings": {
+      "pageTitle": "Impostazioni",
+      "pageDescription": "Configurazione e impostazioni del sistema"
+    },
+    "tasks": {
+      "pageTitle": "Attività",
+      "pageDescription": "Gestire e coordinare le attività del team"
+    },
+    "users": {
+      "pageTitle": "Gestisci utenti",
+      "pageDescription": "Visualizzare gli account utente e gestire le autorizzazioni"
+    },
+    "workshops": {
+      "pageTitle": "Gestione workshop",
+      "pageDescription": "Approva e gestisci le proposte di workshop"
+    },
+    "analytics": {
+      "pageTitle": "Analytics",
+      "pageDescription": "Statistiche e analisi per RevampIT"
+    },
+    "donations": {
+      "pageTitle": "Donazioni",
+      "pageDescription": "Gestire le donazioni in denaro e in natura"
+    },
+    "erfassung": {
+      "pageTitle": "Registrazione",
+      "pageDescription": "Registrare e pubblicare i dati dei prodotti"
+    },
+    "repairer-applications": {
+      "pageTitle": "Candidature riparatori",
+      "pageDescription": "Esaminare e gestire le candidature"
+    },
+    "analyse": {
+      "pageTitle": "Analisi",
+      "pageDescription": "Panoramica e approfondimenti"
+    },
+    "membership": {
+      "pageTitle": "Membri",
+      "pageDescription": "Gestire i membri dell'associazione"
+    },
+    "sidebar": {
+      "closeAria": "Chiudi la barra laterale",
+      "navAria": "Navigazione admin",
+      "sensitiveLabel": "Protetto",
+      "hirnTitle": "Hirn AI",
+      "hirnSubtitle": "Assistente IA",
+      "websiteGroup": "Sito web",
+      "linkHome": "Pagina iniziale",
+      "linkShop": "Shop",
+      "linkDashboard": "La mia area",
+      "expandSidebarTitle": "Espandi la barra laterale",
+      "collapseSidebarTitle": "Comprimi la barra laterale",
+      "openAria": "Apri la barra laterale",
+      "mobileMore": "Altro"
+    },
+    "commandBar": {
+      "placeholder": "Cerca o comando…",
+      "openShortcut": "Apri la barra dei comandi",
+      "noResults": "Nessun risultato",
+      "recentlyVisited": "Visitati di recente"
+    },
+    "userMenu": {
+      "darkMode": "Aspetto",
+      "toWebsite": "Vai al sito web",
+      "signOut": "Esci",
+      "adminArea": "Area admin",
+      "staffFallback": "Membro del team"
+    },
+    "notifications": {
+      "title": "Notifiche",
+      "empty": "Nessuna nuova notifica",
+      "markAllRead": "Segna tutte come lette",
+      "markAllReadShort": "Tutte lette",
+      "bellAriaLabel": "Notifiche",
+      "bellAriaWithUnread": "Notifiche ({count} non lette)",
+      "loadError": "Impossibile caricare le notifiche",
+      "retry": "Riprova",
+      "loading": "Caricamento…",
+      "open": "Apri",
+      "relativeJustNow": "Proprio ora",
+      "relativeMinutes": "{count} min fa",
+      "relativeHours": "{count} h fa",
+      "relativeDays": "{count, plural, one {# giorno fa} other {# giorni fa}}"
+    },
+    "forms": {
+      "cancel": "Annulla",
+      "save": "Salva",
+      "saving": "Salvataggio…",
+      "create": "Crea",
+      "creating": "Creazione…",
+      "delete": "Elimina",
+      "deleting": "Eliminazione…",
+      "edit": "Modifica",
+      "submit": "Invia",
+      "submitting": "Invio…",
+      "close": "Chiudi",
+      "confirm": "Conferma",
+      "back": "Indietro",
+      "next": "Avanti"
+    },
+    "status": {
+      "active": "Attivo",
+      "inactive": "Inattivo",
+      "pending": "In attesa",
+      "approved": "Approvato",
+      "rejected": "Rifiutato",
+      "archived": "Archiviato",
+      "draft": "Bozza",
+      "submitted": "Inviato",
+      "cancelled": "Annullato",
+      "sold": "Venduto",
+      "reserved": "Riservato"
+    },
+    "empty": {
+      "noResults": "Nessun risultato",
+      "noDataYet": "Ancora nessun dato disponibile",
+      "tryDifferentFilter": "Prova un altro filtro"
+    },
+    "pagination": {
+      "page": "Pagina",
+      "of": "di",
+      "prev": "Indietro",
+      "next": "Avanti",
+      "total": "{count} voci"
+    },
+    "filters": {
+      "searchLabel": "Cerca",
+      "searchPlaceholder": "Cerca…",
+      "allOption": "Tutti",
+      "clearFilters": "Reimposta filtri"
+    },
+    "iconPicker": {
+      "choose": "Scegli…",
+      "noneSelected": "Nessuna icona selezionata"
+    },
+    "permissions": {
+      "request": {
+        "title": "Richiedi accesso",
+        "subtitle": "Seleziona le aree a cui hai bisogno di accedere.",
+        "sectionsLabel": "Seleziona aree",
+        "reasonLabel": "Motivazione",
+        "reasonPlaceholder": "Perché hai bisogno di accedere a queste aree?",
+        "submit": "Invia richiesta",
+        "submitting": "Invio in corso…",
+        "successTitle": "Richiesta inviata",
+        "successBody": "Un Super Admin esaminerà la tua richiesta.",
+        "validationNoSections": "Seleziona almeno un'area.",
+        "validationReasonTooShort": "Indica un motivo (almeno 10 caratteri)."
+      },
+      "manager": {
+        "heading": "Richieste di autorizzazione ({count})",
+        "empty": "Nessuna richiesta di autorizzazione in attesa",
+        "loadError": "Errore durante il caricamento",
+        "unknownError": "Errore sconosciuto",
+        "processError": "Errore durante l'elaborazione",
+        "genericError": "Errore",
+        "retry": "Riprova",
+        "approve": "Approva",
+        "reject": "Rifiuta",
+        "rejectionLabel": "Motivo del rifiuto (facoltativo):",
+        "rejectionPlaceholder": "Motivo del rifiuto facoltativo…",
+        "confirmReject": "Conferma rifiuto"
+      },
+      "editor": {
+        "title": "Modifica autorizzazioni",
+        "superAdminLabel": "Stato Super Admin",
+        "superAdminDescription": "Accesso completo a tutte le aree, inclusa la gestione utenti",
+        "superAdminHardcoded": "Questo utente è nell'elenco principale dei Super Admin e non può essere declassato.",
+        "fullAccessLabel": "Accesso completo",
+        "fullAccessDescription": "Accesso a tutte le aree (senza diritti di Super Admin)",
+        "individualHeading": "Singole aree",
+        "sensitiveBadge": "Sensibile",
+        "saveError": "Errore durante il salvataggio",
+        "unknownError": "Errore sconosciuto",
+        "saving": "Salvataggio in corso…"
+      }
+    },
+    "itHilfe": {
+      "tabs": {
+        "requests": "Richieste",
+        "helpers": "Tecnici"
+      },
+      "topActions": {
+        "reviewApplications": "Esamina candidature",
+        "newRequest": "Nuova richiesta"
+      },
+      "hero": {
+        "kpis": {
+          "open": "Aperte",
+          "activeTechniker": "Tecnici attivi",
+          "verified": "Verificati",
+          "resolutionRate": "Tasso di risoluzione"
+        },
+        "urgent": {
+          "headline": "{count, plural, one {# richiesta urgente} other {# richieste urgenti}} in attesa",
+          "sub": "Una reazione rapida evita che chi cerca aiuto rinunci.",
+          "cta": "Mostra urgenti"
+        },
+        "openNoTechniker": {
+          "headline": "{count, plural, one {# richiesta aperta} other {# richieste aperte}}, ma nessun tecnico attivo",
+          "sub": "Conferma le candidature affinché qualcuno possa prendere in carico le richieste.",
+          "cta": "Esamina candidature"
+        },
+        "openWithTechniker": {
+          "headline": "{count, plural, one {# richiesta aperta} other {# richieste aperte}}",
+          "sub": "{technikerCount} tecnici attivi possono prenderle in carico.",
+          "cta": "Visualizza richieste"
+        },
+        "noTechniker": {
+          "headline": "Ancora nessun tecnico attivo",
+          "sub": "Attiva le candidature affinché il sistema possa accettare le richieste.",
+          "cta": "Esamina candidature"
+        },
+        "healthy": {
+          "headline": "Tutto a posto.",
+          "sub": "{total} richieste in totale, {percent}% risolte."
+        }
+      },
+      "requests": {
+        "filters": {
+          "allStatus": "Tutti gli stati",
+          "allCategories": "Tutte le categorie",
+          "allUrgencies": "Tutte le urgenze",
+          "allCantons": "Tutti i cantoni",
+          "searchPlaceholder": "Cerca…"
+        },
+        "columns": {
+          "title": "Titolo",
+          "category": "Categoria",
+          "urgency": "Urgenza",
+          "status": "Stato",
+          "creator": "Creatore",
+          "canton": "Cantone",
+          "budget": "Budget",
+          "offers": "Offerte",
+          "date": "Data",
+          "actions": "Azioni"
+        },
+        "actions": {
+          "edit": "Modifica",
+          "createTask": "Crea attività"
+        },
+        "empty": "Nessuna richiesta trovata",
+        "countLabel": "{count, plural, one {# richiesta} other {# richieste}}"
+      },
+      "helpers": {
+        "filters": {
+          "allHelpers": "Tutti i tecnici",
+          "allCantons": "Tutti i cantoni"
+        },
+        "columns": {
+          "name": "Nome",
+          "skills": "Competenze",
+          "canton": "Cantone",
+          "rate": "Tariffa",
+          "status": "Stato",
+          "helps": "Aiuti",
+          "actions": "Azioni"
+        },
+        "badges": {
+          "gratis": "Gratuito",
+          "kulturlegi": "KulturLegi",
+          "suspended": "Sospeso",
+          "verified": "Verificato",
+          "active": "Attivo",
+          "inactive": "Inattivo"
+        },
+        "actions": {
+          "verify": "Verifica",
+          "suspend": "Sospendi",
+          "reactivate": "Riattiva"
+        },
+        "empty": "Nessun tecnico trovato",
+        "countLabel": "{count, plural, one {# tecnico} other {# tecnici}}"
+      },
+      "editModal": {
+        "title": "Modifica richiesta",
+        "statusLabel": "Stato",
+        "urgencyLabel": "Urgenza",
+        "adminNotesLabel": "Note admin",
+        "adminNotesPlaceholder": "Note interne…"
+      },
+      "helperActionModal": {
+        "titleVerify": "Verifica tecnico",
+        "titleSuspend": "Sospendi tecnico",
+        "titleReactivate": "Riattiva tecnico",
+        "titleDefault": "Azione",
+        "notesLabel": "Note",
+        "notesPlaceholder": "Motivazione (facoltativo)…",
+        "confirm": "Conferma"
+      }
+    },
+    "editHistory": {
+      "empty": "Nessuna modifica da parte degli admin",
+      "changedFields": "Campi modificati:",
+      "showChanges": "Mostra modifiche",
+      "noChanges": "Nessuna modifica",
+      "previousValue": "Valore precedente:",
+      "valueEmpty": "(vuoto)",
+      "valueEmptyList": "(elenco vuoto)",
+      "valueTruncated": "… (troncato)"
+    },
+    "sectionLabels": {
+      "uebersicht": "Oggi",
+      "angebot": "Operatività",
+      "inhalte": "Contenuti",
+      "betrieb": "Organizzazione",
+      "analyse-group": "Analisi",
+      "personen": "Persone",
+      "teamhr": "Team e HR",
+      "system-group": "Sistema",
+      "dashboard": "Dashboard",
+      "profile": "Il mio profilo",
+      "messages": "Messaggi",
+      "workshops": "I miei workshop",
+      "appointments": "Appuntamenti di servizio",
+      "bookings": "Prenotazioni peer",
+      "seller-dashboard": "Dashboard venditore",
+      "my-listings": "I miei annunci",
+      "my-orders": "I miei ordini",
+      "favorites": "Preferiti",
+      "repairer-dashboard": "Profilo tecnico",
+      "repairer-onboarding": "Offri come tecnico",
+      "blog-submit": "Scrivi un articolo",
+      "blog-submissions": "I miei contributi",
+      "workshop-propose": "Proponi un workshop",
+      "user-donations": "Le mie donazioni",
+      "shift-log": "Inizia turno",
+      "my-timecards": "Le mie ore",
+      "intake": "Entrata dispositivi",
+      "erfassung": "Registrazione",
+      "products": "Prodotti",
+      "marketplace": "Marketplace",
+      "it-hilfe-admin": "Assistenza IT",
+      "repairer-applications": "Approvazioni tecnici",
+      "workshops-admin": "Workshop",
+      "services": "Servizi",
+      "appointments-admin": "Appuntamenti",
+      "locations": "Sedi",
+      "reviews": "Recensioni",
+      "content": "Blog e pagine",
+      "projects": "Progetti pubblici",
+      "approvals": "Approvazioni",
+      "membership": "Iscrizioni",
+      "tasks": "Attività",
+      "protocols": "Verbali",
+      "decisions": "Decisioni",
+      "analytics": "Analytics",
+      "donations": "Donazioni",
+      "users": "Utenti",
+      "team": "Profili team",
+      "timecards": "Schede orarie",
+      "timecard-approvals": "Approvazioni schede orarie",
+      "payroll": "Elaborazione stipendi",
+      "finanzen": "Finanze",
+      "analyse-hub": "Panoramica analisi",
+      "kennzahlen": "Indicatori",
+      "wirkung": "Impatto",
+      "transparenz": "Trasparenza",
+      "finances": "Finanze",
+      "hirn": "Hirn AI",
+      "settings": "Impostazioni",
+      "core": "Panoramica",
+      "activities": "Attività",
+      "commerce": "Vendita e commercio",
+      "management": "Gestione",
+      "sensitive": "Sensibile",
+      "system": "Sistema",
+      "analyse": "Analisi",
+      "seller-onboarding": "Diventa venditore"
+    },
+    "errorPage": {
+      "title": "Qualcosa è andato storto",
+      "description": "Si è verificato un errore durante il caricamento della pagina admin.",
+      "retry": "Riprova"
+    },
+    "blog": {
+      "form": {
+        "newPost": "Nuovo articolo",
+        "editPost": "Modifica articolo",
+        "newSubtitle": "Crea un nuovo articolo del blog",
+        "editSubtitle": "Apporta modifiche all'articolo",
+        "preview": "Anteprima",
+        "previewTitle": "Visualizza l'articolo pubblicato",
+        "previewNotAvailable": "L'articolo deve prima essere pubblicato",
+        "publish": "Pubblica",
+        "aiPlaceholderEdit": "es. «Aggiungi una sezione sui consigli di riparazione» o «Rendi il testo più accattivante»",
+        "aiPlaceholderNew": "Descrivi l'argomento o l'idea per il tuo articolo del blog…"
+      }
     }
   },
   "changelog": {
