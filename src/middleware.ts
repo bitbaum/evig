@@ -69,6 +69,27 @@ export async function middleware(request: NextRequest) {
     if (csrfResult) return csrfResult
   }
 
+  // Non-localized (BYPASS_INTL) routes must never carry a locale prefix.
+  // A locale-aware <Link href="/admin"> on e.g. an /ru page renders /ru/admin,
+  // which matches no route under [locale] and 404s for logged-in users (the
+  // auth check passes because it strips the prefix, but intl routing then has
+  // no /ru/admin page). Redirect to the canonical unprefixed path, preserving
+  // the user's locale via NEXT_LOCALE so the bypassed shell still renders in it.
+  const bypassPrefixMatch = pathname.match(LOCALE_PREFIX_REGEX)
+  if (bypassPrefixMatch) {
+    const stripped = stripLocalePrefix(pathname)
+    if (BYPASS_INTL.some(prefix => stripped.startsWith(prefix))) {
+      const target = new URL(stripped + request.nextUrl.search, request.url)
+      const redirect = NextResponse.redirect(target)
+      redirect.cookies.set('NEXT_LOCALE', bypassPrefixMatch[1], {
+        path: '/',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 365,
+      })
+      return redirect
+    }
+  }
+
   // Auth protection for admin/dashboard (CSRF already handled above for API)
   if (requiresAuth(pathname) && !isAuthBypassed(pathname)) {
     if (!(await hasValidSession(request))) {
