@@ -2587,7 +2587,25 @@
       "postalCode": "우편번호",
       "city": "도시",
       "canton": "주(칸톤)",
-      "cantonPlaceholder": "주(칸톤) 선택"
+      "cantonPlaceholder": "주(칸톤) 선택",
+      "budgetTiers": {
+        "gratis": {
+          "name": "무료 (요청 시)",
+          "description": "긴급한 도움이 필요한 분 — 편하게 문의하세요"
+        },
+        "kulturlegi": {
+          "name": "KulturLegi",
+          "description": "유효한 KulturLegi 카드로 50% 할인"
+        },
+        "normal": {
+          "name": "일반 가격",
+          "description": "도움에 대한 공정한 보상"
+        },
+        "supporter": {
+          "name": "서포터",
+          "description": "더 많이 지불하여 다른 사람에게 무료 도움을 제공합니다"
+        }
+      }
     },
     "myRequests": {
       "title": "내 수리 요청",
@@ -7372,7 +7390,8 @@
       "hourlyRate": "CHF {rate}/시간",
       "deliveryTypes": "도움 방식",
       "deliveryRemote": "원격 / 온라인",
-      "deliveryOnsite": "현장 방문"
+      "deliveryOnsite": "현장 방문",
+      "ctaHint": "이렇게 하면 이 사람에게 요청이 시작됩니다 — 상대방에게 알림이 전달되고 제안을 보낼 수 있습니다."
     },
     "seller": {
       "backToMarketplace": "마켓플레이스로 돌아가기",

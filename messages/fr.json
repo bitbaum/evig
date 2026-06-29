@@ -3120,7 +3120,25 @@
         "description": "Ta demande sera communiquée à ce technicien. D'autres techniciens correspondants peuvent également envoyer des offres — jusqu'à ce que tu en acceptes une.",
         "viewProfile": "Voir le profil"
       },
-      "cantonPlaceholder": "Choisir le canton"
+      "cantonPlaceholder": "Choisir le canton",
+      "budgetTiers": {
+        "gratis": {
+          "name": "Gratuit (sur demande)",
+          "description": "Pour les personnes en situation d’urgence — il suffit de demander"
+        },
+        "kulturlegi": {
+          "name": "KulturLegi",
+          "description": "50% de réduction avec une carte KulturLegi valable"
+        },
+        "normal": {
+          "name": "Prix normal",
+          "description": "Une rémunération équitable pour l’aide"
+        },
+        "supporter": {
+          "name": "Soutien",
+          "description": "Vous payez plus et permettez une aide gratuite pour d’autres"
+        }
+      }
     },
     "myRequests": {
       "title": "Mes demandes de réparation",
@@ -4735,7 +4753,8 @@
       "hourlyRate": "CHF {rate}/h",
       "deliveryTypes": "Type d'aide",
       "deliveryRemote": "À distance / En ligne",
-      "deliveryOnsite": "Sur place"
+      "deliveryOnsite": "Sur place",
+      "ctaHint": "Vous démarrez ainsi une demande à cette personne — elle sera notifiée et pourra vous faire une offre."
     },
     "seller": {
       "backToMarketplace": "Retour au marché",

@@ -3112,7 +3112,25 @@
       "postalCode": "PLZ",
       "city": "Stadt",
       "canton": "Kanton",
-      "cantonPlaceholder": "Kanton wählen"
+      "cantonPlaceholder": "Kanton wählen",
+      "budgetTiers": {
+        "gratis": {
+          "name": "Gratis (auf Anfrage)",
+          "description": "Für Personen in akuter Notlage – einfach fragen"
+        },
+        "kulturlegi": {
+          "name": "KulturLegi",
+          "description": "50% Rabatt mit gültiger KulturLegi-Karte"
+        },
+        "normal": {
+          "name": "Normalpreis",
+          "description": "Faire Vergütung für die Hilfe"
+        },
+        "supporter": {
+          "name": "Supporter",
+          "description": "Du zahlst mehr und ermöglichst Gratis-Hilfe für andere"
+        }
+      }
     },
     "myRequests": {
       "title": "Meine Reparaturanfragen",
@@ -7477,7 +7495,8 @@
       "hourlyRate": "CHF {rate}/h",
       "deliveryTypes": "Art der Hilfe",
       "deliveryRemote": "Remote / Online",
-      "deliveryOnsite": "Vor Ort"
+      "deliveryOnsite": "Vor Ort",
+      "ctaHint": "Du startest damit eine Anfrage an diese Person – sie wird benachrichtigt und kann dir ein Angebot machen."
     },
     "seller": {
       "meta": {

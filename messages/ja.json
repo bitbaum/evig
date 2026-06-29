@@ -2587,7 +2587,25 @@
       "postalCode": "郵便番号",
       "city": "市区町村",
       "canton": "州（カントン）",
-      "cantonPlaceholder": "カントンを選択"
+      "cantonPlaceholder": "カントンを選択",
+      "budgetTiers": {
+        "gratis": {
+          "name": "無料（リクエストに応じて）",
+          "description": "緊急に支援が必要な方へ — お気軽にお問い合わせください"
+        },
+        "kulturlegi": {
+          "name": "KulturLegi",
+          "description": "有効なKulturLegiカードで50%割引"
+        },
+        "normal": {
+          "name": "通常料金",
+          "description": "サポートに対する適正な報酬"
+        },
+        "supporter": {
+          "name": "サポーター",
+          "description": "多めに支払うことで、他の方への無料サポートを可能にします"
+        }
+      }
     },
     "myRequests": {
       "title": "マイ修理リクエスト",
@@ -7372,7 +7390,8 @@
       "hourlyRate": "CHF {rate}/時間",
       "deliveryTypes": "サポートの形式",
       "deliveryRemote": "リモート・オンライン",
-      "deliveryOnsite": "現地訪問"
+      "deliveryOnsite": "現地訪問",
+      "ctaHint": "これでこの人へのリクエストを開始します。相手に通知が届き、見積もりを送ることができます。"
     },
     "seller": {
       "backToMarketplace": "マーケットプレイスに戻る",

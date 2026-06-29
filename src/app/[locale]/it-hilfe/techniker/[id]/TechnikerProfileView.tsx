@@ -21,6 +21,7 @@ export type TechnikerProfileCopy = {
   deliveryTypes: string
   submitRequest: string
   contact: string
+  ctaHint: string
   gratisHelp: string
   kulturlegiRate: string
 }
@@ -128,6 +129,7 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
               {meta.ctaLabel}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
+            <p className="mt-3 text-xs text-text-tertiary max-w-md">{copy.ctaHint}</p>
           </div>
         </header>
 

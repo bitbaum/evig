@@ -20,6 +20,7 @@ interface RequestData {
   title?: string
   description?: string
   urgency?: string
+  budgetTier?: string | null
   budgetAmountCents?: number
   postalCode?: string
   city?: string
@@ -86,6 +87,7 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
         title: r.title || '',
         description: r.description || '',
         urgency: r.urgency || URGENCY.NORMAL,
+        budgetTier: r.budgetTier || '',
         maxBudget: r.budgetAmountCents ? String(r.budgetAmountCents / 100) : '',
         postalCode: r.postalCode || '',
         city: r.city || '',

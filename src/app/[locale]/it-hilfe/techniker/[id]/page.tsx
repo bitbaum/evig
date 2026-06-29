@@ -67,6 +67,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
     deliveryTypes: t('detail.deliveryTypes'),
     submitRequest: t('detail.submitRequest'),
     contact: t('detail.contact'),
+    ctaHint: t('detail.ctaHint'),
     gratisHelp: t('detail.gratisHelp'),
     kulturlegiRate: t('detail.kulturlegiRate'),
   }

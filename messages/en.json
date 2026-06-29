@@ -3120,7 +3120,25 @@
       "postalCode": "Postal code",
       "city": "City",
       "canton": "Canton",
-      "cantonPlaceholder": "Select canton"
+      "cantonPlaceholder": "Select canton",
+      "budgetTiers": {
+        "gratis": {
+          "name": "Free (on request)",
+          "description": "For people in acute need — just ask"
+        },
+        "kulturlegi": {
+          "name": "KulturLegi",
+          "description": "50% off with a valid KulturLegi card"
+        },
+        "normal": {
+          "name": "Standard price",
+          "description": "Fair compensation for the help"
+        },
+        "supporter": {
+          "name": "Supporter",
+          "description": "You pay more and enable free help for others"
+        }
+      }
     },
     "myRequests": {
       "title": "My repair requests",
@@ -4734,7 +4752,8 @@
       "hourlyRate": "CHF {rate}/h",
       "deliveryTypes": "Type of help",
       "deliveryRemote": "Remote / Online",
-      "deliveryOnsite": "On-site"
+      "deliveryOnsite": "On-site",
+      "ctaHint": "This starts a request to this person — they’ll be notified and can send you an offer."
     },
     "seller": {
       "backToMarketplace": "Back to Marketplace",

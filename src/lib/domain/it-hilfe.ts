@@ -17,6 +17,7 @@ export function transformITHilfeFormToPayload(formData: ITHilfeCreateFormData) {
     title: formData.title,
     description: formData.description || null,
     urgency: formData.urgency || undefined,
+    budgetTier: formData.budgetTier || undefined,
     maxBudgetCents: formData.maxBudget ? Math.round(parseFloat(formData.maxBudget) * 100) : null,
     postalCode: formData.postalCode || null,
     city: formData.city || null,

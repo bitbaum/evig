@@ -14,7 +14,9 @@ import {
   DEVICE_CATEGORIES,
   URGENCY_LEVELS,
   SERVICE_TYPES,
+  BUDGET_TIERS,
 } from '@/config/it-hilfe'
+import { cn } from '@/lib/utils'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { ITHilfeImageUpload } from '@/components/it-hilfe/ITHilfeImageUpload'
 import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetailsSection'
@@ -290,25 +292,57 @@ export default function CreatePeerRepairPage() {
                 onCantonChange={(v) => updateField('canton', v)}
               />
 
-              {/* Budget */}
+              {/* Budget — solidarity pricing tiers (structure from BUDGET_TIERS
+                  config; labels from i18n). The amount field appears only for
+                  tiers that take one. */}
               <div className="card-shell p-6">
                 <Heading level={2} className="text-lg text-text-primary mb-2">{t('sectionBudget')}</Heading>
                 <p className="text-sm text-text-secondary mb-4">{t('budgetDescription')}</p>
-                <div className="flex items-center gap-3">
-                  <span className="text-text-tertiary">CHF</span>
-                  <Input
-                    type="number"
-                    value={formData.maxBudget}
-                    onChange={(e) => updateField('maxBudget', e.target.value)}
-                    placeholder={t('budgetPlaceholder')}
-                    min="0"
-                    step="5"
-                    className="w-32"
-                  />
-                  <span className="text-sm text-text-tertiary">
-                    {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
-                  </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {BUDGET_TIERS.map((tier) => {
+                    const selected = formData.budgetTier === tier.id
+                    const tierCopy = (t.raw as (k: string) => Record<string, { name: string; description: string }>)('budgetTiers')[tier.id]
+                    return (
+                      <Button
+                        type="button"
+                        key={tier.id}
+                        variant="ghost"
+                        onClick={() => updateField('budgetTier', selected ? '' : tier.id)}
+                        aria-pressed={selected}
+                        className={cn(
+                          'flex-col items-start text-left h-auto w-full rounded-xl border p-4 transition-colors',
+                          selected
+                            ? 'border-action bg-action-muted/10'
+                            : 'border-default hover:border-strong',
+                        )}
+                      >
+                        <span className="block text-sm font-medium text-text-primary">
+                          {tierCopy?.name ?? tier.id}
+                        </span>
+                        <span className="block text-xs text-text-secondary mt-1 whitespace-normal">
+                          {tierCopy?.description}
+                        </span>
+                      </Button>
+                    )
+                  })}
                 </div>
+                {BUDGET_TIERS.find((tier) => tier.id === formData.budgetTier)?.requiresAmount && (
+                  <div className="flex items-center gap-3 mt-4">
+                    <span className="text-text-tertiary">CHF</span>
+                    <Input
+                      type="number"
+                      value={formData.maxBudget}
+                      onChange={(e) => updateField('maxBudget', e.target.value)}
+                      placeholder={t('budgetPlaceholder')}
+                      min="0"
+                      step="5"
+                      className="w-32"
+                    />
+                    <span className="text-sm text-text-tertiary">
+                      {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Service Type & Urgency */}

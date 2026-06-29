@@ -3116,7 +3116,25 @@
       "postalCode": "Индекс",
       "city": "Город",
       "canton": "Кантон",
-      "cantonPlaceholder": "Выберите кантон"
+      "cantonPlaceholder": "Выберите кантон",
+      "budgetTiers": {
+        "gratis": {
+          "name": "Бесплатно (по запросу)",
+          "description": "Для людей в острой нужде — просто спросите"
+        },
+        "kulturlegi": {
+          "name": "KulturLegi",
+          "description": "Скидка 50% с действительной картой KulturLegi"
+        },
+        "normal": {
+          "name": "Обычная цена",
+          "description": "Справедливое вознаграждение за помощь"
+        },
+        "supporter": {
+          "name": "Сторонник",
+          "description": "Вы платите больше и даёте возможность бесплатной помощи другим"
+        }
+      }
     },
     "myRequests": {
       "title": "Мои запросы на ремонт",
@@ -7481,7 +7499,8 @@
       "hourlyRate": "CHF {rate}/ч",
       "deliveryTypes": "Вид помощи",
       "deliveryRemote": "Удалённо / онлайн",
-      "deliveryOnsite": "На месте"
+      "deliveryOnsite": "На месте",
+      "ctaHint": "Так вы создаёте запрос этому человеку — он получит уведомление и сможет отправить вам предложение."
     },
     "seller": {
       "meta": {

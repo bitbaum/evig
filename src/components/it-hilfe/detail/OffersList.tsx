@@ -29,13 +29,26 @@ export function OffersList({
   const t = useTranslations('itHelp.detail')
   if (offers.length === 0) return null
 
+  // Surface the strongest offers first so the requester can compare top-down:
+  // an accepted offer pins to the top, then verified technicians, then higher
+  // rating, then most recent. (Pure presentation — does not mutate the prop.)
+  const sortedOffers = [...offers].sort((a, b) => {
+    const accepted = (o: Offer) => (o.status === OFFER_STATUS.ACCEPTED ? 1 : 0)
+    if (accepted(a) !== accepted(b)) return accepted(b) - accepted(a)
+    const verified = (o: Offer) => (o.repairerProfile?.isVerified ? 1 : 0)
+    if (verified(a) !== verified(b)) return verified(b) - verified(a)
+    const rating = (o: Offer) => Number(o.repairerProfile?.averageRating ?? 0)
+    if (rating(a) !== rating(b)) return rating(b) - rating(a)
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
+
   return (
     <div className="card-shell p-6">
       <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
         {t('incomingOffers', { count: offers.length })}
       </Heading>
       <div className="space-y-4">
-        {offers.map((offer) => {
+        {sortedOffers.map((offer) => {
           const offerStatusConfig = getOfferStatusById(offer.status)
           const isAccepted = offer.status === OFFER_STATUS.ACCEPTED
 

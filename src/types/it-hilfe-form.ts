@@ -14,6 +14,7 @@ export interface ITHilfeCreateFormData {
   title: string
   description: string
   urgency: string
+  budgetTier: string
   maxBudget: string
   postalCode: string
   city: string
@@ -36,6 +37,7 @@ export const INITIAL_IT_HILFE_FORM: ITHilfeCreateFormData = {
   title: '',
   description: '',
   urgency: URGENCY_DEFAULT,
+  budgetTier: '',
   maxBudget: '',
   postalCode: '',
   city: '',
