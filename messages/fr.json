@@ -3078,7 +3078,9 @@
         "title": "Technicien préféré",
         "description": "Tu as demandé l'aide de {name}.",
         "viewProfile": "Voir le profil"
-      }
+      },
+      "messageOfferer": "Message",
+      "askQuestion": "Poser une question"
     },
     "create": {
       "backToList": "Retour à la liste",

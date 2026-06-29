@@ -3074,7 +3074,9 @@
       "markCompletedTitle": "Помощь завершена?",
       "markCompletedDesc": "Если вы закончили ремонт или помощь, отметьте это как завершённое. Запрашивающего попросят оставить вам отзыв.",
       "markCompletedSaving": "Сохраняется...",
-      "markCompletedButton": "Отметить как завершённое"
+      "markCompletedButton": "Отметить как завершённое",
+      "messageOfferer": "Сообщение",
+      "askQuestion": "Задать вопрос"
     },
     "create": {
       "backToList": "Назад к обзору",

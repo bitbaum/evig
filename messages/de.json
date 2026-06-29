@@ -3070,7 +3070,9 @@
       "markCompletedTitle": "Hilfe abgeschlossen?",
       "markCompletedDesc": "Wenn du die Reparatur bzw. Hilfe beendet hast, markiere sie als abgeschlossen. Der Anfragende wird dann gebeten, dir eine Bewertung zu hinterlassen.",
       "markCompletedSaving": "Wird gespeichert...",
-      "markCompletedButton": "Als abgeschlossen markieren"
+      "markCompletedButton": "Als abgeschlossen markieren",
+      "messageOfferer": "Nachricht",
+      "askQuestion": "Frage stellen"
     },
     "create": {
       "backToList": "Zurück zur Übersicht",

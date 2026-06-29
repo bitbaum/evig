@@ -145,7 +145,8 @@ function setupSuccessExecute() {
   const txExecute = jest.fn()
     .mockResolvedValueOnce({ rows: [{ status: 'open' }] })       // FOR UPDATE request
     .mockResolvedValueOnce({ rows: [{ status: 'pending' }] })    // re-read offer
-    .mockResolvedValue({ rows: [] })                              // conversation lookup + rest
+    .mockResolvedValueOnce({ rows: [] })                          // conversation lookup (none exists)
+    .mockResolvedValue({ rows: [{ id: 'conv-new' }] })            // conversation INSERT ... RETURNING id
   const txUpdate = jest.fn().mockReturnValue({ set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }) })
   const txInsert = jest.fn().mockReturnValue({ values: jest.fn().mockResolvedValue(undefined) })
   mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
+import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -195,24 +195,36 @@ export default function ITHilfeDetailPage() {
 
             {/* Offer Form */}
             {detail.canOffer && !detail.userOffer && (
-              <OfferForm
-                showForm={detail.showOfferForm}
-                onShowForm={() => detail.setShowOfferForm(true)}
-                offerMessage={detail.offerMessage}
-                onMessageChange={detail.setOfferMessage}
-                offerEstimatedTime={detail.offerEstimatedTime}
-                onEstimatedTimeChange={detail.setOfferEstimatedTime}
-                offerCompensation={detail.offerCompensation}
-                onCompensationChange={detail.setOfferCompensation}
-                offerAmount={detail.offerAmount}
-                onAmountChange={detail.setOfferAmount}
-                offerSkills={detail.offerSkills}
-                onSkillToggle={detail.handleSkillToggle}
-                submitting={detail.submittingOffer}
-                error={detail.offerError}
-                onSubmit={detail.handleSubmitOffer}
-                onCancel={() => detail.setShowOfferForm(false)}
-              />
+              <div className="space-y-3">
+                <OfferForm
+                  showForm={detail.showOfferForm}
+                  onShowForm={() => detail.setShowOfferForm(true)}
+                  offerMessage={detail.offerMessage}
+                  onMessageChange={detail.setOfferMessage}
+                  offerEstimatedTime={detail.offerEstimatedTime}
+                  onEstimatedTimeChange={detail.setOfferEstimatedTime}
+                  offerCompensation={detail.offerCompensation}
+                  onCompensationChange={detail.setOfferCompensation}
+                  offerAmount={detail.offerAmount}
+                  onAmountChange={detail.setOfferAmount}
+                  offerSkills={detail.offerSkills}
+                  onSkillToggle={detail.handleSkillToggle}
+                  submitting={detail.submittingOffer}
+                  error={detail.offerError}
+                  onSubmit={detail.handleSubmitOffer}
+                  onCancel={() => detail.setShowOfferForm(false)}
+                />
+                {/* Pre-offer: ask the requester a question before committing */}
+                <Button
+                  variant="ghost"
+                  onClick={() => detail.openConversation()}
+                  disabled={detail.openingConversation}
+                  className="gap-1.5"
+                >
+                  <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                  {t('askQuestion')}
+                </Button>
+              </div>
             )}
 
             {/* Offers List (Owner only) */}
@@ -224,6 +236,7 @@ export default function ITHilfeDetailPage() {
                 decliningOfferId={detail.decliningOfferId}
                 onAcceptOffer={detail.handleAcceptOffer}
                 onDeclineOffer={detail.handleDeclineOffer}
+                onMessageOfferer={detail.openConversation}
               />
             )}
 

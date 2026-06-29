@@ -3078,7 +3078,9 @@
       "markCompletedTitle": "Help completed?",
       "markCompletedDesc": "Once you have finished the repair or help, mark it as completed. The requester will then be asked to leave you a review.",
       "markCompletedSaving": "Saving...",
-      "markCompletedButton": "Mark as completed"
+      "markCompletedButton": "Mark as completed",
+      "messageOfferer": "Message",
+      "askQuestion": "Ask a question"
     },
     "create": {
       "backToList": "Back to list",

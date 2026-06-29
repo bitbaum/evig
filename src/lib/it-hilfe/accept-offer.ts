@@ -22,12 +22,11 @@ import { db } from '@/db'
 import { sql, eq, and, ne, getTableName } from 'drizzle-orm'
 import { itHilfeRequests, itHilfeOffers } from '@/db/schema/itHilfe'
 import { users } from '@/db/schema/auth'
-import { conversations } from '@/db/schema/messaging'
-import { CONVERSATION_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { notifyUsers } from '@/lib/services/notifications'
+import { findOrCreateItHilfeConversation } from './conversation'
 import { APP_URL } from '@/config/urls'
 
 export type AcceptOfferReason =
@@ -59,7 +58,6 @@ interface OfferRow {
 const reqTable = getTableName(itHilfeRequests)
 const offTable = getTableName(itHilfeOffers)
 const uTable = getTableName(users)
-const convTable = getTableName(conversations)
 
 /**
  * Resolve an offer's parent requestId. Returns null if the offer doesn't
@@ -178,29 +176,14 @@ export async function acceptOffer(params: {
       .set({ status: REQUEST_STATUS.MATCHED, matchedOfferId: offerId })
       .where(eq(itHilfeRequests.id, requestId))
 
-    // Conversation participants must be in consistent order (CHECK constraint)
-    const participant_1 = requestData.requester_id < offerData.helper_id
-      ? requestData.requester_id
-      : offerData.helper_id
-    const participant_2 = requestData.requester_id < offerData.helper_id
-      ? offerData.helper_id
-      : requestData.requester_id
-
-    const existingConv = await tx.execute(sql`
-      SELECT id FROM ${sql.raw(convTable)}
-      WHERE participant_1 = ${participant_1} AND participant_2 = ${participant_2}
-        AND type = ${CONVERSATION_TYPES.IT_HILFE} AND context_id = ${requestId}
-    `)
-
-    if (existingConv.rows.length === 0) {
-      await tx.insert(conversations).values({
-        participant1: participant_1,
-        participant2: participant_2,
-        type: CONVERSATION_TYPES.IT_HILFE,
-        contextId: requestId,
-        title: `IT-Hilfe: ${requestData.title}`,
-      })
-    }
+    // Ensure the requester ↔ helper conversation exists (shared with the
+    // pre-acceptance "ask a question" flow).
+    await findOrCreateItHilfeConversation(tx, {
+      requestId,
+      userA: requestData.requester_id,
+      userB: offerData.helper_id,
+      requestTitle: requestData.title,
+    })
 
     return false
   })

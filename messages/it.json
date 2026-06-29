@@ -2545,7 +2545,9 @@
         "title": "Tecnico preferito",
         "description": "Hai richiesto l'aiuto di {name}.",
         "viewProfile": "Vedi profilo"
-      }
+      },
+      "messageOfferer": "Messaggio",
+      "askQuestion": "Fai una domanda"
     },
     "create": {
       "backToList": "Torna alla lista",

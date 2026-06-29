@@ -2545,7 +2545,9 @@
       "markCompletedTitle": "도움 완료?",
       "markCompletedDesc": "수리나 도움이 완료되면 완료로 표시하세요. 요청자에게 리뷰를 남기도록 요청됩니다.",
       "markCompletedSaving": "저장 중...",
-      "markCompletedButton": "완료로 표시"
+      "markCompletedButton": "완료로 표시",
+      "messageOfferer": "메시지",
+      "askQuestion": "질문하기"
     },
     "create": {
       "backToList": "목록으로 돌아가기",

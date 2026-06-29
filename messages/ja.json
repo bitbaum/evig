@@ -2545,7 +2545,9 @@
       "markCompletedTitle": "サポート完了？",
       "markCompletedDesc": "修理やサポートが完了したら、完了としてマークしてください。依頼者にレビューを投稿するよう促されます。",
       "markCompletedSaving": "保存中...",
-      "markCompletedButton": "完了としてマーク"
+      "markCompletedButton": "完了としてマーク",
+      "messageOfferer": "メッセージ",
+      "askQuestion": "質問する"
     },
     "create": {
       "backToList": "一覧に戻る",

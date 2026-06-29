@@ -40,6 +40,7 @@ export function useITHilfeDetail(id: string) {
   // Messaging state
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [showMessages, setShowMessages] = useState(false)
+  const [openingConversation, setOpeningConversation] = useState(false)
 
   // Review state
   const [hasReviewed, setHasReviewed] = useState(false)
@@ -416,6 +417,28 @@ export function useITHilfeDetail(id: string) {
     : t('confirmCancelRequest')
     : ''
 
+  // Pre-acceptance conversation: a technician asks the requester a question
+  // (no arg → the helper is the caller), or the requester messages an offerer
+  // (pass the offerer's id). Find-or-creates the conversation, then opens the
+  // message panel.
+  const openConversation = useCallback(async (withUserId?: string) => {
+    setOpeningConversation(true)
+    try {
+      const result = await apiFetch<{ conversationId: string }>(`/api/it-hilfe/requests/${id}/conversation`, {
+        method: 'POST',
+        body: withUserId ? { withUserId } : {},
+      })
+      if (result.success && result.data?.conversationId) {
+        setConversationId(result.data.conversationId)
+        setShowMessages(true)
+      } else {
+        setError(result.error || t('unexpectedError'))
+      }
+    } finally {
+      setOpeningConversation(false)
+    }
+  }, [id, t])
+
   return {
     session,
     request,
@@ -424,6 +447,8 @@ export function useITHilfeDetail(id: string) {
     error,
     isExpired,
     canOffer,
+    openConversation,
+    openingConversation,
 
     // Offer form
     showOfferForm,

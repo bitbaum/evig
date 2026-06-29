@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { Clock, User, Wrench, CheckCircle, Star } from 'lucide-react'
+import { Clock, User, Wrench, CheckCircle, Star, MessageCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ interface OffersListProps {
   decliningOfferId: string | null
   onAcceptOffer: (offerId: string) => void
   onDeclineOffer: (offerId: string) => void
+  onMessageOfferer: (helperId: string) => void
 }
 
 export function OffersList({
@@ -25,6 +26,7 @@ export function OffersList({
   decliningOfferId,
   onAcceptOffer,
   onDeclineOffer,
+  onMessageOfferer,
 }: OffersListProps) {
   const t = useTranslations('itHelp.detail')
   if (offers.length === 0) return null
@@ -155,6 +157,15 @@ export function OffersList({
                     size="sm"
                   >
                     {decliningOfferId === offer.id ? t('declining') : t('decline')}
+                  </Button>
+                  <Button
+                    onClick={() => onMessageOfferer(offer.helperId)}
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1.5"
+                  >
+                    <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                    {t('messageOfferer')}
                   </Button>
                 </div>
               )}
