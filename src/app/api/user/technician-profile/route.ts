@@ -10,18 +10,11 @@
 
 import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { repairerProfiles, userSkills } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import {
-  apiError,
-  apiSuccess,
-} from '@/lib/api/helpers'
+import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { REPAIRER_STATUS, REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { logger } from '@/lib/logger'
-import { IT_SKILLS } from '@/config/it-hilfe'
 import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
+import { getTechnicianSelfProfile, upsertTechnicianProfile } from '@/lib/services/technician-service'
 
 /**
  * GET /api/user/technician-profile
@@ -29,67 +22,8 @@ import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
  */
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    const [profileRow] = await db
-      .select({
-        bio: repairerProfiles.description,
-        hourlyRateCents: repairerProfiles.hourlyRateCents,
-        acceptsGratis: repairerProfiles.acceptsGratis,
-        acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
-        serviceTypes: repairerProfiles.serviceDeliveryTypes,
-        postalCode: repairerProfiles.postalCode,
-        city: repairerProfiles.city,
-        canton: repairerProfiles.canton,
-        maxTravelKm: repairerProfiles.maxTravelKm,
-        isActive: repairerProfiles.isActive,
-        profileTier: repairerProfiles.profileTier,
-      })
-      .from(repairerProfiles)
-      .where(eq(repairerProfiles.userId, session.user.id))
-
-    const skillRows = await db
-      .select({
-        skillId: userSkills.skillId,
-        categoryId: userSkills.categoryId,
-      })
-      .from(userSkills)
-      .where(eq(userSkills.userId, session.user.id))
-
-    const profile = profileRow
-      ? {
-          skills: skillRows.map((r) => r.skillId),
-          bio: profileRow.bio || '',
-          hourlyRateCents: profileRow.hourlyRateCents,
-          acceptsGratis: profileRow.acceptsGratis ?? true,
-          acceptsKulturlegi: profileRow.acceptsKulturlegi ?? true,
-          serviceTypes: profileRow.serviceTypes || ['flexible'],
-          postalCode: profileRow.postalCode || '',
-          city: profileRow.city || '',
-          canton: profileRow.canton || '',
-          maxTravelKm: profileRow.maxTravelKm ?? 10,
-          isActive: profileRow.isActive ?? false,
-          profileTier: profileRow.profileTier,
-        }
-      : skillRows.length > 0
-        ? {
-            skills: skillRows.map((r) => r.skillId),
-            bio: '',
-            hourlyRateCents: null,
-            acceptsGratis: true,
-            acceptsKulturlegi: true,
-            serviceTypes: ['flexible'],
-            postalCode: '',
-            city: '',
-            canton: '',
-            maxTravelKm: 10,
-            isActive: false,
-            profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
-          }
-        : null
-
-    return apiSuccess({
-      profile,
-      hasProfile: !!profileRow,
-    })
+    const { profile, hasProfile } = await getTechnicianSelfProfile(session.user.id)
+    return apiSuccess({ profile, hasProfile })
   } catch (error) {
     logger.error('Error fetching technician profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
@@ -106,84 +40,13 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
     const body = await request.json()
     const validation = validateBody(TechnicianProfileSchema, body)
     if (!validation.success) return validation.error
-    const {
-      skills,
-      bio,
-      hourlyRateCents,
-      acceptsGratis,
-      acceptsKulturlegi,
-      serviceTypes,
-      postalCode,
-      city,
-      canton,
-      maxTravelKm,
-      isActive,
-    } = validation.data
 
-    // repairer_profiles requires phone, address, city, postal_code (NOT NULL).
-    // For community self-registration, use defaults so the INSERT succeeds.
-    // These can be updated later via a fuller profile form.
-    await db
-      .insert(repairerProfiles)
-      .values({
-        userId: session.user.id,
-        description: bio || undefined,
-        hourlyRateCents,
-        acceptsGratis,
-        acceptsKulturlegi,
-        serviceDeliveryTypes: serviceTypes.length > 0 ? serviceTypes : undefined,
-        city: city || '',
-        canton: canton || null,
-        postalCode: postalCode || '',
-        // required NOT NULL columns — use empty strings as placeholder for community users
-        phone: '',
-        address: '',
-        maxTravelKm,
-        isActive,
-        profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
-        status: REPAIRER_STATUS.ACTIVE,
-      })
-      .onConflictDoUpdate({
-        target: repairerProfiles.userId,
-        set: {
-          description: bio || null,
-          hourlyRateCents,
-          acceptsGratis,
-          acceptsKulturlegi,
-          serviceDeliveryTypes: serviceTypes.length > 0 ? serviceTypes : null,
-          city: city || '',
-          canton: canton || null,
-          postalCode: postalCode || '',
-          maxTravelKm,
-          isActive,
-          // Only set tier to 'community' if it is not already 'professional'
-          // (don't demote a verified professional via this endpoint)
-          profileTier: sql`CASE WHEN ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.PROFESSIONAL} THEN ${REPAIRER_PROFILE_TIER.PROFESSIONAL} ELSE ${REPAIRER_PROFILE_TIER.COMMUNITY} END`,
-          updatedAt: sql`NOW()`,
-        },
-      })
-
-    // Replace skills: delete existing, insert new
-    await db
-      .delete(userSkills)
-      .where(eq(userSkills.userId, session.user.id))
-
-    if (skills.length > 0) {
-      const skillValues = skills.map((skillId: string) => ({
-        userId: session.user.id,
-        skillId,
-        categoryId: getCategoryForSkill(skillId),
-      }))
-
-      await db
-        .insert(userSkills)
-        .values(skillValues)
-    }
+    await upsertTechnicianProfile(session.user.id, validation.data)
 
     logger.info('Updated technician profile', {
       userId: session.user.id,
-      skillCount: skills.length,
-      isActive,
+      skillCount: validation.data.skills.length,
+      isActive: validation.data.isActive,
     })
 
     return apiSuccess({
@@ -194,17 +57,3 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })
-
-/**
- * Get category ID for a skill
- */
-function getCategoryForSkill(skillId: string): string {
-  for (const [categoryId, skills] of Object.entries(IT_SKILLS)) {
-    if (
-      (skills as Array<{ id: string }>).some((s) => s.id === skillId)
-    ) {
-      return categoryId
-    }
-  }
-  return 'other'
-}
