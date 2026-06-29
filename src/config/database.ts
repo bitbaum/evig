@@ -44,11 +44,11 @@ export const TABLE_NAMES = {
   // Applications & Profiles
   SELLER_APPLICATIONS: 'seller_applications',
   SELLER_PROFILES: 'seller_profiles',
-  REPAIRER_APPLICATIONS: 'repairer_applications',
-  REPAIRER_PROFILES: 'repairer_profiles',
-  REPAIRER_SERVICES: 'repairer_services',
-  REPAIRER_AVAILABILITY: 'repairer_availability',
-  REPAIRER_REVIEWS: 'repairer_reviews',
+  REPAIRER_APPLICATIONS: 'technician_applications',
+  REPAIRER_PROFILES: 'technician_profiles',
+  REPAIRER_SERVICES: 'technician_services',
+  REPAIRER_AVAILABILITY: 'technician_availability',
+  REPAIRER_REVIEWS: 'technician_reviews',
   REPAIRER_CERTIFICATIONS: 'repairer_certifications',
 
   // Membership
@@ -104,7 +104,7 @@ export const TABLE_NAMES = {
   IT_HILFE_REQUESTS: 'it_hilfe_requests',
   IT_HILFE_OFFERS: 'it_hilfe_offers',
   USER_SKILLS: 'user_skills',
-  IT_HILFE_TECHNICIAN_PROFILES: 'repairer_profiles',
+  IT_HILFE_TECHNICIAN_PROFILES: 'technician_profiles',
 
   // HIRN AI System
   HIRN_DOCUMENTS: 'hirn_documents',

@@ -139,7 +139,7 @@ export type NewServiceAppointment = typeof serviceAppointments.$inferInsert
 // CHECK (business_type IN ('individual', 'business', 'freelance'))
 // CHECK (status IN ('pending_review', 'active', 'suspended', 'inactive'))
 
-export const repairerProfiles = pgTable('repairer_profiles', {
+export const repairerProfiles = pgTable('technician_profiles', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
 
@@ -235,7 +235,7 @@ export type NewRepairerProfile = typeof repairerProfiles.$inferInsert
 // From 008_repairer_system.sql.
 // UNIQUE (repairer_id, service_category, service_name)
 
-export const repairerServices = pgTable('repairer_services', {
+export const repairerServices = pgTable('technician_services', {
   id: uuid('id').primaryKey().defaultRandom(),
   repairerId: uuid('repairer_id').notNull().references(() => repairerProfiles.id, { onDelete: 'cascade' }),
 
@@ -275,7 +275,7 @@ export type NewRepairerService = typeof repairerServices.$inferInsert
 // CHECK (availability_type IN ('available', 'booked', 'blocked'))
 // UNIQUE (repairer_id, date, start_time)
 
-export const repairerAvailability = pgTable('repairer_availability', {
+export const repairerAvailability = pgTable('technician_availability', {
   id: uuid('id').primaryKey().defaultRandom(),
   repairerId: uuid('repairer_id').notNull().references(() => repairerProfiles.id, { onDelete: 'cascade' }),
 
@@ -317,7 +317,7 @@ export type NewRepairerAvailability = typeof repairerAvailability.$inferInsert
 // CHECK (communication_rating >= 1 AND communication_rating <= 5)
 // UNIQUE (repairer_id, customer_id, appointment_id)
 
-export const repairerReviews = pgTable('repairer_reviews', {
+export const repairerReviews = pgTable('technician_reviews', {
   id: uuid('id').primaryKey().defaultRandom(),
   repairerId: uuid('repairer_id').notNull().references(() => repairerProfiles.id, { onDelete: 'cascade' }),
   customerId: uuid('customer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
@@ -365,7 +365,7 @@ export type NewRepairerReview = typeof repairerReviews.$inferInsert
 // CHECK (status IN ('pending', 'approved', 'rejected', 'requires_changes'))
 // UNIQUE (user_id)
 
-export const repairerApplications = pgTable('repairer_applications', {
+export const repairerApplications = pgTable('technician_applications', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
 
