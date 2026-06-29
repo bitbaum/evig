@@ -51,6 +51,7 @@ jest.mock('@/db/schema', () => ({
   repairerServices: { id: 'repairerServices', repairerId: 'repairerId', isActive: 'isActive' },
   userSkills: { userId: 'userSkills_userId', skillId: 'skillId' },
   users: { id: 'users', name: 'users_name' },
+  userProfiles: { userId: 'userProfiles_userId', avatarUrl: 'userProfiles_avatarUrl' },
 }))
 
 jest.mock('drizzle-orm', () => ({

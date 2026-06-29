@@ -131,11 +131,16 @@ async function updateTargetRating(targetType: string, targetId: string): Promise
  * ratings). Replaces the two slice-specific updaters that overwrote each other.
  */
 export async function recomputeTechnicianAggregate(technicianUserId: string): Promise<void> {
+  // Always resets the profile to the truth: LEFT JOIN onto a single base row so
+  // a technician with ZERO published reviews is set back to 0/0.0 rather than
+  // keeping stale (or seeded) values. An inner join here would skip no-review
+  // techs entirely — which is how fabricated aggregates survived recompute.
   const result = await db.execute(sql`
     UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} p SET
-      average_rating = sub.avg_rating,
-      total_reviews = sub.review_count
-    FROM (
+      average_rating = COALESCE(sub.avg_rating, 0.0),
+      total_reviews = COALESCE(sub.review_count, 0)
+    FROM (SELECT ${technicianUserId}::uuid AS user_id) base
+    LEFT JOIN (
       SELECT u AS user_id, AVG(rating)::numeric(3,2) AS avg_rating, COUNT(*)::int AS review_count
       FROM (
         SELECT o.helper_id AS u, r.overall_rating AS rating
@@ -151,8 +156,8 @@ export async function recomputeTechnicianAggregate(technicianUserId: string): Pr
       ) all_reviews
       WHERE u = ${technicianUserId}
       GROUP BY u
-    ) sub
-    WHERE p.user_id = sub.user_id
+    ) sub ON sub.user_id = base.user_id
+    WHERE p.user_id = base.user_id
   `)
   logger.info('Recomputed technician aggregate', { technicianUserId, rows: result.rowCount })
 }

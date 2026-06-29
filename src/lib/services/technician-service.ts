@@ -6,7 +6,7 @@
  */
 
 import { db } from '@/db'
-import { repairerProfiles, repairerServices, userSkills, users } from '@/db/schema'
+import { repairerProfiles, repairerServices, userSkills, users, userProfiles } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
@@ -32,6 +32,7 @@ export interface TechnicianDetail {
   id: string
   userId: string
   name: string | null
+  avatarUrl: string | null
   bio: string | null
   hourlyRateCents: number | null
   averageRating: number | null
@@ -66,6 +67,7 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
       id: repairerProfiles.id,
       userId: repairerProfiles.userId,
       name: users.name,
+      avatarUrl: userProfiles.avatarUrl,
       bio: repairerProfiles.description,
       hourlyRateCents: repairerProfiles.hourlyRateCents,
       averageRating: repairerProfiles.averageRating,
@@ -86,6 +88,7 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
     })
     .from(repairerProfiles)
     .innerJoin(users, eq(repairerProfiles.userId, users.id))
+    .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
     .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
     .where(
       and(
@@ -97,6 +100,7 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
       repairerProfiles.id,
       repairerProfiles.userId,
       users.name,
+      userProfiles.avatarUrl,
       repairerProfiles.description,
       repairerProfiles.hourlyRateCents,
       repairerProfiles.averageRating,

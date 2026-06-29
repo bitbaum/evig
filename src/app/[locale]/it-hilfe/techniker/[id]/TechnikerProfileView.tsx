@@ -68,9 +68,18 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
 
         <header className="mt-8 border-b border-subtle pb-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-subtle bg-action-muted font-mono text-3xl font-semibold text-action">
-              {initial}
-            </div>
+            {technician.avatarUrl ? (
+               
+              <img
+                src={technician.avatarUrl}
+                alt={displayName}
+                className="h-20 w-20 shrink-0 rounded-lg border border-subtle object-cover"
+              />
+            ) : (
+              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-subtle bg-action-muted font-mono text-3xl font-semibold text-action">
+                {initial}
+              </div>
+            )}
             <div className="min-w-0 flex-1">
               <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
                 {meta.eyebrow}

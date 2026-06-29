@@ -43,6 +43,7 @@ const MOCK_TECHNICIAN = {
   id: VALID_UUID,
   userId: 'user-1',
   name: 'Hans Müller',
+  avatarUrl: null,
   bio: 'Ich helfe gerne',
   hourlyRateCents: null,
   averageRating: null,
