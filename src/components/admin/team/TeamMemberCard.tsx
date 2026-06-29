@@ -18,26 +18,21 @@ import {
 } from '@/config/team'
 import { formatDateShort } from '@/lib/date-formats'
 import { adminInteractive } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
+import { Avatar } from '@/components/ui/Avatar'
 import type { TeamMemberCardProps } from './types'
 
 export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) {
-  const initials = member.user_name
-    ? member.user_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : member.user_email[0].toUpperCase()
-
   const displayName = member.user_name || member.user_email.split('@')[0]
 
   return (
     <div className="rounded-lg border border-subtle bg-surface-base p-5 transition-colors hover:border-strong">
       <div className="flex items-start gap-4">
         {/* Avatar */}
-        <div className={cn(
-          'w-12 h-12 rounded-full flex items-center justify-center shrink-0',
-          member.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive,
-        )}>
-          <span className="font-medium text-sm">{initials}</span>
-        </div>
+        <Avatar
+          name={member.user_name || member.user_email}
+          size="lg"
+          colorClassName={member.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive}
+        />
 
         {/* Info */}
         <div className="flex-1 min-w-0">

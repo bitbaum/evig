@@ -27,6 +27,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -72,14 +73,6 @@ interface BulkResultResponse {
 }
 
 type PeriodFilter = 'all' | 'week' | 'month'
-
-function initials(nameOrEmail: string): string {
-  const trimmed = nameOrEmail.trim()
-  if (!trimmed) return '?'
-  const parts = trimmed.split(/[\s.@]+/).filter(Boolean)
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-  return (parts[0][0] + parts[1][0]).toUpperCase()
-}
 
 export function TimecardApprovalsClient() {
   const [items, setItems] = useState<ApprovalRow[]>([])
@@ -312,9 +305,11 @@ export function TimecardApprovalsClient() {
                       aria-label={`Zeitkarte von ${row.user_name || row.user_email} auswählen`}
                       className="w-4 h-4 rounded-sm border-default text-action focus:ring-action shrink-0"
                     />
-                    <div className="w-9 h-9 rounded-full bg-surface-overlay flex items-center justify-center text-xs font-semibold text-text-secondary shrink-0">
-                      {initials(row.user_name || row.user_email)}
-                    </div>
+                    <Avatar
+                      name={row.user_name || row.user_email}
+                      size="sm"
+                      colorClassName="bg-surface-overlay text-text-secondary"
+                    />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-text-primary truncate">

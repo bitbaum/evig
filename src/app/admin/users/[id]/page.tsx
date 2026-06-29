@@ -14,6 +14,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import { buttonClass } from '@/components/ui/button-class'
+import { Avatar } from '@/components/ui/Avatar'
 import {
   ArrowLeft,
   Mail,
@@ -117,10 +118,6 @@ export default async function UserDetailPage({ params }: PageProps) {
   const permissions = user.staff_permissions || []
   const hasFullAccess = permissions.includes('*')
 
-  const initials = user.name
-    ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : user.email[0].toUpperCase()
-
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
@@ -138,15 +135,11 @@ export default async function UserDetailPage({ params }: PageProps) {
       <div className="bg-surface-base rounded-xl border border p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
-          <div className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 ${
-            userIsSuperAdmin
-              ? 'bg-action'
-              : userIsStaff
-                ? 'bg-action'
-                : 'bg-surface-overlay'
-          }`}>
-            <span className="text-white font-bold text-2xl">{initials}</span>
-          </div>
+          <Avatar
+            name={user.name || user.email}
+            size="xl"
+            colorClassName={userIsSuperAdmin || userIsStaff ? 'bg-action text-white' : 'bg-surface-overlay text-text-primary'}
+          />
 
           {/* Info */}
           <div className="flex-1">

@@ -68,7 +68,7 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
 
         <header className="mt-8 border-b border-subtle pb-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-            <Avatar src={technician.avatarUrl} name={displayName} size="xl" />
+            <Avatar src={technician.avatarUrl} name={displayName} size="xl" shape="rounded" bordered className="font-mono" />
             <div className="min-w-0 flex-1">
               <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
                 {meta.eyebrow}

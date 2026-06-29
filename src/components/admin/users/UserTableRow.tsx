@@ -10,6 +10,7 @@ import { isSuperAdmin, isStaffEmail } from '@/lib/permissions'
 import { formatDateShort } from '@/lib/date-formats'
 import type { UserRow } from './types'
 import { adminTable } from '@/lib/admin-ui'
+import { Avatar } from '@/components/ui/Avatar'
 
 interface UserTableRowProps {
   user: UserRow
@@ -68,24 +69,14 @@ function UserInfoCell({
   userIsSuperAdmin: boolean
   userIsStaff: boolean
 }) {
-  const avatarClass = userIsSuperAdmin
-    ? 'bg-action'
-    : userIsStaff
-      ? 'bg-action'
-      : 'bg-surface-overlay'
-
-  const initials = user.name
-    ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2)
-    : user.email[0].toUpperCase()
+  const avatarColor = userIsSuperAdmin || userIsStaff
+    ? 'bg-action text-white'
+    : 'bg-surface-overlay text-text-primary'
 
   return (
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex items-center">
-        <div className="shrink-0">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${avatarClass}`}>
-            <span className="text-white font-medium text-sm">{initials}</span>
-          </div>
-        </div>
+        <Avatar name={user.name || user.email} size="md" colorClassName={avatarColor} />
         <div className="ml-4">
           <div className="text-sm font-medium text-text-primary">
             {user.name || 'Kein Name'}

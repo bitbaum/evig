@@ -1,34 +1,60 @@
 import { cn } from '@/lib/utils'
 
 interface AvatarProps {
-  /** Avatar image URL (e.g. user_profiles.avatar_url). When absent, the initial is shown. */
+  /** Image URL (user_profiles.avatar_url / users.image). Absent → initials tile. */
   src?: string | null
-  /** Display name — drives the alt text and the initial fallback. */
+  /** Display name (or email) — drives alt text + the initials fallback. */
   name?: string | null
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  shape?: 'circle' | 'rounded'
+  /** Show the subtle border (default off — most chrome avatars have none). */
+  bordered?: boolean
+  /** Colors for the initials tile. Override for state (active/inactive, super-admin, …). */
+  colorClassName?: string
+  /** Max initials letters (default 2 → "Georgy Butaev" = "GB"). */
+  maxInitials?: number
+  /** Layout extras (margins, ring, font-family, …). */
   className?: string
 }
 
 const BOX: Record<NonNullable<AvatarProps['size']>, string> = {
+  xs: 'h-8 w-8',
   sm: 'h-9 w-9',
-  md: 'h-12 w-12',
-  lg: 'h-16 w-16',
+  md: 'h-10 w-10',
+  lg: 'h-12 w-12',
   xl: 'h-20 w-20',
 }
 const TEXT: Record<NonNullable<AvatarProps['size']>, string> = {
+  xs: 'text-xs',
   sm: 'text-sm',
-  md: 'text-lg',
-  lg: 'text-2xl',
+  md: 'text-sm',
+  lg: 'text-base',
   xl: 'text-3xl',
 }
 
+function initialsFrom(name: string | null | undefined, max: number): string {
+  const parts = (name ?? '').trim().split(/\s+/).filter(Boolean)
+  if (parts.length === 0) return '?'
+  return parts.slice(0, max).map((p) => p[0]!.toUpperCase()).join('')
+}
+
 /**
- * Avatar — one source of truth for "image or initial". Renders the uploaded
- * photo when present, else a tokenized initial tile (no ad-hoc placeholders).
- * Square with the card radius to match the fleetcrown public surfaces.
+ * Avatar — the single source of truth for "image or initials". Renders the
+ * uploaded photo when present, else a tokenized initials tile. Replaces the
+ * hand-rolled `name.charAt(0)` boxes scattered across the app.
  */
-export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
-  const initial = name?.trim().charAt(0).toUpperCase() || 'T'
+export function Avatar({
+  src,
+  name,
+  size = 'md',
+  shape = 'circle',
+  bordered = false,
+  colorClassName = 'bg-action-muted text-action',
+  maxInitials = 2,
+  className,
+}: AvatarProps) {
+  const radius = shape === 'circle' ? 'rounded-full' : 'rounded-lg'
+  const border = bordered ? 'border border-subtle' : ''
 
   if (src) {
     return (
@@ -36,7 +62,7 @@ export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
       <img
         src={src}
         alt={name ?? ''}
-        className={cn('shrink-0 rounded-lg border border-subtle object-cover', BOX[size], className)}
+        className={cn('shrink-0 object-cover', radius, border, BOX[size], className)}
       />
     )
   }
@@ -44,14 +70,17 @@ export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center justify-center rounded-lg border border-subtle bg-action-muted font-mono font-semibold text-action',
+        'flex shrink-0 items-center justify-center font-semibold',
+        radius,
+        border,
         BOX[size],
         TEXT[size],
+        colorClassName,
         className,
       )}
       aria-hidden="true"
     >
-      {initial}
+      {initialsFrom(name, maxInitials)}
     </div>
   )
 }

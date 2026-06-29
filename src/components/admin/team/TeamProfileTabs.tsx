@@ -22,6 +22,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { adminInteractive } from '@/lib/admin-ui'
+import { Avatar } from '@/components/ui/Avatar'
 import { TeamProfileView } from './TeamProfileView'
 import { TeamProfileTimecardsTab } from './TeamProfileTimecardsTab'
 import { TeamProfileActivityTab } from './TeamProfileActivityTab'
@@ -76,9 +77,6 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
   }, [searchParams, tab])
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const initials = profile.user_name
-    ? profile.user_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : profile.user_email[0].toUpperCase()
   const displayName = profile.user_name || profile.user_email.split('@')[0]
 
   const tabMeta: Record<TabKey, { label: string; icon: typeof User }> = {
@@ -105,12 +103,11 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
         </div>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 items-start gap-4">
-            <div className={cn(
-              'flex h-14 w-14 shrink-0 items-center justify-center rounded-full',
-              profile.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive,
-            )}>
-              <span className="text-base font-semibold">{initials}</span>
-            </div>
+            <Avatar
+              name={profile.user_name || profile.user_email}
+              size="lg"
+              colorClassName={profile.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive}
+            />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="truncate text-xl font-semibold text-text-primary">{displayName}</h1>

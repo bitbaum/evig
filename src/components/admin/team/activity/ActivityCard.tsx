@@ -15,6 +15,7 @@ import {
   ACTIVITY_SOURCE_LABELS,
 } from '@/config/activity'
 import { formatRelativeTime } from '@/lib/utils'
+import { Avatar } from '@/components/ui/Avatar'
 import { URGENCY_DEFAULT } from '@/config/it-hilfe'
 import type { UnifiedActivity } from './types'
 
@@ -53,14 +54,6 @@ function getActivityUpdateIcon(updateType: string): JSX.Element {
 }
 
 export function ActivityCard({ activity }: ActivityCardProps) {
-  const initials = activity.user_name
-    ? activity.user_name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .substring(0, 2)
-    : activity.user_email[0].toUpperCase()
-
   const displayName = activity.user_name || activity.user_email.split('@')[0]
 
   // Extract metadata with type safety
@@ -92,11 +85,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
     <div className="bg-surface-base rounded-lg border border-subtle p-4 hover:border-strong transition-shadow">
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="shrink-0">
-          <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center">
-            <span className="text-white font-medium text-sm">{initials}</span>
-          </div>
-        </div>
+        <Avatar name={activity.user_name || activity.user_email} size="md" colorClassName="bg-action text-white" />
 
         {/* Content */}
         <div className="flex-1 min-w-0">
