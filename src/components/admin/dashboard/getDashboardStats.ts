@@ -191,7 +191,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`
       SELECT COUNT(*) AS count
       FROM ${sql.raw(blogTable)}
-      WHERE status = ${APPROVAL_STATUS.PUBLISHED} AND published_at >= ${weekAgoISO}
+      WHERE is_published = true AND published_at >= ${weekAgoISO}
     `),
 
     // Mission metrics — this month's impact

@@ -71,10 +71,11 @@ async function getUser(id: string): Promise<UserData | null> {
         u.staff_permissions,
         u."createdAt" as created_at,
         u."emailVerified" as email_verified,
-        u.phone,
-        u.address,
+        up.phone,
+        up.address_line1 as address,
         tp.id as team_profile_id
        FROM ${TABLE_NAMES.USERS} u
+       LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
        LEFT JOIN ${TABLE_NAMES.TEAM_PROFILES} tp ON u.id = tp.user_id
        WHERE u.id = $1`,
       [id]
