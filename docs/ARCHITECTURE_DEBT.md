@@ -210,9 +210,11 @@ would add indirection without removing complexity.
 
 - **Permission system** correctly migrated from ROLES to permissions.ts;
   no duplication. Old ROLES marked deprecated. Clean.
-- **Marketplace listings split** (`inventory.marketplace_listings` vs
-  `marketplace.listings`) is intentional — RevampIT shop vs P2P
-  marketplace are two storefronts by design. Documented in CLAUDE.md.
+- **Marketplace storefront unified** (2026-06-29) — the legacy
+  `inventory.marketplace_listings` table + `/api/shop/inventory` routes + the
+  admin "Shop Produkte" tab were removed (migration 103). RevampIT shop stock
+  and P2P listings now share one `marketplace.listings` table (RevampIT rows
+  carry is_revampit=true). Two ingestion pipelines, one store.
 - **Service appointment dashboard routes** — unified under
   `src/config/service-appointments.ts` (`/dashboard/appointments/*`).
   Legacy `/dashboard/bookings/*` permanent-redirects; notification bell

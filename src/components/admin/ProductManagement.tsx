@@ -3,9 +3,9 @@
 /**
  * Product Management Dashboard
  *
- * Two tabs:
- * - Erfasste Produkte: ALL products from Erfassung (draft + published)
- * - Shop Produkte: ONLY published products (mirrors customer shop exactly)
+ * Shows the Erfassung inventory (all products, draft + published). The old
+ * "Shop Produkte" mirror tab was retired together with /api/shop/inventory —
+ * published items are managed via the marketplace.
  *
  * Thin orchestrator — state lives in useProductActions,
  * sub-components are purely presentational.
@@ -15,11 +15,9 @@ import React from 'react'
 import { Loader2, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
-  ProductTabSwitcher,
   ProductStatsCards,
   ProductFilterBar,
   InventoryProductsTable,
-  ShopProductsTable,
 } from './products'
 import { ProductConfirmDialogs } from './products/ProductConfirmDialogs'
 import { useProductActions } from './products/useProductActions'
@@ -61,18 +59,7 @@ export default function ProductManagement() {
 
   return (
     <div className="space-y-6">
-      <ProductTabSwitcher
-        activeTab={actions.activeTab}
-        onTabChange={actions.handleTabChange}
-        inventoryStats={actions.inventoryStats}
-        shopStats={actions.shopStats}
-      />
-
-      <ProductStatsCards
-        activeTab={actions.activeTab}
-        inventoryStats={actions.inventoryStats}
-        shopStats={actions.shopStats}
-      />
+      <ProductStatsCards inventoryStats={actions.inventoryStats} />
 
       <ProductFilterBar
         searchQuery={actions.searchQuery}
@@ -83,34 +70,19 @@ export default function ProductManagement() {
         onFilterCategoryChange={actions.setFilterCategory}
         selectedCount={actions.selectedIds.size}
         onBulkDelete={actions.handleBulkDelete}
-        activeTab={actions.activeTab}
       />
 
-      {actions.activeTab === 'inventory' ? (
-        <InventoryProductsTable
-          products={actions.inventoryProducts}
-          searchQuery={actions.searchQuery}
-          selectedIds={actions.selectedIds}
-          onToggleSelect={actions.handleToggleSelect}
-          onSelectAll={actions.handleSelectAll}
-          onView={actions.handleViewInventory}
-          onEdit={actions.handleEditInventory}
-          onDelete={actions.handleDeleteInventory}
-          onPublish={actions.handlePublishInventory}
-        />
-      ) : (
-        <ShopProductsTable
-          products={actions.shopProducts}
-          searchQuery={actions.searchQuery}
-          selectedIds={actions.selectedIds}
-          onToggleSelect={actions.handleToggleSelect}
-          onSelectAll={actions.handleSelectAll}
-          onView={actions.handleViewShop}
-          onEdit={actions.handleEditShop}
-          onUnpublish={actions.handleUnpublishShop}
-          onDelete={actions.handleDeleteShop}
-        />
-      )}
+      <InventoryProductsTable
+        products={actions.inventoryProducts}
+        searchQuery={actions.searchQuery}
+        selectedIds={actions.selectedIds}
+        onToggleSelect={actions.handleToggleSelect}
+        onSelectAll={actions.handleSelectAll}
+        onView={actions.handleViewInventory}
+        onEdit={actions.handleEditInventory}
+        onDelete={actions.handleDeleteInventory}
+        onPublish={actions.handlePublishInventory}
+      />
 
       <ProductConfirmDialogs
         deleteTarget={actions.deleteTarget}
@@ -118,11 +90,6 @@ export default function ProductManagement() {
         deleteError={actions.deleteError}
         onConfirmDelete={actions.handleConfirmDelete}
         onDismissDelete={actions.dismissDelete}
-        unpublishTarget={actions.unpublishTarget}
-        isUnpublishing={actions.isUnpublishing}
-        unpublishError={actions.unpublishError}
-        onConfirmUnpublish={actions.handleConfirmUnpublish}
-        onDismissUnpublish={actions.dismissUnpublish}
         publishTarget={actions.publishTarget}
         isPublishing={actions.isPublishing}
         publishError={actions.publishError}

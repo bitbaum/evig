@@ -25,7 +25,7 @@ export const GET = withAdmin(async (_request: NextRequest, _session) => {
       `),
       db.execute(sql`
         SELECT id, title, status
-        FROM ${sql.raw(TABLE_NAMES.MARKETPLACE_LISTINGS)}
+        FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
         ORDER BY created_at DESC
         LIMIT 10
       `),

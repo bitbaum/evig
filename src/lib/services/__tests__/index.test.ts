@@ -77,9 +77,6 @@ jest.mock('@/config/service-icons', () => ({
 }))
 
 // The sub-modules that index.ts re-exports from
-jest.mock('../inventory-service', () => ({
-  getInventoryProducts: jest.fn(),
-}))
 jest.mock('../seller-service', () => ({
   getSellerDashboard: jest.fn(),
 }))

@@ -104,10 +104,10 @@ Community P2P (individuals + staff posting privately)
   re-derive it from the seller's `@revamp-it.ch` email — staff posting *private*
   items are regular P2P sellers. The sell form always writes `is_revampit=false`;
   only `publishRevampitListing` sets it true.
-- **`marketplace_listings` + `/api/shop/inventory` are legacy.** `marketplace_listings`
-  is dead for writes (orphan rows only); `/api/shop/inventory` now feeds only
-  admin product management, not the public storefront. `/shop/*` pages redirect
-  to `/marketplace`. These are slated for removal — do not build on them.
+- **`marketplace_listings` + `/api/shop/inventory` were REMOVED** (migration 103).
+  The table is dropped; RevampIT shop stock lives only in `listings`
+  (is_revampit=true). The `/shop/*` pages remain as redirects to `/marketplace`
+  for legacy URLs. Do not reintroduce a separate RevampIT-shop table or API.
 - Erfassung MAY result in a published listing; a staff member posting privately
   is nudged toward erfassung if it's clearly RevampIT stock, but can still post
   as a private individual (`is_revampit=false`).

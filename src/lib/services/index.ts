@@ -13,10 +13,6 @@
  * ```
  */
 
-// Inventory service (public shop)
-export { getInventoryProducts } from './inventory-service'
-export type { InventoryFilters, InventoryProduct, InventoryResult } from './inventory-service'
-
 // Seller service (seller dashboard)
 export { getSellerDashboard } from './seller-service'
 export type { SellerProduct, SellerStats, SellerDashboardData } from './seller-service'

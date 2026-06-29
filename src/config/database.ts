@@ -17,7 +17,6 @@ export const TABLE_NAMES = {
   INVENTORY_ITEMS: 'inventory_items',
   AI_EXTRACTED_PRODUCTS: 'ai_extracted_products',
   PRODUCT_IMAGES: 'product_images',
-  MARKETPLACE_LISTINGS: 'marketplace_listings',
   SUSTAINABILITY_SCORES: 'sustainability_scores',
   AI_PROCESSING_LOGS: 'ai_processing_logs',
   

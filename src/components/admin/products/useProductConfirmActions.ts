@@ -2,7 +2,7 @@
 
 /**
  * useProductConfirmActions — Confirmation dialog state + API calls
- * for publish, unpublish, delete, and bulk delete operations.
+ * for publish, delete, and bulk delete operations.
  *
  * Separated from useProductActions to keep each hook focused
  * and under the 250-line target.
@@ -13,7 +13,7 @@ import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 import { apiFetch } from '@/lib/api/client'
 
 export interface DeleteTarget {
-  type: 'shop' | 'inventory'
+  type: 'inventory'
   id: string
   name: string
 }
@@ -74,7 +74,6 @@ export function useProductConfirmActions({ refetchBoth }: UseProductConfirmActio
   // Confirmation flows (shared pattern)
   const deleteFlow = useConfirmFlow<DeleteTarget>(refetchBoth)
   const publishFlow = useConfirmFlow<ActionTarget>(refetchBoth)
-  const unpublishFlow = useConfirmFlow<ActionTarget>(refetchBoth)
 
   // Bulk delete state (separate from single-delete)
   const [bulkDeletePending, setBulkDeletePending] = useState(false)
@@ -94,13 +93,6 @@ export function useProductConfirmActions({ refetchBoth }: UseProductConfirmActio
     if (!deleteFlow.target) return
     return deleteFlow.execute(() => deleteInventory(deleteFlow.target!.id))
   }, [deleteFlow])
-
-  const handleConfirmUnpublish = useCallback(() => {
-    if (!unpublishFlow.target) return
-    return unpublishFlow.execute(() =>
-      patchInventory(unpublishFlow.target!.id, { marketplace_status: MARKETPLACE_STATUS.DRAFT })
-    )
-  }, [unpublishFlow])
 
   // Selection handlers
   const handleToggleSelect = useCallback((id: string) => {
@@ -169,14 +161,6 @@ export function useProductConfirmActions({ refetchBoth }: UseProductConfirmActio
     openDelete: deleteFlow.open,
     handleConfirmDelete,
     dismissDelete: deleteFlow.dismiss,
-
-    // Unpublish dialog
-    unpublishTarget: unpublishFlow.target,
-    isUnpublishing: unpublishFlow.loading,
-    unpublishError: unpublishFlow.error,
-    openUnpublish: unpublishFlow.open,
-    handleConfirmUnpublish,
-    dismissUnpublish: unpublishFlow.dismiss,
 
     // Publish dialog
     publishTarget: publishFlow.target,

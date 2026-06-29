@@ -4,7 +4,7 @@
  * ProductConfirmDialogs — All confirmation dialogs for product management.
  *
  * Purely presentational: receives state and callbacks from useProductActions.
- * Renders delete, unpublish, publish, and bulk delete confirmation dialogs.
+ * Renders delete, publish, and bulk delete confirmation dialogs.
  */
 
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -17,13 +17,6 @@ interface ProductConfirmDialogsProps {
   deleteError: string | null
   onConfirmDelete: () => void
   onDismissDelete: () => void
-
-  // Unpublish
-  unpublishTarget: ActionTarget | null
-  isUnpublishing: boolean
-  unpublishError: string | null
-  onConfirmUnpublish: () => void
-  onDismissUnpublish: () => void
 
   // Publish
   publishTarget: ActionTarget | null
@@ -47,11 +40,6 @@ export function ProductConfirmDialogs({
   deleteError,
   onConfirmDelete,
   onDismissDelete,
-  unpublishTarget,
-  isUnpublishing,
-  unpublishError,
-  onConfirmUnpublish,
-  onDismissUnpublish,
   publishTarget,
   isPublishing,
   publishError,
@@ -78,20 +66,6 @@ export function ProductConfirmDialogs({
         variant="danger"
         onConfirm={onConfirmDelete}
         onClose={onDismissDelete}
-      />
-
-      <ConfirmDialog
-        isOpen={!!unpublishTarget}
-        title="Aus Shop entfernen"
-        message="Möchtest du dieses Produkt aus dem Shop entfernen? Es bleibt in den erfassten Produkten erhalten und kann jederzeit wieder veröffentlicht werden."
-        itemName={unpublishTarget?.name}
-        confirmLabel="Aus Shop entfernen"
-        cancelLabel="Abbrechen"
-        isLoading={isUnpublishing}
-        error={unpublishError}
-        variant="warning"
-        onConfirm={onConfirmUnpublish}
-        onClose={onDismissUnpublish}
       />
 
       <ConfirmDialog

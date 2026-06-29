@@ -10,7 +10,7 @@ export async function GET() {
   try {
     const [users, listings, repairs, workshops] = await Promise.all([
       query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`),
-      query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS} WHERE status = $1`, [LISTING_STATUS.ACTIVE]),
+      query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.LISTINGS} WHERE status = $1`, [LISTING_STATUS.ACTIVE]),
       query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}`),
       query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOPS} WHERE is_active = true`),
     ])

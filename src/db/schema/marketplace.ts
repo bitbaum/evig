@@ -40,8 +40,8 @@ export const listings = pgTable('listings', {
   // RevampIT inventory link — LIVE (unified storefront). RevampIT shop stock is
   // published into this `listings` table via lib/marketplace/publishRevampitListing
   // (sets is_revampit=true + inventory_item_id). is_revampit is the single source
-  // of truth — never re-derive it from the seller's email. (Legacy
-  // marketplace_listings + /api/shop/inventory are being retired.)
+  // of truth — never re-derive it from the seller's email. (The legacy
+  // marketplace_listings table + /api/shop/inventory were removed, migration 103.)
   isRevampit: boolean('is_revampit').notNull().default(false),
   inventoryItemId: uuid('inventory_item_id').references(() => inventoryItems.id, { onDelete: 'set null' }),
 

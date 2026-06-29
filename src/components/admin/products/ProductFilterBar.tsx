@@ -7,7 +7,7 @@ import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { buttonClass } from '@/components/ui/button-class'
 import { ROUTES } from '@/config/routes'
-import type { TabType, FilterStatus } from './types'
+import type { FilterStatus } from './types'
 
 interface ProductFilterBarProps {
   searchQuery: string
@@ -18,7 +18,6 @@ interface ProductFilterBarProps {
   onFilterCategoryChange: (category: string) => void
   selectedCount: number
   onBulkDelete: () => void
-  activeTab: TabType
 }
 
 export function ProductFilterBar({
@@ -30,7 +29,6 @@ export function ProductFilterBar({
   onFilterCategoryChange,
   selectedCount,
   onBulkDelete,
-  activeTab,
 }: ProductFilterBarProps) {
   return (
     <div className="bg-surface-base rounded-xl shadow-xs border border p-4 md:p-6">
@@ -48,18 +46,16 @@ export function ProductFilterBar({
             />
           </div>
 
-          {/* Filters - only show status filter for inventory tab */}
+          {/* Filters */}
           <div className="flex gap-2">
-            {activeTab === 'inventory' && (
-              <Select
-                value={filterStatus}
-                onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
-              >
-                <option value="all">Alle Status</option>
-                <option value="published">Veröffentlicht</option>
-                <option value="draft">Entwurf</option>
-              </Select>
-            )}
+            <Select
+              value={filterStatus}
+              onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
+            >
+              <option value="all">Alle Status</option>
+              <option value="published">Veröffentlicht</option>
+              <option value="draft">Entwurf</option>
+            </Select>
 
             <Select
               value={filterCategory}
@@ -81,12 +77,10 @@ export function ProductFilterBar({
               {selectedCount} löschen
             </Button>
           )}
-          {activeTab === 'inventory' && (
-            <Link href={ROUTES.admin.erfassung} className={buttonClass({ variant: 'primary', size: 'sm' })}>
-              <Plus className="w-4 h-4" />
-              Produkt erfassen
-            </Link>
-          )}
+          <Link href={ROUTES.admin.erfassung} className={buttonClass({ variant: 'primary', size: 'sm' })}>
+            <Plus className="w-4 h-4" />
+            Produkt erfassen
+          </Link>
         </div>
       </div>
     </div>

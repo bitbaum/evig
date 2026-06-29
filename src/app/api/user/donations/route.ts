@@ -4,7 +4,6 @@ import { db } from '@/db'
 import {
   donations,
   inventoryItems,
-  marketplaceListings,
   aiExtractedProducts,
 } from '@/db/schema'
 import { eq, desc, inArray } from 'drizzle-orm'
@@ -45,9 +44,8 @@ function deriveStage(row: {
   listingStatus: string | null
 }): DonationJourneyStage {
   // Rehomed wins over everything — actual hardware reached someone.
-  // marketplace_listings has no SOLD status (PUBLISHED/DRAFT only); the
-  // inventory_items.status flips to 'sold' when checkout completes — that's
-  // the canonical signal here.
+  // inventory_items.status flips to 'sold' when checkout completes — that's the
+  // canonical signal. The "listed" signal is the item's own marketplace_status.
   if (row.inventoryStatus === INVENTORY_ITEM_STATUS.SOLD) {
     return DONATION_JOURNEY_STAGES.REHOMED
   }
@@ -93,9 +91,10 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
     const journeysByDonation = new Map<string, Journey>()
 
     if (deviceDonationIds.length > 0) {
-      // One row per (inventory item × listing). Inventory items without listings
-      // appear once with listingId=null. Multiple listings per item collapse in
-      // the loop below by keeping the most-advanced stage per inventory item.
+      // One row per inventory item linked to these donations. The marketplace
+      // "listed" signal is the item's own marketplace_status (the legacy
+      // marketplace_listings table is retired); the canonical "rehomed" signal
+      // is inventory_items.status === 'sold'.
       const linked = await db
         .select({
           donationId: inventoryItems.sourceDonationId,
@@ -104,12 +103,11 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
           intakeTier: inventoryItems.intakeTier,
           checklistComplete: inventoryItems.checklistComplete,
           itemUuid: aiExtractedProducts.itemUuid,
-          listingStatus: marketplaceListings.status,
-          listingSoldAt: marketplaceListings.soldAt,
+          listingStatus: inventoryItems.marketplaceStatus,
+          inventoryUpdatedAt: inventoryItems.updatedAt,
         })
         .from(inventoryItems)
         .leftJoin(aiExtractedProducts, eq(aiExtractedProducts.id, inventoryItems.aiProductId))
-        .leftJoin(marketplaceListings, eq(marketplaceListings.inventoryItemId, inventoryItems.id))
         .where(inArray(inventoryItems.sourceDonationId, deviceDonationIds))
 
       // Collapse to one record per inventory item, taking the highest-stage listing.
@@ -135,7 +133,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
             donationId: r.donationId,
             stage,
             listing_url: listingUrl,
-            sold_at: stage === DONATION_JOURNEY_STAGES.REHOMED ? r.listingSoldAt : null,
+            sold_at: stage === DONATION_JOURNEY_STAGES.REHOMED ? r.inventoryUpdatedAt : null,
           })
         }
       }

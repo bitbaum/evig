@@ -312,65 +312,10 @@ export const aiProcessingLogs = pgTable('ai_processing_logs', {
 export type AiProcessingLog = typeof aiProcessingLogs.$inferSelect
 export type NewAiProcessingLog = typeof aiProcessingLogs.$inferInsert
 
-// =============================================================================
-// MARKETPLACE LISTINGS (RevampIT internal shop — not P2P)
-// =============================================================================
-// Tracks RevampIT's own inventory items as shop listings (platform = 'internal').
-//
-// Written by:
-//   - src/lib/erfassung/create-product.ts  (on publish action during erfassung)
-//   - src/lib/admin/inventory-actions.ts   (publishProduct / unpublishProduct)
-//   - src/app/api/admin/intake/[id]/publish/route.ts  (intake publish)
-//
-// Served by: /api/shop/inventory/ routes (NOT /api/listings/)
-//
-// IMPORTANT: Do NOT confuse with the P2P `listings` table in marketplace.ts.
-// The `listings` table is for community peer-to-peer sales.
-// This table is exclusively for RevampIT's own refurbished stock.
-
-export const marketplaceListings = pgTable('marketplace_listings', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  inventoryItemId: uuid('inventory_item_id').references(() => inventoryItems.id, { onDelete: 'cascade' }),
-
-  // Listing details
-  title: text('title').notNull(),
-  description: text('description'),
-  priceChf: decimal('price_chf', { precision: 10, scale: 2 }).notNull(),
-
-  // Platform integration. In practice only MARKETPLACE_LISTING_PLATFORM.INTERNAL
-  // ('internal') is written — see create-product.ts:273, inventory-actions.ts:78,
-  // intake/[id]/publish/route.ts:97.
-  platform: text('platform').notNull(),
-  platformListingId: text('platform_listing_id'),
-  platformUrl: text('platform_url'),
-
-  // Status and visibility
-  // CHECK (status IN ('draft', 'published', 'sold', 'paused', 'expired'))
-  status: text('status').default('draft'),
-  isFeatured: boolean('is_featured').default(false),
-  viewsCount: integer('views_count').default(0),
-  favoritesCount: integer('favorites_count').default(0),
-
-  // Sales tracking
-  soldAt: timestamp('sold_at', { withTimezone: true, mode: 'string' }),
-  soldPriceChf: decimal('sold_price_chf', { precision: 10, scale: 2 }),
-  buyerInfo: jsonb('buyer_info').default({}),
-
-  // Metadata
-  publishedAt: timestamp('published_at', { withTimezone: true, mode: 'string' }),
-  expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'string' }),
-  createdBy: uuid('created_by').references(() => users.id),
-
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  index('idx_listings_status').on(table.status),
-  index('idx_listings_platform').on(table.platform),
-  index('idx_listings_created_by').on(table.createdBy),
-])
-
-export type MarketplaceListing = typeof marketplaceListings.$inferSelect
-export type NewMarketplaceListing = typeof marketplaceListings.$inferInsert
+// NOTE: the legacy `marketplace_listings` table (RevampIT internal shop) was
+// removed (migration 103). RevampIT shop stock now lives in the unified
+// `listings` table (marketplace.ts) with is_revampit=true, published via
+// lib/marketplace/publishRevampitListing.
 
 // =============================================================================
 // PRODUCT CATEGORIES

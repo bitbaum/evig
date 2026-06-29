@@ -1,6 +1,6 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_WEIGHT_KG, CO2_PER_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
+import { CATEGORY_WEIGHT_KG, CO2_PER_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
 import { logger } from '@/lib/logger'
 import { apiSuccessCached, apiError } from '@/lib/api/helpers'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -14,8 +14,9 @@ export const revalidate = 3600 // Cache for 1 hour
  */
 export async function GET() {
   try {
-    const [listingRows, repairRows, userRows, shopRows] = await Promise.all([
-      // P2P listings: count by category + status for CO2 computation
+    const [listingRows, repairRows, userRows] = await Promise.all([
+      // All marketplace listings (unified store: P2P + RevampIT shop, the latter
+      // carries is_revampit=true). Count by category + status for CO2 computation.
       query<{ category: string; status: string; count: string }>(
         `SELECT category, status, COUNT(*) as count
          FROM ${TABLE_NAMES.LISTINGS}
@@ -29,12 +30,6 @@ export async function GET() {
       // Registered users
       query<{ count: string }>(
         `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
-      ),
-      // RevampIT shop items sold
-      query<{ count: string }>(
-        `SELECT COUNT(*) as count
-         FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-         WHERE status = '${LISTING_STATUS.SOLD}'`
       ),
     ])
 
@@ -53,11 +48,6 @@ export async function GET() {
         co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
       }
     }
-
-    // RevampIT shop sales have no category breakdown — use average device weight
-    const shopSold = Number(shopRows.rows[0]?.count || 0)
-    soldDevices += shopSold
-    co2SavedKg += Math.round(shopSold * AVG_DEVICE_WEIGHT_KG * CO2_PER_KG)
 
     const co2SavedTons = Math.round((co2SavedKg / 1000) * 10) / 10
 

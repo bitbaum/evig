@@ -28,7 +28,7 @@ jest.mock('@/auth', () => ({
 
 // The route runs two queries:
 //   1. donations:  select.from(donations).where().orderBy()   → MOCK_DONATIONS
-//   2. linked:     select.from(items).leftJoin().leftJoin().where()  → linked rows
+//   2. linked:     select.from(items).leftJoin().where()  → linked rows
 // mockOrderBy controls the first; mockLinkedWhere controls the second.
 const mockOrderBy = jest.fn()
 const mockLinkedWhere = jest.fn()
@@ -55,10 +55,7 @@ jest.mock('@/db/schema', () => ({
   inventoryItems: {
     id: 'i_id', sourceDonationId: 'i_source', status: 'i_status',
     intakeTier: 'i_tier', checklistComplete: 'i_checklist',
-    aiProductId: 'i_ai_id',
-  },
-  marketplaceListings: {
-    inventoryItemId: 'ml_inventory', status: 'ml_status', soldAt: 'ml_sold',
+    aiProductId: 'i_ai_id', marketplaceStatus: 'i_mkt_status', updatedAt: 'i_updated',
   },
   aiExtractedProducts: { id: 'aep_id', itemUuid: 'aep_uuid' },
 }))
@@ -129,7 +126,8 @@ beforeEach(() => {
 
   // First select call returns the donations chain (from → where → orderBy).
   // Subsequent calls return the linked-inventory chain
-  // (from → leftJoin → leftJoin → where).
+  // (from → leftJoin → where) — one leftJoin now the marketplace_listings
+  // join is gone (listing status comes from inventory_items.marketplace_status).
   let n = 0
   mockSelect.mockImplementation(() => {
     n += 1
@@ -140,9 +138,7 @@ beforeEach(() => {
     }
     return {
       from: () => ({
-        leftJoin: () => ({
-          leftJoin: () => ({ where: mockLinkedWhere }),
-        }),
+        leftJoin: () => ({ where: mockLinkedWhere }),
       }),
     }
   })

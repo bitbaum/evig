@@ -12,7 +12,8 @@
  *   - returns 200 with devices, co2, repairs, users fields
  *   - converts string counts to numbers
  *   - computes CO2 saved from sold listings using category weight × CO2_PER_KG
- *   - adds RevampIT direct shop sales at 2.5 kg fallback weight
+ *     (the unified `listings` table already includes RevampIT shop stock via
+ *     is_revampit=true — no separate marketplace_listings count)
  *   - returns 500 when any DB query throws
  */
 
@@ -29,7 +30,6 @@ jest.mock('@/lib/auth/db', () => ({
 jest.mock('@/config/co2-impact', () => ({
   CATEGORY_WEIGHT_KG: { laptop: 2.0, desktop: 5.0 },
   CO2_PER_KG: 10,
-  AVG_DEVICE_WEIGHT_KG: 2.5,
   FALLBACK_DEVICE_WEIGHT_KG: 2.0,
 }))
 
@@ -42,7 +42,6 @@ jest.mock('@/config/database', () => ({
     LISTINGS: 'listings',
     IT_HILFE_REQUESTS: 'it_hilfe_requests',
     USERS: 'users',
-    MARKETPLACE_LISTINGS: 'marketplace_listings',
   },
 }))
 
@@ -71,24 +70,22 @@ import { GET } from '../route'
 // Fixtures
 // ---------------------------------------------------------------------------
 
-// listingRows: 10 sold laptops, 3 non-sold
+// listingRows: 10 sold laptops, 3 non-sold (RevampIT shop stock is already in
+//              `listings` via is_revampit=true — no separate shop query)
 // repairRows: 25 repairs
 // userRows:   100 users
-// shopRows:   5 shop items sold
 const LISTING_ROWS = [
   { category: 'laptop', status: 'sold', count: '10' },
   { category: 'laptop', status: 'available', count: '3' },
 ]
 const REPAIR_ROWS = [{ count: '25' }]
 const USER_ROWS = [{ count: '100' }]
-const SHOP_ROWS = [{ count: '5' }]
 
 function setupQueryMocks() {
   mockQuery
     .mockResolvedValueOnce({ rows: LISTING_ROWS }) // listings
     .mockResolvedValueOnce({ rows: REPAIR_ROWS })  // repairs
     .mockResolvedValueOnce({ rows: USER_ROWS })    // users
-    .mockResolvedValueOnce({ rows: SHOP_ROWS })    // shop
 }
 
 beforeEach(() => {
@@ -119,26 +116,25 @@ describe('GET /api/stats/impact — success', () => {
     expect(body.data.devices.total).toBe(13)
   })
 
-  it('counts sold devices (listings + shop)', async () => {
+  it('counts sold devices from listings', async () => {
     const response = await GET()
     const body = await response.json()
-    // 10 from listings + 5 from shop
-    expect(body.data.devices.sold).toBe(15)
+    // 10 sold from listings (RevampIT shop stock included via is_revampit)
+    expect(body.data.devices.sold).toBe(10)
   })
 
   it('computes CO2 from sold listings using category weight', async () => {
     const response = await GET()
     const body = await response.json()
     // listings: 10 × 2.0 kg × 10 CO2_PER_KG = 200
-    // shop: 5 × 2.5 kg × 10 CO2_PER_KG = 125
-    expect(body.data.co2.savedKg).toBe(325)
+    expect(body.data.co2.savedKg).toBe(200)
   })
 
   it('converts CO2 kg to tons', async () => {
     const response = await GET()
     const body = await response.json()
-    // 325 kg → 0.3 tons (rounded to 1dp)
-    expect(body.data.co2.savedTons).toBe(0.3)
+    // 200 kg → 0.2 tons (rounded to 1dp)
+    expect(body.data.co2.savedTons).toBe(0.2)
   })
 
   it('returns repair count as number', async () => {
@@ -159,7 +155,6 @@ describe('GET /api/stats/impact — success', () => {
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [{ count: '0' }] })
       .mockResolvedValueOnce({ rows: [{ count: '0' }] })
-      .mockResolvedValueOnce({ rows: [{ count: '0' }] })
 
     const response = await GET()
     const body = await response.json()
@@ -171,7 +166,6 @@ describe('GET /api/stats/impact — success', () => {
     mockQuery.mockReset()
     mockQuery
       .mockResolvedValueOnce({ rows: [{ category: 'unknown-thing', status: 'sold', count: '4' }] })
-      .mockResolvedValueOnce({ rows: [{ count: '0' }] })
       .mockResolvedValueOnce({ rows: [{ count: '0' }] })
       .mockResolvedValueOnce({ rows: [{ count: '0' }] })
 
