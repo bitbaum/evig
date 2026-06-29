@@ -2,7 +2,7 @@
 
 **Created:** 2026-06-04  
 **Last Modified:** 2026-06-29  
-**Last Modified Summary:** #4 Phase 2 — declarative transition-table validator (`resolveTransition`) replaces the orders matrix + appointments switch
+**Last Modified Summary:** #5 — profile fragmentation audit (SSOT/DRY/SoC) + Phase 1 (remove dead technician read paths)
 
 **Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
@@ -203,6 +203,53 @@ serializing on the request row). All three flows route through it:
 IT-Hilfe keeps `VALID_REQUEST_TRANSITIONS` as-is — its OPEN→MATCHED is a
 two-entity offer acceptance, not a single-row transition, so a shared table
 would add indirection without removing complexity.
+
+---
+
+## #5 — Profile fragmentation (SSOT / DRY / SoC)
+
+**Status:** Phase 1 in progress (2026-06-29).
+
+**The problem:** there are 5 profile tables — `users`, `user_profiles`, `repairer_profiles`
+(technician), `seller_profiles`, `team_profiles` — with no shared abstraction, and the same
+fields/logic are re-declared 3–5× across DB → Zod schema → API field-map → hook → form.
+(The `u.phone` admin bug fixed in this session was a direct symptom.)
+
+Key violations found (full audit in session notes):
+- **SSOT — contact/identity duplicated:** `phone` lives in 4 tables; `address`/`city`/
+  `postal_code`/`canton` in 3; `bio`/`description` in 3; avatar in 3 (`users.image`,
+  `user_profiles.avatar_url`, `seller_profiles.avatar_url`). No canonical contact record.
+- **DRY — the technician row is mapped 5+ ways** (`technician-service`, `/api/technicians`,
+  `/api/user/technician-profile`, `/api/repairers/[id]`, `/api/admin/it-hilfe/helpers`,
+  `legacy-helper-response`); user-profile field list redefined 5×; two different types both
+  named `TechnicianProfileInput`; avatar handled 3 ways + ~8 hand-rolled initials.
+- **SoC — layers leak:** the canonical user DAL (`lib/auth/db-users.ts`) is bypassed by its own
+  `/api/user/profile` route; `technician-service` is read-only (writes inline in routes);
+  several pages run raw SQL inline.
+
+Note: `technician_profiles`/`helper_profiles` tables do NOT exist — already unified into
+`repairer_profiles` (migrations 061/096/102). "Technician" is the conceptual name; the
+API/mapper cleanup was never finished.
+
+**Phased remediation (low-risk → high-value):**
+
+- **Phase 1 — remove dead/redundant technician read paths (code-only, this change).**
+  Delete the genuinely-uncalled endpoints + their mappers: `/api/repairers` (410 stub) +
+  `/api/repairers/[id]` (uncalled hand-rolled detail), `/api/it-hilfe/helpers` (410 stub) +
+  `/api/it-hilfe/helpers/[id]` (uncalled legacy shim) + `src/lib/it-hilfe/legacy-helper-response.ts`.
+  `/api/admin/it-hilfe/helpers` stays — it's LIVE (powers `useITHilfeAdmin`); renaming it to
+  `/api/admin/technicians` and routing it through `technician-service` is Phase 2.
+- **Phase 2 — one read+write service for technicians.** Add write functions to
+  `technician-service` (today writes are inline in `/api/user/technician-profile`); route the
+  self-service + admin endpoints through it; collapse the remaining mappers; resolve the
+  `serviceTypes`↔`serviceDeliveryTypes` boundary alias to one name.
+- **Phase 3 — one field-list SSOT per profile + canonical avatar.** Derive types from Zod
+  (`z.infer`), drop the duplicated `DEFAULT_PROFILE`/`fieldMap`/interface restatements; route
+  `/api/user/profile` through `db-users.ts`; adopt `<Avatar>` everywhere (retire `AvatarUpload`'s
+  bespoke placeholder + the seller inline upload + the hand-rolled initials); one upload path.
+- **Phase 4 (schema) — consolidate contact/address SSOT.** Make `user_profiles` the canonical
+  contact record; stop duplicating phone/address/bio/avatar into role profiles (migration +
+  dual-write window). Biggest blast radius; do last.
 
 ---
 
