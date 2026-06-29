@@ -15,6 +15,8 @@ import {
 } from '@/lib/services/appointment-actions'
 import { notifyAllStaff } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
+import { createReview } from '@/lib/reviews/create-review'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 
 const customerUser = alias(users, 'customer')
 const repairerUser = alias(users, 'repairer')
@@ -123,6 +125,7 @@ export const PATCH = withAuth<{ id: string }>(async (
         id: serviceAppointments.id,
         userId: serviceAppointments.userId,
         repairerId: serviceAppointments.repairerId,
+        repairerProfileId: serviceAppointments.repairerProfileId,
         status: serviceAppointments.status,
       })
       .from(serviceAppointments)
@@ -162,6 +165,24 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     if (!updated && action === 'rate') {
       return apiBadRequest('Dieser Termin wurde bereits bewertet')
+    }
+
+    // Mirror a service-appointment rating into the canonical `reviews` table so
+    // it feeds the technician's single aggregate (repairer_profiles.average_rating)
+    // — the inline customer_rating alone never did. One review per appointment
+    // (reviews unique on reviewer+target+booking; the inline write only succeeds
+    // once). Fire-and-forget; the inline rating remains the per-appointment cache.
+    if (action === 'rate' && updated && appointment.repairerProfileId && actionData.customer_rating) {
+      createReview({
+        reviewerId: session.user.id,
+        targetType: REVIEW_TARGET_TYPES.REPAIRER,
+        targetId: appointment.repairerProfileId,
+        bookingId: appointmentId,
+        overallRating: actionData.customer_rating,
+        content: actionData.customer_review ?? '',
+      }).catch(err =>
+        logger.warn('Failed to mirror appointment rating into reviews', { error: err, appointmentId })
+      )
     }
 
     logger.info('Appointment updated', {

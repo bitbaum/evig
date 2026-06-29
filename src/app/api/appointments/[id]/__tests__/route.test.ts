@@ -88,6 +88,13 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
+// The 'rate' action mirrors into reviews via createReview — mock it so the test
+// doesn't pull the real review/schema module chain.
+const mockCreateReview = jest.fn().mockResolvedValue({ reviewId: 'rev-1' })
+jest.mock('@/lib/reviews/create-review', () => ({
+  createReview: (...args: unknown[]) => mockCreateReview(...args),
+}))
+
 const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data }))
 
 jest.mock('@/lib/schemas', () => ({

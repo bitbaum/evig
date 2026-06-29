@@ -95,42 +95,66 @@ export async function createReview(params: CreateReviewParams): Promise<{ review
  */
 async function updateTargetRating(targetType: string, targetId: string): Promise<void> {
   switch (targetType) {
-    case 'it_hilfe':
-      await updateHelperRating(targetId)
+    case 'it_hilfe': {
+      // Resolve the technician (accepted offer's helper) and recompute their
+      // combined aggregate from ALL their reviews.
+      const rows = await db.execute<{ helper_id: string }>(sql`
+        SELECT helper_id FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)}
+        WHERE request_id = ${targetId} AND status = ${OFFER_STATUS.ACCEPTED} LIMIT 1
+      `)
+      const helperId = rows.rows[0]?.helper_id
+      if (helperId) await recomputeTechnicianAggregate(helperId)
       break
+    }
     case 'listing':
       await updateSellerRatingFromListing(targetId)
       break
-    case 'repairer':
-      await updateRepairerRating(targetId)
+    case 'repairer': {
+      // target_id is the repairer_profiles.id — resolve its user, recompute.
+      const rows = await db.execute<{ user_id: string }>(sql`
+        SELECT user_id FROM ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} WHERE id = ${targetId} LIMIT 1
+      `)
+      const userId = rows.rows[0]?.user_id
+      if (userId) await recomputeTechnicianAggregate(userId)
       break
+    }
     default:
       logger.info('No rating update for target type', { targetType })
   }
 }
 
-/** Update repairer_profiles average rating from all it_hilfe reviews */
-async function updateHelperRating(requestId: string): Promise<void> {
+/**
+ * Single source of truth for a technician's rating: recompute
+ * repairer_profiles.average_rating / total_reviews from ALL of their reviews in
+ * the `reviews` table — IT-Hilfe (via accepted offer → helper) AND repairer
+ * (via target_id → profile, which now also includes mirrored service-appointment
+ * ratings). Replaces the two slice-specific updaters that overwrote each other.
+ */
+export async function recomputeTechnicianAggregate(technicianUserId: string): Promise<void> {
   const result = await db.execute(sql`
-    UPDATE ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} SET
+    UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} p SET
       average_rating = sub.avg_rating,
       total_reviews = sub.review_count
     FROM (
-      SELECT
-        o.helper_id AS helper_user_id,
-        AVG(r.overall_rating)::numeric(3,2) AS avg_rating,
-        COUNT(r.id)::int AS review_count
-      FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
-      JOIN ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} o ON o.request_id = r.target_id AND o.status = ${OFFER_STATUS.ACCEPTED}
-      WHERE r.target_type = ${REVIEW_TARGET_TYPES.IT_HILFE} AND r.status = ${REVIEW_STATUS.PUBLISHED}
-      GROUP BY o.helper_id
+      SELECT u AS user_id, AVG(rating)::numeric(3,2) AS avg_rating, COUNT(*)::int AS review_count
+      FROM (
+        SELECT o.helper_id AS u, r.overall_rating AS rating
+        FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
+        JOIN ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} o
+          ON o.request_id = r.target_id AND o.status = ${OFFER_STATUS.ACCEPTED}
+        WHERE r.target_type = ${REVIEW_TARGET_TYPES.IT_HILFE} AND r.status = ${REVIEW_STATUS.PUBLISHED}
+        UNION ALL
+        SELECT p2.user_id AS u, r.overall_rating AS rating
+        FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
+        JOIN ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} p2 ON p2.id = r.target_id
+        WHERE r.target_type = ${REVIEW_TARGET_TYPES.REPAIRER} AND r.status = ${REVIEW_STATUS.PUBLISHED}
+      ) all_reviews
+      WHERE u = ${technicianUserId}
+      GROUP BY u
     ) sub
-    WHERE ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id = sub.helper_user_id
-    AND EXISTS (
-      SELECT 1 FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} WHERE request_id = ${requestId} AND status = ${OFFER_STATUS.ACCEPTED} AND helper_id = ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id
-    )
+    WHERE p.user_id = sub.user_id
   `)
-  logger.info('Updated helper rating', { requestId, rows: result.rowCount })
+  logger.info('Recomputed technician aggregate', { technicianUserId, rows: result.rowCount })
 }
 
 /** Update seller_profiles average rating from all listing reviews for that seller */
@@ -153,34 +177,4 @@ async function updateSellerRatingFromListing(listingId: string): Promise<void> {
     AND sub.seller_id = (SELECT seller_id FROM ${sql.raw(TABLE_NAMES.LISTINGS)} WHERE id = ${listingId})
   `)
   logger.info('Updated seller rating from listing', { listingId, rows: result.rowCount })
-}
-
-/** Update repairer_profiles average rating from all repairer reviews */
-async function updateRepairerRating(repairerId: string): Promise<void> {
-  // For 'repairer' reviews, reviews.target_id is the repairer_profiles.id
-  // (the profile UUID), NOT repairer_profiles.user_id. See api/reviews/
-  // route.ts:131-132 where the JOIN is `eq(reviews.targetId,
-  // repairerProfiles.id)`. Matching the WHERE clause to .user_id silently
-  // never updated a row — the displayed average_rating + total_reviews
-  // stayed stale until an admin manually called /api/admin/repairers/[id]/
-  // recalculate-ratings (which calls the update_repairer_rating_summary
-  // stored proc that does the math correctly). Compare to the
-  // IT-Hilfe and seller paths above where the JOIN is via the helper's /
-  // seller's user_id from offers / listings — those are correct.
-  const result = await db.execute(sql`
-    UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} SET
-      average_rating = sub.avg_rating,
-      total_reviews = sub.review_count
-    FROM (
-      SELECT
-        target_id AS repairer_profile_id,
-        AVG(overall_rating)::numeric(3,2) AS avg_rating,
-        COUNT(id)::int AS review_count
-      FROM ${sql.raw(TABLE_NAMES.REVIEWS)}
-      WHERE target_type = ${REVIEW_TARGET_TYPES.REPAIRER} AND status = ${REVIEW_STATUS.PUBLISHED} AND target_id = ${repairerId}
-      GROUP BY target_id
-    ) sub
-    WHERE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)}.id = sub.repairer_profile_id
-  `)
-  logger.info('Updated repairer rating', { repairerId, rows: result.rowCount })
 }
