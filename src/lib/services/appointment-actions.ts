@@ -7,11 +7,13 @@
 
 import { db } from '@/db'
 import { serviceAppointments, serviceTypes, users } from '@/db/schema'
-import { eq, and, isNull, sql } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
 import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
+import { TABLE_NAMES } from '@/config/database'
+import { guardedTransition } from '@/lib/lifecycle'
 import { APP_URL } from '@/config/urls'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 
@@ -171,26 +173,48 @@ export function buildActionUpdate(
 // ============================================================================
 
 /**
- * Apply the appointment update to the database.
- * For 'rate' action, adds a WHERE condition to prevent double-rating.
+ * Apply the appointment update to the database, race-safe.
+ *
+ * `buildActionUpdate` validated the action against `expectedStatus` (the
+ * status read just before). Between that read and this write, a concurrent
+ * action (or a double-click) could move the appointment — without a lock both
+ * would apply, e.g. double-firing a status change or, for 'rate', writing two
+ * ratings. guardedTransition locks the row (FOR UPDATE) and re-checks under it:
+ *   - the status is still `expectedStatus` (no concurrent transition won), and
+ *   - for 'rate', `customer_rating` is still null (generalises the previous
+ *     `isNull(customerRating)` compare-and-set into the same guard).
+ * A race-loser fails the re-check and returns null (no write). Returns the
+ * updated row, or null when the precondition no longer holds.
  */
 export async function executeAppointmentUpdate(
   appointmentId: string,
   action: string,
-  updateSet: Record<string, unknown>
+  updateSet: Record<string, unknown>,
+  expectedStatus: string | null
 ): Promise<typeof serviceAppointments.$inferSelect | null> {
-  const conditions = [eq(serviceAppointments.id, appointmentId)]
-  if (action === 'rate') {
-    conditions.push(isNull(serviceAppointments.customerRating))
-  }
+  const res = await guardedTransition<
+    { status: string | null; customer_rating: number | null },
+    typeof serviceAppointments.$inferSelect | undefined
+  >({
+    lockTable: TABLE_NAMES.SERVICE_APPOINTMENTS,
+    lockId: appointmentId,
+    lockColumns: ['status', 'customer_rating'],
+    check: (row) => {
+      if (expectedStatus !== null && row.status !== expectedStatus) return false
+      if (action === 'rate' && row.customer_rating != null) return false
+      return true
+    },
+    apply: async (tx) => {
+      const [updated] = await tx
+        .update(serviceAppointments)
+        .set(updateSet)
+        .where(eq(serviceAppointments.id, appointmentId))
+        .returning()
+      return updated
+    },
+  })
 
-  const [updated] = await db
-    .update(serviceAppointments)
-    .set(updateSet)
-    .where(and(...conditions))
-    .returning()
-
-  return updated ?? null
+  return res.ok ? (res.result ?? null) : null
 }
 
 // ============================================================================

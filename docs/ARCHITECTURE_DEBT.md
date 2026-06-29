@@ -1,8 +1,8 @@
 # Architecture Debt — Parallel Implementations + Spaghetti Patterns
 
 **Created:** 2026-06-04  
-**Last Modified:** 2026-06-19  
-**Last Modified Summary:** Phase 3 — admin dashboard 404 links, workshop notification hrefs, IT-Hilfe single-email notifications
+**Last Modified:** 2026-06-29  
+**Last Modified Summary:** #4 — race-safe lifecycle transition guard (`src/lib/lifecycle`) adopted by IT-Hilfe + orders + appointments (Phase 1)
 
 **Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
@@ -158,6 +158,38 @@ approval flow in repair bookings) keeps its specific enum.
 
 **Estimated effort:** 2-3 hours. Risk: minimal — additive layer, doesn't
 change existing enums.
+
+---
+
+## #4 — Lifecycle transition engine (request→accept→complete→review)
+
+**Status:** Phase 1 ✓ DONE (2026-06-29). Phase 2 deferred.
+
+The three flows — IT-Hilfe peer-repair, service appointments, marketplace
+orders — are each "a row with a `status` column moving through role-gated
+actions". They independently re-implemented the read-validate-write step, and
+only IT-Hilfe did it race-safely (and duplicated that 3×). Decided model:
+**"shared core, separate flows"** — share the engine, keep the three
+transition tables + side-effects distinct.
+
+**Phase 1 — race-safe transition guard (`src/lib/lifecycle/guardedTransition`):**
+`SELECT … FOR UPDATE` → re-check the precondition under the lock → run the
+flow's writes in the same transaction. `check(row, tx)` can read a second
+entity in the same tx (IT-Hilfe re-reads offer status — without `FOR UPDATE`,
+serializing on the request row). All three flows route through it:
+- IT-Hilfe (`accept-offer.ts`, `complete`, `confirm-review`) — collapsed the 3×
+  hand-rolled lock blocks; behavior-preserving (`createReview` stays post-commit).
+- Marketplace orders (`PATCH` + `confirm-receipt`) — both lock the same order
+  row, fixing a latent **double Payrexx-capture / double `total_sold`** on
+  concurrent or double-clicked completion. `captureTransaction` runs inside the
+  lock (relies on Payrexx idempotency by transaction id).
+- Appointments (`executeAppointmentUpdate`) — now takes `expectedStatus`;
+  generalized the `rate`-only compare-and-set to all transitions.
+
+**Phase 2 — deferred:** a declarative transition-table validator to replace the
+orders `STATUS_TRANSITIONS` matrix + appointments `buildActionUpdate` switch.
+IT-Hilfe's `VALID_REQUEST_TRANSITIONS` stays as-is (its OPEN→MATCHED is a
+two-entity offer acceptance, not a single-row transition).
 
 ---
 

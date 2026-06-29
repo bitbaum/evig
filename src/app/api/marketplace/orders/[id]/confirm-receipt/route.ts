@@ -16,6 +16,8 @@ import { db } from '@/db'
 import { listings, marketplaceOrders, marketplaceOrderItems, sellerProfiles, users } from '@/db/schema'
 import { eq, sql, inArray } from 'drizzle-orm'
 import { ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
+import { TABLE_NAMES } from '@/config/database'
+import { guardedTransition } from '@/lib/lifecycle'
 import { logger } from '@/lib/logger'
 import { captureTransaction } from '@/lib/payments/payrexx-client'
 import { sendCustomEmail } from '@/lib/email'
@@ -86,45 +88,66 @@ export const POST = withAuth<{ id: string }>(async (
       )
     }
 
-    // Release escrow if there is a Payrexx hold
-    if (order.payrexxTransactionId) {
-      try {
-        await captureTransaction(
-          order.payrexxTransactionId,
-          Math.round(Number(order.amountChf) * 100),
-        )
-      } catch (captureError) {
-        logger.error('Failed to capture Payrexx transaction on receipt confirmation', {
-          captureError,
-          orderId,
-        })
-        return apiError(captureError, 'Zahlung konnte nicht freigegeben werden')
-      }
+    // Capture escrow + complete the order race-safe. Lock the order row and
+    // re-verify it is still shipped/delivered under the lock, so this route
+    // and the PATCH route (the other path to COMPLETED) serialize against each
+    // other — without the lock both could capture the Payrexx hold and bump
+    // seller total_sold twice. Capture runs INSIDE the lock; a genuine retry
+    // relies on Payrexx idempotency by transaction id.
+    let paymentErrorMsg: string | null = null
+    let result
+    try {
+      result = await guardedTransition<{ status: string }, void>({
+        lockTable: TABLE_NAMES.MARKETPLACE_ORDERS,
+        lockId: orderId,
+        check: (r) => validStates.includes(r.status),
+        apply: async (tx) => {
+          // Release escrow if there is a Payrexx hold
+          if (order.payrexxTransactionId) {
+            try {
+              await captureTransaction(
+                order.payrexxTransactionId,
+                Math.round(Number(order.amountChf) * 100),
+              )
+            } catch (captureError) {
+              logger.error('Failed to capture Payrexx transaction on receipt confirmation', {
+                captureError,
+                orderId,
+              })
+              paymentErrorMsg = 'Zahlung konnte nicht freigegeben werden'
+              throw captureError
+            }
+          }
+
+          await tx
+            .update(marketplaceOrders)
+            .set({
+              status: ORDER_STATUS.COMPLETED,
+              deliveredAt: sql`COALESCE(${marketplaceOrders.deliveredAt}, NOW())`,
+              completedAt: sql`NOW()`,
+              updatedAt: sql`NOW()`,
+            })
+            .where(eq(marketplaceOrders.id, orderId))
+          await tx
+            .update(listings)
+            .set({ status: LISTING_STATUS.SOLD })
+            .where(inArray(listings.id, affectedListingIds))
+          await tx
+            .update(sellerProfiles)
+            .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${affectedListingIds.length}` })
+            .where(eq(sellerProfiles.userId, order.sellerId))
+        },
+      })
+    } catch (txError) {
+      if (paymentErrorMsg) return apiError(txError, paymentErrorMsg)
+      throw txError
     }
 
-    // All three state updates are independent — run in parallel
-    await Promise.all([
-      // Mark order completed
-      db
-        .update(marketplaceOrders)
-        .set({
-          status: ORDER_STATUS.COMPLETED,
-          deliveredAt: sql`COALESCE(${marketplaceOrders.deliveredAt}, NOW())`,
-          completedAt: sql`NOW()`,
-          updatedAt: sql`NOW()`,
-        })
-        .where(eq(marketplaceOrders.id, orderId)),
-      // Mark listing(s) as sold
-      db
-        .update(listings)
-        .set({ status: LISTING_STATUS.SOLD })
-        .where(inArray(listings.id, affectedListingIds)),
-      // Increment seller total_sold (once per item)
-      db
-        .update(sellerProfiles)
-        .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${affectedListingIds.length}` })
-        .where(eq(sellerProfiles.userId, order.sellerId)),
-    ])
+    if (!result.ok) {
+      // The order left shipped/delivered under us (e.g. a concurrent
+      // confirm-receipt won). The end-state is the same; treat as done.
+      return apiSuccess({ orderId, status: ORDER_STATUS.COMPLETED })
+    }
 
     logger.info('Buyer confirmed receipt', {
       orderId,

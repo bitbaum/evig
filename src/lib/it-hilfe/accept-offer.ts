@@ -27,6 +27,7 @@ import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { notifyUsers } from '@/lib/services/notifications'
 import { findOrCreateItHilfeConversation } from './conversation'
+import { guardedTransition } from '@/lib/lifecycle'
 import { APP_URL } from '@/config/urls'
 
 export type AcceptOfferReason =
@@ -137,58 +138,55 @@ export async function acceptOffer(params: {
   // emails seconds apart. FOR UPDATE on the request serializes them;
   // the second transaction sees MATCHED and aborts cleanly. Returning
   // a sentinel so the outer function can map it to AcceptOfferResult.
-  const raceFailed = await db.transaction(async (tx) => {
-    const lockedReq = await tx.execute(sql`
-      SELECT status FROM ${sql.raw(reqTable)}
-      WHERE id = ${requestId}
-      FOR UPDATE
-    `)
-    const lockedReqStatus = (lockedReq.rows[0] as { status?: string } | undefined)?.status
-    if (lockedReqStatus !== REQUEST_STATUS.OPEN) return true
+  const applied = await guardedTransition<{ status: string }, void>({
+    lockTable: reqTable,
+    lockId: requestId,
+    // Re-verify request OPEN under the lock, plus the offer is still PENDING.
+    // The request lock serializes all acceptances; the offer is re-read
+    // WITHOUT FOR UPDATE on purpose — correctness comes from serializing on
+    // the request row, and locking the offer too would change lock-
+    // acquisition order and invite deadlocks. We still re-read it so a
+    // separate (non-acceptance) path that WITHDREW the offer aborts here.
+    check: async (lockedReq, tx) => {
+      if (lockedReq.status !== REQUEST_STATUS.OPEN) return false
+      const lockedOff = await tx.execute(sql`
+        SELECT status FROM ${sql.raw(offTable)}
+        WHERE id = ${offerId}
+      `)
+      const lockedOffStatus = (lockedOff.rows[0] as { status?: string } | undefined)?.status
+      return lockedOffStatus === OFFER_STATUS.PENDING
+    },
+    apply: async (tx) => {
+      await tx.update(itHilfeOffers)
+        .set({ status: OFFER_STATUS.ACCEPTED })
+        .where(eq(itHilfeOffers.id, offerId))
 
-    // The request lock serializes all acceptances; an offer can't be
-    // accepted concurrently because the surrounding request transaction
-    // is queued. Still re-read the offer status — if a separate (non-
-    // acceptance) path WITHDREW the offer between the outer SELECT and
-    // this point, we should abort the same way.
-    const lockedOff = await tx.execute(sql`
-      SELECT status FROM ${sql.raw(offTable)}
-      WHERE id = ${offerId}
-    `)
-    const lockedOffStatus = (lockedOff.rows[0] as { status?: string } | undefined)?.status
-    if (lockedOffStatus !== OFFER_STATUS.PENDING) return true
-
-    await tx.update(itHilfeOffers)
-      .set({ status: OFFER_STATUS.ACCEPTED })
-      .where(eq(itHilfeOffers.id, offerId))
-
-    await tx.update(itHilfeOffers)
-      .set({ status: OFFER_STATUS.REJECTED })
-      .where(
-        and(
-          eq(itHilfeOffers.requestId, requestId),
-          ne(itHilfeOffers.id, offerId),
-          eq(itHilfeOffers.status, OFFER_STATUS.PENDING)
+      await tx.update(itHilfeOffers)
+        .set({ status: OFFER_STATUS.REJECTED })
+        .where(
+          and(
+            eq(itHilfeOffers.requestId, requestId),
+            ne(itHilfeOffers.id, offerId),
+            eq(itHilfeOffers.status, OFFER_STATUS.PENDING)
+          )
         )
-      )
 
-    await tx.update(itHilfeRequests)
-      .set({ status: REQUEST_STATUS.MATCHED, matchedOfferId: offerId })
-      .where(eq(itHilfeRequests.id, requestId))
+      await tx.update(itHilfeRequests)
+        .set({ status: REQUEST_STATUS.MATCHED, matchedOfferId: offerId })
+        .where(eq(itHilfeRequests.id, requestId))
 
-    // Ensure the requester ↔ helper conversation exists (shared with the
-    // pre-acceptance "ask a question" flow).
-    await findOrCreateItHilfeConversation(tx, {
-      requestId,
-      userA: requestData.requester_id,
-      userB: offerData.helper_id,
-      requestTitle: requestData.title,
-    })
-
-    return false
+      // Ensure the requester ↔ helper conversation exists (shared with the
+      // pre-acceptance "ask a question" flow).
+      await findOrCreateItHilfeConversation(tx, {
+        requestId,
+        userA: requestData.requester_id,
+        userB: offerData.helper_id,
+        requestTitle: requestData.title,
+      })
+    },
   })
 
-  if (raceFailed) {
+  if (!applied.ok) {
     // Map to the most accurate reason. We can't distinguish here whether
     // the request was already matched vs the offer was withdrawn out-of-
     // band; surface the request-side reason since that's what the

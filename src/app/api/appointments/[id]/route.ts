@@ -160,11 +160,16 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     const { updateSet, newStatus } = result
 
-    // Execute the DB update
-    const updated = await executeAppointmentUpdate(appointmentId, action, updateSet)
+    // Execute the DB update race-safe — re-checks the status is unchanged
+    // (and, for 'rate', not yet rated) under a row lock before writing.
+    const updated = await executeAppointmentUpdate(appointmentId, action, updateSet, appointment.status)
 
-    if (!updated && action === 'rate') {
-      return apiBadRequest('Dieser Termin wurde bereits bewertet')
+    if (!updated) {
+      return apiBadRequest(
+        action === 'rate'
+          ? 'Dieser Termin wurde bereits bewertet'
+          : 'Der Status des Termins hat sich geändert. Bitte Seite neu laden.',
+      )
     }
 
     // Mirror a service-appointment rating into the canonical `reviews` table so

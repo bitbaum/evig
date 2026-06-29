@@ -12,6 +12,8 @@ import { listings, listingImages, marketplaceOrders, marketplaceOrderItems, sell
 import { eq, and, sql, inArray } from 'drizzle-orm';
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
 import type { OrderStatus } from '@/config/marketplace';
+import { TABLE_NAMES } from '@/config/database';
+import { guardedTransition } from '@/lib/lifecycle';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateOrderStatusSchema } from '@/lib/schemas';
 import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client';
@@ -190,82 +192,104 @@ export const PATCH = withAuth<{ id: string }>(async (
       );
     }
 
-    // Handle payment operations for specific transitions
-    if (newStatus === ORDER_STATUS.COMPLETED && order.payrexxTransactionId) {
-      // Capture the held Payrexx reservation
-      try {
-        await captureTransaction(order.payrexxTransactionId, Math.round(Number(order.amountChf) * 100));
-      } catch (captureError) {
-        logger.error('Failed to capture Payrexx transaction', { captureError, orderId });
-        return apiError(captureError, 'Zahlung konnte nicht abgeschlossen werden');
-      }
+    // Apply the transition race-safe. Lock the order row, re-validate the
+    // transition under the lock, then run the Payrexx capture/cancel + status
+    // write + listing side-effects atomically. Without the lock, the two paths
+    // that reach COMPLETED (this PATCH and the confirm-receipt route) or a
+    // double-click could both pass the read-time check and double-capture the
+    // Payrexx reservation + double-bump seller total_sold. Payment ops run
+    // INSIDE the lock (orders are low volume; correctness > lock duration); a
+    // genuine retry relies on Payrexx idempotency by transaction id.
+    let paymentErrorMsg: string | null = null
+    let result
+    try {
+      result = await guardedTransition<{ status: string }, void>({
+        lockTable: TABLE_NAMES.MARKETPLACE_ORDERS,
+        lockId: orderId,
+        check: (r) => {
+          if (r.status === ORDER_STATUS.PENDING_PAYMENT && newStatus === ORDER_STATUS.CANCELLED) return true
+          return (STATUS_TRANSITIONS[r.status]?.[role] || []).includes(newStatus)
+        },
+        apply: async (tx, r) => {
+          // Payment operations (under the lock)
+          if (newStatus === ORDER_STATUS.COMPLETED && order.payrexxTransactionId) {
+            try {
+              await captureTransaction(order.payrexxTransactionId, Math.round(Number(order.amountChf) * 100))
+            } catch (captureError) {
+              logger.error('Failed to capture Payrexx transaction', { captureError, orderId })
+              paymentErrorMsg = 'Zahlung konnte nicht abgeschlossen werden'
+              throw captureError
+            }
+          }
+          if (newStatus === ORDER_STATUS.CANCELLED && r.status !== ORDER_STATUS.PENDING_PAYMENT && order.payrexxTransactionId) {
+            try {
+              await cancelTransaction(order.payrexxTransactionId)
+            } catch (cancelError) {
+              logger.error('Failed to cancel Payrexx transaction', { cancelError, orderId })
+              paymentErrorMsg = 'Zahlung konnte nicht storniert werden'
+              throw cancelError
+            }
+          }
+
+          // Status write (+ tracking info in shipping_address JSONB)
+          const updateValues: Record<string, unknown> = {
+            status: newStatus,
+            updatedAt: sql`NOW()`,
+          }
+          if (tracking_number || tracking_url) {
+            updateValues.shippingAddress = sql`COALESCE(${marketplaceOrders.shippingAddress}, '{}') || ${JSON.stringify({
+              ...(tracking_number && { tracking_number }),
+              ...(tracking_url && { tracking_url }),
+            })}::jsonb`
+          }
+          await tx.update(marketplaceOrders).set(updateValues).where(eq(marketplaceOrders.id, orderId))
+
+          // Single-item P2P orders carry a listing directly; cart orders
+          // (listing_id null) carry their listings in marketplace_order_items.
+          // Resolve the affected listing ids so completion/cancellation acts on all.
+          let affectedListingIds: string[] = []
+          if (order.listingId) {
+            affectedListingIds = [order.listingId]
+          } else {
+            const items = await tx
+              .select({ listingId: marketplaceOrderItems.listingId })
+              .from(marketplaceOrderItems)
+              .where(eq(marketplaceOrderItems.orderId, orderId))
+            affectedListingIds = items.map(i => i.listingId)
+          }
+
+          // If completed: mark listing(s) SOLD + bump seller total_sold (once per item).
+          if (newStatus === ORDER_STATUS.COMPLETED && affectedListingIds.length > 0) {
+            await tx.update(listings)
+              .set({ status: LISTING_STATUS.SOLD })
+              .where(inArray(listings.id, affectedListingIds))
+            await tx.update(sellerProfiles)
+              .set({ totalSold: sql`${sellerProfiles.totalSold} + ${affectedListingIds.length}` })
+              .where(eq(sellerProfiles.userId, order.sellerId))
+          }
+
+          // If cancelled: restore reserved listing(s) to active
+          if (newStatus === ORDER_STATUS.CANCELLED && affectedListingIds.length > 0) {
+            await tx.update(listings)
+              .set({ status: LISTING_STATUS.ACTIVE })
+              .where(and(
+                inArray(listings.id, affectedListingIds),
+                eq(listings.status, LISTING_STATUS.RESERVED),
+              ))
+          }
+        },
+      })
+    } catch (txError) {
+      // A payment-op failure rolled the transaction back (no status change);
+      // surface the specific message. Anything else bubbles to the outer catch.
+      if (paymentErrorMsg) return apiError(txError, paymentErrorMsg)
+      throw txError
     }
 
-    if (newStatus === ORDER_STATUS.CANCELLED && order.status !== ORDER_STATUS.PENDING_PAYMENT && order.payrexxTransactionId) {
-      // Cancel/release the Payrexx reservation
-      try {
-        await cancelTransaction(order.payrexxTransactionId);
-      } catch (cancelError) {
-        logger.error('Failed to cancel Payrexx transaction', { cancelError, orderId });
-        return apiError(cancelError, 'Zahlung konnte nicht storniert werden');
-      }
-    }
-
-    // Build update values
-    const updateValues: Record<string, unknown> = {
-      status: newStatus,
-      updatedAt: sql`NOW()`,
-    };
-
-    // Store tracking info in shipping_address JSONB
-    if (tracking_number || tracking_url) {
-      updateValues.shippingAddress = sql`COALESCE(${marketplaceOrders.shippingAddress}, '{}') || ${JSON.stringify({
-        ...(tracking_number && { tracking_number }),
-        ...(tracking_url && { tracking_url }),
-      })}::jsonb`;
-    }
-
-    await db
-      .update(marketplaceOrders)
-      .set(updateValues)
-      .where(eq(marketplaceOrders.id, orderId));
-
-    // Single-item P2P orders carry a listing directly; cart orders (listing_id
-    // null) carry their listings in marketplace_order_items. Resolve the set of
-    // affected listing ids so completion/cancellation acts on all of them.
-    const listingId = order.listingId
-    let affectedListingIds: string[] = []
-    if (listingId) {
-      affectedListingIds = [listingId]
-    } else {
-      const items = await db
-        .select({ listingId: marketplaceOrderItems.listingId })
-        .from(marketplaceOrderItems)
-        .where(eq(marketplaceOrderItems.orderId, orderId))
-      affectedListingIds = items.map(i => i.listingId)
-    }
-
-    // If completed: mark listing(s) SOLD + bump seller total_sold (once per item).
-    if (newStatus === ORDER_STATUS.COMPLETED && affectedListingIds.length > 0) {
-      await Promise.all([
-        db.update(listings)
-          .set({ status: LISTING_STATUS.SOLD })
-          .where(inArray(listings.id, affectedListingIds)),
-        db.update(sellerProfiles)
-          .set({ totalSold: sql`${sellerProfiles.totalSold} + ${affectedListingIds.length}` })
-          .where(eq(sellerProfiles.userId, order.sellerId)),
-      ])
-    }
-
-    // If cancelled: restore reserved listing(s) to active
-    if (newStatus === ORDER_STATUS.CANCELLED && affectedListingIds.length > 0) {
-      await db
-        .update(listings)
-        .set({ status: LISTING_STATUS.ACTIVE })
-        .where(and(
-          inArray(listings.id, affectedListingIds),
-          eq(listings.status, LISTING_STATUS.RESERVED),
-        ));
+    if (!result.ok) {
+      // The order changed under us between the read-time check and the lock
+      // (concurrent transition); the requested transition is no longer valid.
+      return apiBadRequest('Der Status der Bestellung hat sich geändert. Bitte Seite neu laden.')
     }
 
     logger.info('Marketplace order status updated', {

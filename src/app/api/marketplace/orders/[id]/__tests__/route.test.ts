@@ -186,15 +186,28 @@ const mockSelect = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
+// The FOR UPDATE lock select inside guardedTransition. Returns the row the
+// re-check sees under the lock; set per-test to simulate a race-loser (status
+// changed between the pre-lock fetch and acquiring the lock).
+const mockTxExecute = jest.fn()
 
-jest.mock('@/db', () => ({
-  db: {
-    select: (...args: unknown[]) => mockSelect(...args),
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-    insert: jest.fn(),
-    transaction: jest.fn(),
-  },
-}))
+jest.mock('@/db', () => {
+  const mkUpdate = (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } }
+  return {
+    db: {
+      select: (...args: unknown[]) => mockSelect(...args),
+      update: mkUpdate,
+      insert: jest.fn(),
+      // guardedTransition runs `db.transaction(cb)`; invoke cb with a fake tx
+      // exposing execute (the FOR UPDATE select) + update/select.
+      transaction: (cb: (tx: unknown) => unknown) => cb({
+        execute: (...a: unknown[]) => mockTxExecute(...a),
+        update: mkUpdate,
+        select: (...args: unknown[]) => mockSelect(...args),
+      }),
+    },
+  }
+})
 
 // ---------------------------------------------------------------------------
 // Imports (after all mocks)
@@ -285,6 +298,10 @@ beforeEach(() => {
   // Default update chain
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockResolvedValue(undefined)
+
+  // Default: the FOR UPDATE lock sees the same status as the pre-lock fetch
+  // (no race). Tests override this to simulate a concurrent transition.
+  mockTxExecute.mockResolvedValue({ rows: [{ status: MOCK_ORDER.status }] })
 
   // Re-wire fire-and-forget email mocks — resetAllMocks() clears implementations,
   // and .catch() on undefined would throw inside the route handler
@@ -411,6 +428,41 @@ describe('PATCH /api/marketplace/orders/[id] — success (buyer cancels)', () =>
     await PATCH(makePatchRequest({ status: 'cancelled' }), makeContext())
     expect(mockUpdate).toHaveBeenCalled()
     expect(mockSet).toHaveBeenCalled()
+  })
+})
+
+// ============================================================================
+// PATCH /api/marketplace/orders/[id] — race safety (guardedTransition)
+//
+// The transition is now applied under a `SELECT ... FOR UPDATE` lock with a
+// re-check, so a caller whose pre-lock fetch saw a still-valid state but who
+// then loses the race (the row changed before it acquired the lock) aborts
+// WITHOUT writing or capturing payment. True FOR UPDATE serialization is a
+// Postgres guarantee (exercised in integration/E2E, not this mock); here we
+// verify the route's re-check wiring rejects a now-stale transition.
+// ============================================================================
+
+describe('PATCH /api/marketplace/orders/[id] — race-loser aborts cleanly', () => {
+  it('does not write or capture when the order changed under the lock', async () => {
+    const payrexx = require('@/lib/payments/payrexx-client')
+    // Pre-lock fetch sees a paid order (buyer cancel is valid)...
+    wireSelectReturning({ ...MOCK_ORDER, status: 'paid' })
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { status: 'cancelled', tracking_number: undefined, tracking_url: undefined },
+    })
+    // ...but under the lock the order is already 'cancelled' (a concurrent
+    // caller won). The re-check fails → apply is skipped.
+    mockTxExecute.mockResolvedValueOnce({ rows: [{ status: 'cancelled' }] })
+
+    const response = await PATCH(makePatchRequest({ status: 'cancelled' }), makeContext())
+
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toMatch(/geändert/i)
+    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(payrexx.cancelTransaction).not.toHaveBeenCalled()
+    expect(payrexx.captureTransaction).not.toHaveBeenCalled()
   })
 })
 

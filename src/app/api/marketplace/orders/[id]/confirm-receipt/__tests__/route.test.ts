@@ -157,13 +157,25 @@ const mockSelect = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
+// The FOR UPDATE lock select inside guardedTransition — the status the
+// re-check sees under the lock. Override per-test to simulate a race-loser.
+const mockTxExecute = jest.fn()
 
-jest.mock('@/db', () => ({
-  db: {
-    select: (...args: unknown[]) => mockSelect(...args),
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-  },
-}))
+jest.mock('@/db', () => {
+  const mkUpdate = (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } }
+  return {
+    db: {
+      select: (...args: unknown[]) => mockSelect(...args),
+      update: mkUpdate,
+      // guardedTransition runs `db.transaction(cb)`; invoke cb with a fake tx.
+      transaction: (cb: (tx: unknown) => unknown) => cb({
+        execute: (...a: unknown[]) => mockTxExecute(...a),
+        update: mkUpdate,
+        select: (...args: unknown[]) => mockSelect(...args),
+      }),
+    },
+  }
+})
 
 // ---------------------------------------------------------------------------
 // Imports (after all mocks)
@@ -249,6 +261,10 @@ beforeEach(() => {
   // Default update chain — returns itself for multiple parallel updates
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockResolvedValue(undefined)
+
+  // Default: the FOR UPDATE lock sees the same (valid) status as the pre-lock
+  // fetch (no race). Tests override to simulate a concurrent transition.
+  mockTxExecute.mockResolvedValue({ rows: [{ status: MOCK_ORDER.status }] })
 
   // Re-wire fire-and-forget mocks
   const emailMod = require('@/lib/email')
@@ -345,5 +361,27 @@ describe('POST confirm-receipt — cart order (listingId null)', () => {
     wireSelectReturning({ ...MOCK_ORDER, listingId: null, listingTitle: null }, [])
     const response = await POST(makePostRequest(), makeContext())
     expect(response.status).toBe(404)
+  })
+})
+
+// confirm-receipt and PATCH both reach COMPLETED. They now lock the same order
+// row, so a caller that loses the race (the order left shipped/delivered before
+// it acquired the lock) must NOT capture the Payrexx hold or bump total_sold a
+// second time. True FOR UPDATE serialization is a Postgres guarantee; here we
+// verify the re-check skips apply when the locked status is no longer valid.
+describe('POST confirm-receipt — race-loser does not double-capture', () => {
+  it('skips capture + writes when the order already left shipped/delivered under the lock', async () => {
+    const payrexx = require('@/lib/payments/payrexx-client')
+    // Pre-lock fetch sees a shipped order (valid)...
+    wireSelectReturning({ ...MOCK_ORDER, status: 'shipped' })
+    // ...but under the lock it is already 'completed' (a concurrent caller won).
+    mockTxExecute.mockResolvedValueOnce({ rows: [{ status: 'completed' }] })
+
+    const response = await POST(makePostRequest(), makeContext())
+
+    // End-state is the same (completed); we report success without re-applying.
+    expect(response.status).toBe(200)
+    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(payrexx.captureTransaction).not.toHaveBeenCalled()
   })
 })

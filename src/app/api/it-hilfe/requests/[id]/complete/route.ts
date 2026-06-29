@@ -16,6 +16,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 import { notifyRequestCompleted } from '@/lib/it-hilfe/notifications'
+import { guardedTransition } from '@/lib/lifecycle'
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -83,42 +84,38 @@ export const POST = withAuth<{ id: string }>(async (
       )
     }
 
-    // Mark request as completed + bump helper totals (transactional).
+    // Mark request as completed + bump helper totals, race-safe.
     //
-    // Race: helper double-clicks "Mark complete". Both reads pass (request
-    // MATCHED, offer ACCEPTED, helperId matches). Without a lock both
+    // Race: helper double-clicks "Mark complete". Both reads above pass
+    // (request MATCHED, offer ACCEPTED, helperId matches). Without a lock both
     // transactions run — the status UPDATE is idempotent but the
-    // totalJobsCompleted increment double-fires, inflating the helper's
-    // job count by 1 per duplicate click. Lock the request row with
-    // FOR UPDATE inside the transaction and re-verify status === MATCHED;
-    // a race-loser sees status === 'completed' and aborts cleanly without
-    // re-incrementing. Same shape as 90bdbabf / cc89b7f6.
-    const raceWon = await db.transaction(async (tx) => {
-      const lockedReq = await tx.execute(sql`
-        SELECT status FROM ${sql.raw(reqTable)}
-        WHERE id = ${id}
-        FOR UPDATE
-      `)
-      const lockedStatus = (lockedReq.rows[0] as { status?: string } | undefined)?.status
-      if (lockedStatus !== REQUEST_STATUS.MATCHED) return false
+    // totalJobsCompleted increment double-fires, inflating the helper's job
+    // count by 1 per duplicate click. guardedTransition locks the request row
+    // (FOR UPDATE) and re-verifies status === MATCHED under the lock; a
+    // race-loser sees status === 'completed' (check fails) and aborts cleanly
+    // without re-incrementing.
+    const result = await guardedTransition<{ status: string }, void>({
+      lockTable: reqTable,
+      lockId: id,
+      check: (r) => r.status === REQUEST_STATUS.MATCHED,
+      apply: async (tx) => {
+        await tx
+          .update(itHilfeRequests)
+          .set({
+            status: REQUEST_STATUS.COMPLETED,
+            completedAt: sql`NOW()`,
+            completedBy: session.user.id,
+          })
+          .where(eq(itHilfeRequests.id, id))
 
-      await tx
-        .update(itHilfeRequests)
-        .set({
-          status: REQUEST_STATUS.COMPLETED,
-          completedAt: sql`NOW()`,
-          completedBy: session.user.id,
-        })
-        .where(eq(itHilfeRequests.id, id))
-
-      await tx
-        .update(repairerProfiles)
-        .set({ totalJobsCompleted: sql`${repairerProfiles.totalJobsCompleted} + 1` })
-        .where(eq(repairerProfiles.userId, session.user.id))
-      return true
+        await tx
+          .update(repairerProfiles)
+          .set({ totalJobsCompleted: sql`${repairerProfiles.totalJobsCompleted} + 1` })
+          .where(eq(repairerProfiles.userId, session.user.id))
+      },
     })
 
-    if (!raceWon) {
+    if (!result.ok) {
       // Idempotent: the request is already completed (likely by a sibling
       // double-click). Return success so the UI doesn't show an error for
       // what is essentially the desired end-state.

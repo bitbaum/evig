@@ -18,6 +18,7 @@ import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, REVIEW_MIN_CHARS } from '@/config/it-hilfe'
 import { notifyReviewReceived } from '@/lib/it-hilfe/notifications'
 import { createReview, findDuplicateReview } from '@/lib/reviews/create-review'
+import { guardedTransition } from '@/lib/lifecycle'
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -137,22 +138,20 @@ export const POST = withAuth<{ id: string }>(async (
     // transaction (the lock already serialized us past the race window;
     // if createReview itself fails after the stamp commits, the user
     // sees "already reviewed" on retry — paper cut, no data corruption.)
-    const raceWon = await db.transaction(async (tx) => {
-      const lockedReq = await tx.execute(sql`
-        SELECT reviewed_at FROM ${sql.raw(reqTable)}
-        WHERE id = ${id}
-        FOR UPDATE
-      `)
-      const lockedReviewedAt = (lockedReq.rows[0] as { reviewed_at?: string | null } | undefined)?.reviewed_at
-      if (lockedReviewedAt != null) return false
-      await tx
-        .update(itHilfeRequests)
-        .set({ reviewedAt: sql`NOW()` })
-        .where(eq(itHilfeRequests.id, id))
-      return true
+    const stamped = await guardedTransition<{ reviewed_at: string | null }, void>({
+      lockTable: reqTable,
+      lockId: id,
+      lockColumns: ['reviewed_at'],
+      check: (r) => r.reviewed_at == null,
+      apply: async (tx) => {
+        await tx
+          .update(itHilfeRequests)
+          .set({ reviewedAt: sql`NOW()` })
+          .where(eq(itHilfeRequests.id, id))
+      },
     })
 
-    if (!raceWon) {
+    if (!stamped.ok) {
       return apiBadRequest('Diese Anfrage wurde bereits bewertet')
     }
 
