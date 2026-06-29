@@ -4,6 +4,7 @@ import { getServiceTypeById, getSkillById, IT_HILFE } from '@/config/it-hilfe'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { ROUTES } from '@/config/routes'
 import { formatCentsToChf } from '@/lib/pricing'
+import { Avatar } from '@/components/ui/Avatar'
 import type { TechnicianDetail } from '@/lib/services/technician-service'
 
 export type TechnikerProfileCopy = {
@@ -45,7 +46,6 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
   const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
   const ctaHref = IT_HILFE.routes.createForTechnician(technician.id)
   const displayName = technician.name ?? copy.community
-  const initial = displayName.trim().charAt(0).toUpperCase() || 'T'
 
   const skillLabels = technician.skills
     .map((id) => getSkillById(id)?.name)
@@ -68,18 +68,7 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
 
         <header className="mt-8 border-b border-subtle pb-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-            {technician.avatarUrl ? (
-               
-              <img
-                src={technician.avatarUrl}
-                alt={displayName}
-                className="h-20 w-20 shrink-0 rounded-lg border border-subtle object-cover"
-              />
-            ) : (
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg border border-subtle bg-action-muted font-mono text-3xl font-semibold text-action">
-                {initial}
-              </div>
-            )}
+            <Avatar src={technician.avatarUrl} name={displayName} size="xl" />
             <div className="min-w-0 flex-1">
               <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
                 {meta.eyebrow}

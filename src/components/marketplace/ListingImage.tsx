@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ImageIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface ListingImageProps {
   src: string | null | undefined
@@ -22,8 +23,10 @@ export function ListingImage({ src, alt, className = 'w-full h-full object-cover
 
   if (!src || hasError) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_50%_38%,var(--surface-overlay),var(--surface-base)_64%)]">
-        <ImageIcon className={`${fallbackIconSize} text-text-muted/70`} aria-hidden="true" />
+      <div className="flex h-full w-full items-center justify-center bg-surface-raised">
+        <div className="flex items-center justify-center rounded-full border border-subtle bg-surface-base p-3 shadow-xs">
+          <ImageIcon className={cn('text-text-tertiary', fallbackIconSize)} aria-hidden="true" />
+        </div>
       </div>
     )
   }
