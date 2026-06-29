@@ -243,10 +243,17 @@ API/mapper cleanup was never finished.
   `technician-service` (today writes are inline in `/api/user/technician-profile`); route the
   self-service + admin endpoints through it; collapse the remaining mappers; resolve the
   `serviceTypes`↔`serviceDeliveryTypes` boundary alias to one name.
-- **Phase 3 — one field-list SSOT per profile + canonical avatar.** Derive types from Zod
-  (`z.infer`), drop the duplicated `DEFAULT_PROFILE`/`fieldMap`/interface restatements; route
-  `/api/user/profile` through `db-users.ts`; adopt `<Avatar>` everywhere (retire `AvatarUpload`'s
-  bespoke placeholder + the seller inline upload + the hand-rolled initials); one upload path.
+- **Phase 3 — one field-list SSOT per profile + canonical avatar.**
+  - 3a ✓ DONE: `<Avatar>` is the canonical image-or-initials primitive (shape/size/bordered/
+    colorClassName/maxInitials); adopted across the 6 hand-rolled-initials chrome sites + the
+    technician profile. Header (UserMenu/MobileMenu) left (already photo-capable).
+  - 3b ✓ DONE: `/api/user/profile` now routes through `db-users.ts` (`getOrCreateProfile`/
+    `updateProfile`) — eliminates the duplicate snake→camel field map AND fixes a latent bug
+    (GET previously returned camelCase Drizzle rows, so saved fields never populated the
+    snake_case `ProfileData` client). Removed the dead duplicate `TechnicianProfileInput` in
+    `types/technician.ts` (the Zod-inferred one in `schemas/repairer.ts` is the SSOT).
+  - Remaining: derive the client `ProfileData`/`DEFAULT_PROFILE` from the Zod schema; adopt
+    `<Avatar>` in the seller inline-upload + retire `AvatarUpload`'s bespoke placeholder.
 - **Phase 4 (schema) — consolidate contact/address SSOT.** Make `user_profiles` the canonical
   contact record; stop duplicating phone/address/bio/avatar into role profiles (migration +
   dual-write window). Biggest blast radius; do last.

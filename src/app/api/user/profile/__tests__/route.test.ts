@@ -3,8 +3,9 @@
  *
  * Tests for GET + PUT /api/user/profile
  *
- * GET: Return existing profile, or create one if not found
- * PUT: Validate + update profile fields
+ * The route is a thin controller over the db-users DAL:
+ *   GET → getOrCreateProfile (returns the snake_case profile the client reads)
+ *   PUT → validateBody → updateProfile
  */
 
 // ---------------------------------------------------------------------------
@@ -30,29 +31,6 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }))
 
-const mockSelect = jest.fn()
-const mockInsert = jest.fn()
-const mockValues = jest.fn()
-const mockReturning = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
-const mockUpdateReturning = jest.fn()
-
-jest.mock('@/db', () => ({
-  db: {
-    select: (...args: unknown[]) => mockSelect(...args),
-    insert: (...args: unknown[]) => {
-      mockInsert(...args)
-      return { values: mockValues }
-    },
-    update: (...args: unknown[]) => {
-      mockUpdate(...args)
-      return { set: mockSet }
-    },
-  },
-}))
-
 const mockValidateBody = jest.fn()
 jest.mock('@/lib/schemas', () => ({
   validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
@@ -71,46 +49,11 @@ jest.mock('@/lib/api/helpers', () => {
   }
 })
 
-jest.mock('drizzle-orm', () => ({
-  eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
-  sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
-    raw: (s: string) => ({ __raw: s }),
-  }),
-}))
-
-jest.mock('@/db/schema/auth', () => ({
-  userProfiles: {
-    userId: 'up_userId',
-    bio: 'up_bio',
-    avatarUrl: 'up_avatarUrl',
-    location: 'up_location',
-    phone: 'up_phone',
-    updatedAt: 'up_updatedAt',
-    firstName: 'up_firstName',
-    lastName: 'up_lastName',
-    companyName: 'up_companyName',
-    mobile: 'up_mobile',
-    addressLine1: 'up_addressLine1',
-    addressLine2: 'up_addressLine2',
-    postalCode: 'up_postalCode',
-    city: 'up_city',
-    canton: 'up_canton',
-    country: 'up_country',
-    interests: 'up_interests',
-    preferredLanguage: 'up_preferredLanguage',
-    newsletterSubscribed: 'up_newsletterSubscribed',
-    isSupporter: 'up_isSupporter',
-    supporterType: 'up_supporterType',
-    displayName: 'up_displayName',
-    profileVisibility: 'up_profileVisibility',
-    showEmail: 'up_showEmail',
-    showPhone: 'up_showPhone',
-    emailNotifications: 'up_emailNotifications',
-    smsNotifications: 'up_smsNotifications',
-    marketplaceUpdates: 'up_marketplaceUpdates',
-    workshopReminders: 'up_workshopReminders',
-    $inferSelect: {} as Record<string, unknown>,
-  },
+const mockGetOrCreateProfile = jest.fn()
+const mockUpdateProfile = jest.fn()
+jest.mock('@/lib/auth/db-users', () => ({
+  getOrCreateProfile: (...args: unknown[]) => mockGetOrCreateProfile(...args),
+  updateProfile: (...args: unknown[]) => mockUpdateProfile(...args),
 }))
 
 // ---------------------------------------------------------------------------
@@ -122,33 +65,20 @@ const MOCK_SESSION = {
     id: 'user-1',
     email: 'user@example.com',
     name: 'Test User',
+    role: 'user',
     isStaff: false,
     staffPermissions: [] as string[],
   },
   expires: '2027-01-01',
 }
 
+// Snake_case — the shape db-users returns and the client reads.
 const MOCK_PROFILE = {
-  userId: 'user-1',
+  user_id: 'user-1',
   bio: 'I repair laptops',
-  avatarUrl: null,
-  location: 'Zürich',
+  avatar_url: null,
   phone: null,
-}
-
-// ---------------------------------------------------------------------------
-// Helper
-// ---------------------------------------------------------------------------
-
-function makeChain(terminal: 'where' | 'returning', result: unknown[]) {
-  const terminalFn = jest.fn().mockResolvedValue(result)
-  const chain: Record<string, unknown> = {}
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = terminal === 'where' ? terminalFn : jest.fn().mockReturnValue(chain)
-  chain.returning = terminal === 'returning' ? terminalFn : jest.fn().mockReturnValue(chain)
-  chain.set = jest.fn().mockReturnValue(chain)
-  chain.as = jest.fn().mockReturnValue(chain)
-  return chain
+  first_name: 'Test',
 }
 
 function makeRequest(method = 'GET', body?: unknown) {
@@ -159,24 +89,13 @@ function makeRequest(method = 'GET', body?: unknown) {
   })
 }
 
-// ---------------------------------------------------------------------------
-// Import under test
-// ---------------------------------------------------------------------------
-
 import { GET, PUT } from '../route'
-
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 beforeEach(() => {
   jest.clearAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
-  mockReturning.mockResolvedValue([MOCK_PROFILE])
-  mockValues.mockReturnValue({ returning: mockReturning })
-  mockUpdateReturning.mockResolvedValue([MOCK_PROFILE])
-  mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning })
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
+  mockGetOrCreateProfile.mockResolvedValue(MOCK_PROFILE)
+  mockUpdateProfile.mockResolvedValue(MOCK_PROFILE)
 })
 
 describe('GET /api/user/profile', () => {
@@ -186,26 +105,20 @@ describe('GET /api/user/profile', () => {
     expect(res.status).toBe(401)
   })
 
-  it('returns 200 with existing profile', async () => {
-    mockSelect.mockReturnValue(makeChain('where', [MOCK_PROFILE]))
+  it('returns 200 with the snake_case profile + role from db-users', async () => {
     const res = await GET(makeRequest() as never)
     const body = await res.json()
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
-    expect(body.data.profile.userId).toBe('user-1')
+    expect(body.data.profile.user_id).toBe('user-1')
+    expect(body.data.role).toBe('user')
+    expect(mockGetOrCreateProfile).toHaveBeenCalledWith('user-1')
   })
 
-  it('creates and returns profile when none exists', async () => {
-    // First select returns empty → insert is triggered
-    const selectChain = makeChain('where', [])
-    mockSelect.mockReturnValueOnce(selectChain)
-    mockValues.mockReturnValue({ returning: jest.fn().mockResolvedValue([MOCK_PROFILE]) })
-
+  it('returns 500 when the DAL throws', async () => {
+    mockGetOrCreateProfile.mockRejectedValue(new Error('db down'))
     const res = await GET(makeRequest() as never)
-    const body = await res.json()
-    expect(res.status).toBe(200)
-    expect(body.success).toBe(true)
-    expect(body.data.profile).toBeTruthy()
+    expect(res.status).toBe(500)
   })
 })
 
@@ -225,21 +138,15 @@ describe('PUT /api/user/profile', () => {
     expect(res.status).toBe(400)
   })
 
-  it('returns 200 with updated profile on success', async () => {
-    mockValidateBody.mockReturnValue({
-      success: true,
-      data: { bio: 'Updated bio' },
-    })
-    // getOrCreateProfileDrizzle (ensure exists) → returns profile
-    mockSelect.mockReturnValue(makeChain('where', [MOCK_PROFILE]))
-
-    const updatedProfile = { ...MOCK_PROFILE, bio: 'Updated bio' }
-    mockUpdateReturning.mockResolvedValue([updatedProfile])
+  it('delegates to updateProfile and returns the result', async () => {
+    mockValidateBody.mockReturnValue({ success: true, data: { bio: 'Updated bio' } })
+    mockUpdateProfile.mockResolvedValue({ ...MOCK_PROFILE, bio: 'Updated bio' })
 
     const res = await PUT(makeRequest('PUT', { bio: 'Updated bio' }) as never)
     const body = await res.json()
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
-    expect(body.data.profile).toBeTruthy()
+    expect(body.data.profile.bio).toBe('Updated bio')
+    expect(mockUpdateProfile).toHaveBeenCalledWith('user-1', { bio: 'Updated bio' })
   })
 })

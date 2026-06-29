@@ -69,21 +69,7 @@ export interface Technician {
   homeVisitFeeCents?: number | null
 }
 
-/**
- * Write-shape for "edit my own profile" forms. Subset of Technician —
- * only fields the user can edit themselves. Server fills id, userId,
- * name, isVerified, ratings, totals.
- */
-export type TechnicianProfileInput = Pick<Technician,
-  | 'bio'
-  | 'skills'
-  | 'serviceDeliveryTypes'
-  | 'postalCode'
-  | 'city'
-  | 'canton'
-  | 'maxTravelKm'
-  | 'hourlyRateCents'
-  | 'acceptsGratis'
-  | 'acceptsKulturlegi'
-  | 'isActive'
->
+// The write-shape for self-service technician edits is the single
+// `TechnicianProfileInput` derived from the Zod schema in
+// `src/lib/schemas/repairer.ts` (z.infer<typeof TechnicianProfileSchema>) —
+// don't redefine a second one here.
