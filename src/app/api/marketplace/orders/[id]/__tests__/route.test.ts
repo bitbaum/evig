@@ -68,6 +68,14 @@ jest.mock('@/config/marketplace', () => ({
     completed: { label: 'Abgeschlossen' }, cancelled: { label: 'Storniert' },
     refunded: { label: 'Erstattet' },
   },
+  // Mirror of the real ORDER_TRANSITIONS SSOT (resolveTransition reads this).
+  ORDER_TRANSITIONS: [
+    { action: 'shipped', from: 'paid', role: 'seller', to: 'shipped' },
+    { action: 'delivered', from: 'shipped', role: 'seller', to: 'delivered' },
+    { action: 'completed', from: 'delivered', role: 'buyer', to: 'completed' },
+    { action: 'cancelled', from: 'paid', role: 'buyer', to: 'cancelled' },
+    { action: 'cancelled', from: 'pending_payment', role: ['buyer', 'seller'], to: 'cancelled' },
+  ],
   COMMISSION_RATE: 0.1,
 }))
 

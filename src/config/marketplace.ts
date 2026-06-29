@@ -10,6 +10,7 @@
 
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { UI_STATUS } from '@/config/ui/status'
+import type { TransitionTable } from '@/lib/lifecycle'
 import { PAGINATION } from '@/config/pagination'
 
 // ============================================================================
@@ -209,6 +210,31 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: st
   cancelled:       { label: 'Storniert',          color: UI_STATUS.neutral },
   refunded:        { label: 'Erstattet',          color: UI_STATUS.danger },
 };
+
+// ============================================================================
+// Order Transitions (SSOT) — who can move an order where
+// ============================================================================
+//
+// This table is the SOLE protection against a buyer/seller bypassing the
+// Payrexx payment flow. It is the manual PATCH path (the client sends the
+// target status, so `action === to`). Validated via resolveTransition()
+// from @/lib/lifecycle.
+//
+// NOTE: the buyer's final DELIVERED → COMPLETED (which captures escrow) also
+// has a dedicated route (confirm-receipt) that additionally accepts SHIPPED →
+// COMPLETED. That second path is intentionally NOT folded in here — keep the
+// two allowed-from sets distinct (see confirm-receipt/route.ts).
+
+export type OrderRole = 'buyer' | 'seller';
+
+export const ORDER_TRANSITIONS: TransitionTable<OrderStatus, OrderStatus, OrderRole> = [
+  { action: ORDER_STATUS.SHIPPED,   from: ORDER_STATUS.PAID,      role: 'seller',             to: ORDER_STATUS.SHIPPED },
+  { action: ORDER_STATUS.DELIVERED, from: ORDER_STATUS.SHIPPED,   role: 'seller',             to: ORDER_STATUS.DELIVERED },
+  { action: ORDER_STATUS.COMPLETED, from: ORDER_STATUS.DELIVERED, role: 'buyer',              to: ORDER_STATUS.COMPLETED },
+  { action: ORDER_STATUS.CANCELLED, from: ORDER_STATUS.PAID,      role: 'buyer',              to: ORDER_STATUS.CANCELLED },
+  // Either party may walk away before payment is captured.
+  { action: ORDER_STATUS.CANCELLED, from: ORDER_STATUS.PENDING_PAYMENT, role: ['buyer', 'seller'], to: ORDER_STATUS.CANCELLED },
+];
 
 // ============================================================================
 // Gratis Config

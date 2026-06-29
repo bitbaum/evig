@@ -2,7 +2,7 @@
 
 **Created:** 2026-06-04  
 **Last Modified:** 2026-06-29  
-**Last Modified Summary:** #4 — race-safe lifecycle transition guard (`src/lib/lifecycle`) adopted by IT-Hilfe + orders + appointments (Phase 1)
+**Last Modified Summary:** #4 Phase 2 — declarative transition-table validator (`resolveTransition`) replaces the orders matrix + appointments switch
 
 **Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
@@ -163,7 +163,7 @@ change existing enums.
 
 ## #4 — Lifecycle transition engine (request→accept→complete→review)
 
-**Status:** Phase 1 ✓ DONE (2026-06-29). Phase 2 deferred.
+**Status:** Phase 1 ✓ DONE (2026-06-29). Phase 2 ✓ DONE (2026-06-29).
 
 The three flows — IT-Hilfe peer-repair, service appointments, marketplace
 orders — are each "a row with a `status` column moving through role-gated
@@ -186,10 +186,23 @@ serializing on the request row). All three flows route through it:
 - Appointments (`executeAppointmentUpdate`) — now takes `expectedStatus`;
   generalized the `rate`-only compare-and-set to all transitions.
 
-**Phase 2 — deferred:** a declarative transition-table validator to replace the
-orders `STATUS_TRANSITIONS` matrix + appointments `buildActionUpdate` switch.
-IT-Hilfe's `VALID_REQUEST_TRANSITIONS` stays as-is (its OPEN→MATCHED is a
-two-entity offer acceptance, not a single-row transition).
+**Phase 2 — declarative transition validator (`resolveTransition` in
+`src/lib/lifecycle/state-machine.ts`):** one validator over a per-flow
+`TransitionTable` (rows of `{ action, from, role?, to? }`), returning
+`{ ok, to }` or `{ ok:false, reason: unknown_action|wrong_role|wrong_state }`
+(role checked before state). Replaces the two bespoke mechanisms:
+- Orders: the route's local `STATUS_TRANSITIONS` matrix → `ORDER_TRANSITIONS`
+  SSOT in `config/marketplace.ts` (client sends the target status, so
+  `action === to`). Same table drives the fast-fail check AND the under-lock
+  re-check. Security boundaries + the "nicht erlaubt" message unchanged.
+- Appointments: the `buildActionUpdate` switch's role/from/to gates →
+  `APPOINTMENT_TRANSITIONS` SSOT in `config/booking-status.ts` (carries the
+  exact per-action `roleError`/`stateError` so the 403/400 mapping is
+  preserved). The switch now only builds per-action side-effect fields.
+
+IT-Hilfe keeps `VALID_REQUEST_TRANSITIONS` as-is — its OPEN→MATCHED is a
+two-entity offer acceptance, not a single-row transition, so a shared table
+would add indirection without removing complexity.
 
 ---
 

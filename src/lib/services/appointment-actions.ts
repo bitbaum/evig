@@ -11,9 +11,13 @@ import { eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentStatusUpdate, appointmentQuoteReceived } from '@/lib/email'
-import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
+import {
+  getBookingStatusLabel,
+  APPOINTMENT_TRANSITIONS,
+  type BookingStatus,
+} from '@/config/booking-status'
 import { TABLE_NAMES } from '@/config/database'
-import { guardedTransition } from '@/lib/lifecycle'
+import { guardedTransition, resolveTransition } from '@/lib/lifecycle'
 import { APP_URL } from '@/config/urls'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 
@@ -51,7 +55,12 @@ export interface ActionResult {
 
 /**
  * Validate the action and build the update set.
- * Returns null + error message if the action is not allowed.
+ *
+ * Legality (who may do what, from which state, → which status) is the
+ * `APPOINTMENT_TRANSITIONS` SSOT, decided by the shared `resolveTransition`
+ * validator. This function then layers on the per-action SIDE EFFECTS (quote
+ * price, completion notes, rating, …) that the table doesn't carry.
+ * Returns `{ error }` when the action is not allowed.
  */
 export function buildActionUpdate(
   appointment: AppointmentRow,
@@ -64,100 +73,53 @@ export function buildActionUpdate(
   if (!isCustomer && !isRepairer) {
     return { error: 'Kein Zugriff auf diesen Termin' }
   }
-
-  let newStatus: string | null = null
-  const updateSet: Record<string, unknown> = {}
+  // Customer and repairer are distinct accounts on an appointment; map the
+  // actor to one role for the table lookup.
+  const role = isCustomer ? 'customer' : 'repairer'
   const { action } = actionData
 
+  const resolved = resolveTransition(APPOINTMENT_TRANSITIONS, {
+    from: (appointment.status ?? '') as BookingStatus,
+    action: action as (typeof APPOINTMENT_TRANSITIONS)[number]['action'],
+    role,
+  })
+
+  if (!resolved.ok) {
+    if (resolved.reason === 'unknown_action') {
+      return { error: 'Ungültige Aktion: ' + action }
+    }
+    const entry = APPOINTMENT_TRANSITIONS.find((t) => t.action === action)!
+    return { error: resolved.reason === 'wrong_role' ? entry.roleError : entry.stateError }
+  }
+
+  const newStatus = resolved.to
+  const updateSet: Record<string, unknown> = {}
+
+  // Per-action side effects (the table owns from/role/to; this owns the fields).
   switch (action) {
-    case 'accept':
-      if (!isRepairer) return { error: 'Nur der Techniker kann annehmen' }
-      if (appointment.status !== BOOKING_STATUS.REQUESTED) return { error: 'Termin kann nicht angenommen werden' }
-      newStatus = BOOKING_STATUS.ACCEPTED
-      break
-
-    case 'reject':
-      if (!isRepairer) return { error: 'Nur der Techniker kann ablehnen' }
-      if (appointment.status !== BOOKING_STATUS.REQUESTED) return { error: 'Termin kann nicht abgelehnt werden' }
-      newStatus = BOOKING_STATUS.REJECTED
-      break
-
     case 'quote':
-      if (!isRepairer) return { error: 'Nur der Techniker kann Angebote erstellen' }
-      if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED] as string[]).includes(appointment.status!)) {
-        return { error: 'Angebot kann in diesem Status nicht erstellt werden' }
-      }
-      newStatus = BOOKING_STATUS.QUOTED
       updateSet.quotedPriceChf = actionData.quoted_price_chf
-      if (actionData.diagnosis_notes) {
-        updateSet.diagnosisNotes = actionData.diagnosis_notes
-      }
+      if (actionData.diagnosis_notes) updateSet.diagnosisNotes = actionData.diagnosis_notes
       break
-
     case 'approve_quote':
-      if (!isCustomer) return { error: 'Nur der Kunde kann Angebote bestätigen' }
-      if (appointment.status !== BOOKING_STATUS.QUOTED) return { error: 'Kein Angebot zum Bestätigen' }
-      newStatus = BOOKING_STATUS.QUOTE_APPROVED
       updateSet.quoteApproved = true
       updateSet.quoteApprovedAt = sql`CURRENT_TIMESTAMP`
       break
-
-    case 'reject_quote':
-      if (!isCustomer) return { error: 'Nur der Kunde kann Angebote ablehnen' }
-      if (appointment.status !== BOOKING_STATUS.QUOTED) return { error: 'Kein Angebot zum Ablehnen' }
-      newStatus = BOOKING_STATUS.QUOTE_REJECTED
-      break
-
     case 'start':
-      if (!isRepairer) return { error: 'Nur der Techniker kann starten' }
-      if (!([BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status!)) {
-        return { error: 'Termin kann nicht gestartet werden' }
-      }
-      newStatus = BOOKING_STATUS.IN_PROGRESS
-      if (actionData.confirmed_date) {
-        updateSet.confirmedDate = actionData.confirmed_date
-      }
+      if (actionData.confirmed_date) updateSet.confirmedDate = actionData.confirmed_date
       break
-
     case 'complete':
-      if (!isRepairer) return { error: 'Nur der Techniker kann abschliessen' }
-      if (appointment.status !== BOOKING_STATUS.IN_PROGRESS) return { error: 'Termin ist nicht in Bearbeitung' }
-      newStatus = BOOKING_STATUS.COMPLETED
       updateSet.completedAt = sql`CURRENT_TIMESTAMP`
-      if (actionData.completion_notes) {
-        updateSet.completionNotes = actionData.completion_notes
-      }
+      if (actionData.completion_notes) updateSet.completionNotes = actionData.completion_notes
       break
-
     case 'update':
-      if (!isCustomer) return { error: 'Nur der Kunde kann Angaben bearbeiten' }
-      if (appointment.status !== BOOKING_STATUS.REQUESTED) return { error: 'Angaben können nur im Status "Angefragt" bearbeitet werden' }
-      if (actionData.description) {
-        updateSet.description = actionData.description
-      }
-      if (actionData.preferred_date) {
-        updateSet.preferredDate = actionData.preferred_date
-      }
+      if (actionData.description) updateSet.description = actionData.description
+      if (actionData.preferred_date) updateSet.preferredDate = actionData.preferred_date
       break
-
     case 'rate':
-      if (!isCustomer) return { error: 'Nur der Kunde kann bewerten' }
-      if (appointment.status !== BOOKING_STATUS.COMPLETED) return { error: 'Nur abgeschlossene Termine können bewertet werden' }
       updateSet.customerRating = actionData.customer_rating
-      if (actionData.customer_review) {
-        updateSet.customerReview = actionData.customer_review
-      }
+      if (actionData.customer_review) updateSet.customerReview = actionData.customer_review
       break
-
-    case 'cancel':
-      if (!([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as string[]).includes(appointment.status!)) {
-        return { error: 'Termin kann nicht mehr storniert werden' }
-      }
-      newStatus = BOOKING_STATUS.CANCELLED
-      break
-
-    default:
-      return { error: 'Ungültige Aktion: ' + action }
   }
 
   if (newStatus) {

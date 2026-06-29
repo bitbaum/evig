@@ -15,6 +15,7 @@
  */
 
 import { TECHNICIAN_LABEL } from '@/config/terminology'
+import type { Transition } from '@/lib/lifecycle'
 
 export const BOOKING_STATUS = {
   REQUESTED: 'requested',
@@ -32,6 +33,98 @@ export const BOOKING_STATUS = {
 } as const
 
 export type BookingStatus = typeof BOOKING_STATUS[keyof typeof BOOKING_STATUS]
+
+// ============================================================================
+// Appointment Transitions (SSOT) — who can do what, from which state
+// ============================================================================
+//
+// One row per action. `to` is omitted for actions that change no status
+// (update, rate). `role` lists who may perform it (cancel: either party).
+// `roleError` / `stateError` are the exact user-facing messages the API
+// returns — `roleError` maps to 403, `stateError` to 400 (see the
+// appointments PATCH route). Validated via resolveTransition() from
+// @/lib/lifecycle; the per-action side-effect fields stay in buildActionUpdate.
+
+export type AppointmentRole = 'customer' | 'repairer'
+
+export type AppointmentAction =
+  | 'accept' | 'reject' | 'quote' | 'approve_quote' | 'reject_quote'
+  | 'start' | 'complete' | 'update' | 'rate' | 'cancel'
+
+export interface AppointmentTransition
+  extends Transition<BookingStatus, AppointmentAction, AppointmentRole> {
+  /** 403 — actor's role may not perform this action. */
+  roleError: string
+  /** 400 — action not allowed from the current status. */
+  stateError: string
+}
+
+export const APPOINTMENT_TRANSITIONS: readonly AppointmentTransition[] = [
+  {
+    action: 'accept', role: 'repairer',
+    from: [BOOKING_STATUS.REQUESTED], to: BOOKING_STATUS.ACCEPTED,
+    roleError: 'Nur der Techniker kann annehmen',
+    stateError: 'Termin kann nicht angenommen werden',
+  },
+  {
+    action: 'reject', role: 'repairer',
+    from: [BOOKING_STATUS.REQUESTED], to: BOOKING_STATUS.REJECTED,
+    roleError: 'Nur der Techniker kann ablehnen',
+    stateError: 'Termin kann nicht abgelehnt werden',
+  },
+  {
+    action: 'quote', role: 'repairer',
+    from: [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED], to: BOOKING_STATUS.QUOTED,
+    roleError: 'Nur der Techniker kann Angebote erstellen',
+    stateError: 'Angebot kann in diesem Status nicht erstellt werden',
+  },
+  {
+    action: 'approve_quote', role: 'customer',
+    from: [BOOKING_STATUS.QUOTED], to: BOOKING_STATUS.QUOTE_APPROVED,
+    roleError: 'Nur der Kunde kann Angebote bestätigen',
+    stateError: 'Kein Angebot zum Bestätigen',
+  },
+  {
+    action: 'reject_quote', role: 'customer',
+    from: [BOOKING_STATUS.QUOTED], to: BOOKING_STATUS.QUOTE_REJECTED,
+    roleError: 'Nur der Kunde kann Angebote ablehnen',
+    stateError: 'Kein Angebot zum Ablehnen',
+  },
+  {
+    action: 'start', role: 'repairer',
+    from: [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED], to: BOOKING_STATUS.IN_PROGRESS,
+    roleError: 'Nur der Techniker kann starten',
+    stateError: 'Termin kann nicht gestartet werden',
+  },
+  {
+    action: 'complete', role: 'repairer',
+    from: [BOOKING_STATUS.IN_PROGRESS], to: BOOKING_STATUS.COMPLETED,
+    roleError: 'Nur der Techniker kann abschliessen',
+    stateError: 'Termin ist nicht in Bearbeitung',
+  },
+  {
+    action: 'update', role: 'customer',
+    from: [BOOKING_STATUS.REQUESTED], // no status change
+    roleError: 'Nur der Kunde kann Angaben bearbeiten',
+    stateError: 'Angaben können nur im Status "Angefragt" bearbeitet werden',
+  },
+  {
+    action: 'rate', role: 'customer',
+    from: [BOOKING_STATUS.COMPLETED], // no status change
+    roleError: 'Nur der Kunde kann bewerten',
+    stateError: 'Nur abgeschlossene Termine können bewertet werden',
+  },
+  {
+    // Either party may cancel before the job is in progress. No role gate
+    // beyond "is a participant" (the route's upfront access check covers that),
+    // so roleError is unreachable in practice.
+    action: 'cancel', role: ['customer', 'repairer'],
+    from: [BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED],
+    to: BOOKING_STATUS.CANCELLED,
+    roleError: 'Kein Zugriff auf diesen Termin',
+    stateError: 'Termin kann nicht mehr storniert werden',
+  },
+]
 
 export interface BookingStatusBadge {
   label: string

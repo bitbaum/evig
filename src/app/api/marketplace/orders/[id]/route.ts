@@ -10,23 +10,16 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db';
 import { listings, listingImages, marketplaceOrders, marketplaceOrderItems, sellerProfiles, users } from '@/db/schema';
 import { eq, and, sql, inArray } from 'drizzle-orm';
-import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
-import type { OrderStatus } from '@/config/marketplace';
+import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS, ORDER_TRANSITIONS } from '@/config/marketplace';
+import type { OrderStatus, OrderRole } from '@/config/marketplace';
 import { TABLE_NAMES } from '@/config/database';
-import { guardedTransition } from '@/lib/lifecycle';
+import { guardedTransition, resolveTransition } from '@/lib/lifecycle';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateOrderStatusSchema } from '@/lib/schemas';
 import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client';
 import { sendCustomEmail } from '@/lib/email';
 import { orderStatusUpdate } from '@/lib/email/templates/marketplace';
 import { APP_URL } from '@/config/urls';
-
-// Valid status transitions: { currentStatus: { role: [allowedNewStatuses] } }
-const STATUS_TRANSITIONS: Record<string, Record<string, string[]>> = {
-  [ORDER_STATUS.PAID]:      { seller: [ORDER_STATUS.SHIPPED],    buyer: [ORDER_STATUS.CANCELLED] },
-  [ORDER_STATUS.SHIPPED]:   { seller: [ORDER_STATUS.DELIVERED],  buyer: [] },
-  [ORDER_STATUS.DELIVERED]: { buyer: [ORDER_STATUS.COMPLETED],   seller: [] },
-};
 
 /**
  * Fetch order with full join data (listing, buyer, seller).
@@ -178,14 +171,15 @@ export const PATCH = withAuth<{ id: string }>(async (
 
     if (!role) return apiForbidden('Kein Zugriff auf diese Bestellung');
 
-    // Validate status transition
+    // Validate the transition against the SSOT table (fast-fail; re-checked
+    // under the lock below). The client sends the target status, so the
+    // "action" is the target status itself.
     const currentStatus = order.status;
-    const allowedTransitions = STATUS_TRANSITIONS[currentStatus]?.[role] || [];
-
-    // Allow cancellation from pending_payment for either role
-    if (currentStatus === ORDER_STATUS.PENDING_PAYMENT && newStatus === ORDER_STATUS.CANCELLED) {
-      // OK — allowed
-    } else if (!allowedTransitions.includes(newStatus)) {
+    if (!resolveTransition(ORDER_TRANSITIONS, {
+      from: currentStatus as OrderStatus,
+      action: newStatus as OrderStatus,
+      role: role as OrderRole,
+    }).ok) {
       return apiBadRequest(
         `Statuswechsel von "${ORDER_STATUS_CONFIG[currentStatus as OrderStatus]?.label || currentStatus}" ` +
         `zu "${ORDER_STATUS_CONFIG[newStatus as OrderStatus]?.label || newStatus}" ist nicht erlaubt`
@@ -207,8 +201,11 @@ export const PATCH = withAuth<{ id: string }>(async (
         lockTable: TABLE_NAMES.MARKETPLACE_ORDERS,
         lockId: orderId,
         check: (r) => {
-          if (r.status === ORDER_STATUS.PENDING_PAYMENT && newStatus === ORDER_STATUS.CANCELLED) return true
-          return (STATUS_TRANSITIONS[r.status]?.[role] || []).includes(newStatus)
+          return resolveTransition(ORDER_TRANSITIONS, {
+            from: r.status as OrderStatus,
+            action: newStatus as OrderStatus,
+            role: role as OrderRole,
+          }).ok
         },
         apply: async (tx, r) => {
           // Payment operations (under the lock)
