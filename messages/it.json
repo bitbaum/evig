@@ -2700,7 +2700,9 @@
       "submittingButton": "Invio in corso...",
       "yourOfferBadge": "In attesa",
       "withdrawButton": "Ritira offerta",
-      "withdrawing": "Ritiro in corso..."
+      "withdrawing": "Ritiro in corso...",
+      "amountLabel": "Importo (CHF)",
+      "amountPlaceholder": "es. 40"
     },
     "card": {
       "expired": "Scaduto",

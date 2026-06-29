@@ -2700,7 +2700,9 @@
       "submittingButton": "送信中...",
       "yourOfferBadge": "保留中",
       "withdrawButton": "オファーを撤回",
-      "withdrawing": "撤回中..."
+      "withdrawing": "撤回中...",
+      "amountLabel": "金額（CHF）",
+      "amountPlaceholder": "例: 40"
     },
     "card": {
       "expired": "期限切れ",

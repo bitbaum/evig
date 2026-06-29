@@ -90,6 +90,9 @@ export const itHilfeOffers = pgTable('it_hilfe_offers', {
   message: text('message').notNull(),
   estimatedTime: varchar('estimated_time', { length: 50 }),
   proposedCompensation: varchar('proposed_compensation', { length: 100 }),
+  // Added by 101: structured compensation (the free-text field above stays for
+  // optional context). The accepted offer's amount is the agreed compensation.
+  proposedAmountCents: integer('proposed_amount_cents'),
   relevantSkills: text('relevant_skills').array(),
 
   // Status

@@ -3224,7 +3224,9 @@
       "submittingButton": "Sending...",
       "yourOfferBadge": "Pending",
       "withdrawButton": "Withdraw offer",
-      "withdrawing": "Withdrawing..."
+      "withdrawing": "Withdrawing...",
+      "amountLabel": "Amount (CHF)",
+      "amountPlaceholder": "e.g. 40"
     },
     "review": {
       "heading": "Submit review",

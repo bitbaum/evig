@@ -3220,7 +3220,9 @@
       "submittingButton": "Отправляется...",
       "yourOfferBadge": "Ожидает",
       "withdrawButton": "Отозвать предложение",
-      "withdrawing": "Отзывается..."
+      "withdrawing": "Отзывается...",
+      "amountLabel": "Сумма (CHF)",
+      "amountPlaceholder": "напр. 40"
     },
     "review": {
       "heading": "Оставить отзыв",

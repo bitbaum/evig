@@ -17,6 +17,8 @@ interface OfferFormProps {
   onEstimatedTimeChange: (value: string) => void
   offerCompensation: string
   onCompensationChange: (value: string) => void
+  offerAmount: string
+  onAmountChange: (value: string) => void
   offerSkills: string[]
   onSkillToggle: (skillId: string) => void
   submitting: boolean
@@ -34,6 +36,8 @@ export function OfferForm({
   onEstimatedTimeChange,
   offerCompensation,
   onCompensationChange,
+  offerAmount,
+  onAmountChange,
   offerSkills,
   onSkillToggle,
   submitting,
@@ -94,17 +98,35 @@ export function OfferForm({
                 />
               </div>
               <div>
-                <label htmlFor="offer-compensation" className="block text-sm font-medium text-text-secondary mb-1">
-                  {t('compensationLabel')}
+                <label htmlFor="offer-amount" className="block text-sm font-medium text-text-secondary mb-1">
+                  {t('amountLabel')}
                 </label>
-                <Input
-                  id="offer-compensation"
-                  type="text"
-                  value={offerCompensation}
-                  onChange={(e) => onCompensationChange(e.target.value)}
-                  placeholder={t('compensationPlaceholder')}
-                />
+                <div className="flex items-center gap-2">
+                  <span className="text-text-tertiary text-sm">CHF</span>
+                  <Input
+                    id="offer-amount"
+                    type="number"
+                    min="0"
+                    step="5"
+                    value={offerAmount}
+                    onChange={(e) => onAmountChange(e.target.value)}
+                    placeholder={t('amountPlaceholder')}
+                  />
+                </div>
               </div>
+            </div>
+
+            <div>
+              <label htmlFor="offer-compensation" className="block text-sm font-medium text-text-secondary mb-1">
+                {t('compensationLabel')}
+              </label>
+              <Input
+                id="offer-compensation"
+                type="text"
+                value={offerCompensation}
+                onChange={(e) => onCompensationChange(e.target.value)}
+                placeholder={t('compensationPlaceholder')}
+              />
             </div>
 
             <div>

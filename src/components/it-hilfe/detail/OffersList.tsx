@@ -103,12 +103,17 @@ export function OffersList({
 
               <p className="text-text-secondary mb-3">{offer.message}</p>
 
-              {(offer.estimatedTime || offer.proposedCompensation) && (
-                <div className="flex flex-wrap gap-4 text-sm text-text-secondary mb-3">
+              {(offer.estimatedTime || offer.proposedAmountCents != null || offer.proposedCompensation) && (
+                <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary mb-3">
                   {offer.estimatedTime && (
                     <span className="flex items-center gap-1">
                       <Clock className="w-4 h-4" aria-hidden="true" />
                       {offer.estimatedTime}
+                    </span>
+                  )}
+                  {offer.proposedAmountCents != null && (
+                    <span className="font-medium text-text-primary tabular-nums">
+                      CHF {(offer.proposedAmountCents / 100).toFixed(0)}
                     </span>
                   )}
                   {offer.proposedCompensation && (

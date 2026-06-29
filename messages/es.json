@@ -2700,7 +2700,9 @@
       "submittingButton": "Enviando...",
       "yourOfferBadge": "Pendiente",
       "withdrawButton": "Retirar oferta",
-      "withdrawing": "Retirando..."
+      "withdrawing": "Retirando...",
+      "amountLabel": "Importe (CHF)",
+      "amountPlaceholder": "p. ej. 40"
     },
     "card": {
       "expired": "Expirado",

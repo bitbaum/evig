@@ -3233,7 +3233,9 @@
       "submittingButton": "Envoi en cours...",
       "yourOfferBadge": "En attente",
       "withdrawButton": "Retirer l'offre",
-      "withdrawing": "Retrait en cours..."
+      "withdrawing": "Retrait en cours...",
+      "amountLabel": "Montant (CHF)",
+      "amountPlaceholder": "p. ex. 40"
     },
     "card": {
       "expired": "Expiré",

@@ -2700,7 +2700,9 @@
       "submittingButton": "전송 중...",
       "yourOfferBadge": "대기 중",
       "withdrawButton": "제안 철회",
-      "withdrawing": "철회 중..."
+      "withdrawing": "철회 중...",
+      "amountLabel": "금액 (CHF)",
+      "amountPlaceholder": "예: 40"
     },
     "card": {
       "expired": "만료됨",

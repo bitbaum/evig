@@ -27,17 +27,24 @@ const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockReturning = jest.fn()
 
-jest.mock('@/db', () => ({
-  db: {
-    select: (...args: unknown[]) => mockSelect(...args),
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-    insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
-  },
-}))
+jest.mock('@/db', () => {
+  const update = (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } }
+  const insert = (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } }
+  return {
+    db: {
+      select: (...args: unknown[]) => mockSelect(...args),
+      update,
+      insert,
+      // The offers POST wraps the offer write + count bump in a transaction
+      // (single offer_count writer). The tx exposes the same mocked builders.
+      transaction: async (cb: (tx: unknown) => unknown) => cb({ update, insert }),
+    },
+  }
+})
 
 jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', status: 'ihr_status', title: 'ihr_title', offerCount: 'ihr_offerCount', expiresAt: 'ihr_expiresAt' },
-  itHilfeOffers: { id: 'iho_id', requestId: 'iho_requestId', helperId: 'iho_helperId', status: 'iho_status', message: 'iho_message', estimatedTime: 'iho_estimatedTime', proposedCompensation: 'iho_proposedCompensation', relevantSkills: 'iho_relevantSkills', createdAt: 'iho_createdAt', repairerProfileId: 'iho_repairerProfileId' },
+  itHilfeOffers: { id: 'iho_id', requestId: 'iho_requestId', helperId: 'iho_helperId', status: 'iho_status', message: 'iho_message', estimatedTime: 'iho_estimatedTime', proposedCompensation: 'iho_proposedCompensation', proposedAmountCents: 'iho_proposedAmountCents', relevantSkills: 'iho_relevantSkills', createdAt: 'iho_createdAt', repairerProfileId: 'iho_repairerProfileId' },
   repairerProfiles: { id: 'rp_id', userId: 'rp_userId', businessName: 'rp_businessName', isVerified: 'rp_isVerified', averageRating: 'rp_averageRating', totalReviews: 'rp_totalReviews', isActive: 'rp_isActive' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }))

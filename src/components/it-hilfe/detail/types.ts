@@ -63,6 +63,7 @@ export interface Offer {
   message: string
   estimatedTime: string | null
   proposedCompensation: string | null
+  proposedAmountCents: number | null
   relevantSkills: string[]
   status: string
   createdAt: string

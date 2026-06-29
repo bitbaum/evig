@@ -61,6 +61,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         message: itHilfeOffers.message,
         estimatedTime: itHilfeOffers.estimatedTime,
         proposedCompensation: itHilfeOffers.proposedCompensation,
+        proposedAmountCents: itHilfeOffers.proposedAmountCents,
         relevantSkills: itHilfeOffers.relevantSkills,
         status: itHilfeOffers.status,
         createdAt: itHilfeOffers.createdAt,
@@ -85,6 +86,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       message: row.message,
       estimatedTime: row.estimatedTime,
       proposedCompensation: row.proposedCompensation,
+      proposedAmountCents: row.proposedAmountCents,
       relevantSkills: row.relevantSkills || [],
       status: row.status,
       createdAt: row.createdAt,
@@ -196,7 +198,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const body = await request.json()
     const validation = validateBody(CreateOfferSchema, body)
     if (!validation.success) return validation.error
-    const { message, estimatedTime, proposedCompensation, relevantSkills } = validation.data
+    const { message, estimatedTime, proposedCompensation, proposedAmountCents, relevantSkills } = validation.data
 
     // Check if the user has an active repairer profile — auto-link if so
     const [repairerProfile] = await db
@@ -225,6 +227,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             message,
             estimatedTime: estimatedTime || undefined,
             proposedCompensation: proposedCompensation || undefined,
+            proposedAmountCents: proposedAmountCents ?? null,
             relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
             repairerProfileId: repairerProfile?.id || undefined,
             status: OFFER_STATUS.PENDING,
@@ -241,6 +244,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             message,
             estimatedTime: estimatedTime || undefined,
             proposedCompensation: proposedCompensation || undefined,
+            proposedAmountCents: proposedAmountCents ?? null,
             relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
             repairerProfileId: repairerProfile?.id || undefined,
           })

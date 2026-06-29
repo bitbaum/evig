@@ -204,6 +204,8 @@ export default function ITHilfeDetailPage() {
                 onEstimatedTimeChange={detail.setOfferEstimatedTime}
                 offerCompensation={detail.offerCompensation}
                 onCompensationChange={detail.setOfferCompensation}
+                offerAmount={detail.offerAmount}
+                onAmountChange={detail.setOfferAmount}
                 offerSkills={detail.offerSkills}
                 onSkillToggle={detail.handleSkillToggle}
                 submitting={detail.submittingOffer}

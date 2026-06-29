@@ -110,6 +110,7 @@ export const CreateOfferSchema = z.object({
     .max(OFFER_MAX_CHARS, `Nachricht darf maximal ${OFFER_MAX_CHARS} Zeichen lang sein`),
   estimatedTime: z.string().max(200).optional().nullable(),
   proposedCompensation: z.string().max(200).optional().nullable(),
+  proposedAmountCents: z.number().int().nonnegative().max(100_000_00).optional().nullable(),
   relevantSkills: z
     .array(z.enum(getSkillIds() as [string, ...string[]]))
     .default([]),

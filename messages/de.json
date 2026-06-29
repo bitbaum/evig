@@ -3216,7 +3216,9 @@
       "submittingButton": "Wird gesendet...",
       "yourOfferBadge": "Ausstehend",
       "withdrawButton": "Angebot zurückziehen",
-      "withdrawing": "Wird zurückgezogen..."
+      "withdrawing": "Wird zurückgezogen...",
+      "amountLabel": "Betrag (CHF)",
+      "amountPlaceholder": "z. B. 40"
     },
     "review": {
       "heading": "Bewertung abgeben",

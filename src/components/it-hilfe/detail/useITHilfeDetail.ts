@@ -24,6 +24,7 @@ export function useITHilfeDetail(id: string) {
   const [offerMessage, setOfferMessage] = useState('')
   const [offerEstimatedTime, setOfferEstimatedTime] = useState('')
   const [offerCompensation, setOfferCompensation] = useState('')
+  const [offerAmount, setOfferAmount] = useState('')
   const [offerSkills, setOfferSkills] = useState<string[]>([])
   const [submittingOffer, setSubmittingOffer] = useState(false)
   const [offerError, setOfferError] = useState('')
@@ -108,7 +109,7 @@ export function useITHilfeDetail(id: string) {
   useEffect(() => {
     if (!session?.user || !request || request.isOwner) return
 
-    apiFetch<{ offers: Array<{ id: string; requestId: string; message: string; estimatedTime: string; proposedCompensation: string; relevantSkills: string[]; status: string; createdAt: string }> }>(`/api/it-hilfe/my-offers?status=pending`)
+    apiFetch<{ offers: Array<{ id: string; requestId: string; message: string; estimatedTime: string; proposedCompensation: string; proposedAmountCents: number | null; relevantSkills: string[]; status: string; createdAt: string }> }>(`/api/it-hilfe/my-offers?status=pending`)
       .then(result => {
         if (result.success && result.data) {
           const match = result.data.offers.find((o) => o.requestId === id)
@@ -122,6 +123,7 @@ export function useITHilfeDetail(id: string) {
               message: match.message,
               estimatedTime: match.estimatedTime,
               proposedCompensation: match.proposedCompensation,
+              proposedAmountCents: match.proposedAmountCents ?? null,
               relevantSkills: match.relevantSkills || [],
               status: match.status,
               createdAt: match.createdAt,
@@ -181,6 +183,7 @@ export function useITHilfeDetail(id: string) {
           message: offerMessage,
           estimatedTime: offerEstimatedTime || null,
           proposedCompensation: offerCompensation || null,
+          proposedAmountCents: offerAmount ? Math.round(parseFloat(offerAmount) * 100) : null,
           relevantSkills: offerSkills,
         },
       })
@@ -194,6 +197,7 @@ export function useITHilfeDetail(id: string) {
       setOfferMessage('')
       setOfferEstimatedTime('')
       setOfferCompensation('')
+      setOfferAmount('')
       setOfferSkills([])
       setShowOfferForm(false)
 
@@ -430,6 +434,8 @@ export function useITHilfeDetail(id: string) {
     setOfferEstimatedTime,
     offerCompensation,
     setOfferCompensation,
+    offerAmount,
+    setOfferAmount,
     offerSkills,
     submittingOffer,
     offerError,
