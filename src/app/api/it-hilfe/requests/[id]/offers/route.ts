@@ -212,43 +212,49 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // overwrite the message/details, flip status back to PENDING, keep the
     // same id so any external references remain valid. offerCount is
     // incremented either way (the withdraw route decremented it).
-    let newOffer: { id: string }
-    if (withdrawnOfferId) {
-      const [updated] = await db
-        .update(itHilfeOffers)
-        .set({
-          message,
-          estimatedTime: estimatedTime || undefined,
-          proposedCompensation: proposedCompensation || undefined,
-          relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
-          repairerProfileId: repairerProfile?.id || undefined,
-          status: OFFER_STATUS.PENDING,
-        })
-        .where(eq(itHilfeOffers.id, withdrawnOfferId))
-        .returning({ id: itHilfeOffers.id })
-      newOffer = updated
-    } else {
-      const [inserted] = await db
-        .insert(itHilfeOffers)
-        .values({
-          requestId: id,
-          helperId: session.user.id,
-          message,
-          estimatedTime: estimatedTime || undefined,
-          proposedCompensation: proposedCompensation || undefined,
-          relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
-          repairerProfileId: repairerProfile?.id || undefined,
-        })
-        .returning({ id: itHilfeOffers.id })
-      newOffer = inserted
-    }
+    // The application is the single source of truth for offer_count — the DB
+    // trigger that ALSO incremented it (double-counting fresh offers) was dropped
+    // in migration 100. Offer write + count bump run in one transaction so they
+    // stay atomic. Request status stays OPEN until an offer is accepted (→ MATCHED).
+    const newOffer = await db.transaction(async (tx) => {
+      let offer: { id: string }
+      if (withdrawnOfferId) {
+        const [updated] = await tx
+          .update(itHilfeOffers)
+          .set({
+            message,
+            estimatedTime: estimatedTime || undefined,
+            proposedCompensation: proposedCompensation || undefined,
+            relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
+            repairerProfileId: repairerProfile?.id || undefined,
+            status: OFFER_STATUS.PENDING,
+          })
+          .where(eq(itHilfeOffers.id, withdrawnOfferId))
+          .returning({ id: itHilfeOffers.id })
+        offer = updated
+      } else {
+        const [inserted] = await tx
+          .insert(itHilfeOffers)
+          .values({
+            requestId: id,
+            helperId: session.user.id,
+            message,
+            estimatedTime: estimatedTime || undefined,
+            proposedCompensation: proposedCompensation || undefined,
+            relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
+            repairerProfileId: repairerProfile?.id || undefined,
+          })
+          .returning({ id: itHilfeOffers.id })
+        offer = inserted
+      }
 
-    // Increment offer count. Request status stays OPEN until an offer is
-    // accepted (→ MATCHED).
-    await db
-      .update(itHilfeRequests)
-      .set({ offerCount: sql`${itHilfeRequests.offerCount} + 1` })
-      .where(eq(itHilfeRequests.id, id))
+      await tx
+        .update(itHilfeRequests)
+        .set({ offerCount: sql`${itHilfeRequests.offerCount} + 1` })
+        .where(eq(itHilfeRequests.id, id))
+
+      return offer
+    })
 
     logger.info('Created IT-Hilfe offer', {
       offerId: newOffer.id,

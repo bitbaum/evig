@@ -150,9 +150,13 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
   // 4. Other matching technicians — fan-out via single notifyUsers call.
   if (params.skillsNeeded.length === 0) return
 
+  // Notify every ACTIVE skill-matched technician — community AND verified.
+  // `isVerified` is a trust badge shown on profiles, NOT a notification gate:
+  // self-serve community technicians (the persona this feature targets) default
+  // to is_verified=false with no self-serve verification path, so gating the
+  // fan-out on it silently excluded them from the entire discovery loop.
   const matchingConditions = [
     eq(repairerProfiles.isActive, true),
-    eq(repairerProfiles.isVerified, true),
     ne(repairerProfiles.userId, params.requesterId),
     inArray(userSkills.skillId, params.skillsNeeded),
   ]

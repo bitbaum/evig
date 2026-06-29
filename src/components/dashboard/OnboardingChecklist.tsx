@@ -46,12 +46,12 @@ export function OnboardingChecklist({
     steps.push({
       label: 'Techniker-Profil eingerichtet',
       done: repairerProfileSetup,
-      href: '/dashboard/repairer',
+      href: '/dashboard/techniker',
     })
     steps.push({
       label: 'Erste Dienstleistung publizieren',
       done: hasPublishedService,
-      href: '/dashboard/repairer',
+      href: '/dashboard/techniker',
     })
   }
 

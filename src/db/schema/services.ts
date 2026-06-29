@@ -199,7 +199,9 @@ export const repairerProfiles = pgTable('repairer_profiles', {
   acceptsKulturlegi: boolean('accepts_kulturlegi').default(false),
   maxTravelKm: integer('max_travel_km').default(10),
   serviceDeliveryTypes: text('service_delivery_types').array().default(sql`'{flexible}'`),
-  profileTier: text('profile_tier').default('professional'),
+  // Self-serve registrations are 'community'; professional is granted via the
+  // admin-approved application flow. (Default aligned in migration 100.)
+  profileTier: text('profile_tier').default('community'),
 
   // Metadata
   portfolioImages: text('portfolio_images').array().default([]),
