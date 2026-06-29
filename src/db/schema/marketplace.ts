@@ -259,11 +259,9 @@ export const sellerProfiles = pgTable('seller_profiles', {
   businessType: text('business_type'),
   taxId: text('tax_id'),
 
-  // Contact information (nullable after 031 P2P migration)
-  address: text('address'),
+  // Contact: only city is written (storefront location). phone/address/postal_code
+  // were never written by any code path — dropped in migration 104.
   city: text('city'),
-  postalCode: text('postal_code'),
-  phone: text('phone'),
 
   // Seller settings
   productTypes: text('product_types').array().default([]),

@@ -1,8 +1,8 @@
 # Architecture Debt — Parallel Implementations + Spaghetti Patterns
 
 **Created:** 2026-06-04  
-**Last Modified:** 2026-06-29  
-**Last Modified Summary:** #5 — profile fragmentation audit (SSOT/DRY/SoC) + Phase 1 (remove dead technician read paths)
+**Last Modified:** 2026-06-30  
+**Last Modified Summary:** #5 profile cleanup Phases 1–4 done (Phase 4 re-scoped: contact fields are intentionally distinct, only dead/placeholder columns cleaned)
 
 **Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
@@ -254,9 +254,15 @@ API/mapper cleanup was never finished.
     `types/technician.ts` (the Zod-inferred one in `schemas/repairer.ts` is the SSOT).
   - Remaining: derive the client `ProfileData`/`DEFAULT_PROFILE` from the Zod schema; adopt
     `<Avatar>` in the seller inline-upload + retire `AvatarUpload`'s bespoke placeholder.
-- **Phase 4 (schema) — consolidate contact/address SSOT.** Make `user_profiles` the canonical
-  contact record; stop duplicating phone/address/bio/avatar into role profiles (migration +
-  dual-write window). Biggest blast radius; do last.
+- **Phase 4 (schema) ✓ DONE — re-scoped after investigation.** The original idea (consolidate
+  contact into `user_profiles`) was **dropped as contraindicated**: a per-field write-site audit
+  found NO mirror duplication. The role-profile contact/bio/avatar/display_name fields hold
+  legitimately-distinct business data (seller storefront, repairer service description +
+  application-flow business contact/location, team HR phone) entered via separate forms — collapsing
+  them would destroy real data. The only genuine cleanup (migration 104): `repairer_profiles.phone/
+  address` NOT NULL → nullable (self-service techs stored `''` placeholders only to satisfy NOT NULL;
+  normalized to NULL + dropped the placeholder writes), and dropped the dead `seller_profiles.phone/
+  address/postal_code` columns (never written by any code path).
 
 ---
 

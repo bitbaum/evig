@@ -306,8 +306,8 @@ export async function upsertTechnicianProfile(
       city: city || '',
       canton: canton || null,
       postalCode: postalCode || '',
-      phone: '',
-      address: '',
+      // phone/address are nullable now (migration 104) — self-service community
+      // technicians don't enter business contact; leave them NULL, not ''.
       maxTravelKm,
       isActive,
       profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,

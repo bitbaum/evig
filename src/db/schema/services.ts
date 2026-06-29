@@ -150,10 +150,14 @@ export const repairerProfiles = pgTable('repairer_profiles', {
   description: text('description'),
   yearsExperience: integer('years_experience').default(0),
 
-  // Contact information
-  phone: text('phone').notNull(),
+  // Contact information.
+  // phone/address are nullable: self-service community technicians don't enter
+  // business contact (they were stored as '' placeholders only because these
+  // were NOT NULL — see migration 104). The repairer application flow still
+  // populates real business contact for professionals.
+  phone: text('phone'),
   website: text('website'),
-  address: text('address').notNull(),
+  address: text('address'),
   city: text('city').notNull(),
   postalCode: text('postal_code').notNull(),
   canton: text('canton'),
