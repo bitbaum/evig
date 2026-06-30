@@ -279,16 +279,17 @@ export function CommandBar() {
 
   return (
     <>
-      {/* Trigger button in top bar (Search icon) */}
+      {/* Trigger in top bar. Mobile (no keyboard, so ⌘K is unreachable): a
+          tappable icon button. sm+: the full "Suche ⌘K" box. */}
       <Button
         variant="ghost"
         size="sm"
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border bg-surface-raised px-3 h-8 text-xs text-text-tertiary hover:bg-surface-overlay dark:bg-surface-base/4 dark:hover:bg-surface-base/8 sm:flex"
+        className="flex h-9 w-9 items-center justify-center rounded-md p-0 text-text-tertiary hover:bg-surface-overlay sm:h-8 sm:w-auto sm:gap-2 sm:border sm:border sm:bg-surface-raised sm:px-3 sm:text-xs dark:sm:bg-surface-base/4 dark:hover:sm:bg-surface-base/8"
         aria-label="Suche öffnen (⌘K)"
       >
-        <Search className="w-3.5 h-3.5" />
-        <span className="text-xs">Suche</span>
+        <Search className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+        <span className="hidden text-xs sm:inline">Suche</span>
         <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-surface-overlay rounded-sm text-xs font-mono leading-none">
           ⌘K
         </kbd>
