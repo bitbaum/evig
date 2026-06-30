@@ -25,8 +25,10 @@ import {
   XCircle,
   ExternalLink,
   AlertTriangle,
+  Eye,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { TimecardReviewDrawer } from './TimecardReviewDrawer'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -82,6 +84,7 @@ export function TimecardApprovalsClient() {
   const [isLoading, setIsLoading] = useState(false)
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+  const [openCardId, setOpenCardId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const loadQueue = useCallback(async () => {
@@ -338,6 +341,14 @@ export function TimecardApprovalsClient() {
                     <span className={`hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
                       {statusLabel}
                     </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setOpenCardId(row.id)}
+                      className="shrink-0 inline-flex items-center gap-1.5"
+                    >
+                      <Eye className="w-3.5 h-3.5" /> Prüfen
+                    </Button>
                   </li>
                 )
               })}
@@ -345,6 +356,14 @@ export function TimecardApprovalsClient() {
           </>
         )}
       </div>
+
+      {openCardId && (
+        <TimecardReviewDrawer
+          cardId={openCardId}
+          onClose={() => setOpenCardId(null)}
+          onChanged={loadQueue}
+        />
+      )}
     </div>
   )
 }

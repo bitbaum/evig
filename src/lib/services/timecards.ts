@@ -493,6 +493,31 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
   return submitted
 }
 
+/** Fetch one timecard with its entries for approver review (by card id). */
+export async function getTimecardByIdForReview(timecardId: string): Promise<TimecardWithEntries | null> {
+  return fetchTimecardWithEntries(db, timecardId)
+}
+
+/**
+ * Approver edits a submitted card's entries. Saves to the card's OWNER (not the
+ * approver) and preserves the submitted status — `saveTimecardDraft` only flips
+ * rejected→draft and blocks approved, so a submitted card stays submitted.
+ * Authorization is enforced at the route (withAdmin('timecards')).
+ */
+export async function saveTimecardEntriesForReview(
+  timecardId: string,
+  input: TimecardSaveInput,
+): Promise<TimecardWithEntries> {
+  const rows = await db
+    .select({ userId: timecards.userId })
+    .from(timecards)
+    .where(eq(timecards.id, timecardId))
+    .limit(1)
+  const owner = rows[0]
+  if (!owner) throw new Error('timecard_not_found')
+  return saveTimecardDraft(owner.userId, input)
+}
+
 export async function reviewTimecard(
   reviewerId: string,
   timecardId: string,
