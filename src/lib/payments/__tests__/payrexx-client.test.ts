@@ -170,7 +170,7 @@ describe('createGateway — live mode', () => {
     expect(init.body).toContain('amount=5000')
     expect(init.body).toContain('currency=CHF')
     expect(init.body).toContain('referenceId=order-123')
-    expect(init.body).toContain('reservation=true')
+    expect(init.body).toContain('reservation=1')
     expect(init.body).toContain('ApiSignature=')
   })
 

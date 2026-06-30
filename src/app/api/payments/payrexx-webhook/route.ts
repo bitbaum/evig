@@ -73,7 +73,10 @@ interface WebhookTransaction {
 export async function POST(request: NextRequest) {
   try {
     const rawBody = await request.text();
-    const signature = request.headers.get('payrexx-signature');
+    // Payrexx signs webhooks with a lowercase-hex SHA-256 HMAC of the raw body
+    // (key = the per-webhook signing secret as a UTF-8 string), delivered in the
+    // `X-Webhook-Signature` header. Header lookup is case-insensitive.
+    const signature = request.headers.get('x-webhook-signature');
 
     if (!await verifyPayrexxSignature(rawBody, signature)) {
       // Log presence/length only — never the raw signature bytes

@@ -34,6 +34,21 @@ export function isPayrexxConfigured(): boolean {
   )
 }
 
+/** The webhook signing secret is required to reconcile payments. */
+export function isPayrexxWebhookSecretSet(): boolean {
+  return !!process.env[PAYREXX_ENV.WEBHOOK_SECRET]
+}
+
+/**
+ * A PARTIAL config (INSTANCE + API_SECRET set, but WEBHOOK_SECRET missing) is the
+ * single worst failure mode: gateways open and customers are charged, but every
+ * webhook is rejected (fail-closed) so orders never advance past pending. Use this
+ * to warn loudly the moment a live gateway is created. True only in that exact state.
+ */
+export function isPayrexxPartiallyConfigured(): boolean {
+  return isPayrexxConfigured() && !isPayrexxWebhookSecretSet()
+}
+
 /** Prod blocks checkout until Payrexx is configured; dev uses mock redirect. */
 export function isPayrexxCheckoutUnavailable(): boolean {
   return process.env.NODE_ENV === 'production' && !isPayrexxConfigured()

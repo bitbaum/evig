@@ -81,6 +81,7 @@ non-200, so a failed run shows up in `systemctl`/journald.
 | `revampit-cron@close-it-hilfe-requests.timer` | `/api/cron/close-it-hilfe-requests` | 01:00 |
 | `revampit-cron@prune-audit-log.timer`         | `/api/cron/prune-audit-log`         | 02:00 |
 | `revampit-cron@wake-recurring-tasks.timer`    | `/api/cron/wake-recurring-tasks`    | 07:00 |
+| `revampit-cron@release-escrow.timer`          | `/api/cron/release-escrow`          | 04:00 |
 
 `CRON_SECRET` must be set in `/opt/revampit/app/.env` (without it the routes skip
 auth and are publicly triggerable). It is preserved across deploys (the deploy
@@ -96,7 +97,7 @@ rsync -az -e ssh scripts/ops/revampit-cron@*.service scripts/ops/revampit-cron@*
 ssh "$BOX" '
   sudo mv /tmp/revampit-cron@*.service /tmp/revampit-cron@*.timer /etc/systemd/system/
   sudo systemctl daemon-reload
-  for j in close-decisions close-it-hilfe-requests prune-audit-log wake-recurring-tasks; do
+  for j in close-decisions close-it-hilfe-requests prune-audit-log wake-recurring-tasks release-escrow; do
     sudo systemctl enable --now "revampit-cron@$j.timer"
   done
 '

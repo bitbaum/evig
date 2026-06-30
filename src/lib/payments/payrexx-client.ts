@@ -12,6 +12,7 @@ import {
   PAYREXX_ENV,
   PAYREXX_MOCK_REDIRECT_PATH,
   isPayrexxConfigured,
+  isPayrexxPartiallyConfigured,
 } from '@/config/payrexx';
 import { APP_URL } from '@/config/urls';
 
@@ -62,14 +63,6 @@ export interface PayrexxGateway {
 export interface PayrexxTransactionResult {
   id: number;
   status: string;
-}
-
-// ============================================================================
-// Mock mode detection
-// ============================================================================
-
-function getBaseUrl(): string {
-  return `${PAYREXX_API_BASE}/${process.env[PAYREXX_ENV.INSTANCE]}`;
 }
 
 // ============================================================================
@@ -132,11 +125,25 @@ export async function createGateway(params: PayrexxGatewayParams): Promise<Payre
     return createMockGateway(params);
   }
 
+  // Live, but missing the webhook secret → the customer will be charged but the
+  // reconciling webhook is rejected and the order never advances. Warn loudly
+  // at the moment of charge so this is caught before customers are affected.
+  if (isPayrexxPartiallyConfigured()) {
+    logger.error(
+      'PAYREXX_WEBHOOK_SECRET is not set while Payrexx is live — payments will be charged but every webhook is rejected (orders stay pending). Set PAYREXX_WEBHOOK_SECRET immediately.',
+      { referenceId: params.referenceId },
+    );
+  }
+
   const gatewayParams: Record<string, string> = {
     amount: String(params.amount),
     currency: params.currency,
     referenceId: params.referenceId,
-    reservation: 'true',
+    // Payrexx expects the integer flag `1` (not the string "true", which its
+    // PHP backend coerces to 0 → reservation silently disabled). Funds are
+    // authorized/held, then captured (marketplace: on receipt-confirm/escrow
+    // release; workshops/appointments: immediately in the webhook handler).
+    reservation: '1',
     successRedirectUrl: params.successRedirectUrl,
     failedRedirectUrl: params.failedRedirectUrl,
     cancelRedirectUrl: params.cancelRedirectUrl,

@@ -17,7 +17,7 @@ import {
 } from '@/lib/email/templates/marketplace'
 import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
 import { PAYMENT_STATUS } from '@/config/payment-status'
-import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client'
+import { PAYREXX_TRANSACTION_STATUS, captureTransaction } from '@/lib/payments/payrexx-client'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
 import { APP_URL } from '@/config/urls'
@@ -52,6 +52,12 @@ interface PaymentTransaction {
   workshopRegistrationId: string | null
   serviceAppointmentId: string | null
   amountCents: number
+  /** Set only for escrow payments (auto-release date). Null/absent → non-escrow,
+   *  which must be captured immediately on the reserved webhook (a reservation
+   *  otherwise expires uncaptured in ~7 days and the funds are never collected).
+   *  The runtime lookup always selects it; optional only so unrelated test
+   *  fixtures (which exercise non-escrow paths) need not specify it. */
+  escrowReleaseDate?: string | null
 }
 
 /** Result from looking up a payment record by referenceId */
@@ -134,6 +140,7 @@ export async function lookupPaymentByReferenceId(referenceId: string): Promise<P
       workshopRegistrationId: paymentTransactions.workshopRegistrationId,
       serviceAppointmentId: paymentTransactions.serviceAppointmentId,
       amountCents: paymentTransactions.amountCents,
+      escrowReleaseDate: paymentTransactions.escrowReleaseDate,
     })
     .from(paymentTransactions)
     .where(eq(paymentTransactions.id, referenceId))
@@ -409,6 +416,29 @@ export async function handleGenericPayment(
             .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
         }
       })
+
+      // Non-escrow payments (workshops, appointments) authorize-then-capture in
+      // one step: the gateway only RESERVES funds, so we must capture now or the
+      // hold expires uncaptured (~7 days) and Revamp-IT never receives the money.
+      // Escrow payments stay held and are captured by the escrow-release route.
+      // Capture after the state commit so a Payrexx hiccup never locks the user
+      // out of what they paid for — a failure is loud-logged for manual capture.
+      if (!paymentTx.escrowReleaseDate && payrexxTransactionId) {
+        try {
+          await captureTransaction(payrexxTransactionId, paymentTx.amountCents)
+          logger.info('Non-escrow payment captured', {
+            transactionId: paymentTx.id,
+            payrexxTransactionId,
+          })
+        } catch (captureError) {
+          logger.error('Non-escrow capture FAILED — funds reserved but not captured; capture manually within 7 days', {
+            transactionId: paymentTx.id,
+            payrexxTransactionId,
+            amountCents: paymentTx.amountCents,
+            error: captureError instanceof Error ? captureError.message : String(captureError),
+          })
+        }
+      }
 
       if (paymentTx.workshopRegistrationId) {
         logger.info('Workshop registration confirmed via Payrexx', {
