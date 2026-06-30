@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
-import { GuideBody, type GuideData } from './GuideBody'
+import { GuideBody, type GuideData, type GuideStructure } from '../GuideBody'
+import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
 import { ogFor } from '../og-images'
 
 /**
@@ -9,6 +10,16 @@ import { ogFor } from '../og-images'
  */
 
 type WithMeta = GuideData & { meta: { title: string; description: string } }
+
+/** Language-independent shape of this guide (structure → not i18n). */
+const STRUCTURE: GuideStructure = {
+  stageSteps: { disassemble: [1, 2, 3], lcd: [4], bridge: [5] },
+  schematicAtStep: 5,
+  hero: {
+    poster: UPCYCLING_ASSETS.lenovoGuide.heroPoster,
+    video: UPCYCLING_ASSETS.lenovoGuide.heroVideo,
+  },
+}
 
 export async function generateMetadata() {
   const t = await getTranslations('projects')
@@ -23,5 +34,5 @@ export async function generateMetadata() {
 export default async function LenovoL2251pwdGuidePage() {
   const t = await getTranslations('projects')
   const m = t.raw('upcycling.lenovo_l2251pwd') as WithMeta
-  return <GuideBody data={m} />
+  return <GuideBody data={m} structure={STRUCTURE} />
 }

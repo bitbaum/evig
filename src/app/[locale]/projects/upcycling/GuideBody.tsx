@@ -16,9 +16,10 @@ import {
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
+import { MonitorLampPlaceholder } from './MonitorLampPlaceholder'
 
 /**
- * Mobile-first guide renderer.
+ * Mobile-first guide renderer — shared by every model guide.
  *
  * Phone-on-bench scenario drives every interaction:
  *  - photos zoom to fullscreen on tap (workbench detail unreadable otherwise)
@@ -27,8 +28,15 @@ import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
  *  - tap targets ≥44px everywhere
  *  - multi-photo steps swipe horizontally on mobile (scroll-snap)
  *
- * Server passes the i18n blob as `data`; rendering here is fully client-
- * side so IntersectionObserver / lightbox state work.
+ * Two inputs, separated on purpose:
+ *  - `data`      → all human-language strings, loaded from i18n (per locale).
+ *  - `structure` → the language-INDEPENDENT shape (which steps sit under which
+ *                  stage, where the schematic renders, the hero media). This
+ *                  lives in the route's page.tsx, never in the message files —
+ *                  structure belongs in config, not i18n (see .claude/CLAUDE.md).
+ *
+ * Server passes the i18n blob as `data`; rendering here is fully client-side so
+ * IntersectionObserver / lightbox state work.
  */
 
 type StepImage = { src: string; alt: string }
@@ -46,7 +54,8 @@ export type GuideData = {
   tools: { title: string; items: string[] }
   stages: Stage[]
   steps: Step[]
-  schematic: {
+  /** Omitted while a model's bridging schematic is still unverified. */
+  schematic?: {
     title: string
     body: string
     labels: { v5: string; signal: string; gnd: string; resistor: string }
@@ -66,13 +75,33 @@ export type GuideData = {
   }
 }
 
-const STEPS_BY_STAGE: Record<string, number[]> = {
-  disassemble: [1, 2, 3],
-  lcd: [4],
-  bridge: [5],
+/**
+ * Per-guide structure — the shape of a guide, independent of language.
+ * Supplied by each route's page.tsx so one renderer serves every model.
+ */
+export type GuideStructure = {
+  /** Stage `key` → ordered step numbers rendered under it. */
+  stageSteps: Record<string, number[]>
+  /**
+   * Step number the bridging schematic attaches to, or `null` when the model
+   * has no verified schematic yet (the block is simply not rendered).
+   */
+  schematicAtStep: number | null
+  hero: {
+    /** Real poster photo. Omit → the generative placeholder is shown. */
+    poster?: string
+    /** Hero video. Omit → still image only (no autoplay, no play overlay). */
+    video?: string
+  }
 }
 
-export function GuideBody({ data }: { data: GuideData }) {
+export function GuideBody({
+  data,
+  structure,
+}: {
+  data: GuideData
+  structure: GuideStructure
+}) {
   const stepsById = new Map(data.steps.map((s) => [s.n, s]))
   const totalSteps = data.steps.length
 
@@ -174,7 +203,12 @@ export function GuideBody({ data }: { data: GuideData }) {
 
           {/* Mobile: video first, text below. Desktop: side-by-side, text left. */}
           <div className="mt-4 sm:mt-6 grid gap-6 sm:gap-8 md:grid-cols-[1.1fr_1fr] md:items-center">
-            <HeroVideo title={data.title} labels={data.ui} className="md:order-2" />
+            <GuideHero
+              title={data.title}
+              labels={data.ui}
+              hero={structure.hero}
+              className="md:order-2"
+            />
             <div className="md:order-1">
               <div className="ui-public-eyebrow">{data.eyebrow}</div>
               <h1 className="ui-public-display-md mt-3">{data.title}</h1>
@@ -223,7 +257,7 @@ export function GuideBody({ data }: { data: GuideData }) {
 
         {/* Stages → steps */}
         {data.stages.map((stage) => {
-          const stepNums = STEPS_BY_STAGE[stage.key] ?? []
+          const stepNums = structure.stageSteps[stage.key] ?? []
           return (
             <section key={stage.key} className="mt-14">
               <header className="border-b border-subtle pb-4">
@@ -275,7 +309,7 @@ export function GuideBody({ data }: { data: GuideData }) {
                           />
                         )}
 
-                        {step.n === 5 && (
+                        {structure.schematicAtStep === step.n && data.schematic && (
                           <div className="mt-6 rounded-lg border border-subtle bg-surface-raised p-5">
                             <h4 className="text-sm font-semibold text-text-primary">
                               {data.schematic.title}
@@ -345,19 +379,23 @@ export function GuideBody({ data }: { data: GuideData }) {
   )
 }
 
-/* ─── HeroVideo ──────────────────────────────────────────────────────
- * On mobile (matchMedia max-width 768px) we show the poster + a big
- * play button. Real users tap once to start; we don't burn cellular
- * data on autoplay. On desktop, autoplay-muted-loop fires after mount.
+/* ─── GuideHero ──────────────────────────────────────────────────────
+ * Three render modes, picked from `structure.hero`:
+ *  - video present  → poster + tap-to-play on mobile, autoplay-muted-loop on
+ *                     desktop (the published-guide experience).
+ *  - poster only    → still image (a finished guide without footage yet).
+ *  - neither         → generative MonitorLampPlaceholder (draft guides).
  * Always renders the poster server-side so first paint matches.
  */
-function HeroVideo({
+function GuideHero({
   title,
   labels,
+  hero,
   className = '',
 }: {
   title: string
   labels: GuideData['ui']
+  hero: GuideStructure['hero']
   className?: string
 }) {
   const ref = useRef<HTMLVideoElement>(null)
@@ -368,7 +406,10 @@ function HeroVideo({
   // mobile (poster-first), no on desktop once it's played at least once.
   const [hasPlayed, setHasPlayed] = useState(false)
 
+  const hasVideo = Boolean(hero.video)
+
   useEffect(() => {
+    if (!hasVideo) return
     const mq = window.matchMedia('(max-width: 768px)')
     setIsMobile(mq.matches)
     const v = ref.current
@@ -384,7 +425,32 @@ function HeroVideo({
         })
         .catch(() => setPlaying(false))
     }
-  }, [])
+  }, [hasVideo])
+
+  // No video yet: a still poster, or the generative placeholder for drafts
+  // that have neither finished footage nor a poster photo.
+  if (!hasVideo) {
+    return (
+      <div
+        className={`relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-subtle bg-surface-raised ${className}`}
+      >
+        {hero.poster ? (
+          <Image
+            src={hero.poster}
+            alt={title}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <MonitorLampPlaceholder
+            variant="warm"
+            className="absolute inset-0 h-full w-full"
+          />
+        )}
+      </div>
+    )
+  }
 
   const toggle = () => {
     const v = ref.current
@@ -411,8 +477,8 @@ function HeroVideo({
       <video
         ref={ref}
         className="absolute inset-0 h-full w-full object-cover"
-        poster="/projects/upcycling/lenovo-l2251pwd/hero-poster.jpg"
-        src="/projects/upcycling/lenovo-l2251pwd/hero.mp4"
+        poster={hero.poster}
+        src={hero.video}
         playsInline
         muted
         loop
@@ -713,6 +779,10 @@ function StepProgress({
 /* ─── CircuitDiagram ─────────────────────────────────────────────────
  * Voltage divider: 5V → 1kΩ → Backlight → 1kΩ → GND. Inline SVG so it
  * inherits the page color scheme and works in dark mode for free.
+ *
+ * NOTE: this draws the Lenovo L2251pwd two-resistor voltage divider. Other
+ * models bridge different pins — when a new model's schematic is verified,
+ * give it its own diagram rather than reusing this one.
  */
 function CircuitDiagram({
   labels,

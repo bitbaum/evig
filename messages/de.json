@@ -5899,6 +5899,210 @@
           "photoCountOf": "von"
         }
       },
+      "lenovo_l2440pwc": {
+        "meta": {
+          "title": "Lenovo L2440pwC — Monitor zur Leuchte | Monitor-Upcycling",
+          "description": "Schritt-für-Schritt-Anleitung: Lenovo L2440pwC-Monitor zerlegen, LCD entfernen und die Hintergrundbeleuchtung als Leuchtpanel weiternutzen."
+        },
+        "back": "← Zurück zur Übersicht",
+        "eyebrow": "ANLEITUNG · MONITOR-UPCYCLING",
+        "title": "Lenovo L2440pwC",
+        "subtitle": "24-Zoll-Monitor zur Leuchte umbauen",
+        "metaLine": "Modell: Lenovo L2440pwC · Dauer: ca. 1 Stunde · Schwierigkeit: einfach · Entwurf",
+        "credit": "Anleitung von Bruno, RevampIT · Entwurf — noch nicht veröffentlicht",
+        "safety": {
+          "title": "Sicherheit zuerst",
+          "body": "Niemals unter Spannung arbeiten. Trenne den Monitor vollständig vom Stromnetz und warte 1–2 Minuten, bevor du startest. Vor jedem Funktionstest die nötigen Schutzmassnahmen treffen — bei Unsicherheit einen Elektronik-Kollegen dazuholen."
+        },
+        "tools": {
+          "title": "Werkzeug & Material",
+          "items": [
+            "Kreuzschlitzschraubendreher (verschiedene Grössen)",
+            "Evtl. Schlitzschraubendreher",
+            "Pry Tool (Kunststoffhebelwerkzeug)",
+            "Zwei geeignete Widerstände (gemäss Schaltplan)",
+            "Isolierband oder anderes Klebeband",
+            "Behälter für Schrauben"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Monitor zerlegen",
+            "intro": "Sorge für Platz und einen sauberen Arbeitsplatz. Behalte beim Zerlegen die Orientierung der Teile bei (Knöpfe nach unten, wie auf den Bildern) und nutze einen magnetischen Schraubenzieher samt Schraubenbehälter, damit nichts verloren geht."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 2",
+            "title": "Elektronik überbrücken",
+            "intro": "Die Steuerelektronik wird ausgebaut und der verbleibende Stecker überbrückt, damit das Panel ohne Bedienung dauerhaft leuchtet."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 3",
+            "title": "LCD entfernen",
+            "intro": "Die schwarze LCD-Scheibe raus — die darunterliegenden Diffusor- und Lichtschichten bleiben sauber und unbeschädigt; sie sorgen später für gleichmässiges Licht."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Phase 4",
+            "title": "Zusammenbau & Funktionstest",
+            "intro": "Alles wieder sicher zusammenbauen — und erst dann ans Netz."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Gehäuse öffnen",
+            "body": "Den Monitor mit der Vorderseite nach unten auf eine weiche Unterlage legen. Alle Schrauben auf der Rückseite entfernen — einige sitzen evtl. unter Plastik- oder Gummiabdeckungen, die sich mit einem dünnen Schlitzschraubendreher abnehmen lassen. Mit dem Pry Tool dem Spalt zwischen Rückschale und Rahmen entlangfahren, um Klebestellen zu lösen, und die Gehäuseteile vorsichtig auseinanderhebeln, bis sich die Rastnasen hörbar lösen. Achtung: Im Bereich der Bedientasten können Kabel mit der Abdeckung verbunden sein — nicht ruckartig ziehen. Das Kabel zwischen Rahmen und Elektronik vorsichtig abstecken.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Innere Abdeckungen entfernen",
+            "body": "Die Kunststoffteile beiseitelegen und den Bildschirm flach hinlegen. Alle sichtbaren Schrauben der inneren Halterungen entfernen (wir haben 8 gezählt). Mit Klebeband oder Klebepads befestigte Kabel vorsichtig lösen. Das Flachband-Verbindungskabel zwischen Elektronik und LCD ausstecken; die beiden Kabel zu den Ecken des Bildschirms können eingesteckt bleiben. Die kleinere Box rechts entfernen, das Board mit den USB-Anschlüssen darunter ausstecken und ausschrauben (wird nicht mehr benötigt). Zum Schluss das grössere Gehäuse abbauen — zuerst den Kleber entfernen.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Steuerplatine entfernen und Stecker modifizieren",
+            "body": "Das rechte Steuerboard ausbauen (nicht jenes, wo der Strom reingeht) und beiseitelegen — es wird nicht mehr gebraucht. Im verbleibenden Stecker werden Pins mit Widerständen überbrückt; der genaue Schaltplan folgt, sobald er verifiziert ist. Alle freiliegenden Metallteile der Widerstände und Kontakte sorgfältig mit Isolierband abdecken und den modifizierten Stecker mit Klebeband fixieren, damit er sich nicht löst. Danach zur Seite legen — als Nächstes ist das LCD-Panel dran.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "LCD-Panel entfernen",
+            "body": "Das Displaymodul aus dem Metallrahmen lösen — es ist mit denselben Rastnasen wie eingangs befestigt; vorsichtig lösen, ggf. mit einem Schlitzschraubendreher. Das Flachbandkabel zur LCD-Steuerelektronik abstecken, falls noch angeschlossen. Die LCD-Steuerelektronik sitzt unter einer Metallabdeckung und ist evtl. verklebt — beides von der Metalloberfläche lösen. Das LCD-Panel (die äusserste dunkle Schicht) vorsichtig entfernen; es wird nicht mehr gebraucht. Danach den Metallrahmen wieder montieren. Hinweis: Die Diffusor- und Lichtschichten darunter möglichst sauber und unbeschädigt lassen.",
+            "images": []
+          },
+          {
+            "n": 5,
+            "title": "Zusammenbau und Funktionstest",
+            "body": "Alle verbleibenden Komponenten wieder sicher befestigen und das Gehäuse zusammenschrauben (einige Schrauben werden nicht mehr benötigt). Erst nach dem vollständigen Zusammenbau den Netzstecker einstecken und prüfen, ob die Hintergrundbeleuchtung wie gewünscht leuchtet. Achtung: Funktionstests niemals an einem geöffneten, unter Spannung stehenden Gerät durchführen, sofern keine fachgerechten Schutzmassnahmen getroffen wurden.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Fertig!",
+          "body": "Nach erfolgreichem Umbau dient die Hintergrundbeleuchtung als grossflächige Lichtquelle: Durch das Entfernen des LCD-Panels wird das Licht sichtbar und der Monitor lässt sich als Lampe oder Leuchtpanel nutzen. (Ergebnisfotos folgen.)"
+        },
+        "feedback": {
+          "title": "Bessere Idee? Schreib uns.",
+          "body": "Diese Anleitung ist offen und lebt von Korrekturen. Falls du eine bessere Brücken-Schaltung, eine Helligkeitsregelung oder eine schönere Montage gefunden hast — wir nehmen Beiträge gerne entgegen.",
+          "cta": "Beitragen"
+        },
+        "ui": {
+          "openPhoto": "Foto vergrössern",
+          "closePhoto": "Schliessen",
+          "playVideo": "Video abspielen",
+          "pauseVideo": "Video pausieren",
+          "stepProgressLabel": "Schritt",
+          "stepProgressOf": "von",
+          "jumpToStep": "Zu Schritt springen",
+          "photoCountLabel": "Foto",
+          "photoCountOf": "von"
+        }
+      },
+      "hp_z23n": {
+        "meta": {
+          "title": "HP Z23n — Monitor zur Leuchte | Monitor-Upcycling",
+          "description": "Schritt-für-Schritt-Anleitung: HP Z23n-Monitor zerlegen, LCD entfernen und die Hintergrundbeleuchtung als Leuchtpanel weiternutzen."
+        },
+        "back": "← Zurück zur Übersicht",
+        "eyebrow": "ANLEITUNG · MONITOR-UPCYCLING",
+        "title": "HP Z23n",
+        "subtitle": "23-Zoll-Monitor zur Leuchte umbauen",
+        "metaLine": "Modell: HP Z23n · Dauer: ca. 1 Stunde · Schwierigkeit: einfach · Entwurf",
+        "credit": "Anleitung von Bruno, RevampIT · Entwurf — noch nicht veröffentlicht",
+        "safety": {
+          "title": "Sicherheit zuerst",
+          "body": "Niemals unter Spannung arbeiten. Trenne den Monitor vollständig vom Stromnetz und warte 1–2 Minuten, bevor du startest. Vor jedem Funktionstest die nötigen Schutzmassnahmen treffen — bei Unsicherheit einen Elektronik-Kollegen dazuholen."
+        },
+        "tools": {
+          "title": "Werkzeug & Material",
+          "items": [
+            "Kreuzschlitzschraubendreher (verschiedene Grössen)",
+            "Evtl. Schlitzschraubendreher",
+            "Pry Tool (Kunststoffhebelwerkzeug)",
+            "Zwei geeignete Widerstände (gemäss Schaltplan)",
+            "Isolierband oder anderes Klebeband",
+            "Behälter für Schrauben"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Monitor zerlegen",
+            "intro": "Sorge für Platz und einen sauberen Arbeitsplatz. Behalte beim Zerlegen die Orientierung der Teile bei (Knöpfe nach unten, wie auf den Bildern) und nutze einen magnetischen Schraubenzieher samt Schraubenbehälter, damit nichts verloren geht."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 2",
+            "title": "Elektronik überbrücken",
+            "intro": "Die Steuerelektronik wird ausgebaut und der verbleibende Stecker überbrückt, damit das Panel ohne Bedienung dauerhaft leuchtet."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 3",
+            "title": "LCD entfernen",
+            "intro": "Die schwarze LCD-Scheibe raus — die darunterliegenden Diffusor- und Lichtschichten bleiben sauber und unbeschädigt; sie sorgen später für gleichmässiges Licht."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Phase 4",
+            "title": "Zusammenbau & Funktionstest",
+            "intro": "Alles wieder sicher zusammenbauen — und erst dann ans Netz."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Gehäuse öffnen und Verbindungskabel abstecken",
+            "body": "Den Monitor mit der Vorderseite nach unten auf eine weiche Unterlage legen und alle Schrauben auf der Rückseite entfernen. Mit dem Pry Tool dem Spalt zwischen Rückschale und Rahmen entlangfahren, Klebestellen lösen und die Gehäuseteile auseinanderhebeln, bis sich die Rastnasen hörbar lösen; die Rückschale beiseitelegen. Die Schrauben und den Kleber lösen, die den Plastikrahmen am Display halten (9 Stück). Achtung: Im Bereich der Bedientasten können Kabel mit der Abdeckung verbunden sein — nicht ruckartig ziehen. Die 4 Schrauben unten an der Bedienleiste entfernen, die Verbindungskabel zur Bedienleiste abstecken und diese von vorne vorsichtig abnehmen (ggf. mit dem Pry Tool abhebeln). Um den Plastikrahmen zu entfernen, zuerst das Metallgehäuse abnehmen: alle Klebestreifen entfernen und die beiden Schrauben am oberen Ende lösen. Zum Schluss das Flachband-Verbindungskabel zwischen Elektronik und Bildschirm ausstecken.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Steuerplatine entfernen und Stecker modifizieren",
+            "body": "Das rechte Steuerboard ausbauen (jenes, aus dem das Flachbandkabel aus dem vorherigen Schritt kommt). Es ist mit zwei Schrauben von innen, zwei von aussen und zwei Sechskant-M2-Schrauben von aussen (neben dem VGA-Anschluss) befestigt. Board und Schrauben beiseitelegen — sie werden nicht mehr gebraucht. Im verbleibenden Stecker werden Pins mit Widerständen überbrückt; der genaue Schaltplan folgt, sobald er verifiziert ist. Alle freiliegenden Metallteile sorgfältig mit Isolierband abdecken und den modifizierten Stecker mit Klebeband fixieren, damit er sich nicht löst.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "LCD-Panel entfernen",
+            "body": "Das Displaymodul aus dem Metallrahmen lösen — es ist mit denselben Rastnasen wie eingangs befestigt; vorsichtig lösen, ggf. mit einem Schlitzschraubendreher. Das Flachbandkabel zur LCD-Steuerelektronik abstecken, falls noch angeschlossen. Die LCD-Steuerelektronik sitzt unter einer Metallabdeckung und ist evtl. verklebt — beides lösen. Das LCD-Panel (die äusserste dunkle Schicht) vorsichtig entfernen; es wird nicht mehr gebraucht. Danach den Metallrahmen wieder montieren. Hinweis: Die Diffusor- und Lichtschichten darunter möglichst sauber und unbeschädigt lassen.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Zusammenbau und Funktionstest",
+            "body": "Alle verbleibenden Komponenten wieder sicher befestigen und das Gehäuse zusammenschrauben (einige Schrauben werden nicht mehr benötigt). Erst nach dem vollständigen Zusammenbau den Netzstecker einstecken und prüfen, ob die Hintergrundbeleuchtung wie gewünscht leuchtet. Achtung: Funktionstests niemals an einem geöffneten, unter Spannung stehenden Gerät durchführen, sofern keine fachgerechten Schutzmassnahmen getroffen wurden.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Fertig!",
+          "body": "Nach erfolgreichem Umbau dient die Hintergrundbeleuchtung als grossflächige Lichtquelle: Durch das Entfernen des LCD-Panels wird das Licht sichtbar und der Monitor lässt sich als Lampe oder Leuchtpanel nutzen. (Ergebnisfotos folgen.)"
+        },
+        "feedback": {
+          "title": "Bessere Idee? Schreib uns.",
+          "body": "Diese Anleitung ist offen und lebt von Korrekturen. Falls du eine bessere Brücken-Schaltung, eine Helligkeitsregelung oder eine schönere Montage gefunden hast — wir nehmen Beiträge gerne entgegen.",
+          "cta": "Beitragen"
+        },
+        "ui": {
+          "openPhoto": "Foto vergrössern",
+          "closePhoto": "Schliessen",
+          "playVideo": "Video abspielen",
+          "pauseVideo": "Video pausieren",
+          "stepProgressLabel": "Schritt",
+          "stepProgressOf": "von",
+          "jumpToStep": "Zu Schritt springen",
+          "photoCountLabel": "Foto",
+          "photoCountOf": "von"
+        }
+      },
       "status": {
         "meta": {
           "title": "Status & Wirkung | Monitor-Upcycling",

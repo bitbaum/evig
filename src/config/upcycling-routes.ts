@@ -16,6 +16,14 @@ export const UPCYCLING_ROUTES = {
   businessplan: `${UPCYCLING_BASE}/businessplan`,
   status: `${UPCYCLING_BASE}/status`,
   lenovoL2251pwd: `${UPCYCLING_BASE}/lenovo-l2251pwd`,
+  /**
+   * Draft model guides — scaffolded from the workshop wiki, NOT yet published:
+   * held until their bridging schematic is verified and result photos exist
+   * (so they are intentionally absent from UPCYCLING_GUIDE_SLUGS and every
+   * public guide list). Reachable only by direct URL for review.
+   */
+  lenovoL2440pwc: `${UPCYCLING_BASE}/lenovo-l2440pwc`,
+  hpZ23n: `${UPCYCLING_BASE}/hp-z23n`,
   /** Interner, passwortgeschützter Akquise-Bereich (nicht in der öffentlichen Sub-Nav). */
   dossier: `${UPCYCLING_BASE}/dossier`,
 } as const
