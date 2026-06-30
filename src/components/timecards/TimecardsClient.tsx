@@ -261,10 +261,12 @@ export function TimecardsClient({
 
       {/* Sticky action bar — keeps Save/Einreichen one tap away right after
           filling (the fill + leave controls sit mid-page; without this the user
-          had to scroll back up to the header to submit). */}
+          had to scroll back up to the header to submit). Locked once approved. */}
       <div className="sticky bottom-0 z-20 -mx-1 flex items-center justify-between gap-3 border-t border-subtle bg-surface-base/95 px-1 py-3 backdrop-blur-sm">
         <p className="text-sm text-text-tertiary">
-          {tc.periodEntries.length} {t('headerDaysSuffix')} · {formatTimecardDuration(tc.totalMinutes)}
+          {tc.draft.status === 'approved'
+            ? t('lockedApproved')
+            : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${formatTimecardDuration(tc.totalMinutes)}`}
         </p>
         <div className="flex items-center gap-2">
           <Button
@@ -272,7 +274,7 @@ export function TimecardsClient({
             variant="outline"
             size="sm"
             onClick={tc.saveDraft}
-            disabled={tc.isSaving || tc.isLoadingDraft}
+            disabled={tc.isSaving || tc.isLoadingDraft || tc.draft.status === 'approved'}
           >
             {tc.isSaving ? t('saving') : t('save')}
           </Button>
@@ -281,7 +283,7 @@ export function TimecardsClient({
             variant="primary"
             size="sm"
             onClick={tc.submitDraft}
-            disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft}
+            disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft || tc.draft.status === 'approved'}
           >
             {tc.isSubmitting ? t('submitting') : tc.draft.status === 'submitted' ? t('resubmit') : t('submit')}
           </Button>

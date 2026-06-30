@@ -9765,6 +9765,7 @@
       "submit": "Zur Prüfung einreichen",
       "submitting": "Sende…",
       "resubmit": "Erneut einreichen",
+      "lockedApproved": "Genehmigt und gesperrt",
       "submitSuccess": "Zur Prüfung gesendet — Freigabe-Team wird benachrichtigt.",
       "submitHint": "Entwurf speichern hält deine Eingaben; «Zur Prüfung einreichen» sendet an Freigabe.",
       "submitError": "Zeitkarte konnte nicht eingereicht werden.",

@@ -476,6 +476,20 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
     logger.warn('Failed to notify timecard approvers', { error, timecardId: saved.id })
   }
 
+  // Confirm to the submitter that their card is in review (in-app + email, gated
+  // on their email_notifications pref — same path as the approver notification).
+  try {
+    await notifyUsers([userId], {
+      type: NOTIFICATION_TYPES.TIMECARD_SUBMITTED,
+      title: 'Zeitkarte eingereicht',
+      content: `Deine Zeitkarte für ${submitted.period_start} – ${submitted.period_end} wurde zur Prüfung eingereicht. Du wirst benachrichtigt, sobald sie geprüft wurde.`,
+      related_type: RELATED_TYPES.TIMECARD,
+      related_id: submitted.id,
+    })
+  } catch (error) {
+    logger.warn('Failed to send timecard submission confirmation', { error, timecardId: saved.id })
+  }
+
   return submitted
 }
 

@@ -135,10 +135,8 @@ export function TimecardApprovalsClient() {
 
   const runBulk = async (status: 'approved' | 'rejected') => {
     if (selected.size === 0) return
-    if (status === 'rejected' && !sharedNote.trim()) {
-      setError('Eine Begründung ist nötig, wenn Karten zurückgewiesen werden.')
-      return
-    }
+    // A rejection reason is optional — it's sent when provided so the submitter
+    // knows what to change, but isn't required.
     setBusy(true)
     setError(null)
     setMessage(null)
@@ -216,7 +214,7 @@ export function TimecardApprovalsClient() {
               type="text"
               value={sharedNote}
               onChange={e => setSharedNote(e.target.value)}
-              placeholder="Notiz (optional bei Genehmigung, Pflicht bei Rückweisung)"
+              placeholder="Notiz (optional) — bei Rückweisung erklärt sie dem Team, was anzupassen ist"
               className="flex-1 min-w-0"
               maxLength={1000}
             />
@@ -233,9 +231,8 @@ export function TimecardApprovalsClient() {
               <Button
                 variant="destructive-outline"
                 onClick={() => runBulk('rejected')}
-                disabled={busy || !sharedNote.trim()}
+                disabled={busy}
                 className="inline-flex items-center gap-1.5 text-sm font-semibold"
-                title={!sharedNote.trim() ? 'Notiz erforderlich für Rückweisung' : undefined}
               >
                 <XCircle className="w-4 h-4" />
                 Zurückweisen
