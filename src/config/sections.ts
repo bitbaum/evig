@@ -183,6 +183,12 @@ export interface SidebarGroup {
  * - Analyse:      Analytics & reporting — financials, KPIs, impact
  * - System:       Configuration
  */
+// NOTE: a few group `id`s do not match their display `label` for historical
+// reasons — the labels were revised without renaming the keys. In particular:
+//   id 'angebot' → label 'Betrieb'   ·   id 'betrieb' → label 'Organisation'
+// The `label` is what users see and is authoritative; the `id` is just an
+// internal key (used in section `sidebarGroup` assignments + AdminSidebar). Match
+// on `id` when wiring, not on the German word.
 export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
   uebersicht: {
     id: 'uebersicht',

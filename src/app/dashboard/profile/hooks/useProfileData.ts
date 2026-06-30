@@ -39,15 +39,6 @@ export interface ProfileData {
   expertise_areas?: string[]
   website?: string
   service_radius_km?: number
-  availability?: {
-    monday?: { start: string; end: string; available: boolean }
-    tuesday?: { start: string; end: string; available: boolean }
-    wednesday?: { start: string; end: string; available: boolean }
-    thursday?: { start: string; end: string; available: boolean }
-    friday?: { start: string; end: string; available: boolean }
-    saturday?: { start: string; end: string; available: boolean }
-    sunday?: { start: string; end: string; available: boolean }
-  }
 }
 
 const DEFAULT_PROFILE: ProfileData = {
@@ -78,15 +69,6 @@ const DEFAULT_PROFILE: ProfileData = {
   expertise_areas: [],
   website: '',
   service_radius_km: 50,
-  availability: {
-    monday: { start: '09:00', end: '17:00', available: true },
-    tuesday: { start: '09:00', end: '17:00', available: true },
-    wednesday: { start: '09:00', end: '17:00', available: true },
-    thursday: { start: '09:00', end: '17:00', available: true },
-    friday: { start: '09:00', end: '17:00', available: true },
-    saturday: { start: '09:00', end: '17:00', available: false },
-    sunday: { start: '09:00', end: '17:00', available: false },
-  },
 }
 
 export function useProfileData() {
