@@ -153,6 +153,7 @@ export function TimecardsClient({
             focusedDate={tc.draft.selectedDate}
             selectedDates={tc.selectedDates}
             onDaySelect={tc.handleDaySelect}
+            onWeekdaySelect={tc.selectWeekday}
             onClearSelected={tc.clearSelectedEntries}
             onDayContextMenu={openDayMenu}
           />

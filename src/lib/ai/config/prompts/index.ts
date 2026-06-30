@@ -59,6 +59,50 @@ export interface FormAIConfig {
  * Adding AI to a new form = add entry here + drop AIFormAssist in the component.
  */
 export const FORM_AI_REGISTRY: Record<string, FormAIConfig> = {
+  team: {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für die Erfassung von Team-Mitglieder-Profilen bei RevampIT.
+Aus einer kurzen Beschreibung strukturierst du das Profil einer/eines Mitarbeitenden
+oder Freiwilligen — Rolle, Fähigkeiten, Interessen, Stärken und Entwicklungsziele.
+
+WICHTIG — Datenschutz: Du erfasst NUR beschreibende Profilfelder. Du generierst
+NIEMALS Lohn, AHV-Nummer, Steuer-Code, Daten oder HR-Notizen — diese Felder
+existieren in deinem Antwortschema bewusst nicht.`,
+    extract: `Eine Teamleitung beschreibt ein Team-Mitglied.
+Aus der folgenden Beschreibung, strukturiere das Profil:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON (lass Felder weg, die nicht genannt werden):
+{
+  "position": "Funktion/Rolle im Team",
+  "skills": ["Fähigkeit 1", "Fähigkeit 2"],
+  "interests": ["Interesse 1", "Interesse 2"],
+  "strengths": "Stärken (1-3 Sätze)",
+  "goals": "Lernziele / Entwicklungsziele (1-3 Sätze)",
+  "development_areas": "Entwicklungsfelder (1-2 Sätze)",
+  "availability": "Verfügbarkeit in Worten (z.B. Mo/Mi nachmittags)",
+  "working_hours": "Bevorzugte Arbeitszeiten"
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß).`,
+    schema: null,
+    refine: `Verbessere das folgende Team-Profil gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+    quickActions: {
+      strengths: { label: 'Stärken ausformulieren', prompt: 'Formuliere die Stärken klar und wertschätzend aus.' },
+      goals: { label: 'Lernziele vorschlagen', prompt: 'Schlage 2-3 sinnvolle Entwicklungsziele vor.' },
+    },
+    auth: 'staff',
+  },
   'erfassung': {
     system: ERFASSUNG_PROMPTS.system,
     extract: ERFASSUNG_PROMPTS.extract,

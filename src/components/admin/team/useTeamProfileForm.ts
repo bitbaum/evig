@@ -163,6 +163,22 @@ export function useTeamProfileForm({
     clearError()
   }
 
+  // AI form-fill (SSOT: <AIFormAssist formType="team">). Whitelist ONLY the
+  // narrative/talent fields — compensation, AHV, tax, dates and HR notes are
+  // never AI-populated (and aren't in the 'team' registry schema either).
+  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
+    const setStr = (field: keyof TeamProfileFormState) => {
+      const v = data[field]
+      if (typeof v === 'string' && v.trim()) handleChange(field, v.trim())
+    }
+    const setArr = (field: keyof TeamProfileFormState) => {
+      const v = data[field]
+      if (Array.isArray(v)) handleChange(field, v.map(String).map(s => s.trim()).filter(Boolean))
+    }
+    ;(['position', 'goals', 'strengths', 'development_areas', 'availability', 'working_hours'] as const).forEach(setStr)
+    ;(['skills', 'interests'] as const).forEach(setArr)
+  }
+
   const addSkill = (skill: string) => {
     const trimmed = skill.trim()
     if (trimmed && !form.skills.includes(trimmed)) {
@@ -251,6 +267,7 @@ export function useTeamProfileForm({
     setShowSkillSuggestions,
     toggleSection,
     handleChange,
+    handleAIFieldsFilled,
     addSkill,
     removeSkill,
     addInterest,

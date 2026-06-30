@@ -34,6 +34,7 @@ export function TimecardMonthGrid({
   focusedDate,
   selectedDates,
   onDaySelect,
+  onWeekdaySelect,
   onClearSelected,
   onDayContextMenu,
 }: {
@@ -41,24 +42,29 @@ export function TimecardMonthGrid({
   entries: TimecardEntryInput[]
   focusedDate: string
   selectedDates: string[]
-  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range') => void
+  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range' | 'add') => void
+  onWeekdaySelect?: (weekday: number, additive: boolean) => void
   onClearSelected: () => void
   onDayContextMenu?: (date: string, pos: { x: number; y: number }) => void
 }) {
   const selected = new Set(selectedDates)
 
-  // Drag-to-select. `dragging` enables mouseenter range-extension; `dragged`
-  // remembers a drag happened so the trailing click (which fires on mouseup)
-  // doesn't collapse the range back to a single day.
+  // Drag-to-select (paint). `dragging` = a day-cell drag is in progress (each
+  // entered cell is painted into the selection); `headerDragging` = a weekday
+  // header drag (each entered column is added). `dragged` remembers a drag
+  // happened so the trailing click doesn't collapse it back to one day.
   const [dragging, setDragging] = useState(false)
+  const [headerDragging, setHeaderDragging] = useState(false)
   const dragged = useRef(false)
 
   useEffect(() => {
-    if (!dragging) return
-    const stop = () => setDragging(false)
+    const stop = () => {
+      setDragging(false)
+      setHeaderDragging(false)
+    }
     window.addEventListener('mouseup', stop)
     return () => window.removeEventListener('mouseup', stop)
-  }, [dragging])
+  }, [])
 
   // Weekday-aligned calendar: blanks pad the first row so the 1st lands under
   // its weekday (Mon-first). A real month reads in ~6 rows — no endless scroll.
@@ -80,17 +86,34 @@ export function TimecardMonthGrid({
       className="select-none rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40"
     >
       <div className="mb-1 grid grid-cols-7 gap-1 sm:gap-1.5">
-        {WEEKDAY_LABELS.map((w, i) => (
-          <div
-            key={w}
-            className={cn(
-              'py-1 text-center font-mono text-[0.6rem] uppercase tracking-wide sm:text-xs',
-              i >= 5 ? 'text-text-tertiary' : 'text-text-secondary',
-            )}
-          >
-            {w}
-          </div>
-        ))}
+        {WEEKDAY_LABELS.map((w, i) => {
+          // WEEKDAY_LABELS is Mon-first; map to JS getUTCDay (Sun=0…Sat=6).
+          const weekday = i === 6 ? 0 : i + 1
+          return (
+            <Button
+              key={w}
+              type="button"
+              variant="ghost"
+              title={`Alle ${w} auswählen — ziehen für mehrere Spalten`}
+              onMouseDown={e => {
+                if (e.button !== 0 || !onWeekdaySelect) return
+                e.preventDefault()
+                setHeaderDragging(true)
+                onWeekdaySelect(weekday, false)
+              }}
+              onMouseEnter={() => {
+                if (headerDragging && onWeekdaySelect) onWeekdaySelect(weekday, true)
+              }}
+              className={cn(
+                'h-auto w-full rounded-sm bg-transparent px-0 py-1 text-center font-mono text-[0.6rem] uppercase tracking-wide transition-colors sm:text-xs',
+                onWeekdaySelect && 'cursor-pointer hover:bg-action-muted hover:text-action',
+                i >= 5 ? 'text-text-tertiary' : 'text-text-secondary',
+              )}
+            >
+              {w}
+            </Button>
+          )
+        })}
       </div>
 
       <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
@@ -125,7 +148,9 @@ export function TimecardMonthGrid({
               onMouseEnter={() => {
                 if (!dragging) return
                 dragged.current = true
-                onDaySelect(date, 'range')
+                // Paint: add exactly the cells the cursor passes over (drag down
+                // a column → that weekday's days; across a row → that week).
+                onDaySelect(date, 'add')
               }}
               onClick={e => {
                 // Swallow the click that ends a drag so it doesn't reset to one day.

@@ -26,6 +26,7 @@ import {
 } from 'lucide-react'
 import type { TeamProfileFormProps } from './types'
 import { useTeamProfileForm } from './useTeamProfileForm'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { TeamBasicInfoSection } from './TeamBasicInfoSection'
 import { TeamTalentSection } from './TeamTalentSection'
 import { TeamAvailabilitySection } from './TeamAvailabilitySection'
@@ -74,6 +75,7 @@ export function TeamProfileForm({
     setShowSkillSuggestions,
     toggleSection,
     handleChange,
+    handleAIFieldsFilled,
     addSkill,
     removeSkill,
     addInterest,
@@ -111,6 +113,14 @@ export function TeamProfileForm({
           {error}
         </div>
       )}
+
+      {/* AI Assistant — fills narrative/talent fields only (no salary/AHV/HR) */}
+      <AIFormAssist
+        formType="team"
+        placeholder="Beschreibe die Person: Rolle, Fähigkeiten, Interessen, Stärken, Ziele..."
+        onFieldsFilled={handleAIFieldsFilled}
+        currentData={form as unknown as Record<string, unknown>}
+      />
 
       {/* User Selection (only for new profiles) */}
       {!isEdit && users && (

@@ -228,12 +228,17 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
   const [anchorDate, setAnchorDate] = useState<string | null>(null)
 
   const handleDaySelect = useCallback(
-    (date: string, mode: 'single' | 'toggle' | 'range') => {
+    (date: string, mode: 'single' | 'toggle' | 'range' | 'add') => {
       updateCurrentDraft(current => ({ ...current, selectedDate: date }))
       if (mode === 'toggle') {
         setSelectedDates(prev =>
           prev.includes(date) ? prev.filter(d => d !== date) : [...prev, date],
         )
+        setAnchorDate(date)
+      } else if (mode === 'add') {
+        // Paint: add each day the drag passes over (dragging down a column
+        // paints that weekday's days, across a row paints that week's days).
+        setSelectedDates(prev => (prev.includes(date) ? prev : [...prev, date]))
         setAnchorDate(date)
       } else if (mode === 'range' && anchorDate) {
         const a = monthDates.indexOf(anchorDate)
@@ -257,6 +262,18 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     setSelectedDates([])
     setAnchorDate(null)
   }, [])
+
+  /** Select every occurrence of one weekday (0=Sun…6=Sat) in the month — the
+   *  entry point for clicking a weekday column header ("all Mondays"). With
+   *  `additive`, merges into the current selection (dragging across headers). */
+  const selectWeekday = useCallback((weekday: number, additive = false) => {
+    const days = monthDates.filter(
+      date => new Date(`${date}T00:00:00.000Z`).getUTCDay() === weekday,
+    )
+    if (days.length === 0) return
+    setSelectedDates(prev => (additive ? Array.from(new Set([...prev, ...days])) : days))
+    setAnchorDate(days[0])
+  }, [monthDates])
 
   const selectAllWeekdays = useCallback(() => {
     const weekdays = monthDates.filter(date => {
@@ -712,6 +729,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     // multi-select + bulk
     selectedDates,
     handleDaySelect,
+    selectWeekday,
     clearSelection,
     clearSelectedEntries,
     selectAllWeekdays,
