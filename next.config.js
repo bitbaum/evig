@@ -3,6 +3,11 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Move the dev-only build/error indicator out of the bottom-left default, where
+  // it sits on top of the mobile bottom nav. (Dev only — never shipped to prod.)
+  devIndicators: {
+    position: 'top-left',
+  },
   // next-auth v5 beta ships as ESM with an internal circular dependency that leaves
   // React = null inside webpack's static-generation workers. Forcing transpilation
   // makes webpack process it as CJS in the same pass as the app, which resolves the
