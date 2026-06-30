@@ -53,6 +53,19 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         run: npm ci
 
+      # Persist Next.js's incremental compiler cache across runs. The build runs
+      # on this ephemeral runner, so without this every build is COLD (full
+      # recompile). restore-keys falls back to the latest cache for the same
+      # lockfile, making subsequent builds incremental (warm).
+      - name: Cache Next.js build
+        if: steps.secrets.outputs.configured == 'true'
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+
       - name: Run ESLint
         if: steps.secrets.outputs.configured == 'true'
         run: npm run lint

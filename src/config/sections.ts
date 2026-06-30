@@ -621,7 +621,9 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '🪛',
       color: 'warning',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    // Hidden from the sidebar: folded into the single "Freigaben" page as the
+    // "Techniker" tab. Route stays reachable via that tab.
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 100.8,
     category: 'management',
     sidebarGroup: 'angebot',

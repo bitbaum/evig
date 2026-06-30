@@ -1,8 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
-import { XCircle, FileText, ArrowLeft } from 'lucide-react'
+import { XCircle, FileText } from 'lucide-react'
 import {
   useRepairerApplications,
   ApplicationFilters,
@@ -15,10 +14,10 @@ import {
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
 
 export default function RepairerApplicationsAdmin() {
   const t = useTranslations('admin.repairer-applications')
-  const router = useRouter()
   const {
     applications,
     loading,
@@ -67,19 +66,9 @@ export default function RepairerApplicationsAdmin() {
 
   return (
     <div className="space-y-6">
+      <ApprovalTabs />
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push('/admin')}
-            className="flex items-center gap-2 text-text-secondary hover:text-text-primary"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Zurück zum Admin-Bereich
-          </Button>
-        </div>
         <Heading level={1} className="text-2xl font-bold text-text-primary">{t('pageTitle')}</Heading>
       </div>
 
