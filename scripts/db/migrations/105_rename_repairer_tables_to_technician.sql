@@ -14,6 +14,13 @@
 --
 -- Application references go through TABLE_NAMES (config) + Drizzle pgTable() names,
 -- both updated in lockstep with this migration. Idempotent via IF EXISTS guards.
+--
+-- An empty orphan `technician_profiles` stub exists on prod (created by
+-- 002b-simplified-auth, never adopted — the live data is in repairer_profiles).
+-- It has 0 rows and no inbound FKs, and it blocks the rename below, so drop it
+-- first. (Root cause of this migration's first deploy failing with
+-- "relation technician_profiles already exists".)
+DROP TABLE IF EXISTS technician_profiles;
 
 ALTER TABLE IF EXISTS repairer_profiles     RENAME TO technician_profiles;
 ALTER TABLE IF EXISTS repairer_services     RENAME TO technician_services;
