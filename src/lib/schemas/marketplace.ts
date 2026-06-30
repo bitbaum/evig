@@ -127,10 +127,12 @@ export const UpdateListingSchema = z.object({
   condition: z.enum(LISTING_CONDITIONS as unknown as [string, ...string[]]).optional(),
   brand: z.string().max(100).optional().nullable(),
   model: z.string().max(100).optional().nullable(),
+  // No .min(1): create allows image-less listings (images defaults to []), so
+  // edit must too — otherwise an image-less listing can never be saved.
   images: z.array(z.string().refine(
     (s) => s.startsWith('/uploads/') || s.startsWith('http://') || s.startsWith('https://'),
     'Ungültige Bild-URL',
-  )).min(1).max(MARKETPLACE_LIMITS.MAX_IMAGES).optional(),
+  )).max(MARKETPLACE_LIMITS.MAX_IMAGES).optional(),
   delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).optional(),
   shipping_cost_chf: z.number().min(0).optional().nullable(),
   pickup_location: z.string().max(200).optional().nullable(),

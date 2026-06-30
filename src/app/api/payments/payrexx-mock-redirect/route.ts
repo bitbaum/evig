@@ -37,8 +37,21 @@ export async function GET(request: NextRequest) {
     ? rawCurrency.toUpperCase()
     : 'CHF';
   const amountFormatted = (Number(rawAmount) / 100).toFixed(2);
-  const successUrl = sanitizeReturnTo(searchParams.get('successUrl'), '/');
-  const cancelUrl = sanitizeReturnTo(searchParams.get('cancelUrl'), '/');
+  // The checkout passes ABSOLUTE same-origin success/cancel URLs (that's what the
+  // real Payrexx gateway needs). sanitizeReturnTo only accepts relative paths, so
+  // reduce a same-origin absolute URL to pathname+search first; cross-origin URLs
+  // resolve to null and fall back (open-redirect protection preserved).
+  const toSameOriginPath = (raw: string | null): string | null => {
+    if (!raw) return null;
+    try {
+      const u = new URL(raw, APP_URL);
+      return u.origin === new URL(APP_URL).origin ? u.pathname + u.search : null;
+    } catch {
+      return null;
+    }
+  };
+  const successUrl = sanitizeReturnTo(toSameOriginPath(searchParams.get('successUrl')), '/');
+  const cancelUrl = sanitizeReturnTo(toSameOriginPath(searchParams.get('cancelUrl')), '/');
 
   const webhookUrl = `${APP_URL}/api/payments/payrexx-webhook`;
 
@@ -82,6 +95,10 @@ export async function GET(request: NextRequest) {
     const successUrl = ${JSON.stringify(successUrl)};
     const cancelUrl = ${JSON.stringify(cancelUrl)};
     const referenceId = ${JSON.stringify(referenceIdRaw)};
+    // amount (smallest unit) + currency must be echoed so the webhook's
+    // amount-verification accepts the payment — real Payrexx sends these.
+    const txAmount = ${Number(rawAmount) || 0};
+    const txCurrency = ${JSON.stringify(currency)};
 
     async function handlePay() {
       const btn = document.getElementById('payBtn');
@@ -99,6 +116,8 @@ export async function GET(request: NextRequest) {
               id: mockTxId,
               status: ${JSON.stringify(PAYREXX_TRANSACTION_STATUS.RESERVED)},
               referenceId: referenceId,
+              amount: txAmount,
+              currency: txCurrency,
             },
           }),
         });

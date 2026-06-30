@@ -20,7 +20,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { ListingImage } from '@/components/marketplace/ListingImage'
-import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marketplace'
+import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF, getCategoryLabel } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { useMyListings } from '@/hooks/useMyListings'
@@ -185,7 +185,7 @@ export default function MyListingsPage() {
                       <span className="font-semibold text-text-primary">
                         {formatCHF(Number(listing.price_chf))}
                       </span>
-                      <span>{listing.category}</span>
+                      <span>{getCategoryLabel(listing.category)}</span>
                       <span className={`inline-flex rounded-sm px-1.5 py-0.5 ${conditionInfo.color}`}>
                         {conditionInfo.label}
                       </span>
