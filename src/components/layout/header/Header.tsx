@@ -128,9 +128,11 @@ export function Header() {
               <Logo className="h-10" />
             </div>
 
-            {/* Primary Navigation - Desktop */}
-            <div className="hidden lg:flex items-center justify-center flex-1 px-2 xl:px-6">
-              <div className="flex items-center gap-0.5 xl:gap-1">
+            {/* Primary Navigation — inline only at xl+, where the full nav + right
+                actions provably fit (≤1279px they overflow and clip the bell/avatar,
+                so below xl the hamburger menu is used instead). */}
+            <div className="hidden xl:flex items-center justify-center flex-1 min-w-0 px-6">
+              <div className="flex items-center gap-1">
                 {primaryNavItems.map((item) => (
                   <NavItem
                     key={item.name}
@@ -142,10 +144,9 @@ export function Header() {
               </div>
             </div>
 
-            {/* Right Side Actions - Desktop. Kept compact so the full nav + actions
-                fit common laptop widths (≤1440px) without clipping — Kontakt lives
-                in the nav + footer, so it's not duplicated here. */}
-            <div className="hidden lg:flex items-center gap-2">
+            {/* Right Side Actions — desktop (xl+). shrink-0 so the account actions
+                (bell, avatar / login) can never be clipped by the nav. */}
+            <div className="hidden xl:flex shrink-0 items-center gap-2">
               {/* Command palette trigger (logged-in users) */}
               <CommandPaletteTrigger />
 
@@ -162,8 +163,9 @@ export function Header() {
               <UserMenu />
             </div>
 
-            {/* Mobile Right Side - Auth + Menu */}
-            <div className="lg:hidden flex items-center gap-1.5">
+            {/* Compact Right Side — phones, tablets and laptops below xl. Account
+                actions (bell + avatar / login) stay visible; full nav is in the menu. */}
+            <div className="xl:hidden flex shrink-0 items-center gap-1.5">
               <CommandPaletteTrigger />
               <UserMenu />
               {/* Mobile Menu Button */}
