@@ -258,6 +258,35 @@ export function TimecardsClient({
         onClose={() => setMenuPos(null)}
         header={t('bulkSelected', { count: menuCount })}
       />
+
+      {/* Sticky action bar — keeps Save/Einreichen one tap away right after
+          filling (the fill + leave controls sit mid-page; without this the user
+          had to scroll back up to the header to submit). */}
+      <div className="sticky bottom-0 z-20 -mx-1 flex items-center justify-between gap-3 border-t border-subtle bg-surface-base/95 px-1 py-3 backdrop-blur-sm">
+        <p className="text-sm text-text-tertiary">
+          {tc.periodEntries.length} {t('headerDaysSuffix')} · {formatTimecardDuration(tc.totalMinutes)}
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={tc.saveDraft}
+            disabled={tc.isSaving || tc.isLoadingDraft}
+          >
+            {tc.isSaving ? t('saving') : t('save')}
+          </Button>
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            onClick={tc.submitDraft}
+            disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft}
+          >
+            {tc.isSubmitting ? t('submitting') : tc.draft.status === 'submitted' ? t('resubmit') : t('submit')}
+          </Button>
+        </div>
+      </div>
     </article>
   )
 }
