@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils'
 
 // Skip SSR — both use useSession which requires SessionProvider (lazy-loaded client-side only)
 const UserMenu = dynamic(() => import('@/components/auth/UserMenu').then(m => ({ default: m.UserMenu })), { ssr: false })
+const UserCommandPalette = dynamic(() => import('@/components/search/UserCommandPalette').then(m => ({ default: m.UserCommandPalette })), { ssr: false })
 const MobileMenu = dynamic(() => import('../MobileMenu').then(m => ({ default: m.MobileMenu })), { ssr: false })
 import { mainNavigation } from '@/config/navigation'
 import { NavItem } from './NavItem'
@@ -157,6 +158,9 @@ export function Header() {
                   {contactItem.nameKey ? tNav(contactItem.nameKey as never) : contactItem.name}
                 </Link>
               )}
+
+              {/* Command palette (logged-in users) */}
+              <UserCommandPalette />
 
               {/* Locale Switcher */}
               <LocaleSwitcher />

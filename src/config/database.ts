@@ -154,6 +154,7 @@ export const TABLE_NAMES = {
   LISTING_FAVORITES: 'listing_favorites',
   LISTING_REPORTS: 'listing_reports',
   MARKETPLACE_ORDERS: 'marketplace_orders',
+  MARKETPLACE_ORDER_ITEMS: 'marketplace_order_items',
 
   // Organizational Numbers (shared SSOT)
   ORG_NUMBERS: 'org_numbers',
