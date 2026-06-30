@@ -18,6 +18,8 @@ import { auth } from '@/auth'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { canAccessSection } from '@/lib/permissions'
 import { TimecardApprovalsClient } from '@/components/admin/timecards/TimecardApprovalsClient'
+import { TimeOffApprovals } from '@/components/admin/timecards/TimeOffApprovals'
+import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
 
 export const metadata: Metadata = {
   title: 'Freigaben · Zeitkarten',
@@ -44,12 +46,15 @@ export default async function TimecardApprovalsPage() {
   return (
     <AdminPageWrapper
       title="Freigaben"
-      description="Eingereichte Zeitkarten in Bulk prüfen und genehmigen."
+      description="Eingereichte Zeitkarten und Abwesenheiten prüfen und genehmigen."
       icon={CheckSquare}
       iconColor="green"
-      backButton={{ href: '/admin/team', label: 'Team' }}
     >
+      <ApprovalTabs />
       <TimecardApprovalsClient />
+      <div className="mt-10 border-t border-subtle pt-8">
+        <TimeOffApprovals />
+      </div>
     </AdminPageWrapper>
   )
 }

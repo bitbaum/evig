@@ -17,6 +17,7 @@ import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE, SUBMISSION_CONTENT_TYPE_LABEL
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
+import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Link from 'next/link'
@@ -246,6 +247,7 @@ export default async function ApprovalsPage() {
       icon={CheckSquare}
       iconColor="orange"
     >
+      <ApprovalTabs />
       {/* Hero status — surfaces the actual headline + actionable list below */}
       <ApprovalsHero
         pending={totalPendingAllSources}

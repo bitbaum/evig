@@ -930,7 +930,9 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '⏱️',
       color: 'info',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    // Hidden from the sidebar: this route now redirects to the single
+    // own-timecard editor at /dashboard/timecards ("Meine Zeiterfassung").
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 202,
     category: 'management',
     sidebarGroup: 'teamhr',
@@ -946,7 +948,9 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '✅',
       color: 'success',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    // Hidden from the sidebar: folded into the single "Freigaben" page as a tab
+    // (Zeitkarten & Abwesenheit). Route stays reachable via that tab.
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 2,
     category: 'management',
     sidebarGroup: 'uebersicht',
