@@ -16,11 +16,12 @@ import { HourRangePicker } from './HourRangePicker'
 import { TimecardActions } from './TimecardActions'
 
 /**
- * Day view — fine edits for ONE day. Mirrors the month surface exactly: the
- * SAME action set (TimecardActions: fill from plan / structured absences /
- * clear) sits at the top, scoped to this day. Below it, the HourRangePicker
- * (the day-level counterpart to the calendar) is the star for work days;
- * absence days show their label. Category + note round it out.
+ * Day view — fine edits for ONE day. Mirrors the month surface: same open
+ * framing (no card chrome — an open surface like the month grid) and the SAME
+ * action set (TimecardActions: fill from plan / structured absences / clear)
+ * at the top, scoped to this day. Below it, the HourRangePicker (the day-level
+ * counterpart to the calendar grid — same useCellSelection model) is the star
+ * for work days; absence days show their label. Category + note round it out.
  *
  * The date itself lives in the view's nav bar, so it is NOT repeated here.
  */
@@ -44,7 +45,7 @@ export function TimecardDayEditor({
   const isAbsence = hasEntry && isAbsenceCategory(selectedEntry.category)
 
   return (
-    <section className="space-y-5 rounded-lg border border-subtle bg-surface-base p-5">
+    <section className="space-y-5">
       <div className="flex items-baseline justify-between gap-3">
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {hasEntry

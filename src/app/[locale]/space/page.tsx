@@ -116,7 +116,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
               </p>
             </div>
             <div className="md:justify-self-end">
-              <Button as={Link} href="/contact" variant="outline">
+              <Button href="/contact" variant="outline">
                 {t('currentLocation.moreBtn')} <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
@@ -183,7 +183,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
 
             <div className="mt-6 text-center">
               <p className="text-text-secondary mb-4">{t('future.params.knowSpace')}</p>
-              <Button as={Link} href="/contact" variant="primary">{t('future.params.contactBtn')}</Button>
+              <Button href="/contact" variant="primary">{t('future.params.contactBtn')}</Button>
             </div>
           </div>
         </div>

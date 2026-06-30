@@ -95,7 +95,6 @@ export function TimecardsClient({
         isLoadingDraft={tc.isLoadingDraft}
         errorMessage={tc.errorMessage}
         syncMessage={tc.syncMessage}
-        onFillMonth={tc.fillMonthFromSchedule}
         onSubmit={tc.submitDraft}
         onSave={tc.saveDraft}
       />
@@ -133,10 +132,25 @@ export function TimecardsClient({
 
       {view === 'month' ? (
         <>
-          {/* Quick select entry points — pick a whole batch, then one bulk
-              action ("Alle auswählen" → "Leeren" empties the month). */}
+          {/* Quick select. The 95% case — "fill the whole month from my plan" —
+              leads as the prominent primary action; the two selection helpers
+              ("Ganzer Monat" / "Alle Werktage") follow as quiet ghosts for the
+              batch-then-bulk-bar path. One fill entry point lives here (not the
+              header) so there's a single, obvious place to act. */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={tc.fillMonthFromSchedule}
+              disabled={tc.isLoadingDraft || tc.isSubmitting}
+              title={t('fillMonthHint')}
+              className="gap-1.5"
+            >
+              <CalendarCheck className="h-4 w-4" aria-hidden="true" />
+              {t('fillMonth')}
+            </Button>
+            <span className="ml-1 font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
               {t('selectLabel')}
             </span>
             <Button type="button" variant="ghost" size="sm" onClick={tc.selectAll} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
