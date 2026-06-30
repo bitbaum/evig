@@ -126,7 +126,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         purpose: `${ORG.name}: ${itemCount} Artikel`,
         successRedirectUrl: `${APP_URL}/marketplace/checkout/success?orderId=${orderId}`,
         failedRedirectUrl: `${APP_URL}/marketplace/cart?error=payment_failed`,
-        cancelRedirectUrl: `${APP_URL}/marketplace/cart?error=cancelled`,
+        cancelRedirectUrl: `${APP_URL}/marketplace/cart?error=payment_cancelled`,
       })
     } catch (gatewayError) {
       // Rollback: delete order (items cascade) + restore listings to ACTIVE.
