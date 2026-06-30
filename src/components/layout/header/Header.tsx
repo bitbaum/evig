@@ -122,16 +122,17 @@ export function Header() {
         )}
       >
         <div className="max-w-7xl mx-auto">
-          <nav className="flex items-center justify-between h-16 px-3 sm:px-6 lg:px-8">
+          <nav className="flex items-center justify-between gap-6 h-16 px-3 sm:px-6 lg:px-8">
             {/* Logo */}
             <div className="shrink-0">
               <Logo className="h-10" />
             </div>
 
-            {/* Primary Navigation — inline only at xl+, where the full nav + right
-                actions provably fit (≤1279px they overflow and clip the bell/avatar,
-                so below xl the hamburger menu is used instead). */}
-            <div className="hidden xl:flex items-center justify-center flex-1 min-w-0 px-6">
+            {/* Primary Navigation — inline only at xl+ (below xl the hamburger menu
+                is used). Content-width + the nav's gap-6/justify-between keep clean
+                space from the logo and actions — NOT flex-1, which made the items
+                overflow and collide with the logo. */}
+            <div className="hidden xl:flex items-center">
               <div className="flex items-center gap-1">
                 {primaryNavItems.map((item) => (
                   <NavItem
@@ -146,7 +147,7 @@ export function Header() {
 
             {/* Right Side Actions — desktop (xl+). shrink-0 so the account actions
                 (bell, avatar / login) can never be clipped by the nav. */}
-            <div className="hidden xl:flex shrink-0 items-center gap-2">
+            <div className="hidden xl:flex shrink-0 items-center gap-2 ml-auto">
               {/* Command palette trigger (logged-in users) */}
               <CommandPaletteTrigger />
 
@@ -165,7 +166,7 @@ export function Header() {
 
             {/* Compact Right Side — phones, tablets and laptops below xl. Account
                 actions (bell + avatar / login) stay visible; full nav is in the menu. */}
-            <div className="xl:hidden flex shrink-0 items-center gap-1.5">
+            <div className="xl:hidden flex shrink-0 items-center gap-1.5 ml-auto">
               <CommandPaletteTrigger />
               <UserMenu />
               {/* Mobile Menu Button */}
