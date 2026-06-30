@@ -45,6 +45,7 @@ const mockSelect = jest.fn()
 const mockFrom = jest.fn()
 const mockInnerJoin = jest.fn()
 const mockWhere = jest.fn()
+const mockLimit = jest.fn()
 const mockOrderBy = jest.fn()
 const mockInsert = jest.fn()
 const mockValues = jest.fn()
@@ -229,8 +230,9 @@ describe('POST /api/admin/team/profiles — validation', () => {
 
   it('returns 400 when profile already exists', async () => {
     mockWhere
-      .mockResolvedValueOnce([{ id: 'u-1' }])          // user lookup: found
-      .mockResolvedValueOnce([{ id: 'prof-existing' }]) // profile check: exists
+      .mockResolvedValueOnce([{ id: 'u-1' }])      // user lookup: found (awaited directly)
+      .mockReturnValueOnce({ limit: mockLimit })   // profile check: select().from().where().limit(1)
+    mockLimit.mockResolvedValueOnce([{ id: 'prof-existing' }]) // profile exists
     const response = await POST(makeRequest('POST', VALID_POST_BODY))
     expect(response.status).toBe(400)
   })
@@ -239,8 +241,9 @@ describe('POST /api/admin/team/profiles — validation', () => {
 describe('POST /api/admin/team/profiles — success', () => {
   it('returns 201 on success', async () => {
     mockWhere
-      .mockResolvedValueOnce([{ id: 'u-1' }])  // user lookup: found
-      .mockResolvedValueOnce([])                 // profile check: no existing
+      .mockResolvedValueOnce([{ id: 'u-1' }])      // user lookup: found (awaited directly)
+      .mockReturnValueOnce({ limit: mockLimit })   // profile check: select().from().where().limit(1)
+    mockLimit.mockResolvedValueOnce([])            // no existing profile
     const response = await POST(makeRequest('POST', VALID_POST_BODY))
     expect(response.status).toBe(201)
     const body = await response.json()

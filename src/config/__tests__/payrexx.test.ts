@@ -44,25 +44,33 @@ describe('isPayrexxConfigured', () => {
 })
 
 describe('isPayrexxCheckoutUnavailable', () => {
-  const env = process.env as Record<string, string | undefined>
-  const originalNodeEnv = env.NODE_ENV
+  // NOTE: the top-level beforeEach reassigns `process.env` to a fresh object
+  // before every test. Capturing `const env = process.env` here (at collection
+  // time) would freeze a stale reference to the ORIGINAL object, so writes to
+  // it never reach the copy the code under test reads — write to the live
+  // `process.env` via this helper instead. The cast is needed because Node's
+  // types declare NODE_ENV read-only.
+  const setNodeEnv = (value: string | undefined) => {
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = value
+  }
+  const originalNodeEnv = process.env.NODE_ENV
 
   afterEach(() => {
-    env.NODE_ENV = originalNodeEnv
+    setNodeEnv(originalNodeEnv)
   })
 
   it('is false in non-production even without credentials', () => {
-    env.NODE_ENV = 'development'
+    setNodeEnv('development')
     expect(isPayrexxCheckoutUnavailable()).toBe(false)
   })
 
   it('is true in production without credentials', () => {
-    env.NODE_ENV = 'production'
+    setNodeEnv('production')
     expect(isPayrexxCheckoutUnavailable()).toBe(true)
   })
 
   it('is false in production when configured', () => {
-    env.NODE_ENV = 'production'
+    setNodeEnv('production')
     process.env[PAYREXX_ENV.INSTANCE] = 'demo'
     process.env[PAYREXX_ENV.API_SECRET] = 'secret'
     expect(isPayrexxCheckoutUnavailable()).toBe(false)

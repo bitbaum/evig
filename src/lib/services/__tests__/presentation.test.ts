@@ -9,8 +9,13 @@
  *
  * Behaviors locked:
  *   getServicePresentation
- *   - returns specific config for known slugs (computer-repair-upgrades, data-recovery-transfer, etc.)
- *   - falls back to defaultPresentation for unknown slug
+ *   - returns specific config for the template/booking slugs that have a
+ *     servicePresentation entry (computer-repair-upgrades, data-recovery-transfer, custom-build)
+ *   - falls back to defaultPresentation for unknown slugs AND for bespoke
+ *     services that render via their own static page (hardware-recycling,
+ *     linux-open-source, web-design-development, consultation) — these were
+ *     intentionally removed from servicePresentation in the dedupe refactor
+ *     (5d131dc9) and must NOT be reintroduced.
  *   - returned object contains icon, hero, and features
  *
  *   getServicePricing
@@ -72,32 +77,21 @@ describe('getServicePresentation', () => {
     expect(result.hero.title).toContain('Datenrettung')
   })
 
-  it('returns config for hardware-recycling', () => {
-    const result = getServicePresentation('hardware-recycling')
-
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Hardware-Recycling')
-  })
-
-  it('returns config for linux-open-source', () => {
-    const result = getServicePresentation('linux-open-source')
-
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Linux')
-  })
-
-  it('returns config for web-design-development', () => {
-    const result = getServicePresentation('web-design-development')
-
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Webdesign')
-  })
-
-  it('returns config for consultation', () => {
-    const result = getServicePresentation('consultation')
-
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Beratung')
+  it('falls back to defaultPresentation for bespoke static-page services', () => {
+    // hardware-recycling, linux-open-source and web-design-development each
+    // render via a dedicated static page (literal route segments shadow the
+    // [service] dynamic route), and consultation is bookable but not featured.
+    // Their servicePresentation entries were removed in the dedupe refactor
+    // (5d131dc9) because they fed nowhere visible — re-adding them is a
+    // content trap. They must therefore fall back to the default.
+    for (const slug of [
+      'hardware-recycling',
+      'linux-open-source',
+      'web-design-development',
+      'consultation',
+    ]) {
+      expect(getServicePresentation(slug)).toBe(defaultPresentation)
+    }
   })
 
   it('returns config for custom-build', () => {
@@ -179,10 +173,15 @@ describe('getServicePricing', () => {
     expect(result.base).toBe('CHF 50.00')
   })
 
-  it('hardware-recycling override shows "Kostenlos"', () => {
+  it('bespoke service (hardware-recycling) has no override → falls through to formatPriceCents', () => {
+    // hardware-recycling renders via its own static page; its presentation
+    // (and pricingOverride) was removed in the dedupe refactor, so pricing
+    // now falls through to the DB-derived value via formatPriceCents.
+    mockFormatPriceCents.mockReturnValueOnce('Auf Anfrage')
+
     const result = getServicePricing('hardware-recycling', null)
 
-    expect(result.base).toBe('Kostenlos')
-    expect(mockFormatPriceCents).not.toHaveBeenCalled()
+    expect(mockFormatPriceCents).toHaveBeenCalledWith(null)
+    expect(result.base).toBe('Auf Anfrage')
   })
 })

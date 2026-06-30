@@ -27,15 +27,18 @@ const mockUpdateChain = {
   where: jest.fn().mockResolvedValue([]),
 }
 
-// db.transaction mock: provide tx.update returning a happy-path chain, and
-// tx.execute returning status='pending' so the withdraw race-recheck passes.
+// db.transaction mock: the POST route inserts the offer AND bumps offerCount
+// inside one transaction, so tx must expose insert + update (and execute for
+// the withdraw race-recheck). tx.insert delegates to the shared mockInsertChain
+// so individual tests configure the returned offer via
+// mockInsertChain.returning.mockResolvedValueOnce(...).
 // Individual tests can override via jest.requireMock('@/db').db.transaction.
 const mockDbTransaction = jest.fn(async (fn: (tx: unknown) => unknown) => {
   const txUpdate = jest.fn(() => ({
     set: jest.fn(() => ({ where: jest.fn().mockResolvedValue(undefined) })),
   }))
   const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] })
-  return fn({ update: txUpdate, execute: txExecute })
+  return fn({ insert: jest.fn(() => mockInsertChain), update: txUpdate, execute: txExecute })
 })
 
 jest.mock('@/db', () => ({

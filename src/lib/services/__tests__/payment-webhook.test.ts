@@ -33,13 +33,15 @@
  *   - skips when payment transaction is not PENDING
  *   - updates payment transaction to SUCCEEDED
  *   - confirms workshop registration when workshopRegistrationId is set
- *   - confirms service appointment when serviceAppointmentId is set
+ *   - moves service appointment to IN_PROGRESS when serviceAppointmentId is set
+ *     (a paid, quote-approved booking starts the repair — see booking-status.ts)
  *   - does NOT update workshop/appointment when IDs are null
  *
  *   handleGenericPayment — CANCELLED / DECLINED
  *   - updates payment transaction to FAILED
  *   - cancels workshop registration when workshopRegistrationId is set
- *   - cancels service appointment when serviceAppointmentId is set
+ *   - reverts service appointment to QUOTE_APPROVED when serviceAppointmentId is
+ *     set (pre-payment payable state, so the customer can retry — not a dead end)
  *
  *   handleGenericPayment — REFUNDED
  *   - updates payment transaction to REFUNDED
@@ -190,16 +192,10 @@ jest.mock('@/lib/payments/payrexx-client', () => ({
   },
 }))
 
-jest.mock('@/config/appointment-status', () => ({
-  APPOINTMENT_STATUS: {
-    PENDING_APPROVAL: 'pending_approval',
-    REQUESTED: 'requested',
-    CONFIRMED: 'confirmed',
-    IN_PROGRESS: 'in_progress',
-    CANCELLED: 'cancelled',
-    COMPLETED: 'completed',
-  },
-}))
+// NOTE: service appointments follow the BOOKING_STATUS lifecycle
+// (requested → … → quote_approved → in_progress → completed), NOT the legacy
+// APPOINTMENT_STATUS model. The module under test imports @/config/booking-status
+// directly; we use the real (unmocked) config here so assertions track the SSOT.
 
 jest.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
@@ -235,7 +231,7 @@ import { ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client'
 import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
-import { APPOINTMENT_STATUS } from '@/config/appointment-status'
+import { BOOKING_STATUS } from '@/config/booking-status'
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -581,14 +577,14 @@ describe('handleGenericPayment — RESERVED', () => {
     )
   })
 
-  it('confirms service appointment when serviceAppointmentId is set', async () => {
+  it('moves service appointment to IN_PROGRESS when serviceAppointmentId is set', async () => {
     const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, serviceAppointmentId: 'appt-1' })
 
     await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockDbUpdate).toHaveBeenCalledTimes(2)
     expect(mockUpdateSet).toHaveBeenCalledWith(
-      expect.objectContaining({ status: APPOINTMENT_STATUS.CONFIRMED }),
+      expect.objectContaining({ status: BOOKING_STATUS.IN_PROGRESS }),
     )
   })
 
@@ -714,13 +710,13 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     expect(mockDbExecute).not.toHaveBeenCalled()
   })
 
-  it('cancels service appointment when serviceAppointmentId is set', async () => {
+  it('reverts service appointment to QUOTE_APPROVED when serviceAppointmentId is set', async () => {
     const tx = makePaymentTx({ serviceAppointmentId: 'appt-2' })
 
     await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
-      expect.objectContaining({ status: APPOINTMENT_STATUS.CANCELLED }),
+      expect.objectContaining({ status: BOOKING_STATUS.QUOTE_APPROVED }),
     )
   })
 

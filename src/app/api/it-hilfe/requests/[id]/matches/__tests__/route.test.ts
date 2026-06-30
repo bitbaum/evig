@@ -67,6 +67,14 @@ jest.mock('@/lib/it-hilfe/sql', () => ({
   technicianHasSkillMatch: jest.fn().mockReturnValue({ __skillMatch: true }),
 }))
 
+// The route composes its WHERE from publicTechnicianListCondition(), whose
+// internals call drizzle's or()/REPAIRER_STATUS (not part of these unit mocks).
+// Mock it like technicianHasSkillMatch — it returns an opaque SQL fragment the
+// route only feeds into and().
+jest.mock('@/lib/domain/technician-visibility', () => ({
+  publicTechnicianListCondition: jest.fn().mockReturnValue({ __publicVisibility: true }),
+}))
+
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
 const VALID_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
