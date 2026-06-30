@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -51,7 +51,8 @@ export function AdminSidebar({
   const labelFor = (id: string, fallback: string): string => {
     try { return tLabels(id as never) || fallback } catch { return fallback }
   }
-  const groupedSections = getSidebarGroupsWithSections()
+  // Static config — compute once, not every render.
+  const groupedSections = useMemo(() => getSidebarGroupsWithSections(), [])
   const hirnSection = getHirnSection()
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
 
@@ -66,15 +67,16 @@ export function AdminSidebar({
     return group.sections.some(s => isActive(s.path) && accessibleSections.includes(s.id))
   }
 
-  const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(() => {
-    const initial = new Set<SidebarGroupId>(['uebersicht', 'angebot', 'inhalte'])
-    for (const { group } of groupedSections) {
-      if (groupHasActiveItem(group.id)) {
-        initial.add(group.id)
-      }
-    }
-    return initial
-  })
+  // User-controlled open groups (manual toggles). The group containing the
+  // active route is ALWAYS shown open via isGroupOpen() below — derived during
+  // render, so navigating never mutates state (no double-render) nor surprises
+  // the user by re-expanding a group they collapsed.
+  const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(
+    () => new Set<SidebarGroupId>(['uebersicht', 'angebot', 'inhalte']),
+  )
+
+  const isGroupOpen = (groupId: SidebarGroupId) =>
+    expandedGroups.has(groupId) || groupHasActiveItem(groupId)
 
   const toggleGroup = (groupId: SidebarGroupId) => {
     setExpandedGroups(prev => {
@@ -87,18 +89,6 @@ export function AdminSidebar({
       return next
     })
   }
-
-  useEffect(() => {
-    setExpandedGroups(prev => {
-      const next = new Set(prev)
-      for (const { group } of groupedSections) {
-        if (groupHasActiveItem(group.id)) {
-          next.add(group.id)
-        }
-      }
-      return next
-    })
-  }, [pathname, accessibleSections])
 
   return (
     <div
@@ -165,8 +155,8 @@ export function AdminSidebar({
           const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
           if (accessibleGroupSections.length === 0) return null
 
-          const isExpanded = expandedGroups.has(group.id)
           const hasActive = groupHasActiveItem(group.id)
+          const isExpanded = isGroupOpen(group.id)
 
           return (
             <div key={group.id} className="mb-2">
