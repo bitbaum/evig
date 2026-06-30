@@ -30,7 +30,6 @@ import { mainNavigation } from '@/config/navigation'
 import { NavItem } from './NavItem'
 
 export function Header() {
-  const tNav = useTranslations('nav')
   const tAccessibility = useTranslations('accessibility')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [anyDropdownOpen, setAnyDropdownOpen] = useState(false)
@@ -45,7 +44,6 @@ export function Header() {
 
   // Filter navigation - separate main nav from action items
   const primaryNavItems = mainNavigation.filter(item => !item.highlight)
-  const contactItem = mainNavigation.find(item => item.highlight)
 
   // Scroll detection for header styling + smart hide/show.
   // Threshold of 5px on the delta filters out micro-jitter from trackpads
@@ -131,8 +129,8 @@ export function Header() {
             </div>
 
             {/* Primary Navigation - Desktop */}
-            <div className="hidden lg:flex items-center justify-center flex-1 px-8">
-              <div className="flex items-center gap-1">
+            <div className="hidden lg:flex items-center justify-center flex-1 px-2 xl:px-6">
+              <div className="flex items-center gap-0.5 xl:gap-1">
                 {primaryNavItems.map((item) => (
                   <NavItem
                     key={item.name}
@@ -144,22 +142,10 @@ export function Header() {
               </div>
             </div>
 
-            {/* Right Side Actions - Desktop */}
-            <div className="hidden lg:flex items-center gap-3">
-              {/* Contact Link - subtle */}
-              {contactItem && (
-                <Link
-                  href={contactItem.href}
-                  className={cn(
-                    "px-4 py-2 text-sm font-medium text-text-secondary",
-                    "hover:text-text-primary transition-colors duration-200",
-                    "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
-                  )}
-                >
-                  {contactItem.nameKey ? tNav(contactItem.nameKey as never) : contactItem.name}
-                </Link>
-              )}
-
+            {/* Right Side Actions - Desktop. Kept compact so the full nav + actions
+                fit common laptop widths (≤1440px) without clipping — Kontakt lives
+                in the nav + footer, so it's not duplicated here. */}
+            <div className="hidden lg:flex items-center gap-2">
               {/* Command palette trigger (logged-in users) */}
               <CommandPaletteTrigger />
 

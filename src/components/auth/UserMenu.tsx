@@ -67,25 +67,15 @@ export function UserMenu() {
   // CRITICAL: Always show buttons immediately - don't wait for session check
   // Session check happens in background and UI updates when ready
   // This prevents blocking page loads, especially on slow local connections
-  // Show login/register buttons if: loading OR no session
+  // Logged out (or loading): a single compact primary CTA. Registration is
+  // linked from the login page, so one button keeps the header from overflowing
+  // on laptop widths (the full nav + actions are tight at ≤1440px).
   if (status === 'loading' || !session?.user) {
     return (
-      <div className="flex items-center gap-2">
-        <Link
-          href={ROUTES.public.login}
-          className={cn(
-            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-text-secondary dark:text-text-muted",
-            "hover:text-text-primary transition-colors duration-200",
-            "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
-          )}
-        >
-          {t('login')}
-        </Link>
-        <Button as={Link} href={ROUTES.public.register} variant="primary" size="sm">
-          {t('register')}
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Button>
-      </div>
+      <Button href={ROUTES.public.login} variant="primary" size="sm">
+        {t('login')}
+        <ArrowRight className="w-3.5 h-3.5" />
+      </Button>
     )
   }
 
