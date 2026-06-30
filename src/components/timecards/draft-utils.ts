@@ -12,6 +12,7 @@ import type { DraftState } from './types'
 
 export function createDraft(entries: TimecardEntryInput[], selectedDate: string): DraftState {
   return {
+    id: null,
     entries,
     notes: '',
     status: TIMECARD_STATUSES.DRAFT,
@@ -21,6 +22,7 @@ export function createDraft(entries: TimecardEntryInput[], selectedDate: string)
 
 export function toDraftState(timecard: Timecard, fallbackSelectedDate: string): DraftState {
   return {
+    id: timecard.id ?? null,
     entries: timecard.entries.map(entry => normalizeEntry(entry)),
     notes: timecard.notes ?? '',
     status: timecard.status as DraftState['status'],

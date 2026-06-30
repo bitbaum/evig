@@ -24,6 +24,7 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { eq, desc } from 'drizzle-orm'
 import { auth } from '@/auth'
+import { isSuperAdmin } from '@/lib/permissions'
 import { db } from '@/db'
 import { teamProfiles, timecards as timecardsTable } from '@/db/schema'
 import Heading from '@/components/ui/Heading'
@@ -42,6 +43,13 @@ export default async function DashboardTimecardsPage() {
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/dashboard/timecards')
   }
+
+  // Approvers (superadmins / timecard-permission staff) can reopen a card that
+  // was reviewed/approved by mistake — see the "Wieder öffnen" action.
+  const u = session.user as typeof session.user & { isSuperAdmin?: boolean; staffPermissions?: string[] }
+  const canApprove =
+    isSuperAdmin(u.email, u.isSuperAdmin) ||
+    (u.staffPermissions ?? []).some(p => ['timecards', 'timecard-approvals', '*'].includes(p))
 
   // Pull workingHours so the TimecardsClient can prefill entries from the
   // user's regular schedule. Returns null if there's no team profile yet —
@@ -87,6 +95,7 @@ export default async function DashboardTimecardsPage() {
           <TimecardsClient
             workingHours={profile?.workingHours ?? null}
             userName={session.user.name || session.user.email || 'Du'}
+            canApprove={canApprove}
           />
         </div>
         <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">

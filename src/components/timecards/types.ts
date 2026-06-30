@@ -14,6 +14,8 @@ export interface TimecardAIResult {
 }
 
 export interface DraftState {
+  /** Persisted card id once saved/loaded (null for a fresh, never-saved draft). */
+  id: string | null
   entries: TimecardEntryInput[]
   notes: string
   status: TimecardStatus

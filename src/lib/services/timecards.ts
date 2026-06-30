@@ -518,6 +518,31 @@ export async function saveTimecardEntriesForReview(
   return saveTimecardDraft(owner.userId, input)
 }
 
+/**
+ * Reopen a reviewed/locked timecard back to draft so it can be edited again
+ * (e.g. a card approved by mistake — like an approved-empty month). Clears the
+ * review + submission metadata. Authorization is enforced at the route
+ * (withAdmin('timecards')).
+ */
+export async function reopenTimecard(timecardId: string): Promise<TimecardWithEntries> {
+  const rows = await db
+    .update(timecards)
+    .set({
+      status: TIMECARD_STATUSES.DRAFT,
+      reviewedBy: null,
+      reviewedAt: null,
+      reviewNotes: null,
+      submittedAt: null,
+      updatedAt: sql`NOW()`,
+    })
+    .where(eq(timecards.id, timecardId))
+    .returning({ id: timecards.id })
+  if (!rows[0]) throw new Error('timecard_not_found')
+  const result = await fetchTimecardWithEntries(db, timecardId)
+  if (!result) throw new Error('timecard_not_found')
+  return result
+}
+
 export async function reviewTimecard(
   reviewerId: string,
   timecardId: string,

@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { ContextMenu, type ContextMenuItem, type ContextMenuPosition } from '@/components/ui/context-menu'
 import { cn } from '@/lib/utils'
+import { apiFetch } from '@/lib/api/client'
 import { formatTimecardDuration, TIMECARD_ABSENCE_TYPES } from '@/config/timecards'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { NoScheduleNotice } from './NoScheduleNotice'
@@ -36,9 +37,12 @@ import type { TimecardAIResult } from './types'
 export function TimecardsClient({
   workingHours,
   userName,
+  canApprove = false,
 }: {
   workingHours: string | null
   userName: string
+  /** Approvers can reopen a card that was reviewed/approved by mistake. */
+  canApprove?: boolean
 }) {
   const tc = useTimecardDraft({ workingHours })
   const [extrasOpen, setExtrasOpen] = useState(false)
@@ -269,6 +273,19 @@ export function TimecardsClient({
             : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${formatTimecardDuration(tc.totalMinutes)}`}
         </p>
         <div className="flex items-center gap-2">
+          {canApprove && tc.draft.status === 'approved' && tc.draft.id && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                const r = await apiFetch(`/api/admin/timecards/${tc.draft.id}/reopen`, { method: 'POST' })
+                if (r.success) window.location.reload()
+              }}
+            >
+              {t('reopen2')}
+            </Button>
+          )}
           <Button
             type="button"
             variant="outline"
