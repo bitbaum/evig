@@ -127,6 +127,11 @@ export interface SectionConfig {
    *  order don't appear in the bottom nav; "Mehr" opens the full sidebar.
    *  Used by `getMobileBottomNavSections()`. */
   mobileBottomNavOrder?: number
+  /** Position in the USER dashboard mobile bottom nav (1-4). Sections without
+   *  an order don't appear in the bar; "Mehr" opens the full dashboard menu.
+   *  Used by `getDashboardBottomNavSections()`. Short label from
+   *  `ui.mobileBottomNavLabel`. */
+  dashboardBottomNavOrder?: number
 }
 
 export type SectionCategory =
@@ -256,10 +261,12 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: User,
       emoji: '👤',
       color: 'info',
+      mobileBottomNavLabel: 'Profil',
     },
     visibility: { admin: false, dashboard: true },
     priority: 1,
     category: 'core',
+    dashboardBottomNavOrder: 1,
   },
 
   messages: {
@@ -271,10 +278,12 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: MessageSquare,
       emoji: '💬',
       color: 'info',
+      mobileBottomNavLabel: 'Chat',
     },
     visibility: { admin: false, dashboard: true },
     priority: 2,
     category: 'core',
+    dashboardBottomNavOrder: 2,
   },
 
   // ---------------------------------------------------------------------------
@@ -352,10 +361,12 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: Package,
       emoji: '📦',
       color: 'primary',
+      mobileBottomNavLabel: 'Inserate',
     },
     visibility: { admin: false, dashboard: true },
     priority: 22,
     category: 'commerce',
+    dashboardBottomNavOrder: 4,
   },
 
   'my-orders': {
@@ -367,10 +378,12 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: ShoppingBag,
       emoji: '🛒',
       color: 'info',
+      mobileBottomNavLabel: 'Bestellungen',
     },
     visibility: { admin: false, dashboard: true },
     priority: 23,
     category: 'commerce',
+    dashboardBottomNavOrder: 3,
   },
 
   favorites: {

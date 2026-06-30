@@ -21,7 +21,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
   return (
     <nav
       aria-label="Dashboard"
-      className="sticky top-14 z-30 border-b border-subtle bg-surface-base/95 backdrop-blur-sm"
+      className="sticky top-16 z-30 hidden border-b border-subtle bg-surface-base/95 backdrop-blur-sm lg:block"
     >
       <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
         {items.map((item) => {

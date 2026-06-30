@@ -5,6 +5,7 @@ import { isSuperAdmin } from '@/lib/permissions'
 import { getAllDashboardCards } from '@/config/dashboard'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { DashboardNav } from '@/components/dashboard/DashboardNav'
+import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const messages = await getMessages()
@@ -30,7 +31,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
           double-wrapped. */}
       <ConditionalMainLayout leanChrome>
         <DashboardNav items={navItems} />
-        {children}
+        {/* Mobile/tablet (<lg): bottom tab bar + "Mehr" sheet. The padding keeps
+            content clear of the fixed bar. */}
+        <div className="pb-16 lg:pb-0">{children}</div>
+        <DashboardMobileNav items={navItems} />
       </ConditionalMainLayout>
     </NextIntlClientProvider>
   )

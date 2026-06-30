@@ -37,6 +37,10 @@ export interface DashboardCard {
   badge?: string
   color: 'info' | 'success' | 'warning' | 'error' | 'secondary' | 'neutral'
   priority: number
+  /** Position in the mobile bottom nav (1-4); undefined → only in "Mehr". */
+  bottomNavOrder?: number
+  /** Short label for the bottom-nav bar (falls back to title). */
+  shortLabel?: string
 }
 
 /** Community roles (not staff roles) */
@@ -169,6 +173,8 @@ function sectionToCard(section: SectionConfig): DashboardCard {
     category: categoryMapping[section.category],
     color: colorMapping[section.ui.color],
     priority: section.priority,
+    bottomNavOrder: section.dashboardBottomNavOrder,
+    shortLabel: section.ui.mobileBottomNavLabel,
   }
 
   // Handle community role visibility
