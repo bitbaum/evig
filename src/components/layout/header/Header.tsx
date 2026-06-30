@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils'
 // Skip SSR — both use useSession which requires SessionProvider (lazy-loaded client-side only)
 const UserMenu = dynamic(() => import('@/components/auth/UserMenu').then(m => ({ default: m.UserMenu })), { ssr: false })
 const UserCommandPalette = dynamic(() => import('@/components/search/UserCommandPalette').then(m => ({ default: m.UserCommandPalette })), { ssr: false })
+const CommandPaletteTrigger = dynamic(() => import('@/components/search/CommandPaletteTrigger').then(m => ({ default: m.CommandPaletteTrigger })), { ssr: false })
 const MobileMenu = dynamic(() => import('../MobileMenu').then(m => ({ default: m.MobileMenu })), { ssr: false })
 import { mainNavigation } from '@/config/navigation'
 import { NavItem } from './NavItem'
@@ -159,8 +160,8 @@ export function Header() {
                 </Link>
               )}
 
-              {/* Command palette (logged-in users) */}
-              <UserCommandPalette />
+              {/* Command palette trigger (logged-in users) */}
+              <CommandPaletteTrigger />
 
               {/* Locale Switcher */}
               <LocaleSwitcher />
@@ -177,6 +178,7 @@ export function Header() {
 
             {/* Mobile Right Side - Auth + Menu */}
             <div className="lg:hidden flex items-center gap-1.5">
+              <CommandPaletteTrigger />
               <UserMenu />
               {/* Mobile Menu Button */}
               <Button
@@ -195,6 +197,11 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               </Button>
             </div>
+
+            {/* Single command-palette dialog (always rendered, not in an lg-gated
+                container, so showModal works at every width). Triggers above open
+                it via a window event. */}
+            <UserCommandPalette />
           </nav>
         </div>
       </header>

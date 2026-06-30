@@ -19,6 +19,12 @@ import { getDashboardSections } from '@/config/sections'
  * favorites + public marketplace listings + workshops, and jumps to any
  * dashboard destination — plus a "search the marketplace for X" hand-off.
  */
+/** Triggers dispatch this to open the single mounted palette dialog. */
+export const OPEN_COMMAND_PALETTE_EVENT = 'revampit:open-command-palette'
+export function openCommandPalette() {
+  window.dispatchEvent(new Event(OPEN_COMMAND_PALETTE_EVENT))
+}
+
 interface IdTitleStatus { id: string; title: string; status?: string }
 interface SearchIndex {
   myListings: IdTitleStatus[]
@@ -119,6 +125,15 @@ export function UserCommandPalette() {
     return () => window.removeEventListener('keydown', handler)
   }, [loggedIn])
 
+  // Triggers (placed anywhere — desktop + mobile header) open the single dialog
+  // via this event, so we never double-mount the dialog or the ⌘K listener.
+  useEffect(() => {
+    if (!loggedIn) return
+    const open = () => setOpen(true)
+    window.addEventListener(OPEN_COMMAND_PALETTE_EVENT, open)
+    return () => window.removeEventListener(OPEN_COMMAND_PALETTE_EVENT, open)
+  }, [loggedIn])
+
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -168,20 +183,10 @@ export function UserCommandPalette() {
 
   let flatIdx = 0
 
+  // Dialog only — triggers live separately (CommandPaletteTrigger) so the bar can
+  // place them in both the desktop and mobile header without double-mounting.
   return (
     <>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => setOpen(true)}
-        aria-label="Suche öffnen (⌘K)"
-        className="flex h-9 w-9 items-center justify-center rounded-md p-0 text-text-tertiary hover:bg-surface-raised sm:h-9 sm:w-auto sm:gap-2 sm:px-3"
-      >
-        <Search className="h-4 w-4" />
-        <span className="hidden text-sm sm:inline">Suche</span>
-        <kbd className="hidden items-center rounded-sm bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none lg:inline-flex">⌘K</kbd>
-      </Button>
-
       <dialog
         ref={dialogRef}
         className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
