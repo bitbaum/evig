@@ -33,7 +33,10 @@ if [ "$ready" -ne 1 ]; then
 fi
 
 export PLAYWRIGHT_BASE_URL="$BASE_URL"
-export AUTH_TEST_USER_EMAIL="${AUTH_TEST_USER_EMAIL:-butaeff@gmail.com}"
+# No hardcoded user default — the old butaeff@gmail.com test account was removed.
+# Set AUTH_TEST_USER_EMAIL to a real non-admin account (ideally against a staging
+# URL, since these journeys mutate data). The admin default is a real account.
+export AUTH_TEST_USER_EMAIL="${AUTH_TEST_USER_EMAIL:?set AUTH_TEST_USER_EMAIL to a real non-admin account}"
 export AUTH_TEST_ADMIN_EMAIL="${AUTH_TEST_ADMIN_EMAIL:-georgy.butaev@revamp-it.ch}"
 
 echo "=== dual-persona inventory smoke → ${BASE_URL} ==="
