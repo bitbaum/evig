@@ -1,8 +1,14 @@
 # Architecture Debt — Parallel Implementations + Spaghetti Patterns
 
+> **STATUS: CLOSED (2026-06-30).** All tracked items (#1–#5) are resolved. The
+> #1 repairer→technician table rename (migration 105) and the #5 profile cleanup
+> (Phases 1–4; Phase 3 leftovers assessed + intentionally declined as premature
+> abstraction) are the final pieces. Re-open only when a NEW parallel-implementation
+> or spaghetti pattern is discovered.
+
 **Created:** 2026-06-04  
 **Last Modified:** 2026-06-30  
-**Last Modified Summary:** #5 profile cleanup Phases 1–4 done (Phase 4 re-scoped: contact fields are intentionally distinct, only dead/placeholder columns cleaned)
+**Last Modified Summary:** Doc CLOSED — #5 Phase 3 leftovers assessed (not warranted); all #1–#5 resolved
 
 **Last updated:** 2026-06-15 (auth/onboarding cleanup + notification pipeline closed)
 
@@ -252,8 +258,19 @@ API/mapper cleanup was never finished.
     (GET previously returned camelCase Drizzle rows, so saved fields never populated the
     snake_case `ProfileData` client). Removed the dead duplicate `TechnicianProfileInput` in
     `types/technician.ts` (the Zod-inferred one in `schemas/repairer.ts` is the SSOT).
-  - Remaining: derive the client `ProfileData`/`DEFAULT_PROFILE` from the Zod schema; adopt
-    `<Avatar>` in the seller inline-upload + retire `AvatarUpload`'s bespoke placeholder.
+  - 3c ✓ ASSESSED — the two speculative leftovers were evaluated and intentionally NOT done
+    (premature abstraction; "premature abstraction is worse than duplication"):
+    · `<Avatar>` in the upload widgets — `AvatarUpload` (128px) + the seller inline-upload
+      (64px) are upload widgets (live data-URL preview via next/Image, remove button, person-icon
+      placeholder, URL-input), not the small image-or-initials identity chip `<Avatar>` (32–80px)
+      serves. Forcing it would need new sizes + an icon-placeholder mode on `<Avatar>` for 2
+      consumers and would lose the Image optimisation — a net regression. Kept separate.
+    · `ProfileData` from Zod — `ProfileData` is NOT `z.infer<UpdateProfileSchema>`: the schema has
+      `interests` (client lacks it) and a different `availability` shape (client `{start,end,
+      available}` per day vs schema `{available, hours}`). Deriving would change availability
+      handling for no real gain. (Minor follow-up if ever wanted: reconcile the `availability`
+      shape — the client's start/end times are stripped by the schema on save; the field appears
+      unused in the profile UI, so low priority.)
 - **Phase 4 (schema) ✓ DONE — re-scoped after investigation.** The original idea (consolidate
   contact into `user_profiles`) was **dropped as contraindicated**: a per-field write-site audit
   found NO mirror duplication. The role-profile contact/bio/avatar/display_name fields hold
@@ -297,5 +314,9 @@ API/mapper cleanup was never finished.
 
 ## Execution order recommendation
 
-All three items are resolved as of 2026-06-15. Re-open this doc when a
-new parallel-implementation pattern is discovered.
+**All items resolved — doc closed 2026-06-30.** The original three patterns
+(#1 decision systems, #2 notification pipeline, #3 status taxonomy) closed
+2026-06-15; #4 lifecycle engine (Phases 1–2) and #5 profile fragmentation
+(Phases 1–4, with the Phase 3 cosmetic leftovers assessed and intentionally
+declined) closed 2026-06-29/30. Re-open this doc only when a new
+parallel-implementation or spaghetti pattern is discovered.
