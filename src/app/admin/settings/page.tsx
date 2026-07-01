@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { requireSection } from '@/lib/admin/guards'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
@@ -25,8 +26,9 @@ export default async function SettingsPage() {
     {
       icon: Mail,
       title: 'E-Mail',
-      description: 'SMTP-Konfiguration, Templates',
+      description: 'Anbieter, Verbindungstest, Test-Versand',
       color: 'green',
+      href: '/admin/settings/email',
     },
     {
       icon: Shield,
@@ -67,12 +69,8 @@ export default async function SettingsPage() {
       iconColor="gray"
     >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {settingsSections.map(section => (
-          <div
-            key={section.title}
-            className="p-6 bg-surface-base rounded-xl border border opacity-70"
-            aria-disabled="true"
-          >
+        {settingsSections.map(section => {
+          const inner = (
             <div className="flex items-start gap-4">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getColorClasses(section.color)}`}>
                 <section.icon className="w-5 h-5" />
@@ -80,15 +78,34 @@ export default async function SettingsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <Heading level={3} className="font-semibold text-text-primary">{section.title}</Heading>
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-surface-raised text-text-secondary">
-                    Demnächst
-                  </span>
+                  {!section.href && (
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-surface-raised text-text-secondary">
+                      Demnächst
+                    </span>
+                  )}
                 </div>
                 <p className="text-sm text-text-secondary mt-1">{section.description}</p>
               </div>
             </div>
-          </div>
-        ))}
+          )
+          return section.href ? (
+            <Link
+              key={section.title}
+              href={section.href}
+              className="block p-6 bg-surface-base rounded-xl border border hover:border-neutral-300 transition-colors"
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div
+              key={section.title}
+              className="p-6 bg-surface-base rounded-xl border border opacity-70"
+              aria-disabled="true"
+            >
+              {inner}
+            </div>
+          )
+        })}
       </div>
 
       <div className="p-6 bg-surface-raised border border rounded-xl">
