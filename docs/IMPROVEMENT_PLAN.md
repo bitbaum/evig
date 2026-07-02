@@ -72,6 +72,32 @@ to find any section across the 8 groups).
 
 ---
 
+## Hirn assistant — 2026-07 unification (shipped)
+
+One assistant, one brand: **Hirn**, on both surfaces. What changed:
+- **Deleted** the 3,129-line client-side rule engine (`src/features/chatbot` +
+  `floating-ui` — "Revamp IT Assistent": intent-matching, no LLM, dead
+  complexity). The feedback widget (SuggestionButton) was preserved and moved
+  to `src/components/feedback/`.
+- **Page-context SSOT**: `src/config/hirn/page-contexts.ts` — route-pattern →
+  context description + suggestion chips + quick actions, for public AND admin
+  (admin labels derive from the sections SSOT). `resolveHirnContext()` is the
+  single resolver.
+- **Public tier**: `HirnPublicFab` (+ shared `HirnChatPanel`) on all public
+  pages; logged-in users chat via `POST /api/hirn/chat` (Zod, 20 msg/h rate
+  limit); anonymous visitors get a login prompt + context quick links.
+  Proactive nudges are RULE-BASED from the context SSOT (one dismissible chip
+  per page per session — zero LLM cost).
+- **Isolation (security)**: the public route has NO RAG (hirn_documents hold
+  finance/personnel data) and NO action cockpit — only the provider layer is
+  shared with the admin route (SSOT).
+- **Admin tier**: HirnChat now sends `pathname`; the admin route merges the
+  resolved context into the system prompt; empty state shows context chips.
+  Staff actions (create task/decision/protocol drafts) unchanged. 60 msg/h.
+- **Follow-ups**: persist public chat history (client-held today); consider
+  user-tier actions (prefilled listing drafts) once abuse posture is clear;
+  localize context suggestions (DE-only today).
+
 ## Phase 2 — NEXT (scoped project work, not this session)
 
 1. **Silent-failure sweep** (~15 admin mutation sites): standardize `result.success ? … : toast.error(…)` on sonner; includes donations/intake/timecards/blog/erfassung + repairer-apps queue-blanking. (HIGH subset may land in Phase 1 if time allows.)

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Github, ArrowRight, ExternalLink } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
-import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
+import { UPCYCLING_ROUTES, UPCYCLING_WIKI_URL } from '@/config/upcycling-routes'
 import { orderPublishedGuides } from '@/data/upcycling-guides'
 import { UpcyclingPageHeader } from '../UpcyclingPageHeader'
 import { ogFor } from '../og-images'
@@ -52,6 +52,9 @@ type PageMessages = {
     repoCta: string
     repoUrl: string
     licenseLabel: string
+    wikiTitle: string
+    wikiBody: string
+    wikiCta: string
   }
   contribute: {
     title: string
@@ -231,6 +234,22 @@ export default async function UpcyclingBuildYourOwnPage() {
                 {m.source.repoCta}
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
+
+              {/* Public Umbau-Wiki — the project's open documentation platform
+                  (Swico Abschlussbericht). URL from config (SSOT). */}
+              <div className="mt-8 rounded-lg border border-subtle bg-surface-base p-5">
+                <h3 className="text-base font-semibold text-text-primary">{m.source.wikiTitle}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{m.source.wikiBody}</p>
+                <a
+                  href={UPCYCLING_WIKI_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-action hover:underline"
+                >
+                  {m.source.wikiCta}
+                  <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                </a>
+              </div>
             </div>
 
             <div>

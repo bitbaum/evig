@@ -112,6 +112,13 @@ export const rateLimiters = {
   // HR job applications: 10 per hour per email/IP
   jobApplicationCreate: createRateLimiter(ONE_HOUR_MS, 10),
 
+  // Hirn public chat: 20 per hour per user. Every message is a billed LLM
+  // call, so logged-in users get a tighter budget than staff.
+  hirnChatUser: createRateLimiter(ONE_HOUR_MS, 20),
+
+  // Hirn admin chat: 60 per hour per staff member (working tool, generous).
+  hirnChatStaff: createRateLimiter(ONE_HOUR_MS, 60),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(FIFTEEN_MINUTES_MS, 100)
 };

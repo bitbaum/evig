@@ -9,8 +9,19 @@ import { UPCYCLING_BASE, UPCYCLING_GALLERY_ASSET_BASE } from '@/config/upcycling
 
 const BUSINESSPLAN = `${UPCYCLING_BASE}/businessplan` as const
 const LENOVO = `${UPCYCLING_BASE}/lenovo-l2251pwd` as const
+const INSTALLS = `${UPCYCLING_BASE}/installs` as const
 
 export const UPCYCLING_ASSETS = {
+  /** Real installation photography (Juli 2026 shoot) — see upcycling-installations.ts */
+  installs: {
+    curvedRepairhub: `${INSTALLS}/curved-repairhub.jpg`,
+    eingangLaden: `${INSTALLS}/eingang-laden.jpg`,
+    werkbankCurved1: `${INSTALLS}/werkbank-curved-1.jpg`,
+    werkbankCurved2: `${INSTALLS}/werkbank-curved-2.jpg`,
+    ladenDecke1: `${INSTALLS}/laden-decke-1.jpg`,
+    ladenWand1: `${INSTALLS}/laden-wand-1.jpg`,
+    ladenWand2: `${INSTALLS}/laden-wand-2.jpg`,
+  },
   gallery: {
     lenovoPoster: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished-poster.jpg`,
     lenovoVideo: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished.mp4`,

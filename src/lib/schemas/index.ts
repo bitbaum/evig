@@ -19,6 +19,7 @@ export * from './inventory';
 export * from './marketplace';
 export * from './it-hilfe';
 export * from './locations';
+export * from './hirn';
 
 // Re-export Zod for convenience
 export { z, ZodError } from 'zod';

@@ -240,3 +240,19 @@ Stil:
 ═══════════════════════════════════════════════════════════════
 
 ${HIRN_ACTION_INSTRUCTION}`
+
+/**
+ * Build the admin system prompt, optionally enriched with the page context
+ * the user is currently looking at (from src/config/hirn/page-contexts.ts).
+ */
+export function buildSystemPrompt(pageContext?: string): string {
+  if (!pageContext) return SYSTEM_PROMPT
+  return `${SYSTEM_PROMPT}
+
+═══════════════════════════════════════════════════════════════
+10. AKTUELLE SEITE
+═══════════════════════════════════════════════════════════════
+
+${pageContext}
+Beziehe dich, wo hilfreich, auf diesen Kontext.`
+}

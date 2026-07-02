@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
+import { UPCYCLING_INSTALLATIONS } from '@/data/upcycling-installations'
 import { cn } from '@/lib/utils'
 
 /**
@@ -31,11 +32,25 @@ export type RawApplication = {
   imageCaption: string
 }
 
+export type InstallItemMessages = {
+  title: string
+  location: string
+  story: string
+}
+
 export type ApplicationsMessages = {
   meta: { title: string; description: string }
   eyebrow: string
   title: string
   intro: string
+  installs: {
+    eyebrow: string
+    title: string
+    intro: string
+    photoBadge: string
+    noPhotoBadge: string
+    items: Record<string, InstallItemMessages>
+  }
   spectrum: { label: string; functional: string; decor: string }
   tiers: {
     functional: RawApplication
@@ -60,8 +75,10 @@ const ACTS: Act[] = [
 
 const ACT_PHOTOS: Record<Act['key'], { src: string; alt: string }> = {
   functional: {
-    src: UPCYCLING_ASSETS.businessplan.electronicsSpread,
-    alt: 'Electronics spread from a monitor retrofit — workshop documentation',
+    // Real installation: the curved monitor light over the zuerich.repair
+    // workbench (Juli 2026 shoot) — the functional tier in daily use.
+    src: UPCYCLING_ASSETS.installs.werkbankCurved1,
+    alt: 'Curved-Upcycling-Leuchte über der Werkbank im RepairHub von zuerich.repair',
   },
   decor: {
     src: UPCYCLING_ASSETS.gallery.lenovoPoster,
@@ -100,7 +117,106 @@ export function ApplicationsExperience({ messages: m }: { messages: Applications
       {ACTS.map((act, idx) => (
         <Scene key={act.key} idx={idx} act={act} tier={m.tiers[act.key]} />
       ))}
+
+      <InstallationsSection installs={m.installs} />
     </article>
+  )
+}
+
+/* ─── InstallationsSection ───────────────────────────────────────────
+ * Real-world proof: photographed installations with their field stories
+ * (Swico Abschlussbericht). Structure from UPCYCLING_INSTALLATIONS (data
+ * SSOT); all strings from messages keyed by install id. Entries without
+ * photography render honestly as text cards ("Foto folgt") — same
+ * discipline as the gallery's documented-vs-queued split.
+ */
+function InstallationsSection({ installs }: { installs: ApplicationsMessages['installs'] }) {
+  const photographed = UPCYCLING_INSTALLATIONS.filter((i) => !!i.image)
+  const textOnly = UPCYCLING_INSTALLATIONS.filter((i) => !i.image)
+
+  return (
+    <section className="border-t border-subtle bg-surface-raised py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <p className="ui-public-eyebrow">{installs.eyebrow}</p>
+        <h2 className="ui-public-display-md mt-3">{installs.title}</h2>
+        <p className="ui-public-section-lede mt-4 max-w-3xl">{installs.intro}</p>
+
+        {/* Photographed installs — big photo cards */}
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {photographed.map((install) => {
+            const msg = installs.items[install.id]
+            if (!msg) return null
+            return (
+              <figure
+                key={install.id}
+                className="overflow-hidden rounded-xl border border-subtle bg-surface-base"
+              >
+                <div className="relative aspect-[4/3] bg-surface-raised">
+                  <Image
+                    src={install.image!}
+                    alt={`${msg.title} — ${msg.location}`}
+                    fill
+                    sizes="(min-width: 768px) 45vw, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute left-3 top-3 rounded-md bg-black/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-white">
+                    {installs.photoBadge}
+                  </span>
+                </div>
+                {/* Secondary shots, small strip */}
+                {install.extraImages && install.extraImages.length > 0 && (
+                  <div className="flex gap-1 border-t border-subtle">
+                    {install.extraImages.map((src) => (
+                      <div key={src} className="relative aspect-[4/3] min-w-0 flex-1">
+                        <Image
+                          src={src}
+                          alt={msg.title}
+                          fill
+                          sizes="25vw"
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <figcaption className="p-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+                    {msg.location}
+                  </p>
+                  <h3 className="mt-1 text-lg font-semibold text-text-primary">{msg.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">{msg.story}</p>
+                </figcaption>
+              </figure>
+            )
+          })}
+        </div>
+
+        {/* Verified installs awaiting photography — honest text cards */}
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {textOnly.map((install) => {
+            const msg = installs.items[install.id]
+            if (!msg) return null
+            return (
+              <div
+                key={install.id}
+                className="rounded-xl border border-subtle bg-surface-base p-5"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+                    {msg.location}
+                  </p>
+                  <span className="rounded-md border border-subtle px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-muted">
+                    {installs.noPhotoBadge}
+                  </span>
+                </div>
+                <h3 className="mt-1 text-base font-semibold text-text-primary">{msg.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{msg.story}</p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }
 

@@ -8,22 +8,35 @@
 import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { chat } from '@/lib/hirn'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { buildSystemPrompt } from '@/lib/hirn/system-prompt'
+import { resolveHirnContext } from '@/config/hirn/page-contexts'
+import { apiSuccess, apiError, apiRateLimited } from '@/lib/api/helpers'
+import { rateLimiters } from '@/lib/security/rate-limit'
 import { logger } from '@/lib/logger'
 import { validateBody, HirnChatSchema } from '@/lib/schemas'
 
 export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
+    if (!rateLimiters.hirnChatStaff(`${session.user.id}:hirn-chat-staff`)) {
+      return apiRateLimited('Zu viele Anfragen an Hirn. Bitte warte einen Moment.')
+    }
+
     const body = await request.json()
     const validation = validateBody(HirnChatSchema, body)
     if (!validation.success) return validation.error
-    const { message, sessionId, temperature, maxTokens } = validation.data
+    const { message, sessionId, temperature, maxTokens, pathname } = validation.data
+
+    // Enrich the system prompt with what the user is currently looking at.
+    const pageContext = pathname
+      ? resolveHirnContext(pathname, 'admin').description
+      : undefined
 
     const response = await chat(message, {
       sessionId,
       userId: session.user.id,
       temperature,
       maxTokens,
+      systemPrompt: buildSystemPrompt(pageContext),
     })
 
     return apiSuccess({

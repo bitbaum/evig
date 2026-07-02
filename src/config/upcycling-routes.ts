@@ -97,3 +97,9 @@ export const UPCYCLING_INTEREST_SKIP_PATHS = new Set<string>([
   // Interner Bereich: keine öffentlichen Marketing-Bänder.
   UPCYCLING_ROUTES.dossier,
 ])
+
+/**
+ * Öffentliches Umbau-Wiki (Swico-Projekt): Anleitungen unter CC-BY-SA,
+ * weltweit erweiterbar. Quelle: Abschlussbericht Projekt 2023-02-01.
+ */
+export const UPCYCLING_WIKI_URL = 'https://monitor-upcycling.org'

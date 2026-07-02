@@ -5681,6 +5681,40 @@
           "body": "Wir installieren Pilotleuchten in Liegenschaften, Cafés und Ausstellungsräumen — oder zeigen dir, wie du selber eine baust.",
           "primary": "Pilotinstallation anfragen",
           "secondary": "Selber bauen"
+        },
+        "installs": {
+          "eyebrow": "IM EINSATZ",
+          "title": "Echte Installationen, echte Bilanz",
+          "intro": "Keine Renderings: Diese Leuchten hängen und werden täglich benutzt. Die Erfahrungen stammen aus dem Abschlussbericht des Swico-Projekts «Funktionelle Kreislaufnutzung von IT-Geräten».",
+          "photoBadge": "Foto Juli 2026",
+          "noPhotoBadge": "Foto folgt",
+          "items": {
+            "repairhub": {
+              "title": "Curved-Leuchte im RepairHub",
+              "location": "zuerich.repair, Zürich",
+              "story": "Ein grosser Curved-Monitor mit gebrochenem Display wurde zur Werkstattleuchte. Das gleichmässige Licht ohne Schattenwurf wird von den Reparateur*innen bei der Arbeit sehr geschätzt — und die Installation ist ein Blickfang, der Besucher*innen sofort auffällt."
+            },
+            "laden": {
+              "title": "Laden & Büro revamp-it",
+              "location": "Birmensdorferstrasse 379, Zürich",
+              "story": "Im Eingangsbereich des Ladens ersetzen zwei Upcycling-Leuchten die bestehenden Deckenleuchten — die Reaktionen der Kund*innen sind durchweg positiv. Im Büro läuft eine weitere Leuchte seit über einem Jahr einwandfrei."
+            },
+            "werkraum4": {
+              "title": "Werkstatträume Werkraum4",
+              "location": "Zürich",
+              "story": "Rund 20 Leuchten sind seit etwa einem Jahr täglich im Einsatz. Die breitflächige, schattenfreie Ausleuchtung ist ideal für handwerkliche Arbeiten. Bilanz: ein einziger Netzteil-Ausfall — repariert durch einfachen Austausch; die LED-Hintergrundbeleuchtung machte keine Probleme."
+            },
+            "recreazzz": {
+              "title": "Sanitäranlagen RecreaZZZ",
+              "location": "ehemalige Zentralwäscherei, Zürich",
+              "story": "Zwei Leuchten seit über einem Jahr im Einsatz — bei jedem Besuch ein- und ausgeschaltet. Das häufige Schalten verursachte keinerlei Probleme, und die per Strichliste gesammelten Rückmeldungen sind überwiegend positiv."
+            },
+            "ambossrampe": {
+              "title": "Lager AmbossRampe",
+              "location": "Zürich",
+              "story": "Die Installation bestätigt Lager als sinnvollen Einsatzort: Die seit rund einem Jahr installierten Leuchten funktionieren einwandfrei."
+            }
+          }
         }
       },
       "gallery": {
@@ -5747,7 +5781,10 @@
           "body": "Plattform-Code und alle Anleitungen liegen auf GitHub. Fork, Issue oder Pull Request: alles willkommen.",
           "repoCta": "Auf GitHub ansehen",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "Creative Commons CC-BY-SA · Plattform-Code unter MIT"
+          "licenseLabel": "Creative Commons CC-BY-SA · Plattform-Code unter MIT",
+          "wikiTitle": "Umbau-Wiki: monitor-upcycling.org",
+          "wikiBody": "Alle Umbau-Anleitungen sind auch im öffentlichen Wiki verfügbar — so aufgebaut, dass Elektroniker*innen aus aller Welt weitere Modelle dokumentieren können. Lizenz CC-BY-SA, Nutzung auch kommerziell frei.",
+          "wikiCta": "Wiki öffnen"
         },
         "contribute": {
           "title": "Mitmachen",
@@ -8127,6 +8164,23 @@
       "successGeneric": "Felder ausgefüllt!",
       "quickActionDisabled": "Fülle zuerst das Formular aus"
     }
+  },
+  "hirn": {
+    "title": "Hirn",
+    "subtitle": "Der Assistent von {orgName}",
+    "open": "Hirn öffnen",
+    "inputPlaceholder": "Frag Hirn etwas…",
+    "send": "Senden",
+    "thinking": "Hirn denkt nach…",
+    "emptyTitle": "Wie kann ich helfen?",
+    "emptyHint": "Wähle einen Vorschlag oder stelle deine eigene Frage.",
+    "suggestionsLabel": "Vorschläge",
+    "quickActionsLabel": "Passende Links",
+    "loginPrompt": "Melde dich an, um mit Hirn zu chatten — dem Assistenten von {orgName}.",
+    "loginCta": "Anmelden",
+    "rateLimited": "Zu viele Anfragen — bitte versuche es später erneut.",
+    "error": "Hirn ist gerade nicht erreichbar. Bitte versuche es später erneut.",
+    "proactiveDismiss": "Hinweis schliessen"
   },
   "dashboard": {
     "profile": {
@@ -10512,6 +10566,7 @@
       "reviews": "Bewertungen",
       "content": "Blog & Seiten",
       "projects": "Öffentliche Projekte",
+      "presentations": "Präsentationen",
       "approvals": "Freigaben",
       "membership": "Mitgliedschaften",
       "tasks": "Aufgaben",

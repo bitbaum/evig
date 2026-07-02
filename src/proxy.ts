@@ -160,6 +160,10 @@ export const config = {
   // this, middleware intercepts the request and the file 404s through
   // the next-intl router (it tries to route the extension as a page).
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|apple-icon|icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|mp4|webm|mp3|m4a|m4v|pdf|txt|xml|json|webmanifest|html|md|map)).*)',
+    // `presentations` is excluded so the pretty URL /presentations/<slug>
+    // reaches the next.config rewrite (→ index.html) instead of being
+    // routed — and 404'd — by the next-intl router. This is why shared
+    // presentation links had silently broken.
+    '/((?!_next/static|_next/image|presentations|favicon.ico|apple-icon|icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|mp4|webm|mp3|m4a|m4v|pdf|txt|xml|json|webmanifest|html|md|map)).*)',
   ],
 }

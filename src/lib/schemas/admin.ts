@@ -216,6 +216,8 @@ export const HirnChatSchema = z.object({
   sessionId: z.string().min(1, 'Session-ID ist erforderlich'),
   temperature: z.number().min(0).max(2).optional(),
   maxTokens: z.number().int().positive().max(8192).optional(),
+  /** Current admin pathname — used to add page context to the system prompt. */
+  pathname: z.string().max(300).optional(),
 });
 
 export type HirnChatInput = z.infer<typeof HirnChatSchema>;

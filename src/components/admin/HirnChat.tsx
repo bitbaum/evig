@@ -7,6 +7,8 @@ import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { apiFetch } from '@/lib/api/client'
+import { usePathname } from 'next/navigation'
+import { resolveHirnContext } from '@/config/hirn/page-contexts'
 import { logger } from '@/lib/logger'
 import { ORG } from '@/config/org'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -75,6 +77,11 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const pathname = usePathname()
+  // Page context (SSOT: config/hirn/page-contexts) — tells Hirn what the
+  // staff member is currently looking at + seeds the empty-state chips.
+  const pageContext = resolveHirnContext(pathname ?? '/admin', 'admin')
+
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || loading) return
@@ -97,6 +104,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         body: {
           message: userMessage.content,
           sessionId,
+          pathname: pathname ?? undefined,
         },
       })
 
@@ -212,6 +220,22 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             <p className="text-sm max-w-md mt-2">
               {t('welcomeBody', { orgName: ORG.name })}
             </p>
+            {pageContext.suggestions.length > 0 && (
+              <div className="mt-5 flex flex-wrap justify-center gap-2">
+                {pageContext.suggestions.map(suggestion => (
+                  <Button
+                    key={suggestion}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInput(suggestion)}
+                    className="rounded-full text-xs"
+                  >
+                    {suggestion}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           messages.map(message => (

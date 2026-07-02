@@ -3,12 +3,12 @@
 import { ReactNode } from 'react'
 import { Header } from './header'
 import Footer from './Footer'
-import { RevampCopilot, SuggestionButton } from '@/features/floating-ui'
-import { MessageButton } from '@/components/messaging/MessageButton'
+import { HirnPublicFab } from '@/components/hirn/HirnPublicFab'
+import SuggestionButton from '@/components/feedback/SuggestionButton'
 
 interface MainLayoutProps {
   children: ReactNode
-  /** Skip copilot + suggestion widgets on task-focused pages. */
+  /** Skip assistant + suggestion widgets on task-focused pages. */
   leanChrome?: boolean
 }
 
@@ -25,10 +25,10 @@ export default function MainLayout({ children, leanChrome = false }: MainLayoutP
 
       {!leanChrome && (
         <>
-          <RevampCopilot />
+          <HirnPublicFab />
           <SuggestionButton />
         </>
       )}
     </div>
   )
-} 
+}

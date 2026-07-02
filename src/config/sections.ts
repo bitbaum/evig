@@ -49,6 +49,7 @@ import {
   Wallet,
   ScanLine,
   UserCheck,
+  Presentation,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
@@ -750,6 +751,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 105.5,
     category: 'management',
+    sidebarGroup: 'inhalte',
+  },
+
+  presentations: {
+    id: 'presentations',
+    path: '/admin/presentations',
+    ui: {
+      label: 'Präsentationen',
+      description: 'Präsentationen ansehen und teilen',
+      icon: Presentation,
+      emoji: '📽️',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 105.7,
+    category: 'content',
     sidebarGroup: 'inhalte',
   },
 
