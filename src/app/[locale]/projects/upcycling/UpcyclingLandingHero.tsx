@@ -14,7 +14,9 @@ interface UpcyclingLandingHeroProps {
   photoAlt: string
 }
 
-/** Landing hero with real workshop photography (Lenovo retrofit, May 2026). */
+/** Landing hero with real installation photography (curved light over the
+ *  zuerich.repair workbench, Juli-2026 shoot) — the strongest field photo
+ *  leads the minisite. */
 export function UpcyclingLandingHero({
   title,
   description,
@@ -59,7 +61,7 @@ export function UpcyclingLandingHero({
           </div>
           <figure className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-subtle bg-surface-raised">
             <Image
-              src={UPCYCLING_ASSETS.gallery.lenovoPoster}
+              src={UPCYCLING_ASSETS.installs.werkbankCurved1}
               alt={photoAlt}
               fill
               priority

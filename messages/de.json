@@ -5550,7 +5550,7 @@
         "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
         "cta1": "Projekt entdecken",
         "cta2": "Partner werden",
-        "photoAlt": "Fertige Monitor-Leuchte (Lenovo L2251pwd) aus dem Werkraum 4, Mai 2026"
+        "photoAlt": "Curved-Upcycling-Leuchte über der Werkbank im RepairHub von zuerich.repair, Juli 2026"
       },
       "needs": {
         "title": "Was wir brauchen",
@@ -5727,6 +5727,7 @@
         "intro": "Jedes Stück ein wiederbelebter Monitor. Oben: Modelle mit echter Foto-Dokumentation und Anleitung. Unten: Modelle, die wir umgebaut, aber noch nicht abgelichtet haben.",
         "statsLine": "{documented} dokumentiert · {queued} in Warteschlange",
         "placeholderNote": "Die Vorschaubilder werden generiert — sobald die ersten Stücke fotografiert sind, ersetzen wir sie durch echte Aufnahmen.",
+        "installsCta": "Alle Installationen ansehen",
         "documented": {
           "title": "Bereits dokumentiert",
           "cta": "Anleitung lesen"
@@ -5745,7 +5746,7 @@
       "buildYourOwn": {
         "meta": {
           "title": "Selber bauen | Monitor-Upcycling",
-          "description": "Open-Source-Hardware: alle Anleitungen, Schaltpläne und Materialien, um eine Monitor-Leuchte selbst zu bauen. MIT-Lizenz, frei nutzbar weltweit."
+          "description": "Open-Source-Hardware: alle Anleitungen, Schaltpläne und Materialien, um eine Monitor-Leuchte selbst zu bauen. Anleitungen unter CC-BY-SA — frei nutzbar, auch kommerziell."
         },
         "eyebrow": "SELBER BAUEN · MONITOR-UPCYCLING",
         "title": "Bau dein eigenes Stück",
@@ -5774,6 +5775,19 @@
             "title": "Weitere Anleitungen folgen",
             "body": "Wir dokumentieren die nächsten Modelle (Dell, HP, Acer). Auf dem Laufenden bleiben.",
             "cta": "Updates erhalten"
+          }
+        },
+        "artifacts": {
+          "eyebrow": "AUS DER WERKSTATT",
+          "title": "Zwei Bauteile, die den Umbau lösen",
+          "intro": "Offene Hardware zum Anfassen: der Stecker gegen das Standby-Problem und die druckbare Halterung für die Montage.",
+          "standby": {
+            "alt": "Spannungsteiler-Stecker mit zwei Widerständen, vergossen in einem 3D-gedruckten Gehäuse",
+            "caption": "Der Spannungsteiler-Stecker löst das Standby-Problem — fertigbar in der Werkstatt."
+          },
+          "mount": {
+            "alt": "3D-CAD-Ansicht der druckbaren Deckenhalterung mit Wabenstruktur",
+            "caption": "3D-druckbare Deckenhalterung — das CAD-Modell ist offen verfügbar."
           }
         },
         "source": {
@@ -7242,7 +7256,12 @@
             }
           ],
           "caveat": "Diese Zahlen sind nicht der Werbe-Höhepunkt, sondern unsere Arbeitsbasis. Sie werden mit jedem Pilot validiert. Detaillierte Methodik auf der Transparenz-Seite.",
-          "transparencyLink": "Transparenz-Seite öffnen"
+          "transparencyLink": "Transparenz-Seite öffnen",
+          "comparison": {
+            "eyebrow": "VERGLEICH NEUWARE",
+            "alt": "Neues 24-W-LED-Panel im Verkaufsregal mit Preisschild CHF 79.95",
+            "caption": "Ein vergleichbares neues 24-W-LED-Panel kostet CHF 79.95 im Handel — und bedeutet eine vollständige Neuproduktion."
+          }
         },
         "scientific": {
           "eyebrow": "WISSENSCHAFT",

@@ -11,17 +11,29 @@ const BUSINESSPLAN = `${UPCYCLING_BASE}/businessplan` as const
 const LENOVO = `${UPCYCLING_BASE}/lenovo-l2251pwd` as const
 const INSTALLS = `${UPCYCLING_BASE}/installs` as const
 
+/** Real installation + engineering photography (Juli 2026) — see upcycling-installations.ts */
+const INSTALL_ASSETS = {
+  curvedRepairhub: `${INSTALLS}/curved-repairhub.jpg`,
+  eingangLaden: `${INSTALLS}/eingang-laden.jpg`,
+  werkbankCurved1: `${INSTALLS}/werkbank-curved-1.jpg`,
+  werkbankCurved2: `${INSTALLS}/werkbank-curved-2.jpg`,
+  werkbankCurved3: `${INSTALLS}/werkbank-curved-3.jpg`,
+  ladenDecke1: `${INSTALLS}/laden-decke-1.jpg`,
+  ladenDecke2: `${INSTALLS}/laden-decke-2.jpg`,
+  ladenWand1: `${INSTALLS}/laden-wand-1.jpg`,
+  ladenWand2: `${INSTALLS}/laden-wand-2.jpg`,
+  /** Der Standby-Fix: Spannungsteiler-Stecker im 3D-gedruckten Gehäuse. */
+  standbyDongle: `${INSTALLS}/standby-dongle.jpg`,
+  /** 3D-CAD der Deckenhalterung (druckbar, offene Hardware). */
+  deckenhalterungCad: `${INSTALLS}/deckenhalterung-3d-cad.png`,
+  /** Elektronik-Arbeitsplatz — Controller-Boards + Lupe. */
+  werkstattElektronik: `${INSTALLS}/werkstatt-elektronik.jpg`,
+  /** Neuware-Vergleich: 24-W-LED-Panel im Laden, CHF 79.95. */
+  ledPanelVergleich: `${INSTALLS}/led-panel-vergleich.jpg`,
+} as const
+
 export const UPCYCLING_ASSETS = {
-  /** Real installation photography (Juli 2026 shoot) — see upcycling-installations.ts */
-  installs: {
-    curvedRepairhub: `${INSTALLS}/curved-repairhub.jpg`,
-    eingangLaden: `${INSTALLS}/eingang-laden.jpg`,
-    werkbankCurved1: `${INSTALLS}/werkbank-curved-1.jpg`,
-    werkbankCurved2: `${INSTALLS}/werkbank-curved-2.jpg`,
-    ladenDecke1: `${INSTALLS}/laden-decke-1.jpg`,
-    ladenWand1: `${INSTALLS}/laden-wand-1.jpg`,
-    ladenWand2: `${INSTALLS}/laden-wand-2.jpg`,
-  },
+  installs: INSTALL_ASSETS,
   gallery: {
     lenovoPoster: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished-poster.jpg`,
     lenovoVideo: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished.mp4`,
@@ -42,8 +54,8 @@ export const UPCYCLING_ASSETS = {
   },
   /** Thumbnails for landing explore cards — real local photography only. */
   explore: {
-    applications: `${BUSINESSPLAN}/hero-finished-poster.jpg`,
-    gallery: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished-poster.jpg`,
-    buildYourOwn: `${BUSINESSPLAN}/03-lcd-panel-removed.jpg`,
+    applications: INSTALL_ASSETS.eingangLaden,
+    gallery: INSTALL_ASSETS.curvedRepairhub,
+    buildYourOwn: INSTALL_ASSETS.standbyDongle,
   },
 } as const

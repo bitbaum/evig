@@ -46,6 +46,13 @@ type PageMessages = {
     empty: string
     moreComing: { title: string; body: string; cta: string }
   }
+  artifacts: {
+    eyebrow: string
+    title: string
+    intro: string
+    standby: { alt: string; caption: string }
+    mount: { alt: string; caption: string }
+  }
   source: {
     title: string
     body: string
@@ -186,6 +193,49 @@ export default async function UpcyclingBuildYourOwnPage() {
               )}
             </ul>
           )}
+        </div>
+      </section>
+
+      {/* Engineering artifacts — the two open-hardware parts every retrofit
+          needs, photographed/rendered from our own workshop (Juli 2026):
+          the Spannungsteiler standby plug and the printable ceiling mount. */}
+      <section className="border-t border-subtle bg-canvas">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <div className="ui-public-eyebrow">{m.artifacts.eyebrow}</div>
+          <h2 className="ui-public-display-md mt-3">{m.artifacts.title}</h2>
+          <p className="ui-public-section-lede mt-4 max-w-3xl">{m.artifacts.intro}</p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            <figure className="overflow-hidden rounded-lg border border-subtle bg-surface-base">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={UPCYCLING_ASSETS.installs.standbyDongle}
+                  alt={m.artifacts.standby.alt}
+                  fill
+                  sizes="(min-width: 640px) 45vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="border-t border-subtle px-4 py-3 text-sm leading-relaxed text-text-secondary">
+                {m.artifacts.standby.caption}
+              </figcaption>
+            </figure>
+
+            <figure className="overflow-hidden rounded-lg border border-subtle bg-surface-base">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={UPCYCLING_ASSETS.installs.deckenhalterungCad}
+                  alt={m.artifacts.mount.alt}
+                  fill
+                  sizes="(min-width: 640px) 45vw, 100vw"
+                  className="object-contain p-4"
+                />
+              </div>
+              <figcaption className="border-t border-subtle px-4 py-3 text-sm leading-relaxed text-text-secondary">
+                {m.artifacts.mount.caption}
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 

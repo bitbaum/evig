@@ -1,6 +1,8 @@
 import { getTranslations } from 'next-intl/server'
+import Image from 'next/image'
 import { ArrowRight, ExternalLink, BookOpen } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { UPCYCLING_ASSETS } from '@/config/upcycling-assets'
 import { UPCYCLING_ROUTES } from '@/config/upcycling-routes'
 import { UpcyclingPageHeader } from '../UpcyclingPageHeader'
 import { ogFor } from '../og-images'
@@ -38,6 +40,7 @@ type WirkungCopy = {
     metrics: Metric[]
     caveat: string
     transparencyLink: string
+    comparison: { eyebrow: string; alt: string; caption: string }
   }
   scientific: {
     eyebrow: string
@@ -143,6 +146,29 @@ function Environment({ section }: { section: WirkungCopy['environment'] }) {
         <p className="mt-8 max-w-3xl text-sm leading-relaxed text-text-secondary">
           {section.caveat}
         </p>
+
+        {/* Photo evidence, no invented data: a comparable new 24-W LED panel
+            on the shelf at CHF 79.95 — every one of them a full new
+            production run. Shot Juli 2026. */}
+        <figure className="mt-10 grid gap-0 overflow-hidden rounded-xl border border-subtle bg-surface-base sm:grid-cols-[1.4fr_1fr] sm:items-stretch">
+          <div className="relative aspect-[4/3] sm:aspect-auto sm:min-h-[16rem]">
+            <Image
+              src={UPCYCLING_ASSETS.installs.ledPanelVergleich}
+              alt={section.comparison.alt}
+              fill
+              sizes="(min-width: 640px) 55vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="flex flex-col justify-center border-t border-subtle p-6 sm:border-l sm:border-t-0">
+            <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+              {section.comparison.eyebrow}
+            </span>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+              {section.comparison.caption}
+            </p>
+          </figcaption>
+        </figure>
       </div>
     </section>
   )
