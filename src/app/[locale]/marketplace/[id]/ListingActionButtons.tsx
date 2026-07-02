@@ -41,6 +41,8 @@ interface ListingActionButtonsProps {
   onShare: () => void
   // Report
   onShowReportModal: () => void
+  // Error feedback (favorite / contact-seller failures)
+  actionError: string | null
 }
 
 export function ListingActionButtons({
@@ -62,6 +64,7 @@ export function ListingActionButtons({
   shareConfirm,
   onShare,
   onShowReportModal,
+  actionError,
 }: ListingActionButtonsProps) {
   const router = useRouter()
   const t = useTranslations('marketplace.listing_actions')
@@ -81,6 +84,16 @@ export function ListingActionButtons({
 
   return (
     <div className="space-y-3">
+      {/* Action failure feedback (favorite / contact-seller) — never fail silently */}
+      {actionError && (
+        <div
+          role="alert"
+          className="w-full rounded-lg border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 px-3 py-2 text-sm text-error-600"
+        >
+          {actionError}
+        </div>
+      )}
+
       {/* Unavailable banner for non-ACTIVE listings (replaces the buy/contact CTAs) */}
       {!isOwner && !isAvailable && (
         <div

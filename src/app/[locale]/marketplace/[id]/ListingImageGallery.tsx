@@ -51,12 +51,12 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
           onClick={() => hasImage && setZoomed(true)}
           disabled={!hasImage}
           aria-label={t('zoomOpen')}
-          className={`block w-full ${hasImage ? 'cursor-zoom-in' : 'cursor-default'}`}
+          className={`block w-full aspect-square ${hasImage ? 'cursor-zoom-in' : 'cursor-default'}`}
         >
           <ListingImage
             src={current?.url}
             alt={title}
-            className="w-full aspect-square object-cover"
+            className="object-cover"
             fallbackIconSize="w-24 h-24"
           />
           {hasImage && (

@@ -28,12 +28,16 @@ import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 export default function MarketplacePage() {
   const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const t = useTranslations('marketplace')
+
+  // Esc-to-close + focus trap for the mobile filter drawer (overlay SSOT).
+  const drawerRef = useFocusTrap<HTMLElement>(mobileFiltersOpen, () => setMobileFiltersOpen(false))
 
   const {
     listings,
@@ -185,6 +189,19 @@ export default function MarketplacePage() {
           activeAdvancedCount={advancedFilterCount}
         />
 
+        {/* Two-column on desktop: persistent refinement rail + results.
+            Mobile keeps the single column + drawer (below). */}
+        <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8 lg:items-start">
+          {/* Persistent refinement rail — desktop only. Reuses the exact same
+              MarketplaceFilterSidebar rendered inside the mobile drawer (DRY). */}
+          <aside className="hidden lg:block" aria-label={t('filters.advanced')}>
+            <div className="sticky top-20">
+              <MarketplaceFilterSidebar {...sharedSidebarProps} />
+            </div>
+          </aside>
+
+          {/* Results column */}
+          <div className="min-w-0">
         {/* Secondary chips — condition, price, etc. (not duplicating source/category pills) */}
         <ActiveFilterChips
           filters={filters}
@@ -192,9 +209,6 @@ export default function MarketplacePage() {
           clearFilters={clearFilters}
           hidePrimary
         />
-
-        {/* Results area — full width */}
-        <div className="min-w-0">
             {/* Results header */}
             <div className="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-subtle">
               <p className="ui-public-meta font-mono tabular-nums">
@@ -279,6 +293,7 @@ export default function MarketplacePage() {
               </nav>
             )}
           </div>
+        </div>
 
         {status === 'unauthenticated' && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
@@ -307,7 +322,7 @@ export default function MarketplacePage() {
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-surface-base flex flex-col border-l border-strong">
+          <aside ref={drawerRef} tabIndex={-1} className="absolute right-0 top-0 h-full w-full max-w-md bg-surface-base flex flex-col border-l border-strong focus:outline-none">
             <div className="flex items-center justify-between p-4 border-b border-subtle shrink-0">
               <span className="ui-public-eyebrow">{t('filters.advanced')}</span>
               <Button

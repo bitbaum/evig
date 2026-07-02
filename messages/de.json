@@ -746,6 +746,10 @@
       "removeImageLabel": "Foto {index} entfernen"
     },
     "listingsAvailable": "{count, plural, one {# Inserat} other {# Inserate}} verfügbar",
+    "aiCamera": {
+      "analyzing": "Produkt wird analysiert...",
+      "analyzingHint": "Unsere KI erkennt Marke, Modell und Zustand deines Produkts"
+    },
     "searchPlaceholder": "Laptop, Monitor, Smartphone...",
     "searchAriaLabel": "Im Marketplace suchen",
     "searchButton": "Suchen",

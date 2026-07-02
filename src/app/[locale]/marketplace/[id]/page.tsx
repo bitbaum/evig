@@ -137,7 +137,8 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
             onSendMessage={actions.sendMessage}
             shareConfirm={actions.shareConfirm}
             onShare={actions.handleShare}
-            onShowReportModal={() => actions.setShowReportModal(true)}
+            onShowReportModal={() => { actions.clearActionError(); actions.setShowReportModal(true) }}
+            actionError={actions.actionError}
           />
 
           <RevampitTrustStrip listing={listing} isVerified={isVerified} />
@@ -170,6 +171,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           reportSent={actions.reportSent}
           onReport={actions.handleReport}
           onClose={actions.closeReportModal}
+          actionError={actions.actionError}
         />
       )}
 

@@ -20,6 +20,7 @@ interface ReportModalProps {
   reportSent: boolean
   onReport: () => void
   onClose: () => void
+  actionError: string | null
 }
 
 export function ReportModal({
@@ -31,6 +32,7 @@ export function ReportModal({
   reportSent,
   onReport,
   onClose,
+  actionError,
 }: ReportModalProps) {
   const t = useTranslations('marketplace.report_modal')
   return (
@@ -73,6 +75,14 @@ export function ReportModal({
             rows={3}
             className="resize-none mb-4"
           />
+          {actionError && (
+            <div
+              role="alert"
+              className="mb-4 rounded-lg border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 px-3 py-2 text-sm text-error-600"
+            >
+              {actionError}
+            </div>
+          )}
           <Button
             onClick={onReport}
             disabled={!reportReason || reportSending}

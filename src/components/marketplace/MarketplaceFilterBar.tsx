@@ -96,7 +96,9 @@ export function MarketplaceFilterBar({
       </div>
 
       {onOpenAdvanced && (
-        <div className="flex items-center gap-3 pt-1 border-t border-subtle">
+        // Compact-viewport affordance only — on lg+ the persistent filter
+        // rail replaces this trigger, so hide it to avoid a redundant control.
+        <div className="flex items-center gap-3 pt-1 border-t border-subtle lg:hidden">
           <FilterPill active={activeAdvancedCount > 0} onClick={onOpenAdvanced}>
             {t('filters.advanced')}
             {activeAdvancedCount > 0 && (

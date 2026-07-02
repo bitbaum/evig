@@ -57,7 +57,7 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
         <Heading level={1} className="text-2xl lg:text-3xl text-text-primary mb-2">
           {listing.title}
         </Heading>
-        <p className={`text-3xl font-bold ${isGratis ? 'text-teal-600' : 'text-action'}`}>
+        <p className={`text-3xl font-bold ${isGratis ? GRATIS_CONFIG.priceColor : 'text-action'}`}>
           {formatCHF(Number(listing.price_chf))}
         </p>
       </div>

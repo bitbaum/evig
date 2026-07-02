@@ -244,6 +244,9 @@ export const GRATIS_CONFIG = {
   label: 'Gratis',
   color: UI_STATUS.teal,
   borderColor: 'border-teal-200 dark:border-teal-800',
+  // Prominent price text (not a badge) — kept here so the gratis visual
+  // identity has a single source of truth.
+  priceColor: 'text-teal-700 dark:text-teal-300',
 } as const;
 
 // ============================================================================

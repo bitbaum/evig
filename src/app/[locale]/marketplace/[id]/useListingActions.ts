@@ -172,6 +172,7 @@ export function useListingActions({
     setReportReason('')
     setReportDetails('')
     setReportSent(false)
+    setActionError(null)
   }
 
   return {
