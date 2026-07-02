@@ -181,22 +181,25 @@ export default function MarketplacePage() {
           </Select>
         </div>
 
-        {/* Unified filter bar — source + category in one surface */}
-        <MarketplaceFilterBar
-          filters={filters}
-          resetOffset={resetOffset}
-          onOpenAdvanced={() => setMobileFiltersOpen(true)}
-          activeAdvancedCount={advancedFilterCount}
-        />
+        {/* Mobile top strip — browse facets + advanced trigger. On desktop the
+            persistent rail is the single filter surface, so this is hidden. */}
+        <div className="lg:hidden">
+          <MarketplaceFilterBar
+            filters={filters}
+            resetOffset={resetOffset}
+            onOpenAdvanced={() => setMobileFiltersOpen(true)}
+            activeAdvancedCount={advancedFilterCount}
+          />
+        </div>
 
         {/* Two-column on desktop: persistent refinement rail + results.
             Mobile keeps the single column + drawer (below). */}
         <div className="lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8 lg:items-start">
           {/* Persistent refinement rail — desktop only. Reuses the exact same
               MarketplaceFilterSidebar rendered inside the mobile drawer (DRY). */}
-          <aside className="hidden lg:block" aria-label={t('filters.advanced')}>
+          <aside className="hidden lg:block" aria-label={t('filters.label')}>
             <div className="sticky top-20">
-              <MarketplaceFilterSidebar {...sharedSidebarProps} />
+              <MarketplaceFilterSidebar {...sharedSidebarProps} showBrowse />
             </div>
           </aside>
 

@@ -13,6 +13,7 @@ import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FilterPill } from '@/components/marketplace/FilterPill'
+import { MarketplaceBrowseFacets } from '@/components/marketplace/MarketplaceBrowseFacets'
 
 export type FiltersObj = ReturnType<typeof useMarketplaceListings>['filters']
 
@@ -22,6 +23,12 @@ interface FilterSidebarProps {
   resetOffset: () => void
   clearFilters: () => void
   hasActiveFilters: boolean
+  /**
+   * Include the primary browse facets (source + category) at the top. True for
+   * the desktop rail (the single filter surface); false in the mobile drawer,
+   * where the top strip already carries them.
+   */
+  showBrowse?: boolean
 }
 
 /**
@@ -80,6 +87,7 @@ export function MarketplaceFilterSidebar({
   resetOffset,
   clearFilters,
   hasActiveFilters,
+  showBrowse = false,
 }: FilterSidebarProps) {
   const t = useTranslations('marketplace')
   const specFilters = getSpecFiltersForCategory(filters.category)
@@ -128,6 +136,15 @@ export function MarketplaceFilterSidebar({
       </div>
 
       <div className="mt-5 space-y-5">
+        {/* Primary browse facets — only in the desktop rail (single surface) */}
+        {showBrowse && (
+          <MarketplaceBrowseFacets
+            filters={filters}
+            resetOffset={resetOffset}
+            orientation="vertical"
+          />
+        )}
+
         {/* Condition */}
         <PillGroup
           label={t('filters.condition')}
