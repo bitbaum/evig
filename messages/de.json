@@ -7274,7 +7274,28 @@
             "Validierung gegenüber Apple PER, Öko-Institut und Circular-Computing-Studien"
           ],
           "timeline": "Start: April 2026 · Zwischenresultate: Juni 2026 · Schlussbericht: Q3 2026.",
-          "commitment": "Wir publizieren das Ergebnis unverändert — auch wenn es ungünstig ausfällt. Eine LCA, die nur \"gewinnt\", ist keine."
+          "commitment": "Wir publizieren das Ergebnis unverändert — auch wenn es ungünstig ausfällt. Eine LCA, die nur \"gewinnt\", ist keine.",
+          "results": {
+            "eyebrow": "VORLÄUFIGE RESULTATE · ZWISCHENSTAND 28.05.2026",
+            "quote": "Unter aktueller Modellierung und unter aktuellen Lebensdauerszenarien ist die Monitorleuchte in jedem Fall besser als die LED-Leuchte.",
+            "quoteSource": "ZHAW School of Engineering, Institut für Nachhaltige Entwicklung — C. Baumgartner, M. Grünholz",
+            "stats": {
+              "ghg": {
+                "value": "−82.7%",
+                "label": "Treibhausgase pro Mlmh · Durchschnittsszenario"
+              },
+              "scarcity": {
+                "value": "−84.8%",
+                "label": "Gesamt-Umweltwirkung · Methode der ökologischen Knappheit"
+              },
+              "range": {
+                "value": "52–86%",
+                "label": "Reduktion über alle Lebensdauer-Szenarien"
+              }
+            },
+            "specs": "Referenzleuchte (DELL U2412b, umgebaut): 13.6 W gemessen · ~965 lm gemessen · Vergleich pro Megalumen-Stunde, cradle-to-grave, gegen eine herkömmliche LED-Leuchte.",
+            "caveat": "Vorläufige Zahlen aus dem laufenden Innosuisse-Innovationsscheck — der finale ZHAW-Bericht ersetzt sie. Die Richtung ist über alle Szenarien eindeutig."
+          }
         },
         "openHardware": {
           "eyebrow": "OPEN HARDWARE",

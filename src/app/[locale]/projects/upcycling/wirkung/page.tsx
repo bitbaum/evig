@@ -49,6 +49,14 @@ type WirkungCopy = {
     scope: string[]
     timeline: string
     commitment: string
+    results: {
+      eyebrow: string
+      quote: string
+      quoteSource: string
+      stats: Record<string, { value: string; label: string }>
+      specs: string
+      caveat: string
+    }
   }
   openHardware: {
     eyebrow: string
@@ -258,6 +266,36 @@ function Scientific({ section }: { section: WirkungCopy['scientific'] }) {
         <p className="mt-6 border-l-2 border-action pl-4 text-sm leading-relaxed text-text-primary sm:text-base">
           {section.commitment}
         </p>
+
+        {/* Vorläufige ZHAW-Resultate — Zwischenstand, ehrlich als solcher
+            markiert. Zahlen aus der ZHAW-Zwischenpräsentation (28.05.2026). */}
+        <div className="mt-12 rounded-xl border border-subtle bg-surface-base p-6 sm:p-8">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+            {section.results.eyebrow}
+          </p>
+          <div className="mt-6 grid gap-6 sm:grid-cols-3">
+            {Object.entries(section.results.stats).map(([key, stat]) => (
+              <div key={key}>
+                <p className="text-3xl font-semibold tracking-tight text-action sm:text-4xl">
+                  {stat.value}
+                </p>
+                <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.14em] leading-relaxed text-text-muted">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+          <blockquote className="mt-8 border-l-2 border-action pl-4">
+            <p className="text-base leading-relaxed text-text-primary sm:text-lg">
+              «{section.results.quote}»
+            </p>
+            <cite className="mt-2 block font-mono text-[10px] uppercase not-italic tracking-[0.14em] text-text-muted">
+              {section.results.quoteSource}
+            </cite>
+          </blockquote>
+          <p className="mt-6 text-sm leading-relaxed text-text-secondary">{section.results.specs}</p>
+          <p className="mt-3 text-xs leading-relaxed text-text-tertiary">{section.results.caveat}</p>
+        </div>
       </div>
     </section>
   )

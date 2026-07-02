@@ -21,6 +21,24 @@ body { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
   justify-content: center; padding: clamp(2rem,6vmin,5rem) clamp(2rem,7vmin,6.5rem);
   opacity: 0; transition: opacity .25s ease; }
 .slide.active { display: flex; opacity: 1; }
+  .slide.active .eyebrow, .slide.active h1, .slide.active h2, .slide.active .facts li,
+  .slide.active .stat, .slide.active .card, .slide.active .subtitle, .slide.active .bleed-fact,
+  .slide.active .sources, .slide.active .hairline {
+    animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+  .slide.active h1, .slide.active h2 { animation-delay: .08s; }
+  .slide.active .subtitle { animation-delay: .16s; }
+  .slide.active .facts li:nth-child(1), .slide.active .card:nth-child(1), .slide.active .stat:nth-child(1) { animation-delay: .16s; }
+  .slide.active .facts li:nth-child(2), .slide.active .card:nth-child(2), .slide.active .stat:nth-child(2) { animation-delay: .24s; }
+  .slide.active .facts li:nth-child(3), .slide.active .card:nth-child(3), .slide.active .stat:nth-child(3) { animation-delay: .32s; }
+  .slide.active .facts li:nth-child(4), .slide.active .stat:nth-child(4) { animation-delay: .40s; }
+  .slide.active .facts li:nth-child(5) { animation-delay: .48s; }
+  .slide.active .bleed-fact { animation-delay: .3s; }
+  .slide.active .sources { animation-delay: .5s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .slide.active * { animation: none !important; } }
+  .dots { position: fixed; bottom: 2.6rem; left: 50%; transform: translateX(-50%); display: flex; gap: .35rem; z-index: 55; }
+  .dots span { width: 5px; height: 5px; border-radius: 999px; background: rgba(255,255,255,.18); transition: background .2s, width .2s; }
+  .dots span.on { background: var(--green); width: 14px; }
 
 /* typography — x.ai discipline: big, tight, left-aligned */
 .eyebrow { font-family: var(--mono); font-size: clamp(.65rem,1.3vmin,.85rem);
@@ -275,17 +293,39 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
     </div>
   </div>
 
-  <!-- 10 · WISSENSCHAFT (Fakten) -->
-  <div class="slide" data-notes="Die Wissenschaft — und unsere Haltung dazu: Die Arbeitszahl lautet 15 bis 25 Kilogramm CO2 vermieden pro Leuchte. Das ist die Differenz zwischen der Weiternutzung eines bereits produzierten Bildschirms und der Neuproduktion einer vergleichbaren LED-Leuchte. Quellen: Apple Product Environmental Reports und Öko-Institut-LCA-Daten für Display-Elektronik. Wichtig — und das sagen wir Swico genauso offen wie auf unserer Website: Diese Zahl ist unsere Arbeitsbasis, nicht der Werbe-Höhepunkt. Die ZHAW erstellt die vollständige Ökobilanz nach ISO 14040/44 — Material, Nutzungsenergie, End-of-Life, Sensitivitäten — Resultate Q3 2026, finanziert über einen Innosuisse-Innovationsscheck. Dazu die CE-Frage, sauber geklärt: Das Gutachten der Barologic GmbH Winterthur bestätigt, dass wir die Konformität als Hersteller garantieren können, weil nur Komponenten entnommen werden. Nächster Messschritt: Energieverbrauch im Betrieb.">
-    <p class="eyebrow">Wissenschaft</p>
-    <h2>Belegt statt <span class="accent">behauptet</span>.</h2>
+  <!-- 10 · WISSENSCHAFT (ZHAW-Resultate) -->
+  <div class="slide" data-notes="Der wissenschaftliche Kern — und die stärkste Folie des Abends. Die ZHAW, Institut für Nachhaltige Entwicklung an der School of Engineering — Corinna Baumgartner und Mirjam Grünholz — erstellt die komparative Ökobilanz nach ISO 14040/44: cradle-to-grave, funktionelle Einheit ist die abgegebene Lichtmenge über die Zeit, in Megalumen-Stunden. Verglichen wird unsere Monitorleuchte mit einer herkömmlichen LED-Leuchte. Die vorläufigen Resultate, Zwischenstand 28. Mai 2026: 82.7 Prozent weniger Treibhausgasemissionen im Durchschnittsszenario. Nach der Methode der ökologischen Knappheit — der Schweizer Methode über alle Umweltwirkungen — 84.8 Prozent weniger. Und über sämtliche Lebensdauer-Szenarien hinweg bleibt die Reduktion zwischen 52 und 86 Prozent. Das Fazit der ZHAW wörtlich: 'Unter aktueller Modellierung ist die Monitorleuchte in jedem Fall besser als die LED-Leuchte.' Wichtig für die Glaubwürdigkeit: vorläufige Zahlen, der finale Bericht folgt — aber die Richtung ist über alle Szenarien eindeutig. Dazu die CE-Frage, geklärt durch das Gutachten der Barologic GmbH.">
+    <p class="eyebrow">Wissenschaft · ZHAW-Ökobilanz (ISO 14040/44) · vorläufig, Stand 28.05.2026</p>
+    <h2>«In jedem Fall <span class="accent">besser</span>.»</h2>
+    <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat"><div class="n"><em>−82.7%</em></div><div class="l">Treibhausgase · Durchschnittsszenario</div></div>
+      <div class="stat"><div class="n"><em>−84.8%</em></div><div class="l">Gesamt-Umweltwirkung · ökol. Knappheit</div></div>
+      <div class="stat"><div class="n">52–86%</div><div class="l">Reduktion über alle Szenarien</div></div>
+    </div>
+    <hr class="hairline">
     <ul class="facts">
-      <li><strong class="accent">~15–25 kg CO₂ vermieden pro Leuchte</strong> — Wiederverwendung statt Neuproduktion <em style="font-style:normal">(Arbeitsbasis, wird validiert)</em></li>
-      <li><strong>ZHAW-Ökobilanz nach ISO 14040/44</strong>: Material · Nutzungsenergie · End-of-Life · Resultate Q3 2026 · Innosuisse-Innovationsscheck</li>
-      <li><strong>CE-Konformität geklärt</strong> — Gutachten Barologic GmbH: als Hersteller garantierbar</li>
-      <li>Nächster Messschritt: <strong>Energieverbrauch im Betrieb</strong></li>
+      <li>Vergleich pro <strong>Megalumen-Stunde</strong> (cradle-to-grave) gegen eine herkömmliche LED-Leuchte — ZHAW-Fazit: «Die Monitorleuchte ist <strong>in jedem Fall besser</strong>»</li>
+      <li><strong>CE-Konformität geklärt</strong> — Gutachten Barologic GmbH, Winterthur</li>
     </ul>
-    <p class="sources">Quellen: Apple Product Environmental Reports · Öko-Institut/UBA (Display-Elektronik) · Abschlussbericht E/G · Methodik: revampit.orangecat.ch/de/projects/upcycling/wirkung</p>
+    <p class="sources">ZHAW School of Engineering, Institut für Nachhaltige Entwicklung — C. Baumgartner, M. Grünholz · Zwischenstand Innoscheck 28.05.2026 · Treibhauspotential kg CO₂-eq/Mlmh (IPCC) + Methode der ökologischen Knappheit · finaler Bericht folgt</p>
+  </div>
+
+  <!-- 10b · ÖKONOMIE (Messwerte + Markt) -->
+  <div class="slide" data-notes="Die Zahlen zur Wirtschaftlichkeit — alles gemessen oder erhoben, nichts geschätzt: Unsere Referenzleuchte, ein umgebauter DELL U2412b, zieht gemessene 13.6 Watt und liefert rund 965 Lumen — bei 50'000 Stunden erwarteter Lebensdauer. Auf die Leuchtfläche gerechnet ist die Monitorleuchte konkurrenzlos: Selbst bei einem Verkaufspreis von 100 Franken liegt sie bei 5 Franken pro Quadratdezimeter — kommerzielle Panels im Handel kosten 4.90 bis 11.20. Bei 50 Franken sind es 2.50. Und die ZHAW-Akzeptanzumfrage zeigt eine Zahlungsbereitschaft von 20 bis 150 Franken, im Schnitt 80 — wir können also kostendeckend UND unter Neuware-Preis verkaufen. Ehrlich dazu: n gleich 6, die Umfrage läuft weiter. Die bevorzugten Einsatzorte aus der Umfrage decken sich mit unseren Piloten: Korridor, Treppenhaus, Werkstatt, Labor — plus neue Ideen wie Leuchttische für die grafische Industrie und Plakat-Hinterleuchtung.">
+    <p class="eyebrow">Ökonomie · gemessen und erhoben</p>
+    <h2>Konkurrenzfähig — <span class="accent">gemessen</span>.</h2>
+    <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat"><div class="n">13.6<em> W</em></div><div class="l">Verbrauch · gemessen (DELL U2412b)</div></div>
+      <div class="stat"><div class="n">~965<em> lm</em></div><div class="l">Lichtstrom · gemessen</div></div>
+      <div class="stat"><div class="n">Ø 80<em> CHF</em></div><div class="l">Zahlungsbereitschaft (n=6, ZHAW)</div></div>
+      <div class="stat"><div class="n">2.5–5<em> CHF</em></div><div class="l">pro dm² — Neuware: 4.90–11.20</div></div>
+    </div>
+    <hr class="hairline">
+    <ul class="facts">
+      <li>Bevorzugte Einsatzorte (ZHAW-Umfrage): <strong>Korridor, Treppenhaus, Werkstatt, Labor</strong> — deckt sich mit unseren Piloten</li>
+      <li>Neue Anwendungsideen aus der Umfrage: <strong>Leuchttische</strong> (grafische Industrie), Plakat-Hinterleuchtung, Kellerabteile</li>
+    </ul>
+    <p class="sources">ZHAW Akzeptanzumfrage + Preisvergleich, Zwischenstand 28.05.2026 · Lumen-Messung: 8 Messpunkte, Ø 4'785 Lux × 0.2016 m² · Lebensdauer-Annahme 50'000 h</p>
   </div>
 
   <!-- 11 · OPEN SOURCE (Fakten) -->
@@ -876,6 +916,41 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
 
   // Init
   show(0);
+})();
+</script>
+<script>
+(function () {
+  // Slide dots
+  var slides = document.querySelectorAll('.slide');
+  var dots = document.createElement('div'); dots.className = 'dots';
+  slides.forEach(function () { dots.appendChild(document.createElement('span')); });
+  document.body.appendChild(dots);
+  function syncDots() {
+    var act = document.querySelector('.slide.active');
+    var idx = Array.prototype.indexOf.call(slides, act);
+    dots.querySelectorAll('span').forEach(function (d, i) { d.classList.toggle('on', i === idx); });
+  }
+  // Count-up for .stat .n numbers when their slide activates
+  function countUp(el) {
+    var raw = el.getAttribute('data-count'); if (!raw) return;
+    var target = parseFloat(raw); var dec = (raw.split('.')[1] || '').length;
+    var t0 = null;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min((ts - t0) / 900, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.childNodes[0].nodeValue = (target * eased).toFixed(dec);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var mo = new MutationObserver(function () {
+    syncDots();
+    var act = document.querySelector('.slide.active');
+    if (act) act.querySelectorAll('[data-count]').forEach(countUp);
+  });
+  slides.forEach(function (sl) { mo.observe(sl, { attributes: true, attributeFilter: ['class'] }); });
+  syncDots();
 })();
 </script>
 </body>
