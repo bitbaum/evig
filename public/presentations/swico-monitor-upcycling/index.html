@@ -113,6 +113,15 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
   .slide { position: relative; display: flex !important; opacity: 1 !important; page-break-after: always; height: 100vh; }
   .progress, .counter, .nav-arrow, .toolbar, .watermark, .notes-panel { display: none !important; }
 }
+
+/* statement bleeds + fact chips */
+.bleed-fact { display: inline-block; margin-top: 1.2rem; font-family: var(--mono);
+  font-size: clamp(.65rem,1.3vmin,.85rem); letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
+  padding: .45rem .9rem; backdrop-filter: blur(4px); }
+.statement h1 { font-size: clamp(2.6rem,7.5vmin,6.2rem); }
+.facts { max-width: 62rem; }
+.facts li { font-size: clamp(1.1rem,2.3vmin,1.75rem); margin-bottom: 1em; }
 </style>
 </head>
 <body>
@@ -150,87 +159,97 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
 
 <div class="deck" id="deck">
 
-  <!-- 01 · TITEL -->
-  <div class="slide slide--bleed active" data-notes="Begrüssung. Das ist die Abschlusspräsentation des Swico-Projekts 2023-02-01 'Funktionelle Kreislaufnutzung von IT-Geräten'. Das Foto ist keine Visualisierung — das ist unsere Curved-Leuchte im täglichen Einsatz über der Werkbank des RepairHub von zuerich.repair." data-no-watermark>
-    <img class="bleed-img" src="/projects/upcycling/installs/werkbank-curved-1.jpg" alt="Curved-Upcycling-Leuchte über der Werkbank">
+  <!-- 01 · TITEL (full-bleed) -->
+  <div class="slide slide--bleed active" data-notes="Begrüssung. Abschlusspräsentation des Swico-Projekts 2023-02-01 'Funktionelle Kreislaufnutzung von IT-Geräten'. Dieses Foto ist keine Visualisierung: Das ist ein entsorgter Curved-Monitor — heute die Werkstattleuchte im RepairHub von zuerich.repair, fotografiert im Juli 2026." data-no-watermark>
+    <img class="bleed-img" style="object-position:50% 38%" src="/projects/upcycling/installs/werkbank-curved-3.jpg" alt="Curved-Upcycling-Leuchte über der Werkbank im RepairHub">
     <div class="bleed-scrim"></div>
     <div class="bleed-content">
       <p class="eyebrow">Projekt 2023-02-01 · revamp-it × Swico × ZHAW</p>
       <h1>Monitor-<span class="accent">Upcycling</span></h1>
       <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">Vom entsorgten Bildschirm zur Wand- und Deckenleuchte.<br>Abschlusspräsentation · Juli 2026</p>
+      <p class="subtitle">Abschlusspräsentation · Juli 2026</p>
+      <span class="bleed-fact">Foto: entsorgter Monitor, heute Werkstattleuchte · RepairHub zuerich.repair</span>
     </div>
   </div>
 
-  <!-- 02 · PROBLEM -->
-  <div class="slide" data-notes="Das Problem in einem Satz: Wir schreddern funktionierende Technik. Monitore sind nach Grösse UND Stückzahl ein wichtiger Anteil im IT-Recycling-Mix. Entscheidend: Ein kaputtes Display bedeutet fast nie ein kaputtes Backlight — genau die Geräte, die niemand mehr reparieren will, haben eine funktionierende Lichtquelle eingebaut. Und parallel werden für jeden Um- und Neubau neue Leuchten produziert.">
+  <!-- 02 · MISSION (full-bleed) -->
+  <div class="slide slide--bleed statement" data-notes="Der Satz, der alles trägt: Wir machen aus Abfall Licht. Und wir zeigen allen, wie es geht — denn wir glauben an offene Hardware genauso, wie wir an Open-Source-Software glauben. Jede Anleitung ist frei. Jede Werkstatt, die sie nutzt, vergrössert die Wirkung. Das Foto: Wandleuchten in unserem Laden — ehemalige Monitore." data-no-watermark>
+    <img class="bleed-img" style="object-position:30% 18%" src="/projects/upcycling/installs/laden-wand-1.jpg" alt="Upcycling-Wandleuchten im Laden revamp-it">
+    <div class="bleed-scrim"></div>
+    <div class="bleed-content">
+      <p class="eyebrow">Unsere Mission</p>
+      <h1>Wir machen aus Abfall <span class="accent">Licht</span>.</h1>
+      <hr class="hairline" style="max-width:8rem">
+      <p class="subtitle">Und zeigen offen, wie es geht — Hardware so offen wie Software.</p>
+      <span class="bleed-fact">Foto: Wandleuchten · Laden revamp-it, Zürich · Juli 2026</span>
+    </div>
+  </div>
+
+  <!-- 03 · PROBLEM (Fakten) -->
+  <div class="slide" data-notes="Warum das nötig ist — drei Fakten aus dem Abschlussbericht: Erstens sind Monitore nach Grösse und Stückzahl ein wichtiger Anteil im IT-Recycling-Mix — es geht um relevante Mengen. Zweitens der entscheidende technische Punkt: Ein defektes Display heisst fast nie defektes Backlight. Kratzer, Pixelfehler, Darstellungsfehler — die Lichtquelle dahinter funktioniert. Genau diese Geräte, die niemand mehr als Bildschirm will, sind unser Rohstoff. Drittens läuft parallel eine Neuproduktion: Jeder Um- und Neubau braucht Wand- und Deckenleuchten in Stückzahlen — mit vollem Rohstoff-, Energie- und Transportaufwand.">
     <p class="eyebrow">Das Problem</p>
     <h2>Funktionierende Technik<br>wird <span class="accent">geschreddert</span>.</h2>
-    <div class="split">
-      <ul>
-        <li><strong>Monitore</strong> sind nach Grösse und Stückzahl ein wichtiger Anteil im IT-Recycling-Mix</li>
-        <li>Defektes Display <strong>&ne;</strong> defektes Backlight — die Lichtquelle funktioniert fast immer noch</li>
-        <li>Gleichzeitig: Jeder Um- und Neubau braucht <strong>neue Wand- und Deckenleuchten</strong> — volle Neuproduktion</li>
-      </ul>
-      <figure class="ph"><img src="/projects/upcycling/installs/werkstatt-elektronik.jpg" alt="Monitor-Elektronik auf dem Arbeitstisch"><figcaption>Monitor-Elektronik · Werkstatt revamp-it</figcaption></figure>
-    </div>
+    <ul class="facts">
+      <li><strong>Monitore</strong> sind nach Grösse und Stückzahl ein wichtiger Anteil im IT-Recycling-Mix</li>
+      <li>Defektes Display <strong>&ne;</strong> defektes Backlight — Kratzer und Pixelfehler lassen die Lichtquelle intakt</li>
+      <li>Parallel dazu: Jeder Um- und Neubau braucht <strong>neue Leuchten</strong> — volle Neuproduktion aus Rohstoffen, Energie, Transport</li>
+    </ul>
+    <p class="sources">Quelle: Abschlussbericht Projekt 2023-02-01, Abschnitte A + B</p>
   </div>
 
-  <!-- 03 · INSIGHT -->
-  <div class="slide" data-notes="Unsere Kernidee: In jedem Flachbildschirm steckt eine fertige Leuchte. Man entfernt die Bildoberfläche und die Bild-Elektronik — was bleibt, ist das LED-Backlight mit Diffusor: ein fertiges, gleichmässiges Flächenlicht. Rechts der Realitäts-Check aus dem Baumarkt: Ein vergleichbares neues 24-W-LED-Panel kostet CHF 79.95 — und dahinter steht eine komplette Neuproduktion mit Rohstoffen, Energie und Transport. Unser Panel ist schon produziert.">
+  <!-- 04 · DIE IDEE (Fakten) -->
+  <div class="slide" data-notes="Die Kernidee, technisch präzise: In jedem Flachbildschirm steckt eine fertige Leuchte. Wir entfernen die Bildoberfläche und die Bild-Elektronik — was bleibt, ist das LED-Backlight mit Diffusor: ein fertiges, gleichmässiges Flächenlicht, schattenfrei. Der Realitäts-Check aus dem Handel: Ein vergleichbares neues 24-Watt-LED-Panel kostet CHF 79.95 — Foto-Beleg auf unserer Wirkungs-Seite. Der Unterschied: Unser Panel ist bereits produziert. Schwerpunkt bewusst auf LED-Backlights: tieferer Verbrauch als Leuchtstoffröhren, heller, kaum Zusatzmaterial, beste Ökobilanz.">
     <p class="eyebrow">Die Idee</p>
     <h2>In jedem Flachbildschirm steckt<br>eine <span class="accent">fertige Leuchte</span>.</h2>
-    <div class="grid-2">
-      <figure class="ph"><img src="/projects/upcycling/businessplan/03-lcd-panel-removed.jpg" alt="LCD-Panel entfernt — das Backlight liegt frei"><figcaption>Bildoberfläche entfernt → Backlight bleibt</figcaption></figure>
-      <figure class="ph"><img src="/projects/upcycling/installs/led-panel-vergleich.jpg" alt="Neues LED-Panel im Handel, CHF 79.95"><figcaption>Neuware-Vergleich: 24-W-Panel · CHF 79.95</figcaption></figure>
-    </div>
-    <p class="sources">Schwerpunkt LED-Backlight: tieferer Energieverbrauch als CCFL, hellere Ausleuchtung, minimales Zusatzmaterial. (Abschlussbericht, Abschnitt A)</p>
+    <ul class="facts">
+      <li>Bildoberfläche + Bild-Elektronik raus → das <strong>LED-Backlight</strong> bleibt: fertiges, schattenfreies Flächenlicht</li>
+      <li>Neuware-Vergleich: 24-W-LED-Panel im Handel <strong>CHF 79.95</strong> — volle Neuproduktion. Unser Panel ist schon produziert</li>
+      <li>Schwerpunkt LED statt CCFL: <strong>tieferer Verbrauch, heller, kaum Zusatzmaterial</strong></li>
+    </ul>
+    <p class="sources">Foto-Beleg Neuware-Vergleich: revampit.orangecat.ch/de/projects/upcycling/wirkung · Abschlussbericht Abschnitt A</p>
   </div>
 
-  <!-- 04 · PRODUKT -->
-  <div class="slide" data-notes="Das Produkt in drei realen Installationen — alle Fotos Juli 2026, nichts gerendert. Links die Curved-Leuchte im RepairHub: schattenfreies Arbeitslicht UND Blickfang. Mitte: Deckenleuchten im Eingangsbereich unseres Ladens — Kundenreaktionen durchweg positiv. Rechts: Wandleuchten im Laden. Eine Leuchte, zwei Einsatzwelten: funktional (Werkstätten, Korridore, Lager) und dekorativ (Wohn- und Verkaufsräume).">
-    <p class="eyebrow">Das Produkt · Fotos Juli 2026</p>
-    <h2>Eine Leuchte.<br>Zwei <span class="accent">Einsatzwelten</span>.</h2>
-    <div class="grid-3">
-      <figure class="ph"><img src="/projects/upcycling/installs/werkbank-curved-3.jpg" alt="Curved-Leuchte im RepairHub"><figcaption>RepairHub · zuerich.repair</figcaption></figure>
-      <figure class="ph"><img src="/projects/upcycling/installs/laden-decke-2.jpg" alt="Deckenleuchte im Laden revamp-it"><figcaption>Laden revamp-it · Decke</figcaption></figure>
-      <figure class="ph"><img src="/projects/upcycling/installs/laden-wand-1.jpg" alt="Wandleuchte im Laden revamp-it"><figcaption>Laden revamp-it · Wand</figcaption></figure>
-    </div>
-  </div>
-
-  <!-- 05 · UMBAU -->
-  <div class="slide" data-notes="So entsteht die Leuchte — der komplette Umbau ist in geschützten Werkstätten machbar, ohne Spezialausrüstung: Gehäuse öffnen, Bildoberfläche und Bild-Elektronik entnehmen, Standby-Fix einsetzen, Netzteil wieder einbauen, schliessen. Pro Monitor-Typ gibt es eine dokumentierte Anleitung. Wichtig fürs Publikum: Das ist kein Bastelprojekt — es ist ein reproduzierbarer Prozess mit Anleitung, Checkliste und definierten Eignungskriterien (Kratzer und Pixelfehler ok, defekte Stromversorgung nicht).">
-    <p class="eyebrow">Der Umbau</p>
-    <h2>Werkstatt-tauglich.<br><span class="accent">Reproduzierbar</span>.</h2>
-    <div class="grid-4">
-      <figure class="ph"><img src="/projects/upcycling/businessplan/02-back-cover-opened.jpg" alt="Gehäuse geöffnet"><figcaption>01 · Öffnen</figcaption></figure>
-      <figure class="ph"><img src="/projects/upcycling/businessplan/03-lcd-panel-removed.jpg" alt="LCD entfernt"><figcaption>02 · Panel raus</figcaption></figure>
-      <figure class="ph"><img src="/projects/upcycling/installs/standby-dongle.jpg" alt="Standby-Fix Stecker"><figcaption>03 · Standby-Fix</figcaption></figure>
-      <figure class="ph"><img src="/projects/upcycling/businessplan/hero-finished-poster.jpg" alt="Fertige Leuchte"><figcaption>04 · Fertig</figcaption></figure>
-    </div>
-    <p class="sources">Geeignet: Kratzer, Pixelfehler, Darstellungsfehler · Nicht geeignet: defekte Stromversorgung, starker Gehäusebruch. (Abschlussbericht, Abschnitt B)</p>
-  </div>
-
-  <!-- 06 · HARD PART -->
-  <div class="slide" data-notes="Die härteste technische Hürde — und warum sie ein Wettbewerbsvorteil ist: Viele Monitore fallen Minuten nach dem Einschalten in den Standby. Elektroniker Benjamin Ernst hat die Lösung entwickelt: ein Spannungsteiler im Niedervoltbereich, verpackt als kleiner Stecker — im Foto das 3D-gedruckte Gehäuse mit den zwei Widerständen. Der Stecker wird in der Werkstatt selbst gefertigt. Rechts unten das CAD der 3D-druckbaren Deckenhalterung — auch die Montage ist gelöste, offene Hardware: VESA-Standard, Wandlösung mit Bettlagerbeschlägen, Leisten für ganze Reihen. Ehrliches Learning: Bei EIZO fiel die Serie trotz erfolgreichem Prototyp zurück in den Standby — Serie gestoppt, wird nachuntersucht.">
-    <p class="eyebrow">Die technische Hürde</p>
-    <h2>Standby: <span class="accent">gelöst</span> —<br>und als offene Hardware geteilt.</h2>
-    <div class="split">
-      <figure class="ph-tall ph"><img src="/projects/upcycling/installs/standby-dongle.jpg" alt="Spannungsteiler-Stecker im 3D-gedruckten Gehäuse"><figcaption>Der Standby-Fix · in der Werkstatt fertigbar</figcaption></figure>
-      <div>
-        <ul>
-          <li><strong>Spannungsteiler</strong> im Niedervoltbereich des Netzteils</li>
-          <li>Als Stecker <strong>in der Werkstatt selbst fertigbar</strong> — Gehäuse aus dem 3D-Drucker</li>
-          <li>Pro Monitor-Typ <strong>dokumentiert</strong></li>
-          <li>Montage gelöst: VESA · Wand · 3D-Deckenhalterung · Leisten</li>
-        </ul>
-        <figure class="ph" style="height:clamp(120px,22vmin,240px);margin-top:1rem;background:#fff"><img src="/projects/upcycling/installs/deckenhalterung-3d-cad.png" alt="3D-CAD der druckbaren Deckenhalterung" style="object-fit:contain"><figcaption>Deckenhalterung · 3D-druckbar</figcaption></figure>
-      </div>
+  <!-- 05 · HARD PART (full-bleed macro) -->
+  <div class="slide slide--bleed statement" data-notes="Die härteste technische Hürde — gelöst und geteilt. Viele Monitore fallen Minuten nach dem Einschalten in den Standby. Für eine Leuchte inakzeptabel. Elektroniker Benjamin Ernst hat die Lösung entwickelt: ein Spannungsteiler im Niedervoltbereich des Netzteils, verpackt als kleiner Stecker. Das Foto zeigt ihn: zwei Widerstände, Gehäuse aus dem 3D-Drucker — in der geschützten Werkstatt selbst fertigbar. Pro Monitor-Typ dokumentiert. Auch die Montage ist gelöste offene Hardware: VESA-Standard, Wandhalterung aus Bettlagerbeschlägen, 3D-druckbare Deckenhalterung, Leisten für ganze Reihen. Ehrliches Learning für die Kompetenz-Frage: Bei EIZO fiel die Kleinserie trotz erfolgreichem Prototyp zurück in den Standby — Serie gestoppt, wird nachuntersucht. So arbeiten wir." data-no-watermark>
+    <img class="bleed-img" src="/projects/upcycling/installs/standby-dongle.jpg" alt="Der Standby-Fix: Spannungsteiler-Stecker im 3D-gedruckten Gehäuse">
+    <div class="bleed-scrim"></div>
+    <div class="bleed-content">
+      <p class="eyebrow">Die härteste Hürde</p>
+      <h1>Standby: <span class="accent">gelöst</span>.</h1>
+      <hr class="hairline" style="max-width:8rem">
+      <p class="subtitle">Spannungsteiler-Stecker, Gehäuse aus dem 3D-Drucker — in der Werkstatt selbst fertigbar, pro Monitor-Typ dokumentiert, als offene Hardware geteilt.</p>
+      <span class="bleed-fact">Foto: der Stecker · Entwicklung Benjamin Ernst · Werkstatt-fertigbar</span>
     </div>
   </div>
 
-  <!-- 07 · TRAKTION -->
-  <div class="slide" data-notes="Traktion — nicht versprochen, sondern gemessen: Fünf reale Standorte. Die wichtigste Zahl: Im Werkraum4 hängen rund 20 Leuchten seit einem Jahr im täglichen Einsatz — genau EIN Ausfall, ein Netzteil, durch einfachen Austausch repariert. Die LED-Backlights selbst: null Probleme. RecreaZZZ ist der Stresstest: ständiges Ein- und Ausschalten bei jedem WC-Besuch, seit über einem Jahr störungsfrei, Nutzerfeedback per Strichliste überwiegend positiv. Dazu RepairHub, Lager AmbossRampe und unser eigener Laden.">
+  <!-- 06 · KOMPETENZ / UMBAU (Fakten) -->
+  <div class="slide" data-notes="Warum uns das jemand glauben darf — der Prozess ist Industriearbeit, kein Bastelprojekt: Definierte Eignungskriterien — Kratzer, Pixelfehler, Darstellungsfehler sind ok; defekte Stromversorgung und starker Gehäusebruch nicht. Reproduzierbarer Umbau mit dokumentierter Anleitung pro Monitor-Typ, ohne Spezialausrüstung — deshalb funktioniert er in geschützten Werkstätten. Kleinserien liefen bei Werkraum4, Schwerpunkt Dell und HP. Montage über VESA-Standard MIS-D, dazu unsere offenen Halterungslösungen. Und das EIZO-Learning zeigen wir offen: Serie gestoppt statt schöngeredet.">
+    <p class="eyebrow">Kompetenz</p>
+    <h2>Reproduzierbar.<br>Nicht <span class="accent">gebastelt</span>.</h2>
+    <ul class="facts">
+      <li><strong>Eignungskriterien definiert</strong>: Kratzer/Pixelfehler ok · defekte Stromversorgung, Gehäusebruch nicht</li>
+      <li><strong>Anleitung pro Monitor-Typ</strong> — Umbau ohne Spezialausrüstung, werkstatt-tauglich</li>
+      <li><strong>Kleinserien erprobt</strong> bei Werkraum4 · Schwerpunkt Dell &amp; HP</li>
+      <li><strong>Montage gelöst</strong>: VESA MIS-D · Wandbeschläge · 3D-Deckenhalterung · Leisten für Reihen</li>
+      <li>Ehrlich dokumentiert: <strong>EIZO-Serie gestoppt</strong> (Standby-Rückfall) — wird nachuntersucht</li>
+    </ul>
+    <p class="sources">Abschlussbericht Abschnitte B + C · Anleitungen: monitor-upcycling.org + revampit.orangecat.ch/de/projects/upcycling</p>
+  </div>
+
+  <!-- 07 · USE CASE LADEN (full-bleed) -->
+  <div class="slide slide--bleed statement" data-notes="Einsatz Nummer eins zum Anfassen: unser eigener Laden an der Birmensdorferstrasse. Im Eingangsbereich haben wir zwei bestehende Deckenleuchten durch Upcycling-Leuchten ersetzt — die im Foto. Die Reaktionen der Kundinnen und Kunden: durchweg positiv. Im Büro läuft eine weitere Leuchte seit über einem Jahr täglich, einwandfrei. Der Laden ist gleichzeitig Showroom: Wer fragt, bekommt die Geschichte — und die Anleitung." data-no-watermark>
+    <img class="bleed-img" style="object-position:50% 22%" src="/projects/upcycling/installs/laden-decke-2.jpg" alt="Upcycling-Deckenleuchten im Eingangsbereich des Ladens revamp-it">
+    <div class="bleed-scrim"></div>
+    <div class="bleed-content">
+      <p class="eyebrow">Im Einsatz · 01</p>
+      <h1>Laden <span class="accent">revamp-it</span>, Zürich.</h1>
+      <hr class="hairline" style="max-width:8rem">
+      <span class="bleed-fact">2 Neuleuchten ersetzt · Kundenreaktionen durchweg positiv · Büro-Leuchte: 1+ Jahr einwandfrei</span>
+    </div>
+  </div>
+
+  <!-- 08 · TRAKTION (Fakten/Stats) -->
+  <div class="slide" data-notes="Die Zahlen nach einem Jahr Feldbetrieb — gemessen, nicht versprochen: Fünf reale Standorte. Werkraum4 ist der Härtetest der Stückzahl: rund 20 Leuchten, ein Jahr täglicher Einsatz — genau EIN Ausfall. Ein Netzteil, durch einfachen Austausch repariert; die LED-Backlights selbst: null Probleme. RecreaZZZ in der ehemaligen Zentralwäscherei ist der Schalt-Härtetest: bei jedem WC-Besuch ein und aus, seit über einem Jahr störungsfrei, Feedback per Strichliste überwiegend positiv. Dazu der RepairHub, das Lager AmbossRampe und unser Laden.">
     <p class="eyebrow">Traktion · gemessen, nicht versprochen</p>
     <h2>Ein Jahr <span class="accent">Feldbetrieb</span>.</h2>
     <div class="stats">
@@ -240,62 +259,62 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
       <div class="stat"><div class="n"><em>1</em></div><div class="l">Ausfall — repariert</div></div>
     </div>
     <hr class="hairline">
-    <p class="subtitle">Werkraum4 · RepairHub zuerich.repair · RecreaZZZ (Dauerschalttest) · Lager AmbossRampe · Laden revamp-it</p>
+    <p class="subtitle">Werkraum4 · RepairHub zuerich.repair · RecreaZZZ (Dauerschalttest, 1+ Jahr störungsfrei) · Lager AmbossRampe · Laden revamp-it</p>
+    <p class="sources">Abschlussbericht Abschnitt D — Durchgeführte Installationen und erste Erfahrungen</p>
   </div>
 
-  <!-- 08 · WISSENSCHAFT -->
-  <div class="slide" data-notes="Die Wissenschaft dahinter — und unsere Haltung dazu: Die Arbeitszahl ist 15 bis 25 kg CO2 vermieden pro Leuchte — die Differenz zwischen Weiternutzung eines bereits produzierten Bildschirms und der Neuproduktion einer vergleichbaren LED-Leuchte. Quellen: Apple Product Environmental Reports und Öko-Institut-LCA-Daten für Display-Elektronik. Wichtig und ehrlich: Das ist unsere Arbeitsbasis, nicht der Werbe-Höhepunkt — die ZHAW erstellt gerade die vollständige Ökobilanz nach ISO 14040/44, mit Materialaufwand, Nutzungsenergie, End-of-Life und Sensitivitäten. Resultate Q3 2026, finanziert über einen Innosuisse-Innovationsscheck. Und: Das CE-Gutachten der Barologic GmbH bestätigt, dass wir die Konformität als Hersteller garantieren können.">
+  <!-- 09 · USE CASE REPAIRHUB (full-bleed) -->
+  <div class="slide slide--bleed statement" data-notes="Einsatz Nummer zwei — und die schönste Pointe des Projekts: Im RepairHub von zuerich.repair hängt ein grosser Curved-Monitor mit gebrochenem Display als Werkstattleuchte. Das breitflächige Licht wirft keine Schatten — genau das, was man bei feinen Reparaturarbeiten braucht. Die Reparateur*innen schätzen es täglich, und für Besucher*innen ist die Leuchte ein Blickfang, der das Thema Upcycling von selbst ins Gespräch bringt. Eine Reparatur-Werkstatt, beleuchtet von einem reparierten Gerät." data-no-watermark>
+    <img class="bleed-img" style="object-position:45% 42%" src="/projects/upcycling/installs/werkbank-curved-1.jpg" alt="Curved-Upcycling-Leuchte über der Werkbank, Vogelperspektive">
+    <div class="bleed-scrim"></div>
+    <div class="bleed-content">
+      <p class="eyebrow">Im Einsatz · 02</p>
+      <h1>RepairHub · <span class="accent">zuerich.repair</span></h1>
+      <hr class="hairline" style="max-width:8rem">
+      <span class="bleed-fact">Curved-Monitor, Display gebrochen → schattenfreies Arbeitslicht + Blickfang</span>
+    </div>
+  </div>
+
+  <!-- 10 · WISSENSCHAFT (Fakten) -->
+  <div class="slide" data-notes="Die Wissenschaft — und unsere Haltung dazu: Die Arbeitszahl lautet 15 bis 25 Kilogramm CO2 vermieden pro Leuchte. Das ist die Differenz zwischen der Weiternutzung eines bereits produzierten Bildschirms und der Neuproduktion einer vergleichbaren LED-Leuchte. Quellen: Apple Product Environmental Reports und Öko-Institut-LCA-Daten für Display-Elektronik. Wichtig — und das sagen wir Swico genauso offen wie auf unserer Website: Diese Zahl ist unsere Arbeitsbasis, nicht der Werbe-Höhepunkt. Die ZHAW erstellt die vollständige Ökobilanz nach ISO 14040/44 — Material, Nutzungsenergie, End-of-Life, Sensitivitäten — Resultate Q3 2026, finanziert über einen Innosuisse-Innovationsscheck. Dazu die CE-Frage, sauber geklärt: Das Gutachten der Barologic GmbH Winterthur bestätigt, dass wir die Konformität als Hersteller garantieren können, weil nur Komponenten entnommen werden. Nächster Messschritt: Energieverbrauch im Betrieb.">
     <p class="eyebrow">Wissenschaft</p>
     <h2>Belegt statt <span class="accent">behauptet</span>.</h2>
-    <div class="grid-3">
-      <div class="card"><h3 class="accent">~15–25 kg CO₂</h3><p>vermieden pro Leuchte — Wiederverwendung statt Neuproduktion einer vergleichbaren LED-Leuchte. <strong>Arbeitsbasis, wird von der ZHAW validiert.</strong></p></div>
-      <div class="card"><h3>ZHAW-Ökobilanz</h3><p>Vollständige LCA nach <strong>ISO 14040/44</strong>: Material, Nutzungsenergie, End-of-Life, Sensitivitäten. Resultate Q3 2026 · Innosuisse-Innovationsscheck.</p></div>
-      <div class="card"><h3>CE-Konformität</h3><p>Gutachten <strong>Barologic GmbH</strong>, Winterthur: Da nur Komponenten entnommen werden, bleibt die CE-Konformität als Hersteller garantierbar.</p></div>
-    </div>
-    <p class="sources">Quellen: Apple Product Environmental Reports · Öko-Institut/UBA LCA-Daten Display-Elektronik · Abschlussbericht Abschnitt E/G · Methodik: revampit.orangecat.ch/de/projects/upcycling/wirkung</p>
+    <ul class="facts">
+      <li><strong class="accent">~15–25 kg CO₂ vermieden pro Leuchte</strong> — Wiederverwendung statt Neuproduktion <em style="font-style:normal">(Arbeitsbasis, wird validiert)</em></li>
+      <li><strong>ZHAW-Ökobilanz nach ISO 14040/44</strong>: Material · Nutzungsenergie · End-of-Life · Resultate Q3 2026 · Innosuisse-Innovationsscheck</li>
+      <li><strong>CE-Konformität geklärt</strong> — Gutachten Barologic GmbH: als Hersteller garantierbar</li>
+      <li>Nächster Messschritt: <strong>Energieverbrauch im Betrieb</strong></li>
+    </ul>
+    <p class="sources">Quellen: Apple Product Environmental Reports · Öko-Institut/UBA (Display-Elektronik) · Abschlussbericht E/G · Methodik: revampit.orangecat.ch/de/projects/upcycling/wirkung</p>
   </div>
 
-  <!-- 09 · OPEN SOURCE -->
-  <div class="slide" data-notes="Unsere Skalierungsstrategie ist Offenheit — als Non-Profit konkurrieren wir nicht über Geheimhaltung, sondern gewinnen über Verbreitung. Zwei Plattformen: Das Team-Wiki monitor-upcycling.org trägt die Umbau-Anleitungen pro Monitor-Modell unter CC-BY-SA — Elektroniker weltweit können beitragen, Nutzung auch kommerziell frei. Und die Minisite bündelt alles Strategische: Businessplan, Wirkung mit Quellen, Galerie, Status und die Selbstbau-Guides. Plattform-Code unter MIT. Jede Werkstatt, die unsere Anleitungen nutzt, vergrössert die Wirkung.">
-    <p class="eyebrow">Open Source · Non-Profit</p>
-    <h2>Wir skalieren durch <span class="accent">Offenheit</span>.</h2>
-    <div class="grid-2">
-      <div class="card"><h3>monitor-upcycling.org</h3><p>Das offene Umbau-Wiki des Teams: Anleitungen pro Monitor-Modell, Sicherheitshinweise · <strong>CC-BY-SA</strong>, auch kommerziell frei · weltweit erweiterbar · revamp-it × Swico × ZHAW.</p></div>
-      <div class="card"><h3>revampit.orangecat.ch/de/projects/upcycling</h3><p>Die Projekt-Plattform: <strong>Businessplan, Wirkung mit Quellen, Galerie, Status, Selbstbau-Guides</strong> (HP Z23n, Lenovo L2251pwd/L2440pwC) · Plattform-Code unter MIT.</p></div>
-    </div>
-    <p class="sources">Alle Anleitungen frei nutzbar — jede Werkstatt, die sie nutzt, vergrössert die Wirkung.</p>
-  </div>
-
-  <!-- 10 · MODELL -->
-  <div class="slide" data-notes="Das Betriebsmodell verbindet drei Dinge, die selten zusammenkommen: Erstens soziale Wirkung — der Umbau braucht keine Spezialausrüstung und schafft sinnvolle Arbeit in geschützten Werkstätten; die Kleinserien liefen bei Werkraum4, Schwerpunkt Dell und HP. Zweitens gesicherte Nachfrage — Wand- und Deckenleuchten werden bei jedem Um- und Neubau in Stückzahlen gebraucht. Drittens Reparierbarkeit by Design: Der eine Ausfall im Feldtest wurde durch einfachen Netzteiltausch behoben — jedes Werkstatt-Mitglied kann das dank offener Anleitung.">
-    <p class="eyebrow">Das Modell</p>
-    <h2>Sozial produziert.<br>Nachfrage <span class="accent">gesichert</span>.</h2>
-    <div class="split">
-      <ul>
-        <li>Fertigung in <strong>geschützten Werkstätten</strong> — keine Spezialausrüstung, leicht skalierbar</li>
-        <li>Kleinserien erprobt bei <strong>Werkraum4</strong> · Schwerpunkt Dell &amp; HP</li>
-        <li><strong>Nachfrage gesichert</strong>: Wand-/Deckenleuchten bei jedem Um- und Neubau</li>
-        <li><strong>Reparierbar by Design</strong> — Netzteiltausch statt Entsorgung</li>
-      </ul>
-      <figure class="ph"><img src="/projects/upcycling/installs/eingang-laden.jpg" alt="Upcycling-Deckenleuchten im Ladeneingang"><figcaption>Laden revamp-it · Eingang</figcaption></figure>
-    </div>
-  </div>
-
-  <!-- 11 · NEXT -->
-  <div class="slide" data-notes="Was als Nächstes kommt — und wo Swico hilft: Erstens Skalierung der Abnehmerseite: Liegenschaftsverwaltungen, Firmen und Verwaltungen mit eigenen Gebäuden, Leuchten-Handel. Zweitens, in Absprache mit Swico Recycling: die Abklärung mit ERZ Stadt Zürich, um Monitore aus dem städtischen Entsorgungsstrom in grösserem Umfang umzunutzen — das ist der Hebel für echte Stückzahlen. Drittens wissenschaftlich: Energiemessungen im Betrieb und der Abschluss der ZHAW-LCA. Und viertens weitere Pilot-Standorte — in situ und Offcut stehen bereit, ZHAW-Installation pendent nach CE-Abklärung.">
-    <p class="eyebrow">Nächste Schritte</p>
-    <h2>Vom Pilot zur <span class="accent">Stückzahl</span>.</h2>
-    <ul>
-      <li><strong>Abnehmer skalieren</strong>: Liegenschaftsverwaltungen · Firmen/Verwaltungen mit eigenen Gebäuden · Leuchten-Handel · weitere geschützte Werkstätten</li>
-      <li><strong>Mit Swico Recycling</strong>: Abklärung ERZ Stadt Zürich für umfangreicheres Upcycling entsorgter Monitore</li>
-      <li><strong>Wissenschaft abschliessen</strong>: Energiemessung im Betrieb · ZHAW-LCA-Resultate Q3 2026</li>
-      <li><strong>Neue Piloten</strong>: Baubüro in situ · Offcut Zürich · ZHAW-Gebäude (nach CE-Abklärung)</li>
+  <!-- 11 · OPEN SOURCE (Fakten) -->
+  <div class="slide" data-notes="Warum wir alles offenlegen — als Non-Profit ist Offenheit unsere Skalierungsstrategie: Wir konkurrieren nicht über Geheimhaltung, wir gewinnen über Verbreitung. Zwei Plattformen: Das Team-Wiki monitor-upcycling.org trägt die Umbau-Anleitungen pro Monitor-Modell plus Sicherheitshinweise, unter CC-BY-SA — Namensnennung, Weitergabe unter gleichen Bedingungen, Nutzung auch kommerziell frei. Elektroniker*innen weltweit können eigene Modelle dokumentieren. Die Minisite bündelt das Strategische: Businessplan, Wirkung mit Quellen, Galerie der Installationen, Projektstatus und die Selbstbau-Guides — der Plattform-Code steht unter MIT. Der Kernsatz für Swico: Jede Werkstatt, die unsere Anleitungen nutzt, vergrössert die Wirkung dieses Projekts.">
+    <p class="eyebrow">Open-Source-Hardware</p>
+    <h2>Hardware so offen<br>wie <span class="accent">Software</span>.</h2>
+    <ul class="facts">
+      <li><strong>monitor-upcycling.org</strong> — das offene Umbau-Wiki: Anleitungen pro Modell + Sicherheitshinweise · <strong>CC-BY-SA</strong>, auch kommerziell frei · weltweit erweiterbar</li>
+      <li><strong>revampit.orangecat.ch/de/projects/upcycling</strong> — Businessplan · Wirkung mit Quellen · Galerie · Status · Selbstbau-Guides · Code unter <strong>MIT</strong></li>
+      <li>Jede Werkstatt, die die Anleitungen nutzt, <strong>vergrössert die Wirkung</strong></li>
     </ul>
   </div>
 
-  <!-- 12 · DANKE -->
-  <div class="slide slide--bleed" data-notes="Danke an Swico für die Projektförderung — und an alle Beteiligten: Werkraum4, Benjamin Ernst, zuerich.repair, RecreaZZZ, AmbossRampe, die ZHAW. Alle Details auf der Minisite und im Wiki. Der Prototyp wurde am 23.5.24 an den Swico-Geschäftssitz geliefert — die Filmdoku des Umbaus verlinken wir gern. Fragen und Diskussion." data-no-watermark>
-    <img class="bleed-img" src="/projects/upcycling/installs/eingang-laden.jpg" alt="Upcycling-Leuchten im Eingangsbereich des revamp-it Ladens">
+  <!-- 12 · SKALIERUNG (Fakten) -->
+  <div class="slide" data-notes="Vom Pilot zur Stückzahl — vier Spuren: Erstens die Abnehmerseite: Liegenschaftsverwaltungen, Firmen und Verwaltungen mit eigenen Gebäuden, Leuchten-Handel — die Nachfrage nach Wand- und Deckenleuchten bei Um- und Neubauten ist strukturell da. Zweitens die Produktionsseite: weitere Betriebe mit geschützten Arbeitsplätzen — der Umbau schafft dort sinnvolle, skalierbare Arbeit. Drittens der grösste Hebel, in Absprache mit Swico Recycling: die Abklärung mit ERZ Stadt Zürich, um Monitore aus dem städtischen Entsorgungsstrom in grossem Umfang umzunutzen. Viertens die nächsten Piloten: Baubüro in situ hat grosses Interesse, Offcut Zürich setzt demnächst um, die ZHAW-Installation folgt nach der CE-Abklärung.">
+    <p class="eyebrow">Nächste Schritte</p>
+    <h2>Vom Pilot zur <span class="accent">Stückzahl</span>.</h2>
+    <ul class="facts">
+      <li><strong>Abnehmer</strong>: Liegenschaftsverwaltungen · Firmen/Verwaltungen mit eigenen Gebäuden · Leuchten-Handel</li>
+      <li><strong>Produktion</strong>: weitere geschützte Werkstätten — sinnvolle Arbeit, leicht skalierbar</li>
+      <li><strong>Mit Swico Recycling</strong>: Abklärung ERZ Stadt Zürich — Monitore aus dem städtischen Entsorgungsstrom</li>
+      <li><strong>Piloten</strong>: Baubüro in situ · Offcut Zürich · ZHAW (nach CE-Abklärung)</li>
+    </ul>
+    <p class="sources">Abschlussbericht Abschnitt F — Skalierung</p>
+  </div>
+
+  <!-- 13 · DANKE (full-bleed) -->
+  <div class="slide slide--bleed statement" data-notes="Danke an Swico für die Projektförderung — und an alle Beteiligten: Werkraum4, Benjamin Ernst, zuerich.repair, RecreaZZZ, AmbossRampe und die ZHAW. Der Prototyp steht seit Mai 2024 am Swico-Geschäftssitz an der Lagerstrasse. Alle Details, die Filmdokumentation des Umbaus und jede Anleitung: auf der Minisite und im Wiki. Fragen und Diskussion." data-no-watermark>
+    <img class="bleed-img" style="object-position:50% 15%" src="/projects/upcycling/installs/laden-decke-1.jpg" alt="Upcycling-Deckenleuchte im Laden revamp-it">
     <div class="bleed-scrim"></div>
     <div class="bleed-content">
       <p class="eyebrow">Danke</p>
