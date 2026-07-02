@@ -113,7 +113,6 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
                               alt={opt.label}
                               fill
                               className="object-contain p-2"
-                              unoptimized
                             />
                           </div>
                         )}

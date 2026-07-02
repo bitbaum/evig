@@ -21,6 +21,14 @@ const nextConfig = {
         hostname: '*.amazonaws.com',
         pathname: '/**',
       },
+      // Cloudflare R2 — where all content images actually live (S3_PUBLIC_URL,
+      // bucket revampit-media). Without this the optimizer rejects R2 URLs,
+      // which is why `unoptimized` was scattered across image components.
+      {
+        protocol: 'https',
+        hostname: '*.r2.dev',
+        pathname: '/**',
+      },
     ],
   },
   async rewrites() {

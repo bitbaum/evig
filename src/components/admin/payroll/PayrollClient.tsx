@@ -12,7 +12,7 @@
  * they're closing, not whatever they typed last time.
  */
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
 import {
   Calendar, Lock, Download, AlertTriangle, CheckCircle2,
@@ -86,7 +86,10 @@ export function PayrollClient() {
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const bounds = monthBounds(monthInput)
+  // Memoized — a fresh object every render changed loadPreview's identity each
+  // time, so the effect below re-fired after every setPreview: the page polled
+  // /api/admin/payroll/close continuously while open.
+  const bounds = useMemo(() => monthBounds(monthInput), [monthInput])
 
   const loadPreview = useCallback(async () => {
     if (!bounds) {

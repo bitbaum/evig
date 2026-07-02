@@ -36,10 +36,9 @@ jest.mock('@/lib/api/middleware', () => ({
 
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
-const mockInnerJoin = jest.fn()
 
-// Route chain: db.select({...}).from(listings).innerJoin(users, eq(...))
-// innerJoin is the terminal awaited step and resolves to the row array.
+// Route chain: db.select({...}).from(listings) — from() is the terminal
+// awaited step (the users join was dropped with the is_revampit SSOT fix).
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
@@ -118,9 +117,8 @@ function makeRequest() {
 beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
-  // select().from().innerJoin() — innerJoin is terminal and resolves the rows
-  mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
-  mockInnerJoin.mockResolvedValue([MOCK_ROW])
+  // select().from() — from() is terminal and resolves the rows
+  mockFrom.mockResolvedValue([MOCK_ROW])
 })
 
 // ============================================================================
@@ -148,7 +146,7 @@ describe('GET /api/admin/marketplace/stats — authenticated', () => {
   })
 
   it('returns 500 when DB throws', async () => {
-    mockInnerJoin.mockRejectedValueOnce(new Error('DB error'))
+    mockFrom.mockRejectedValueOnce(new Error('DB error'))
     const response = await GET(makeRequest())
     expect(response.status).toBe(500)
   })

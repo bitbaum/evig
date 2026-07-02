@@ -7,7 +7,7 @@ import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { REQUEST_STATUS, VALID_REQUEST_TRANSITIONS, deriveBudgetType } from '@/config/it-hilfe'
+import { REQUEST_STATUS, VALID_REQUEST_TRANSITIONS, OFFER_STATUS, deriveBudgetType } from '@/config/it-hilfe'
 import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas'
 import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
@@ -236,6 +236,53 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
               }
             })
             .catch(err => logger.error('Failed to notify helper on completion', { error: err, requestId: id }))
+        }
+      }
+
+      // Cancellation must not be silent: reject still-pending offers so
+      // helpers aren't left waiting forever, and tell everyone involved.
+      if (status === REQUEST_STATUS.CANCELLED) {
+        try {
+          // Collect helpers with pending offers + the matched helper (if any)
+          const pendingOffers = await db
+            .select({ id: itHilfeOffers.id, helperId: itHilfeOffers.helperId })
+            .from(itHilfeOffers)
+            .where(and(
+              eq(itHilfeOffers.requestId, id),
+              eq(itHilfeOffers.status, OFFER_STATUS.PENDING),
+            ))
+
+          if (pendingOffers.length > 0) {
+            await db
+              .update(itHilfeOffers)
+              .set({ status: OFFER_STATUS.REJECTED })
+              .where(and(
+                eq(itHilfeOffers.requestId, id),
+                eq(itHilfeOffers.status, OFFER_STATUS.PENDING),
+              ))
+          }
+
+          const recipientIds = new Set(pendingOffers.map(o => o.helperId))
+          if (existing.matchedOfferId) {
+            const [matched] = await db
+              .select({ helperId: itHilfeOffers.helperId })
+              .from(itHilfeOffers)
+              .where(eq(itHilfeOffers.id, existing.matchedOfferId))
+            if (matched) recipientIds.add(matched.helperId)
+          }
+
+          if (recipientIds.size > 0) {
+            // Fire-and-forget: catches internally, never blocks the update.
+            sendItHilfeNotification({
+              recipientIds: [...recipientIds],
+              title: `Anfrage "${existing.title}" wurde storniert`,
+              content: 'Die Anfrage wurde vom Ersteller storniert. Dein Angebot ist damit hinfällig.',
+              requestId: id,
+            })
+          }
+        } catch (err) {
+          // Never block the cancellation itself on the cleanup side effects.
+          logger.error('Error handling cancellation side effects', { error: err, requestId: id })
         }
       }
     }

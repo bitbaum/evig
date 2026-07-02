@@ -68,6 +68,13 @@ export const rateLimiters = {
   // Repairer bookings: 5 per hour per user
   bookingCreate: createRateLimiter(ONE_HOUR_MS, 5),
 
+  // Workshop registrations (free path): 5 per hour per user
+  workshopRegister: createRateLimiter(ONE_HOUR_MS, 5),
+
+  // Listing reports: 10 per hour per user (defence in depth on top of the
+  // one-report-per-listing UNIQUE constraint)
+  listingReport: createRateLimiter(ONE_HOUR_MS, 10),
+
   // IT-Hilfe offers: 10 per hour per user
   offerCreate: createRateLimiter(ONE_HOUR_MS, 10),
 

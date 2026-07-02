@@ -8,8 +8,9 @@
 // Mock sections to avoid lucide-react icons in test environment
 jest.mock('@/config/sections', () => ({
   SECTIONS: {},
-  ADMIN_SECTION_IDS: ['dashboard', 'products', 'workshops', 'users', 'hirn', 'finanzen'],
+  ADMIN_SECTION_IDS: ['dashboard', 'products', 'workshops', 'users', 'hirn', 'finanzen', 'my-timecards'],
   SENSITIVE_SECTION_IDS: ['users', 'hirn', 'finanzen'],
+  STAFF_UNIVERSAL_SECTION_IDS: ['my-timecards'],
   getAdminSections: () => [],
   isSensitiveSection: (id: string) => ['users', 'hirn', 'finanzen'].includes(id),
 }))

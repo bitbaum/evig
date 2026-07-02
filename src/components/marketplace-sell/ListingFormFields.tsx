@@ -125,7 +125,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             placeholder={t('pricePlaceholder')}
           />
           {formData.price === '0' && (
-            <p className="text-xs text-teal-600 mt-1">{t('freeNotice')}</p>
+            <p className="text-xs text-action mt-1">{t('freeNotice')}</p>
           )}
         </div>
         <div>

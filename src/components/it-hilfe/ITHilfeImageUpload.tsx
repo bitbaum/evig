@@ -131,6 +131,7 @@ export function ITHilfeImageUpload({
                 variant="destructive"
                 size="icon"
                 onClick={() => handleRemove(index)}
+                aria-label={t('removeImage', { index: index + 1 })}
                 className="absolute -top-2 -right-2 w-6 h-6 rounded-full opacity-0 group-hover:opacity-100"
               >
                 <X className="w-3 h-3" />

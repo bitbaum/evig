@@ -37,6 +37,10 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const projectId = searchParams.get('project_id');
     const assignedTo = searchParams.get('assigned_to');
     const includeArchived = searchParams.get('include_archived') === 'true';
+    // Bounded result set — this table grows without limit; an uncapped SELECT
+    // eventually ships the whole task history on every board load.
+    const limit = Math.min(Math.max(Number(searchParams.get('limit')) || 100, 1), 200);
+    const offset = Math.max(Number(searchParams.get('offset')) || 0, 0);
 
     // Build conditions
     const conditions: SQL[] = [];
@@ -105,6 +109,8 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
         END`,
         desc(tasks.createdAt)
       )
+      .limit(limit)
+      .offset(offset)
 
     logger.info('Tasks fetched', {
       userId: session.user.id,

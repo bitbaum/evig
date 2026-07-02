@@ -103,7 +103,7 @@ export function ActivityFeed({
               className={
                 hasActiveFilters
                   ? 'text-action bg-action-muted'
-                  : 'text-text-tertiary hover:text-text-secondary ${adminInteractive.rowHover}'
+                  : `text-text-tertiary hover:text-text-secondary ${adminInteractive.rowHover}`
               }
               title="Filter"
             >

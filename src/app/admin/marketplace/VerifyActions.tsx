@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { toast } from 'sonner'
 import { ShieldCheck, ShieldOff, Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -13,16 +13,18 @@ interface VerifyActionsProps {
   listingId: string
   isVerified: boolean
   title: string
+  /** Refetch the client-held listings after a change — router.refresh() can't
+   *  reach state living in useMarketplaceAdmin. */
+  onChanged: () => void
 }
 
-export function VerifyActions({ listingId, isVerified, title }: VerifyActionsProps) {
+export function VerifyActions({ listingId, isVerified, title, onChanged }: VerifyActionsProps) {
   const t = useTranslations('admin.marketplace.listings')
   const tForms = useTranslations('admin.forms')
   const [loading, setLoading] = useState(false)
   const [showNotes, setShowNotes] = useState(false)
   const [notes, setNotes] = useState('')
   const [confirmUnverify, setConfirmUnverify] = useState(false)
-  const router = useRouter()
 
   async function handleVerify() {
     setLoading(true)
@@ -34,7 +36,9 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
       if (result.success) {
         setShowNotes(false)
         setNotes('')
-        router.refresh()
+        onChanged()
+      } else {
+        toast.error(result.error || t('verifyFailed'))
       }
     } finally {
       setLoading(false)
@@ -49,7 +53,9 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
         method: 'DELETE',
       })
       if (result.success) {
-        router.refresh()
+        onChanged()
+      } else {
+        toast.error(result.error || t('verifyFailed'))
       }
     } finally {
       setLoading(false)

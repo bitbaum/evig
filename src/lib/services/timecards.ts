@@ -570,6 +570,12 @@ export async function reviewTimecard(
     throw new Error('timecard_not_found')
   }
 
+  // Four-eyes principle: nobody approves their own hours — self-approved
+  // cards would flow straight into payroll close.
+  if (timecard.userId === reviewerId) {
+    throw new Error('timecard_self_review')
+  }
+
   if (timecard.status !== TIMECARD_STATUSES.SUBMITTED) {
     throw new Error('timecard_not_submitted')
   }

@@ -1,4 +1,19 @@
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
+
+const BOX_PX: Record<NonNullable<AvatarProps['size']>, number> = {
+  xs: 32,
+  sm: 36,
+  md: 40,
+  lg: 48,
+  xl: 80,
+}
+
+/** Optimizer only accepts whitelisted hosts (next.config remotePatterns);
+ *  OAuth avatars (Google/GitHub/…) pass through unoptimized to avoid a runtime throw. */
+function isOptimizableHost(src: string): boolean {
+  return /\.r2\.dev\//.test(src) || /\.amazonaws\.com\//.test(src)
+}
 
 interface AvatarProps {
   /** Image URL (user_profiles.avatar_url / users.image). Absent → initials tile. */
@@ -58,10 +73,12 @@ export function Avatar({
 
   if (src) {
     return (
-       
-      <img
+      <Image
         src={src}
         alt={name ?? ''}
+        width={BOX_PX[size]}
+        height={BOX_PX[size]}
+        unoptimized={!isOptimizableHost(src)}
         className={cn('shrink-0 object-cover', radius, border, BOX[size], className)}
       />
     )

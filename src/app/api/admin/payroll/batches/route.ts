@@ -14,7 +14,7 @@ import { db } from '@/db'
 import { payrollBatches, timecards, timecardEntries, users } from '@/db/schema'
 import { eq, sql, desc } from 'drizzle-orm'
 
-export const GET = withAdmin('timecards', async (_request: NextRequest, _session: ValidSession) => {
+export const GET = withAdmin('payroll', async (_request: NextRequest, _session: ValidSession) => {
   try {
     const rows = await db
       .select({

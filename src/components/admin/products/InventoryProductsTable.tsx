@@ -63,7 +63,7 @@ export function InventoryProductsTable({
   const allSelected = selectable && filteredIds.length > 0 && filteredIds.every(id => selectedIds.has(id))
 
   return (
-    <div className="bg-surface-base rounded-xl shadow-xs border border overflow-hidden">
+    <div className="bg-surface-base rounded-xl shadow-xs border overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px]">
           <thead className="bg-surface-raised border-b border">
@@ -200,6 +200,7 @@ export function InventoryProductsTable({
                         onClick={() => onPublish?.(product)}
                         className="p-1 text-action hover:text-action h-auto w-auto bg-transparent hover:bg-transparent"
                         title="Im Shop veröffentlichen"
+                        aria-label="Im Shop veröffentlichen"
                       >
                         <Upload className="w-4 h-4" />
                       </Button>
@@ -217,6 +218,7 @@ export function InventoryProductsTable({
                       onClick={() => onView?.(product)}
                       className="p-1 text-text-tertiary hover:text-text-secondary h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Ansehen"
+                      aria-label="Ansehen"
                     >
                       <Eye className="w-4 h-4" />
                     </Button>
@@ -226,6 +228,7 @@ export function InventoryProductsTable({
                       onClick={() => onEdit?.(product)}
                       className="p-1 text-text-tertiary hover:text-text-secondary h-auto w-auto bg-transparent hover:bg-transparent"
                       title="Bearbeiten"
+                      aria-label="Bearbeiten"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -235,6 +238,7 @@ export function InventoryProductsTable({
                       onClick={() => onDelete?.(product)}
                       className="p-1 text-error-400 hover:text-error-600 h-auto w-auto bg-transparent"
                       title="Löschen"
+                      aria-label="Löschen"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

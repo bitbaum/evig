@@ -2,7 +2,8 @@ import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
-import { eq, and, ne, count } from 'drizzle-orm'
+import { eq, and, ne, count, gte } from 'drizzle-orm'
+import { rateLimiters } from '@/lib/security/rate-limit'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
@@ -17,10 +18,14 @@ import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
+    if (!rateLimiters.workshopRegister(`${session.user.id}:workshop-register`)) {
+      return apiBadRequest('Zu viele Anmeldungen. Bitte versuche es später erneut.')
+    }
+
     const body = await request.json()
     const validation = validateBody(WorkshopRegistrationSchema, body)
     if (!validation.success) return validation.error
-    const { workshopSlug } = validation.data
+    const { workshopSlug, instanceId } = validation.data
 
     // Find the workshop
     const [workshop] = await db
@@ -35,6 +40,15 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     if (!workshop) {
       return apiNotFound('Workshop')
+    }
+
+    // Price gate — this is the FREE registration path. Paid workshops must go
+    // through /api/workshops/[slug]/register-with-payment; without this gate a
+    // paid workshop could be booked without paying.
+    if ((workshop.priceCents ?? 0) > 0) {
+      return apiBadRequest(
+        'Dieser Workshop ist kostenpflichtig. Bitte nutze die Anmeldung mit Zahlung.'
+      )
     }
 
     // Duplicate check + INSERT must be atomic — two concurrent registrations
@@ -72,7 +86,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         .from(workshopInstances)
         .where(and(
           eq(workshopInstances.workshopId, workshop.id),
-          eq(workshopInstances.status, WORKSHOP_INSTANCE_STATUS.SCHEDULED)
+          eq(workshopInstances.status, WORKSHOP_INSTANCE_STATUS.SCHEDULED),
+          // Only future Termine — never register anyone onto a past instance.
+          gte(workshopInstances.startDate, new Date().toISOString()),
+          // Honor an explicitly chosen Termin (falls back to next upcoming).
+          ...(instanceId ? [eq(workshopInstances.id, instanceId)] : []),
         ))
         .orderBy(workshopInstances.startDate)
         .limit(1)

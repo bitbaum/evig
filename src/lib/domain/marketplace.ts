@@ -25,8 +25,14 @@ export function validateListingForm(formData: ListingFormData): string | null {
 /**
  * Transform client-side form data to the API payload shape.
  * Returns a plain object — validated by CreateListingSchema.safeParse in validateListingForm.
+ *
+ * On EDIT pass `includeStatus: false` — owner status transitions are gated
+ * server-side, so a PATCH of a reserved/sold listing must not send `status`.
  */
-export function transformListingFormToPayload(formData: ListingFormData) {
+export function transformListingFormToPayload(
+  formData: ListingFormData,
+  { includeStatus = true }: { includeStatus?: boolean } = {}
+) {
   return {
     title: formData.title.trim(),
     description: formData.description.trim(),
@@ -45,7 +51,7 @@ export function transformListingFormToPayload(formData: ListingFormData) {
       value: s.value.trim(),
       unit: s.unit || null,
     })),
-    status: LISTING_STATUS.ACTIVE,
+    ...(includeStatus ? { status: LISTING_STATUS.ACTIVE } : {}),
     condition_checks: formData.conditionChecks.length > 0
       ? formData.conditionChecks.map(c => ({ key: c.key, checked: c.checked }))
       : undefined,

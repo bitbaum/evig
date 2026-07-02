@@ -43,7 +43,9 @@ export function buildQuickActions(
   if (canAccessSection('workshops-admin')) {
     actions.push({
       label: 'Neuer Workshop',
-      href: '/admin/workshops/new',
+      // Workshops entstehen über den Vorschlags-Flow (Proposal → Freigabe).
+      // Das alte /admin/workshops/new-Formular speicherte nie etwas.
+      href: '/admin/workshops/proposals',
       icon: GraduationCap,
       color: 'bg-action-muted text-action hover:bg-action-muted',
     })

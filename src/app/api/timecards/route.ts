@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { withAuth, type ValidSession } from '@/lib/api/middleware'
+import { withAdmin, type ValidSession } from '@/lib/api/middleware'
 import { apiBadRequest, apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import {
@@ -12,7 +12,7 @@ import {
   submitTimecard,
 } from '@/lib/services/timecards'
 
-export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
+export const GET = withAdmin(async (request: NextRequest, session: ValidSession) => {
   try {
     const { searchParams } = new URL(request.url)
     const periodResult = timecardPeriodQuerySchema.safeParse({
@@ -32,7 +32,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
   }
 })
 
-export const PUT = withAuth(async (request: NextRequest, session: ValidSession) => {
+export const PUT = withAdmin(async (request: NextRequest, session: ValidSession) => {
   try {
     const body = await request.json()
     const parsed = timecardSaveSchema.safeParse(body)
@@ -48,7 +48,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
   }
 })
 
-export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
+export const POST = withAdmin(async (request: NextRequest, session: ValidSession) => {
   try {
     const body = await request.json()
     const parsed = timecardSaveSchema.safeParse(body)

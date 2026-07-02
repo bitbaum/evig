@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import VotingPanel from '@/app/admin/decisions/[id]/VotingPanel';
+import VotingPanel from '@/components/decisions/VotingPanel';
 import type { VotingMethod } from '@/config/decisions';
 
 interface Option {

@@ -74,6 +74,12 @@ export interface SectionVisibility {
   requiresStaff?: boolean
   /** For admin: sensitive section (requires super admin or explicit grant) */
   sensitive?: boolean
+  /**
+   * Personal staff tool (e.g. own Zeiterfassung): accessible to EVERY staff
+   * member regardless of their stored staff_permissions array — permission
+   * narrowing never removes access to one's own tools.
+   */
+  alwaysForStaff?: boolean
   /** For dashboard: show only for users with this community role */
   communityRole?: 'seller' | 'repairer' | 'techniker'
   /** For dashboard: hide if user has this role (show onboarding instead) */
@@ -510,19 +516,25 @@ export const SECTIONS: Record<string, SectionConfig> = {
   // (Clock-in/out is no longer a separate destination — it's an integral
   //  widget inside the timecard tool. See 'my-timecards'.)
 
+  // Zeiterfassung is an EMPLOYEE tool, not a customer feature — it lives in
+  // the admin area ("Heute" group, right under Freigaben) and on the admin
+  // mobile bottom nav, never on the customer dashboard.
   'my-timecards': {
     id: 'my-timecards',
-    path: '/dashboard/timecards',
+    path: '/admin/zeiterfassung',
     ui: {
-      label: 'Meine Zeiterfassung',
+      label: 'Zeiterfassung',
       description: 'Arbeitszeiten erfassen und einreichen',
       icon: Clock,
       emoji: '⏱️',
       color: 'info',
+      mobileBottomNavLabel: 'Zeit',
     },
-    visibility: { admin: false, dashboard: true, requiresStaff: true },
-    priority: 6,
+    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    priority: 3,
     category: 'activities',
+    sidebarGroup: 'uebersicht',
+    mobileBottomNavOrder: 4,
   },
 
   // ---------------------------------------------------------------------------
@@ -933,7 +945,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
       color: 'info',
     },
     // Hidden from the sidebar: this route now redirects to the single
-    // own-timecard editor at /dashboard/timecards ("Meine Zeiterfassung").
+    // own-timecard editor at /admin/zeiterfassung ("Zeiterfassung").
     visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 202,
     category: 'management',
@@ -1127,6 +1139,14 @@ export const ADMIN_SECTION_IDS = Object.values(SECTIONS)
  */
 export const SENSITIVE_SECTION_IDS = Object.values(SECTIONS)
   .filter(s => s.visibility.sensitive)
+  .map(s => s.id)
+
+/**
+ * Personal staff tools — accessible to every staff member regardless of
+ * stored permissions (see SectionVisibility.alwaysForStaff).
+ */
+export const STAFF_UNIVERSAL_SECTION_IDS = Object.values(SECTIONS)
+  .filter(s => s.visibility.alwaysForStaff)
   .map(s => s.id)
 
 /**

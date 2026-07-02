@@ -34,6 +34,8 @@ export interface DashboardCard {
   requiredRole?: CommunityRole
   /** Hide for users with this role */
   hiddenForRoles?: CommunityRole[]
+  /** Show only for staff (mirrors section.visibility.requiresStaff) */
+  requiresStaff?: boolean
   badge?: string
   color: 'info' | 'success' | 'warning' | 'error' | 'secondary' | 'neutral'
   priority: number
@@ -182,6 +184,10 @@ function sectionToCard(section: SectionConfig): DashboardCard {
     card.requiredRole = section.visibility.communityRole
   }
 
+  if (section.visibility.requiresStaff) {
+    card.requiresStaff = true
+  }
+
   if (section.visibility.hideIfRole) {
     card.hiddenForRoles = [section.visibility.hideIfRole]
   }
@@ -232,6 +238,11 @@ export function getDashboardCardsForRole(
   }
 
   return DASHBOARD_CARDS.filter(card => {
+    // Staff-only cards (e.g. Zeiterfassung) never show for regular users
+    if (card.requiresStaff && !isStaff && !isSuperAdmin) {
+      return false
+    }
+
     // Hide if user has a role that should hide this card
     if (card.hiddenForRoles?.some(role => communityRoles.includes(role))) {
       return false

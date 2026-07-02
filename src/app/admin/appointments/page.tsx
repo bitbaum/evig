@@ -6,7 +6,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { adminTable } from '@/lib/admin-ui'
+import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import { Calendar, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -106,7 +106,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
                 'px-3 min-h-9 inline-flex items-center rounded-full border transition-colors ' +
                 (isActive
                   ? 'border-action bg-action-muted text-action'
-                  : 'text-text-secondary hover:border-strong ${adminInteractive.rowHover}')
+                  : `text-text-secondary hover:border-strong ${adminInteractive.rowHover}`)
               }
             >
               {opt.label}

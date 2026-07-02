@@ -1,11 +1,15 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { apiFetch } from '@/lib/api/client'
+import { toast } from 'sonner'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {
   Search,
@@ -36,8 +40,25 @@ interface BlogListClientProps {
 }
 
 export function BlogListClient({ posts }: BlogListClientProps) {
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'' | 'published' | 'draft'>('')
+  const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null)
+  const [deleting, setDeleting] = useState(false)
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return
+    setDeleting(true)
+    const result = await apiFetch(`/api/admin/blog/${deleteTarget.id}`, { method: 'DELETE' })
+    setDeleting(false)
+    if (result.success) {
+      toast.success('Artikel gelöscht')
+      setDeleteTarget(null)
+      router.refresh()
+    } else {
+      toast.error(result.error || 'Artikel konnte nicht gelöscht werden')
+    }
+  }
 
   const filtered = useMemo(() => {
     return posts.filter(p => {
@@ -167,6 +188,8 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                         variant="destructive-ghost"
                         size="icon"
                         className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
+                        onClick={() => setDeleteTarget(post)}
+                        aria-label="Artikel löschen"
                         title="Artikel löschen"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -199,6 +222,17 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           )}
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={deleteTarget !== null}
+        title="Artikel löschen"
+        message="Dieser Blog-Artikel wird endgültig gelöscht."
+        itemName={deleteTarget?.title}
+        confirmLabel="Löschen"
+        isLoading={deleting}
+        onConfirm={handleDelete}
+        onClose={() => setDeleteTarget(null)}
+      />
     </div>
   )
 }

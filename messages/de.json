@@ -3257,7 +3257,8 @@
       "errorImageOnly": "Nur Bilddateien sind erlaubt",
       "errorTooLarge": "Datei zu gross (max 10MB)",
       "errorUploadFailed": "Bild-Upload fehlgeschlagen. Bitte versuche es erneut.",
-      "imageAlt": "Bild {index}"
+      "imageAlt": "Bild {index}",
+      "removeImage": "Bild {index} entfernen"
     },
     "card": {
       "expired": "Abgelaufen",
@@ -3482,7 +3483,10 @@
       "errorVerificationError": "Ein Fehler ist bei der E-Mail-Verifizierung aufgetreten",
       "errorConnection": "Verbindungsproblem. Bitte versuche es in einer Minute erneut.",
       "backHome": "Zurück zur Startseite",
-      "pageTitle": "Anmelden | RevampIT"
+      "pageTitle": "Anmelden | RevampIT",
+      "errorLocked": "Konto vorübergehend gesperrt. Bitte versuche es in einigen Minuten erneut.",
+      "errorNoPassword": "Für dieses Konto ist noch kein Passwort gesetzt. Nutze «Passwort vergessen», um dein Konto zu aktivieren.",
+      "errorUnverified": "Bitte bestätige zuerst deine E-Mail-Adresse. Überprüfe deinen Posteingang."
     },
     "register": {
       "title": "Registrieren",
@@ -9157,7 +9161,9 @@
         "columnNumber": "#",
         "columnStatus": "Status",
         "ofText": "von",
-        "productsText": "Produkten"
+        "productsText": "Produkten",
+        "prevPage": "Vorherige Seite",
+        "nextPage": "Nächste Seite"
       },
       "bulkActionBar": {
         "deselectAll": "Auswahl aufheben",
@@ -9386,6 +9392,25 @@
         "gapLocation": "PLZ oder Ort angeben"
       }
     }
+  },
+  "invite": {
+    "title": "Freunde einladen",
+    "subtitle": "Lade Freunde zu {orgName} ein — und ihr beide profitiert.",
+    "friendReceives": "Dein Freund erhält",
+    "friendReceivesDesc": "Rabatt auf den ersten Einkauf im Shop",
+    "youReceive": "Du erhältst",
+    "youReceiveDesc": "Gutschein, wenn dein Freund seinen ersten Kauf abschliesst",
+    "linkLabel": "Dein persönlicher Einladungslink",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "inviteByEmail": "Per E-Mail einladen",
+    "emailPlaceholder": "email@beispiel.ch",
+    "send": "Einladen",
+    "sending": "Senden…",
+    "inviteSent": "Einladung an {email} gesendet!",
+    "sendError": "Fehler beim Senden.",
+    "invitesSent": "Einladungen gesendet",
+    "registrations": "Registrierungen"
   },
   "vote": {
     "notFound": "Abstimmung nicht gefunden",
@@ -10069,7 +10094,8 @@
         "unverifyConfirm": {
           "title": "Verifizierung entfernen",
           "message": "Verifizierung wirklich entfernen?"
-        }
+        },
+        "verifyFailed": "Aktion fehlgeschlagen. Bitte erneut versuchen."
       },
       "reports": {
         "filters": {
@@ -10184,6 +10210,8 @@
     "sidebar": {
       "closeAria": "Seitenleiste schliessen",
       "navAria": "Admin-Navigation",
+      "filterPlaceholder": "Bereich suchen…",
+      "filterNoResults": "Kein Bereich gefunden",
       "sensitiveLabel": "Geschützt",
       "hirnTitle": "Hirn AI",
       "hirnSubtitle": "KI-Assistent",
@@ -10216,6 +10244,7 @@
       "markAllReadShort": "Alle gelesen",
       "bellAriaLabel": "Benachrichtigungen",
       "bellAriaWithUnread": "Benachrichtigungen ({count} ungelesen)",
+      "closeAriaLabel": "Benachrichtigungen schliessen",
       "loadError": "Benachrichtigungen konnten nicht geladen werden",
       "retry": "Erneut versuchen",
       "loading": "Laden…",

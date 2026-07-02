@@ -15,6 +15,7 @@ import {
   SECTIONS,
   ADMIN_SECTION_IDS,
   SENSITIVE_SECTION_IDS,
+  STAFF_UNIVERSAL_SECTION_IDS,
   getAdminSections,
   isSensitiveSection as checkSensitive,
   type SectionConfig,
@@ -137,6 +138,10 @@ export function canAccessSection(
   // Super admins always have full access
   if (isSuperAdmin(user.email, user.is_super_admin)) return true
 
+  // Personal staff tools (own Zeiterfassung, …) are open to every staff
+  // member — permission narrowing never removes someone's own tools.
+  if (STAFF_UNIVERSAL_SECTION_IDS.includes(section)) return true
+
   // Wildcard permission = full access
   if (user.staff_permissions.includes('*')) return true
 
@@ -203,8 +208,10 @@ export function getAccessibleSections(
     return ADMIN_SECTION_IDS
   }
 
-  // Filter to permitted sections, checking aliases for backward compat
+  // Filter to permitted sections, checking aliases for backward compat.
+  // Personal staff tools (alwaysForStaff) are included for every staff member.
   return ADMIN_SECTION_IDS.filter(sectionId => {
+    if (STAFF_UNIVERSAL_SECTION_IDS.includes(sectionId)) return true
     if (user.staff_permissions.includes(sectionId)) return true
     const aliasedPerm = PERMISSION_ALIASES[sectionId]
     return !!(aliasedPerm && user.staff_permissions.includes(aliasedPerm))

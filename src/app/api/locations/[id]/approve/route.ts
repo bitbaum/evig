@@ -67,11 +67,14 @@ export async function POST(
 
     // Execute in transaction
     await db.transaction(async (tx) => {
-      // Update location status
+      // Update location status. `isApproved` is what every public list/query
+      // filters on — without setting it here an approved location never
+      // surfaces anywhere (split-brain between the two columns).
       await tx
         .update(locations)
         .set({
           approvalStatus: newStatus,
+          isApproved: newStatus === LOCATION_STATUS.APPROVED,
           approvedBy: session.user.id,
           approvedAt: sql`CURRENT_TIMESTAMP`,
           updatedAt: sql`CURRENT_TIMESTAMP`,

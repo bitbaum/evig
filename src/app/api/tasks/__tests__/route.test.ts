@@ -186,7 +186,7 @@ function makePostRequest(body?: Record<string, unknown>) {
 }
 
 // Build a Drizzle select chain where the given terminal method resolves with value
-function makeSelectChain(terminal: 'orderBy' | 'where' | 'limit', value: unknown[]) {
+function makeSelectChain(terminal: 'orderBy' | 'where' | 'limit' | 'offset', value: unknown[]) {
   const c: Record<string, jest.Mock> = {}
   ;['from', 'leftJoin', 'innerJoin', 'where', 'orderBy', 'groupBy', 'having', 'limit', 'offset'].forEach(m => {
     c[m] = jest.fn().mockReturnValue(c)
@@ -204,7 +204,7 @@ beforeEach(() => {
   const dbMod = require('@/db')
 
   // GET default: single select chain that resolves at orderBy
-  dbMod.db.select.mockReturnValue(makeSelectChain('orderBy', [MOCK_TASK]))
+  dbMod.db.select.mockReturnValue(makeSelectChain('offset', [MOCK_TASK]))
 
   // POST insert chain
   const mockReturning = jest.fn().mockResolvedValue([MOCK_TASK])
@@ -241,7 +241,7 @@ describe('GET /api/tasks — authenticated', () => {
 
   it('returns empty array when no tasks exist', async () => {
     const dbMod = require('@/db')
-    dbMod.db.select.mockReturnValueOnce(makeSelectChain('orderBy', []))
+    dbMod.db.select.mockReturnValueOnce(makeSelectChain('offset', []))
     const response = await GET(makeGetRequest())
     const body = await response.json()
     expect(body.data).toEqual([])

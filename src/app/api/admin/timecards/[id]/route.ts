@@ -76,6 +76,9 @@ export const PATCH = withAdmin('timecards', async (
     const result = await reviewTimecard(session.user.id, id, parsed.data)
     return apiSuccess(result)
   } catch (error) {
+    if (error instanceof Error && error.message === 'timecard_self_review') {
+      return apiBadRequest('Eigene Zeitkarten können nicht selbst freigegeben werden.')
+    }
     logger.error('Error reviewing timecard', { error, reviewerId: session.user.id })
     return apiError(error, 'Zeitkarte konnte nicht bearbeitet werden')
   }

@@ -29,6 +29,20 @@ const AUTH_ERROR_I18N_KEY: Record<string, 'errorCredentials' | 'errorAccessDenie
   verification_error: 'errorVerificationError',
 }
 
+/**
+ * Machine-readable codes from the typed LoginError in src/auth.ts — these give
+ * the user a SPECIFIC message (unverified email, lockout, no password) instead
+ * of collapsing everything into "wrong credentials".
+ */
+const LOGIN_CODE_I18N_KEY: Record<string, 'errorCredentials' | 'errorLocked' | 'errorNoPassword' | 'errorUnverified' | 'errorConnection'> = {
+  invalid_credentials: 'errorCredentials',
+  missing_fields: 'errorCredentials',
+  account_locked: 'errorLocked',
+  no_password: 'errorNoPassword',
+  email_unverified: 'errorUnverified',
+  db_unavailable: 'errorConnection',
+}
+
 export function LoginForm() {
   const t = useTranslations('auth.login')
   const searchParams = useSearchParams()
@@ -58,7 +72,9 @@ export function LoginForm() {
       })
 
       if (result?.error) {
-        setFormError(result.error)
+        // Auth.js v5: CredentialsSignin subclasses surface their code here.
+        const code = (result as { code?: string | null }).code
+        setFormError(code && LOGIN_CODE_I18N_KEY[code] ? code : result.error)
         return
       }
 
@@ -79,6 +95,8 @@ export function LoginForm() {
   const errorMessage = (() => {
     const error = formError || queryError
     if (!error) return null
+    const codeKey = LOGIN_CODE_I18N_KEY[error]
+    if (codeKey) return t(codeKey)
     const i18nKey = AUTH_ERROR_I18N_KEY[error]
     if (i18nKey) return t(i18nKey)
     if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {

@@ -5,7 +5,20 @@
  * Provides unified accounts for shop, workshops, services, and community
  */
 
-import NextAuth from 'next-auth'
+import NextAuth, { CredentialsSignin } from 'next-auth'
+
+/**
+ * Login failure with a machine-readable `code` the login form maps to a
+ * SPECIFIC message. Plain `Error` in authorize() collapses to the generic
+ * "Configuration" type — unverified-email users were told their password was
+ * wrong (a dead-end trap: no hint to check their inbox).
+ */
+class LoginError extends CredentialsSignin {
+  constructor(code: string) {
+    super()
+    this.code = code
+  }
+}
 import Credentials from 'next-auth/providers/credentials'
 import type { JWT } from 'next-auth/jwt'
 import type { Session, User } from 'next-auth'
@@ -17,7 +30,6 @@ import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security'
 import { sendEmail } from '@/lib/email'
-import { ERROR_MESSAGES } from '@/config/error-messages'
 import { DEFAULT_USER_NAME_FALLBACK } from '@/config/auth-ui'
 
 // Database pool: uses the shared pool from @/lib/auth/db (single pool for the entire app)
@@ -117,7 +129,7 @@ export const authConfig = {
         })
 
         if (!creds?.email || !creds?.password) {
-          throw new Error(ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED)
+          throw new LoginError('missing_fields')
         }
 
         const email = creds.email as string
@@ -127,24 +139,19 @@ export const authConfig = {
           // Get user from database
           const user = await getUserByEmail(email)
 
-          // Generic error message to prevent user enumeration
-          const invalidCredentialsError = 'Ungültige E-Mail-Adresse oder Passwort'
-
           if (!user) {
-            throw new Error(invalidCredentialsError)
+            // Same code as wrong password — prevents user enumeration.
+            throw new LoginError('invalid_credentials')
           }
 
           // SECURITY: Check account lockout before password validation
           const lockoutCheck = isAccountLocked(`${user.id}:login`)
           if (lockoutCheck.locked) {
-            const minutes = Math.ceil((lockoutCheck.retryAfter ?? 60) / 60)
-            throw new Error(`Konto vorübergehend gesperrt. Versuche es in ${minutes} Minuten erneut.`)
+            throw new LoginError('account_locked')
           }
 
           if (!user.password_hash) {
-            throw new Error(
-              'Für dieses Konto ist noch kein Passwort gesetzt. Nutze «Passwort vergessen», um dein Konto zu aktivieren.',
-            )
+            throw new LoginError('no_password')
           }
 
           // Verify password
@@ -156,7 +163,7 @@ export const authConfig = {
             recordFailedAttemptDb(user.id, 'login').catch(err =>
               logger.error('Failed to record lockout attempt in DB', { error: err, userId: user.id })
             )
-            throw new Error(invalidCredentialsError)
+            throw new LoginError('invalid_credentials')
           }
 
           // SECURITY: Clear lockout on successful login
@@ -166,7 +173,7 @@ export const authConfig = {
 
           // SECURITY: Require email verification before login
           if (!user.emailVerified) {
-            throw new Error('Bitte bestätige zuerst deine E-Mail-Adresse. Überprüfe deinen Posteingang.')
+            throw new LoginError('email_unverified')
           }
 
           // Determine staff status — DB flag is SSOT, email domain only for initial setup
@@ -191,6 +198,9 @@ export const authConfig = {
             dashboard_mode: user.dashboard_mode ?? 'coordinator',
           }
         } catch (dbError) {
+          // Typed login failures pass through untouched — they carry the code.
+          if (dbError instanceof CredentialsSignin) throw dbError
+
           // Handle database connection errors gracefully
           const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
 
@@ -200,7 +210,7 @@ export const authConfig = {
               provider: 'credentials',
               reason: errorMessage,
             })
-            throw new Error(ERROR_MESSAGES.DB_CONNECTION_FAILED)
+            throw new LoginError('db_unavailable')
           }
 
           logger.warn('AUTH_LOGIN_REJECTED', {

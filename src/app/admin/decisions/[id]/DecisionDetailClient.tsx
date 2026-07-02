@@ -8,7 +8,7 @@ import {
 } from '@/config/decisions';
 import { adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
-import VotingPanel from './VotingPanel';
+import VotingPanel from '@/components/decisions/VotingPanel';
 import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
 import ResultsPanel from './ResultsPanel';

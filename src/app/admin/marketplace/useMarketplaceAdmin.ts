@@ -192,6 +192,7 @@ export function useMarketplaceAdmin() {
   }
 
   return {
+    fetchListings,
     // Tab
     tab,
     switchTab,

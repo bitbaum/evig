@@ -20,6 +20,9 @@ import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { auth } from '@/auth'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 import { ORG } from '@/config/org'
 import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
 import { ADMIN_SECTIONS } from '@/lib/permissions'
@@ -150,7 +153,14 @@ export default async function AdminDashboard() {
   const quickActions = buildQuickActions(canAccess)
 
   const userId = session.user.id ?? ''
-  const isMember = !!(session.user as { isMember?: boolean }).isMember
+  // isMember lives in the DB, not the JWT — the old session cast was never
+  // populated, so member-scoped Abstimmungen never surfaced on the dashboard.
+  const [memberRow] = await db
+    .select({ isMember: users.isMember })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1)
+  const isMember = !!memberRow?.isMember
   const dashboardMode: DashboardMode =
     (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator'
   const firstName = session.user.name?.split(' ')[0] || 'Admin'

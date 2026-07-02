@@ -7,6 +7,7 @@ import { FolderKanban, Save, Loader2 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { PROJECT_STATUSES, PROJECT_STATUS_LABELS } from '@/config/tasks'
 import { ROUTES } from '@/config/routes'
+import { apiFetch } from '@/lib/api/client'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { Button } from '@/components/ui/button'
@@ -35,18 +36,18 @@ export default function NewTaskProjectPage() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/task-projects', {
+      // apiFetch attaches the CSRF header — bare fetch() gets 403'd by the
+      // csrf middleware on state-changing /api/* requests.
+      const res = await apiFetch('/api/task-projects', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           title: form.title.trim(),
           description: form.description.trim() || undefined,
           status: form.status,
           target_date: form.target_date || undefined,
-        }),
+        },
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? 'Fehler beim Erstellen')
+      if (!res.success) throw new Error(res.error ?? 'Fehler beim Erstellen')
       router.push(ROUTES.admin.taskProjects)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')

@@ -58,34 +58,13 @@ export function useIntakePipeline(active: boolean) {
     }
   }, [tierFilter, statusFilter, categoryFilter, searchFilter])
 
-  // Auto-fetch when active or filters change
+  // Auto-fetch when active or filters change. Delegates to fetchItems — the
+  // previous hand-copied fetch body drifted (it dropped statusCounts, so the
+  // hero KPIs stayed 0 on every initial load until the user paginated).
   useEffect(() => {
-    let cancelled = false
-    async function load() {
-      if (!active) return
-      setLoading(true)
-      try {
-        const params = new URLSearchParams({ limit: '20', offset: '0' })
-        if (tierFilter) params.set('tier', tierFilter)
-        if (statusFilter) params.set('status', statusFilter)
-        if (categoryFilter) params.set('category', categoryFilter)
-        if (searchFilter) params.set('search', searchFilter)
-
-        const result = await apiFetch<{
-          items: PipelineItem[]
-          pagination: PaginationState
-        }>(`/api/admin/intake?${params}`)
-        if (!cancelled && result.success && result.data) {
-          setItems(result.data.items)
-          setPagination(result.data.pagination)
-        }
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-    load()
-    return () => { cancelled = true }
-  }, [active, tierFilter, statusFilter, categoryFilter, searchFilter])
+    if (!active) return
+    void fetchItems(0)
+  }, [active, fetchItems])
 
   return {
     items,

@@ -11,11 +11,13 @@ import {
   ChevronDown,
   Home,
   Store,
+  Search,
   Shield,
   User,
   Brain,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { ORG, ORG_IMAGES } from '@/config/org'
 import {
   getSidebarGroupsWithSections,
@@ -55,6 +57,29 @@ export function AdminSidebar({
   const groupedSections = useMemo(() => getSidebarGroupsWithSections(), [])
   const hirnSection = getHirnSection()
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
+
+  // Quick filter — the sidebar carries 30+ destinations across 8 groups;
+  // typing beats scanning. Matches label + group label, case/diacritic-light.
+  const [filterQuery, setFilterQuery] = useState('')
+  const normalizedQuery = filterQuery.trim().toLowerCase()
+  const filteredSections = useMemo(() => {
+    if (!normalizedQuery) return null
+    return groupedSections.flatMap(({ group, sections }) =>
+      sections
+        .filter(s => accessibleSections.includes(s.id))
+        .filter(s => {
+          const label = labelFor(s.id, s.ui.label).toLowerCase()
+          return (
+            label.includes(normalizedQuery) ||
+            s.ui.label.toLowerCase().includes(normalizedQuery) ||
+            group.label.toLowerCase().includes(normalizedQuery)
+          )
+        })
+        .map(s => ({ section: s, groupLabel: labelFor(group.id, group.label) })),
+    )
+    // labelFor is stable per render (next-intl); query + config drive the result.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [normalizedQuery, groupedSections, accessibleSections])
 
   const isActive = (href: string) => {
     if (href === '/admin') return pathname === '/admin'
@@ -149,9 +174,56 @@ export function AdminSidebar({
         </Button>
       </div>
 
+      {/* Quick filter — hidden when collapsed (no room for an input) */}
+      {!sidebarCollapsed && (
+        <div className="px-3 pt-2">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted z-10" aria-hidden="true" />
+            <Input
+              type="search"
+              value={filterQuery}
+              onChange={(e) => setFilterQuery(e.target.value)}
+              placeholder={t('filterPlaceholder')}
+              aria-label={t('filterPlaceholder')}
+              className="h-8 pl-8 pr-2 text-sm"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
-      <nav aria-label={t('navAria')} className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
-        {groupedSections.map(({ group, sections }) => {
+      <nav aria-label={t('navAria')} className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 220px)' }}>
+        {/* Filtered flat list — replaces the grouped tree while typing */}
+        {filteredSections !== null && !sidebarCollapsed && (
+          <div className="space-y-1 pb-2">
+            {filteredSections.length === 0 && (
+              <p className="px-2 py-2 text-sm text-text-muted">{t('filterNoResults')}</p>
+            )}
+            {filteredSections.map(({ section, groupLabel }) => {
+              const Icon = section.ui.icon
+              return (
+                <Link
+                  key={section.path}
+                  href={section.path}
+                  onClick={() => { setMobileMenuOpen(false); setFilterQuery('') }}
+                  className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 transition-colors ${
+                    isActive(section.path)
+                      ? adminInteractive.navActive
+                      : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
+                  }`}
+                >
+                  <Icon className="h-4 w-4 shrink-0 text-text-muted dark:text-text-secondary" />
+                  <span className="flex-1 text-sm font-medium">
+                    {labelFor(section.id, section.ui.label)}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wider text-text-muted">{groupLabel}</span>
+                </Link>
+              )
+            })}
+          </div>
+        )}
+
+        {(filteredSections === null || sidebarCollapsed) && groupedSections.map(({ group, sections }) => {
           const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
           if (accessibleGroupSections.length === 0) return null
 

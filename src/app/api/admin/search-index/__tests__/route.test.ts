@@ -59,6 +59,13 @@ jest.mock('@/config/sections', () => ({
   ],
 }))
 
+// The route scopes results by the caller's permissions — grant everything here;
+// the scoping logic itself is covered by src/lib/__tests__/permissions.test.ts.
+jest.mock('@/lib/permissions', () => ({
+  canAccessSection: () => true,
+  toStaffUser: (u: unknown) => u,
+}))
+
 jest.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
 }))

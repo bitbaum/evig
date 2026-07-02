@@ -26,6 +26,13 @@
 
 const LOCALE = 'de-CH'
 
+/**
+ * Always render in Swiss time. The prod box runs UTC — without an explicit
+ * timeZone every server-rendered timestamp is 1-2h off (a 15:00 workshop
+ * displayed as 13:00, "today" flipping at 02:00 Swiss time).
+ */
+const TIME_ZONE = 'Europe/Zurich'
+
 /** Value returned for missing or invalid dates. */
 const EMPTY = ''
 
@@ -46,9 +53,10 @@ function formatWith(
 ): string {
   const d = toValidDate(date)
   if (!d) return EMPTY
+  const opts = { timeZone: TIME_ZONE, ...options }
   return kind === 'time'
-    ? d.toLocaleTimeString(LOCALE, options)
-    : d.toLocaleDateString(LOCALE, options)
+    ? d.toLocaleTimeString(LOCALE, opts)
+    : d.toLocaleDateString(LOCALE, opts)
 }
 
 /** Format date with long month name: "1. Januar 2026" */

@@ -115,7 +115,7 @@ describe('GET /api/admin/hirn/history — authenticated', () => {
   it('returns 200 with history when sessionId provided', async () => {
     const response = await GET(makeRequest('GET', { sessionId: 'sess-1' }))
     expect(response.status).toBe(200)
-    expect(mockGetChatHistory).toHaveBeenCalledWith('sess-1')
+    expect(mockGetChatHistory).toHaveBeenCalledWith('sess-1', 'admin-1')
   })
 
   it('returns 500 when service throws', async () => {

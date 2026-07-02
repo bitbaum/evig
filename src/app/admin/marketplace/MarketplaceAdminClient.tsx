@@ -66,6 +66,7 @@ export default function MarketplaceAdminClient() {
               setOffset={m.setListingsOffset}
               onEdit={m.openEditModal}
               onRemove={m.handleRemove}
+              onChanged={m.fetchListings}
             />
           )}
 

@@ -138,7 +138,8 @@ export async function chat(
  * Get chat history for a session
  */
 export async function getChatHistory(
-  sessionId: string
+  sessionId: string,
+  userId: string
 ): Promise<Array<{
   id: string
   role: string
@@ -157,7 +158,9 @@ export async function getChatHistory(
       model: hirnChatHistory.model,
     })
     .from(hirnChatHistory)
-    .where(eq(hirnChatHistory.sessionId, sessionId))
+    // Scope by owner — session UUIDs are not authorization; without the
+    // userId filter any staff member could read another's chat.
+    .where(and(eq(hirnChatHistory.sessionId, sessionId), eq(hirnChatHistory.userId, userId)))
     .orderBy(asc(hirnChatHistory.createdAt))
 
   return rows.map(r => ({
@@ -214,9 +217,12 @@ export async function getUserSessions(
 /**
  * Delete a chat session
  */
-export async function deleteSession(sessionId: string): Promise<void> {
-  await db.delete(hirnChatHistory).where(eq(hirnChatHistory.sessionId, sessionId))
-  logger.info('Chat session deleted', { sessionId })
+export async function deleteSession(sessionId: string, userId: string): Promise<void> {
+  // Scope by owner (see getChatHistory).
+  await db
+    .delete(hirnChatHistory)
+    .where(and(eq(hirnChatHistory.sessionId, sessionId), eq(hirnChatHistory.userId, userId)))
+  logger.info('Chat session deleted', { sessionId, userId })
 }
 
 /**

@@ -351,7 +351,6 @@ export default function DecisionHeaderCard({
                         alt={opt.label}
                         fill
                         className="object-contain p-2"
-                        unoptimized
                       />
                     </div>
                   ) : (

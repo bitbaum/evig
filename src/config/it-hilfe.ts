@@ -43,8 +43,6 @@ export const IT_HILFE = {
     hub: '/it-hilfe',
     /** Browse open repair requests (for technicians offering help) */
     browseRequests: '/it-hilfe/anfragen',
-    /** @deprecated Use browseRequests — kept for one release */
-    browse: '/it-hilfe/anfragen',
     create: '/it-hilfe/create',
     createForTechnician: (technicianId: string) => `/it-hilfe/create?technician=${technicianId}`,
     my: '/it-hilfe/my',
@@ -52,8 +50,6 @@ export const IT_HILFE = {
     detail: (id: string) => `/it-hilfe/${id}`,
     technicians: '/it-hilfe/techniker',
     technicianProfile: (id: string) => `/it-hilfe/techniker/${id}`,
-    /** @deprecated Use technicians */
-    helpers: '/it-hilfe/techniker',
     register: '/profil/techniker',
   },
   api: {

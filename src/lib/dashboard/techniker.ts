@@ -22,8 +22,6 @@ export interface TechnicianDashboardSummary {
   city: string
 }
 
-/** @deprecated Use TechnicianDashboardSummary. Kept for one release. */
-export type TechnicianProfile = TechnicianDashboardSummary
 
 export interface MatchingRequest {
   id: string

@@ -40,7 +40,6 @@ export function ListingImage({ src, alt, className = 'w-full h-full object-cover
         fill
         sizes="(max-width: 768px) 100vw, 400px"
         onError={() => setHasError(true)}
-        unoptimized
       />
     </div>
   )

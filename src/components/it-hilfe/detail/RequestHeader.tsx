@@ -73,7 +73,6 @@ export function RequestHeader({ request }: RequestHeaderProps) {
                   width={400}
                   height={128}
                   className="w-full h-32 object-cover rounded-lg hover:opacity-90 transition-opacity"
-                  unoptimized
                 />
               </a>
             ))}

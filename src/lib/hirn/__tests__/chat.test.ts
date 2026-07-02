@@ -236,7 +236,7 @@ describe('getChatHistory', () => {
   it('returns empty array when no history', async () => {
     mockDbSelect.mockImplementationOnce(() => makeChain([]))
 
-    const result = await getChatHistory(SESSION_ID)
+    const result = await getChatHistory(SESSION_ID, USER_ID)
 
     expect(result).toEqual([])
   })
@@ -246,7 +246,7 @@ describe('getChatHistory', () => {
       makeChain([makeHistoryRow({ role: 'assistant', provider: 'groq', model: 'groq:llama' })]),
     )
 
-    const result = await getChatHistory(SESSION_ID)
+    const result = await getChatHistory(SESSION_ID, USER_ID)
 
     expect(result).toHaveLength(1)
     expect(result[0].role).toBe('assistant')
@@ -259,7 +259,7 @@ describe('getChatHistory', () => {
       makeChain([makeHistoryRow({ provider: null, model: null })]),
     )
 
-    const result = await getChatHistory(SESSION_ID)
+    const result = await getChatHistory(SESSION_ID, USER_ID)
 
     expect(result[0].provider).toBeUndefined()
     expect(result[0].model).toBeUndefined()
@@ -315,7 +315,7 @@ describe('getUserSessions', () => {
 
 describe('deleteSession', () => {
   it('calls db.delete once', async () => {
-    await deleteSession(SESSION_ID)
+    await deleteSession(SESSION_ID, USER_ID)
     expect(mockDbDelete).toHaveBeenCalledTimes(1)
   })
 })

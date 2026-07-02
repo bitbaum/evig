@@ -24,9 +24,11 @@ interface ListingsTabProps {
   setOffset: React.Dispatch<React.SetStateAction<number>>
   onEdit: (id: string, admin_notes: string, status: string) => void
   onRemove: (id: string, title: string) => void
+  /** Refetch listings after a verify/unverify (client-held state). */
+  onChanged: () => void
 }
 
-export function ListingsTab({ listings, filter, setFilter, offset, setOffset, onEdit, onRemove }: ListingsTabProps) {
+export function ListingsTab({ listings, filter, setFilter, offset, setOffset, onEdit, onRemove, onChanged }: ListingsTabProps) {
   const t = useTranslations('admin.marketplace.listings')
   const tPag = useTranslations('admin.pagination')
   return (
@@ -116,7 +118,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                     <Button variant="ghost" size="icon" onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.edit')}>
                       <Edit3 className="w-4 h-4 text-text-tertiary" />
                     </Button>
-                    <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
+                    <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} onChanged={onChanged} />
                     {l.status !== LISTING_STATUS.REMOVED && (
                       <Button variant="destructive-ghost" size="icon" onClick={() => onRemove(l.id, l.title)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.remove')}>
                         <Trash2 className="w-4 h-4 text-error-500" />

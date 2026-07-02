@@ -3,6 +3,8 @@ import { uuidSchema } from './common'
 
 export const WorkshopRegistrationSchema = z.object({
   workshopSlug: z.string().min(1, 'Workshop-Slug ist erforderlich'),
+  // Optional: register for a specific Termin instead of the next upcoming one.
+  instanceId: uuidSchema.optional(),
 })
 
 export type WorkshopRegistrationInput = z.infer<typeof WorkshopRegistrationSchema>

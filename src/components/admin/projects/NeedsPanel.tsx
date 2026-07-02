@@ -9,6 +9,8 @@
 
 import { useState, useTransition, type FormEvent } from 'react'
 import { useTranslations } from 'next-intl'
+import { toast } from 'sonner'
+import { apiFetch } from '@/lib/api/client'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { Button } from '@/components/ui/button'
@@ -50,10 +52,11 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
 
   async function save(need: Need) {
     startTransition(async () => {
-      const res = await fetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${need.id}`, {
+      // apiFetch attaches the CSRF header — bare fetch() gets 403'd by the
+      // csrf middleware on state-changing /api/* requests.
+      const res = await apiFetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${need.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           type: need.type,
           title: need.title,
           description: need.description,
@@ -61,18 +64,18 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           targetUnit: need.targetUnit,
           status: need.status,
           sortOrder: need.sortOrder,
-        }),
+        },
       })
-      if (!res.ok) alert(t('needs.errorSave'))
+      if (!res.success) toast.error(res.error || t('needs.errorSave'))
     })
   }
 
   async function remove(id: string) {
     if (!confirm(t('needs.confirmDelete'))) return
     startTransition(async () => {
-      const res = await fetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${id}`, { method: 'DELETE' })
-      if (!res.ok) {
-        alert(t('needs.errorDelete'))
+      const res = await apiFetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${id}`, { method: 'DELETE' })
+      if (!res.success) {
+        toast.error(res.error || t('needs.errorDelete'))
         return
       }
       setNeeds(prev => prev.filter(n => n.id !== id))
@@ -92,17 +95,15 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
     }
     if (!payload.title) return
 
-    const res = await fetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs`, {
+    const res = await apiFetch<Need>(`/api/admin/projects/${encodeURIComponent(slug)}/needs`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: payload,
     })
-    const json = await res.json().catch(() => null)
-    if (!res.ok || !json?.success) {
-      alert(t('needs.errorCreate'))
+    if (!res.success || !res.data) {
+      toast.error(res.error || t('needs.errorCreate'))
       return
     }
-    setNeeds(prev => [...prev, json.data as Need])
+    setNeeds(prev => [...prev, res.data as Need])
     setAdding(false)
   }
 

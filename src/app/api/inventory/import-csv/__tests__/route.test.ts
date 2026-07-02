@@ -16,8 +16,11 @@ jest.mock('@/auth', () => ({
 }))
 
 jest.mock('@/lib/api/middleware', () => ({
-  withAuth: (handler: unknown) =>
-    (req: Request, context?: { params?: Promise<unknown> }) =>
+  // Route is now staff-gated via withAdmin('products', handler); the section
+  // check itself is covered by permissions tests.
+  withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
+    const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler
+    return (req: Request, context?: { params?: Promise<unknown> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
           const { NextResponse } = jest.requireActual('next/server')
@@ -25,7 +28,8 @@ jest.mock('@/lib/api/middleware', () => ({
         }
         const resolvedContext = context?.params ? { params: await context.params } : undefined
         return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext)
-      }),
+      })
+  },
 }))
 
 const mockSelect = jest.fn()

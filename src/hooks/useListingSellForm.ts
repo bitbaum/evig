@@ -158,7 +158,7 @@ export function useListingSellForm() {
     setIsSubmitting(true)
     setError(null)
     try {
-      const body = transformListingFormToPayload(formData)
+      const body = transformListingFormToPayload(formData, { includeStatus: !editId })
       const url = editId ? `/api/listings/${editId}` : '/api/listings'
       const method = editId ? 'PATCH' : 'POST'
       const result = await apiFetch<{ id: string }>(url, { method, body })

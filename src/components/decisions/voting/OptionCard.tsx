@@ -39,7 +39,6 @@ export function OptionCard({
             alt={opt.label}
             fill
             className="object-contain p-2"
-            unoptimized
           />
           {selected && (
             <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-action text-white shadow-sm">

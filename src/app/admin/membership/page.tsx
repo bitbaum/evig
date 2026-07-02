@@ -6,8 +6,7 @@
  */
 
 import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
+import { requireSection } from '@/lib/admin/guards'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { Users, CheckCircle, AlertCircle } from 'lucide-react'
@@ -64,10 +63,9 @@ function isPaid(member: MemberRow): boolean {
 }
 
 export default async function MembershipPage() {
-  const session = await auth()
-  if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/membership')
-  }
+  // Member PII (names, emails, payment status) — enforce the section permission,
+  // not just "is logged in".
+  await requireSection('membership')
 
   const [members, totalApplications] = await Promise.all([
     getMembers(),

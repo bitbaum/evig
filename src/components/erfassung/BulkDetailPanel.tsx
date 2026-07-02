@@ -15,6 +15,7 @@ import { ProductForm } from '@/components/erfassung/ProductForm'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
 import Heading from '@/components/ui/Heading'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 interface BulkDetailPanelProps {
   product: BulkProduct
@@ -26,6 +27,10 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
   const t = useTranslations('components.erfassung.bulkDetail')
   const [localData, setLocalData] = useState<BulkProduct>({ ...product })
   const [showAdvanced, setShowAdvanced] = useState(false)
+
+  // Escape-to-close, initial focus, focus restore and the Tab trap all live in
+  // the shared hook; attach its ref to the panel below.
+  const panelRef = useFocusTrap<HTMLDivElement>(true, onClose)
 
   const handleFieldChange = (field: keyof ErfassungFormData, value: string | string[]) => {
     setLocalData(prev => ({ ...prev, [field]: value }))
@@ -91,8 +96,15 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
         onClick={onClose}
       />
 
-      {/* Panel */}
-      <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-surface-base z-50 shadow-xs overflow-y-auto">
+      {/* Panel — tabIndex=-1 so the trap can focus it when no child is focusable. */}
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${localData.hersteller || 'Produkt'} ${localData.produktname || t('editLabel')}`}
+        className="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[600px] bg-surface-base z-50 shadow-xs overflow-y-auto focus:outline-none"
+      >
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b border px-4 py-3 flex items-center justify-between z-10">
           <div>
@@ -108,6 +120,7 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
             variant="ghost"
             size="icon"
             onClick={onClose}
+            aria-label={t('close')}
             className="rounded-lg hover:bg-surface-raised"
           >
             <X className="w-5 h-5" />

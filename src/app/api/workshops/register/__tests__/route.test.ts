@@ -67,6 +67,7 @@ jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
+  gte: (a: unknown, b: unknown) => ({ __gte: [a, b] }),
   sql: Object.assign(
     (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
     { raw: (s: string) => ({ __raw: s }) }
@@ -95,6 +96,12 @@ jest.mock('@/config/error-messages', () => ({
 
 jest.mock('@/config/urls', () => ({
   APP_URL: 'https://revamp-it.ch',
+}))
+
+// The real limiter is an in-memory LRU that persists across tests in a suite —
+// after 5 calls every later test would 400. Always allow here.
+jest.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: new Proxy({}, { get: () => () => true }),
 }))
 
 jest.mock('@/lib/email', () => ({

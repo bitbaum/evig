@@ -37,7 +37,7 @@ const closeSchema = z.object({
   path: ['period_end'],
 })
 
-export const POST = withAdmin('timecards', async (request: NextRequest, session: ValidSession) => {
+export const POST = withAdmin('payroll', async (request: NextRequest, session: ValidSession) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
       return apiForbidden('Nur Super-Admins können einen Lohnlauf abschliessen.')
@@ -101,7 +101,7 @@ export const POST = withAdmin('timecards', async (request: NextRequest, session:
   }
 })
 
-export const GET = withAdmin('timecards', async (_request: NextRequest, _session: ValidSession) => {
+export const GET = withAdmin('payroll', async (_request: NextRequest, _session: ValidSession) => {
   // Helper for the UI: "what's eligible to be closed?" — sums hours of
   // approved timecards still waiting on a batch. Two args via query:
   // ?period_start=YYYY-MM-DD&period_end=YYYY-MM-DD. Returns counts + minutes.

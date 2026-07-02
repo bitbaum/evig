@@ -14,7 +14,6 @@ import { ROUTES } from '@/config/routes'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
 import { MatchedTechnicianCard } from '@/components/it-hilfe/detail/MatchedTechnicianCard'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
-import { ITHilfeReviewForm } from '@/components/it-hilfe/ITHilfeReviewForm'
 import { MessageSidebar } from '@/components/messaging/MessageSidebar'
 import {
   RequestHeader,
@@ -240,14 +239,9 @@ export default function ITHilfeDetailPage() {
               />
             )}
 
-            {/* Review Form (completed requests) */}
-            {request.status === REQUEST_STATUS.COMPLETED && detail.session?.user && !detail.hasReviewed && !detail.reviewSubmitted && (
-              <ITHilfeReviewForm
-                requestId={request.id}
-                requestTitle={request.title}
-                onSuccess={() => detail.setReviewSubmitted(true)}
-              />
-            )}
+            {/* Reviews go exclusively through ConfirmReviewCard above
+                (owner-only, confirm-review endpoint) — a generic form here
+                would let any user rate any technician. */}
 
             {/* Review submitted confirmation */}
             {detail.reviewSubmitted && (

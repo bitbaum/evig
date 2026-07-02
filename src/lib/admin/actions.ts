@@ -8,14 +8,22 @@ import { eq, sql } from 'drizzle-orm'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logActivity } from '@/lib/activity'
 import { logger } from '@/lib/logger'
+import { canAccessSection, toStaffUser } from '@/lib/permissions'
 
 // ---------------------------------------------------------------------------
-// Guard: require active admin session for all actions
+// Guard: require staff session WITH the section permission. Server actions are
+// directly callable POSTs — without the section check a volunteer narrowed to
+// ['dashboard','tasks'] could still verify listings / approve applications via
+// the one-click dashboard buttons.
 // ---------------------------------------------------------------------------
 
-async function requireAdmin() {
+async function requireAdmin(section: string) {
   const session = await auth()
   if (!session?.user?.isStaff && !session?.user?.isSuperAdmin) {
+    throw new Error('Unauthorized')
+  }
+  const staffUser = toStaffUser(session.user)
+  if (!canAccessSection(staffUser, section)) {
     throw new Error('Unauthorized')
   }
   return session.user
@@ -26,7 +34,7 @@ async function requireAdmin() {
 // ---------------------------------------------------------------------------
 
 export async function approveBlogSubmissionAction(submissionId: string) {
-  const user = await requireAdmin()
+  const user = await requireAdmin('approvals')
 
   try {
     await db
@@ -60,7 +68,7 @@ export async function approveBlogSubmissionAction(submissionId: string) {
 // ---------------------------------------------------------------------------
 
 export async function verifyListingAction(listingId: string) {
-  const user = await requireAdmin()
+  const user = await requireAdmin('marketplace')
 
   try {
     await db
@@ -92,7 +100,7 @@ export async function verifyListingAction(listingId: string) {
 // ---------------------------------------------------------------------------
 
 export async function approveRepairerApplicationAction(applicationId: string) {
-  const user = await requireAdmin()
+  const user = await requireAdmin('approvals')
 
   try {
     await db

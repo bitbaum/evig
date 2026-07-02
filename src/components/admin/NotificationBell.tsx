@@ -178,6 +178,7 @@ export function NotificationBell() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setOpen(false)}
+                aria-label={t('closeAriaLabel')}
                 className={`rounded-md p-1 ${adminInteractive.rowHover} h-auto w-auto`}
               >
                 <X className="w-4 h-4 text-text-tertiary" />

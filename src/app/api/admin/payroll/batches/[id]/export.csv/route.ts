@@ -51,7 +51,7 @@ function rowToCsv(values: unknown[]): string {
   return values.map(csvField).join(',')
 }
 
-export const GET = withAdmin<{ id: string }>('timecards', async (
+export const GET = withAdmin<{ id: string }>('payroll', async (
   _request: NextRequest,
   session: ValidSession,
   context,

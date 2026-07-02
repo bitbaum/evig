@@ -4,39 +4,55 @@ import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
 import { getAdminSections } from '@/config/sections'
+import { canAccessSection, toStaffUser } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 
-export const GET = withAdmin(async (_request: NextRequest, _session) => {
+export const GET = withAdmin(async (_request: NextRequest, session) => {
   try {
+    // Scope everything by the CALLER's permissions — the ⌘K index otherwise
+    // leaks user PII and sensitive section names to permission-limited staff.
+    const staffUser = toStaffUser(session.user)
+    const canSeeUsers = canAccessSection(staffUser, 'users')
+    const canSeeDecisions = canAccessSection(staffUser, 'decisions')
+    const canSeeListings = canAccessSection(staffUser, 'marketplace')
+
     const [usersResult, decisionsResult, listingsResult] = await Promise.allSettled([
-      db.execute(sql`
-        SELECT id, name, email
-        FROM ${sql.raw(TABLE_NAMES.USERS)}
-        ORDER BY created_at DESC
-        LIMIT 20
-      `),
-      db.execute(sql`
-        SELECT id, title, status
-        FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
-        ORDER BY created_at DESC
-        LIMIT 10
-      `),
-      db.execute(sql`
-        SELECT id, title, status
-        FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
-        ORDER BY created_at DESC
-        LIMIT 10
-      `),
+      canSeeUsers
+        ? db.execute(sql`
+            SELECT id, name, email
+            FROM ${sql.raw(TABLE_NAMES.USERS)}
+            ORDER BY "createdAt" DESC
+            LIMIT 20
+          `)
+        : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
+      canSeeDecisions
+        ? db.execute(sql`
+            SELECT id, title, status
+            FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
+            ORDER BY created_at DESC
+            LIMIT 10
+          `)
+        : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
+      canSeeListings
+        ? db.execute(sql`
+            SELECT id, title, status
+            FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
+            ORDER BY created_at DESC
+            LIMIT 10
+          `)
+        : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
     ])
 
-    const sections = getAdminSections().map(s => ({
-      id: s.id,
-      label: s.ui.label,
-      path: s.path,
-      description: s.ui.description,
-    }))
+    const sections = getAdminSections()
+      .filter(s => canAccessSection(staffUser, s.id))
+      .map(s => ({
+        id: s.id,
+        label: s.ui.label,
+        path: s.path,
+        description: s.ui.description,
+      }))
 
     type Row = Record<string, unknown>
 

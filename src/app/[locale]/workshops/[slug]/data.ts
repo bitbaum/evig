@@ -10,6 +10,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { type WorkshopInstanceStatus } from '@/config/workshops'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
 
 // Extended workshop type (mirrors columns from migration 038)
@@ -90,11 +91,12 @@ export async function getWorkshopInstances(workshopId: string): Promise<Workshop
         wi.*,
         COUNT(wr.id) as current_participants
       FROM ${TABLE_NAMES.WORKSHOP_INSTANCES} wi
-      LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr ON wi.id = wr.workshop_instance_id
+      LEFT JOIN ${TABLE_NAMES.WORKSHOP_REGISTRATIONS} wr
+        ON wi.id = wr.workshop_instance_id AND wr.status != $2
       WHERE wi.workshop_id = $1
       GROUP BY wi.id
       ORDER BY wi.start_date ASC
-    `, [workshopId])
+    `, [workshopId, WORKSHOP_REGISTRATION_STATUS.CANCELLED])
 
     return (result.rows as WorkshopInstanceRow[]).map((row): WorkshopInstanceWithCount => ({
       id: row.id,

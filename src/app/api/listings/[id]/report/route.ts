@@ -13,6 +13,7 @@ import { eq, and } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, ReportListingSchema } from '@/lib/schemas';
 import { LISTING_STATUS } from '@/config/marketplace';
+import { rateLimiters } from '@/lib/security/rate-limit';
 
 type RouteContext = { params?: { id: string } };
 
@@ -22,6 +23,10 @@ export const POST = withAuth<{ id: string }>(async (
   context?: RouteContext
 ) => {
   try {
+    if (!rateLimiters.listingReport(`${session.user.id}:listing-report`)) {
+      return apiBadRequest('Zu viele Meldungen. Bitte versuche es später erneut.');
+    }
+
     const id = context?.params?.id;
     if (!id) return apiNotFound('Inserat');
 

@@ -23,7 +23,7 @@ export const GET = withAdmin('hirn', async (request: NextRequest, session) => {
 
     if (sessionId) {
       // Get history for specific session
-      const history = await getChatHistory(sessionId)
+      const history = await getChatHistory(sessionId, session.user.id)
       return apiSuccess(history)
     } else {
       // Get all sessions for user
@@ -35,7 +35,7 @@ export const GET = withAdmin('hirn', async (request: NextRequest, session) => {
   }
 })
 
-export const DELETE = withAdmin('hirn', async (request: NextRequest) => {
+export const DELETE = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
@@ -44,7 +44,7 @@ export const DELETE = withAdmin('hirn', async (request: NextRequest) => {
       return apiBadRequest('Session-ID ist erforderlich')
     }
 
-    await deleteSession(sessionId)
+    await deleteSession(sessionId, session.user.id)
 
     return apiSuccess({ message: 'Session gelöscht' })
   } catch (error) {

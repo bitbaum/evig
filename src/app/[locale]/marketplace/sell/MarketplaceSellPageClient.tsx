@@ -7,13 +7,19 @@ import { Button } from '@/components/ui/button'
 import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
 import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields'
 import { ListingPreview } from '@/components/marketplace-sell/ListingPreview'
-import { AICameraProductListing } from '@/components/marketplace/ai-camera'
+import dynamic from 'next/dynamic'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useTranslations } from 'next-intl'
 import { useListingSellForm } from '@/hooks/useListingSellForm'
 import { ROUTES } from '@/config/routes'
+
+// framer-motion is heavy — load the camera flow lazily, only when opened.
+const AICameraProductListing = dynamic(
+  () => import('@/components/marketplace/ai-camera/AICameraProductListing').then(m => m.AICameraProductListing),
+  { ssr: false }
+)
 
 function SellPageContent() {
   const t = useTranslations('marketplace.sell')

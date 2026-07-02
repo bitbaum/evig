@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { listings, listingImages, users, sellerProfiles } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import { LISTING_STATUS } from '@/config/marketplace'
 import type { ListingForCheckout } from '@/hooks/useCheckout'
 
@@ -10,8 +10,6 @@ import type { ListingForCheckout } from '@/hooks/useCheckout'
 export async function getListingForCheckout(
   listingId: string,
 ): Promise<ListingForCheckout | null> {
-  const revampitSellerCondition = sql`(${listings.isRevampit} = true OR lower(${users.email}) LIKE '%@revamp-it.ch' OR lower(${users.email}) LIKE '%@revampit.ch')`
-
   const [row] = await db
     .select({
       id: listings.id,
@@ -24,7 +22,8 @@ export async function getListingForCheckout(
       seller_name: users.name,
       seller_display_name: sellerProfiles.displayName,
       seller_id: listings.sellerId,
-      is_revampit: revampitSellerCondition,
+      // SSOT: the stored column decides — staff selling privately are P2P.
+      is_revampit: listings.isRevampit,
     })
     .from(listings)
     .innerJoin(users, eq(listings.sellerId, users.id))

@@ -8,6 +8,8 @@
 
 import { useMemo, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
+import { toast } from 'sonner'
+import { apiFetch } from '@/lib/api/client'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { Button } from '@/components/ui/button'
@@ -65,17 +67,17 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
 
   async function save(c: Contribution) {
     startTransition(async () => {
-      const res = await fetch(`/api/admin/projects/${encodeURIComponent(slug)}/contributions/${c.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: c.status, internalNotes: c.internalNotes }),
-      })
-      if (!res.ok) {
-        alert(t('contributions.errorSave'))
+      // apiFetch attaches the CSRF header — bare fetch() gets 403'd by the
+      // csrf middleware on state-changing /api/* requests.
+      const res = await apiFetch<{ respondedAt?: string }>(
+        `/api/admin/projects/${encodeURIComponent(slug)}/contributions/${c.id}`,
+        { method: 'PATCH', body: { status: c.status, internalNotes: c.internalNotes } },
+      )
+      if (!res.success) {
+        toast.error(res.error || t('contributions.errorSave'))
         return
       }
-      const json = await res.json().catch(() => null)
-      if (json?.success) patch(c.id, { respondedAt: json.data.respondedAt ?? c.respondedAt })
+      patch(c.id, { respondedAt: res.data?.respondedAt ?? c.respondedAt })
     })
   }
 

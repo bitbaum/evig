@@ -234,6 +234,16 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       timelinessRating, valueRating, title, content,
     } = validation.data
 
+    // IT-Hilfe reviews go exclusively through the request's confirm-review
+    // endpoint, which verifies the reviewer IS the requester and the request is
+    // completed. Accepting them here would let any user rate any technician
+    // (rating-integrity hole — reviews feed the public aggregate).
+    if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
+      return apiBadRequest(
+        'IT-Hilfe-Bewertungen erfolgen über die Abschluss-Bestätigung der Anfrage.'
+      )
+    }
+
     // Duplicate check
     const existingId = await findDuplicateReview(session.user.id, targetType, targetId, bookingId)
     if (existingId) {

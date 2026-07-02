@@ -28,12 +28,20 @@ export function useTaskActions(taskId: string) {
 
   useEffect(() => {
     let cancelled = false
-    apiFetch<{ profiles: { user_id: string; name: string | null; email: string }[] }>(
+    // The profiles API returns a bare array with user_name/user_email (same
+    // shape useTaskForm consumes) — the old `{profiles:[{name,email}]}` shape
+    // never existed, which left this dropdown permanently empty and every
+    // help request silently broadcast to all staff.
+    apiFetch<Array<{ user_id: string; user_name?: string | null; user_email?: string | null; is_active?: boolean }>>(
       '/api/admin/team/profiles',
     ).then((res) => {
       if (cancelled) return
-      if (res.success && res.data?.profiles) {
-        setStaffMembers(res.data.profiles.map((p) => ({ id: p.user_id, name: p.name, email: p.email })))
+      if (res.success && res.data) {
+        setStaffMembers(
+          res.data
+            .filter((p) => p.is_active !== false)
+            .map((p) => ({ id: p.user_id, name: p.user_name ?? null, email: p.user_email ?? '' })),
+        )
       }
     })
     return () => { cancelled = true }

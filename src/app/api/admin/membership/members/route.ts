@@ -10,7 +10,7 @@ import { eq, asc } from 'drizzle-orm'
  * Returns all active Verein members for decision invitation.
  * Used by decision creation form to auto-invite members to votes.
  */
-export const GET = withAdmin(async (_request: NextRequest) => {
+export const GET = withAdmin('membership', async (_request: NextRequest) => {
   try {
     const members = await db
       .select({

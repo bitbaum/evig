@@ -5,7 +5,7 @@ import { aiExtractedProducts, inventoryItems, sustainabilityScores } from "@/db/
 import { eq, desc } from "drizzle-orm";
 import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
 import { logger } from "@/lib/logger";
-import { withAuth, ValidSession } from "@/lib/api/middleware";
+import { withAdmin, ValidSession } from "@/lib/api/middleware";
 import { validateBody, ImportCSVSchema } from '@/lib/schemas';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status';
@@ -30,7 +30,9 @@ interface ImportResult {
 
 const MAX_CSV_ROWS = 1000;
 
-export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
+// Staff-only: CSV import writes into the erfassung/inventory system, so it is
+// gated on the same 'products' section as the sibling /api/admin/erfassung/* routes.
+export const POST = withAdmin('products', async (request: NextRequest, session: ValidSession) => {
   try {
     // SECURITY: Rate limiting - 5 imports per hour per user
     if (!rateLimiters.csvImport(`${session.user.id}:csv-import`)) {
@@ -178,8 +180,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
   }
 });
 
-// GET endpoint to retrieve import history
-export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
+// GET endpoint to retrieve import history (staff-only, same section as POST)
+export const GET = withAdmin('products', async (_request: NextRequest, session: ValidSession) => {
   try {
     const importHistory = await db
       .select({

@@ -8,6 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ORG } from '@/config/org'
+import { useTranslations } from 'next-intl'
 import { PageShell } from '@/components/layout/PageShell'
 
 interface ReferralData {
@@ -19,6 +20,7 @@ interface ReferralData {
 }
 
 export default function InvitePage() {
+  const t = useTranslations('invite')
   const { status } = useSession()
   const router = useRouter()
   const [data, setData] = useState<ReferralData | null>(null)
@@ -53,11 +55,11 @@ export default function InvitePage() {
     const json = await res.json()
 
     if (json.success) {
-      setFeedback({ type: 'success', message: `Einladung an ${email} gesendet!` })
+      setFeedback({ type: 'success', message: t('inviteSent', { email }) })
       setEmail('')
       setData(prev => prev ? { ...prev, totalInvites: prev.totalInvites + 1 } : prev)
     } else {
-      setFeedback({ type: 'error', message: json.error ?? 'Fehler beim Senden.' })
+      setFeedback({ type: 'error', message: json.error ?? t('sendError') })
     }
     setSending(false)
   }
@@ -80,9 +82,9 @@ export default function InvitePage() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-action-muted rounded-2xl mb-4">
             <Users className="w-7 h-7 text-action" />
           </div>
-          <Heading level={1} className="text-3xl sm:text-4xl mb-3">Freunde einladen</Heading>
+          <Heading level={1} className="text-3xl sm:text-4xl mb-3">{t('title')}</Heading>
           <p className="text-text-secondary text-lg">
-            Lade Freunde zu {ORG.name} ein — und ihr beide profitiert.
+            {t('subtitle', { orgName: ORG.name })}
           </p>
         </div>
 
@@ -91,18 +93,18 @@ export default function InvitePage() {
           <div className="card-shell p-5">
             <div className="flex items-center gap-3 mb-2">
               <Gift className="w-5 h-5 text-action" />
-              <span className="font-semibold text-text-primary">Dein Freund erhält</span>
+              <span className="font-semibold text-text-primary">{t('friendReceives')}</span>
             </div>
             <p className="text-2xl font-bold text-action mb-1">CHF {inviteeCHF}</p>
-            <p className="text-sm text-text-tertiary">Rabatt auf den ersten Einkauf im Shop</p>
+            <p className="text-sm text-text-tertiary">{t('friendReceivesDesc')}</p>
           </div>
           <div className="card-shell p-5">
             <div className="flex items-center gap-3 mb-2">
               <Gift className="w-5 h-5 text-action" />
-              <span className="font-semibold text-text-primary">Du erhältst</span>
+              <span className="font-semibold text-text-primary">{t('youReceive')}</span>
             </div>
             <p className="text-2xl font-bold text-action mb-1">CHF {rewardCHF}</p>
-            <p className="text-sm text-text-tertiary">Gutschein, wenn dein Freund seinen ersten Kauf abschliesst</p>
+            <p className="text-sm text-text-tertiary">{t('youReceiveDesc')}</p>
           </div>
         </div>
 
@@ -110,7 +112,7 @@ export default function InvitePage() {
         <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Link2 className="w-4 h-4 text-text-tertiary" />
-            <span className="text-sm font-medium text-text-secondary">Dein persönlicher Einladungslink</span>
+            <span className="text-sm font-medium text-text-secondary">{t('linkLabel')}</span>
           </div>
           {loading ? (
             <div className="h-10 bg-surface-raised rounded-lg animate-pulse" />
@@ -123,7 +125,7 @@ export default function InvitePage() {
               />
               <Button onClick={copyLink} variant="primary" size="sm" className="whitespace-nowrap">
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? 'Kopiert!' : 'Kopieren'}
+                {copied ? t('copied') : t('copy')}
               </Button>
             </div>
           )}
@@ -131,23 +133,23 @@ export default function InvitePage() {
 
         {/* Invite by email */}
         <div className="card-shell p-6 mb-6">
-          <Heading level={2} className="text-lg font-semibold mb-4">Per E-Mail einladen</Heading>
+          <Heading level={2} className="text-lg font-semibold mb-4">{t('inviteByEmail')}</Heading>
           <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-2">
             <Input
               type="email"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="email@beispiel.ch"
+              placeholder={t('emailPlaceholder')}
               className="flex-1"
             />
             <Button type="submit" variant="primary" size="sm" disabled={sending} className="whitespace-nowrap">
               <Send className="w-4 h-4" />
-              {sending ? 'Senden…' : 'Einladen'}
+              {sending ? t('sending') : t('send')}
             </Button>
           </form>
           {feedback && (
-            <p className={`mt-3 text-sm ${feedback.type === 'success' ? 'text-action' : 'text-red-600'}`}>
+            <p className={`mt-3 text-sm ${feedback.type === 'success' ? 'text-action' : 'text-error-600'}`}>
               {feedback.message}
             </p>
           )}
@@ -158,11 +160,11 @@ export default function InvitePage() {
           <div className="flex gap-6 text-center">
             <div className="flex-1 card-shell p-4">
               <p className="text-2xl font-bold text-text-primary">{data.totalInvites}</p>
-              <p className="text-sm text-text-tertiary">Einladungen gesendet</p>
+              <p className="text-sm text-text-tertiary">{t('invitesSent')}</p>
             </div>
             <div className="flex-1 card-shell p-4">
               <p className="text-2xl font-bold text-action">{data.registrations}</p>
-              <p className="text-sm text-text-tertiary">Registrierungen</p>
+              <p className="text-sm text-text-tertiary">{t('registrations')}</p>
             </div>
           </div>
         )}

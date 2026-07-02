@@ -24,8 +24,6 @@ export const ROUTES = {
     tasks:              '/admin/tasks',
     taskNew:            '/admin/tasks/new',
     task:               (id: string) => `/admin/tasks/${id}`,
-    /** @deprecated Redirects to tasks list — kept for legacy bookmarks only */
-    tasksAnalytics:     '/admin/tasks/analytics',
     taskProjects:       '/admin/tasks/projects',
     taskProjectNew:     '/admin/tasks/projects/new',
     taskProject:        (id: string) => `/admin/tasks/projects/${id}`,
@@ -43,7 +41,7 @@ export const ROUTES = {
     tasksForUser:       (userId: string) =>
       `/admin/tasks?assigned_to=${encodeURIComponent(userId)}`,
     workshops:          '/admin/workshops',
-    workshopsNew:       '/admin/workshops/new',
+    workshopsNew:       '/admin/workshops/proposals',
     workshopsInstances: '/admin/workshops/instances',
     workshopInstance:   (id: string) => `/admin/workshops/instances/${id}`,
     workshopProposal:   (id: string) => `/admin/workshops/proposals/${id}`,
@@ -80,8 +78,6 @@ export const ROUTES = {
     /** Online shop canonical route. Legacy /shop URLs redirect here. */
     shop:                     '/marketplace',
     services:                 '/services',
-    /** @deprecated Use ROUTES.public.marketplace with ?search=. */
-    shopSearch:               '/marketplace',
     marketplace:              '/marketplace',
     marketplaceSell:          '/marketplace/sell',
     marketplaceListing:       (id: string) => `/marketplace/${id}`,

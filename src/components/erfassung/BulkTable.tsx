@@ -225,6 +225,7 @@ export function BulkTable({
               size="icon"
               onClick={() => onPageChange(page - 1)}
               disabled={page === 0}
+              aria-label={t('prevPage')}
               className="p-2 rounded-lg h-auto w-auto"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -238,6 +239,7 @@ export function BulkTable({
               size="icon"
               onClick={() => onPageChange(page + 1)}
               disabled={page >= totalPages - 1}
+              aria-label={t('nextPage')}
               className="p-2 rounded-lg h-auto w-auto"
             >
               <ChevronRight className="w-4 h-4" />
