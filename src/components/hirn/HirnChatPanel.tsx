@@ -155,7 +155,7 @@ export function HirnChatPanel({ isOpen, onClose, context, pathname, isAuthentica
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[600] bg-black/30 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 z-[100] bg-black/30 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -167,7 +167,7 @@ export function HirnChatPanel({ isOpen, onClose, context, pathname, isAuthentica
         aria-modal="true"
         aria-label={t('title')}
         tabIndex={-1}
-        className="fixed inset-y-0 right-0 z-[610] w-full max-w-md bg-surface-base flex flex-col focus:outline-none"
+        className="fixed inset-y-0 right-0 z-[110] w-full max-w-md bg-surface-base flex flex-col focus:outline-none"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border bg-action">

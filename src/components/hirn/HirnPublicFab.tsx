@@ -52,7 +52,7 @@ export function HirnPublicFab() {
     <>
       {/* Proactive suggestion chip */}
       {showChip && !isOpen && (
-        <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-[600] max-w-xs">
+        <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-40 max-w-xs">
           <div className="flex items-start gap-2 bg-surface-base border border-strong rounded-xl px-3 py-2 text-sm text-text-primary">
             <Button
               type="button"
@@ -84,7 +84,7 @@ export function HirnPublicFab() {
         aria-label={t('open')}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[600] w-14 h-14 rounded-full shadow-xs hover:scale-105"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 w-14 h-14 rounded-full shadow-xs hover:scale-105"
       >
         <Brain className="w-6 h-6 text-white" aria-hidden="true" />
       </Button>

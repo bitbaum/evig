@@ -176,8 +176,10 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "relative rounded-lg",
-                  "text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:text-text-muted dark:hover:bg-surface-base/6"
+                  // Boxed like the theme toggle — the bare ghost icon was easy
+                  // to miss on phones (thin faint lines at the screen edge).
+                  "relative rounded-lg border border-subtle bg-surface-raised",
+                  "text-text-primary hover:border-strong hover:bg-surface-raised"
                 )}
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label={tAccessibility('openMenu')}
