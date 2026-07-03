@@ -9,10 +9,8 @@
 import { NextRequest } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { finalizeProtocol } from '@/lib/services/protocols'
-import { notifyAllStaff } from '@/lib/services/notifications'
-import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
@@ -40,14 +38,8 @@ export const POST = withAdmin<RouteParams>(async (
       userId: session.user.id,
     })
 
-    // Notify team that protocol is finalized
-    await notifyAllStaff({
-      type: 'protocol_finalized',
-      title: SUCCESS_MESSAGES.PROTOCOL_FINALIZED,
-      content: `Ein Sitzungsprotokoll wurde fertiggestellt.`,
-      related_type: RELATED_TYPES.PROTOCOL,
-      related_id: protocolId,
-    }, session.user.id)
+    // Attendee notification fires inside finalizeProtocol (the service) —
+    // a second notifyAllStaff here double-notified every staff member.
 
     return apiSuccess({ finalized: true })
   } catch (error) {
