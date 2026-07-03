@@ -129,8 +129,7 @@ Payrexx go-live checklist: `docs/operations/PAYREXX_SETUP.md` · config SSOT: `s
 npm run deploy          # same as deploy:selfhost
 npm run deploy:selfhost # build standalone → release backup → activate → /api/health gate → rollback on failure
 npm run ship            # quality gate (typecheck, lint, build, tests)
-npm run deploy:vercel   # legacy Vercel script (Vercel retired — not used for prod)
-npm run migrate-to-prod # database migrations against the prod self-hosted Hetzner Postgres
+npm run db:migrate      # apply unrecorded scripts/db/migrations/*.sql (DATABASE_URL / PG* env)
 ```
 
 Operational checks:

@@ -67,6 +67,20 @@ revampit/
    `/opt/revampit/app/.env`, pipe the `.sql` to `psql "$DB"` in a transaction,
    then record it in `schema_migrations`. Extension/owner ops need
    `sudo -u postgres psql -d revampit` (the app user isn't superuser).
+2. **Schema reaches ANY shared database ONLY via `scripts/db/migrations/`.**
+   `drizzle-kit push` is FORBIDDEN against dev/prod — push-created tables are
+   invisible to from-scratch replays and broke CI for days (see 101b/109
+   baselines). Local ad-hoc DBs: `npm run db:migrate`. The CI Migration Drift
+   job replays every migration from zero; before pushing a new migration,
+   replay locally in a throwaway pgvector container.
+3. **App-level enums live in `src/config/*` + zod at the write boundary — NOT
+   in SQL CHECK constraints.** Hand-synced CHECK lists drift (the
+   `notifications_type_check` was recreated five times and still caused two
+   incidents; dropped in migration 110). DB constraints are reserved for true
+   invariants: ranges, money, date ordering, uniqueness (see
+   `079_invariant_check_constraints.sql`). When touching a domain that still
+   has a legacy enum CHECK, verify its write routes validate via zod/config,
+   then drop the CHECK in that domain's migration.
 
 **Never assume Neon for prod.** Check `DATABASE_URL` in the relevant `.env`.
 
