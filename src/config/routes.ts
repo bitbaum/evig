@@ -42,7 +42,9 @@ export const ROUTES = {
     tasksForUser:       (userId: string) =>
       `/admin/tasks?assigned_to=${encodeURIComponent(userId)}`,
     workshops:          '/admin/workshops',
-    workshopsNew:       '/admin/workshops/proposals',
+    // Workshop creation happens via the proposal flow on the workshops admin
+    // home — there is no standalone create form.
+    workshopsNew:       '/admin/workshops',
     workshopsInstances: '/admin/workshops/instances',
     workshopInstance:   (id: string) => `/admin/workshops/instances/${id}`,
     workshopProposal:   (id: string) => `/admin/workshops/proposals/${id}`,
