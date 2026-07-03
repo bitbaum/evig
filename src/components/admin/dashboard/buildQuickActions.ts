@@ -7,9 +7,10 @@ import {
   MapPin,
 } from 'lucide-react'
 import type { QuickAction } from './types'
+import type { AdminSection } from '@/lib/permissions'
 
 export function buildQuickActions(
-  canAccessSection: (section: string) => boolean
+  canAccessSection: (section: AdminSection) => boolean
 ): QuickAction[] {
   const actions: QuickAction[] = []
 

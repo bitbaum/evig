@@ -57,6 +57,7 @@ jest.mock('@/config/sections', () => ({
   getAdminSections: () => [
     { id: 'dashboard', path: '/admin', ui: { label: 'Dashboard', description: 'Overview' } },
   ],
+  isSectionId: (id: string) => id === 'dashboard',
 }))
 
 // The route scopes results by the caller's permissions — grant everything here;

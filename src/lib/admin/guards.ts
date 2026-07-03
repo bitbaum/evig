@@ -1,7 +1,7 @@
 import 'server-only'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
-import { canAccessSection, toStaffUser } from '@/lib/permissions'
+import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissions'
 
 /**
  * Server-side guard for admin section pages.
@@ -32,7 +32,7 @@ import { canAccessSection, toStaffUser } from '@/lib/permissions'
  * outer admin layout already caught that case — so this branch is the
  * defensive "if someone calls requireSection from outside /admin/*" path.
  */
-export async function requireSection(section: string) {
+export async function requireSection(section: AdminSection) {
   const session = await auth()
   if (!session?.user) {
     redirect(`/auth/login?callbackUrl=/admin/${section}`)
@@ -57,7 +57,7 @@ export async function requireSection(section: string) {
  * The redirect parameter (when none match) uses a synthetic
  * `?error=no_<key>_access` key — the caller passes the URL slug.
  */
-export async function requireAnySection(sections: string[], errorKey: string) {
+export async function requireAnySection(sections: AdminSection[], errorKey: string) {
   const session = await auth()
   if (!session?.user) {
     redirect(`/auth/login?callbackUrl=/admin/${errorKey}`)

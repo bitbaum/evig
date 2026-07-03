@@ -8,7 +8,7 @@ import { eq, sql } from 'drizzle-orm'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logActivity } from '@/lib/activity'
 import { logger } from '@/lib/logger'
-import { canAccessSection, toStaffUser } from '@/lib/permissions'
+import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissions'
 
 // ---------------------------------------------------------------------------
 // Guard: require staff session WITH the section permission. Server actions are
@@ -17,7 +17,7 @@ import { canAccessSection, toStaffUser } from '@/lib/permissions'
 // the one-click dashboard buttons.
 // ---------------------------------------------------------------------------
 
-async function requireAdmin(section: string) {
+async function requireAdmin(section: AdminSection) {
   const session = await auth()
   if (!session?.user?.isStaff && !session?.user?.isSuperAdmin) {
     throw new Error('Unauthorized')

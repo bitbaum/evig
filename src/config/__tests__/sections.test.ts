@@ -60,6 +60,7 @@ import {
   getMobileBottomNavSections,
   getHirnSection,
   SECTIONS,
+  SENSITIVE_SECTION_IDS,
 } from '../sections'
 
 // ============================================================================
@@ -161,9 +162,9 @@ describe('isSensitiveSection', () => {
 
   it('sensitive sections have visibility.sensitive=true in SECTIONS', () => {
     // Cross-verify: every section flagged as sensitive should be in SECTIONS
-    const sensitiveSections = Object.values(SECTIONS).filter(s => s.visibility.sensitive)
-    for (const s of sensitiveSections) {
-      expect(isSensitiveSection(s.id)).toBe(true)
+    for (const id of SENSITIVE_SECTION_IDS) {
+      expect('sensitive' in SECTIONS[id].visibility && SECTIONS[id].visibility.sensitive).toBe(true)
+      expect(isSensitiveSection(id)).toBe(true)
     }
   })
 })

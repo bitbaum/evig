@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { apiUnauthorized, apiForbidden } from './helpers';
-import { canAccessSection, toStaffUser, ADMIN_SECTIONS } from '@/lib/permissions';
+import { canAccessSection, toStaffUser, ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 
 export type AuthSession = Awaited<ReturnType<typeof auth>>;
@@ -98,13 +98,13 @@ export function withAdmin<TParams = Record<string, never>>(
 
 // Overload: withAdmin(section, handler)
 export function withAdmin<TParams = Record<string, never>>(
-  section: string,
+  section: AdminSection,
   handler: AdminHandler<TParams>
 ): RouteHandler<TParams>;
 
 // Implementation
 export function withAdmin<TParams = Record<string, never>>(
-  sectionOrHandler: string | AdminHandler<TParams>,
+  sectionOrHandler: AdminSection | AdminHandler<TParams>,
   maybeHandler?: AdminHandler<TParams>
 ): RouteHandler<TParams> {
   const section = typeof sectionOrHandler === 'string' ? sectionOrHandler : undefined;

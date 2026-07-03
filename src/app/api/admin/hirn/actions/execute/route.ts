@@ -1,13 +1,13 @@
 import { NextRequest } from 'next/server'
 import { withAdmin, type ValidSession } from '@/lib/api/middleware'
 import { apiBadRequest, apiForbidden, apiSuccess, apiError } from '@/lib/api/helpers'
-import { canAccessSection } from '@/lib/permissions'
+import { canAccessSection, type AdminSection } from '@/lib/permissions'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { executeHirnAction } from '@/lib/hirn/action-executor'
 import { validateExecuteActionInput } from '@/lib/hirn/action-executor-contracts'
 import type { HirnActionType } from '@/lib/hirn/action-cockpit'
 
-const ACTION_SECTION_REQUIREMENTS: Record<HirnActionType, string> = {
+const ACTION_SECTION_REQUIREMENTS: Record<HirnActionType, AdminSection> = {
   create_task: 'tasks',
   create_decision_draft: 'decisions',
   create_protocol_draft: 'protocols',

@@ -3,7 +3,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
-import { getAdminSections } from '@/config/sections'
+import { getAdminSections, isSectionId } from '@/config/sections'
 import { canAccessSection, toStaffUser } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
@@ -46,7 +46,7 @@ export const GET = withAdmin(async (_request: NextRequest, session) => {
     ])
 
     const sections = getAdminSections()
-      .filter(s => canAccessSection(staffUser, s.id))
+      .filter(s => isSectionId(s.id) && canAccessSection(staffUser, s.id))
       .map(s => ({
         id: s.id,
         label: s.ui.label,

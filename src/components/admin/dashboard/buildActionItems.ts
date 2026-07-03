@@ -1,10 +1,11 @@
 import type { DashboardStats, ActionItem } from './types'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
+import type { AdminSection } from '@/lib/permissions'
 
 export function buildActionItems(
   stats: DashboardStats,
   isSuper: boolean,
-  canAccessSection: (section: string) => boolean
+  canAccessSection: (section: AdminSection) => boolean
 ): ActionItem[] {
   const items: ActionItem[] = []
 

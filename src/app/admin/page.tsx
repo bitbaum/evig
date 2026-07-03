@@ -24,7 +24,7 @@ import { db } from '@/db'
 import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { ORG } from '@/config/org'
-import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
+import { getAccessibleSections, isSuperAdmin, canAccessSection, ADMIN_SECTION_IDS, type AdminSection } from '@/lib/permissions'
 import { ADMIN_SECTIONS } from '@/lib/permissions'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { RequestAccessSection } from './RequestAccessSection'
@@ -71,7 +71,7 @@ async function UnifiedQueueSection({
 }: {
   statsPromise: Promise<DashboardStats>
   isSuper: boolean
-  canAccess: (section: string) => boolean
+  canAccess: (section: AdminSection) => boolean
 }) {
   const stats = await statsPromise
   const items = buildUnifiedQueue(stats, isSuper, canAccess)
@@ -137,7 +137,7 @@ export default async function AdminDashboard() {
   }
 
   const accessibleSections = getAccessibleSections(userForPermissions)
-  const allSections = Object.keys(ADMIN_SECTIONS)
+  const allSections = ADMIN_SECTION_IDS
   const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
   const inaccessibleSections = hasFullAccess
     ? []
@@ -149,7 +149,7 @@ export default async function AdminDashboard() {
           description: ADMIN_SECTIONS[s]?.description ?? '',
         }))
 
-  const canAccess = (section: string) => canAccessSection(userForPermissions, section)
+  const canAccess = (section: AdminSection) => canAccessSection(userForPermissions, section)
   const quickActions = buildQuickActions(canAccess)
 
   const userId = session.user.id ?? ''

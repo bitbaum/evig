@@ -242,7 +242,7 @@ export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
 // SECTION DEFINITIONS - SSOT
 // =============================================================================
 
-export const SECTIONS: Record<string, SectionConfig> = {
+export const SECTIONS = {
   // ---------------------------------------------------------------------------
   // CORE - Shared between admin and dashboard
   // ---------------------------------------------------------------------------
@@ -1106,6 +1106,16 @@ export const SECTIONS: Record<string, SectionConfig> = {
     category: 'sensitive',
     sidebarGroup: 'system',
   },
+} satisfies Record<string, SectionConfig>
+
+export type SectionId = keyof typeof SECTIONS
+
+function sectionIds(): SectionId[] {
+  return Object.keys(SECTIONS) as Array<keyof typeof SECTIONS>
+}
+
+export function isSectionId(id: string): id is SectionId {
+  return id in SECTIONS
 }
 
 // =============================================================================
@@ -1115,36 +1125,34 @@ export const SECTIONS: Record<string, SectionConfig> = {
 /**
  * All section IDs
  */
-export const SECTION_IDS = Object.keys(SECTIONS)
+export const SECTION_IDS = sectionIds()
+
+const SECTION_CONFIGS: SectionConfig[] = SECTION_IDS.map(id => SECTIONS[id])
 
 /**
  * Admin section IDs (for permission system)
  */
-export const ADMIN_SECTION_IDS = Object.values(SECTIONS)
-  .filter(s => s.visibility.admin)
-  .map(s => s.id)
+export const ADMIN_SECTION_IDS = SECTION_IDS.filter(id => SECTIONS[id].visibility.admin)
 
 /**
  * Sensitive section IDs
  */
-export const SENSITIVE_SECTION_IDS = Object.values(SECTIONS)
-  .filter(s => s.visibility.sensitive)
-  .map(s => s.id)
+export const SENSITIVE_SECTION_IDS = SECTION_IDS.filter(id =>
+  'sensitive' in SECTIONS[id].visibility && SECTIONS[id].visibility.sensitive === true
+)
 
 /**
  * Personal staff tools — accessible to every staff member regardless of
  * stored permissions (see SectionVisibility.alwaysForStaff).
  */
-export const STAFF_UNIVERSAL_SECTION_IDS = Object.values(SECTIONS)
-  .filter(s => s.visibility.alwaysForStaff)
-  .map(s => s.id)
+export const STAFF_UNIVERSAL_SECTION_IDS = SECTION_IDS.filter(id =>
+  'alwaysForStaff' in SECTIONS[id].visibility && SECTIONS[id].visibility.alwaysForStaff === true
+)
 
 /**
  * Dashboard section IDs
  */
-export const DASHBOARD_SECTION_IDS = Object.values(SECTIONS)
-  .filter(s => s.visibility.dashboard)
-  .map(s => s.id)
+export const DASHBOARD_SECTION_IDS = SECTION_IDS.filter(id => SECTIONS[id].visibility.dashboard)
 
 // =============================================================================
 // HELPER FUNCTIONS
@@ -1154,7 +1162,7 @@ export const DASHBOARD_SECTION_IDS = Object.values(SECTIONS)
  * Get sections for admin sidebar
  */
 export function getAdminSections(): SectionConfig[] {
-  return Object.values(SECTIONS)
+  return SECTION_CONFIGS
     .filter(s => s.visibility.admin)
     .sort((a, b) => a.priority - b.priority)
 }
@@ -1163,7 +1171,7 @@ export function getAdminSections(): SectionConfig[] {
  * Get sections for user dashboard
  */
 export function getDashboardSections(): SectionConfig[] {
-  return Object.values(SECTIONS)
+  return SECTION_CONFIGS
     .filter(s => s.visibility.dashboard)
     .sort((a, b) => a.priority - b.priority)
 }
@@ -1172,14 +1180,14 @@ export function getDashboardSections(): SectionConfig[] {
  * Get section by ID
  */
 export function getSection(id: string): SectionConfig | undefined {
-  return SECTIONS[id]
+  return isSectionId(id) ? SECTIONS[id] : undefined
 }
 
 /**
  * Check if section is sensitive
  */
 export function isSensitiveSection(id: string): boolean {
-  return SENSITIVE_SECTION_IDS.includes(id)
+  return isSectionId(id) && SENSITIVE_SECTION_IDS.includes(id)
 }
 
 /**
@@ -1202,7 +1210,7 @@ export function getSensitivityReason(section: string): string | undefined {
  * Get sections by category
  */
 export function getSectionsByCategory(category: SectionCategory): SectionConfig[] {
-  return Object.values(SECTIONS)
+  return SECTION_CONFIGS
     .filter(s => s.category === category)
     .sort((a, b) => a.priority - b.priority)
 }
@@ -1219,7 +1227,7 @@ export function getSidebarGroupsWithSections(): Array<{
 
   return groups.map(group => ({
     group,
-    sections: Object.values(SECTIONS)
+    sections: SECTION_CONFIGS
       .filter(s => s.visibility.admin && s.sidebarGroup === group.id)
       .sort((a, b) => a.priority - b.priority),
   })).filter(g => g.sections.length > 0) // Only return groups with sections
@@ -1247,7 +1255,7 @@ export function getMobileBottomNavSections(
     ? new Set(accessibleSectionIds)
     : null
 
-  return Object.values(SECTIONS)
+  return SECTION_CONFIGS
     .filter(
       (s): s is SectionConfig =>
         typeof s.mobileBottomNavOrder === 'number' &&
@@ -1345,5 +1353,3 @@ export function getSortedCategories(): CategoryConfig[] {
 // =============================================================================
 // TYPE EXPORTS
 // =============================================================================
-
-export type SectionId = keyof typeof SECTIONS

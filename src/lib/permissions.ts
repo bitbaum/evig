@@ -19,6 +19,7 @@ import {
   getAdminSections,
   isSensitiveSection as checkSensitive,
   type SectionConfig,
+  type SectionId,
 } from '@/config/sections'
 
 // =============================================================================
@@ -44,7 +45,7 @@ export const ADMIN_SECTIONS = Object.fromEntries(
   { label: string; path: string; sensitive: boolean; description: string }
 >
 
-export type AdminSection = (typeof ADMIN_SECTION_IDS)[number]
+export type AdminSection = SectionId
 
 // =============================================================================
 // STAFF EMAIL DOMAIN
@@ -115,7 +116,7 @@ export interface StaffUser {
  * @/config/sections.ts — pure legacy rename leftovers were removed when the
  * legacy admin pages were cleaned up (no prod user held a legacy string).
  */
-const PERMISSION_ALIASES: Record<string, string> = {
+const PERMISSION_ALIASES: Partial<Record<AdminSection, string>> = {
   'workshops-admin': 'workshops',
   services: 'appointments-admin',
   'hr-vacancies': 'team',
@@ -130,7 +131,7 @@ const PERMISSION_ALIASES: Record<string, string> = {
  */
 export function canAccessSection(
   user: StaffUser | null | undefined,
-  section: string
+  section: AdminSection
 ): boolean {
   if (!user) return false
   if (!user.is_staff) return false
@@ -200,7 +201,7 @@ export function toStaffUser(sessionUser: {
  */
 export function getAccessibleSections(
   user: StaffUser | null | undefined
-): string[] {
+): AdminSection[] {
   if (!user || !user.is_staff) return []
 
   // Super admins or wildcard = all sections
@@ -221,7 +222,7 @@ export function getAccessibleSections(
 /**
  * Check if a section is sensitive (derived from SSOT)
  */
-export function isSensitiveSection(section: string): boolean {
+export function isSensitiveSection(section: AdminSection): boolean {
   return checkSensitive(section)
 }
 
@@ -233,7 +234,7 @@ export function isSensitiveSection(section: string): boolean {
  * Default permissions for new staff members (non-super-admins)
  * They get access to non-sensitive sections by default
  */
-export const DEFAULT_STAFF_PERMISSIONS: string[] = ADMIN_SECTION_IDS.filter(
+export const DEFAULT_STAFF_PERMISSIONS: AdminSection[] = ADMIN_SECTION_IDS.filter(
   id => !SENSITIVE_SECTION_IDS.includes(id)
 )
 
