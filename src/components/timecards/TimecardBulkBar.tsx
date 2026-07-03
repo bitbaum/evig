@@ -30,7 +30,9 @@ export function TimecardBulkBar({
   if (count === 0) return null
 
   return (
-    <div className="sticky bottom-4 z-10 flex flex-wrap items-center gap-2 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm">
+    // bottom-16 keeps the bar clear of the page's sticky save/submit footer
+    // (bottom-0, ~3.5rem tall) — at bottom-4 the two overlapped on mobile.
+    <div className="sticky bottom-16 z-10 flex flex-wrap items-center gap-2 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm">
       <span className="mr-1 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary">
         <CalendarCheck className="h-4 w-4 text-action" aria-hidden="true" />
         {t('bulkSelected', { count })}

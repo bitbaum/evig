@@ -19,6 +19,8 @@ export type ActivityAction =
   | 'submitted_timecard'
   | 'approved_timecard'
   | 'rejected_timecard'
+  | 'edited_timecard'
+  | 'reopened_timecard'
 
 interface ActivityParams {
   actorId: string

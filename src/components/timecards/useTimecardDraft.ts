@@ -13,6 +13,7 @@ import {
   isAbsenceCategory,
   getAbsenceType,
   type TimecardEntryCategory,
+  type TimecardStatus,
 } from '@/config/timecards'
 import {
   buildTimecardEntriesForMonth,
@@ -65,6 +66,27 @@ import type { DraftState, TimecardAIResult } from './types'
  * The parent component just composes presentational subcomponents around
  * the hook's return value.
  */
+/**
+ * Content signature for dirty tracking — only the persisted fields, so
+ * server-added metadata (entry ids, timestamps) can't fake a diff between
+ * "what the server has" and "what's on screen".
+ */
+function entrySignature(entry: TimecardEntryInput): string {
+  return [
+    entry.work_date,
+    entry.start_time ?? '',
+    entry.end_time ?? '',
+    entry.break_minutes ?? 0,
+    entry.duration_minutes,
+    entry.category ?? 'other',
+    entry.description ?? '',
+  ].join('|')
+}
+
+function draftSignature(entries: TimecardEntryInput[], notes: string): string {
+  return `${[...entries].map(entrySignature).sort().join(';')}::${notes ?? ''}`
+}
+
 export function useTimecardDraft({ workingHours }: { workingHours: string | null }) {
   const t = useTranslations('admin.timecards')
   // ── Schedule + period window ───────────────────────────────────────
@@ -158,6 +180,20 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
   const [syncMessage, setSyncMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
+  // Server truth for dirty/lock decisions: the card's persisted status plus a
+  // content snapshot of the last server state. Local edits never touch these —
+  // isDirty is derived by comparing content, so editing and then reverting to
+  // the exact saved state correctly reads as "not dirty".
+  const [serverStatus, setServerStatus] = useState<TimecardStatus | null>(null)
+  const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null)
+
+  const applyServerCard = useCallback((card: Timecard, fallbackSelectedDate: string) => {
+    const next = toDraftState(card, fallbackSelectedDate)
+    setDraft(next)
+    setServerStatus((card.status as TimecardStatus) ?? null)
+    setSavedSnapshot(draftSignature(next.entries, next.notes))
+  }, [])
+
   // ── Derived ────────────────────────────────────────────────────────
   const periodEntries = draft.entries
   const totalMinutes = sumTimecardMinutes(periodEntries)
@@ -170,6 +206,13 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     notes: draft.notes || null,
     entries: periodEntries.map(entry => normalizeEntry(entry)),
   }
+  const isDirty = useMemo(
+    () =>
+      savedSnapshot === null
+        ? true
+        : draftSignature(periodEntries, draft.notes) !== savedSnapshot,
+    [savedSnapshot, periodEntries, draft.notes],
+  )
 
   // ── Mutators ───────────────────────────────────────────────────────
   const updateCurrentDraft = useCallback(
@@ -291,25 +334,39 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     setAnchorDate(monthDates[0] ?? null)
   }, [monthDates])
 
-  /** Schedule (or standard 9–17) hours for a given date's weekday. */
-  const dayTemplateForDate = useCallback(
-    (date: string): { start: string; end: string; break_minutes: number } => {
+  /** Schedule hours for a given date's weekday — null when it's NOT a plan day. */
+  const scheduleTemplateForDate = useCallback(
+    (date: string): { start: string; end: string; break_minutes: number } | null => {
       const wd = new Date(`${date}T00:00:00.000Z`).getUTCDay()
       const weekday = WEEKDAY_IDS[wd === 0 ? 6 : wd - 1]
       const day = effectiveSchedule.days[weekday]
       return day.enabled
         ? { start: day.start, end: day.end, break_minutes: day.break_minutes }
-        : { start: '09:00', end: '17:00', break_minutes: 60 }
+        : null
     },
     [effectiveSchedule],
+  )
+
+  /**
+   * Like scheduleTemplateForDate but with a 09:00–17:00 fallback, for surfaces
+   * that need SOME time baseline (manual editing, AI work entries on explicit
+   * dates). Never use it for plan-fills or absence hours — a non-plan day has
+   * 0 scheduled hours and must not silently gain a full workday.
+   */
+  const dayTemplateForDate = useCallback(
+    (date: string): { start: string; end: string; break_minutes: number } =>
+      scheduleTemplateForDate(date) ?? { start: '09:00', end: '17:00', break_minutes: 60 },
+    [scheduleTemplateForDate],
   )
 
   // Shared entry builders — ONE definition each for "a scheduled work day" and
   // "an absence day", used by both the month bulk actions and the day view, so
   // the two surfaces produce identical data (SSOT/DRY).
   const buildScheduleEntry = useCallback(
-    (date: string): TimecardEntryInput => {
-      const t = dayTemplateForDate(date)
+    (date: string): TimecardEntryInput | null => {
+      // Same rule as the whole-month fill: non-plan days get nothing.
+      const t = scheduleTemplateForDate(date)
+      if (!t) return null
       return {
         work_date: date,
         start_time: t.start,
@@ -321,41 +378,52 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         description: '',
       }
     },
-    [dayTemplateForDate],
+    [scheduleTemplateForDate],
   )
 
   const buildAbsenceEntry = useCallback(
     (date: string, category: TimecardEntryCategory): TimecardEntryInput => {
       const paid = getAbsenceType(category)?.paid ?? true
-      const t = dayTemplateForDate(date)
-      // Paid absences (Ferien/Krank/…) count the day's scheduled hours;
-      // unpaid (Unbezahlt) records 0h but stays labelled.
+      const t = scheduleTemplateForDate(date)
+      // Paid absences (Ferien/Krank/…) count the day's SCHEDULED hours — on a
+      // non-plan day that is 0 (Ferien on a free Friday must not add paid
+      // time). Unpaid (Unbezahlt) always records 0h but stays labelled.
+      const counted = paid && t !== null
       return {
         work_date: date,
-        start_time: paid ? t.start : null,
-        end_time: paid ? t.end : null,
-        break_minutes: paid ? t.break_minutes : 0,
-        duration_minutes: paid ? calculateTimeRangeMinutes(t.start, t.end, t.break_minutes) : 0,
+        start_time: counted ? t.start : null,
+        end_time: counted ? t.end : null,
+        break_minutes: counted ? t.break_minutes : 0,
+        duration_minutes: counted ? calculateTimeRangeMinutes(t.start, t.end, t.break_minutes) : 0,
         category,
         source: 'manual',
         description: TIMECARD_ENTRY_CATEGORY_LABELS[category],
       }
     },
-    [dayTemplateForDate],
+    [scheduleTemplateForDate],
   )
 
   const applyToSelected = useCallback(
-    (build: (date: string) => TimecardEntryInput) => {
+    (build: (date: string) => TimecardEntryInput | null) => {
       if (selectedDates.length === 0) return
-      const additions = selectedDates.map(build)
-      updateCurrentDraft(current => ({
-        ...current,
-        entries: mergeEntries(current.entries, additions),
-        status: TIMECARD_STATUSES.DRAFT,
-      }))
+      const additions = selectedDates
+        .map(build)
+        .filter((entry): entry is TimecardEntryInput => entry !== null)
+      const skipped = selectedDates.length - additions.length
+      if (additions.length > 0) {
+        updateCurrentDraft(current => ({
+          ...current,
+          entries: mergeEntries(current.entries, additions),
+          status: TIMECARD_STATUSES.DRAFT,
+        }))
+      }
+      if (skipped > 0) {
+        // After updateCurrentDraft (which clears messages) so it survives.
+        setSyncMessage(t('fillSkippedNonPlanDays', { count: skipped }))
+      }
       clearSelection()
     },
-    [selectedDates, updateCurrentDraft, clearSelection],
+    [selectedDates, updateCurrentDraft, clearSelection, t],
   )
 
   const bulkFillFromSchedule = useCallback(
@@ -417,22 +485,49 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
           source: 'manual',
           description: '',
         }
-        const mergedEntry = normalizeEntry({ ...baseEntry, ...patch })
-        const shouldRecalc =
-          patch.start_time !== undefined ||
-          patch.end_time !== undefined ||
-          patch.break_minutes !== undefined
-        const nextEntry =
-          shouldRecalc && mergedEntry.start_time && mergedEntry.end_time
-            ? {
-                ...mergedEntry,
-                duration_minutes: calculateTimeRangeMinutes(
-                  mergedEntry.start_time,
-                  mergedEntry.end_time,
-                  mergedEntry.break_minutes ?? 0,
-                ),
-              }
-            : mergedEntry
+
+        const categoryChanged =
+          patch.category !== undefined && patch.category !== baseEntry.category
+        let nextEntry: TimecardEntryInput
+
+        if (categoryChanged && isAbsenceCategory(patch.category as string)) {
+          // Switching to an absence re-derives the day from the plan (0h on
+          // non-plan days) — previously-entered work hours must not carry
+          // over into a paid absence.
+          nextEntry = buildAbsenceEntry(selectedDate, patch.category as TimecardEntryCategory)
+        } else {
+          const wasAbsence = isAbsenceCategory(baseEntry.category ?? '')
+          // Absence → work: restore a time baseline so the day is editable.
+          const template = dayTemplateForDate(selectedDate)
+          const seed =
+            categoryChanged && wasAbsence
+              ? {
+                  ...baseEntry,
+                  start_time: template.start,
+                  end_time: template.end,
+                  break_minutes: template.break_minutes,
+                  description: '',
+                }
+              : baseEntry
+          const mergedEntry = normalizeEntry({ ...seed, ...patch })
+          const shouldRecalc =
+            patch.start_time !== undefined ||
+            patch.end_time !== undefined ||
+            patch.break_minutes !== undefined ||
+            (categoryChanged && wasAbsence)
+          nextEntry =
+            shouldRecalc && mergedEntry.start_time && mergedEntry.end_time
+              ? {
+                  ...mergedEntry,
+                  duration_minutes: calculateTimeRangeMinutes(
+                    mergedEntry.start_time,
+                    mergedEntry.end_time,
+                    mergedEntry.break_minutes ?? 0,
+                  ),
+                }
+              : mergedEntry
+        }
+
         const nextEntries = existing
           ? current.entries.map(entry =>
               entry.work_date === selectedDate ? nextEntry : entry,
@@ -441,18 +536,24 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         return { ...current, entries: nextEntries, status: TIMECARD_STATUSES.DRAFT }
       })
     },
-    [updateCurrentDraft],
+    [updateCurrentDraft, buildAbsenceEntry, dayTemplateForDate],
   )
 
   // ── Day-scope actions (the day view applies to the focused day) ────────
   // Same builders as the month bulk actions → identical data, no note hacks.
   const fillDayFromSchedule = useCallback(() => {
+    const entry = buildScheduleEntry(draft.selectedDate)
+    if (!entry) {
+      // Non-plan day: nothing to fill — say so instead of silently no-oping.
+      setSyncMessage(t('fillNonPlanDay'))
+      return
+    }
     updateCurrentDraft(current => ({
       ...current,
-      entries: mergeEntries(current.entries, [buildScheduleEntry(current.selectedDate)]),
+      entries: mergeEntries(current.entries, [entry]),
       status: TIMECARD_STATUSES.DRAFT,
     }))
-  }, [updateCurrentDraft, buildScheduleEntry])
+  }, [updateCurrentDraft, buildScheduleEntry, draft.selectedDate, t])
 
   const setDayAbsence = useCallback(
     (category: TimecardEntryCategory) => {
@@ -496,13 +597,17 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
 
       if (isAbsenceCategory(category)) {
         const paid = getAbsenceType(category)?.paid ?? true
+        // Same rule as buildAbsenceEntry: paid absences count SCHEDULED hours,
+        // which are 0 on non-plan days.
+        const sched = scheduleTemplateForDate(work_date)
+        const counted = paid && sched !== null
         return {
           work_date,
-          start_time: paid ? tpl.start : null,
-          end_time: paid ? tpl.end : null,
-          break_minutes: paid ? tpl.break_minutes : 0,
-          duration_minutes: paid
-            ? calculateTimeRangeMinutes(tpl.start, tpl.end, tpl.break_minutes)
+          start_time: counted ? sched.start : null,
+          end_time: counted ? sched.end : null,
+          break_minutes: counted ? sched.break_minutes : 0,
+          duration_minutes: counted
+            ? calculateTimeRangeMinutes(sched.start, sched.end, sched.break_minutes)
             : 0,
           category,
           source: 'ai_assisted',
@@ -525,7 +630,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         description: desc,
       }
     },
-    [dayTemplateForDate],
+    [dayTemplateForDate, scheduleTemplateForDate],
   )
 
   const handleAIFieldsFilled = useCallback(
@@ -570,7 +675,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
           setErrorMessage(result.error || 'Zeitkarte konnte nicht geladen werden.')
           return
         }
-        setDraft(toDraftState(result.data, monthDates[0]))
+        applyServerCard(result.data, monthDates[0])
         setSyncMessage('Zeitkarte geladen')
       } finally {
         if (active) setIsLoadingDraft(false)
@@ -594,6 +699,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     currentPeriodRange.period_start,
     currentPeriodRange.period_type,
     monthDates,
+    applyServerCard,
   ])
 
   const saveDraft = useCallback(async () => {
@@ -606,14 +712,14 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         body: currentSavePayload,
       })
       if (!result.success || !result.data) throw new Error(result.error || 'save_failed')
-      setDraft(toDraftState(result.data, draft.selectedDate))
+      applyServerCard(result.data, draft.selectedDate)
       setSyncMessage('Gespeichert')
     } catch {
       setErrorMessage('Zeitkarte konnte nicht gespeichert werden.')
     } finally {
       setIsSaving(false)
     }
-  }, [currentSavePayload, draft.selectedDate])
+  }, [currentSavePayload, draft.selectedDate, applyServerCard])
 
   /**
    * Add a clocked shift to the month draft and persist it immediately.
@@ -669,7 +775,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
           },
         })
         if (!result.success || !result.data) throw new Error(result.error || 'shift_save_failed')
-        setDraft(toDraftState(result.data, shift.work_date))
+        applyServerCard(result.data, shift.work_date)
         setSyncMessage('Schicht gespeichert')
       } catch {
         setErrorMessage('Schicht konnte nicht gespeichert werden.')
@@ -677,7 +783,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         setIsSaving(false)
       }
     },
-    [periodEntries, currentPeriodRange, draft.notes],
+    [periodEntries, currentPeriodRange, draft.notes, applyServerCard],
   )
 
   const submitDraft = useCallback(async () => {
@@ -690,14 +796,14 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         body: currentSavePayload,
       })
       if (!result.success || !result.data) throw new Error(result.error || 'submit_failed')
-      setDraft(toDraftState(result.data, draft.selectedDate))
+      applyServerCard(result.data, draft.selectedDate)
       setSyncMessage(t('submitSuccess'))
     } catch {
       setErrorMessage(t('submitError'))
     } finally {
       setIsSubmitting(false)
     }
-  }, [currentSavePayload, draft.selectedDate, t])
+  }, [currentSavePayload, draft.selectedDate, t, applyServerCard])
 
   return {
     // schedule
@@ -711,6 +817,8 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     periodEntries,
     totalMinutes,
     selectedEntry,
+    serverStatus,
+    isDirty,
     // network state
     isLoadingDraft,
     isSaving,

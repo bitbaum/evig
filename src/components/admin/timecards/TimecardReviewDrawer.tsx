@@ -13,6 +13,8 @@ import {
   getTimecardEntryCategoryLabel,
   formatTimecardDuration,
 } from '@/config/timecards'
+import { formatTimecardPeriod } from '@/lib/team/timecard-display'
+import { getDisplayDate } from '@/lib/team/timecard-utils'
 
 interface ReviewEntry {
   id?: string
@@ -27,6 +29,7 @@ interface ReviewEntry {
 }
 interface ReviewCard {
   id: string
+  user_id: string
   user_name?: string | null
   user_email?: string | null
   period_type: string
@@ -44,10 +47,13 @@ interface ReviewCard {
  */
 export function TimecardReviewDrawer({
   cardId,
+  currentUserId,
   onClose,
   onChanged,
 }: {
   cardId: string
+  /** Reviewer's own user id — own cards are view-only (four-eyes principle). */
+  currentUserId?: string
   onClose: () => void
   onChanged: () => void
 }) {
@@ -75,6 +81,9 @@ export function TimecardReviewDrawer({
 
   const total = entries.reduce((s, e) => s + (Number(e.duration_minutes) || 0), 0)
   const isApproved = card?.status === 'approved'
+  // The server rejects self-review anyway (400) — surface that BEFORE the
+  // click instead of after it.
+  const isOwnCard = !!card && !!currentUserId && card.user_id === currentUserId
 
   const patchEntry = (i: number, patch: Partial<ReviewEntry>) =>
     setEntries(prev => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)))
@@ -132,7 +141,9 @@ export function TimecardReviewDrawer({
               {card?.user_name || card?.user_email || 'Zeitkarte'}
             </p>
             <p className="text-xs text-text-tertiary">
-              {card ? `${card.period_start} – ${card.period_end} · ${formatTimecardDuration(total)}` : 'Lädt…'}
+              {card
+                ? `${formatTimecardPeriod(card.period_type, card.period_start, card.period_end)} · ${formatTimecardDuration(total)}`
+                : 'Lädt…'}
               {isApproved && ' · genehmigt'}
             </p>
           </div>
@@ -159,7 +170,7 @@ export function TimecardReviewDrawer({
               <tbody>
                 {entries.map((e, i) => (
                   <tr key={e.id ?? `${e.work_date}-${i}`} className="border-t border-subtle">
-                    <td className="py-1.5 pr-2 font-mono tabular-nums text-text-secondary">{e.work_date}</td>
+                    <td className="py-1.5 pr-2 font-mono tabular-nums text-text-secondary whitespace-nowrap">{getDisplayDate(e.work_date)}</td>
                     <td className="py-1.5 pr-2">
                       {editing ? (
                         <Select
@@ -189,7 +200,7 @@ export function TimecardReviewDrawer({
                           className="ml-auto w-20 text-right"
                         />
                       ) : (
-                        (Number(e.duration_minutes) / 60).toFixed(2)
+                        formatTimecardDuration(Number(e.duration_minutes) || 0)
                       )}
                     </td>
                   </tr>
@@ -200,7 +211,12 @@ export function TimecardReviewDrawer({
         </div>
 
         <div className="space-y-3 border-t border-subtle px-5 py-4">
-          {!editing && (
+          {isOwnCard && (
+            <p className="text-sm text-warning-700 dark:text-warning-400">
+              Eigene Zeitkarte — die Freigabe übernimmt ein anderes Teammitglied.
+            </p>
+          )}
+          {!editing && !isOwnCard && (
             <Input
               type="text"
               value={note}
@@ -225,15 +241,15 @@ export function TimecardReviewDrawer({
                   variant="primary"
                   size="sm"
                   onClick={() => review('approved')}
-                  disabled={busy !== null || isApproved}
+                  disabled={busy !== null || isApproved || isOwnCard}
                   className="inline-flex items-center gap-1.5 bg-success-600 text-white hover:bg-success-700"
                 >
                   <Check className="h-3.5 w-3.5" /> Genehmigen
                 </Button>
-                <Button variant="destructive-outline" size="sm" onClick={() => review('rejected')} disabled={busy !== null} className="inline-flex items-center gap-1.5">
+                <Button variant="destructive-outline" size="sm" onClick={() => review('rejected')} disabled={busy !== null || isOwnCard} className="inline-flex items-center gap-1.5">
                   <Ban className="h-3.5 w-3.5" /> Zurückweisen
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setEditing(true)} disabled={busy !== null || isApproved} className="inline-flex items-center gap-1.5">
+                <Button variant="outline" size="sm" onClick={() => setEditing(true)} disabled={busy !== null || isApproved || isOwnCard} className="inline-flex items-center gap-1.5">
                   <Pencil className="h-3.5 w-3.5" /> Bearbeiten
                 </Button>
               </>

@@ -143,6 +143,7 @@ export function HourRangePicker({
               type="button"
               variant="ghost"
               aria-pressed={inRange}
+              onPointerDown={e => sel.onCellPointerDown(e)}
               onMouseDown={e => sel.onCellMouseDown(key, e)}
               onMouseEnter={() => sel.onCellMouseEnter(key)}
               onClick={e => sel.onCellClick(key, e)}
@@ -170,7 +171,15 @@ export function HourRangePicker({
             {breakMinutes > 0 && <> · {formatTimecardDuration(breakMinutes)} Pause</>}
           </>
         ) : (
-          'Tippe oder ziehe über die Stunden. Ctrl/Cmd-Klick für geteilte Schichten (Lücke = Pause).'
+          <>
+            {/* Device-matched hint: Ctrl/Cmd and drag don't exist on touch. */}
+            <span className="[@media(pointer:coarse)]:hidden">
+              Klicke oder ziehe über die Stunden. Ctrl/Cmd-Klick für geteilte Schichten (Lücke = Pause).
+            </span>
+            <span className="hidden [@media(pointer:coarse)]:inline">
+              Tippe zuerst die Start-Stunde an, dann die End-Stunde.
+            </span>
+          </>
         )}
       </p>
     </div>

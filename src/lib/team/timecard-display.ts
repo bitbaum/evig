@@ -9,7 +9,7 @@
  */
 
 import { CheckCircle2, Clock, AlertCircle, Edit3, type LucideIcon } from 'lucide-react'
-import { formatDateShort } from '@/lib/date-formats'
+import { formatTimecardPeriodLabel } from './timecard-period-label'
 
 /**
  * Map timecard status → lucide icon.
@@ -28,13 +28,12 @@ export const TIMECARD_STATUS_ICONS: Record<string, LucideIcon> = {
 /**
  * Format a timecard period as a human-readable label.
  *
- * Week periods render as "Woche dd.mm.yyyy–dd.mm.yyyy" with the date
- * range visible; month periods collapse to "Mai 2026" because the
- * full range adds no information for a calendar month.
+ * Week periods render as "Woche dd.mm.yyyy–dd.mm.yyyy" with the INCLUSIVE
+ * date range visible (period_end is stored exclusive); month periods
+ * collapse to "Mai 2026" because the full range adds no information for a
+ * calendar month. Implementation lives in timecard-period-label.ts so
+ * server code (notifications, activity log) shares the same label.
  */
 export function formatTimecardPeriod(periodType: string, periodStart: string, periodEnd: string): string {
-  if (periodType === 'week') {
-    return `Woche ${formatDateShort(periodStart)}–${formatDateShort(periodEnd)}`
-  }
-  return new Date(periodStart).toLocaleString('de-CH', { month: 'long', year: 'numeric' })
+  return formatTimecardPeriodLabel(periodType, periodStart, periodEnd)
 }

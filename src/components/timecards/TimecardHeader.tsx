@@ -22,6 +22,7 @@ export function TimecardHeader({
   totalMinutes,
   entryCount,
   status,
+  isDirty,
   hasEntries,
   isSaving,
   isSubmitting,
@@ -35,7 +36,10 @@ export function TimecardHeader({
   scheduleSummary: string
   totalMinutes: number
   entryCount: number
+  /** SERVER status of the card — not the keystroke-level local draft status. */
   status: string
+  /** Content differs from the last server state (drives save/resubmit). */
+  isDirty: boolean
   hasEntries: boolean
   isSaving: boolean
   isSubmitting: boolean
@@ -46,6 +50,7 @@ export function TimecardHeader({
   onSave: () => void
 }) {
   const isSubmitted = status === 'submitted'
+  const isApproved = status === 'approved'
   const t = useTranslations('admin.timecards')
 
   return (
@@ -71,7 +76,7 @@ export function TimecardHeader({
             type="button"
             variant="outline"
             onClick={onSave}
-            disabled={isSaving || isLoadingDraft}
+            disabled={isSaving || isLoadingDraft || isApproved || !isDirty}
             className="text-sm"
           >
             {isSaving ? t('saving') : t('save')}
@@ -80,7 +85,10 @@ export function TimecardHeader({
             type="button"
             variant="primary"
             onClick={onSubmit}
-            disabled={isSubmitting || !hasEntries || isLoadingDraft}
+            disabled={
+              isSubmitting || !hasEntries || isLoadingDraft || isApproved ||
+              (isSubmitted && !isDirty)
+            }
             className="text-sm"
           >
             {isSubmitting ? t('submitting') : isSubmitted ? t('resubmit') : t('submit')}

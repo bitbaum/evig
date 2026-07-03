@@ -187,7 +187,7 @@ export function NotificationBell() {
           </div>
 
           {/* List */}
-          <div className="max-h-[400px] divide-y overflow-y-auto divide-subtle">
+          <div className="max-h-[400px] divide-y overflow-y-auto overflow-x-hidden divide-subtle">
             {error && notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
@@ -218,16 +218,19 @@ export function NotificationBell() {
                     variant="ghost"
                     onClick={() => void markOneRead(n)}
                     className={cn(
-                      'w-full text-left px-4 py-3 h-auto rounded-none justify-start',
+                      // whitespace-normal overrides the button base's nowrap —
+                      // notification text must wrap, not force a horizontal
+                      // scrollbar in the dropdown.
+                      'w-full text-left px-4 py-3 h-auto rounded-none justify-start whitespace-normal',
                       adminInteractive.rowHover,
                       !n.is_read && adminInteractive.unreadTint,
                     )}
                   >
-                    <div className="flex items-start gap-2">
+                    <div className="flex w-full min-w-0 items-start gap-2">
                       {!n.is_read && (
                         <span className="mt-1.5 shrink-0 w-2 h-2 rounded-full bg-action" />
                       )}
-                      <div className={!n.is_read ? '' : 'pl-4'}>
+                      <div className={cn('min-w-0 flex-1 break-words', n.is_read && 'pl-4')}>
                         <p className={`text-sm leading-snug ${
                           !n.is_read
                             ? 'font-semibold text-text-primary'

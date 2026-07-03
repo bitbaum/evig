@@ -42,9 +42,12 @@ export const PUT = withAdmin('timecards', async (
       return apiBadRequest('Ungültige Eingabedaten', parsed.error.flatten().fieldErrors)
     }
 
-    const result = await saveTimecardEntriesForReview(id, parsed.data)
+    const result = await saveTimecardEntriesForReview(id, parsed.data, session.user.id)
     return apiSuccess(result)
   } catch (error) {
+    if (error instanceof Error && error.message === 'timecard_payroll_locked') {
+      return apiBadRequest('Diese Zeitkarte ist in einem Lohnlauf gesperrt und kann nicht geändert werden.')
+    }
     logger.error('Error editing timecard as approver', { error, reviewerId: session.user.id })
     return apiError(error, 'Zeitkarte konnte nicht gespeichert werden')
   }

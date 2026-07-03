@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, Trash2 } from 'lucide-react'
+import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, Trash2, AlertCircle, Check } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -51,6 +51,14 @@ export function TimecardsClient({
   const [menuCount, setMenuCount] = useState(1)
   const t = useTranslations('admin.timecards')
 
+  // Lock/label decisions come from the SERVER status + a content diff, not
+  // from the local draft status (which flips on every keystroke): editing a
+  // submitted card and reverting reads as "not dirty" again, and an approved
+  // card stays locked no matter what local mutators did.
+  const serverStatus = tc.serverStatus ?? 'draft'
+  const isApproved = serverStatus === 'approved'
+  const isSubmittedUnchanged = serverStatus === 'submitted' && !tc.isDirty
+
   // Right-click a day → the same bulk actions as the action bar, at the cursor.
   const openDayMenu = (date: string, pos: ContextMenuPosition) => {
     setMenuCount(tc.selectedDates.includes(date) ? tc.selectedDates.length : 1)
@@ -92,7 +100,8 @@ export function TimecardsClient({
         scheduleSummary={tc.scheduleSummary}
         totalMinutes={tc.totalMinutes}
         entryCount={tc.periodEntries.length}
-        status={tc.draft.status}
+        status={serverStatus}
+        isDirty={tc.isDirty}
         hasEntries={tc.periodEntries.length > 0}
         isSaving={tc.isSaving}
         isSubmitting={tc.isSubmitting}
@@ -109,7 +118,12 @@ export function TimecardsClient({
           the entry tools (clock-in, AI) sit BELOW it, not above. */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         {view === 'month' ? (
-          <p className="text-sm text-text-tertiary">{t('selectHint')}</p>
+          <>
+            {/* Gesture hints match the input device: the drag/Ctrl/Shift text
+                describes gestures that don't exist on touch screens. */}
+            <p className="text-sm text-text-tertiary [@media(pointer:coarse)]:hidden">{t('selectHint')}</p>
+            <p className="hidden text-sm text-text-tertiary [@media(pointer:coarse)]:block">{t('selectHintTouch')}</p>
+          </>
         ) : (
           <div className="flex items-center gap-1">
             <Button type="button" variant="ghost" size="icon" onClick={() => gotoDay(-1)} disabled={dayIndex <= 0} aria-label={t('dayPrev')}>
@@ -267,13 +281,29 @@ export function TimecardsClient({
           filling (the fill + leave controls sit mid-page; without this the user
           had to scroll back up to the header to submit). Locked once approved. */}
       <div className="sticky bottom-0 z-20 -mx-1 flex items-center justify-between gap-3 border-t border-subtle bg-surface-base/95 px-1 py-3 backdrop-blur-sm">
-        <p className="text-sm text-text-tertiary">
-          {tc.draft.status === 'approved'
-            ? t('lockedApproved')
-            : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${formatTimecardDuration(tc.totalMinutes)}`}
-        </p>
+        {/* Feedback lives NEXT TO the buttons that trigger it — the header
+            message is off-screen when the user submits from down here. */}
+        {tc.errorMessage ? (
+          <p className="flex items-center gap-1.5 text-sm text-error-700 dark:text-error-400">
+            <AlertCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+            {tc.errorMessage}
+          </p>
+        ) : tc.syncMessage ? (
+          <p className="flex items-center gap-1.5 text-sm text-text-tertiary">
+            <Check className="h-4 w-4 shrink-0 text-action" aria-hidden="true" />
+            {tc.syncMessage}
+          </p>
+        ) : (
+          <p className="text-sm text-text-tertiary">
+            {isApproved
+              ? t('lockedApproved')
+              : isSubmittedUnchanged
+                ? t('submittedUnchanged')
+                : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${formatTimecardDuration(tc.totalMinutes)}`}
+          </p>
+        )}
         <div className="flex items-center gap-2">
-          {canApprove && tc.draft.status === 'approved' && tc.draft.id && (
+          {canApprove && isApproved && tc.draft.id && (
             <Button
               type="button"
               variant="outline"
@@ -291,7 +321,7 @@ export function TimecardsClient({
             variant="outline"
             size="sm"
             onClick={tc.saveDraft}
-            disabled={tc.isSaving || tc.isLoadingDraft || tc.draft.status === 'approved'}
+            disabled={tc.isSaving || tc.isLoadingDraft || isApproved || !tc.isDirty}
           >
             {tc.isSaving ? t('saving') : t('save')}
           </Button>
@@ -300,9 +330,9 @@ export function TimecardsClient({
             variant="primary"
             size="sm"
             onClick={tc.submitDraft}
-            disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft || tc.draft.status === 'approved'}
+            disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft || isApproved || isSubmittedUnchanged}
           >
-            {tc.isSubmitting ? t('submitting') : tc.draft.status === 'submitted' ? t('resubmit') : t('submit')}
+            {tc.isSubmitting ? t('submitting') : serverStatus === 'submitted' ? t('resubmit') : t('submit')}
           </Button>
         </div>
       </div>

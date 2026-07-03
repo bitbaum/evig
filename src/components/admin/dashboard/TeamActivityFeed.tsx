@@ -31,6 +31,8 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
   submitted_timecard: 'reichte Zeitkarte ein',
   approved_timecard: 'genehmigte Zeitkarte',
   rejected_timecard: 'wies Zeitkarte zurück',
+  edited_timecard: 'passte Zeitkarte an',
+  reopened_timecard: 'öffnete Zeitkarte wieder',
 }
 
 export async function TeamActivityFeed() {

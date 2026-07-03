@@ -43,6 +43,12 @@ export const PUT = withAdmin(async (request: NextRequest, session: ValidSession)
     const timecard = await saveTimecardDraft(session.user.id, parsed.data)
     return apiSuccess(timecard)
   } catch (error) {
+    if (error instanceof Error && error.message === 'approved_timecard_locked') {
+      return apiBadRequest('Genehmigte Zeitkarten sind gesperrt und können nicht geändert werden.')
+    }
+    if (error instanceof Error && error.message === 'timecard_payroll_locked') {
+      return apiBadRequest('Diese Zeitkarte ist in einem Lohnlauf gesperrt und kann nicht geändert werden.')
+    }
     logger.error('Error saving timecard draft', { error, userId: session.user.id })
     return apiError(error, 'Zeitkarte konnte nicht gespeichert werden')
   }
@@ -59,6 +65,12 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
     const timecard = await submitTimecard(session.user.id, parsed.data)
     return apiSuccess(timecard)
   } catch (error) {
+    if (error instanceof Error && error.message === 'approved_timecard_locked') {
+      return apiBadRequest('Genehmigte Zeitkarten sind gesperrt und können nicht geändert werden.')
+    }
+    if (error instanceof Error && error.message === 'timecard_payroll_locked') {
+      return apiBadRequest('Diese Zeitkarte ist in einem Lohnlauf gesperrt und kann nicht geändert werden.')
+    }
     logger.error('Error submitting timecard', { error, userId: session.user.id })
     return apiError(error, 'Zeitkarte konnte nicht eingereicht werden')
   }

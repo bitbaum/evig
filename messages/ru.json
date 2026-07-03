@@ -9610,7 +9610,7 @@
       "viewDay": "День",
       "dayPrev": "Предыдущий день",
       "dayNext": "Следующий день",
-      "bulkSelected": "Выбрано дней: {count}",
+      "bulkSelected": "{count, plural, one {Выбран # день} few {Выбрано # дня} many {Выбрано # дней} other {Выбрано # дня}}",
       "bulkFill": "Заполнить из плана",
       "bulkClear": "Очистить",
       "bulkCancel": "Снять выбор"

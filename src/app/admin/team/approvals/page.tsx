@@ -51,7 +51,7 @@ export default async function TimecardApprovalsPage() {
       iconColor="green"
     >
       <ApprovalTabs />
-      <TimecardApprovalsClient />
+      <TimecardApprovalsClient currentUserId={session.user.id} />
       <div className="mt-10 border-t border-subtle pt-8">
         <TimeOffApprovals />
       </div>

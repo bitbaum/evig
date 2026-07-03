@@ -9616,7 +9616,7 @@
       "viewDay": "Giorno",
       "dayPrev": "Giorno precedente",
       "dayNext": "Giorno successivo",
-      "bulkSelected": "{count} giorni selezionati",
+      "bulkSelected": "{count, plural, one {1 giorno selezionato} other {# giorni selezionati}}",
       "bulkFill": "Compila dal piano",
       "bulkClear": "Svuota",
       "bulkCancel": "Annulla selezione"

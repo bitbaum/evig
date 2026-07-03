@@ -13,10 +13,13 @@ export const POST = withAdmin('timecards', async (
   try {
     const id = context?.params?.id
     if (!id) return apiBadRequest('Zeitkarten-ID ist erforderlich')
-    const result = await reopenTimecard(id)
+    const result = await reopenTimecard(id, session.user.id)
     logger.info('Timecard reopened', { timecardId: id, by: session.user.id })
     return apiSuccess(result)
   } catch (error) {
+    if (error instanceof Error && error.message === 'timecard_payroll_locked') {
+      return apiBadRequest('Diese Zeitkarte ist in einem Lohnlauf gesperrt und kann nicht wieder geöffnet werden.')
+    }
     logger.error('Error reopening timecard', { error, reviewerId: session.user.id })
     return apiError(error, 'Zeitkarte konnte nicht wieder geöffnet werden')
   }

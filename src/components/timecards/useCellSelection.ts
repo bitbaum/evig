@@ -26,6 +26,12 @@ export function useCellSelection(orderedKeys: string[], initial?: string[]) {
   const [dragging, setDragging] = useState(false)
   const dragged = useRef(false)
 
+  // Touch has no mouseenter-drag and no Ctrl/Shift, so taps build a range
+  // instead: first tap anchors the start, the next tap extends to a range.
+  // pointerdown tells us which device started the interaction so the
+  // synthetic mouse events after a tap don't double-handle it.
+  const lastPointerType = useRef<string>('mouse')
+
   useEffect(() => {
     if (!dragging) return
     const stop = () => setDragging(false)
@@ -77,8 +83,14 @@ export function useCellSelection(orderedKeys: string[], initial?: string[]) {
   }, [])
 
   // Per-cell DOM handlers — spread or call from the cell element.
+  const onCellPointerDown = useCallback((e: { pointerType: string }) => {
+    lastPointerType.current = e.pointerType
+  }, [])
+
   const onCellMouseDown = useCallback(
     (key: string, e: { button: number; shiftKey: boolean; ctrlKey: boolean; metaKey: boolean; preventDefault: () => void }) => {
+      // Touch taps arrive as synthetic mousedowns — handled in onCellClick.
+      if (lastPointerType.current === 'touch') return
       if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
       e.preventDefault()
       dragged.current = false
@@ -103,9 +115,15 @@ export function useCellSelection(orderedKeys: string[], initial?: string[]) {
         dragged.current = false
         return
       }
+      if (lastPointerType.current === 'touch') {
+        // Tap-tap range: anchored tap extends to a range, otherwise (re)anchor.
+        if (anchor && anchor !== key && selected.size > 0) select(key, 'range')
+        else select(key, 'single')
+        return
+      }
       select(key, e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single')
     },
-    [select],
+    [select, anchor, selected],
   )
 
   return {
@@ -116,6 +134,7 @@ export function useCellSelection(orderedKeys: string[], initial?: string[]) {
     clear,
     selectAll,
     setExact,
+    onCellPointerDown,
     onCellMouseDown,
     onCellMouseEnter,
     onCellClick,

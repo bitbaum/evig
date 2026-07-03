@@ -9963,10 +9963,14 @@
       "viewDay": "Tag",
       "dayPrev": "Vorheriger Tag",
       "dayNext": "Nächster Tag",
-      "bulkSelected": "{count} Tage ausgewählt",
+      "bulkSelected": "{count, plural, one {1 Tag ausgewählt} other {# Tage ausgewählt}}",
       "bulkFill": "Aus Plan füllen",
       "bulkClear": "Leeren",
-      "bulkCancel": "Auswahl aufheben"
+      "bulkCancel": "Auswahl aufheben",
+      "fillSkippedNonPlanDays": "{count, plural, one {1 Tag ohne Arbeitsplan übersprungen (0 Soll-Stunden)} other {# Tage ohne Arbeitsplan übersprungen (0 Soll-Stunden)}}",
+      "fillNonPlanDay": "Kein Plan-Tag — keine Soll-Stunden. Trage Zeiten bei Bedarf manuell ein.",
+      "selectHintTouch": "Tippe Tage an, um sie auszuwählen (erneut tippen wählt ab) · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte · Dann unten eine Aktion wählen.",
+      "submittedUnchanged": "Eingereicht — warten auf Freigabe. Änderungen machen ein erneutes Einreichen nötig."
     },
     "appointments": {
       "pageTitle": "Termine",

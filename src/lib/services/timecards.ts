@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { teamProfiles, timecards, timecardEntries, users } from '@/db/schema'
+import { notifications, teamProfiles, timecards, timecardEntries, users } from '@/db/schema'
 import { and, asc, eq, gte, lte, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { createNotification, notifyUsers } from '@/lib/services/notifications'
@@ -15,6 +15,7 @@ import {
   type WeeklySchedule,
 } from '@/lib/team/schedule'
 import { normalizeTimeToHHMM } from '@/lib/team/timecard-utils'
+import { formatTimecardPeriodLabel } from '@/lib/team/timecard-period-label'
 import {
   timecardPeriodQuerySchema,
   timecardSaveSchema,
@@ -357,7 +358,11 @@ export async function listTimecards(params: {
   return rows
 }
 
-export async function saveTimecardDraft(userId: string, input: TimecardSaveInput): Promise<TimecardWithEntries> {
+export async function saveTimecardDraft(
+  userId: string,
+  input: TimecardSaveInput,
+  options: { keepSubmitted?: boolean } = {},
+): Promise<TimecardWithEntries> {
   const parsed = timecardSaveSchema.safeParse(input)
   if (!parsed.success) {
     throw new Error('invalid_timecard_payload')
@@ -378,6 +383,20 @@ export async function saveTimecardDraft(userId: string, input: TimecardSaveInput
     if (row && row.status === TIMECARD_STATUSES.APPROVED) {
       throw new Error('approved_timecard_locked')
     }
+    // Once a payroll batch references the card, its hours are financial
+    // history — edits would desync the payroll snapshot.
+    if (row && row.payrollBatchId != null) {
+      throw new Error('timecard_payroll_locked')
+    }
+
+    // Any content edit invalidates a pending submission: the card drops back
+    // to draft so an approver never reviews silently-changed data. The
+    // approver review-edit path opts out (keepSubmitted) — that path is
+    // audited and notifies the owner instead.
+    const demoteToDraft =
+      row !== undefined &&
+      (row.status === TIMECARD_STATUSES.REJECTED ||
+        (row.status === TIMECARD_STATUSES.SUBMITTED && !options.keepSubmitted))
 
     const returnedRows = row
       ? await tx
@@ -385,7 +404,8 @@ export async function saveTimecardDraft(userId: string, input: TimecardSaveInput
           .set({
             periodType: parsed.data.period_type,
             notes: parsed.data.notes ?? null,
-            status: row.status === TIMECARD_STATUSES.REJECTED ? TIMECARD_STATUSES.DRAFT : row.status,
+            status: demoteToDraft ? TIMECARD_STATUSES.DRAFT : row.status,
+            ...(demoteToDraft ? { submittedAt: null } : {}),
             updatedAt: sql`NOW()`,
           })
           .where(eq(timecards.id, row.id))
@@ -450,44 +470,40 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
     })
     .where(eq(timecards.id, saved.id))
 
+  const periodLabel = formatTimecardPeriodLabel(saved.period_type, saved.period_start, saved.period_end)
+
   logActivity({
     actorId: userId,
     action: 'submitted_timecard',
     subjectType: 'timecard',
     subjectId: saved.id,
-    subjectLabel: `${saved.period_start} – ${saved.period_end}`,
+    subjectLabel: periodLabel,
   })
 
   const submitted = (await fetchTimecardWithEntries(db, saved.id)) ?? saved
   const displayName = submitted.user_name || submitted.user_email || 'Ein Teammitglied'
 
+  // Notify approvers only — the submitter just clicked the button and gets
+  // inline confirmation; a self-notification is noise. Resubmits REPLACE the
+  // previous "eingereicht" notifications for this card instead of stacking,
+  // so approvers see exactly one live entry per card.
   try {
     const approverIds = await getTimecardApproverIds(userId)
     if (approverIds.length > 0) {
+      await db.delete(notifications).where(and(
+        eq(notifications.relatedId, submitted.id),
+        eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
+      ))
       await notifyUsers(approverIds, {
         type: NOTIFICATION_TYPES.TIMECARD_SUBMITTED,
         title: 'Neue Zeitkarte eingereicht',
-        content: `${displayName} hat die Zeitkarte für ${submitted.period_start} – ${submitted.period_end} zur Prüfung eingereicht.`,
+        content: `${displayName} hat die Zeitkarte für ${periodLabel} zur Prüfung eingereicht.`,
         related_type: RELATED_TYPES.TIMECARD_REVIEW,
         related_id: submitted.id,
       })
     }
   } catch (error) {
     logger.warn('Failed to notify timecard approvers', { error, timecardId: saved.id })
-  }
-
-  // Confirm to the submitter that their card is in review (in-app + email, gated
-  // on their email_notifications pref — same path as the approver notification).
-  try {
-    await notifyUsers([userId], {
-      type: NOTIFICATION_TYPES.TIMECARD_SUBMITTED,
-      title: 'Zeitkarte eingereicht',
-      content: `Deine Zeitkarte für ${submitted.period_start} – ${submitted.period_end} wurde zur Prüfung eingereicht. Du wirst benachrichtigt, sobald sie geprüft wurde.`,
-      related_type: RELATED_TYPES.TIMECARD,
-      related_id: submitted.id,
-    })
-  } catch (error) {
-    logger.warn('Failed to send timecard submission confirmation', { error, timecardId: saved.id })
   }
 
   return submitted
@@ -500,13 +516,15 @@ export async function getTimecardByIdForReview(timecardId: string): Promise<Time
 
 /**
  * Approver edits a submitted card's entries. Saves to the card's OWNER (not the
- * approver) and preserves the submitted status — `saveTimecardDraft` only flips
- * rejected→draft and blocks approved, so a submitted card stays submitted.
- * Authorization is enforced at the route (withAdmin('timecards')).
+ * approver) and preserves the submitted status (keepSubmitted). Never silent:
+ * the edit lands in the activity log and the owner is notified — otherwise an
+ * approver could rewrite someone's hours and approve their own numbers without
+ * a trace. Authorization is enforced at the route (withAdmin('timecards')).
  */
 export async function saveTimecardEntriesForReview(
   timecardId: string,
   input: TimecardSaveInput,
+  reviewerId: string,
 ): Promise<TimecardWithEntries> {
   const rows = await db
     .select({ userId: timecards.userId })
@@ -515,17 +533,64 @@ export async function saveTimecardEntriesForReview(
     .limit(1)
   const owner = rows[0]
   if (!owner) throw new Error('timecard_not_found')
-  return saveTimecardDraft(owner.userId, input)
+
+  const result = await saveTimecardDraft(owner.userId, input, { keepSubmitted: true })
+
+  if (owner.userId !== reviewerId) {
+    const periodLabel = formatTimecardPeriodLabel(result.period_type, result.period_start, result.period_end)
+
+    logActivity({
+      actorId: reviewerId,
+      action: 'edited_timecard',
+      subjectType: 'timecard',
+      subjectId: timecardId,
+      subjectLabel: periodLabel,
+    })
+
+    const reviewerRows = await db
+      .select({ name: users.name, email: users.email })
+      .from(users)
+      .where(eq(users.id, reviewerId))
+      .limit(1)
+    const reviewerName = reviewerRows[0]?.name || reviewerRows[0]?.email || 'Ein Teammitglied'
+
+    await createNotification(owner.userId, {
+      type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
+      title: 'Zeitkarte angepasst',
+      content: `${reviewerName} hat deine Zeitkarte für ${periodLabel} angepasst. Bitte sieh dir die Einträge an.`,
+      related_type: RELATED_TYPES.TIMECARD,
+      related_id: timecardId,
+    }).catch(err => logger.warn('Failed to notify timecard owner about approver edit', { error: err, timecardId }))
+  }
+
+  return result
 }
 
 /**
  * Reopen a reviewed/locked timecard back to draft so it can be edited again
  * (e.g. a card approved by mistake — like an approved-empty month). Clears the
- * review + submission metadata. Authorization is enforced at the route
- * (withAdmin('timecards')).
+ * review + submission metadata, logs the actor, and notifies the owner —
+ * un-approving hours must never happen invisibly. Refuses payroll-linked cards
+ * (that history is closed; corrections go through a new batch). Authorization
+ * is enforced at the route (withAdmin('timecards')).
  */
-export async function reopenTimecard(timecardId: string): Promise<TimecardWithEntries> {
-  const rows = await db
+export async function reopenTimecard(timecardId: string, actorId: string): Promise<TimecardWithEntries> {
+  const cardRows = await db
+    .select({
+      userId: timecards.userId,
+      periodType: timecards.periodType,
+      periodStart: timecards.periodStart,
+      periodEnd: timecards.periodEnd,
+      payrollBatchId: timecards.payrollBatchId,
+    })
+    .from(timecards)
+    .where(eq(timecards.id, timecardId))
+    .limit(1)
+  const card = cardRows[0]
+  if (!card) throw new Error('timecard_not_found')
+  if (card.payrollBatchId != null) throw new Error('timecard_payroll_locked')
+
+  await db
     .update(timecards)
     .set({
       status: TIMECARD_STATUSES.DRAFT,
@@ -536,8 +601,27 @@ export async function reopenTimecard(timecardId: string): Promise<TimecardWithEn
       updatedAt: sql`NOW()`,
     })
     .where(eq(timecards.id, timecardId))
-    .returning({ id: timecards.id })
-  if (!rows[0]) throw new Error('timecard_not_found')
+
+  const periodLabel = formatTimecardPeriodLabel(card.periodType, card.periodStart, card.periodEnd)
+
+  logActivity({
+    actorId,
+    action: 'reopened_timecard',
+    subjectType: 'timecard',
+    subjectId: timecardId,
+    subjectLabel: periodLabel,
+  })
+
+  if (card.userId !== actorId) {
+    await createNotification(card.userId, {
+      type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
+      title: 'Zeitkarte wieder geöffnet',
+      content: `Deine Zeitkarte für ${periodLabel} wurde wieder geöffnet und kann angepasst werden.`,
+      related_type: RELATED_TYPES.TIMECARD,
+      related_id: timecardId,
+    }).catch(err => logger.warn('Failed to notify timecard owner about reopen', { error: err, timecardId }))
+  }
+
   const result = await fetchTimecardWithEntries(db, timecardId)
   if (!result) throw new Error('timecard_not_found')
   return result
@@ -557,6 +641,7 @@ export async function reviewTimecard(
       .select({
         id: timecards.id,
         userId: timecards.userId,
+        periodType: timecards.periodType,
         periodStart: timecards.periodStart,
         periodEnd: timecards.periodEnd,
         status: timecards.status,
@@ -564,7 +649,7 @@ export async function reviewTimecard(
       .from(timecards)
       .where(eq(timecards.id, timecardId))
       .limit(1)
-    const timecard = timecardRows[0] as { id: string; userId: string; periodStart: string; periodEnd: string; status: string } | undefined
+    const timecard = timecardRows[0] as { id: string; userId: string; periodType: string; periodStart: string; periodEnd: string; status: string } | undefined
 
   if (!timecard) {
     throw new Error('timecard_not_found')
@@ -591,12 +676,14 @@ export async function reviewTimecard(
     })
     .where(eq(timecards.id, timecardId))
 
+  const reviewPeriodLabel = formatTimecardPeriodLabel(timecard.periodType, timecard.periodStart, timecard.periodEnd)
+
   await createNotification(timecard.userId, {
     type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
     title: parsed.data.status === TIMECARD_STATUSES.APPROVED ? 'Zeitkarte genehmigt' : 'Zeitkarte benötigt Anpassung',
     content: parsed.data.status === TIMECARD_STATUSES.APPROVED
-      ? `Deine Zeitkarte für ${timecard.periodStart} bis ${timecard.periodEnd} wurde genehmigt.`
-      : `Deine Zeitkarte für ${timecard.periodStart} bis ${timecard.periodEnd} wurde zurückgewiesen. ${parsed.data.review_notes ?? ''}`.trim(),
+      ? `Deine Zeitkarte für ${reviewPeriodLabel} wurde genehmigt.`
+      : `Deine Zeitkarte für ${reviewPeriodLabel} wurde zurückgewiesen. ${parsed.data.review_notes ?? ''}`.trim(),
     related_type: RELATED_TYPES.TIMECARD,
     related_id: timecardId,
   }).catch(err => logger.warn('Failed to notify timecard review', { error: err, timecardId }))
@@ -606,7 +693,7 @@ export async function reviewTimecard(
     action: parsed.data.status === TIMECARD_STATUSES.APPROVED ? 'approved_timecard' : 'rejected_timecard',
     subjectType: 'timecard',
     subjectId: timecardId,
-    subjectLabel: `${timecard.periodStart} – ${timecard.periodEnd}`,
+    subjectLabel: reviewPeriodLabel,
   })
 
   const result = await fetchTimecardWithEntries(db, timecardId)

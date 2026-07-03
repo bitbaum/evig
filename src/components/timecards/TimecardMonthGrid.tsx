@@ -57,6 +57,12 @@ export function TimecardMonthGrid({
   const [headerDragging, setHeaderDragging] = useState(false)
   const dragged = useRef(false)
 
+  // Touch has no mouseenter-drag, no Ctrl/Shift and no right-click, so taps
+  // TOGGLE days into the selection instead (multi-select by tapping). The
+  // browser fires synthetic mouse events after a tap — pointerdown tells us
+  // which device started the interaction so the mouse handlers can stand down.
+  const lastPointerType = useRef<string>('mouse')
+
   useEffect(() => {
     const stop = () => {
       setDragging(false)
@@ -105,7 +111,9 @@ export function TimecardMonthGrid({
                 if (headerDragging && onWeekdaySelect) onWeekdaySelect(weekday, true)
               }}
               className={cn(
-                'h-auto w-full rounded-sm bg-transparent px-0 py-1 text-center font-mono text-[0.6rem] uppercase tracking-wide transition-colors sm:text-xs',
+                // Taller tap target on touch layouts (the header is the only
+                // way to select a whole column); compact again on sm+.
+                'h-auto w-full rounded-sm bg-transparent px-0 py-2.5 text-center font-mono text-[0.6rem] uppercase tracking-wide transition-colors sm:py-1 sm:text-xs',
                 onWeekdaySelect && 'cursor-pointer hover:bg-action-muted hover:text-action',
                 i >= 5 ? 'text-text-tertiary' : 'text-text-secondary',
               )}
@@ -137,7 +145,13 @@ export function TimecardMonthGrid({
               key={date}
               type="button"
               variant="ghost"
+              onPointerDown={e => {
+                lastPointerType.current = e.pointerType
+              }}
               onMouseDown={e => {
+                // Touch taps arrive here as synthetic mousedowns — selection is
+                // handled in onClick for touch (toggle), so stand down.
+                if (lastPointerType.current === 'touch') return
                 // Modifier clicks (toggle/range) are handled in onClick — let them through.
                 if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
                 e.preventDefault()
@@ -156,6 +170,10 @@ export function TimecardMonthGrid({
                 // Swallow the click that ends a drag so it doesn't reset to one day.
                 if (dragged.current) {
                   dragged.current = false
+                  return
+                }
+                if (lastPointerType.current === 'touch') {
+                  onDaySelect(date, 'toggle')
                   return
                 }
                 onDaySelect(
