@@ -42,6 +42,7 @@ export {
   isAccountLocked,
   resetLockout,
   clearFailedAttempts,
+  isAccountLockedDb,
   recordFailedAttemptDb,
   clearLockoutDb,
   getClientIp,

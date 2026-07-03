@@ -5,15 +5,15 @@ import { users } from './auth'
 // REVIEWS
 // =============================================================================
 // User reviews and ratings for repairers, services, and workshops.
-// From 008_rating_review_system.sql.
-// CHECK (target_type IN ('repairer', 'service', 'workshop'))
+// From 008_rating_review_system.sql. Ratings are DB invariants; app-level enum
+// values (targetType/status) are validated at the write boundary, not mirrored
+// as hand-synced Drizzle comments.
 // CHECK (overall_rating >= 1 AND overall_rating <= 5)
 // CHECK (communication_rating >= 1 AND communication_rating <= 5)
 // CHECK (professionalism_rating >= 1 AND professionalism_rating <= 5)
 // CHECK (quality_rating >= 1 AND quality_rating <= 5)
 // CHECK (timeliness_rating >= 1 AND timeliness_rating <= 5)
 // CHECK (value_rating >= 1 AND value_rating <= 5)
-// CHECK (status IN ('published', 'pending_moderation', 'hidden', 'deleted'))
 // UNIQUE (reviewer_id, target_type, target_id, booking_id)
 
 export const reviews = pgTable('reviews', {
@@ -21,7 +21,6 @@ export const reviews = pgTable('reviews', {
   reviewerId: uuid('reviewer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
   // Target (polymorphic: repairer, service, or workshop)
-  // CHECK (target_type IN ('repairer', 'service', 'workshop'))
   targetType: varchar('target_type', { length: 20 }).notNull(),
   targetId: uuid('target_id').notNull(),
   bookingId: uuid('booking_id'),
@@ -43,7 +42,7 @@ export const reviews = pgTable('reviews', {
   helpfulVotes: integer('helpful_votes').notNull().default(0),
   totalVotes: integer('total_votes').notNull().default(0),
 
-  // Status — CHECK (status IN ('published', 'pending_moderation', 'hidden', 'deleted'))
+  // Status — enum value validated at the write boundary.
   status: varchar('status', { length: 20 }).notNull().default('published'),
 
   // Moderation

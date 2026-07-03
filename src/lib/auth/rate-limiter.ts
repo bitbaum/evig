@@ -6,16 +6,17 @@
  * - Credential stuffing
  * - API abuse
  *
- * Uses in-memory storage with optional Redis backend for production.
+ * Request rate-limit counters are kept in-memory for the current process.
+ * Account lockouts are persisted in user_lockouts via the DB helpers below;
+ * the in-memory lockout helpers are kept only as a fallback if the DB is
+ * unavailable while recording a failed login.
  */
 
 import { AUTH_CONFIG } from './config'
 import { db } from '@/db'
 import { userLockouts } from '@/db/schema'
 import { eq, sql, getTableName } from 'drizzle-orm'
-import { getRedis } from './redis'
 import { logger } from '@/lib/logger'
-import { isRedisConfigured, REDIS_CONFIG } from '@/config/redis'
 import { RATE_LIMIT_LOCKOUT_CAP_MS } from '@/config/security'
 
 // Table name ref for raw SQL in complex upsert
@@ -44,7 +45,6 @@ interface LockoutEntry {
 
 const rateLimitStore = new Map<string, RateLimitEntry>()
 const lockoutStore = new Map<string, LockoutEntry>()
-const ENABLE_REDIS = isRedisConfigured() && REDIS_CONFIG.ENABLE_RATE_LIMITER
 
 // Cleanup old entries periodically
 setInterval(() => {
@@ -83,14 +83,6 @@ interface RateLimitResult {
  * @param type - Type of rate limit to check
  */
 export function checkRateLimit(identifier: string, type: RateLimitType): RateLimitResult {
-  // Redis-backed path
-  // This synchronous signature requires async under-the-hood. To preserve
-  // backward compatibility, we optimistically no-op to in-memory if Redis is not ready.
-  // Consumers that need strict guarantees should use an async variant (future).
-  // Here we do a best-effort: if Redis configured, we schedule an async update
-  // and compute allowed using local heuristics. For correctness across instances,
-  // prefer enabling Redis and switching to API endpoints that enforce it server-side.
-
   const config = AUTH_CONFIG.rateLimit[type]
   const key = `${type}:${identifier}`
   const now = Date.now()
@@ -363,6 +355,48 @@ export async function recordFailedAttemptDb(
 }
 
 /**
+ * Check persistent account lockout state before password validation.
+ */
+export async function isAccountLockedDb(userId: string): Promise<LockoutResult> {
+  const config = AUTH_CONFIG.lockout
+  const now = new Date()
+
+  try {
+    const rows = await db
+      .select({
+        failedAttempts: userLockouts.failedAttempts,
+        lockedUntil: userLockouts.lockedUntil,
+      })
+      .from(userLockouts)
+      .where(eq(userLockouts.userId, userId))
+      .limit(1)
+
+    const record = rows[0]
+    if (!record) {
+      return { locked: false, remainingAttempts: config.maxFailedAttempts }
+    }
+
+    if (record.lockedUntil && new Date(record.lockedUntil) > now) {
+      const lockedUntil = new Date(record.lockedUntil).getTime()
+      return {
+        locked: true,
+        remainingAttempts: 0,
+        lockedUntil,
+        retryAfter: Math.ceil((lockedUntil - now.getTime()) / 1000),
+      }
+    }
+
+    return {
+      locked: false,
+      remainingAttempts: Math.max(0, config.maxFailedAttempts - record.failedAttempts),
+    }
+  } catch (error) {
+    logger.error('Database lockout read error, falling back to in-memory', { error, userId })
+    return isAccountLocked(`${userId}:login`)
+  }
+}
+
+/**
  * Clear lockout from database after successful login
  */
 export async function clearLockoutDb(userId: string): Promise<void> {
@@ -421,155 +455,4 @@ export function createRateLimitKey(
     return `${ip}:${email.toLowerCase()}`
   }
   return ip
-}
-
-// =============================================================================
-// Redis-backed implementations (optional, multi-instance safe)
-// =============================================================================
-
-/**
- * Redis-backed rate limit check (atomic INCR with TTL)
- */
-export async function checkRateLimitRedis(identifier: string, type: RateLimitType): Promise<RateLimitResult> {
-  const redis = ENABLE_REDIS ? await getRedis() : null
-  if (!redis) return checkRateLimit(identifier, type)
-
-  const config = AUTH_CONFIG.rateLimit[type]
-  const base = `rate:${type}:${identifier}`
-  const blockKey = `${base}:block`
-
-  const now = Date.now()
-  // If blocked
-  const blockTtlMs = await redis.pttl(blockKey)
-  if (blockTtlMs > 0) {
-    return {
-      allowed: false,
-      remaining: 0,
-      resetAt: now + blockTtlMs,
-      retryAfter: Math.ceil(blockTtlMs / 1000),
-    }
-  }
-
-  // Increment attempts within window
-  const count = await redis.incr(base)
-  if (count === 1) {
-    await redis.expire(base, Math.ceil(config.windowMs / 1000))
-  }
-  const remaining = Math.max(0, config.maxAttempts - count)
-  const ttlMs = await redis.pttl(base)
-
-  if (count > config.maxAttempts) {
-    if ('blockDuration' in config && config.blockDuration) {
-      const blockDuration = config.blockDuration as number
-      await redis.set(blockKey, '1', 'EX', Math.ceil(blockDuration / 1000))
-    }
-    return {
-      allowed: false,
-      remaining: 0,
-      resetAt: now + Math.max(ttlMs, 0),
-      retryAfter: Math.ceil(Math.max(ttlMs, 0) / 1000),
-    }
-  }
-
-  return {
-    allowed: true,
-    remaining,
-    resetAt: now + Math.max(ttlMs, 0),
-  }
-}
-
-export async function resetRateLimitRedis(identifier: string, type: RateLimitType): Promise<void> {
-  const redis = ENABLE_REDIS ? await getRedis() : null
-  if (!redis) return resetRateLimit(identifier, type)
-  const base = `rate:${type}:${identifier}`
-  const blockKey = `${base}:block`
-  await redis.del(base)
-  await redis.del(blockKey)
-}
-
-/**
- * Redis-backed lockout tracking
- */
-export async function recordFailedAttemptRedis(identifier: string): Promise<LockoutResult> {
-  const redis = ENABLE_REDIS ? await getRedis() : null
-  if (!redis) return recordFailedAttempt(identifier)
-
-  const config = AUTH_CONFIG.lockout
-  const now = Date.now()
-  const key = `lockout:${identifier}`
-
-  const raw = await redis.get(key)
-  const entry: LockoutEntry = raw ? JSON.parse(raw) : { failedAttempts: 0, lockoutCount: 0, lastAttempt: now }
-
-  // If currently locked
-  if (entry.lockedUntil && entry.lockedUntil > now) {
-    return {
-      locked: true,
-      remainingAttempts: 0,
-      lockedUntil: entry.lockedUntil,
-      retryAfter: Math.ceil((entry.lockedUntil - now) / 1000),
-    }
-  }
-
-  // Clear lock if expired
-  if (entry.lockedUntil && entry.lockedUntil <= now) {
-    entry.failedAttempts = 0
-    entry.lockedUntil = undefined
-  }
-
-  entry.failedAttempts++
-  entry.lastAttempt = now
-
-  if (entry.failedAttempts >= config.maxFailedAttempts) {
-    entry.lockoutCount++
-    const multiplier = config.progressiveLockout ? Math.pow(2, entry.lockoutCount - 1) : 1
-    const lockoutDuration = Math.min(config.lockoutDuration * multiplier, RATE_LIMIT_LOCKOUT_CAP_MS)
-    entry.lockedUntil = now + lockoutDuration
-  }
-
-  await redis.set(key, JSON.stringify(entry))
-
-  if (entry.lockedUntil && entry.lockedUntil > now) {
-    return {
-      locked: true,
-      remainingAttempts: 0,
-      lockedUntil: entry.lockedUntil,
-      retryAfter: Math.ceil((entry.lockedUntil - now) / 1000),
-    }
-  }
-
-  return {
-    locked: false,
-    remainingAttempts: Math.max(0, config.maxFailedAttempts - entry.failedAttempts),
-  }
-}
-
-export async function isAccountLockedRedis(identifier: string): Promise<LockoutResult> {
-  const redis = ENABLE_REDIS ? await getRedis() : null
-  if (!redis) return isAccountLocked(identifier)
-  const now = Date.now()
-  const raw = await redis.get(`lockout:${identifier}`)
-  if (!raw) return { locked: false, remainingAttempts: AUTH_CONFIG.lockout.maxFailedAttempts }
-  const entry: LockoutEntry = JSON.parse(raw)
-  if (entry.lockedUntil && entry.lockedUntil > now) {
-    return {
-      locked: true,
-      remainingAttempts: 0,
-      lockedUntil: entry.lockedUntil,
-      retryAfter: Math.ceil((entry.lockedUntil - now) / 1000),
-    }
-  }
-  return { locked: false, remainingAttempts: Math.max(0, AUTH_CONFIG.lockout.maxFailedAttempts - entry.failedAttempts) }
-}
-
-export async function resetLockoutRedis(identifier: string): Promise<void> {
-  const redis = ENABLE_REDIS ? await getRedis() : null
-  if (!redis) return resetLockout(identifier)
-  await redis.del(`lockout:${identifier}`)
-}
-
-export async function clearFailedAttemptsRedis(identifier: string): Promise<void> {
-  const redis = ENABLE_REDIS ? await getRedis() : null
-  if (!redis) return clearFailedAttempts(identifier)
-  await redis.del(`lockout:${identifier}`)
 }

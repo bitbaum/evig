@@ -9,6 +9,7 @@
 jest.mock('@/db', () => ({
   db: {
     execute: jest.fn(),
+    select: jest.fn(),
     update: jest.fn(() => ({
       set: jest.fn().mockReturnThis(),
       where: jest.fn().mockResolvedValue([]),
@@ -24,15 +25,6 @@ jest.mock('@/lib/logger', () => ({
   },
 }))
 
-jest.mock('@/lib/auth/redis', () => ({
-  getRedis: jest.fn().mockResolvedValue(null),
-}))
-
-jest.mock('@/config/redis', () => ({
-  isRedisConfigured: () => false,
-  REDIS_CONFIG: { ENABLE_RATE_LIMITER: false },
-}))
-
 import {
   checkRateLimit,
   resetRateLimit,
@@ -40,9 +32,14 @@ import {
   isAccountLocked,
   resetLockout,
   clearFailedAttempts,
+  isAccountLockedDb,
   getClientIp,
   createRateLimitKey,
 } from '../rate-limiter'
+
+const mockDb = jest.requireMock('@/db').db as {
+  select: jest.Mock
+}
 
 // ============================================================================
 // getClientIp
@@ -241,5 +238,53 @@ describe('clearFailedAttempts', () => {
     const result = isAccountLocked(id)
     expect(result.locked).toBe(false)
     expect(result.remainingAttempts).toBe(5)
+  })
+})
+
+describe('isAccountLockedDb', () => {
+  function mockLockoutRows(rows: unknown[]) {
+    const limit = jest.fn().mockResolvedValue(rows)
+    const where = jest.fn(() => ({ limit }))
+    const from = jest.fn(() => ({ where }))
+    mockDb.select.mockReturnValue({ from })
+    return { from, where, limit }
+  }
+
+  beforeEach(() => {
+    mockDb.select.mockReset()
+  })
+
+  it('returns unlocked when no persistent lockout row exists', async () => {
+    mockLockoutRows([])
+
+    const result = await isAccountLockedDb('user-1')
+
+    expect(result).toEqual({ locked: false, remainingAttempts: 5 })
+  })
+
+  it('returns locked when locked_until is in the future', async () => {
+    const lockedUntil = new Date(Date.now() + 60_000).toISOString()
+    mockLockoutRows([{ failedAttempts: 5, lockedUntil }])
+
+    const result = await isAccountLockedDb('user-1')
+
+    expect(result.locked).toBe(true)
+    expect(result.remainingAttempts).toBe(0)
+    expect(result.retryAfter).toBeGreaterThan(0)
+  })
+
+  it('falls back to in-memory lockout if the DB read fails', async () => {
+    mockDb.select.mockImplementationOnce(() => {
+      throw new Error('db unavailable')
+    })
+
+    const id = 'user-fallback'
+    for (let i = 0; i < 5; i++) {
+      recordFailedAttempt(`${id}:login`)
+    }
+
+    const result = await isAccountLockedDb(id)
+
+    expect(result.locked).toBe(true)
   })
 })

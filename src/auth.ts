@@ -25,7 +25,7 @@ import type { Session, User } from 'next-auth'
 import { getUserByEmail, createUser, getOrCreateProfile, createVerificationCode, type DbUser } from '@/lib/auth/db'
 import { hashPassword, verifyPassword } from '@/lib/auth/password'
 import { ROLES, isStaffEmail, getInitialStaffPermissions, isSuperAdmin } from '@/lib/constants'
-import { recordFailedAttempt, isAccountLocked, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/rate-limiter'
+import { isAccountLockedDb, recordFailedAttemptDb, clearLockoutDb } from '@/lib/auth/rate-limiter'
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { SESSION_MAX_AGE_SECONDS, SESSION_UPDATE_AGE_SECONDS } from '@/config/security'
@@ -145,7 +145,7 @@ export const authConfig = {
           }
 
           // SECURITY: Check account lockout before password validation
-          const lockoutCheck = isAccountLocked(`${user.id}:login`)
+          const lockoutCheck = await isAccountLockedDb(user.id)
           if (lockoutCheck.locked) {
             throw new LoginError('account_locked')
           }
@@ -158,18 +158,12 @@ export const authConfig = {
           const isValid = await verifyPassword(password, user.password_hash)
 
           if (!isValid) {
-            // Record failed attempt for lockout tracking (in-memory + DB)
-            recordFailedAttempt(`${user.id}:login`)
-            recordFailedAttemptDb(user.id, 'login').catch(err =>
-              logger.error('Failed to record lockout attempt in DB', { error: err, userId: user.id })
-            )
+            await recordFailedAttemptDb(user.id, 'login')
             throw new LoginError('invalid_credentials')
           }
 
           // SECURITY: Clear lockout on successful login
-          clearLockoutDb(user.id).catch(err =>
-            logger.error('Failed to clear lockout in DB', { error: err, userId: user.id })
-          )
+          await clearLockoutDb(user.id)
 
           // SECURITY: Require email verification before login
           if (!user.emailVerified) {
