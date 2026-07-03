@@ -82,6 +82,12 @@ export const PATCH = withAdmin('timecards', async (
     if (error instanceof Error && error.message === 'timecard_self_review') {
       return apiBadRequest('Eigene Zeitkarten können nicht selbst freigegeben werden.')
     }
+    if (error instanceof Error && error.message === 'timecard_payroll_locked') {
+      return apiBadRequest('Diese Zeitkarte ist in einem Lohnlauf gesperrt und kann nicht bearbeitet werden.')
+    }
+    if (error instanceof Error && error.message === 'timecard_not_submitted') {
+      return apiBadRequest('Diese Zeitkarte ist nicht mehr zur Freigabe eingereicht. Bitte neu laden.')
+    }
     logger.error('Error reviewing timecard', { error, reviewerId: session.user.id })
     return apiError(error, 'Zeitkarte konnte nicht bearbeitet werden')
   }

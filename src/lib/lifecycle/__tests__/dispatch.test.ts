@@ -84,6 +84,16 @@ describe('dispatchWorkflowEvent', () => {
     expect(mockNotifyUsers).not.toHaveBeenCalled()
   })
 
+  it('allows activity-only events without inventing a notification recipient', async () => {
+    await dispatchWorkflowEvent({
+      type: 'timecard_reviewed',
+      activity: { actorId: 'a1', action: 'reopened_timecard' },
+    })
+    expect(mockNotifyUsers).not.toHaveBeenCalled()
+    expect(mockNotifyAllStaff).not.toHaveBeenCalled()
+    expect(mockLogActivity).toHaveBeenCalledWith({ actorId: 'a1', action: 'reopened_timecard' })
+  })
+
   it('a failing notify channel is logged and does not stop activity/audit', async () => {
     mockNotifyUsers.mockRejectedValue(new Error('smtp down'))
     await expect(dispatchWorkflowEvent({

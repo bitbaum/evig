@@ -16,6 +16,9 @@ import {
 } from '@/lib/team/schedule'
 import { normalizeTimeToHHMM } from '@/lib/team/timecard-utils'
 import { formatTimecardPeriodLabel } from '@/lib/team/timecard-period-label'
+import { runReviewTransition, type ReviewGuard } from '@/lib/lifecycle/review-workflow'
+import type { TransitionTable } from '@/lib/lifecycle'
+import type { WorkflowEvent } from '@/lib/lifecycle/dispatch'
 import {
   timecardPeriodQuerySchema,
   timecardSaveSchema,
@@ -39,6 +42,44 @@ export interface TimecardPeriodRange {
 }
 
 type TimecardDbClient = Pick<typeof db, 'select' | 'insert' | 'update' | 'delete'>
+
+interface TimecardReviewRow extends Record<string, unknown> {
+  status: string
+  user_id: string
+  period_type: string
+  period_start: string
+  period_end: string
+  payroll_batch_id: string | null
+}
+
+const TIMECARD_REVIEW_TRANSITIONS: TransitionTable = [
+  { action: TIMECARD_STATUSES.APPROVED, from: TIMECARD_STATUSES.SUBMITTED, to: TIMECARD_STATUSES.APPROVED },
+  { action: TIMECARD_STATUSES.REJECTED, from: TIMECARD_STATUSES.SUBMITTED, to: TIMECARD_STATUSES.REJECTED },
+]
+
+const TIMECARD_REOPEN_TRANSITIONS: TransitionTable = [
+  { action: 'reopen', from: TIMECARD_STATUSES.SUBMITTED, to: TIMECARD_STATUSES.DRAFT },
+  { action: 'reopen', from: TIMECARD_STATUSES.APPROVED, to: TIMECARD_STATUSES.DRAFT },
+  { action: 'reopen', from: TIMECARD_STATUSES.REJECTED, to: TIMECARD_STATUSES.DRAFT },
+]
+
+const TIMECARD_REVIEW_GUARDS: readonly ReviewGuard<TimecardReviewRow>[] = [
+  {
+    code: 'self_review',
+    check: (row, actor) => row.user_id !== actor.id,
+  },
+  {
+    code: 'payroll_locked',
+    check: row => row.payroll_batch_id == null,
+  },
+]
+
+const TIMECARD_PAYROLL_GUARD: readonly ReviewGuard<TimecardReviewRow>[] = [
+  {
+    code: 'payroll_locked',
+    check: row => row.payroll_batch_id == null,
+  },
+]
 
 function startOfWeek(date: Date): Date {
   const next = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
@@ -576,56 +617,56 @@ export async function saveTimecardEntriesForReview(
  * is enforced at the route (withAdmin('timecards')).
  */
 export async function reopenTimecard(timecardId: string, actorId: string): Promise<TimecardWithEntries> {
-  const cardRows = await db
-    .select({
-      userId: timecards.userId,
-      periodType: timecards.periodType,
-      periodStart: timecards.periodStart,
-      periodEnd: timecards.periodEnd,
-      payrollBatchId: timecards.payrollBatchId,
-    })
-    .from(timecards)
-    .where(eq(timecards.id, timecardId))
-    .limit(1)
-  const card = cardRows[0]
-  if (!card) throw new Error('timecard_not_found')
-  if (card.payrollBatchId != null) throw new Error('timecard_payroll_locked')
+  const result = await runReviewTransition<TimecardReviewRow>({
+    target: {
+      table: 'timecards',
+      select: ['user_id', 'period_type', 'period_start', 'period_end', 'payroll_batch_id'],
+    },
+    transitions: TIMECARD_REOPEN_TRANSITIONS,
+    id: timecardId,
+    action: 'reopen',
+    actor: { id: actorId },
+    guards: TIMECARD_PAYROLL_GUARD,
+    write: {
+      reopen: {
+        reviewer: 'clear',
+        reason: 'clear',
+        extra: () => ({ submitted_at: null }),
+      },
+    },
+    emit: (row): WorkflowEvent => {
+      const periodLabel = formatTimecardPeriodLabel(row.period_type, row.period_start, row.period_end)
+      const event: WorkflowEvent = {
+        type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
+        related: { type: RELATED_TYPES.TIMECARD, id: timecardId },
+        activity: {
+          actorId,
+          action: 'reopened_timecard',
+          subjectType: 'timecard',
+          subjectId: timecardId,
+          subjectLabel: periodLabel,
+        },
+      }
 
-  await db
-    .update(timecards)
-    .set({
-      status: TIMECARD_STATUSES.DRAFT,
-      reviewedBy: null,
-      reviewedAt: null,
-      reviewNotes: null,
-      submittedAt: null,
-      updatedAt: sql`NOW()`,
-    })
-    .where(eq(timecards.id, timecardId))
+      if (row.user_id !== actorId) {
+        event.recipients = { userId: row.user_id }
+        event.title = 'Zeitkarte wieder geöffnet'
+        event.content = `Deine Zeitkarte für ${periodLabel} wurde wieder geöffnet und kann angepasst werden.`
+      }
 
-  const periodLabel = formatTimecardPeriodLabel(card.periodType, card.periodStart, card.periodEnd)
-
-  logActivity({
-    actorId,
-    action: 'reopened_timecard',
-    subjectType: 'timecard',
-    subjectId: timecardId,
-    subjectLabel: periodLabel,
+      return event
+    },
   })
 
-  if (card.userId !== actorId) {
-    await createNotification(card.userId, {
-      type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
-      title: 'Zeitkarte wieder geöffnet',
-      content: `Deine Zeitkarte für ${periodLabel} wurde wieder geöffnet und kann angepasst werden.`,
-      related_type: RELATED_TYPES.TIMECARD,
-      related_id: timecardId,
-    }).catch(err => logger.warn('Failed to notify timecard owner about reopen', { error: err, timecardId }))
+  if (!result.ok) {
+    if (result.code === 'not_found') throw new Error('timecard_not_found')
+    if (result.code === 'guard_failed' && result.guard === 'payroll_locked') throw new Error('timecard_payroll_locked')
+    throw new Error('timecard_not_submitted')
   }
 
-  const result = await fetchTimecardWithEntries(db, timecardId)
-  if (!result) throw new Error('timecard_not_found')
-  return result
+  const reopened = await fetchTimecardWithEntries(db, timecardId)
+  if (!reopened) throw new Error('timecard_not_found')
+  return reopened
 }
 
 export async function reviewTimecard(
@@ -638,66 +679,47 @@ export async function reviewTimecard(
     throw new Error('invalid_timecard_review')
   }
 
-    const timecardRows = await db
-      .select({
-        id: timecards.id,
-        userId: timecards.userId,
-        periodType: timecards.periodType,
-        periodStart: timecards.periodStart,
-        periodEnd: timecards.periodEnd,
-        status: timecards.status,
-      })
-      .from(timecards)
-      .where(eq(timecards.id, timecardId))
-      .limit(1)
-    const timecard = timecardRows[0] as { id: string; userId: string; periodType: string; periodStart: string; periodEnd: string; status: string } | undefined
+  const result = await runReviewTransition<TimecardReviewRow>({
+    target: {
+      table: 'timecards',
+      select: ['user_id', 'period_type', 'period_start', 'period_end', 'payroll_batch_id'],
+    },
+    transitions: TIMECARD_REVIEW_TRANSITIONS,
+    id: timecardId,
+    action: parsed.data.status,
+    actor: { id: reviewerId },
+    guards: TIMECARD_REVIEW_GUARDS,
+    reason: parsed.data.review_notes ?? null,
+    emit: (row): WorkflowEvent => {
+      const reviewPeriodLabel = formatTimecardPeriodLabel(row.period_type, row.period_start, row.period_end)
+      const approved = parsed.data.status === TIMECARD_STATUSES.APPROVED
+      return {
+        type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
+        recipients: { userId: row.user_id },
+        title: approved ? 'Zeitkarte genehmigt' : 'Zeitkarte benötigt Anpassung',
+        content: approved
+          ? `Deine Zeitkarte für ${reviewPeriodLabel} wurde genehmigt.`
+          : `Deine Zeitkarte für ${reviewPeriodLabel} wurde zurückgewiesen. ${parsed.data.review_notes ?? ''}`.trim(),
+        related: { type: RELATED_TYPES.TIMECARD, id: timecardId },
+        activity: {
+          actorId: reviewerId,
+          action: approved ? 'approved_timecard' : 'rejected_timecard',
+          subjectType: 'timecard',
+          subjectId: timecardId,
+          subjectLabel: reviewPeriodLabel,
+        },
+      }
+    },
+  })
 
-  if (!timecard) {
-    throw new Error('timecard_not_found')
-  }
-
-  // Four-eyes principle: nobody approves their own hours — self-approved
-  // cards would flow straight into payroll close.
-  if (timecard.userId === reviewerId) {
-    throw new Error('timecard_self_review')
-  }
-
-  if (timecard.status !== TIMECARD_STATUSES.SUBMITTED) {
+  if (!result.ok) {
+    if (result.code === 'not_found') throw new Error('timecard_not_found')
+    if (result.code === 'guard_failed' && result.guard === 'self_review') throw new Error('timecard_self_review')
+    if (result.code === 'guard_failed' && result.guard === 'payroll_locked') throw new Error('timecard_payroll_locked')
     throw new Error('timecard_not_submitted')
   }
 
-  await db
-    .update(timecards)
-    .set({
-      status: parsed.data.status,
-      reviewedBy: reviewerId,
-      reviewedAt: sql`NOW()`,
-      reviewNotes: parsed.data.review_notes ?? null,
-      updatedAt: sql`NOW()`,
-    })
-    .where(eq(timecards.id, timecardId))
-
-  const reviewPeriodLabel = formatTimecardPeriodLabel(timecard.periodType, timecard.periodStart, timecard.periodEnd)
-
-  await createNotification(timecard.userId, {
-    type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
-    title: parsed.data.status === TIMECARD_STATUSES.APPROVED ? 'Zeitkarte genehmigt' : 'Zeitkarte benötigt Anpassung',
-    content: parsed.data.status === TIMECARD_STATUSES.APPROVED
-      ? `Deine Zeitkarte für ${reviewPeriodLabel} wurde genehmigt.`
-      : `Deine Zeitkarte für ${reviewPeriodLabel} wurde zurückgewiesen. ${parsed.data.review_notes ?? ''}`.trim(),
-    related_type: RELATED_TYPES.TIMECARD,
-    related_id: timecardId,
-  }).catch(err => logger.warn('Failed to notify timecard review', { error: err, timecardId }))
-
-  logActivity({
-    actorId: reviewerId,
-    action: parsed.data.status === TIMECARD_STATUSES.APPROVED ? 'approved_timecard' : 'rejected_timecard',
-    subjectType: 'timecard',
-    subjectId: timecardId,
-    subjectLabel: reviewPeriodLabel,
-  })
-
-  const result = await fetchTimecardWithEntries(db, timecardId)
-  if (!result) throw new Error('timecard_review_failed')
-  return result
+  const reviewed = await fetchTimecardWithEntries(db, timecardId)
+  if (!reviewed) throw new Error('timecard_review_failed')
+  return reviewed
 }

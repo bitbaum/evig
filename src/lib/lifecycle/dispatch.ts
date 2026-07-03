@@ -39,9 +39,9 @@ export type WorkflowRecipients =
 export interface WorkflowEvent {
   /** NOTIFICATION_TYPES value. */
   type: string
-  recipients: WorkflowRecipients
-  title: string
-  content: string
+  recipients?: WorkflowRecipients
+  title?: string
+  content?: string
   related?: { type: string; id: string }
   /** Template args for getEmailContent's type-specific email branches. */
   metadata?: Record<string, string>
@@ -86,24 +86,26 @@ export async function dispatchWorkflowEvent(event: WorkflowEvent): Promise<void>
   }
 
   // 2. In-app notification + preference-gated email (fused in the service).
-  try {
-    const payload = {
-      type: event.type,
-      title: event.title,
-      content: event.content,
-      related_type: event.related?.type,
-      related_id: event.related?.id,
-      metadata: event.metadata,
+  if (event.recipients && event.title && event.content) {
+    try {
+      const payload = {
+        type: event.type,
+        title: event.title,
+        content: event.content,
+        related_type: event.related?.type,
+        related_id: event.related?.id,
+        metadata: event.metadata,
+      }
+      const resolved = await resolveRecipients(event.recipients)
+      if (resolved === 'all-staff') {
+        const exclude = 'excludeUserId' in event.recipients ? event.recipients.excludeUserId : undefined
+        await notifyAllStaff(payload, exclude)
+      } else if (resolved.length > 0) {
+        await notifyUsers(resolved, payload)
+      }
+    } catch (error) {
+      logger.warn('workflow event channel failed', { type: event.type, channel: 'notify', error })
     }
-    const resolved = await resolveRecipients(event.recipients)
-    if (resolved === 'all-staff') {
-      const exclude = 'excludeUserId' in event.recipients ? event.recipients.excludeUserId : undefined
-      await notifyAllStaff(payload, exclude)
-    } else if (resolved.length > 0) {
-      await notifyUsers(resolved, payload)
-    }
-  } catch (error) {
-    logger.warn('workflow event channel failed', { type: event.type, channel: 'notify', error })
   }
 
   // 3. Activity feed (logActivity is already fire-and-forget internally).
