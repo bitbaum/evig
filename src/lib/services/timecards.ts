@@ -486,14 +486,15 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
   // Notify approvers only — the submitter just clicked the button and gets
   // inline confirmation; a self-notification is noise. Resubmits REPLACE the
   // previous "eingereicht" notifications for this card instead of stacking,
-  // so approvers see exactly one live entry per card.
+  // so approvers see exactly one live entry per card. The cleanup runs even
+  // with zero approvers (single-staff installs) so stale entries never linger.
   try {
+    await db.delete(notifications).where(and(
+      eq(notifications.relatedId, submitted.id),
+      eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
+    ))
     const approverIds = await getTimecardApproverIds(userId)
     if (approverIds.length > 0) {
-      await db.delete(notifications).where(and(
-        eq(notifications.relatedId, submitted.id),
-        eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
-      ))
       await notifyUsers(approverIds, {
         type: NOTIFICATION_TYPES.TIMECARD_SUBMITTED,
         title: 'Neue Zeitkarte eingereicht',
