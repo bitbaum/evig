@@ -42,41 +42,10 @@ export AUTH_TEST_ADMIN_EMAIL="${AUTH_TEST_ADMIN_EMAIL:-georgy.butaev@revamp-it.c
 echo "=== dual-persona inventory smoke → ${BASE_URL} ==="
 npx playwright test tests/e2e/feature-inventory.spec.ts --project=chromium --reporter=line
 
-echo "=== IT-Hilfe dual-persona journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/it-hilfe-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Marketplace checkout journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/marketplace-checkout-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Workshops registration journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/workshops-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Service repair appointment journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/service-appointment-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Workshop proposal review journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/workshop-proposal-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Timecard submit + approve journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/timecard-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== IT-Hilfe preferred technician journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/it-hilfe-preferred-technician-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Intake pipeline staff journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/intake-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Admin tasks staff journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/tasks-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Admin protocols staff journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/protocols-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Admin decisions staff journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/decisions-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== Admin CMS staff journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/cms-journey.spec.ts --project=chromium --reporter=line
-
-echo "=== HR vacancy staff journey → ${BASE_URL} ==="
-npx playwright test tests/e2e/hr-vacancy-journey.spec.ts --project=chromium --reporter=line
+# The MUTATING journey specs (it-hilfe, marketplace checkout, workshops,
+# service appointments, timecards, intake, tasks, protocols, decisions, cms,
+# hr) no longer run against production from here: they create/submit/approve
+# real rows and depend on fixture accounts/data prod doesn't have (the
+# service-appointment journey needs the user persona to BE a technician).
+# They run against the seeded ephemeral environment in CI (e2e-local job)
+# instead. Production keeps the read-only dual-persona route inventory above.
