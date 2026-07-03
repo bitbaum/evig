@@ -43,6 +43,7 @@ const mockWhere = jest.fn()
 const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockReturning = jest.fn()
+const mockNotifyUsers = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
@@ -56,6 +57,7 @@ jest.mock('@/db/schema', () => ({
     id: 'spr_id', userId: 'spr_userId', requestedSections: 'spr_sections',
     reason: 'spr_reason', status: 'spr_status',
   },
+  users: { id: 'u_id', email: 'u_email', isSuperAdmin: 'u_isSuperAdmin' },
 }))
 
 jest.mock('drizzle-orm', () => ({
@@ -73,6 +75,15 @@ jest.mock('@/config/permission-request-status', () => ({
 
 jest.mock('@/lib/permissions', () => ({
   ADMIN_SECTIONS: { dashboard: {}, products: {}, users: {} },
+  SUPER_ADMIN_EMAILS: ['admin@revamp-it.ch'],
+}))
+
+jest.mock('@/lib/services/notifications', () => ({
+  notifyUsers: (ids: string[], payload: unknown) => mockNotifyUsers(ids, payload),
+}))
+
+jest.mock('@/lib/logger', () => ({
+  logger: { warn: jest.fn(), error: jest.fn(), info: jest.fn() },
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -119,6 +130,7 @@ beforeEach(() => {
 
   mockValues.mockReturnValue({ returning: mockReturning })
   mockReturning.mockResolvedValue([{ id: 'new-req-1' }])
+  mockNotifyUsers.mockResolvedValue(undefined)
 })
 
 // ============================================================================
@@ -167,5 +179,21 @@ describe('POST /api/admin/permissions/request — success', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.data.requestId).toBe('new-req-1')
+  })
+
+  it('notifies super admins after creating the request', async () => {
+    mockWhere
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([{ id: 'admin-1' }])
+
+    const response = await POST(makeRequest({ sections: ['products'], reason: 'I need access to manage products in the store.' }))
+    expect(response.status).toBe(200)
+    expect(mockNotifyUsers).toHaveBeenCalledWith(
+      ['admin-1'],
+      expect.objectContaining({
+        type: 'permission_request_submitted',
+        title: 'Neue Berechtigungsanfrage',
+      }),
+    )
   })
 })

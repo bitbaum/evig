@@ -58,6 +58,10 @@ export const NOTIFICATION_TYPES = {
   TIMECARD_SUBMITTED: 'timecard_submitted',
   TIMECARD_REVIEWED: 'timecard_reviewed',
 
+  // Permission requests
+  PERMISSION_REQUEST_SUBMITTED: 'permission_request_submitted',
+  PERMISSION_REQUEST_REVIEWED: 'permission_request_reviewed',
+
   // HR / Careers
   JOB_APPLICATION_RECEIVED: 'job_application_received',
   JOB_APPLICATION_STATUS: 'job_application_status',

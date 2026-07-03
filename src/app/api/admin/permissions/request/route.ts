@@ -7,12 +7,15 @@
 
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { staffPermissionRequests } from '@/db/schema'
+import { staffPermissionRequests, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
-import { ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions'
+import { ADMIN_SECTIONS, SUPER_ADMIN_EMAILS, type AdminSection } from '@/lib/permissions'
+import { NOTIFICATION_TYPES } from '@/config/notifications'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { notifyUsers } from '@/lib/services/notifications'
+import { logger } from '@/lib/logger'
 
 export const POST = withAdmin(async (request, session) => {
   try {
@@ -59,6 +62,23 @@ export const POST = withAdmin(async (request, session) => {
         reason: reason.trim(),
       })
       .returning({ id: staffPermissionRequests.id })
+
+    try {
+      const admins = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(sql`${users.isSuperAdmin} = true OR lower(${users.email}) = ANY(${[...SUPER_ADMIN_EMAILS]}::text[])`)
+      const adminIds = admins.map(admin => admin.id)
+      if (adminIds.length > 0) {
+        await notifyUsers(adminIds, {
+          type: NOTIFICATION_TYPES.PERMISSION_REQUEST_SUBMITTED,
+          title: 'Neue Berechtigungsanfrage',
+          content: `${session.user.name || session.user.email || 'Ein Teammitglied'} beantragt Zugriff auf ${sections.join(', ')}.`,
+        })
+      }
+    } catch (error) {
+      logger.warn('Failed to notify super admins about permission request', { error, requestId: created.id })
+    }
 
     return apiSuccess({
       requestId: created.id,

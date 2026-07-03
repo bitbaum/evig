@@ -11,7 +11,7 @@
  *   - returns 404 when request not found
  *   - returns 400 when request already processed
  *   - returns 200 on reject
- *   - returns 200 on approve (also updates user permissions)
+ *   - returns 200 on approve (permission merge happens inside the workflow tx)
  */
 
 // ---------------------------------------------------------------------------
@@ -48,12 +48,17 @@ const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
 const mockIsSuperAdmin = jest.fn()
+const mockRunReviewTransition = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
   },
+}))
+
+jest.mock('@/lib/lifecycle/review-workflow', () => ({
+  runReviewTransition: (opts: unknown) => mockRunReviewTransition(opts),
 }))
 
 jest.mock('@/db/schema', () => ({
@@ -130,6 +135,12 @@ beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
   mockIsSuperAdmin.mockReturnValue(true)
+  mockRunReviewTransition.mockResolvedValue({
+    ok: true,
+    row: MOCK_PERM_REQUEST,
+    from: 'pending',
+    to: 'rejected',
+  })
 
   mockFrom.mockReturnValue({ where: mockWhere })
   // Default: reject path needs only permRequest select + update
@@ -168,15 +179,18 @@ describe('POST /api/admin/permissions/requests/[id] — validation', () => {
   })
 
   it('returns 404 when request not found', async () => {
-    mockWhere.mockReset()
-    mockWhere.mockResolvedValueOnce([])
+    mockRunReviewTransition.mockResolvedValueOnce({ ok: false, code: 'not_found' })
     const response = await POST(makeRequest(), makeContext())
     expect(response.status).toBe(404)
   })
 
   it('returns 400 when request already processed', async () => {
-    mockWhere.mockReset()
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_PERM_REQUEST, status: 'approved' }])
+    mockRunReviewTransition.mockResolvedValueOnce({
+      ok: false,
+      code: 'invalid_transition',
+      reason: 'wrong_state',
+      from: 'approved',
+    })
     const response = await POST(makeRequest(), makeContext())
     expect(response.status).toBe(400)
   })
@@ -191,11 +205,36 @@ describe('POST /api/admin/permissions/requests/[id] — success', () => {
   })
 
   it('returns 200 on approve and updates user permissions', async () => {
+    mockRunReviewTransition.mockResolvedValueOnce({
+      ok: true,
+      row: MOCK_PERM_REQUEST,
+      from: 'pending',
+      to: 'approved',
+    })
     const response = await POST(makeRequest({ action: 'approve' }), makeContext())
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.data.message).toContain('genehmigt')
-    // Two updates: one for the request, one for the user
-    expect(mockUpdate).toHaveBeenCalledTimes(2)
+    const opts = mockRunReviewTransition.mock.calls[0][0]
+    expect(opts.action).toBe('approve')
+    expect(opts.guards.map((guard: { code: string }) => guard.code)).toEqual(['super_admin_only'])
+    const tx = { execute: jest.fn().mockResolvedValue(undefined) }
+    await opts.applyInTxn(tx, { user_id: 'user-1', requested_sections: ['products'] }, { action: 'approve' })
+    expect(tx.execute).toHaveBeenCalledTimes(1)
+  })
+
+  it('emits a requester notification after review', async () => {
+    await POST(makeRequest({ action: 'reject', notes: 'Nicht jetzt' }), makeContext())
+    const opts = mockRunReviewTransition.mock.calls[0][0]
+    const event = opts.emit(
+      { user_id: 'user-1', requested_sections: ['products', 'users'] },
+      { action: 'reject' },
+    )
+    expect(event).toEqual(expect.objectContaining({
+      type: 'permission_request_reviewed',
+      recipients: { userId: 'user-1' },
+      title: 'Berechtigungsanfrage abgelehnt',
+    }))
+    expect(event.content).toContain('Nicht jetzt')
   })
 })
