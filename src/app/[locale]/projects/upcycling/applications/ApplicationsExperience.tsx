@@ -51,6 +51,13 @@ export type ApplicationsMessages = {
     noPhotoBadge: string
     items: Record<string, InstallItemMessages>
   }
+  szenarien: {
+    eyebrow: string
+    title: string
+    intro: string
+    badge: string
+    items: Record<string, string>
+  }
   spectrum: { label: string; functional: string; decor: string }
   tiers: {
     functional: RawApplication
@@ -119,7 +126,67 @@ export function ApplicationsExperience({ messages: m }: { messages: Applications
       ))}
 
       <InstallationsSection installs={m.installs} />
+
+      <SzenarienSection szenarien={m.szenarien} />
     </article>
+  )
+}
+
+/* ─── SzenarienSection ───────────────────────────────────────────────
+ * "So könnte es aussehen" — Szenarien-Kompositionen. These are
+ * VISUALISIERUNGEN, not photographs; every card carries an explicit
+ * "Visualisierung" badge and the intro says so, keeping the honest
+ * photographed-vs-imagined split the installs section established.
+ * Structure (scene ids + order) lives here; captions come from messages
+ * keyed by scene id (i18n SSOT: messages = strings only).
+ */
+const SZENARIEN_SCENES = [
+  { id: 'schaufenster', src: UPCYCLING_ASSETS.szenarien.schaufenster },
+  { id: 'garage', src: UPCYCLING_ASSETS.szenarien.garage },
+  { id: 'party', src: UPCYCLING_ASSETS.szenarien.party },
+  { id: 'treppenhaus', src: UPCYCLING_ASSETS.szenarien.treppenhaus },
+  { id: 'vorlesung', src: UPCYCLING_ASSETS.szenarien.vorlesung },
+  { id: 'buero', src: UPCYCLING_ASSETS.szenarien.buero },
+] as const
+
+function SzenarienSection({ szenarien }: { szenarien: ApplicationsMessages['szenarien'] }) {
+  return (
+    <section className="border-t border-subtle bg-canvas py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <p className="ui-public-eyebrow">{szenarien.eyebrow}</p>
+        <h2 className="ui-public-display-md mt-3">{szenarien.title}</h2>
+        <p className="ui-public-section-lede mt-4 max-w-3xl">{szenarien.intro}</p>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {SZENARIEN_SCENES.map((scene) => {
+            const caption = szenarien.items[scene.id]
+            if (!caption) return null
+            return (
+              <figure
+                key={scene.id}
+                className="overflow-hidden rounded-xl border border-subtle bg-surface-base"
+              >
+                <div className="relative aspect-[4/3] bg-surface-raised">
+                  <Image
+                    src={scene.src}
+                    alt={`${szenarien.badge} — ${caption}`}
+                    fill
+                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute left-3 top-3 rounded-md bg-black/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-white">
+                    {szenarien.badge}
+                  </span>
+                </div>
+                <figcaption className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
+                  {caption}
+                </figcaption>
+              </figure>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }
 

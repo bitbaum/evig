@@ -37,7 +37,11 @@ export const UPCYCLING_INSTALLATIONS: UpcyclingInstallation[] = [
       UPCYCLING_ASSETS.installs.ladenDecke1,
     ],
   },
-  { id: 'werkraum4' },
+  {
+    id: 'werkraum4',
+    image: UPCYCLING_ASSETS.installs.werkraum4Decke1,
+    extraImages: [UPCYCLING_ASSETS.installs.werkraum4Decke2],
+  },
   { id: 'recreazzz' },
   { id: 'ambossrampe' },
 ]

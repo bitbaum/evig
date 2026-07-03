@@ -5715,6 +5715,20 @@
               "story": "Die Installation bestätigt Lager als sinnvollen Einsatzort: Die seit rund einem Jahr installierten Leuchten funktionieren einwandfrei."
             }
           }
+        },
+        "szenarien": {
+          "eyebrow": "SZENARIEN",
+          "title": "So könnte es aussehen",
+          "intro": "Keine Fotos, sondern Kompositionen: Diese Visualisierungen zeigen, wie die Leuchten in typischen Räumen wirken könnten. Was wirklich hängt und täglich brennt, steht oben unter «Im Einsatz».",
+          "badge": "Visualisierung",
+          "items": {
+            "schaufenster": "Schaufenster · Detailhandel",
+            "garage": "Tiefgarage · Dauerbetrieb",
+            "party": "Fest & Anlass · Stimmungslicht",
+            "treppenhaus": "Treppenhaus · Mehrfamilienhaus",
+            "vorlesung": "Hörsaal · Bildungsräume",
+            "buero": "Büro · Arbeitsplatz"
+          }
         }
       },
       "gallery": {
@@ -5788,6 +5802,19 @@
           "mount": {
             "alt": "3D-CAD-Ansicht der druckbaren Deckenhalterung mit Wabenstruktur",
             "caption": "3D-druckbare Deckenhalterung — das CAD-Modell ist offen verfügbar."
+          }
+        },
+        "teaching": {
+          "eyebrow": "WISSEN TEILEN",
+          "title": "Aus den Anleitungen wird Unterricht",
+          "body": "Im interdisziplinären Bachelor-Modul «Local Loops — Circularity locally made» der Hochschule Luzern entwarfen und prototypisierten 14 Studierende eigene Leuchten aus unseren ausgemusterten Monitoren. Genau dafür sind die offenen Anleitungen da: Wir teilen unser Wissen, damit überall gebaut werden kann — in Werkstätten, Vereinen und Hörsälen.",
+          "workshop": {
+            "alt": "HSLU-Studierende entwerfen im Modul «Local Loops» eigene Leuchten aus ausgemusterten Monitoren",
+            "caption": "HSLU-Modul «Local Loops»: 14 Studierende entwickeln eigene Leuchten-Entwürfe aus unseren Monitoren."
+          },
+          "kreativ": {
+            "alt": "Kreativer Leuchten-Prototyp mit Textilschirm, gebaut von HSLU-Studierenden",
+            "caption": "Studentischer Prototyp: Leuchte mit Textilschirm auf Basis einer Monitor-Lichtfläche."
           }
         },
         "source": {

@@ -140,6 +140,14 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
 .statement h1 { font-size: clamp(2.6rem,7.5vmin,6.2rem); }
 .facts { max-width: 62rem; }
 .facts li { font-size: clamp(1.1rem,2.3vmin,1.75rem); margin-bottom: 1em; }
+
+.link { color: var(--text); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--green); text-decoration-thickness: 1.5px; }
+.link:hover { color: var(--green); }
+.uc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(.8rem, 2vmin, 1.4rem); }
+.uc-grid figure { height: clamp(150px, 32vmin, 340px); }
+body.exporting .slide, body.exporting .slide * { animation: none !important; transition: none !important; }
+body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, body.exporting .toolbar, body.exporting .dots, body.exporting .notes-panel { display: none !important; }
+@media (max-width:760px){ .uc-grid { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -293,6 +301,20 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
     </div>
   </div>
 
+  
+  <!-- 09b · USE-CASES (Visualisierungen) -->
+  <div class="slide" data-notes="Wo überall Licht entstehen kann — vier Visualisierungen aus unserer Szenarien-Arbeit, klar als solche gekennzeichnet: Schaufenster, Parkgarage, Club und Treppenhaus. Die ZHAW-Akzeptanzumfrage bestätigt genau diese Richtung: Korridor, Treppenhaus, Werkstatt und Labor gelten als geeignet bis sehr geeignet. Grosse Flächen, lange Brenndauern, funktionales Licht — überall dort spielt die Monitorleuchte ihre Stärken aus. Und jeder dieser Orte ist heute mit neu produzierten Panels beleuchtet.">
+    <p class="eyebrow">Einsatzorte · Visualisierungen</p>
+    <h2>Überall, wo <span class="accent">Licht</span> gebraucht wird.</h2>
+    <div class="uc-grid">
+      <figure><img src="/projects/upcycling/szenarien/schaufenster.jpg" alt="Visualisierung: Monitorleuchte im Schaufenster"><figcaption>Schaufenster</figcaption></figure>
+      <figure><img src="/projects/upcycling/szenarien/garage.jpg" alt="Visualisierung: Monitorleuchten in der Parkgarage"><figcaption>Parkgarage</figcaption></figure>
+      <figure><img src="/projects/upcycling/szenarien/party.jpg" alt="Visualisierung: Monitorleuchten im Club"><figcaption>Club / Bar</figcaption></figure>
+      <figure><img src="/projects/upcycling/szenarien/treppenhaus.jpg" alt="Visualisierung: Monitorleuchte im Treppenhaus"><figcaption>Treppenhaus</figcaption></figure>
+    </div>
+    <p class="sources">Visualisierungen · ZHAW-Umfrage: Korridor, Treppenhaus, Werkstatt, Labor «geeignet bis sehr geeignet» (Zwischenstand 28.05.2026)</p>
+  </div>
+
   <!-- 10 · WISSENSCHAFT (ZHAW-Resultate) -->
   <div class="slide" data-notes="Der wissenschaftliche Kern — und die stärkste Folie des Abends. Die ZHAW, Institut für Nachhaltige Entwicklung an der School of Engineering — Corinna Baumgartner und Mirjam Grünholz — erstellt die komparative Ökobilanz nach ISO 14040/44: cradle-to-grave, funktionelle Einheit ist die abgegebene Lichtmenge über die Zeit, in Megalumen-Stunden. Verglichen wird unsere Monitorleuchte mit einer herkömmlichen LED-Leuchte. Die vorläufigen Resultate, Zwischenstand 28. Mai 2026: 82.7 Prozent weniger Treibhausgasemissionen im Durchschnittsszenario. Nach der Methode der ökologischen Knappheit — der Schweizer Methode über alle Umweltwirkungen — 84.8 Prozent weniger. Und über sämtliche Lebensdauer-Szenarien hinweg bleibt die Reduktion zwischen 52 und 86 Prozent. Das Fazit der ZHAW wörtlich: 'Unter aktueller Modellierung ist die Monitorleuchte in jedem Fall besser als die LED-Leuchte.' Wichtig für die Glaubwürdigkeit: vorläufige Zahlen, der finale Bericht folgt — aber die Richtung ist über alle Szenarien eindeutig. Dazu die CE-Frage, geklärt durch das Gutachten der Barologic GmbH.">
     <p class="eyebrow">Wissenschaft · ZHAW-Ökobilanz (ISO 14040/44) · vorläufig, Stand 28.05.2026</p>
@@ -328,15 +350,17 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
     <p class="sources">ZHAW Akzeptanzumfrage + Preisvergleich, Zwischenstand 28.05.2026 · Lumen-Messung: 8 Messpunkte, Ø 4'785 Lux × 0.2016 m² · Lebensdauer-Annahme 50'000 h</p>
   </div>
 
-  <!-- 11 · OPEN SOURCE (Fakten) -->
-  <div class="slide" data-notes="Warum wir alles offenlegen — als Non-Profit ist Offenheit unsere Skalierungsstrategie: Wir konkurrieren nicht über Geheimhaltung, wir gewinnen über Verbreitung. Zwei Plattformen: Das Team-Wiki monitor-upcycling.org trägt die Umbau-Anleitungen pro Monitor-Modell plus Sicherheitshinweise, unter CC-BY-SA — Namensnennung, Weitergabe unter gleichen Bedingungen, Nutzung auch kommerziell frei. Elektroniker*innen weltweit können eigene Modelle dokumentieren. Die Minisite bündelt das Strategische: Businessplan, Wirkung mit Quellen, Galerie der Installationen, Projektstatus und die Selbstbau-Guides — der Plattform-Code steht unter MIT. Der Kernsatz für Swico: Jede Werkstatt, die unsere Anleitungen nutzt, vergrössert die Wirkung dieses Projekts.">
-    <p class="eyebrow">Open-Source-Hardware</p>
-    <h2>Hardware so offen<br>wie <span class="accent">Software</span>.</h2>
-    <ul class="facts">
-      <li><strong>monitor-upcycling.org</strong> — das offene Umbau-Wiki: Anleitungen pro Modell + Sicherheitshinweise · <strong>CC-BY-SA</strong>, auch kommerziell frei · weltweit erweiterbar</li>
-      <li><strong>revampit.orangecat.ch/de/projects/upcycling</strong> — Businessplan · Wirkung mit Quellen · Galerie · Status · Selbstbau-Guides · Code unter <strong>MIT</strong></li>
-      <li>Jede Werkstatt, die die Anleitungen nutzt, <strong>vergrössert die Wirkung</strong></li>
-    </ul>
+  <!-- 11 · WISSEN TEILEN (full-bleed) -->
+  <div class="slide slide--bleed statement" data-notes="Der Kern unserer Haltung — und warum eine Non-Profit hier sitzt: Wir teilen unser Wissen, statt es zu verkaufen. Alle Umbau-Anleitungen sind öffentlich — im Team-Wiki monitor-upcycling.org unter Creative Commons, auch kommerziell frei nutzbar, und auf unserer Projekt-Plattform mit Businessplan, Wirkungsdaten und Selbstbau-Guides. Das heisst konkret: Jede Person, jede Werkstatt, jedes Unternehmen — überall auf der Welt — kann diese Leuchten nachbauen oder in Serie fertigen. Genau das wollen wir. Denn für uns zählt vermiedener Abfall, nicht Verkauf und Gewinn. Das Foto: Studierende der HSLU im Modul 'Local Loops — Circularity locally made' beim Entwerfen eigener Leuchten aus unseren Monitoren — 14 Studierende, interdisziplinär. Wissen, das sich vermehrt, wenn man es teilt." data-no-watermark>
+    <img class="bleed-img" style="object-position:50% 60%" src="/projects/upcycling/installs/hslu-workshop-1.jpg" alt="HSLU-Studierende entwerfen Leuchten aus Monitoren">
+    <div class="bleed-scrim"></div>
+    <div class="bleed-content">
+      <p class="eyebrow">Open-Source-Hardware · Non-Profit</p>
+      <h1>Wissen teilen<br>statt <span class="accent">verkaufen</span>.</h1>
+      <hr class="hairline" style="max-width:8rem">
+      <p class="subtitle">Alle Anleitungen öffentlich: <a class="link" href="https://monitor-upcycling.org" target="_blank" rel="noopener noreferrer">monitor-upcycling.org</a> (CC-BY-SA) und <a class="link" href="https://revampit.orangecat.ch/de/projects/upcycling" target="_blank" rel="noopener noreferrer">unsere Projekt-Plattform</a>. Jede Person, überall, kann bauen — oder in Serie fertigen. Uns zählt vermiedener Abfall, nicht Gewinn.</p>
+      <span class="bleed-fact">Foto: HSLU-Modul «Local Loops — Circularity locally made» · 14 Studierende</span>
+    </div>
   </div>
 
   <!-- 12 · SKALIERUNG (Fakten) -->
@@ -360,7 +384,7 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
       <p class="eyebrow">Danke</p>
       <h1>Merci, <span class="accent">Swico</span>.</h1>
       <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">revampit.orangecat.ch/de/projects/upcycling<br>monitor-upcycling.org<br>empfang@revamp-it.ch · 043 960 32 64</p>
+      <p class="subtitle"><a class="link" href="https://revampit.orangecat.ch/de/projects/upcycling" target="_blank" rel="noopener noreferrer">revampit.orangecat.ch/de/projects/upcycling</a><br><a class="link" href="https://monitor-upcycling.org" target="_blank" rel="noopener noreferrer">monitor-upcycling.org</a><br><a class="link" href="mailto:empfang@revamp-it.ch">empfang@revamp-it.ch</a> · 043 960 32 64</p>
     </div>
   </div>
 
@@ -951,6 +975,102 @@ figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9
   });
   slides.forEach(function (sl) { mo.observe(sl, { attributes: true, attributeFilter: ['class'] }); });
   syncDots();
+})();
+</script>
+<script>
+/* WYSIWYG-Export: PDF und PPTX entstehen aus Pixel-Snapshots der echten
+   Folien (html2canvas) — identisches Design statt Text-Rekonstruktion. */
+(function () {
+  var W = 1600, H = 900;
+  function loadScript(src) {
+    return new Promise(function (res, rej) {
+      var sc = document.createElement('script');
+      sc.src = src; sc.onload = res; sc.onerror = rej;
+      document.head.appendChild(sc);
+    });
+  }
+  function ensureH2C() {
+    return window.html2canvas ? Promise.resolve() :
+      loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
+  }
+  function ensureJsPDF() {
+    return (window.jspdf && window.jspdf.jsPDF) ? Promise.resolve() :
+      loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
+  }
+  function ensurePptx() {
+    return window.PptxGenJS ? Promise.resolve() :
+      loadScript('/presentations/_assets/pptxgen.bundle.js').catch(function () {
+        return loadScript('https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js');
+      });
+  }
+  async function snapshotAll(progressCb) {
+    var deck = document.getElementById('deck');
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var prevActive = document.querySelector('.slide.active');
+    document.body.classList.add('exporting');
+    var prevStyle = deck.getAttribute('style') || '';
+    deck.setAttribute('style', 'position:fixed;left:0;top:0;width:' + W + 'px;height:' + H + 'px;overflow:hidden;z-index:1;');
+    var shots = [];
+    for (var i = 0; i < slides.length; i++) {
+      slides.forEach(function (sl) { sl.classList.remove('active'); });
+      slides[i].classList.add('active');
+      await new Promise(function (r) { setTimeout(r, 60); });
+      await Promise.all(Array.prototype.map.call(slides[i].querySelectorAll('img'), function (im) {
+        return (im.complete ? Promise.resolve() : new Promise(function (r) { im.onload = im.onerror = r; }));
+      }));
+      var canvas = await window.html2canvas(slides[i], {
+        width: W, height: H, scale: 1.2, useCORS: true, backgroundColor: '#0a0a0a', logging: false
+      });
+      shots.push({ data: canvas.toDataURL('image/jpeg', 0.92), notes: slides[i].getAttribute('data-notes') || '' });
+      if (progressCb) progressCb(i + 1, slides.length);
+    }
+    deck.setAttribute('style', prevStyle);
+    slides.forEach(function (sl) { sl.classList.remove('active'); });
+    (prevActive || slides[0]).classList.add('active');
+    document.body.classList.remove('exporting');
+    return shots;
+  }
+  function busy(btn, label) { btn.dataset.orig = btn.textContent; btn.textContent = label; btn.disabled = true; }
+  function done(btn) { btn.textContent = btn.dataset.orig; btn.disabled = false; }
+  function swapHandler(id, fn) {
+    var old = document.getElementById(id);
+    if (!old) return;
+    var neu = old.cloneNode(true);
+    old.parentNode.replaceChild(neu, old);
+    neu.addEventListener('click', function (e) { e.preventDefault(); fn(neu); });
+  }
+  swapHandler('btn-print', async function (btn) {
+    try {
+      busy(btn, '0%');
+      await ensureH2C(); await ensureJsPDF();
+      var shots = await snapshotAll(function (i, n) { btn.textContent = Math.round(i / n * 100) + '%'; });
+      var pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [W, H], compress: true });
+      shots.forEach(function (sh, i) {
+        if (i > 0) pdf.addPage([W, H], 'landscape');
+        pdf.addImage(sh.data, 'JPEG', 0, 0, W, H);
+      });
+      pdf.save('Monitor-Upcycling-Swico.pdf');
+    } catch (err) { alert('PDF-Export fehlgeschlagen: ' + err); }
+    done(btn);
+  });
+  swapHandler('btn-pptx', async function (btn) {
+    try {
+      busy(btn, '0%');
+      await ensureH2C(); await ensurePptx();
+      var shots = await snapshotAll(function (i, n) { btn.textContent = Math.round(i / n * 100) + '%'; });
+      var pptx = new window.PptxGenJS();
+      pptx.defineLayout({ name: 'W16x9', width: 13.33, height: 7.5 });
+      pptx.layout = 'W16x9';
+      shots.forEach(function (sh) {
+        var slide = pptx.addSlide();
+        slide.background = { color: '0a0a0a' };
+        slide.addImage({ data: sh.data, x: 0, y: 0, w: 13.33, h: 7.5 });
+        if (sh.notes) slide.addNotes(sh.notes);
+      });
+      pptx.writeFile({ fileName: 'Monitor-Upcycling-Swico.pptx' });
+    } catch (err) { alert('PPTX-Export fehlgeschlagen: ' + err); }
+    done(btn);
+  });
 })();
 </script>
 </body>

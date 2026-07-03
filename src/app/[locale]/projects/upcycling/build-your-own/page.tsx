@@ -53,6 +53,13 @@ type PageMessages = {
     standby: { alt: string; caption: string }
     mount: { alt: string; caption: string }
   }
+  teaching: {
+    eyebrow: string
+    title: string
+    body: string
+    workshop: { alt: string; caption: string }
+    kreativ: { alt: string; caption: string }
+  }
   source: {
     title: string
     body: string
@@ -233,6 +240,50 @@ export default async function UpcyclingBuildYourOwnPage() {
               </div>
               <figcaption className="border-t border-subtle px-4 py-3 text-sm leading-relaxed text-text-secondary">
                 {m.artifacts.mount.caption}
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      {/* Teaching — the open guides in the classroom. HSLU Bachelor module
+          «Local Loops — Circularity locally made»: 14 students designed and
+          prototyped their own lamps from our retired monitors (Nextcloud:
+          hslu.txt). Knowledge-sharing proof for the philosophy section above. */}
+      <section className="border-t border-subtle bg-surface-base">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <div className="ui-public-eyebrow">{m.teaching.eyebrow}</div>
+          <h2 className="ui-public-display-md mt-3">{m.teaching.title}</h2>
+          <p className="ui-public-section-lede mt-4 max-w-3xl">{m.teaching.body}</p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            <figure className="overflow-hidden rounded-lg border border-subtle bg-surface-raised">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={UPCYCLING_ASSETS.installs.hsluWorkshop1}
+                  alt={m.teaching.workshop.alt}
+                  fill
+                  sizes="(min-width: 640px) 45vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="border-t border-subtle px-4 py-3 text-sm leading-relaxed text-text-secondary">
+                {m.teaching.workshop.caption}
+              </figcaption>
+            </figure>
+
+            <figure className="overflow-hidden rounded-lg border border-subtle bg-surface-raised">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={UPCYCLING_ASSETS.installs.hsluKreativ1}
+                  alt={m.teaching.kreativ.alt}
+                  fill
+                  sizes="(min-width: 640px) 45vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="border-t border-subtle px-4 py-3 text-sm leading-relaxed text-text-secondary">
+                {m.teaching.kreativ.caption}
               </figcaption>
             </figure>
           </div>

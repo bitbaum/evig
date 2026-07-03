@@ -10,6 +10,7 @@ import { UPCYCLING_BASE, UPCYCLING_GALLERY_ASSET_BASE } from '@/config/upcycling
 const BUSINESSPLAN = `${UPCYCLING_BASE}/businessplan` as const
 const LENOVO = `${UPCYCLING_BASE}/lenovo-l2251pwd` as const
 const INSTALLS = `${UPCYCLING_BASE}/installs` as const
+const SZENARIEN = `${UPCYCLING_BASE}/szenarien` as const
 
 /** Real installation + engineering photography (Juli 2026) — see upcycling-installations.ts */
 const INSTALL_ASSETS = {
@@ -30,10 +31,36 @@ const INSTALL_ASSETS = {
   werkstattElektronik: `${INSTALLS}/werkstatt-elektronik.jpg`,
   /** Neuware-Vergleich: 24-W-LED-Panel im Laden, CHF 79.95. */
   ledPanelVergleich: `${INSTALLS}/led-panel-vergleich.jpg`,
+  /** Werkraum4 — Deckenleuchten, ~20 Stück seit einem Jahr täglich im Einsatz. */
+  werkraum4Decke1: `${INSTALLS}/werkraum4-1.jpg`,
+  werkraum4Decke2: `${INSTALLS}/werkraum4-2.jpg`,
+  /** HSLU-Modul «Local Loops»: Studierende entwerfen eigene Leuchten-Builds. */
+  hsluWorkshop1: `${INSTALLS}/hslu-workshop-1.jpg`,
+  /** Kreativ-Prototyp mit Textilschirm, gebaut von HSLU-Studierenden. */
+  hsluKreativ1: `${INSTALLS}/hslu-kreativ-1.jpg`,
+  /** Kreativ-Leuchte aus der Werkstatt. */
+  kreativLeuchte1: `${INSTALLS}/kreativ-leuchte-1.jpg`,
+} as const
+
+/**
+ * Szenarien-Kompositionen — VISUALISIERUNGEN, keine echten Fotos.
+ * Überall, wo diese Bilder erscheinen, MÜSSEN sie als «Visualisierung»
+ * gekennzeichnet sein (Ehrlichkeits-Disziplin des Mini-Site-Audits).
+ */
+const SZENARIEN_ASSETS = {
+  schaufenster: `${SZENARIEN}/schaufenster.jpg`,
+  garage: `${SZENARIEN}/garage.jpg`,
+  party: `${SZENARIEN}/party.jpg`,
+  treppenhaus: `${SZENARIEN}/treppenhaus.jpg`,
+  vorlesung: `${SZENARIEN}/vorlesung.jpg`,
+  buero: `${SZENARIEN}/buero.jpg`,
+  korridor: `${SZENARIEN}/korridor.jpg`,
+  werkstatt: `${SZENARIEN}/werkstatt.jpg`,
 } as const
 
 export const UPCYCLING_ASSETS = {
   installs: INSTALL_ASSETS,
+  szenarien: SZENARIEN_ASSETS,
   gallery: {
     lenovoPoster: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished-poster.jpg`,
     lenovoVideo: `${UPCYCLING_GALLERY_ASSET_BASE}/lenovo-l2251pwd-finished.mp4`,
