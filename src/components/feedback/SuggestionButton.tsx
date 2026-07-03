@@ -326,7 +326,7 @@ export default function SuggestionButton() {
 
   // Floating Button (collapsed state)
   return (
-    <div className="fixed z-40 sm:right-4 sm:top-1/2 sm:-translate-y-1/2 left-4 bottom-4">
+    <div className="fixed z-40 left-4 bottom-4 sm:left-auto sm:bottom-auto sm:right-4 sm:top-1/2 sm:-translate-y-1/2">
       <Button
         variant="primary"
         size="icon"

@@ -32,6 +32,7 @@ body { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
   .slide.active .facts li:nth-child(3), .slide.active .card:nth-child(3), .slide.active .stat:nth-child(3) { animation-delay: .32s; }
   .slide.active .facts li:nth-child(4), .slide.active .stat:nth-child(4) { animation-delay: .40s; }
   .slide.active .facts li:nth-child(5) { animation-delay: .48s; }
+  .slide.active .facts li:nth-child(6) { animation-delay: .56s; }
   .slide.active .bleed-fact { animation-delay: .3s; }
   .slide.active .sources { animation-delay: .5s; }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -257,6 +258,7 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
       <li><strong>Anleitung pro Monitor-Typ</strong> — Umbau ohne Spezialausrüstung, werkstatt-tauglich</li>
       <li><strong>Kleinserien erprobt</strong> bei Werkraum4 · Schwerpunkt Dell &amp; HP</li>
       <li><strong>Montage gelöst</strong>: VESA MIS-D · Wandbeschläge · 3D-Deckenhalterung · Leisten für Reihen</li>
+      <li><strong>Keine Blend- oder Stroboskopeffekte</strong> — gleichmässiges Licht, wenig Schattenwurf</li>
       <li>Ehrlich dokumentiert: <strong>EIZO-Serie gestoppt</strong> (Standby-Rückfall) — wird nachuntersucht</li>
     </ul>
     <p class="sources">Abschlussbericht Abschnitte B + C · Anleitungen: monitor-upcycling.org + revampit.orangecat.ch/de/projects/upcycling</p>
@@ -275,7 +277,7 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
   </div>
 
   <!-- 08 · TRAKTION (Fakten/Stats) -->
-  <div class="slide" data-notes="Die Zahlen nach einem Jahr Feldbetrieb — gemessen, nicht versprochen: Fünf reale Standorte. Werkraum4 ist der Härtetest der Stückzahl: rund 20 Leuchten, ein Jahr täglicher Einsatz — genau EIN Ausfall. Ein Netzteil, durch einfachen Austausch repariert; die LED-Backlights selbst: null Probleme. RecreaZZZ in der ehemaligen Zentralwäscherei ist der Schalt-Härtetest: bei jedem WC-Besuch ein und aus, seit über einem Jahr störungsfrei, Feedback per Strichliste überwiegend positiv. Dazu der RepairHub, das Lager AmbossRampe und unser Laden.">
+  <div class="slide" data-notes="Die Zahlen nach einem Jahr Feldbetrieb — gemessen, nicht versprochen: Fünf reale Standorte. Werkraum4 ist der Härtetest der Stückzahl: rund 20 Leuchten, ein Jahr täglicher Einsatz — genau EIN Ausfall. Ein Netzteil, durch einfachen Austausch repariert; die LED-Backlights selbst: null Probleme. RecreaZZZ in der ehemaligen Zentralwäscherei ist der Schalt-Härtetest: bei jedem WC-Besuch ein und aus, seit über einem Jahr störungsfrei, Feedback per Strichliste überwiegend positiv. Dazu der RepairHub, das Lager AmbossRampe und unser Laden. Ehrlich gesagt — und so steht es auch in der Team-Präsentation: Die Standortsuche war schwieriger als erwartet. Umso mehr zählt, dass diese fünf Installationen seit einem Jahr real laufen.">
     <p class="eyebrow">Traktion · gemessen, nicht versprochen</p>
     <h2>Ein Jahr <span class="accent">Feldbetrieb</span>.</h2>
     <div class="stats">
@@ -303,7 +305,7 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
 
   
   <!-- 09b · USE-CASES (Visualisierungen) -->
-  <div class="slide" data-notes="Wo überall Licht entstehen kann — vier Visualisierungen aus unserer Szenarien-Arbeit, klar als solche gekennzeichnet: Schaufenster, Parkgarage, Club und Treppenhaus. Die ZHAW-Akzeptanzumfrage bestätigt genau diese Richtung: Korridor, Treppenhaus, Werkstatt und Labor gelten als geeignet bis sehr geeignet. Grosse Flächen, lange Brenndauern, funktionales Licht — überall dort spielt die Monitorleuchte ihre Stärken aus. Und jeder dieser Orte ist heute mit neu produzierten Panels beleuchtet.">
+  <div class="slide" data-notes="Wo überall Licht entstehen kann — vier Visualisierungen aus unserer Szenarien-Arbeit, klar als solche gekennzeichnet: Schaufenster, Parkgarage, Club und Treppenhaus. Die ZHAW-Akzeptanzumfrage bestätigt genau diese Richtung: Korridor, Treppenhaus, Werkstatt und Labor gelten als geeignet bis sehr geeignet. Grosse Flächen, lange Brenndauern, funktionales Licht — überall dort spielt die Monitorleuchte ihre Stärken aus. Und jeder dieser Orte ist heute mit neu produzierten Panels beleuchtet. Über Leuchten hinaus: Leuchttische und Lightboards, Leuchtrahmen für Werbung, künstlerische Installationen, beleuchtete Bilderrahmen — die standardisierten Montagelöcher eröffnen zusätzliches Potenzial.">
     <p class="eyebrow">Einsatzorte · Visualisierungen</p>
     <h2>Überall, wo <span class="accent">Licht</span> gebraucht wird.</h2>
     <div class="uc-grid">
@@ -312,7 +314,7 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
       <figure><img src="/projects/upcycling/szenarien/party.jpg" alt="Visualisierung: Monitorleuchten im Club"><figcaption>Club / Bar</figcaption></figure>
       <figure><img src="/projects/upcycling/szenarien/treppenhaus.jpg" alt="Visualisierung: Monitorleuchte im Treppenhaus"><figcaption>Treppenhaus</figcaption></figure>
     </div>
-    <p class="sources">Visualisierungen · ZHAW-Umfrage: Korridor, Treppenhaus, Werkstatt, Labor «geeignet bis sehr geeignet» (Zwischenstand 28.05.2026)</p>
+    <p class="sources">Visualisierungen · ZHAW-Umfrage: Korridor, Treppenhaus, Werkstatt, Labor «geeignet bis sehr geeignet» · Mehr als Leuchten: Leuchttische, Leuchtrahmen für Werbung, künstlerische Installationen, beleuchtete Bilderrahmen</p>
   </div>
 
   <!-- 10 · WISSENSCHAFT (ZHAW-Resultate) -->
@@ -322,7 +324,7 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
     <div class="stats" style="grid-template-columns:repeat(3,1fr)">
       <div class="stat"><div class="n"><em>−82.7%</em></div><div class="l">Treibhausgase · Durchschnittsszenario</div></div>
       <div class="stat"><div class="n"><em>−84.8%</em></div><div class="l">Gesamt-Umweltwirkung · ökol. Knappheit</div></div>
-      <div class="stat"><div class="n">52–86%</div><div class="l">Reduktion über alle Szenarien</div></div>
+      <div class="stat"><div class="n">52–86%</div><div class="l">THG-Reduktion · alle Szenarien (ökol. Knappheit: 78.5–85%)</div></div>
     </div>
     <hr class="hairline">
     <ul class="facts">
@@ -364,16 +366,16 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
   </div>
 
   <!-- 12 · SKALIERUNG (Fakten) -->
-  <div class="slide" data-notes="Vom Pilot zur Stückzahl — vier Spuren: Erstens die Abnehmerseite: Liegenschaftsverwaltungen, Firmen und Verwaltungen mit eigenen Gebäuden, Leuchten-Handel — die Nachfrage nach Wand- und Deckenleuchten bei Um- und Neubauten ist strukturell da. Zweitens die Produktionsseite: weitere Betriebe mit geschützten Arbeitsplätzen — der Umbau schafft dort sinnvolle, skalierbare Arbeit. Drittens der grösste Hebel, in Absprache mit Swico Recycling: die Abklärung mit ERZ Stadt Zürich, um Monitore aus dem städtischen Entsorgungsstrom in grossem Umfang umzunutzen. Viertens die nächsten Piloten: Baubüro in situ hat grosses Interesse, Offcut Zürich setzt demnächst um, die ZHAW-Installation folgt nach der CE-Abklärung.">
-    <p class="eyebrow">Nächste Schritte</p>
+  <div class="slide" data-notes="Der Ausblick — bewusst entlang der drei Achsen des Swico Innovationsfonds formuliert: effizienter, umweltfreundlicher, rentabler. Effizienter: Monitore, deren Backlight funktioniert, werden VOR dem Schreddern abgezweigt — in Absprache mit Swico Recycling klären wir mit ERZ Stadt Zürich die Umnutzung aus dem städtischen Entsorgungsstrom; das ist der Hebel für Stückzahlen. Umweltfreundlicher: Die ZHAW-Zahlen — 52 bis 86 Prozent weniger Treibhausgase — werden mit dem finalen Bericht abgeschlossen; dazu Energiemessungen weiterer Modelle. Rentabler: Die Zahlungsbereitschaft von durchschnittlich 80 Franken über den Fertigungskosten in geschützten Werkstätten plus 2.5 bis 5 Franken pro Quadratdezimeter gegenüber 4.90 bis 11.20 bei Neuware — Absatz- und Verkaufsabklärungen laufen. Und als Verstärker: weitere Prototypen, weitere Testinstallationen, und jede neue Anleitung wird auf monitor-upcycling.org veröffentlicht — Skalierung durch Offenheit, im Ökosystem von Swico.">
+    <p class="eyebrow">Ausblick · effizienter — umweltfreundlicher — rentabler</p>
     <h2>Vom Pilot zur <span class="accent">Stückzahl</span>.</h2>
     <ul class="facts">
-      <li><strong>Abnehmer</strong>: Liegenschaftsverwaltungen · Firmen/Verwaltungen mit eigenen Gebäuden · Leuchten-Handel</li>
-      <li><strong>Produktion</strong>: weitere geschützte Werkstätten — sinnvolle Arbeit, leicht skalierbar</li>
-      <li><strong>Mit Swico Recycling</strong>: Abklärung ERZ Stadt Zürich — Monitore aus dem städtischen Entsorgungsstrom</li>
-      <li><strong>Piloten</strong>: Baubüro in situ · Offcut Zürich · ZHAW (nach CE-Abklärung)</li>
+      <li><strong>Effizienter</strong>: Funktionierende Backlights vor dem Schreddern abzweigen — mit Swico Recycling: Abklärung ERZ Stadt Zürich (städtischer Entsorgungsstrom)</li>
+      <li><strong>Umweltfreundlicher</strong>: ZHAW-Studie abschliessen (Innocheque) · Energiemessung weiterer Modelle</li>
+      <li><strong>Rentabler</strong>: Absatz-/Verkaufsabklärungen — Ø 80 CHF Zahlungsbereitschaft · Fertigung in geschützten Werkstätten</li>
+      <li><strong>Verstärker</strong>: weitere Prototypen + Testinstallationen · jede Anleitung öffentlich auf monitor-upcycling.org</li>
     </ul>
-    <p class="sources">Abschlussbericht Abschnitt F — Skalierung</p>
+    <p class="sources">Abschlussbericht Abschnitt F · Team-Präsentation «Ausblick» · Achsen des Swico Innovationsfonds</p>
   </div>
 
   <!-- 13 · DANKE (full-bleed) -->
