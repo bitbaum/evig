@@ -1,16 +1,19 @@
 /**
  * Time-off request service — create / list / cancel / review, with
  * notifications in both directions. Raw parameterised SQL via query() +
- * TABLE_NAMES (project DB convention); notifications via createNotification.
+ * TABLE_NAMES (project DB convention). Review runs on the shared
+ * review-workflow core (lifecycle/review-workflow) — pilot A.
  */
 
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { createNotification, notifyUsers } from '@/lib/services/notifications'
+import { notifyUsers } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { getTimeOffKindLabel, TIME_OFF_STATUSES } from '@/config/time-off'
 import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
+import { runReviewTransition } from '@/lib/lifecycle/review-workflow'
+import type { TransitionTable } from '@/lib/lifecycle'
 import type {
   CreateTimeOffInput,
   ReviewTimeOffInput,
@@ -123,36 +126,50 @@ export async function cancelTimeOffRequest(
   return row ?? null
 }
 
+// Declarative review transitions — pilot A of the shared review-workflow core.
+const REVIEW_TRANSITIONS: TransitionTable = [
+  { action: 'approve', from: TIME_OFF_STATUSES.PENDING, to: TIME_OFF_STATUSES.APPROVED },
+  { action: 'reject', from: TIME_OFF_STATUSES.PENDING, to: TIME_OFF_STATUSES.REJECTED },
+]
+
 /** Approver grants or declines a pending request; notifies the requester. */
 export async function reviewTimeOffRequest(
   reviewerId: string,
   id: string,
   input: ReviewTimeOffInput,
 ): Promise<TimeOffRequest | null> {
-  const updated = await query<{ id: string; user_id: string }>(
-    `UPDATE ${T}
-     SET status = $1, review_notes = $2, reviewed_by = $3, reviewed_at = now(), updated_at = now()
-     WHERE id = $4 AND status = $5
-     RETURNING id, user_id`,
-    [input.status, input.review_notes ?? null, reviewerId, id, TIME_OFF_STATUSES.PENDING],
-  )
-  if (updated.rows.length === 0) return null
+  const action = input.status === TIME_OFF_STATUSES.APPROVED ? 'approve' : 'reject'
+
+  const result = await runReviewTransition<{ status: string; user_id: string }>({
+    // Column defaults (status/reviewed_by/reviewed_at/review_notes/updated_at)
+    // match this table exactly.
+    target: { table: T, select: ['user_id'] },
+    transitions: REVIEW_TRANSITIONS,
+    id,
+    action,
+    actor: { id: reviewerId },
+    reason: input.review_notes ?? null,
+    emit: async (row) => {
+      // Re-fetch the joined projection (kind label + formatted range come
+      // from the display query, not the locked row).
+      const [full] = await getRequestsByIds([id])
+      if (!full) return null
+      const approved = action === 'approve'
+      return {
+        type: NOTIFICATION_TYPES.TIME_OFF_REVIEWED,
+        recipients: { userId: String(row.user_id) },
+        title: approved ? 'Abwesenheit genehmigt' : 'Abwesenheit abgelehnt',
+        content: `Dein Antrag (${getTimeOffKindLabel(full.kind)}, ${formatRange(full)}) wurde ${
+          approved ? 'genehmigt' : 'abgelehnt'
+        }.${input.review_notes ? ` Hinweis: ${input.review_notes}` : ''}`,
+        related: { type: RELATED_TYPES.TIME_OFF, id },
+      }
+    },
+  })
+
+  // Route contract: null → 404 ("kein offener Antrag") for every failure mode
+  // (missing row, already reviewed, lost race).
+  if (!result.ok) return null
   const [row] = await getRequestsByIds([id])
-
-  try {
-    const approved = input.status === TIME_OFF_STATUSES.APPROVED
-    await createNotification(updated.rows[0].user_id, {
-      type: NOTIFICATION_TYPES.TIME_OFF_REVIEWED,
-      title: approved ? 'Abwesenheit genehmigt' : 'Abwesenheit abgelehnt',
-      content: `Dein Antrag (${getTimeOffKindLabel(row.kind)}, ${formatRange(row)}) wurde ${
-        approved ? 'genehmigt' : 'abgelehnt'
-      }.${input.review_notes ? ` Hinweis: ${input.review_notes}` : ''}`,
-      related_type: RELATED_TYPES.TIME_OFF,
-      related_id: id,
-    })
-  } catch (error) {
-    logger.error('time-off: notify requester failed', { error, requestId: id })
-  }
-
   return row ?? null
 }
