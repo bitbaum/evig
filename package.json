@@ -16,6 +16,7 @@
     "stop:all": "./scripts/stop-all.sh",
     "setup": "npm run services:up && echo 'Waiting for services...' && sleep 5",
     "setup-admins": "npx tsx scripts/setup-all-admins.ts",
+    "e2e:seed": "npx tsx scripts/e2e-seed.ts",
     "generate:admin-hash": "node scripts/generate-admin-hash.js",
     "reset": "npm run services:down && docker compose down -v && npm run setup",
     "listmonk:setup": "./scripts/setup-listmonk.sh",
