@@ -177,6 +177,7 @@ jobs:
       DB_NAME: revampit_e2e
       DB_USER: postgres
       DB_PASSWORD: ci
+      DB_SSL: false
       PGHOST: localhost
       PGPORT: 5432
       PGUSER: postgres
