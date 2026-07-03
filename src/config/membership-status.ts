@@ -3,11 +3,13 @@
  * Covers both the application lifecycle and the ongoing member status.
  */
 
+// Joining is INSTANT (see /api/membership/apply): the application row is a
+// historical record inserted directly as 'approved', never a review queue.
+// 'pending'/'rejected' remain for legacy rows; there is no approval workflow.
 export const MEMBERSHIP_APPLICATION_STATUS = {
   PENDING: 'pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-  WITHDRAWN: 'withdrawn',
 } as const
 
 export type MembershipApplicationStatus =
@@ -17,14 +19,15 @@ export const MEMBERSHIP_APPLICATION_STATUS_LABELS: Record<MembershipApplicationS
   pending: 'Ausstehend',
   approved: 'Genehmigt',
   rejected: 'Abgelehnt',
-  withdrawn: 'Zurückgezogen',
 }
 
+// Matches the users.member_type CHECK constraint (migration 062):
+// regular | reduced | honorary. The public form offers regular/reduced;
+// honorary is set by staff.
 export const MEMBERSHIP_TYPE = {
   REGULAR: 'regular',
   REDUCED: 'reduced',
   HONORARY: 'honorary',
-  SUPPORTING: 'supporting',
 } as const
 
 export type MembershipType = (typeof MEMBERSHIP_TYPE)[keyof typeof MEMBERSHIP_TYPE]
@@ -33,5 +36,4 @@ export const MEMBERSHIP_TYPE_LABELS: Record<MembershipType, string> = {
   regular: 'Ordentliches Mitglied',
   reduced: 'Ermässigtes Mitglied',
   honorary: 'Ehrenmitglied',
-  supporting: 'Fördermitglied',
 }

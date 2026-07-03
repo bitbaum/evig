@@ -33,6 +33,7 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
   rejected_timecard: 'wies Zeitkarte zurück',
   edited_timecard: 'passte Zeitkarte an',
   reopened_timecard: 'öffnete Zeitkarte wieder',
+  recorded_membership_payment: 'erfasste Mitgliederbeitrag',
 }
 
 export async function TeamActivityFeed() {

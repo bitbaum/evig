@@ -17,6 +17,7 @@ import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStats
 import { MEMBERSHIP } from '@/config/org'
 import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
 import { adminTable } from '@/lib/admin-ui'
+import { MemberPaymentAction } from './MemberPaymentAction'
 
 export const metadata: Metadata = {
   title: 'Mitgliedschaften',
@@ -111,6 +112,7 @@ export default async function MembershipPage() {
                   <th className="text-left px-4 py-3 font-medium text-text-secondary">Dabei seit</th>
                   <th className="text-left px-4 py-3 font-medium text-text-secondary">Bezahlt bis</th>
                   <th className="text-left px-4 py-3 font-medium text-text-secondary">Status</th>
+                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Aktion</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-subtle">
@@ -149,6 +151,9 @@ export default async function MembershipPage() {
                             Offen
                           </span>
                         )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <MemberPaymentAction memberId={member.id} paidUntil={member.member_paid_until} />
                       </td>
                     </tr>
                   )

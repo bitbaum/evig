@@ -34,8 +34,8 @@ export const NOTIFICATION_TYPES = {
   // Blog submissions
   BLOG_SUBMISSION_STATUS: 'blog_submission_status',
 
-  // Membership
-  MEMBERSHIP_APPROVED: 'membership_approved',
+  // Membership (join is instant — the only notification is payment confirmation)
+  MEMBERSHIP_PAYMENT_RECORDED: 'membership_payment_recorded',
 
   // Workshops
   WORKSHOP_PROPOSAL_APPROVED: 'workshop_proposal_approved',
@@ -101,7 +101,8 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.IT_HILFE]: '/it-hilfe/',
   [RELATED_TYPES.WORKSHOP]: '/admin/workshops/instances/',
   [RELATED_TYPES.WORKSHOP_PROPOSAL]: '/admin/workshops/proposals/',
-  [RELATED_TYPES.MEMBERSHIP]: '/admin/membership?id=',
+  // Membership notifications go to the MEMBER (not staff) → member-facing page.
+  [RELATED_TYPES.MEMBERSHIP]: '/dashboard/membership?ref=',
   [RELATED_TYPES.LISTING]: '/admin/marketplace?listing=',
   // timecards has no [id] detail page — land on the flat queue and pass the
   // request id as a harmless query param (same append pattern as CONVERSATION),

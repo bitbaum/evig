@@ -134,8 +134,8 @@ describe('RELATED_TYPE_HREFS', () => {
     expect(RELATED_TYPE_HREFS[RELATED_TYPES.LISTING]).toBe('/admin/marketplace?listing=')
   })
 
-  it('MEMBERSHIP uses membership list query deep link (no [id] admin route)', () => {
-    expect(RELATED_TYPE_HREFS[RELATED_TYPES.MEMBERSHIP]).toBe('/admin/membership?id=')
+  it('MEMBERSHIP deep-links to the MEMBER-facing dashboard (recipients are members, not staff)', () => {
+    expect(RELATED_TYPE_HREFS[RELATED_TYPES.MEMBERSHIP]).toBe('/dashboard/membership?ref=')
   })
 })
 
