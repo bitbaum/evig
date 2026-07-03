@@ -138,8 +138,10 @@ export const ADMIN_ROUTES: InventoryRoute[] = [
   { id: 143, label: 'Team help / permissions', path: '/admin/team/help' },
 ]
 
-/** Every admin list route — non-staff must be turned away. */
-export const ADMIN_BLOCK_CHECK_ROUTES = ADMIN_ROUTES.map(r => r.path)
+/** Every admin list route — non-staff must be turned away. Deduped: multiple
+ *  inventory rows may share a path (e.g. workshops home + create-workshop),
+ *  and duplicate paths would generate duplicate Playwright test titles. */
+export const ADMIN_BLOCK_CHECK_ROUTES = Array.from(new Set(ADMIN_ROUTES.map(r => r.path)))
 
 import type { DynamicSmokeIds } from './route-smoke'
 
