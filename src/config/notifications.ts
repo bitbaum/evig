@@ -34,6 +34,9 @@ export const NOTIFICATION_TYPES = {
   // Blog submissions
   BLOG_SUBMISSION_STATUS: 'blog_submission_status',
 
+  // Generic user content submissions (workshops, blog posts via user_content_submissions)
+  CONTENT_SUBMISSION_STATUS: 'content_submission_status',
+
   // Membership (join is instant — the only notification is payment confirmation)
   MEMBERSHIP_PAYMENT_RECORDED: 'membership_payment_recorded',
 

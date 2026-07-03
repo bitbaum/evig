@@ -18,6 +18,8 @@ import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
 import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
+import { WorkshopProposalsSection } from '@/components/admin/approvals/WorkshopProposalsSection'
+import { LocationApprovalsSection } from '@/components/admin/approvals/LocationApprovalsSection'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Link from 'next/link'
@@ -55,6 +57,10 @@ interface ApprovalSource {
   count: number
   href: string
   oldestPendingDays: number | null
+  /** Which surface actions this source: inline section below, or a link-out page. */
+  inline: boolean
+  /** Count query failed — surface it instead of pretending "0 ausstehend". */
+  failed?: boolean
 }
 
 async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
@@ -64,21 +70,25 @@ async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
     {
       label: 'Blog-Beiträge',
       href: '/admin/content/submissions',
+      inline: false,
       sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Workshop-Vorschläge',
       href: '/admin/workshops',
+      inline: true,
       sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Techniker-Bewerbungen',
       href: '/admin/repairer-applications',
+      inline: false,
       sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Standorte',
       href: '/admin/locations',
+      inline: true,
       sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.LOCATIONS} WHERE approval_status = '${APPROVAL_STATUS.PENDING}'`,
     },
   ]
@@ -91,10 +101,12 @@ async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
       const oldestPendingDays = oldest && count > 0
         ? Math.floor((Date.now() - new Date(oldest).getTime()) / (1000 * 60 * 60 * 24))
         : null
-      sources.push({ label: q.label, count, href: q.href, oldestPendingDays })
-    } catch {
-      // Table might not exist yet
-      sources.push({ label: q.label, count: 0, href: q.href, oldestPendingDays: null })
+      sources.push({ label: q.label, count, href: q.href, inline: q.inline, oldestPendingDays })
+    } catch (error) {
+      // A failing count must LOOK failed — "0 ausstehend" would read as
+      // "nothing to do" while submissions pile up unseen.
+      logger.error('Approval source count failed', { source: q.label, error })
+      sources.push({ label: q.label, count: 0, href: q.href, inline: q.inline, oldestPendingDays: null, failed: true })
     }
   }
 
@@ -261,13 +273,22 @@ export default async function ApprovalsPage() {
         }
       />
 
-      {/* Übersicht — pending counts from all approval sources */}
+      {/* Inline queues — Workshop-Vorschläge + Standorte are actioned right
+          here (they call the same domain APIs as their full pages, so every
+          transaction/email/audit side effect stays intact). The sections
+          render nothing when their queue is empty. */}
+      <WorkshopProposalsSection />
+      <LocationApprovalsSection />
+
+      {/* Link-outs — domains whose review genuinely needs a full page:
+          blog (read the whole article, edit, publish) and technicians
+          (document/certification verification sub-workflow). */}
       <div className="bg-surface-base rounded-xl border border">
         <div className="p-4 border-b border">
-          <Heading level={2} className="font-semibold text-text-primary">Übersicht</Heading>
+          <Heading level={2} className="font-semibold text-text-primary">Weitere Freigaben</Heading>
         </div>
         <div className="divide-y divide-neutral-200 dark:divide-white/4">
-          {approvalSources.map(source => (
+          {approvalSources.filter(source => !source.inline).map(source => (
             <Link
               key={source.href}
               href={source.href}
@@ -285,20 +306,17 @@ export default async function ApprovalsPage() {
                     {source.oldestPendingDays}+ Tage
                   </StatusBadge>
                 )}
-                <span className={`text-sm font-medium ${source.count > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-text-muted'}`}>
-                  {source.count} ausstehend
-                </span>
+                {source.failed ? (
+                  <StatusBadge variant="error">Zählung fehlgeschlagen</StatusBadge>
+                ) : (
+                  <span className={`text-sm font-medium ${source.count > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-text-muted'}`}>
+                    {source.count} ausstehend
+                  </span>
+                )}
                 <ExternalLink className="w-4 h-4 text-text-muted" />
               </span>
             </Link>
           ))}
-          {/* Inline submissions count */}
-          <div className="p-4 flex items-center justify-between">
-            <span className="text-text-primary">Allgemeine Einreichungen</span>
-            <span className={`text-sm font-medium ${stats.pending > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-text-muted'}`}>
-              {stats.pending} ausstehend
-            </span>
-          </div>
         </div>
       </div>
 
@@ -323,7 +341,7 @@ export default async function ApprovalsPage() {
                     <p className="text-sm text-text-tertiary mt-1 line-clamp-1">{item.summary}</p>
                   )}
                 </div>
-                <ApprovalActions submissionId={item.id} title={item.title} />
+                <ApprovalActions submissionId={item.id} />
               </div>
             ))}
           </div>

@@ -40,6 +40,9 @@ export type AdminUpdateUserInput = z.infer<typeof AdminUpdateUserSchema>;
 
 export const AdminApprovalActionSchema = z.object({
   action: z.enum(['approve', 'reject', 'reopen']),
+  // Optional reviewer note — on reject it reaches the submitter (email +
+  // in-app) and is stored on the submission as the rejection reason.
+  reason: z.string().trim().max(1000).optional(),
 });
 
 export type AdminApprovalActionInput = z.infer<typeof AdminApprovalActionSchema>;

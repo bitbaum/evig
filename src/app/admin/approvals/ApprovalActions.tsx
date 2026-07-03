@@ -1,67 +1,26 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
+import { InlineDecisionActions } from '@/components/admin/approvals/InlineDecisionActions'
 
-interface ApprovalActionsProps {
-  submissionId: string
-  title: string
-}
-
-export function ApprovalActions({ submissionId, title }: ApprovalActionsProps) {
+/**
+ * Approve/reject a user content submission from the Freigaben hub.
+ * Rejections carry an optional reason that reaches the submitter (email +
+ * in-app) — a bare "abgelehnt" left people guessing what to fix.
+ */
+export function ApprovalActions({ submissionId }: { submissionId: string }) {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState<'approve' | 'reject' | null>(null)
 
-  const handleAction = async (action: 'approve' | 'reject') => {
-    setIsLoading(action)
-
+  const decide = async (decision: 'approve' | 'reject', reason: string) => {
     const result = await apiFetch<unknown>(`/api/admin/approvals/${submissionId}`, {
       method: 'PATCH',
-      body: { action },
+      body: { action: decision, ...(reason ? { reason } : {}) },
     })
-
-    if (!result.success) {
-      // Show inline feedback on error
-      setIsLoading(null)
-      return
-    }
-
-    // Refresh the page to reflect the updated status
+    if (!result.success) return result.error || 'Aktion fehlgeschlagen.'
     router.refresh()
+    return null
   }
 
-  return (
-    <div className="flex gap-2">
-      <Button
-        onClick={() => handleAction('approve')}
-        disabled={isLoading !== null}
-        size="sm"
-        className="flex items-center gap-1"
-      >
-        {isLoading === 'approve' ? (
-          <Loader2 className="w-3 h-3 animate-spin" />
-        ) : (
-          <CheckCircle className="w-3 h-3" />
-        )}
-        Genehmigen
-      </Button>
-      <Button
-        onClick={() => handleAction('reject')}
-        disabled={isLoading !== null}
-        variant="destructive"
-        size="sm"
-        className="flex items-center gap-1"
-      >
-        {isLoading === 'reject' ? (
-          <Loader2 className="w-3 h-3 animate-spin" />
-        ) : (
-          <XCircle className="w-3 h-3" />
-        )}
-        Ablehnen
-      </Button>
-    </div>
-  )
+  return <InlineDecisionActions onDecide={decide} />
 }

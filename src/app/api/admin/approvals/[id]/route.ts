@@ -15,6 +15,8 @@ import { logger } from '@/lib/logger'
 import { logContentDecision } from '@/lib/auth/audit'
 import { sendEmail } from '@/lib/email'
 import { logActivity } from '@/lib/activity'
+import { createNotification } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES } from '@/config/notifications'
 
 export const PATCH = withAdmin<{ id: string }>('approvals', async (request, session, context) => {
   try {
@@ -22,7 +24,7 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
     const body = await request.json()
     const validation = validateBody(AdminApprovalActionSchema, body)
     if (!validation.success) return validation.error
-    const { action } = validation.data
+    const { action, reason } = validation.data
 
     // Verify submission exists and is pending
     const [submission] = await db
@@ -64,6 +66,7 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
         reviewedBy: session.user.id,
         reviewedAt: sql`NOW()`,
         updatedAt: sql`NOW()`,
+        ...(action === 'reject' ? { rejectionReason: reason ?? null } : {}),
       })
       .where(eq(userContentSubmissions.id, id))
 
@@ -76,19 +79,33 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
     // only signal — silent SMTP failure leaves them unaware.
     try {
       const [submitter] = await db
-        .select({ email: users.email, name: users.name })
+        .select({ id: users.id, email: users.email, name: users.name })
         .from(users)
         .innerJoin(userContentSubmissions, eq(userContentSubmissions.userId, users.id))
         .where(eq(userContentSubmissions.id, id))
 
       if (submitter) {
+        // In-app notification FIRST — email deliverability is not guaranteed
+        // (unauthenticated sender domain), so the decision must also land
+        // where the submitter can always see it.
+        if (action === 'approve' || action === 'reject') {
+          await createNotification(submitter.id, {
+            type: NOTIFICATION_TYPES.CONTENT_SUBMISSION_STATUS,
+            title: action === 'approve' ? 'Einreichung genehmigt' : 'Einreichung abgelehnt',
+            content: action === 'approve'
+              ? `«${submission.title}» wurde genehmigt und wird veröffentlicht.`
+              : `«${submission.title}» wurde abgelehnt.${reason ? ` Begründung: ${reason}` : ''}`,
+          }).catch(err => logger.warn('Content approval notification failed', { error: err, submissionId: id }))
+        }
+
         const templateName = action === 'approve' ? 'contentSubmissionApproved' : 'contentSubmissionRejected'
         const emailResult = await sendEmail(
           submitter.email,
           templateName,
           submitter.name || 'Benutzer',
           submission.title,
-          submission.contentType
+          submission.contentType,
+          ...(action === 'reject' ? [reason ?? ''] : [])
         )
         if (!emailResult.success) {
           logger.warn('Content approval email failed (resolved)', {

@@ -54,7 +54,8 @@ ${createTextFooter()}
 export const contentSubmissionRejected = (
   name: string,
   title: string,
-  contentType: string
+  contentType: string,
+  reason?: string
 ): EmailContent => ({
   subject: `Einreichung abgelehnt - ${ORG.name}`,
   html: `
@@ -76,6 +77,7 @@ export const contentSubmissionRejected = (
           <p>Leider wurde deine Einreichung abgelehnt.</p>
           <p><strong>Titel:</strong> ${escapeHtml(title)}</p>
           <p><strong>Typ:</strong> ${escapeHtml(contentType)}</p>
+          ${reason ? `<p><strong>Begründung:</strong> ${escapeHtml(reason)}</p>` : ''}
           <p>Bei Fragen kannst du uns jederzeit kontaktieren.</p>
         </div>
         <div class="footer">
@@ -92,7 +94,7 @@ Hallo ${name},
 Leider wurde deine Einreichung abgelehnt.
 
 Titel: ${title}
-Typ: ${contentType}
+Typ: ${contentType}${reason ? `\nBegründung: ${reason}` : ''}
 
 Bei Fragen kannst du uns jederzeit kontaktieren.
 ${createTextFooter()}
