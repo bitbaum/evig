@@ -191,7 +191,7 @@ function ErfassungContent() {
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
-          href={ROUTES.admin.products}
+          href={ROUTES.admin.intake}
           className={`p-2 sm:p-2 rounded-lg ${adminInteractive.rowHover} touch-manipulation`}
         >
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />

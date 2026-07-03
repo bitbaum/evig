@@ -111,7 +111,7 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   // request id as a harmless query param (same append pattern as CONVERSATION),
   // so relatedHref() can't produce a broken "/admin/zeiterfassung<id>" path.
   [RELATED_TYPES.TIME_OFF]: '/admin/zeiterfassung?id=', // requester → their tool
-  [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/timecards?id=', // approver → the queue
+  [RELATED_TYPES.TIME_OFF_REVIEW]: '/admin/team/approvals?id=', // approver → the queue
   [RELATED_TYPES.TIMECARD]: '/admin/zeiterfassung?id=',
   [RELATED_TYPES.TIMECARD_REVIEW]: '/admin/team/approvals?id=',
   [RELATED_TYPES.JOB_APPLICATION]: '/admin/hr/applications/',

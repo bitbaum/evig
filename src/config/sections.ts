@@ -23,7 +23,6 @@ import {
   CheckSquare,
   Users,
   UserCog,
-  DollarSign,
   BarChart3,
   Settings,
   Brain,
@@ -577,16 +576,19 @@ export const SECTIONS: Record<string, SectionConfig> = {
 
   products: {
     id: 'products',
-    path: '/admin/products',
+    path: '/admin/erfassung',
     ui: {
       label: 'Produkte',
-      description: 'Produktverwaltung und Inventar',
+      description: 'Produktdaten erfassen und Inventar verwalten',
       icon: Package,
       emoji: '📦',
       color: 'primary',
     },
-    // Hidden from sidebar — functionality covered by Geräte-Eingang + Marketplace.
-    // Route still exists for direct access/backwards compatibility.
+    // Hidden from sidebar — the legacy /admin/products page was removed
+    // (covered by Geräte-Eingang + Marketplace). The id stays: it is a live
+    // PERMISSION KEY gating the erfassung/inventory APIs
+    // (withAdmin('products') on /api/admin/erfassung/*, /api/admin/inventory/*,
+    // /api/inventory/import-csv, /api/admin/ai/smart-product-entry).
     visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 100,
     category: 'management',
@@ -852,22 +854,6 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'betrieb',
   },
 
-  analytics: {
-    id: 'analytics',
-    path: '/admin/analytics',
-    ui: {
-      label: 'Analytics',
-      description: 'Statistiken und Auswertungen (Legacy)',
-      icon: BarChart3,
-      emoji: '📈',
-      color: 'info',
-    },
-    // Legacy route — use Analyse-Übersicht (/admin/analyse) instead.
-    visibility: { admin: false, dashboard: false, requiresStaff: true },
-    priority: 107,
-    category: 'management',
-  },
-
   donations: {
     id: 'donations',
     path: '/admin/donations',
@@ -953,7 +939,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
 
   timecards: {
     id: 'timecards',
-    path: '/admin/timecards',
+    path: '/admin/team/approvals',
     ui: {
       label: 'Zeitkarten',
       description: 'Arbeitszeiten erfassen, einreichen und genehmigen',
@@ -961,8 +947,11 @@ export const SECTIONS: Record<string, SectionConfig> = {
       emoji: '⏱️',
       color: 'info',
     },
-    // Hidden from the sidebar: this route now redirects to the single
-    // own-timecard editor at /admin/zeiterfassung ("Zeiterfassung").
+    // Hidden from the sidebar. The id stays: it is a live PERMISSION KEY
+    // gating the timecard review APIs (withAdmin('timecards') on
+    // /api/admin/timecards/*, /api/admin/time-off). The legacy /admin/timecards
+    // page was removed — own-timecard editing lives at /admin/zeiterfassung,
+    // the approver queue at /admin/team/approvals.
     visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 202,
     category: 'management',
@@ -1086,22 +1075,6 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'analyse',
   },
 
-  // Keep 'finances' as alias for backwards compatibility
-  finances: {
-    id: 'finances',
-    path: '/admin/analyse/finanzen',
-    ui: {
-      label: 'Finanzen',
-      description: 'Finanzübersicht und Berichte',
-      icon: DollarSign,
-      emoji: '💰',
-      color: 'error',
-    },
-    visibility: { admin: false, dashboard: false, requiresStaff: true, sensitive: true },
-    priority: 999, // Hide from sidebar but keep for permissions
-    category: 'sensitive',
-  },
-
   hirn: {
     id: 'hirn',
     path: '/admin/hirn',
@@ -1215,7 +1188,7 @@ export function isSensitiveSection(id: string): boolean {
 export const SENSITIVITY_REASONS: Record<string, string> = {
   users: 'Enthält personenbezogene Daten und Kontoinformationen',
   team: 'Enthält Mitarbeiter- und HR-Daten',
-  finances: 'Enthält vertrauliche Finanzdaten',
+  finanzen: 'Enthält vertrauliche Finanzdaten',
   'analyse-hub': 'Enthält vertrauliche Kennzahlen und Finanzdaten',
   hirn: 'Enthält strategische Geschäftsinformationen',
   settings: 'Kann Systemkonfiguration ändern',

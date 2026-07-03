@@ -31,7 +31,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
 
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-          <Button as={Link} href={ROUTES.admin.productFactsheet(productId)} variant="primary">
+          <Button as={Link} href={ROUTES.admin.erfassungFactsheet(productId)} variant="primary">
             <Printer className="w-5 h-5" />
             {t('printFactsheet')}
           </Button>
@@ -40,7 +40,7 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
             {t('captureAnother')}
           </Button>
           <Link
-            href={ROUTES.admin.products}
+            href={ROUTES.admin.intake}
             className="inline-flex items-center gap-2 px-4 py-2 border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"
           >
             <FileText className="w-5 h-5" />

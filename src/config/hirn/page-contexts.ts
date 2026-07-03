@@ -296,7 +296,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     ],
     quickActions: [
       { label: 'Erfassung', href: ROUTES.admin.erfassung },
-      { label: 'Produkte', href: ROUTES.admin.products },
+      { label: 'Geräte-Eingang', href: ROUTES.admin.intake },
     ],
   },
   {

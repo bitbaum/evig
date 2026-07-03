@@ -36,16 +36,12 @@ export default async function FinanzenPage() {
     redirect('/auth/login?callbackUrl=/admin/analyse/finanzen')
   }
 
-  // Check permission for finanzen section (or legacy 'finances' alias)
+  // Check permission for the finanzen section
   const hasAccess = canAccessSection({
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
-  }, 'finanzen') || canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'finances')
+  }, 'finanzen')
 
   if (!hasAccess) {
     redirect('/admin?error=no_finances_access')

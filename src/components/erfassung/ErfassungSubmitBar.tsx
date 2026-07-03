@@ -21,7 +21,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       {/* Desktop */}
       <div className="hidden sm:flex justify-between items-center pt-4">
         <Link
-          href={ROUTES.admin.products}
+          href={ROUTES.admin.intake}
           className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-default bg-surface-base hover:bg-surface-raised text-text-primary"
         >
           {t('cancel')}

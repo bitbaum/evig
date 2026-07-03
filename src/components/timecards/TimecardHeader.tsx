@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { formatTimecardDuration } from '@/config/timecards'
 
 /**
- * Page header for /admin/timecards.
+ * Page header for /admin/zeiterfassung.
  *
  * x.ai-style restraint: big month title, single subtle summary line,
  * one primary action ("Einreichen"). The "Save draft" affordance only

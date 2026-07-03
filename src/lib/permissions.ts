@@ -110,13 +110,13 @@ export interface StaffUser {
 }
 
 /**
- * Permission aliases for backwards compatibility
- * Maps old permission names to new ones
+ * Permission aliases: section id → permission string that also grants it
+ * (checked in both directions). Every KEY must be an existing section id in
+ * @/config/sections.ts — pure legacy rename leftovers were removed when the
+ * legacy admin pages were cleaned up (no prod user held a legacy string).
  */
 const PERMISSION_ALIASES: Record<string, string> = {
-  finances: 'finanzen',
   'workshops-admin': 'workshops',
-  'it-hilfe': 'it-hilfe-admin',
   services: 'appointments-admin',
   'hr-vacancies': 'team',
   'hr-applications': 'team',
@@ -263,51 +263,6 @@ export const CONTENT_STATUS = {
 } as const
 
 export type ContentStatus = (typeof CONTENT_STATUS)[keyof typeof CONTENT_STATUS]
-
-// =============================================================================
-// LEGACY COMPATIBILITY
-// =============================================================================
-
-/**
- * Map old role strings to new system for migration
- * This helps during the transition period
- */
-export function migrateOldRole(oldRole: string | null | undefined): {
-  is_staff: boolean
-  staff_permissions: string[]
-} {
-  if (!oldRole) {
-    return { is_staff: false, staff_permissions: [] }
-  }
-
-  // Map old roles to new system
-  const roleMapping: Record<
-    string,
-    { is_staff: boolean; staff_permissions: string[] }
-  > = {
-    revampit_super_admin: { is_staff: true, staff_permissions: ['*'] },
-    revampit_admin: { is_staff: true, staff_permissions: ['*'] },
-    admin: { is_staff: true, staff_permissions: ['*'] },
-    revampit_editor: {
-      is_staff: true,
-      staff_permissions: ['dashboard', 'content', 'products', 'workshops-admin'],
-    },
-    revampit_support: {
-      is_staff: true,
-      staff_permissions: ['dashboard', 'users', 'reviews'],
-    },
-    hirn_admin: {
-      is_staff: true,
-      staff_permissions: ['dashboard', 'hirn', 'finances', 'analytics'],
-    },
-    hirn_user: {
-      is_staff: true,
-      staff_permissions: ['dashboard', 'hirn', 'analytics'],
-    },
-  }
-
-  return roleMapping[oldRole] || { is_staff: false, staff_permissions: [] }
-}
 
 // =============================================================================
 // RE-EXPORTS FROM SSOT

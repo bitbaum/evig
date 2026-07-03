@@ -86,7 +86,6 @@ export {
   canAccessSensitive,
   getAccessibleSections,
   getInitialStaffPermissions,
-  migrateOldRole,
   isSensitiveSection,
   // SSOT section data
   SECTIONS,

@@ -22,7 +22,7 @@
  *
  * The endpoint replaces a 5-step manual flow (open team page → click
  * own name → fill schedule → save → navigate to timecards) with a
- * single POST + page reload. The /admin/timecards page surfaces this
+ * single POST + page reload. The /admin/zeiterfassung page surfaces this
  * as the primary action of the NoScheduleNotice block.
  */
 

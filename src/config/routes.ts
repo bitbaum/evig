@@ -9,9 +9,10 @@ export const ROUTES = {
     dashboard:          '/admin',
     erfassung:          '/admin/erfassung',
     erfassungNew:       '/admin/erfassung',
-    products:           '/admin/products',
-    product:            (id: string) => `/admin/products/${id}`,
-    productFactsheet:   (id: string) => `/admin/products/${id}/factsheet`,
+    // Printable A4 sales label for a captured device (re-homed from the
+    // removed legacy /admin/products tree — the print view is a live feature).
+    erfassungFactsheet: (id: string) => `/admin/erfassung/${id}/factsheet`,
+    intake:             '/admin/intake',
     decisions:          '/admin/decisions',
     decisionNew:        '/admin/decisions/new',
     decision:           (id: string) => `/admin/decisions/${id}`,

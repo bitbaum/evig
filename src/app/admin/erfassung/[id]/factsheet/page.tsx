@@ -145,7 +145,7 @@ export default function FactSheetPage() {
       <div className="print:hidden fixed top-0 left-0 right-0 bg-surface-base border-b border z-50 px-4 py-3">
         <div className="max-w-[210mm] mx-auto flex items-center justify-between">
           <Link
-            href={ROUTES.admin.products}
+            href={ROUTES.admin.intake}
             className="flex items-center gap-2 text-text-secondary hover:text-text-primary"
           >
             <ArrowLeft className="w-5 h-5" />

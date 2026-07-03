@@ -227,7 +227,7 @@ function ApprovalsHero({
     <AdminHeroStatus
       tone={tone}
       icon="clock"
-      headline={`${pending} Inhalt${pending === 1 ? '' : 'e'} warten auf Freigabe`}
+      headline={pending === 1 ? '1 Inhalt wartet auf Freigabe' : `${pending} Inhalte warten auf Freigabe`}
       sub={sub}
       kpis={kpis}
     />

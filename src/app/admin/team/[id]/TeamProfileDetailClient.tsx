@@ -6,7 +6,7 @@
  * Phase 3 of the team + timecards rebuild: wraps the existing
  * TeamProfileView in a tab shell so HR can see Überblick / Zeiterfassung /
  * Aktivität for one person in one place — no jumping to
- * /admin/timecards or /admin/team/activity. Tab state is in the URL
+ * /admin/team/approvals or /admin/team/activity. Tab state is in the URL
  * (?tab=zeiterfassung) so deep-links work.
  */
 

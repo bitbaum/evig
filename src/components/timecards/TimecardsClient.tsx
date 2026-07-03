@@ -22,7 +22,7 @@ import { useTimecardDraft } from './useTimecardDraft'
 import type { TimecardAIResult } from './types'
 
 /**
- * Timecard editor (shared by /dashboard/timecards + /admin/timecards).
+ * Timecard editor (shared by /dashboard/timecards + /admin/zeiterfassung).
  *
  * Calendar-first, predictive UX:
  *   - One-tap "Monat aus Plan füllen" for the 95% case.

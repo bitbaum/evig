@@ -23,7 +23,6 @@ import {
   getAccessibleSections,
   getInitialStaffPermissions,
   toStaffUser,
-  migrateOldRole,
   SUPER_ADMIN_EMAILS,
   STAFF_EMAIL_DOMAIN,
   type StaffUser,
@@ -157,23 +156,23 @@ describe('canAccessSection', () => {
     expect(canAccessSection(limitedStaff, 'hirn')).toBe(false)
   })
 
-  it('grants access via alias: "finances" maps to permission "finanzen"', () => {
+  it('grants access via alias: "erfassung" section is granted by "intake" permission', () => {
     const withAlias: StaffUser = {
       email: 'alias@revamp-it.ch',
       is_staff: true,
-      staff_permissions: ['finanzen'],
+      staff_permissions: ['intake'],
     }
-    // Requesting 'finances' section with 'finanzen' permission → alias grants access
-    expect(canAccessSection(withAlias, 'finances')).toBe(true)
+    // Requesting 'erfassung' section with 'intake' permission → alias grants access
+    expect(canAccessSection(withAlias, 'erfassung')).toBe(true)
   })
 
-  it('grants access via reverse alias: old "finances" permission grants new "finanzen" section', () => {
-    const withOldPerm: StaffUser = {
+  it('grants access via reverse alias: "erfassung" permission grants "intake" section', () => {
+    const withReverse: StaffUser = {
       email: 'old@revamp-it.ch',
       is_staff: true,
-      staff_permissions: ['finances'],
+      staff_permissions: ['erfassung'],
     }
-    expect(canAccessSection(withOldPerm, 'finanzen')).toBe(true)
+    expect(canAccessSection(withReverse, 'intake')).toBe(true)
   })
 })
 
@@ -294,47 +293,5 @@ describe('toStaffUser', () => {
       staffPermissions: [],
     })
     expect(result.is_super_admin).toBeUndefined()
-  })
-})
-
-// ============================================================================
-// migrateOldRole
-// ============================================================================
-
-describe('migrateOldRole', () => {
-  it('maps revampit_super_admin to full access', () => {
-    const result = migrateOldRole('revampit_super_admin')
-    expect(result.is_staff).toBe(true)
-    expect(result.staff_permissions).toContain('*')
-  })
-
-  it('maps admin to full access', () => {
-    const result = migrateOldRole('admin')
-    expect(result.is_staff).toBe(true)
-    expect(result.staff_permissions).toContain('*')
-  })
-
-  it('maps revampit_editor to staff with limited permissions', () => {
-    const result = migrateOldRole('revampit_editor')
-    expect(result.is_staff).toBe(true)
-    expect(result.staff_permissions).not.toContain('*')
-    expect(result.staff_permissions).toContain('dashboard')
-  })
-
-  it('returns non-staff for null', () => {
-    const result = migrateOldRole(null)
-    expect(result.is_staff).toBe(false)
-    expect(result.staff_permissions).toEqual([])
-  })
-
-  it('returns non-staff for undefined', () => {
-    const result = migrateOldRole(undefined)
-    expect(result.is_staff).toBe(false)
-  })
-
-  it('returns non-staff for unknown role', () => {
-    const result = migrateOldRole('unknown_role')
-    expect(result.is_staff).toBe(false)
-    expect(result.staff_permissions).toEqual([])
   })
 })

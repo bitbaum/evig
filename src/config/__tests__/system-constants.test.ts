@@ -155,7 +155,7 @@ describe('RELATED_TYPE_HREFS route shells', () => {
     { type: RELATED_TYPES.MEMBERSHIP, pagePath: 'admin/membership/page.tsx' },
     { type: RELATED_TYPES.LISTING, pagePath: 'admin/marketplace/page.tsx' },
     { type: RELATED_TYPES.TIME_OFF, pagePath: 'dashboard/timecards/page.tsx' },
-    { type: RELATED_TYPES.TIME_OFF_REVIEW, pagePath: 'admin/timecards/page.tsx' },
+    { type: RELATED_TYPES.TIME_OFF_REVIEW, pagePath: 'admin/team/approvals/page.tsx' },
     { type: RELATED_TYPES.TIMECARD, pagePath: 'dashboard/timecards/page.tsx' },
     { type: RELATED_TYPES.TIMECARD_REVIEW, pagePath: 'admin/team/approvals/page.tsx' },
   ]

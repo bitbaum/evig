@@ -31,10 +31,9 @@ const SECTION_IDS: { id: string; sensitive: boolean }[] = [
   { id: 'reviews', sensitive: false },
   { id: 'content', sensitive: false },
   { id: 'approvals', sensitive: false },
-  { id: 'analytics', sensitive: false },
   { id: 'users', sensitive: true },
   { id: 'team', sensitive: true },
-  { id: 'finances', sensitive: true },
+  { id: 'finanzen', sensitive: true },
   { id: 'settings', sensitive: true },
   { id: 'hirn', sensitive: true },
 ]

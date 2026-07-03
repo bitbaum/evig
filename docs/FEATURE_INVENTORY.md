@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-19
-last_modified_summary: HR talent lifecycle — vacancies, applications, /karriere, hire→team_profiles
+last_modified_date: 2026-07-03
+last_modified_summary: Legacy admin cleanup — /admin/products, /admin/analytics, /admin/timecards removed
 ---
 
 # Feature Inventory (SSOT)
@@ -238,7 +238,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 |---|---------|-------|--------|
 | 122 | Admin dashboard | `/admin` | ✅ (admin E2E) |
 | 123 | Device intake / Erfassung | `/admin/erfassung` | ✅ inventory E2E |
-| 124 | Products / inventory | `/admin/products`, factsheet | ✅ list; detail dynamic 🟡 |
+| 124 | Products / inventory | removed 2026-07 — covered by `/admin/intake` + `/admin/marketplace` | ✂️ removed |
 | 125 | Intake pipeline | `/admin/intake` | ✅ inventory + journey E2E |
 | 126 | Locations | `/admin/locations/*` | ✅ inventory E2E |
 | 127 | Admin services config | `/admin/services/*` | ✅ inventory E2E |
@@ -249,11 +249,11 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 132 | Users admin | `/admin/users/[id]` | ✅ list; detail dynamic 🟡 |
 | 133 | Membership approvals | `/admin/membership` | ✅ inventory E2E |
 | 134 | Timecards (staff submit) | `/dashboard/timecards` | ✅ inventory + journey E2E |
-| 135 | Timecards (admin queue) | `/admin/timecards` | ✅ inventory + journey E2E |
+| 135 | Timecards (admin queue) | removed 2026-07 — merged into `/admin/team/approvals` (queue) + `/admin/zeiterfassung` (own editor) | ✂️ removed |
 | 136 | Shift view | `/dashboard/shift` | ✅ inventory E2E |
 | 137 | Time off requests | API `time-off/*` | 🟡 API-only |
 | 138 | Payroll | `/admin/payroll` | ✅ inventory E2E |
-| 139 | Analytics | `/admin/analytics` | ✅ inventory E2E |
+| 139 | Analytics (legacy) | removed 2026-07 — replaced by `/admin/analyse/*` (row 140) | ✂️ removed |
 | 140 | Analyse | `/admin/analyse/*` | ✅ inventory E2E |
 | 141 | Hirn AI admin | `/admin/hirn` | ✅ inventory E2E |
 | 142 | Settings | `/admin/settings` | ✅ inventory E2E |

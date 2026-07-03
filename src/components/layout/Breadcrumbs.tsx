@@ -16,7 +16,7 @@ interface BreadcrumbsProps {
 // this map, the breadcrumb falls back to a Title-Cased English label — which
 // is wrong on every non-English locale. Keep this in sync with admin routes.
 const SEGMENT_KEYS: Record<string, string> = {
-  admin: 'admin', products: 'products', workshops: 'workshops',
+  admin: 'admin', workshops: 'workshops',
   services: 'services', users: 'users', team: 'team',
   locations: 'locations', content: 'content', analyse: 'analyse',
   approvals: 'approvals', settings: 'settings', hirn: 'hirn',

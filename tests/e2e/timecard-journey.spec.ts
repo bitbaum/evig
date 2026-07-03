@@ -64,7 +64,7 @@ test.describe('Timecard staff journey', () => {
     const resubmitted = await submitTimecardForReview(page.request)
     expect(resubmitted.status).toBe('submitted')
 
-    await loginWithCredentials(page, '/admin/timecards', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
+    await loginWithCredentials(page, '/admin/zeiterfassung', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
     await expect(page.getByRole('heading', { name: 'Zeitkarten' })).toBeVisible({ timeout: 15000 })
 
     await approveTimecardAsAdmin(page.request, submitted.id)

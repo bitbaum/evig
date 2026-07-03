@@ -31,7 +31,7 @@ export function useErfassungForm() {
   const searchParams = useSearchParams()
   const editId = searchParams.get('edit')
   // Prevent open-redirect: only same-origin paths
-  const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/products')
+  const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/intake')
 
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingProduct, setIsLoadingProduct] = useState(false)

@@ -152,12 +152,12 @@ describeAuthenticatedFlows(
       expect(page.url()).toMatch(/\/admin\/it-hilfe/)
     })
 
-    test('admin timecards loads', async () => {
+    test('admin zeiterfassung loads', async () => {
       const page = getPage()
-      await page.goto('/admin/timecards')
+      await page.goto('/admin/zeiterfassung')
       await page.waitForLoadState('domcontentloaded')
       await expectNotLoginPage(page)
-      expect(page.url()).toMatch(/\/admin\/timecards/)
+      expect(page.url()).toMatch(/\/admin\/zeiterfassung/)
     })
 
     test('admin users list loads', async () => {

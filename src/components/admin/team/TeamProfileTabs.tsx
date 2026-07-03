@@ -5,7 +5,7 @@
  *
  * Wraps the existing TeamProfileView in a tab shell so HR can see a
  * person's profile, their timecards, and their activity in one place
- * without context-switching to /admin/timecards or /admin/team/activity.
+ * without context-switching to /admin/team/approvals or /admin/team/activity.
  * The Bearbeiten action stays as a link to the existing edit page —
  * a full inline edit experience is a Phase 4 concern (it needs the
  * compensation + leave_periods schema work to land first).

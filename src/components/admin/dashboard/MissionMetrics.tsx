@@ -52,7 +52,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       icon: Monitor,
       iconBg: 'bg-action-muted',
       iconColor: 'text-action',
-      href: ROUTES.admin.products,
+      href: ROUTES.admin.marketplace,
     },
     {
       value: mission.itHilfeCompletedThisMonth,

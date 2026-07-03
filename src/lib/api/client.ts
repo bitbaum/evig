@@ -6,7 +6,7 @@
  *
  * Usage:
  *   const { data, error } = await apiFetch<UserProfile>('/api/user/profile')
- *   const { data, error } = await apiFetch<void>('/api/admin/products', {
+ *   const { data, error } = await apiFetch<void>('/api/admin/erfassung', {
  *     method: 'POST',
  *     body: { title: 'New Product' },
  *   })

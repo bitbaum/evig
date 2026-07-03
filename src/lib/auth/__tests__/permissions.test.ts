@@ -2,7 +2,7 @@
  * Tests for permissions.ts
  *
  * Tests staff email detection, super admin checks, section access control,
- * permission aliases, and role migration.
+ * and permission aliases.
  */
 
 // Mock next/server
@@ -24,7 +24,6 @@ import {
   getAccessibleSections,
   isSensitiveSection,
   getInitialStaffPermissions,
-  migrateOldRole,
   STAFF_EMAIL_DOMAIN,
   SUPER_ADMIN_EMAILS,
   ADMIN_SECTIONS,
@@ -154,22 +153,22 @@ describe('canAccessSection', () => {
     expect(canAccessSection(undefined, 'dashboard')).toBe(false)
   })
 
-  it('supports permission aliases (finances → finanzen)', () => {
-    const staffWithFinances: StaffUser = {
+  it('supports permission aliases (erfassung ← intake)', () => {
+    const staffWithIntake: StaffUser = {
       email: 'staff@revamp-it.ch',
       is_staff: true,
-      staff_permissions: ['finanzen'],
+      staff_permissions: ['intake'],
     }
-    expect(canAccessSection(staffWithFinances, 'finances')).toBe(true)
+    expect(canAccessSection(staffWithIntake, 'erfassung')).toBe(true)
   })
 
-  it('supports reverse aliases (finanzen access for finances permission)', () => {
-    const staffWithOldPermission: StaffUser = {
+  it('supports reverse aliases (intake access for erfassung permission)', () => {
+    const staffWithErfassung: StaffUser = {
       email: 'staff@revamp-it.ch',
       is_staff: true,
-      staff_permissions: ['finances'],
+      staff_permissions: ['erfassung'],
     }
-    expect(canAccessSection(staffWithOldPermission, 'finanzen')).toBe(true)
+    expect(canAccessSection(staffWithErfassung, 'intake')).toBe(true)
   })
 })
 
@@ -281,42 +280,6 @@ describe('getInitialStaffPermissions', () => {
     SENSITIVE_SECTION_IDS.forEach(sid => {
       expect(perms).not.toContain(sid)
     })
-  })
-})
-
-// ============================================================================
-// migrateOldRole
-// ============================================================================
-
-describe('migrateOldRole', () => {
-  it('maps super admin roles to wildcard', () => {
-    expect(migrateOldRole('revampit_super_admin')).toEqual({
-      is_staff: true,
-      staff_permissions: ['*'],
-    })
-    expect(migrateOldRole('admin')).toEqual({
-      is_staff: true,
-      staff_permissions: ['*'],
-    })
-  })
-
-  it('maps editor role to limited permissions', () => {
-    const result = migrateOldRole('revampit_editor')
-    expect(result.is_staff).toBe(true)
-    expect(result.staff_permissions).toContain('dashboard')
-    expect(result.staff_permissions).toContain('products')
-  })
-
-  it('returns non-staff for unknown roles', () => {
-    expect(migrateOldRole('unknown_role')).toEqual({
-      is_staff: false,
-      staff_permissions: [],
-    })
-  })
-
-  it('returns non-staff for null/undefined', () => {
-    expect(migrateOldRole(null)).toEqual({ is_staff: false, staff_permissions: [] })
-    expect(migrateOldRole(undefined)).toEqual({ is_staff: false, staff_permissions: [] })
   })
 })
 

@@ -5,7 +5,7 @@ test.describe('Admin timecards', () => {
   test.setTimeout(120000)
 
   test('renders the month-first flow and keeps controls clickable', async ({ page }) => {
-    await loginWithCredentials(page, '/admin/timecards')
+    await loginWithCredentials(page, '/admin/zeiterfassung')
 
     await expect(page.getByRole('heading', { name: 'Zeitkarten' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Monat' })).toBeVisible()
