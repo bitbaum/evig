@@ -61,7 +61,7 @@ describe('guardedTransition', () => {
       apply,
     })
 
-    expect(res).toEqual({ ok: false })
+    expect(res).toEqual({ ok: false, reason: 'not_found' })
     expect(apply).not.toHaveBeenCalled()
   })
 
@@ -76,7 +76,7 @@ describe('guardedTransition', () => {
       apply,
     })
 
-    expect(res).toEqual({ ok: false })
+    expect(res).toEqual({ ok: false, reason: 'check_failed' })
     expect(apply).not.toHaveBeenCalled()
   })
 

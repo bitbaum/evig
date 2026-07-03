@@ -65,7 +65,15 @@ export interface GuardedTransitionOptions<Row extends Record<string, unknown>, T
   db?: DbOrTx
 }
 
-export type GuardedTransitionResult<T> = { ok: true; result: T } | { ok: false }
+/**
+ * `reason` distinguishes the two abort paths for callers that surface
+ * different errors (404 vs 409): the locked row didn't exist vs it existed
+ * but `check` rejected it. Optional so existing `.ok`-only callers are
+ * untouched.
+ */
+export type GuardedTransitionResult<T> =
+  | { ok: true; result: T }
+  | { ok: false; reason: 'not_found' | 'check_failed' }
 
 /**
  * Run `apply` against `lockTable`/`lockId` only if `check` passes under a
@@ -85,9 +93,9 @@ export async function guardedTransition<Row extends Record<string, unknown>, T>(
       sql`SELECT ${columns} FROM ${table} WHERE id = ${lockId} FOR UPDATE`,
     )
     const row = locked.rows[0] as Row | undefined
-    if (!row) return { ok: false }
+    if (!row) return { ok: false, reason: 'not_found' }
 
-    if (!(await check(row, tx))) return { ok: false }
+    if (!(await check(row, tx))) return { ok: false, reason: 'check_failed' }
 
     const result = await apply(tx, row)
     return { ok: true, result }

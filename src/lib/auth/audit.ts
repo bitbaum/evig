@@ -191,7 +191,7 @@ export async function logAuditEventSync(
 // Convenience Functions
 // =============================================================================
 
-interface AuditContext {
+export interface AuditContext {
   userId?: string | null
   email?: string
   ipAddress: string

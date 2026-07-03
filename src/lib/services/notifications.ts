@@ -33,6 +33,7 @@ import {
   itHilfeCompleted,
   itHilfeReviewReceived,
 } from '@/lib/email/templates/it-hilfe'
+import { contentSubmissionApproved, contentSubmissionRejected } from '@/lib/email/templates/content'
 import type { EmailContent } from '@/lib/email/types'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
 
@@ -139,6 +140,18 @@ function getEmailContent(payload: NotificationPayload): EmailContent {
       metadata.reviewText ?? '',
       metadata.requestUrl,
     )
+  }
+
+  // Content submissions — approve/reject decisions keep their rich templates
+  // when dispatched through the fused path (metadata.action carries the
+  // decision; missing metadata degrades to the generic email below).
+  if (type === NOTIFICATION_TYPES.CONTENT_SUBMISSION_STATUS && metadata?.action) {
+    const name = metadata.submitterName ?? 'Benutzer'
+    const submissionTitle = metadata.title ?? title
+    const contentType = metadata.contentType ?? ''
+    return metadata.action === 'approve'
+      ? contentSubmissionApproved(name, submissionTitle, contentType)
+      : contentSubmissionRejected(name, submissionTitle, contentType, metadata.reason || undefined)
   }
 
   return notificationEmail(title, content)

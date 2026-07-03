@@ -12,7 +12,7 @@
  *   - returns 401 when not authenticated
  *   - returns 404 when finalizeProtocol returns false (not found / wrong status)
  *   - returns 200 with { finalized: true } on success
- *   - calls notifyAllStaff after successful finalization
+ *   - route does NOT notify (service owns the attendee notification)
  */
 
 // ---------------------------------------------------------------------------
@@ -157,17 +157,9 @@ describe('POST /api/protocols/[id]/finalize — success', () => {
     expect(mockFinalizeProtocol).toHaveBeenCalledWith('proto-42')
   })
 
-  it('calls notifyAllStaff after successful finalization', async () => {
+  it('does NOT notify from the route — the attendee notification fires inside finalizeProtocol (a route-level notifyAllStaff double-notified every staff member)', async () => {
     await POST(makeRequest(), makeContext())
-    expect(mockNotifyAllStaff).toHaveBeenCalledTimes(1)
-    expect(mockNotifyAllStaff).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: 'protocol_finalized',
-        related_type: 'protocol',
-        related_id: 'proto-1',
-      }),
-      'user-1'
-    )
+    expect(mockNotifyAllStaff).not.toHaveBeenCalled()
   })
 
   it('does not call notifyAllStaff when finalizeProtocol returns false', async () => {
