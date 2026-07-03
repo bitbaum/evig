@@ -1,27 +1,20 @@
 /**
  * @jest-environment node
  *
- * Tests for PATCH /api/admin/approvals/[id]
+ * Tests for PATCH /api/admin/approvals/[id] — pilot B on the shared
+ * review-workflow core.
  *
- * Mission-relevant: content approval transitions are governance actions —
- * wrong status transitions would allow approving already-approved content
- * or rejecting content that can't be rejected.
- *
- * Behaviors locked:
- *   PATCH /api/admin/approvals/[id]
+ * The lock/UPDATE/dispatch mechanics are covered by the lifecycle tests.
+ * THESE tests lock the route's wiring:
  *   - returns 401 when not authenticated
  *   - returns 400 when body is invalid
- *   - returns 404 when submission not found
- *   - returns 400 when transition is invalid (e.g. approved → rejected)
- *   - returns 200 on approve
- *   - returns 200 on reject
- *   - email failure does not affect response (fire-and-forget)
- *   - returns 500 when DB throws
+ *   - failure-code mapping: not_found→404, invalid_transition→400 (with the
+ *     approved-is-terminal message), conflict→400
+ *   - 200 on approve/reject with the historic message + status payload
+ *   - reject passes the reason through; approve/reopen use reason:'skip'
+ *   - emit builds the full event: notification + rich-template metadata +
+ *     historic activity verbs + content_decision audit with route context
  */
-
-// ---------------------------------------------------------------------------
-// Mocks
-// ---------------------------------------------------------------------------
 
 const mockAuth = jest.fn()
 
@@ -46,56 +39,29 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }))
 
-const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockInnerJoin = jest.fn()
-const mockWhere = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
+const mockRunReviewTransition = jest.fn()
+jest.mock('@/lib/lifecycle/review-workflow', () => ({
+  runReviewTransition: (opts: unknown) => mockRunReviewTransition(opts),
+}))
 
+const mockWhere = jest.fn()
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    select: () => ({ from: () => ({ where: mockWhere }) }),
   },
 }))
 
 jest.mock('@/db/schema', () => ({
-  userContentSubmissions: { id: 'ucs_id', status: 'ucs_status', title: 'ucs_title', contentType: 'ucs_contentType', contentId: 'ucs_contentId', userId: 'ucs_userId', reviewedBy: 'ucs_reviewedBy', reviewedAt: 'ucs_reviewedAt', updatedAt: 'ucs_updatedAt' },
   users: { id: 'u_id', email: 'u_email', name: 'u_name' },
 }))
 
 jest.mock('drizzle-orm', () => ({
-  ...jest.requireActual('drizzle-orm'),
   eq: jest.fn().mockReturnValue({ __eq: true }),
-  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'NOW()' }), { raw: jest.fn(), join: jest.fn() }),
-  // audit.ts calls getTableName(authAuditLog) at module load; the @/db/schema
-  // mock returns plain objects (not real Drizzle tables), so override here.
-  getTableName: () => 'auth_audit_log',
 }))
 
 jest.mock('@/lib/schemas', () => ({
-  validateBody: jest.fn().mockReturnValue({ success: true, data: { action: 'approve' } }),
+  validateBody: jest.fn(),
   AdminApprovalActionSchema: {},
-}))
-
-jest.mock('@/config/approval-status', () => ({
-  APPROVAL_STATUS: {
-    PENDING: 'pending',
-    APPROVED: 'approved',
-    REJECTED: 'rejected',
-    REQUIRES_CHANGES: 'requires_changes',
-    PUBLISHED: 'published',
-  },
-}))
-
-jest.mock('@/lib/email', () => ({
-  sendEmail: jest.fn().mockResolvedValue({ success: true, messageId: 'test-msg' }),
-}))
-
-jest.mock('@/lib/activity', () => ({
-  logActivity: jest.fn(),
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -115,44 +81,26 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
-// ---------------------------------------------------------------------------
-// Imports (after mocks)
-// ---------------------------------------------------------------------------
-
 import { NextRequest } from 'next/server'
 import { PATCH } from '../route'
-
-// ---------------------------------------------------------------------------
-// Fixtures
-// ---------------------------------------------------------------------------
 
 const MOCK_SESSION = {
   user: { id: 'admin-1', email: 'admin@revamp-it.ch', name: 'Admin', isStaff: true, staffPermissions: ['*'] as string[], isSuperAdmin: true },
   expires: '2027-01-01',
 }
 
-const MOCK_SUBMISSION_PENDING = {
-  id: 'sub-1',
+const ROW = {
   status: 'pending',
+  user_id: 'u1',
   title: 'Mein Blog-Artikel',
-  contentType: 'blog_post',
-  contentId: 'p-1',
-}
-
-const MOCK_SUBMISSION_APPROVED = {
-  ...MOCK_SUBMISSION_PENDING,
-  status: 'approved',
-}
-
-const MOCK_SUBMITTER = {
-  email: 'user@example.com',
-  name: 'User',
+  content_type: 'blog_post',
+  content_id: 'p-1',
 }
 
 function makeRequest(body: Record<string, unknown> = { action: 'approve' }) {
   return new NextRequest('http://localhost/api/admin/approvals/sub-1', {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'user-agent': 'jest-agent', 'x-forwarded-for': '9.9.9.9' },
     body: JSON.stringify(body),
   })
 }
@@ -161,39 +109,28 @@ function makeContext(id = 'sub-1') {
   return { params: Promise.resolve({ id }) }
 }
 
-beforeEach(() => {
-  jest.resetAllMocks()
-  mockAuth.mockResolvedValue(MOCK_SESSION)
-  // GET submission: from().where()
-  // GET submitter: from().innerJoin().where()
-  mockFrom.mockReturnValue({ where: mockWhere, innerJoin: mockInnerJoin })
-  mockInnerJoin.mockReturnValue({ where: mockWhere })
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockResolvedValue(undefined)
-  // By default: submission exists (pending) + submitter found
-  mockWhere
-    .mockResolvedValueOnce([MOCK_SUBMISSION_PENDING])  // submission lookup
-    .mockResolvedValueOnce([MOCK_SUBMITTER])             // submitter lookup
+function setValidBody(data: Record<string, unknown>) {
+  const schemas = jest.requireMock('@/lib/schemas') as { validateBody: jest.Mock }
+  schemas.validateBody.mockReturnValue({ success: true, data })
+}
 
-  const schemas = require('@/lib/schemas')
-  schemas.validateBody.mockReturnValue({ success: true, data: { action: 'approve' } })
+beforeEach(() => {
+  jest.clearAllMocks()
+  mockAuth.mockResolvedValue(MOCK_SESSION)
+  mockWhere.mockResolvedValue([{ name: 'User', email: 'user@example.com' }])
+  setValidBody({ action: 'approve' })
+  mockRunReviewTransition.mockResolvedValue({ ok: true, row: ROW, from: 'pending', to: 'approved' })
 })
 
-// ============================================================================
-// PATCH /api/admin/approvals/[id]
-// ============================================================================
-
-describe('PATCH /api/admin/approvals/[id] — unauthenticated', () => {
+describe('PATCH /api/admin/approvals/[id] — auth + validation', () => {
   it('returns 401 when session is null', async () => {
     mockAuth.mockResolvedValueOnce(null)
     const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(401)
   })
-})
 
-describe('PATCH /api/admin/approvals/[id] — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const schemas = require('@/lib/schemas')
+    const schemas = jest.requireMock('@/lib/schemas') as { validateBody: jest.Mock }
     const { NextResponse } = jest.requireActual('next/server')
     schemas.validateBody.mockReturnValueOnce({
       success: false,
@@ -204,66 +141,90 @@ describe('PATCH /api/admin/approvals/[id] — validation', () => {
   })
 })
 
-describe('PATCH /api/admin/approvals/[id] — service errors', () => {
-  it('returns 404 when submission not found', async () => {
-    mockWhere.mockReset()
-    mockWhere.mockResolvedValueOnce([])
+describe('PATCH /api/admin/approvals/[id] — failure-code mapping', () => {
+  it('not_found → 404', async () => {
+    mockRunReviewTransition.mockResolvedValueOnce({ ok: false, code: 'not_found' })
     const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(404)
   })
 
-  it('returns 400 when transition is invalid', async () => {
-    mockWhere.mockReset()
-    mockWhere.mockResolvedValueOnce([MOCK_SUBMISSION_APPROVED])
+  it('invalid_transition from approved → 400 with the terminal message', async () => {
+    mockRunReviewTransition.mockResolvedValueOnce({
+      ok: false, code: 'invalid_transition', reason: 'wrong_state', from: 'approved',
+    })
     const response = await PATCH(makeRequest({ action: 'reject' }), makeContext())
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toContain('Genehmigte Einreichungen')
+  })
+
+  it('conflict → 400', async () => {
+    mockRunReviewTransition.mockResolvedValueOnce({ ok: false, code: 'conflict' })
+    const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(400)
   })
 })
 
-describe('PATCH /api/admin/approvals/[id] — success', () => {
-  it('returns 200 on approve', async () => {
-    const response = await PATCH(makeRequest({ action: 'approve' }), makeContext())
+describe('PATCH /api/admin/approvals/[id] — success wiring', () => {
+  it('returns 200 with message + status on approve', async () => {
+    const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.data.status).toBe('approved')
+    expect(body.data.message).toBe('Inhalt genehmigt')
   })
 
-  it('returns 200 on reject', async () => {
-    const schemas = require('@/lib/schemas')
-    schemas.validateBody.mockReturnValueOnce({ success: true, data: { action: 'reject' } })
-    const response = await PATCH(makeRequest({ action: 'reject' }), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.status).toBe('rejected')
+  it('reject passes the reason through; approve/reopen skip the reason column', async () => {
+    setValidBody({ action: 'reject', reason: 'Bitte Quellen ergänzen' })
+    mockRunReviewTransition.mockResolvedValueOnce({ ok: true, row: ROW, from: 'pending', to: 'rejected' })
+    await PATCH(makeRequest({ action: 'reject' }), makeContext())
+
+    const opts = mockRunReviewTransition.mock.calls[0][0]
+    expect(opts.reason).toBe('Bitte Quellen ergänzen')
+    expect(opts.target.columns.reason).toBe('rejection_reason')
+    expect(opts.write.approve).toEqual({ reason: 'skip' })
+    expect(opts.write.reopen).toEqual({ reason: 'skip' })
+    expect(opts.write.reject).toBeUndefined() // default = write it
   })
 
-  it('email failure does not affect response', async () => {
-    const { sendEmail } = require('@/lib/email')
-    sendEmail.mockRejectedValueOnce(new Error('SMTP error'))
-    const response = await PATCH(makeRequest(), makeContext())
-    expect(response.status).toBe(200)
+  it('emit builds notification + metadata + historic activity verb + audit ctx', async () => {
+    setValidBody({ action: 'reject', reason: 'Zu kurz' })
+    await PATCH(makeRequest({ action: 'reject' }), makeContext())
+
+    const opts = mockRunReviewTransition.mock.calls[0][0]
+    const event = await opts.emit(ROW, { from: 'pending', to: 'rejected', action: 'reject' })
+
+    expect(event).toEqual(expect.objectContaining({
+      type: 'content_submission_status',
+      recipients: { userId: 'u1' },
+      title: 'Einreichung abgelehnt',
+    }))
+    expect(event.content).toContain('Zu kurz')
+    expect(event.metadata).toEqual(expect.objectContaining({
+      action: 'reject', submitterName: 'User', title: ROW.title, contentType: 'blog_post', reason: 'Zu kurz',
+    }))
+    expect(event.activity).toEqual(expect.objectContaining({
+      actorId: 'admin-1', action: 'rejected_listing', subjectId: 'p-1',
+    }))
+    expect(event.audit).toEqual(expect.objectContaining({
+      kind: 'content_decision',
+      decision: 'rejected',
+      ctx: expect.objectContaining({ ipAddress: '9.9.9.9', userAgent: 'jest-agent', userId: 'admin-1' }),
+    }))
   })
 
-  it('logs (resolved) warn when sendEmail returns {success:false} — admin-detectable, not silently swallowed', async () => {
-    // sendEmail RESOLVES with {success:false,error} on SMTP/Listmonk
-    // failure rather than throwing. Without the .success check the
-    // submitter would silently never learn of the approve/reject
-    // decision (no in-app fallback for content submissions).
-    const { sendEmail } = require('@/lib/email')
-    sendEmail.mockResolvedValueOnce({ success: false, error: 'Listmonk disabled' })
+  it('emit returns null for reopen (no notification on re-queue)', async () => {
+    setValidBody({ action: 'reopen' })
+    mockRunReviewTransition.mockResolvedValueOnce({ ok: true, row: ROW, from: 'rejected', to: 'pending' })
+    await PATCH(makeRequest({ action: 'reopen' }), makeContext())
 
-    const response = await PATCH(makeRequest({ action: 'approve' }), makeContext())
-    expect(response.status).toBe(200) // The decision still applies
-
-    const { logger } = require('@/lib/logger')
-    expect(logger.warn).toHaveBeenCalledWith(
-      'Content approval email failed (resolved)',
-      expect.objectContaining({ action: 'approve', error: 'Listmonk disabled' }),
-    )
+    const opts = mockRunReviewTransition.mock.calls[0][0]
+    const event = await opts.emit(ROW, { from: 'rejected', to: 'pending', action: 'reopen' })
+    expect(event).toBeNull()
   })
 
-  it('returns 500 when DB update throws', async () => {
-    mockUpdateWhere.mockRejectedValueOnce(new Error('DB error'))
+  it('returns 500 when the core throws', async () => {
+    mockRunReviewTransition.mockRejectedValueOnce(new Error('DB error'))
     const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(500)
   })

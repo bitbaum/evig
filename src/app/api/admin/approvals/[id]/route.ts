@@ -1,22 +1,53 @@
 /**
  * Admin Approval Action API
- * PATCH /api/admin/approvals/[id] - Approve or reject a content submission
+ * PATCH /api/admin/approvals/[id] - Approve, reject or reopen a content submission
+ *
+ * Pilot B of the shared review-workflow core: the transition table, FOR UPDATE
+ * race safety, review-column writes and the side-effect fan-out (in-app +
+ * email + activity + audit) all run through lifecycle/review-workflow —
+ * this route only maps HTTP ⇄ core.
+ *
+ * Behavior note (intentional): the decision email now goes through the fused
+ * notification path, so it respects the user's email_notifications preference
+ * (the old direct sendEmail bypassed it). The in-app notification is the
+ * guaranteed channel.
  */
 
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { userContentSubmissions, users } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { APPROVAL_STATUS } from '@/config/approval-status'
-import { logger } from '@/lib/logger'
-import { logContentDecision } from '@/lib/auth/audit'
-import { sendEmail } from '@/lib/email'
-import { logActivity } from '@/lib/activity'
-import { createNotification } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
+import { TABLE_NAMES } from '@/config/database'
+import { logger } from '@/lib/logger'
+import { runReviewTransition } from '@/lib/lifecycle/review-workflow'
+import type { TransitionTable } from '@/lib/lifecycle'
+import type { WorkflowEvent } from '@/lib/lifecycle/dispatch'
+
+const CONTENT_TRANSITIONS: TransitionTable = [
+  { action: 'approve', from: APPROVAL_STATUS.PENDING, to: APPROVAL_STATUS.APPROVED },
+  { action: 'reject', from: APPROVAL_STATUS.PENDING, to: APPROVAL_STATUS.REJECTED },
+  // Re-review: a rejected submission can be reopened (approved is terminal).
+  { action: 'reopen', from: APPROVAL_STATUS.REJECTED, to: APPROVAL_STATUS.PENDING },
+]
+
+const SUCCESS_MESSAGES: Record<string, string> = {
+  approve: 'Inhalt genehmigt',
+  reject: 'Inhalt abgelehnt',
+  reopen: 'Zur erneuten Prüfung geöffnet',
+}
+
+interface SubmissionRow extends Record<string, unknown> {
+  status: string
+  user_id: string
+  title: string
+  content_type: string
+  content_id: string | null
+}
 
 export const PATCH = withAdmin<{ id: string }>('approvals', async (request, session, context) => {
   try {
@@ -26,136 +57,98 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
     if (!validation.success) return validation.error
     const { action, reason } = validation.data
 
-    // Verify submission exists and is pending
-    const [submission] = await db
-      .select({
-        id: userContentSubmissions.id,
-        status: userContentSubmissions.status,
-        title: userContentSubmissions.title,
-        contentType: userContentSubmissions.contentType,
-        contentId: userContentSubmissions.contentId,
-      })
-      .from(userContentSubmissions)
-      .where(eq(userContentSubmissions.id, id))
+    const result = await runReviewTransition<SubmissionRow>({
+      target: {
+        table: TABLE_NAMES.USER_CONTENT_SUBMISSIONS,
+        columns: { reason: 'rejection_reason' },
+        select: ['user_id', 'title', 'content_type', 'content_id'],
+      },
+      transitions: CONTENT_TRANSITIONS,
+      id,
+      action,
+      actor: { id: session.user.id },
+      reason: reason ?? null,
+      // Only a rejection writes the reason column; approve/reopen leave it.
+      write: {
+        approve: { reason: 'skip' },
+        reopen: { reason: 'skip' },
+      },
+      emit: async (row, ctx): Promise<WorkflowEvent | null> => {
+        if (ctx.action !== 'approve' && ctx.action !== 'reject') return null
+        const approved = ctx.action === 'approve'
 
-    if (!submission) {
-      return apiNotFound('Einreichung nicht gefunden')
-    }
+        const [submitter] = await db
+          .select({ name: users.name, email: users.email })
+          .from(users)
+          .where(eq(users.id, row.user_id))
 
-    // Allow pending → approved/rejected, and rejected → pending (re-review)
-    const VALID_TRANSITIONS: Record<string, string[]> = {
-      [APPROVAL_STATUS.PENDING]: [APPROVAL_STATUS.APPROVED, APPROVAL_STATUS.REJECTED],
-      [APPROVAL_STATUS.REJECTED]: [APPROVAL_STATUS.PENDING],
-    }
-
-    const newStatus = action === 'approve' ? APPROVAL_STATUS.APPROVED : action === 'reopen' ? APPROVAL_STATUS.PENDING : APPROVAL_STATUS.REJECTED
-    const allowedNext = VALID_TRANSITIONS[submission.status!]
-
-    if (!allowedNext || !allowedNext.includes(newStatus)) {
-      return apiBadRequest(
-        submission.status === APPROVAL_STATUS.APPROVED
-          ? 'Genehmigte Einreichungen können nicht geändert werden'
-          : `Ungültiger Statusübergang: ${submission.status} → ${newStatus}`
-      )
-    }
-
-    await db
-      .update(userContentSubmissions)
-      .set({
-        status: newStatus,
-        reviewedBy: session.user.id,
-        reviewedAt: sql`NOW()`,
-        updatedAt: sql`NOW()`,
-        ...(action === 'reject' ? { rejectionReason: reason ?? null } : {}),
-      })
-      .where(eq(userContentSubmissions.id, id))
-
-    // Send notification email to submitter. sendEmail RESOLVES with
-    // {success:false,error} on SMTP/Listmonk failure rather than throwing,
-    // so the bare try/catch only catches the rare exception path.
-    // Realistic failures slipped through with no log entry. Same pattern
-    // as c610bb72 / 87f084af. Content-submission decisions have no
-    // in-app notification fallback, so the email is the submitter's
-    // only signal — silent SMTP failure leaves them unaware.
-    try {
-      const [submitter] = await db
-        .select({ id: users.id, email: users.email, name: users.name })
-        .from(users)
-        .innerJoin(userContentSubmissions, eq(userContentSubmissions.userId, users.id))
-        .where(eq(userContentSubmissions.id, id))
-
-      if (submitter) {
-        // In-app notification FIRST — email deliverability is not guaranteed
-        // (unauthenticated sender domain), so the decision must also land
-        // where the submitter can always see it.
-        if (action === 'approve' || action === 'reject') {
-          await createNotification(submitter.id, {
-            type: NOTIFICATION_TYPES.CONTENT_SUBMISSION_STATUS,
-            title: action === 'approve' ? 'Einreichung genehmigt' : 'Einreichung abgelehnt',
-            content: action === 'approve'
-              ? `«${submission.title}» wurde genehmigt und wird veröffentlicht.`
-              : `«${submission.title}» wurde abgelehnt.${reason ? ` Begründung: ${reason}` : ''}`,
-          }).catch(err => logger.warn('Content approval notification failed', { error: err, submissionId: id }))
+        return {
+          type: NOTIFICATION_TYPES.CONTENT_SUBMISSION_STATUS,
+          recipients: { userId: row.user_id },
+          title: approved ? 'Einreichung genehmigt' : 'Einreichung abgelehnt',
+          content: approved
+            ? `«${row.title}» wurde genehmigt und wird veröffentlicht.`
+            : `«${row.title}» wurde abgelehnt.${reason ? ` Begründung: ${reason}` : ''}`,
+          metadata: {
+            action: ctx.action,
+            submitterName: submitter?.name || 'Benutzer',
+            title: row.title,
+            contentType: row.content_type,
+            ...(reason ? { reason } : {}),
+          },
+          activity: {
+            actorId: session.user.id,
+            // Historic verbs kept for feed continuity.
+            action: approved ? 'approved_blog' : 'rejected_listing',
+            subjectType: row.content_type ?? undefined,
+            subjectId: row.content_id ?? id,
+            subjectLabel: row.title ?? row.content_type ?? undefined,
+          },
+          audit: {
+            kind: 'content_decision',
+            ctx: {
+              userId: session.user.id,
+              ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+              userAgent: request.headers.get('user-agent') || 'unknown',
+            },
+            contentType: row.content_type ?? 'unknown',
+            contentId: row.content_id ?? id,
+            decision: approved ? 'approved' : 'rejected',
+          },
         }
+      },
+    })
 
-        const templateName = action === 'approve' ? 'contentSubmissionApproved' : 'contentSubmissionRejected'
-        const emailResult = await sendEmail(
-          submitter.email,
-          templateName,
-          submitter.name || 'Benutzer',
-          submission.title,
-          submission.contentType,
-          ...(action === 'reject' ? [reason ?? ''] : [])
-        )
-        if (!emailResult.success) {
-          logger.warn('Content approval email failed (resolved)', {
-            submissionId: id,
-            action,
-            error: emailResult.error,
-          })
-        }
+    if (!result.ok) {
+      switch (result.code) {
+        case 'not_found':
+          return apiNotFound('Einreichung nicht gefunden')
+        case 'invalid_transition':
+          return apiBadRequest(
+            result.from === APPROVAL_STATUS.APPROVED
+              ? 'Genehmigte Einreichungen können nicht geändert werden'
+              : `Ungültiger Statusübergang: ${result.from} (${action})`,
+          )
+        case 'conflict':
+          return apiBadRequest('Der Status wurde soeben von jemand anderem geändert — bitte neu laden.')
+        default:
+          return apiBadRequest('Aktion nicht möglich')
       }
-    } catch (emailError) {
-      logger.warn('Content approval email failed (rejected)', { error: emailError, submissionId: id, action })
     }
 
     logger.info('Content submission reviewed', {
       submissionId: id,
-      action: newStatus,
+      action: result.to,
       reviewerId: session.user.id,
-      title: submission.title,
+      title: result.row.title,
     })
-
-    if (action === 'approve' || action === 'reject') {
-      logActivity({
-        actorId: session.user.id,
-        action: action === 'approve' ? 'approved_blog' : 'rejected_listing',
-        subjectType: submission.contentType ?? undefined,
-        subjectId: submission.contentId ?? undefined,
-        subjectLabel: submission.title ?? submission.contentType ?? undefined,
-      })
-
-      // Compliance audit — buffered (info-severity, not security-critical).
-      // Provides a who-decided-what trail separate from the activity feed
-      // (which is user-facing; audit log is admin-only).
-      logContentDecision(
-        {
-          userId: session.user.id,
-          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-          userAgent: request.headers.get('user-agent') || 'unknown',
-        },
-        submission.contentType ?? 'unknown',
-        submission.contentId ?? id,
-        action === 'approve' ? 'approved' : 'rejected',
-      )
-    }
 
     return apiSuccess({
-      message: action === 'approve' ? 'Inhalt genehmigt' : 'Inhalt abgelehnt',
-      status: newStatus,
+      message: SUCCESS_MESSAGES[action] ?? 'Aktualisiert',
+      status: result.to,
     })
   } catch (error) {
-    logger.error('Error processing approval', { error })
-    return apiError(error, 'Freigabe konnte nicht verarbeitet werden')
+    logger.error('Error processing approval action', { error })
+    return apiError(error, 'Aktion konnte nicht verarbeitet werden')
   }
 })
