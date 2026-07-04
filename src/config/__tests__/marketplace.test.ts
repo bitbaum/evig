@@ -35,6 +35,8 @@ import {
   formatCHF,
   getCategoryLabel,
   getSpecFiltersForCategory,
+  supportsSecureCheckout,
+  supportsDirectContact,
 } from '../marketplace'
 
 // ============================================================================
@@ -142,5 +144,31 @@ describe('getSpecFiltersForCategory', () => {
 
   it('returns empty array for peripherals category "80" (no spec filters defined)', () => {
     expect(getSpecFiltersForCategory('80')).toEqual([])
+  })
+})
+
+// ============================================================================
+// Payment mode helpers
+// ============================================================================
+
+describe('supportsSecureCheckout', () => {
+  it('returns true for secure and both', () => {
+    expect(supportsSecureCheckout('secure')).toBe(true)
+    expect(supportsSecureCheckout('both')).toBe(true)
+  })
+
+  it('returns false for direct', () => {
+    expect(supportsSecureCheckout('direct')).toBe(false)
+  })
+})
+
+describe('supportsDirectContact', () => {
+  it('returns true for direct and both', () => {
+    expect(supportsDirectContact('direct')).toBe(true)
+    expect(supportsDirectContact('both')).toBe(true)
+  })
+
+  it('returns false for secure-only', () => {
+    expect(supportsDirectContact('secure')).toBe(false)
   })
 })

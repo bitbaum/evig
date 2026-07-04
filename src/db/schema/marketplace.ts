@@ -170,6 +170,31 @@ export type ListingReport = typeof listingReports.$inferSelect
 export type NewListingReport = typeof listingReports.$inferInsert
 
 // =============================================================================
+// LISTING QUESTIONS (public Q&A — Ricardo-style)
+// =============================================================================
+
+export const listingQuestions = pgTable('listing_questions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  listingId: uuid('listing_id').notNull().references(() => listings.id, { onDelete: 'cascade' }),
+  askerId: uuid('asker_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  question: text('question').notNull(),
+  answer: text('answer'),
+  answeredAt: timestamp('answered_at', { withTimezone: true, mode: 'string' }),
+  answeredBy: uuid('answered_by').references(() => users.id, { onDelete: 'set null' }),
+  // CHECK (status IN ('open', 'answered', 'hidden'))
+  status: text('status').notNull().default('open'),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_listing_questions_listing').on(table.listingId, table.createdAt),
+  index('idx_listing_questions_asker').on(table.askerId),
+  index('idx_listing_questions_status').on(table.listingId, table.status),
+])
+
+export type ListingQuestion = typeof listingQuestions.$inferSelect
+export type NewListingQuestion = typeof listingQuestions.$inferInsert
+
+// =============================================================================
 // MARKETPLACE ORDERS (secure payment mode only)
 // =============================================================================
 // Orders for P2P transactions using secure payment (escrow).

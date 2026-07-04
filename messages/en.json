@@ -873,6 +873,8 @@
       "cancel": "Cancel",
       "contactSeller": "Send message",
       "buyNow": "Buy now",
+      "securePaymentTitle": "Secure payment via Revamp-IT",
+      "securePaymentDesc": "Pay via Payrexx — funds are released only after you confirm receipt",
       "revampitTrustTitle": "Verified by Revamp-IT",
       "revampitTrustDesc": "Professionally refurbished, tested, and ready for its next owner",
       "save": "Save",
@@ -891,6 +893,23 @@
       "unavailableRemoved": "This listing has been removed and is no longer available.",
       "unavailableDraft": "This listing has not been published yet.",
       "unavailableGeneric": "This listing is currently unavailable."
+    },
+    "questions": {
+      "title": "Questions & answers",
+      "subtitle": "Public questions — answers are visible to everyone",
+      "loading": "Loading questions…",
+      "emptyPublic": "No questions yet — be the first to ask.",
+      "emptyOwner": "No questions yet — buyers can ask publicly here.",
+      "askButton": "Ask a question",
+      "askPlaceholder": "e.g. Is the battery still good? What's included?",
+      "submitQuestion": "Send question",
+      "cancel": "Cancel",
+      "awaitingAnswer": "· open",
+      "sellerAnswer": "Seller's answer",
+      "answerPlaceholder": "Your public answer…",
+      "submitAnswer": "Publish answer",
+      "errorAsk": "Could not send question",
+      "errorAnswer": "Could not save answer"
     },
     "conditionExplainer": "What does \"{condition}\" mean for {category}?",
     "pagination": {

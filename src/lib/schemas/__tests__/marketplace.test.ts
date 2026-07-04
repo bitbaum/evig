@@ -12,6 +12,8 @@ import {
   CreateListingSchema,
   UpdateListingSchema,
   ContactSellerSchema,
+  AskListingQuestionSchema,
+  AnswerListingQuestionSchema,
   CreateOrderSchema,
   ReportListingSchema,
   ListingsQuerySchema,
@@ -53,9 +55,9 @@ describe('CreateListingSchema', () => {
     if (result.success) expect(result.data.delivery_options).toBe('pickup')
   })
 
-  it('defaults payment_mode to "direct"', () => {
+  it('defaults payment_mode to "both"', () => {
     const result = CreateListingSchema.safeParse(valid)
-    if (result.success) expect(result.data.payment_mode).toBe('direct')
+    if (result.success) expect(result.data.payment_mode).toBe('both')
   })
 
   it('rejects title shorter than 3 characters', () => {
@@ -183,6 +185,39 @@ describe('ContactSellerSchema', () => {
 
   it('rejects missing message', () => {
     const result = ContactSellerSchema.safeParse({})
+    expect(result.success).toBe(false)
+  })
+})
+
+// ============================================================================
+// Listing Q&A schemas
+// ============================================================================
+
+describe('AskListingQuestionSchema', () => {
+  it('accepts valid question', () => {
+    const result = AskListingQuestionSchema.safeParse({ question: 'Ist der Akku noch gut?' })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects question shorter than 5 characters', () => {
+    const result = AskListingQuestionSchema.safeParse({ question: 'Hi?' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects question longer than MAX_QUESTION_LENGTH', () => {
+    const result = AskListingQuestionSchema.safeParse({ question: 'x'.repeat(MARKETPLACE_LIMITS.MAX_QUESTION_LENGTH + 1) })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('AnswerListingQuestionSchema', () => {
+  it('accepts valid answer', () => {
+    const result = AnswerListingQuestionSchema.safeParse({ answer: 'Ja, Akku hält noch ca. 4 Stunden.' })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects answer shorter than 5 characters', () => {
+    const result = AnswerListingQuestionSchema.safeParse({ answer: 'Ja.' })
     expect(result.success).toBe(false)
   })
 })

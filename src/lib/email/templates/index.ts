@@ -89,6 +89,7 @@ export {
 export {
   listingPublishedConfirmation,
   newMarketplaceMessage,
+  newListingQuestion,
   listingReviewNotification,
   orderConfirmationBuyer,
   newOrderNotificationSeller,

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-19
-last_modified_summary: E2E commands; DB SSOT Hetzner-only
+last_modified_date: 2026-07-04
+last_modified_summary: Marketplace rollout tracker; migration 114 prod-applied note
 ---
 
 # RevampIT Commands Reference (SSOT)
@@ -118,6 +118,19 @@ Requires `.env.selfhost.local` locally (gitignored). Copy from a teammate or rec
 | `AUTH_TEST_USER_EMAIL` | Optional override for user persona (defaults to butaeff) |
 | `AUTH_TEST_ADMIN_EMAIL` | Optional override for admin persona (defaults to georgy) |
 | `AUTH_TEST_EMAIL` / `AUTH_TEST_PASSWORD` | Legacy single-account auth smoke (`test:e2e:auth`) |
+| `PLAYWRIGHT_CHANNEL` | `chrome` or `msedge` when bundled Chromium cannot install (e.g. Ubuntu 26) |
+
+**Local marketplace journey (no prod secrets):**
+
+```bash
+npm run e2e:seed
+PLAYWRIGHT_CHANNEL=chrome \
+AUTH_TEST_USER_EMAIL=e2e-user@revampit.test AUTH_TEST_USER_PASSWORD='E2EUser123!' \
+AUTH_TEST_ADMIN_EMAIL=e2e-admin@revampit.test AUTH_TEST_ADMIN_PASSWORD='E2EAdmin123!' \
+npm run test:e2e:marketplace:journey
+```
+
+Apply migration `114_listing_questions.sql` before first local run (`npm run db:migrate` or direct `psql`). **Prod:** applied on Hetzner 2026-07-04 (see `docs/FEATURE_INVENTORY.md` → Marketplace UX rollout tracker).
 
 After each successful deploy, **Dual-persona inventory smoke** runs automatically when the two password secrets are set (routes + IT-Hilfe + marketplace + workshops + service journeys). Manual re-run: `npm run test:e2e:inventory:prod`.
 

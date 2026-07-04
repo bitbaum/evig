@@ -50,7 +50,7 @@ export const INITIAL_LISTING_FORM: ListingFormData = {
   deliveryOptions: 'pickup',
   shippingCost: '',
   pickupLocation: '',
-  paymentMode: 'direct',
+  paymentMode: 'both',
   specs: [],
   conditionChecks: [],
 }

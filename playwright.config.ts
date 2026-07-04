@@ -5,6 +5,9 @@ import path from 'node:path';
 const authFile = path.join(__dirname, 'tests/e2e/.auth/user.json');
 const savedSession = fs.existsSync(authFile) ? authFile : undefined;
 
+/** Use installed Chrome/Edge when bundled Chromium cannot be downloaded (e.g. Ubuntu 26). */
+const browserChannel = process.env.PLAYWRIGHT_CHANNEL as 'chrome' | 'msedge' | undefined;
+
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -37,7 +40,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        ...(browserChannel ? { channel: browserChannel } : {}),
+      },
     },
 
     // Uncomment for cross-browser testing

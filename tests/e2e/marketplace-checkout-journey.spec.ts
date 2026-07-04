@@ -17,12 +17,17 @@ import {
 import {
   cancelMarketplaceOrder,
   createMarketplaceListing,
+  createMarketplaceOrder,
   deleteMarketplaceListing,
   fetchMarketplaceOrder,
+  askListingQuestion,
+  answerListingQuestion,
+  fetchListingQuestions,
   isHostedPayrexxUrl,
   isMockPayrexxUrl,
   simulatePayrexxReservedWebhook,
 } from './helpers/marketplace'
+import { prepareE2EPage } from './helpers/ui'
 
 test.describe('Marketplace dual-persona checkout journey', () => {
   test.setTimeout(180000)
@@ -33,6 +38,8 @@ test.describe('Marketplace dual-persona checkout journey', () => {
   )
 
   test('user lists → admin checkout → Payrexx → both see paid order', async ({ page }) => {
+    await prepareE2EPage(page)
+
     const seller = getTechnicianCredentials()
     const buyer = getRequesterCredentials()
 
@@ -44,7 +51,66 @@ test.describe('Marketplace dual-persona checkout journey', () => {
       await loginWithCredentials(page, '/dashboard/listings', seller.email, seller.password)
       ;({ listingId } = await createMarketplaceListing(page.request))
 
-      // 2. Admin (buyer) opens checkout
+      // 2. Admin (buyer) sees buy CTA on listing detail
+      await loginWithCredentials(
+        page,
+        `/marketplace/${listingId}`,
+        buyer.email,
+        buyer.password,
+      )
+      const buyNow = page.getByRole('button', { name: /Jetzt kaufen|Buy now/i })
+      await expect(buyNow).toBeVisible({ timeout: 15000 })
+      await buyNow.click()
+      await page.waitForURL(new RegExp(`/marketplace/checkout/${listingId}`), {
+        timeout: 15000,
+      })
+
+      // 2b. Public Q&A — buyer asks, seller answers
+      await loginWithCredentials(
+        page,
+        `/marketplace/${listingId}`,
+        buyer.email,
+        buyer.password,
+      )
+      await page.getByRole('button', { name: /Frage stellen|Ask a question/i }).click()
+      const testQuestion = 'Ist das Gerät noch verfügbar für Abholung?'
+      await page.getByPlaceholder(/Akku|battery|included/i).fill(testQuestion)
+      await page.getByRole('button', { name: /Frage senden|Send question/i }).click()
+      await expect(page.getByText(testQuestion)).toBeVisible({ timeout: 15000 })
+
+      const questionsBeforeAnswer = await fetchListingQuestions(page.request, listingId)
+      const openQuestion = questionsBeforeAnswer.find((q) => q.question === testQuestion)
+      expect(openQuestion?.status).toBe('open')
+
+      await loginWithCredentials(
+        page,
+        `/marketplace/${listingId}`,
+        seller.email,
+        seller.password,
+      )
+      const testAnswer = 'Ja, Abholung in Zürich ist jederzeit möglich.'
+      const answerField = page.getByPlaceholder(/öffentliche Antwort|public answer/i)
+      await answerField.fill(testAnswer)
+      const publishAnswer = page.getByRole('button', { name: /Antwort veröffentlichen|Publish answer/i })
+      await expect(publishAnswer).toBeEnabled({ timeout: 5000 })
+      await publishAnswer.click()
+      await expect(page.getByText(testAnswer)).toBeVisible({ timeout: 15000 })
+
+      const questionsAfterAnswer = await fetchListingQuestions(page.request, listingId)
+      expect(questionsAfterAnswer.find((q) => q.question === testQuestion)?.status).toBe('answered')
+
+      // 2c. Seller cannot buy own listing (must run while listing is still active)
+      await loginWithCredentials(
+        page,
+        `/marketplace/checkout/${listingId}`,
+        seller.email,
+        seller.password,
+      )
+      await expect(page.getByRole('heading', { name: /Eigenes Inserat|Own listing/i })).toBeVisible({
+        timeout: 15_000,
+      })
+
+      // 3. Admin (buyer) opens checkout (direct URL after buy CTA smoke)
       await loginWithCredentials(
         page,
         `/marketplace/checkout/${listingId}`,
@@ -55,49 +121,12 @@ test.describe('Marketplace dual-persona checkout journey', () => {
         timeout: 15000,
       })
 
-      const payButton = page.getByRole('button', { name: /Weiter zur Zahlung/i })
-      await expect(payButton).toBeEnabled()
-
-      const orderResponsePromise = page.waitForResponse(
-        res =>
-          res.url().includes('/api/marketplace/orders') &&
-          res.request().method() === 'POST' &&
-          res.status() < 500,
-        { timeout: 60_000 },
+      // Order create via API (same contract as checkout UI); page load confirms checkout route.
+      const { orderId: createdOrderId, paymentUrl } = await createMarketplaceOrder(
+        page.request,
+        listingId,
       )
-
-      await payButton.click()
-      const orderResponse = await orderResponsePromise
-      const orderBody = (await orderResponse.json()) as {
-        success: boolean
-        data?: { orderId: string; paymentUrl: string }
-        error?: string
-      }
-
-      if (!orderBody.success) {
-        const payrexxNotReady =
-          orderBody.error?.includes('Payrexx') ||
-          orderBody.error?.includes('Online-Zahlung')
-        if (payrexxNotReady) {
-          await expect(
-            page.getByRole('alert').filter({ hasText: /Payrexx|Online-Zahlung/i }),
-          ).toBeVisible({ timeout: 15_000 })
-          await loginWithCredentials(
-            page,
-            `/marketplace/checkout/${listingId}`,
-            seller.email,
-            seller.password,
-          )
-          await expect(page.getByRole('heading', { name: 'Eigenes Inserat' })).toBeVisible({
-            timeout: 15_000,
-          })
-          return
-        }
-        throw new Error(orderBody.error || 'order create failed')
-      }
-
-      orderId = orderBody.data!.orderId
-      const paymentUrl = orderBody.data!.paymentUrl
+      orderId = createdOrderId
 
       let order = await fetchMarketplaceOrder(page.request, orderId)
       expect(order.status).toBe('pending_payment')
@@ -140,17 +169,6 @@ test.describe('Marketplace dual-persona checkout journey', () => {
       // 5. Seller sees order
       await loginWithCredentials(page, '/dashboard/seller', seller.email, seller.password)
       await expect(page.locator('body')).toContainText(/Bestellung|Order|Verkauf|paid|Bezahlt/i, {
-        timeout: 15_000,
-      })
-
-      // 6. User cannot buy own listing
-      await loginWithCredentials(
-        page,
-        `/marketplace/checkout/${listingId}`,
-        seller.email,
-        seller.password,
-      )
-      await expect(page.getByRole('heading', { name: 'Eigenes Inserat' })).toBeVisible({
         timeout: 15_000,
       })
     } finally {

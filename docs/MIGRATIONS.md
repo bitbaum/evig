@@ -2,7 +2,9 @@
 
 > Single source of truth for "how schema changes reach production."
 
-**Last Updated:** 2026-06-19
+**Last Updated:** 2026-07-04
+
+**Recent prod applies:** `114_listing_questions.sql` — manual on Hetzner 2026-07-04 (ahead of app deploy; idempotent `CREATE TABLE IF NOT EXISTS`).
 
 ## CI drift check
 

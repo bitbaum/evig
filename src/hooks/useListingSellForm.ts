@@ -80,7 +80,7 @@ export function useListingSellForm() {
           deliveryOptions: l.delivery_options || 'pickup',
           shippingCost: l.shipping_cost_chf != null ? String(l.shipping_cost_chf) : '',
           pickupLocation: l.pickup_location || '',
-          paymentMode: l.payment_mode || 'direct',
+          paymentMode: l.payment_mode || 'both',
           images: Array.isArray(l.images) ? l.images.map(img => img.url) : [],
           specs: Array.isArray(l.specs) ? l.specs.map(s => ({ key: s.key, value: s.value || '', unit: s.unit })) : [],
           conditionChecks: Array.isArray(l.condition_checks)

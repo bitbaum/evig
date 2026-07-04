@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-07-03
-last_modified_summary: Legacy admin cleanup — /admin/products, /admin/analytics, /admin/timecards removed
+last_modified_date: 2026-07-04
+last_modified_summary: Marketplace rollout tracker; migration 114 applied on Hetzner prod
 ---
 
 # Feature Inventory (SSOT)
@@ -123,6 +123,27 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 48 | Listing reports | API | ⬜ API-only |
 | 49 | Admin marketplace moderation | `/admin/marketplace` | ✅ inventory E2E |
 | 50 | Legacy `/shop/*` redirects | → marketplace | ✅ inventory E2E |
+| MKT-1 | P2P «Jetzt kaufen» on listing detail | `/marketplace/[id]` → checkout | ✅ local journey E2E green; app deploy in step 6 |
+| MKT-2 | Public listing Q&A (ask + seller answer) | `/marketplace/[id]` + `/api/listings/[id]/questions` | ✅ migration 114 on Hetzner; app deploy in step 6 |
+| MKT-3 | Contact seller (private message) | listing detail | ✅ |
+
+### Marketplace UX rollout tracker (2026-07-04)
+
+Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Update this table as each step lands.
+
+| Step | What | Status | Notes |
+|------|------|--------|-------|
+| 1 | Schema `listing_questions` + Drizzle/API/UI | ✅ | `114_listing_questions.sql`, `ListingQuestions.tsx`, question APIs |
+| 2 | P2P «Jetzt kaufen» CTA (`payment_mode` secure/both) | ✅ | Default sell form `both`; i18n router fix |
+| 3 | Local unit tests | ✅ | marketplace config + Zod schemas |
+| 4 | Local journey E2E (`test:e2e:marketplace:journey`) | ✅ | buy CTA, Q&A, checkout, mock Payrexx — 2026-07-04 |
+| 5 | **Prod DB migration 114** | ✅ | Applied manually on Hetzner `2026-07-04T17:29Z`; `schema_migrations` + `listing_questions` verified |
+| 6 | **Commit + deploy app code** | ✅ | This release; deploy applies migrations idempotently (114 will skip) |
+| 7 | Prod smoke — listing detail buy CTA + Q&A | ⬜ | After deploy: manual or extend `test:e2e:inventory:prod` |
+| 8 | Admin Q&A moderation (`hide` question) | ⬜ | Optional — API supports `hidden` status; no admin UI yet |
+| 9 | i18n parity (`marketplace.questions`, `securePayment*`) | ⬜ | de/en only; fr/it/es/ru/ja/ko pending |
+
+**Next recommended:** step **7** — smoke-test prod after deploy so the tracker reflects what users can actually use.
 
 ---
 

@@ -100,7 +100,7 @@ export const CreateListingSchema = z.object({
   delivery_options: z.enum(DELIVERY_OPTIONS as unknown as [string, ...string[]]).default('pickup'),
   shipping_cost_chf: z.number().min(0).optional().nullable(),
   pickup_location: z.string().max(200).optional().nullable(),
-  payment_mode: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).default('direct'),
+  payment_mode: z.enum(PAYMENT_MODES as unknown as [string, ...string[]]).default('both'),
   status: z.enum(['active', 'draft'] as const).default('active'),
   // Phase 1 additions
   specs: z.array(ListingSpecSchema).max(30).optional(),
@@ -156,6 +156,26 @@ export const ContactSellerSchema = z.object({
 });
 
 export type ContactSellerInput = z.infer<typeof ContactSellerSchema>;
+
+// ============================================================================
+// Listing Questions (public Q&A)
+// ============================================================================
+
+export const AskListingQuestionSchema = z.object({
+  question: z.string()
+    .min(5, 'Frage muss mindestens 5 Zeichen lang sein')
+    .max(MARKETPLACE_LIMITS.MAX_QUESTION_LENGTH, `Frage darf maximal ${MARKETPLACE_LIMITS.MAX_QUESTION_LENGTH} Zeichen lang sein`),
+});
+
+export type AskListingQuestionInput = z.infer<typeof AskListingQuestionSchema>;
+
+export const AnswerListingQuestionSchema = z.object({
+  answer: z.string()
+    .min(5, 'Antwort muss mindestens 5 Zeichen lang sein')
+    .max(MARKETPLACE_LIMITS.MAX_ANSWER_LENGTH, `Antwort darf maximal ${MARKETPLACE_LIMITS.MAX_ANSWER_LENGTH} Zeichen lang sein`),
+});
+
+export type AnswerListingQuestionInput = z.infer<typeof AnswerListingQuestionSchema>;
 
 // ============================================================================
 // Create Order (secure payment)

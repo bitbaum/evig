@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test'
+import { dismissCookieBanner } from './ui'
 
 const DEFAULT_EMAIL = process.env.AUTH_TEST_EMAIL || 'admin@revampit.ch'
 const DEFAULT_PASSWORD = process.env.AUTH_TEST_PASSWORD || 'Admin123!'
@@ -76,7 +77,7 @@ function pathMatchesCallback(pathname: string, search: string, callbackUrl: stri
     (!targetSearch || search === targetSearch)
 }
 
-/** Log in via the credentials form (same flow as auth-smoke / timecards e2e). */
+/** Log in via Auth.js credentials API (reliable; shares cookies with page context). */
 export async function loginWithCredentials(
   page: Page,
   callbackUrl: string,
@@ -84,18 +85,43 @@ export async function loginWithCredentials(
   password = DEFAULT_PASSWORD,
 ) {
   await page.context().clearCookies()
-  const localePrefix = callbackUrl.match(/^\/([a-z]{2})\//)?.[1] || 'de'
-  await page.goto(
-    `/${localePrefix}/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`,
-  )
-  await page.waitForLoadState('domcontentloaded')
-  await page.locator('#email').fill(email)
-  await page.locator('#password').fill(password)
-  await page.getByRole('button', { name: LOGIN_SUBMIT }).click()
+
+  const baseURL =
+    process.env.PLAYWRIGHT_BASE_URL ||
+    (page.url().startsWith('http') ? new URL(page.url()).origin : 'http://localhost:3001')
+
+  const csrfRes = await page.request.get('/api/auth/csrf')
+  if (!csrfRes.ok()) {
+    throw new Error(`CSRF fetch failed: ${csrfRes.status()}`)
+  }
+  const { csrfToken } = (await csrfRes.json()) as { csrfToken: string }
+
+  const loginRes = await page.request.post('/api/auth/callback/credentials', {
+    form: {
+      csrfToken,
+      email,
+      password,
+      callbackUrl: callbackUrl.startsWith('http') ? callbackUrl : `${baseURL}${callbackUrl}`,
+      json: 'true',
+    },
+  })
+
+  if (![200, 302].includes(loginRes.status())) {
+    throw new Error(`Login failed for ${email}: ${loginRes.status()}`)
+  }
+
+  const sessionRes = await page.request.get('/api/auth/session')
+  const session = await sessionRes.json()
+  if (session?.user?.email?.toLowerCase() !== email.toLowerCase()) {
+    throw new Error(`Login succeeded but session email mismatch for ${email}`)
+  }
+
+  await page.goto(callbackUrl)
   await page.waitForURL(
     url => pathMatchesCallback(url.pathname, url.search, callbackUrl),
     { timeout: 60_000 },
   )
+  await dismissCookieBanner(page)
 }
 
 /**

@@ -83,6 +83,7 @@ export const rateLimiters = {
 
   // Contact seller: 10 per hour per user
   contactSeller: createRateLimiter(ONE_HOUR_MS, 10),
+  listingQuestion: createRateLimiter(ONE_HOUR_MS, 10),
 
   // Public vote submit: 10 per hour per IP (unauthenticated, prevents vote spam)
   voteSubmit: createRateLimiter(ONE_HOUR_MS, 10),

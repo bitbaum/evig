@@ -104,6 +104,40 @@ export async function cancelMarketplaceOrder(
   await parseApi(response)
 }
 
+export async function askListingQuestion(
+  request: APIRequestContext,
+  listingId: string,
+  question: string,
+): Promise<{ id: string }> {
+  const response = await csrfPost(request, `/api/listings/${listingId}/questions`, { question })
+  const data = await parseApi<{ id: string }>(response)
+  if (!data.id) throw new Error('askListingQuestion: missing id')
+  return { id: data.id }
+}
+
+export async function answerListingQuestion(
+  request: APIRequestContext,
+  listingId: string,
+  questionId: string,
+  answer: string,
+): Promise<void> {
+  const response = await csrfPost(
+    request,
+    `/api/listings/${listingId}/questions/${questionId}/answer`,
+    { answer },
+  )
+  await parseApi(response)
+}
+
+export async function fetchListingQuestions(
+  request: APIRequestContext,
+  listingId: string,
+): Promise<Array<{ id: string; question: string; answer: string | null; status: string }>> {
+  const response = await request.get(`/api/listings/${listingId}/questions`)
+  const data = await parseApi<{ questions: Array<{ id: string; question: string; answer: string | null; status: string }> }>(response)
+  return data.questions
+}
+
 export async function simulatePayrexxReservedWebhook(
   request: APIRequestContext,
   orderId: string,

@@ -10,6 +10,7 @@ import { getCategoryLabel, VERIFICATION_CONFIG } from '@/config/marketplace'
 import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
 import { formatDateShort } from '@/lib/date-formats'
 import ListingReviews from '@/components/marketplace/ListingReviews'
+import ListingQuestions from '@/components/marketplace/ListingQuestions'
 import { CO2Badge } from '@/components/marketplace/CO2Badge'
 import type { ListingDetail } from './types'
 import { useTranslations } from 'next-intl'
@@ -92,6 +93,11 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
           </ul>
         </div>
       )}
+
+      {/* Public Q&A */}
+      <div className="mt-6">
+        <ListingQuestions listingId={listing.id} sellerId={listing.seller_id} />
+      </div>
 
       {/* Reviews */}
       <div className="mt-6">

@@ -1,9 +1,8 @@
 'use client'
 
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { useRouter } from 'next/navigation'
 import {
   Heart,
   MessageSquare,
@@ -13,10 +12,12 @@ import {
   Share2,
   Check,
   Flag,
+  ShoppingCart,
 } from 'lucide-react'
 import type { ListingDetail } from './types'
 import { useTranslations } from 'next-intl'
-import { LISTING_STATUS } from '@/config/marketplace'
+import { LISTING_STATUS, supportsSecureCheckout, supportsDirectContact } from '@/config/marketplace'
+import { ROUTES } from '@/config/routes'
 
 interface ListingActionButtonsProps {
   listing: ListingDetail
@@ -70,11 +71,12 @@ export function ListingActionButtons({
   const t = useTranslations('marketplace.listing_actions')
 
   const isRevampit = listing.is_revampit
-  // The contact-seller API and the checkout flow both reject non-ACTIVE
-  // listings server-side. Without this guard the UI rendered fully-enabled
-  // CTAs that failed silently when clicked (generic "Inserat ist nicht mehr
-  // verfügbar" error, no explanation that it was reserved/sold/removed).
   const isAvailable = listing.status === LISTING_STATUS.ACTIVE
+  const isGratis = Number(listing.price_chf) === 0
+  const canBuySecure =
+    !isOwner && !isRevampit && isAvailable && !isGratis && supportsSecureCheckout(listing.payment_mode)
+  const canContactDirect =
+    !isOwner && !isRevampit && isAvailable && supportsDirectContact(listing.payment_mode)
   const unavailableLabel =
     listing.status === LISTING_STATUS.RESERVED ? t('unavailableReserved')
     : listing.status === LISTING_STATUS.SOLD ? t('unavailableSold')
@@ -119,8 +121,21 @@ export function ListingActionButtons({
         </div>
       )}
 
-      {/* P2P payment info */}
-      {!isOwner && !isRevampit && isAvailable && (
+      {/* P2P secure payment info */}
+      {!isOwner && !isRevampit && isAvailable && canBuySecure && (
+        <div className="bg-action-muted border border-strong rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2 text-action font-medium text-sm">
+            <Shield className="w-4 h-4" aria-hidden="true" />
+            {t('securePaymentTitle')}
+          </div>
+          <p className="text-xs text-action">
+            {t('securePaymentDesc')}
+          </p>
+        </div>
+      )}
+
+      {/* P2P direct payment info */}
+      {!isOwner && !isRevampit && isAvailable && canContactDirect && (
         <div className="bg-action-muted border border-strong rounded-lg p-4 space-y-2">
           <div className="flex items-center gap-2 text-action font-medium text-sm">
             <Shield className="w-4 h-4" aria-hidden="true" />
@@ -131,7 +146,27 @@ export function ListingActionButtons({
           </p>
         </div>
       )}
-      {!isOwner && !isRevampit && isAvailable && (
+
+      {/* Buy now — P2P secure checkout */}
+      {canBuySecure && (
+        <Button
+          variant="primary"
+          className="w-full"
+          onClick={() => {
+            if (!sessionUserId) {
+              router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
+              return
+            }
+            router.push(ROUTES.public.marketplaceCheckout(listing.id))
+          }}
+        >
+          <ShoppingCart className="w-5 h-5" aria-hidden="true" />
+          {t('buyNow')}
+        </Button>
+      )}
+
+      {/* Contact seller — P2P direct coordination */}
+      {canContactDirect && (
         <>
           {messageSent ? (
             <div className="w-full bg-action-muted border border-strong rounded-lg p-4 text-center space-y-2">
@@ -158,7 +193,7 @@ export function ListingActionButtons({
                 <Button
                   onClick={onSendMessage}
                   disabled={sendingMessage || !contactMessage.trim()}
-                  variant="primary"
+                  variant={canBuySecure ? 'outline' : 'primary'}
                   className="flex-1"
                 >
                   {sendingMessage ? (
@@ -188,7 +223,7 @@ export function ListingActionButtons({
                 }
                 onShowMessageForm(true)
               }}
-              variant="primary"
+              variant={canBuySecure ? 'outline' : 'primary'}
               className="w-full"
             >
               <MessageSquare className="w-5 h-5" aria-hidden="true" />

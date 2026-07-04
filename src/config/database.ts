@@ -153,6 +153,7 @@ export const TABLE_NAMES = {
   LISTING_SPECS: 'listing_specs',
   LISTING_FAVORITES: 'listing_favorites',
   LISTING_REPORTS: 'listing_reports',
+  LISTING_QUESTIONS: 'listing_questions',
   MARKETPLACE_ORDERS: 'marketplace_orders',
   MARKETPLACE_ORDER_ITEMS: 'marketplace_order_items',
 

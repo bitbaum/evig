@@ -850,6 +850,8 @@
       "cancel": "Abbrechen",
       "contactSeller": "Nachricht senden",
       "buyNow": "Jetzt kaufen",
+      "securePaymentTitle": "Sichere Zahlung über Revamp-IT",
+      "securePaymentDesc": "Zahlung per Payrexx — Geld wird erst nach Empfangsbestätigung freigegeben",
       "revampitTrustTitle": "Geprüft von Revamp-IT",
       "revampitTrustDesc": "Professionell aufbereitet, getestet und bereit für den nächsten Besitzer",
       "save": "Merken",
@@ -868,6 +870,23 @@
       "unavailableRemoved": "Dieses Inserat wurde entfernt und ist nicht mehr verfügbar.",
       "unavailableDraft": "Dieses Inserat ist noch nicht veröffentlicht.",
       "unavailableGeneric": "Dieses Inserat ist derzeit nicht verfügbar."
+    },
+    "questions": {
+      "title": "Fragen & Antworten",
+      "subtitle": "Öffentliche Fragen — Antworten sind für alle sichtbar",
+      "loading": "Fragen werden geladen…",
+      "emptyPublic": "Noch keine Fragen — sei die erste Person, die nachfragt.",
+      "emptyOwner": "Noch keine Fragen — Käuferinnen und Käufer können hier öffentlich nachfragen.",
+      "askButton": "Frage stellen",
+      "askPlaceholder": "z. B. Ist der Akku noch gut? Lieferumfang?",
+      "submitQuestion": "Frage senden",
+      "cancel": "Abbrechen",
+      "awaitingAnswer": "· offen",
+      "sellerAnswer": "Antwort des Verkäufers",
+      "answerPlaceholder": "Deine öffentliche Antwort…",
+      "submitAnswer": "Antwort veröffentlichen",
+      "errorAsk": "Frage konnte nicht gesendet werden",
+      "errorAnswer": "Antwort konnte nicht gespeichert werden"
     },
     "empty": "Keine Inserate gefunden",
     "conditions": {

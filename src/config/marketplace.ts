@@ -138,10 +138,20 @@ export const PAYMENT_MODES = ['secure', 'direct', 'both'] as const;
 export type PaymentMode = typeof PAYMENT_MODES[number];
 
 export const PAYMENT_MODE_LABELS: Record<PaymentMode, string> = {
-  secure: 'Sichere Zahlung — demnächst verfügbar',
+  secure: 'Sichere Zahlung (Payrexx)',
   direct: 'Direkt (TWINT, Bar, Überweisung)',
   both:   'Beide Optionen',
 };
+
+/** P2P listings that can use /marketplace/checkout/[id] (Payrexx escrow). */
+export function supportsSecureCheckout(paymentMode: string): boolean {
+  return paymentMode === 'secure' || paymentMode === 'both';
+}
+
+/** P2P listings where buyers coordinate payment off-platform via contact. */
+export function supportsDirectContact(paymentMode: string): boolean {
+  return paymentMode === 'direct' || paymentMode === 'both';
+}
 
 // ============================================================================
 // Sort Options
@@ -172,10 +182,25 @@ export const MARKETPLACE_LIMITS = {
   MIN_IMAGES: 0,
   MAX_TITLE_LENGTH: 120,
   MAX_DESCRIPTION_LENGTH: 5000,
+  MAX_QUESTION_LENGTH: 500,
+  MAX_ANSWER_LENGTH: 2000,
   MAX_PRICE_CHF: 50000,
   DEFAULT_PAGE_SIZE: PAGINATION.PUBLIC,
   MAX_PAGE_SIZE: 100,
 } as const;
+
+// ============================================================================
+// Listing Questions (public Q&A — Ricardo-style)
+// ============================================================================
+
+export const LISTING_QUESTION_STATUS = {
+  OPEN: 'open',
+  ANSWERED: 'answered',
+  HIDDEN: 'hidden',
+} as const;
+
+export const LISTING_QUESTION_STATUSES = Object.values(LISTING_QUESTION_STATUS);
+export type ListingQuestionStatus = typeof LISTING_QUESTION_STATUS[keyof typeof LISTING_QUESTION_STATUS];
 
 /**
  * Commission rate for marketplace transactions.
