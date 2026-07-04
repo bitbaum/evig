@@ -9770,7 +9770,8 @@
       "tabs": {
         "listings": "Annonces",
         "reports": "Signalements",
-        "orders": "Commandes"
+        "orders": "Commandes",
+        "questions": "Questions"
       },
       "hero": {
         "kpis": {
@@ -9860,6 +9861,35 @@
         "edit": "Traiter",
         "empty": "Aucun signalement trouvé",
         "countLabel": "{count, plural, one {# signalement} other {# signalements}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "Ouvertes",
+          "answered": "Répondues",
+          "hidden": "Masquées",
+          "all": "Toutes"
+        },
+        "columns": {
+          "listing": "Annonce",
+          "question": "Question",
+          "asker": "Auteur",
+          "date": "Date",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "sellerLabel": "Vendeur : {name}",
+        "answerLabel": "Réponse",
+        "status": {
+          "open": "Ouverte",
+          "answered": "Répondue",
+          "hidden": "Masquée"
+        },
+        "actions": {
+          "hide": "Masquer",
+          "restore": "Restaurer"
+        },
+        "empty": "Aucune question trouvée",
+        "countLabel": "{count, plural, one {# question} other {# questions}}"
       },
       "orders": {
         "filters": {

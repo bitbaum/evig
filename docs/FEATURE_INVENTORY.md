@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-07-04
-last_modified_summary: Marketplace rollout complete; admin Q&A moderation added
+last_modified_summary: Marketplace rollout closed; admin Q&A i18n + API tests
 ---
 
 # Feature Inventory (SSOT)
@@ -141,9 +141,9 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 6 | **Commit + deploy app code** | ✅ | `40a50b4e` deployed 2026-07-04T17:52Z; migration 114 skipped (already applied) |
 | 7 | Prod smoke — listing detail buy CTA + Q&A | ✅ | Browser smoke 2026-07-04 on `b6b01592…` (`payment_mode` set to `both` for demo) |
 | 8 | Admin Q&A moderation (`hide` question) | ✅ | `/admin/marketplace` Questions tab; hide/restore API |
-| 9 | i18n parity (`marketplace.questions`, `securePayment*`) | ✅ | fr, it, es, ru, ja, ko added 2026-07-04 |
+| 9 | i18n parity (`marketplace.questions`, `securePayment*`, admin moderation) | ✅ | public + admin strings in all 8 locales |
 
-**Marketplace UX rollout is complete.** Next work should move back to the wider workflow inventory.
+**Marketplace UX rollout is complete (2026-07-04).** Shipped: buy CTA, public Q&A, admin moderation, prod migration 114, journey E2E, prod smoke. Resume wider inventory from Phase 2 / HR / P3 edge cases.
 
 ---
 

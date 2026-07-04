@@ -9817,7 +9817,8 @@
       "tabs": {
         "listings": "Anuncios",
         "reports": "Denuncias",
-        "orders": "Pedidos"
+        "orders": "Pedidos",
+        "questions": "Preguntas"
       },
       "hero": {
         "kpis": {
@@ -9907,6 +9908,35 @@
         "edit": "Editar",
         "empty": "No se encontraron denuncias",
         "countLabel": "{count, plural, one {# denuncia} other {# denuncias}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "Abiertas",
+          "answered": "Respondidas",
+          "hidden": "Ocultas",
+          "all": "Todas"
+        },
+        "columns": {
+          "listing": "Anuncio",
+          "question": "Pregunta",
+          "asker": "Autor",
+          "date": "Fecha",
+          "status": "Estado",
+          "actions": "Acciones"
+        },
+        "sellerLabel": "Vendedor: {name}",
+        "answerLabel": "Respuesta",
+        "status": {
+          "open": "Abierta",
+          "answered": "Respondida",
+          "hidden": "Oculta"
+        },
+        "actions": {
+          "hide": "Ocultar",
+          "restore": "Restaurar"
+        },
+        "empty": "No se encontraron preguntas",
+        "countLabel": "{count, plural, one {# pregunta} other {# preguntas}}"
       },
       "orders": {
         "filters": {

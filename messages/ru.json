@@ -9811,7 +9811,8 @@
       "tabs": {
         "listings": "Объявления",
         "reports": "Жалобы",
-        "orders": "Заказы"
+        "orders": "Заказы",
+        "questions": "Вопросы"
       },
       "hero": {
         "kpis": {
@@ -9901,6 +9902,35 @@
         "edit": "Редактировать",
         "empty": "Жалобы не найдены",
         "countLabel": "{count, plural, one {# жалоба} few {# жалобы} many {# жалоб} other {# жалобы}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "Открытые",
+          "answered": "С ответом",
+          "hidden": "Скрытые",
+          "all": "Все"
+        },
+        "columns": {
+          "listing": "Объявление",
+          "question": "Вопрос",
+          "asker": "Автор",
+          "date": "Дата",
+          "status": "Статус",
+          "actions": "Действия"
+        },
+        "sellerLabel": "Продавец: {name}",
+        "answerLabel": "Ответ",
+        "status": {
+          "open": "Открыт",
+          "answered": "С ответом",
+          "hidden": "Скрыт"
+        },
+        "actions": {
+          "hide": "Скрыть",
+          "restore": "Восстановить"
+        },
+        "empty": "Вопросы не найдены",
+        "countLabel": "{count, plural, one {# вопрос} few {# вопроса} many {# вопросов} other {# вопроса}}"
       },
       "orders": {
         "filters": {

@@ -9817,7 +9817,8 @@
       "tabs": {
         "listings": "리스팅",
         "reports": "신고",
-        "orders": "주문"
+        "orders": "주문",
+        "questions": "질문"
       },
       "hero": {
         "kpis": {
@@ -9907,6 +9908,35 @@
         "edit": "편집",
         "empty": "신고가 없습니다",
         "countLabel": "{count, plural, one {신고 #건} other {신고 #건}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "미답변",
+          "answered": "답변됨",
+          "hidden": "숨김",
+          "all": "전체"
+        },
+        "columns": {
+          "listing": "항목",
+          "question": "질문",
+          "asker": "질문자",
+          "date": "날짜",
+          "status": "상태",
+          "actions": "작업"
+        },
+        "sellerLabel": "판매자: {name}",
+        "answerLabel": "답변",
+        "status": {
+          "open": "미답변",
+          "answered": "답변됨",
+          "hidden": "숨김"
+        },
+        "actions": {
+          "hide": "숨기기",
+          "restore": "복원"
+        },
+        "empty": "질문이 없습니다",
+        "countLabel": "{count, plural, one {질문 #건} other {질문 #건}}"
       },
       "orders": {
         "filters": {

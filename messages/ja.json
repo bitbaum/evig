@@ -9817,7 +9817,8 @@
       "tabs": {
         "listings": "出品",
         "reports": "通報",
-        "orders": "注文"
+        "orders": "注文",
+        "questions": "質問"
       },
       "hero": {
         "kpis": {
@@ -9907,6 +9908,35 @@
         "edit": "編集",
         "empty": "通報が見つかりません",
         "countLabel": "{count, plural, one {#件の通報} other {#件の通報}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "未回答",
+          "answered": "回答済み",
+          "hidden": "非表示",
+          "all": "すべて"
+        },
+        "columns": {
+          "listing": "出品",
+          "question": "質問",
+          "asker": "質問者",
+          "date": "日付",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "sellerLabel": "出品者: {name}",
+        "answerLabel": "回答",
+        "status": {
+          "open": "未回答",
+          "answered": "回答済み",
+          "hidden": "非表示"
+        },
+        "actions": {
+          "hide": "非表示",
+          "restore": "復元"
+        },
+        "empty": "質問が見つかりません",
+        "countLabel": "{count, plural, one {#件の質問} other {#件の質問}}"
       },
       "orders": {
         "filters": {

@@ -9817,7 +9817,8 @@
       "tabs": {
         "listings": "Annunci",
         "reports": "Segnalazioni",
-        "orders": "Ordini"
+        "orders": "Ordini",
+        "questions": "Domande"
       },
       "hero": {
         "kpis": {
@@ -9907,6 +9908,35 @@
         "edit": "Modifica",
         "empty": "Nessuna segnalazione trovata",
         "countLabel": "{count, plural, one {# segnalazione} other {# segnalazioni}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "Aperte",
+          "answered": "Risposte",
+          "hidden": "Nascoste",
+          "all": "Tutte"
+        },
+        "columns": {
+          "listing": "Annuncio",
+          "question": "Domanda",
+          "asker": "Autore",
+          "date": "Data",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "sellerLabel": "Venditore: {name}",
+        "answerLabel": "Risposta",
+        "status": {
+          "open": "Aperta",
+          "answered": "Risposta",
+          "hidden": "Nascosta"
+        },
+        "actions": {
+          "hide": "Nascondi",
+          "restore": "Ripristina"
+        },
+        "empty": "Nessuna domanda trovata",
+        "countLabel": "{count, plural, one {# domanda} other {# domande}}"
       },
       "orders": {
         "filters": {
