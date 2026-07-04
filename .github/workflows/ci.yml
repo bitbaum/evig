@@ -229,7 +229,7 @@ jobs:
           exit 1
 
       - name: Run Playwright E2E journeys
-        run: npx playwright test tests/e2e --project=chromium --reporter=line
+        run: npm run test:e2e:journeys -- --project=chromium --reporter=line
 
       - name: Upload E2E artifacts
         if: always()
