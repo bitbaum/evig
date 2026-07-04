@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-07-04
-last_modified_summary: IT-Hilfe edit + withdraw offer journey E2E (items #19, #24)
+last_modified_date: 2026-07-05
+last_modified_summary: IT-Hilfe Phase 2 deployed (edit + withdraw E2E, canton schema fix)
 ---
 
 # Feature Inventory (SSOT)
@@ -144,6 +144,15 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 9 | i18n parity (`marketplace.questions`, `securePayment*`, admin moderation) | ✅ | public + admin strings in all 8 locales |
 
 **Marketplace UX rollout is complete (2026-07-04).** Shipped: buy CTA, public Q&A, admin moderation, prod migration 114, journey E2E, prod smoke. Resume wider inventory from Phase 2 / HR / P3 edge cases.
+
+### IT-Hilfe Phase 2 tracker (2026-07-05)
+
+| Step | What | Status | Notes |
+|------|------|--------|-------|
+| 1 | Owner edit request E2E (#19) | ✅ | API `PUT` + `/it-hilfe/[id]/edit` form smoke in `test:e2e:it-hilfe:journey` |
+| 2 | Withdraw offer E2E (#24) | ✅ | API `DELETE` + resurrect offer flow in same journey |
+| 3 | Update schema canton fix | ✅ | `UpdateITHilfeRequestSchema` uses `SWISS_CANTONS` (matches create) |
+| 4 | Commit + deploy | ✅ | `7fecaeb3` active on prod `2026-07-04T23:42Z`; migrations up to date |
 
 ---
 
