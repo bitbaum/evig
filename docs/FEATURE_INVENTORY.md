@@ -123,8 +123,8 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 48 | Listing reports | API | ⬜ API-only |
 | 49 | Admin marketplace moderation | `/admin/marketplace` | ✅ inventory E2E |
 | 50 | Legacy `/shop/*` redirects | → marketplace | ✅ inventory E2E |
-| MKT-1 | P2P «Jetzt kaufen» on listing detail | `/marketplace/[id]` → checkout | ✅ local journey E2E green; app deploy in step 6 |
-| MKT-2 | Public listing Q&A (ask + seller answer) | `/marketplace/[id]` + `/api/listings/[id]/questions` | ✅ migration 114 on Hetzner; app deploy in step 6 |
+| MKT-1 | P2P «Jetzt kaufen» on listing detail | `/marketplace/[id]` → checkout | ✅ deployed `40a50b4e` (2026-07-04); shows when `payment_mode` is `secure`/`both` |
+| MKT-2 | Public listing Q&A (ask + seller answer) | `/marketplace/[id]` + `/api/listings/[id]/questions` | ✅ deployed `40a50b4e`; API smoke on prod |
 | MKT-3 | Contact seller (private message) | listing detail | ✅ |
 
 ### Marketplace UX rollout tracker (2026-07-04)
@@ -138,12 +138,12 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 3 | Local unit tests | ✅ | marketplace config + Zod schemas |
 | 4 | Local journey E2E (`test:e2e:marketplace:journey`) | ✅ | buy CTA, Q&A, checkout, mock Payrexx — 2026-07-04 |
 | 5 | **Prod DB migration 114** | ✅ | Applied manually on Hetzner `2026-07-04T17:29Z`; `schema_migrations` + `listing_questions` verified |
-| 6 | **Commit + deploy app code** | ✅ | This release; deploy applies migrations idempotently (114 will skip) |
-| 7 | Prod smoke — listing detail buy CTA + Q&A | ⬜ | After deploy: manual or extend `test:e2e:inventory:prod` |
+| 6 | **Commit + deploy app code** | ✅ | `40a50b4e` deployed 2026-07-04T17:52Z; migration 114 skipped (already applied) |
+| 7 | Prod smoke — listing detail buy CTA + Q&A | 🟡 | `GET /api/listings/[id]/questions` ✅ on prod; buy CTA needs a `secure`/`both` listing to verify in UI |
 | 8 | Admin Q&A moderation (`hide` question) | ⬜ | Optional — API supports `hidden` status; no admin UI yet |
 | 9 | i18n parity (`marketplace.questions`, `securePayment*`) | ⬜ | de/en only; fr/it/es/ru/ja/ko pending |
 
-**Next recommended:** step **7** — smoke-test prod after deploy so the tracker reflects what users can actually use.
+**Next recommended:** step **7** — create or edit one prod listing with `payment_mode=both`, then run `npm run test:e2e:marketplace:journey` against prod or smoke manually.
 
 ---
 
