@@ -884,6 +884,8 @@
       "errorReport": "Erreur lors du signalement de l'annonce",
       "errorNetworkReport": "Erreur réseau lors du signalement de l'annonce",
       "buyNow": "Acheter maintenant",
+      "securePaymentTitle": "Paiement sécurisé via Revamp-IT",
+      "securePaymentDesc": "Paiement via Payrexx — les fonds ne sont libérés qu'après confirmation de réception",
       "revampitTrustTitle": "Vérifié par Revamp-IT",
       "revampitTrustDesc": "Remis à neuf professionnellement, testé et prêt pour son prochain propriétaire",
       "unavailableReserved": "Cette annonce est réservée par une autre personne.",
@@ -891,6 +893,23 @@
       "unavailableRemoved": "Cette annonce a été retirée et n'est plus disponible.",
       "unavailableDraft": "Cette annonce n'est pas encore publiée.",
       "unavailableGeneric": "Cette annonce n'est pas disponible actuellement."
+    },
+    "questions": {
+      "title": "Questions et réponses",
+      "subtitle": "Questions publiques — les réponses sont visibles par tous",
+      "loading": "Chargement des questions…",
+      "emptyPublic": "Pas encore de questions — soyez le premier à demander.",
+      "emptyOwner": "Pas encore de questions — les acheteurs peuvent poser des questions ici.",
+      "askButton": "Poser une question",
+      "askPlaceholder": "p. ex. La batterie est-elle encore bonne ? Que contient l'offre ?",
+      "submitQuestion": "Envoyer la question",
+      "cancel": "Annuler",
+      "awaitingAnswer": "· ouvert",
+      "sellerAnswer": "Réponse du vendeur",
+      "answerPlaceholder": "Votre réponse publique…",
+      "submitAnswer": "Publier la réponse",
+      "errorAsk": "Impossible d'envoyer la question",
+      "errorAnswer": "Impossible d'enregistrer la réponse"
     },
     "conditionExplainer": "Que signifie \"{condition}\" pour {category} ?",
     "pagination": {

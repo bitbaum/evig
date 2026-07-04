@@ -3117,6 +3117,8 @@
       "errorReport": "Errore nella segnalazione dell'annuncio",
       "errorNetworkReport": "Errore di rete nella segnalazione dell'annuncio",
       "buyNow": "Acquista ora",
+      "securePaymentTitle": "Pagamento sicuro tramite Revamp-IT",
+      "securePaymentDesc": "Pagamento con Payrexx — i fondi vengono rilasciati solo dopo la conferma di ricezione",
       "revampitTrustTitle": "Verificato da Revamp-IT",
       "revampitTrustDesc": "Rigenerato professionalmente, testato e pronto per il prossimo proprietario",
       "unavailableReserved": "Questo annuncio è riservato da un'altra persona.",
@@ -3124,6 +3126,23 @@
       "unavailableRemoved": "Questo annuncio è stato rimosso e non è più disponibile.",
       "unavailableDraft": "Questo annuncio non è ancora stato pubblicato.",
       "unavailableGeneric": "Questo annuncio al momento non è disponibile."
+    },
+    "questions": {
+      "title": "Domande e risposte",
+      "subtitle": "Domande pubbliche — le risposte sono visibili a tutti",
+      "loading": "Caricamento domande…",
+      "emptyPublic": "Nessuna domanda ancora — sii il primo a chiedere.",
+      "emptyOwner": "Nessuna domanda ancora — gli acquirenti possono chiedere qui.",
+      "askButton": "Fai una domanda",
+      "askPlaceholder": "es. La batteria è ancora buona? Cosa è incluso?",
+      "submitQuestion": "Invia domanda",
+      "cancel": "Annulla",
+      "awaitingAnswer": "· aperta",
+      "sellerAnswer": "Risposta del venditore",
+      "answerPlaceholder": "La tua risposta pubblica…",
+      "submitAnswer": "Pubblica risposta",
+      "errorAsk": "Impossibile inviare la domanda",
+      "errorAnswer": "Impossibile salvare la risposta"
     },
     "empty": "Nessun annuncio trovato",
     "conditions": {

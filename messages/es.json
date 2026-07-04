@@ -3117,6 +3117,8 @@
       "errorReport": "Error al reportar el anuncio",
       "errorNetworkReport": "Error de red al reportar el anuncio",
       "buyNow": "Comprar ahora",
+      "securePaymentTitle": "Pago seguro a través de Revamp-IT",
+      "securePaymentDesc": "Pago con Payrexx — los fondos se liberan solo después de confirmar la recepción",
       "revampitTrustTitle": "Verificado por Revamp-IT",
       "revampitTrustDesc": "Acondicionado profesionalmente, probado y listo para su siguiente propietario",
       "unavailableReserved": "Este anuncio está reservado por otra persona.",
@@ -3124,6 +3126,23 @@
       "unavailableRemoved": "Este anuncio se ha retirado y ya no está disponible.",
       "unavailableDraft": "Este anuncio aún no se ha publicado.",
       "unavailableGeneric": "Este anuncio no está disponible en este momento."
+    },
+    "questions": {
+      "title": "Preguntas y respuestas",
+      "subtitle": "Preguntas públicas — las respuestas son visibles para todos",
+      "loading": "Cargando preguntas…",
+      "emptyPublic": "Aún no hay preguntas — sé el primero en preguntar.",
+      "emptyOwner": "Aún no hay preguntas — los compradores pueden preguntar aquí.",
+      "askButton": "Hacer una pregunta",
+      "askPlaceholder": "p. ej. ¿La batería sigue bien? ¿Qué incluye?",
+      "submitQuestion": "Enviar pregunta",
+      "cancel": "Cancelar",
+      "awaitingAnswer": "· abierta",
+      "sellerAnswer": "Respuesta del vendedor",
+      "answerPlaceholder": "Tu respuesta pública…",
+      "submitAnswer": "Publicar respuesta",
+      "errorAsk": "No se pudo enviar la pregunta",
+      "errorAnswer": "No se pudo guardar la respuesta"
     },
     "empty": "No se encontraron anuncios",
     "conditions": {

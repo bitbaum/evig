@@ -3117,6 +3117,8 @@
       "errorReport": "게시물 신고 오류",
       "errorNetworkReport": "게시물 신고 네트워크 오류",
       "buyNow": "지금 구매하기",
+      "securePaymentTitle": "Revamp-IT 안전 결제",
+      "securePaymentDesc": "Payrexx로 결제 — 수령 확인 후 판매자에게 입금됩니다",
       "revampitTrustTitle": "Revamp-IT 검증 완료",
       "revampitTrustDesc": "전문적으로 정비 및 테스트되어 다음 사용자를 기다리고 있습니다",
       "unavailableReserved": "이 상품은 다른 분이 예약하셨습니다.",
@@ -3124,6 +3126,23 @@
       "unavailableRemoved": "이 상품은 삭제되어 더 이상 이용할 수 없습니다.",
       "unavailableDraft": "이 상품은 아직 게시되지 않았습니다.",
       "unavailableGeneric": "이 상품은 현재 이용할 수 없습니다."
+    },
+    "questions": {
+      "title": "질문과 답변",
+      "subtitle": "공개 질문 — 답변은 모든 사용자에게 표시됩니다",
+      "loading": "질문 불러오는 중…",
+      "emptyPublic": "아직 질문이 없습니다 — 첫 번째로 질문해 보세요.",
+      "emptyOwner": "아직 질문이 없습니다 — 구매자가 여기서 공개 질문할 수 있습니다.",
+      "askButton": "질문하기",
+      "askPlaceholder": "예: 배터리 상태는 어떤가요? 구성품은 무엇인가요?",
+      "submitQuestion": "질문 보내기",
+      "cancel": "취소",
+      "awaitingAnswer": "· 미답변",
+      "sellerAnswer": "판매자 답변",
+      "answerPlaceholder": "공개 답변 입력…",
+      "submitAnswer": "답변 게시",
+      "errorAsk": "질문을 보낼 수 없습니다",
+      "errorAnswer": "답변을 저장할 수 없습니다"
     },
     "empty": "판매 목록을 찾을 수 없습니다",
     "conditions": {

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-07-04
-last_modified_summary: Marketplace rollout tracker; migration 114 applied on Hetzner prod
+last_modified_summary: Marketplace rollout complete; i18n parity for Q&A and secure payment
 ---
 
 # Feature Inventory (SSOT)
@@ -140,10 +140,10 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 5 | **Prod DB migration 114** | ✅ | Applied manually on Hetzner `2026-07-04T17:29Z`; `schema_migrations` + `listing_questions` verified |
 | 6 | **Commit + deploy app code** | ✅ | `40a50b4e` deployed 2026-07-04T17:52Z; migration 114 skipped (already applied) |
 | 7 | Prod smoke — listing detail buy CTA + Q&A | ✅ | Browser smoke 2026-07-04 on `b6b01592…` (`payment_mode` set to `both` for demo) |
+| 9 | i18n parity (`marketplace.questions`, `securePayment*`) | ✅ | fr, it, es, ru, ja, ko added 2026-07-04 |
 | 8 | Admin Q&A moderation (`hide` question) | ⬜ | Optional — API supports `hidden` status; no admin UI yet |
-| 9 | i18n parity (`marketplace.questions`, `securePayment*`) | ⬜ | de/en only; fr/it/es/ru/ja/ko pending |
 
-**Next recommended:** step **9** (i18n) or **8** (admin moderation) — core rollout is complete; `main` pushed (`9e1817f8`).
+**Next recommended:** step **8** (admin moderation) or deploy i18n strings — core rollout complete.
 
 ---
 
