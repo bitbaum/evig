@@ -1,4 +1,4 @@
-import { Package, AlertTriangle, ShoppingBag } from 'lucide-react'
+import { Package, AlertTriangle, ShoppingBag, MessageSquare } from 'lucide-react'
 import type { OffsetPaginatedResponse } from '@/lib/api/types'
 import type { ShippingAddress } from '@/config/marketplace'
 
@@ -60,6 +60,21 @@ export interface OrderRow {
   seller_email: string
 }
 
+export interface QuestionRow {
+  id: string
+  question: string
+  answer: string | null
+  status: string
+  created_at: string
+  answered_at: string | null
+  listing_id: string
+  listing_title: string
+  asker_name: string | null
+  asker_email: string
+  seller_name: string | null
+  seller_email: string
+}
+
 export interface Stats {
   total: number
   byStatus: Record<string, number>
@@ -76,12 +91,13 @@ export interface Stats {
 // Tab config
 // ---------------------------------------------------------------------------
 
-export type Tab = 'listings' | 'reports' | 'orders'
+export type Tab = 'listings' | 'reports' | 'orders' | 'questions'
 
 // TABS define the structural list of tabs — labels are resolved at render
 // time from admin.marketplace.tabs.* so they translate per locale.
-export const TABS: { id: Tab; labelKey: 'listings' | 'reports' | 'orders'; icon: typeof Package }[] = [
+export const TABS: { id: Tab; labelKey: 'listings' | 'reports' | 'orders' | 'questions'; icon: typeof Package }[] = [
   { id: 'listings', labelKey: 'listings', icon: Package },
   { id: 'reports', labelKey: 'reports', icon: AlertTriangle },
   { id: 'orders', labelKey: 'orders', icon: ShoppingBag },
+  { id: 'questions', labelKey: 'questions', icon: MessageSquare },
 ]

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
-import type { Tab, Stats, ListingRow, ReportRow, OrderRow, PaginatedResponse } from './types'
+import type { Tab, Stats, ListingRow, ReportRow, OrderRow, QuestionRow, PaginatedResponse } from './types'
 
 // ---------------------------------------------------------------------------
 // Hook
@@ -26,6 +26,11 @@ export function useMarketplaceAdmin() {
   const [orders, setOrders] = useState<PaginatedResponse<OrderRow> | null>(null)
   const [ordersFilter, setOrdersFilter] = useState({ status: 'all' })
   const [ordersOffset, setOrdersOffset] = useState(0)
+
+  // Questions state
+  const [questions, setQuestions] = useState<PaginatedResponse<QuestionRow> | null>(null)
+  const [questionsFilter, setQuestionsFilter] = useState({ status: 'open' })
+  const [questionsOffset, setQuestionsOffset] = useState(0)
 
   // Edit modal state
   const [editId, setEditId] = useState<string | null>(null)
@@ -91,6 +96,18 @@ export function useMarketplaceAdmin() {
     setLoading(false)
   }, [ordersFilter, ordersOffset])
 
+  const fetchQuestions = useCallback(async () => {
+    setLoading(true)
+    const params = new URLSearchParams({
+      status: questionsFilter.status,
+      limit: '50',
+      offset: String(questionsOffset),
+    })
+    const result = await apiFetch<PaginatedResponse<QuestionRow>>(`/api/admin/marketplace/questions?${params}`)
+    if (result.success && result.data) setQuestions(result.data)
+    setLoading(false)
+  }, [questionsFilter, questionsOffset])
+
   // Data fetching — subscribe to external API data (valid effect usage)
   useEffect(() => {
     let cancelled = false
@@ -116,12 +133,16 @@ export function useMarketplaceAdmin() {
         const params = new URLSearchParams({ status: ordersFilter.status, limit: '50', offset: String(ordersOffset) })
         const result = await apiFetch<PaginatedResponse<OrderRow>>(`/api/admin/marketplace/orders?${params}`)
         if (!cancelled && result.success && result.data) setOrders(result.data)
+      } else if (tab === 'questions') {
+        const params = new URLSearchParams({ status: questionsFilter.status, limit: '50', offset: String(questionsOffset) })
+        const result = await apiFetch<PaginatedResponse<QuestionRow>>(`/api/admin/marketplace/questions?${params}`)
+        if (!cancelled && result.success && result.data) setQuestions(result.data)
       }
       if (!cancelled) setLoading(false)
     }
     load()
     return () => { cancelled = true }
-  }, [tab, listingsFilter, listingsOffset, reportsFilter, reportsOffset, ordersFilter, ordersOffset])
+  }, [tab, listingsFilter, listingsOffset, reportsFilter, reportsOffset, ordersFilter, ordersOffset, questionsFilter, questionsOffset])
 
   // ------- Actions -------
 
@@ -165,6 +186,14 @@ export function useMarketplaceAdmin() {
     refreshStats()
   }
 
+  async function handleQuestionModeration(id: string, action: 'hide' | 'restore') {
+    await apiFetch<void>(`/api/admin/marketplace/questions/${id}`, {
+      method: 'PATCH',
+      body: { action },
+    })
+    fetchQuestions()
+  }
+
   function openEditModal(id: string, admin_notes: string, status: string) {
     setEditId(id)
     setEditData({ admin_notes, status })
@@ -189,6 +218,7 @@ export function useMarketplaceAdmin() {
     setListingsOffset(0)
     setReportsOffset(0)
     setOrdersOffset(0)
+    setQuestionsOffset(0)
   }
 
   return {
@@ -227,6 +257,14 @@ export function useMarketplaceAdmin() {
     setOrdersFilter,
     ordersOffset,
     setOrdersOffset,
+
+    // Questions
+    questions,
+    questionsFilter,
+    setQuestionsFilter,
+    questionsOffset,
+    setQuestionsOffset,
+    handleQuestionModeration,
 
     // Edit modal
     editId,

@@ -13,6 +13,7 @@ import {
   PAYMENT_MODES,
   MARKETPLACE_LIMITS,
   LISTING_STATUSES,
+  LISTING_QUESTION_STATUSES,
   ORDER_STATUSES,
   REPORT_REASONS,
   MARKETPLACE_SELLER_TYPE,
@@ -290,3 +291,15 @@ export const AdminReportsQuerySchema = z.object({
 }).merge(paginationSchema);
 
 export type AdminReportsQuery = z.infer<typeof AdminReportsQuerySchema>;
+
+export const AdminQuestionsQuerySchema = z.object({
+  status: z.enum(['all', ...LISTING_QUESTION_STATUSES] as [string, ...string[]]).default('open'),
+}).merge(paginationSchema);
+
+export type AdminQuestionsQuery = z.infer<typeof AdminQuestionsQuerySchema>;
+
+export const ModerateListingQuestionSchema = z.object({
+  action: z.enum(['hide', 'restore'] as const),
+});
+
+export type ModerateListingQuestionInput = z.infer<typeof ModerateListingQuestionSchema>;

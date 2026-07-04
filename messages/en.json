@@ -9818,7 +9818,8 @@
       "tabs": {
         "listings": "Listings",
         "reports": "Reports",
-        "orders": "Orders"
+        "orders": "Orders",
+        "questions": "Questions"
       },
       "hero": {
         "kpis": {
@@ -9908,6 +9909,35 @@
         "edit": "Handle",
         "empty": "No reports found",
         "countLabel": "{count, plural, one {# report} other {# reports}}"
+      },
+      "questions": {
+        "filters": {
+          "open": "Open",
+          "answered": "Answered",
+          "hidden": "Hidden",
+          "all": "All"
+        },
+        "columns": {
+          "listing": "Listing",
+          "question": "Question",
+          "asker": "Asker",
+          "date": "Date",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "sellerLabel": "Seller: {name}",
+        "answerLabel": "Answer",
+        "status": {
+          "open": "Open",
+          "answered": "Answered",
+          "hidden": "Hidden"
+        },
+        "actions": {
+          "hide": "Hide",
+          "restore": "Restore"
+        },
+        "empty": "No questions found",
+        "countLabel": "{count, plural, one {# question} other {# questions}}"
       },
       "orders": {
         "filters": {

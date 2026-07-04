@@ -7,6 +7,7 @@ import { TABS } from './types'
 import { ListingsTab } from './ListingsTab'
 import { ReportsTab } from './ReportsTab'
 import { OrdersTab } from './OrdersTab'
+import { QuestionsTab } from './QuestionsTab'
 import { EditListingModal } from './EditListingModal'
 import { HandleReportModal } from './HandleReportModal'
 import { Button } from '@/components/ui/button'
@@ -51,7 +52,7 @@ export default function MarketplaceAdminClient() {
       </div>
 
       {/* Tab Content */}
-      {m.loading && !m.listings && !m.reports && !m.orders ? (
+      {m.loading && !m.listings && !m.reports && !m.orders && !m.questions ? (
         <div className="flex justify-center py-12">
           <Loader2 className="w-6 h-6 animate-spin text-text-tertiary" />
         </div>
@@ -88,6 +89,17 @@ export default function MarketplaceAdminClient() {
               setFilter={m.setOrdersFilter}
               offset={m.ordersOffset}
               setOffset={m.setOrdersOffset}
+            />
+          )}
+
+          {m.tab === 'questions' && (
+            <QuestionsTab
+              questions={m.questions}
+              filter={m.questionsFilter}
+              setFilter={m.setQuestionsFilter}
+              offset={m.questionsOffset}
+              setOffset={m.setQuestionsOffset}
+              onModerate={m.handleQuestionModeration}
             />
           )}
         </>
@@ -127,7 +139,7 @@ export default function MarketplaceAdminClient() {
   )
 }
 
-type MarketplaceTab = 'listings' | 'reports' | 'orders'
+type MarketplaceTab = 'listings' | 'reports' | 'orders' | 'questions'
 
 /**
  * Compute the Marketplace hero state from stats. Pure function.
