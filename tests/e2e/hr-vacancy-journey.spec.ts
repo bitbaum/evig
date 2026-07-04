@@ -61,7 +61,7 @@ test.describe('HR vacancy journey', () => {
     expect(hireResult.team_profile_id).toBeTruthy()
 
     await page.goto(ROUTES.admin.team + `/${hireResult.team_profile_id}`)
-    await expect(page.getByText(title, { exact: false })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText(title, { exact: false }).first()).toBeVisible({ timeout: 15000 })
   })
 
   test('public careers page lists published vacancy', async ({ page }) => {

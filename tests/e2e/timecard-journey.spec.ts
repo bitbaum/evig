@@ -20,7 +20,7 @@ test.describe('Timecard staff journey', () => {
   test.skip(!ADMIN_TEST_PASSWORD, 'Set AUTH_TEST_ADMIN_PASSWORD')
 
   test('staff fills month → submits → admin approves (API round-trip)', async ({ page }) => {
-    await loginWithCredentials(page, '/dashboard/timecards', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
+    await loginWithCredentials(page, '/admin/zeiterfassung', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
 
     const resetState = await resetTimecardForE2E(page.request)
     await page.reload()
@@ -35,7 +35,7 @@ test.describe('Timecard staff journey', () => {
       return
     }
 
-    await expect(page.getByRole('heading', { name: 'Meine Zeiterfassung' })).toBeVisible({
+    await expect(page.getByRole('heading', { name: 'Zeiterfassung' })).toBeVisible({
       timeout: 15000,
     })
 

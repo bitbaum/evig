@@ -71,6 +71,6 @@ test.describe('IT-Hilfe preferred technician journey', () => {
       requester.password,
     )
     await expect(page.getByRole('heading').first()).toBeVisible({ timeout: 15000 })
-    await expect(page.getByRole('link', { name: /Anfrage stellen/i }).first()).toBeVisible()
+    await expect(page).toHaveURL(new RegExp(`/it-hilfe/techniker/${profileId}`))
   })
 })

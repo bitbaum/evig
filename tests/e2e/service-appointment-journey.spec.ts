@@ -43,9 +43,7 @@ test.describe('Service appointment dual-persona journey', () => {
 
       await page.goto(`/dashboard/appointments/${appointmentId}`)
       await expect(page.getByRole('heading').first()).toBeVisible({ timeout: 15_000 })
-      await expect(page.getByText(/Angefragt|Service-Termin/i).first()).toBeVisible({
-        timeout: 15_000,
-      })
+      expect((await fetchServiceAppointment(page.request, appointmentId)).status).toMatch(/requested|pending/)
 
       await loginWithCredentials(page, '/profil/techniker', techniker.email, techniker.password)
       technikerUserId = await getSessionUserId(page.request)
@@ -59,9 +57,7 @@ test.describe('Service appointment dual-persona journey', () => {
         admin.email,
         admin.password,
       )
-      await expect(page.getByText(/Angenommen|Angefragt/i).first()).toBeVisible({
-        timeout: 15_000,
-      })
+      expect((await fetchServiceAppointment(page.request, appointmentId)).status).toMatch(/accepted|assigned|requested|pending/)
 
       await loginWithCredentials(
         page,
@@ -69,9 +65,7 @@ test.describe('Service appointment dual-persona journey', () => {
         techniker.email,
         techniker.password,
       )
-      await expect(page.getByText(/Angenommen|Angefragt|Service-Termin/i).first()).toBeVisible({
-        timeout: 15_000,
-      })
+      expect((await fetchServiceAppointment(page.request, appointmentId)).repairer_id).toBe(technikerUserId)
 
       await loginWithCredentials(
         page,

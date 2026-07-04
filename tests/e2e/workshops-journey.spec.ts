@@ -56,9 +56,13 @@ test.describe('Workshops dual-persona journey', () => {
         await page.goto(`/workshops/${freeWorkshop.slug}`)
         await expect(page.locator('#register')).toBeVisible({ timeout: 15_000 })
 
-        const registerButton = page.getByRole('button', { name: /Für Workshop anmelden|Anmelden/i })
-        await expect(registerButton).toBeVisible({ timeout: 15_000 })
-        await registerButton.click()
+        const openRegister = page.getByRole('button', { name: 'Für Workshop anmelden' }).first()
+        await expect(openRegister).toBeVisible({ timeout: 15_000 })
+        await openRegister.click()
+
+        const submitRegister = page.getByRole('button', { name: 'Anmelden', exact: true })
+        await expect(submitRegister).toBeVisible({ timeout: 15_000 })
+        await submitRegister.click()
 
         await expect(page.getByText(/Erfolgreich angemeldet|angemeldet|Bestätigung/i).first()).toBeVisible({
           timeout: 30_000,
