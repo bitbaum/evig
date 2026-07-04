@@ -39,6 +39,18 @@ export async function csrfPatch(
   })
 }
 
+export async function csrfPut(
+  request: APIRequestContext,
+  path: string,
+  data?: unknown,
+): Promise<Awaited<ReturnType<APIRequestContext['put']>>> {
+  const csrfToken = await getApiCsrfToken(request)
+  return request.put(path, {
+    data,
+    headers: { 'x-csrf-token': csrfToken },
+  })
+}
+
 export async function csrfDelete(
   request: APIRequestContext,
   path: string,

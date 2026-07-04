@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-07-04
-last_modified_summary: Marketplace rollout tracker; migration 114 prod-applied note
+last_modified_summary: IT-Hilfe journey E2E (edit + withdraw); local run notes
 ---
 
 # RevampIT Commands Reference (SSOT)
@@ -77,6 +77,7 @@ npm run test:e2e:inventory # Dual-persona feature inventory (user + admin)
 npm run test:e2e:inventory:prod # Same, with prod health wait (CI / post-deploy)
 npm run test:e2e:user-admin # Legacy quick smoke (subset)
 npm run test:e2e:it-hilfe    # IT-Hilfe hub/journey specs
+npm run test:e2e:it-hilfe:journey # Dual-persona lifecycle + edit/withdraw (see E2E section)
 npm run test:e2e:marketplace:journey # User sells, admin buys (Payrexx when configured)
 npm run test:e2e:workshops:proposal:journey # User proposes, admin approve/reject
 npm run test:e2e:timecards:journey          # Staff submit + admin approve (TIME round-trip)
@@ -129,6 +130,18 @@ AUTH_TEST_USER_EMAIL=e2e-user@revampit.test AUTH_TEST_USER_PASSWORD='E2EUser123!
 AUTH_TEST_ADMIN_EMAIL=e2e-admin@revampit.test AUTH_TEST_ADMIN_PASSWORD='E2EAdmin123!' \
 npm run test:e2e:marketplace:journey
 ```
+
+**Local IT-Hilfe dual-persona journey** (owner edit + withdraw offer + full lifecycle):
+
+```bash
+npm run e2e:seed
+PLAYWRIGHT_CHANNEL=chrome PLAYWRIGHT_BASE_URL=http://localhost:3001 \
+AUTH_TEST_USER_EMAIL=e2e-user@revampit.test AUTH_TEST_USER_PASSWORD='E2EUser123!' \
+AUTH_TEST_ADMIN_EMAIL=e2e-admin@revampit.test AUTH_TEST_ADMIN_PASSWORD='E2EAdmin123!' \
+npm run test:e2e:it-hilfe:journey
+```
+
+Use `npx next dev --port 3001 --webpack` locally if Turbopack returns 404 on `/api/auth/*`. Restart the dev server if create-request rate limit (`Zu viele Anfragen`) trips during repeated runs.
 
 Apply migration `114_listing_questions.sql` before first local run (`npm run db:migrate` or direct `psql`). **Prod:** applied on Hetzner 2026-07-04 (see `docs/FEATURE_INVENTORY.md` → Marketplace UX rollout tracker).
 

@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-07-04
-last_modified_summary: Marketplace rollout closed; admin Q&A i18n + API tests
+last_modified_summary: IT-Hilfe edit + withdraw offer journey E2E (items #19, #24)
 ---
 
 # Feature Inventory (SSOT)
@@ -84,12 +84,12 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 16 | Browse open requests | `/it-hilfe/anfragen` | Public / Techniker | ✅ (E2E browse) |
 | 17 | Filters (skill, service type, match skills) | `/it-hilfe/anfragen` | Techniker | 🟡 (E2E category filter) |
 | 18 | Request detail | `/it-hilfe/[id]` | Public | ✅ journey + preferred E2E |
-| 19 | Owner edit request | `/it-hilfe/[id]/edit` | Owner | ⬜ |
+| 19 | Owner edit request | `/it-hilfe/[id]/edit` | Owner | ✅ journey E2E (API + edit form smoke) |
 | 20 | Preferred technician sidebar | request detail | Owner | ✅ preferred journey E2E |
 | 21 | Match panel | request detail + API matches | Techniker | ✅ preferred first in matches API |
 | 22 | Submit offer | `/api/it-hilfe/requests/[id]/offers` | Techniker | ✅ dual-persona journey E2E |
 | 23 | Accept / decline offer | API offers accept/decline | Owner | ✅ journey accept |
-| 24 | Withdraw offer | API | Techniker | ⬜ |
+| 24 | Withdraw offer | API | Techniker | ✅ journey E2E (withdraw + resurrect offer) |
 | 25 | My requests | `/it-hilfe/my` | Requester | ✅ inventory E2E |
 | 26 | My offers | `/it-hilfe/my/offers` | Techniker | ✅ inventory E2E |
 | 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ⬜ |

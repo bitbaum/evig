@@ -110,9 +110,15 @@ export async function loginWithCredentials(
     throw new Error(`Login failed for ${email}: ${loginRes.status()}`)
   }
 
-  const sessionRes = await page.request.get('/api/auth/session')
-  const session = await sessionRes.json()
-  if (session?.user?.email?.toLowerCase() !== email.toLowerCase()) {
+  let sessionEmail: string | undefined
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const sessionRes = await page.request.get('/api/auth/session')
+    const session = await sessionRes.json()
+    sessionEmail = session?.user?.email
+    if (sessionEmail?.toLowerCase() === email.toLowerCase()) break
+    await new Promise(resolve => setTimeout(resolve, 400))
+  }
+  if (sessionEmail?.toLowerCase() !== email.toLowerCase()) {
     throw new Error(`Login succeeded but session email mismatch for ${email}`)
   }
 
@@ -121,7 +127,11 @@ export async function loginWithCredentials(
     url => pathMatchesCallback(url.pathname, url.search, callbackUrl),
     { timeout: 60_000 },
   )
-  await dismissCookieBanner(page)
+  try {
+    await dismissCookieBanner(page)
+  } catch {
+    /* navigation can interrupt evaluate — non-fatal for API-driven flows */
+  }
 }
 
 /**

@@ -1,6 +1,6 @@
 import type { APIRequestContext } from '@playwright/test'
 import { OFFER_MIN_CHARS } from '../../../src/config/it-hilfe'
-import { csrfPost } from './api-csrf'
+import { csrfDelete, csrfPost, csrfPut } from './api-csrf'
 
 export interface ItHilfeRequestPayload {
   categoryId: string
@@ -36,11 +36,37 @@ interface ApiEnvelope<T> {
 }
 
 async function parseApi<T>(response: Awaited<ReturnType<APIRequestContext['post']>>): Promise<T> {
-  const body = (await response.json()) as ApiEnvelope<T>
+  const contentType = response.headers()['content-type'] ?? ''
+  const text = await response.text()
+  if (!contentType.includes('json')) {
+    throw new Error(
+      `API ${response.status()} ${response.url()} returned non-JSON (${contentType}): ${text.slice(0, 120)}`,
+    )
+  }
+  const body = JSON.parse(text) as ApiEnvelope<T>
   if (!response.ok() || !body.success) {
     throw new Error(body.error || `API ${response.status()} ${response.url()}`)
   }
   return body.data as T
+}
+
+async function withDevCompileRetry<T>(
+  action: () => Promise<Awaited<ReturnType<APIRequestContext['post']>>>,
+): Promise<T> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await parseApi<T>(await action())
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      const isDevCompileMiss = message.includes('returned non-JSON') && message.includes('404')
+      if (attempt === 0 && isDevCompileMiss) {
+        await new Promise(resolve => setTimeout(resolve, 3000))
+        continue
+      }
+      throw error
+    }
+  }
+  throw new Error('withDevCompileRetry: unreachable')
 }
 
 export async function createItHilfeRequest(
@@ -75,36 +101,63 @@ export async function submitItHilfeOffer(
   return { offerId: data.offerId }
 }
 
+export async function withdrawItHilfeOffer(
+  request: APIRequestContext,
+  requestId: string,
+  offerId: string,
+): Promise<void> {
+  const response = await csrfDelete(request, `/api/it-hilfe/requests/${requestId}/offers/${offerId}`)
+  await parseApi(response)
+}
+
+export async function updateItHilfeRequest(
+  request: APIRequestContext,
+  requestId: string,
+  overrides: Partial<ItHilfeRequestPayload>,
+): Promise<void> {
+  const response = await csrfPut(request, `/api/it-hilfe/requests/${requestId}`, overrides)
+  await parseApi(response)
+}
+
+export async function fetchItHilfeOffers(
+  request: APIRequestContext,
+  requestId: string,
+): Promise<Array<{ id: string; status: string }>> {
+  const response = await request.get(`/api/it-hilfe/requests/${requestId}/offers`)
+  const data = await parseApi<{ offers: Array<{ id: string; status: string }> }>(response)
+  return data.offers ?? []
+}
+
 export async function acceptItHilfeOffer(
   request: APIRequestContext,
   requestId: string,
   offerId: string,
 ): Promise<void> {
-  const response = await csrfPost(
-    request,
-    `/api/it-hilfe/requests/${requestId}/offers/${offerId}/accept`,
+  await withDevCompileRetry(() =>
+    csrfPost(request, `/api/it-hilfe/requests/${requestId}/offers/${offerId}/accept`),
   )
-  await parseApi(response)
 }
 
 export async function completeItHilfeRequest(
   request: APIRequestContext,
   requestId: string,
 ): Promise<void> {
-  const response = await csrfPost(request, `/api/it-hilfe/requests/${requestId}/complete`)
-  await parseApi(response)
+  await withDevCompileRetry(() =>
+    csrfPost(request, `/api/it-hilfe/requests/${requestId}/complete`),
+  )
 }
 
 export async function confirmItHilfeReview(
   request: APIRequestContext,
   requestId: string,
 ): Promise<void> {
-  const response = await csrfPost(request, `/api/it-hilfe/requests/${requestId}/confirm-review`, {
-    rating: 5,
-    recommended: true,
-    reviewText: 'Sehr hilfreich, danke!',
-  })
-  await parseApi(response)
+  await withDevCompileRetry(() =>
+    csrfPost(request, `/api/it-hilfe/requests/${requestId}/confirm-review`, {
+      rating: 5,
+      recommended: true,
+      reviewText: 'Sehr hilfreich, danke!',
+    }),
+  )
 }
 
 export async function fetchItHilfeRequest(
@@ -112,6 +165,7 @@ export async function fetchItHilfeRequest(
   requestId: string,
 ): Promise<{
   status: string
+  title: string
   reviewedAt: string | null
   preferredTechnicianId: string | null
   preferredTechnicianName: string | null
@@ -120,6 +174,7 @@ export async function fetchItHilfeRequest(
   const data = await parseApi<{
     request: {
       status: string
+      title?: string
       reviewedAt?: string | null
       preferredTechnicianId?: string | null
       preferredTechnicianName?: string | null
@@ -127,6 +182,7 @@ export async function fetchItHilfeRequest(
   }>(response)
   return {
     status: data.request.status,
+    title: data.request.title ?? '',
     reviewedAt: data.request.reviewedAt ?? null,
     preferredTechnicianId: data.request.preferredTechnicianId ?? null,
     preferredTechnicianName: data.request.preferredTechnicianName ?? null,

@@ -13,22 +13,76 @@ import {
   loginWithCredentials,
 } from './helpers/auth'
 import {
-  acceptItHilfeOffer,
   completeItHilfeRequest,
   confirmItHilfeReview,
   createItHilfeRequest,
+  fetchItHilfeOffers,
   fetchItHilfeRequest,
   submitItHilfeOffer,
+  updateItHilfeRequest,
+  withdrawItHilfeOffer,
 } from './helpers/it-hilfe'
 import { expectAdminRouteBlocked } from './helpers/route-smoke'
 
 test.describe('IT-Hilfe dual-persona journey', () => {
+  test.use({ storageState: { cookies: [], origins: [] } })
   test.setTimeout(180000)
+
+  test.beforeAll(async ({ request }) => {
+    // Webpack dev lazily compiles nested API routes; prime accept handler.
+    await request.post(
+      '/api/it-hilfe/requests/00000000-0000-0000-0000-000000000000/offers/00000000-0000-0000-0000-000000000001/accept',
+      { headers: { 'x-csrf-token': 'warmup' }, failOnStatusCode: false },
+    )
+  })
 
   test.skip(
     !hasDualPersonaCredentials(),
     'Set AUTH_TEST_USER_PASSWORD + AUTH_TEST_ADMIN_PASSWORD (different accounts)',
   )
+
+  test('owner edits open request and techniker withdraws pending offer', async ({ page }) => {
+    const requester = getRequesterCredentials()
+    const techniker = getTechnicianCredentials()
+    const editedTitle = `E2E bearbeitet ${Date.now()}`
+
+    await loginWithCredentials(page, '/dashboard', requester.email, requester.password)
+    const { requestId } = await createItHilfeRequest(page.request)
+
+    await updateItHilfeRequest(page.request, requestId, { title: editedTitle })
+    expect((await fetchItHilfeRequest(page.request, requestId)).title).toBe(editedTitle)
+
+    await loginWithCredentials(
+      page,
+      `/it-hilfe/${requestId}/edit`,
+      requester.email,
+      requester.password,
+    )
+    await expect(page.locator(`input[value="${editedTitle}"]`)).toBeVisible({ timeout: 60000 })
+
+    await loginWithCredentials(
+      page,
+      `/it-hilfe/${requestId}`,
+      techniker.email,
+      techniker.password,
+    )
+    const { offerId } = await submitItHilfeOffer(page.request, requestId)
+    await withdrawItHilfeOffer(page.request, requestId, offerId)
+
+    await loginWithCredentials(page, `/it-hilfe/${requestId}`, requester.email, requester.password)
+    const offersAfterWithdraw = await fetchItHilfeOffers(page.request, requestId)
+    expect(offersAfterWithdraw.some(o => o.id === offerId && o.status === 'pending')).toBe(false)
+
+    await loginWithCredentials(page, `/it-hilfe/${requestId}`, techniker.email, techniker.password)
+    const { offerId: offerId2 } = await submitItHilfeOffer(
+      page.request,
+      requestId,
+      'E2E-Angebot nach Rückzug: Ich kann weiterhin helfen und schaue es mir gerne an.',
+    )
+    await loginWithCredentials(page, `/it-hilfe/${requestId}`, requester.email, requester.password)
+    const offersAfterResubmit = await fetchItHilfeOffers(page.request, requestId)
+    expect(offersAfterResubmit.some(o => o.id === offerId2 && o.status === 'pending')).toBe(true)
+  })
 
   test('admin creates → user offers → admin accepts → user completes → admin reviews', async ({
     page,
@@ -51,17 +105,21 @@ test.describe('IT-Hilfe dual-persona journey', () => {
       techniker.password,
     )
     const { offerId } = await submitItHilfeOffer(page.request, requestId)
+    await page.reload()
     await expect(
-      page.getByRole('button', { name: 'Angebot abgeben' }).or(
-        page.getByText(/Angebot abgegeben|bereits ein Angebot/i),
-      ),
+      page.getByRole('button', { name: /Angebot zurückziehen|Withdraw offer/i }),
     ).toBeVisible({ timeout: 15000 })
 
-    // 3. Admin accepts offer
+    // 3. Admin accepts offer (UI — avoids webpack dev 404 on nested accept API route)
     await loginWithCredentials(page, `/it-hilfe/${requestId}`, requester.email, requester.password)
-    await acceptItHilfeOffer(page.request, requestId, offerId)
-    let status = (await fetchItHilfeRequest(page.request, requestId)).status
-    expect(status).toBe('matched')
+    await page.reload()
+    await page.getByRole('button', { name: /Akzeptieren|Accept/i }).first().click()
+    await page.getByRole('button', { name: /Bestätigen|Confirm/i }).click()
+    await expect.poll(
+      async () => (await fetchItHilfeRequest(page.request, requestId)).status,
+      { timeout: 30000 },
+    ).toBe('matched')
+    let status = 'matched'
     await page.reload()
     await expect(page.getByText(/vergeben|matched|Techniker/i).first()).toBeVisible({
       timeout: 15000,

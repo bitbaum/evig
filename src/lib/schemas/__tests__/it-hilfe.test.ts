@@ -271,6 +271,11 @@ describe('UpdateITHilfeRequestSchema', () => {
     expect(result.success).toBe(false)
   })
 
+  it('accepts valid canton name on partial update', () => {
+    const result = UpdateITHilfeRequestSchema.safeParse({ canton: 'Zürich' })
+    expect(result.success).toBe(true)
+  })
+
   it('rejects budgetAmountCents above 100000', () => {
     const result = UpdateITHilfeRequestSchema.safeParse({ budgetAmountCents: 100001 })
     expect(result.success).toBe(false)

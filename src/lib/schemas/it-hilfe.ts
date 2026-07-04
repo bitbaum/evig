@@ -147,7 +147,9 @@ export const UpdateITHilfeRequestSchema = z.object({
   maxBudgetCents: z.number().int().min(0).max(100000).nullable().optional(),
   postalCode: z.string().regex(/^\d{4}$/, 'Ungültige Postleitzahl (4 Ziffern erforderlich)').optional(),
   city: z.string().max(100).optional(),
-  canton: z.string().max(2).optional(),
+  canton: z.enum(SWISS_CANTONS, {
+    message: 'Ungültiger Kanton',
+  }).optional(),
   serviceType: z.enum(serviceTypeIds, {
     message: 'Ungültiger Service-Typ',
   }).optional(),
