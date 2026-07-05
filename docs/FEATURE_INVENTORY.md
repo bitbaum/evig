@@ -153,7 +153,7 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 2 | Withdraw offer E2E (#24) | ✅ | API `DELETE` + resurrect offer flow in same journey |
 | 3 | Update schema canton fix | ✅ | `UpdateITHilfeRequestSchema` uses `SWISS_CANTONS` (matches create) |
 | 4 | Commit + deploy | ✅ | `7fecaeb3` active on prod `2026-07-04T23:42Z`; migrations up to date |
-| 5 | Magic-link claim (#27) | ✅ | Guest `/it-hilfe/accept?token=…` journey E2E; CSRF exempt + `AcceptButton` header fix |
+| 5 | Magic-link claim (#27) | ✅ | Guest journey E2E; CSRF fix deployed `82693d0f` 2026-07-05 |
 
 ---
 
