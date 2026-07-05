@@ -53,6 +53,7 @@ export const PUBLIC_ROUTES: InventoryRoute[] = [
   { id: 13, label: 'IT-Hilfe hub', path: ROUTES.public.itHilfe },
   { id: 14, label: 'IT-Hilfe create', path: ROUTES.public.itHilfeCreate },
   { id: 16, label: 'IT-Hilfe browse', path: ROUTES.public.itHilfeBrowseRequests },
+  { id: 27, label: 'IT-Hilfe claim (magic link)', path: '/it-hilfe/accept', urlPattern: /\/it-hilfe\/accept/ },
   { id: 28, label: 'Technician directory', path: ROUTES.public.techniker },
   { id: 36, label: 'Legacy techniker redirect', path: '/techniker', urlPattern: /\/it-hilfe\/techniker/ },
   { id: 37, label: 'Marketplace browse', path: ROUTES.public.marketplace },

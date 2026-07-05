@@ -55,6 +55,7 @@ const CSRF_CONFIG = {
     '/api/webhooks/',                // External webhook callers
     '/api/payments/payrexx-webhook', // External Payrexx webhook
     '/api/payments/webhook',         // External payment webhook
+    '/api/it-hilfe/accept-offer-via-token', // HMAC token in body = auth (email magic link)
   ],
 }
 

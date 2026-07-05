@@ -1,5 +1,6 @@
 import type { APIRequestContext } from '@playwright/test'
 import { OFFER_MIN_CHARS } from '../../../src/config/it-hilfe'
+import { signOfferAcceptToken } from '../../../src/lib/it-hilfe/offer-accept-tokens'
 import { csrfDelete, csrfPost, csrfPut } from './api-csrf'
 
 export interface ItHilfeRequestPayload {
@@ -99,6 +100,24 @@ export async function submitItHilfeOffer(
   const data = await parseApi<{ offerId: string }>(response)
   if (!data.offerId) throw new Error('submitItHilfeOffer: missing offerId')
   return { offerId: data.offerId }
+}
+
+/** Signed one-tap accept URL (same token as emailed to request owner). */
+export function buildOfferAcceptMagicLink(offerId: string): string {
+  const token = signOfferAcceptToken(offerId)
+  return `/it-hilfe/accept?token=${encodeURIComponent(token)}`
+}
+
+/** Guest one-tap accept (same POST as AcceptButton on /it-hilfe/accept). */
+export async function acceptItHilfeOfferViaMagicLink(
+  request: APIRequestContext,
+  offerId: string,
+): Promise<{ requestId: string }> {
+  const response = await request.post('/api/it-hilfe/accept-offer-via-token', {
+    data: { token: signOfferAcceptToken(offerId) },
+  })
+  const data = await parseApi<{ requestId: string; helperId: string }>(response)
+  return { requestId: data.requestId }
 }
 
 export async function withdrawItHilfeOffer(

@@ -13,9 +13,11 @@ import {
   loginWithCredentials,
 } from './helpers/auth'
 import {
+  acceptItHilfeOfferViaMagicLink,
   completeItHilfeRequest,
   confirmItHilfeReview,
   createItHilfeRequest,
+  buildOfferAcceptMagicLink,
   fetchItHilfeOffers,
   fetchItHilfeRequest,
   submitItHilfeOffer,
@@ -151,5 +153,54 @@ test.describe('IT-Hilfe dual-persona journey', () => {
     // 7. User must stay blocked from admin IT-Hilfe
     await loginWithCredentials(page, '/dashboard', techniker.email, techniker.password)
     await expectAdminRouteBlocked(page, '/admin/it-hilfe')
+  })
+
+  test('guest accepts pending offer via emailed magic link', async ({ page, context, browser }) => {
+    const requester = getRequesterCredentials()
+    const techniker = getTechnicianCredentials()
+    const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001'
+
+    await loginWithCredentials(page, '/dashboard', requester.email, requester.password)
+    const { requestId } = await createItHilfeRequest(page.request)
+
+    const technikerContext = await browser.newContext({
+      baseURL,
+      storageState: { cookies: [], origins: [] },
+    })
+    const technikerPage = await technikerContext.newPage()
+    await loginWithCredentials(
+      technikerPage,
+      `/it-hilfe/${requestId}`,
+      techniker.email,
+      techniker.password,
+    )
+    const { offerId } = await submitItHilfeOffer(technikerPage.request, requestId)
+    await technikerContext.close()
+
+    await context.clearCookies()
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('cookie_consent', 'accepted')
+      } catch {
+        /* ignore */
+      }
+    })
+    await page.goto(buildOfferAcceptMagicLink(offerId))
+    await expect(page.getByRole('heading', { name: /Angebot annehmen/i })).toBeVisible({
+      timeout: 60000,
+    })
+    await expect(page.getByRole('button', { name: /Angebot annehmen/i })).toBeVisible()
+
+    const { requestId: acceptedRequestId } = await acceptItHilfeOfferViaMagicLink(
+      page.request,
+      offerId,
+    )
+    expect(acceptedRequestId).toBe(requestId)
+
+    await page.goto(`/it-hilfe/${requestId}?accepted=1`)
+    await expect.poll(
+      async () => (await fetchItHilfeRequest(page.request, requestId)).status,
+      { timeout: 30000 },
+    ).toBe('matched')
   })
 })

@@ -9,6 +9,7 @@ import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
+import { withClientCsrfHeader } from '@/lib/api/csrf-client'
 
 interface AcceptButtonProps {
   token: string
@@ -56,7 +57,7 @@ export function AcceptButton({ token }: AcceptButtonProps) {
     try {
       const res = await fetch('/api/it-hilfe/accept-offer-via-token', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: withClientCsrfHeader({ 'content-type': 'application/json' }, 'POST'),
         body: JSON.stringify({ token }),
       })
       const body = (await res.json().catch(() => null)) as

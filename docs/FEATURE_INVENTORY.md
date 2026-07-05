@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
 last_modified_date: 2026-07-05
-last_modified_summary: IT-Hilfe Phase 2 deployed (edit + withdraw E2E, canton schema fix)
+last_modified_summary: IT-Hilfe magic-link claim E2E (#27)
 ---
 
 # Feature Inventory (SSOT)
@@ -92,7 +92,7 @@ Route matrix: `tests/e2e/helpers/inventory-routes.ts` · Spec: `tests/e2e/featur
 | 24 | Withdraw offer | API | Techniker | ✅ journey E2E (withdraw + resurrect offer) |
 | 25 | My requests | `/it-hilfe/my` | Requester | ✅ inventory E2E |
 | 26 | My offers | `/it-hilfe/my/offers` | Techniker | ✅ inventory E2E |
-| 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ⬜ |
+| 27 | Claim request (magic link) | `/it-hilfe/accept` | Guest | ✅ journey E2E (token accept + inventory empty-state) |
 | 28 | Technician directory | `/it-hilfe/techniker` | Public | ✅ (E2E list load) |
 | 29 | Technician public profile | `/it-hilfe/techniker/[id]` | Public | ✅ dynamic inventory + preferred journey |
 | 30 | Technician self-service profile | `/profil/techniker` | Techniker | ✅ (user + admin E2E) |
@@ -153,6 +153,7 @@ Single checklist for the Ricardo-style gap closure (buy CTA + public Q&A). Updat
 | 2 | Withdraw offer E2E (#24) | ✅ | API `DELETE` + resurrect offer flow in same journey |
 | 3 | Update schema canton fix | ✅ | `UpdateITHilfeRequestSchema` uses `SWISS_CANTONS` (matches create) |
 | 4 | Commit + deploy | ✅ | `7fecaeb3` active on prod `2026-07-04T23:42Z`; migrations up to date |
+| 5 | Magic-link claim (#27) | ✅ | Guest `/it-hilfe/accept?token=…` journey E2E; CSRF exempt + `AcceptButton` header fix |
 
 ---
 

@@ -34,6 +34,10 @@ describe('isExcludedPath', () => {
     expect(isExcludedPath('/api/payments/webhook')).toBe(true)
   })
 
+  it('excludes IT-Hilfe magic-link accept (HMAC token in body)', () => {
+    expect(isExcludedPath('/api/it-hilfe/accept-offer-via-token')).toBe(true)
+  })
+
   it('protects normal API routes', () => {
     expect(isExcludedPath('/api/marketplace/orders')).toBe(false)
     expect(isExcludedPath('/api/listings')).toBe(false)
