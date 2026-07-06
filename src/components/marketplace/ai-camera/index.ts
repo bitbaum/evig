@@ -13,4 +13,4 @@ export { AIProductResults } from './AIProductResults'
 export type { ProductSuggestion, DetectedProductData, AICameraProductListingProps } from './types'
 
 // Config
-export { CONDITION_LABELS, CATEGORY_ICONS, getConditionLabel, getCategoryIcon, generateProductDescription } from './config'
+export { CONDITION_LABELS, DEFAULT_CATEGORY_ICON, getConditionLabel, getCategoryIcon, generateProductDescription } from './config'

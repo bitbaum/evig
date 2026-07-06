@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react'
 import { useAIProductAnalysis, type ProductAnalysis } from './useAIProductAnalysis'
 import { getCategoryIcon } from '@/components/marketplace/ai-camera/config'
+import { resolveCategoryValue } from '@/config/marketplace'
 import type { ProductSuggestion } from '@/components/marketplace/ai-camera/types'
 
 export function useAICamera() {
@@ -17,7 +18,9 @@ export function useAICamera() {
     const suggestion: ProductSuggestion = {
       id: `ai-${Date.now()}`,
       name: result.product_name || 'Unbekanntes Produkt',
-      category: result.category || 'Electronics',
+      // Normalize the AI's free-text label to a KATEGORIEN value so it is a
+      // valid marketplace category when it flows into the sell form.
+      category: resolveCategoryValue(result.category),
       estimatedPrice: result.estimated_price_chf || 0,
       confidence: result.total_confidence || 0.5,
       brand: result.brand,

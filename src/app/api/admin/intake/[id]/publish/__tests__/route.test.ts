@@ -78,10 +78,6 @@ jest.mock('@/config/marketplace-status', () => ({
   MARKETPLACE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
 }))
 
-jest.mock('@/config/shop', () => ({
-  MARKETPLACE_LISTING_PLATFORM: { INTERNAL: 'internal' },
-}))
-
 jest.mock('@/config/intake-checklist', () => ({
   isChecklistComplete: jest.fn().mockReturnValue(true),
 }))

@@ -8,6 +8,7 @@ import { CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON, getConditionLabel } from './config'
+import { resolveCategoryValue } from '@/config/marketplace'
 import type { ProductSuggestion } from './types'
 
 interface ProductSuggestionCardProps {
@@ -15,9 +16,9 @@ interface ProductSuggestionCardProps {
   onSelect: (suggestion: ProductSuggestion) => void
 }
 
-// Render icon outside of component to avoid "creating component during render"
+// Look up (don't create) the icon component to keep a stable reference.
 function CategoryIcon({ category, className }: { category: string; className: string }) {
-  const IconComponent = CATEGORY_ICONS[category] || DEFAULT_CATEGORY_ICON
+  const IconComponent = CATEGORY_ICONS[resolveCategoryValue(category)] || DEFAULT_CATEGORY_ICON
   return <IconComponent className={className} />
 }
 

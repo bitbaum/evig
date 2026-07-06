@@ -50,6 +50,53 @@ export function getCategoryLabel(value: string): string {
   return MARKETPLACE_CATEGORY_LABELS[value] || value
 }
 
+/** Lowercased KATEGORIEN label → value (built once from the SSOT). */
+const CATEGORY_LABEL_TO_VALUE: Readonly<Record<string, string>> = Object.fromEntries(
+  KATEGORIEN.map(k => [k.label.toLowerCase(), k.value])
+)
+
+/**
+ * Aliases for free-text / AI-produced category labels that are not exact
+ * KATEGORIEN labels (English terms or coarser German words the vision model
+ * emits). Keys are lowercased. Values are KATEGORIEN values.
+ */
+const CATEGORY_LABEL_ALIASES: Readonly<Record<string, MarketplaceCategoryValue>> = {
+  laptop: '10', laptops: '10', notebook: '10', notebooks: '10',
+  desktop: '20', 'desktop pc': '20', 'desktop pcs': '20', pc: '20', computer: '20',
+  monitor: '30', monitore: '30', display: '30', beamer: '30',
+  tablet: '40', tablets: '40', ipad: '40',
+  smartphone: '50', smartphones: '50', handy: '50', phone: '50', telefon: '50',
+  drucker: '60', printer: '60', scanner: '60',
+  komponenten: '70', components: '70', speicher: '70', storage: '70',
+  ram: '70', cpu: '70', ssd: '70', festplatte: '70', mainboard: '70',
+  peripherie: '80', peripherals: '80', 'zubehör': '80', zubehoer: '80',
+  accessories: '80', tastatur: '80', maus: '80', keyboard: '80', mouse: '80',
+  netzwerk: '90', network: '90', router: '90', switch: '90',
+  electronics: '99', elektronik: '99', sonstiges: '99', other: '99',
+}
+
+/**
+ * Resolve any category input — a KATEGORIEN value ('10'), a German label
+ * ('Laptops'), or a free-text/AI label ('Electronics') — to a canonical
+ * marketplace category value. Falls back to '99' (Sonstiges). Never throws.
+ *
+ * SSOT guard: keeps AI-produced and legacy category strings from leaking
+ * non-KATEGORIEN values into listings.category.
+ */
+export function resolveCategoryValue(input: string | null | undefined): MarketplaceCategoryValue {
+  if (!input) return '99'
+  const raw = input.trim()
+  if ((MARKETPLACE_CATEGORY_VALUES as readonly string[]).includes(raw)) {
+    return raw as MarketplaceCategoryValue
+  }
+  const key = raw.toLowerCase()
+  return (
+    (CATEGORY_LABEL_TO_VALUE[key] as MarketplaceCategoryValue | undefined) ??
+    CATEGORY_LABEL_ALIASES[key] ??
+    '99'
+  )
+}
+
 // ============================================================================
 // Listing Statuses
 // ============================================================================
