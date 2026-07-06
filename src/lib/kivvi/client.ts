@@ -100,6 +100,42 @@ export interface CreateKivviInvoiceInput {
 }
 
 // ============================================================================
+// CONDITION MAPPING — RevampIT zustand → Kivvi ITEM_CONDITION enum
+// ============================================================================
+
+type KivviCondition = NonNullable<CreateKivviInventoryItemInput["condition"]>;
+
+/**
+ * RevampIT's condition vocabulary (ZUSTAND_OPTIONS: new/like_new/good/fair/poor/
+ * defect + aliases) does not match Kivvi's enum (untested/like_new/good/fair/
+ * poor/parts_only/scrap). Without this map a brand-new ('new') or defective
+ * ('defect') item is rejected by Kivvi's z.enum with HTTP 400 and never syncs
+ * (it lands in kivviSyncStatus='error' with no retry). Unknown values fall back
+ * to Kivvi's own default, 'untested'.
+ */
+const CONDITION_TO_KIVVI: Readonly<Record<string, KivviCondition>> = {
+  new: "like_new",
+  like_new: "like_new",
+  excellent: "like_new",
+  very_good: "like_new",
+  good: "good",
+  fair: "fair",
+  acceptable: "fair",
+  poor: "poor",
+  defect: "parts_only",
+  defective: "parts_only",
+  damaged: "parts_only",
+  parts_only: "parts_only",
+  scrap: "scrap",
+  untested: "untested",
+};
+
+export function mapConditionToKivvi(condition?: string | null): KivviCondition {
+  if (!condition) return "untested";
+  return CONDITION_TO_KIVVI[condition.toLowerCase().trim()] ?? "untested";
+}
+
+// ============================================================================
 // HTTP HELPER
 // ============================================================================
 
@@ -184,7 +220,16 @@ export async function createKivviInvoice(
     method: "POST",
     body: JSON.stringify({
       type: "invoice",
-      ...input,
+      contactName: input.contactName,
+      contactEmail: input.contactEmail,
+      notes: input.notes,
+      // Kivvi's documentItemSchema expects `inventoryItemId`. RevampIT names it
+      // kivviInventoryItemId internally, so rename here — otherwise zod strips
+      // the unknown key and the invoice line is never linked to the item.
+      items: input.items.map(({ kivviInventoryItemId, ...rest }) => ({
+        ...rest,
+        ...(kivviInventoryItemId ? { inventoryItemId: kivviInventoryItemId } : {}),
+      })),
     }),
   });
 }

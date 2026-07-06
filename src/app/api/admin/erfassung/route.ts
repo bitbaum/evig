@@ -12,7 +12,7 @@ import { db } from '@/db'
 import { eq } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
-import { syncToKivvi } from '@/lib/kivvi/client'
+import { syncToKivvi, mapConditionToKivvi } from '@/lib/kivvi/client'
 import { inventoryItems } from '@/db/schema/inventory'
 import type { ErfassungPayload } from '@/types/erfassung'
 
@@ -33,7 +33,9 @@ export const POST = withAdmin('products', async (request, session) => {
     // Push to Kivvi ERP after transaction commits (non-blocking — never fails the request)
     syncToKivvi({
       description: `${payload.hersteller ? `${payload.hersteller} ` : ''}${payload.produktname}`,
-      condition: payload.zustand as 'untested' | 'like_new' | 'good' | 'fair' | 'poor' | undefined,
+      // Map RevampIT's zustand vocabulary to Kivvi's enum — a raw 'new'/'defect'
+      // would otherwise be rejected by Kivvi with HTTP 400 and never sync.
+      condition: mapConditionToKivvi(payload.zustand),
       askingPrice: payload.verkaufspreis != null ? String(payload.verkaufspreis) : undefined,
       location: payload.location ?? undefined,
       notes: payload.kurzbeschreibung ?? undefined,
