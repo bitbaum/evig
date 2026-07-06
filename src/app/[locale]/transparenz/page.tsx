@@ -10,6 +10,7 @@ import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import { ORG, CONTACT } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 import { getTranslations } from 'next-intl/server'
 
 interface TransparenzPageProps {
@@ -35,6 +36,7 @@ export async function generateMetadata({ params }: TransparenzPageProps): Promis
 export default async function TransparenzPage({ params }: TransparenzPageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'transparenz' })
+  const tk = await getTranslations({ locale, namespace: 'kennzahlen' })
   const compactMetrics = getCompactMetrics({
     devicesRescued: t('compactMetrics.devicesRescued'),
     peopleTrained: t('compactMetrics.peopleTrained'),
@@ -93,7 +95,13 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
             ))}
           </dl>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+            <Link
+              href={ROUTES.public.transparenzKennzahlen}
+              className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
+            >
+              {tk('linkFromOverview')} <span aria-hidden="true">→</span>
+            </Link>
             <Link
               href="/about/impact"
               className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
