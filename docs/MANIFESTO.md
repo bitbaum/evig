@@ -14,6 +14,16 @@ compass. Companion to the concrete plans in
 
 ---
 
+## The meta-rule: everything is changeable, except the core
+
+Make it **easy to change anything** — code, config, features, even the
+organization's own structure (this is what forkability, §3, is for). The *only*
+things held constant are the **constitutional core**: **transparency of
+decision-making**, and **regular, honest reporting** — what we've done, what we
+strive toward, and what help or resources we need. Everything else is malleable;
+those two are load-bearing and fixed. Litmus test for any change: it's allowed if
+it doesn't weaken transparency or reporting.
+
 ## The values, as product principles
 
 ### 1. Radical transparency & open governance
@@ -88,6 +98,14 @@ channels — so they can contribute and belong.
 - **Payment sovereignty:** keep one easily-toggleable provider; add a self-hosted
   crypto option (**BTCPay**), currency-agnostic, wallets that *can* be public, to
   avoid lock-in to closed processors like Payrexx.
+- **Donation requests / appeals *(proposed — extends existing donations)*:** the
+  platform already records monetary + device donations (`donations` table with a
+  `device`/`monetary` split, `/get-involved/donate`, dropoff + admin + public
+  financials). Add the *request* side — an easy, shareable **ask** ("we need N
+  laptops for X" / "CHF Y toward repairs"), fulfillable with **a device or
+  money-earmarked-for-devices**, shown against the transparent budget. Build it as
+  a **reusable donation-request module** so it dogfoods into other apps (OrangeCat
+  = natural fundraising host) rather than being reimplemented per app.
 - **First-principles rule:** every franc anchors to a mission metric (devices
   rehomed, people trained, CO₂ avoided — from the `org-numbers` SSOT). Growth is
   only good if metric-per-franc holds.
