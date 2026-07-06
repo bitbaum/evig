@@ -226,6 +226,8 @@ import {
   lookupPaymentByReferenceId,
   handleMarketplacePayment,
   handleGenericPayment,
+  grossToNetChf,
+  KIVVI_MWST_RATE,
 } from '../payment-webhook'
 import { ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
 import { PAYMENT_STATUS } from '@/config/payment-status'
@@ -763,5 +765,37 @@ describe('handleGenericPayment — REFUNDED', () => {
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.REFUNDED }),
     )
+  })
+})
+
+describe('grossToNetChf (Kivvi invoice VAT)', () => {
+  // Regression: marketplace prices are charged VAT-inclusive (gross); Kivvi adds
+  // VAT on top of unitPrice. Sending gross as unitPrice inflated every invoice by
+  // the VAT rate and left invoices partially_paid + overstated MWST. We must send
+  // net so that Kivvi's net + VAT == the amount the customer actually paid.
+  const rate = parseFloat(KIVVI_MWST_RATE) / 100
+
+  it('uses the current Swiss standard rate (8.1%)', () => {
+    expect(KIVVI_MWST_RATE).toBe('8.1')
+  })
+
+  it('net + VAT reconstructs the gross charged (within a Rappen)', () => {
+    for (const gross of ['100.00', '50.00', '19.90', '12.35', '1234.55']) {
+      const net = parseFloat(grossToNetChf(gross))
+      const total = net + Math.round(net * rate * 100) / 100
+      expect(Math.abs(total - parseFloat(gross))).toBeLessThanOrEqual(0.01)
+    }
+  })
+
+  it('net is strictly less than gross for a positive amount', () => {
+    expect(parseFloat(grossToNetChf('100.00'))).toBeLessThan(100)
+  })
+
+  it('returns a 2-decimal string', () => {
+    expect(grossToNetChf('100.00')).toMatch(/^\d+\.\d{2}$/)
+  })
+
+  it('falls back to the input for unparseable amounts', () => {
+    expect(grossToNetChf('abc')).toBe('abc')
   })
 })
