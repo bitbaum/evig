@@ -8771,6 +8771,8 @@
       "tierCommunity": "Сообщество"
     },
     "userMenu": {
+      "browseRequests": "Открытые заявки",
+      "myOffers": "Мои предложения",
       "login": "Войти",
       "register": "Регистрация",
       "admin": "Админ-раздел",

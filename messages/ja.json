@@ -8776,6 +8776,8 @@
       "tierCommunity": "コミュニティ"
     },
     "userMenu": {
+      "browseRequests": "未対応のリクエスト",
+      "myOffers": "自分の申し出",
       "login": "ログイン",
       "register": "新規登録",
       "admin": "管理エリア",

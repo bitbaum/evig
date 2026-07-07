@@ -8776,6 +8776,8 @@
       "tierCommunity": "커뮤니티"
     },
     "userMenu": {
+      "browseRequests": "열린 요청",
+      "myOffers": "내 제안",
       "login": "로그인",
       "register": "회원가입",
       "admin": "관리자 영역",

@@ -18,12 +18,15 @@ import {
   MessageSquare,
   BadgeCheck,
   Gift,
+  Wrench,
+  Handshake,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
 import { NotificationBell } from '@/components/admin/NotificationBell'
+import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus'
 
 /**
  * UserMenu Component
@@ -39,6 +42,10 @@ export function UserMenu() {
   const { data: session, status } = useSession({
     required: false, // Don't require session for this component
   })
+  // Role-aware nav: a technician (has a technician profile) gets their helper-
+  // side links surfaced here. SWR-cached and only fetched when logged in, so it
+  // adds no cost for anonymous visitors and dedupes with other usages.
+  const { hasProfile: isTechnician } = useTechnicianProfileStatus()
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -106,6 +113,13 @@ export function UserMenu() {
       { href: '/dashboard/listings', icon: Store, label: t('myListings') },
       { href: '/dashboard/orders', icon: ShoppingBag, label: t('myOrders') },
     ],
+    // IT-Hilfe — helper side, only for technicians (role-aware)
+    ...(isTechnician
+      ? [[
+          { href: ROUTES.public.itHilfeBrowseRequests, icon: Wrench, label: t('browseRequests') },
+          { href: ROUTES.public.itHilfeMyOffers, icon: Handshake, label: t('myOffers') },
+        ]]
+      : []),
     // Services
     [
       { href: '/dashboard/appointments', icon: Calendar, label: t('myAppointments') },

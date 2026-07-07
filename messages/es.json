@@ -8776,6 +8776,8 @@
       "tierCommunity": "Comunidad"
     },
     "userMenu": {
+      "browseRequests": "Solicitudes abiertas",
+      "myOffers": "Mis ofertas",
       "login": "Iniciar sesión",
       "register": "Registrarse",
       "admin": "Área de administración",

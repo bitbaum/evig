@@ -9129,6 +9129,8 @@
       "tierCommunity": "Community"
     },
     "userMenu": {
+      "browseRequests": "Offene Anfragen",
+      "myOffers": "Meine Angebote",
       "login": "Anmelden",
       "register": "Registrieren",
       "admin": "Admin-Bereich",
