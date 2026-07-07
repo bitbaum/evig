@@ -131,6 +131,8 @@
       "requestHelp": "Request help",
       "viewSection": "Overview",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "browseRequests": "Открытые заявки",
+      "browseRequestsDesc": "Просматривайте заявки на ремонт и предлагайте помощь",
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "computerRepair": "Ремонт и апгрейды",

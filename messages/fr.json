@@ -170,6 +170,8 @@
       "requestHelp": "Request help",
       "viewSection": "Overview",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "browseRequests": "Demandes ouvertes",
+      "browseRequestsDesc": "Parcourir les demandes de réparation et proposer son aide",
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },

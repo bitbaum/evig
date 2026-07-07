@@ -131,6 +131,8 @@
       "requestHelp": "Request help",
       "viewSection": "Overview",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "browseRequests": "Richieste aperte",
+      "browseRequestsDesc": "Sfoglia le richieste di riparazione e offri aiuto",
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },

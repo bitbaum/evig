@@ -131,6 +131,8 @@
       "requestHelp": "Request help",
       "viewSection": "Overview",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "browseRequests": "열린 요청",
+      "browseRequestsDesc": "수리 요청을 둘러보고 도움을 제안하세요",
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },

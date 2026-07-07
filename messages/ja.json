@@ -131,6 +131,8 @@
       "requestHelp": "Request help",
       "viewSection": "Overview",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "browseRequests": "未対応のリクエスト",
+      "browseRequestsDesc": "修理リクエストを見て、手伝いを申し出る",
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },

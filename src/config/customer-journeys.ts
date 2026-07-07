@@ -50,6 +50,13 @@ export const CUSTOMER_JOURNEYS = {
         descriptionKey: 'requestHelpDesc',
       },
       {
+        // Helper side of the two-sided flow: technicians browse open requests
+        // and make offers. The page existed but was unreachable from the nav.
+        nameKey: 'browseRequests',
+        href: ROUTES.public.itHilfeBrowseRequests,
+        descriptionKey: 'browseRequestsDesc',
+      },
+      {
         nameKey: 'findTechnician',
         href: ROUTES.public.techniker,
         descriptionKey: 'findTechnicianDesc',

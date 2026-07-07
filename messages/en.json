@@ -161,6 +161,8 @@
       "sectionItHelp": "IT help",
       "requestHelp": "Request help",
       "requestHelpDesc": "Describe your issue and get matched with technicians",
+      "browseRequests": "Open requests",
+      "browseRequestsDesc": "Browse repair requests and offer help",
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "viewSection": "Overview",
