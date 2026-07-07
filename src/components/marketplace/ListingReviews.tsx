@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import { Star, Loader2, MessageSquare } from 'lucide-react'
+import { Star, MessageSquare } from 'lucide-react'
 import ReviewForm from './ReviewForm'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
@@ -75,9 +75,18 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   }
 
   if (isLoading) {
+    // Keep the section shell + header stable and show a quiet skeleton instead
+    // of a bare spinner, so an empty (usual) section never flashes as "broken".
     return (
-      <div className="flex items-center justify-center py-6">
-        <Loader2 className="w-5 h-5 text-text-muted animate-spin" />
+      <div className="card-shell p-6">
+        <Heading level={2} className="text-lg font-bold text-text-primary flex items-center gap-2 mb-4">
+          <MessageSquare className="w-5 h-5" />
+          {t('title')}
+        </Heading>
+        <div className="space-y-2" aria-hidden="true">
+          <div className="h-3 w-40 rounded bg-surface-raised animate-pulse" />
+          <div className="h-3 w-full rounded bg-surface-raised animate-pulse" />
+        </div>
       </div>
     )
   }

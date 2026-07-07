@@ -138,9 +138,11 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
       <p className="text-sm text-text-tertiary mb-4">{t('subtitle')}</p>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-sm text-text-tertiary py-4">
-          <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
-          {t('loading')}
+        // Quiet skeleton, not a "…loading" text — this section is usually empty
+        // and sits below the fold, so an alarming spinner reads as "broken".
+        <div className="space-y-2 py-2" aria-hidden="true">
+          <div className="h-3 w-40 rounded bg-surface-raised animate-pulse" />
+          <div className="h-3 w-full rounded bg-surface-raised animate-pulse" />
         </div>
       ) : (
         <div className="space-y-4">
