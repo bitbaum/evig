@@ -79,6 +79,10 @@ export async function GET(request: NextRequest) {
     const rows = await db
       .select({
         _total: sql<number>`count(*) over()`,
+        // Average over the whole target (window fn, pre-limit/offset) — mirrors
+        // _total, so the client gets a correct aggregate instead of averaging
+        // only the current page.
+        _avgRating: sql<number>`avg(${reviews.overallRating}) over()`,
         id: reviews.id,
         reviewerId: reviews.reviewerId,
         reviewerName: users.name,
@@ -160,6 +164,9 @@ export async function GET(request: NextRequest) {
       .offset(offset)
 
     const total = rows[0]?._total ?? 0
+    // pg returns numeric avg as a string; null when there are no rows.
+    const averageRating =
+      total > 0 && rows[0]?._avgRating != null ? Number(rows[0]._avgRating) : null
 
     const isAdmin = !!session?.user?.isStaff
 
@@ -209,6 +216,7 @@ export async function GET(request: NextRequest) {
     return apiSuccess({
       reviews: reviewList,
       total,
+      stats: { average_rating: averageRating, review_count: total },
       pagination: { limit, offset, hasMore: hasMoreItems(offset, limit, total) },
       filters: { targetType, targetId, status, sortBy: sortField, sortOrder: sortOrder === 'asc' ? 'ASC' : 'DESC' },
     })

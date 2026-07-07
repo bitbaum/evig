@@ -43,17 +43,10 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
     try {
       const result = await apiFetch<{ reviews: Review[]; stats?: ReviewStats }>(`/api/reviews?targetType=${REVIEW_TARGET_TYPES.LISTING}&targetId=${listingId}`)
       if (result.success && result.data) {
-        const data = result.data
-        setReviews(data.reviews || [])
-        if (data.stats) {
-          setStats(data.stats)
-        } else {
-          const ratings = (data.reviews || []).map((r: Review) => r.overallRating)
-          setStats({
-            average_rating: ratings.length > 0 ? ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length : null,
-            review_count: ratings.length,
-          })
-        }
+        // The API returns aggregate stats over ALL reviews (not just this page),
+        // so consume them directly instead of averaging the current page.
+        setReviews(result.data.reviews || [])
+        setStats(result.data.stats ?? { average_rating: null, review_count: 0 })
       }
     } catch {
       // Silently fail — reviews are non-critical
