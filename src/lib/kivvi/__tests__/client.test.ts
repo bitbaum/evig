@@ -102,6 +102,7 @@ import {
   getKivviInventoryItem,
   createKivviInvoice,
   syncToKivvi,
+  mapConditionToKivvi,
 } from '../client'
 
 // ============================================================================
@@ -249,6 +250,70 @@ describe('createKivviInvoice', () => {
     const body = JSON.parse(options.body)
     expect(body.type).toBe('invoice')
     expect(body.contactName).toBe('Alice Müller')
+  })
+
+  it('renames kivviInventoryItemId → inventoryItemId on line items (Kivvi schema)', async () => {
+    // Regression: Kivvi's documentItemSchema field is `inventoryItemId`; sending
+    // `kivviInventoryItemId` was silently stripped, so the invoice line never
+    // linked to the inventory item.
+    mockFetchResponse({ id: 'doc-1', number: 'RE-001', type: 'invoice', status: 'draft', total: '10', currency: 'CHF' })
+
+    await createKivviInvoice({
+      contactName: 'Alice',
+      items: [{ description: 'ThinkPad', quantity: '1', unitPrice: '199.00', kivviInventoryItemId: 'kiv-item-42' }],
+    })
+
+    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
+    expect(body.items[0].inventoryItemId).toBe('kiv-item-42')
+    expect(body.items[0].kivviInventoryItemId).toBeUndefined()
+  })
+
+  it('omits inventoryItemId when no link is provided', async () => {
+    mockFetchResponse({ id: 'doc-1', number: 'RE-001', type: 'invoice', status: 'draft', total: '10', currency: 'CHF' })
+
+    await createKivviInvoice({
+      contactName: 'Alice',
+      items: [{ description: 'Cable', quantity: '1', unitPrice: '5.00' }],
+    })
+
+    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
+    expect('inventoryItemId' in body.items[0]).toBe(false)
+  })
+})
+
+// ============================================================================
+// mapConditionToKivvi
+// ============================================================================
+
+describe('mapConditionToKivvi', () => {
+  // Regression: RevampIT 'new'/'defect' are not in Kivvi's ITEM_CONDITION enum;
+  // an unmapped value made Kivvi reject the item with HTTP 400 (never synced).
+  it('maps brand-new and defective to valid Kivvi conditions', () => {
+    expect(mapConditionToKivvi('new')).toBe('like_new')
+    expect(mapConditionToKivvi('defect')).toBe('parts_only')
+  })
+
+  it('passes through conditions shared by both vocabularies', () => {
+    expect(mapConditionToKivvi('good')).toBe('good')
+    expect(mapConditionToKivvi('fair')).toBe('fair')
+    expect(mapConditionToKivvi('poor')).toBe('poor')
+    expect(mapConditionToKivvi('like_new')).toBe('like_new')
+  })
+
+  it('resolves RevampIT aliases', () => {
+    expect(mapConditionToKivvi('excellent')).toBe('like_new')
+    expect(mapConditionToKivvi('damaged')).toBe('parts_only')
+  })
+
+  it('is case-insensitive and trims', () => {
+    expect(mapConditionToKivvi('  NEW ')).toBe('like_new')
+  })
+
+  it('falls back to untested for unknown / empty', () => {
+    expect(mapConditionToKivvi('mystery')).toBe('untested')
+    expect(mapConditionToKivvi('')).toBe('untested')
+    expect(mapConditionToKivvi(undefined)).toBe('untested')
+    expect(mapConditionToKivvi(null)).toBe('untested')
   })
 })
 

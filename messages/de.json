@@ -4706,6 +4706,35 @@
     "agbLinkLabel": "Allgemeinen Geschäftsbedingungen",
     "asOf": "Stand: April 2026"
   },
+  "kennzahlen": {
+    "meta": {
+      "title": "Kennzahlen",
+      "description": "Alle wichtigen Zahlen von Revamp-IT – offen gelegt, mit Quelle und Vertrauensgrad. Keine geschönten Werte."
+    },
+    "hero": {
+      "title": "Kennzahlen",
+      "subtitle": "Alle Zahlen, die uns wichtig sind – offen gelegt, mit Quelle und Vertrauensgrad"
+    },
+    "intro": "Jede Zahl ist mit einem Vertrauensgrad gekennzeichnet und – wo möglich – mit Berechnung und Quelle belegt. Wir zeigen lieber eine ehrliche Schätzung als eine geschönte Zahl.",
+    "categories": {
+      "impact": "Ökologische Wirkung",
+      "social": "Soziale Wirkung",
+      "economic": "Wirtschaftlich",
+      "operations": "Organisation"
+    },
+    "confidence": {
+      "high": "Belegt",
+      "medium": "Fundiert",
+      "estimated": "Schätzung",
+      "target": "Ziel"
+    },
+    "howCalculated": "Wie berechnet?",
+    "source": "Quelle",
+    "lastVerified": "Zuletzt geprüft",
+    "co2Note": "Details zur CO₂-Methodik",
+    "backToTransparenz": "Zurück zur Transparenz-Übersicht",
+    "linkFromOverview": "Alle Kennzahlen ansehen"
+  },
   "transparenz": {
     "meta": {
       "title": "Transparenz",

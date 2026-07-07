@@ -115,6 +115,7 @@ export const ROUTES = {
     datenschutz:              '/datenschutz',
     agb:                      '/agb',
     transparenz:              '/transparenz',
+    transparenzKennzahlen:    '/transparenz/kennzahlen',
     mitgliedWerden:           '/mitglied-werden',
     careers:                  '/karriere',
     careerPosting:            (slug: string) => `/karriere/${slug}`,

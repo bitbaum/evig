@@ -102,10 +102,6 @@ jest.mock('@/config/marketplace-status', () => ({
   INVENTORY_ITEM_STATUS: { AVAILABLE: 'available' },
 }))
 
-jest.mock('@/config/shop', () => ({
-  MARKETPLACE_LISTING_PLATFORM: { INTERNAL: 'internal' },
-}))
-
 jest.mock('@/config/intake-checklist', () => ({
   getChecklistForDevice: jest.fn().mockReturnValue([
     { id: 'check-1' },

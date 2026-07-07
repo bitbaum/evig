@@ -101,10 +101,6 @@ jest.mock('@/config/marketplace-status', () => ({
   MARKETPLACE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
 }))
 
-jest.mock('@/config/shop', () => ({
-  MARKETPLACE_LISTING_PLATFORM: { INTERNAL: 'internal' },
-}))
-
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))

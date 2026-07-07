@@ -37,6 +37,7 @@ import {
   getSpecFiltersForCategory,
   supportsSecureCheckout,
   supportsDirectContact,
+  resolveCategoryValue,
 } from '../marketplace'
 
 // ============================================================================
@@ -170,5 +171,37 @@ describe('supportsDirectContact', () => {
 
   it('returns false for secure-only', () => {
     expect(supportsDirectContact('secure')).toBe(false)
+  })
+})
+
+describe('resolveCategoryValue', () => {
+  // SSOT guard: AI-produced and legacy category strings must never leak a
+  // non-KATEGORIEN value into listings.category.
+  it('passes through a valid KATEGORIEN value unchanged', () => {
+    expect(resolveCategoryValue('10')).toBe('10')
+    expect(resolveCategoryValue('99')).toBe('99')
+  })
+
+  it('resolves a German KATEGORIEN label to its value', () => {
+    expect(resolveCategoryValue('Laptops')).toBe('10')
+    expect(resolveCategoryValue('Monitore')).toBe('30')
+  })
+
+  it('resolves free-text / AI labels (English + coarse German) via aliases', () => {
+    expect(resolveCategoryValue('Electronics')).toBe('99')
+    expect(resolveCategoryValue('notebook')).toBe('10')
+    expect(resolveCategoryValue('Zubehör')).toBe('80')
+    expect(resolveCategoryValue('storage')).toBe('70')
+  })
+
+  it('is case-insensitive and trims whitespace', () => {
+    expect(resolveCategoryValue('  LAPTOP  ')).toBe('10')
+  })
+
+  it('falls back to 99 (Sonstiges) for unknown / empty input', () => {
+    expect(resolveCategoryValue('completely-unknown')).toBe('99')
+    expect(resolveCategoryValue('')).toBe('99')
+    expect(resolveCategoryValue(null)).toBe('99')
+    expect(resolveCategoryValue(undefined)).toBe('99')
   })
 })

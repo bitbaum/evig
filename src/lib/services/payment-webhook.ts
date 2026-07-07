@@ -572,6 +572,31 @@ export async function handleGenericPayment(
  * This is fire-and-forget — the order is already marked paid in RevampIT.
  * Any error here is logged but does not affect the buyer/seller experience.
  */
+/**
+ * Current Swiss standard MWST rate (8.1% since 2024-01-01), as the string Kivvi
+ * expects. Marketplace prices are charged VAT-INCLUSIVE (gross), but Kivvi
+ * treats `unitPrice` as NET and adds VAT on top — so we must convert to net
+ * before sending (see grossToNetChf), otherwise the invoice total is inflated by
+ * the VAT rate and never matches the recorded payment.
+ *
+ * NOTE (SSOT follow-up): the app also carries a stale VAT_RATE_CHF (7.7%) in
+ * src/lib/pricing and a duplicate in src/lib/payments/currency.ts. The VAT-rate
+ * source of truth should be consolidated to one place at the correct 8.1%.
+ */
+export const KIVVI_MWST_RATE = '8.1'
+
+/**
+ * Convert a VAT-inclusive (gross) CHF amount to the net amount, so that Kivvi's
+ * `net + VAT` reconstructs the original gross that the customer actually paid.
+ * Returns a 2-decimal string. Falls back to the input on unparseable values.
+ */
+export function grossToNetChf(grossChf: string, ratePercent: string = KIVVI_MWST_RATE): string {
+  const gross = parseFloat(grossChf)
+  const rate = parseFloat(ratePercent)
+  if (!Number.isFinite(gross) || !Number.isFinite(rate)) return grossChf
+  return (gross / (1 + rate / 100)).toFixed(2)
+}
+
 async function syncOrderToKivvi(
   order: MarketplaceOrder,
   payrexxTransactionId: string | null,
@@ -615,8 +640,9 @@ async function syncOrderToKivvi(
     invoiceItems.push({
       description: info.title,
       quantity: '1',
-      unitPrice: order.amountChf,
-      vatRate: '8.1', // Standard Swiss MWST — marketplace items are CHF-priced incl. VAT
+      // Gross (VAT-incl.) amount charged → net, so Kivvi's net+VAT == amount paid.
+      unitPrice: grossToNetChf(order.amountChf),
+      vatRate: KIVVI_MWST_RATE,
       kivviInventoryItemId: kivviItemId,
     })
   } else {
@@ -641,8 +667,9 @@ async function syncOrderToKivvi(
       invoiceItems.push({
         description: it.title,
         quantity: String(it.quantity),
-        unitPrice: it.unitPriceChf,
-        vatRate: '8.1',
+        // Per-unit gross (VAT-incl.) → net; Kivvi computes net·qty + VAT.
+        unitPrice: grossToNetChf(it.unitPriceChf),
+        vatRate: KIVVI_MWST_RATE,
         kivviInventoryItemId: kivviItemId,
       })
     }
