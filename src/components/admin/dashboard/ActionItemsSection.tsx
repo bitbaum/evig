@@ -4,27 +4,10 @@ import Heading from '@/components/admin/AdminHeading'
 import { formatQueueAge } from './format'
 import type { ActionItem } from './types'
 import { adminInteractive } from '@/lib/admin-ui'
+import { URGENCY_TONES } from '@/config/dashboard'
 
 interface ActionItemsSectionProps {
   actionItems: ActionItem[]
-}
-
-const URGENCY_CONFIG = {
-  urgent: {
-    dot: 'bg-error-500',
-    label: 'Dringend',
-    text: 'text-error-700 dark:text-error-400',
-  },
-  warning: {
-    dot: 'bg-warning-500',
-    label: 'Ausstehend',
-    text: 'text-warning-700 dark:text-warning-400',
-  },
-  success: {
-    dot: 'bg-action',
-    label: 'Information',
-    text: 'text-action',
-  },
 }
 
 export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
@@ -50,7 +33,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
         ) : (
           <ul className="space-y-2" role="list">
             {actionItems.map((item, index) => {
-              const urgency = URGENCY_CONFIG[item.type]
+              const urgency = URGENCY_TONES[item.type]
               const age = formatQueueAge(item.oldestAt)
               return (
                 <li key={index}>

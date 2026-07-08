@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import {
   PROJECT_STATUS_LABELS,
+  PROJECT_STATUS_COLORS,
   TASK_STATUS_LABELS,
   TASK_PRIORITY_LABELS,
   TASK_STATUS_COLORS,
@@ -19,14 +20,6 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react'
-
-const STATUS_BADGE: Record<ProjectStatus, string> = {
-  planning:  'bg-surface-raised text-text-secondary dark:bg-surface-base/6',
-  active:    'bg-action-muted text-action',
-  on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
-  completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
-  cancelled: 'bg-error-100 text-error-800 dark:bg-error-500/15 dark:text-error-400',
-} as const
 
 async function getProject(id: string) {
   try {
@@ -122,7 +115,7 @@ export default async function TaskProjectDetailPage({
         <div className="flex flex-wrap items-center gap-4">
           <span className={cn(
             designPrimitive.badgeBase,
-            STATUS_BADGE[project.status as ProjectStatus] ?? 'bg-surface-raised text-text-secondary'
+            PROJECT_STATUS_COLORS[project.status as ProjectStatus] ?? 'bg-surface-raised text-text-secondary'
           )}>
             {PROJECT_STATUS_LABELS[project.status as ProjectStatus] ?? project.status}
           </span>

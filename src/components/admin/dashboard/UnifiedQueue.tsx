@@ -6,33 +6,18 @@ import { Check, ArrowRight } from 'lucide-react'
 import { InlineActionButton } from './InlineActionButton'
 import { formatQueueAge } from './format'
 import type { UnifiedQueueItem } from './types'
+import { URGENCY_TONES } from '@/config/dashboard'
 
 interface UnifiedQueueProps {
   items: UnifiedQueueItem[]
 }
 
-const URGENCY_DOT = {
-  urgent: 'bg-error-500',
-  warning: 'bg-warning-500',
-  success: 'bg-action',
-} as const
-
+// Badge background is queue-specific (no equivalent on ActionItemsSection), so
+// it stays local; dot / label / age-text come from the URGENCY_TONES SSOT.
 const URGENCY_BADGE = {
   urgent: 'bg-error-100 text-error-700 dark:bg-error-900/40 dark:text-error-300',
   warning: 'bg-warning-100 text-warning-700 dark:bg-warning-900/40 dark:text-warning-300',
   success: 'bg-action-muted text-action',
-} as const
-
-const URGENCY_AGE_TEXT = {
-  urgent: 'text-error-600 dark:text-error-400',
-  warning: 'text-warning-700 dark:text-warning-400',
-  success: 'text-action',
-} as const
-
-const URGENCY_LABEL = {
-  urgent: 'Dringend',
-  warning: 'Ausstehend',
-  success: 'Info',
 } as const
 
 /**
@@ -73,7 +58,7 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
         <ul className="mt-3 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">
           {items.map((item, index) => {
             const age = formatQueueAge(item.oldestAt)
-            const ariaLabel = `${URGENCY_LABEL[item.type]}: ${item.label}${age ? `, ${age}` : ''}${item.count ? `, ${item.count} Einträge` : ''}`
+            const ariaLabel = `${URGENCY_TONES[item.type].label}: ${item.label}${age ? `, ${age}` : ''}${item.count ? `, ${item.count} Einträge` : ''}`
             return (
               <li key={index}>
                 <Link
@@ -83,7 +68,7 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
                 >
                   <div className="flex min-w-0 items-start gap-3">
                     <span
-                      className={`mt-[6px] h-2 w-2 shrink-0 rounded-full ${URGENCY_DOT[item.type]}`}
+                      className={`mt-[6px] h-2 w-2 shrink-0 rounded-full ${URGENCY_TONES[item.type].dot}`}
                       aria-hidden="true"
                     />
                     <div className="min-w-0">
@@ -91,7 +76,7 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
                         {item.label}
                       </p>
                       {age && (
-                        <p className={`mt-0.5 text-xs ${URGENCY_AGE_TEXT[item.type]}`}>
+                        <p className={`mt-0.5 text-xs ${URGENCY_TONES[item.type].text}`}>
                           {age}
                         </p>
                       )}

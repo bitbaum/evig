@@ -140,6 +140,21 @@ export const DASHBOARD_CATEGORIES: Record<DashboardCategory, DashboardCategoryCo
 }
 
 // =============================================================================
+// =============================================================================
+// URGENCY TONES — SSOT for dashboard queue urgency (dot + label + text).
+// Was duplicated across ActionItemsSection (label "Information") and
+// UnifiedQueue (label "Info") — the labels had drifted apart. One source now.
+// =============================================================================
+
+export type UrgencyTone = 'urgent' | 'warning' | 'success'
+
+export const URGENCY_TONES: Record<UrgencyTone, { dot: string; label: string; text: string }> = {
+  urgent:  { dot: 'bg-error-500',   label: 'Dringend',    text: 'text-error-700 dark:text-error-400' },
+  warning: { dot: 'bg-warning-500', label: 'Ausstehend',  text: 'text-warning-700 dark:text-warning-400' },
+  success: { dot: 'bg-action',      label: 'Information',  text: 'text-action' },
+}
+
+// =============================================================================
 // DASHBOARD ROUTES - Derived from SSOT
 // =============================================================================
 

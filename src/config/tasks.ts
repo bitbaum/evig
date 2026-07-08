@@ -145,6 +145,16 @@ export const TASK_STATUS_COLORS: Record<TaskStatus, string> = {
   in_progress: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
 };
 
+// SSOT for project-status badge colors — was duplicated byte-for-byte in
+// admin/tasks/projects/page.tsx and .../[id]/page.tsx.
+export const PROJECT_STATUS_COLORS: Record<ProjectStatus, string> = {
+  planning:  'bg-surface-raised text-text-secondary dark:bg-surface-base/6',
+  active:    'bg-action-muted text-action',
+  on_hold:   'bg-warning-100 text-warning-800 dark:bg-warning-500/15 dark:text-warning-400',
+  completed: 'bg-success-100 text-success-800 dark:bg-success-500/15 dark:text-success-400',
+  cancelled: 'bg-error-100 text-error-800 dark:bg-error-500/15 dark:text-error-400',
+};
+
 export const TASK_PRIORITY_COLORS: Record<TaskPriority, string> = {
   low: 'bg-neutral-100 text-neutral-800',
   normal: 'bg-neutral-100 text-neutral-800',
