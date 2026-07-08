@@ -154,6 +154,36 @@ export default async function ProtocolsAdminPage({
         </Link>
       }
     >
+      {listError ? (
+        <div className="bg-surface-base rounded-lg border p-12 text-center">
+          <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
+            {ADMIN_CONTENT.protocols.errorMessage}
+          </Heading>
+          <p className="text-text-secondary mb-4">
+            Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
+          </p>
+          <Link href={ROUTES.admin.protocols} className={buttonClass({ variant: 'primary' })}>
+            Seite neu laden
+          </Link>
+        </div>
+      ) : stats.total === 0 ? (
+        // Single, clean empty state — no zero-stats, no empty queue, no filters.
+        <div className="bg-surface-base rounded-lg border p-12 text-center">
+          <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
+            {ADMIN_CONTENT.protocols.emptyTitle}
+          </Heading>
+          <p className="text-text-secondary mb-4">
+            {ADMIN_CONTENT.protocols.emptyDescription}
+          </p>
+          <Link href={ROUTES.admin.protocolNew} className={buttonClass({ variant: 'primary' })}>
+            <Plus className="w-4 h-4" />
+            Neues Protokoll
+          </Link>
+        </div>
+      ) : (
+        <>
       {/* Stats Cards */}
       <AdminStatsGrid items={[
         {
@@ -184,7 +214,7 @@ export default async function ProtocolsAdminPage({
         },
       ] satisfies StatCardItem[]} />
 
-      <ProtocolReviewQueue protocols={reviewQueue} />
+      {reviewQueue.length > 0 && <ProtocolReviewQueue protocols={reviewQueue} />}
 
       {/* Filters */}
       <Suspense fallback={<div className="bg-surface-base rounded-lg border p-4 h-14" />}>
@@ -193,32 +223,17 @@ export default async function ProtocolsAdminPage({
 
       {/* Protocol List */}
       <div className="bg-surface-base rounded-lg border overflow-hidden overflow-x-auto">
-        {listError ? (
-          <div className="p-12 text-center">
-            <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-              {ADMIN_CONTENT.protocols.errorMessage}
-            </Heading>
-            <p className="text-text-secondary mb-4">
-              Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
-            </p>
-            <Link href={ROUTES.admin.protocols} className={buttonClass({ variant: 'primary' })}>
-              Seite neu laden
-            </Link>
-          </div>
-        ) : filteredProtocols.length === 0 ? (
+        {filteredProtocols.length === 0 ? (
+          // Protocols exist, but none match the current filters (the truly-empty
+          // case is handled by the page-level empty state above).
           <div className="p-12 text-center">
             <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-              {ADMIN_CONTENT.protocols.emptyTitle}
+              Keine Treffer
             </Heading>
-            <p className="text-text-secondary mb-4">
-              {ADMIN_CONTENT.protocols.emptyDescription}
+            <p className="text-text-secondary">
+              Keine Protokolle entsprechen den aktuellen Filtern.
             </p>
-            <Link href={ROUTES.admin.protocolNew} className={buttonClass({ variant: 'primary' })}>
-              <Plus className="w-4 h-4" />
-              Neues Protokoll
-            </Link>
           </div>
         ) : (
           <table className="w-full">
@@ -359,6 +374,8 @@ export default async function ProtocolsAdminPage({
           hrefBase={protocolsHrefBase}
         />
       </div>
+        </>
+      )}
     </AdminPageWrapper>
   )
 }

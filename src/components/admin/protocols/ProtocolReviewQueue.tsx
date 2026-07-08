@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/navigation'
-import { AlertCircle, ArrowRight, CheckCircle2, FileText, ListChecks } from 'lucide-react'
+import { AlertCircle, ArrowRight, ListChecks } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { PROTOCOL_STATUS_COLORS, PROTOCOL_STATUS_LABELS } from '@/config/protocols'
 import { getProtocolWorkflowStep, PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow'
@@ -26,7 +26,10 @@ function getWorkflowLabel(protocol: ProtocolListItem) {
 
 export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
   const t = await getTranslations('admin.protocols')
-  const hasItems = protocols.length > 0
+  // The page renders this only when there are items; guard anyway so it's never
+  // shown empty. No "new protocol" CTA here — the page header owns that action;
+  // this is a review surface, not a create surface.
+  if (protocols.length === 0) return null
 
   return (
     <section className={cn(adminSurface.card, 'p-5')}>
@@ -34,26 +37,9 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
         title={t('queueTitle')}
         description={t('queueDescription')}
         icon={ListChecks}
-        actions={
-          <AdminButton href={ROUTES.admin.protocolNew} variant="primary">
-            <FileText className="w-4 h-4" />
-            {t('newProtocol')}
-          </AdminButton>
-        }
       />
 
-      {!hasItems ? (
-        <div className="mt-5 flex items-start gap-3 rounded-lg border border-strong bg-action-muted p-4 text-action">
-          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-action" />
-          <div>
-            <p className={cn(adminType.body, 'font-medium text-action')}>{t('noPendingReviews')}</p>
-            <p className="mt-1 text-base text-action">
-              {t('noPendingDescription')}
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="mt-5 grid gap-3">
+      <div className="mt-5 grid gap-3">
           {protocols.map((protocol) => {
             const needsTasks = protocol.unlinked_action_item_count > 0
             return (
@@ -102,7 +88,6 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
             )
           })}
         </div>
-      )}
     </section>
   )
 }
