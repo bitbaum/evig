@@ -8,10 +8,16 @@
 import { voiceProductDataSchema } from '@/lib/schemas/erfassung'
 import { zodSchemaToPromptString } from '@/lib/ai/schema-to-prompt'
 import { BRAND_CONTEXT } from './shared'
+import { KATEGORIEN } from '@/config/erfassung/categories'
 
 // =============================================================================
 // ERFASSUNG PROMPTS
 // =============================================================================
+
+// Full category list, derived from the KATEGORIEN SSOT so the model always sees
+// every option. A stale hardcoded subset (missing 70 Komponenten, and 40
+// mislabelled) is why a CPU landed in "Desktop PCs".
+const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value} für ${k.label}`).join(', ')
 
 /**
  * SSOT for AI-facing field descriptions used in extraction prompts.
@@ -24,7 +30,7 @@ export const ERFASSUNG_FIELD_DESCRIPTIONS = {
   specs: { key: 'Spec-Name (CPU, RAM, Speicher, Display)', value: 'Spec-Wert' },
   verkaufspreis: 'Preis in CHF als Zahl ohne Währungssymbol',
   zustand: 'Einer von: new, like_new, good, fair, poor',
-  hauptkategorie: '10 für Laptops, 20 für Desktop PCs, 30 für Monitore, 40 für Peripherie',
+  hauptkategorie: KATEGORIE_LISTE,
   unterkategorie: '101 für Business Laptops, 102 für Consumer, 103 für Gaming',
   kundenprofile: 'Passende Profile: oma, buero, chiller, gamer, kreativ, dev, student',
   bemerkungen: 'Zusätzliche Hinweise zu Zustand oder Besonderheiten',
@@ -65,6 +71,7 @@ Wichtige Regeln:
 - Preise in CHF ohne Währungssymbol
 - Zustand mappen: "gut" -> "good", "wie neu" -> "like_new", "neu" -> "new", "akzeptabel" -> "fair", "schlecht" -> "poor"
 - Bei Laptops: Kategorien 10 (Hauptkategorie) und 101/102/103 (Unterkategorie je nach Typ)
+- Einzelteile/Komponenten (CPU, RAM, Grafikkarte, Mainboard, SSD, Festplatte, Netzteil) → Hauptkategorie 70 (Komponenten), NICHT 20 (Desktop PCs)
 - Kundenprofile basierend auf Gerät wählen (z.B. ThinkPad -> buero, dev; Gaming Laptop -> gamer)
 - Beschreibung auf Deutsch
 - Specs basierend auf bekanntem Modell ergänzen falls nicht genannt
