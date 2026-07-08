@@ -2,7 +2,8 @@
 
 import { Suspense } from 'react'
 import { Link } from '@/i18n/navigation'
-import { ArrowLeft, Eye, Package, Loader2, Camera } from 'lucide-react'
+import NextLink from 'next/link'
+import { ArrowLeft, Eye, Package, Loader2, Camera, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
 import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields'
@@ -101,6 +102,30 @@ function SellPageContent() {
           <span className="text-sm text-text-tertiary">{t('stepPreview')}</span>
         </div>
       </div>
+
+      {/* Poster clarity — what kind of listing this is. The channel decides
+          ownership, never the email: the sell form is always a private
+          Community listing (is_revampit=false), even for staff. Staff get a
+          non-blocking nudge toward Erfassung for actual RevampIT stock. */}
+      {!editId && (
+        <div className="mb-6 flex items-start gap-3 rounded-lg border border-default bg-surface-raised p-4 text-sm">
+          <Info className="w-5 h-5 shrink-0 mt-0.5 text-text-tertiary" aria-hidden />
+          <div className="min-w-0">
+            <p className="text-text-primary">
+              Du erstellst ein <span className="font-semibold">Community-Inserat</span> (Privatverkauf) — kein RevampIT-Lagerbestand.
+            </p>
+            {session.user.isStaff && (
+              <p className="text-text-secondary mt-1">
+                Ist das RevampIT-Lagerbestand? Dann über{' '}
+                <NextLink href="/admin/erfassung" className="font-medium text-action underline underline-offset-2 hover:text-action">
+                  Produkt aufnehmen → Erfassung
+                </NextLink>{' '}
+                erfassen — wird als RevampIT-Produkt mit Inventar gelistet. Nicht zwingend: persönliche Verkäufe gehören hierher.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {showCamera && (
         <AICameraProductListing
