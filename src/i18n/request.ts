@@ -1,5 +1,5 @@
 import { getRequestConfig } from 'next-intl/server'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { routing } from './routing'
 import { hasLocale } from 'next-intl'
 
@@ -35,9 +35,15 @@ export default getRequestConfig(async ({ requestLocale }) => {
   // locale (cookie) or visits a /[locale]/* URL — matching routing.localeDetection:
   // false. (BYPASS_INTL routes like /dashboard, /admin, /auth have no URL locale,
   // so the cookie carries the user's actual preference across them.)
+  // The admin area is German-only — this resolver is the single source of truth
+  // for its locale. Force DE for /admin/* so BOTH server (getTranslations) and
+  // client render in German; the cookie/URL locale must never leak into admin.
+  const path = (await headers()).get('x-current-path') || ''
   const requested = await requestLocale
   let locale: string = routing.defaultLocale
-  if (hasLocale(routing.locales, requested)) {
+  if (path.startsWith('/admin')) {
+    locale = routing.defaultLocale
+  } else if (hasLocale(routing.locales, requested)) {
     locale = requested
   } else {
     const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value

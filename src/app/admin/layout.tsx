@@ -6,10 +6,11 @@
  */
 
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
+import { headers, cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getTranslations } from 'next-intl/server'
+import { NextIntlClientProvider, hasLocale } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
+import { routing } from '@/i18n/routing'
 import deMessages from '../../../messages/de.json'
 import { auth } from '@/auth'
 import { getAccessibleSections } from '@/lib/permissions'
@@ -54,7 +55,10 @@ export default async function AdminLayout({
   // the admin locale — we pin it to German and pass the German messages so the
   // cookie/URL locale can never leak in and half-translate the nav (e.g. a
   // stale ja cookie rendering the sidebar in Japanese).
-  const visitorLocale = await getLocale()
+  // Admin is forced to German by the i18n resolver, so read the visitor's real
+  // language preference from the cookie to decide whether to show the notice.
+  const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
+  const visitorLocale = hasLocale(routing.locales, cookieLocale) ? cookieLocale : 'de'
   // If the visitor came in on a non-DE locale (e.g. /ja/marketplace → click
   // "Admin-Bereich"), surface a notice IN THEIR LANGUAGE so the jump to German
   // isn't disorienting.
