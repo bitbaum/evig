@@ -36,6 +36,13 @@ export function LocaleSwitcher({ className, openUpward = false }: Props) {
 
   function switchLocale(next: Locale) {
     if (next === locale) { setOpen(false); return }
+    // Persist the choice explicitly, BEFORE navigating. Bypass-intl routes
+    // (/admin, /dashboard, /auth) read locale from the NEXT_LOCALE cookie, and
+    // switching TO the default locale navigates to an unprefixed URL where the
+    // middleware may not rewrite the cookie — leaving a stale value that keeps
+    // those routes in the old language. Setting it here makes the switcher the
+    // single source of truth for the cookie.
+    document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`
     startTransition(() => {
       router.replace(pathname, { locale: next })
       setOpen(false)

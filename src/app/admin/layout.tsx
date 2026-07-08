@@ -9,7 +9,8 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
-import { getLocale, getMessages, getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import deMessages from '../../../messages/de.json'
 import { auth } from '@/auth'
 import { getAccessibleSections } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
@@ -49,21 +50,24 @@ export default async function AdminLayout({
     redirect('/?error=no_admin_access')
   }
 
-  const messages = await getMessages()
-  const locale = await getLocale()
-  // Admin copy is German-only. If the visitor came in on a non-DE locale
-  // (e.g. /ru/marketplace → click "Admin-Bereich"), surface a clear notice
-  // in their language so the language jump isn't disorienting.
+  // The admin area is German-only. SSOT: THIS is the single place that decides
+  // the admin locale — we pin it to German and pass the German messages so the
+  // cookie/URL locale can never leak in and half-translate the nav (e.g. a
+  // stale ja cookie rendering the sidebar in Japanese).
+  const visitorLocale = await getLocale()
+  // If the visitor came in on a non-DE locale (e.g. /ja/marketplace → click
+  // "Admin-Bereich"), surface a notice IN THEIR LANGUAGE so the jump to German
+  // isn't disorienting.
   const localeNotice =
-    locale === 'de'
+    visitorLocale === 'de'
       ? null
       : await (async () => {
-          const t = await getTranslations({ locale, namespace: 'admin.localeFallback' })
+          const t = await getTranslations({ locale: visitorLocale, namespace: 'admin.localeFallback' })
           return t('notice')
         })()
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider locale="de" messages={deMessages}>
       {localeNotice && (
         <div
           role="note"
