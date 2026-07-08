@@ -8162,7 +8162,47 @@
       "title": "Wir informieren dich, wie deine Spende wirkt.",
       "description": "Keine Werbung. Nur echte Updates zu Geräten gerettet, CO₂ eingespart und Menschen unterstützt."
     },
-    "purposeTemplate": "Spende {orgName} {month} {year}"
+    "purposeTemplate": "Spende {orgName} {month} {year}",
+    "wishlist": {
+      "prefillTemplate": "Ich möchte folgendes spenden: {title}",
+      "eyebrow": "AKTUELLE SPEZIFISCHE BEDARFE",
+      "heading": "Unsere Wunschliste",
+      "intro": "Um unsere Werkstatt am Laufen zu halten und gerettete Geräte aufzubessern, benötigen wir regelmässig bestimmte Werkzeuge oder Komponenten. Du kannst uns unterstützen, indem du entweder den physischen Gegenstand spendest oder dessen Kauf finanzierst.",
+      "donateItem": "Gegenstand spenden",
+      "fundItem": "Kauf finanzieren",
+      "funded": "{amount} von {target} finanziert",
+      "received": "{count} von {target} erhalten",
+      "copyReference": "Verwendungszweck kopieren",
+      "referenceCopied": "Kopiert!",
+      "close": "Schliessen",
+      "fundTitle": "{title} finanzieren",
+      "fundIntro": "Du kannst diesen Gegenstand finanzieren, indem du eine Banküberweisung über den angegebenen Betrag tätigst. Bitte verwende den unten angegebenen Verwendungszweck, damit wir deine Spende diesem Gegenstand zuordnen können:",
+      "priorityHigh": "Hohe Priorität",
+      "priorityMedium": "Mittlere Priorität",
+      "priorityLow": "Niedrige Priorität",
+      "donateHeading": "Diesen Gegenstand spenden",
+      "donateIntro": "Wenn du diesen Gegenstand hast und spenden möchtest, nutze bitte das untenstehende Abgabe-Formular. Wir haben die Details bereits für dich eingetragen.",
+      "items": {
+        "ifixit": {
+          "title": "iFixit Pro Tech Toolkits",
+          "whyNeeded": "Unverzichtbare Profi-Werkzeuge, um Laptops und Smartphones beschädigungsfrei zu öffnen. Wir benötigen weitere Sets für unsere ehrenamtlichen Werkstätten.",
+          "costLabel": "CHF 79.00 pro Set",
+          "purpose": "Spende: iFixit Pro Tech Toolkit"
+        },
+        "ssd": {
+          "title": "2.5\" SATA SSDs (500GB)",
+          "whyNeeded": "Langsame mechanische Festplatten sind der Hauptengpass bei älteren Laptops. Der Ersatz durch moderne SSDs macht sie wieder schnell und nutzbar.",
+          "costLabel": "CHF 35.00 pro SSD",
+          "purpose": "Spende: 2.5 SATA SSD 500GB"
+        },
+        "soldering": {
+          "title": "Lötstation (Ersa i-CON Pico)",
+          "whyNeeded": "Für fortgeschrittene Mainboard-Reparaturen (Ersatz von defekten Kondensatoren, Ladebuchsen), um Geräte zu retten, die sonst Elektroschrott wären.",
+          "costLabel": "CHF 160.00",
+          "purpose": "Spende: Ersa i-CON Pico"
+        }
+      }
+    }
   },
   "mitgliedWerden": {
     "meta": {
@@ -10707,9 +10747,9 @@
       "shift-log": "Schicht starten",
       "my-timecards": "Meine Zeiterfassung",
       "intake": "Geräte-Eingang",
-      "erfassung": "Erfassung",
+      "erfassung": "Produkt aufnehmen",
       "products": "Produkte",
-      "marketplace": "Marketplace",
+      "marketplace": "Inserate",
       "it-hilfe-admin": "IT-Hilfe",
       "repairer-applications": "Techniker-Freigaben",
       "workshops-admin": "Workshops",
@@ -10791,6 +10831,12 @@
     "command": {
       "label": "Lokal starten",
       "text": "npm run d"
+    }
+  },
+  "payment": {
+    "method": {
+      "title": "Zahlungsart",
+      "subtitle": "Wähle, wie du bezahlen möchtest"
     }
   }
 }
