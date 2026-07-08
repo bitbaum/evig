@@ -47,6 +47,9 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
   const hasAudio = sources.audio !== null
   const hasTextFiles = sources.textFiles.length > 0
   const hasTypedText = content.trim().length > 0
+  // Meeting details are optional (the AI fills type/title/attendees from the
+  // recording), so keep them collapsed by default — the upload is the hero.
+  const [showDetails, setShowDetails] = useState(false)
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -61,10 +64,24 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
       {error && <StatusBanner variant="error">{error}</StatusBanner>}
 
-      {/* Sitzungsdetails */}
+      {/* Sitzungsdetails — optional; collapsed by default. The AI fills type,
+          title and attendees from the recording; open this only to override. */}
       <div className="bg-surface-base rounded-lg border p-6 space-y-4">
-        <Heading level={2} className="text-lg font-semibold text-text-primary">Sitzungsdetails</Heading>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => setShowDetails(!showDetails)}
+          className="flex w-full items-center justify-between text-left h-auto p-0 bg-transparent hover:bg-transparent"
+        >
+          <span className="text-lg font-semibold text-text-primary">
+            Sitzungsdetails{' '}
+            <span className="text-sm font-normal text-text-tertiary">— optional, die KI ergänzt fehlende Angaben</span>
+          </span>
+          {showDetails ? <ChevronUp className="w-5 h-5 text-text-tertiary" /> : <ChevronDown className="w-5 h-5 text-text-tertiary" />}
+        </Button>
 
+        {showDetails && (
+          <div className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField label="Sitzungstyp" htmlFor="meeting_type">
             <Select
@@ -169,6 +186,8 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             </div>
           )}
         </div>
+          </div>
+        )}
       </div>
 
       {/* Inhalt — multi-source upload (YY.1) */}
