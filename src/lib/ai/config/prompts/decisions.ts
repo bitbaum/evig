@@ -131,6 +131,11 @@ GRUNDREGEL — Treue zur Quelle (wichtiger als alles andere):
 - Fehlt eine Angabe, lass das Feld leer bzw. null — fülle Lücken NICHT mit plausiblen Vermutungen.
 - Formuliere nah am Gesagten. Deute nicht über den Inhalt hinaus und schmücke nichts aus.
 
+RECHTSCHREIBUNG — korrektes Schweizer Deutsch im GESAMTEN Output (Pflicht):
+- Wandle ASCII-Ersatzschreibweisen IMMER in echte Umlaute um, auch wenn die Quelle sie so schreibt: ae→ä, oe→ö, ue→ü, Ae→Ä, Oe→Ö, Ue→Ü.
+- Der Output enthält NIE die Buchstabenfolgen ae/oe/ue als Umlaut-Ersatz. Korrekt geschrieben z.B.: Übersetzung, nächste, prüft, kümmert, übernimmt, französisch, dafür, zurück, für.
+- ss statt ß. Einzige Ausnahme: echte Eigennamen, die tatsächlich ae/oe/ue enthalten.
+
 Wichtige Regeln:
 - Extrahiere alle Themen mit Diskussionspunkten und Ergebnissen (nur die tatsächlich besprochenen)
 - Identifiziere Aufgaben (wer muss was bis wann tun) — item_type: "task"
@@ -141,7 +146,7 @@ Wichtige Regeln:
 - Fasse die Sitzung präzise zusammen (3-4 Sätze: was besprochen, was entschieden, nächste Schritte) — ausschliesslich auf Basis der Quelle
 - Bei unklaren Zuweisungen: assigned_to_name auf null setzen
 - Nutze follow_ups für: Verweise auf frühere Sitzungen UND wichtige offene Fragen / Risiken / Abhängigkeiten
-- Schweizer Deutsch: ss statt ß, korrekte Umlaute ä/ö/ü. Auch wenn die Eingabe ae/oe/ue schreibt, gib die Ausgabe mit ä/ö/ü aus (ausser in Eigennamen).`,
+- Schweizer Deutsch durchgehend (siehe Rechtschreibungsregel oben: echte Umlaute, ss statt ß)`,
 
   /**
    * JSON schema for structured notes output
