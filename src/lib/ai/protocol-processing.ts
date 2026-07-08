@@ -53,6 +53,9 @@ export async function processProtocolTranscript(
   const result = await callWithFallback({
     systemPrompt: PROTOCOL_PROMPTS.system,
     userPrompt: prompt,
+    // Extraction, not creative writing: sampling >0 lets the model invent
+    // tokens (names, dates, embellished summaries). Pin to 0 for faithfulness.
+    temperature: 0,
   })
 
   if (!result) {
@@ -129,6 +132,7 @@ export async function processProtocolNotes(
   const result = await callWithFallback({
     systemPrompt: PROTOCOL_PROMPTS.notesSystem,
     userPrompt: prompt,
+    temperature: 0,
   })
 
   if (!result) return null
@@ -178,6 +182,7 @@ export async function processTaskList(
   const result = await callWithFallback({
     systemPrompt: PROTOCOL_PROMPTS.tasksSystem,
     userPrompt: prompt,
+    temperature: 0,
   })
 
   if (!result) return null

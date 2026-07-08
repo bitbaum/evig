@@ -39,17 +39,20 @@ async function getTeamRoster(): Promise<{ promptString: string; userRows: UserRo
 }
 
 /**
- * Fuzzy-match an AI-extracted name against known users.
- * Matches on: exact first name, one being a prefix of the other (≥3 chars).
+ * Match an AI-extracted name against known users by EXACT first name only,
+ * and only when it is UNAMBIGUOUS (exactly one user has that first name).
+ *
+ * The previous ≥3-char prefix fuzzy match snapped "Mar" onto whichever of
+ * Maria/Markus/Martin came first in the roster and rewrote the person's name
+ * + assigned the task to them — inventing/mis-attributing people. We now never
+ * guess: a non-exact or ambiguous name stays as the AI wrote it with
+ * assigned_to_id left null, so the human reviewer resolves it deliberately.
  */
-function fuzzyMatchUser(aiName: string, userRows: UserRow[]): UserRow | undefined {
+function matchUserByFirstName(aiName: string, userRows: UserRow[]): UserRow | undefined {
   const normalized = aiName.toLowerCase().trim()
-  return userRows.find(u => {
-    const firstName = u.name.split(' ')[0].toLowerCase()
-    return firstName === normalized ||
-      (normalized.length >= 3 && firstName.startsWith(normalized)) ||
-      (firstName.length >= 3 && normalized.startsWith(firstName))
-  })
+  if (normalized.length < 2) return undefined
+  const matches = userRows.filter(u => u.name.split(' ')[0].toLowerCase() === normalized)
+  return matches.length === 1 ? matches[0] : undefined
 }
 
 // =============================================================================
@@ -325,15 +328,11 @@ export async function importTasks(
   for (const task of tasks) {
     const actionItemId = crypto.randomUUID()
 
-    // Fuzzy match assigned_to_name -> user ID
+    // Match assigned_to_name -> user ID via the same strict, unambiguous
+    // exact-first-name rule used everywhere else (no loose includes()).
     let assignedToId: string | null = null
     if (task.assigned_to_name) {
-      const match = userRows.find(u => {
-        const userName = u.name.toLowerCase()
-        const assignedName = task.assigned_to_name!.toLowerCase()
-        return userName.includes(assignedName) ||
-          assignedName.includes(userName.split(' ')[0])
-      })
+      const match = matchUserByFirstName(task.assigned_to_name, userRows)
       if (match) assignedToId = match.id
     }
 
@@ -410,16 +409,18 @@ export async function importTasks(
 function resolveAttendeeNames(notes: StructuredNotes, userRows: UserRow[]): StructuredNotes {
   if (userRows.length === 0) return notes
 
-  // Normalize detected_attendees: snap AI-guessed names to canonical first names
+  // Normalize detected_attendees: snap to canonical first name ONLY on an
+  // unambiguous exact match; otherwise keep the name exactly as extracted.
   const normalizedAttendees = (notes.detected_attendees ?? []).map(aiName => {
-    const match = fuzzyMatchUser(aiName, userRows)
+    const match = matchUserByFirstName(aiName, userRows)
     return match ? match.name.split(' ')[0] : aiName
   })
 
-  // Resolve action item assignments: set assigned_to_id where we find a match
+  // Resolve action item assignments: set assigned_to_id only on an unambiguous
+  // exact first-name match. No match → leave unresolved for the reviewer.
   const resolvedActionItems = notes.action_items.map(item => {
     if (!item.assigned_to_name || item.assigned_to_id) return item
-    const match = fuzzyMatchUser(item.assigned_to_name, userRows)
+    const match = matchUserByFirstName(item.assigned_to_name, userRows)
     if (!match) return item
     return {
       ...item,
