@@ -3,7 +3,7 @@ export const FILE_SIZE_LIMITS = {
   UPLOAD_MAX: 10 * 1024 * 1024,        // 10MB - general uploads
   AVATAR_MAX: 5 * 1024 * 1024,         // 5MB - profile avatars
   CSV_MAX: 5 * 1024 * 1024,            // 5MB - CSV imports
-  AUDIO_MAX: 25 * 1024 * 1024,         // 25MB - audio files
+  AUDIO_MAX: 250 * 1024 * 1024,        // 250MB - real meeting recordings (server transcribes; Groq gets <=24MB, longer/bigger falls back to local whisper)
 } as const
 
 /** UI feedback timeouts in milliseconds — how long transient states stay visible */

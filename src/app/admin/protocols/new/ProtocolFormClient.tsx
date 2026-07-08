@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Loader2, FileText, Mic, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
 import { MEETING_TYPE_LABELS, PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
-import { WHISPER_MODELS } from '@/config/transcription'
 import Heading from '@/components/admin/AdminHeading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useProtocolForm } from '@/hooks/useProtocolForm'
@@ -35,7 +34,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
     attendeeSearch, setAttendeeSearch,
     content, setContent,
     sources, setSources,
-    whisperModel, setWhisperModel,
     loading, processing, error, setError,
     canSubmit,
     contentFormat,
@@ -195,20 +193,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         />
 
         <CaptureAlternatives />
-
-        {hasAudio && (
-          <FormField label="Whisper-Modell" htmlFor="whisper_model">
-            <Select
-              id="whisper_model"
-              value={whisperModel}
-              onChange={(e) => setWhisperModel(e.target.value)}
-            >
-              {WHISPER_MODELS.map((model) => (
-                <option key={model.id} value={model.id}>{model.label}</option>
-              ))}
-            </Select>
-          </FormField>
-        )}
 
         <FormField label="Zusätzliche Notizen (optional)" htmlFor="content">
           <Textarea

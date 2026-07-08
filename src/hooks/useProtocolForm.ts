@@ -9,7 +9,6 @@ import {
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
-import { DEFAULT_WHISPER_MODEL } from '@/config/transcription'
 import { formatDateShort } from '@/lib/date-formats'
 import { todayLocalIso } from '@/lib/utils/date'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
@@ -51,7 +50,6 @@ export function useProtocolForm(
   // typed notes alongside dropped files without one clobbering the other.
   const [content, setContent] = useState('')
   const [sources, setSources] = useState<SourceValue>({ audio: null, textFiles: [] })
-  const [whisperModel, setWhisperModel] = useState(DEFAULT_WHISPER_MODEL)
 
   // UI state
   const [loading, setLoading] = useState(false)
@@ -171,7 +169,6 @@ export function useProtocolForm(
       const formData = new FormData()
       if (sources.audio) {
         formData.append('audio', sources.audio)
-        formData.append('whisper_model', whisperModel)
       }
       if (content.trim()) formData.append('text', content)
       for (const tf of sources.textFiles) formData.append('textFile', tf)
@@ -223,8 +220,6 @@ export function useProtocolForm(
     setContent,
     sources,
     setSources: handleSourcesChange,
-    whisperModel,
-    setWhisperModel,
     // UI state
     loading,
     processing,
