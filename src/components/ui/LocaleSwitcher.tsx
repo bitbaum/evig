@@ -13,9 +13,12 @@ type Props = {
    * footer), force the dropdown to open upward so options aren't clipped
    * by the viewport edge. */
   openUpward?: boolean
+  /** Render every locale as a row of tappable pills (one tap, large touch
+   * targets, no nested dropdown) instead of the chip+dropdown. For mobile. */
+  inline?: boolean
 }
 
-export function LocaleSwitcher({ className, openUpward = false }: Props) {
+export function LocaleSwitcher({ className, openUpward = false, inline = false }: Props) {
   const locale = useLocale() as Locale
   const pathname = usePathname()
   const router = useRouter()
@@ -47,6 +50,37 @@ export function LocaleSwitcher({ className, openUpward = false }: Props) {
       router.replace(pathname, { locale: next })
       setOpen(false)
     })
+  }
+
+  // Mobile: a wrapping row of language pills. One tap switches, targets meet the
+  // 44px minimum, and there's no nested dropdown to fight the menu overlay.
+  if (inline) {
+    return (
+      <div className={cn('flex flex-wrap gap-2', className)}>
+        {locales.map((loc) => {
+          const active = loc === locale
+          return (
+            <button
+              key={loc}
+              onClick={() => switchLocale(loc)}
+              disabled={isPending}
+              aria-current={active ? 'true' : undefined}
+              className={cn(
+                'min-h-touch flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action',
+                active
+                  ? 'bg-action text-white'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-base',
+                isPending && 'opacity-50 cursor-wait',
+              )}
+            >
+              <span className="uppercase font-mono text-xs opacity-70">{loc}</span>
+              {localeLabels[loc]}
+            </button>
+          )
+        })}
+      </div>
+    )
   }
 
   return (

@@ -309,12 +309,15 @@ export function MobileMenu({
           )}
         </nav>
 
-        {/* Footer - Locale Switcher + Theme Toggle + Auth Actions */}
-        <div className="border-t border-subtle dark:border-white/6 px-6 pt-3 pb-1 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        {/* Footer - Language pills (one-tap) + Theme Toggle + Auth Actions */}
+        <div className="border-t border-subtle dark:border-white/6 px-6 pt-3 pb-1 space-y-3">
+          <div>
+            <p className="text-xs font-medium text-text-tertiary mb-2">{t('language')}</p>
+            <LocaleSwitcher inline />
+          </div>
+          <div className="flex items-center">
             <ThemeToggle />
           </div>
-          <LocaleSwitcher openUpward />
         </div>
         <div className="px-6 pb-4">
           {session?.user ? (
