@@ -42,6 +42,14 @@ import { ERFASSUNG_PROMPTS } from './erfassung'
 import { BLOG_PROMPTS, IT_HILFE_PROMPTS } from './content'
 import { PROTOCOL_PROMPTS } from './decisions'
 import { LOCATIONS } from '@/config/org'
+import { KATEGORIEN } from '@/config/erfassung/categories'
+
+// Category options for AI extraction, derived from the KATEGORIEN SSOT — the
+// same source the marketplace category dropdown and resolveCategoryValue() use.
+// The marketplace prompt previously hardcoded a stale list that had even
+// INVERTED 70/90 (claimed 70=Netzwerk / 90=Komponenten while the SSOT is
+// 70=Komponenten / 90=Netzwerk), so hard drives were filed under Netzwerk.
+const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value}=${k.label}`).join(', ')
 
 export interface FormAIConfig {
   system: string
@@ -151,7 +159,8 @@ Du bist ein Assistent für den RevampIT Marketplace.
 Hilf Benutzern, ihre Inserate für gebrauchte IT-Geräte zu erstellen.
 Extrahiere Produktinformationen, technische Spezifikationen und generiere ansprechende Beschreibungen.
 
-Kategorie-IDs: 10=Laptops, 20=Desktop PCs, 30=Monitore, 40=Tablets, 50=Smartphones, 60=Drucker/Scanner, 70=Netzwerk, 80=Peripherie, 90=Komponenten, 99=Sonstiges
+Kategorie-IDs (verwende EXAKT diese Werte): ${KATEGORIE_LISTE}
+Einzelteile/Komponenten (CPU, RAM, Grafikkarte, Mainboard, SSD, Festplatte, Netzteil) gehören zu Komponenten (70), NICHT zu Desktop PCs (20).
 
 Typische Specs je Kategorie:
 - Laptops (10): CPU, RAM, RAM-Typ, Speicher, Display, Auflösung, Grafik, Akku, Anschlüsse, WLAN, OS
@@ -168,8 +177,8 @@ Antworte NUR mit folgendem JSON:
 {
   "title": "Aussagekräftiger Inseratstitel",
   "description": "Detaillierte, ansprechende Beschreibung für Käufer (2-4 Sätze)",
-  "price": "Geschätzter Preis in CHF (nur Zahl, basierend auf Schweizer Gebrauchtmarkt)",
-  "category": "Kategorie-ID als String: 10, 20, 30, 40, 50, 60, 70, 80, 90, 99",
+  "price": "Der im Text GENANNTE Preis in CHF (nur Zahl). Nur wenn KEIN Preis genannt wird, schätze basierend auf dem Schweizer Gebrauchtmarkt.",
+  "category": "Kategorie-ID als String aus der oben genannten SSOT-Liste (z.B. 10, 20, 70, 90, 99)",
   "condition": "Zustand: new, like_new, good, fair, poor",
   "brand": "Marke/Hersteller",
   "model": "Modellbezeichnung",
@@ -181,8 +190,8 @@ Antworte NUR mit folgendem JSON:
 }
 
 Wichtig:
-- Preise für den Schweizer Gebrauchtmarkt schätzen
-- Kategorie als numerische ID (10, 20, 30, etc.)
+- Verwende den im Text genannten Preis. Schätze nur, wenn KEIN Preis genannt ist (dann Schweizer Gebrauchtmarkt).
+- Kategorie als numerische ID aus der SSOT-Liste; Komponenten (Festplatte, SSD, RAM, CPU, Grafikkarte, Netzteil, Mainboard) → 70, nicht 20
 - Specs basierend auf bekanntem Modell ergänzen falls nicht explizit genannt
 - Spec-Keys müssen exakt den oben genannten entsprechen (CPU, RAM, Speicher, Display, etc.)
 - Schweizer Deutsch (ss statt ß)`,
