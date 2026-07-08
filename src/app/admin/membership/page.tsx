@@ -12,11 +12,11 @@ import { TABLE_NAMES } from '@/config/database'
 import { Users, CheckCircle, AlertCircle } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/admin/AdminHeading'
 import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
+import { ADMIN_CONTENT } from '@/config/admin-content'
 import { MEMBERSHIP } from '@/config/org'
 import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
-import { adminTable } from '@/lib/admin-ui'
 import { MemberPaymentAction } from './MemberPaymentAction'
 
 export const metadata: Metadata = {
@@ -82,6 +82,54 @@ export default async function MembershipPage() {
     { icon: AlertCircle, color: 'orange', label: 'Offen', value: unpaidCount, valueColor: unpaidCount > 0 ? 'text-secondary-600' : undefined },
   ]
 
+  const columns: AdminTableColumn<MemberRow>[] = [
+    { header: 'Name', cell: (m) => <span className="font-medium text-text-primary">{m.name || '—'}</span> },
+    { header: 'E-Mail', cell: (m) => <span className="text-text-secondary">{m.email}</span> },
+    {
+      header: 'Typ',
+      cell: (m) => {
+        const fee = m.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
+        return (
+          <>
+            <span className="text-text-secondary">
+              {MEMBERSHIP_TYPE_LABELS[(m.member_type || 'regular') as keyof typeof MEMBERSHIP_TYPE_LABELS] || m.member_type}
+            </span>
+            <span className="text-text-muted ml-1 text-xs">CHF {fee}</span>
+          </>
+        )
+      },
+    },
+    { header: 'Dabei seit', cell: (m) => <span className="text-text-secondary">{m.member_since ? formatDateShort(m.member_since) : '—'}</span> },
+    { header: 'Bezahlt bis', cell: (m) => <span className="text-text-secondary">{m.member_paid_until ? formatDateShort(m.member_paid_until) : '—'}</span> },
+    {
+      header: 'Status',
+      cell: (m) =>
+        isPaid(m) ? (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-action-muted text-action rounded-full text-xs font-medium">
+            <CheckCircle className="w-3 h-3" />Bezahlt
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-100 dark:bg-secondary-900/30 text-secondary-800 dark:text-secondary-300 rounded-full text-xs font-medium">
+            <AlertCircle className="w-3 h-3" />Offen
+          </span>
+        ),
+    },
+    { header: 'Aktion', cell: (m) => <MemberPaymentAction memberId={m.id} paidUntil={m.member_paid_until} /> },
+  ]
+
+  // No members at all → single empty state, no dead stats grid.
+  if (members.length === 0) {
+    return (
+      <AdminPageWrapper title="Mitglieder" description={`${totalApplications} Beitritte total`} icon={Users} iconColor="green">
+        <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
+          <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <p className="font-medium text-text-primary">{ADMIN_CONTENT.membership.emptyTitle}</p>
+          <p className="text-text-secondary mt-1">{ADMIN_CONTENT.membership.emptyDescription}</p>
+        </div>
+      </AdminPageWrapper>
+    )
+  }
+
   return (
     <AdminPageWrapper
       title="Mitglieder"
@@ -90,79 +138,7 @@ export default async function MembershipPage() {
       iconColor="green"
     >
       <AdminStatsGrid items={stats} columns={3} />
-
-      {/* Members List */}
-      <div className="bg-surface-base rounded-xl border border overflow-hidden">
-        {members.length === 0 ? (
-          <div className="p-8 text-center">
-            <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
-            <Heading level={3} className="text-lg text-text-primary mb-2">
-              Noch keine Mitglieder
-            </Heading>
-            <p className="text-text-tertiary">Mitglieder erscheinen hier sobald jemand beitritt.</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-surface-raised border-b border">
-                <tr>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Name</th>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">E-Mail</th>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Typ</th>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Dabei seit</th>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Bezahlt bis</th>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Status</th>
-                  <th className="text-left px-4 py-3 font-medium text-text-secondary">Aktion</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-subtle">
-                {members.map(member => {
-                  const paid = isPaid(member)
-                  const fee = member.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
-                  return (
-                    <tr key={member.id} className={adminTable.tr}>
-                      <td className="px-4 py-3 font-medium text-text-primary">
-                        {member.name || '—'}
-                      </td>
-                      <td className="px-4 py-3 text-text-secondary">
-                        {member.email}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className="text-text-secondary">
-                          {MEMBERSHIP_TYPE_LABELS[(member.member_type || 'regular') as keyof typeof MEMBERSHIP_TYPE_LABELS] || member.member_type}
-                        </span>
-                        <span className="text-text-muted ml-1 text-xs">CHF {fee}</span>
-                      </td>
-                      <td className="px-4 py-3 text-text-secondary">
-                        {member.member_since ? formatDateShort(member.member_since) : '—'}
-                      </td>
-                      <td className="px-4 py-3 text-text-secondary">
-                        {member.member_paid_until ? formatDateShort(member.member_paid_until) : '—'}
-                      </td>
-                      <td className="px-4 py-3">
-                        {paid ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-action-muted text-action rounded-full text-xs font-medium">
-                            <CheckCircle className="w-3 h-3" />
-                            Bezahlt
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-100 dark:bg-secondary-900/30 text-secondary-800 dark:text-secondary-300 rounded-full text-xs font-medium">
-                            <AlertCircle className="w-3 h-3" />
-                            Offen
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <MemberPaymentAction memberId={member.id} paidUntil={member.member_paid_until} />
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <AdminTable columns={columns} rows={members} rowKey={(m) => m.id} />
     </AdminPageWrapper>
   )
 }

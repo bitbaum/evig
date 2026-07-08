@@ -6,11 +6,13 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { adminInteractive, adminTable } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import { Calendar, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
+import { ADMIN_CONTENT } from '@/config/admin-content'
 import {
   BOOKING_STATUS,
   BOOKING_STATUS_BADGES,
@@ -81,6 +83,72 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
     },
   ]
 
+  const columns: AdminTableColumn<(typeof appointments)[number]>[] = [
+    {
+      header: 'Kunde',
+      cell: (row) => (
+        <>
+          <Link
+            href={SERVICE_APPOINTMENT_ROUTES.adminDetail(row.id)}
+            className="font-medium text-text-primary hover:text-action"
+          >
+            {row.customer_name || row.customer_email}
+          </Link>
+          {row.customer_name && (
+            <div className="text-xs text-text-tertiary">{row.customer_email}</div>
+          )}
+        </>
+      ),
+    },
+    { header: 'Service', cell: (row) => <span className="text-text-secondary">{row.service_name || '—'}</span> },
+    {
+      header: 'Beschreibung',
+      className: 'max-w-md',
+      cell: (row) => <p className="line-clamp-2 text-text-tertiary">{row.description || '—'}</p>,
+    },
+    {
+      header: 'Dringlichkeit',
+      cell: (row) => {
+        const b = getUrgencyBadge(row.urgency ?? '')
+        return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${b.color}`}>{b.label}</span>
+      },
+    },
+    {
+      header: 'Status',
+      cell: (row) => {
+        const b = getBookingStatusBadge(row.status ?? '')
+        return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${b.color}`}>{b.label}</span>
+      },
+    },
+    {
+      header: 'Techniker',
+      cell: (row) =>
+        row.repairer_name ? (
+          <span className="text-text-secondary">{row.repairer_name}</span>
+        ) : (
+          <AssignRepairerSelect appointmentId={row.id} alreadyAssigned={!!row.repairer_id} repairers={repairers} />
+        ),
+    },
+    {
+      header: 'Erstellt',
+      className: 'whitespace-nowrap text-text-tertiary',
+      cell: (row) => (row.created_at ? formatDateShort(row.created_at) : '—'),
+    },
+  ]
+
+  // No appointments at all → single empty state (no dead stats/filters).
+  if (stats.total === 0) {
+    return (
+      <AdminPageWrapper title={t('pageTitle')} description={t('pageDescription')} icon={Calendar} iconColor="amber">
+        <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
+          <Calendar className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <p className="font-medium text-text-primary">{ADMIN_CONTENT.appointments.emptyTitle}</p>
+          <p className="text-text-secondary mt-1">{ADMIN_CONTENT.appointments.emptyDescription}</p>
+        </div>
+      </AdminPageWrapper>
+    )
+  }
+
   return (
     <AdminPageWrapper
       title={t('pageTitle')}
@@ -115,85 +183,14 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
         })}
       </div>
 
-      <div className="rounded-lg border bg-surface-base overflow-hidden">
-        {appointments.length === 0 ? (
-          <div className="p-12 text-center">
-            <Calendar className="w-12 h-12 text-text-muted mx-auto mb-4" />
-            <p className="text-text-secondary">
-              Keine Termine in dieser Ansicht.
-            </p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-surface-raised text-left text-xs uppercase tracking-wide text-text-tertiary">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Kunde</th>
-                  <th className="px-4 py-3 font-medium">Service</th>
-                  <th className="px-4 py-3 font-medium">Beschreibung</th>
-                  <th className="px-4 py-3 font-medium">Dringlichkeit</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium">Techniker</th>
-                  <th className="px-4 py-3 font-medium">Erstellt</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-subtle">
-                {appointments.map(row => {
-                  const statusBadge = getBookingStatusBadge(row.status ?? '')
-                  const urgencyBadge = getUrgencyBadge(row.urgency ?? '')
-                  return (
-                    <tr key={row.id} className={adminTable.tr}>
-                      <td className="px-4 py-3">
-                        <Link
-                          href={SERVICE_APPOINTMENT_ROUTES.adminDetail(row.id)}
-                          className="font-medium text-text-primary hover:text-action"
-                        >
-                          {row.customer_name || row.customer_email}
-                        </Link>
-                        {row.customer_name && (
-                          <div className="text-xs text-text-tertiary">
-                            {row.customer_email}
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-text-secondary">
-                        {row.service_name || '—'}
-                      </td>
-                      <td className="px-4 py-3 text-text-tertiary max-w-md">
-                        <p className="line-clamp-2">{row.description || '—'}</p>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${urgencyBadge.color}`}>
-                          {urgencyBadge.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge.color}`}>
-                          {statusBadge.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        {row.repairer_name ? (
-                          <span className="text-text-secondary">{row.repairer_name}</span>
-                        ) : (
-                          <AssignRepairerSelect
-                            appointmentId={row.id}
-                            alreadyAssigned={!!row.repairer_id}
-                            repairers={repairers}
-                          />
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">
-                        {row.created_at ? formatDateShort(row.created_at) : '—'}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {appointments.length === 0 ? (
+        <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
+          <Calendar className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <p className="text-text-secondary">Keine Termine in dieser Ansicht.</p>
+        </div>
+      ) : (
+        <AdminTable columns={columns} rows={appointments} rowKey={(r) => r.id} />
+      )}
     </AdminPageWrapper>
   )
 }

@@ -34,6 +34,21 @@ export const ADMIN_CONTENT = {
     emptyDescription: 'Füge das erste Teammitglied hinzu.',
     errorMessage: 'Fehler beim Laden des Teams',
   },
+  appointments: {
+    emptyTitle: 'Keine Termine vorhanden',
+    emptyDescription: 'Sobald Kundinnen und Kunden Service-Termine anfragen, erscheinen sie hier.',
+    errorMessage: 'Fehler beim Laden der Termine',
+  },
+  services: {
+    emptyTitle: 'Keine Dienstleistungen vorhanden',
+    emptyDescription: 'Lege die erste Dienstleistung an.',
+    errorMessage: 'Fehler beim Laden der Dienstleistungen',
+  },
+  membership: {
+    emptyTitle: 'Keine Mitgliedschaften vorhanden',
+    emptyDescription: 'Es sind noch keine Mitgliedschaften erfasst.',
+    errorMessage: 'Fehler beim Laden der Mitgliedschaften',
+  },
 } as const
 
 export const ADMIN_COMMON = {
