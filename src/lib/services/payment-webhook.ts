@@ -597,10 +597,50 @@ export function grossToNetChf(grossChf: string, ratePercent: string = KIVVI_MWST
   return (gross / (1 + rate / 100)).toFixed(2)
 }
 
+/**
+ * True only when every listing behind the order is revamp-it-OWNED stock
+ * (isRevampit=true). Single-item orders carry `order.listingId`; cart orders
+ * resolve their listings via marketplace_order_items. The cart checkout rejects
+ * P2P listings, so a cart order is all-owned by construction — but we still
+ * verify every line so a future mixed order can never leak a P2P amount into
+ * the general ledger. isRevampit on the listing is the SSOT (see
+ * db/schema/marketplace.ts) — ownership is NEVER re-derived from seller email.
+ */
+async function isRevampitOwnedOrder(order: MarketplaceOrder): Promise<boolean> {
+  if (order.listingId) {
+    const [row] = await db
+      .select({ isRevampit: listings.isRevampit })
+      .from(listings)
+      .where(eq(listings.id, order.listingId))
+      .limit(1)
+    return Boolean(row?.isRevampit)
+  }
+  const rows = await db
+    .select({ isRevampit: listings.isRevampit })
+    .from(marketplaceOrderItems)
+    .innerJoin(listings, eq(marketplaceOrderItems.listingId, listings.id))
+    .where(eq(marketplaceOrderItems.orderId, order.id))
+  return rows.length > 0 && rows.every((r) => Boolean(r.isRevampit))
+}
+
 async function syncOrderToKivvi(
   order: MarketplaceOrder,
   payrexxTransactionId: string | null,
 ): Promise<void> {
+  // Agency / pass-through guard: only revamp-it-OWNED stock may be booked as
+  // revenue in Kivvi's general ledger. P2P listings (isRevampit=false) belong
+  // to a third-party seller — revamp-it merely facilitates the sale, takes 0
+  // commission, and pays the seller off-platform. Booking a P2P sale as
+  // revamp-it revenue would overstate income and hide the payable owed to the
+  // seller. So P2P orders get NO Kivvi invoice; owned stock still runs the full
+  // invoice → sent → payment → mark-sold flow below.
+  if (!(await isRevampitOwnedOrder(order))) {
+    logger.info('Kivvi sync skipped: P2P order (agency/pass-through, not revamp-it revenue)', {
+      orderId: order.id,
+    })
+    return
+  }
+
   // Buyer info is always present (no listing dependency).
   const [buyer] = await db
     .select({ name: users.name, email: users.email })

@@ -25,6 +25,7 @@ import { logger } from '@/lib/logger'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
 import { validateBody, InventoryUpdateSchema, InventoryPatchSchema } from '@/lib/schemas'
+import { updateKivviInventoryItem, mapConditionToKivvi, isKivviConfigured } from '@/lib/kivvi/client'
 
 export const GET = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
@@ -232,6 +233,56 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
     let imageUrl: string | null = null
     if (body.image && typeof body.image === 'string') {
       imageUrl = await updateProductImage(productId, body.image as string, session.user.id)
+    }
+
+    // Forward edit-sync → Kivvi ERP (fire-and-forget). Kivvi is the canonical
+    // ERP; when owned stock is re-edited after intake we push the current
+    // values so both sides converge. Only for items already synced to Kivvi
+    // (kivviInventoryItemId present) and only when Kivvi is configured — mirrors
+    // the intake sync's kivviSyncStatus handling. This is the ONLY forward push
+    // in the edit path; the Kivvi webhook receiver never triggers it (no loop).
+    if (isKivviConfigured()) {
+      const [inv] = await db
+        .select({
+          id: inventoryItems.id,
+          kivviInventoryItemId: inventoryItems.kivviInventoryItemId,
+          updatedAt: inventoryItems.updatedAt,
+        })
+        .from(inventoryItems)
+        .where(eq(inventoryItems.aiProductId, productId))
+        .limit(1)
+
+      if (inv?.kivviInventoryItemId) {
+        const updated = result[0]
+        const description = `${updated.brand ? `${updated.brand} ` : ''}${updated.productName ?? ''}`.trim()
+        const kivviItemId = inv.kivviInventoryItemId
+        updateKivviInventoryItem(
+          kivviItemId,
+          {
+            ...(description ? { description } : {}),
+            condition: mapConditionToKivvi(updated.condition),
+            ...(updated.estimatedPriceChf != null ? { askingPrice: String(updated.estimatedPriceChf) } : {}),
+          },
+          // Idempotency-Key = RevampIT item id + updatedAt → Kivvi de-dupes retries.
+          `${inv.id}:${inv.updatedAt ?? ''}`,
+        )
+          .then(() => {
+            db.update(inventoryItems)
+              .set({ kivviSyncStatus: 'synced', kivviSyncedAt: new Date().toISOString() })
+              .where(eq(inventoryItems.id, inv.id))
+              .catch((err: unknown) => logger.error('Failed to record Kivvi edit-sync', { err }))
+          })
+          .catch((err: unknown) => {
+            logger.warn('Kivvi edit-sync failed', {
+              productId,
+              error: err instanceof Error ? err.message : String(err),
+            })
+            db.update(inventoryItems)
+              .set({ kivviSyncStatus: 'error' })
+              .where(eq(inventoryItems.id, inv.id))
+              .catch(() => {})
+          })
+      }
     }
 
     const allowedFields = [

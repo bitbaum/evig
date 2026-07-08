@@ -33,6 +33,15 @@ function isConfigured(): boolean {
   return !!(process.env.KIVVI_API_URL && process.env.KIVVI_API_TOKEN);
 }
 
+/**
+ * Public config check so callers outside syncToKivvi (e.g. the admin edit-sync
+ * path) can skip silently when Kivvi is not configured, instead of flagging
+ * every edit as a sync error in development.
+ */
+export function isKivviConfigured(): boolean {
+  return isConfigured();
+}
+
 function getDefaultWarehouseId(): string | undefined {
   return process.env.KIVVI_DEFAULT_WAREHOUSE_ID || undefined;
 }
@@ -135,6 +144,29 @@ export function mapConditionToKivvi(condition?: string | null): KivviCondition {
   return CONDITION_TO_KIVVI[condition.toLowerCase().trim()] ?? "untested";
 }
 
+/**
+ * Reverse direction — Kivvi ITEM_CONDITION enum → RevampIT's condition_override
+ * vocabulary. Used by the inbound Kivvi webhook receiver to write a valid local
+ * grade. RevampIT's inventory_items.condition_override only accepts
+ * new/like_new/good/fair/poor/damaged (DB CHECK), so Kivvi's parts_only/scrap
+ * collapse to 'damaged' and its 'untested' (no local equivalent) falls back to
+ * the neutral 'fair'. Symmetric with mapConditionToKivvi where it can be.
+ */
+const CONDITION_FROM_KIVVI: Readonly<Record<KivviCondition, string>> = {
+  untested: "fair",
+  like_new: "like_new",
+  good: "good",
+  fair: "fair",
+  poor: "poor",
+  parts_only: "damaged",
+  scrap: "damaged",
+};
+
+export function mapConditionFromKivvi(condition?: string | null): string {
+  if (!condition) return "fair";
+  return CONDITION_FROM_KIVVI[condition.toLowerCase().trim() as KivviCondition] ?? "fair";
+}
+
 // ============================================================================
 // HTTP HELPER
 // ============================================================================
@@ -189,10 +221,15 @@ export async function createKivviInventoryItem(
 export async function updateKivviInventoryItem(
   kivviId: string,
   input: Partial<CreateKivviInventoryItemInput> & { status?: string },
+  // Optional idempotency key (RevampIT item id + updatedAt) so Kivvi can
+  // de-duplicate retries of the same forward edit-sync push. Kivvi's PATCH is
+  // an idempotent upsert regardless, but the key makes retries provably safe.
+  idempotencyKey?: string,
 ): Promise<KivviInventoryItem> {
   return kivviFetch<KivviInventoryItem>(`/inventory-items/${kivviId}`, {
     method: "PATCH",
     body: JSON.stringify(input),
+    ...(idempotencyKey ? { headers: { "Idempotency-Key": idempotencyKey } } : {}),
   });
 }
 

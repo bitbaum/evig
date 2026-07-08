@@ -106,6 +106,7 @@ jest.mock('@/db', () => ({
 
 jest.mock('@/db/schema', () => ({
   marketplaceOrders: { id: 'marketplaceOrders' },
+  marketplaceOrderItems: { id: 'marketplaceOrderItems' },
   listings: { id: 'listings' },
   users: { id: 'users' },
   paymentTransactions: { id: 'paymentTransactions' },
@@ -392,6 +393,60 @@ describe('handleMarketplacePayment — RESERVED', () => {
     await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: null, currency: 'CHF' })
 
     expect(mockDbUpdate).not.toHaveBeenCalled()
+  })
+})
+
+// ============================================================================
+// handleMarketplacePayment — Kivvi accounting sync ownership guard
+// ============================================================================
+
+describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', () => {
+  // The Kivvi sync is fired fire-and-forget from the RESERVED handler, so the
+  // handler resolves before the async sync chain settles. Drain the microtask +
+  // immediate queue so the (all-immediately-resolving) sync completes before we
+  // assert on the mocked Kivvi client.
+  const flush = () => new Promise((res) => setTimeout(res, 0))
+
+  it('books an OWNED-stock order to Kivvi (createKivviInvoice runs)', async () => {
+    // Every db.select in the RESERVED fire-and-forget fan-out (email title,
+    // ownership check, buyer, listing info) returns a single row carrying all
+    // fields any of those queries reads — so ordering between the two
+    // concurrent fire-and-forget chains cannot flake the assertion.
+    mockDbSelect.mockImplementation(() =>
+      makeSelectChain([
+        { isRevampit: true, title: 'ThinkPad X270', inventoryItemId: null, name: 'Buyer', email: 'buyer@x.ch' },
+      ]),
+    )
+    const { createKivviInvoice } = jest.requireMock('@/lib/kivvi/client')
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT, listingId: 'listing-owned' })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-owned', { amount: 25000, currency: 'CHF' })
+    await flush()
+
+    expect(createKivviInvoice).toHaveBeenCalledTimes(1)
+  })
+
+  it('does NOT book a P2P order to Kivvi (agency/pass-through — not revamp-it revenue)', async () => {
+    // isRevampit=false → revamp-it never sold this item, took 0 commission, and
+    // owes the seller off-platform. Booking it as revenue would overstate income
+    // and hide the payable. The guard must short-circuit before createKivviInvoice.
+    mockDbSelect.mockImplementation(() =>
+      makeSelectChain([
+        { isRevampit: false, title: 'Community bike', inventoryItemId: null, name: 'Buyer', email: 'buyer@x.ch' },
+      ]),
+    )
+    const { createKivviInvoice, updateKivviDocumentStatus, recordKivviPayment } = jest.requireMock('@/lib/kivvi/client')
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT, listingId: 'listing-p2p' })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-p2p', { amount: 25000, currency: 'CHF' })
+    await flush()
+
+    // Order still flips to PAID (the sale happened); it just isn't booked as
+    // revamp-it revenue in the general ledger.
+    expect(mockUpdateSet).toHaveBeenCalledWith(expect.objectContaining({ status: ORDER_STATUS.PAID }))
+    expect(createKivviInvoice).not.toHaveBeenCalled()
+    expect(updateKivviDocumentStatus).not.toHaveBeenCalled()
+    expect(recordKivviPayment).not.toHaveBeenCalled()
   })
 })
 
