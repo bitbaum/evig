@@ -1,16 +1,19 @@
 'use client'
 
 /**
- * Protocol Detail Client Component — Redesigned
+ * Protocol Detail Client Component
  *
- * Information hierarchy:
+ * Information hierarchy follows the pipeline the user reads — source first,
+ * derivations after, tools last:
  *   1. Progress strip (where are we in the review flow?)
- *   2. Summary + AI chat (the content)
- *   3. Attendee mapping callout (only when needed)
- *   4. Topics (collapsed accordion)
- *   5. Action items (primary CTA area)
- *   6. Follow-ups
- *   7. Finalize / delete buttons
+ *   2. Zusammenfassung (executive overview)
+ *   3. Quelle · Rohtranskript (the source, in-flow — not buried in the sidebar)
+ *   4. Strukturierte Notizen / Themen (the transform of the source)
+ *   5. Personen-Zuordnung (optional metadata, below the content it annotates)
+ *   6. Aktionen & Entscheidungen (derived items, each tagged with its source topic)
+ *   7. Offene Punkte (follow-ups)
+ *   8. KI-Assistent (a tool — below the protocol, not above it)
+ *   9. Erneut verarbeiten / Abschliessen / Löschen
  */
 
 import { useState, useMemo } from 'react'
@@ -169,11 +172,13 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         />
       )}
 
-      {/* Main content — only when structured notes exist */}
+      {/* Main content — only when structured notes exist. Order follows the
+          actual pipeline the user reads: overview → source → structured notes
+          → derived actions/decisions → follow-ups → tools. */}
       {notes && (
         <>
-          {/* 1. Summary */}
-          <div className="bg-surface-base rounded-lg border border p-5">
+          {/* 1. Zusammenfassung — executive overview */}
+          <div className="bg-surface-base rounded-lg border border-default p-5">
             <h2 className="text-base font-semibold text-text-primary mb-2">
               Zusammenfassung
             </h2>
@@ -182,17 +187,35 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             </p>
           </div>
 
-          {/* 2. AI Chat — collapsed by default */}
-          <ProtocolAIChat title={protocol.title} notes={notes} />
+          {/* 2. Quelle — Rohtranskript / Notizen. Moved out of the sidebar into
+              the main flow so the pipeline reads source → structure → actions.
+              Collapsed by default; the structured view below is the daily one. */}
+          {protocol.raw_transcript && (
+            <details className="bg-surface-base rounded-lg border border-default">
+              <summary className="flex items-center gap-2 p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">
+                <FileText className="w-4 h-4 text-text-muted" />
+                Quelle · Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
+              </summary>
+              <div className="px-4 pb-4">
+                <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-96 overflow-y-auto bg-surface-raised rounded-lg p-3 leading-relaxed">
+                  {protocol.raw_transcript}
+                </pre>
+              </div>
+            </details>
+          )}
 
-          {/* 3. Attendee mapping callout — advisory, not blocking. Per the
-              admin UX audit: this used to scream WARNING (yellow/red) when in
-              reality it's optional metadata. Subtle neutral border now; staff
-              can still map names but the visual weight matches the actual
-              criticality (finalization isn't blocked, task assignments just
-              fall back to manual). */}
+          {/* 3. Strukturierte Notizen (Themen) — the transform of the source */}
+          <ProtocolTopicsSection
+            topics={notes.topics}
+            expandedTopics={expandedTopics}
+            onToggleTopic={toggleTopic}
+          />
+
+          {/* 4. Personen-Zuordnung — optional metadata; sits below the content
+              it annotates, not above it. Advisory, not blocking (finalization
+              isn't gated on it; task assignment just falls back to manual). */}
           {isReview && notes.detected_attendees && notes.detected_attendees.length > 0 && (
-            <div className="rounded-lg border border bg-surface-base p-4">
+            <div className="rounded-lg border border-default bg-surface-base p-4">
               <div className="flex items-start gap-3">
                 <UserCheck className="w-5 h-5 shrink-0 mt-0.5 text-text-tertiary" />
                 <div className="flex-1 min-w-0">
@@ -249,14 +272,8 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             </div>
           )}
 
-          {/* 4. Topics — all collapsed by default for cleaner view */}
-          <ProtocolTopicsSection
-            topics={notes.topics}
-            expandedTopics={expandedTopics}
-            onToggleTopic={toggleTopic}
-          />
-
-          {/* 5. Action Items — primary CTA section */}
+          {/* 5. Aktionen & Entscheidungen — derived items, each tagged with the
+              source topic it came from (provenance) */}
           <ProtocolActionItemsList
             notes={notes}
             actionLinks={actionLinks}
@@ -279,12 +296,16 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             onRefresh={() => router.refresh()}
           />
 
-          {/* 6. Follow-ups */}
+          {/* 6. Offene Punkte */}
           {notes.follow_ups && notes.follow_ups.length > 0 && (
             <ProtocolFollowUps followUps={notes.follow_ups} />
           )}
 
-          {/* 7. Reprocess (edge case — collapsed by default) */}
+          {/* 7. KI-Assistent — a tool for asking about the protocol, not primary
+              content, so it sits below the protocol itself. Collapsed by default. */}
+          <ProtocolAIChat title={protocol.title} notes={notes} />
+
+          {/* 8. Erneut verarbeiten (edge case — collapsed by default) */}
           {isReview && (
             <ProtocolReprocessSection
               inputMethod={protocol.input_method}
@@ -299,9 +320,9 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             />
           )}
 
-          {/* 8. Footer actions */}
+          {/* 9. Footer actions */}
           {(isReview || isProtocolCreator || isSuperAdmin) && (
-            <div id="protocol-step-done" className="flex items-center justify-between pt-2">
+            <div className="flex items-center justify-between pt-2">
               <div>
                 {(isProtocolCreator || isSuperAdmin) && (
                   <Button
@@ -331,7 +352,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
       {/* Empty state */}
       {!notes && !isDraft && protocol.status !== PROTOCOL_STATUSES.PROCESSING && (
-        <div className="bg-surface-base rounded-lg border border p-12 text-center">
+        <div className="bg-surface-base rounded-lg border border-default p-12 text-center">
           <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             Keine strukturierten Notizen

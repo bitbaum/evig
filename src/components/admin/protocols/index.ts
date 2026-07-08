@@ -10,7 +10,6 @@
 export { useProtocolDetail } from './useProtocolDetail'
 export { ProtocolReprocessSection } from './ProtocolReprocessSection'
 export { ProtocolDraftInput } from './ProtocolDraftInput'
-export { ProtocolSummarySection } from './ProtocolSummarySection'
 export { ProtocolTopicsSection } from './ProtocolTopicsSection'
 export { ProtocolActionItemsList } from './ProtocolActionItemsList'
 export { ProtocolFollowUps } from './ProtocolFollowUps'

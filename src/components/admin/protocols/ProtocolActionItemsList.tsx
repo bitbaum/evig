@@ -9,10 +9,11 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
 import {
   PRIORITY_HINT_LABELS,
+  ACTION_ITEM_TYPE_LABELS,
 } from '@/config/protocols'
+import { pluralDe } from '@/lib/i18n/plural-de'
 import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols'
 import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
 import DecisionBridge from '@/components/admin/protocols/DecisionBridge'
@@ -40,6 +41,11 @@ interface Props {
   onRefresh: () => void
 }
 
+// Plural helpers keyed off the label SSOT so the vocabulary lives in one place.
+const pluralTask = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.task, 'Aufgaben')
+const pluralDecision = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.decision, 'Entscheidungen')
+const pluralInfo = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.info, 'Informationen')
+
 interface BucketHeaderProps {
   icon: React.ReactNode
   label: string
@@ -49,7 +55,7 @@ interface BucketHeaderProps {
 
 function BucketHeader({ icon, label, count, accent }: BucketHeaderProps) {
   return (
-    <div className={`flex items-center gap-2 px-4 py-2.5 border-b ${accent}`}>
+    <div className={`flex items-center gap-2 px-4 py-2.5 border-b border-subtle ${accent}`}>
       {icon}
       <span className="text-sm font-semibold">{label}</span>
       <span className="ml-auto text-xs text-text-tertiary tabular-nums">{count}</span>
@@ -80,10 +86,14 @@ export function ProtocolActionItemsList({
   const decisionsByActionItem = new Map(
     protocolDecisions.map((d) => [d.actionItemId, d])
   )
+  // Provenance: actionItemId's topic → topic title, so each derived item can
+  // show which structured-note topic it came from (raw → notes → item chain).
+  const topicTitleById = new Map((notes.topics ?? []).map((t) => [t.id, t.title]))
+
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
-      <div id="protocol-step-tasks" className="bg-surface-raised border border rounded-lg p-4">
-        <Heading level={3} className="text-sm text-text-primary mb-1">Keine Aktionen erkannt</Heading>
+      <div className="bg-surface-raised border border-default rounded-lg p-4">
+        <h3 className="text-sm font-semibold text-text-primary mb-1">Keine Aktionen erkannt</h3>
         <p className="text-sm text-text-secondary">
           Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
         </p>
@@ -100,76 +110,49 @@ export function ProtocolActionItemsList({
   }).length
 
   const canAct = isReview || isFinalized
-  const showSummaryBanner = canAct && notes.action_items.length > 0
 
   return (
-    <div id="protocol-step-tasks" className="bg-surface-base rounded-lg border border overflow-hidden">
-
-      {showSummaryBanner && (
-        <div className="px-4 py-4 border-b border-subtle bg-action-muted/50 space-y-3">
-          <div className="flex items-start gap-3">
-            <Sparkles className="w-5 h-5 text-action mt-0.5 shrink-0" aria-hidden />
-            <div className="flex-1 min-w-0 space-y-1">
-              <p className="text-sm font-medium text-text-primary">
-                KI hat erkannt:{' '}
-                {tasks.length > 0 && (
-                  <span className="text-action">
-                    {tasks.length} {tasks.length === 1 ? 'Aufgabe' : 'Aufgaben'}
-                  </span>
-                )}
-                {tasks.length > 0 && (decisions.length > 0 || openQuestions.length > 0) && ' · '}
-                {decisions.length > 0 && (
-                  <span className="text-violet-700 dark:text-violet-300">
-                    {decisions.length} {decisions.length === 1 ? 'Entscheidung' : 'Entscheidungen'}
-                  </span>
-                )}
-                {decisions.length > 0 && openQuestions.length > 0 && ' · '}
-                {openQuestions.length > 0 && (
-                  <span className="text-text-secondary">
-                    {openQuestions.length} Info
-                  </span>
-                )}
+    <div className="bg-surface-base rounded-lg border border-default overflow-hidden">
+      {/* One header + one tally. The old design also printed a redundant
+          "Aktionen N" superset count next to the "Aufgaben M" subset count,
+          which read as two conflicting numbers — removed. */}
+      <div className="px-4 py-4 border-b border-subtle bg-action-muted/50">
+        <div className="flex items-start gap-3">
+          <Sparkles className="w-5 h-5 text-action mt-0.5 shrink-0" aria-hidden />
+          <div className="flex-1 min-w-0 space-y-1">
+            <h2 className="text-sm font-semibold text-text-primary">
+              Aktionen & Entscheidungen
+            </h2>
+            <p className="text-sm text-text-secondary">
+              {[
+                tasks.length > 0 ? `${tasks.length} ${pluralTask(tasks.length)}` : null,
+                decisions.length > 0 ? `${decisions.length} ${pluralDecision(decisions.length)}` : null,
+                openQuestions.length > 0 ? `${openQuestions.length} ${pluralInfo(openQuestions.length)}` : null,
+              ].filter(Boolean).join(' · ')}
+              {' aus dem Protokoll.'}
+            </p>
+            {canAct && (
+              <p className="text-xs text-text-tertiary">
+                {unlinkedTaskItems.length > 0 && <>Erstelle alle Aufgaben mit einem Klick. </>}
+                {openDecisionCount > 0 && <>Offene Entscheidungen können unten direkt zur Abstimmung.</>}
+                {unlinkedTaskItems.length === 0 && openDecisionCount === 0 && <>Alle Aufgaben verknüpft, alle Entscheidungen geschlossen.</>}
               </p>
-              <p className="text-xs text-text-secondary">
-                {unlinkedTaskItems.length > 0 && (
-                  <>Erstelle alle Aufgaben mit einem Klick. </>
-                )}
-                {openDecisionCount > 0 && (
-                  <>Entscheidungen sind offen — Teilnehmer können unten direkt abstimmen.</>
-                )}
-                {unlinkedTaskItems.length === 0 && openDecisionCount === 0 && (
-                  <>Alle Aufgaben verknüpft, alle Entscheidungen geschlossen.</>
-                )}
-              </p>
-            </div>
-            {unlinkedTaskItems.length > 0 && (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={onCreateAllTasks}
-                disabled={bulkCreatingTasks}
-                className="shrink-0 gap-2"
-              >
-                {bulkCreatingTasks
-                  ? <><Loader2 className="w-4 h-4 animate-spin" />Erstellt…</>
-                  : <><ListChecks className="w-4 h-4" />Alle {unlinkedTaskItems.length} {unlinkedTaskItems.length === 1 ? 'Aufgabe' : 'Aufgaben'} erstellen</>
-                }
-              </Button>
             )}
           </div>
-        </div>
-      )}
-
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-subtle flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <ListChecks className="w-4 h-4 text-text-muted" />
-          <Heading level={2} className="text-text-primary">
-            Aktionen
-          </Heading>
-          <span className="text-xs text-text-muted tabular-nums">
-            {notes.action_items.length}
-          </span>
+          {canAct && unlinkedTaskItems.length > 0 && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={onCreateAllTasks}
+              disabled={bulkCreatingTasks}
+              className="shrink-0 gap-2"
+            >
+              {bulkCreatingTasks
+                ? <><Loader2 className="w-4 h-4 animate-spin" />Erstellt…</>
+                : <><ListChecks className="w-4 h-4" />Alle {unlinkedTaskItems.length} {pluralTask(unlinkedTaskItems.length)} erstellen</>
+              }
+            </Button>
+          )}
         </div>
       </div>
 
@@ -189,15 +172,16 @@ export function ProtocolActionItemsList({
         <div>
           <BucketHeader
             icon={<ListChecks className="w-3.5 h-3.5 text-action" />}
-            label="Aufgaben"
+            label={pluralTask(tasks.length)}
             count={tasks.length}
-            accent="bg-action-muted/50 border-subtle"
+            accent="bg-action-muted/50"
           />
           <div className="divide-y divide-subtle">
             {tasks.map((item) => (
               <ActionRow
                 key={item.id}
                 item={item}
+                topicTitle={item.topic_id ? topicTitleById.get(item.topic_id) : undefined}
                 isLinked={linkedActionIds.has(item.id)}
                 link={actionLinks.find(l => l.action_item_id === item.id)}
                 canAct={canAct}
@@ -205,7 +189,6 @@ export function ProtocolActionItemsList({
                 protocolId={protocolId}
                 attendeeCount={attendeeCount}
                 linkedDecision={decisionsByActionItem.get(item.id)}
-                
                 currentUserId={currentUserId}
                 isProtocolCreator={isProtocolCreator}
                 onCreateTask={onCreateTask}
@@ -218,18 +201,19 @@ export function ProtocolActionItemsList({
 
       {/* Bucket 2: Decisions */}
       {decisions.length > 0 && (
-        <div className={tasks.length > 0 ? 'border-t border' : ''}>
+        <div className={tasks.length > 0 ? 'border-t border-default' : ''}>
           <BucketHeader
-            icon={<Vote className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />}
-            label="Entscheidungen"
+            icon={<Vote className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />}
+            label={pluralDecision(decisions.length)}
             count={decisions.length}
-            accent="bg-violet-50/50 dark:bg-violet-900/10 border-subtle"
+            accent="bg-purple-50/50 dark:bg-purple-900/10"
           />
           <div className="divide-y divide-subtle">
             {decisions.map((item) => (
               <ActionRow
                 key={item.id}
                 item={item}
+                topicTitle={item.topic_id ? topicTitleById.get(item.topic_id) : undefined}
                 isLinked={linkedActionIds.has(item.id)}
                 link={actionLinks.find(l => l.action_item_id === item.id)}
                 canAct={canAct}
@@ -237,7 +221,6 @@ export function ProtocolActionItemsList({
                 protocolId={protocolId}
                 attendeeCount={attendeeCount}
                 linkedDecision={decisionsByActionItem.get(item.id)}
-                
                 currentUserId={currentUserId}
                 isProtocolCreator={isProtocolCreator}
                 onCreateTask={onCreateTask}
@@ -248,20 +231,21 @@ export function ProtocolActionItemsList({
         </div>
       )}
 
-      {/* Bucket 3: Open Questions / Info */}
+      {/* Bucket 3: Info */}
       {openQuestions.length > 0 && (
-        <div className={(tasks.length > 0 || decisions.length > 0) ? 'border-t border' : ''}>
+        <div className={(tasks.length > 0 || decisions.length > 0) ? 'border-t border-default' : ''}>
           <BucketHeader
             icon={<HelpCircle className="w-3.5 h-3.5 text-text-tertiary" />}
-            label="Offene Fragen / Info"
+            label={pluralInfo(openQuestions.length)}
             count={openQuestions.length}
-            accent="bg-surface-raised border-subtle"
+            accent="bg-surface-raised"
           />
           <div className="divide-y divide-subtle">
             {openQuestions.map((item) => (
               <ActionRow
                 key={item.id}
                 item={item}
+                topicTitle={item.topic_id ? topicTitleById.get(item.topic_id) : undefined}
                 isLinked={linkedActionIds.has(item.id)}
                 link={actionLinks.find(l => l.action_item_id === item.id)}
                 canAct={canAct}
@@ -269,7 +253,6 @@ export function ProtocolActionItemsList({
                 protocolId={protocolId}
                 attendeeCount={attendeeCount}
                 linkedDecision={decisionsByActionItem.get(item.id)}
-                
                 currentUserId={currentUserId}
                 isProtocolCreator={isProtocolCreator}
                 onCreateTask={onCreateTask}
@@ -289,6 +272,7 @@ export function ProtocolActionItemsList({
 
 interface ActionRowProps {
   item: StructuredNotes['action_items'][0]
+  topicTitle: string | undefined
   isLinked: boolean
   link: ActionLinkRecord | undefined
   canAct: boolean
@@ -304,6 +288,7 @@ interface ActionRowProps {
 
 function ActionRow({
   item,
+  topicTitle,
   isLinked,
   link,
   canAct,
@@ -319,6 +304,12 @@ function ActionRow({
       <div className="flex-1 min-w-0">
         <p className="text-sm text-text-primary leading-relaxed">{item.description}</p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1">
+          {/* Provenance: which structured-note topic this item was derived from */}
+          {topicTitle && (
+            <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">
+              <span className="text-text-muted">aus:</span> {topicTitle}
+            </span>
+          )}
           {item.assigned_to_name && (
             <span className="text-xs text-text-tertiary">
               {item.assigned_to_name}

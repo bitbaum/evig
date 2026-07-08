@@ -163,7 +163,7 @@ export default async function ProtocolDetailPage({
         {/* Sidebar */}
         <div className="space-y-4">
           {/* Protocol Details */}
-          <div className="bg-surface-base rounded-lg border border p-4">
+          <div className="bg-surface-base rounded-lg border border-default p-4">
             <Heading level={2} className="text-sm font-semibold text-text-primary mb-3">Details</Heading>
             <dl className="space-y-3">
               <div>
@@ -220,7 +220,11 @@ export default async function ProtocolDetailPage({
             </dl>
           </div>
 
-          {/* Attendees — editable client component */}
+          {/* Attendees — editable client component. The raw transcript used to
+              live here in a collapsed sidebar accordion (buried, last on mobile);
+              it now sits in the main content flow as "Quelle · Rohtranskript",
+              right after the summary, so source → structure → actions reads top
+              to bottom. */}
           <ProtocolAttendeesCard
             protocolId={protocol.id}
             attendees={protocol.attendees || []}
@@ -228,20 +232,6 @@ export default async function ProtocolDetailPage({
             teamMembers={teamMembers}
             isReview={isReview}
           />
-
-          {/* Raw Transcript (collapsed) */}
-          {protocol.raw_transcript && (
-            <details className="bg-surface-base rounded-lg border border">
-              <summary className="p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">
-                Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
-              </summary>
-              <div className="px-4 pb-4">
-                <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-80 overflow-y-auto bg-surface-raised rounded-lg p-3 leading-relaxed">
-                  {protocol.raw_transcript}
-                </pre>
-              </div>
-            </details>
-          )}
         </div>
       </div>
     </div>

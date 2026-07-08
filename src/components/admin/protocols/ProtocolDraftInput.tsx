@@ -32,7 +32,7 @@ export function ProtocolDraftInput({
   onProcess,
 }: Props) {
   return (
-    <div id="protocol-step-input" className="bg-surface-base rounded-lg border border p-6 space-y-4">
+    <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
       <Heading level={2} className="text-lg text-text-primary">
         {inputMethod === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
       </Heading>

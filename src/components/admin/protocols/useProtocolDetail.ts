@@ -4,21 +4,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
-import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { TASK_PRIORITIES } from '@/config/tasks'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateShort } from '@/lib/date-formats'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 import type { ProtocolDetailProps } from './types'
-
-const STEP_SECTION_IDS: Record<ProtocolWorkflowStepId, string> = {
-  input: 'protocol-step-input',
-  ai: 'protocol-step-ai',
-  review: 'protocol-step-review',
-  tasks: 'protocol-step-tasks',
-  done: 'protocol-step-done',
-}
 
 export function useProtocolDetail({ protocol, actionLinks, initialProcessingError = null }: ProtocolDetailProps) {
   const router = useRouter()
@@ -59,19 +50,6 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
   const unlinkedTaskItems = (notes?.action_items || []).filter(
     item => item.item_type === 'task' && !linkedActionIds.has(item.id)
   )
-
-  const workflowProgress = getProtocolWorkflowProgress({
-    status: protocol.status,
-    hasStructuredNotes: Boolean(notes),
-    unlinkedTaskCount: unlinkedTaskItems.length,
-  })
-  const currentStepIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowProgress.currentStepId)
-
-  const scrollToStep = (stepId: ProtocolWorkflowStepId) => {
-    const section = document.getElementById(STEP_SECTION_IDS[stepId])
-    if (!section) return
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
 
   const toggleTopic = (id: string) => {
     setExpandedTopics(prev => {
@@ -310,10 +288,6 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     isFinalized,
     error,
     initialProcessingError,
-    // Workflow
-    workflowProgress,
-    currentStepIndex,
-    scrollToStep,
     // Topics
     expandedTopics,
     toggleTopic,
