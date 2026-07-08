@@ -6,25 +6,25 @@
  */
 
 import { Metadata } from 'next'
-import { adminInteractive, adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { Button } from '@/components/ui/button'
-import { buttonClass } from '@/components/ui/button-class'
 import { EmptyState } from '@/components/ui/EmptyState'
 import {
   Plus,
   Tag,
   Edit,
   Trash2,
-  ArrowLeft,
   CheckCircle,
   XCircle,
 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
+import { AdminButton } from '@/components/admin/AdminButton'
 import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
@@ -112,224 +112,100 @@ export default async function AdminCategoriesPage() {
     getCategories(),
   ])
 
-  return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link
-            href={ROUTES.admin.content}
-            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
-          >
-            <ArrowLeft className="w-5 h-5 text-text-secondary" />
-          </Link>
-          <div>
-            <Heading level={1} className="text-2xl font-bold text-text-primary">
-              Blog-Kategorien
-            </Heading>
-            <p className="text-text-secondary mt-1">
-              Kategorien für Blog-Artikel verwalten
-            </p>
-          </div>
-        </div>
-        <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
-          <Plus className="w-5 h-5" />
-          Neue Kategorie
-        </Link>
-      </div>
+  const createAction = (
+    <AdminButton href={ROUTES.admin.categoryNew} variant="primary" className="gap-2">
+      <Plus className="w-4 h-4" />
+      Neue Kategorie
+    </AdminButton>
+  )
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <Tag className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Gesamt Kategorien
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.totalCategories}
-              </p>
-            </div>
-          </div>
+  const columns: AdminTableColumn<BlogCategory>[] = [
+    {
+      header: 'Kategorie',
+      cell: (c) => (
+        <div>
+          <div className="text-sm font-medium text-text-primary">{c.name}</div>
+          {c.description && <div className="text-sm text-text-tertiary line-clamp-1">{c.description}</div>}
+          <div className="text-xs text-text-tertiary mt-1">/{c.slug}</div>
         </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Aktive Kategorien
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.activeCategories}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <Tag className="w-8 h-8 text-text-secondary" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Artikel gesamt
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.totalPosts}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Categories Table */}
-      <div className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
-        {categories.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-surface-raised">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                    Kategorie
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                    Farbe
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                    Artikel
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                    Aktionen
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
-                {categories.map((category) => (
-                  <tr
-                    key={category.id}
-                    className={adminTable.tr}
-                  >
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="text-sm font-medium text-text-primary">
-                          {category.name}
-                        </div>
-                        {category.description && (
-                          <div className="text-sm text-text-tertiary line-clamp-1">
-                            {category.description}
-                          </div>
-                        )}
-                        <div className="text-xs text-text-tertiary mt-1">
-                          /{category.slug}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {category.color ? (
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-6 h-6 rounded-full border border"
-                            style={{ backgroundColor: category.color }}
-                          />
-                          <span className="text-sm text-text-secondary font-mono">
-                            {category.color}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-text-muted">-</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-text-primary">
-                        {category.post_count}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${
-                          category.is_active
-                            ? 'bg-action-muted text-action-muted'
-                            : 'bg-surface-raised text-text-primary'
-                        }`}
-                      >
-                        {category.is_active ? (
-                          <>
-                            <CheckCircle className="w-3 h-3" />
-                            Aktiv
-                          </>
-                        ) : (
-                          <>
-                            <XCircle className="w-3 h-3" />
-                            Inaktiv
-                          </>
-                        )}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/admin/content/categories/${category.id}`}
-                          className="text-action hover:text-action"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Link>
-                        <Button
-                          variant="destructive-ghost"
-                          size="icon"
-                          className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300 disabled:opacity-50"
-                          disabled={category.post_count > 0}
-                          title={
-                            category.post_count > 0
-                              ? 'Kategorie hat Artikel und kann nicht gelöscht werden'
-                              : 'Kategorie löschen'
-                          }
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      ),
+    },
+    {
+      header: 'Farbe',
+      className: 'whitespace-nowrap',
+      cell: (c) =>
+        c.color ? (
+          <div className="flex items-center gap-2">
+            {/* dynamic data colour → inline style is legitimate here */}
+            <div className="w-6 h-6 rounded-full border border-default" style={{ backgroundColor: c.color }} />
+            <span className="text-sm text-text-secondary font-mono">{c.color}</span>
           </div>
         ) : (
-          <EmptyState
-            icon={Tag}
-            title="Noch keine Kategorien"
-            description="Erstelle Kategorien, um deine Blog-Artikel zu organisieren."
-            action={
-              <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
-                <Plus className="w-5 h-5" />
-                Erste Kategorie erstellen
-              </Link>
-            }
-          />
-        )}
-      </div>
-
-      {/* Info Banner */}
-      <div className="bg-surface-raised border border rounded-xl p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center shrink-0">
-            <Tag className="w-5 h-5 text-text-secondary" />
-          </div>
-          <div>
-            <Heading level={3} className="font-medium text-text-primary">
-              Kategorien-Verwaltung
-            </Heading>
-            <p className="text-sm text-text-secondary mt-1">
-              Kategorien helfen beim Organisieren Ihrer Blog-Artikel. Jede
-              Kategorie kann eine eigene Farbe und Beschreibung haben. Aktive
-              Kategorien erscheinen in der Auswahl beim Erstellen neuer Artikel.
-            </p>
-          </div>
+          <span className="text-sm text-text-muted">-</span>
+        ),
+    },
+    { header: 'Artikel', className: 'whitespace-nowrap', cell: (c) => <span className="text-sm text-text-primary">{c.post_count}</span> },
+    {
+      header: 'Status',
+      className: 'whitespace-nowrap',
+      cell: (c) => (
+        <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${
+          c.is_active ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-primary'
+        }`}>
+          {c.is_active ? <><CheckCircle className="w-3 h-3" />Aktiv</> : <><XCircle className="w-3 h-3" />Inaktiv</>}
+        </span>
+      ),
+    },
+    {
+      header: 'Aktionen',
+      className: 'whitespace-nowrap',
+      cell: (c) => (
+        <div className="flex items-center gap-2">
+          <Link href={`/admin/content/categories/${c.id}`} className="text-action hover:text-action">
+            <Edit className="w-4 h-4" />
+          </Link>
+          <Button
+            variant="destructive-ghost"
+            size="icon"
+            className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300 disabled:opacity-50"
+            disabled={c.post_count > 0}
+            title={c.post_count > 0 ? 'Kategorie hat Artikel und kann nicht gelöscht werden' : 'Kategorie löschen'}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
         </div>
-      </div>
-    </div>
+      ),
+    },
+  ]
+
+  return (
+    <AdminPageWrapper
+      title="Blog-Kategorien"
+      description="Kategorien für Blog-Artikel verwalten"
+      icon={Tag}
+      backButton={{ href: ROUTES.admin.content, label: 'Inhalte' }}
+      actions={createAction}
+    >
+      {categories.length === 0 ? (
+        <EmptyState
+          icon={Tag}
+          title="Noch keine Kategorien"
+          description="Erstelle Kategorien, um deine Blog-Artikel zu organisieren."
+          action={createAction}
+        />
+      ) : (
+        <>
+          <AdminStatsGrid
+            columns={3}
+            items={[
+              { icon: Tag, color: 'gray', label: 'Gesamt Kategorien', value: stats.totalCategories },
+              { icon: CheckCircle, color: 'green', label: 'Aktive Kategorien', value: stats.activeCategories },
+              { icon: Tag, color: 'gray', label: 'Artikel gesamt', value: stats.totalPosts },
+            ] satisfies StatCardItem[]}
+          />
+          <AdminTable columns={columns} rows={categories} rowKey={(c) => c.id} />
+        </>
+      )}
+    </AdminPageWrapper>
   )
 }
