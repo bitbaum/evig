@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
+  MEETING_TYPES,
   MEETING_TYPE_LABELS,
   MEETING_TYPE_TEMPLATES,
 } from '@/config/protocols'
@@ -86,13 +87,14 @@ export function useProtocolForm(
     return teamMembers.filter((m) => m.name.toLowerCase().includes(search))
   }, [teamMembers, attendeeSearch])
 
-  const setupComplete =
-    meetingType !== '' && title.trim() !== '' && meetingDate !== ''
   const hasContent =
     sources.audio !== null ||
     sources.textFiles.length > 0 ||
     content.trim().length >= 20
-  const canSubmit = setupComplete && hasContent && !loading && !processing
+  // Throw in a file (or notes / the AI box) and go. Meeting type + title are
+  // OPTIONAL — we default them at submit and the AI fills the rest from the
+  // transcript. The only requirement is that there's something to process.
+  const canSubmit = hasContent && !loading && !processing
 
   // Used at protocol-creation time so the detail page knows which
   // primary source drove the structuring (drives the reprocess UI label).
@@ -142,7 +144,15 @@ export function useProtocolForm(
   }
 
   const handleSubmit = async () => {
-    if (!canSubmit || !meetingType) return
+    if (!canSubmit) return
+
+    // Default the optional setup fields so a "just drop a file" submit works;
+    // type + title can be refined on the review page afterward.
+    const effectiveType = meetingType || MEETING_TYPES.AD_HOC
+    const effectiveTitle =
+      title.trim() ||
+      `${MEETING_TYPE_LABELS[effectiveType]} — ${formatDateShort(meetingDate)}`
+
     setLoading(true)
     setError(null)
 
@@ -150,9 +160,9 @@ export function useProtocolForm(
       const createResult = await apiFetch<{ id: string }>('/api/protocols', {
         method: 'POST',
         body: {
-          title,
+          title: effectiveTitle,
           meeting_date: meetingDate,
-          meeting_type: meetingType,
+          meeting_type: effectiveType,
           visibility,
           input_method: detectedInputMethod,
           attendees: selectedAttendees,
@@ -226,7 +236,6 @@ export function useProtocolForm(
     error,
     setError,
     // Computed
-    setupComplete,
     hasContent,
     canSubmit,
     contentFormat,
