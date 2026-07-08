@@ -21,6 +21,7 @@ import { Stepper } from '@/components/ui/Stepper'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 import Heading from '@/components/admin/AdminHeading'
+import { ProduktAufnehmenModeToggle } from '@/components/admin/ProduktAufnehmenModeToggle'
 import { ROUTES } from '@/config/routes'
 import { adminInteractive } from '@/lib/admin-ui'
 
@@ -179,7 +180,7 @@ function ErfassungContent() {
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
       {/* Pipeline progress — shown when entering from Geräte-Eingang */}
       {isIntakePipeline && (
-        <div className="bg-surface-base border border rounded-lg px-4 py-3">
+        <div className="bg-surface-base border border-default rounded-lg px-4 py-3">
           <Stepper
             steps={INTAKE_PIPELINE_STEPS}
             currentStep={1}
@@ -217,16 +218,11 @@ function ErfassungContent() {
         )}
       </div>
 
-      {/* Intake cross-link banner */}
-      {!form.isEditMode && (
-        <div className="flex items-center gap-3 bg-surface-raised border border rounded-lg px-4 py-3 text-sm">
-          <span className="text-text-primary">
-            Für Geräte-Eingang mit Checkliste und Spenden-Erfassung →{' '}
-            <Link href="/admin/intake" className="font-medium underline hover:text-text-primary">
-              Geräte-Eingang verwenden
-            </Link>
-          </span>
-        </div>
+      {/* Mode switch — Schnellerfassung (here) vs Physische Annahme (intake).
+          One "Produkt aufnehmen" door, two modes; hidden in edit mode and when
+          already inside the intake→erfassung pipeline. */}
+      {!form.isEditMode && !isIntakePipeline && (
+        <ProduktAufnehmenModeToggle active="schnell" />
       )}
 
       {/* Data Entry Tabs (always at top) */}

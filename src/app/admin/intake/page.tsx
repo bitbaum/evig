@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { PackageCheck } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { ProduktAufnehmenModeToggle } from '@/components/admin/ProduktAufnehmenModeToggle'
 import IntakeClient from './IntakeClient'
 
 export const metadata: Metadata = {
@@ -18,6 +19,9 @@ export default async function IntakePage() {
       icon={PackageCheck}
       iconColor="blue"
     >
+      <div className="mb-4">
+        <ProduktAufnehmenModeToggle active="annahme" />
+      </div>
       <IntakeClient />
     </AdminPageWrapper>
   )

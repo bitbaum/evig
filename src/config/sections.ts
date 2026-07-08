@@ -540,38 +540,44 @@ export const SECTIONS = {
   // ---------------------------------------------------------------------------
   // ADMIN MANAGEMENT - Staff sections (non-sensitive)
   // ---------------------------------------------------------------------------
+  // Physical intake (checklist + donation). No longer its own sidebar entry —
+  // it's the "Physische Annahme" mode of the consolidated "Produkt aufnehmen"
+  // door (see the `erfassung` section + ProduktAufnehmenModeToggle). Route +
+  // id stay live (reachable via the toggle and donation cross-links).
   intake: {
     id: 'intake',
     path: '/admin/intake',
     ui: {
       label: 'Geräte-Eingang',
-      description: 'Geräte erfassen, prüfen und freigeben',
+      description: 'Annahme & Prüfung gespendeter Geräte (Checkliste, Spende)',
       icon: PackageCheck,
       emoji: '📋',
       color: 'primary',
-      mobileBottomNavLabel: 'Eingang',
+    },
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
+    priority: 99,
+    category: 'management',
+    sidebarGroup: 'angebot',
+  },
+
+  // The single "add a product" door. Defaults to Schnellerfassung; the
+  // ProduktAufnehmenModeToggle switches to Physische Annahme (/admin/intake).
+  erfassung: {
+    id: 'erfassung',
+    path: '/admin/erfassung',
+    ui: {
+      label: 'Produkt aufnehmen',
+      description: 'Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen',
+      icon: ScanLine,
+      emoji: '📝',
+      color: 'primary',
+      mobileBottomNavLabel: 'Aufnehmen',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 99,
     category: 'management',
     sidebarGroup: 'angebot',
     mobileBottomNavOrder: 3,
-  },
-
-  erfassung: {
-    id: 'erfassung',
-    path: '/admin/erfassung',
-    ui: {
-      label: 'Inventar-Erfassung',
-      description: 'Interne Produktdaten erfassen und RevampIT-Bestand veröffentlichen',
-      icon: ScanLine,
-      emoji: '📝',
-      color: 'primary',
-    },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
-    priority: 99.5,
-    category: 'management',
-    sidebarGroup: 'angebot',
   },
 
   products: {
@@ -598,8 +604,10 @@ export const SECTIONS = {
     id: 'marketplace',
     path: '/admin/marketplace',
     ui: {
-      label: 'Marketplace',
-      description: 'Inserate prüfen und verifizieren',
+      // "Inserate" — the manage/moderate view. Renamed from "Marketplace" so it
+      // no longer collides with the public /marketplace storefront customers see.
+      label: 'Inserate',
+      description: 'Inserate prüfen, verifizieren und verwalten',
       icon: Store,
       emoji: '🏪',
       color: 'secondary',
