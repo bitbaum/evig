@@ -110,7 +110,8 @@ describe('POST /api/admin/intake/extract-voice — validation', () => {
   })
 
   it('returns 500 when transcription service fails', async () => {
-    mockFetch.mockResolvedValueOnce({ ok: false, text: async () => 'Error' })
+    // Both providers (Groq primary + local fallback) fail → 500
+    mockFetch.mockResolvedValue({ ok: false, text: async () => 'Error' })
     const response = await POST(makeAudioRequest())
     expect(response.status).toBe(500)
   })

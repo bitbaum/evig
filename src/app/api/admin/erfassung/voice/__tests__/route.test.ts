@@ -110,7 +110,8 @@ describe('POST /api/admin/erfassung/voice — validation', () => {
   })
 
   it('returns 500 when transcription service fails', async () => {
-    mockFetch.mockResolvedValueOnce({
+    // Both providers (Groq primary + local fallback) fail → 500
+    mockFetch.mockResolvedValue({
       ok: false,
       text: async () => 'Service unavailable',
     })

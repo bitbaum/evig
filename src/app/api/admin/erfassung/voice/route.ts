@@ -17,7 +17,7 @@ import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
-import { SERVICE_URLS } from '@/config/services'
+import { transcribeAudio } from '@/lib/transcription/transcribe'
 
 export const POST = withAdmin('products', async (request, session) => {
   try {
@@ -36,23 +36,13 @@ export const POST = withAdmin('products', async (request, session) => {
     })
 
     // Step 1: Transcribe audio
-    const transcribeFormData = new FormData()
-    transcribeFormData.append('audio', audioFile)
-
-    const transcribeResponse = await fetch(
-      `${SERVICE_URLS.TRANSCRIPTION}/transcribe?language=de`,
-      {
-        method: 'POST',
-        body: transcribeFormData,
-      }
-    )
-
-    if (!transcribeResponse.ok) {
-      const transcribeError = await transcribeResponse.text()
-      return apiError(new Error(transcribeError), 'Transkription fehlgeschlagen')
+    // Groq Whisper first (works on prod), local faster-whisper fallback.
+    let transcription
+    try {
+      transcription = await transcribeAudio(audioFile, { language: 'de', filename: audioFile.name })
+    } catch (transcribeError) {
+      return apiError(transcribeError, 'Transkription fehlgeschlagen')
     }
-
-    const transcription = await transcribeResponse.json()
     const transcribedText = transcription.text
 
     if (!transcribedText || transcribedText.trim() === '') {
@@ -61,8 +51,8 @@ export const POST = withAdmin('products', async (request, session) => {
 
     logger.info('Transcription complete', {
       text: transcribedText,
-      language: transcription.language,
-      duration: transcription.duration_processing,
+      provider: transcription.provider,
+      model: transcription.model,
     })
 
     // Step 2: Extract product data using shared AI service

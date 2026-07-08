@@ -36,8 +36,7 @@ import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { logger } from '@/lib/logger'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { validateTextUpload } from '@/lib/protocols/upload'
-import { WHISPER_MODELS } from '@/config/transcription'
-import { SERVICE_URLS } from '@/config/services'
+import { transcribeAudio } from '@/lib/transcription/transcribe'
 
 type RouteParams = { id: string }
 
@@ -96,24 +95,19 @@ export const POST = withAdmin<RouteParams>(async (
     // becomes the only copy.
     let transcribedText: string | undefined
     if (audioFile) {
-      const validModel = WHISPER_MODELS.find((m) => m.id === requestedModel)
-      const modelParam = validModel ? `&model=${validModel.id}` : ''
-
-      const transcribeFormData = new FormData()
-      transcribeFormData.append('audio', audioFile)
-
-      const transcribeResponse = await fetch(
-        `${SERVICE_URLS.TRANSCRIPTION}/transcribe?language=de${modelParam}`,
-        { method: 'POST', body: transcribeFormData },
-      )
-
-      if (!transcribeResponse.ok) {
-        const errorBody = await transcribeResponse.text()
+      let transcription
+      try {
+        // Groq Whisper first (works on prod), local faster-whisper fallback.
+        transcription = await transcribeAudio(audioFile, {
+          language: 'de',
+          localModel: requestedModel ?? undefined,
+          filename: audioFile.name,
+        })
+      } catch (error) {
         logger.error('Protocol audio transcription failed', {
           protocolId,
           userId: dbUserId,
-          status: transcribeResponse.status,
-          errorBody,
+          error: String(error),
         })
         return NextResponse.json({
           success: false,
@@ -123,8 +117,12 @@ export const POST = withAdmin<RouteParams>(async (
         }, { status: 503 })
       }
 
-      const transcription = await transcribeResponse.json() as { text?: string }
-      transcribedText = transcription.text?.trim()
+      transcribedText = transcription.text
+      logger.info('Protocol audio transcribed', {
+        protocolId,
+        provider: transcription.provider,
+        model: transcription.model,
+      })
 
       if (!transcribedText) {
         return NextResponse.json({
