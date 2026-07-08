@@ -9,7 +9,6 @@ import type { Metadata } from 'next'
 import { headers, cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 import deMessages from '../../../messages/de.json'
 import { auth } from '@/auth'
@@ -59,15 +58,22 @@ export default async function AdminLayout({
   // language preference from the cookie to decide whether to show the notice.
   const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
   const visitorLocale = hasLocale(routing.locales, cookieLocale) ? cookieLocale : 'de'
-  // If the visitor came in on a non-DE locale (e.g. /ja/marketplace → click
-  // "Admin-Bereich"), surface a notice IN THEIR LANGUAGE so the jump to German
-  // isn't disorienting.
+  // If the visitor came in on a non-DE locale, surface a notice IN THEIR
+  // LANGUAGE so the jump to German isn't disorienting. Read it straight from
+  // the visitor's message file — getTranslations would resolve to German here
+  // (the resolver forces DE on admin routes), defeating the notice's purpose.
   const localeNotice =
     visitorLocale === 'de'
       ? null
       : await (async () => {
-          const t = await getTranslations({ locale: visitorLocale, namespace: 'admin.localeFallback' })
-          return t('notice')
+          try {
+            const msgs = (await import(`../../../messages/${visitorLocale}.json`)).default as {
+              admin?: { localeFallback?: { notice?: string } }
+            }
+            return msgs.admin?.localeFallback?.notice ?? null
+          } catch {
+            return null
+          }
         })()
 
   return (
