@@ -806,6 +806,12 @@
       "closeLabel": "Schliessen",
       "advanced": "Weitere Filter"
     },
+    "osInstall": {
+      "heading": "Linux gratis vorinstalliert",
+      "body": "Auf Wunsch installieren wir dir kostenlos eine Linux-Distribution deiner Wahl — leichtgewichtig, sicher und ohne Lizenzkosten. Wähle eine aus oder vergleiche sie zuerst.",
+      "selected": "Gewählt: {distro} — gib das bei der Bestellung oder Kontaktaufnahme an.",
+      "compare": "Unsicher? Distributionen vergleichen"
+    },
     "listing": {
       "contact": "Verkäufer kontaktieren",
       "report": "Melden",

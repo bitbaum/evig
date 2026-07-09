@@ -16,6 +16,7 @@ import { ListingImageGallery } from './ListingImageGallery'
 import { ListingInfoPanel } from './ListingInfoPanel'
 import { ListingActionButtons } from './ListingActionButtons'
 import { ListingSellerCard } from './ListingSellerCard'
+import { OsInstallHint } from '@/components/marketplace/OsInstallHint'
 import { RevampitTrustStrip } from './RevampitTrustStrip'
 import { AddToCartButton } from '@/components/marketplace/cart/AddToCartButton'
 import { ListingDetails } from './ListingDetails'
@@ -144,6 +145,8 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           <RevampitTrustStrip listing={listing} isVerified={isVerified} />
 
           <ListingSellerCard listing={listing} sellerName={sellerName} />
+
+          <OsInstallHint category={listing.category} />
 
           {/* Meta */}
           <div className="flex items-center gap-4 text-xs text-text-muted">
