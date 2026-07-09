@@ -39,7 +39,12 @@ test.describe('Timecard staff journey', () => {
       timeout: 15000,
     })
 
-    const submitButton = page.getByRole('button', { name: /Zur Prüfung einreichen|Erneut einreichen/ })
+    // The submit control renders twice on purpose — once in the header and once
+    // in the sticky action bar (reachability while scrolling) — so the role+name
+    // locator matches two elements. Either submits; target the first (header).
+    const submitButton = page
+      .getByRole('button', { name: /Zur Prüfung einreichen|Erneut einreichen/ })
+      .first()
     await expect(submitButton).toBeVisible({ timeout: 15000 })
 
     if (!(await submitButton.isEnabled())) {
