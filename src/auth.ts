@@ -165,10 +165,13 @@ export const authConfig = {
           // SECURITY: Clear lockout on successful login
           await clearLockoutDb(user.id)
 
-          // SECURITY: Require email verification before login
-          if (!user.emailVerified) {
-            throw new LoginError('email_unverified')
-          }
+          // Email verification is NOT a login wall. A Swiss non-profit that wants
+          // reach can't gate browsing/selling behind an inbox round-trip that
+          // may silently fail. Verification instead gates ONLY staff/admin
+          // powers: the JWT callback below withholds isStaff/isSuperAdmin until
+          // emailVerified is set, so an unverified @revamp-it.ch user logs in as
+          // a normal user and unlocks admin the moment they verify. Regular
+          // users need no verification at all.
 
           // Determine staff status — DB flag is SSOT, email domain only for initial setup
           const userIsStaff = Boolean(user.is_staff) || isStaffEmail(user.email)

@@ -12,7 +12,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { routing } from '@/i18n/routing'
 import deMessages from '../../../messages/de.json'
 import { auth } from '@/auth'
-import { getAccessibleSections } from '@/lib/permissions'
+import { getAccessibleSections, isStaffEmail } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
 import { ORG } from '@/config/org'
 
@@ -37,6 +37,12 @@ export default async function AdminLayout({
   }
 
   if (!session.user.isStaff) {
+    // A staff-email user who simply hasn't verified yet is staff — they just
+    // haven't unlocked admin. Send them to complete verification (resends the
+    // code + shows the entry step) rather than to a misleading "not staff" page.
+    if (isStaffEmail(session.user.email ?? '') && !session.user.emailVerified) {
+      redirect(`/auth/register?email=${encodeURIComponent(session.user.email!)}`)
+    }
     redirect('/?error=not_staff')
   }
 

@@ -132,7 +132,10 @@ export function RegistrationWizard() {
     })
   }, [prefillEmail, currentStep, resendCode])
 
-  // Step 1: Account Creation
+  // Step 1: Account Creation.
+  // Verification is no longer a wall — sign the user in the instant the account
+  // exists (password is still in memory here) so they land in the app. The
+  // verify step that follows is an optional nudge, not a gate.
   const handleAccountNext = async () => {
     const result = await register({
       email: state.email,
@@ -143,6 +146,15 @@ export function RegistrationWizard() {
 
     if (result) {
       updateState({ userId: result.userId })
+      if (state.password) {
+        await signIn('credentials', {
+          email: state.email,
+          password: state.password,
+          redirect: false,
+        }).catch(() => {
+          // Non-fatal: they can still verify or sign in manually below.
+        })
+      }
       setCurrentStep(1)
       if (result.emailSent === false) {
         setEmailSendFailed(true)
@@ -183,9 +195,11 @@ export function RegistrationWizard() {
 
   const handleResendCode = (): Promise<boolean> => resendCode(state.email)
 
+  // Skip = "verify later". The user was already signed in at account creation,
+  // so drop them straight into the app rather than onto a dead-end screen.
   const handleSkipVerification = () => {
     clearPersistedState()
-    setIsComplete(true)
+    router.replace('/dashboard')
   }
 
   // User typed wrong email at step 0 — let them go back and fix it.
