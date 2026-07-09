@@ -49,6 +49,7 @@ import {
   ScanLine,
   UserCheck,
   Presentation,
+  Ticket,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
@@ -1097,6 +1098,22 @@ export const SECTIONS = {
     priority: 203,
     category: 'sensitive',
     // Note: Hirn is shown separately in sidebar, not in a group
+  },
+
+  'promo-codes': {
+    id: 'promo-codes',
+    path: '/admin/promo-codes',
+    ui: {
+      label: 'Aktionscodes',
+      description: 'Rabatt- und Gutscheincodes ausstellen',
+      icon: Ticket,
+      emoji: '🎟️',
+      color: 'neutral',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 203,
+    category: 'sensitive',
+    sidebarGroup: 'system',
   },
 
   settings: {
