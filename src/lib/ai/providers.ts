@@ -27,6 +27,12 @@ const GROQ_LARGE_CONTEXT_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
 
+// Vision-capable models (multimodal). Llama 4 Scout on Groq accepts images;
+// OpenRouter has a free vision model. Used by callVisionWithFallback so photo
+// analysis works on prod (Ollama vision is local-dev only and isn't deployed).
+const GROQ_VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'
+const OPENROUTER_VISION_MODEL = 'meta-llama/llama-3.2-11b-vision-instruct:free'
+
 const DEFAULT_TIMEOUT_MS = 60000
 
 interface ProviderRuntimeConfig {
@@ -426,6 +432,130 @@ export async function callWithFallback(opts: CallOptions): Promise<CallResult | 
     failures: failedProviders.map(p => ({ provider: p.provider, reason: p.reason, message: p.message })),
   })
 
+  return null
+}
+
+export interface VisionCallOptions {
+  prompt: string
+  /** Full data URL: `data:image/jpeg;base64,...` */
+  imageDataUrl: string
+  temperature?: number
+  maxTokens?: number
+  timeoutMs?: number
+}
+
+/** OpenAI-compatible vision call (Groq + OpenRouter share this shape). */
+async function callOpenAICompatVision(
+  provider: 'groq' | 'openrouter',
+  url: string,
+  apiKey: string,
+  model: string,
+  opts: VisionCallOptions,
+): Promise<ProviderResult | ProviderError> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS)
+  try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    }
+    if (provider === 'openrouter') {
+      headers['HTTP-Referer'] = APP_URL
+      headers['X-Title'] = ORG.name
+    }
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'text', text: opts.prompt },
+            { type: 'image_url', image_url: { url: opts.imageDataUrl } },
+          ],
+        }],
+        temperature: opts.temperature ?? 0.3,
+        max_tokens: opts.maxTokens ?? 2048,
+      }),
+      signal: controller.signal,
+    })
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '')
+      const reason: ProviderError['reason'] =
+        response.status === 401 || response.status === 403 ? 'auth'
+        : response.status === 429 ? 'rate_limit' : 'unknown'
+      return { provider, reason, message: `HTTP ${response.status}: ${errorText.substring(0, 200)}` }
+    }
+    const result = await response.json().catch(() => null) as { choices?: Array<{ message?: { content?: string } }> } | null
+    const text = result?.choices?.[0]?.message?.content || ''
+    if (!text) return { provider, reason: 'parse', message: 'Leere Vision-Antwort' }
+    return { text, model, provider }
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      return { provider, reason: 'timeout', message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s` }
+    }
+    return { provider, reason: 'network', message: error instanceof Error ? error.message : 'Netzwerkfehler' }
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
+/** Ollama vision (local dev only — /api/generate with images). */
+async function callOllamaVision(cfg: ProviderRuntimeConfig, opts: VisionCallOptions): Promise<ProviderResult | ProviderError> {
+  const model = process.env.OLLAMA_VISION_MODEL || 'llama3.2-vision'
+  const base64 = opts.imageDataUrl.replace(/^data:image\/\w+;base64,/, '')
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS)
+  try {
+    const response = await fetch(`${cfg.ollamaUrl}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, prompt: opts.prompt, images: [base64], stream: false, options: { temperature: opts.temperature ?? 0.3 } }),
+      signal: controller.signal,
+    })
+    if (!response.ok) return { provider: 'ollama', reason: 'unknown', message: `HTTP ${response.status}` }
+    const result = await response.json().catch(() => null) as { response?: string } | null
+    const text = result?.response || ''
+    if (!text) return { provider: 'ollama', reason: 'parse', message: 'Leere Antwort' }
+    return { text, model: `ollama:${model}`, provider: 'ollama' }
+  } catch {
+    return { provider: 'ollama', reason: 'network', message: 'Ollama nicht erreichbar' }
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
+/**
+ * Vision cascade: Groq (Llama 4 Scout) → OpenRouter (free vision) → Ollama
+ * (local dev). Fixes photo analysis on prod, where Ollama isn't deployed.
+ */
+export async function callVisionWithFallback(opts: VisionCallOptions): Promise<CallResult | null> {
+  const cfg = await loadProviderRuntimeConfig()
+  const failed: ProviderError[] = []
+
+  const attempts: Array<() => Promise<ProviderResult | ProviderError>> = []
+  if (cfg.groqEnabled && cfg.groqApiKey) {
+    attempts.push(() => callOpenAICompatVision('groq', GROQ_API_URL, cfg.groqApiKey, GROQ_VISION_MODEL, opts))
+  }
+  if (cfg.openRouterEnabled && cfg.openRouterApiKey) {
+    attempts.push(() => callOpenAICompatVision('openrouter', OPENROUTER_API_URL, cfg.openRouterApiKey, OPENROUTER_VISION_MODEL, opts))
+  }
+  if (cfg.ollamaEnabled && cfg.ollamaUrl) {
+    attempts.push(() => callOllamaVision(cfg, opts))
+  }
+
+  for (const attempt of attempts) {
+    const result = await attempt()
+    if (isError(result)) {
+      failed.push(result)
+      logger.warn(`Vision provider ${result.provider} failed`, { reason: result.reason, message: result.message })
+      continue
+    }
+    if (failed.length > 0) logger.info(`Vision fallback to ${result.provider}`, { failed: failed.map(p => `${p.provider}:${p.reason}`) })
+    return { text: result.text, model: result.model, provider: result.provider, failedProviders: failed }
+  }
+  logger.error('All vision providers failed', { failures: failed.map(p => ({ provider: p.provider, reason: p.reason })) })
   return null
 }
 

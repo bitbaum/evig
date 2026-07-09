@@ -27,9 +27,11 @@
 // ---------------------------------------------------------------------------
 
 const mockCallWithFallback = jest.fn()
+const mockCallVisionWithFallback = jest.fn()
 
 jest.mock('@/lib/ai/providers', () => ({
   callWithFallback: (...args: unknown[]) => mockCallWithFallback.apply(null, args),
+  callVisionWithFallback: (...args: unknown[]) => mockCallVisionWithFallback.apply(null, args),
 }))
 
 const mockFillPromptTemplate = jest.fn((template: string) => `PROMPT:${template}`)
@@ -234,27 +236,10 @@ describe('extractProductFromText — fast parser fallback', () => {
 
 describe('extractProductFromImage', () => {
   const BASE64 = 'aGVsbG8=' // "hello" in base64
+  const visionOk = (text: string) => ({ text, model: 'groq:llama-4-scout', provider: 'groq' as const, failedProviders: [] })
 
-  function ollamaOk(responseText: string) {
-    return Promise.resolve({
-      ok: true,
-      status: 200,
-      json: () => Promise.resolve({ response: responseText }),
-      text: () => Promise.resolve(''),
-    })
-  }
-
-  function ollamaError(status: number, body: string) {
-    return Promise.resolve({
-      ok: false,
-      status,
-      json: () => Promise.resolve({}),
-      text: () => Promise.resolve(body),
-    })
-  }
-
-  it('returns { success: true } when Ollama returns valid JSON', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(ollamaOk(PRODUCT_JSON))
+  it('returns { success: true } when the vision cascade returns valid JSON', async () => {
+    mockCallVisionWithFallback.mockResolvedValueOnce(visionOk(PRODUCT_JSON))
 
     const result = await extractProductFromImage(BASE64)
 
@@ -265,60 +250,43 @@ describe('extractProductFromImage', () => {
     }
   })
 
-  it('strips data URL prefix before sending', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(ollamaOk(PRODUCT_JSON))
+  it('normalises a bare base64 string into a full data URL', async () => {
+    mockCallVisionWithFallback.mockResolvedValueOnce(visionOk(PRODUCT_JSON))
 
-    await extractProductFromImage(`data:image/jpeg;base64,${BASE64}`)
+    await extractProductFromImage(BASE64)
 
-    const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
-    expect(body.images[0]).toBe(BASE64) // no data:image prefix
+    expect(mockCallVisionWithFallback.mock.calls[0][0].imageDataUrl).toBe(`data:image/jpeg;base64,${BASE64}`)
   })
 
-  it('returns model-not-found error when Ollama response contains "model...not found"', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(
-      ollamaError(404, 'model llama3.2-vision not found')
-    )
+  it('passes an already-prefixed data URL through unchanged', async () => {
+    mockCallVisionWithFallback.mockResolvedValueOnce(visionOk(PRODUCT_JSON))
+    const url = `data:image/png;base64,${BASE64}`
+
+    await extractProductFromImage(url)
+
+    expect(mockCallVisionWithFallback.mock.calls[0][0].imageDataUrl).toBe(url)
+  })
+
+  it('returns a friendly error when all vision providers fail (null)', async () => {
+    mockCallVisionWithFallback.mockResolvedValueOnce(null)
 
     const result = await extractProductFromImage(BASE64)
 
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error).toContain('nicht installiert')
-      expect(result.error).toContain('ollama pull')
-    }
+    if (!result.success) expect(result.error).toContain('nicht verfügbar')
   })
 
-  it('returns generic error on non-ok HTTP response', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(ollamaError(500, 'Internal error'))
+  it('returns an error when no JSON is found in the vision response', async () => {
+    mockCallVisionWithFallback.mockResolvedValueOnce(visionOk('Ich sehe ein Laptop aber kein JSON'))
 
     const result = await extractProductFromImage(BASE64)
 
     expect(result.success).toBe(false)
-    if (!result.success) expect(result.error).toBeTruthy()
+    if (!result.success) expect(result.error).toContain('extrahieren')
   })
 
-  it('returns error when no JSON found in Ollama response', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(
-      ollamaOk('Ich sehe ein Laptop aber kein JSON')
-    )
-
-    const result = await extractProductFromImage(BASE64)
-
-    expect(result.success).toBe(false)
-    if (!result.success) expect(result.error).toBeTruthy()
-  })
-
-  it('returns connection error message on fetch failure', async () => {
-    ;(global.fetch as jest.Mock).mockRejectedValueOnce(new Error('fetch failed: ECONNREFUSED'))
-
-    const result = await extractProductFromImage(BASE64)
-
-    expect(result.success).toBe(false)
-    if (!result.success) expect(result.error).toContain('nicht erreichbar')
-  })
-
-  it('returns generic error for unexpected exceptions', async () => {
-    ;(global.fetch as jest.Mock).mockRejectedValueOnce(new Error('unexpected error'))
+  it('returns a parse error for malformed JSON', async () => {
+    mockCallVisionWithFallback.mockResolvedValueOnce(visionOk('{ produktname: ThinkPad }'))
 
     const result = await extractProductFromImage(BASE64)
 

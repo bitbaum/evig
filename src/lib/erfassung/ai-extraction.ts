@@ -19,8 +19,7 @@
 import { logger } from '@/lib/logger'
 import type { VoiceProductData, AIFieldMetadata, VerificationSource } from '@/types/erfassung'
 import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
-import { callWithFallback } from '@/lib/ai/providers'
-import { OLLAMA_URL } from '@/config/urls'
+import { callWithFallback, callVisionWithFallback } from '@/lib/ai/providers'
 
 // Re-export from split modules so existing imports don't break
 export { generateVerificationSources, calculateFieldConfidence } from './ai-field-mapping'
@@ -153,8 +152,6 @@ export async function extractProductFromText(
 export async function extractProductFromImage(
   imageBase64: string
 ): Promise<ExtractProductResult> {
-  const VISION_MODEL = process.env.OLLAMA_VISION_MODEL || 'llama3.2-vision'
-
   const imagePrompt = `Analysiere dieses Produktbild und extrahiere alle sichtbaren Informationen.
 
 Beschreibe:
@@ -169,94 +166,52 @@ ${PRODUCT_SCHEMA}
 
 Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
 
+  // Normalise to a full data URL (OpenAI-compatible vision needs the prefix).
+  const base64 = imageBase64.replace(/^data:image\/\w+;base64,/, '')
+  const imageDataUrl = imageBase64.startsWith('data:') ? imageBase64 : `data:image/jpeg;base64,${base64}`
+
+  // Cascade: Groq (Llama 4 Scout) → OpenRouter → Ollama (local). Fixes photo
+  // analysis on prod, where the old direct-to-Ollama call always failed.
+  const result = await callVisionWithFallback({ prompt: imagePrompt, imageDataUrl, temperature: 0.3 })
+
+  if (!result) {
+    return {
+      success: false,
+      error: 'KI-Bildanalyse ist momentan nicht verfügbar. Bitte nutze die Text-Eingabe.',
+    }
+  }
+
+  const jsonMatch = result.text.match(/\{[\s\S]*\}/)
+  if (!jsonMatch) {
+    logger.error('No JSON found in vision response', { provider: result.provider })
+    return {
+      success: false,
+      error: 'Konnte Produktdaten nicht aus dem Bild extrahieren',
+      rawResponse: result.text,
+    }
+  }
+
   try {
-    // Remove data URL prefix if present
-    const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, '')
-
-    logger.info('Sending image to Ollama for analysis', {
-      model: VISION_MODEL,
-      imageSize: base64Data.length,
-    })
-
-    const response = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: VISION_MODEL,
-        prompt: imagePrompt,
-        images: [base64Data],
-        stream: false,
-        options: {
-          temperature: 0.3,
-        },
-      }),
-    })
-
-    if (!response.ok) {
-      const error = await response.text()
-      logger.error('Ollama vision request failed', { status: response.status, error })
-
-      // Check if model not found
-      if (error.includes('model') && error.includes('not found')) {
-        return {
-          success: false,
-          error: `Vision-Modell "${VISION_MODEL}" nicht installiert. Bitte mit "ollama pull ${VISION_MODEL}" installieren.`,
-        }
-      }
-
-      return {
-        success: false,
-        error: 'Bildanalyse fehlgeschlagen',
-        rawResponse: error,
-      }
-    }
-
-    const ollamaResult = await response.json()
-    const responseText = ollamaResult.response
-
-    // Extract JSON from response
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
-      logger.error('No JSON found in vision response', { response: responseText })
-      return {
-        success: false,
-        error: 'Konnte Produktdaten nicht aus Bild extrahieren',
-        rawResponse: responseText,
-      }
-    }
-
     const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
-
-    // For image extraction, use a generic input description for confidence
     const { metadata, allSources } = calculateFieldConfidence('[image analysis]', productData, 'image')
-
     logger.info('Image extraction successful', {
+      provider: result.provider,
+      model: result.model,
       product: productData.produktname,
       hersteller: productData.hersteller,
       fieldsExtracted: Object.keys(metadata).length,
-      sourcesCount: allSources.length,
     })
-
     return {
       success: true,
       data: productData,
       metadata,
       sourceType: 'image',
       inputText: '[Bild-Analyse]',
-      model: VISION_MODEL,
+      model: result.model,
       verificationSources: allSources,
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
-    logger.error('Image extraction failed', { error })
-
-    if (message.includes('fetch') || message.includes('ECONNREFUSED')) {
-      return {
-        success: false,
-        error: 'KI-Service nicht erreichbar. Bitte später versuchen.',
-      }
-    }
-
-    return { success: false, error: 'Fehler bei der Bildanalyse' }
+    logger.error('Failed to parse vision JSON', { error, provider: result.provider })
+    return { success: false, error: 'Fehler bei der Bildanalyse', rawResponse: result.text }
   }
 }

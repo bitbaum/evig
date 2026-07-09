@@ -192,8 +192,8 @@ export async function POST(request: NextRequest) {
       dimensions: null,
       weight_grams: null,
       weight_confidence: 0.5,
-      ai_provider: 'ollama',
-      ai_model: process.env.OLLAMA_VISION_MODEL || 'llama3.2-vision',
+      ai_provider: 'ai',
+      ai_model: extractionResult.model || 'vision',
       processing_time_ms: processingTime,
       total_confidence: 0.82,
       raw_ai_response: {
@@ -278,7 +278,7 @@ export async function POST(request: NextRequest) {
           .insert(aiProcessingLogs)
           .values({
             requestType: 'image_analysis',
-            provider: 'ollama',
+            provider: 'ai',
             model: analysisResult.ai_model,
             inputData: { image_provided: !!image, image_url_provided: !!imageUrl },
             responseData: analysisResult,
