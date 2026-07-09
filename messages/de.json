@@ -9457,6 +9457,14 @@
         "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
         "unmappedColumns": "Nicht zugeordnete Spalten:"
       },
+      "voiceEntry": {
+        "start": "Aufnahme starten",
+        "stop": "Aufnahme stoppen",
+        "processing": "Wird verarbeitet…",
+        "hint": "Beschreibe das Gerät: Hersteller, Modell, Zustand, Preis.",
+        "transcription": "Erkannt: {text}",
+        "errorGeneric": "Sprache konnte nicht verarbeitet werden. Bitte erneut versuchen."
+      },
       "formErrors": {
         "updateFailed": "Produkt konnte nicht aktualisiert werden",
         "saveFailed": "Produkt konnte nicht gespeichert werden",

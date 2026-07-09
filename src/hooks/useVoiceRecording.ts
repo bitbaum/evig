@@ -12,7 +12,16 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { logger } from '@/lib/logger'
-import type { RecorderState } from '@/components/voice/types'
+
+/** Mic recorder state machine — owned here (this hook is the recorder SSOT). */
+export type RecorderState =
+  | 'idle'
+  | 'recording'
+  | 'paused'
+  | 'stopped'
+  | 'processing'
+  | 'success'
+  | 'error'
 
 interface UseVoiceRecordingProps {
   maxDuration: number

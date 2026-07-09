@@ -21,7 +21,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { detectMultipleProducts } from '@/lib/erfassung/detect-multi'
-import type { VoiceProductData, ErfassungFormData, AIFieldMetadata, BulkProduct } from '@/types/erfassung'
+import { VoiceEntry } from './VoiceEntry'
+import { ImageCapture } from './ImageCapture'
+import type { ErfassungFormData, AIFieldMetadata, BulkProduct } from '@/types/erfassung'
 
 export type EntryMode = 'speech' | 'picture' | 'form' | 'file'
 
@@ -103,26 +105,6 @@ export function DataEntryTabs({
   // effect is unavoidable here.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setIsCollapsed(collapsed) }, [collapsed])
-
-  // Handle voice transcription complete
-  const handleVoiceData = useCallback(
-    (data: VoiceProductData, metadata?: AIFieldMetadata) => {
-      logger.info('Voice data received', { product: data.produktname })
-      const formData: Partial<ErfassungFormData> = {
-        hersteller: data.hersteller,
-        produktname: data.produktname,
-        kurzbeschreibung: data.kurzbeschreibung,
-        specs: data.specs,
-        verkaufspreis: data.verkaufspreis,
-        zustand: data.zustand,
-        hauptkategorie: data.hauptkategorie,
-        unterkategorie: data.unterkategorie,
-        kundenprofile: data.kundenprofile,
-      }
-      onProductData(formData, metadata)
-    },
-    [onProductData]
-  )
 
   // Handle image capture
   const handleImageCapture = useCallback(
@@ -287,22 +269,26 @@ export function DataEntryTabs({
 
       {/* Tab content */}
       {!isCollapsed && <div className="p-6">
-        {/* Speech mode - Coming soon */}
+        {/* Speech mode — record → transcribe → extract (VoiceEntry composes
+            useVoiceRecording + useVoiceProduct; posts to /api/admin/erfassung/voice) */}
         {activeMode === 'speech' && (
-          <div className="text-center py-8 text-text-tertiary">
-            <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>{t('speechComingSoon')}</p>
-            <p className="text-sm">{t('speechRequires')}</p>
-          </div>
+          <VoiceEntry
+            onProductData={onProductData}
+            onError={onError}
+            onDataFilled={onDataFilled}
+          />
         )}
 
-        {/* Picture mode - Coming soon */}
+        {/* Picture mode — photo/upload → vision analysis → form prefill */}
         {activeMode === 'picture' && (
-          <div className="text-center py-8 text-text-tertiary">
-            <Camera className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>{t('pictureComingSoon')}</p>
-            <p className="text-sm">{t('pictureRequires')}</p>
-          </div>
+          <ImageCapture
+            onImageCapture={handleImageCapture}
+            onAnalysisComplete={(data) => {
+              onProductData(data)
+              onDataFilled?.()
+            }}
+            onError={onError}
+          />
         )}
 
         {/* Form mode with Quick Text Entry */}

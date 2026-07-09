@@ -3,11 +3,13 @@
 import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import type { VoiceProductData } from '@/types/erfassung'
+import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
 
 interface VoiceResult {
   transcription: string
   data: VoiceProductData
+  /** Per-field AI confidence — drives the form's field-confidence highlighting. */
+  metadata?: AIFieldMetadata
 }
 
 interface UseVoiceProductResult {
@@ -30,7 +32,7 @@ export function useVoiceProduct(): UseVoiceProductResult {
       const formData = new FormData()
       formData.append('audio', audioBlob, 'recording.webm')
 
-      const result = await apiFetch<{ transcription: string; data: VoiceProductData }>(
+      const result = await apiFetch<{ transcription: string; data: VoiceProductData; metadata?: AIFieldMetadata }>(
         '/api/admin/erfassung/voice',
         { method: 'POST', body: formData, formData: true },
       )
@@ -42,6 +44,7 @@ export function useVoiceProduct(): UseVoiceProductResult {
       return {
         transcription: result.data.transcription,
         data: result.data.data,
+        metadata: result.data.metadata,
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Verarbeitung fehlgeschlagen'

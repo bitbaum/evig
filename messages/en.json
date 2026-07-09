@@ -9034,6 +9034,14 @@
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
       },
+      "voiceEntry": {
+        "start": "Start recording",
+        "stop": "Stop recording",
+        "processing": "Processing…",
+        "hint": "Describe the device: brand, model, condition, price.",
+        "transcription": "Recognised: {text}",
+        "errorGeneric": "Could not process the recording. Please try again."
+      },
       "formErrors": {
         "updateFailed": "Product could not be updated",
         "saveFailed": "Product could not be saved",

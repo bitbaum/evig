@@ -227,6 +227,7 @@ function ErfassungContent() {
 
       {/* Data Entry Tabs (always at top) */}
       <DataEntryTabs
+        showAllTabs
         onProductData={form.handleProductData}
         onBulkData={handleBulkData}
         onImageCapture={form.handleImageCapture}

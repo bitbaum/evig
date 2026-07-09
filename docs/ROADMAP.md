@@ -28,14 +28,27 @@ Living queue of what we're building. Updated 2026-07-09. Keep in sync as items s
 
 ## 📋 Queue (priority order)
 
-1. **Freigaben full unification** — one `/admin/freigaben` queue driven by the SSOT; **per-type polished review UX** (article ≠ timecard ≠ permission request); reconcile the DASHBOARD's second count engine (`getDashboardStats`/`buildActionItems` still read the dead table) onto the SSOT; filter chips; mobile-first; test every element.
+1. **Freigaben full unification** — ✅ **hub + count engine done.** The
+   `/admin/approvals` hub reads ONE SSOT engine (`getApprovalCounts` over
+   `APPROVAL_SOURCES`), routing each source to its `reviewHref` by `reviewMode`
+   (inline / bulk / page). ✅ **Dashboard reconciled (edcebec6):** the second
+   engine is gone — `getDashboardStats` no longer reads the dead
+   `user_content_submissions` table for approvals; `buildActionItems` now derives
+   every approval row from the same SSOT counts, gated per-source permission +
+   `superAdminOnly`, so hub and dashboard can't drift. Removed the dead
+   `ActionItemsSection`/`QuickActionsSection`/`buildFulfillActions` the
+   UnifiedQueue had already replaced. **Optional polish left:** filter chips on
+   the hub; richer per-type review surfaces (the routing is correct, the
+   destination pages vary in polish).
 
 2. **Zeiterfassung de-frankenstein** — audit done; design tokens were actually clean (frankenstein is in the LOGIC).
    - ✅ **Slice 1 (the real bug, shipped+tested):** "fill from plan" had TWO builders storing different category/description for the same intent (month=schedule category, per-day=hardcoded ADMIN) → **divergent payroll rows**. Unified via one canonical `buildScheduleEntryForDate`; test locks range-fill===single-day-fill. Extracted `weekdayIdFromDate`.
    - ✅ **Slice 2 (config SSOT, shipped):** `TIMECARD_DAY_GRID` (06–22/30min/break window) + `TIMECARD_MANUAL_DEFAULT` (09:00/17:00/60) moved out of HourRangePicker + the hook into `config/timecards.ts`.
    - **Remaining (careful, payroll-adjacent — do attended):** the 3 input modes (calendar / hour-grid / shift-clock) don't share a selection engine (month grid hand-rolls it; `useCellSelection` "SSOT" is ignored by it) or a persist path (`addShiftEntry` rebuilds its own PUT); the 858-line `useTimecardDraft` god-hook needs splitting; two Save/Submit clusters with duplicated disabled logic → derive `canSave`/`canSubmit` once. Lower-severity: day-grid re-quantizes non-30-min breaks (edge case; the `firstRun` guard means viewing doesn't corrupt, only editing a non-aligned break). **NOTE: the audit's "dead week code" is NOT dead** — `buildTimecardEntriesFromSchedule`/`startOfWeek`/`period_type='week'` are live server-side for historical week timecards; do not remove.
 
-2b. **Geräte-Eingang / erfassung intake** — the AI-entry page. ✅ **Photo/vision fixed** (2026-07-09): analysis now cascades Groq (Llama 4 Scout) → OpenRouter → Ollama instead of the dead direct-to-localhost Ollama call, so the Foto tab works on prod (`callVisionWithFallback`); text ✅ + voice ✅ (Groq whisper) already worked. **Still to do:** the page itself (`/admin/intake` = the pipeline+tabs page; `/admin/erfassung` = Schnellerfassung — two doors, god-components ~350-420 lines) needs polish + de-frankensteining; **AI-entry SSOT** — audio recording is reimplemented 4× + image-capture 2× + near-dup routes + a fully DEAD `src/components/voice/*` module — consolidate into ONE `<AiQuickEntry text|voice|photo>` primitive routed through one `/api/ai/extract`; the erfassung Sprache/Foto tabs are "coming soon" stubs (wire them). **Bulk/CSV:** `import-csv` (API-only, Kivitendo) + erfassung `bulk-upload` (UI, CSV/XLSX) coexist (SSOT smell → consolidate); Shopware = docs-only.
+2b. **Geräte-Eingang / erfassung intake** — the AI-entry page. ✅ **Photo/vision fixed** (2026-07-09): analysis cascades Groq (Llama 4 Scout) → OpenRouter → Ollama (`callVisionWithFallback`). ✅ **erfassung voice + photo tabs wired + dead voice module purged (this run):** the "Sprache"/"Bild" tabs were "coming soon" stubs — now live. New focused `<VoiceEntry>` composes the SSOT hooks `useVoiceRecording` (record→blob, 23 tests) + `useVoiceProduct` (blob→product, tested) → posts to the existing `/api/admin/erfassung/voice`; "Bild" now renders the existing `ImageCapture`. Deleted the fully DEAD `src/components/voice/*` (776 lines, zero importers) and the redundant 3rd voice hook `useVoiceTranscription` (the "slimmer sibling" `useVoiceProduct` is canonical). Net −1052 lines. **Still to do:** the two entry *pages* (`/admin/intake` pipeline vs `/admin/erfassung` Schnellerfassung — god-components ~350-420 lines) still duplicate a form; intake still has its own inline MediaRecorder voice + parallel `/api/admin/intake/extract-{text,voice}` routes ≈ the erfassung ones → adopt `<VoiceEntry>`/`ImageCapture` in intake + collapse the dup routes into one `/api/ai/extract-product`. **Bulk/CSV:** `import-csv` (API-only, Kivitendo) + erfassung `bulk-upload` (UI, CSV/XLSX) coexist (SSOT smell → consolidate); Shopware = docs-only.
+
+    ⚠️ **Pre-existing red test (NOT mine):** `src/app/api/admin/erfassung/__tests__/route.test.ts` — 2 success cases 500 because the Kivvi refactor (1d230a3d) added a post-transaction `db.update(inventoryItems)` for `kivvi_sync_status` that the test's `db` mock doesn't stub. Route is fine in prod; the mock is stale. Fix the mock (add chainable `db.update().set().where()`), don't touch the route.
 
 2c. **Product location + multi-location on erfassung (NEW)** — when erfassing a product, mark exactly WHERE it physically is; choose among multiple locations (main storage, shop, secondary storage, a team member's possession…) + ability to ADD a location. Verify it's SSOT/SoC/DRY.
 

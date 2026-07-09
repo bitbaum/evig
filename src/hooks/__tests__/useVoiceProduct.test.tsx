@@ -1,9 +1,10 @@
 /**
- * Tests for useVoiceProduct — slimmer sibling of useVoiceTranscription.
+ * Tests for useVoiceProduct — the canonical blob→product voice hook.
  *
- * Same /api/admin/erfassung/voice endpoint, same FormData shape, but
- * a return-value API instead of callbacks. Used by ad-hoc voice flows
- * where the caller wants the result inline rather than via callbacks.
+ * Posts to /api/admin/erfassung/voice with the audio FormData and returns
+ * { transcription, data, metadata } inline (promise-based, not callbacks), so
+ * <VoiceEntry> can compose it with useVoiceRecording. (The old callback-based
+ * useVoiceTranscription sibling was removed as a redundant duplicate.)
  *
  * Behaviors locked:
  *   - POSTs FormData with audio blob filename "recording.webm" (whisper API)
