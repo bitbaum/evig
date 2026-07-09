@@ -6,10 +6,10 @@ import { Monitor, ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 
-// Categories where a Linux pre-install is relevant. Matched loosely against the
-// listing's category string (SSOT lives in the erfassung categories, but a
-// substring check keeps this resilient to category-label changes).
-const COMPUTER_HINTS = ['laptop', 'notebook', 'computer', 'desktop', 'pc', 'workstation', 'mini-pc']
+// listing.category holds the KATEGORIEN code (not a label). A Linux pre-install
+// is relevant for full computers only — 10 = Laptops, 20 = Desktop PCs
+// (src/config/erfassung/categories.ts). Not monitors/components/peripherals.
+const OS_INSTALLABLE_CATEGORIES = ['10', '20']
 const DISTROS = ['Linux Mint', 'Ubuntu', 'Fedora', 'Debian', 'MX Linux']
 
 /**
@@ -22,8 +22,7 @@ export function OsInstallHint({ category }: { category: string }) {
   const t = useTranslations('marketplace.osInstall')
   const [selected, setSelected] = useState<string | null>(null)
 
-  const isComputer = COMPUTER_HINTS.some((h) => category.toLowerCase().includes(h))
-  if (!isComputer) return null
+  if (!OS_INSTALLABLE_CATEGORIES.includes(category)) return null
 
   return (
     <div className="rounded-xl border border-subtle bg-surface-base p-5">
