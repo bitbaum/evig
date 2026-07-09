@@ -128,6 +128,18 @@ const nextConfig = {
         permanent: true,
       },
       // Shop - the online shop is the marketplace. Keep old URLs as
+      // /support consolidated into the canonical donate page (its unique
+      // channels — Ko-fi, GitHub Sponsors, contribute — now live there).
+      {
+        source: '/support',
+        destination: '/get-involved/donate',
+        permanent: true,
+      },
+      {
+        source: '/:locale(en|fr|it|es|ja|ko|ru)/support',
+        destination: '/:locale/get-involved/donate',
+        permanent: true,
+      },
       // hard redirects so crawlers and users do not render a parallel
       // shop shell before landing on products.
       {

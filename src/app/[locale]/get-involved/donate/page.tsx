@@ -3,12 +3,14 @@ export const dynamic = 'force-dynamic'
 
 import React from 'react'
 import { Metadata } from 'next'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, Coffee, Heart } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { DropoffForm } from '@/components/donate/DropoffForm'
 import { CopyButton } from '@/components/community/CopyButton'
 import { BANK, LOCATIONS, CONTACT, OPENING_HOURS, ORG } from '@/config/org'
 import { DONATION_TIER_AMOUNTS } from '@/config/donations'
+import { ROUTES } from '@/config/routes'
 import { getTranslations } from 'next-intl/server'
 
 interface DonatePageProps {
@@ -36,6 +38,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'donate' })
   const tFooter = await getTranslations({ locale, namespace: 'footer' })
+  const tSupport = await getTranslations({ locale, namespace: 'support' })
 
   const now = new Date()
   const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(now)
@@ -192,6 +195,60 @@ export default async function DonatePage({ params }: DonatePageProps) {
 
           <div className="mt-10 rounded-lg border bg-surface-base p-6 sm:p-8">
             <DropoffForm />
+          </div>
+        </div>
+      </section>
+
+      {/* ── More ways to support (consolidated from the former /support) ── */}
+      <section className="py-20 sm:py-24 border-t border-subtle">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <div className="ui-public-eyebrow">{tSupport('otherWays.title').toUpperCase()}</div>
+            <h2 className="ui-public-display-md mt-4">{tSupport('otherWays.title')}</h2>
+          </div>
+
+          <div className="mt-12 grid gap-4 md:grid-cols-2">
+            <article className="ui-public-card">
+              <Coffee className="mb-4 h-8 w-8 text-action" aria-hidden="true" />
+              <h3 className="ui-public-card-title">{tSupport('oneTime.title')}</h3>
+              <p className="ui-public-card-body">{tSupport('oneTime.description')}</p>
+              <a
+                href="https://ko-fi.com/revampit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ui-public-cta mt-6 w-full text-center"
+              >
+                {tSupport('oneTime.cta')}
+              </a>
+            </article>
+
+            <article className="ui-public-card">
+              <Heart className="mb-4 h-8 w-8 text-action" aria-hidden="true" />
+              <h3 className="ui-public-card-title">{tSupport('monthly.title')}</h3>
+              <p className="ui-public-card-body">{tSupport('monthly.description')}</p>
+              <a
+                href="https://github.com/sponsors/revampit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ui-public-cta mt-6 w-full text-center"
+              >
+                {tSupport('monthly.cta')}
+              </a>
+            </article>
+          </div>
+
+          <div className="ui-public-cta-row mt-8 justify-center">
+            <a
+              href="https://github.com/revampit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ui-public-cta-ghost"
+            >
+              {tSupport('otherWays.contributeCode')}
+            </a>
+            <Link href={ROUTES.public.blog} className="ui-public-cta-ghost">
+              {tSupport('otherWays.shareArticle')}
+            </Link>
           </div>
         </div>
       </section>

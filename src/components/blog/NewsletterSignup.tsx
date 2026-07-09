@@ -8,6 +8,7 @@ import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ROUTES } from '@/config/routes'
 
 export default function NewsletterSignup() {
   const t = useTranslations('components.newsletterSignup')
@@ -138,7 +139,7 @@ export default function NewsletterSignup() {
             {t('communityDesc')}
           </p>
           <Link
-            href="/support"
+            href={ROUTES.public.donate}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary border border-default rounded-lg hover:bg-surface-raised transition-colors"
           >
             <Heart className="w-4 h-4" />
