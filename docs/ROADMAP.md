@@ -50,7 +50,12 @@ Living queue of what we're building. Updated 2026-07-09. Keep in sync as items s
 
     ⚠️ **Pre-existing red test (NOT mine):** `src/app/api/admin/erfassung/__tests__/route.test.ts` — 2 success cases 500 because the Kivvi refactor (1d230a3d) added a post-transaction `db.update(inventoryItems)` for `kivvi_sync_status` that the test's `db` mock doesn't stub. Route is fine in prod; the mock is stale. Fix the mock (add chainable `db.update().set().where()`), don't touch the route.
 
-2c. **Product location + multi-location on erfassung (NEW)** — when erfassing a product, mark exactly WHERE it physically is; choose among multiple locations (main storage, shop, secondary storage, a team member's possession…) + ability to ADD a location. Verify it's SSOT/SoC/DRY.
+2c. **Product location on erfassung (NEW)** — pick WHERE a product physically is from a runtime-addable list. **Design decided (2026-07-09):** the current `inventory_items.location` is FREE TEXT; the existing `locations` table is for PUBLIC venues (address/geo/capacity/approval) — do NOT reuse it. Build a dedicated internal model:
+   - Migration: `storage_locations` table (`id`, `name`, `kind`, `holder_user_id` uuid NULL → users, `is_active`, `created_by`, timestamps) + `inventory_items.storage_location_id` uuid NULL FK. Seed defaults (Hauptlager, Laden, Nebenlager). Keep the old free-text `location` column for backfill/compat (don't drop).
+   - Config SSOT `src/config/erfassung/storage-locations.ts`: `STORAGE_LOCATION_KINDS` = main_storage · shop · secondary_storage · member_possession · other, with DE labels + icon. (member_possession rows carry a `holder_user_id`.)
+   - API `/api/admin/storage-locations`: GET (list active) + POST (create, withAdmin('intake'|'products')).
+   - Erfassung: replace the free-text location `<Input>` in `ProductDimensionFields.tsx` with a `<Select>` of active storage locations + an inline "＋ Standort hinzufügen" that POSTs and re-selects. Keep `box_id`. Write `storage_location_id` in `formDataToPayload` + `/api/admin/erfassung`.
+   - ONE location per product (the ask is "choose among a list", not split-across-places). SSOT/SoC/DRY: config = kinds, table = instances, one API, one Select component.
 
 2d. **Category SSOT review + build-your-computer (NEW)** — are product categories the best for helping people find the right part / build a machine? Review the `KATEGORIEN` SSOT; likely needs richer/better categories. Ties to **`/services/build-your-computer`** — "looks absolutely atrocious but has so much potential": the AI build-tool page (requirements → inventory scan → optimise → assemble + "Revamped" cert). Redesign it to x.ai discipline + make the categories power real part-matching.
 
