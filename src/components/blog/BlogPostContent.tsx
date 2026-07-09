@@ -1,6 +1,10 @@
+import type { ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { BlogPost } from '@/lib/blog'
+import { ORG } from '@/config/org'
+import { extractHeadings, slugifyHeading } from '@/lib/blog-toc'
+import BlogTableOfContents from './BlogTableOfContents'
 import ShareButtons from './ShareButtons'
 import NewsletterSignup from './NewsletterSignup'
 
@@ -8,21 +12,50 @@ interface BlogPostContentProps {
   post: BlogPost
 }
 
+// Flatten heading children (which may include <code>/<em>) to plain text so the
+// generated id matches the slug the table of contents links to.
+function toText(node: ReactNode): string {
+  if (node == null || typeof node === 'boolean') return ''
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(toText).join('')
+  if (typeof node === 'object' && 'props' in node) {
+    return toText((node as { props?: { children?: ReactNode } }).props?.children)
+  }
+  return ''
+}
+
 export default function BlogPostContent({ post }: BlogPostContentProps) {
+  const headings = extractHeadings(post.body)
+  const showToc = headings.length >= 3
+
   return (
     <>
-      <article className="mx-auto max-w-[720px] px-4 pb-16 pt-12 sm:px-6">
+      <div
+        className={
+          showToc
+            ? 'mx-auto grid max-w-[1120px] gap-x-12 px-4 sm:px-6 xl:grid-cols-[210px_minmax(0,1fr)]'
+            : ''
+        }
+      >
+        {showToc && <BlogTableOfContents headings={headings} />}
+        <article
+          className={
+            showToc
+              ? 'min-w-0 max-w-[720px] pb-16 pt-12'
+              : 'mx-auto max-w-[720px] px-4 pb-16 pt-12 sm:px-6'
+          }
+        >
         <div className="mb-16">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               h2: ({ children }) => (
-                <h2 className="mt-14 mb-4 text-2xl font-semibold leading-tight tracking-[-0.01em] text-text-primary sm:text-3xl">
+                <h2 id={slugifyHeading(toText(children))} className="scroll-mt-24 mt-14 mb-4 text-2xl font-semibold leading-tight tracking-[-0.01em] text-text-primary sm:text-3xl">
                   {children}
                 </h2>
               ),
               h3: ({ children }) => (
-                <h3 className="mt-10 mb-3 text-xl font-semibold leading-tight text-text-primary sm:text-2xl">
+                <h3 id={slugifyHeading(toText(children))} className="scroll-mt-24 mt-10 mb-3 text-xl font-semibold leading-tight text-text-primary sm:text-2xl">
                   {children}
                 </h3>
               ),
@@ -127,11 +160,12 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
         {/* Share */}
         <div className="border-t border-subtle py-8">
           <ShareButtons
-            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.ch'}/blog/${post.slug}`}
+            url={`${process.env.NEXT_PUBLIC_SITE_URL || ORG.website}/blog/${post.slug}`}
             title={post.title}
           />
         </div>
-      </article>
+        </article>
+      </div>
 
       <NewsletterSignup />
     </>
