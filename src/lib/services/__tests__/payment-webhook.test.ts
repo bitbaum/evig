@@ -151,6 +151,11 @@ jest.mock('@/lib/kivvi/client', () => ({
     reference: 'MO-order-1',
     sourceType: 'marketplace_agency_sale',
   }),
+  recordKivviPayout: jest.fn().mockResolvedValue({
+    journalEntryId: 'je-2',
+    reference: 'MO-order-1',
+    sourceType: 'marketplace_payout',
+  }),
 }))
 
 jest.mock('@/config/marketplace', () => ({
@@ -478,6 +483,8 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
 // ============================================================================
 
 describe('handleMarketplacePayment — CONFIRMED', () => {
+  const flush = () => new Promise((res) => setTimeout(res, 0))
+
   it('skips update when order status is not PAID or DELIVERED', async () => {
     const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
 
@@ -504,6 +511,41 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.COMPLETED }),
     )
+  })
+
+  it('books P2P seller payout on CONFIRMED when escrow is released', async () => {
+    mockDbSelect.mockImplementation(() =>
+      makeSelectChain([{ isRevampit: false }]),
+    )
+    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client')
+    const order = makeOrder({
+      status: ORDER_STATUS.PAID,
+      sellerPayoutChf: '230.00',
+    })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
+    await flush()
+
+    expect(recordKivviPayout).toHaveBeenCalledWith(
+      expect.objectContaining({
+        amount: '230.00',
+        reference: `MO-${order.id}`,
+      }),
+      `marketplace-order:${order.id}:payout`,
+    )
+  })
+
+  it('skips payout sync for owned-stock orders on CONFIRMED', async () => {
+    mockDbSelect.mockImplementation(() =>
+      makeSelectChain([{ isRevampit: true }]),
+    )
+    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client')
+    const order = makeOrder({ status: ORDER_STATUS.PAID })
+
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
+    await flush()
+
+    expect(recordKivviPayout).not.toHaveBeenCalled()
   })
 })
 

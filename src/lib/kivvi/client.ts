@@ -349,6 +349,28 @@ export async function recordKivviAgencySale(
   });
 }
 
+export interface RecordKivviPayoutInput {
+  amount: string;
+  date: string; // YYYY-MM-DD
+  reference: string;
+  description?: string;
+}
+
+/**
+ * Settle a P2P seller payable (Dr 2140 / Cr 1020) when escrow is released.
+ * Idempotency key required — use `marketplace-order:{orderId}:payout`.
+ */
+export async function recordKivviPayout(
+  input: RecordKivviPayoutInput,
+  idempotencyKey: string,
+): Promise<KivviJournalEntryRef> {
+  return kivviFetch<KivviJournalEntryRef>("/marketplace/payouts", {
+    method: "POST",
+    body: JSON.stringify(input),
+    headers: { "Idempotency-Key": idempotencyKey },
+  });
+}
+
 // ============================================================================
 // SYNC HELPER — safe wrapper with error handling for use in erfassung flow
 // ============================================================================

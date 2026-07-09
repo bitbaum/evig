@@ -28,6 +28,7 @@ import {
   recordKivviPayment,
   updateKivviInventoryItem,
   recordKivviAgencySale,
+  recordKivviPayout,
 } from '@/lib/kivvi/client'
 import { triggerInviterReward } from '@/lib/referral'
 
@@ -255,6 +256,13 @@ export async function handleMarketplacePayment(
           updatedAt: sql`NOW()`,
         })
         .where(eq(marketplaceOrders.id, order.id))
+
+      syncP2PPayoutToKivvi(order).catch(err =>
+        logger.error('Kivvi payout sync failed — order completed but seller payable not cleared', {
+          error: err,
+          orderId: order.id,
+        })
+      )
       break
     }
 
@@ -680,6 +688,36 @@ async function syncP2POrderToKivvi(
     grossAmount,
     commissionAmount,
     sellerPayout,
+  })
+}
+
+/**
+ * Clear seller payable when escrow is released (Payrexx CONFIRMED → COMPLETED).
+ * Owned-stock orders skip — no 2140 liability was created at payment time.
+ */
+async function syncP2PPayoutToKivvi(order: MarketplaceOrder): Promise<void> {
+  if (await isRevampitOwnedOrder(order)) {
+    return
+  }
+
+  const sellerPayout = formatChfAmount(order.sellerPayoutChf)
+  if (Number(sellerPayout) <= 0) {
+    return
+  }
+
+  await recordKivviPayout(
+    {
+      amount: sellerPayout,
+      date: new Date().toISOString().split('T')[0],
+      reference: `MO-${order.id}`,
+      description: `P2P seller payout MO-${order.id}`,
+    },
+    `marketplace-order:${order.id}:payout`,
+  )
+
+  logger.info('Kivvi P2P seller payout booked', {
+    orderId: order.id,
+    amount: sellerPayout,
   })
 }
 
