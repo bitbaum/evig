@@ -51,59 +51,37 @@ describe('getAppointmentStatusLabel', () => {
 })
 
 // ============================================================================
-// build-computer.ts — getMockRecommendation
+// build-computer.ts — getBuildRecommendation (honest guidance, no fake products)
 // ============================================================================
 
-import { getMockRecommendation } from '../build-computer'
+import { getBuildRecommendation } from '../build-computer'
 
-describe('getMockRecommendation', () => {
-  it('gaming → totalPrice 705', () => {
-    const result = getMockRecommendation('gaming')
-    expect(result.totalPrice).toBe(705)
+describe('getBuildRecommendation', () => {
+  it('returns honest component-tier guidance strings (not fabricated products/prices)', () => {
+    const result = getBuildRecommendation('gaming')
+    expect(typeof result.cpu).toBe('string')
+    expect(typeof result.gpu).toBe('string')
+    expect(typeof result.ram).toBe('string')
+    expect(typeof result.storage).toBe('string')
+    expect(result.note.length).toBeGreaterThan(0)
+    // No fabricated numeric price/score fields leak back in.
+    expect(result).not.toHaveProperty('totalPrice')
+    expect(result).not.toHaveProperty('sustainabilityScore')
   })
 
-  it('creative → totalPrice 550', () => {
-    const result = getMockRecommendation('creative')
-    expect(result.totalPrice).toBe(550)
-  })
-
-  it('default (unknown useCase) → totalPrice 370', () => {
-    const result = getMockRecommendation('office')
-    expect(result.totalPrice).toBe(370)
-  })
-
-  it('gaming → sustainabilityScore 91', () => {
-    expect(getMockRecommendation('gaming').sustainabilityScore).toBe(91)
-  })
-
-  it('creative → sustainabilityScore 93', () => {
-    expect(getMockRecommendation('creative').sustainabilityScore).toBe(93)
-  })
-
-  it('all results have usedPartsPercent 100 (refurbished parts)', () => {
-    expect(getMockRecommendation('gaming').usedPartsPercent).toBe(100)
-    expect(getMockRecommendation('creative').usedPartsPercent).toBe(100)
-    expect(getMockRecommendation('ai').usedPartsPercent).toBe(100)
-  })
-
-  it('result has all required fields', () => {
-    for (const useCase of ['gaming', 'creative', 'default']) {
-      const result = getMockRecommendation(useCase)
-      expect(result).toHaveProperty('cpu')
-      expect(result).toHaveProperty('gpu')
-      expect(result).toHaveProperty('ram')
-      expect(result).toHaveProperty('storage')
-      expect(result).toHaveProperty('totalPrice')
-      expect(result).toHaveProperty('sustainabilityScore')
-      expect(result).toHaveProperty('performance')
-      expect(result).toHaveProperty('usedPartsPercent')
+  it('gives every use case a full recommendation', () => {
+    for (const useCase of ['office', 'creative', 'gaming', 'development', 'server', 'ai']) {
+      const r = getBuildRecommendation(useCase)
+      expect(r.cpu).toBeTruthy()
+      expect(r.gpu).toBeTruthy()
+      expect(r.ram).toBeTruthy()
+      expect(r.storage).toBeTruthy()
+      expect(r.note).toBeTruthy()
     }
   })
 
-  it('totalPrice is a positive number for all use cases', () => {
-    for (const useCase of ['gaming', 'creative', 'office', 'ai']) {
-      expect(getMockRecommendation(useCase).totalPrice).toBeGreaterThan(0)
-    }
+  it('falls back to the office profile for an unknown use case', () => {
+    expect(getBuildRecommendation('totally-unknown')).toEqual(getBuildRecommendation('office'))
   })
 })
 

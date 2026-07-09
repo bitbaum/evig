@@ -13,12 +13,11 @@ import {
   Zap,
   Search,
   ShoppingCart,
-  MapPin,
   Leaf,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import type { BuildResult } from '@/config/build-computer'
-import { getMockRecommendation, USE_CASE_OPTIONS, PERFORMANCE_OPTIONS, BUDGET_OPTIONS } from '@/config/build-computer'
+import type { BuildRecommendation } from '@/config/build-computer'
+import { getBuildRecommendation, USE_CASE_OPTIONS, PERFORMANCE_OPTIONS, BUDGET_OPTIONS } from '@/config/build-computer'
 
 type UseCaseId = typeof USE_CASE_OPTIONS[number]['id']
 type PerformanceId = typeof PERFORMANCE_OPTIONS[number]['id']
@@ -107,13 +106,13 @@ export function BuildTool() {
     sustainability: 'high',
     specific: '',
   })
-  const [buildResult, setBuildResult] = useState<BuildResult | null>(null)
+  const [buildResult, setBuildResult] = useState<BuildRecommendation | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true)
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    setBuildResult(getMockRecommendation(formData.useCase))
+    await new Promise(resolve => setTimeout(resolve, 1200))
+    setBuildResult(getBuildRecommendation(formData.useCase))
     setIsAnalyzing(false)
     setStep(3)
   }
@@ -135,17 +134,14 @@ export function BuildTool() {
     label: t(`budgetOptions.${value}`),
   }))
 
+  // Honest guidance rows — recommended component TIER per type, not fabricated
+  // products. Each type links to the real marketplace so people see actual stock.
   const componentRows = buildResult ? [
-    { component: buildResult.cpu,     icon: Cpu,        type: t('buildTool.componentTypes.cpu') },
-    { component: buildResult.gpu,     icon: Monitor,    type: t('buildTool.componentTypes.gpu') },
-    { component: buildResult.ram,     icon: Zap,        type: t('buildTool.componentTypes.ram') },
-    { component: buildResult.storage, icon: HardDrive,  type: t('buildTool.componentTypes.storage') },
+    { guidance: buildResult.cpu,     icon: Cpu,       type: t('buildTool.componentTypes.cpu') },
+    { guidance: buildResult.gpu,     icon: Monitor,   type: t('buildTool.componentTypes.gpu') },
+    { guidance: buildResult.ram,     icon: Zap,       type: t('buildTool.componentTypes.ram') },
+    { guidance: buildResult.storage, icon: HardDrive, type: t('buildTool.componentTypes.storage') },
   ] : []
-
-  const conditionLabel = (condition: string) =>
-    condition === 'used' ? t('buildTool.conditions.used')
-    : condition === 'refurbished' ? t('buildTool.conditions.refurbished')
-    : t('buildTool.conditions.new')
 
   const scanningLines = t.raw('buildTool.scanningLines') as string[]
 
@@ -191,7 +187,6 @@ export function BuildTool() {
                 t={t}
                 buildResult={buildResult}
                 componentRows={componentRows}
-                conditionLabel={conditionLabel}
                 onBack={() => setStep(1)}
               />
             )}
@@ -352,92 +347,58 @@ function Step2({ t, formData, isAnalyzing, scanningLines, onBack, onAnalyze }: S
 
 interface Step3Props {
   t: ReturnType<typeof useTranslations>
-  buildResult: BuildResult
+  buildResult: BuildRecommendation
   componentRows: Array<{
-    component: BuildResult['cpu']
+    guidance: string
     icon: React.ComponentType<{ className?: string }>
     type: string
   }>
-  conditionLabel: (condition: string) => string
   onBack: () => void
 }
 
-function Step3({ t, buildResult, componentRows, conditionLabel, onBack }: Step3Props) {
+function Step3({ t, buildResult, componentRows, onBack }: Step3Props) {
   return (
     <div className="space-y-8">
       <div className="text-center">
         <Heading level={3} className="ui-public-display-md mb-3">{t('buildTool.step3Heading')}</Heading>
-        <div className="flex justify-center flex-wrap gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-          <span>{buildResult.sustainabilityScore}{t('buildTool.sustainableLabel')}</span>
-          <span>·</span>
-          <span>{buildResult.performance}{t('buildTool.performanceMatchLabel')}</span>
-          <span>·</span>
-          <span>{buildResult.usedPartsPercent}{t('buildTool.usedPartsLabel')}</span>
-        </div>
+        <p className="mx-auto max-w-xl text-text-secondary">{buildResult.note}</p>
       </div>
 
+      {/* Recommended component TIERS — honest guidance, not fabricated products
+          with invented prices/stock/locations. */}
       <div className="space-y-3">
         {componentRows.map((row, index) => (
-          <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
-            <row.icon className="w-6 h-6 text-text-tertiary shrink-0" />
-            <div className="grow min-w-0">
-              <div className="flex items-center flex-wrap gap-2">
-                <Heading level={4} className="font-semibold text-text-primary">{row.component.name}</Heading>
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
-                  · {conditionLabel(row.component.condition)}
-                </span>
-              </div>
-              <p className="text-sm text-text-secondary">{row.type}</p>
-              <div className="font-mono text-xs text-text-tertiary mt-1 flex flex-wrap items-center gap-3">
-                <span className="inline-flex items-center gap-1"><MapPin className="w-3 h-3" />{row.component.location}</span>
-                <span>{row.component.inStock} {t('buildTool.inStock')}</span>
-              </div>
-            </div>
-            <div className="text-right shrink-0">
-              <div className="font-mono tabular-nums font-semibold">CHF {row.component.price}</div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mt-1">{t('buildTool.deliveryTime')}</div>
+          <div key={index} className="flex items-center gap-4 rounded-lg border p-4">
+            <row.icon className="w-6 h-6 shrink-0 text-text-tertiary" />
+            <div className="min-w-0 grow">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">{row.type}</p>
+              <Heading level={4} className="font-semibold text-text-primary">{row.guidance}</Heading>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="card-shell p-6">
-        <div className="flex justify-between items-center mb-3 font-mono tabular-nums">
-          <span className="font-semibold">{t('buildTool.totalCost')}</span>
-          <span className="text-2xl font-semibold">CHF {buildResult.totalPrice}</span>
-        </div>
-        <p className="text-sm text-text-secondary mb-5">{t('buildTool.extras')}</p>
-
-        <div className="flex gap-3">
+      {/* Honest next steps: browse the REAL marketplace or request a built machine. */}
+      <div className="card-shell space-y-4 p-6">
+        <p className="text-sm text-text-secondary">{t('buildTool.resultNote')}</p>
+        <div className="flex flex-col gap-3 sm:flex-row">
           <Button onClick={onBack} variant="outline" className="flex-1">
             {t('buildTool.changeRequirements')}
           </Button>
-          <Button as={Link} href="/contact" variant="primary" className="flex-1">
+          <Button as={Link} href="/marketplace" variant="outline" className="flex-1">
             <ShoppingCart className="w-4 h-4 mr-2" />
+            {t('buildTool.browseComponents')}
+          </Button>
+          <Button as={Link} href="/contact" variant="primary" className="flex-1">
             {t('buildTool.orderBuild')}
           </Button>
         </div>
       </div>
 
-      <div className="card-shell p-6">
-        <Heading level={4} className="font-semibold mb-4 flex items-center gap-2">
-          <Leaf className="w-4 h-4 text-action" />
-          {t('buildTool.environmentHeading')}
-        </Heading>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 text-sm">
-          <div>
-            <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">{t('buildTool.co2Saved')}</div>
-            <div className="font-mono tabular-nums mt-1 text-text-primary">{t('buildTool.co2Value')}</div>
-          </div>
-          <div>
-            <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">{t('buildTool.reusedLabel')}</div>
-            <div className="font-mono tabular-nums mt-1 text-text-primary">{t('buildTool.reusedValue')}</div>
-          </div>
-          <div>
-            <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">{t('buildTool.circularLabel')}</div>
-            <div className="font-mono tabular-nums mt-1 text-text-primary">{t('buildTool.circularValue')}</div>
-          </div>
-        </div>
+      {/* Honest sustainability line — no fabricated CO₂/percentage numbers. */}
+      <div className="card-shell flex items-start gap-3 p-6">
+        <Leaf className="mt-0.5 w-4 h-4 shrink-0 text-action" />
+        <p className="text-sm text-text-secondary">{t('buildTool.sustainabilityNote')}</p>
       </div>
     </div>
   )
