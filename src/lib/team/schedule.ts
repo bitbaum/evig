@@ -203,6 +203,41 @@ export function buildTimecardEntriesFromSchedule(
   })
 }
 
+/** Description stamped on every plan-derived entry (SSOT — was duplicated). */
+export const SCHEDULE_FILL_DESCRIPTION = 'Aus offiziellem Standardschedule'
+
+/** ISO date → weekday id (Mo-first). One home for the `getUTCDay()===0?6:` shift. */
+export function weekdayIdFromDate(date: Date | string): WeekdayId {
+  const d = typeof date === 'string' ? new Date(`${date}T00:00:00.000Z`) : date
+  const wd = d.getUTCDay()
+  return WEEKDAY_IDS[wd === 0 ? 6 : wd - 1]
+}
+
+/**
+ * THE canonical "fill this day from the plan" builder. Every fill path — whole
+ * month, bulk selection, single day, day view — goes through this, so they all
+ * store identical data (category = the schedule day's own category, not a
+ * hardcoded ADMIN). Returns null for a non-plan / zero-hour day (which must NOT
+ * silently gain a workday). This is the fix for day-vs-month divergence.
+ */
+export function buildScheduleEntryForDate(
+  date: string,
+  scheduleDay: WeeklyScheduleDay,
+): TimecardEntryInput | null {
+  const duration = getScheduleDayMinutes(scheduleDay)
+  if (!scheduleDay.enabled || duration <= 0) return null
+  return {
+    work_date: date,
+    start_time: scheduleDay.start,
+    end_time: scheduleDay.end,
+    break_minutes: scheduleDay.break_minutes,
+    duration_minutes: duration,
+    category: scheduleDay.category,
+    description: SCHEDULE_FILL_DESCRIPTION,
+    source: 'template',
+  }
+}
+
 export function buildTimecardEntriesForRange(
   schedule: WeeklySchedule,
   rangeStart: Date,
@@ -212,22 +247,8 @@ export function buildTimecardEntriesForRange(
   const cursor = new Date(rangeStart)
 
   while (cursor < rangeEnd) {
-    const weekday = WEEKDAY_IDS[cursor.getUTCDay() === 0 ? 6 : cursor.getUTCDay() - 1]
-    const scheduleDay = schedule.days[weekday]
-    const duration = getScheduleDayMinutes(scheduleDay)
-    if (scheduleDay.enabled && duration > 0) {
-      entries.push({
-        work_date: toISODate(cursor),
-        start_time: scheduleDay.start,
-        end_time: scheduleDay.end,
-        break_minutes: scheduleDay.break_minutes,
-        duration_minutes: duration,
-        category: scheduleDay.category,
-        description: 'Aus offiziellem Standardschedule',
-        source: 'template',
-      })
-    }
-
+    const entry = buildScheduleEntryForDate(toISODate(cursor), schedule.days[weekdayIdFromDate(cursor)])
+    if (entry) entries.push(entry)
     cursor.setUTCDate(cursor.getUTCDate() + 1)
   }
 

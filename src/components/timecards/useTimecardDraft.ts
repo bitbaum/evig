@@ -17,6 +17,8 @@ import {
 } from '@/config/timecards'
 import {
   buildTimecardEntriesForMonth,
+  buildScheduleEntryForDate,
+  weekdayIdFromDate,
   calculateTimeRangeMinutes,
   getMonthStart,
   getNextMonthStart,
@@ -362,23 +364,15 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
   // Shared entry builders — ONE definition each for "a scheduled work day" and
   // "an absence day", used by both the month bulk actions and the day view, so
   // the two surfaces produce identical data (SSOT/DRY).
+  //
+  // Day/bulk fill now goes through the SAME canonical builder as the whole-month
+  // fill (buildScheduleEntryForDate), so both store the schedule day's own
+  // category + description — previously per-day fill hardcoded ADMIN + '',
+  // diverging from month fill for any non-ADMIN schedule day (payroll bug).
   const buildScheduleEntry = useCallback(
-    (date: string): TimecardEntryInput | null => {
-      // Same rule as the whole-month fill: non-plan days get nothing.
-      const t = scheduleTemplateForDate(date)
-      if (!t) return null
-      return {
-        work_date: date,
-        start_time: t.start,
-        end_time: t.end,
-        break_minutes: t.break_minutes,
-        duration_minutes: calculateTimeRangeMinutes(t.start, t.end, t.break_minutes),
-        category: TIMECARD_ENTRY_CATEGORIES.ADMIN,
-        source: 'template',
-        description: '',
-      }
-    },
-    [scheduleTemplateForDate],
+    (date: string): TimecardEntryInput | null =>
+      buildScheduleEntryForDate(date, effectiveSchedule.days[weekdayIdFromDate(date)]),
+    [effectiveSchedule],
   )
 
   const buildAbsenceEntry = useCallback(

@@ -3,11 +3,16 @@ import {
   applyStandardSchedule,
   buildTimecardEntriesFromSchedule,
   buildTimecardEntriesForMonth,
+  buildScheduleEntryForDate,
+  buildTimecardEntriesForRange,
+  weekdayIdFromDate,
   getScheduleWeeklyMinutes,
   parseWeeklySchedule,
   serializeWeeklySchedule,
   summarizeWeeklySchedule,
+  SCHEDULE_FILL_DESCRIPTION,
 } from '../schedule'
+import { TIMECARD_ENTRY_CATEGORIES } from '@/config/timecards'
 
 describe('weekly schedule helpers', () => {
   it('returns an empty schedule for legacy free text', () => {
@@ -31,6 +36,37 @@ describe('weekly schedule helpers', () => {
   it('summarizes enabled days and weekly duration', () => {
     const schedule = parseWeeklySchedule(applyStandardSchedule())
     expect(summarizeWeeklySchedule(schedule)).toBe('Mo, Di, Mi, Do, Fr · 35 Std./Woche')
+  })
+
+  it('buildScheduleEntryForDate preserves the schedule day category (not hardcoded ADMIN)', () => {
+    const schedule = parseWeeklySchedule(applyStandardSchedule())
+    // Give Monday a non-ADMIN category so a divergence would be visible.
+    schedule.days.monday = { ...schedule.days.monday, category: TIMECARD_ENTRY_CATEGORIES.REPAIR }
+    // 2026-05-11 is a Monday.
+    const entry = buildScheduleEntryForDate('2026-05-11', schedule.days[weekdayIdFromDate('2026-05-11')])
+    expect(entry).not.toBeNull()
+    expect(entry!.category).toBe(TIMECARD_ENTRY_CATEGORIES.REPAIR)
+    expect(entry!.description).toBe(SCHEDULE_FILL_DESCRIPTION)
+    expect(entry!.source).toBe('template')
+  })
+
+  it('returns null for a non-plan day', () => {
+    const schedule = parseWeeklySchedule(applyStandardSchedule())
+    // 2026-05-16 is a Saturday (disabled in the standard schedule).
+    expect(buildScheduleEntryForDate('2026-05-16', schedule.days[weekdayIdFromDate('2026-05-16')])).toBeNull()
+  })
+
+  it('range fill and single-day fill store IDENTICAL data (no day-vs-month divergence)', () => {
+    const schedule = parseWeeklySchedule(applyStandardSchedule())
+    schedule.days.monday = { ...schedule.days.monday, category: TIMECARD_ENTRY_CATEGORIES.REPAIR }
+    const range = buildTimecardEntriesForRange(
+      schedule,
+      new Date('2026-05-11T00:00:00.000Z'),
+      new Date('2026-05-12T00:00:00.000Z'),
+    )
+    const single = buildScheduleEntryForDate('2026-05-11', schedule.days[weekdayIdFromDate('2026-05-11')])
+    expect(range).toHaveLength(1)
+    expect(range[0]).toEqual(single)
   })
 
   it('builds one template timecard entry per enabled schedule day', () => {
