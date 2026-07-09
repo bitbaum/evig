@@ -67,6 +67,13 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
     pros: string[]
     cons: string[]
   }>
+  const chooser = t.raw('distrosSection.chooser') as {
+    heading: string
+    subtitle: string
+    recommendedLabel: string
+    items: Array<{ need: string; distro: string; why: string }>
+  }
+  const distroAnchor = (name: string) => `distro-${name.toLowerCase().replace(/\s+/g, '-')}`
 
   return (
     <main>
@@ -189,17 +196,44 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       {/* Distributions Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="max-w-3xl mx-auto text-center mb-12">
             <Heading level={2} className="mb-6">{t('distrosSection.heading')}</Heading>
             <p className="text-lg text-text-secondary">
               {t('distrosSection.subtitle')}
             </p>
           </div>
+
+          {/* Quick chooser — pick a need, get a recommended starting point.
+              Each card jumps to that distro's detail card below. */}
+          <div className="max-w-5xl mx-auto mb-16">
+            <div className="text-center mb-8">
+              <Heading level={3} className="ui-public-display-md">{chooser.heading}</Heading>
+              <p className="ui-public-section-lede mx-auto mt-3">{chooser.subtitle}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {chooser.items.map((item, i) => (
+                <a
+                  key={i}
+                  href={`#${distroAnchor(item.distro)}`}
+                  className="group block rounded-xl border border-subtle bg-surface-base p-5 transition-colors hover:border-strong"
+                >
+                  <p className="text-sm font-medium text-text-primary">{item.need}</p>
+                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">{chooser.recommendedLabel}</p>
+                  <p className="mt-0.5 inline-flex items-center gap-1 text-base font-semibold text-action">
+                    {item.distro}
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                  </p>
+                  <p className="mt-1 text-sm text-text-tertiary">{item.why}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
           <div className="space-y-8">
             {distroItems.map((distro, index) => {
               const Icon = DISTRO_ICONS[index]
               return (
-                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300">
+                <div key={index} id={distroAnchor(DISTRO_NAMES[index])} className="scroll-mt-24 bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300">
                   <div className="flex items-start mb-6">
                     <div className="p-3 bg-action-muted rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />

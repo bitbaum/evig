@@ -1752,6 +1752,18 @@
         "bestFor": "Am besten für:",
         "pros": "Vorteile:",
         "cons": "Berücksichtigungen:",
+        "chooser": {
+          "heading": "Welche Distribution passt zu dir?",
+          "subtitle": "Nicht sicher? Wähle aus, was dir am wichtigsten ist — wir empfehlen dir einen guten Startpunkt.",
+          "recommendedLabel": "Empfehlung",
+          "items": [
+            { "need": "Umstieg von Windows / Einsteiger:innen", "distro": "Linux Mint", "why": "Vertraute Oberfläche, funktioniert sofort, kaum Einarbeitung." },
+            { "need": "Am meisten Anleitungen & Hilfe im Netz", "distro": "Ubuntu", "why": "Die grösste Community — für fast jedes Problem gibt es eine Anleitung." },
+            { "need": "Neueste Software & Technik", "distro": "Fedora", "why": "Aktuellste Pakete, nah an der Entwicklung — für neugierige Nutzer:innen." },
+            { "need": "Maximale Stabilität & Langlebigkeit", "distro": "Debian", "why": "Extrem stabil — ideal für Server und Rechner, die einfach laufen sollen." },
+            { "need": "Ältere oder schwächere Hardware", "distro": "MX Linux", "why": "Ressourcenschonend — haucht auch älteren Geräten neues Leben ein." }
+          ]
+        },
         "items": [
           {
             "description": "Benutzerfreundliche Distribution, perfekt für Anfänger und Profis gleichermassen. Bietet eine polierte Desktop-Umgebung und ein umfangreiches Software-Repository.",
