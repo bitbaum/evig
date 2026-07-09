@@ -50,7 +50,6 @@ describe('NOTIFICATION_TYPES', () => {
     expect(NOTIFICATION_TYPES.TASK_REQUEST).toBe('task_request')
     expect(NOTIFICATION_TYPES.TASK_REQUEST_RESPONSE).toBe('task_request_response')
     expect(NOTIFICATION_TYPES.TASK_COMPLETED).toBe('task_completed')
-    expect(NOTIFICATION_TYPES.TASK_BROADCAST).toBe('task_broadcast')
   })
 
   it('IT-Hilfe types have expected values', () => {
@@ -78,11 +77,9 @@ describe('NOTIFICATION_TYPES', () => {
   })
 
   it('core types have expected values', () => {
-    expect(NOTIFICATION_TYPES.MESSAGE).toBe('message')
     expect(NOTIFICATION_TYPES.APPOINTMENT).toBe('appointment')
     expect(NOTIFICATION_TYPES.MARKETPLACE).toBe('marketplace')
     expect(NOTIFICATION_TYPES.SYSTEM).toBe('system')
-    expect(NOTIFICATION_TYPES.MARKETING).toBe('marketing')
   })
 })
 

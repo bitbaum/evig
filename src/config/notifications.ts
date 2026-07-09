@@ -22,7 +22,6 @@ export const NOTIFICATION_TYPES = {
   TASK_REQUEST: 'task_request',
   TASK_REQUEST_RESPONSE: 'task_request_response',
   TASK_COMPLETED: 'task_completed',
-  TASK_BROADCAST: 'task_broadcast',
 
   // IT-Hilfe
   IT_HILFE_REQUEST_CONFIRMATION: 'it_hilfe_request_confirmation',
@@ -71,12 +70,9 @@ export const NOTIFICATION_TYPES = {
   // HR / Careers
   JOB_APPLICATION_RECEIVED: 'job_application_received',
   JOB_APPLICATION_STATUS: 'job_application_status',
-  VACANCY_PUBLISHED: 'vacancy_published',
-  MESSAGE: 'message',
   APPOINTMENT: 'appointment',
   MARKETPLACE: 'marketplace',
   SYSTEM: 'system',
-  MARKETING: 'marketing',
 } as const
 
 export type NotificationType = typeof NOTIFICATION_TYPES[keyof typeof NOTIFICATION_TYPES]
