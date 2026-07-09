@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Menu, X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import {
-  type DashboardCard,
   DASHBOARD_CATEGORIES,
+  getAllDashboardCards,
   groupCardsByCategory,
   type DashboardCategory,
 } from '@/config/dashboard'
@@ -25,8 +25,24 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function DashboardMobileNav({ items }: { items: DashboardCard[] }) {
+export function DashboardMobileNav({
+  role,
+  isStaff,
+  isSuperAdmin,
+}: {
+  role: string | null
+  isStaff: boolean
+  isSuperAdmin: boolean
+}) {
   const pathname = usePathname()
+
+  // Compute cards here (client-side) rather than receiving them as props: the
+  // cards carry lucide icon components (functions) which can't cross the RSC
+  // server→client boundary. The layout passes serializable flags instead.
+  const items = useMemo(
+    () => getAllDashboardCards({ role, isStaff, isSuperAdmin, communityRoles: [] }),
+    [role, isStaff, isSuperAdmin],
+  )
   const [moreOpen, setMoreOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const sheetRef = useFocusTrap<HTMLDivElement>(moreOpen, () => setMoreOpen(false))

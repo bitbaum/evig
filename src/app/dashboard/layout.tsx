@@ -2,7 +2,6 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getLocale } from 'next-intl/server'
 import { auth } from '@/auth'
 import { isSuperAdmin } from '@/lib/permissions'
-import { getAllDashboardCards } from '@/config/dashboard'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav'
 
@@ -11,14 +10,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const locale = await getLocale()
   const session = await auth()
 
-  const navItems = session?.user
-    ? getAllDashboardCards({
-        role: session.user.role,
-        isStaff: session.user.isStaff,
-        isSuperAdmin: isSuperAdmin(session.user.email ?? ''),
-        communityRoles: [],
-      })
-    : []
+  // Pass only serializable primitives across the server→client boundary. The
+  // dashboard cards carry lucide icon *components* (functions), which RSC can't
+  // serialize — so the client nav computes its own cards from these flags.
+  const navUser = {
+    role: session?.user?.role ?? null,
+    isStaff: session?.user?.isStaff ?? false,
+    isSuperAdmin: session?.user ? isSuperAdmin(session.user.email ?? '') : false,
+  }
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
@@ -33,7 +32,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             sectioned index — no redundant horizontal strip. Mobile (<lg) keeps a
             thumb-reachable bottom tab bar + "Mehr" sheet; the padding clears it. */}
         <div className="pb-16 lg:pb-0">{children}</div>
-        <DashboardMobileNav items={navItems} />
+        <DashboardMobileNav {...navUser} />
       </ConditionalMainLayout>
     </NextIntlClientProvider>
   )
