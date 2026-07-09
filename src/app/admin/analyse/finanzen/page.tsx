@@ -20,14 +20,6 @@ import { AnalyseTabs, RevenueAreaChart, RevenuePieChart, TrendBarChart } from '@
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
 
-const CATEGORY_LABELS = {
-  warenverkauf: 'Warenverkauf',
-  dienstleistungen: 'Dienstleistungen',
-  integration: 'Integration',
-  spenden: 'Spenden',
-  aufstockung: 'Aufstockung',
-}
-
 export default async function FinanzenPage() {
   // Check authentication and authorization
   const session = await auth()

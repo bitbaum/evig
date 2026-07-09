@@ -16,12 +16,12 @@ import { Pagination } from '@/components/ui/Pagination';
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { AdminListShell } from '@/components/admin/AdminListShell';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
-import { adminSurface, adminTable } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
-import { useDecisionList } from '@/hooks/useDecisionList';
+import { useDecisionList, type DecisionListItem } from '@/hooks/useDecisionList';
 import { ROUTES } from '@/config/routes';
 
 export default function DecisionListClient({
@@ -53,6 +53,76 @@ export default function DecisionListClient({
     closeDeleteDialog,
     PAGE_SIZE,
   } = useDecisionList()
+
+  const columns: AdminTableColumn<DecisionListItem>[] = [
+    {
+      header: 'Titel',
+      cell: (d) => (
+        <>
+          <Link
+            href={`/admin/decisions/${d.id}`}
+            className="font-medium text-text-primary hover:text-action transition-colors"
+          >
+            {d.title}
+          </Link>
+          {d.hasUserVoted && (
+            <span className="ml-2 text-xs text-action">✓ abgestimmt</span>
+          )}
+        </>
+      ),
+    },
+    {
+      header: 'Typ',
+      className: 'hidden md:table-cell',
+      cell: (d) => DECISION_TYPE_CONFIG[d.decisionType]?.label || d.decisionType,
+    },
+    {
+      header: 'Methode',
+      className: 'hidden lg:table-cell',
+      cell: (d) => VOTING_METHOD_CONFIG[d.votingMethod]?.label || d.votingMethod,
+    },
+    {
+      header: 'Status',
+      cell: (d) => {
+        const statusConf = DECISION_STATUS_CONFIG[d.status];
+        return (
+          <span className={cn('inline-block rounded-full px-2 py-0.5 text-xs font-medium', statusConf?.color || '')}>
+            {statusConf?.label || d.status}
+          </span>
+        );
+      },
+    },
+    {
+      header: 'Frist',
+      className: 'hidden sm:table-cell',
+      cell: (d) => formatDeadline(d.status === DECISION_STATUS.VOTING ? d.votingDeadline : d.discussionDeadline),
+    },
+    {
+      header: 'Stimmen',
+      className: 'hidden sm:table-cell',
+      cell: (d) => d.voteCount,
+    },
+    {
+      header: 'Erstellt von',
+      className: 'hidden lg:table-cell',
+      cell: (d) => d.creator.email,
+    },
+    {
+      header: '',
+      cell: (d) =>
+        (d.creator.id === currentUserId || isSuperAdmin) && (
+          <Button
+            variant="destructive-ghost"
+            size="icon"
+            onClick={() => setDeleteTarget(d)}
+            className="text-text-muted hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded-sm"
+            title="Löschen"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        ),
+    },
+  ];
 
   return (
     <div className="space-y-4">
@@ -97,80 +167,17 @@ export default function DecisionListClient({
         }
         resultsLabel={`${total} Entscheidung${total === 1 ? '' : 'en'}`}
       >
-        <div className={adminSurface.table}>
-          <table className="w-full text-left">
-            <thead className={adminTable.thead}>
-              <tr>
-                <th className={adminTable.th}>Titel</th>
-                <th className={cn(adminTable.th, 'hidden md:table-cell')}>Typ</th>
-                <th className={cn(adminTable.th, 'hidden lg:table-cell')}>Methode</th>
-                <th className={adminTable.th}>Status</th>
-                <th className={cn(adminTable.th, 'hidden sm:table-cell')}>Frist</th>
-                <th className={cn(adminTable.th, 'hidden sm:table-cell')}>Stimmen</th>
-                <th className={cn(adminTable.th, 'hidden lg:table-cell')}>Erstellt von</th>
-                <th className={adminTable.th}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {decisions.map((d) => {
-                const statusConf = DECISION_STATUS_CONFIG[d.status];
-                const deadline = d.status === DECISION_STATUS.VOTING ? d.votingDeadline : d.discussionDeadline;
-                return (
-                  <tr key={d.id} className={adminTable.tr}>
-                    <td className={adminTable.td}>
-                      <Link
-                        href={`/admin/decisions/${d.id}`}
-                        className="font-medium text-text-primary hover:text-action transition-colors"
-                      >
-                        {d.title}
-                      </Link>
-                      {d.hasUserVoted && (
-                        <span className="ml-2 text-xs text-action">✓ abgestimmt</span>
-                      )}
-                    </td>
-                    <td className={cn(adminTable.td, 'hidden md:table-cell')}>
-                      {DECISION_TYPE_CONFIG[d.decisionType]?.label || d.decisionType}
-                    </td>
-                    <td className={cn(adminTable.td, 'hidden lg:table-cell')}>
-                      {VOTING_METHOD_CONFIG[d.votingMethod]?.label || d.votingMethod}
-                    </td>
-                    <td className={adminTable.td}>
-                      <span className={cn('inline-block rounded-full px-2 py-0.5 text-xs font-medium', statusConf?.color || '')}>
-                        {statusConf?.label || d.status}
-                      </span>
-                    </td>
-                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>{formatDeadline(deadline)}</td>
-                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>{d.voteCount}</td>
-                    <td className={cn(adminTable.td, 'hidden lg:table-cell')}>{d.creator.email}</td>
-                    <td className={adminTable.td}>
-                      {(d.creator.id === currentUserId || isSuperAdmin) && (
-                        <Button
-                          variant="destructive-ghost"
-                          size="icon"
-                          onClick={() => setDeleteTarget(d)}
-                          className="text-text-muted hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded-sm"
-                          title="Löschen"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <AdminTable columns={columns} rows={decisions} rowKey={(d) => d.id} />
 
-          {total > PAGE_SIZE && (
-            <Pagination
-              currentPage={page}
-              totalPages={Math.ceil(total / PAGE_SIZE)}
-              totalItems={total}
-              pageSize={PAGE_SIZE}
-              onPageChange={setPage}
-            />
-          )}
-        </div>
+        {total > PAGE_SIZE && (
+          <Pagination
+            currentPage={page}
+            totalPages={Math.ceil(total / PAGE_SIZE)}
+            totalItems={total}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+          />
+        )}
       </AdminListShell>
 
       {deleteError && (

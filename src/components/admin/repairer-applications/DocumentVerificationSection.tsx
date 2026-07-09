@@ -1,4 +1,5 @@
 import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status'
+import { getDocumentStatusBadge } from '@/config/document-status'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import type { RepairerApplication, VerificationDocument, DocumentType, ActionDialogState } from './types'
@@ -46,11 +47,7 @@ export function DocumentVerificationSection({
                 {documents.map((doc) => (
                   <div key={doc.id} className="flex items-center justify-between p-3 bg-surface-raised rounded-lg">
                     <div className="flex items-center gap-3">
-                      <div className={`w-3 h-3 rounded-full ${
-                        doc.status === APPROVAL_STATUS.APPROVED ? 'bg-action' :
-                        doc.status === APPROVAL_STATUS.REJECTED ? 'bg-error-500' :
-                        'bg-warning-500'
-                      }`} />
+                      <div className={`w-3 h-3 rounded-full ${getDocumentStatusBadge(doc.status).bg}`} />
                       <div>
                         <p className="text-sm font-medium text-text-primary">
                           {doc.documentTypeName || doc.originalFilename}

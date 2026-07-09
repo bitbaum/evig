@@ -124,16 +124,14 @@ export default async function TasksAdminPage({
         <TaskFiltersClient />
       </Suspense>
 
-      <div className="bg-surface-base rounded-lg border overflow-hidden overflow-x-auto">
-        <TaskTable tasks={tasks} hasError={listError} />
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalTasks}
-          pageSize={TASKS_PAGE_SIZE}
-          hrefBase={tasksHrefBase}
-        />
-      </div>
+      <TaskTable tasks={tasks} hasError={listError} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalTasks}
+        pageSize={TASKS_PAGE_SIZE}
+        hrefBase={tasksHrefBase}
+      />
     </AdminPageWrapper>
   )
 }

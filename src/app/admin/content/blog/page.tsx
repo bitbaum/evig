@@ -6,10 +6,7 @@
  */
 
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { auth } from '@/auth'
-import { buttonClass } from '@/components/ui/button-class'
-import { ORG } from '@/config/org'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -21,8 +18,10 @@ import {
   Tag,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminButton } from '@/components/admin/AdminButton'
+import { ADMIN_CONTENT } from '@/config/admin-content'
 import { BlogListClient } from './BlogListClient'
-import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
@@ -117,6 +116,41 @@ export default async function AdminBlogPage() {
 
   const [stats, posts] = await Promise.all([getBlogStats(), getBlogPosts()])
 
+  const createAction = (
+    <AdminButton href={ROUTES.admin.contentBlogNew} variant="primary" className="gap-2">
+      <Plus className="w-4 h-4" />
+      Neuer Artikel
+    </AdminButton>
+  )
+
+  // No posts yet → single empty state, no dead stats grid.
+  if (posts.length === 0) {
+    return (
+      <AdminPageWrapper
+        title="Blog-Artikel"
+        description="News, Tutorials und Ankündigungen verwalten"
+        icon={FileText}
+        iconColor="blue"
+        backButton={{ href: ROUTES.admin.content, label: 'Zurück' }}
+        actions={createAction}
+      >
+        <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
+          <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
+          <p className="font-medium text-text-primary">{ADMIN_CONTENT.blog.emptyTitle}</p>
+          <p className="text-text-secondary mt-1 mb-6">{ADMIN_CONTENT.blog.emptyDescription}</p>
+          {createAction}
+        </div>
+      </AdminPageWrapper>
+    )
+  }
+
+  const statCards: StatCardItem[] = [
+    { icon: FileText, color: 'gray', label: 'Gesamt Artikel', value: stats.totalPosts },
+    { icon: CheckCircle, color: 'green', label: 'Veröffentlicht', value: stats.publishedPosts },
+    { icon: Clock, color: 'gray', label: 'Entwürfe', value: stats.draftPosts },
+    { icon: Tag, color: 'gray', label: 'Kategorien', value: stats.categoriesCount },
+  ]
+
   return (
     <AdminPageWrapper
       title="Blog-Artikel"
@@ -124,98 +158,10 @@ export default async function AdminBlogPage() {
       icon={FileText}
       iconColor="blue"
       backButton={{ href: ROUTES.admin.content, label: 'Zurück' }}
-      actions={
-        <Link href={ROUTES.admin.contentBlogNew} className={buttonClass({ variant: 'primary' })}>
-          <Plus className="w-5 h-5" />
-          Neuer Artikel
-        </Link>
-      }
+      actions={createAction}
     >
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <FileText className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Gesamt Artikel
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.totalPosts}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Veröffentlicht
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.publishedPosts}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <Clock className="w-8 h-8 text-secondary-600" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Entwürfe
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.draftPosts}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
-          <div className="flex items-center gap-3">
-            <Tag className="w-8 h-8 text-action" />
-            <div>
-              <p className="text-sm font-medium text-text-secondary">
-                Kategorien
-              </p>
-              <p className="text-2xl font-bold text-text-primary">
-                {stats.categoriesCount}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Posts Table with Search/Filters */}
+      <AdminStatsGrid items={statCards} />
       <BlogListClient posts={posts} />
-
-      {/* Info Banner */}
-      <div className="bg-surface-raised border border rounded-xl p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center shrink-0">
-            <FileText className="w-5 h-5 text-text-secondary" />
-          </div>
-          <div>
-            <Heading level={3} className="font-medium text-text-primary">
-              Blog-Verwaltung
-            </Heading>
-            <p className="text-sm text-text-secondary mt-1 mb-3">
-              Blog-Artikel sind ein wichtiger Kommunikationskanal. Teile
-              News über {ORG.name}, schreibe Tutorials zur
-              Computeraufarbeitung oder kündige Workshops und Events an.
-            </p>
-            <div className="flex gap-3">
-              <Link href={ROUTES.admin.contentBlogNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
-                Artikel erstellen
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
     </AdminPageWrapper>
   )
 }

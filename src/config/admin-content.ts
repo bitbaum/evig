@@ -49,6 +49,16 @@ export const ADMIN_CONTENT = {
     emptyDescription: 'Es sind noch keine Mitgliedschaften erfasst.',
     errorMessage: 'Fehler beim Laden der Mitgliedschaften',
   },
+  blog: {
+    emptyTitle: 'Keine Artikel vorhanden',
+    emptyDescription: 'Erstelle den ersten Blog-Artikel.',
+    errorMessage: 'Fehler beim Laden der Artikel',
+  },
+  donations: {
+    emptyTitle: 'Keine Spenden vorhanden',
+    emptyDescription: 'Es sind noch keine Spenden erfasst.',
+    errorMessage: 'Fehler beim Laden der Spenden',
+  },
 } as const
 
 export const ADMIN_COMMON = {

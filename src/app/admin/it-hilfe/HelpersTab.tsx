@@ -6,7 +6,7 @@
 
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { adminInteractive, adminTable } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import {
@@ -17,6 +17,7 @@ import { HELPER_STATUS, HELPER_STATUS_LABELS } from '@/config/helper-status'
 import type { HelperRow, PaginatedResponse, HelperFilter, Stats } from './types'
 import { StatsCard, SkillTag } from './shared'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 
 interface HelpersTabProps {
   helpers: PaginatedResponse<HelperRow> | null
@@ -32,6 +33,104 @@ export function HelpersTab({
   helpers, helpFilter, setHelpFilter, helpOffset, setHelpOffset, stats, onAction,
 }: HelpersTabProps) {
   const t = useTranslations('admin.itHilfe.helpers')
+
+  const columns: AdminTableColumn<HelperRow>[] = [
+    {
+      header: t('columns.name'),
+      cell: (h) => (
+        <div>
+          <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
+            {h.helper_name || h.helper_email}
+          </Link>
+          {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted text-action">{t('badges.gratis')}</span>}
+          {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">{t('badges.kulturlegi')}</span>}
+        </div>
+      ),
+    },
+    {
+      header: t('columns.skills'),
+      cell: (h) => (
+        <div className="flex flex-wrap gap-1 max-w-xs">
+          {(h.skills ?? []).slice(0, 5).map(s => <SkillTag key={s} skillId={s} />)}
+          {(h.skills ?? []).length > 5 && <span className="text-[10px] text-text-tertiary">+{(h.skills ?? []).length - 5}</span>}
+        </div>
+      ),
+    },
+    {
+      header: t('columns.canton'),
+      cell: (h) => <span className="text-text-tertiary">{h.location_canton ?? '–'}</span>,
+    },
+    {
+      header: t('columns.rate'),
+      cell: (h) => (
+        <span className="text-text-secondary">
+          {h.hourly_rate_cents ? `CHF ${(h.hourly_rate_cents / 100).toFixed(0)}/h` : '–'}
+        </span>
+      ),
+    },
+    {
+      header: t('columns.status'),
+      cell: (h) => (
+        <div className="flex items-center gap-1">
+          {h.suspended_at ? (
+            <StatusBadge variant="error">{t('badges.suspended')}</StatusBadge>
+          ) : h.is_verified ? (
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">{t('badges.verified')}</span>
+          ) : h.is_active ? (
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">{t('badges.active')}</span>
+          ) : (
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">{t('badges.inactive')}</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      header: t('columns.helps'),
+      align: 'center',
+      cell: (h) => <span className="text-text-secondary">{h.total_helps_completed}</span>,
+    },
+    {
+      header: t('columns.actions'),
+      cell: (h) => (
+        <div className="flex items-center gap-1">
+          {!h.is_verified && !h.suspended_at && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onAction(h.id, 'verify')}
+              className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
+              title={t('actions.verify')}
+            >
+              <ShieldCheck className="w-4 h-4 text-action" />
+            </Button>
+          )}
+          {!h.suspended_at && (
+            <Button
+              variant="destructive-ghost"
+              size="icon"
+              onClick={() => onAction(h.id, 'suspend')}
+              className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
+              title={t('actions.suspend')}
+            >
+              <Ban className="w-4 h-4 text-error-500" />
+            </Button>
+          )}
+          {h.suspended_at && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onAction(h.id, 'reactivate')}
+              className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
+              title={t('actions.reactivate')}
+            >
+              <UserCheck className="w-4 h-4 text-action" />
+            </Button>
+          )}
+        </div>
+      ),
+    },
+  ]
+
   return (
     <div className="space-y-4">
       {/* Filters */}
@@ -49,100 +148,11 @@ export function HelpersTab({
       </div>
 
       {/* Table */}
-      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.name')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.skills')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.canton')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.rate')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.helps')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
-            {helpers?.items.map(h => (
-              <tr key={h.id} className={adminTable.tr}>
-                <td className="px-4 py-3">
-                  <div>
-                    <Link href={`/admin/users/${h.user_id}`} className="font-medium text-action hover:underline">
-                      {h.helper_name || h.helper_email}
-                    </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-action-muted text-action">{t('badges.gratis')}</span>}
-                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded-sm bg-surface-raised text-text-secondary">{t('badges.kulturlegi')}</span>}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-wrap gap-1 max-w-xs">
-                    {(h.skills ?? []).slice(0, 5).map(s => <SkillTag key={s} skillId={s} />)}
-                    {(h.skills ?? []).length > 5 && <span className="text-[10px] text-text-tertiary">+{(h.skills ?? []).length - 5}</span>}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-text-tertiary">{h.location_canton ?? '–'}</td>
-                <td className="px-4 py-3 text-text-secondary">
-                  {h.hourly_rate_cents ? `CHF ${(h.hourly_rate_cents / 100).toFixed(0)}/h` : '–'}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    {h.suspended_at ? (
-                      <StatusBadge variant="error">{t('badges.suspended')}</StatusBadge>
-                    ) : h.is_verified ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">{t('badges.verified')}</span>
-                    ) : h.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-action-muted text-action">{t('badges.active')}</span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-tertiary">{t('badges.inactive')}</span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-center text-text-secondary">{h.total_helps_completed}</td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    {!h.is_verified && !h.suspended_at && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onAction(h.id, 'verify')}
-                        className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
-                        title={t('actions.verify')}
-                      >
-                        <ShieldCheck className="w-4 h-4 text-action" />
-                      </Button>
-                    )}
-                    {!h.suspended_at && (
-                      <Button
-                        variant="destructive-ghost"
-                        size="icon"
-                        onClick={() => onAction(h.id, 'suspend')}
-                        className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
-                        title={t('actions.suspend')}
-                      >
-                        <Ban className="w-4 h-4 text-error-500" />
-                      </Button>
-                    )}
-                    {h.suspended_at && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onAction(h.id, 'reactivate')}
-                        className={`p-2 rounded-sm ${adminInteractive.rowHover}`}
-                        title={t('actions.reactivate')}
-                      >
-                        <UserCheck className="w-4 h-4 text-action" />
-                      </Button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {helpers && helpers.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
-        )}
-      </div>
+      {helpers && helpers.items.length === 0 ? (
+        <div className="bg-surface-base rounded-xl border border-default p-8 text-center text-text-tertiary">{t('empty')}</div>
+      ) : (
+        <AdminTable columns={columns} rows={helpers?.items ?? []} rowKey={(h) => h.id} />
+      )}
 
       {helpers && helpers.pagination.total > 50 && (
         <Pagination

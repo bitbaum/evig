@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { formatDateShort } from '@/lib/date-formats'
 import { LISTING_QUESTION_STATUS } from '@/config/marketplace'
-import { adminInteractive, adminTable } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import type { PaginatedResponse, QuestionRow } from './types'
 
 interface QuestionsTabProps {
@@ -30,6 +31,77 @@ export function QuestionsTab({
   const t = useTranslations('admin.marketplace.questions')
   const tPag = useTranslations('admin.pagination')
 
+  const columns: AdminTableColumn<QuestionRow>[] = [
+    {
+      header: t('columns.listing'),
+      cell: (q) => (
+        <>
+          <a href={`/marketplace/${q.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
+            {q.listing_title} <ExternalLink className="w-3 h-3" />
+          </a>
+          <p className="text-xs text-text-tertiary">{t('sellerLabel', { name: q.seller_name || q.seller_email })}</p>
+        </>
+      ),
+    },
+    {
+      header: t('columns.question'),
+      className: 'max-w-md',
+      cell: (q) => (
+        <>
+          <p className="font-medium text-text-primary">{q.question}</p>
+          {q.answer && (
+            <p className="mt-1 text-xs text-text-tertiary">
+              {t('answerLabel')}: {q.answer}
+            </p>
+          )}
+        </>
+      ),
+    },
+    {
+      header: t('columns.asker'),
+      cell: (q) => <span className="text-text-secondary">{q.asker_name || q.asker_email}</span>,
+    },
+    {
+      header: t('columns.date'),
+      className: 'whitespace-nowrap',
+      cell: (q) => <span className="text-text-tertiary">{formatDateShort(q.created_at)}</span>,
+    },
+    {
+      header: t('columns.status'),
+      cell: (q) =>
+        q.status === LISTING_QUESTION_STATUS.HIDDEN ? (
+          <StatusBadge variant="neutral">{t('status.hidden')}</StatusBadge>
+        ) : q.status === LISTING_QUESTION_STATUS.ANSWERED ? (
+          <StatusBadge variant="success">{t('status.answered')}</StatusBadge>
+        ) : (
+          <StatusBadge variant="warning">{t('status.open')}</StatusBadge>
+        ),
+    },
+    {
+      header: t('columns.actions'),
+      cell: (q) =>
+        q.status === LISTING_QUESTION_STATUS.HIDDEN ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onModerate(q.id, 'restore')}
+            className={`px-3 py-1.5 text-sm rounded-lg border-default ${adminInteractive.rowHover}`}
+          >
+            {t('actions.restore')}
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onModerate(q.id, 'hide')}
+            className={`px-3 py-1.5 text-sm rounded-lg border-default ${adminInteractive.rowHover}`}
+          >
+            {t('actions.hide')}
+          </Button>
+        ),
+    },
+  ]
+
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
@@ -48,75 +120,11 @@ export function QuestionsTab({
         </Select>
       </div>
 
-      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.listing')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.question')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.asker')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
-            {questions?.items.map(q => (
-              <tr key={q.id} className={adminTable.tr}>
-                <td className="px-4 py-3">
-                  <a href={`/marketplace/${q.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
-                    {q.listing_title} <ExternalLink className="w-3 h-3" />
-                  </a>
-                  <p className="text-xs text-text-tertiary">{t('sellerLabel', { name: q.seller_name || q.seller_email })}</p>
-                </td>
-                <td className="px-4 py-3 max-w-md">
-                  <p className="font-medium text-text-primary">{q.question}</p>
-                  {q.answer && (
-                    <p className="mt-1 text-xs text-text-tertiary">
-                      {t('answerLabel')}: {q.answer}
-                    </p>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-text-secondary">{q.asker_name || q.asker_email}</td>
-                <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(q.created_at)}</td>
-                <td className="px-4 py-3">
-                  {q.status === LISTING_QUESTION_STATUS.HIDDEN ? (
-                    <StatusBadge variant="neutral">{t('status.hidden')}</StatusBadge>
-                  ) : q.status === LISTING_QUESTION_STATUS.ANSWERED ? (
-                    <StatusBadge variant="success">{t('status.answered')}</StatusBadge>
-                  ) : (
-                    <StatusBadge variant="warning">{t('status.open')}</StatusBadge>
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  {q.status === LISTING_QUESTION_STATUS.HIDDEN ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onModerate(q.id, 'restore')}
-                      className={`px-3 py-1.5 text-sm rounded-lg border border ${adminInteractive.rowHover}`}
-                    >
-                      {t('actions.restore')}
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onModerate(q.id, 'hide')}
-                      className={`px-3 py-1.5 text-sm rounded-lg border border ${adminInteractive.rowHover}`}
-                    >
-                      {t('actions.hide')}
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {questions && questions.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
-        )}
-      </div>
+      {questions && questions.items.length === 0 ? (
+        <div className="rounded-lg border border-default bg-surface-base p-8 text-center text-text-tertiary">{t('empty')}</div>
+      ) : (
+        <AdminTable columns={columns} rows={questions?.items ?? []} rowKey={(q) => q.id} />
+      )}
 
       {questions && questions.pagination.total > 50 && (
         <div className="flex items-center justify-between">

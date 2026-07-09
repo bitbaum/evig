@@ -9,6 +9,7 @@ import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData } from './types'
 import { LOCATIONS } from '@/config/org'
+import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops'
 
 interface InstanceFormModalProps {
   editingInstance: WorkshopInstanceWithDetails | null
@@ -122,9 +123,9 @@ export function InstanceFormModal({
               value={formData.status}
               onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
             >
-              <option value="scheduled">Geplant</option>
-              <option value="cancelled">Abgesagt</option>
-              <option value="completed">Abgeschlossen</option>
+              {Object.values(WORKSHOP_INSTANCE_STATUS).map(status => (
+                <option key={status} value={status}>{WORKSHOP_INSTANCE_STATUS_LABELS[status]}</option>
+              ))}
             </Select>
           </FormField>
 

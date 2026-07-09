@@ -8,6 +8,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
 import { getBookingStatusBadge } from '@/config/booking-status'
+import { APPROVAL_STATUS, APPROVAL_STATUS_LABELS } from '@/config/approval-status'
 import { LOCATION_TYPES } from '@/components/admin/locations/location-form'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { useLocationDetail } from '@/hooks/useLocationDetail'
@@ -339,7 +340,7 @@ export default function LocationDetailPage() {
             <div className="text-sm text-text-secondary space-y-2">
               <p>
                 <span className="font-medium">Aktion:</span>{' '}
-                {location.last_approval_action === 'approve' ? 'Genehmigt' : 'Abgelehnt'}
+                {APPROVAL_STATUS_LABELS[location.last_approval_action === 'approve' ? APPROVAL_STATUS.APPROVED : APPROVAL_STATUS.REJECTED]}
               </p>
               {location.last_reviewed_at && (
                 <p>

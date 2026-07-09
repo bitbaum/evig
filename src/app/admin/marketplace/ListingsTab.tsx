@@ -14,7 +14,8 @@ import { getConditionLabel } from '@/config/erfassung/conditions'
 import { VerifyActions } from './VerifyActions'
 import { StatusBadge } from './StatusBadge'
 import type { ListingRow, PaginatedResponse } from './types'
-import { adminInteractive, adminTable } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 
 interface ListingsTabProps {
   listings: PaginatedResponse<ListingRow> | null
@@ -31,6 +32,74 @@ interface ListingsTabProps {
 export function ListingsTab({ listings, filter, setFilter, offset, setOffset, onEdit, onRemove, onChanged }: ListingsTabProps) {
   const t = useTranslations('admin.marketplace.listings')
   const tPag = useTranslations('admin.pagination')
+
+  const columns: AdminTableColumn<ListingRow>[] = [
+    {
+      header: t('columns.title'),
+      cell: (l) => (
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-medium text-text-primary">{l.title}</span>
+          {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-action" />}
+          {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-action-muted text-action">{t('badges.rit')}</span>}
+          {parseInt(l.report_count) > 0 && (
+            <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
+              {t('badges.reportCount', { count: parseInt(l.report_count) })}
+            </span>
+          )}
+        </div>
+      ),
+    },
+    {
+      header: t('columns.category'),
+      cell: (l) => (
+        <span className="text-text-secondary">
+          {getCategoryLabel(l.category)}
+          {l.condition && <span className="text-xs ml-1">· {getConditionLabel(l.condition)}</span>}
+        </span>
+      ),
+    },
+    {
+      header: t('columns.price'),
+      cell: (l) => <span className="text-text-primary font-medium">{formatPrice(Number(l.price_chf))}</span>,
+    },
+    {
+      header: t('columns.seller'),
+      cell: (l) => (
+        <Link href={`/admin/users/${l.seller_id}`} className="text-action hover:underline text-sm">
+          {l.seller_name || l.seller_email}
+        </Link>
+      ),
+    },
+    {
+      header: t('columns.status'),
+      cell: (l) => <StatusBadge status={l.status} config={LISTING_STATUS_CONFIG} />,
+    },
+    {
+      header: t('columns.date'),
+      className: 'whitespace-nowrap',
+      cell: (l) => <span className="text-text-tertiary">{formatDateShort(l.created_at)}</span>,
+    },
+    {
+      header: t('columns.actions'),
+      cell: (l) => (
+        <div className="flex items-center gap-1">
+          <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.view')}>
+            <Eye className="w-4 h-4 text-text-tertiary" />
+          </a>
+          <Button variant="ghost" size="icon" onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.edit')}>
+            <Edit3 className="w-4 h-4 text-text-tertiary" />
+          </Button>
+          <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} onChanged={onChanged} />
+          {l.status !== LISTING_STATUS.REMOVED && (
+            <Button variant="destructive-ghost" size="icon" onClick={() => onRemove(l.id, l.title)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.remove')}>
+              <Trash2 className="w-4 h-4 text-error-500" />
+            </Button>
+          )}
+        </div>
+      ),
+    },
+  ]
+
   return (
     <div className="space-y-4">
       {/* Filters */}
@@ -70,70 +139,11 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
       </div>
 
       {/* Table */}
-      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.title')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.category')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.price')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.seller')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
-            {listings?.items.map(l => (
-              <tr key={l.id} className={adminTable.tr}>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-text-primary">{l.title}</span>
-                    {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-action" />}
-                    {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-action-muted text-action-muted">{t('badges.rit')}</span>}
-                    {parseInt(l.report_count) > 0 && (
-                      <span className="px-1.5 py-0.5 text-[10px] rounded-sm bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
-                        {t('badges.reportCount', { count: parseInt(l.report_count) })}
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-text-secondary">
-                  {getCategoryLabel(l.category)}
-                  {l.condition && <span className="text-xs ml-1">· {getConditionLabel(l.condition)}</span>}
-                </td>
-                <td className="px-4 py-3 text-text-primary font-medium">{formatPrice(Number(l.price_chf))}</td>
-                <td className="px-4 py-3">
-                  <Link href={`/admin/users/${l.seller_id}`} className="text-action hover:underline text-sm">
-                    {l.seller_name || l.seller_email}
-                  </Link>
-                </td>
-                <td className="px-4 py-3"><StatusBadge status={l.status} config={LISTING_STATUS_CONFIG} /></td>
-                <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(l.created_at)}</td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.view')}>
-                      <Eye className="w-4 h-4 text-text-tertiary" />
-                    </a>
-                    <Button variant="ghost" size="icon" onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.edit')}>
-                      <Edit3 className="w-4 h-4 text-text-tertiary" />
-                    </Button>
-                    <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} onChanged={onChanged} />
-                    {l.status !== LISTING_STATUS.REMOVED && (
-                      <Button variant="destructive-ghost" size="icon" onClick={() => onRemove(l.id, l.title)} className={`p-2 rounded-sm ${adminInteractive.rowHover}`} title={t('actions.remove')}>
-                        <Trash2 className="w-4 h-4 text-error-500" />
-                      </Button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {listings && listings.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
-        )}
-      </div>
+      {listings && listings.items.length === 0 ? (
+        <div className="rounded-xl border border-default bg-surface-base p-8 text-center text-text-tertiary">{t('empty')}</div>
+      ) : (
+        <AdminTable columns={columns} rows={listings?.items ?? []} rowKey={(l) => l.id} />
+      )}
 
       {/* Pagination */}
       {listings && listings.pagination.total > 50 && (

@@ -18,12 +18,11 @@ import {
   TASK_STATUS_COLORS,
   TASK_PRIORITY_COLORS,
 } from '@/config/tasks'
-import { adminTable } from '@/lib/admin-ui'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import Heading from '@/components/admin/AdminHeading'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import type { TaskListItem } from '@/lib/schemas/tasks'
 
-const TH_CLASS = 'text-left px-4 py-3 text-xs font-semibold text-text-tertiary uppercase tracking-wide'
 const CHIP_CLASS = 'inline-flex px-2 py-0.5 text-xs font-medium rounded-full'
 
 interface Props {
@@ -31,37 +30,12 @@ interface Props {
   hasError: boolean
 }
 
-export function TaskTable({ tasks, hasError }: Props) {
-  if (hasError) return <ErrorPanel />
-  if (tasks.length === 0) return <EmptyPanel />
-
-  return (
-    <table className="w-full">
-      <thead className="bg-surface-raised border-b">
-        <tr>
-          <th className={TH_CLASS}>Aufgabe</th>
-          <th className={`${TH_CLASS} hidden sm:table-cell`}>Kategorie</th>
-          <th className={TH_CLASS}>Status</th>
-          <th className={TH_CLASS}>Priorität</th>
-          <th className={`${TH_CLASS} hidden md:table-cell`}>Zeitplan</th>
-          <th className={`${TH_CLASS} hidden md:table-cell`}>Zugewiesen</th>
-          <th className={`${TH_CLASS} hidden sm:table-cell whitespace-nowrap`}>Fällig</th>
-          <th className={`${TH_CLASS} hidden sm:table-cell text-right whitespace-nowrap`}>Erledigungen</th>
-        </tr>
-      </thead>
-      <tbody className="divide-y">
-        {tasks.map((task) => (
-          <TaskRow key={task.id} task={task} />
-        ))}
-      </tbody>
-    </table>
-  )
-}
-
-function TaskRow({ task }: { task: TaskListItem }) {
-  return (
-    <tr className={adminTable.tr}>
-      <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
+const columns: AdminTableColumn<TaskListItem>[] = [
+  {
+    header: 'Aufgabe',
+    className: 'max-w-[200px] sm:max-w-xs',
+    cell: (task) => (
+      <>
         <div className="flex items-center gap-2 min-w-0">
           <Link
             href={ROUTES.admin.task(task.id)}
@@ -74,38 +48,66 @@ function TaskRow({ task }: { task: TaskListItem }) {
         {task.description && (
           <p className="text-sm text-text-tertiary truncate max-w-full">{task.description}</p>
         )}
-      </td>
-      <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
-        <span className="text-sm text-text-secondary">{TASK_CATEGORY_LABELS[task.category]}</span>
-      </td>
-      <td className="px-4 py-3 whitespace-nowrap">
-        <span className={`${CHIP_CLASS} ${TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-text-primary'}`}>
-          {TASK_STATUS_LABELS[task.current_status]}
-        </span>
-      </td>
-      <td className="px-4 py-3 whitespace-nowrap">
-        <span className={`${CHIP_CLASS} ${TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-text-primary'}`}>
-          {TASK_PRIORITY_LABELS[task.priority]}
-        </span>
-      </td>
-      <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
-        <span className="text-sm text-text-secondary">
-          {task.schedule_human || TASK_TYPE_LABELS[task.task_type]}
-        </span>
-      </td>
-      <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
-        {task.assigned_to_name
-          ? <span className="text-sm text-text-secondary">{task.assigned_to_name}</span>
-          : <span className="text-sm text-text-muted">&mdash;</span>}
-      </td>
-      <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
-        <DueDateCell task={task} />
-      </td>
-      <td className="hidden sm:table-cell px-4 py-3 text-right whitespace-nowrap">
-        <span className="text-sm text-text-secondary">{task.completion_count}</span>
-      </td>
-    </tr>
-  )
+      </>
+    ),
+  },
+  {
+    header: 'Kategorie',
+    className: 'hidden sm:table-cell whitespace-nowrap',
+    cell: (task) => <span className="text-sm text-text-secondary">{TASK_CATEGORY_LABELS[task.category]}</span>,
+  },
+  {
+    header: 'Status',
+    className: 'whitespace-nowrap',
+    cell: (task) => (
+      <span className={`${CHIP_CLASS} ${TASK_STATUS_COLORS[task.current_status] || 'bg-surface-raised text-text-primary'}`}>
+        {TASK_STATUS_LABELS[task.current_status]}
+      </span>
+    ),
+  },
+  {
+    header: 'Priorität',
+    className: 'whitespace-nowrap',
+    cell: (task) => (
+      <span className={`${CHIP_CLASS} ${TASK_PRIORITY_COLORS[task.priority] || 'bg-surface-raised text-text-primary'}`}>
+        {TASK_PRIORITY_LABELS[task.priority]}
+      </span>
+    ),
+  },
+  {
+    header: 'Zeitplan',
+    className: 'hidden md:table-cell whitespace-nowrap',
+    cell: (task) => (
+      <span className="text-sm text-text-secondary">
+        {task.schedule_human || TASK_TYPE_LABELS[task.task_type]}
+      </span>
+    ),
+  },
+  {
+    header: 'Zugewiesen',
+    className: 'hidden md:table-cell whitespace-nowrap',
+    cell: (task) =>
+      task.assigned_to_name
+        ? <span className="text-sm text-text-secondary">{task.assigned_to_name}</span>
+        : <span className="text-sm text-text-muted">&mdash;</span>,
+  },
+  {
+    header: 'Fällig',
+    className: 'hidden sm:table-cell whitespace-nowrap',
+    cell: (task) => <DueDateCell task={task} />,
+  },
+  {
+    header: 'Erledigungen',
+    className: 'hidden sm:table-cell text-right whitespace-nowrap',
+    cell: (task) => <span className="text-sm text-text-secondary">{task.completion_count}</span>,
+  },
+]
+
+export function TaskTable({ tasks, hasError }: Props) {
+  if (hasError) return <ErrorPanel />
+  if (tasks.length === 0) return <EmptyPanel />
+
+  return <AdminTable columns={columns} rows={tasks} rowKey={(task) => task.id} />
 }
 
 /**
@@ -149,7 +151,7 @@ function DueDateCell({ task }: { task: TaskListItem }) {
 
 function ErrorPanel() {
   return (
-    <div className="p-12 text-center">
+    <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
       <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
       <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
         {ADMIN_CONTENT.tasks.errorMessage}
@@ -166,7 +168,7 @@ function ErrorPanel() {
 
 function EmptyPanel() {
   return (
-    <div className="p-12 text-center">
+    <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
       <ClipboardList className="w-12 h-12 text-text-muted mx-auto mb-4" />
       <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
         {ADMIN_CONTENT.tasks.emptyTitle}

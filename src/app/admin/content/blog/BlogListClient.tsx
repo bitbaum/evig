@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { adminTable } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -14,14 +13,13 @@ import { formatDateNumeric } from '@/lib/date-formats'
 import {
   Search,
   FileText,
-  Plus,
   Eye,
   Edit,
   Trash2,
   Calendar,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 
 interface BlogPost {
   id: string
@@ -69,10 +67,96 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     })
   }, [posts, search, statusFilter])
 
+  const columns: AdminTableColumn<BlogPost>[] = [
+    {
+      header: 'Titel',
+      cell: (post) => (
+        <div>
+          <div className="text-sm font-medium text-text-primary">{post.title}</div>
+          {post.excerpt && (
+            <div className="text-sm text-text-tertiary line-clamp-1">{post.excerpt}</div>
+          )}
+        </div>
+      ),
+    },
+    {
+      header: 'Kategorie',
+      className: 'whitespace-nowrap',
+      cell: (post) => <span className="text-sm text-text-primary">{post.category_name || '-'}</span>,
+    },
+    {
+      header: 'Status',
+      className: 'whitespace-nowrap',
+      cell: (post) => (
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+            post.is_published
+              ? 'bg-action-muted text-action'
+              : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
+          }`}
+        >
+          {post.is_published ? 'Veröffentlicht' : 'Entwurf'}
+        </span>
+      ),
+    },
+    {
+      header: 'Datum',
+      className: 'whitespace-nowrap',
+      cell: (post) => (
+        <div className="text-sm text-text-primary flex items-center gap-1">
+          <Calendar className="w-4 h-4 text-text-muted" />
+          {formatDateNumeric(post.published_at || post.created_at)}
+        </div>
+      ),
+    },
+    {
+      header: 'Aktionen',
+      className: 'whitespace-nowrap',
+      cell: (post) => (
+        <div className="flex items-center gap-2">
+          {post.is_published && post.published_at && new Date(post.published_at) <= new Date() ? (
+            <Link
+              href={`/blog/${post.slug}`}
+              className="text-text-secondary hover:text-text-primary"
+              target="_blank"
+              title="Artikel ansehen"
+            >
+              <Eye className="w-4 h-4" />
+            </Link>
+          ) : (
+            <span
+              className="text-text-muted dark:text-text-secondary cursor-not-allowed"
+              title="Artikel muss veröffentlicht sein"
+            >
+              <Eye className="w-4 h-4" />
+            </span>
+          )}
+          <Link
+            href={`/admin/content/blog/${post.id}`}
+            className="text-action hover:text-action"
+            title="Artikel bearbeiten"
+          >
+            <Edit className="w-4 h-4" />
+          </Link>
+          <Button
+            variant="destructive-ghost"
+            size="icon"
+            className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
+            onClick={() => setDeleteTarget(post)}
+            aria-label="Artikel löschen"
+            title="Artikel löschen"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ]
+
   return (
-    <div className="bg-surface-base rounded-xl border border-subtle overflow-hidden">
+    <div className="space-y-5">
       {/* Filters */}
-      <div className="px-6 py-4 border-b border">
+      <div className="rounded-lg border border-default bg-surface-base p-4">
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
@@ -97,129 +181,14 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       </div>
 
       {filtered.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-surface-raised">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                  Titel
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                  Kategorie
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                  Datum
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase tracking-wider">
-                  Aktionen
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-surface-base divide-y divide-neutral-200 dark:divide-white/4">
-              {filtered.map((post) => (
-                <tr
-                  key={post.id}
-                  className={adminTable.tr}
-                >
-                  <td className="px-6 py-4">
-                    <div>
-                      <div className="text-sm font-medium text-text-primary">
-                        {post.title}
-                      </div>
-                      {post.excerpt && (
-                        <div className="text-sm text-text-tertiary line-clamp-1">
-                          {post.excerpt}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-text-primary">
-                      {post.category_name || '-'}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        post.is_published
-                          ? 'bg-action-muted text-action'
-                          : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
-                      }`}
-                    >
-                      {post.is_published ? 'Veröffentlicht' : 'Entwurf'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-text-primary flex items-center gap-1">
-                      <Calendar className="w-4 h-4 text-text-muted" />
-                      {formatDateNumeric(post.published_at || post.created_at)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center gap-2">
-                      {post.is_published && post.published_at && new Date(post.published_at) <= new Date() ? (
-                        <Link
-                          href={`/blog/${post.slug}`}
-                          className="text-text-secondary hover:text-text-primary"
-                          target="_blank"
-                          title="Artikel ansehen"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Link>
-                      ) : (
-                        <span
-                          className="text-text-muted dark:text-text-secondary cursor-not-allowed"
-                          title="Artikel muss veröffentlicht sein"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </span>
-                      )}
-                      <Link
-                        href={`/admin/content/blog/${post.id}`}
-                        className="text-action hover:text-action"
-                        title="Artikel bearbeiten"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Link>
-                      <Button
-                        variant="destructive-ghost"
-                        size="icon"
-                        className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
-                        onClick={() => setDeleteTarget(post)}
-                        aria-label="Artikel löschen"
-                        title="Artikel löschen"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <AdminTable columns={columns} rows={filtered} rowKey={(p) => p.id} />
       ) : (
-        <div className="text-center py-12">
+        <div className="rounded-lg border border-default bg-surface-base text-center py-12">
           <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-            {search.trim() || statusFilter
-              ? 'Keine Ergebnisse'
-              : 'Noch keine Blog-Artikel'}
+            Keine Ergebnisse
           </Heading>
-          <p className="text-text-secondary mb-6">
-            {search.trim() || statusFilter
-              ? 'Versuche andere Suchkriterien.'
-              : 'Erstelle deinen ersten Blog-Artikel.'}
-          </p>
-          {!search.trim() && !statusFilter && (
-            <Button as={Link} href={ROUTES.admin.contentBlogNew} variant="primary">
-              <Plus className="w-5 h-5" />
-              Ersten Artikel erstellen
-            </Button>
-          )}
+          <p className="text-text-secondary">Versuche andere Suchkriterien.</p>
         </div>
       )}
 

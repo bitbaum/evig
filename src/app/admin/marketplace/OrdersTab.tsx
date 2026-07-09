@@ -9,7 +9,7 @@ import { formatPrice, ORDER_STATUS_CONFIG, DELIVERY_LABELS } from '@/config/mark
 import type { DeliveryOption } from '@/config/marketplace'
 import { StatusBadge } from './StatusBadge'
 import type { OrderRow, PaginatedResponse } from './types'
-import { adminTable } from '@/lib/admin-ui'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 
 interface OrdersTabProps {
   orders: PaginatedResponse<OrderRow> | null
@@ -22,6 +22,62 @@ interface OrdersTabProps {
 export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: OrdersTabProps) {
   const t = useTranslations('admin.marketplace.orders')
   const tPag = useTranslations('admin.pagination')
+
+  const columns: AdminTableColumn<OrderRow>[] = [
+    {
+      header: t('columns.orderId'),
+      cell: (o) => <span className="font-mono text-xs text-text-secondary">{o.id.slice(0, 8)}</span>,
+    },
+    {
+      header: t('columns.listing'),
+      cell: (o) => <span className="font-medium text-text-primary">{o.listing_title || t('cartItems', { count: o.item_count })}</span>,
+    },
+    {
+      header: t('columns.buyer'),
+      cell: (o) => <span className="text-text-secondary">{o.buyer_name || o.buyer_email}</span>,
+    },
+    {
+      header: t('columns.seller'),
+      cell: (o) => <span className="text-text-secondary">{o.seller_name || o.seller_email}</span>,
+    },
+    {
+      header: t('columns.delivery'),
+      className: 'align-top text-text-secondary',
+      cell: (o) => (
+        <>
+          <span className="inline-flex items-center gap-1 whitespace-nowrap">
+            {o.delivery_method === 'shipping'
+              ? <Truck className="w-3.5 h-3.5 shrink-0" />
+              : <MapPin className="w-3.5 h-3.5 shrink-0" />}
+            {DELIVERY_LABELS[o.delivery_method as DeliveryOption] || o.delivery_method}
+          </span>
+          {o.delivery_method === 'shipping' && o.shipping_address && (
+            <div className="mt-1 text-xs text-text-tertiary leading-tight">
+              {o.shipping_address.name && <div>{o.shipping_address.name}</div>}
+              {o.shipping_address.street && <div>{o.shipping_address.street}</div>}
+              {(o.shipping_address.postal_code || o.shipping_address.city) && (
+                <div>{o.shipping_address.postal_code} {o.shipping_address.city}</div>
+              )}
+            </div>
+          )}
+        </>
+      ),
+    },
+    {
+      header: t('columns.amount'),
+      cell: (o) => <span className="font-medium">{formatPrice(o.total_cents / 100)}</span>,
+    },
+    {
+      header: t('columns.status'),
+      cell: (o) => <StatusBadge status={o.status} config={ORDER_STATUS_CONFIG} />,
+    },
+    {
+      header: t('columns.date'),
+      className: 'whitespace-nowrap text-text-tertiary',
+      cell: (o) => formatDateShort(o.created_at),
+    },
+  ]
+
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
@@ -31,55 +87,11 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
         </Select>
       </div>
 
-      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.orderId')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.listing')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.buyer')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.seller')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.delivery')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.amount')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
-            {orders?.items.map(o => (
-              <tr key={o.id} className={adminTable.tr}>
-                <td className="px-4 py-3 font-mono text-xs text-text-secondary">{o.id.slice(0, 8)}</td>
-                <td className="px-4 py-3 font-medium text-text-primary">{o.listing_title || t('cartItems', { count: o.item_count })}</td>
-                <td className="px-4 py-3 text-text-secondary">{o.buyer_name || o.buyer_email}</td>
-                <td className="px-4 py-3 text-text-secondary">{o.seller_name || o.seller_email}</td>
-                <td className="px-4 py-3 text-text-secondary align-top">
-                  <span className="inline-flex items-center gap-1 whitespace-nowrap">
-                    {o.delivery_method === 'shipping'
-                      ? <Truck className="w-3.5 h-3.5 shrink-0" />
-                      : <MapPin className="w-3.5 h-3.5 shrink-0" />}
-                    {DELIVERY_LABELS[o.delivery_method as DeliveryOption] || o.delivery_method}
-                  </span>
-                  {o.delivery_method === 'shipping' && o.shipping_address && (
-                    <div className="mt-1 text-xs text-text-tertiary leading-tight">
-                      {o.shipping_address.name && <div>{o.shipping_address.name}</div>}
-                      {o.shipping_address.street && <div>{o.shipping_address.street}</div>}
-                      {(o.shipping_address.postal_code || o.shipping_address.city) && (
-                        <div>{o.shipping_address.postal_code} {o.shipping_address.city}</div>
-                      )}
-                    </div>
-                  )}
-                </td>
-                <td className="px-4 py-3 font-medium">{formatPrice(o.total_cents / 100)}</td>
-                <td className="px-4 py-3"><StatusBadge status={o.status} config={ORDER_STATUS_CONFIG} /></td>
-                <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(o.created_at)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {orders && orders.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
-        )}
-      </div>
+      {orders && orders.items.length === 0 ? (
+        <div className="rounded-lg border border-default bg-surface-base p-12 text-center text-text-tertiary">{t('empty')}</div>
+      ) : (
+        <AdminTable columns={columns} rows={orders?.items ?? []} rowKey={(o) => o.id} />
+      )}
 
       {orders && orders.pagination.total > 50 && (
         <div className="flex items-center justify-between">

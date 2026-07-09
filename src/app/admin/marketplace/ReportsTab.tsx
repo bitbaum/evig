@@ -9,7 +9,8 @@ import { REPORT_REASONS } from '@/config/marketplace'
 import { REPORT_STATUS, REPORT_STATUS_LABELS } from '@/config/report-status'
 import type { ReportRow, PaginatedResponse } from './types'
 import { StatusBadge } from '@/components/ui/status-badge'
-import { adminInteractive, adminTable } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui'
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 
 function getReportReasonLabel(reason: string): string {
   return REPORT_REASONS.find(r => r.value === reason)?.label ?? reason
@@ -27,6 +28,62 @@ interface ReportsTabProps {
 export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHandle }: ReportsTabProps) {
   const t = useTranslations('admin.marketplace.reports')
   const tPag = useTranslations('admin.pagination')
+
+  const columns: AdminTableColumn<ReportRow>[] = [
+    {
+      header: t('columns.listing'),
+      cell: (r) => (
+        <>
+          <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
+            {r.listing_title} <ExternalLink className="w-3 h-3" />
+          </a>
+          <p className="text-xs text-text-tertiary">{t('sellerLabel', { name: r.seller_name || r.seller_email })}</p>
+        </>
+      ),
+    },
+    {
+      header: t('columns.reason'),
+      cell: (r) => (
+        <>
+          <span className="font-medium">{getReportReasonLabel(r.reason)}</span>
+          {r.details && <p className="text-xs text-text-tertiary mt-1 max-w-xs truncate">{r.details}</p>}
+        </>
+      ),
+    },
+    {
+      header: t('columns.reporter'),
+      cell: (r) => <span className="text-text-secondary">{r.reporter_name || r.reporter_email}</span>,
+    },
+    {
+      header: t('columns.date'),
+      className: 'whitespace-nowrap',
+      cell: (r) => <span className="text-text-tertiary">{formatDateShort(r.created_at)}</span>,
+    },
+    {
+      header: t('columns.status'),
+      cell: (r) =>
+        r.status === REPORT_STATUS.PENDING ? (
+          <StatusBadge variant="warning">{t('statusOpen')}</StatusBadge>
+        ) : (
+          <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">{r.resolution_action ?? t('statusProcessed')}</span>
+        ),
+    },
+    {
+      header: t('columns.actions'),
+      cell: (r) =>
+        r.status === REPORT_STATUS.PENDING ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onHandle(r.id)}
+            className={`px-3 py-1.5 text-sm rounded-lg border-default ${adminInteractive.rowHover}`}
+          >
+            {t('edit')}
+          </Button>
+        ) : null,
+    },
+  ]
+
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
@@ -37,60 +94,10 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
         </Select>
       </div>
 
-      <div className="bg-surface-base rounded-xl border border overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border text-left">
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.listing')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.reason')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.reporter')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.date')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.status')}</th>
-              <th className="px-4 py-3 font-medium text-text-secondary">{t('columns.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-white/4">
-            {reports?.items.map(r => (
-              <tr key={r.id} className={adminTable.tr}>
-                <td className="px-4 py-3">
-                  <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
-                    {r.listing_title} <ExternalLink className="w-3 h-3" />
-                  </a>
-                  <p className="text-xs text-text-tertiary">{t('sellerLabel', { name: r.seller_name || r.seller_email })}</p>
-                </td>
-                <td className="px-4 py-3">
-                  <span className="font-medium">{getReportReasonLabel(r.reason)}</span>
-                  {r.details && <p className="text-xs text-text-tertiary mt-1 max-w-xs truncate">{r.details}</p>}
-                </td>
-                <td className="px-4 py-3 text-text-secondary">{r.reporter_name || r.reporter_email}</td>
-                <td className="px-4 py-3 text-text-tertiary whitespace-nowrap">{formatDateShort(r.created_at)}</td>
-                <td className="px-4 py-3">
-                  {r.status === REPORT_STATUS.PENDING ? (
-                    <StatusBadge variant="warning">{t('statusOpen')}</StatusBadge>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">{r.resolution_action ?? t('statusProcessed')}</span>
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  {r.status === REPORT_STATUS.PENDING && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onHandle(r.id)}
-                      className={`px-3 py-1.5 text-sm rounded-lg border border ${adminInteractive.rowHover}`}
-                    >
-                      {t('edit')}
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {reports && reports.items.length === 0 && (
-          <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
-        )}
-      </div>
+      <AdminTable columns={columns} rows={reports?.items ?? []} rowKey={(r) => r.id} />
+      {reports && reports.items.length === 0 && (
+        <div className="p-8 text-center text-text-tertiary">{t('empty')}</div>
+      )}
 
       {reports && reports.pagination.total > 50 && (
         <div className="flex items-center justify-between">
