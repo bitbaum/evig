@@ -1,18 +1,20 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { Clock } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/date-formats'
 import { getReadingTime } from '@/lib/blog-utils'
-import Heading from '@/components/ui/Heading'
+import UnlistedBadge from './UnlistedBadge'
 
 interface BlogFeaturedGridProps {
   posts: BlogPost[]
 }
 
-export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
+export default async function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
+  const t = await getTranslations('blog')
+
   return (
-    <div className="grid md:grid-cols-3 gap-8">
+    <div className="grid gap-8 md:grid-cols-3">
       {posts.map((post) => {
         const readingTime = getReadingTime(post.body)
 
@@ -21,47 +23,42 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
             <article>
               {/* Image */}
               {post.featuredImage ? (
-                <div className="aspect-16/10 overflow-hidden rounded-lg bg-surface-overlay mb-4 relative">
+                <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-xl border border-subtle bg-surface-raised">
                   <Image
                     src={post.featuredImage}
                     alt={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
               ) : (
-                <div className="aspect-16/10 bg-surface-raised border rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-text-muted text-4xl font-bold">R</span>
+                <div className="mb-4 flex aspect-[16/10] items-center justify-center rounded-xl border border-subtle bg-surface-raised">
+                  <span className="font-mono text-3xl font-semibold text-text-tertiary">R</span>
                 </div>
               )}
 
-              {/* Category */}
-              {post.category && (
-                <span className="inline-block px-2 py-1 bg-surface-raised text-text-secondary text-xs font-semibold rounded-sm mb-3 uppercase tracking-wide">
-                  {post.category}
-                </span>
-              )}
+              <div className="flex flex-wrap items-center gap-2.5">
+                {post.category && <span className="ui-public-eyebrow">{post.category}</span>}
+                {post.visibility === 'unlisted' && <UnlistedBadge />}
+              </div>
 
-              {/* Title */}
-              <Heading level={3} className="text-xl font-bold text-text-primary mb-2 leading-snug group-hover:text-action transition-colors line-clamp-3">
+              <h3 className="mt-3 line-clamp-3 text-xl font-semibold leading-snug tracking-[-0.01em] text-text-primary transition-colors group-hover:text-action">
                 {post.title}
-              </Heading>
+              </h3>
 
-              {/* Excerpt */}
               {post.excerpt && (
-                <p className="text-text-secondary mb-3 line-clamp-2 text-sm">
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-secondary">
                   {post.excerpt}
                 </p>
               )}
 
-              {/* Meta */}
-              <div className="flex items-center gap-3 text-xs text-text-tertiary">
-                <span className="font-semibold text-text-secondary">{post.author}</span>
-                <span className="w-1 h-1 bg-surface-overlay rounded-full"></span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  {readingTime} min
+              <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
+                <span className="text-text-secondary">{post.author}</span>
+                <span aria-hidden="true">·</span>
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3 w-3" aria-hidden="true" />
+                  {readingTime} {t('minutesShort')}
                 </span>
               </div>
             </article>

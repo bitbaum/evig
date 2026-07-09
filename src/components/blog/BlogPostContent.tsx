@@ -3,7 +3,6 @@ import remarkGfm from 'remark-gfm'
 import { BlogPost } from '@/lib/blog'
 import ShareButtons from './ShareButtons'
 import NewsletterSignup from './NewsletterSignup'
-import Heading from '@/components/ui/Heading'
 
 interface BlogPostContentProps {
   post: BlogPost
@@ -12,121 +11,129 @@ interface BlogPostContentProps {
 export default function BlogPostContent({ post }: BlogPostContentProps) {
   return (
     <>
-    <article className="max-w-[680px] mx-auto px-6 py-16">
-      {/* Main Content - Medium Style */}
-      <div className="mb-16">
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={{
-            h1: ({ children }) => (
-              <Heading level={1} className="text-4xl font-bold text-text-primary mt-12 mb-4 leading-tight">
-                {children}
-              </Heading>
-            ),
-            h2: ({ children }) => (
-              <Heading level={2} className="text-3xl font-bold text-text-primary mt-10 mb-3 leading-tight">
-                {children}
-              </Heading>
-            ),
-            h3: ({ children }) => (
-              <Heading level={3} className="text-2xl font-bold text-text-primary mt-8 mb-3 leading-tight">
-                {children}
-              </Heading>
-            ),
-            p: ({ children }) => (
-              <p className="text-[21px] text-text-primary leading-[1.58] mb-8 font-serif">
-                {children}
-              </p>
-            ),
-            ul: ({ children }) => (
-              <ul className="text-[21px] text-text-primary leading-[1.58] mb-8 pl-8 space-y-2">
-                {children}
-              </ul>
-            ),
-            ol: ({ children }) => (
-              <ol className="text-[21px] text-text-primary leading-[1.58] mb-8 pl-8 space-y-2 list-decimal">
-                {children}
-              </ol>
-            ),
-            li: ({ children }) => (
-              <li className="text-[21px] text-text-primary leading-[1.58]">
-                {children}
-              </li>
-            ),
-            a: ({ href, children }) => (
-              <a
-                href={href}
-                className="text-text-primary underline decoration-neutral-900 hover:text-action hover:decoration-primary-700 transition-colors"
-              >
-                {children}
-              </a>
-            ),
-            strong: ({ children }) => (
-              <strong className="font-bold text-text-primary">
-                {children}
-              </strong>
-            ),
-            em: ({ children }) => (
-              <em className="italic">
-                {children}
-              </em>
-            ),
-            blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-strong pl-6 py-2 my-8 italic text-[21px] text-text-secondary leading-[1.58]">
-                {children}
-              </blockquote>
-            ),
-            code: ({ children, className }) => {
-              const isInline = !className
-              if (isInline) {
+      <article className="mx-auto max-w-[720px] px-4 pb-16 pt-12 sm:px-6">
+        <div className="mb-16">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              h2: ({ children }) => (
+                <h2 className="mt-14 mb-4 text-2xl font-semibold leading-tight tracking-[-0.01em] text-text-primary sm:text-3xl">
+                  {children}
+                </h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="mt-10 mb-3 text-xl font-semibold leading-tight text-text-primary sm:text-2xl">
+                  {children}
+                </h3>
+              ),
+              p: ({ children }) => (
+                <p className="mb-6 text-[19px] leading-[1.75] text-text-primary">{children}</p>
+              ),
+              ul: ({ children }) => (
+                <ul className="mb-6 list-disc space-y-2 pl-6 text-[19px] leading-[1.7] text-text-primary marker:text-text-tertiary">
+                  {children}
+                </ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="mb-6 list-decimal space-y-2 pl-6 text-[19px] leading-[1.7] text-text-primary marker:text-text-tertiary">
+                  {children}
+                </ol>
+              ),
+              li: ({ children }) => <li className="pl-1">{children}</li>,
+              a: ({ href, children }) => (
+                <a
+                  href={href}
+                  className="font-medium text-action underline decoration-action/40 underline-offset-[3px] transition-colors hover:decoration-action"
+                  {...(href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {children}
+                </a>
+              ),
+              strong: ({ children }) => (
+                <strong className="font-semibold text-text-primary">{children}</strong>
+              ),
+              em: ({ children }) => <em className="italic text-text-secondary">{children}</em>,
+              blockquote: ({ children }) => (
+                <blockquote className="my-10 border-l-2 border-action pl-5 text-xl leading-relaxed text-text-primary">
+                  {children}
+                </blockquote>
+              ),
+              img: ({ src, alt }) => (
+                // Chart/illustration assets. Plain img: same-origin SVGs render
+                // as-is without the next/image optimizer (which rejects SVG).
+                <img
+                  src={typeof src === 'string' ? src : ''}
+                  alt={alt || ''}
+                  loading="lazy"
+                  className="my-10 w-full rounded-xl border border-subtle bg-surface-base"
+                />
+              ),
+              hr: () => <hr className="my-14 border-t border-subtle" />,
+              code: ({ children, className }) => {
+                const isInline = !className
+                if (isInline) {
+                  return (
+                    <code className="rounded bg-surface-raised px-1.5 py-0.5 font-mono text-[0.9em] text-text-primary">
+                      {children}
+                    </code>
+                  )
+                }
                 return (
-                  <code className="bg-surface-raised text-text-primary px-2 py-0.5 rounded-sm text-[18px] font-mono">
+                  <code className="my-8 block overflow-x-auto rounded-lg bg-surface-overlay p-5 font-mono text-sm leading-relaxed text-text-secondary">
                     {children}
                   </code>
                 )
-              }
-              return (
-                <code className="block bg-surface-overlay text-text-muted p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
+              },
+              table: ({ children }) => (
+                <div className="my-10 overflow-x-auto rounded-xl border border-subtle">
+                  <table className="w-full border-collapse text-left text-[15px]">{children}</table>
+                </div>
+              ),
+              thead: ({ children }) => (
+                <thead className="bg-surface-raised">{children}</thead>
+              ),
+              th: ({ children }) => (
+                <th className="border-b border-subtle px-4 py-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
                   {children}
-                </code>
-              )
-            },
-            hr: () => (
-              <hr className="my-12 border-t border" />
-            ),
-          }}
-        >
-          {post.body}
-        </ReactMarkdown>
-      </div>
-
-      {/* Tags */}
-      {post.tags && post.tags.length > 0 && (
-        <div className="py-8 border-t border">
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full hover:bg-surface-overlay transition-colors"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+                </th>
+              ),
+              td: ({ children }) => (
+                <td className="border-b border-subtle px-4 py-3 align-top text-text-secondary [tr:last-child_&]:border-b-0">
+                  {children}
+                </td>
+              ),
+            }}
+          >
+            {post.body}
+          </ReactMarkdown>
         </div>
-      )}
 
-      {/* Share Buttons */}
-      <div className="py-8 border-t border">
-        <ShareButtons
-          url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.ch'}/blog/${post.slug}`}
-          title={post.title}
-        />
-      </div>
-    </article>
+        {/* Tags */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="border-t border-subtle py-8">
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="rounded-full border border-subtle px-3 py-1 font-mono text-xs text-text-tertiary"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
-    {/* Newsletter Signup */}
-    <NewsletterSignup />
-  </>
+        {/* Share */}
+        <div className="border-t border-subtle py-8">
+          <ShareButtons
+            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.ch'}/blog/${post.slug}`}
+            title={post.title}
+          />
+        </div>
+      </article>
+
+      <NewsletterSignup />
+    </>
   )
 }

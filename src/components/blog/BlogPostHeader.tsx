@@ -1,53 +1,60 @@
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
+import { getReadingTime } from '@/lib/blog-utils'
 import { ROUTES } from '@/config/routes'
-import { responsiveTypography } from '@/lib/responsive'
+import UnlistedBadge from './UnlistedBadge'
 
 interface BlogPostHeaderProps {
   post: BlogPost
 }
 
-export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
+export default async function BlogPostHeader({ post }: BlogPostHeaderProps) {
+  const t = await getTranslations('blog')
+  const readingTime = getReadingTime(post.body)
+
   return (
-    <header className="max-w-[680px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      {/* Back Link */}
+    <header className="mx-auto max-w-[720px] px-4 pt-10 pb-8 sm:px-6 sm:pt-16">
+      {/* Back link */}
       <Link
         href={ROUTES.public.blog}
-        className="inline-flex items-center text-text-secondary hover:text-text-primary mb-8 transition-colors"
+        className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary transition-colors hover:text-text-primary"
       >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Blog
+        <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+        {t('back')}
       </Link>
 
-      {/* Category */}
-      {post.category && (
-        <div className="mb-4">
-          <span className="text-sm font-medium text-action uppercase tracking-wide">
-            {post.category}
-          </span>
-        </div>
-      )}
+      {/* Eyebrow: category + unlisted marker */}
+      <div className="mt-10 flex flex-wrap items-center gap-3">
+        {post.category && <span className="ui-public-eyebrow">{post.category}</span>}
+        {post.visibility === 'unlisted' && <UnlistedBadge />}
+      </div>
 
       {/* Title */}
-      <Heading level={1} className={`${responsiveTypography.hero} font-bold text-text-primary leading-tight mb-6`}>
+      <h1 className="mt-4 text-4xl font-semibold leading-[1.04] tracking-[-0.02em] text-text-primary sm:text-5xl lg:text-[3.5rem]">
         {post.title}
-      </Heading>
+      </h1>
 
-      {/* Excerpt */}
+      {/* Excerpt / lede */}
       {post.excerpt && (
-        <p className={`${responsiveTypography.bodyLarge} text-text-secondary leading-relaxed mb-8`}>
+        <p className="mt-6 max-w-[60ch] text-lg leading-relaxed text-text-secondary sm:text-xl">
           {post.excerpt}
         </p>
       )}
 
       {/* Meta */}
-      <div className="flex items-center gap-4 text-text-secondary text-sm border-b border pb-8">
-        <span className="font-medium">{post.author}</span>
-        <span>·</span>
-        <time>{formatDate(post.publishedAt || post.createdAt)}</time>
+      <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-subtle pt-6 font-mono text-xs uppercase tracking-[0.08em] text-text-tertiary">
+        <span className="text-text-secondary">{post.author}</span>
+        <span aria-hidden="true">·</span>
+        <time dateTime={post.publishedAt || post.createdAt}>
+          {formatDate(post.publishedAt || post.createdAt)}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>
+          {readingTime} {t('minutesShort')}
+        </span>
       </div>
     </header>
   )

@@ -188,5 +188,6 @@ function mapPostFromDb(row: {
     published: true, // Only published posts are returned
     body: row.content,
     createdAt: row.createdAt || '',
+    visibility: 'public', // DB-authored posts are public; unlisted lives in file frontmatter
   }
 }

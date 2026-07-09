@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { getPostBySlug, getAllPosts } from '@/lib/blog-db'
-import { getPostBySlug as getFilePost, getAllPosts as getFilePosts } from '@/lib/blog'
+import { getPostBySlug as getFilePost, getAllPosts as getFilePosts, isListedPost } from '@/lib/blog'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
 import RelatedPosts from '@/components/blog/RelatedPosts'
@@ -68,15 +69,30 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // Get related posts from same category
+  // Related = same category, public only (never surface unlisted posts to a
+  // link visitor who just happens to land on an unlisted article).
   const allPosts = await getPosts(locale);
   const relatedPosts = allPosts
-    .filter((p) => p.slug !== post.slug && p.category === post.category)
+    .filter((p) => p.slug !== post.slug && p.category === post.category && isListedPost(p))
     .slice(0, 3);
 
   return (
     <main>
       <BlogPostHeader post={post} />
+      {post.featuredImage && (
+        <figure className="mx-auto max-w-[960px] px-4 sm:px-6">
+          <div className="relative aspect-[1200/630] overflow-hidden rounded-xl border border-subtle bg-surface-raised">
+            <Image
+              src={post.featuredImage}
+              alt={post.title}
+              fill
+              priority
+              sizes="(max-width: 960px) 100vw, 960px"
+              className="object-cover"
+            />
+          </div>
+        </figure>
+      )}
       <BlogPostContent post={post} />
       {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
     </main>

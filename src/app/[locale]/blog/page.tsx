@@ -6,7 +6,8 @@ import { Link } from '@/i18n/navigation'
 import { Suspense } from 'react'
 import { BookOpen } from 'lucide-react'
 import { getAllPosts, getAllCategories, type BlogCategory } from '@/lib/blog-db'
-import { getAllPosts as getFilePosts } from '@/lib/blog'
+import { getAllPosts as getFilePosts, isListedPost } from '@/lib/blog'
+import { auth } from '@/auth'
 import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
 import BlogLatestList from '@/components/blog/BlogLatestList'
@@ -45,6 +46,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   let allPosts = await getAllPosts()
   if (allPosts.length === 0) {
     allPosts = getFilePosts(locale)
+  }
+
+  // Unlisted posts stay out of the public listing, but logged-in staff see them
+  // (with a badge) so they can grab the link to share. Direct links stay open.
+  const session = await auth()
+  const isStaff = Boolean(session?.user?.isStaff)
+  if (!isStaff) {
+    allPosts = allPosts.filter(isListedPost)
   }
 
   // Fetch categories from DB (with colors and descriptions)

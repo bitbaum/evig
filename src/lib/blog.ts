@@ -37,6 +37,25 @@ export interface BlogPost {
   body: string
   createdAt: string
   locale?: string
+  /**
+   * `public` (default) is listed on the blog and visible to everyone.
+   * `unlisted` is hidden from the public listing but its direct link works for
+   * anyone (no account needed) — staff share it deliberately. Logged-in staff
+   * still see unlisted posts in the listing so they can grab the link.
+   */
+  visibility: 'public' | 'unlisted'
+}
+
+// Frontmatter `visibility:` accepts a few intuitive spellings for "not public".
+function parseVisibility(value: unknown): BlogPost['visibility'] {
+  return value === 'unlisted' || value === 'staff' || value === 'internal'
+    ? 'unlisted'
+    : 'public'
+}
+
+/** A post belongs in the public listing unless it is explicitly unlisted. */
+export function isListedPost(post: BlogPost): boolean {
+  return post.visibility !== 'unlisted'
 }
 
 // Filenames encode locale as a suffix: `tablets.md` (→ de), `tablets.en.md`,
@@ -73,6 +92,7 @@ function readPost(fileName: string, slug: string, locale: string): BlogPost {
     body: content,
     createdAt: stats.birthtime.toISOString(),
     locale,
+    visibility: parseVisibility(data.visibility),
   }
 }
 
