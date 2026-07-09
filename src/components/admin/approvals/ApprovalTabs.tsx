@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils'
 const TABS = [
   { href: '/admin/approvals', label: 'Inhalte' },
   { href: '/admin/team/approvals', label: 'Zeitkarten & Abwesenheit' },
-  { href: '/admin/repairer-applications', label: 'Techniker' },
 ] as const
 
 export function ApprovalTabs() {
