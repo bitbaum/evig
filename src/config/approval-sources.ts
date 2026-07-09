@@ -71,7 +71,9 @@ export const APPROVAL_SOURCES: readonly ApprovalSourceConfig[] = [
     icon: Clock,
     reviewMode: 'bulk',
     reviewHref: '/admin/team/approvals',
-    permission: 'timecards',
+    // Gate on the APPROVAL surface, not personal `timecards` — only reviewers,
+    // not everyone with their own card, should see this in a queue.
+    permission: 'timecard-approvals',
   },
   {
     key: 'time_off',
@@ -80,7 +82,7 @@ export const APPROVAL_SOURCES: readonly ApprovalSourceConfig[] = [
     icon: CalendarOff,
     reviewMode: 'bulk',
     reviewHref: '/admin/team/approvals',
-    permission: 'timecards',
+    permission: 'timecard-approvals',
   },
   {
     key: 'permission_request',

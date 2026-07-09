@@ -1,35 +1,44 @@
 import type { DashboardStats, ActionItem } from './types'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 import type { AdminSection } from '@/lib/permissions'
+import { APPROVAL_SOURCES } from '@/config/approval-sources'
+import type { ApprovalCounts } from '@/lib/approvals/counts'
+
+/** A pending approval older than this reads as urgent (matches the hub hero). */
+const APPROVAL_STALE_DAYS = 7
+
+function daysSince(iso: string | null): number | null {
+  if (!iso) return null
+  return Math.floor((Date.now() - Date.parse(iso)) / 86_400_000)
+}
 
 export function buildActionItems(
   stats: DashboardStats,
+  approvalCounts: ApprovalCounts,
   isSuper: boolean,
   canAccessSection: (section: AdminSection) => boolean
 ): ActionItem[] {
   const items: ActionItem[] = []
 
-  if (stats.pendingApprovals > 0 && canAccessSection('approvals')) {
+  // Approval sources — ONE count engine (`getApprovalCounts` over the
+  // APPROVAL_SOURCES SSOT), the SAME one the /admin/approvals hub reads. This
+  // replaces the former dead `user_content_submissions` read plus the separately
+  // queried blog/timecard/permission counts, so the dashboard and the hub can no
+  // longer disagree. Each row routes to its own review surface (`reviewHref`) and
+  // is gated by its own section permission — add a source and it appears here.
+  for (const source of APPROVAL_SOURCES) {
+    const count = approvalCounts[source.key]
+    if (!count || count.failed || count.pending === 0) continue
+    if (source.superAdminOnly && !isSuper) continue
+    if (!canAccessSection(source.permission as AdminSection)) continue
+    const age = daysSince(count.oldestAt)
     items.push({
-      type: 'urgent',
-      label: `${stats.pendingApprovals} Freigabe${stats.pendingApprovals > 1 ? 'n' : ''} warten`,
-      count: stats.pendingApprovals,
-      href: '/admin/approvals',
-      actionLabel: 'Jetzt prüfen',
-      oldestAt: stats.pendingApprovalsOldest,
-      inlineAction: stats.topPendingApproval
-        ? { itemId: stats.topPendingApproval.id, itemLabel: stats.topPendingApproval.label, actionType: 'approve_blog' }
-        : undefined,
-    })
-  }
-
-  if (isSuper && stats.pendingPermissionRequests > 0) {
-    items.push({
-      type: 'warning',
-      label: `${stats.pendingPermissionRequests} Berechtigungsanfrage${stats.pendingPermissionRequests > 1 ? 'n' : ''}`,
-      count: stats.pendingPermissionRequests,
-      href: '#permission-requests',
-      actionLabel: 'Ansehen',
+      type: age !== null && age >= APPROVAL_STALE_DAYS ? 'urgent' : 'warning',
+      label: `${source.label} zur Freigabe`,
+      count: count.pending,
+      href: source.reviewHref,
+      actionLabel: 'Prüfen',
+      oldestAt: count.oldestAt,
     })
   }
 
@@ -80,17 +89,6 @@ export function buildActionItems(
     })
   }
 
-  if (stats.pendingBlogSubmissions > 0) {
-    items.push({
-      type: 'warning',
-      label: `${stats.pendingBlogSubmissions} Blog-Einreichung${stats.pendingBlogSubmissions > 1 ? 'en' : ''} ausstehend`,
-      count: stats.pendingBlogSubmissions,
-      href: '/admin/approvals',
-      actionLabel: 'Prüfen',
-      oldestAt: stats.pendingBlogSubmissionsOldest,
-    })
-  }
-
   if (stats.pendingJobApplications > 0 && canAccessSection('hr-applications')) {
     items.push({
       type: 'warning',
@@ -99,17 +97,6 @@ export function buildActionItems(
       href: '/admin/hr/applications',
       actionLabel: 'Prüfen',
       oldestAt: stats.pendingJobApplicationsOldest,
-    })
-  }
-
-  if (stats.pendingTimecardApprovals > 0 && canAccessSection('timecard-approvals')) {
-    items.push({
-      type: 'warning',
-      label: `${stats.pendingTimecardApprovals} Zeitkarte${stats.pendingTimecardApprovals > 1 ? 'n' : ''} zur Freigabe`,
-      count: stats.pendingTimecardApprovals,
-      href: '/admin/team/approvals',
-      actionLabel: 'Freigeben',
-      oldestAt: stats.pendingTimecardApprovalsOldest,
     })
   }
 

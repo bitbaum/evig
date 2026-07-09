@@ -45,6 +45,7 @@ import {
 import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
 import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
 import type { DashboardStats } from '@/components/admin/dashboard'
+import { getApprovalCounts, type ApprovalCounts } from '@/lib/approvals/counts'
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
 import { getOnboardingChecklistState } from '@/lib/services/onboarding-state'
 import { ROLES, type UserRole } from '@/lib/constants'
@@ -69,15 +70,17 @@ function todayLongLabel(): string {
 
 async function UnifiedQueueSection({
   statsPromise,
+  approvalCountsPromise,
   isSuper,
   canAccess,
 }: {
   statsPromise: Promise<DashboardStats>
+  approvalCountsPromise: Promise<ApprovalCounts>
   isSuper: boolean
   canAccess: (section: AdminSection) => boolean
 }) {
-  const stats = await statsPromise
-  const items = buildUnifiedQueue(stats, isSuper, canAccess)
+  const [stats, approvalCounts] = await Promise.all([statsPromise, approvalCountsPromise])
+  const items = buildUnifiedQueue(stats, approvalCounts, isSuper, canAccess)
   return <UnifiedQueue items={items} />
 }
 
@@ -98,15 +101,15 @@ async function MonatsueberblickSection({
 }
 
 async function PermissionRequestsSection({
-  statsPromise,
+  approvalCountsPromise,
   isSuper,
 }: {
-  statsPromise: Promise<DashboardStats>
+  approvalCountsPromise: Promise<ApprovalCounts>
   isSuper: boolean
 }) {
   if (!isSuper) return null
-  const stats = await statsPromise
-  if (stats.pendingPermissionRequests === 0) return null
+  const approvalCounts = await approvalCountsPromise
+  if ((approvalCounts.permission_request?.pending ?? 0) === 0) return null
   const t = await getTranslations('admin.dashboard')
   return (
     <section id="permission-requests" aria-labelledby="dashboard-perm-title">
@@ -131,6 +134,9 @@ export default async function AdminDashboard() {
 
   const isSuper = isSuperAdmin(session.user.email)
   const statsPromise = getDashboardStats(isSuper)
+  // Approval-type counts come from the SSOT engine (same as the /admin/approvals
+  // hub) — fetched once, shared by the queue and the permission-requests block.
+  const approvalCountsPromise = getApprovalCounts()
   const t = await getTranslations('admin.dashboard')
 
   const userForPermissions = {
@@ -218,6 +224,7 @@ export default async function AdminDashboard() {
       <Suspense fallback={<UnifiedQueueSkeleton />}>
         <UnifiedQueueSection
           statsPromise={statsPromise}
+          approvalCountsPromise={approvalCountsPromise}
           isSuper={isSuper}
           canAccess={canAccess}
         />
@@ -228,7 +235,7 @@ export default async function AdminDashboard() {
 
       {/* ZUGRIFFS-ANFRAGEN — super admin only, only when pending */}
       <Suspense fallback={null}>
-        <PermissionRequestsSection statsPromise={statsPromise} isSuper={isSuper} />
+        <PermissionRequestsSection approvalCountsPromise={approvalCountsPromise} isSuper={isSuper} />
       </Suspense>
 
       {/* MONATSÜBERBLICK — collapsed by default except for 'lead' mode */}

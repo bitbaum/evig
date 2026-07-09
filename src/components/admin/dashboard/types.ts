@@ -15,24 +15,23 @@ export interface MissionDelta {
 }
 
 export interface DashboardStats {
+  // NOTE: approval-type counts (blog, workshop proposals, locations, timecards,
+  // absences, permission requests) are NOT here — they come from the SSOT
+  // `getApprovalCounts()` engine (src/lib/approvals/counts.ts), the same one the
+  // /admin/approvals hub reads, so the two surfaces can't drift. Only
+  // non-approval action items live in DashboardStats.
+
   // Action items with age of oldest unresolved item
-  pendingApprovals: number
-  pendingApprovalsOldest: string | null
-  pendingPermissionRequests: number
   pendingAppointments: number
   pendingAppointmentsOldest: string | null
   unverifiedListings: number
   unverifiedListingsOldest: string | null
-  pendingBlogSubmissions: number
-  pendingBlogSubmissionsOldest: string | null
   urgentItHilfe: number
   urgentItHilfeOldest: string | null
   pendingRepairerApplications: number
   pendingRepairerApplicationsOldest: string | null
   pendingJobApplications: number
   pendingJobApplicationsOldest: string | null
-  pendingTimecardApprovals: number
-  pendingTimecardApprovalsOldest: string | null
   overdueTasks: number
   overdueTasksOldest: string | null
   openDecisions: number
@@ -55,7 +54,6 @@ export interface DashboardStats {
   // Delta vs last month (positive = improvement)
   delta: MissionDelta
   // Top pending items for inline actions in UnifiedQueue
-  topPendingApproval: { id: string; label: string } | null
   topUnverifiedListing: { id: string; label: string } | null
   topPendingRepairerApp: { id: string; label: string } | null
 }
@@ -83,13 +81,6 @@ export type QuickAction = {
   color: string
 }
 
-export type FulfillAction = {
-  label: string
-  href: string
-  icon: typeof Package
-  count: number
-}
-
 // UnifiedQueueItem is an ActionItem — same shape, used in the merged queue
-// that replaces the separate ActionItems + FulfillActions sections.
+// that replaced the separate ActionItems + FulfillActions sections.
 export type UnifiedQueueItem = ActionItem

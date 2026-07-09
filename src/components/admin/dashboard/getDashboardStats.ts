@@ -1,21 +1,17 @@
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import {
-  users, userContentSubmissions, staffPermissionRequests,
-  serviceAppointments, repairerProfiles, listings,
+  users, serviceAppointments, repairerProfiles, listings,
   tasks, decisions, itHilfeRequests, repairerApplications,
   inventoryItems, workshopRegistrations,
 } from '@/db/schema'
 import { jobApplications } from '@/db/schema/hr-vacancies'
-import { timecards } from '@/db/schema/timecards'
-import { blogPosts, blogSubmissions } from '@/db/schema/content'
-import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE } from '@/config/approval-status'
-import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
+import { blogPosts } from '@/db/schema/content'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
 import { REPAIRER_APPLICATION_STATUS, REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { APPLICATION_STATUS } from '@/config/hr-application-status'
-import { TIMECARD_STATUSES } from '@/config/timecards'
 import { DECISION_STATUS } from '@/config/decisions'
 import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
 import { logger } from '@/lib/logger'
@@ -23,17 +19,13 @@ import type { DashboardStats } from './types'
 
 // Table name refs
 const usersTable = getTableName(users)
-const ucsTable = getTableName(userContentSubmissions)
-const sprTable = getTableName(staffPermissionRequests)
 const saTable = getTableName(serviceAppointments)
 const rpTable = getTableName(repairerProfiles)
 const blogTable = getTableName(blogPosts)
 const listingsTable = getTableName(listings)
-const blogSubTable = getTableName(blogSubmissions)
 const itHilfeTable = getTableName(itHilfeRequests)
 const repairerAppTable = getTableName(repairerApplications)
 const jobApplicationsTable = getTableName(jobApplications)
-const timecardsTable = getTableName(timecards)
 const tasksTable = getTableName(tasks)
 const decisionsTable = getTableName(decisions)
 const inventoryTable = getTableName(inventoryItems)
@@ -89,14 +81,10 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     usersRes,
     staffRes,
     techRes,
-    approvalsRes,
-    permissionsRes,
     appointmentsRes,
-    blogSubRes,
     itHilfeRes,
     repairerRes,
     jobApplicationsRes,
-    timecardsRes,
     tasksRes,
     decisionsRes,
     listingsRes,
@@ -110,7 +98,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     prevDevicesSoldRes,
     prevItHilfeCompletedRes,
     prevWorkshopAttendeesRes,
-    topApprovalRes,
     topListingRes,
     topRepairerRes,
   ] = await Promise.allSettled([
@@ -119,28 +106,13 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)} WHERE is_staff = true`),
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(rpTable)} WHERE is_active = true AND profile_tier = ${REPAIRER_PROFILE_TIER.COMMUNITY}`),
 
-    // Action items — count + oldest unresolved
-    db.execute(sql`
-      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
-      FROM ${sql.raw(ucsTable)}
-      WHERE status = ${APPROVAL_STATUS.PENDING}
-        AND content_type IN (${SUBMISSION_CONTENT_TYPE.WORKSHOP}, ${SUBMISSION_CONTENT_TYPE.BLOG_POST})
-    `),
-    isSuper
-      ? db.execute(sql`
-          SELECT COUNT(*) AS count
-          FROM ${sql.raw(sprTable)}
-          WHERE status = ${PERMISSION_REQUEST_STATUS.PENDING}
-        `)
-      : Promise.resolve({ rows: [{ count: '0' }] }),
+    // Action items — count + oldest unresolved. NOTE: approval-type counts
+    // (blog/workshop proposals/locations/timecards/absences/permission requests)
+    // are intentionally NOT here — they come from the SSOT `getApprovalCounts()`
+    // engine so the dashboard and the /admin/approvals hub read ONE source.
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(saTable)}
-      WHERE status = ${APPROVAL_STATUS.PENDING}
-    `),
-    db.execute(sql`
-      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
-      FROM ${sql.raw(blogSubTable)}
       WHERE status = ${APPROVAL_STATUS.PENDING}
     `),
     db.execute(sql`
@@ -157,11 +129,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(jobApplicationsTable)}
       WHERE status = ${APPLICATION_STATUS.NEW}
-    `),
-    db.execute(sql`
-      SELECT COUNT(*) AS count, MIN(submitted_at) AS oldest
-      FROM ${sql.raw(timecardsTable)}
-      WHERE status = ${TIMECARD_STATUSES.SUBMITTED}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(due_date) AS oldest
@@ -240,14 +207,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
 
     // Top pending items for inline actions in the dashboard queue
     db.execute(sql`
-      SELECT id, COALESCE(title, content_type, 'Einreichung') AS label
-      FROM ${sql.raw(ucsTable)}
-      WHERE status = ${APPROVAL_STATUS.PENDING}
-        AND content_type IN (${SUBMISSION_CONTENT_TYPE.WORKSHOP}, ${SUBMISSION_CONTENT_TYPE.BLOG_POST})
-      ORDER BY created_at ASC
-      LIMIT 1
-    `),
-    db.execute(sql`
       SELECT id, COALESCE(title, 'Inserat') AS label
       FROM ${sql.raw(listingsTable)}
       WHERE status = ${LISTING_STATUS.ACTIVE} AND verified_at IS NULL
@@ -264,14 +223,12 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     `),
   ])
 
-  // Extract approvals
-  const approvals = rowCountAndOldest(approvalsRes, 'pendingApprovals')
+  // Extract non-approval action items (approval-type counts come from the SSOT
+  // `getApprovalCounts()` engine, not from here).
   const appointments = rowCountAndOldest(appointmentsRes, 'pendingAppointments')
-  const blogSubs = rowCountAndOldest(blogSubRes, 'pendingBlogSubmissions')
   const itHilfe = rowCountAndOldest(itHilfeRes, 'urgentItHilfe')
   const repairer = rowCountAndOldest(repairerRes, 'pendingRepairerApplications')
   const jobApps = rowCountAndOldest(jobApplicationsRes, 'pendingJobApplications')
-  const timecardApprovals = rowCountAndOldest(timecardsRes, 'pendingTimecardApprovals')
   const overdueTasksData = rowCountAndOldest(tasksRes, 'overdueTasks')
 
   // Listings (special shape)
@@ -290,23 +247,16 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
   }
 
   return {
-    pendingApprovals: approvals.count,
-    pendingApprovalsOldest: approvals.oldest,
-    pendingPermissionRequests: rowCount(permissionsRes, 'pendingPermissionRequests'),
     pendingAppointments: appointments.count,
     pendingAppointmentsOldest: appointments.oldest,
     unverifiedListings,
     unverifiedListingsOldest,
-    pendingBlogSubmissions: blogSubs.count,
-    pendingBlogSubmissionsOldest: blogSubs.oldest,
     urgentItHilfe: itHilfe.count,
     urgentItHilfeOldest: itHilfe.oldest,
     pendingRepairerApplications: repairer.count,
     pendingRepairerApplicationsOldest: repairer.oldest,
     pendingJobApplications: jobApps.count,
     pendingJobApplicationsOldest: jobApps.oldest,
-    pendingTimecardApprovals: timecardApprovals.count,
-    pendingTimecardApprovalsOldest: timecardApprovals.oldest,
     overdueTasks: overdueTasksData.count,
     overdueTasksOldest: overdueTasksData.oldest,
     openDecisions: rowCount(decisionsRes, 'openDecisions'),
@@ -337,11 +287,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
         rowCount(workshopAttendeesRes, 'workshopAttendeesThisMonth') -
         rowCount(prevWorkshopAttendeesRes, 'prevWorkshopAttendees'),
     },
-    topPendingApproval: (() => {
-      if (topApprovalRes.status !== 'fulfilled') return null
-      const r = (topApprovalRes.value.rows as Row[])[0]
-      return r ? { id: String(r.id), label: String(r.label) } : null
-    })(),
     topUnverifiedListing: (() => {
       if (topListingRes.status !== 'fulfilled') return null
       const r = (topListingRes.value.rows as Row[])[0]

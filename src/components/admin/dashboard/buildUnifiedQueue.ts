@@ -1,5 +1,6 @@
 import { buildActionItems } from './buildActionItems'
 import type { DashboardStats, UnifiedQueueItem } from './types'
+import type { ApprovalCounts } from '@/lib/approvals/counts'
 import type { AdminSection } from '@/lib/permissions'
 
 const URGENCY_ORDER = { urgent: 0, warning: 1, success: 2 } as const
@@ -13,10 +14,11 @@ const URGENCY_ORDER = { urgent: 0, warning: 1, success: 2 } as const
  */
 export function buildUnifiedQueue(
   stats: DashboardStats,
+  approvalCounts: ApprovalCounts,
   isSuper: boolean,
   canAccessSection: (section: AdminSection) => boolean,
 ): UnifiedQueueItem[] {
-  return buildActionItems(stats, isSuper, canAccessSection).sort(
+  return buildActionItems(stats, approvalCounts, isSuper, canAccessSection).sort(
     (a, b) => URGENCY_ORDER[a.type] - URGENCY_ORDER[b.type]
   )
 }
