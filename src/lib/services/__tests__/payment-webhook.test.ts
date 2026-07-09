@@ -146,6 +146,11 @@ jest.mock('@/lib/kivvi/client', () => ({
   updateKivviDocumentStatus: jest.fn().mockResolvedValue(undefined),
   recordKivviPayment: jest.fn().mockResolvedValue(undefined),
   updateKivviInventoryItem: jest.fn().mockResolvedValue(undefined),
+  recordKivviAgencySale: jest.fn().mockResolvedValue({
+    journalEntryId: 'je-1',
+    reference: 'MO-order-1',
+    sourceType: 'marketplace_agency_sale',
+  }),
 }))
 
 jest.mock('@/config/marketplace', () => ({
@@ -426,27 +431,45 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
     expect(createKivviInvoice).toHaveBeenCalledTimes(1)
   })
 
-  it('does NOT book a P2P order to Kivvi (agency/pass-through — not revamp-it revenue)', async () => {
-    // isRevampit=false → revamp-it never sold this item, took 0 commission, and
-    // owes the seller off-platform. Booking it as revenue would overstate income
-    // and hide the payable. The guard must short-circuit before createKivviInvoice.
+  it('books a P2P order via agency sale (not invoice)', async () => {
     mockDbSelect.mockImplementation(() =>
       makeSelectChain([
         { isRevampit: false, title: 'Community bike', inventoryItemId: null, name: 'Buyer', email: 'buyer@x.ch' },
       ]),
     )
-    const { createKivviInvoice, updateKivviDocumentStatus, recordKivviPayment } = jest.requireMock('@/lib/kivvi/client')
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT, listingId: 'listing-p2p' })
+    const {
+      createKivviInvoice,
+      updateKivviDocumentStatus,
+      recordKivviPayment,
+      recordKivviAgencySale,
+    } = jest.requireMock('@/lib/kivvi/client')
+    const order = makeOrder({
+      status: ORDER_STATUS.PENDING_PAYMENT,
+      listingId: 'listing-p2p',
+      amountChf: '250.00',
+      commissionChf: '0',
+      sellerPayoutChf: '250.00',
+    })
 
     await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-p2p', { amount: 25000, currency: 'CHF' })
     await flush()
 
-    // Order still flips to PAID (the sale happened); it just isn't booked as
-    // revamp-it revenue in the general ledger.
     expect(mockUpdateSet).toHaveBeenCalledWith(expect.objectContaining({ status: ORDER_STATUS.PAID }))
     expect(createKivviInvoice).not.toHaveBeenCalled()
     expect(updateKivviDocumentStatus).not.toHaveBeenCalled()
     expect(recordKivviPayment).not.toHaveBeenCalled()
+    expect(recordKivviAgencySale).toHaveBeenCalledTimes(1)
+    expect(recordKivviAgencySale).toHaveBeenCalledWith(
+      expect.objectContaining({
+        orderReference: `MO-${order.id}`,
+        grossAmount: '250.00',
+        commissionAmount: '0.00',
+        commissionVatAmount: '0.00',
+        sellerPayout: '250.00',
+        sourceId: order.id,
+      }),
+      `marketplace-order:${order.id}:paid`,
+    )
   })
 })
 

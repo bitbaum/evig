@@ -297,6 +297,24 @@ export interface RecordKivviPaymentInput {
   reference?: string;
 }
 
+/** P2P marketplace agency sale — books pass-through liability + commission only. */
+export interface RecordKivviAgencySaleInput {
+  orderReference: string;
+  date: string; // YYYY-MM-DD
+  grossAmount: string;
+  commissionAmount: string;
+  commissionVatAmount: string;
+  sellerPayout?: string;
+  sourceId: string;
+  description?: string;
+}
+
+export interface KivviJournalEntryRef {
+  journalEntryId: string;
+  reference: string;
+  sourceType: string;
+}
+
 /**
  * Record a payment against a Kivvi invoice.
  * The invoice must already be in "sent" or "partially_paid" status.
@@ -309,6 +327,25 @@ export async function recordKivviPayment(
   return kivviFetch<{ id: string }>(`/documents/${kivviDocumentId}/payments`, {
     method: "POST",
     body: JSON.stringify(input),
+  });
+}
+
+// ============================================================================
+// MARKETPLACE AGENCY (P2P pass-through economics)
+// ============================================================================
+
+/**
+ * Book a facilitated (P2P) marketplace sale in Kivvi — agency model only.
+ * No invoice, no inventory mark-sold. Idempotency key required for Payrexx retries.
+ */
+export async function recordKivviAgencySale(
+  input: RecordKivviAgencySaleInput,
+  idempotencyKey: string,
+): Promise<KivviJournalEntryRef> {
+  return kivviFetch<KivviJournalEntryRef>("/marketplace/agency-sales", {
+    method: "POST",
+    body: JSON.stringify(input),
+    headers: { "Idempotency-Key": idempotencyKey },
   });
 }
 

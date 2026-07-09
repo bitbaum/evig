@@ -102,6 +102,7 @@ import {
   getKivviInventoryItem,
   createKivviInvoice,
   syncToKivvi,
+  recordKivviAgencySale,
   mapConditionToKivvi,
 } from '../client'
 
@@ -393,5 +394,43 @@ describe('syncToKivvi', () => {
 
     expect(result.success).toBe(false)
     expect((result as { error: string }).error).toBe('network timeout')
+  })
+})
+
+describe('recordKivviAgencySale', () => {
+  it('POSTs to /marketplace/agency-sales with Idempotency-Key header', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: jest.fn().mockResolvedValue({
+        success: true,
+        data: {
+          journalEntryId: 'je-1',
+          reference: 'MO-abc',
+          sourceType: 'marketplace_agency_sale',
+        },
+      }),
+    })
+
+    await recordKivviAgencySale(
+      {
+        orderReference: 'MO-abc',
+        date: '2026-07-09',
+        grossAmount: '250.00',
+        commissionAmount: '0.00',
+        commissionVatAmount: '0.00',
+        sellerPayout: '250.00',
+        sourceId: 'abc',
+      },
+      'marketplace-order:abc:paid',
+    )
+
+    const [url, options] = mockFetch.mock.calls[0]
+    expect(url).toContain('/api/v1/marketplace/agency-sales')
+    expect(options.method).toBe('POST')
+    expect(options.headers['Idempotency-Key']).toBe('marketplace-order:abc:paid')
+    const body = JSON.parse(options.body)
+    expect(body.grossAmount).toBe('250.00')
+    expect(body.sellerPayout).toBe('250.00')
   })
 })

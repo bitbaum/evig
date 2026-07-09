@@ -27,6 +27,7 @@ import {
   updateKivviDocumentStatus,
   recordKivviPayment,
   updateKivviInventoryItem,
+  recordKivviAgencySale,
 } from '@/lib/kivvi/client'
 import { triggerInviterReward } from '@/lib/referral'
 
@@ -212,9 +213,8 @@ export async function handleMarketplacePayment(
         logger.error('Failed to send order emails', { error: err, orderId: order.id })
       )
 
-      // Fire-and-forget Kivvi accounting sync
-      // Creates invoice → marks sent (GL entries) → records payment (clears AR)
-      syncOrderToKivvi(order, transactionId).catch(err =>
+      // Fire-and-forget Kivvi accounting sync (owned stock → invoice; P2P → agency journal)
+      syncMarketplaceOrderToKivvi(order, transactionId).catch(err =>
         logger.error('Kivvi accounting sync failed — order paid but not in GL', {
           error: err,
           orderId: order.id,
@@ -623,24 +623,70 @@ async function isRevampitOwnedOrder(order: MarketplaceOrder): Promise<boolean> {
   return rows.length > 0 && rows.every((r) => Boolean(r.isRevampit))
 }
 
+async function syncMarketplaceOrderToKivvi(
+  order: MarketplaceOrder,
+  payrexxTransactionId: string | null,
+): Promise<void> {
+  if (await isRevampitOwnedOrder(order)) {
+    return syncOrderToKivvi(order, payrexxTransactionId)
+  }
+  return syncP2POrderToKivvi(order, payrexxTransactionId)
+}
+
+/** VAT on platform commission fee only (Swiss 8.1%). Zero when commission is 0. */
+function computeCommissionVatAmount(commissionNetChf: string): string {
+  const net = Number(commissionNetChf || 0)
+  if (!Number.isFinite(net) || net <= 0) return '0.00'
+  return (Math.round(net * 0.081 * 100) / 100).toFixed(2)
+}
+
+function formatChfAmount(value: string | number): string {
+  const n = typeof value === 'number' ? value : Number(value)
+  if (!Number.isFinite(n)) return '0.00'
+  return n.toFixed(2)
+}
+
+/**
+ * P2P agency booking — pass-through liability + optional commission.
+ * Per Kivvi SYSTEM_DESIGN.md §3.4. No invoice, no inventory mark-sold.
+ */
+async function syncP2POrderToKivvi(
+  order: MarketplaceOrder,
+  payrexxTransactionId: string | null,
+): Promise<void> {
+  const commissionAmount = formatChfAmount(order.commissionChf)
+  const commissionVatAmount = computeCommissionVatAmount(commissionAmount)
+  const sellerPayout = formatChfAmount(order.sellerPayoutChf)
+  const grossAmount = formatChfAmount(order.amountChf)
+
+  await recordKivviAgencySale(
+    {
+      orderReference: `MO-${order.id}`,
+      date: new Date().toISOString().split('T')[0],
+      grossAmount,
+      commissionAmount,
+      commissionVatAmount,
+      sellerPayout,
+      sourceId: order.id,
+      description: payrexxTransactionId
+        ? `P2P sale MO-${order.id} Payrexx ${payrexxTransactionId}`
+        : `P2P sale MO-${order.id}`,
+    },
+    `marketplace-order:${order.id}:paid`,
+  )
+
+  logger.info('Kivvi P2P agency sale booked', {
+    orderId: order.id,
+    grossAmount,
+    commissionAmount,
+    sellerPayout,
+  })
+}
+
 async function syncOrderToKivvi(
   order: MarketplaceOrder,
   payrexxTransactionId: string | null,
 ): Promise<void> {
-  // Agency / pass-through guard: only revamp-it-OWNED stock may be booked as
-  // revenue in Kivvi's general ledger. P2P listings (isRevampit=false) belong
-  // to a third-party seller — revamp-it merely facilitates the sale, takes 0
-  // commission, and pays the seller off-platform. Booking a P2P sale as
-  // revamp-it revenue would overstate income and hide the payable owed to the
-  // seller. So P2P orders get NO Kivvi invoice; owned stock still runs the full
-  // invoice → sent → payment → mark-sold flow below.
-  if (!(await isRevampitOwnedOrder(order))) {
-    logger.info('Kivvi sync skipped: P2P order (agency/pass-through, not revamp-it revenue)', {
-      orderId: order.id,
-    })
-    return
-  }
-
   // Buyer info is always present (no listing dependency).
   const [buyer] = await db
     .select({ name: users.name, email: users.email })
