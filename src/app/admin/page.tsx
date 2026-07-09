@@ -45,6 +45,9 @@ import {
 import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
 import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
 import type { DashboardStats } from '@/components/admin/dashboard'
+import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
+import { getOnboardingChecklistState } from '@/lib/services/onboarding-state'
+import { ROLES, type UserRole } from '@/lib/constants'
 
 type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
 
@@ -165,6 +168,16 @@ export default async function AdminDashboard() {
     (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator'
   const firstName = session.user.name?.split(' ')[0] || 'Admin'
 
+  // Staff onboarding — nudge new team members to set their schedule (drives
+  // Zeiterfassung) + complete their team profile. Wired to real DB state; the
+  // checklist self-hides once all steps are done.
+  const onboarding = await getOnboardingChecklistState(
+    userId,
+    (session.user.role as UserRole) || ROLES.CUSTOMER,
+    session.user.emailVerified ?? false,
+    session.user.isStaff ?? false,
+  )
+
   return (
     <article className="space-y-12 pb-12">
       {/* Header — date in mono on top, big greeting, subtle mode toggle */}
@@ -179,6 +192,12 @@ export default async function AdminDashboard() {
         </div>
         <DashboardModeToggle current={dashboardMode} />
       </header>
+
+      <OnboardingChecklist
+        role={(session.user.role as UserRole) || ROLES.CUSTOMER}
+        teamProfileHref={`/admin/team/${userId}/edit`}
+        {...onboarding}
+      />
 
       {/* AUF DEINEM TISCH — combines voting + personal + org queue.
           Each streams independently; they share a top-level eyebrow

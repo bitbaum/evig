@@ -92,6 +92,7 @@ export default async function DashboardPage() {
     session.user.id,
     userRole,
     session.user.emailVerified ?? false,
+    session.user.isStaff ?? false,
   )
 
   return (
@@ -111,7 +112,11 @@ export default async function DashboardPage() {
         {!session.user.emailVerified && session.user.email && (
           <EmailVerificationBanner email={session.user.email} />
         )}
-        <OnboardingChecklist role={userRole} {...onboardingState} />
+        <OnboardingChecklist
+          role={userRole}
+          teamProfileHref={`/admin/team/${session.user.id}/edit`}
+          {...onboardingState}
+        />
 
         {/* Category sections — each is an eyebrow + divide-y list of links.
             No outer wrapper card; the list itself has the only border. */}

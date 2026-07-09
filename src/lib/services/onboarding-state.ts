@@ -5,8 +5,14 @@
 import { db } from '@/db'
 import { listings, sellerProfiles } from '@/db/schema/marketplace'
 import { repairerProfiles, repairerServices } from '@/db/schema/services'
+import { teamProfiles } from '@/db/schema/team'
 import { getOrCreateProfile } from '@/lib/auth/db'
-import { isBasicProfileComplete, type OnboardingChecklistState } from '@/lib/domain/onboarding'
+import {
+  isBasicProfileComplete,
+  isScheduleSet,
+  isTeamProfileComplete,
+  type OnboardingChecklistState,
+} from '@/lib/domain/onboarding'
 import { ROLES, type UserRole } from '@/lib/constants'
 import { eq, and, sql } from 'drizzle-orm'
 
@@ -14,6 +20,7 @@ export async function getOnboardingChecklistState(
   userId: string,
   role: UserRole,
   emailVerified: boolean,
+  isStaff = false,
 ): Promise<OnboardingChecklistState> {
   const profile = await getOrCreateProfile(userId)
   const profileComplete = isBasicProfileComplete(profile)
@@ -25,6 +32,26 @@ export async function getOnboardingChecklistState(
     hasListing: false,
     repairerProfileSetup: false,
     hasPublishedService: false,
+    isStaff,
+    scheduleSet: false,
+    teamProfileComplete: false,
+  }
+
+  if (isStaff) {
+    const [team] = await db
+      .select({
+        working_hours: teamProfiles.workingHours,
+        skills: teamProfiles.skills,
+        goals: teamProfiles.goals,
+      })
+      .from(teamProfiles)
+      .where(eq(teamProfiles.userId, userId))
+      .limit(1)
+
+    if (team) {
+      base.scheduleSet = isScheduleSet(team)
+      base.teamProfileComplete = isTeamProfileComplete(team)
+    }
   }
 
   if (role === ROLES.SELLER) {

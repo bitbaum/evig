@@ -26,4 +26,25 @@ export interface OnboardingChecklistState {
   hasListing: boolean
   repairerProfileSetup: boolean
   hasPublishedService: boolean
+  // Staff (@revamp-it.ch) get a DIFFERENT checklist — their profile powers
+  // Zeiterfassung (schedule) + task-matching (skills/interests).
+  isStaff: boolean
+  scheduleSet: boolean
+  teamProfileComplete: boolean
+}
+
+export interface OnboardingTeamFields {
+  working_hours: string | null
+  skills: string[] | null
+  goals: string | null
+}
+
+/** Staff have set a weekly schedule → Zeiterfassung can derive expected hours. */
+export function isScheduleSet(t: OnboardingTeamFields): boolean {
+  return !!t.working_hours && t.working_hours.trim().length > 0
+}
+
+/** Staff profile is rich enough to power dev-paths / task matching. */
+export function isTeamProfileComplete(t: OnboardingTeamFields): boolean {
+  return (t.skills?.length ?? 0) > 0 && !!t.goals?.trim()
 }
