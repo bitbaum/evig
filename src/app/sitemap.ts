@@ -1,10 +1,12 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/db'
-import { blogPosts, workshops, listings, sellerProfiles } from '@/db/schema'
+import { workshops, listings, sellerProfiles } from '@/db/schema'
 import { eq, gt } from 'drizzle-orm'
 import { locales, defaultLocale } from '@/i18n/routing'
 import { APP_URL } from '@/config/urls'
 import { ROUTES } from '@/config/routes'
+import { getMergedPosts } from '@/lib/blog-merge'
+import { isListedPost } from '@/lib/blog'
 import { OSS_ALTERNATIVES } from '@/config/open-source-registry'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { SERVICE_CONFIGS } from '@/app/[locale]/services/data'
@@ -98,18 +100,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // 5. Published blog posts
+  // 5. Published blog posts — unified DB + git-file reader, deduped by slug.
+  //    Unlisted (link-only) posts are excluded so they never surface to crawlers.
   try {
-    const posts = await db
-      .select({ slug: blogPosts.slug, updatedAt: blogPosts.updatedAt })
-      .from(blogPosts)
-      .where(eq(blogPosts.isPublished, true))
+    const posts = (await getMergedPosts(defaultLocale)).filter(isListedPost)
 
     for (const post of posts) {
+      const lastModified = post.publishedAt
+        ? new Date(post.publishedAt)
+        : post.createdAt
+          ? new Date(post.createdAt)
+          : undefined
       for (const locale of locales) {
         entries.push({
           url: url(`/blog/${post.slug}`, locale),
-          lastModified: post.updatedAt ? new Date(post.updatedAt) : undefined,
+          lastModified,
           changeFrequency: 'monthly',
           priority: 0.7,
         })

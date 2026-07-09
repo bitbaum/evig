@@ -133,6 +133,21 @@ export function getAllPosts(locale: string = DEFAULT_LOCALE): BlogPost[] {
 }
 
 /**
+ * Locales that have a translation file for this slug (the DE original counts).
+ * Drives hreflang alternates so search engines see every translated variant.
+ */
+export function getPostLocales(slug: string): string[] {
+  if (!fs.existsSync(postsDirectory)) return []
+  const found = new Set<string>()
+  for (const fileName of fs.readdirSync(postsDirectory)) {
+    if (!fileName.endsWith('.md')) continue
+    const parsed = parseFileName(fileName)
+    if (parsed.slug === slug) found.add(parsed.locale)
+  }
+  return [...found]
+}
+
+/**
  * A single post by slug, preferring the requested locale and falling back to
  * the German original.
  */

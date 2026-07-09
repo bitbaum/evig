@@ -3,8 +3,11 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { getPostBySlug } from '@/lib/blog-db'
-import { getPostBySlug as getFilePost, isListedPost } from '@/lib/blog'
+import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
 import { getMergedPosts } from '@/lib/blog-merge'
+import { APP_URL } from '@/config/urls'
+import { ORG } from '@/config/org'
+import { defaultLocale } from '@/i18n/routing'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
 import RelatedPosts from '@/components/blog/RelatedPosts'
@@ -39,9 +42,24 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const isUnlisted = post.visibility === 'unlisted'
+  const canonical = `${APP_URL}/blog/${slug}`
+  const localesForSlug = getPostLocales(slug)
+  const languages: Record<string, string> = {}
+  for (const loc of localesForSlug) {
+    languages[loc] = loc === defaultLocale ? canonical : `${APP_URL}/${loc}/blog/${slug}`
+  }
+
   return {
     title: { absolute: `${post.title} | Revamp-IT Blog` },
     description: post.excerpt || '',
+    // Unlisted posts are link-only: keep them out of the index even if a crawler
+    // ever finds the URL. Listed posts get canonical + hreflang alternates.
+    ...(isUnlisted ? { robots: { index: false, follow: false } } : {}),
+    alternates: {
+      canonical,
+      ...(!isUnlisted && Object.keys(languages).length > 1 ? { languages } : {}),
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt || '',
@@ -75,8 +93,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .filter((p) => p.slug !== post.slug && p.category === post.category && isListedPost(p))
     .slice(0, 3);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    ...(post.excerpt ? { description: post.excerpt } : {}),
+    ...(post.featuredImage ? { image: `${APP_URL}${post.featuredImage}` } : {}),
+    datePublished: post.publishedAt || post.createdAt,
+    author: { '@type': 'Organization', name: post.author },
+    publisher: { '@type': 'Organization', name: ORG.name },
+    mainEntityOfPage: `${APP_URL}/blog/${post.slug}`,
+    inLanguage: locale,
+  }
+
   return (
     <main>
+      {post.visibility !== 'unlisted' && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       <BlogPostHeader post={post} />
       {post.featuredImage && (
         <figure className="mx-auto max-w-[960px] px-4 sm:px-6">

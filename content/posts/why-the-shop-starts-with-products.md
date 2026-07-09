@@ -13,7 +13,7 @@ publishedAt: "2026-06-16"
 published: true
 ---
 
-Die Shop-Frage hatte eine falsche Praemisse. Wir brauchen keine zweite Shop-Seite, die neben dem Marktplatz erklaert, wo man kaufen kann. Wer auf "Shop" klickt, will Produkte sehen, vergleichen und moeglichst schnell zur Kaufentscheidung kommen. Deshalb ist der Online-Shop jetzt der Marktplatz.
+Die Shop-Frage hatte eine falsche Prämisse. Wir brauchen keine zweite Shop-Seite, die neben dem Marktplatz erklärt, wo man kaufen kann. Wer auf "Shop" klickt, will Produkte sehen, vergleichen und möglichst schnell zur Kaufentscheidung kommen. Deshalb ist der Online-Shop jetzt der Marktplatz.
 
 Das reduziert kognitive Last. Es gibt einen kanonischen Ort fuer gebrauchte Elektronik: `/marketplace`. Alte `/shop`-URLs bleiben als Redirects erhalten, aber neue Navigation, Sitemap, Chatbot-Vorschlaege und interne Helfer zeigen auf den Marktplatz. Die Nutzer:innen landen direkt bei Suche, Filtern und Inseraten statt in einer Kanalauswahl.
 
