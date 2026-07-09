@@ -70,6 +70,9 @@ jest.mock('@/lib/erfassung/create-product', () => ({
 
 jest.mock('@/lib/kivvi/client', () => ({
   syncToKivvi: (...args: unknown[]) => mockSyncToKivvi.apply(null, args),
+  // Route maps zustand → Kivvi enum synchronously while building the sync
+  // payload; without this stub it's undefined and throws before the response.
+  mapConditionToKivvi: (condition?: string | null) => condition ?? 'fair',
 }))
 
 jest.mock('@/lib/schemas', () => ({
