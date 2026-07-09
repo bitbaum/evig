@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Illustration: ein Tablet, dessen Leiterbahnen zu einem grünen Zweig mit Blättern austreiben — ein zweites Leben statt Elektroschrott.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0fdf4"/>
+      <stop offset="1" stop-color="#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c3a2a"/>
+      <stop offset="1" stop-color="#14261b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- ambient circles -->
+  <circle cx="210" cy="140" r="120" fill="#bbf7d0" opacity="0.45"/>
+  <circle cx="1010" cy="500" r="160" fill="#bbf7d0" opacity="0.4"/>
+
+  <!-- ground shadow -->
+  <ellipse cx="600" cy="566" rx="205" ry="20" fill="#86efac" opacity="0.55"/>
+
+  <!-- tablet body -->
+  <rect x="452" y="196" width="296" height="372" rx="30" fill="#ffffff" stroke="#a7f3c4" stroke-width="3"/>
+  <rect x="476" y="220" width="248" height="324" rx="16" fill="url(#screen)"/>
+  <rect x="576" y="532" width="48" height="5" rx="2.5" fill="#4b6b58"/>
+
+  <!-- circuit traces on screen -->
+  <g stroke="#22c55e" stroke-width="3" fill="none" opacity="0.9" stroke-linecap="round">
+    <path d="M524 512 L524 424 L580 424"/>
+    <path d="M672 520 L672 452 L620 452 L620 410"/>
+    <path d="M504 470 L556 470 L556 372"/>
+    <circle cx="524" cy="512" r="5" fill="#22c55e" stroke="none"/>
+    <circle cx="672" cy="520" r="5" fill="#22c55e" stroke="none"/>
+    <circle cx="504" cy="470" r="5" fill="#22c55e" stroke="none"/>
+  </g>
+  <!-- chip -->
+  <rect x="580" y="400" width="40" height="22" rx="4" fill="#2a1a10" stroke="#c2410c" stroke-width="2.5"/>
+  <path d="M600 400 L600 356" stroke="#c2410c" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- branch sprouting from the top of the tablet -->
+  <g fill="none" stroke="#15803d" stroke-width="9" stroke-linecap="round">
+    <path d="M600 356 C600 280 596 210 580 150"/>
+    <path d="M588 236 C544 208 516 172 502 120"/>
+    <path d="M590 196 C634 172 664 140 676 96"/>
+  </g>
+  <!-- leaves -->
+  <g fill="#22c55e">
+    <path d="M502 120 C482 100 452 100 434 122 C460 142 490 138 502 120 Z"/>
+    <path d="M676 96 C696 72 728 72 746 92 C720 114 690 110 676 96 Z"/>
+    <path d="M580 150 C560 118 560 84 584 62 C608 90 604 128 580 150 Z"/>
+  </g>
+  <g fill="#16a34a">
+    <path d="M544 176 C524 158 498 160 484 178 C506 194 530 190 544 176 Z"/>
+    <path d="M638 158 C660 138 688 138 702 156 C680 174 654 172 638 158 Z"/>
+  </g>
+  <circle cx="584" cy="58" r="7" fill="#c2410c"/>
+</svg>

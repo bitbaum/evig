@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 210" role="img" aria-label="Gestapelter Balken: von 95 kg CO2e sind 66 kg Herstellung, 21 kg Nutzung, 6 kg Transport, 2 kg Recycling.">
+  <style>
+    text { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .unit { fill: #a3a3a3; font-size: 12px; letter-spacing: .04em; }
+    .seg  { fill: #ffffff; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .lead { fill: #737373; font-size: 12px; font-variant-numeric: tabular-nums; }
+    .scale{ fill: #a3a3a3; font-size: 12px; font-variant-numeric: tabular-nums; }
+  </style>
+  <rect x="1" y="1" width="638" height="208" rx="16" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="28" y="40" class="unit">LEBENSZYKLUS · 95 kg CO&#8322;e</text>
+
+  <!-- stacked bar: x40 → x600 (560px = 95kg) -->
+  <rect x="40"  y="70" width="389" height="62" fill="#c2410c"/>
+  <rect x="429" y="70" width="124" height="62" fill="#15803d"/>
+  <rect x="553" y="70" width="35"  height="62" fill="#22c55e"/>
+  <rect x="588" y="70" width="12"  height="62" fill="#d4d4d4"/>
+
+  <!-- inline labels for the two large segments -->
+  <text x="234" y="106" text-anchor="middle" class="seg" font-size="17">66 kg &#183; 69%</text>
+  <text x="491" y="106" text-anchor="middle" class="seg" font-size="14">21 kg</text>
+
+  <!-- leaders for the two small segments -->
+  <line x1="570" y1="70" x2="570" y2="52" stroke="#a3a3a3"/>
+  <text x="570" y="46" text-anchor="middle" class="lead">6</text>
+  <line x1="594" y1="132" x2="594" y2="152" stroke="#a3a3a3"/>
+  <text x="594" y="166" text-anchor="middle" class="lead">2</text>
+
+  <!-- scale ends -->
+  <text x="40"  y="154" class="scale">0 kg</text>
+  <text x="600" y="154" text-anchor="end" class="scale">95 kg</text>
+</svg>

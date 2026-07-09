@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { locales } from '@/i18n/routing'
 
 // js-yaml@4 ships no bundled type declarations and @types/js-yaml is not a
 // project dependency, so import it with the minimal typed surface we consume.
@@ -18,6 +19,11 @@ const matterOptions = {
   },
 }
 
+// Canonical language. Bare `<slug>.md` files (and any post lacking a
+// translation) resolve to German, mirroring the site-wide DE fallback.
+const DEFAULT_LOCALE = 'de'
+const LOCALE_SET = new Set<string>(locales)
+
 export interface BlogPost {
   slug: string
   title: string
@@ -30,74 +36,94 @@ export interface BlogPost {
   published?: boolean
   body: string
   createdAt: string
+  locale?: string
 }
 
-export function getAllPosts(): BlogPost[] {
-  // Ensure directory exists
+// Filenames encode locale as a suffix: `tablets.md` (→ de), `tablets.en.md`,
+// `tablets.fr.md`. A trailing segment is treated as a locale only when it is a
+// known locale code, so slugs that happen to contain dots stay intact.
+function parseFileName(fileName: string): { slug: string; locale: string } {
+  const base = fileName.replace(/\.md$/, '')
+  const dot = base.lastIndexOf('.')
+  if (dot > 0) {
+    const maybeLocale = base.slice(dot + 1)
+    if (LOCALE_SET.has(maybeLocale)) {
+      return { slug: base.slice(0, dot), locale: maybeLocale }
+    }
+  }
+  return { slug: base, locale: DEFAULT_LOCALE }
+}
+
+function readPost(fileName: string, slug: string, locale: string): BlogPost {
+  const fullPath = path.join(postsDirectory, fileName)
+  const fileContents = fs.readFileSync(fullPath, 'utf8')
+  const { data, content } = matter(fileContents, matterOptions)
+  const stats = fs.statSync(fullPath)
+
+  return {
+    slug,
+    title: data.title || 'Untitled',
+    excerpt: data.excerpt,
+    featuredImage: data.featuredImage,
+    author: data.author || 'RevampIt Team',
+    category: data.category,
+    tags: data.tags || [],
+    publishedAt: data.publishedAt,
+    published: data.published !== false, // default to true if not specified
+    body: content,
+    createdAt: stats.birthtime.toISOString(),
+    locale,
+  }
+}
+
+/**
+ * All published posts for a locale. Each slug resolves to its translation for
+ * `locale` when present, otherwise the German original (DE-canonical fallback),
+ * so partially-translated content still surfaces on every locale.
+ */
+export function getAllPosts(locale: string = DEFAULT_LOCALE): BlogPost[] {
   if (!fs.existsSync(postsDirectory)) {
     return []
   }
 
-  const fileNames = fs.readdirSync(postsDirectory)
-  const allPostsData = fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.md$/, '')
-      const fullPath = path.join(postsDirectory, fileName)
-      const fileContents = fs.readFileSync(fullPath, 'utf8')
-      const { data, content } = matter(fileContents, matterOptions)
+  // slug → { locale → fileName }
+  const bySlug = new Map<string, Map<string, string>>()
+  for (const fileName of fs.readdirSync(postsDirectory)) {
+    if (!fileName.endsWith('.md')) continue
+    const { slug, locale: fileLocale } = parseFileName(fileName)
+    if (!bySlug.has(slug)) bySlug.set(slug, new Map())
+    bySlug.get(slug)!.set(fileLocale, fileName)
+  }
 
-      // Get file stats for creation date
-      const stats = fs.statSync(fullPath)
+  const posts: BlogPost[] = []
+  for (const [slug, byLocale] of bySlug) {
+    const chosenLocale = byLocale.has(locale) ? locale : DEFAULT_LOCALE
+    const fileName = byLocale.get(chosenLocale)
+    if (!fileName) continue // no translation and no German original
+    posts.push(readPost(fileName, slug, chosenLocale))
+  }
 
-      return {
-        slug,
-        title: data.title || 'Untitled',
-        excerpt: data.excerpt,
-        featuredImage: data.featuredImage,
-        author: data.author || 'RevampIt Team',
-        category: data.category,
-        tags: data.tags || [],
-        publishedAt: data.publishedAt,
-        published: data.published !== false, // default to true if not specified
-        body: content,
-        createdAt: stats.birthtime.toISOString(),
-      }
-    })
-    // Filter only published posts
+  return posts
     .filter((post) => post.published)
-    // Sort by published date (newest first)
     .sort((a, b) => {
       const dateA = a.publishedAt ? new Date(a.publishedAt) : new Date(a.createdAt)
       const dateB = b.publishedAt ? new Date(b.publishedAt) : new Date(b.createdAt)
       return dateB.getTime() - dateA.getTime()
     })
-
-  return allPostsData
 }
 
-export function getPostBySlug(slug: string): BlogPost | null {
-  try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data, content } = matter(fileContents, matterOptions)
-    const stats = fs.statSync(fullPath)
-
-    return {
-      slug,
-      title: data.title || 'Untitled',
-      excerpt: data.excerpt,
-      featuredImage: data.featuredImage,
-      author: data.author || 'RevampIt Team',
-      category: data.category,
-      tags: data.tags || [],
-      publishedAt: data.publishedAt,
-      published: data.published !== false,
-      body: content,
-      createdAt: stats.birthtime.toISOString(),
+/**
+ * A single post by slug, preferring the requested locale and falling back to
+ * the German original.
+ */
+export function getPostBySlug(slug: string, locale: string = DEFAULT_LOCALE): BlogPost | null {
+  const candidates = [`${slug}.${locale}.md`, `${slug}.md`, `${slug}.${DEFAULT_LOCALE}.md`]
+  for (const fileName of candidates) {
+    const fullPath = path.join(postsDirectory, fileName)
+    if (fs.existsSync(fullPath)) {
+      const { locale: fileLocale } = parseFileName(fileName)
+      return readPost(fileName, slug, fileLocale)
     }
-  } catch (error) {
-    return null
   }
+  return null
 }
-

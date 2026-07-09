@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
 import { getPostBySlug, getAllPosts } from '@/lib/blog-db'
 import { getPostBySlug as getFilePost, getAllPosts as getFilePosts } from '@/lib/blog'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
@@ -12,23 +13,25 @@ interface BlogPostPageProps {
   }>;
 }
 
-// Helper to get post from DB or file system
-async function getPost(slug: string) {
+// Helper to get post from DB or file system (file posts are locale-aware,
+// falling back to the German original when a translation is absent).
+async function getPost(slug: string, locale: string) {
   const dbPost = await getPostBySlug(slug)
   if (dbPost) return dbPost
-  return getFilePost(slug)
+  return getFilePost(slug, locale)
 }
 
 // Helper to get all posts from DB or file system
-async function getPosts() {
+async function getPosts(locale: string) {
   const dbPosts = await getAllPosts()
   if (dbPosts.length > 0) return dbPosts
-  return getFilePosts()
+  return getFilePosts(locale)
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const locale = await getLocale();
+  const post = await getPost(slug, locale);
 
   if (!post) {
     return {
@@ -58,14 +61,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const locale = await getLocale();
+  const post = await getPost(slug, locale);
 
   if (!post || !post.published) {
     notFound();
   }
 
   // Get related posts from same category
-  const allPosts = await getPosts();
+  const allPosts = await getPosts(locale);
   const relatedPosts = allPosts
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, 3);

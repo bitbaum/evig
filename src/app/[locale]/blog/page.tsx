@@ -14,7 +14,7 @@ import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
 import Heading from '@/components/ui/Heading'
 import { buttonClass } from '@/components/ui/button-class'
 import { PageHero } from '@/components/layout/PageHero'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -39,10 +39,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const t = await getTranslations('blog')
   const { categories } = await searchParams
 
-  // Try database first, fall back to file system if no posts in DB
+  // Try database first, fall back to file system if no posts in DB.
+  // File posts are locale-aware (translation for `locale`, else DE original).
+  const locale = await getLocale()
   let allPosts = await getAllPosts()
   if (allPosts.length === 0) {
-    allPosts = getFilePosts()
+    allPosts = getFilePosts(locale)
   }
 
   // Fetch categories from DB (with colors and descriptions)
