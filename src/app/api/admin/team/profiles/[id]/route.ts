@@ -22,6 +22,7 @@ import {
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateUpdateTeamProfile } from '@/lib/schemas/team'
+import { mapTeamProfileUpdate } from '@/lib/services/team-profiles'
 
 /**
  * GET /api/admin/team/profiles/[id]
@@ -126,43 +127,9 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
       return apiNotFound('Team-Profil')
     }
 
-    // Build update object from validated data
-    const update: Record<string, unknown> = {}
-
-    if (data.position !== undefined) update.position = data.position
-    if (data.department !== undefined) update.department = data.department
-    if (data.employment_type !== undefined) update.employmentType = data.employment_type
-    if (data.start_date !== undefined) update.startDate = data.start_date
-    if (data.contract_hours !== undefined) update.contractHours = data.contract_hours
-    if (data.skills !== undefined) update.skills = data.skills
-    if (data.interests !== undefined) update.interests = data.interests
-    if (data.goals !== undefined) update.goals = data.goals
-    if (data.strengths !== undefined) update.strengths = data.strengths
-    if (data.development_areas !== undefined) update.developmentAreas = data.development_areas
-    if (data.availability !== undefined) update.availability = data.availability
-    if (data.working_hours !== undefined) update.workingHours = data.working_hours
-    if (data.preferred_contact !== undefined) update.preferredContact = data.preferred_contact
-    if (data.phone !== undefined) update.phone = data.phone
-    if (data.emergency_contact_name !== undefined) update.emergencyContactName = data.emergency_contact_name
-    if (data.emergency_contact_phone !== undefined) update.emergencyContactPhone = data.emergency_contact_phone
-    if (data.emergency_contact_relation !== undefined) update.emergencyContactRelation = data.emergency_contact_relation
-    if (data.is_active !== undefined) update.isActive = data.is_active
-    if (data.show_on_about !== undefined) update.showOnAbout = data.show_on_about
-
-    // Lifecycle fields — admin-level (not just super admin)
-    if (data.end_date !== undefined) update.endDate = data.end_date
-    if (data.exit_reason !== undefined) update.exitReason = data.exit_reason
-    if (data.work_state !== undefined) update.workState = data.work_state
-
-    // Sensitive fields — super admin only (compensation, AHV, hr_notes)
-    if (isSuperAdminUser) {
-      if (data.hr_notes !== undefined) update.hrNotes = data.hr_notes
-      if (data.hourly_rate_cents !== undefined) update.hourlyRateCents = data.hourly_rate_cents
-      if (data.salary_chf !== undefined) update.salaryChf = data.salary_chf
-      if (data.salary_effective_date !== undefined) update.salaryEffectiveDate = data.salary_effective_date
-      if (data.ahv_number !== undefined) update.ahvNumber = data.ahv_number
-      if (data.canton_tax_code !== undefined) update.cantonTaxCode = data.canton_tax_code
-    }
+    // Build update object from validated data (sensitive fields gated on super
+    // admin) — the SAME mapping the self-service /profiles/me route uses.
+    const update = mapTeamProfileUpdate(data, isSuperAdminUser)
 
     if (Object.keys(update).length === 0) {
       return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)

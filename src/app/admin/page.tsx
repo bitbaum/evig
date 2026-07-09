@@ -201,7 +201,7 @@ export default async function AdminDashboard() {
 
       <OnboardingChecklist
         role={(session.user.role as UserRole) || ROLES.CUSTOMER}
-        teamProfileHref={`/admin/team/${userId}/edit`}
+        teamProfileHref="/admin/team/me/edit"
         {...onboarding}
       />
 

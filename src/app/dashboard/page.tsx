@@ -114,7 +114,7 @@ export default async function DashboardPage() {
         )}
         <OnboardingChecklist
           role={userRole}
-          teamProfileHref={`/admin/team/${session.user.id}/edit`}
+          teamProfileHref="/admin/team/me/edit"
           {...onboardingState}
         />
 
