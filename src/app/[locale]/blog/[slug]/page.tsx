@@ -2,8 +2,9 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { getPostBySlug, getAllPosts } from '@/lib/blog-db'
-import { getPostBySlug as getFilePost, getAllPosts as getFilePosts, isListedPost } from '@/lib/blog'
+import { getPostBySlug } from '@/lib/blog-db'
+import { getPostBySlug as getFilePost, isListedPost } from '@/lib/blog'
+import { getMergedPosts } from '@/lib/blog-merge'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
 import RelatedPosts from '@/components/blog/RelatedPosts'
@@ -22,11 +23,9 @@ async function getPost(slug: string, locale: string) {
   return getFilePost(slug, locale)
 }
 
-// Helper to get all posts from DB or file system
+// Unified DB + git-file read layer (deduped by slug).
 async function getPosts(locale: string) {
-  const dbPosts = await getAllPosts()
-  if (dbPosts.length > 0) return dbPosts
-  return getFilePosts(locale)
+  return getMergedPosts(locale)
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {

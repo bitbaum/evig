@@ -14,9 +14,11 @@ import {
   Search,
   FileText,
   Eye,
+  EyeOff,
   Edit,
   Trash2,
   Calendar,
+  GitBranch,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
@@ -31,7 +33,12 @@ interface BlogPost {
   created_at: string
   updated_at: string
   category_name: string | null
+  source: 'db' | 'file'
+  visibility: 'public' | 'unlisted'
 }
+
+const sourceBadgeClass =
+  'inline-flex items-center gap-1 rounded-full border border-default px-2 py-0.5 text-[10px] font-mono uppercase tracking-wide text-text-tertiary'
 
 interface BlogListClientProps {
   posts: BlogPost[]
@@ -72,7 +79,24 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       header: 'Titel',
       cell: (post) => (
         <div>
-          <div className="text-sm font-medium text-text-primary">{post.title}</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-text-primary">{post.title}</span>
+            {post.source === 'file' && (
+              <span
+                className={sourceBadgeClass}
+                title="In Git verwaltet (content/posts) — hier schreibgeschützt"
+              >
+                <GitBranch className="w-3 h-3" />
+                Git
+              </span>
+            )}
+            {post.visibility === 'unlisted' && (
+              <span className={sourceBadgeClass} title="Nicht gelistet — nur per Link erreichbar">
+                <EyeOff className="w-3 h-3" />
+                Nicht gelistet
+              </span>
+            )}
+          </div>
           {post.excerpt && (
             <div className="text-sm text-text-tertiary line-clamp-1">{post.excerpt}</div>
           )}
@@ -131,23 +155,34 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               <Eye className="w-4 h-4" />
             </span>
           )}
-          <Link
-            href={`/admin/content/blog/${post.id}`}
-            className="text-action hover:text-action"
-            title="Artikel bearbeiten"
-          >
-            <Edit className="w-4 h-4" />
-          </Link>
-          <Button
-            variant="destructive-ghost"
-            size="icon"
-            className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
-            onClick={() => setDeleteTarget(post)}
-            aria-label="Artikel löschen"
-            title="Artikel löschen"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          {post.source === 'db' ? (
+            <>
+              <Link
+                href={`/admin/content/blog/${post.id}`}
+                className="text-action hover:text-action"
+                title="Artikel bearbeiten"
+              >
+                <Edit className="w-4 h-4" />
+              </Link>
+              <Button
+                variant="destructive-ghost"
+                size="icon"
+                className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
+                onClick={() => setDeleteTarget(post)}
+                aria-label="Artikel löschen"
+                title="Artikel löschen"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </>
+          ) : (
+            <span
+              className="text-text-muted cursor-not-allowed"
+              title="In Git verwaltet — im Repository (content/posts) bearbeiten"
+            >
+              <GitBranch className="w-4 h-4" />
+            </span>
+          )}
         </div>
       ),
     },

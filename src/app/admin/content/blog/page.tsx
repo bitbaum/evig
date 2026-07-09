@@ -10,6 +10,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { getAllPosts as getFilePosts } from '@/lib/blog'
 import {
   Plus,
   FileText,
@@ -39,6 +40,10 @@ interface BlogPost {
   created_at: string
   updated_at: string
   category_name: string | null
+  // `db` posts are authored in this UI (editable/deletable); `file` posts live
+  // in content/posts/*.md and are managed in Git (read-only here).
+  source: 'db' | 'file'
+  visibility: 'public' | 'unlisted'
 }
 
 interface BlogStats {
@@ -48,43 +53,28 @@ interface BlogStats {
   categoriesCount: number
 }
 
-async function getBlogStats(): Promise<BlogStats> {
-  let totalPosts = 0
-  let publishedPosts = 0
-  let draftPosts = 0
-  let categoriesCount = 0
-
-  try {
-    const totalResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_POSTS}`
-    )
-    totalPosts = parseInt(totalResult.rows[0]?.count || '0')
-
-    const publishedResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_POSTS} WHERE is_published = true`
-    )
-    publishedPosts = parseInt(publishedResult.rows[0]?.count || '0')
-
-    draftPosts = totalPosts - publishedPosts
-  } catch {
-    // Table might not exist
-  }
-
-  try {
-    const catResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_CATEGORIES} WHERE is_active = true`
-    )
-    categoriesCount = parseInt(catResult.rows[0]?.count || '0')
-  } catch {
-    // Table might not exist
-  }
-
-  return { totalPosts, publishedPosts, draftPosts, categoriesCount }
+interface DbBlogRow {
+  id: string
+  slug: string
+  title: string
+  excerpt: string | null
+  is_published: boolean
+  published_at: string | null
+  created_at: string
+  updated_at: string
+  category_name: string | null
 }
 
+/**
+ * Unified admin list: DB posts (this UI) + git file posts (content/posts/*.md),
+ * deduped by slug so staff see EVERY article regardless of where it lives. File
+ * posts are marked read-only. The admin area is German-only, so file posts
+ * resolve to their German version.
+ */
 async function getBlogPosts(): Promise<BlogPost[]> {
+  let dbPosts: BlogPost[] = []
   try {
-    const result = await query<BlogPost>(
+    const result = await query<DbBlogRow>(
       `SELECT
         bp.id,
         bp.slug,
@@ -100,10 +90,45 @@ async function getBlogPosts(): Promise<BlogPost[]> {
        ORDER BY bp.created_at DESC
        LIMIT 50`
     )
-    return result.rows
+    dbPosts = result.rows.map((r): BlogPost => ({ ...r, source: 'db', visibility: 'public' }))
   } catch {
-    // Table might not exist
-    return []
+    // Table might not exist — fall through to file posts only.
+  }
+
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug))
+  const filePosts: BlogPost[] = getFilePosts('de')
+    .filter((p) => !dbSlugs.has(p.slug))
+    .map((p) => ({
+      id: `file:${p.slug}`,
+      slug: p.slug,
+      title: p.title,
+      excerpt: p.excerpt ?? null,
+      is_published: p.published ?? true,
+      published_at: p.publishedAt ?? null,
+      created_at: p.createdAt,
+      updated_at: p.createdAt,
+      category_name: p.category ?? null,
+      source: 'file',
+      visibility: p.visibility ?? 'public',
+    }))
+
+  return [...dbPosts, ...filePosts].sort((a, b) => {
+    const da = new Date(a.published_at || a.created_at).getTime()
+    const db = new Date(b.published_at || b.created_at).getTime()
+    return db - da
+  })
+}
+
+function computeBlogStats(posts: BlogPost[]): BlogStats {
+  const publishedPosts = posts.filter((p) => p.is_published).length
+  const categoriesCount = new Set(
+    posts.map((p) => p.category_name).filter(Boolean) as string[]
+  ).size
+  return {
+    totalPosts: posts.length,
+    publishedPosts,
+    draftPosts: posts.length - publishedPosts,
+    categoriesCount,
   }
 }
 
@@ -114,7 +139,8 @@ export default async function AdminBlogPage() {
     redirect('/auth/login?callbackUrl=/admin/content/blog')
   }
 
-  const [stats, posts] = await Promise.all([getBlogStats(), getBlogPosts()])
+  const posts = await getBlogPosts()
+  const stats = computeBlogStats(posts)
 
   const createAction = (
     <AdminButton href={ROUTES.admin.contentBlogNew} variant="primary" className="gap-2">

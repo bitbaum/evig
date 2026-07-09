@@ -5,8 +5,9 @@ import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Suspense } from 'react'
 import { BookOpen } from 'lucide-react'
-import { getAllPosts, getAllCategories, type BlogCategory } from '@/lib/blog-db'
-import { getAllPosts as getFilePosts, isListedPost } from '@/lib/blog'
+import { getAllCategories, type BlogCategory } from '@/lib/blog-db'
+import { isListedPost } from '@/lib/blog'
+import { getMergedPosts } from '@/lib/blog-merge'
 import { auth } from '@/auth'
 import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
@@ -40,13 +41,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const t = await getTranslations('blog')
   const { categories } = await searchParams
 
-  // Try database first, fall back to file system if no posts in DB.
-  // File posts are locale-aware (translation for `locale`, else DE original).
+  // Unified read layer: DB posts (admin UI) + git file posts (locale-aware),
+  // deduped by slug. Everything shows regardless of where it was authored.
   const locale = await getLocale()
-  let allPosts = await getAllPosts()
-  if (allPosts.length === 0) {
-    allPosts = getFilePosts(locale)
-  }
+  let allPosts = await getMergedPosts(locale)
 
   // Unlisted posts stay out of the public listing, but logged-in staff see them
   // (with a badge) so they can grab the link to share. Direct links stay open.
