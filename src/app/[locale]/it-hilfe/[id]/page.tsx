@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle } from 'lucide-react'
+import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle, Wrench } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -223,6 +223,41 @@ export default function ITHilfeDetailPage() {
                   <MessageCircle className="w-4 h-4" aria-hidden="true" />
                   {t('askQuestion')}
                 </Button>
+              </div>
+            )}
+
+            {/* Eligible to help but not a registered technician — nudge to
+                register instead of showing the offer form. The server enforces
+                the same rule (403), so this is the honest UI for that gate. */}
+            {detail.needsTechnicianProfile && !detail.userOffer && (
+              <div className="card-shell p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action-muted">
+                    <Wrench className="h-5 w-5 text-action" aria-hidden="true" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <Heading level={3} className="text-base font-medium text-text-primary">
+                      {t('becomeTechnicianTitle')}
+                    </Heading>
+                    <p className="mt-1 text-sm text-text-secondary">
+                      {t('becomeTechnicianBody')}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      <Button as={Link} href={ROUTES.public.profilTechniker} variant="primary">
+                        {t('becomeTechnicianCta')}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => detail.openConversation()}
+                        disabled={detail.openingConversation}
+                        className="gap-1.5"
+                      >
+                        <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                        {t('askQuestion')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 

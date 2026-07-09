@@ -3097,7 +3097,10 @@
       "markCompletedSaving": "Wird gespeichert...",
       "markCompletedButton": "Als abgeschlossen markieren",
       "messageOfferer": "Nachricht",
-      "askQuestion": "Frage stellen"
+      "askQuestion": "Frage stellen",
+      "becomeTechnicianTitle": "Möchtest du helfen?",
+      "becomeTechnicianBody": "Nur registrierte Techniker können auf Hilfe-Anfragen antworten. Erstelle dein kostenloses Techniker-Profil – dann kannst du hier und bei anderen Anfragen Angebote abgeben.",
+      "becomeTechnicianCta": "Techniker-Profil erstellen"
     },
     "create": {
       "backToList": "Zurück zur Übersicht",

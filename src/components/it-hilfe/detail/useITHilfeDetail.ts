@@ -310,7 +310,25 @@ export function useITHilfeDetail(id: string) {
   }
 
   const isExpired = request ? new Date(request.expiresAt) < new Date() : false
-  const canOffer = !!(session?.user && request && !request.isOwner && request.status === REQUEST_STATUS.OPEN && !isExpired)
+  // Only registered technicians may offer (server enforces the same via a 403).
+  // A logged-in non-technician sees a "become a technician" nudge instead.
+  const canOffer = !!(
+    session?.user &&
+    request &&
+    !request.isOwner &&
+    request.viewerIsTechnician &&
+    request.status === REQUEST_STATUS.OPEN &&
+    !isExpired
+  )
+  // Eligible to help but hasn't registered as a technician yet — drives the CTA.
+  const needsTechnicianProfile = !!(
+    session?.user &&
+    request &&
+    !request.isOwner &&
+    !request.viewerIsTechnician &&
+    request.status === REQUEST_STATUS.OPEN &&
+    !isExpired
+  )
 
   // Is the current user the matched helper for this request?
   const isMatchedHelper = !!(
@@ -447,6 +465,7 @@ export function useITHilfeDetail(id: string) {
     error,
     isExpired,
     canOffer,
+    needsTechnicianProfile,
     openConversation,
     openingConversation,
 

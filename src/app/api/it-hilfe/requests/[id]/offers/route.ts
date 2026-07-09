@@ -11,6 +11,7 @@ import { validateBody, CreateOfferSchema } from '@/lib/schemas'
 import { notifyUsers } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { signOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens'
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { APP_URL } from '@/config/urls'
 
@@ -200,14 +201,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     if (!validation.success) return validation.error
     const { message, estimatedTime, proposedCompensation, proposedAmountCents, relevantSkills } = validation.data
 
-    // Check if the user has an active repairer profile — auto-link if so
-    const [repairerProfile] = await db
-      .select({ id: repairerProfiles.id })
-      .from(repairerProfiles)
-      .where(and(
-        eq(repairerProfiles.userId, session.user.id),
-        eq(repairerProfiles.isActive, true)
-      ))
+    // Only registered technicians may respond to help requests. This is the
+    // hard boundary — the client also hides the form, but the rule is enforced
+    // here regardless of what the UI allowed. Same SSOT drives the detail view.
+    const repairerProfileId = await getActiveTechnicianProfileId(session.user.id)
+    if (!repairerProfileId) {
+      return apiForbidden('Nur registrierte Techniker können auf Hilfe-Anfragen antworten. Erstelle zuerst dein Techniker-Profil.')
+    }
 
     // Insert OR resurrect a withdrawn offer. UNIQUE(request_id, helper_id)
     // prevents a fresh INSERT when a withdrawn row exists, so reuse it:
@@ -229,7 +229,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             proposedCompensation: proposedCompensation || undefined,
             proposedAmountCents: proposedAmountCents ?? null,
             relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
-            repairerProfileId: repairerProfile?.id || undefined,
+            repairerProfileId: repairerProfileId || undefined,
             status: OFFER_STATUS.PENDING,
           })
           .where(eq(itHilfeOffers.id, withdrawnOfferId))
@@ -246,7 +246,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             proposedCompensation: proposedCompensation || undefined,
             proposedAmountCents: proposedAmountCents ?? null,
             relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
-            repairerProfileId: repairerProfile?.id || undefined,
+            repairerProfileId: repairerProfileId || undefined,
           })
           .returning({ id: itHilfeOffers.id })
         offer = inserted

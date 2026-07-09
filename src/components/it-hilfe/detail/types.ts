@@ -44,6 +44,8 @@ export interface ITHilfeRequest {
   createdAt: string
   updatedAt: string
   isOwner: boolean
+  /** Viewer has an active technician profile → may submit an offer. */
+  viewerIsTechnician: boolean
 }
 
 export interface OfferRepairerProfile {

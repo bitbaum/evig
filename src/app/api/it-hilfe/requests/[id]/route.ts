@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger'
 import { REQUEST_STATUS, VALID_REQUEST_TRANSITIONS, OFFER_STATUS, deriveBudgetType } from '@/config/it-hilfe'
 import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas'
 import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper'
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
 
 interface RouteParams {
@@ -89,10 +90,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return apiNotFound('IT-Hilfe-Anfrage')
     }
 
-    // Get current user to check ownership
+    // Get current user to check ownership + technician eligibility. The client
+    // needs viewerIsTechnician to decide whether to show the offer form or a
+    // "become a technician" nudge — the same SSOT the offer boundary enforces.
     const session = await auth()
     const isOwner = session?.user?.id === row.requester_id
-    const requestData = mapRequestDetailRow(row as RequestRow, isOwner)
+    const viewerIsTechnician = session?.user?.id
+      ? !!(await getActiveTechnicianProfileId(session.user.id))
+      : false
+    const requestData = {
+      ...mapRequestDetailRow(row as RequestRow, isOwner),
+      viewerIsTechnician,
+    }
 
     logger.info('Fetched IT-Hilfe request details', { requestId: id })
 

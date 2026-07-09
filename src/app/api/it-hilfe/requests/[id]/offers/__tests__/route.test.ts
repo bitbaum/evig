@@ -345,10 +345,10 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         where: jest.fn().mockResolvedValue([]),
       }),
     })
-    // 4. Repairer profile check → none
+    // 4. Technician profile check → active profile (registered technician)
     mockSelect.mockReturnValueOnce({
       from: jest.fn().mockReturnValue({
-        where: jest.fn().mockResolvedValue([]),
+        where: jest.fn().mockResolvedValue([{ id: 'rp-1' }]),
       }),
     })
 
@@ -363,6 +363,39 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     expect(res.status).toBe(201)
     expect(body.success).toBe(true)
     expect(body.data.offerId).toBe('new-offer-1')
+  })
+
+  it('returns 403 when the user is not a registered technician', async () => {
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+
+    // 1. Request + user join → open, not owner
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        innerJoin: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue([{ requesterId: 'other-user', status: 'open', title: 'Fix laptop', requester_name: 'Jane', requester_email: 'jane@example.com' }]),
+        }),
+      }),
+    })
+    // 2. Expiry check → not expired
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    })
+    // 3. Existing offer check → none
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    })
+    // 4. Technician profile check → none (NOT registered as a technician)
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    })
+
+    mockValidateBody.mockReturnValue({
+      success: true,
+      data: { message: 'I can help', estimatedTime: null, proposedCompensation: null, relevantSkills: [] },
+    })
+
+    const res = await POST(makeRequest(VALID_UUID, 'POST', { message: 'I can help' }), routeParams(VALID_UUID))
+    expect(res.status).toBe(403)
   })
 
   it('resurrects a withdrawn offer instead of returning 400 (UPDATE not INSERT)', async () => {
@@ -390,9 +423,9 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         where: jest.fn().mockResolvedValue([{ id: 'old-withdrawn-offer', status: 'withdrawn' }]),
       }),
     })
-    // 4. Repairer profile check — none
+    // 4. Technician profile check — active profile (registered technician)
     mockSelect.mockReturnValueOnce({
-      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([{ id: 'rp-1' }]) }),
     })
 
     // The resurrect path uses .update().set().where().returning() — set up
@@ -440,7 +473,8 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     })
     mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }) })
     mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }) })
-    mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }) })
+    // Technician profile check → active profile (registered technician)
+    mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([{ id: 'rp-1' }]) }) })
 
     mockValidateBody.mockReturnValue({
       success: true,
