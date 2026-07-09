@@ -16,7 +16,7 @@ import { redirect } from 'next/navigation'
 import { CheckSquare } from 'lucide-react'
 import { auth } from '@/auth'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { canAccessSection } from '@/lib/permissions'
+import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { TimecardApprovalsClient } from '@/components/admin/timecards/TimecardApprovalsClient'
 import { TimeOffApprovals } from '@/components/admin/timecards/TimeOffApprovals'
 import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
@@ -51,7 +51,10 @@ export default async function TimecardApprovalsPage() {
       iconColor="green"
     >
       <ApprovalTabs />
-      <TimecardApprovalsClient currentUserId={session.user.id} />
+      <TimecardApprovalsClient
+        currentUserId={session.user.id}
+        allowSelfReview={isSuperAdmin(session.user.email, session.user.isSuperAdmin)}
+      />
       <div className="mt-10 border-t border-subtle pt-8">
         <TimeOffApprovals />
       </div>

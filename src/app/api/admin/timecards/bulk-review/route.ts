@@ -23,6 +23,7 @@ import { apiBadRequest, apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { timecardBulkReviewSchema } from '@/lib/schemas/timecards'
 import { reviewTimecard } from '@/lib/services/timecards'
+import { isSuperAdmin } from '@/lib/permissions'
 
 interface BulkResultItem {
   id: string
@@ -43,6 +44,9 @@ export const POST = withAdmin('timecards', async (
 
     const { ids, status, review_notes } = parsed.data
 
+    // Super-admins may approve their own cards in a bulk pass too.
+    const allowSelfReview = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+
     const results: BulkResultItem[] = []
     let approved = 0
     let rejected = 0
@@ -50,7 +54,7 @@ export const POST = withAdmin('timecards', async (
 
     for (const id of ids) {
       try {
-        await reviewTimecard(session.user.id, id, { status, review_notes })
+        await reviewTimecard(session.user.id, id, { status, review_notes }, { allowSelfReview })
         results.push({ id, ok: true })
         if (status === 'approved') approved += 1
         else rejected += 1

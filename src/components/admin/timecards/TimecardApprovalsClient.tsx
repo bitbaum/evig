@@ -84,7 +84,16 @@ const BULK_FAILURE_REASONS: Record<string, string> = {
   timecard_payroll_locked: 'im Lohnlauf gesperrt',
 }
 
-export function TimecardApprovalsClient({ currentUserId }: { currentUserId: string }) {
+export function TimecardApprovalsClient({
+  currentUserId,
+  allowSelfReview = false,
+}: {
+  currentUserId: string
+  /** Super-admins may approve their own cards — in a small org they're often
+   *  the only approver. The server enforces the same rule; this just avoids
+   *  offering a doomed click to everyone else. */
+  allowSelfReview?: boolean
+}) {
   const [items, setItems] = useState<ApprovalRow[]>([])
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [sharedNote, setSharedNote] = useState('')
@@ -128,11 +137,12 @@ export function TimecardApprovalsClient({ currentUserId }: { currentUserId: stri
   }, [loadQueue])
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  // Own cards are never selectable — the server enforces the four-eyes rule
-  // (timecard_self_review), so don't offer the doomed click in the first place.
+  // Own cards are normally not selectable — the server enforces the four-eyes
+  // rule (timecard_self_review), so don't offer the doomed click. Super-admins
+  // are exempt (allowSelfReview) since they're often the sole approver.
   const selectableItems = useMemo(
-    () => items.filter(i => i.user_id !== currentUserId),
-    [items, currentUserId],
+    () => (allowSelfReview ? items : items.filter(i => i.user_id !== currentUserId)),
+    [items, currentUserId, allowSelfReview],
   )
   const allSelected = selectableItems.length > 0 && selected.size === selectableItems.length
 
@@ -304,7 +314,8 @@ export function TimecardApprovalsClient({ currentUserId }: { currentUserId: stri
             <ul className="divide-y divide-subtle">
               {items.map(row => {
                 const isSelected = selected.has(row.id)
-                const isOwn = row.user_id === currentUserId
+                // Own card is only lockable when the viewer isn't a super-admin.
+                const isOwn = row.user_id === currentUserId && !allowSelfReview
                 const status = row.status as TimecardStatus
                 const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
                 const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
@@ -392,6 +403,7 @@ export function TimecardApprovalsClient({ currentUserId }: { currentUserId: stri
         <TimecardReviewDrawer
           cardId={openCardId}
           currentUserId={currentUserId}
+          allowSelfReview={allowSelfReview}
           onClose={() => setOpenCardId(null)}
           onChanged={loadQueue}
         />

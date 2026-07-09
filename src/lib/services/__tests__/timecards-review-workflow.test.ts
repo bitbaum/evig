@@ -117,6 +117,25 @@ describe('reviewTimecard workflow wiring', () => {
     await expect(reviewTimecard('reviewer-1', 'card-1', { status: TIMECARD_STATUSES.APPROVED }))
       .rejects.toThrow('timecard_not_submitted')
   })
+
+  it('keeps the self_review guard by default but drops it when allowSelfReview is set', async () => {
+    await expect(reviewTimecard('reviewer-1', 'card-1', { status: TIMECARD_STATUSES.APPROVED }))
+      .rejects.toThrow('timecard_not_found')
+    const defaultGuards = mockRunReviewTransition.mock.calls[0][0].guards
+      .map((g: { code: string }) => g.code)
+    expect(defaultGuards).toContain('self_review')
+
+    mockRunReviewTransition.mockClear()
+
+    await expect(
+      reviewTimecard('reviewer-1', 'card-1', { status: TIMECARD_STATUSES.APPROVED }, { allowSelfReview: true }),
+    ).rejects.toThrow('timecard_not_found')
+    const exemptGuards = mockRunReviewTransition.mock.calls[0][0].guards
+      .map((g: { code: string }) => g.code)
+    expect(exemptGuards).not.toContain('self_review')
+    // The payroll lock is an invariant, not separation-of-duties — it stays.
+    expect(exemptGuards).toContain('payroll_locked')
+  })
 })
 
 describe('reopenTimecard workflow wiring', () => {

@@ -672,12 +672,21 @@ export async function reopenTimecard(timecardId: string, actorId: string): Promi
 export async function reviewTimecard(
   reviewerId: string,
   timecardId: string,
-  input: TimecardReviewActionInput
+  input: TimecardReviewActionInput,
+  opts?: { allowSelfReview?: boolean }
 ): Promise<TimecardWithEntries> {
   const parsed = timecardReviewActionSchema.safeParse(input)
   if (!parsed.success) {
     throw new Error('invalid_timecard_review')
   }
+
+  // Super-admins may approve their OWN timecards — in a small org they're often
+  // the only approver, so the separation-of-duties block would otherwise leave
+  // their cards permanently unapprovable. Regular approvers still need a
+  // colleague: the self_review guard stays for them.
+  const guards = opts?.allowSelfReview
+    ? TIMECARD_REVIEW_GUARDS.filter((g) => g.code !== 'self_review')
+    : TIMECARD_REVIEW_GUARDS
 
   const result = await runReviewTransition<TimecardReviewRow>({
     target: {
@@ -688,7 +697,7 @@ export async function reviewTimecard(
     id: timecardId,
     action: parsed.data.status,
     actor: { id: reviewerId },
-    guards: TIMECARD_REVIEW_GUARDS,
+    guards,
     reason: parsed.data.review_notes ?? null,
     emit: (row): WorkflowEvent => {
       const reviewPeriodLabel = formatTimecardPeriodLabel(row.period_type, row.period_start, row.period_end)

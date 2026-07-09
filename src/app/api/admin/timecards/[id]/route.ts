@@ -4,6 +4,7 @@ import { apiBadRequest, apiError, apiNotFound, apiSuccess } from '@/lib/api/help
 import { logger } from '@/lib/logger'
 import { timecardReviewActionSchema, timecardSaveSchema } from '@/lib/schemas/timecards'
 import { reviewTimecard, getTimecardByIdForReview, saveTimecardEntriesForReview } from '@/lib/services/timecards'
+import { isSuperAdmin } from '@/lib/permissions'
 import { db } from '@/db'
 import { timecards } from '@/db/schema'
 import { eq } from 'drizzle-orm'
@@ -76,7 +77,10 @@ export const PATCH = withAdmin('timecards', async (
 
     if (!existing) return apiNotFound('Zeitkarte')
 
-    const result = await reviewTimecard(session.user.id, id, parsed.data)
+    // Super-admins may approve their own timecards; regular approvers still need
+    // a colleague (the self_review guard stays for them).
+    const allowSelfReview = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+    const result = await reviewTimecard(session.user.id, id, parsed.data, { allowSelfReview })
     return apiSuccess(result)
   } catch (error) {
     if (error instanceof Error && error.message === 'timecard_self_review') {

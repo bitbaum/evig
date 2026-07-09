@@ -48,12 +48,15 @@ interface ReviewCard {
 export function TimecardReviewDrawer({
   cardId,
   currentUserId,
+  allowSelfReview = false,
   onClose,
   onChanged,
 }: {
   cardId: string
   /** Reviewer's own user id — own cards are view-only (four-eyes principle). */
   currentUserId?: string
+  /** Super-admins may review their own card (they're often the sole approver). */
+  allowSelfReview?: boolean
   onClose: () => void
   onChanged: () => void
 }) {
@@ -83,7 +86,7 @@ export function TimecardReviewDrawer({
   const isApproved = card?.status === 'approved'
   // The server rejects self-review anyway (400) — surface that BEFORE the
   // click instead of after it.
-  const isOwnCard = !!card && !!currentUserId && card.user_id === currentUserId
+  const isOwnCard = !!card && !!currentUserId && card.user_id === currentUserId && !allowSelfReview
 
   const patchEntry = (i: number, patch: Partial<ReviewEntry>) =>
     setEntries(prev => prev.map((e, idx) => (idx === i ? { ...e, ...patch } : e)))
