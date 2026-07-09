@@ -109,6 +109,7 @@ jest.mock('@/lib/services/notifications', () => ({
 
 jest.mock('@/config/notifications', () => ({
   RELATED_TYPES: { TASK: 'task' },
+  NOTIFICATION_TYPES: { TASK_ASSIGNED: 'task_assigned' },
 }))
 
 jest.mock('@/lib/logger', () => ({

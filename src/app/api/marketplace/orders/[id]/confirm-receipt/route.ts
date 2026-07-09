@@ -155,12 +155,13 @@ export const POST = withAuth<{ id: string }>(async (
       sellerId: order.sellerId,
     })
 
-    // Notify seller (in-app + email fallback via notification service)
+    // Notify seller — in-app bell only; the styled orderReceiptConfirmed email
+    // below is the single email for this event (skipEmail avoids a 2nd generic one).
     createNotification(order.sellerId, {
       type: NOTIFICATION_TYPES.MARKETPLACE,
       title: 'Empfang bestätigt',
       content: `Der Käufer hat den Erhalt von "${displayTitle}" bestätigt. Die Zahlung wurde freigegeben.`,
-    }).catch((err) =>
+    }, { skipEmail: true }).catch((err) =>
       logger.error('Failed to create seller notification on receipt confirmation', {
         error: err,
         orderId,

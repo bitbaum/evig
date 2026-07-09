@@ -97,8 +97,8 @@ Legend: **A** = notification system (in-app + maybe email) · **B** = direct ema
 
 1. **Paid workshop registration (webhook) sends no confirmation** — `src/lib/services/payment-webhook.ts:451` only logs. Fix: send `workshopRegistrationConfirmation` on payment success. *(Deferred: the Payrexx-paid path isn't live/testable yet.)*
 2. **Paid service appointment (webhook) sends no confirmation** — `payment-webhook.ts:457` only logs. Same deferral.
-3. **Marketplace double emails** — question / confirm-receipt / review each fire a `marketplace`-type `createNotification` (→ generic email) **and** a dedicated `sendCustomEmail`, so the seller gets two emails per event. Fix: pass `{ skipEmail: true }` to those `createNotification` calls (now supported) to keep only the styled email.
-4. **Time-off request → requester gets no acknowledgement** (only notified later on review). Mirror the timecard-submit confirmation for consistency.
-5. **SSOT drift:** `src/app/api/tasks/route.ts` + `tasks/[id]/route.ts` emit the literal `'task_assigned'`, which isn't in `NOTIFICATION_TYPES`. Add the constant and use it.
+3. ✅ **DONE** — **Marketplace double emails** fixed: the seller `createNotification` in the question (`listings/[id]/questions`), confirm-receipt and review routes now pass `{ skipEmail: true }`, so only the dedicated styled email is sent (the bell entry stays).
+4. ✅ **DONE** — **Time-off requester acknowledgement** added: `createTimeOffRequest` now sends the requester an in-app `time_off_requested` confirmation (→ `/admin/zeiterfassung`) at submit time, mirroring the timecard-submit confirmation.
+5. ✅ **DONE** — **SSOT drift** fixed: added `NOTIFICATION_TYPES.TASK_ASSIGNED` and both task routes use the constant (the stale `notifications_type_check` DB constraint note in the config was also corrected — it was dropped in migration 110).
 6. **Dead notification types** (defined, no producer): `message`, `appointment` (now used), `vacancy_published`, `marketing`, `task_broadcast`. Prune or wire.
 7. **Deliverability:** authenticate `revampit.ch` in Brevo (SPF/DKIM/DMARC) so external emails actually land.

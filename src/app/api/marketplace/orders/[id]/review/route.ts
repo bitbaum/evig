@@ -134,12 +134,13 @@ export const POST = withAuth<{ id: string }>(async (
       sellerId: order.sellerId,
     })
 
-    // Notify seller
+    // Notify seller — in-app bell only; the styled orderReviewReceived email
+    // below is the single email for this event (skipEmail avoids a 2nd generic one).
     createNotification(order.sellerId, {
       type: NOTIFICATION_TYPES.MARKETPLACE,
       title: `Neue Bewertung: ${rating}/5 Sterne`,
       content: `${order.buyerName || 'Ein Käufer'} hat Ihr Inserat "${order.listingTitle}" bewertet.`,
-    }).catch((err) =>
+    }, { skipEmail: true }).catch((err) =>
       logger.error('Failed to create seller notification for review', {
         error: err,
         orderId,

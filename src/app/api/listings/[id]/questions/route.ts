@@ -141,11 +141,13 @@ export const POST = withAuth<{ id: string }>(async (
 
     const listingUrl = `${APP_URL}${ROUTES.public.marketplaceListing(listingId)}`;
 
+    // In-app bell only; the styled newListingQuestion email below is the single
+    // email for this event (skipEmail avoids a 2nd generic one).
     createNotification(listing.sellerId, {
       type: NOTIFICATION_TYPES.MARKETPLACE,
       title: 'Neue Frage zu deinem Inserat',
       content: `"${listing.title}": ${question.trim().substring(0, 120)}`,
-    }).catch((err) =>
+    }, { skipEmail: true }).catch((err) =>
       logger.warn('Failed to notify seller of listing question', { error: err, listingId }),
     );
 

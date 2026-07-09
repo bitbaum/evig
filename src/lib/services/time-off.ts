@@ -8,7 +8,7 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { notifyUsers } from '@/lib/services/notifications'
+import { notifyUsers, createNotification } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { getTimeOffKindLabel, TIME_OFF_STATUSES } from '@/config/time-off'
 import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
@@ -55,10 +55,26 @@ export async function createTimeOffRequest(
   const id = insert.rows[0].id
   const [created] = await getRequestsByIds([id])
 
+  const label = getTimeOffKindLabel(input.kind)
+
+  // Acknowledge the requester (mirrors the timecard-submit confirmation) so a
+  // submitted request always leaves a trace on the requester's side, even if the
+  // approver email is dropped by deliverability.
+  try {
+    await createNotification(userId, {
+      type: NOTIFICATION_TYPES.TIME_OFF_REQUESTED,
+      title: 'Antrag eingereicht',
+      content: `Dein Antrag auf ${label} (${formatRange(created)}) wurde eingereicht und wartet auf Freigabe.`,
+      related_type: RELATED_TYPES.TIME_OFF,
+      related_id: id,
+    })
+  } catch (error) {
+    logger.error('time-off: acknowledge requester failed', { error, requestId: id })
+  }
+
   // Notify approvers (staff with timecards permission) — in-app + email.
   try {
     const approverIds = await getTimecardApproverIds(userId)
-    const label = getTimeOffKindLabel(input.kind)
     if (approverIds.length > 0) {
       await notifyUsers(approverIds, {
         type: NOTIFICATION_TYPES.TIME_OFF_REQUESTED,

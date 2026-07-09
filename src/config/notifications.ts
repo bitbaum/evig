@@ -1,9 +1,10 @@
 /**
  * Notification Configuration (SSOT)
  *
- * All notification types and navigation hrefs live here.
- * DB CHECK constraint must match these types — see migration 093
- * (and src/config/notifications.ts when adding new types).
+ * All notification types and navigation hrefs live here. This config + zod at
+ * the write boundary is the ONLY enum authority — the old `notifications_type_check`
+ * DB constraint was dropped in migration 110 (it drifted repeatedly). Adding a
+ * type here needs no migration.
  */
 
 export const NOTIFICATION_TYPES = {
@@ -16,6 +17,7 @@ export const NOTIFICATION_TYPES = {
   PROTOCOL_FINALIZED: 'protocol_finalized',
 
   // Task management
+  TASK_ASSIGNED: 'task_assigned',
   TASK_ATTENTION: 'task_attention',
   TASK_REQUEST: 'task_request',
   TASK_REQUEST_RESPONSE: 'task_request_response',

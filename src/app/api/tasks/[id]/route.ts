@@ -19,7 +19,7 @@ import { alias } from 'drizzle-orm/pg-core';
 import { REQUEST_STATUSES } from '@/config/tasks';
 import { updateTaskSchema } from '@/lib/schemas/tasks';
 import { notifyUsers } from '@/lib/services/notifications';
-import { RELATED_TYPES } from '@/config/notifications'
+import { RELATED_TYPES, NOTIFICATION_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger';
 
 const requestedByUser = alias(users, 'requested_by_user');
@@ -253,7 +253,7 @@ export const PATCH = withAdmin<RouteParams>(async (
     const newAssignee = (data as Record<string, unknown>).assigned_to as string | null | undefined;
     if (newAssignee && newAssignee !== existing.assignedTo) {
       notifyUsers([newAssignee], {
-        type: 'task_assigned',
+        type: NOTIFICATION_TYPES.TASK_ASSIGNED,
         title: 'Aufgabe zugewiesen',
         content: `Dir wurde eine Aufgabe zugewiesen: ${existing.title}`,
         related_type: RELATED_TYPES.TASK,
