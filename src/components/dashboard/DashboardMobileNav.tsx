@@ -70,6 +70,7 @@ export function DashboardMobileNav({ items }: { items: DashboardCard[] }) {
       >
         {barItems.map(item => {
           const active = isActive(pathname, item.href)
+          const Icon = item.icon
           return (
             <Link
               key={item.id}
@@ -79,7 +80,7 @@ export function DashboardMobileNav({ items }: { items: DashboardCard[] }) {
                 active ? 'text-action' : 'text-text-tertiary hover:text-text-secondary'
               }`}
             >
-              <span aria-hidden="true" className="text-lg leading-none">{item.icon}</span>
+              <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
               <span className="max-w-full truncate px-1">{item.shortLabel ?? item.title}</span>
             </Link>
           )
@@ -130,6 +131,7 @@ export function DashboardMobileNav({ items }: { items: DashboardCard[] }) {
                   <div className="grid grid-cols-2 gap-2">
                     {group.cards.map(card => {
                       const active = isActive(pathname, card.href)
+                      const Icon = card.icon
                       return (
                         <Link
                           key={card.id}
@@ -141,7 +143,7 @@ export function DashboardMobileNav({ items }: { items: DashboardCard[] }) {
                               : 'border-subtle text-text-secondary hover:border-strong hover:text-text-primary'
                           }`}
                         >
-                          <span aria-hidden="true" className="text-base leading-none">{card.icon}</span>
+                          <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                           <span className="min-w-0 truncate">{card.title}</span>
                         </Link>
                       )

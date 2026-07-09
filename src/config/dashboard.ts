@@ -10,6 +10,8 @@
  * Last Updated: 2026-01-26
  */
 
+import type { LucideIcon } from 'lucide-react'
+import { Shield } from 'lucide-react'
 import {
   SECTIONS,
   getDashboardSections,
@@ -28,7 +30,8 @@ export interface DashboardCard {
   title: string
   description: string
   href: string
-  icon: string // Emoji
+  /** lucide icon from the section SSOT (section.ui.icon) — never an emoji. */
+  icon: LucideIcon
   category: DashboardCategory
   /** Show only for users with this community role */
   requiredRole?: CommunityRole
@@ -60,7 +63,6 @@ export interface DashboardCategoryConfig {
   id: DashboardCategory
   title: string
   description: string
-  icon: string
   priority: number
 }
 
@@ -99,42 +101,36 @@ export const DASHBOARD_CATEGORIES: Record<DashboardCategory, DashboardCategoryCo
     id: 'account',
     title: CATEGORIES.core.label,
     description: CATEGORIES.core.description,
-    icon: CATEGORIES.core.emoji,
     priority: CATEGORIES.core.priority,
   },
   activities: {
     id: 'activities',
     title: CATEGORIES.activities.label,
     description: CATEGORIES.activities.description,
-    icon: CATEGORIES.activities.emoji,
     priority: CATEGORIES.activities.priority,
   },
   commerce: {
     id: 'commerce',
     title: CATEGORIES.commerce.label,
     description: CATEGORIES.commerce.description,
-    icon: CATEGORIES.commerce.emoji,
     priority: CATEGORIES.commerce.priority,
   },
   services: {
     id: 'services',
     title: CATEGORIES.services.label,
     description: CATEGORIES.services.description,
-    icon: CATEGORIES.services.emoji,
     priority: CATEGORIES.services.priority,
   },
   content: {
     id: 'content',
     title: CATEGORIES.content.label,
     description: CATEGORIES.content.description,
-    icon: CATEGORIES.content.emoji,
     priority: CATEGORIES.content.priority,
   },
   admin: {
     id: 'admin',
     title: 'Administration',
     description: 'System verwalten',
-    icon: '⚙️',
     priority: 10,
   },
 }
@@ -186,7 +182,7 @@ function sectionToCard(section: SectionConfig): DashboardCard {
     title: section.ui.label,
     description: section.ui.description,
     href: section.path,
-    icon: section.ui.emoji ?? '📄',
+    icon: section.ui.icon,
     category: categoryMapping[section.category],
     color: colorMapping[section.ui.color],
     priority: section.priority,
@@ -318,7 +314,7 @@ export function getAdminCard(): DashboardCard {
     title: 'Admin-Bereich',
     description: 'System verwalten',
     href: '/admin',
-    icon: '⚙️',
+    icon: Shield,
     category: 'admin',
     color: 'error',
     priority: 1000,

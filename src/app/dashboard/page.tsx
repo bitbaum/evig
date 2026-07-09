@@ -47,17 +47,6 @@ const CATEGORY_ORDER: DashboardCategory[] = [
   'admin',
 ]
 
-// Semantic dot colour per card.color — small visual key without the
-// heavy icon-box that the previous grid layout used.
-const DOT_BY_COLOR: Record<DashboardCard['color'], string> = {
-  info: 'bg-action',
-  success: 'bg-action',
-  warning: 'bg-warning-500',
-  error: 'bg-error-500',
-  secondary: 'bg-secondary-500',
-  neutral: 'bg-text-muted',
-}
-
 // Stable de-CH date for the header kicker. Server-rendered per request.
 function todayLongLabel(): string {
   return new Intl.DateTimeFormat('de-CH', {
@@ -130,44 +119,44 @@ export default async function DashboardPage() {
                 {config.title}
               </h2>
               <ul className="mt-3 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">
-                {categoryCards.map(card => (
-                  <li key={card.id}>
-                    <Link
-                      href={card.href}
-                      className="group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-surface-raised"
-                    >
-                      {/* Color dot — semantic, replaces the heavy icon box.
-                          The card.icon (an emoji) follows for quick visual
-                          recognition without the giant tile. */}
-                      <span
-                        className={`h-2 w-2 shrink-0 rounded-full ${DOT_BY_COLOR[card.color]}`}
-                        aria-hidden="true"
-                      />
-                      <span aria-hidden="true" className="text-base">
-                        {card.icon}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="text-sm font-medium text-text-primary">
-                            {card.title}
+                {categoryCards.map(card => {
+                  const Icon = card.icon
+                  return (
+                    <li key={card.id}>
+                      <Link
+                        href={card.href}
+                        className="group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-surface-raised"
+                      >
+                        {/* Bare lucide icon from the section SSOT — muted at rest,
+                            resolves to primary on hover. No decorative dots, no
+                            emoji: chrome stays monochrome (accent = the arrow). */}
+                        <Icon
+                          className="h-5 w-5 shrink-0 text-text-tertiary transition-colors group-hover:text-text-primary"
+                          aria-hidden="true"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium text-text-primary">
+                              {card.title}
+                            </p>
+                            {card.badge && (
+                              <span className="rounded-sm bg-action-muted px-1.5 py-0.5 text-xs font-medium text-action">
+                                {card.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-0.5 line-clamp-1 text-xs text-text-tertiary">
+                            {card.description}
                           </p>
-                          {card.badge && (
-                            <span className="rounded-sm bg-action-muted px-1.5 py-0.5 text-xs font-medium text-action">
-                              {card.badge}
-                            </span>
-                          )}
                         </div>
-                        <p className="mt-0.5 line-clamp-1 text-xs text-text-tertiary">
-                          {card.description}
-                        </p>
-                      </div>
-                      <ArrowRight
-                        className="h-4 w-4 shrink-0 text-text-tertiary transition-colors group-hover:text-action"
-                        aria-hidden="true"
-                      />
-                    </Link>
-                  </li>
-                ))}
+                        <ArrowRight
+                          className="h-4 w-4 shrink-0 text-text-tertiary transition-colors group-hover:text-action"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    </li>
+                  )
+                })}
               </ul>
             </section>
           )

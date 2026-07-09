@@ -4,7 +4,6 @@ import { auth } from '@/auth'
 import { isSuperAdmin } from '@/lib/permissions'
 import { getAllDashboardCards } from '@/config/dashboard'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
-import { DashboardNav } from '@/components/dashboard/DashboardNav'
 import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -30,9 +29,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
           (React #418 hydration mismatch). /admin works precisely because it never
           double-wrapped. */}
       <ConditionalMainLayout leanChrome>
-        <DashboardNav items={navItems} />
-        {/* Mobile/tablet (<lg): bottom tab bar + "Mehr" sheet. The padding keeps
-            content clear of the fixed bar. */}
+        {/* Desktop dashboard nav lives in the account dropdown + the home-page
+            sectioned index — no redundant horizontal strip. Mobile (<lg) keeps a
+            thumb-reachable bottom tab bar + "Mehr" sheet; the padding clears it. */}
         <div className="pb-16 lg:pb-0">{children}</div>
         <DashboardMobileNav items={navItems} />
       </ConditionalMainLayout>
