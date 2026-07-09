@@ -5,38 +5,12 @@
  */
 
 import {
-  adminNewRepairerApplication,
   adminNewWorkshopProposal,
   adminNewBlogSubmission,
   adminNewSellerApplication,
 } from '../templates/admin'
 
 const ADMIN_URL = 'https://revamp-it.ch/admin/dashboard'
-
-// ─── adminNewRepairerApplication ──────────────────────────────────────────────
-
-describe('adminNewRepairerApplication', () => {
-  // (applicantName, applicantEmail, adminDashboardUrl)
-  const email = adminNewRepairerApplication('Anna Müller', 'anna@example.com', ADMIN_URL)
-
-  it('returns { subject, html, text }', () => {
-    expect(email).toHaveProperty('subject')
-    expect(email).toHaveProperty('html')
-    expect(email).toHaveProperty('text')
-  })
-
-  it('html contains the applicant name', () => {
-    expect(email.html).toContain('Anna Müller')
-  })
-
-  it('html contains the applicant email', () => {
-    expect(email.html).toContain('anna@example.com')
-  })
-
-  it('html contains the admin URL', () => {
-    expect(email.html).toContain(ADMIN_URL)
-  })
-})
 
 // ─── adminNewWorkshopProposal ──────────────────────────────────────────────────
 

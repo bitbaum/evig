@@ -2,7 +2,7 @@
  * Tests for lifecycle status config files.
  *
  * Covers: appointment-status, invoice-status, workshop-registration-status,
- * refund, document-status, location-status, certification-status, report-status.
+ * refund, location-status, report-status.
  *
  * These share the same pattern: constant → labels map → get*Label/Badge helper.
  * Mission-relevant: status labels appear in admin tables, email subjects, and
@@ -45,24 +45,10 @@ import {
 } from '../refund'
 
 import {
-  DOCUMENT_STATUS,
-  DOCUMENT_STATUS_LABELS,
-  DOCUMENT_STATUS_BADGES,
-  getDocumentStatusBadge,
-} from '../document-status'
-
-import {
   LOCATION_STATUS,
   LOCATION_STATUS_LABELS,
   getLocationStatusLabel,
 } from '../location-status'
-
-import {
-  CERTIFICATION_STATUS,
-  CERTIFICATION_STATUS_LABELS,
-  CERTIFICATION_STATUS_BADGES,
-  getCertificationStatusBadge,
-} from '../certification-status'
 
 import {
   REPORT_STATUS,
@@ -248,52 +234,6 @@ describe('getRefundReasonLabel', () => {
 })
 
 // ============================================================================
-// document-status
-// ============================================================================
-
-describe('DOCUMENT_STATUS', () => {
-  it('has the expected values including INCOMPLETE', () => {
-    expect(DOCUMENT_STATUS.PENDING).toBe('pending')
-    expect(DOCUMENT_STATUS.IN_REVIEW).toBe('in_review')
-    expect(DOCUMENT_STATUS.APPROVED).toBe('approved')
-    expect(DOCUMENT_STATUS.REJECTED).toBe('rejected')
-    expect(DOCUMENT_STATUS.INCOMPLETE).toBe('incomplete')
-  })
-
-  it('every value has a Swiss-German label', () => {
-    for (const v of Object.values(DOCUMENT_STATUS)) {
-      expect(DOCUMENT_STATUS_LABELS[v as keyof typeof DOCUMENT_STATUS_LABELS]).toBeTruthy()
-    }
-  })
-})
-
-describe('getDocumentStatusBadge', () => {
-  it('returns green badge for APPROVED', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.APPROVED)
-    expect(badge.bg).toContain('primary')
-    expect(badge.color).toContain('primary')
-  })
-
-  it('returns red badge for REJECTED', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.REJECTED)
-    expect(badge.bg).toContain('error')
-  })
-
-  it('returns gray fallback badge for unknown status', () => {
-    const badge = getDocumentStatusBadge('mystery')
-    expect(badge.label).toBe('mystery')
-    expect(badge.bg).toContain('neutral')
-    expect(badge.color).toContain('neutral')
-  })
-
-  it('every known status has a badge entry', () => {
-    for (const v of Object.values(DOCUMENT_STATUS)) {
-      expect(DOCUMENT_STATUS_BADGES[v]).toBeDefined()
-    }
-  })
-})
-
-// ============================================================================
 // location-status
 // ============================================================================
 
@@ -319,51 +259,6 @@ describe('getLocationStatusLabel', () => {
 
   it('falls back to status string for unknown', () => {
     expect(getLocationStatusLabel('archived')).toBe('archived')
-  })
-})
-
-// ============================================================================
-// certification-status
-// ============================================================================
-
-describe('CERTIFICATION_STATUS', () => {
-  it('has the expected values', () => {
-    expect(CERTIFICATION_STATUS.PENDING).toBe('pending')
-    expect(CERTIFICATION_STATUS.VERIFIED).toBe('verified')
-    expect(CERTIFICATION_STATUS.REJECTED).toBe('rejected')
-    expect(CERTIFICATION_STATUS.EXPIRED).toBe('expired')
-  })
-
-  it('every value has a Swiss-German label', () => {
-    for (const v of Object.values(CERTIFICATION_STATUS)) {
-      expect(CERTIFICATION_STATUS_LABELS[v as keyof typeof CERTIFICATION_STATUS_LABELS]).toBeTruthy()
-    }
-  })
-})
-
-describe('getCertificationStatusBadge', () => {
-  it('returns green badge for VERIFIED', () => {
-    const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.VERIFIED)
-    expect(badge.bg).toContain('primary')
-    expect(badge.label).toBe('Verifiziert')
-  })
-
-  it('returns orange badge for EXPIRED', () => {
-    const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.EXPIRED)
-    expect(badge.bg).toContain('orange')
-    expect(badge.label).toBe('Abgelaufen')
-  })
-
-  it('returns gray fallback for unknown status', () => {
-    const badge = getCertificationStatusBadge('suspended')
-    expect(badge.label).toBe('suspended')
-    expect(badge.bg).toContain('neutral')
-  })
-
-  it('every known status has a badge entry', () => {
-    for (const v of Object.values(CERTIFICATION_STATUS)) {
-      expect(CERTIFICATION_STATUS_BADGES[v]).toBeDefined()
-    }
   })
 })
 

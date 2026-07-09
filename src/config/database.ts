@@ -44,12 +44,10 @@ export const TABLE_NAMES = {
   // Applications & Profiles
   SELLER_APPLICATIONS: 'seller_applications',
   SELLER_PROFILES: 'seller_profiles',
-  REPAIRER_APPLICATIONS: 'technician_applications',
   REPAIRER_PROFILES: 'technician_profiles',
   REPAIRER_SERVICES: 'technician_services',
   REPAIRER_AVAILABILITY: 'technician_availability',
   REPAIRER_REVIEWS: 'technician_reviews',
-  REPAIRER_CERTIFICATIONS: 'repairer_certifications',
 
   // Membership
   MEMBERSHIP_APPLICATIONS: 'membership_applications',
@@ -90,11 +88,6 @@ export const TABLE_NAMES = {
   REVIEW_RESPONSES: 'review_responses',
   REVIEW_VOTES: 'review_votes',
   REVIEW_MODERATION_LOG: 'review_moderation_log',
-
-  // Documents & Verification
-  VERIFICATION_DOCUMENTS: 'verification_documents',
-  DOCUMENT_TYPES: 'document_types',
-  CERTIFICATION_TYPES: 'certification_types',
 
   // Auth & Security
   USER_LOCKOUTS: 'user_lockouts',

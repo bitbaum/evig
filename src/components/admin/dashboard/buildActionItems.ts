@@ -100,20 +100,6 @@ export function buildActionItems(
     })
   }
 
-  if (stats.pendingRepairerApplications > 0) {
-    items.push({
-      type: 'warning',
-      label: `${stats.pendingRepairerApplications} Techniker-Bewerbung${stats.pendingRepairerApplications > 1 ? 'en' : ''}`,
-      count: stats.pendingRepairerApplications,
-      href: '/admin/repairer-applications',
-      actionLabel: 'Prüfen',
-      oldestAt: stats.pendingRepairerApplicationsOldest,
-      inlineAction: stats.topPendingRepairerApp
-        ? { itemId: stats.topPendingRepairerApp.id, itemLabel: stats.topPendingRepairerApp.label, actionType: 'approve_repairer' }
-        : undefined,
-    })
-  }
-
   if (stats.openDecisions > 0) {
     items.push({
       type: 'warning',

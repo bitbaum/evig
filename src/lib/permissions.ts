@@ -122,7 +122,6 @@ const PERMISSION_ALIASES: Partial<Record<AdminSection, string>> = {
   'hr-vacancies': 'team',
   'hr-applications': 'team',
   erfassung: 'intake',
-  'repairer-applications': 'it-hilfe-admin',
   'analyse-hub': 'finanzen',
 }
 

@@ -38,13 +38,6 @@ jest.mock('../templates/auth', () => ({
   passwordChangeConfirmation: jest.fn(() => ({ subject: 'Test Email', html: '<p>Test</p>', text: 'Test' })),
 }))
 
-jest.mock('../templates/repairer', () => ({
-  repairerApplicationSubmitted: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  repairerApplicationApproved: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  repairerApplicationRejected: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-  repairerApplicationChangesRequested: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
-}))
-
 jest.mock('../templates/workshop', () => ({
   workshopRegistrationConfirmation: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
   workshopRegistrationStatusUpdate: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
@@ -58,7 +51,6 @@ jest.mock('../templates/workshop', () => ({
 }))
 
 jest.mock('../templates/admin', () => ({
-  adminNewRepairerApplication: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
   adminNewWorkshopProposal: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
   adminNewBlogSubmission: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),
   adminNewSellerApplication: jest.fn(() => ({ subject: 'T', html: 'H', text: 'T' })),

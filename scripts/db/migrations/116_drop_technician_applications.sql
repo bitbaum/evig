@@ -1,0 +1,22 @@
+-- Migration 116: drop the orphaned pro-repairer application table
+--
+-- The PRO-repairer application/certification flow is removed. It let users apply
+-- to become vetted "professional" technicians, pending admin approval — but the
+-- professional tier was never assigned to any profile, so the table held only
+-- pending/rejected applications with no downstream effect. All of its code
+-- (/api/repairer/apply, /api/admin/repairer-applications, the admin review UI,
+-- certifications/documents verification) is deleted in the same change.
+--
+-- KEPT (the live community-technician / IT-Hilfe flow): technician_profiles,
+-- technician_services, technician_availability, technician_reviews, and the
+-- whole /api/it-hilfe/* + /it-hilfe/* two-sided marketplace. Technicians
+-- self-register at /it-hilfe/techniker (profile_tier = 'community').
+--
+-- The certification/document verification tables the deleted routes referenced
+-- (repairer_certifications, certification_types, verification_documents,
+-- document_types) were only ever named in TABLE_NAMES — no migration ever
+-- created them — so there is nothing to drop for those.
+--
+-- Renamed repairer_applications -> technician_applications in migration 105.
+
+DROP TABLE IF EXISTS technician_applications CASCADE;

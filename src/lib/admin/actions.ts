@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { userContentSubmissions, listings, repairerApplications } from '@/db/schema'
+import { userContentSubmissions, listings } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logActivity } from '@/lib/activity'
@@ -95,36 +95,3 @@ export async function verifyListingAction(listingId: string) {
   revalidatePath('/admin')
 }
 
-// ---------------------------------------------------------------------------
-// Approve a repairer application
-// ---------------------------------------------------------------------------
-
-export async function approveRepairerApplicationAction(applicationId: string) {
-  const user = await requireAdmin('approvals')
-
-  try {
-    await db
-      .update(repairerApplications)
-      .set({
-        status: APPROVAL_STATUS.APPROVED,
-        reviewedBy: user.id,
-        reviewedAt: sql`NOW()`,
-        updatedAt: sql`NOW()`,
-      })
-      .where(eq(repairerApplications.id, applicationId))
-
-    logActivity({
-      actorId: user.id,
-      action: 'approved_repairer',
-      subjectType: 'repairer_application',
-      subjectId: applicationId,
-    })
-
-    logger.info('Inline: repairer application approved', { applicationId, actorId: user.id })
-  } catch (error) {
-    logger.error('Inline approveRepairerApplicationAction failed', { error, applicationId })
-    throw error
-  }
-
-  revalidatePath('/admin')
-}

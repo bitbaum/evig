@@ -14,59 +14,6 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 // mail body. Admins read these emails — keep their inbox safe from layout
 // breakage and phishing-style HTML injection.
 
-export const adminNewRepairerApplication = (
-  applicantName: string,
-  applicantEmail: string,
-  adminDashboardUrl: string
-): EmailContent => {
-  const eName = escapeHtml(applicantName);
-  const eEmail = escapeHtml(applicantEmail);
-  return {
-    subject: `Neue Techniker-Bewerbung wartet auf Prüfung - ${ORG.name}`,
-    html: `
-    <!DOCTYPE html>
-    <html lang="de">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Neue Techniker-Bewerbung</title>
-      <style>${BASE_STYLES}</style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="header header-green">
-          <h1>Neue Techniker-Bewerbung</h1>
-        </div>
-        <div class="content">
-          <p>Eine neue Techniker-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.</p>
-          <p><strong>Bewerber:</strong> ${eName}</p>
-          <p><strong>E-Mail:</strong> ${eEmail}</p>
-          <p>Bitte prüfe die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
-          <a href="${adminDashboardUrl}" class="button button-green">Bewerbung prüfen</a>
-        </div>
-        <div class="footer">
-          <p>Diese E-Mail wurde automatisch generiert.</p>
-          <p>${COPYRIGHT_TEXT}</p>
-        </div>
-      </div>
-    </body>
-    </html>
-  `,
-    text: `
-Eine neue Techniker-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.
-
-Bewerber: ${applicantName}
-E-Mail: ${applicantEmail}
-
-Bitte prüfe die Bewerbung zeitnah:
-${adminDashboardUrl}
-
-Mit freundlichen Grüssen,
-${ORG.name} System
-  `.trim(),
-  };
-};
-
 export const adminNewWorkshopProposal = (
   proposerName: string,
   proposerEmail: string,

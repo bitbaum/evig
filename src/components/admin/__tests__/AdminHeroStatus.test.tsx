@@ -73,12 +73,12 @@ describe('AdminHeroStatus', () => {
         icon={ShoppingBag}
         headline="x"
         sub="y"
-        cta={{ label: 'Bewerbungen prüfen', href: '/admin/repairer-applications' }}
+        cta={{ label: 'Techniker ansehen', href: '/it-hilfe/techniker' }}
         kpis={[]}
       />,
     )
-    const link = getByText('Bewerbungen prüfen').closest('a')
-    expect(link).toHaveAttribute('href', '/admin/repairer-applications')
+    const link = getByText('Techniker ansehen').closest('a')
+    expect(link).toHaveAttribute('href', '/it-hilfe/techniker')
   })
 
   it('omits CTA section when no cta prop', () => {

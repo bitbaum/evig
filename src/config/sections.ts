@@ -635,23 +635,6 @@ export const SECTIONS = {
     sidebarGroup: 'angebot',
   },
 
-  'repairer-applications': {
-    id: 'repairer-applications',
-    path: '/admin/repairer-applications',
-    ui: {
-      label: 'Techniker-Freigaben',
-      description: 'Techniker-Bewerbungen prüfen und freigeben',
-      icon: UserCheck,
-      emoji: '🪛',
-      color: 'warning',
-    },
-    // Hidden from the sidebar: folded into the single "Freigaben" page as the
-    // "Techniker" tab. Route stays reachable via that tab.
-    visibility: { admin: false, dashboard: false, requiresStaff: true },
-    priority: 100.8,
-    category: 'management',
-    sidebarGroup: 'angebot',
-  },
 
   'workshops-admin': {
     id: 'workshops-admin',

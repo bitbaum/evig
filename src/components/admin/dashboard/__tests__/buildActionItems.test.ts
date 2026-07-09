@@ -14,8 +14,6 @@ const ZERO_STATS: DashboardStats = {
   unverifiedListingsOldest: null,
   urgentItHilfe: 0,
   urgentItHilfeOldest: null,
-  pendingRepairerApplications: 0,
-  pendingRepairerApplicationsOldest: null,
   pendingJobApplications: 0,
   pendingJobApplicationsOldest: null,
   overdueTasks: 0,
@@ -36,7 +34,6 @@ const ZERO_STATS: DashboardStats = {
   },
   delta: { devicesProcessed: 0, devicesSold: 0, itHilfeCompleted: 0, workshopAttendees: 0 },
   topUnverifiedListing: null,
-  topPendingRepairerApp: null,
 }
 
 function emptyCounts(): ApprovalCounts {

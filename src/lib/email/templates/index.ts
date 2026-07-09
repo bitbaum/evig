@@ -15,14 +15,6 @@ export {
   staffWelcome,
 } from './auth';
 
-// Repairer application templates
-export {
-  repairerApplicationSubmitted,
-  repairerApplicationApproved,
-  repairerApplicationRejected,
-  repairerApplicationChangesRequested,
-} from './repairer';
-
 // Workshop templates
 export {
   workshopRegistrationConfirmation,
@@ -38,7 +30,6 @@ export {
 
 // Admin notification templates
 export {
-  adminNewRepairerApplication,
   adminNewWorkshopProposal,
   adminNewBlogSubmission,
   adminNewSellerApplication,

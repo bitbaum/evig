@@ -2,123 +2,12 @@
  * Tests for remaining config utility functions.
  *
  * Covers:
- *   - document-status.ts: getDocumentStatusBadge
- *   - certification-status.ts: getCertificationStatusBadge
  *   - appointment-status.ts: getAppointmentStatusLabel
  *   - build-computer.ts: getMockRecommendation
  *   - editable-fields.ts: getFieldLabel, getEditableFieldLabels
  *   - dashboard.ts: getDashboardCardsForRole, groupCardsByCategory,
  *                   getAdminCard, getAllDashboardCards
  */
-
-// ============================================================================
-// document-status.ts — getDocumentStatusBadge
-// ============================================================================
-
-import {
-  getDocumentStatusBadge,
-  DOCUMENT_STATUS,
-} from '../document-status'
-
-describe('getDocumentStatusBadge', () => {
-  it('approved → green badge', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.APPROVED)
-    expect(badge.label).toBe('Genehmigt')
-    expect(badge.bg).toContain('primary')
-    expect(badge.color).toContain('primary')
-  })
-
-  it('pending → gray badge', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.PENDING)
-    expect(badge.label).toBe('Ausstehend')
-    expect(badge.bg).toContain('neutral')
-  })
-
-  it('in_review → warning badge', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.IN_REVIEW)
-    expect(badge.label).toBe('In Prüfung')
-    expect(badge.bg).toContain('warning')
-  })
-
-  it('rejected → red badge', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.REJECTED)
-    expect(badge.label).toBe('Abgelehnt')
-    expect(badge.bg).toContain('error')
-  })
-
-  it('incomplete → red badge', () => {
-    const badge = getDocumentStatusBadge(DOCUMENT_STATUS.INCOMPLETE)
-    expect(badge.label).toBe('Unvollständig')
-    expect(badge.bg).toContain('error')
-  })
-
-  it('unknown status → fallback gray badge with raw label', () => {
-    const badge = getDocumentStatusBadge('xyz_unknown')
-    expect(badge.label).toBe('xyz_unknown')
-    expect(badge.bg).toContain('neutral')
-    expect(badge.color).toContain('neutral')
-  })
-
-  it('each known status badge has label, bg, color', () => {
-    for (const status of Object.values(DOCUMENT_STATUS)) {
-      const badge = getDocumentStatusBadge(status)
-      expect(badge).toHaveProperty('label')
-      expect(badge).toHaveProperty('bg')
-      expect(badge).toHaveProperty('color')
-    }
-  })
-})
-
-// ============================================================================
-// certification-status.ts — getCertificationStatusBadge
-// ============================================================================
-
-import {
-  getCertificationStatusBadge,
-  CERTIFICATION_STATUS,
-} from '../certification-status'
-
-describe('getCertificationStatusBadge', () => {
-  it('verified → green badge', () => {
-    const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.VERIFIED)
-    expect(badge.label).toBe('Verifiziert')
-    expect(badge.bg).toContain('primary')
-    expect(badge.color).toContain('primary')
-  })
-
-  it('pending → gray badge', () => {
-    const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.PENDING)
-    expect(badge.label).toBe('Ausstehend')
-    expect(badge.bg).toContain('neutral')
-  })
-
-  it('rejected → red badge', () => {
-    const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.REJECTED)
-    expect(badge.label).toBe('Abgelehnt')
-    expect(badge.bg).toContain('error')
-  })
-
-  it('expired → orange badge', () => {
-    const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.EXPIRED)
-    expect(badge.label).toBe('Abgelaufen')
-    expect(badge.bg).toContain('orange')
-  })
-
-  it('unknown status → fallback gray badge with raw label', () => {
-    const badge = getCertificationStatusBadge('mystery_cert')
-    expect(badge.label).toBe('mystery_cert')
-    expect(badge.bg).toContain('neutral')
-  })
-
-  it('each known status badge has label, bg, color', () => {
-    for (const status of Object.values(CERTIFICATION_STATUS)) {
-      const badge = getCertificationStatusBadge(status)
-      expect(badge).toHaveProperty('label')
-      expect(badge).toHaveProperty('bg')
-      expect(badge).toHaveProperty('color')
-    }
-  })
-})
 
 // ============================================================================
 // appointment-status.ts — getAppointmentStatusLabel

@@ -53,7 +53,6 @@ export * from './templates';
  * Email templates object for backwards compatibility
  */
 import * as authTemplates from './templates/auth';
-import * as repairerTemplates from './templates/repairer';
 import * as workshopTemplates from './templates/workshop';
 import * as adminTemplates from './templates/admin';
 import * as miscTemplates from './templates/misc';
@@ -71,12 +70,6 @@ export const emailTemplates = {
   passwordReset: authTemplates.passwordReset,
   passwordChangeConfirmation: authTemplates.passwordChangeConfirmation,
 
-  // Repairer
-  repairerApplicationSubmitted: repairerTemplates.repairerApplicationSubmitted,
-  repairerApplicationApproved: repairerTemplates.repairerApplicationApproved,
-  repairerApplicationRejected: repairerTemplates.repairerApplicationRejected,
-  repairerApplicationChangesRequested: repairerTemplates.repairerApplicationChangesRequested,
-
   // Workshop
   workshopRegistrationConfirmation: workshopTemplates.workshopRegistrationConfirmation,
   workshopRegistrationStatusUpdate: workshopTemplates.workshopRegistrationStatusUpdate,
@@ -89,7 +82,6 @@ export const emailTemplates = {
   workshopProposalChangesRequested: workshopTemplates.workshopProposalChangesRequested,
 
   // Admin
-  adminNewRepairerApplication: adminTemplates.adminNewRepairerApplication,
   adminNewWorkshopProposal: adminTemplates.adminNewWorkshopProposal,
   adminNewBlogSubmission: adminTemplates.adminNewBlogSubmission,
   adminNewSellerApplication: adminTemplates.adminNewSellerApplication,

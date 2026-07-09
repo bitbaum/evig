@@ -67,12 +67,6 @@ export default function ITHilfeAdminClient() {
             </Button>
           ))}
         </div>
-        {tab === 'helpers' && (
-          <Button as={Link} href="/admin/repairer-applications" variant="primary" size="sm" className="mb-2 inline-flex items-center gap-2">
-            <UserPlus className="w-4 h-4" />
-            {t('topActions.reviewApplications')}
-          </Button>
-        )}
         {tab === 'requests' && (
           <Button as={Link} href="/it-hilfe/create" variant="outline" size="sm" className="mb-2 inline-flex items-center gap-2">
             <HelpCircle className="w-4 h-4" />
@@ -160,7 +154,10 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
   const activeTechniker = stats.activeHelpers
   const verifiedTechniker = stats.verifiedHelpers
   const resolutionPct = stats.resolutionRate
-  const REVIEW_APPLICATIONS_HREF = '/admin/repairer-applications'
+  // Technicians self-register (community flow) — the admin's action for an empty
+  // roster is to view/recruit via the technician directory, not review applications
+  // (the pro-application flow was removed).
+  const TECHNIKER_HREF = '/it-hilfe/techniker'
 
   const kpis: HeroKpi[] = [
     { label: t('hero.kpis.open'), value: openRequests },
@@ -185,7 +182,7 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
       icon: AlertTriangle,
       headline: t('hero.openNoTechniker.headline', { count: openRequests }),
       sub: t('hero.openNoTechniker.sub'),
-      cta: { label: t('hero.openNoTechniker.cta'), href: REVIEW_APPLICATIONS_HREF },
+      cta: { label: t('hero.openNoTechniker.cta'), href: TECHNIKER_HREF },
       kpis,
     }
   }
@@ -205,7 +202,7 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
       icon: UserPlus,
       headline: t('hero.noTechniker.headline'),
       sub: t('hero.noTechniker.sub'),
-      cta: { label: t('hero.noTechniker.cta'), href: REVIEW_APPLICATIONS_HREF },
+      cta: { label: t('hero.noTechniker.cta'), href: TECHNIKER_HREF },
       kpis,
     }
   }

@@ -10653,8 +10653,8 @@
         },
         "openNoTechniker": {
           "headline": "{count, plural, one {# offene Anfrage} other {# offene Anfragen}}, aber keine aktiven Techniker",
-          "sub": "Bestätige Bewerbungen, damit jemand die Anfragen übernehmen kann.",
-          "cta": "Bewerbungen prüfen"
+          "sub": "Es fehlen aktive Techniker, um die Anfragen zu übernehmen.",
+          "cta": "Techniker ansehen"
         },
         "openWithTechniker": {
           "headline": "{count, plural, one {# offene Anfrage} other {# offene Anfragen}}",
@@ -10663,8 +10663,8 @@
         },
         "noTechniker": {
           "headline": "Noch keine aktiven Techniker",
-          "sub": "Aktiviere Bewerbungen, damit das System Anfragen entgegennehmen kann.",
-          "cta": "Bewerbungen prüfen"
+          "sub": "Techniker registrieren sich selbst über das Techniker-Verzeichnis.",
+          "cta": "Techniker ansehen"
         },
         "healthy": {
           "headline": "Alles im grünen Bereich.",

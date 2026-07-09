@@ -2,7 +2,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import {
   users, serviceAppointments, repairerProfiles, listings,
-  tasks, decisions, itHilfeRequests, repairerApplications,
+  tasks, decisions, itHilfeRequests,
   inventoryItems, workshopRegistrations,
 } from '@/db/schema'
 import { jobApplications } from '@/db/schema/hr-vacancies'
@@ -10,7 +10,7 @@ import { blogPosts } from '@/db/schema/content'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
-import { REPAIRER_APPLICATION_STATUS, REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { APPLICATION_STATUS } from '@/config/hr-application-status'
 import { DECISION_STATUS } from '@/config/decisions'
 import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
@@ -24,7 +24,6 @@ const rpTable = getTableName(repairerProfiles)
 const blogTable = getTableName(blogPosts)
 const listingsTable = getTableName(listings)
 const itHilfeTable = getTableName(itHilfeRequests)
-const repairerAppTable = getTableName(repairerApplications)
 const jobApplicationsTable = getTableName(jobApplications)
 const tasksTable = getTableName(tasks)
 const decisionsTable = getTableName(decisions)
@@ -83,7 +82,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     techRes,
     appointmentsRes,
     itHilfeRes,
-    repairerRes,
     jobApplicationsRes,
     tasksRes,
     decisionsRes,
@@ -99,7 +97,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     prevItHilfeCompletedRes,
     prevWorkshopAttendeesRes,
     topListingRes,
-    topRepairerRes,
   ] = await Promise.allSettled([
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
@@ -119,11 +116,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(itHilfeTable)}
       WHERE status = ${REQUEST_STATUS.OPEN} AND urgency = ${URGENCY.URGENT}
-    `),
-    db.execute(sql`
-      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
-      FROM ${sql.raw(repairerAppTable)}
-      WHERE status = ${APPROVAL_STATUS.PENDING}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
@@ -213,21 +205,12 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       ORDER BY created_at ASC
       LIMIT 1
     `),
-    db.execute(sql`
-      SELECT ra.id, COALESCE(ra.business_name, u.name, 'Bewerbung') AS label
-      FROM ${sql.raw(repairerAppTable)} ra
-      LEFT JOIN ${sql.raw(usersTable)} u ON u.id = ra.user_id
-      WHERE ra.status = ${REPAIRER_APPLICATION_STATUS.PENDING}
-      ORDER BY ra.created_at ASC
-      LIMIT 1
-    `),
   ])
 
   // Extract non-approval action items (approval-type counts come from the SSOT
   // `getApprovalCounts()` engine, not from here).
   const appointments = rowCountAndOldest(appointmentsRes, 'pendingAppointments')
   const itHilfe = rowCountAndOldest(itHilfeRes, 'urgentItHilfe')
-  const repairer = rowCountAndOldest(repairerRes, 'pendingRepairerApplications')
   const jobApps = rowCountAndOldest(jobApplicationsRes, 'pendingJobApplications')
   const overdueTasksData = rowCountAndOldest(tasksRes, 'overdueTasks')
 
@@ -253,8 +236,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     unverifiedListingsOldest,
     urgentItHilfe: itHilfe.count,
     urgentItHilfeOldest: itHilfe.oldest,
-    pendingRepairerApplications: repairer.count,
-    pendingRepairerApplicationsOldest: repairer.oldest,
     pendingJobApplications: jobApps.count,
     pendingJobApplicationsOldest: jobApps.oldest,
     overdueTasks: overdueTasksData.count,
@@ -290,11 +271,6 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     topUnverifiedListing: (() => {
       if (topListingRes.status !== 'fulfilled') return null
       const r = (topListingRes.value.rows as Row[])[0]
-      return r ? { id: String(r.id), label: String(r.label) } : null
-    })(),
-    topPendingRepairerApp: (() => {
-      if (topRepairerRes.status !== 'fulfilled') return null
-      const r = (topRepairerRes.value.rows as Row[])[0]
       return r ? { id: String(r.id), label: String(r.label) } : null
     })(),
   }

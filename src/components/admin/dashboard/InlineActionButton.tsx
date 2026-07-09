@@ -7,18 +7,16 @@ import { Button } from '@/components/ui/button'
 import {
   approveBlogSubmissionAction,
   verifyListingAction,
-  approveRepairerApplicationAction,
 } from '@/lib/admin/actions'
 
 interface InlineActionButtonProps {
   itemId: string
-  actionType: 'approve_blog' | 'verify_listing' | 'approve_repairer'
+  actionType: 'approve_blog' | 'verify_listing'
 }
 
 const ACTION_FNS = {
   approve_blog: approveBlogSubmissionAction,
   verify_listing: verifyListingAction,
-  approve_repairer: approveRepairerApplicationAction,
 } as const
 
 export function InlineActionButton({ itemId, actionType }: InlineActionButtonProps) {
@@ -28,7 +26,6 @@ export function InlineActionButton({ itemId, actionType }: InlineActionButtonPro
   const labels = {
     approve_blog: t('approve'),
     verify_listing: t('release'),
-    approve_repairer: t('accept'),
   }
 
   const label = labels[actionType]

@@ -28,8 +28,6 @@ export interface DashboardStats {
   unverifiedListingsOldest: string | null
   urgentItHilfe: number
   urgentItHilfeOldest: string | null
-  pendingRepairerApplications: number
-  pendingRepairerApplicationsOldest: string | null
   pendingJobApplications: number
   pendingJobApplicationsOldest: string | null
   overdueTasks: number
@@ -55,7 +53,6 @@ export interface DashboardStats {
   delta: MissionDelta
   // Top pending items for inline actions in UnifiedQueue
   topUnverifiedListing: { id: string; label: string } | null
-  topPendingRepairerApp: { id: string; label: string } | null
 }
 
 export type ActionItem = {
@@ -70,7 +67,7 @@ export type ActionItem = {
   inlineAction?: {
     itemId: string
     itemLabel: string
-    actionType: 'approve_blog' | 'verify_listing' | 'approve_repairer'
+    actionType: 'approve_blog' | 'verify_listing'
   }
 }
 

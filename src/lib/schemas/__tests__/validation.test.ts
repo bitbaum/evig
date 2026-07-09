@@ -33,8 +33,6 @@ import {
   SendMessageSchema,
   // User schemas
   UpdateProfileSchema,
-  // Repairer schemas
-  RepairerApplicationSchema,
   // Seller schemas
   SellerApplicationSchema,
   // Blog schemas
@@ -415,52 +413,6 @@ describe('UpdateProfileSchema', () => {
   it('rejects invalid postal code', () => {
     const result = UpdateProfileSchema.safeParse({
       postal_code: '123', // Swiss postal codes are 4 digits
-    })
-    expect(result.success).toBe(false)
-  })
-})
-
-// ── Repairer schemas ──────────────────────────────────────────
-
-describe('RepairerApplicationSchema', () => {
-  const validApplication = {
-    businessType: 'individual',
-    description: 'Experienced laptop repairer',
-    yearsExperience: 5,
-    phone: '+41791234567',
-    address: 'Techstrasse 42',
-    city: 'Bern',
-    postalCode: '3001',
-    serviceRadius: 20,
-    servicesOffered: ['laptop-repair', 'phone-repair'],
-    termsAccepted: true,
-  }
-
-  it('accepts valid application', () => {
-    const result = RepairerApplicationSchema.safeParse(validApplication)
-    expect(result.success).toBe(true)
-  })
-
-  it('rejects without termsAccepted', () => {
-    const result = RepairerApplicationSchema.safeParse({
-      ...validApplication,
-      termsAccepted: false,
-    })
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects empty servicesOffered', () => {
-    const result = RepairerApplicationSchema.safeParse({
-      ...validApplication,
-      servicesOffered: [],
-    })
-    expect(result.success).toBe(false)
-  })
-
-  it('rejects invalid postal code format', () => {
-    const result = RepairerApplicationSchema.safeParse({
-      ...validApplication,
-      postalCode: '12345', // Swiss PLZ is 4 digits
     })
     expect(result.success).toBe(false)
   })
