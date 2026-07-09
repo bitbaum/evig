@@ -29,10 +29,12 @@ export function DashboardMobileNav({
   role,
   isStaff,
   isSuperAdmin,
+  isTechnician,
 }: {
   role: string | null
   isStaff: boolean
   isSuperAdmin: boolean
+  isTechnician: boolean
 }) {
   const pathname = usePathname()
 
@@ -40,8 +42,13 @@ export function DashboardMobileNav({
   // cards carry lucide icon components (functions) which can't cross the RSC
   // server→client boundary. The layout passes serializable flags instead.
   const items = useMemo(
-    () => getAllDashboardCards({ role, isStaff, isSuperAdmin, communityRoles: [] }),
-    [role, isStaff, isSuperAdmin],
+    () => getAllDashboardCards({
+      role,
+      isStaff,
+      isSuperAdmin,
+      communityRoles: isTechnician ? ['repairer'] : [],
+    }),
+    [role, isStaff, isSuperAdmin, isTechnician],
   )
   const [moreOpen, setMoreOpen] = useState(false)
   const [mounted, setMounted] = useState(false)

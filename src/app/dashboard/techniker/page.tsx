@@ -13,6 +13,7 @@ import {
   getMyOffers,
 } from '@/lib/dashboard/techniker'
 import { UrgencyBadge, OfferStatusBadge } from '@/components/dashboard/TechnikerBadges'
+import { TechnicianActiveToggle } from '@/components/dashboard/TechnicianActiveToggle'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { ORG } from '@/config/org'
 
@@ -104,7 +105,8 @@ export default async function TechnikerDashboardPage() {
               {t('pageTitle')}
             </Heading>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <TechnicianActiveToggle initialActive={profile.isActive} />
             <Link
               href={IT_HILFE.routes.register}
               className="px-4 py-2 text-sm border border-default text-text-secondary rounded-lg hover:bg-surface-raised transition-colors"

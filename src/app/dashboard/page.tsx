@@ -20,6 +20,7 @@ import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ROLES, type UserRole } from '@/lib/constants'
 import { isSuperAdmin } from '@/lib/permissions'
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
 import {
   getAllDashboardCards,
   DASHBOARD_CATEGORIES,
@@ -64,10 +65,17 @@ export default async function DashboardPage() {
 
   const t = await getTranslations('dashboard.home')
 
+  // "Is a technician" SSOT = an active repairer profile (same source the offer
+  // boundary uses), NOT users.role — self-serve technicians never get that role,
+  // which is why the Techniker-Dashboard card was missing and the onboarding
+  // nag never hid. Derive the community role from the profile instead.
+  const isTechnician = !!(await getActiveTechnicianProfileId(session.user.id))
+
   const cards = getAllDashboardCards({
     role: session.user.role,
     isStaff: session.user.isStaff,
     isSuperAdmin: isSuperAdmin(session.user.email || ''),
+    communityRoles: isTechnician ? ['repairer'] : [],
   })
 
   const cardsByCategory = new Map<DashboardCategory, DashboardCard[]>()

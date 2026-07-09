@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getLocale } from 'next-intl/server'
 import { auth } from '@/auth'
 import { isSuperAdmin } from '@/lib/permissions'
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav'
 
@@ -13,10 +14,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   // Pass only serializable primitives across the server→client boundary. The
   // dashboard cards carry lucide icon *components* (functions), which RSC can't
   // serialize — so the client nav computes its own cards from these flags.
+  // isTechnician derives from an active repairer profile (SSOT), so the mobile
+  // nav shows/hides the technician cards consistently with the home page.
   const navUser = {
     role: session?.user?.role ?? null,
     isStaff: session?.user?.isStaff ?? false,
     isSuperAdmin: session?.user ? isSuperAdmin(session.user.email ?? '') : false,
+    isTechnician: session?.user ? !!(await getActiveTechnicianProfileId(session.user.id)) : false,
   }
 
   return (

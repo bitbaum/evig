@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { UI_FEEDBACK_MS } from '@/config/limits'
 
 export interface TechnicianProfile {
   skills: string[]
@@ -32,7 +31,11 @@ const DEFAULT_PROFILE: TechnicianProfile = {
   city: '',
   canton: '',
   maxTravelKm: 10,
-  isActive: false,
+  // New profiles go live on save — being a technician you can't find or offer
+  // help with is a dead end. Pausing is a deliberate opt-out on the dashboard.
+  // Editing an existing profile preserves its stored value (loaded below), so a
+  // dashboard-paused profile stays paused.
+  isActive: true,
 }
 
 export function useTechnicianProfile(saveFailed: string) {
@@ -106,7 +109,10 @@ export function useTechnicianProfile(saveFailed: string) {
       }
 
       setSuccess(true)
-      setTimeout(() => setSuccess(false), UI_FEEDBACK_MS.SUCCESS)
+      // Land on the technician cockpit — the real "you're live, here are
+      // matching requests" confirmation, instead of a form that flashes a
+      // banner and leaves the user wondering what happens next.
+      router.push('/dashboard/techniker?saved=1')
     } catch (err) {
       const message = err instanceof Error ? err.message : saveFailed
       setError(message)

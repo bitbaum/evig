@@ -344,3 +344,19 @@ export async function upsertTechnicianProfile(
     )
   }
 }
+
+/**
+ * Pause or reactivate the current user's technician profile — the deliberate
+ * opt-out that replaced the easy-to-miss default-off toggle on the registration
+ * form. Paused (is_active=false) hides them from technician search and blocks
+ * offering help (the offer boundary checks is_active). Returns the new state,
+ * or null if the user has no profile.
+ */
+export async function setTechnicianActive(userId: string, isActive: boolean): Promise<boolean | null> {
+  const updated = await db
+    .update(repairerProfiles)
+    .set({ isActive, updatedAt: sql`NOW()` })
+    .where(eq(repairerProfiles.userId, userId))
+    .returning({ isActive: repairerProfiles.isActive })
+  return updated[0]?.isActive ?? null
+}

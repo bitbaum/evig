@@ -349,33 +349,9 @@ export default function TechnikerProfilPage() {
           </p>
         </div>
 
-        {/* Active Toggle */}
-        <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6">
-          <label className="flex items-center justify-between cursor-pointer">
-            <div>
-              <Heading level={2} className="text-lg text-text-primary">
-                {t('activate.heading')}
-              </Heading>
-              <p className="text-sm text-text-secondary">
-                {t('activate.desc')}
-              </p>
-            </div>
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={profile.isActive}
-                onChange={(e) =>
-                  setProfile((prev) => ({
-                    ...prev,
-                    isActive: e.target.checked,
-                  }))
-                }
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-surface-overlay peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-base after:border-default after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-action"></div>
-            </div>
-          </label>
-        </div>
+        {/* No activate toggle: saving publishes the profile (you go live and can
+            offer help immediately). Pausing is a deliberate opt-out on the
+            technician dashboard, not an easy-to-miss default-off here. */}
 
         {/* Save Button */}
         <div className="flex justify-end gap-4">
