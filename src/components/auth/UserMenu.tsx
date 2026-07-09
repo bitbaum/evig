@@ -45,7 +45,7 @@ export function UserMenu() {
   // Role-aware nav: a technician (has a technician profile) gets their helper-
   // side links surfaced here. SWR-cached and only fetched when logged in, so it
   // adds no cost for anonymous visitors and dedupes with other usages.
-  const { hasProfile: isTechnician } = useTechnicianProfileStatus()
+  const { isActiveTechnician: isTechnician } = useTechnicianProfileStatus()
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
