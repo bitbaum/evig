@@ -83,6 +83,8 @@ export function useErfassungForm() {
               verkaufspreis: p.estimated_price_chf?.toString() || '',
               zustand: p.condition || 'good',
               location: p.location || '',
+              // Not returned by the inventory GET yet — defaults to unselected on edit.
+              storage_location_id: '',
               box_id: p.box_id || '',
               auf_lager: p.quantity_available?.toString() || '1',
               hauptkategorie: p.category || '',

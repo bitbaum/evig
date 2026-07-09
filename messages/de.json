@@ -9361,6 +9361,15 @@
         "boxId": "Box ID",
         "boxIdPlaceholder": "B-YYMMDD-NNNN"
       },
+      "storageLocation": {
+        "label": "Lagerort",
+        "placeholder": "Standort wählen…",
+        "loading": "Wird geladen…",
+        "addNew": "Standort hinzufügen",
+        "newNamePlaceholder": "Name des Standorts",
+        "kindLabel": "Art",
+        "save": "Speichern"
+      },
       "submitBar": {
         "cancel": "Abbrechen",
         "saving": "Speichere…",

@@ -8940,6 +8940,15 @@
         "boxId": "Box ID",
         "boxIdPlaceholder": "B-YYMMDD-NNNN"
       },
+      "storageLocation": {
+        "label": "Storage location",
+        "placeholder": "Choose location…",
+        "loading": "Loading…",
+        "addNew": "Add location",
+        "newNamePlaceholder": "Location name",
+        "kindLabel": "Kind",
+        "save": "Save"
+      },
       "submitBar": {
         "cancel": "Cancel",
         "saving": "Saving…",

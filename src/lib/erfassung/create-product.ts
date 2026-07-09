@@ -222,6 +222,7 @@ export async function createErfassungProduct(
     .values({
       aiProductId: productId,
       location: payload.location || null,
+      storageLocationId: payload.storage_location_id || null,
       boxId: payload.box_id || null,
       quantityAvailable: payload.auf_lager || 1,
       status: INVENTORY_ITEM_STATUS.AVAILABLE,

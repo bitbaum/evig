@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl'
 import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
+import { StorageLocationSelect } from './StorageLocationSelect'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 
 interface ProductDimensionFieldsProps {
@@ -114,12 +115,9 @@ export function ProductDimensionFields({
           </div>
           <div>
             <label htmlFor="dimension-location" className="block text-sm text-text-secondary mb-1">{t('location')}</label>
-            <Input
-              id="dimension-location"
-              type="text"
-              value={formData.location}
-              onChange={(e) => onFieldChange('location', e.target.value)}
-              placeholder={t('locationPlaceholder')}
+            <StorageLocationSelect
+              value={formData.storage_location_id}
+              onChange={(id) => onFieldChange('storage_location_id', id)}
             />
           </div>
           <div>

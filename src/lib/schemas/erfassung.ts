@@ -67,6 +67,9 @@ export const erfassungFormDataSchema = z.object({
   verkaufspreis: z.string(),
   zustand: z.string(),
   location: z.string(),
+  // Structured storage-location FK (uuid) or '' when none picked. The legacy
+  // free-text `location` above stays for backfill/compat.
+  storage_location_id: z.string(),
   box_id: z.string(),
   auf_lager: z.string(),
 
@@ -116,6 +119,7 @@ export const erfassungPayloadSchema = z.object({
   hoehe_mm: z.number().nullable().optional(),
   gewicht_kg: z.number().nullable().optional(),
   location: z.string().optional(),
+  storage_location_id: z.string().uuid().nullable().optional(),
   box_id: z.string().optional(),
   auf_lager: z.number().int().min(0).optional(),
   hauptkategorie: z.string().optional(),

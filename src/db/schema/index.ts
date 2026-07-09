@@ -26,4 +26,5 @@ export * from './referral'
 export * from './promo-codes'
 export * from './projects'
 export * from './hr-vacancies'
+export * from './storage-locations'
 // misc is now a backward-compat re-export barrel; index owns the canonical exports above

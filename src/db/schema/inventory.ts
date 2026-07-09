@@ -125,7 +125,10 @@ export const inventoryItems = pgTable('inventory_items', {
   kivviSyncedAt: timestamp('kivvi_synced_at', { withTimezone: true, mode: 'string' }),
 
   // Physical inventory tracking
+  // Legacy free-text location (kept for backfill/compat); new entries use the
+  // structured storage_location_id FK below (added migration 117).
   location: text('location'),
+  storageLocationId: uuid('storage_location_id'),
   quantityAvailable: integer('quantity_available').default(0),
   quantityReserved: integer('quantity_reserved').default(0),
   quantitySold: integer('quantity_sold').default(0),
