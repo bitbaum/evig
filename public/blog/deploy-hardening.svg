@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Illustration: ein Schild schützt einen Server-Stack — ein gehärteter, verlässlicher Self-Host-Deploy.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0fdf4"/>
+      <stop offset="1" stop-color="#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16a34a"/>
+      <stop offset="1" stop-color="#15803d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="210" cy="140" r="120" fill="#bbf7d0" opacity="0.45"/>
+  <circle cx="1010" cy="500" r="160" fill="#bbf7d0" opacity="0.4"/>
+
+  <!-- server stack -->
+  <g fill="#ffffff" stroke="#a7f3c4" stroke-width="3">
+    <rect x="452" y="206" width="300" height="80" rx="14"/>
+    <rect x="452" y="300" width="300" height="80" rx="14"/>
+    <rect x="452" y="394" width="300" height="80" rx="14"/>
+  </g>
+  <g fill="#22c55e">
+    <circle cx="492" cy="246" r="9"/><circle cx="492" cy="340" r="9"/><circle cx="492" cy="434" r="9"/>
+  </g>
+  <g fill="#bbf7d0">
+    <rect x="524" y="240" width="150" height="12" rx="6"/>
+    <rect x="524" y="334" width="150" height="12" rx="6"/>
+    <rect x="524" y="428" width="150" height="12" rx="6"/>
+  </g>
+
+  <!-- deploy arrow, orange -->
+  <path d="M690 210 l0 -70 m-26 26 l26 -30 l26 30" fill="none" stroke="#c2410c" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- shield with check -->
+  <path d="M792 250 c60 -22 108 -22 168 0 c0 96 -30 168 -84 210 c-54 -42 -84 -114 -84 -210 Z" fill="url(#shield)"/>
+  <path d="M842 344 l30 32 l52 -66" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

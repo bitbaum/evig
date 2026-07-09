@@ -2,6 +2,7 @@
 title: "Mastodon Upgrade & Operations Runbook — net.miaumuh.ch"
 excerpt: "Internal runbook: take net.miaumuh.ch from Mastodon 4.3.8 to 4.6.3 — cleanly, reversibly, without dropping off the network — and keep it healthy afterward. Unlisted; shareable only via this link."
 author: "RevampIT Ops"
+featuredImage: "/blog/mastodon-upgrade.svg"
 category: "Betrieb"
 tags:
   - mastodon

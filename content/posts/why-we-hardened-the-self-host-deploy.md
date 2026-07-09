@@ -2,6 +2,7 @@
 title: "Warum wir den Self-Host-Deploy härten"
 excerpt: "Coolify ist nicht der nächste sinnvolle Schritt. Der bessere Schritt ist ein reproduzierbarer, prüfbarer Deploy auf unserer bestehenden Hetzner-Infrastruktur."
 author: "RevampIT Team"
+featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:
   - devops

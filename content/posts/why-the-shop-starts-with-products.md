@@ -2,6 +2,7 @@
 title: "Warum der Shop der Marktplatz ist"
 excerpt: "Shop bedeutet bei Revamp-IT ab jetzt Marktplatz: ein schneller Kaufpfad fuer gebrauchte Elektronik von Revamp-IT und anderen Anbieter:innen."
 author: "RevampIT Team"
+featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:
   - shop

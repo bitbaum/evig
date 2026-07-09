@@ -2,6 +2,7 @@
 title: "Warum wir Homepage und Marktplatz neu ordnen"
 excerpt: "Die Plattform soll zuerst beim Kaufen und Reparieren helfen. Spenden bleiben wichtig, aber sie sind nicht mehr der erste Aufruf auf der Startseite."
 author: "RevampIT Team"
+featuredImage: "/blog/reorder-layout.svg"
 category: "Produkt"
 tags:
   - informationsarchitektur
