@@ -2,6 +2,11 @@
 
 Living queue of what we're building. Updated 2026-07-09. Keep in sync as items ship.
 
+## ✅ Shipped — autonomous run (2026-07-09, part 2)
+- **build-your-computer** fixed: broken option cards (Button base crushed stacked title+desc → overlap) → accessible OptionCard; dropped 11 fabricated "global inventory network / Europa" claims → honest local copy. Browser-verified.
+- **Linux distro guide**: added a "Welche Distribution passt zu dir?" quick-chooser (need→Mint/Ubuntu/Fedora/Debian/MX, jumps to detail cards) on `/services/linux-open-source`. Browser-verified — looks great.
+- **Marketplace OS picker**: computer/laptop listings (category 10/20) get a "Linux gratis vorinstalliert" distro picker + link to the chooser. (Fixed: category is a CODE not a label.)
+
 ## ✅ Shipped (2026-07-09 session)
 - Timecard self-approval (super-admins) + submit/approve **emails** (submitter confirmation + sole-approver case)
 - Verification gates admin, not login (frictionless signup; auto-sign-in)
@@ -12,6 +17,14 @@ Living queue of what we're building. Updated 2026-07-09. Keep in sync as items s
 - Email audit + `docs/EMAILS.md` SSOT; wired shop-sale→seller bell + service-booking→customer
 - **Promo/gift-code foundation** (migration 115, `revamp100`/`revamp100p`, tested engine) — Phase 1 Slice 1
 - **Freigaben** `approval-sources.ts` SSOT + one count engine; killed the dead-`user_content_submissions` double-count; removed Techniker tab — Slice 1
+
+## 🐛 Bugs to fix
+- **Technician items shown to a non-technician** — `butaeff@gmail.com` (role=customer, NO `technician_profiles` row on prod) reportedly sees technician UI. Data is clean → a UI-gating bug: some nav/account-dropdown/dashboard surface shows technician links (Offene Anfragen / Meine Angebote) without checking for an active technician profile. Audit every place technician items appear and gate on `getActiveTechnicianProfileId` (the SSOT). NOT caused by the auto-activate change (that only touches existing profiles on save).
+
+## 🆕 Newer asks
+- **Marketplace OS selection** — for a laptop/computer listing, let the buyer choose which **Linux distro** to have pre-installed; if unsure, link to a **Linux-distro guide** (under Lernen/Guides). Build that guide if missing.
+- **Linux distro guide (education)** — a beautiful, easy, progressive-disclosure guide (pictures/schemas/diagrams; source or AI-generate images) so people make an educated distro choice. Rethink Lernen/Guides navigation + content around it.
+- **Profiles SSOT/debt** — are the 4-5 profile types (user/seller/technician/team) following SSOT/SoC/DRY, or spaghetti? (See debt notes.) Unify rating star (Lucide `Star` + one token); build the missing public buyer + team pages; skills taxonomy.
 
 ## 📋 Queue (priority order)
 
