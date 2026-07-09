@@ -150,12 +150,12 @@ export function TimecardsClient({
 
       {view === 'month' ? (
         <>
-          {/* Quick select. The 95% case — "fill the whole month from my plan" —
-              leads as the prominent primary action; the two selection helpers
-              ("Ganzer Monat" / "Alle Werktage") follow as quiet ghosts for the
-              batch-then-bulk-bar path. One fill entry point lives here (not the
-              header) so there's a single, obvious place to act. */}
-          <div className="flex flex-wrap items-center gap-2">
+          {/* Two DISTINCT intents, kept apart (they read as one blob when
+              crammed on a line): LEFT = the 95% case "fill the whole month from
+              my plan" (primary action); RIGHT = a labelled "Schnellauswahl"
+              group to pick days for the bulk bar below. justify-between splits
+              them; on mobile they wrap to two coherent rows. */}
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
             <Button
               type="button"
               variant="primary"
@@ -168,15 +168,17 @@ export function TimecardsClient({
               <CalendarCheck className="h-4 w-4" aria-hidden="true" />
               {t('fillMonth')}
             </Button>
-            <span className="ml-1 font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
-              {t('selectLabel')}
-            </span>
-            <Button type="button" variant="ghost" size="sm" onClick={tc.selectAll} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
-              {t('selectAllDays')}
-            </Button>
-            <Button type="button" variant="ghost" size="sm" onClick={tc.selectAllWeekdays} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
-              {t('selectAllWeekdays')}
-            </Button>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
+                {t('selectLabel')}
+              </span>
+              <Button type="button" variant="ghost" size="sm" onClick={tc.selectAll} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
+                {t('selectAllDays')}
+              </Button>
+              <Button type="button" variant="ghost" size="sm" onClick={tc.selectAllWeekdays} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
+                {t('selectAllWeekdays')}
+              </Button>
+            </div>
           </div>
 
           <TimecardMonthGrid

@@ -9650,6 +9650,7 @@
       "dayNext": "Next day",
       "bulkSelected": "{count, plural, one {1 day selected} other {# days selected}}",
       "bulkFill": "Fill from schedule",
+      "bulkAbsenceLabel": "Absent",
       "bulkClear": "Clear",
       "bulkCancel": "Cancel selection"
     },

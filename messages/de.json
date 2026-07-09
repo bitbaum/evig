@@ -10092,6 +10092,7 @@
       "dayNext": "Nächster Tag",
       "bulkSelected": "{count, plural, one {1 Tag ausgewählt} other {# Tage ausgewählt}}",
       "bulkFill": "Aus Plan füllen",
+      "bulkAbsenceLabel": "Abwesend",
       "bulkClear": "Leeren",
       "bulkCancel": "Auswahl aufheben",
       "fillSkippedNonPlanDays": "{count, plural, one {1 Tag ohne Arbeitsplan übersprungen (0 Soll-Stunden)} other {# Tage ohne Arbeitsplan übersprungen (0 Soll-Stunden)}}",
