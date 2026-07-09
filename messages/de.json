@@ -1978,14 +1978,14 @@
     "buildComputer": {
       "meta": {
         "title": "KI-gestützte nachhaltige Computer-Builds",
-        "description": "Unser KI-System scannt globale Partnernetzwerke, um deinen perfekten Computer aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen."
+        "description": "Unser KI-System durchsucht unser Inventar an gebrauchten und wiederaufbereiteten Komponenten, um deinen perfekten Computer aus Gebrauchtteilen zusammenzustellen."
       },
       "hero": {
         "title": "KI-gestützte nachhaltige Computer-Builds",
-        "subtitle": "Unser revolutionäres KI-System scannt unser Inventar und globale Partnernetzwerke, um deinen perfekten Computer hauptsächlich aus gebrauchten und wiederaufbereiteten Komponenten zusammenzustellen.",
-        "strong": "100% Gebrauchtteile-Priorität • Globales Inventar-Netzwerk • Intelligentes KI-Matching",
+        "subtitle": "Unser KI-System durchsucht unser Inventar an gebrauchten und wiederaufbereiteten Komponenten, um deinen perfekten Computer hauptsächlich aus Gebrauchtteilen zusammenzustellen.",
+        "strong": "100% Gebrauchtteile-Priorität • Aus unserem Inventar • Intelligentes KI-Matching",
         "badge1": "Kreislaufwirtschaft",
-        "badge2": "Globales Netzwerk",
+        "badge2": "Aus unserem Inventar",
         "badge3": "KI-optimiert"
       },
       "howItWorks": {
@@ -1996,8 +1996,8 @@
             "description": "Teile uns deinen Anwendungsfall, deine Leistungsanforderungen und deine Nachhaltigkeitspräferenzen mit"
           },
           {
-            "title": "Globaler Inventar-Scan",
-            "description": "Die KI scannt unser Inventar + Partnernetzwerke in ganz Europa und darüber hinaus"
+            "title": "Inventar-Scan",
+            "description": "Die KI durchsucht unser Inventar an gebrauchten und wiederaufbereiteten Komponenten"
           },
           {
             "title": "Intelligente Optimierung",
@@ -2027,9 +2027,9 @@
         "sustainabilityLabel": "Nachhaltigkeit",
         "sustainabilityValue": "Hohe Priorität",
         "specialNotesLabel": "Besondere Hinweise",
-        "analyzeDescription": "Bereit, unser globales Inventar-Netzwerk zu scannen und deine personalisierte Build-Empfehlung zu generieren?",
+        "analyzeDescription": "Bereit, unser Inventar zu durchsuchen und deine personalisierte Build-Empfehlung zu erstellen?",
         "backButton": "Zurück zur Bearbeitung",
-        "analyzeButton": "Globales Inventar analysieren",
+        "analyzeButton": "Inventar durchsuchen",
         "scanningLabel": "🔍 Scanne Inventar-Netzwerke...",
         "scanningLines": [
           "Überprüfe Lager Zürich (847 Komponenten)",
@@ -2070,8 +2070,8 @@
         "heading": "Warum unser KI-Build-System wählen?",
         "items": [
           {
-            "title": "Globales Inventar-Netzwerk",
-            "description": "Zugang zu Tausenden von gebrauchten und wiederaufbereiteten Komponenten in ganz Europa und darüber hinaus, mit Echtzeit-Bestandsverfolgung."
+            "title": "Unser Inventar an Gebrauchtteilen",
+            "description": "Zugang zu gebrauchten und wiederaufbereiteten Komponenten aus unserem Lager, mit Echtzeit-Bestandsverfolgung."
           },
           {
             "title": "KI-gestützte Optimierung",
@@ -2228,7 +2228,7 @@
         "description": "Erhalte einen massgeschneiderten Computer für deine spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.",
         "features": [
           "KI-gestützte Build-Empfehlungen",
-          "Globales Teile-Beschaffungsnetzwerk",
+          "Teile aus unserem Inventar",
           "Professionelle Montage und Tests",
           "Qualitätsgarantie und Gewährleistung"
         ],

@@ -33,14 +33,43 @@ interface FormData {
 }
 
 /**
- * Single SSOT for the selectable option-card style.
- * Used by use-case + performance pickers in Step 1.
+ * Selectable option card (SSOT for the use-case + performance pickers).
+ *
+ * A plain focusable div — NOT <Button>, whose base is
+ * `inline-flex items-center justify-center whitespace-nowrap` and crushes a
+ * stacked title+description onto one non-wrapping line (the layout bug this
+ * replaced). role/tabIndex/onKeyDown keep it keyboard-accessible.
  */
-function optionCardClass(selected: boolean) {
-  return [
-    'p-4 border rounded-lg cursor-pointer transition-colors text-left w-full',
-    selected ? 'border-strong bg-surface-raised' : 'hover:border-strong',
-  ].join(' ')
+function OptionCard({
+  selected,
+  onSelect,
+  className = '',
+  children,
+}: {
+  selected: boolean
+  onSelect: () => void
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect() }
+      }}
+      className={[
+        'p-4 border rounded-lg cursor-pointer transition-colors w-full',
+        'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action',
+        selected ? 'border-strong bg-surface-raised' : 'hover:border-strong',
+        className,
+      ].join(' ')}
+    >
+      {children}
+    </div>
+  )
 }
 
 /** Monochrome step indicator — replaces bg-action-text-white circles. */
@@ -192,16 +221,14 @@ function Step1({ t, formData, setFormData, useCaseOptions, performanceOptions, b
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {useCaseOptions.map((category) => (
-          <Button
+          <OptionCard
             key={category.id}
-            type="button"
-            variant="ghost"
-            onClick={() => setFormData({ ...formData, useCase: category.id as FormData['useCase'] })}
-            className={optionCardClass(formData.useCase === category.id)}
+            selected={formData.useCase === category.id}
+            onSelect={() => setFormData({ ...formData, useCase: category.id as FormData['useCase'] })}
           >
             <Heading level={4} className="font-semibold text-text-primary">{category.name}</Heading>
             <p className="text-sm text-text-secondary mt-1">{category.description}</p>
-          </Button>
+          </OptionCard>
         ))}
       </div>
 
@@ -209,16 +236,15 @@ function Step1({ t, formData, setFormData, useCaseOptions, performanceOptions, b
         <Heading level={4} className="font-semibold mb-4">{t('buildTool.performanceHeading')}</Heading>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {performanceOptions.map((perf) => (
-            <Button
+            <OptionCard
               key={perf.id}
-              type="button"
-              variant="ghost"
-              onClick={() => setFormData({ ...formData, performance: perf.id as FormData['performance'] })}
-              className={`${optionCardClass(formData.performance === perf.id)} text-center`}
+              selected={formData.performance === perf.id}
+              onSelect={() => setFormData({ ...formData, performance: perf.id as FormData['performance'] })}
+              className="text-center"
             >
               <div className="font-semibold">{perf.name}</div>
               <div className="text-xs text-text-secondary mt-1">{perf.description}</div>
-            </Button>
+            </OptionCard>
           ))}
         </div>
       </div>
