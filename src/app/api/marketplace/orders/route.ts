@@ -20,6 +20,8 @@ import {
 } from '@/lib/payments/payrexx-client';
 import { APP_URL } from '@/config/urls';
 import { sendCustomEmail, orderConfirmationBuyer, newOrderNotificationSeller } from '@/lib/email';
+import { createNotification } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
 
 class OrderValidationError extends Error {
   statusCode: number;
@@ -227,6 +229,17 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         }
       })
       .catch(err => logger.error('Failed to look up seller for order email', { err, orderId }));
+
+    // In-app notification to the seller (bell entry) — the dedicated seller
+    // email above may be dropped for deliverability, so this guarantees the
+    // seller learns of the sale. skipEmail avoids a second, generic email.
+    createNotification(listing.seller_id, {
+      type: NOTIFICATION_TYPES.LISTING_SOLD,
+      title: 'Dein Artikel wurde verkauft',
+      content: `${session.user.name || 'Ein Käufer'} hat "${listing.title}" gekauft.`,
+      related_type: RELATED_TYPES.ORDER,
+      related_id: orderId,
+    }, { skipEmail: true }).catch(err => logger.error('Failed to create seller sale notification', { err, orderId }));
 
     return apiSuccess({
       orderId,

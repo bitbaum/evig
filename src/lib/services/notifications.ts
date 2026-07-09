@@ -221,6 +221,7 @@ async function trySendEmail(
 export async function createNotification(
   userId: string,
   payload: NotificationPayload,
+  opts?: { skipEmail?: boolean },
 ): Promise<void> {
   const [inserted] = await db
     .insert(notifications)
@@ -236,6 +237,12 @@ export async function createNotification(
     .returning({ id: notifications.id })
 
   const notificationId = inserted?.id
+
+  // skipEmail = in-app only. Used when a dedicated (styled) email is already
+  // sent for this event via sendCustomEmail — this writes the bell entry
+  // without a second, generic email (and gives the recipient a notification
+  // that survives even if the styled email is dropped for deliverability).
+  if (opts?.skipEmail) return
 
   // Fetch email + preference
   const userRows = await db

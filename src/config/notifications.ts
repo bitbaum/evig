@@ -56,6 +56,10 @@ export const NOTIFICATION_TYPES = {
 
   // Timecards
   TIMECARD_SUBMITTED: 'timecard_submitted',
+  // Confirmation to the person who submitted (distinct from the approver
+  // "needs review" notification above) — also the "you can approve it yourself"
+  // prompt when the submitter is the sole approver.
+  TIMECARD_SUBMIT_CONFIRMED: 'timecard_submit_confirmed',
   TIMECARD_REVIEWED: 'timecard_reviewed',
 
   // Permission requests
@@ -86,6 +90,7 @@ export const RELATED_TYPES = {
   WORKSHOP_PROPOSAL: 'workshop_proposal',
   MEMBERSHIP: 'membership',
   LISTING: 'listing',
+  ORDER: 'order',
   TIME_OFF: 'time_off',
   TIME_OFF_REVIEW: 'time_off_review',
   TIMECARD: 'timecard',
@@ -111,6 +116,9 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   // Membership notifications go to the MEMBER (not staff) → member-facing page.
   [RELATED_TYPES.MEMBERSHIP]: '/dashboard/membership?ref=',
   [RELATED_TYPES.LISTING]: '/admin/marketplace?listing=',
+  // Order notifications go to the SELLER (often a P2P community member, not
+  // staff) → their own order view, not the admin surface.
+  [RELATED_TYPES.ORDER]: '/dashboard/orders/',
   // timecards has no [id] detail page — land on the flat queue and pass the
   // request id as a harmless query param (same append pattern as CONVERSATION),
   // so relatedHref() can't produce a broken "/admin/zeiterfassung<id>" path.

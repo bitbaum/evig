@@ -16,7 +16,7 @@ import { ROUTES } from '@/config/routes'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 import { TABLE_NAMES } from '@/config/database'
 import { listAppointments, notifyRepairerOfAssignment } from '@/lib/services/appointments'
-import { notifyAllStaff } from '@/lib/services/notifications'
+import { notifyAllStaff, createNotification } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 // GET /api/appointments - Get appointments for current user (as customer or repairer)
@@ -128,6 +128,7 @@ export const POST = withAuth(async (
         urgency,
         repairer_id,
       )
+      notifyCustomerOfBooking(createdAppointment?.id as string | undefined, session.user.id, description)
       if (repairer_id && createdAppointment?.id) {
         notifyRepairerOfAssignment(repairer_id, createdAppointment.id as string, description).catch(() => {})
       }
@@ -160,6 +161,7 @@ export const POST = withAuth(async (
     })
 
     notifyAdminsOfNewBooking(createdAppointment?.id, session, description, urgency, repairer_id)
+    notifyCustomerOfBooking(createdAppointment?.id, session.user.id, description)
     if (repairer_id && createdAppointment?.id) {
       notifyRepairerOfAssignment(repairer_id, createdAppointment.id, description).catch(() => {})
     }
@@ -188,6 +190,26 @@ export const POST = withAuth(async (
  *      links to the new /admin/appointments page (ROUTES SSOT) instead
  *      of /admin/services (which is the service catalog, not bookings).
  */
+/**
+ * Acknowledge the booking to the CUSTOMER — previously only admins + the
+ * assigned repairer were notified, so the person who booked heard nothing until
+ * a later status change. In-app row + generic email (survives deliverability).
+ */
+function notifyCustomerOfBooking(
+  appointmentId: string | undefined,
+  userId: string,
+  description: string,
+) {
+  if (!appointmentId) return
+  createNotification(userId, {
+    type: NOTIFICATION_TYPES.APPOINTMENT,
+    title: 'Terminanfrage erhalten',
+    content: `Wir haben deine Terminanfrage erhalten und melden uns bald bei dir.${description ? ` (${description.slice(0, 80)})` : ''}`,
+    related_type: RELATED_TYPES.APPOINTMENT,
+    related_id: appointmentId,
+  }).catch(() => {})
+}
+
 function notifyAdminsOfNewBooking(
   appointmentId: string | undefined,
   session: ValidSession,

@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { notifications, teamProfiles, timecards, timecardEntries, users } from '@/db/schema'
-import { and, asc, eq, gte, lte, sql } from 'drizzle-orm'
+import { and, asc, eq, gte, lte, or, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { createNotification, notifyUsers } from '@/lib/services/notifications'
 import { logActivity } from '@/lib/activity'
@@ -524,19 +524,29 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
   const submitted = (await fetchTimecardWithEntries(db, saved.id)) ?? saved
   const displayName = submitted.user_name || submitted.user_email || 'Ein Teammitglied'
 
-  // Notify approvers only — the submitter just clicked the button and gets
-  // inline confirmation; a self-notification is noise. Resubmits REPLACE the
-  // previous "eingereicht" notifications for this card instead of stacking,
-  // so approvers see exactly one live entry per card. The cleanup runs even
-  // with zero approvers (single-staff installs) so stale entries never linger.
+  // Two notifications on submit, each with its own email:
+  //   1. every OTHER approver → "a timecard needs your review"
+  //   2. the SUBMITTER → an emailed confirmation (inline UI isn't an email). In
+  //      a small org the submitter is often the sole approver, so this also
+  //      tells them they can approve it themselves — previously nobody got
+  //      anything at all in that case.
+  // Resubmits REPLACE the previous entries for this card (delete by related_id
+  // + type) instead of stacking, so there's exactly one live entry per kind.
   try {
+    const allApproverIds = await getTimecardApproverIds()
+    const otherApproverIds = allApproverIds.filter((id) => id !== userId)
+    const submitterIsApprover = allApproverIds.includes(userId)
+
     await db.delete(notifications).where(and(
       eq(notifications.relatedId, submitted.id),
-      eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
+      or(
+        eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
+        eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMIT_CONFIRMED),
+      ),
     ))
-    const approverIds = await getTimecardApproverIds(userId)
-    if (approverIds.length > 0) {
-      await notifyUsers(approverIds, {
+
+    if (otherApproverIds.length > 0) {
+      await notifyUsers(otherApproverIds, {
         type: NOTIFICATION_TYPES.TIMECARD_SUBMITTED,
         title: 'Neue Zeitkarte eingereicht',
         content: `${displayName} hat die Zeitkarte für ${periodLabel} zur Prüfung eingereicht.`,
@@ -544,8 +554,18 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
         related_id: submitted.id,
       })
     }
+
+    await createNotification(userId, {
+      type: NOTIFICATION_TYPES.TIMECARD_SUBMIT_CONFIRMED,
+      title: 'Zeitkarte eingereicht',
+      content: submitterIsApprover && otherApproverIds.length === 0
+        ? `Deine Zeitkarte für ${periodLabel} wurde eingereicht. Als Freigabeberechtigte:r kannst du sie selbst freigeben.`
+        : `Deine Zeitkarte für ${periodLabel} wurde zur Freigabe eingereicht.`,
+      related_type: submitterIsApprover ? RELATED_TYPES.TIMECARD_REVIEW : RELATED_TYPES.TIMECARD,
+      related_id: submitted.id,
+    })
   } catch (error) {
-    logger.warn('Failed to notify timecard approvers', { error, timecardId: saved.id })
+    logger.warn('Failed to send timecard submission notifications', { error, timecardId: saved.id })
   }
 
   return submitted
