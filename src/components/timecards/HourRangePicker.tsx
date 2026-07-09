@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { formatTimecardDuration } from '@/config/timecards'
+import { formatTimecardDuration, TIMECARD_DAY_GRID } from '@/config/timecards'
 import { useCellSelection } from './useCellSelection'
 
 /**
@@ -22,9 +22,7 @@ import { useCellSelection } from './useCellSelection'
  * re-seeds from the entry whenever the selected day changes.
  */
 
-const DAY_START_HOUR = 6
-const DAY_END_HOUR = 22
-const STEP_MINUTES = 30
+const { startHour: DAY_START_HOUR, endHour: DAY_END_HOUR, stepMinutes: STEP_MINUTES } = TIMECARD_DAY_GRID
 const SLOT_COUNT = ((DAY_END_HOUR - DAY_START_HOUR) * 60) / STEP_MINUTES
 
 function slotToTime(slotIndex: number): string {
@@ -59,8 +57,8 @@ function reconstructWorkedSlots(
   const slots = new Set<number>()
   for (let i = from; i < toExcl; i++) slots.add(i)
   let toRemove = span - worked
-  const middayFrom = timeToSlot('12:00')
-  const middayTo = timeToSlot('14:00')
+  const middayFrom = timeToSlot(TIMECARD_DAY_GRID.middayBreakStart)
+  const middayTo = timeToSlot(TIMECARD_DAY_GRID.middayBreakEnd)
   if (toRemove > 0 && middayFrom !== null && middayTo !== null) {
     for (let i = middayFrom; i < middayTo && toRemove > 0; i++) {
       if (slots.delete(i)) toRemove--

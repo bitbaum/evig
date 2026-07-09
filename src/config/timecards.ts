@@ -164,3 +164,27 @@ export function formatTimecardDuration(totalMinutes: number): string {
   if (minutes === 0) return `${hours} Std.`
   return `${hours} Std. ${minutes} Min.`
 }
+
+/**
+ * Day-view hour grid geometry (SSOT — was hardcoded in HourRangePicker).
+ * The grid runs [startHour, endHour) in stepMinutes slots; a default lunch
+ * break sits between middayBreakStart/End.
+ */
+export const TIMECARD_DAY_GRID = {
+  startHour: 6,
+  endHour: 22,
+  stepMinutes: 30,
+  middayBreakStart: '12:00',
+  middayBreakEnd: '14:00',
+} as const
+
+/**
+ * Fallback work times when a day has NO schedule template and the user starts
+ * a manual entry (SSOT — was the `09:00/17:00/60` literal duplicated in the
+ * hook). Never used for plan-fills: a non-plan day has 0 scheduled hours.
+ */
+export const TIMECARD_MANUAL_DEFAULT = {
+  start: '09:00',
+  end: '17:00',
+  break_minutes: 60,
+} as const

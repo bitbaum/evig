@@ -10,6 +10,7 @@ import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
   TIMECARD_ABSENCE_TYPES,
+  TIMECARD_MANUAL_DEFAULT,
   isAbsenceCategory,
   getAbsenceType,
   type TimecardEntryCategory,
@@ -357,7 +358,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
    */
   const dayTemplateForDate = useCallback(
     (date: string): { start: string; end: string; break_minutes: number } =>
-      scheduleTemplateForDate(date) ?? { start: '09:00', end: '17:00', break_minutes: 60 },
+      scheduleTemplateForDate(date) ?? TIMECARD_MANUAL_DEFAULT,
     [scheduleTemplateForDate],
   )
 
@@ -471,10 +472,14 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         const existing = getEntryForDate(current.entries, selectedDate)
         const baseEntry = existing ?? {
           work_date: selectedDate,
-          start_time: '09:00',
-          end_time: '17:00',
-          break_minutes: 60,
-          duration_minutes: 420,
+          start_time: TIMECARD_MANUAL_DEFAULT.start,
+          end_time: TIMECARD_MANUAL_DEFAULT.end,
+          break_minutes: TIMECARD_MANUAL_DEFAULT.break_minutes,
+          duration_minutes: calculateTimeRangeMinutes(
+            TIMECARD_MANUAL_DEFAULT.start,
+            TIMECARD_MANUAL_DEFAULT.end,
+            TIMECARD_MANUAL_DEFAULT.break_minutes,
+          ),
           category: 'other',
           source: 'manual',
           description: '',
