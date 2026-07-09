@@ -3100,7 +3100,13 @@
       "askQuestion": "Frage stellen",
       "becomeTechnicianTitle": "Möchtest du helfen?",
       "becomeTechnicianBody": "Nur registrierte Techniker können auf Hilfe-Anfragen antworten. Erstelle dein kostenloses Techniker-Profil – dann kannst du hier und bei anderen Anfragen Angebote abgeben.",
-      "becomeTechnicianCta": "Techniker-Profil erstellen"
+      "becomeTechnicianCta": "Techniker-Profil erstellen",
+      "noOffersNudge": {
+        "title": "Noch keine Angebote?",
+        "bodyPaid": "So ziehst du mehr Techniker an: Erhöhe deine Vergütung, erweitere die benötigten Skills oder verlängere die Frist. Je attraktiver deine Anfrage, desto schneller meldet sich jemand.",
+        "bodyFree": "Deine Gratis-Anfrage ist öffentlich sichtbar. Teile sie mit deinem Umfeld, erweitere die benötigten Skills oder verlängere die Frist. Eine kleine freiwillige Vergütung kann helfen, schneller jemanden zu finden.",
+        "cta": "Anfrage anpassen"
+      }
     },
     "create": {
       "backToList": "Zurück zur Übersicht",

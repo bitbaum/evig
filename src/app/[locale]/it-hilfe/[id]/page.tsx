@@ -23,6 +23,7 @@ import {
   RequestSidebar,
   MarkCompletedCard,
   ConfirmReviewCard,
+  OwnerNoOffersNudge,
   useITHilfeDetail,
 } from '@/components/it-hilfe/detail'
 import { PageShell } from '@/components/layout/PageShell'
@@ -259,6 +260,16 @@ export default function ITHilfeDetailPage() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {/* Owner, open request, zero offers → nudge toward the levers that
+                attract technicians (raise/add compensation, broaden skills,
+                extend, share) instead of a dead "no technicians" line. */}
+            {request.isOwner
+              && request.status === REQUEST_STATUS.OPEN
+              && request.offerCount === 0
+              && !detail.isExpired && (
+                <OwnerNoOffersNudge requestId={request.id} budgetType={request.budgetType} />
             )}
 
             {/* Offers List (Owner only) */}
