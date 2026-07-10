@@ -23,6 +23,7 @@ import {
 import Heading from '@/components/admin/AdminHeading'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { importFilePostForEdit, hideFilePost } from './actions'
+import { publishStatusLabel } from '@/config/content-status'
 
 interface BlogPost {
   id: string
@@ -133,7 +134,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
           }`}
         >
-          {post.is_published ? 'Veröffentlicht' : 'Entwurf'}
+          {publishStatusLabel(post.is_published)}
         </span>
       ),
     },

@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next'
+import { publishStatusLabel } from '@/config/content-status'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { formatDateNumeric } from '@/lib/date-formats'
@@ -201,7 +202,7 @@ export default async function AdminPagesPage() {
             ? 'bg-action-muted text-action'
             : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
         }`}>
-          {p.is_published ? 'Veröffentlicht' : 'Entwurf'}
+          {publishStatusLabel(p.is_published)}
         </span>
       ),
     },
