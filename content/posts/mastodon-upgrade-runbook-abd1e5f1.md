@@ -109,7 +109,10 @@ TS=$(date +%Y%m%d-%H%M%S); BK=~/masto-backup-$TS; mkdir -p "$BK"
 
 ```bash
 cd /path/to/mastodon              # dir with docker-compose.yml
-docker compose exec -T db pg_dump -U postgres -Fc postgres > "$BK/mastodon-db.dump"
+# DB name comes from .env.production (POSTGRES_DB) — often mastodon_production, NOT "postgres".
+# Dumping the wrong (empty) DB would still pass the TOC check on garbage, so read it, don't guess.
+DB=$(grep -E '^POSTGRES_DB=' .env.production | cut -d= -f2)
+docker compose exec -T db pg_dump -U postgres -Fc "${DB:-mastodon_production}" > "$BK/mastodon-db.dump"
 cp .env.production "$BK/"
 docker compose config > "$BK/compose-resolved.yml"     # records current image tags
 echo "media on: $(docker volume ls | grep -i mastodon)"
@@ -148,14 +151,15 @@ $EDITOR docker-compose.yml
 # b) pull
 docker compose pull
 
-# c) pre-deploy migrations with the NEW image
-docker compose run --rm web bundle exec rails db:migrate
+# c) PRE-deploy migrations only — the old code is still serving, so hold back the
+#    post-deploy migrations (this env var is Mastodon's documented upgrade flow)
+docker compose run --rm -e SKIP_POST_DEPLOYMENT_MIGRATIONS=true web bundle exec rails db:migrate
 
 # d) bring services up on the new image
 docker compose up -d
 
-# e) POST-deploy migrations — ONLY if the release notes say "after restart"
-#    docker compose run --rm web bundle exec rails db:migrate
+# e) POST-deploy migrations — now the NEW code is running (unconditional; a no-op if none pending)
+docker compose run --rm web bundle exec rails db:migrate
 
 # f) verify before the next minor
 docker compose ps
@@ -200,16 +204,19 @@ git checkout v4.4.3          # then v4.5.x, then v4.6.3
 bundle install
 yarn install --immutable     # or: corepack enable && yarn install
 
-RAILS_ENV=production bundle exec rails db:migrate        # pre-deploy
+# PRE-deploy migrations only — old code still serves until the restart below
+SKIP_POST_DEPLOYMENT_MIGRATIONS=true RAILS_ENV=production bundle exec rails db:migrate
 RAILS_ENV=production bundle exec rails assets:precompile
 
 sudo systemctl restart mastodon-web mastodon-sidekiq mastodon-streaming
 
-# POST-deploy migrations IF the notes require them:
-# RAILS_ENV=production bundle exec rails db:migrate
+# POST-deploy migrations — now the NEW code is running (unconditional; no-op if none pending)
+RAILS_ENV=production bundle exec rails db:migrate
 
 curl -sI https://net.miaumuh.ch | head -1
 ```
+
+> **Ruby/Node under systemd:** `systemctl` does **not** see your shell's rbenv/nvm PATH. Make sure the service unit pins the new Ruby (via its `Environment=`/`.ruby-version` the unit reads) — a mismatch is the classic "works in my shell, fails under systemd" trap right after the restart.
 
 ---
 
@@ -232,11 +239,14 @@ Then **in a browser**, logged in as `@g`:
 - **Post a status with an image** → thumbnail generates. *This exercises libvips — the top failure mode.*
 - Post a status with a **video** → transcodes (FFmpeg 5.1).
 - **Federation:** search a remote account (e.g. `@Gargron@mastodon.social`) — it resolves and you can follow.
+- **Federation backfill:** after following, only *new* posts appear — a freshly-followed remote account is **not** backfilled with its old history, and the "replies may be missing" banner is expected. This is normal ActivityPub behaviour, not a bug or "shadowban" — it's the single thing our users misread most. Newer releases improve reply/thread fetching; check what your target version added in its release notes, and confirm the `pull` queue is draining.
 - Notifications arrive.
 - Admin → **Sidekiq**: no growing `retry`/`dead` backlog.
 - `bin/tootctl doctor` is clean.
 
 > **If media is broken:** confirm libvips is installed and `MASTODON_USE_LIBVIPS` isn't disabled; re-check §01.
+>
+> **If users complain remote posts/replies are "missing":** that's federation backfill (above), not the upgrade. It's expected on a small instance — a larger following graph and the newer reply-fetch improvements help, but Mastodon does not do a full retroactive backfill.
 
 ---
 
@@ -402,4 +412,4 @@ EXIT / REPORTING:
 - Upgrade docs — docs.joinmastodon.org/admin/upgrading
 - tootctl reference — docs.joinmastodon.org/admin/tootctl
 
-*Unlisted internal runbook · last updated 2026-07-09 · RevampIT Ops*
+*Unlisted internal runbook · last updated 2026-07-10 · migration flow verified against Mastodon's v4.3.0 release-note upgrade steps (2026-07-10); the version floors in §01 are as of 2026-07 — if a release note disagrees, the release note wins · RevampIT Ops*
