@@ -24,6 +24,7 @@ import { AdminButton } from '@/components/admin/AdminButton'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { BlogListClient } from './BlogListClient'
 import { ROUTES } from '@/config/routes'
+import { canAccessSection, toStaffUser } from '@/lib/permissions'
 
 export const metadata: Metadata = {
   title: 'Blog-Artikel',
@@ -137,6 +138,9 @@ export default async function AdminBlogPage() {
 
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/admin/content/blog')
+  }
+  if (!canAccessSection(toStaffUser(session.user), 'content')) {
+    redirect('/?error=no_admin_access')
   }
 
   const posts = await getBlogPosts()

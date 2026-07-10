@@ -10,6 +10,7 @@ import { redirect, notFound } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { BlogPostForm } from '@/components/admin/BlogPostForm'
+import { canAccessSection, toStaffUser } from '@/lib/permissions'
 
 export const metadata: Metadata = {
   title: 'Artikel bearbeiten',
@@ -71,6 +72,9 @@ export default async function EditBlogPostPage({ params }: PageProps) {
 
   if (!session?.user) {
     redirect(`/auth/login?callbackUrl=/admin/content/blog/${postId}`)
+  }
+  if (!canAccessSection(toStaffUser(session.user), 'content')) {
+    redirect('/?error=no_admin_access')
   }
 
   const post = await getBlogPost(postId)
