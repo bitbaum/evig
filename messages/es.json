@@ -1263,6 +1263,18 @@
       "placeholder": "Contraseña",
       "submit": "Abrir",
       "error": "Contraseña incorrecta. Inténtalo de nuevo."
+    },
+    "comments": {
+      "title": "Comentarios",
+      "empty": "Aún no hay comentarios. Sé el primero.",
+      "placeholder": "Escribe un comentario…",
+      "submit": "Comentar",
+      "posting": "Enviando…",
+      "loginPrompt": "Inicia sesión para comentar.",
+      "login": "Iniciar sesión",
+      "delete": "Eliminar",
+      "error": "Algo salió mal. Inténtalo de nuevo.",
+      "anon": "Usuario"
     }
   },
   "contact": {

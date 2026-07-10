@@ -3440,6 +3440,18 @@
     "by": "by",
     "back": "Back to blog",
     "onThisPage": "On this page",
+    "comments": {
+      "title": "Comments",
+      "empty": "No comments yet. Be the first.",
+      "placeholder": "Write a comment…",
+      "submit": "Post comment",
+      "posting": "Posting…",
+      "loginPrompt": "Log in to comment.",
+      "login": "Log in",
+      "delete": "Delete",
+      "error": "Something went wrong. Please try again.",
+      "anon": "User"
+    },
     "gate": {
       "eyebrow": "Internal · Confidential",
       "intro": "This post isn't publicly listed. Enter the password to read it.",

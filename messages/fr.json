@@ -3538,6 +3538,18 @@
       "placeholder": "Mot de passe",
       "submit": "Ouvrir",
       "error": "Mot de passe incorrect. Réessaie."
+    },
+    "comments": {
+      "title": "Commentaires",
+      "empty": "Pas encore de commentaires. Sois le premier.",
+      "placeholder": "Écris un commentaire…",
+      "submit": "Publier",
+      "posting": "Envoi…",
+      "loginPrompt": "Connecte-toi pour commenter.",
+      "login": "Se connecter",
+      "delete": "Supprimer",
+      "error": "Une erreur est survenue. Réessaie.",
+      "anon": "Utilisateur"
     }
   },
   "auth": {

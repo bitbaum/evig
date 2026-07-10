@@ -12,6 +12,7 @@ import { isUnlistedUnlocked } from '@/lib/blog-unlisted-auth'
 import BlogPasswordGate from './BlogPasswordGate'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
+import BlogComments from '@/components/blog/BlogComments'
 import RelatedPosts from '@/components/blog/RelatedPosts'
 
 interface BlogPostPageProps {
@@ -142,6 +143,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </figure>
       )}
       <BlogPostContent post={post} />
+      <BlogComments slug={post.slug} />
       {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
     </main>
   );

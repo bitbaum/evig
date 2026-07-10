@@ -59,6 +59,29 @@ export type BlogPost = typeof blogPosts.$inferSelect
 export type NewBlogPost = typeof blogPosts.$inferInsert
 
 // =============================================================================
+// BLOG COMMENTS
+// =============================================================================
+// Any logged-in user can comment. Keyed by post SLUG (not blog_posts.id) so it
+// works for both DB-authored and git/file posts. `status` validated at the app
+// layer (config + zod), not a SQL CHECK (migration-110 policy).
+
+export const blogComments = pgTable('blog_comments', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  postSlug: text('post_slug').notNull(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  body: text('body').notNull(),
+  status: text('status').notNull().default('visible'),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  index('blog_comments_post_slug_idx').on(table.postSlug, table.createdAt),
+  index('blog_comments_user_id_idx').on(table.userId),
+])
+
+export type BlogComment = typeof blogComments.$inferSelect
+export type NewBlogComment = typeof blogComments.$inferInsert
+
+// =============================================================================
 // BLOG SUBMISSIONS
 // =============================================================================
 // User-submitted blog content pending admin review.

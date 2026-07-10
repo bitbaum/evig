@@ -1263,6 +1263,18 @@
       "placeholder": "Password",
       "submit": "Apri",
       "error": "Password errata. Riprova."
+    },
+    "comments": {
+      "title": "Commenti",
+      "empty": "Ancora nessun commento. Scrivi il primo.",
+      "placeholder": "Scrivi un commento…",
+      "submit": "Commenta",
+      "posting": "Invio…",
+      "loginPrompt": "Accedi per commentare.",
+      "login": "Accedi",
+      "delete": "Elimina",
+      "error": "Qualcosa è andato storto. Riprova.",
+      "anon": "Utente"
     }
   },
   "contact": {

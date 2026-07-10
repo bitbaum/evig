@@ -58,6 +58,7 @@ export const TABLE_NAMES = {
   BLOG_POSTS: 'blog_posts',
   BLOG_SUBMISSIONS: 'blog_submissions',
   BLOG_CATEGORIES: 'blog_categories',
+  BLOG_COMMENTS: 'blog_comments',
   STATIC_PAGES: 'static_pages',
 
   // Applications

@@ -3412,6 +3412,18 @@
     "by": "von",
     "back": "Zurück zum Blog",
     "onThisPage": "Auf dieser Seite",
+    "comments": {
+      "title": "Kommentare",
+      "empty": "Noch keine Kommentare. Schreib den ersten.",
+      "placeholder": "Schreib einen Kommentar…",
+      "submit": "Kommentieren",
+      "posting": "Wird gesendet…",
+      "loginPrompt": "Melde dich an, um zu kommentieren.",
+      "login": "Anmelden",
+      "delete": "Löschen",
+      "error": "Etwas ist schiefgelaufen. Bitte versuch es erneut.",
+      "anon": "Nutzer:in"
+    },
     "gate": {
       "eyebrow": "Intern · Vertraulich",
       "intro": "Dieser Beitrag ist nicht öffentlich gelistet. Gib das Passwort ein, um ihn zu lesen.",
