@@ -1117,6 +1117,16 @@
       "revampitOnly": "Only Revamp-IT devices can be added to the cart. Community listings are purchased directly.",
       "cartAriaLabel": "Cart, {count} items",
       "closeAriaLabel": "Close cart"
+    },
+    "aiCamera": {
+      "analyzing": "Analyzing product...",
+      "analyzingHint": "Our AI detects the brand, model and condition of your product"
+    },
+    "osInstall": {
+      "heading": "Linux pre-installed for free",
+      "body": "On request, we'll install a Linux distribution of your choice for free — lightweight, secure and with no licence costs. Pick one or compare them first.",
+      "selected": "Selected: {distro} — mention this when you order or get in touch.",
+      "compare": "Not sure? Compare distributions"
     }
   },
   "services": {
@@ -1847,7 +1857,39 @@
               "Limited enterprise features"
             ]
           }
-        ]
+        ],
+        "chooser": {
+          "heading": "Which distribution suits you?",
+          "subtitle": "Not sure? Choose what matters most to you — we'll suggest a good starting point.",
+          "recommendedLabel": "Recommendation",
+          "items": [
+            {
+              "need": "Switching from Windows / beginners",
+              "distro": "Linux Mint",
+              "why": "Familiar interface, works right away, hardly any learning curve."
+            },
+            {
+              "need": "Most guides & help online",
+              "distro": "Ubuntu",
+              "why": "The largest community — there's a guide for almost every problem."
+            },
+            {
+              "need": "Latest software & tech",
+              "distro": "Fedora",
+              "why": "The newest packages, close to development — for curious users."
+            },
+            {
+              "need": "Maximum stability & longevity",
+              "distro": "Debian",
+              "why": "Extremely stable — ideal for servers and machines that should just keep running."
+            },
+            {
+              "need": "Older or weaker hardware",
+              "distro": "MX Linux",
+              "why": "Light on resources — breathes new life into older devices too."
+            }
+          ]
+        }
       },
       "finalCta": {
         "heading": "Ready to switch to Linux?",
@@ -3104,7 +3146,16 @@
       "markCompletedSaving": "Saving...",
       "markCompletedButton": "Mark as completed",
       "messageOfferer": "Message",
-      "askQuestion": "Ask a question"
+      "askQuestion": "Ask a question",
+      "becomeTechnicianTitle": "Want to help?",
+      "becomeTechnicianBody": "Only registered technicians can respond to help requests. Create your free technician profile – then you can make offers here and on other requests.",
+      "becomeTechnicianCta": "Create technician profile",
+      "noOffersNudge": {
+        "title": "No offers yet?",
+        "bodyPaid": "Here's how to attract more technicians: raise your compensation, broaden the required skills or extend the deadline. The more appealing your request, the faster someone responds.",
+        "bodyFree": "Your free request is publicly visible. Share it with people you know, broaden the required skills or extend the deadline. A small voluntary payment can help you find someone faster.",
+        "cta": "Edit request"
+      }
     },
     "create": {
       "backToList": "Back to list",
@@ -3285,7 +3336,8 @@
       "errorImageOnly": "Only image files are allowed",
       "errorTooLarge": "File too large (max 10MB)",
       "errorUploadFailed": "Image upload failed. Please try again.",
-      "imageAlt": "Image {index}"
+      "imageAlt": "Image {index}",
+      "removeImage": "Remove image {index}"
     },
     "card": {
       "expired": "Expired",
@@ -3514,7 +3566,10 @@
       "errorVerificationError": "An error occurred during email verification",
       "errorConnection": "Connection problem. Please try again in a minute.",
       "backHome": "Back to home",
-      "pageTitle": "Sign in | RevampIT"
+      "pageTitle": "Sign in | RevampIT",
+      "errorLocked": "Account temporarily locked. Please try again in a few minutes.",
+      "errorNoPassword": "No password has been set for this account yet. Use «Forgot password» to activate your account.",
+      "errorUnverified": "Please confirm your email address first. Check your inbox."
     },
     "register": {
       "title": "Register",
@@ -5965,6 +6020,54 @@
           "body": "We install pilot lamps in buildings, cafés and exhibition spaces — or show you how to build one yourself.",
           "primary": "Request a pilot installation",
           "secondary": "Build your own"
+        },
+        "installs": {
+          "eyebrow": "IN USE",
+          "title": "Real installations, real track record",
+          "intro": "No renderings: these lamps are up and in daily use. The findings come from the final report of the Swico project «Functional circular reuse of IT equipment».",
+          "photoBadge": "Photo July 2026",
+          "noPhotoBadge": "Photo to come",
+          "items": {
+            "repairhub": {
+              "title": "Curved lamp at the RepairHub",
+              "location": "zuerich.repair, Zürich",
+              "story": "A large curved monitor with a broken display became a workshop lamp. The repairers really appreciate the even, shadow-free light while working — and the installation is an eye-catcher that visitors notice right away."
+            },
+            "laden": {
+              "title": "revamp-it shop & office",
+              "location": "Birmensdorferstrasse 379, Zürich",
+              "story": "In the shop's entrance area, two upcycled lamps replace the existing ceiling lights — customer reactions are consistently positive. In the office, another lamp has been running flawlessly for over a year."
+            },
+            "werkraum4": {
+              "title": "Werkraum4 workshop spaces",
+              "location": "Zürich",
+              "story": "Around 20 lamps have been in daily use for about a year. The broad, shadow-free lighting is ideal for hands-on work. Track record: a single power-supply failure — fixed with a simple swap; the LED backlighting gave no trouble."
+            },
+            "recreazzz": {
+              "title": "RecreaZZZ washrooms",
+              "location": "former Zentralwäscherei, Zürich",
+              "story": "Two lamps in use for over a year — switched on and off with every visit. The frequent switching caused no problems at all, and the feedback collected via tally sheet is mostly positive."
+            },
+            "ambossrampe": {
+              "title": "AmbossRampe storage",
+              "location": "Zürich",
+              "story": "The installation confirms storage areas as a sensible place to use them: the lamps, installed for about a year, work flawlessly."
+            }
+          }
+        },
+        "szenarien": {
+          "eyebrow": "SCENARIOS",
+          "title": "How it could look",
+          "intro": "Not photos but compositions: these visualisations show how the lamps could look in typical spaces. What's actually up and lit every day is above under «In use».",
+          "badge": "Visualisation",
+          "items": {
+            "schaufenster": "Shop window · Retail",
+            "garage": "Underground car park · Continuous operation",
+            "party": "Parties & events · Mood lighting",
+            "treppenhaus": "Stairwell · Apartment building",
+            "vorlesung": "Lecture hall · Educational spaces",
+            "buero": "Office · Workplace"
+          }
         }
       },
       "gallery": {
@@ -5990,7 +6093,8 @@
           "body": "Every model we don't photograph ourselves stays an SVG sketch. If you're in Zürich and like workshop photography, get in touch.",
           "cta": "Get involved"
         },
-        "statsLine": "{documented} documented · {queued} queued"
+        "statsLine": "{documented} documented · {queued} queued",
+        "installsCta": "View all installations"
       },
       "buildYourOwn": {
         "meta": {
@@ -6031,7 +6135,10 @@
           "body": "Platform code and every guide live on GitHub. Fork, issue or pull request — all welcome.",
           "repoCta": "View on GitHub",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "Creative Commons CC-BY-SA · platform code under MIT"
+          "licenseLabel": "Creative Commons CC-BY-SA · platform code under MIT",
+          "wikiTitle": "Conversion wiki: monitor-upcycling.org",
+          "wikiBody": "All conversion guides are also available in the public wiki — set up so that electronics people from all over the world can document more models. Licensed CC-BY-SA, free to use including commercially.",
+          "wikiCta": "Open wiki"
         },
         "contribute": {
           "title": "Get involved",
@@ -6044,6 +6151,32 @@
             "Schematic variant for a different backlight driver",
             "Safety review or CE notes"
           ]
+        },
+        "artifacts": {
+          "eyebrow": "FROM THE WORKSHOP",
+          "title": "Two parts that make the conversion work",
+          "intro": "Open hardware you can get your hands on: the plug that solves the standby problem and the printable bracket for mounting.",
+          "standby": {
+            "alt": "Voltage-divider plug with two resistors, potted in a 3D-printed housing",
+            "caption": "The voltage-divider plug solves the standby problem — and can be made in the workshop."
+          },
+          "mount": {
+            "alt": "3D CAD view of the printable ceiling bracket with honeycomb structure",
+            "caption": "3D-printable ceiling bracket — the CAD model is openly available."
+          }
+        },
+        "teaching": {
+          "eyebrow": "SHARING KNOWLEDGE",
+          "title": "The guides become teaching material",
+          "body": "In the interdisciplinary bachelor module «Local Loops — Circularity locally made» at Lucerne University of Applied Sciences, 14 students designed and prototyped their own lamps from our decommissioned monitors. That's exactly what the open guides are for: we share our knowledge so people can build everywhere — in workshops, clubs and lecture halls.",
+          "workshop": {
+            "alt": "HSLU students designing their own lamps from decommissioned monitors in the «Local Loops» module",
+            "caption": "HSLU module «Local Loops»: 14 students develop their own lamp designs from our monitors."
+          },
+          "kreativ": {
+            "alt": "Creative lamp prototype with a fabric shade, built by HSLU students",
+            "caption": "Student prototype: a lamp with a fabric shade based on a monitor light panel."
+          }
         }
       },
       "lenovo_l2251pwd": {
@@ -7234,7 +7367,12 @@
             }
           ],
           "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
-          "transparencyLink": "Open transparency page"
+          "transparencyLink": "Open transparency page",
+          "comparison": {
+            "eyebrow": "COMPARED TO NEW",
+            "alt": "New 24 W LED panel on the shop shelf with a price tag of CHF 79.95",
+            "caption": "A comparable new 24 W LED panel costs CHF 79.95 in the shops — and means a full new production run."
+          }
         },
         "scientific": {
           "eyebrow": "SCIENCE",
@@ -7247,7 +7385,28 @@
             "Validation against Apple PER, Öko-Institut and Circular Computing studies"
           ],
           "timeline": "Start: April 2026 · Interim results: June 2026 · Final report: Q3 2026.",
-          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA."
+          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA.",
+          "results": {
+            "eyebrow": "PRELIMINARY RESULTS · INTERIM STATUS 28.05.2026",
+            "quote": "Under the current modelling and current lifespan scenarios, the monitor lamp is better than the LED lamp in every case.",
+            "quoteSource": "ZHAW School of Engineering, Institute for Sustainable Development — C. Baumgartner, M. Grünholz",
+            "stats": {
+              "ghg": {
+                "value": "−82.7%",
+                "label": "Greenhouse gases per Mlmh · Average scenario"
+              },
+              "scarcity": {
+                "value": "−84.8%",
+                "label": "Total environmental impact · Ecological scarcity method"
+              },
+              "range": {
+                "value": "52–86%",
+                "label": "Reduction across all lifespan scenarios"
+              }
+            },
+            "specs": "Reference lamp (DELL U2412b, converted): 13.6 W measured · ~965 lm measured · Compared per megalumen-hour, cradle-to-grave, against a conventional LED lamp.",
+            "caveat": "Preliminary figures from the ongoing Innosuisse innovation cheque — the final ZHAW report will supersede them. The direction is clear across all scenarios."
+          }
         },
         "openHardware": {
           "eyebrow": "OPEN HARDWARE",
@@ -7340,6 +7499,210 @@
           "title": "Current project status",
           "body": "Compact numbers, milestones and deadlines — without rereading the full business plan.",
           "cta": "View status"
+        }
+      },
+      "lenovo_l2440pwc": {
+        "meta": {
+          "title": "Lenovo L2440pwC — monitor into a lamp | Monitor upcycling",
+          "description": "Step-by-step guide: take apart a Lenovo L2440pwC monitor, remove the LCD and reuse the backlight as a light panel."
+        },
+        "back": "← Back to overview",
+        "eyebrow": "GUIDE · MONITOR UPCYCLING",
+        "title": "Lenovo L2440pwC",
+        "subtitle": "Convert a 24-inch monitor into a lamp",
+        "metaLine": "Model: Lenovo L2440pwC · Time: approx. 1 hour · Difficulty: easy · Draft",
+        "credit": "Guide by Bruno, RevampIT · Draft — not yet published",
+        "safety": {
+          "title": "Safety first",
+          "body": "Never work on a live device. Disconnect the monitor fully from the mains and wait 1–2 minutes before you start. Take the necessary safety precautions before any function test — if unsure, bring in an electronics colleague."
+        },
+        "tools": {
+          "title": "Tools & materials",
+          "items": [
+            "Phillips screwdriver (various sizes)",
+            "Possibly a flat-head screwdriver",
+            "Pry tool (plastic prying tool)",
+            "Two suitable resistors (per the circuit diagram)",
+            "Insulating tape or other tape",
+            "Container for screws"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Take apart the monitor",
+            "intro": "Make room and a clean workspace. As you take it apart, keep the parts in their orientation (buttons down, as in the pictures) and use a magnetic screwdriver together with a screw container so nothing gets lost."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 2",
+            "title": "Bridge the electronics",
+            "intro": "The control electronics are removed and the remaining connector bridged, so the panel stays lit permanently without any controls."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 3",
+            "title": "Remove the LCD",
+            "intro": "Take out the black LCD pane — the diffuser and light layers beneath stay clean and undamaged; they provide the even light later on."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Phase 4",
+            "title": "Reassembly & function test",
+            "intro": "Put everything back together securely — and only then plug it into the mains."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Open the housing",
+            "body": "Lay the monitor face down on a soft surface. Remove all the screws on the back — some may sit under plastic or rubber covers that can be lifted off with a thin flat-head screwdriver. Run the pry tool along the gap between the back shell and the frame to release the adhesive, and carefully lever the housing parts apart until the clips audibly release. Caution: near the control buttons, cables may be attached to the cover — don't pull sharply. Carefully unplug the cable between the frame and the electronics.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Remove the inner covers",
+            "body": "Set the plastic parts aside and lay the screen flat. Remove all visible screws on the inner brackets (we counted 8). Carefully detach cables held down with tape or adhesive pads. Unplug the ribbon connector cable between the electronics and the LCD; the two cables to the corners of the screen can stay plugged in. Remove the smaller box on the right, unplug and unscrew the board with the USB ports underneath it (no longer needed). Finally, remove the larger housing — first take off the adhesive.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Remove the control board and modify the connector",
+            "body": "Remove the right-hand control board (not the one where the power comes in) and set it aside — it's no longer needed. On the remaining connector, pins are bridged with resistors; the exact circuit diagram will follow once it's verified. Carefully cover all exposed metal parts of the resistors and contacts with insulating tape, and secure the modified connector with tape so it doesn't come loose. Then set it aside — the LCD panel is next.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Remove the LCD panel",
+            "body": "Release the display module from the metal frame — it's held by the same clips as at the start; release it carefully, using a flat-head screwdriver if needed. Unplug the ribbon cable to the LCD control electronics if still connected. The LCD control electronics sit under a metal cover and may be glued down — release both from the metal surface. Carefully remove the LCD panel (the outermost dark layer); it's no longer needed. Then remount the metal frame. Note: keep the diffuser and light layers beneath as clean and undamaged as possible.",
+            "images": []
+          },
+          {
+            "n": 5,
+            "title": "Reassembly and function test",
+            "body": "Securely refasten all remaining components and screw the housing back together (some screws are no longer needed). Only after fully reassembling should you plug in the mains lead and check that the backlight lights up as intended. Caution: never run function tests on an open, live device unless proper safety precautions have been taken.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Done!",
+          "body": "After a successful conversion, the backlight serves as a large-area light source: removing the LCD panel makes the light visible and the monitor can be used as a lamp or light panel. (Result photos to come.)"
+        },
+        "feedback": {
+          "title": "Got a better idea? Write to us.",
+          "body": "This guide is open and thrives on corrections. If you've found a better bridging circuit, a brightness control or a nicer way to mount it — we'd love to receive your contributions.",
+          "cta": "Contribute"
+        },
+        "ui": {
+          "openPhoto": "Enlarge photo",
+          "closePhoto": "Close",
+          "playVideo": "Play video",
+          "pauseVideo": "Pause video",
+          "stepProgressLabel": "Step",
+          "stepProgressOf": "of",
+          "jumpToStep": "Jump to step",
+          "photoCountLabel": "Photo",
+          "photoCountOf": "of"
+        }
+      },
+      "hp_z23n": {
+        "meta": {
+          "title": "HP Z23n — monitor into a lamp | Monitor upcycling",
+          "description": "Step-by-step guide: take apart an HP Z23n monitor, remove the LCD and reuse the backlight as a light panel."
+        },
+        "back": "← Back to overview",
+        "eyebrow": "GUIDE · MONITOR UPCYCLING",
+        "title": "HP Z23n",
+        "subtitle": "Convert a 23-inch monitor into a lamp",
+        "metaLine": "Model: HP Z23n · Time: approx. 1 hour · Difficulty: easy · Draft",
+        "credit": "Guide by Bruno, RevampIT · Draft — not yet published",
+        "safety": {
+          "title": "Safety first",
+          "body": "Never work on a live device. Disconnect the monitor fully from the mains and wait 1–2 minutes before you start. Take the necessary safety precautions before any function test — if unsure, bring in an electronics colleague."
+        },
+        "tools": {
+          "title": "Tools & materials",
+          "items": [
+            "Phillips screwdriver (various sizes)",
+            "Possibly a flat-head screwdriver",
+            "Pry tool (plastic prying tool)",
+            "Two suitable resistors (per the circuit diagram)",
+            "Insulating tape or other tape",
+            "Container for screws"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Take apart the monitor",
+            "intro": "Make room and a clean workspace. As you take it apart, keep the parts in their orientation (buttons down, as in the pictures) and use a magnetic screwdriver together with a screw container so nothing gets lost."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 2",
+            "title": "Bridge the electronics",
+            "intro": "The control electronics are removed and the remaining connector bridged, so the panel stays lit permanently without any controls."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 3",
+            "title": "Remove the LCD",
+            "intro": "Take out the black LCD pane — the diffuser and light layers beneath stay clean and undamaged; they provide the even light later on."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Phase 4",
+            "title": "Reassembly & function test",
+            "intro": "Put everything back together securely — and only then plug it into the mains."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Open the housing and unplug the connector cable",
+            "body": "Lay the monitor face down on a soft surface and remove all the screws on the back. Run the pry tool along the gap between the back shell and the frame, release the adhesive and lever the housing parts apart until the clips audibly release; set the back shell aside. Undo the screws and adhesive holding the plastic frame to the display (9 of them). Caution: near the control buttons, cables may be attached to the cover — don't pull sharply. Remove the 4 screws at the bottom of the control bar, unplug the connector cables to the control bar and carefully take it off from the front (pry it off with the pry tool if needed). To remove the plastic frame, first take off the metal housing: remove all adhesive strips and undo the two screws at the top. Finally, unplug the ribbon connector cable between the electronics and the screen.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Remove the control board and modify the connector",
+            "body": "Remove the right-hand control board (the one the ribbon cable from the previous step comes from). It's fixed with two screws from the inside, two from the outside and two hex M2 screws from the outside (next to the VGA port). Set the board and screws aside — they're no longer needed. On the remaining connector, pins are bridged with resistors; the exact circuit diagram will follow once it's verified. Carefully cover all exposed metal parts with insulating tape and secure the modified connector with tape so it doesn't come loose.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Remove the LCD panel",
+            "body": "Release the display module from the metal frame — it's held by the same clips as at the start; release it carefully, using a flat-head screwdriver if needed. Unplug the ribbon cable to the LCD control electronics if still connected. The LCD control electronics sit under a metal cover and may be glued down — release both. Carefully remove the LCD panel (the outermost dark layer); it's no longer needed. Then remount the metal frame. Note: keep the diffuser and light layers beneath as clean and undamaged as possible.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Reassembly and function test",
+            "body": "Securely refasten all remaining components and screw the housing back together (some screws are no longer needed). Only after fully reassembling should you plug in the mains lead and check that the backlight lights up as intended. Caution: never run function tests on an open, live device unless proper safety precautions have been taken.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Done!",
+          "body": "After a successful conversion, the backlight serves as a large-area light source: removing the LCD panel makes the light visible and the monitor can be used as a lamp or light panel. (Result photos to come.)"
+        },
+        "feedback": {
+          "title": "Got a better idea? Write to us.",
+          "body": "This guide is open and thrives on corrections. If you've found a better bridging circuit, a brightness control or a nicer way to mount it — we'd love to receive your contributions.",
+          "cta": "Contribute"
+        },
+        "ui": {
+          "openPhoto": "Enlarge photo",
+          "closePhoto": "Close",
+          "playVideo": "Play video",
+          "pauseVideo": "Pause video",
+          "stepProgressLabel": "Step",
+          "stepProgressOf": "of",
+          "jumpToStep": "Jump to step",
+          "photoCountLabel": "Photo",
+          "photoCountOf": "of"
         }
       }
     }
@@ -7831,6 +8194,46 @@
         "eyebrow": "DEVICE",
         "title": "Drop off a laptop, desktop or monitor.",
         "body": "We accept working or repairable devices, refurbish them and pass them on. We can erase your personal data on site."
+      }
+    },
+    "wishlist": {
+      "prefillTemplate": "I'd like to donate the following: {title}",
+      "eyebrow": "CURRENT SPECIFIC NEEDS",
+      "heading": "Our wishlist",
+      "intro": "To keep our workshop running and to bring rescued devices back into shape, we regularly need certain tools or components. You can support us either by donating the physical item or by funding its purchase.",
+      "donateItem": "Donate the item",
+      "fundItem": "Fund the purchase",
+      "funded": "{amount} of {target} funded",
+      "received": "{count} of {target} received",
+      "copyReference": "Copy payment reference",
+      "referenceCopied": "Copied!",
+      "close": "Close",
+      "fundTitle": "Fund {title}",
+      "fundIntro": "You can fund this item by making a bank transfer for the amount shown. Please use the payment reference below so we can match your donation to this item:",
+      "priorityHigh": "High priority",
+      "priorityMedium": "Medium priority",
+      "priorityLow": "Low priority",
+      "donateHeading": "Donate this item",
+      "donateIntro": "If you have this item and would like to donate it, please use the drop-off form below. We've already filled in the details for you.",
+      "items": {
+        "ifixit": {
+          "title": "iFixit Pro Tech Toolkits",
+          "whyNeeded": "Essential professional tools for opening laptops and smartphones without damage. We need more sets for our volunteer workshops.",
+          "costLabel": "CHF 79.00 per set",
+          "purpose": "Donation: iFixit Pro Tech Toolkit"
+        },
+        "ssd": {
+          "title": "2.5\" SATA SSDs (500GB)",
+          "whyNeeded": "Slow mechanical hard drives are the main bottleneck in older laptops. Replacing them with modern SSDs makes them fast and usable again.",
+          "costLabel": "CHF 35.00 per SSD",
+          "purpose": "Donation: 2.5 SATA SSD 500GB"
+        },
+        "soldering": {
+          "title": "Soldering station (Ersa i-CON Pico)",
+          "whyNeeded": "For advanced mainboard repairs (replacing faulty capacitors, charging ports) to rescue devices that would otherwise be e-waste.",
+          "costLabel": "CHF 160.00",
+          "purpose": "Donation: Ersa i-CON Pico"
+        }
       }
     }
   },
@@ -8996,7 +9399,9 @@
         "columnNumber": "#",
         "columnStatus": "Status",
         "ofText": "of",
-        "productsText": "products"
+        "productsText": "products",
+        "prevPage": "Previous page",
+        "nextPage": "Next page"
       },
       "bulkActionBar": {
         "deselectAll": "Deselect all",
@@ -9668,7 +10073,13 @@
       "bulkFill": "Fill from schedule",
       "bulkAbsenceLabel": "Absent",
       "bulkClear": "Clear",
-      "bulkCancel": "Cancel selection"
+      "bulkCancel": "Cancel selection",
+      "lockedApproved": "Approved and locked",
+      "reopen2": "Reopen (admin)",
+      "fillSkippedNonPlanDays": "{count, plural, one {1 day without a work plan skipped (0 target hours)} other {# days without a work plan skipped (0 target hours)}}",
+      "fillNonPlanDay": "No planned day — no target hours. Enter times manually if needed.",
+      "selectHintTouch": "Tap days to select them (tap again to deselect) · A weekday abbreviation (Mon, Tue …) selects the whole column · Then choose an action below.",
+      "submittedUnchanged": "Submitted — awaiting approval. Any changes will require resubmitting."
     },
     "appointments": {
       "pageTitle": "Appointments",
@@ -9918,7 +10329,8 @@
         "unverifyConfirm": {
           "title": "Remove verification",
           "message": "Really remove verification?"
-        }
+        },
+        "verifyFailed": "Action failed. Please try again."
       },
       "reports": {
         "filters": {
@@ -9979,10 +10391,12 @@
           "seller": "Seller",
           "amount": "Amount",
           "status": "Status",
-          "date": "Date"
+          "date": "Date",
+          "delivery": "Delivery"
         },
         "empty": "No orders found",
-        "countLabel": "{count, plural, one {# order} other {# orders}}"
+        "countLabel": "{count, plural, one {# order} other {# orders}}",
+        "cartItems": "{count, plural, one {# item} other {# items}}"
       },
       "editModal": {
         "title": "Edit listing",
@@ -10070,7 +10484,9 @@
       "expandSidebarTitle": "Expand sidebar",
       "collapseSidebarTitle": "Collapse sidebar",
       "openAria": "Open sidebar",
-      "mobileMore": "More"
+      "mobileMore": "More",
+      "filterPlaceholder": "Search section…",
+      "filterNoResults": "No section found"
     },
     "commandBar": {
       "placeholder": "Search or command…",
@@ -10099,7 +10515,8 @@
       "relativeJustNow": "Just now",
       "relativeMinutes": "{count} min ago",
       "relativeHours": "{count} h ago",
-      "relativeDays": "{count, plural, one {# day ago} other {# days ago}}"
+      "relativeDays": "{count, plural, one {# day ago} other {# days ago}}",
+      "closeAriaLabel": "Close notifications"
     },
     "forms": {
       "cancel": "Cancel",
@@ -10386,7 +10803,10 @@
       "sensitive": "Sensitive",
       "system": "System",
       "analyse": "Analytics",
-      "seller-onboarding": "Become a seller"
+      "seller-onboarding": "Become a seller",
+      "presentations": "Presentations",
+      "hr-vacancies": "Open positions",
+      "hr-applications": "Applications"
     },
     "errorPage": {
       "title": "Something went wrong",
@@ -10428,6 +10848,77 @@
     "command": {
       "label": "Run locally",
       "text": "npm run d"
+    }
+  },
+  "kennzahlen": {
+    "meta": {
+      "title": "Key figures",
+      "description": "All of Revamp-IT's key numbers – laid open, with source and confidence level. No embellished figures."
+    },
+    "hero": {
+      "title": "Key figures",
+      "subtitle": "All the numbers that matter to us – laid open, with source and confidence level"
+    },
+    "intro": "Every number is marked with a confidence level and – where possible – backed by a calculation and source. We'd rather show an honest estimate than an embellished figure.",
+    "categories": {
+      "impact": "Environmental impact",
+      "social": "Social impact",
+      "economic": "Economic",
+      "operations": "Organisation"
+    },
+    "confidence": {
+      "high": "Verified",
+      "medium": "Well-founded",
+      "estimated": "Estimate",
+      "target": "Target"
+    },
+    "howCalculated": "How is this calculated?",
+    "source": "Source",
+    "lastVerified": "Last verified",
+    "co2Note": "Details on the CO₂ methodology",
+    "backToTransparenz": "Back to the transparency overview",
+    "linkFromOverview": "View all key figures"
+  },
+  "hirn": {
+    "title": "Hirn",
+    "subtitle": "The assistant from {orgName}",
+    "open": "Open Hirn",
+    "inputPlaceholder": "Ask Hirn something…",
+    "send": "Send",
+    "thinking": "Hirn is thinking…",
+    "emptyTitle": "How can I help?",
+    "emptyHint": "Pick a suggestion or ask your own question.",
+    "suggestionsLabel": "Suggestions",
+    "quickActionsLabel": "Relevant links",
+    "loginPrompt": "Sign in to chat with Hirn — the assistant from {orgName}.",
+    "loginCta": "Sign in",
+    "rateLimited": "Too many requests — please try again later.",
+    "error": "Hirn isn't reachable right now. Please try again later.",
+    "proactiveDismiss": "Dismiss hint"
+  },
+  "invite": {
+    "title": "Invite friends",
+    "subtitle": "Invite friends to {orgName} — and you both benefit.",
+    "friendReceives": "Your friend gets",
+    "friendReceivesDesc": "A discount on their first purchase in the shop",
+    "youReceive": "You get",
+    "youReceiveDesc": "A voucher when your friend completes their first purchase",
+    "linkLabel": "Your personal invite link",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "inviteByEmail": "Invite by email",
+    "emailPlaceholder": "email@example.ch",
+    "send": "Invite",
+    "sending": "Sending…",
+    "inviteSent": "Invitation sent to {email}!",
+    "sendError": "Something went wrong while sending.",
+    "invitesSent": "Invitations sent",
+    "registrations": "Registrations"
+  },
+  "payment": {
+    "method": {
+      "title": "Payment method",
+      "subtitle": "Choose how you'd like to pay"
     }
   }
 }

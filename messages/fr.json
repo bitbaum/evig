@@ -1117,6 +1117,16 @@
       "paymentSuccess": "Paiement réussi ! Ta commande est confirmée.",
       "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
       "paymentCancelled": "Paiement annulé."
+    },
+    "aiCamera": {
+      "analyzing": "Analyse du produit en cours...",
+      "analyzingHint": "Notre IA reconnaît la marque, le modèle et l'état de ton produit"
+    },
+    "osInstall": {
+      "heading": "Linux préinstallé gratuitement",
+      "body": "Sur demande, nous installons gratuitement la distribution Linux de ton choix — légère, sécurisée et sans frais de licence. Choisis-en une ou compare-les d'abord.",
+      "selected": "Choisie : {distro} — indique-le lors de ta commande ou de ta prise de contact.",
+      "compare": "Pas sûr ? Comparer les distributions"
     }
   },
   "services": {
@@ -1777,7 +1787,39 @@
               "Fonctionnalités entreprise limitées"
             ]
           }
-        ]
+        ],
+        "chooser": {
+          "heading": "Quelle distribution te convient ?",
+          "subtitle": "Pas sûr ? Choisis ce qui compte le plus pour toi — nous te recommandons un bon point de départ.",
+          "recommendedLabel": "Recommandation",
+          "items": [
+            {
+              "need": "Passage depuis Windows / débutant·e·s",
+              "distro": "Linux Mint",
+              "why": "Interface familière, fonctionne tout de suite, presque aucune prise en main."
+            },
+            {
+              "need": "Le plus de tutoriels et d'aide en ligne",
+              "distro": "Ubuntu",
+              "why": "La plus grande communauté — pour presque chaque problème, il existe un tutoriel."
+            },
+            {
+              "need": "Logiciels et technologies les plus récents",
+              "distro": "Fedora",
+              "why": "Paquets les plus récents, proche du développement — pour les utilisateur·rice·s curieux·ses."
+            },
+            {
+              "need": "Stabilité et longévité maximales",
+              "distro": "Debian",
+              "why": "Extrêmement stable — idéal pour les serveurs et les ordinateurs qui doivent simplement tourner."
+            },
+            {
+              "need": "Matériel plus ancien ou moins puissant",
+              "distro": "MX Linux",
+              "why": "Économe en ressources — redonne vie même aux appareils plus anciens."
+            }
+          ]
+        }
       },
       "finalCta": {
         "heading": "Prêt à passer à Linux?",
@@ -1998,7 +2040,10 @@
         "reusedLabel": "Composants réutilisés",
         "reusedValue": "4 sur 4 parties principales",
         "circularLabel": "Économie circulaire",
-        "circularValue": "Prolonge la durée de vie du matériel"
+        "circularValue": "Prolonge la durée de vie du matériel",
+        "browseComponents": "Voir les composants",
+        "resultNote": "Nous assemblons ton appareil à partir de composants reconditionnés et vérifiés. Découvre les pièces adaptées sur notre marketplace ou demande directement un assemblage complet.",
+        "sustainabilityNote": "Chaque composant réutilisé prolonge la durée de vie du matériel et évite les émissions d'une production neuve."
       },
       "features": {
         "heading": "Pourquoi choisir notre système de build IA ?",
@@ -3101,7 +3146,16 @@
         "viewProfile": "Voir le profil"
       },
       "messageOfferer": "Message",
-      "askQuestion": "Poser une question"
+      "askQuestion": "Poser une question",
+      "becomeTechnicianTitle": "Tu veux aider ?",
+      "becomeTechnicianBody": "Seuls les technicien·ne·s inscrit·e·s peuvent répondre aux demandes d'aide. Crée ton profil de technicien·ne gratuit – tu pourras alors faire des offres ici et pour d'autres demandes.",
+      "becomeTechnicianCta": "Créer un profil de technicien·ne",
+      "noOffersNudge": {
+        "title": "Pas encore d'offres ?",
+        "bodyPaid": "Voici comment attirer plus de technicien·ne·s : augmente ta rémunération, élargis les compétences requises ou prolonge le délai. Plus ta demande est attractive, plus vite quelqu'un se manifestera.",
+        "bodyFree": "Ta demande gratuite est visible publiquement. Partage-la autour de toi, élargis les compétences requises ou prolonge le délai. Une petite rémunération volontaire peut aider à trouver quelqu'un plus vite.",
+        "cta": "Modifier la demande"
+      }
     },
     "create": {
       "backToList": "Retour à la liste",
@@ -3239,7 +3293,8 @@
       "errorImageOnly": "Seuls les fichiers image sont autorisés",
       "errorTooLarge": "Fichier trop volumineux (max 10 Mo)",
       "errorUploadFailed": "Échec du téléchargement. Veuillez réessayer.",
-      "imageAlt": "Image {index}"
+      "imageAlt": "Image {index}",
+      "removeImage": "Supprimer l'image {index}"
     },
     "offer": {
       "offerButton": "Faire une offre",
@@ -3472,7 +3527,11 @@
       "selectPrompt": "Sélectionnez une soumission pour voir les détails",
       "tipText": "💡 {strong}Conseil :{/strong} Téléchargez le fichier Markdown et copiez-le dans le dossier {code}content/posts/{/code}. Modifiez-le et publiez-le dans TinaCMS !",
       "submittedBy": "Soumis par : {name} ({email})"
-    }
+    },
+    "back": "Retour au blog",
+    "onThisPage": "Sur cette page",
+    "unlisted": "Non répertorié",
+    "minutesShort": "min"
   },
   "auth": {
     "login": {
@@ -3507,7 +3566,10 @@
       "errorVerificationError": "Une erreur s'est produite lors de la vérification de l'e-mail",
       "errorConnection": "Problème de connexion. Veuillez réessayer dans une minute.",
       "backHome": "Retour à l'accueil",
-      "pageTitle": "Connexion | RevampIT"
+      "pageTitle": "Connexion | RevampIT",
+      "errorLocked": "Compte temporairement bloqué. Réessaie dans quelques minutes.",
+      "errorNoPassword": "Aucun mot de passe n'est encore défini pour ce compte. Utilise « Mot de passe oublié » pour activer ton compte.",
+      "errorUnverified": "Confirme d'abord ton adresse e-mail. Vérifie ta boîte de réception."
     },
     "register": {
       "title": "S'inscrire",
@@ -6012,6 +6074,54 @@
           "body": "Nous installons des luminaires pilotes dans des immeubles, des cafés et des espaces d'exposition — ou nous vous montrons comment en construire un vous-même.",
           "primary": "Demander une installation pilote",
           "secondary": "Construire soi-même"
+        },
+        "installs": {
+          "eyebrow": "EN SERVICE",
+          "title": "Vraies installations, vrai bilan",
+          "intro": "Pas de rendus : ces luminaires sont accrochés et utilisés chaque jour. Les retours proviennent du rapport final du projet Swico « Utilisation circulaire fonctionnelle d'appareils informatiques ».",
+          "photoBadge": "Photo juillet 2026",
+          "noPhotoBadge": "Photo à venir",
+          "items": {
+            "repairhub": {
+              "title": "Luminaire incurvé au RepairHub",
+              "location": "zuerich.repair, Zürich",
+              "story": "Un grand écran incurvé à la dalle cassée est devenu un luminaire d'atelier. Sa lumière uniforme sans ombre portée est très appréciée des réparateur·rice·s au travail — et l'installation attire aussitôt le regard des visiteur·euse·s."
+            },
+            "laden": {
+              "title": "Boutique et bureau revamp-it",
+              "location": "Birmensdorferstrasse 379, Zürich",
+              "story": "À l'entrée de la boutique, deux luminaires upcyclés remplacent les plafonniers existants — les réactions de la clientèle sont unanimement positives. Au bureau, un autre luminaire fonctionne parfaitement depuis plus d'un an."
+            },
+            "werkraum4": {
+              "title": "Ateliers Werkraum4",
+              "location": "Zürich",
+              "story": "Une vingtaine de luminaires sont utilisés chaque jour depuis environ un an. L'éclairage large et sans ombre est idéal pour les travaux manuels. Bilan : une seule panne d'alimentation — réparée par un simple remplacement ; le rétroéclairage LED n'a posé aucun problème."
+            },
+            "recreazzz": {
+              "title": "Sanitaires RecreaZZZ",
+              "location": "ancienne blanchisserie centrale, Zürich",
+              "story": "Deux luminaires en service depuis plus d'un an — allumés et éteints à chaque passage. Les allumages fréquents n'ont causé aucun problème, et les retours recueillis par pointage sont majoritairement positifs."
+            },
+            "ambossrampe": {
+              "title": "Entrepôt AmbossRampe",
+              "location": "Zürich",
+              "story": "L'installation confirme que les entrepôts sont un lieu d'usage pertinent : les luminaires posés depuis environ un an fonctionnent parfaitement."
+            }
+          }
+        },
+        "szenarien": {
+          "eyebrow": "SCÉNARIOS",
+          "title": "À quoi cela pourrait ressembler",
+          "intro": "Pas des photos, mais des compositions : ces visualisations montrent comment les luminaires pourraient rendre dans des espaces typiques. Ce qui est réellement installé et allumé chaque jour figure plus haut sous « En service ».",
+          "badge": "Visualisation",
+          "items": {
+            "schaufenster": "Vitrine · commerce de détail",
+            "garage": "Parking souterrain · fonctionnement continu",
+            "party": "Fête et événement · lumière d'ambiance",
+            "treppenhaus": "Cage d'escalier · immeuble collectif",
+            "vorlesung": "Amphithéâtre · espaces de formation",
+            "buero": "Bureau · poste de travail"
+          }
         }
       },
       "gallery": {
@@ -6037,7 +6147,8 @@
           "body": "Chaque modèle que nous ne photographions pas nous-mêmes reste un croquis SVG. Si vous êtes à Zurich et aimez la photo d'atelier, dites-le nous.",
           "cta": "Participer"
         },
-        "statsLine": "{documented} documenté · {queued} en attente"
+        "statsLine": "{documented} documenté · {queued} en attente",
+        "installsCta": "Voir toutes les installations"
       },
       "buildYourOwn": {
         "meta": {
@@ -6078,7 +6189,10 @@
           "body": "Le code de la plateforme et chaque guide sont sur GitHub. Fork, issue ou pull request : tout est bienvenu.",
           "repoCta": "Voir sur GitHub",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "Creative Commons CC-BY-SA · code de la plateforme sous MIT"
+          "licenseLabel": "Creative Commons CC-BY-SA · code de la plateforme sous MIT",
+          "wikiTitle": "Wiki de transformation : monitor-upcycling.org",
+          "wikiBody": "Tous les tutoriels de transformation sont aussi disponibles sur le wiki public — conçu pour que des électronicien·ne·s du monde entier puissent documenter d'autres modèles. Licence CC-BY-SA, utilisation libre y compris commerciale.",
+          "wikiCta": "Ouvrir le wiki"
         },
         "contribute": {
           "title": "Participer",
@@ -6091,6 +6205,32 @@
             "Variante de schéma pour un autre pilote de rétroéclairage",
             "Revue de sécurité ou indications CE"
           ]
+        },
+        "artifacts": {
+          "eyebrow": "DEPUIS L'ATELIER",
+          "title": "Deux composants qui résolvent la transformation",
+          "intro": "Du matériel libre et concret : le connecteur contre le problème de veille et le support imprimable pour le montage.",
+          "standby": {
+            "alt": "Connecteur diviseur de tension avec deux résistances, coulé dans un boîtier imprimé en 3D",
+            "caption": "Le connecteur diviseur de tension résout le problème de veille — réalisable en atelier."
+          },
+          "mount": {
+            "alt": "Vue CAO 3D du support de plafond imprimable à structure en nid d'abeille",
+            "caption": "Support de plafond imprimable en 3D — le modèle CAO est disponible librement."
+          }
+        },
+        "teaching": {
+          "eyebrow": "PARTAGER LE SAVOIR",
+          "title": "Les tutoriels deviennent des cours",
+          "body": "Dans le module Bachelor interdisciplinaire « Local Loops — Circularity locally made » de la Haute école de Lucerne, 14 étudiant·e·s ont conçu et prototypé leurs propres luminaires à partir de nos écrans mis au rebut. C'est précisément à cela que servent les tutoriels ouverts : nous partageons notre savoir pour qu'on puisse construire partout — dans les ateliers, les associations et les amphithéâtres.",
+          "workshop": {
+            "alt": "Des étudiant·e·s de la HSLU conçoivent leurs propres luminaires à partir d'écrans mis au rebut dans le module « Local Loops »",
+            "caption": "Module HSLU « Local Loops » : 14 étudiant·e·s développent leurs propres concepts de luminaires à partir de nos écrans."
+          },
+          "kreativ": {
+            "alt": "Prototype de luminaire créatif avec abat-jour en textile, construit par des étudiant·e·s de la HSLU",
+            "caption": "Prototype étudiant : luminaire avec abat-jour en textile basé sur la surface lumineuse d'un écran."
+          }
         }
       },
       "lenovo_l2251pwd": {
@@ -7281,7 +7421,12 @@
             }
           ],
           "caveat": "Ces chiffres ne sont pas le clou marketing, mais notre base de travail. Ils sont validés à chaque pilote. Méthodologie détaillée sur la page Transparence.",
-          "transparencyLink": "Ouvrir la page Transparence"
+          "transparencyLink": "Ouvrir la page Transparence",
+          "comparison": {
+            "eyebrow": "COMPARAISON AVEC DU NEUF",
+            "alt": "Panneau LED 24 W neuf en rayon avec étiquette de prix CHF 79.95",
+            "caption": "Un panneau LED 24 W neuf comparable coûte CHF 79.95 dans le commerce — et implique une production entièrement neuve."
+          }
         },
         "scientific": {
           "eyebrow": "SCIENCE",
@@ -7294,7 +7439,28 @@
             "Validation par rapport à Apple PER, Öko-Institut et études Circular Computing"
           ],
           "timeline": "Démarrage : avril 2026 · résultats intermédiaires : juin 2026 · rapport final : T3 2026.",
-          "commitment": "Nous publierons le résultat tel quel — même s'il est défavorable. Une ACV qui ne « gagne » que n'en est pas une."
+          "commitment": "Nous publierons le résultat tel quel — même s'il est défavorable. Une ACV qui ne « gagne » que n'en est pas une.",
+          "results": {
+            "eyebrow": "RÉSULTATS PROVISOIRES · ÉTAT INTERMÉDIAIRE 28.05.2026",
+            "quote": "Selon la modélisation actuelle et les scénarios de durée de vie actuels, le luminaire à base d'écran est dans tous les cas meilleur que le luminaire LED.",
+            "quoteSource": "ZHAW School of Engineering, Institut für Nachhaltige Entwicklung — C. Baumgartner, M. Grünholz",
+            "stats": {
+              "ghg": {
+                "value": "−82.7 %",
+                "label": "Gaz à effet de serre par Mlmh · scénario moyen"
+              },
+              "scarcity": {
+                "value": "−84.8 %",
+                "label": "Impact environnemental global · méthode de la rareté écologique"
+              },
+              "range": {
+                "value": "52–86 %",
+                "label": "Réduction sur l'ensemble des scénarios de durée de vie"
+              }
+            },
+            "specs": "Luminaire de référence (DELL U2412b, transformé) : 13.6 W mesurés · ~965 lm mesurés · comparaison par mégalumen-heure, du berceau à la tombe, face à un luminaire LED conventionnel.",
+            "caveat": "Chiffres provisoires issus du chèque d'innovation Innosuisse en cours — le rapport final de la ZHAW les remplacera. La tendance est claire sur l'ensemble des scénarios."
+          }
         },
         "openHardware": {
           "eyebrow": "OPEN HARDWARE",
@@ -7387,6 +7553,210 @@
           "title": "État actuel du projet",
           "body": "Chiffres, jalons et échéances — sans relire tout le plan.",
           "cta": "Voir le statut"
+        }
+      },
+      "lenovo_l2440pwc": {
+        "meta": {
+          "title": "Lenovo L2440pwC — de l'écran au luminaire | Monitor-Upcycling",
+          "description": "Tutoriel pas à pas : démonter l'écran Lenovo L2440pwC, retirer la dalle LCD et réutiliser le rétroéclairage comme panneau lumineux."
+        },
+        "back": "← Retour à l'aperçu",
+        "eyebrow": "TUTORIEL · MONITOR-UPCYCLING",
+        "title": "Lenovo L2440pwC",
+        "subtitle": "Transformer un écran 24 pouces en luminaire",
+        "metaLine": "Modèle : Lenovo L2440pwC · Durée : env. 1 heure · Difficulté : facile · Brouillon",
+        "credit": "Tutoriel par Bruno, RevampIT · Brouillon — pas encore publié",
+        "safety": {
+          "title": "La sécurité d'abord",
+          "body": "Ne jamais travailler sous tension. Débranche complètement l'écran du secteur et attends 1 à 2 minutes avant de commencer. Prends les mesures de protection nécessaires avant chaque test de fonctionnement — en cas de doute, fais appel à un·e collègue en électronique."
+        },
+        "tools": {
+          "title": "Outils et matériel",
+          "items": [
+            "Tournevis cruciforme (différentes tailles)",
+            "Éventuellement un tournevis plat",
+            "Pry Tool (outil de levier en plastique)",
+            "Deux résistances adaptées (selon le schéma)",
+            "Ruban isolant ou autre ruban adhésif",
+            "Récipient pour les vis"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Démonter l'écran",
+            "intro": "Prévois de la place et un plan de travail propre. Pendant le démontage, conserve l'orientation des pièces (boutons vers le bas, comme sur les images) et utilise un tournevis magnétique avec un récipient à vis pour ne rien perdre."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 2",
+            "title": "Ponter l'électronique",
+            "intro": "L'électronique de commande est retirée et le connecteur restant est ponté, afin que le panneau reste allumé en permanence sans commande."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 3",
+            "title": "Retirer la dalle LCD",
+            "intro": "Retire la vitre LCD noire — les couches de diffusion et de lumière situées en dessous restent propres et intactes ; ce sont elles qui assureront ensuite un éclairage uniforme."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Phase 4",
+            "title": "Remontage et test de fonctionnement",
+            "intro": "Remonte tout de manière sûre — et seulement ensuite, branche au secteur."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Ouvrir le boîtier",
+            "body": "Pose l'écran face vers le bas sur un support souple. Retire toutes les vis à l'arrière — certaines se trouvent parfois sous des caches en plastique ou en caoutchouc, qui s'enlèvent avec un tournevis plat fin. Passe le Pry Tool le long de l'interstice entre la coque arrière et le cadre pour décoller les points de colle, et sépare les parties du boîtier avec précaution jusqu'à ce que les clips se détachent de façon audible. Attention : au niveau des boutons de commande, des câbles peuvent être reliés au cache — ne tire pas d'un coup sec. Débranche avec précaution le câble entre le cadre et l'électronique.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Retirer les caches internes",
+            "body": "Mets les pièces en plastique de côté et pose l'écran à plat. Retire toutes les vis visibles des supports internes (nous en avons compté 8). Détache avec précaution les câbles fixés par du ruban adhésif ou des pastilles adhésives. Débranche le câble plat entre l'électronique et la dalle LCD ; les deux câbles allant vers les coins de l'écran peuvent rester branchés. Retire le boîtier plus petit à droite, débranche et dévisse la carte avec les ports USB en dessous (elle n'est plus nécessaire). Enfin, démonte le boîtier plus grand — retire d'abord la colle.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Retirer la carte de commande et modifier le connecteur",
+            "body": "Démonte la carte de commande de droite (pas celle où arrive le courant) et mets-la de côté — elle n'est plus nécessaire. Dans le connecteur restant, des broches sont pontées avec des résistances ; le schéma exact suivra dès qu'il sera vérifié. Recouvre soigneusement de ruban isolant toutes les parties métalliques exposées des résistances et des contacts, et fixe le connecteur modifié avec du ruban adhésif pour qu'il ne se détache pas. Ensuite, mets-le de côté — la prochaine étape concerne la dalle LCD.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Retirer la dalle LCD",
+            "body": "Détache le module d'affichage du cadre métallique — il est fixé par les mêmes clips qu'au début ; détache-le avec précaution, au besoin avec un tournevis plat. Débranche le câble plat vers l'électronique de commande LCD, s'il est encore connecté. L'électronique de commande LCD se trouve sous un cache métallique et peut être collée — détache les deux de la surface métallique. Retire avec précaution la dalle LCD (la couche sombre la plus externe) ; elle n'est plus nécessaire. Remonte ensuite le cadre métallique. Remarque : laisse autant que possible les couches de diffusion et de lumière en dessous propres et intactes.",
+            "images": []
+          },
+          {
+            "n": 5,
+            "title": "Remontage et test de fonctionnement",
+            "body": "Refixe solidement tous les composants restants et revisse le boîtier (certaines vis ne sont plus nécessaires). Ce n'est qu'après un remontage complet que tu peux brancher la prise secteur et vérifier que le rétroéclairage s'allume comme voulu. Attention : ne réalise jamais de test de fonctionnement sur un appareil ouvert et sous tension, sauf si des mesures de protection appropriées ont été prises.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Terminé !",
+          "body": "Après une transformation réussie, le rétroéclairage sert de source lumineuse de grande surface : en retirant la dalle LCD, la lumière devient visible et l'écran peut être utilisé comme lampe ou panneau lumineux. (Photos du résultat à venir.)"
+        },
+        "feedback": {
+          "title": "Une meilleure idée ? Écris-nous.",
+          "body": "Ce tutoriel est ouvert et vit de ses corrections. Si tu as trouvé un meilleur montage de pontage, un réglage de luminosité ou une plus belle installation — nous accueillons volontiers les contributions.",
+          "cta": "Contribuer"
+        },
+        "ui": {
+          "openPhoto": "Agrandir la photo",
+          "closePhoto": "Fermer",
+          "playVideo": "Lire la vidéo",
+          "pauseVideo": "Mettre la vidéo en pause",
+          "stepProgressLabel": "Étape",
+          "stepProgressOf": "sur",
+          "jumpToStep": "Aller à l'étape",
+          "photoCountLabel": "Photo",
+          "photoCountOf": "sur"
+        }
+      },
+      "hp_z23n": {
+        "meta": {
+          "title": "HP Z23n — de l'écran au luminaire | Monitor-Upcycling",
+          "description": "Tutoriel pas à pas : démonter l'écran HP Z23n, retirer la dalle LCD et réutiliser le rétroéclairage comme panneau lumineux."
+        },
+        "back": "← Retour à l'aperçu",
+        "eyebrow": "TUTORIEL · MONITOR-UPCYCLING",
+        "title": "HP Z23n",
+        "subtitle": "Transformer un écran 23 pouces en luminaire",
+        "metaLine": "Modèle : HP Z23n · Durée : env. 1 heure · Difficulté : facile · Brouillon",
+        "credit": "Tutoriel par Bruno, RevampIT · Brouillon — pas encore publié",
+        "safety": {
+          "title": "La sécurité d'abord",
+          "body": "Ne jamais travailler sous tension. Débranche complètement l'écran du secteur et attends 1 à 2 minutes avant de commencer. Prends les mesures de protection nécessaires avant chaque test de fonctionnement — en cas de doute, fais appel à un·e collègue en électronique."
+        },
+        "tools": {
+          "title": "Outils et matériel",
+          "items": [
+            "Tournevis cruciforme (différentes tailles)",
+            "Éventuellement un tournevis plat",
+            "Pry Tool (outil de levier en plastique)",
+            "Deux résistances adaptées (selon le schéma)",
+            "Ruban isolant ou autre ruban adhésif",
+            "Récipient pour les vis"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Phase 1",
+            "title": "Démonter l'écran",
+            "intro": "Prévois de la place et un plan de travail propre. Pendant le démontage, conserve l'orientation des pièces (boutons vers le bas, comme sur les images) et utilise un tournevis magnétique avec un récipient à vis pour ne rien perdre."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Phase 2",
+            "title": "Ponter l'électronique",
+            "intro": "L'électronique de commande est retirée et le connecteur restant est ponté, afin que le panneau reste allumé en permanence sans commande."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Phase 3",
+            "title": "Retirer la dalle LCD",
+            "intro": "Retire la vitre LCD noire — les couches de diffusion et de lumière situées en dessous restent propres et intactes ; ce sont elles qui assureront ensuite un éclairage uniforme."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Phase 4",
+            "title": "Remontage et test de fonctionnement",
+            "intro": "Remonte tout de manière sûre — et seulement ensuite, branche au secteur."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Ouvrir le boîtier et débrancher les câbles de connexion",
+            "body": "Pose l'écran face vers le bas sur un support souple et retire toutes les vis à l'arrière. Passe le Pry Tool le long de l'interstice entre la coque arrière et le cadre, décolle les points de colle et sépare les parties du boîtier jusqu'à ce que les clips se détachent de façon audible ; mets la coque arrière de côté. Retire les vis et la colle qui maintiennent le cadre en plastique sur l'écran (9 au total). Attention : au niveau des boutons de commande, des câbles peuvent être reliés au cache — ne tire pas d'un coup sec. Retire les 4 vis en bas de la barre de commande, débranche les câbles de connexion vers la barre de commande et retire celle-ci avec précaution par l'avant (au besoin, fais levier avec le Pry Tool). Pour retirer le cadre en plastique, enlève d'abord le boîtier métallique : retire tous les rubans adhésifs et dévisse les deux vis en haut. Enfin, débranche le câble plat entre l'électronique et l'écran.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Retirer la carte de commande et modifier le connecteur",
+            "body": "Démonte la carte de commande de droite (celle d'où sort le câble plat de l'étape précédente). Elle est fixée par deux vis à l'intérieur, deux à l'extérieur et deux vis hexagonales M2 à l'extérieur (à côté du port VGA). Mets la carte et les vis de côté — elles ne sont plus nécessaires. Dans le connecteur restant, des broches sont pontées avec des résistances ; le schéma exact suivra dès qu'il sera vérifié. Recouvre soigneusement de ruban isolant toutes les parties métalliques exposées et fixe le connecteur modifié avec du ruban adhésif pour qu'il ne se détache pas.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Retirer la dalle LCD",
+            "body": "Détache le module d'affichage du cadre métallique — il est fixé par les mêmes clips qu'au début ; détache-le avec précaution, au besoin avec un tournevis plat. Débranche le câble plat vers l'électronique de commande LCD, s'il est encore connecté. L'électronique de commande LCD se trouve sous un cache métallique et peut être collée — détache les deux. Retire avec précaution la dalle LCD (la couche sombre la plus externe) ; elle n'est plus nécessaire. Remonte ensuite le cadre métallique. Remarque : laisse autant que possible les couches de diffusion et de lumière en dessous propres et intactes.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Remontage et test de fonctionnement",
+            "body": "Refixe solidement tous les composants restants et revisse le boîtier (certaines vis ne sont plus nécessaires). Ce n'est qu'après un remontage complet que tu peux brancher la prise secteur et vérifier que le rétroéclairage s'allume comme voulu. Attention : ne réalise jamais de test de fonctionnement sur un appareil ouvert et sous tension, sauf si des mesures de protection appropriées ont été prises.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Terminé !",
+          "body": "Après une transformation réussie, le rétroéclairage sert de source lumineuse de grande surface : en retirant la dalle LCD, la lumière devient visible et l'écran peut être utilisé comme lampe ou panneau lumineux. (Photos du résultat à venir.)"
+        },
+        "feedback": {
+          "title": "Une meilleure idée ? Écris-nous.",
+          "body": "Ce tutoriel est ouvert et vit de ses corrections. Si tu as trouvé un meilleur montage de pontage, un réglage de luminosité ou une plus belle installation — nous accueillons volontiers les contributions.",
+          "cta": "Contribuer"
+        },
+        "ui": {
+          "openPhoto": "Agrandir la photo",
+          "closePhoto": "Fermer",
+          "playVideo": "Lire la vidéo",
+          "pauseVideo": "Mettre la vidéo en pause",
+          "stepProgressLabel": "Étape",
+          "stepProgressOf": "sur",
+          "jumpToStep": "Aller à l'étape",
+          "photoCountLabel": "Photo",
+          "photoCountOf": "sur"
         }
       }
     }
@@ -7825,6 +8195,46 @@
         "eyebrow": "APPAREIL",
         "title": "Déposez un ordinateur portable, fixe ou écran.",
         "body": "Nous acceptons les appareils fonctionnels ou réparables, les reconditionnons et les transmettons. Nous pouvons effacer vos données personnelles sur place."
+      }
+    },
+    "wishlist": {
+      "prefillTemplate": "Je souhaite faire don de ceci : {title}",
+      "eyebrow": "BESOINS SPÉCIFIQUES ACTUELS",
+      "heading": "Notre liste de souhaits",
+      "intro": "Pour faire tourner notre atelier et remettre en état les appareils sauvés, nous avons régulièrement besoin de certains outils ou composants. Tu peux nous soutenir soit en donnant l'objet physique, soit en finançant son achat.",
+      "donateItem": "Donner l'objet",
+      "fundItem": "Financer l'achat",
+      "funded": "{amount} sur {target} financés",
+      "received": "{count} sur {target} reçus",
+      "copyReference": "Copier le motif de versement",
+      "referenceCopied": "Copié !",
+      "close": "Fermer",
+      "fundTitle": "Financer {title}",
+      "fundIntro": "Tu peux financer cet objet en effectuant un virement bancaire du montant indiqué. Utilise le motif de versement ci-dessous pour que nous puissions attribuer ton don à cet objet :",
+      "priorityHigh": "Priorité élevée",
+      "priorityMedium": "Priorité moyenne",
+      "priorityLow": "Priorité faible",
+      "donateHeading": "Donner cet objet",
+      "donateIntro": "Si tu possèdes cet objet et souhaites en faire don, utilise le formulaire de remise ci-dessous. Nous avons déjà rempli les détails pour toi.",
+      "items": {
+        "ifixit": {
+          "title": "iFixit Pro Tech Toolkits",
+          "whyNeeded": "Des outils professionnels indispensables pour ouvrir ordinateurs portables et smartphones sans les endommager. Il nous faut d'autres kits pour nos ateliers bénévoles.",
+          "costLabel": "CHF 79.00 par kit",
+          "purpose": "Don : iFixit Pro Tech Toolkit"
+        },
+        "ssd": {
+          "title": "SSD SATA 2.5\" (500 Go)",
+          "whyNeeded": "Les disques durs mécaniques lents sont le principal goulot d'étranglement des ordinateurs portables plus anciens. Les remplacer par des SSD modernes les rend à nouveau rapides et utilisables.",
+          "costLabel": "CHF 35.00 par SSD",
+          "purpose": "Don : SSD SATA 2.5 500 Go"
+        },
+        "soldering": {
+          "title": "Station de soudage (Ersa i-CON Pico)",
+          "whyNeeded": "Pour les réparations avancées de cartes mères (remplacement de condensateurs défectueux, prises de charge), afin de sauver des appareils qui finiraient sinon en déchets électroniques.",
+          "costLabel": "CHF 160.00",
+          "purpose": "Don : Ersa i-CON Pico"
+        }
       }
     }
   },
@@ -8981,7 +9391,9 @@
         "columnNumber": "#",
         "columnStatus": "Status",
         "ofText": "of",
-        "productsText": "products"
+        "productsText": "products",
+        "prevPage": "Page précédente",
+        "nextPage": "Page suivante"
       },
       "bulkActionBar": {
         "deselectAll": "Tout désélectionner",
@@ -9039,6 +9451,23 @@
         "updateFailed": "Impossible de mettre à jour le produit",
         "saveFailed": "Impossible d'enregistrer le produit",
         "genericSaveError": "Erreur lors de l'enregistrement. Veuillez réessayer."
+      },
+      "storageLocation": {
+        "label": "Lieu de stockage",
+        "placeholder": "Choisir un emplacement…",
+        "loading": "Chargement…",
+        "addNew": "Ajouter un emplacement",
+        "newNamePlaceholder": "Nom de l'emplacement",
+        "kindLabel": "Type",
+        "save": "Enregistrer"
+      },
+      "voiceEntry": {
+        "start": "Démarrer l'enregistrement",
+        "stop": "Arrêter l'enregistrement",
+        "processing": "Traitement en cours…",
+        "hint": "Décris l'appareil : fabricant, modèle, état, prix.",
+        "transcription": "Reconnu : {text}",
+        "errorGeneric": "La voix n'a pas pu être traitée. Réessaie."
       }
     },
     "eWasteProblem": {
@@ -9595,7 +10024,14 @@
       "bulkCancel": "Annuler la sélection",
       "submitSuccess": "Envoyé pour vérification — l'équipe de validation sera notifiée.",
       "submitHint": "Enregistrer le brouillon conserve tes saisies ; « Soumettre pour vérification » envoie à la validation.",
-      "submitError": "La carte de temps n'a pas pu être soumise."
+      "submitError": "La carte de temps n'a pas pu être soumise.",
+      "lockedApproved": "Approuvé et verrouillé",
+      "reopen2": "Rouvrir (admin)",
+      "bulkAbsenceLabel": "Absent",
+      "fillSkippedNonPlanDays": "{count, plural, one {1 jour sans plan de travail ignoré (0 heure due)} other {# jours sans plan de travail ignorés (0 heure due)}}",
+      "fillNonPlanDay": "Jour hors plan — aucune heure due. Saisis les horaires manuellement si besoin.",
+      "selectHintTouch": "Touche des jours pour les sélectionner (retoucher désélectionne) · l'abréviation du jour (lu, ma …) sélectionne toute la colonne · choisis ensuite une action en bas.",
+      "submittedUnchanged": "Soumis — en attente d'approbation. Toute modification nécessite une nouvelle soumission."
     },
     "appointments": {
       "pageTitle": "Rendez-vous",
@@ -9845,7 +10281,8 @@
         "unverifyConfirm": {
           "title": "Retirer la vérification",
           "message": "Vraiment retirer la vérification ?"
-        }
+        },
+        "verifyFailed": "Action échouée. Réessaie."
       },
       "reports": {
         "filters": {
@@ -9999,7 +10436,9 @@
       "expandSidebarTitle": "Déplier la barre latérale",
       "collapseSidebarTitle": "Replier la barre latérale",
       "openAria": "Ouvrir la barre latérale",
-      "mobileMore": "Plus"
+      "mobileMore": "Plus",
+      "filterPlaceholder": "Rechercher une section…",
+      "filterNoResults": "Aucune section trouvée"
     },
     "commandBar": {
       "placeholder": "Recherche ou commande…",
@@ -10028,7 +10467,8 @@
       "relativeJustNow": "À l'instant",
       "relativeMinutes": "il y a {count} min",
       "relativeHours": "il y a {count} h",
-      "relativeDays": "{count, plural, one {il y a # jour} other {il y a # jours}}"
+      "relativeDays": "{count, plural, one {il y a # jour} other {il y a # jours}}",
+      "closeAriaLabel": "Fermer les notifications"
     },
     "forms": {
       "cancel": "Annuler",
@@ -10315,7 +10755,10 @@
       "teamhr": "Équipe & RH",
       "erfassung": "Saisie",
       "repairer-applications": "Validations de techniciens",
-      "analyse-hub": "Aperçu des analyses"
+      "analyse-hub": "Aperçu des analyses",
+      "presentations": "Présentations",
+      "hr-vacancies": "Postes ouverts",
+      "hr-applications": "Candidatures"
     },
     "errorPage": {
       "title": "Quelque chose a mal tourné",
@@ -10406,6 +10849,77 @@
     "command": {
       "label": "Démarrer en local",
       "text": "npm run d"
+    }
+  },
+  "kennzahlen": {
+    "meta": {
+      "title": "Chiffres clés",
+      "description": "Tous les chiffres importants de Revamp-IT – rendus publics, avec source et niveau de confiance. Aucune donnée embellie."
+    },
+    "hero": {
+      "title": "Chiffres clés",
+      "subtitle": "Tous les chiffres qui comptent pour nous – rendus publics, avec source et niveau de confiance"
+    },
+    "intro": "Chaque chiffre est accompagné d'un niveau de confiance et – lorsque possible – étayé par un calcul et une source. Nous préférons montrer une estimation honnête plutôt qu'un chiffre embelli.",
+    "categories": {
+      "impact": "Impact écologique",
+      "social": "Impact social",
+      "economic": "Économique",
+      "operations": "Organisation"
+    },
+    "confidence": {
+      "high": "Attesté",
+      "medium": "Fondé",
+      "estimated": "Estimation",
+      "target": "Objectif"
+    },
+    "howCalculated": "Comment est-ce calculé ?",
+    "source": "Source",
+    "lastVerified": "Dernière vérification",
+    "co2Note": "Détails sur la méthodologie CO₂",
+    "backToTransparenz": "Retour à l'aperçu Transparence",
+    "linkFromOverview": "Voir tous les chiffres clés"
+  },
+  "hirn": {
+    "title": "Hirn",
+    "subtitle": "L'assistant de {orgName}",
+    "open": "Ouvrir Hirn",
+    "inputPlaceholder": "Pose une question à Hirn…",
+    "send": "Envoyer",
+    "thinking": "Hirn réfléchit…",
+    "emptyTitle": "Comment puis-je aider ?",
+    "emptyHint": "Choisis une suggestion ou pose ta propre question.",
+    "suggestionsLabel": "Suggestions",
+    "quickActionsLabel": "Liens utiles",
+    "loginPrompt": "Connecte-toi pour discuter avec Hirn — l'assistant de {orgName}.",
+    "loginCta": "Se connecter",
+    "rateLimited": "Trop de requêtes — réessaie plus tard.",
+    "error": "Hirn n'est pas joignable pour le moment. Réessaie plus tard.",
+    "proactiveDismiss": "Fermer l'indication"
+  },
+  "invite": {
+    "title": "Inviter des amis",
+    "subtitle": "Invite des amis chez {orgName} — et vous en profitez tous les deux.",
+    "friendReceives": "Ton ami reçoit",
+    "friendReceivesDesc": "Une réduction sur le premier achat en boutique",
+    "youReceive": "Tu reçois",
+    "youReceiveDesc": "Un bon d'achat lorsque ton ami finalise son premier achat",
+    "linkLabel": "Ton lien d'invitation personnel",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "inviteByEmail": "Inviter par e-mail",
+    "emailPlaceholder": "email@exemple.ch",
+    "send": "Inviter",
+    "sending": "Envoi…",
+    "inviteSent": "Invitation envoyée à {email} !",
+    "sendError": "Erreur lors de l'envoi.",
+    "invitesSent": "Invitations envoyées",
+    "registrations": "Inscriptions"
+  },
+  "payment": {
+    "method": {
+      "title": "Mode de paiement",
+      "subtitle": "Choisis comment tu souhaites payer"
     }
   }
 }

@@ -339,7 +339,10 @@
       "errorVerificationError": "이메일 인증 중 오류가 발생했습니다",
       "errorConnection": "연결 문제입니다. 1분 후에 다시 시도해 주세요.",
       "backHome": "홈으로 돌아가기",
-      "pageTitle": "로그인 | RevampIT"
+      "pageTitle": "로그인 | RevampIT",
+      "errorLocked": "계정이 일시적으로 잠겼습니다. 몇 분 후에 다시 시도해 주세요.",
+      "errorNoPassword": "이 계정에는 아직 비밀번호가 설정되지 않았습니다. «비밀번호 찾기»를 사용해 계정을 활성화하세요.",
+      "errorUnverified": "먼저 이메일 주소를 인증해 주세요. 받은 편지함을 확인하세요."
     },
     "register": {
       "title": "회원가입",
@@ -1249,7 +1252,11 @@
     "subtitle": "커뮤니티의 지식",
     "readMore": "더 읽기",
     "by": "작성자:",
-    "categories": "카테고리"
+    "categories": "카테고리",
+    "back": "블로그로 돌아가기",
+    "onThisPage": "이 페이지에서",
+    "unlisted": "목록에 없음",
+    "minutesShort": "분"
   },
   "contact": {
     "meta": {
@@ -2549,7 +2556,16 @@
       "markCompletedSaving": "저장 중...",
       "markCompletedButton": "완료로 표시",
       "messageOfferer": "메시지",
-      "askQuestion": "질문하기"
+      "askQuestion": "질문하기",
+      "becomeTechnicianTitle": "돕고 싶으신가요?",
+      "becomeTechnicianBody": "등록된 기술자만 도움 요청에 응답할 수 있습니다. 무료 기술자 프로필을 만들면 여기와 다른 요청에도 제안을 할 수 있습니다.",
+      "becomeTechnicianCta": "기술자 프로필 만들기",
+      "noOffersNudge": {
+        "title": "아직 제안이 없나요?",
+        "bodyPaid": "더 많은 기술자를 끌어들이는 방법: 보수를 올리거나, 필요한 기술 범위를 넓히거나, 기한을 연장하세요. 요청이 매력적일수록 더 빨리 응답이 옵니다.",
+        "bodyFree": "무료 요청은 공개적으로 표시됩니다. 주변에 공유하거나, 필요한 기술 범위를 넓히거나, 기한을 연장하세요. 소액의 자발적인 보수도 더 빨리 사람을 찾는 데 도움이 됩니다.",
+        "cta": "요청 수정하기"
+      }
     },
     "create": {
       "backToList": "목록으로 돌아가기",
@@ -2687,7 +2703,8 @@
       "errorImageOnly": "이미지 파일만 허용됩니다",
       "errorTooLarge": "파일이 너무 큽니다 (최대 10MB)",
       "errorUploadFailed": "이미지 업로드에 실패했습니다. 다시 시도해 주세요.",
-      "imageAlt": "이미지 {index}"
+      "imageAlt": "이미지 {index}",
+      "removeImage": "이미지 {index} 삭제"
     },
     "offer": {
       "offerButton": "제안하기",
@@ -3369,6 +3386,16 @@
       "paymentSuccess": "결제가 완료되었습니다! 주문이 확정되었습니다.",
       "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
       "paymentCancelled": "결제가 취소되었습니다."
+    },
+    "aiCamera": {
+      "analyzing": "제품 분석 중...",
+      "analyzingHint": "AI가 제품의 브랜드, 모델, 상태를 인식합니다"
+    },
+    "osInstall": {
+      "heading": "Linux 무료 사전 설치",
+      "body": "원하시면 선택한 Linux 배포판을 무료로 설치해 드립니다 — 가볍고 안전하며 라이선스 비용도 없습니다. 하나를 고르거나 먼저 비교해 보세요.",
+      "selected": "선택함: {distro} — 주문하거나 문의할 때 알려 주세요.",
+      "compare": "잘 모르겠나요? 배포판 비교하기"
     }
   },
   "membership": {
@@ -4288,6 +4315,54 @@
           "body": "저희는 건물, 카페, 전시 공간에 파일럿 조명을 설치합니다 — 또는 직접 만드는 방법을 알려드립니다.",
           "primary": "파일럿 설치 문의",
           "secondary": "직접 만들기"
+        },
+        "installs": {
+          "eyebrow": "실제 사용 중",
+          "title": "실제 설치, 실제 결과",
+          "intro": "렌더링이 아닙니다: 이 조명들은 실제로 설치되어 매일 사용되고 있습니다. 관련 경험은 Swico 프로젝트 «IT 기기의 기능적 순환 활용»의 최종 보고서에서 가져왔습니다.",
+          "photoBadge": "사진 2026년 7월",
+          "noPhotoBadge": "사진 예정",
+          "items": {
+            "repairhub": {
+              "title": "RepairHub의 커브드 조명",
+              "location": "zuerich.repair, Zürich",
+              "story": "화면이 깨진 대형 커브드 모니터가 작업장 조명이 되었습니다. 그림자가 지지 않는 고른 빛은 수리 기술자들이 작업할 때 매우 좋아하며 — 이 설치물은 방문객의 시선을 바로 사로잡는 볼거리이기도 합니다."
+            },
+            "laden": {
+              "title": "revamp-it 매장 & 사무실",
+              "location": "Birmensdorferstrasse 379, Zürich",
+              "story": "매장 입구에서는 업사이클링 조명 두 개가 기존 천장 조명을 대체했으며 — 고객 반응은 한결같이 긍정적입니다. 사무실에서는 또 다른 조명 하나가 1년 넘게 문제없이 작동하고 있습니다."
+            },
+            "werkraum4": {
+              "title": "Werkraum4 작업 공간",
+              "location": "Zürich",
+              "story": "약 20개의 조명이 1년 가까이 매일 사용되고 있습니다. 넓은 면적을 그림자 없이 비추는 조명은 수작업에 이상적입니다. 결과: 전원 공급 장치 고장은 단 한 번뿐이었으며 — 간단한 교체로 수리되었고, LED 백라이트에는 아무 문제가 없었습니다."
+            },
+            "recreazzz": {
+              "title": "RecreaZZZ 화장실 시설",
+              "location": "옛 중앙 세탁소, Zürich",
+              "story": "조명 두 개가 1년 넘게 사용되고 있으며 — 방문할 때마다 켜고 꺼집니다. 잦은 스위치 조작에도 아무 문제가 없었고, 체크 표시로 모은 피드백은 대체로 긍정적입니다."
+            },
+            "ambossrampe": {
+              "title": "AmbossRampe 창고",
+              "location": "Zürich",
+              "story": "이 설치 사례는 창고가 적절한 사용 장소임을 확인해 줍니다: 약 1년 전 설치된 조명들이 문제없이 작동하고 있습니다."
+            }
+          }
+        },
+        "szenarien": {
+          "eyebrow": "시나리오",
+          "title": "이런 모습일 수 있습니다",
+          "intro": "사진이 아니라 합성 이미지입니다: 이 시각화 자료는 일반적인 공간에서 조명이 어떻게 보일 수 있는지 보여 줍니다. 실제로 설치되어 매일 켜지는 것은 위의 «실제 사용 중»에서 확인할 수 있습니다.",
+          "badge": "시각화",
+          "items": {
+            "schaufenster": "쇼윈도 · 소매업",
+            "garage": "지하 주차장 · 상시 운영",
+            "party": "행사 & 이벤트 · 분위기 조명",
+            "treppenhaus": "계단실 · 다세대 주택",
+            "vorlesung": "강의실 · 교육 공간",
+            "buero": "사무실 · 작업 공간"
+          }
         }
       },
       "gallery": {
@@ -4313,7 +4388,8 @@
           "body": "우리가 직접 촬영하지 않은 모델은 SVG 스케치로 남아 있습니다. 취리히에서 작업장 사진 촬영을 즐기시는 분, 연락 주세요.",
           "cta": "함께하기"
         },
-        "statsLine": "기록 {documented} · 대기 {queued}"
+        "statsLine": "기록 {documented} · 대기 {queued}",
+        "installsCta": "모든 설치 사례 보기"
       },
       "buildYourOwn": {
         "meta": {
@@ -4354,7 +4430,10 @@
           "body": "플랫폼 코드와 모든 가이드는 GitHub에 있습니다. Fork, Issue, Pull Request 모두 환영합니다.",
           "repoCta": "GitHub 에서 보기",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "Creative Commons CC-BY-SA · 플랫폼 코드는 MIT"
+          "licenseLabel": "Creative Commons CC-BY-SA · 플랫폼 코드는 MIT",
+          "wikiTitle": "개조 위키: monitor-upcycling.org",
+          "wikiBody": "모든 개조 안내서는 공개 위키에서도 볼 수 있으며 — 전 세계 전자 기술자들이 더 많은 모델을 문서화할 수 있도록 구성되어 있습니다. 라이선스는 CC-BY-SA로, 상업적 이용도 자유롭습니다.",
+          "wikiCta": "위키 열기"
         },
         "contribute": {
           "title": "함께하기",
@@ -4367,6 +4446,32 @@
             "다른 백라이트 드라이버용 회로도 변형",
             "안전 검토 또는 CE 관련 안내"
           ]
+        },
+        "artifacts": {
+          "eyebrow": "작업장에서",
+          "title": "개조를 완성하는 두 가지 부품",
+          "intro": "직접 만져볼 수 있는 오픈 하드웨어: 대기 전력 문제를 해결하는 커넥터와 설치를 위한 프린팅 가능한 거치대.",
+          "standby": {
+            "alt": "3D 프린팅 케이스에 봉인된 저항 두 개짜리 전압 분배 커넥터",
+            "caption": "전압 분배 커넥터가 대기 전력 문제를 해결합니다 — 작업장에서 직접 제작 가능합니다."
+          },
+          "mount": {
+            "alt": "벌집 구조의 프린팅 가능한 천장 거치대 3D CAD 뷰",
+            "caption": "3D 프린팅 가능한 천장 거치대 — CAD 모델은 공개되어 있습니다."
+          }
+        },
+        "teaching": {
+          "eyebrow": "지식 나누기",
+          "title": "안내서가 수업이 됩니다",
+          "body": "루체른 응용과학대학교의 학제 간 학사 모듈 «Local Loops — Circularity locally made»에서 14명의 학생이 폐기된 우리 모니터로 직접 조명을 설계하고 시제품을 만들었습니다. 공개 안내서는 바로 이를 위한 것입니다: 우리는 어디서든 만들 수 있도록 지식을 나눕니다 — 작업장에서, 단체에서, 강의실에서.",
+          "workshop": {
+            "alt": "HSLU 학생들이 «Local Loops» 모듈에서 폐기된 모니터로 직접 조명을 설계하고 있습니다",
+            "caption": "HSLU 모듈 «Local Loops»: 14명의 학생이 우리 모니터로 직접 조명 디자인을 개발합니다."
+          },
+          "kreativ": {
+            "alt": "HSLU 학생들이 만든 직물 갓이 달린 창의적인 조명 시제품",
+            "caption": "학생 시제품: 모니터 발광면을 활용한 직물 갓 조명."
+          }
         }
       },
       "lenovo_l2251pwd": {
@@ -5557,7 +5662,12 @@
             }
           ],
           "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
-          "transparencyLink": "Open transparency page"
+          "transparencyLink": "Open transparency page",
+          "comparison": {
+            "eyebrow": "신제품 비교",
+            "alt": "판매대에 놓인 가격표 CHF 79.95의 새 24W LED 패널",
+            "caption": "비슷한 새 24W LED 패널은 시중에서 CHF 79.95이며 — 완전한 신제품 생산을 의미합니다."
+          }
         },
         "scientific": {
           "eyebrow": "SCIENCE",
@@ -5570,7 +5680,28 @@
             "Validation against Apple PER, Öko-Institut and Circular Computing studies"
           ],
           "timeline": "Start: April 2026 · Interim results: June 2026 · Final report: Q3 2026.",
-          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA."
+          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA.",
+          "results": {
+            "eyebrow": "예비 결과 · 중간 상태 2026.05.28",
+            "quote": "현재의 모델링과 수명 시나리오에서 모니터 조명은 어떤 경우에도 LED 조명보다 낫습니다.",
+            "quoteSource": "ZHAW School of Engineering, 지속가능발전 연구소 — C. Baumgartner, M. Grünholz",
+            "stats": {
+              "ghg": {
+                "value": "−82.7%",
+                "label": "메가루멘시(Mlmh)당 온실가스 · 평균 시나리오"
+              },
+              "scarcity": {
+                "value": "−84.8%",
+                "label": "총 환경 영향 · 생태학적 희소성 방법"
+              },
+              "range": {
+                "value": "52–86%",
+                "label": "모든 수명 시나리오에 걸친 감소"
+              }
+            },
+            "specs": "기준 조명(DELL U2412b, 개조): 측정값 13.6W · 측정값 약 965lm · 메가루멘시 단위로 요람에서 무덤까지(cradle-to-grave) 방식으로 일반 LED 조명과 비교.",
+            "caveat": "진행 중인 Innosuisse 혁신 바우처의 예비 수치입니다 — 최종 ZHAW 보고서가 이를 대체합니다. 방향성은 모든 시나리오에서 명확합니다."
+          }
         },
         "openHardware": {
           "eyebrow": "오픈 하드웨어",
@@ -5663,6 +5794,210 @@
           "title": "현재 프로젝트 현황",
           "body": "숫자, 마일스톤, 마감 — 전체 사업계획을 다시 읽지 않고.",
           "cta": "상태 보기"
+        }
+      },
+      "lenovo_l2440pwc": {
+        "meta": {
+          "title": "Lenovo L2440pwC — 모니터로 만드는 조명 | 모니터 업사이클링",
+          "description": "단계별 안내: Lenovo L2440pwC 모니터를 분해하고 LCD를 제거한 뒤 백라이트를 조명 패널로 재활용하기."
+        },
+        "back": "← 개요로 돌아가기",
+        "eyebrow": "안내서 · 모니터 업사이클링",
+        "title": "Lenovo L2440pwC",
+        "subtitle": "24인치 모니터를 조명으로 개조하기",
+        "metaLine": "모델: Lenovo L2440pwC · 소요 시간: 약 1시간 · 난이도: 쉬움 · 초안",
+        "credit": "안내: RevampIT의 Bruno · 초안 — 아직 공개되지 않음",
+        "safety": {
+          "title": "안전이 먼저입니다",
+          "body": "전원이 켜진 상태에서는 절대 작업하지 마세요. 모니터를 전원에서 완전히 분리하고 1~2분 기다린 후 시작하세요. 작동 테스트 전에는 반드시 필요한 안전 조치를 취하고 — 확신이 서지 않으면 전자 분야 동료의 도움을 받으세요."
+        },
+        "tools": {
+          "title": "공구 & 재료",
+          "items": [
+            "십자 드라이버 (여러 크기)",
+            "필요 시 일자 드라이버",
+            "프라이 툴 (플라스틱 지렛대 공구)",
+            "적합한 저항 두 개 (회로도에 따라)",
+            "절연 테이프 또는 기타 접착 테이프",
+            "나사 보관 용기"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "1단계",
+            "title": "모니터 분해하기",
+            "intro": "충분한 공간과 깨끗한 작업 공간을 확보하세요. 분해할 때 부품의 방향을 유지하고(사진처럼 버튼이 아래로), 자성 드라이버와 나사 보관 용기를 사용해 아무것도 잃어버리지 않도록 하세요."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "2단계",
+            "title": "전자 회로 연결하기",
+            "intro": "제어 회로를 제거하고 남은 커넥터를 연결해, 조작 없이도 패널이 계속 켜지도록 합니다."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "3단계",
+            "title": "LCD 제거하기",
+            "intro": "검은 LCD 판을 제거합니다 — 그 아래의 확산판과 발광층은 깨끗하고 손상 없이 남겨 두세요. 이들이 나중에 고른 빛을 만들어 냅니다."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "4단계",
+            "title": "조립 & 작동 테스트",
+            "intro": "모든 것을 다시 안전하게 조립하고 — 그런 다음에야 전원에 연결하세요."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "케이스 열기",
+            "body": "모니터를 화면이 아래로 향하도록 부드러운 바닥에 놓습니다. 뒷면의 모든 나사를 제거하세요 — 일부는 플라스틱이나 고무 덮개 아래에 있을 수 있으며, 얇은 일자 드라이버로 떼어낼 수 있습니다. 프라이 툴로 뒷판과 프레임 사이 틈을 따라가며 접착 부위를 떼어내고, 걸림쇠가 딸깍 소리를 내며 풀릴 때까지 케이스를 조심스럽게 벌리세요. 주의: 조작 버튼 부위에는 케이블이 덮개에 연결되어 있을 수 있으니 — 세게 잡아당기지 마세요. 프레임과 회로 사이의 케이블을 조심스럽게 분리하세요.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "내부 덮개 제거하기",
+            "body": "플라스틱 부품을 옆에 두고 화면을 평평하게 눕힙니다. 내부 고정부의 보이는 나사를 모두 제거하세요(우리는 8개를 확인했습니다). 테이프나 접착 패드로 고정된 케이블을 조심스럽게 떼어내세요. 회로와 LCD 사이의 플랫 케이블을 분리하고, 화면 모서리로 이어지는 두 케이블은 연결된 채로 두어도 됩니다. 오른쪽의 작은 박스를 제거하고, 그 아래 USB 포트가 있는 보드를 분리한 뒤 나사를 풀어 빼내세요(더 이상 필요 없음). 마지막으로 더 큰 케이스를 떼어내되 — 먼저 접착제를 제거하세요.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "제어 기판 제거 및 커넥터 개조하기",
+            "body": "오른쪽 제어 보드를 떼어내(전원이 들어오는 쪽이 아님) 옆에 두세요 — 더 이상 필요 없습니다. 남은 커넥터에서는 핀들을 저항으로 연결하며, 정확한 회로도는 검증되는 대로 제공됩니다. 저항과 접점의 노출된 금속 부분을 모두 절연 테이프로 꼼꼼히 덮고, 개조한 커넥터가 풀리지 않도록 테이프로 고정하세요. 그런 다음 옆에 두세요 — 다음은 LCD 패널 차례입니다.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "LCD 패널 제거하기",
+            "body": "디스플레이 모듈을 금속 프레임에서 분리하세요 — 처음과 같은 걸림쇠로 고정되어 있으니 조심스럽게, 필요하면 일자 드라이버로 풀어내세요. 아직 연결되어 있다면 LCD 제어 회로로 가는 플랫 케이블을 분리하세요. LCD 제어 회로는 금속 덮개 아래에 있고 접착되어 있을 수 있으니 — 둘 다 금속 표면에서 떼어내세요. LCD 패널(가장 바깥쪽 어두운 층)을 조심스럽게 제거하세요. 더 이상 필요 없습니다. 그런 다음 금속 프레임을 다시 조립하세요. 참고: 그 아래의 확산판과 발광층은 되도록 깨끗하고 손상 없이 남겨 두세요.",
+            "images": []
+          },
+          {
+            "n": 5,
+            "title": "조립 및 작동 테스트",
+            "body": "남은 부품을 모두 다시 안전하게 고정하고 케이스를 나사로 조립하세요(일부 나사는 더 이상 필요 없음). 완전히 조립한 후에만 전원 플러그를 꽂고 백라이트가 원하는 대로 켜지는지 확인하세요. 주의: 적절한 안전 조치를 취하지 않은 채로는 열려 있고 전원이 켜진 기기에서 절대 작동 테스트를 하지 마세요.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "완성!",
+          "body": "개조에 성공하면 백라이트가 넓은 면적의 광원 역할을 합니다: LCD 패널을 제거하면 빛이 드러나며 모니터를 조명이나 발광 패널로 사용할 수 있습니다. (결과 사진은 추후 공개됩니다.)"
+        },
+        "feedback": {
+          "title": "더 좋은 아이디어가 있나요? 알려 주세요.",
+          "body": "이 안내서는 공개되어 있으며 수정으로 발전합니다. 더 나은 브리지 회로, 밝기 조절 방법, 더 멋진 설치 방식을 찾으셨다면 — 기여를 기꺼이 받겠습니다.",
+          "cta": "기여하기"
+        },
+        "ui": {
+          "openPhoto": "사진 확대",
+          "closePhoto": "닫기",
+          "playVideo": "동영상 재생",
+          "pauseVideo": "동영상 일시정지",
+          "stepProgressLabel": "단계",
+          "stepProgressOf": "/",
+          "jumpToStep": "단계로 이동",
+          "photoCountLabel": "사진",
+          "photoCountOf": "/"
+        }
+      },
+      "hp_z23n": {
+        "meta": {
+          "title": "HP Z23n — 모니터로 만드는 조명 | 모니터 업사이클링",
+          "description": "단계별 안내: HP Z23n 모니터를 분해하고 LCD를 제거한 뒤 백라이트를 조명 패널로 재활용하기."
+        },
+        "back": "← 개요로 돌아가기",
+        "eyebrow": "안내서 · 모니터 업사이클링",
+        "title": "HP Z23n",
+        "subtitle": "23인치 모니터를 조명으로 개조하기",
+        "metaLine": "모델: HP Z23n · 소요 시간: 약 1시간 · 난이도: 쉬움 · 초안",
+        "credit": "안내: RevampIT의 Bruno · 초안 — 아직 공개되지 않음",
+        "safety": {
+          "title": "안전이 먼저입니다",
+          "body": "전원이 켜진 상태에서는 절대 작업하지 마세요. 모니터를 전원에서 완전히 분리하고 1~2분 기다린 후 시작하세요. 작동 테스트 전에는 반드시 필요한 안전 조치를 취하고 — 확신이 서지 않으면 전자 분야 동료의 도움을 받으세요."
+        },
+        "tools": {
+          "title": "공구 & 재료",
+          "items": [
+            "십자 드라이버 (여러 크기)",
+            "필요 시 일자 드라이버",
+            "프라이 툴 (플라스틱 지렛대 공구)",
+            "적합한 저항 두 개 (회로도에 따라)",
+            "절연 테이프 또는 기타 접착 테이프",
+            "나사 보관 용기"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "1단계",
+            "title": "모니터 분해하기",
+            "intro": "충분한 공간과 깨끗한 작업 공간을 확보하세요. 분해할 때 부품의 방향을 유지하고(사진처럼 버튼이 아래로), 자성 드라이버와 나사 보관 용기를 사용해 아무것도 잃어버리지 않도록 하세요."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "2단계",
+            "title": "전자 회로 연결하기",
+            "intro": "제어 회로를 제거하고 남은 커넥터를 연결해, 조작 없이도 패널이 계속 켜지도록 합니다."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "3단계",
+            "title": "LCD 제거하기",
+            "intro": "검은 LCD 판을 제거합니다 — 그 아래의 확산판과 발광층은 깨끗하고 손상 없이 남겨 두세요. 이들이 나중에 고른 빛을 만들어 냅니다."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "4단계",
+            "title": "조립 & 작동 테스트",
+            "intro": "모든 것을 다시 안전하게 조립하고 — 그런 다음에야 전원에 연결하세요."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "케이스 열고 연결 케이블 분리하기",
+            "body": "모니터를 화면이 아래로 향하도록 부드러운 바닥에 놓고 뒷면의 모든 나사를 제거합니다. 프라이 툴로 뒷판과 프레임 사이 틈을 따라가며 접착 부위를 떼어내고, 걸림쇠가 딸깍 소리를 내며 풀릴 때까지 케이스를 벌린 뒤 뒷판을 옆에 두세요. 플라스틱 프레임을 디스플레이에 고정하는 나사와 접착제를 풀어내세요(9개). 주의: 조작 버튼 부위에는 케이블이 덮개에 연결되어 있을 수 있으니 — 세게 잡아당기지 마세요. 조작부 아래의 나사 4개를 제거하고, 조작부로 이어지는 연결 케이블을 분리한 뒤 앞쪽에서 조심스럽게 떼어내세요(필요하면 프라이 툴로 들어올림). 플라스틱 프레임을 제거하려면 먼저 금속 케이스를 떼어내세요: 모든 접착 테이프를 제거하고 윗부분의 나사 두 개를 풀어냅니다. 마지막으로 회로와 화면 사이의 플랫 케이블을 분리하세요.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "제어 기판 제거 및 커넥터 개조하기",
+            "body": "오른쪽 제어 보드를 떼어내세요(이전 단계에서 플랫 케이블이 나오던 그 보드). 안쪽에서 나사 두 개, 바깥쪽에서 나사 두 개, 그리고 바깥쪽(VGA 포트 옆)에서 육각 M2 나사 두 개로 고정되어 있습니다. 보드와 나사는 옆에 두세요 — 더 이상 필요 없습니다. 남은 커넥터에서는 핀들을 저항으로 연결하며, 정확한 회로도는 검증되는 대로 제공됩니다. 노출된 금속 부분을 모두 절연 테이프로 꼼꼼히 덮고, 개조한 커넥터가 풀리지 않도록 테이프로 고정하세요.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "LCD 패널 제거하기",
+            "body": "디스플레이 모듈을 금속 프레임에서 분리하세요 — 처음과 같은 걸림쇠로 고정되어 있으니 조심스럽게, 필요하면 일자 드라이버로 풀어내세요. 아직 연결되어 있다면 LCD 제어 회로로 가는 플랫 케이블을 분리하세요. LCD 제어 회로는 금속 덮개 아래에 있고 접착되어 있을 수 있으니 — 둘 다 떼어내세요. LCD 패널(가장 바깥쪽 어두운 층)을 조심스럽게 제거하세요. 더 이상 필요 없습니다. 그런 다음 금속 프레임을 다시 조립하세요. 참고: 그 아래의 확산판과 발광층은 되도록 깨끗하고 손상 없이 남겨 두세요.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "조립 및 작동 테스트",
+            "body": "남은 부품을 모두 다시 안전하게 고정하고 케이스를 나사로 조립하세요(일부 나사는 더 이상 필요 없음). 완전히 조립한 후에만 전원 플러그를 꽂고 백라이트가 원하는 대로 켜지는지 확인하세요. 주의: 적절한 안전 조치를 취하지 않은 채로는 열려 있고 전원이 켜진 기기에서 절대 작동 테스트를 하지 마세요.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "완성!",
+          "body": "개조에 성공하면 백라이트가 넓은 면적의 광원 역할을 합니다: LCD 패널을 제거하면 빛이 드러나며 모니터를 조명이나 발광 패널로 사용할 수 있습니다. (결과 사진은 추후 공개됩니다.)"
+        },
+        "feedback": {
+          "title": "더 좋은 아이디어가 있나요? 알려 주세요.",
+          "body": "이 안내서는 공개되어 있으며 수정으로 발전합니다. 더 나은 브리지 회로, 밝기 조절 방법, 더 멋진 설치 방식을 찾으셨다면 — 기여를 기꺼이 받겠습니다.",
+          "cta": "기여하기"
+        },
+        "ui": {
+          "openPhoto": "사진 확대",
+          "closePhoto": "닫기",
+          "playVideo": "동영상 재생",
+          "pauseVideo": "동영상 일시정지",
+          "stepProgressLabel": "단계",
+          "stepProgressOf": "/",
+          "jumpToStep": "단계로 이동",
+          "photoCountLabel": "사진",
+          "photoCountOf": "/"
         }
       }
     }
@@ -6451,7 +6786,39 @@
               "엔터프라이즈 기능 제한"
             ]
           }
-        ]
+        ],
+        "chooser": {
+          "heading": "어떤 배포판이 나에게 맞을까요?",
+          "subtitle": "잘 모르겠나요? 가장 중요하게 여기는 것을 골라 주세요 — 좋은 출발점을 추천해 드립니다.",
+          "recommendedLabel": "추천",
+          "items": [
+            {
+              "need": "Windows에서 전환 / 초보자",
+              "distro": "Linux Mint",
+              "why": "익숙한 인터페이스, 바로 사용 가능, 배울 것이 거의 없음."
+            },
+            {
+              "need": "가장 많은 안내와 도움말이 온라인에 있음",
+              "distro": "Ubuntu",
+              "why": "가장 큰 커뮤니티 — 거의 모든 문제에 대한 안내가 있습니다."
+            },
+            {
+              "need": "최신 소프트웨어와 기술",
+              "distro": "Fedora",
+              "why": "가장 최신 패키지, 개발에 가까움 — 호기심 많은 사용자에게 적합."
+            },
+            {
+              "need": "최고의 안정성과 내구성",
+              "distro": "Debian",
+              "why": "매우 안정적 — 그냥 계속 돌아가야 하는 서버와 컴퓨터에 이상적."
+            },
+            {
+              "need": "오래되었거나 성능이 낮은 하드웨어",
+              "distro": "MX Linux",
+              "why": "자원 소모가 적음 — 오래된 기기에도 새 생명을 불어넣습니다."
+            }
+          ]
+        }
       },
       "finalCta": {
         "heading": "Linux로 전환할 준비가 되셨나요?",
@@ -6672,7 +7039,10 @@
         "reusedLabel": "재사용 부품",
         "reusedValue": "주요 4개 부품 중 4개",
         "circularLabel": "순환 경제",
-        "circularValue": "하드웨어 수명 연장"
+        "circularValue": "하드웨어 수명 연장",
+        "browseComponents": "부품 보기",
+        "resultNote": "검증된 리퍼비시 부품으로 기기를 조립해 드립니다. 마켓플레이스에서 알맞은 부품을 살펴보거나 완성된 조립품을 바로 문의하세요.",
+        "sustainabilityNote": "재사용된 부품 하나하나가 하드웨어의 수명을 늘리고 신제품 생산에 드는 배출량을 절약합니다."
       },
       "features": {
         "heading": "왜 AI 빌드 시스템을 선택해야 할까요?",
@@ -7825,6 +8195,46 @@
         "eyebrow": "장치",
         "title": "노트북, 데스크탑, 모니터를 가져오세요.",
         "body": "작동하거나 수리 가능한 장치를 받고, 재정비하여 전달합니다. 개인 데이터는 현장에서 삭제해 드릴 수 있습니다."
+      }
+    },
+    "wishlist": {
+      "prefillTemplate": "다음을 기부하고 싶습니다: {title}",
+      "eyebrow": "현재 필요한 구체적 물품",
+      "heading": "우리의 위시리스트",
+      "intro": "작업장을 계속 운영하고 되살린 기기를 손보기 위해 우리는 특정 공구나 부품을 정기적으로 필요로 합니다. 실제 물품을 기부하거나 그 구매 비용을 지원하는 방식으로 우리를 도울 수 있습니다.",
+      "donateItem": "물품 기부하기",
+      "fundItem": "구매 비용 지원하기",
+      "funded": "{target} 중 {amount} 지원됨",
+      "received": "{target} 중 {count} 받음",
+      "copyReference": "용도 문구 복사",
+      "referenceCopied": "복사됨!",
+      "close": "닫기",
+      "fundTitle": "{title} 지원하기",
+      "fundIntro": "표시된 금액을 계좌 이체하면 이 물품을 지원할 수 있습니다. 아래에 표시된 용도 문구를 사용해 주시면 기부금을 이 물품에 연결할 수 있습니다:",
+      "priorityHigh": "높은 우선순위",
+      "priorityMedium": "중간 우선순위",
+      "priorityLow": "낮은 우선순위",
+      "donateHeading": "이 물품 기부하기",
+      "donateIntro": "이 물품을 가지고 있고 기부하고 싶다면 아래 기부 양식을 사용해 주세요. 세부 정보는 이미 입력해 두었습니다.",
+      "items": {
+        "ifixit": {
+          "title": "iFixit Pro Tech 툴킷",
+          "whyNeeded": "노트북과 스마트폰을 손상 없이 열기 위한 필수 전문 공구입니다. 자원봉사 작업장을 위해 세트가 더 필요합니다.",
+          "costLabel": "세트당 CHF 79.00",
+          "purpose": "기부: iFixit Pro Tech 툴킷"
+        },
+        "ssd": {
+          "title": "2.5\" SATA SSD (500GB)",
+          "whyNeeded": "느린 기계식 하드디스크는 오래된 노트북의 주요 병목입니다. 최신 SSD로 교체하면 다시 빠르고 쓸 만해집니다.",
+          "costLabel": "SSD당 CHF 35.00",
+          "purpose": "기부: 2.5 SATA SSD 500GB"
+        },
+        "soldering": {
+          "title": "납땜 스테이션 (Ersa i-CON Pico)",
+          "whyNeeded": "고장 난 콘덴서나 충전 단자 교체 등 고급 메인보드 수리를 위한 것으로, 그러지 않으면 전자 폐기물이 될 기기를 되살립니다.",
+          "costLabel": "CHF 160.00",
+          "purpose": "기부: Ersa i-CON Pico"
+        }
       }
     }
   },
@@ -8981,7 +9391,9 @@
         "columnNumber": "#",
         "columnStatus": "Status",
         "ofText": "of",
-        "productsText": "products"
+        "productsText": "products",
+        "prevPage": "이전 페이지",
+        "nextPage": "다음 페이지"
       },
       "bulkActionBar": {
         "deselectAll": "선택 해제",
@@ -9039,6 +9451,23 @@
         "updateFailed": "제품을 업데이트할 수 없습니다",
         "saveFailed": "제품을 저장할 수 없습니다",
         "genericSaveError": "저장 중 오류가 발생했습니다. 다시 시도해 주십시오."
+      },
+      "storageLocation": {
+        "label": "보관 위치",
+        "placeholder": "위치 선택…",
+        "loading": "불러오는 중…",
+        "addNew": "위치 추가",
+        "newNamePlaceholder": "위치 이름",
+        "kindLabel": "종류",
+        "save": "저장"
+      },
+      "voiceEntry": {
+        "start": "녹음 시작",
+        "stop": "녹음 중지",
+        "processing": "처리 중…",
+        "hint": "기기를 설명하세요: 제조사, 모델, 상태, 가격.",
+        "transcription": "인식됨: {text}",
+        "errorGeneric": "음성을 처리할 수 없습니다. 다시 시도해 주세요."
       }
     },
     "eWasteProblem": {
@@ -9642,7 +10071,14 @@
       "bulkSelected": "{count}일 선택됨",
       "bulkFill": "근무 일정에서 채우기",
       "bulkClear": "비우기",
-      "bulkCancel": "선택 해제"
+      "bulkCancel": "선택 해제",
+      "lockedApproved": "승인 및 잠김",
+      "reopen2": "다시 열기 (관리자)",
+      "bulkAbsenceLabel": "부재",
+      "fillSkippedNonPlanDays": "{count, plural, one {근무 계획이 없는 1일 건너뜀 (목표 시간 0)} other {근무 계획이 없는 #일 건너뜀 (목표 시간 0)}}",
+      "fillNonPlanDay": "계획된 날이 아님 — 목표 시간 없음. 필요하면 시간을 직접 입력하세요.",
+      "selectHintTouch": "날짜를 눌러 선택하세요(다시 누르면 해제) · 요일 약자(월, 화 …)를 누르면 열 전체 선택 · 그런 다음 아래에서 작업을 선택하세요.",
+      "submittedUnchanged": "제출됨 — 승인 대기 중. 변경하면 다시 제출해야 합니다."
     },
     "appointments": {
       "pageTitle": "예약",
@@ -9892,7 +10328,8 @@
         "unverifyConfirm": {
           "title": "인증 해제",
           "message": "인증을 정말 해제하시겠습니까?"
-        }
+        },
+        "verifyFailed": "작업에 실패했습니다. 다시 시도해 주세요."
       },
       "reports": {
         "filters": {
@@ -10046,7 +10483,9 @@
       "expandSidebarTitle": "사이드바 펼치기",
       "collapseSidebarTitle": "사이드바 접기",
       "openAria": "사이드바 열기",
-      "mobileMore": "더보기"
+      "mobileMore": "더보기",
+      "filterPlaceholder": "영역 검색…",
+      "filterNoResults": "영역을 찾을 수 없음"
     },
     "commandBar": {
       "placeholder": "검색 또는 명령…",
@@ -10075,7 +10514,8 @@
       "relativeJustNow": "방금 전",
       "relativeMinutes": "{count}분 전",
       "relativeHours": "{count}시간 전",
-      "relativeDays": "{count, plural, one {#일 전} other {#일 전}}"
+      "relativeDays": "{count, plural, one {#일 전} other {#일 전}}",
+      "closeAriaLabel": "알림 닫기"
     },
     "forms": {
       "cancel": "취소",
@@ -10362,7 +10802,10 @@
       "sensitive": "민감",
       "system": "시스템",
       "analyse": "분석",
-      "seller-onboarding": "판매자 되기"
+      "seller-onboarding": "판매자 되기",
+      "presentations": "프레젠테이션",
+      "hr-vacancies": "채용 공고",
+      "hr-applications": "지원서"
     },
     "errorPage": {
       "title": "문제가 발생했습니다",
@@ -10404,6 +10847,77 @@
     "command": {
       "label": "로컬에서 시작",
       "text": "npm run d"
+    }
+  },
+  "kennzahlen": {
+    "meta": {
+      "title": "주요 지표",
+      "description": "Revamp-IT의 모든 주요 수치 — 출처와 신뢰도와 함께 투명하게 공개합니다. 포장된 수치는 없습니다."
+    },
+    "hero": {
+      "title": "주요 지표",
+      "subtitle": "우리에게 중요한 모든 수치 — 출처와 신뢰도와 함께 투명하게 공개합니다"
+    },
+    "intro": "모든 수치에는 신뢰도가 표시되며, 가능한 경우 계산 방식과 출처가 함께 제시됩니다. 우리는 포장된 수치보다 솔직한 추정치를 보여 드립니다.",
+    "categories": {
+      "impact": "환경적 영향",
+      "social": "사회적 영향",
+      "economic": "경제적",
+      "operations": "조직 운영"
+    },
+    "confidence": {
+      "high": "입증됨",
+      "medium": "근거 있음",
+      "estimated": "추정치",
+      "target": "목표"
+    },
+    "howCalculated": "어떻게 계산했나요?",
+    "source": "출처",
+    "lastVerified": "마지막 확인",
+    "co2Note": "CO₂ 산정 방법 자세히 보기",
+    "backToTransparenz": "투명성 개요로 돌아가기",
+    "linkFromOverview": "모든 지표 보기"
+  },
+  "hirn": {
+    "title": "Hirn",
+    "subtitle": "{orgName}의 어시스턴트",
+    "open": "Hirn 열기",
+    "inputPlaceholder": "Hirn에게 물어보세요…",
+    "send": "보내기",
+    "thinking": "Hirn이 생각 중…",
+    "emptyTitle": "무엇을 도와드릴까요?",
+    "emptyHint": "제안을 고르거나 직접 질문해 보세요.",
+    "suggestionsLabel": "제안",
+    "quickActionsLabel": "관련 링크",
+    "loginPrompt": "{orgName}의 어시스턴트 Hirn과 대화하려면 로그인하세요.",
+    "loginCta": "로그인",
+    "rateLimited": "요청이 너무 많습니다 — 나중에 다시 시도해 주세요.",
+    "error": "Hirn에 지금 연결할 수 없습니다. 나중에 다시 시도해 주세요.",
+    "proactiveDismiss": "알림 닫기"
+  },
+  "invite": {
+    "title": "친구 초대하기",
+    "subtitle": "친구를 {orgName}에 초대하세요 — 두 분 모두 혜택을 받습니다.",
+    "friendReceives": "친구가 받는 혜택",
+    "friendReceivesDesc": "샵 첫 구매 할인",
+    "youReceive": "내가 받는 혜택",
+    "youReceiveDesc": "친구가 첫 구매를 완료하면 받는 상품권",
+    "linkLabel": "나만의 초대 링크",
+    "copy": "복사",
+    "copied": "복사됨!",
+    "inviteByEmail": "이메일로 초대하기",
+    "emailPlaceholder": "email@beispiel.ch",
+    "send": "초대하기",
+    "sending": "보내는 중…",
+    "inviteSent": "{email}에게 초대장을 보냈습니다!",
+    "sendError": "전송 오류.",
+    "invitesSent": "보낸 초대",
+    "registrations": "가입 수"
+  },
+  "payment": {
+    "method": {
+      "title": "결제 수단",
+      "subtitle": "결제 방법을 선택하세요"
     }
   }
 }

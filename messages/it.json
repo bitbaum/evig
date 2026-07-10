@@ -339,7 +339,10 @@
       "errorVerificationError": "Si è verificato un errore durante la verifica e-mail",
       "errorConnection": "Problema di connessione. Riprova tra un minuto.",
       "backHome": "Torna alla home",
-      "pageTitle": "Accedi | RevampIT"
+      "pageTitle": "Accedi | RevampIT",
+      "errorLocked": "Account temporaneamente bloccato. Riprova tra qualche minuto.",
+      "errorNoPassword": "Per questo account non è ancora stata impostata una password. Usa «Password dimenticata» per attivare il tuo account.",
+      "errorUnverified": "Conferma prima il tuo indirizzo e-mail. Controlla la tua casella di posta."
     },
     "register": {
       "title": "Registrati",
@@ -1249,7 +1252,11 @@
     "subtitle": "Conoscenza dalla comunità",
     "readMore": "Leggi di più",
     "by": "di",
-    "categories": "Categorie"
+    "categories": "Categorie",
+    "back": "Torna al blog",
+    "onThisPage": "In questa pagina",
+    "unlisted": "Non elencato",
+    "minutesShort": "min"
   },
   "contact": {
     "meta": {
@@ -2549,7 +2556,16 @@
         "viewProfile": "Vedi profilo"
       },
       "messageOfferer": "Messaggio",
-      "askQuestion": "Fai una domanda"
+      "askQuestion": "Fai una domanda",
+      "becomeTechnicianTitle": "Vuoi dare una mano?",
+      "becomeTechnicianBody": "Solo i tecnici registrati possono rispondere alle richieste di aiuto. Crea il tuo profilo tecnico gratuito – così potrai fare offerte qui e per altre richieste.",
+      "becomeTechnicianCta": "Crea profilo tecnico",
+      "noOffersNudge": {
+        "title": "Ancora nessuna offerta?",
+        "bodyPaid": "Ecco come attirare più tecnici: aumenta il compenso, amplia le competenze richieste o prolunga la scadenza. Più la tua richiesta è interessante, più in fretta qualcuno si farà avanti.",
+        "bodyFree": "La tua richiesta gratuita è visibile pubblicamente. Condividila con la tua cerchia, amplia le competenze richieste o prolunga la scadenza. Un piccolo compenso volontario può aiutare a trovare qualcuno più in fretta.",
+        "cta": "Modifica la richiesta"
+      }
     },
     "create": {
       "backToList": "Torna alla lista",
@@ -2687,7 +2703,8 @@
       "errorImageOnly": "Sono consentiti solo file immagine",
       "errorTooLarge": "File troppo grande (max 10 MB)",
       "errorUploadFailed": "Caricamento immagine non riuscito. Riprova.",
-      "imageAlt": "Immagine {index}"
+      "imageAlt": "Immagine {index}",
+      "removeImage": "Rimuovi immagine {index}"
     },
     "offer": {
       "offerButton": "Fare un'offerta",
@@ -3369,6 +3386,16 @@
       "paymentSuccess": "Pagamento riuscito! Il tuo ordine è confermato.",
       "paymentFailed": "Pagamento non riuscito. Riprova.",
       "paymentCancelled": "Pagamento annullato."
+    },
+    "aiCamera": {
+      "analyzing": "Analisi del prodotto in corso...",
+      "analyzingHint": "La nostra IA riconosce marca, modello e condizioni del tuo prodotto"
+    },
+    "osInstall": {
+      "heading": "Linux preinstallato gratuitamente",
+      "body": "Su richiesta installiamo gratuitamente una distribuzione Linux a tua scelta — leggera, sicura e senza costi di licenza. Scegline una o confrontale prima.",
+      "selected": "Scelta: {distro} — indicalo al momento dell'ordine o del contatto.",
+      "compare": "Non sei sicuro? Confronta le distribuzioni"
     }
   },
   "membership": {
@@ -4288,6 +4315,54 @@
           "body": "Installiamo lampade pilota in immobili, caffè e spazi espositivi — o Le mostriamo come costruirne una da sé.",
           "primary": "Richiedi un'installazione pilota",
           "secondary": "Costruisci da sé"
+        },
+        "installs": {
+          "eyebrow": "IN USO",
+          "title": "Installazioni reali, bilancio reale",
+          "intro": "Niente rendering: queste lampade sono appese e vengono usate ogni giorno. Le esperienze provengono dal rapporto finale del progetto Swico «Uso circolare funzionale dei dispositivi IT».",
+          "photoBadge": "Foto luglio 2026",
+          "noPhotoBadge": "Foto in arrivo",
+          "items": {
+            "repairhub": {
+              "title": "Lampada curva nel RepairHub",
+              "location": "zuerich.repair, Zürich",
+              "story": "Un grande monitor curvo con display rotto è diventato una lampada da officina. La luce uniforme e senza ombre è molto apprezzata dai riparatori durante il lavoro — e l'installazione è un elemento accattivante che colpisce subito i visitatori."
+            },
+            "laden": {
+              "title": "Negozio e ufficio revamp-it",
+              "location": "Birmensdorferstrasse 379, Zürich",
+              "story": "Nell'ingresso del negozio due lampade upcycling sostituiscono i lampadari esistenti — le reazioni dei clienti sono unanimemente positive. In ufficio un'altra lampada funziona perfettamente da oltre un anno."
+            },
+            "werkraum4": {
+              "title": "Locali dell'officina Werkraum4",
+              "location": "Zürich",
+              "story": "Circa 20 lampade sono in uso quotidiano da circa un anno. L'illuminazione ampia e senza ombre è ideale per i lavori artigianali. Bilancio: un unico guasto all'alimentatore — riparato con una semplice sostituzione; la retroilluminazione LED non ha dato problemi."
+            },
+            "recreazzz": {
+              "title": "Servizi igienici RecreaZZZ",
+              "location": "ex lavanderia centrale, Zürich",
+              "story": "Due lampade in uso da oltre un anno — accese e spente a ogni visita. Le frequenti accensioni non hanno causato alcun problema e i riscontri raccolti con un conteggio a barre sono per lo più positivi."
+            },
+            "ambossrampe": {
+              "title": "Magazzino AmbossRampe",
+              "location": "Zürich",
+              "story": "L'installazione conferma il magazzino come luogo d'impiego sensato: le lampade installate da circa un anno funzionano perfettamente."
+            }
+          }
+        },
+        "szenarien": {
+          "eyebrow": "SCENARI",
+          "title": "Ecco come potrebbe essere",
+          "intro": "Non foto, ma composizioni: queste visualizzazioni mostrano come le lampade potrebbero apparire in ambienti tipici. Ciò che è davvero appeso e acceso ogni giorno si trova sopra, alla voce «In uso».",
+          "badge": "Visualizzazione",
+          "items": {
+            "schaufenster": "Vetrina · Commercio al dettaglio",
+            "garage": "Autorimessa · Funzionamento continuo",
+            "party": "Feste ed eventi · Luce d'atmosfera",
+            "treppenhaus": "Tromba delle scale · Condominio",
+            "vorlesung": "Aula magna · Ambienti formativi",
+            "buero": "Ufficio · Postazione di lavoro"
+          }
         }
       },
       "gallery": {
@@ -4313,7 +4388,8 @@
           "body": "Ogni modello che non fotografiamo noi resta uno schizzo SVG. Se sei a Zurigo e ti piace la fotografia da laboratorio, fatti sentire.",
           "cta": "Partecipa"
         },
-        "statsLine": "{documented} documentati · {queued} in coda"
+        "statsLine": "{documented} documentati · {queued} in coda",
+        "installsCta": "Vedi tutte le installazioni"
       },
       "buildYourOwn": {
         "meta": {
@@ -4354,7 +4430,10 @@
           "body": "Il codice della piattaforma e tutte le guide sono su GitHub. Fork, issue o pull request: tutto è benvenuto.",
           "repoCta": "Vedi su GitHub",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "Creative Commons CC-BY-SA · codice della piattaforma sotto MIT"
+          "licenseLabel": "Creative Commons CC-BY-SA · codice della piattaforma sotto MIT",
+          "wikiTitle": "Wiki di conversione: monitor-upcycling.org",
+          "wikiBody": "Tutte le guide di conversione sono disponibili anche nel wiki pubblico — strutturato in modo che elettronici di tutto il mondo possano documentare altri modelli. Licenza CC-BY-SA, uso libero anche commerciale.",
+          "wikiCta": "Apri il wiki"
         },
         "contribute": {
           "title": "Partecipa",
@@ -4367,6 +4446,32 @@
             "Variante di schema elettrico per un altro driver di retroilluminazione",
             "Revisione di sicurezza o indicazioni CE"
           ]
+        },
+        "artifacts": {
+          "eyebrow": "DALL'OFFICINA",
+          "title": "Due componenti che risolvono la conversione",
+          "intro": "Hardware aperto e concreto: il connettore contro il problema dello standby e il supporto stampabile per il montaggio.",
+          "standby": {
+            "alt": "Connettore partitore di tensione con due resistenze, incapsulato in un involucro stampato in 3D",
+            "caption": "Il connettore partitore di tensione risolve il problema dello standby — realizzabile in officina."
+          },
+          "mount": {
+            "alt": "Vista CAD 3D del supporto a soffitto stampabile con struttura a nido d'ape",
+            "caption": "Supporto a soffitto stampabile in 3D — il modello CAD è disponibile liberamente."
+          }
+        },
+        "teaching": {
+          "eyebrow": "CONDIVIDERE IL SAPERE",
+          "title": "Dalle guide nasce la didattica",
+          "body": "Nel modulo interdisciplinare di bachelor «Local Loops — Circularity locally made» dell'Università di Lucerna, 14 studenti hanno progettato e prototipato lampade proprie a partire dai nostri monitor dismessi. È proprio a questo che servono le guide aperte: condividiamo il nostro sapere affinché si possa costruire ovunque — in officine, associazioni e aule.",
+          "workshop": {
+            "alt": "Studenti della HSLU progettano nel modulo «Local Loops» lampade proprie a partire da monitor dismessi",
+            "caption": "Modulo HSLU «Local Loops»: 14 studenti sviluppano progetti di lampade a partire dai nostri monitor."
+          },
+          "kreativ": {
+            "alt": "Prototipo creativo di lampada con paralume in tessuto, costruito da studenti della HSLU",
+            "caption": "Prototipo studentesco: lampada con paralume in tessuto basata sulla superficie luminosa di un monitor."
+          }
         }
       },
       "lenovo_l2251pwd": {
@@ -5557,7 +5662,12 @@
             }
           ],
           "caveat": "Queste cifre non sono il momento clou del marketing, sono la nostra base di lavoro. Vengono validate a ogni pilota. Metodologia dettagliata sulla pagina Trasparenza.",
-          "transparencyLink": "Apri la pagina Trasparenza"
+          "transparencyLink": "Apri la pagina Trasparenza",
+          "comparison": {
+            "eyebrow": "CONFRONTO CON IL NUOVO",
+            "alt": "Nuovo pannello LED da 24 W sullo scaffale con cartellino del prezzo CHF 79.95",
+            "caption": "Un pannello LED nuovo comparabile da 24 W costa CHF 79.95 nel commercio — e significa una produzione completamente nuova."
+          }
         },
         "scientific": {
           "eyebrow": "SCIENZA",
@@ -5570,7 +5680,28 @@
             "Validazione rispetto a Apple PER, Öko-Institut e studi Circular Computing"
           ],
           "timeline": "Avvio: aprile 2026 · risultati intermedi: giugno 2026 · rapporto finale: T3 2026.",
-          "commitment": "Pubblichiamo il risultato così com'è — anche se sfavorevole. Un LCA che \"vince\" sempre non è un LCA."
+          "commitment": "Pubblichiamo il risultato così com'è — anche se sfavorevole. Un LCA che \"vince\" sempre non è un LCA.",
+          "results": {
+            "eyebrow": "RISULTATI PRELIMINARI · STATO INTERMEDIO 28.05.2026",
+            "quote": "Secondo la modellizzazione attuale e gli attuali scenari di durata di vita, la lampada da monitor è in ogni caso migliore della lampada LED.",
+            "quoteSource": "ZHAW School of Engineering, Institut für Nachhaltige Entwicklung — C. Baumgartner, M. Grünholz",
+            "stats": {
+              "ghg": {
+                "value": "−82.7%",
+                "label": "Gas serra per Mlmh · Scenario medio"
+              },
+              "scarcity": {
+                "value": "−84.8%",
+                "label": "Impatto ambientale totale · Metodo della scarsità ecologica"
+              },
+              "range": {
+                "value": "52–86%",
+                "label": "Riduzione su tutti gli scenari di durata di vita"
+              }
+            },
+            "specs": "Lampada di riferimento (DELL U2412b, convertita): 13.6 W misurati · ~965 lm misurati · confronto per megalumen-ora, cradle-to-grave, rispetto a una lampada LED tradizionale.",
+            "caveat": "Numeri preliminari dell'Innosuisse-Innovationsscheck in corso — il rapporto finale della ZHAW li sostituirà. La tendenza è inequivocabile su tutti gli scenari."
+          }
         },
         "openHardware": {
           "eyebrow": "OPEN HARDWARE",
@@ -5663,6 +5794,210 @@
           "title": "Stato attuale del progetto",
           "body": "Numeri, tappe e scadenze — senza rileggere l'intero piano.",
           "cta": "Vai allo stato"
+        }
+      },
+      "lenovo_l2440pwc": {
+        "meta": {
+          "title": "Lenovo L2440pwC — Da monitor a lampada | Monitor-Upcycling",
+          "description": "Guida passo passo: smontare il monitor Lenovo L2440pwC, rimuovere l'LCD e riutilizzare la retroilluminazione come pannello luminoso."
+        },
+        "back": "← Torna alla panoramica",
+        "eyebrow": "GUIDA · MONITOR-UPCYCLING",
+        "title": "Lenovo L2440pwC",
+        "subtitle": "Trasformare un monitor da 24 pollici in una lampada",
+        "metaLine": "Modello: Lenovo L2440pwC · Durata: circa 1 ora · Difficoltà: facile · Bozza",
+        "credit": "Guida di Bruno, RevampIT · Bozza — non ancora pubblicata",
+        "safety": {
+          "title": "Prima la sicurezza",
+          "body": "Non lavorare mai sotto tensione. Scollega completamente il monitor dalla rete elettrica e attendi 1–2 minuti prima di iniziare. Prima di ogni prova di funzionamento adotta le necessarie misure di protezione — in caso di dubbio chiama un collega esperto di elettronica."
+        },
+        "tools": {
+          "title": "Attrezzi e materiale",
+          "items": [
+            "Cacciavite a croce (diverse misure)",
+            "Eventualmente cacciavite a taglio",
+            "Pry tool (leva in plastica)",
+            "Due resistenze adatte (secondo lo schema elettrico)",
+            "Nastro isolante o altro nastro adesivo",
+            "Contenitore per le viti"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Fase 1",
+            "title": "Smontare il monitor",
+            "intro": "Assicurati di avere spazio e una postazione di lavoro pulita. Durante lo smontaggio mantieni l'orientamento dei componenti (pulsanti verso il basso, come nelle immagini) e usa un cacciavite magnetico con un contenitore per le viti, così non si perde nulla."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Fase 2",
+            "title": "Ponticellare l'elettronica",
+            "intro": "L'elettronica di controllo viene rimossa e il connettore rimanente viene ponticellato, così il pannello resta acceso in modo permanente senza comandi."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Fase 3",
+            "title": "Rimuovere l'LCD",
+            "intro": "Togli il vetro nero dell'LCD — gli strati diffusori e luminosi sottostanti restano puliti e integri; saranno loro a garantire in seguito una luce uniforme."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Fase 4",
+            "title": "Rimontaggio e prova di funzionamento",
+            "intro": "Rimonta tutto in modo sicuro — e solo allora collega alla rete."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Aprire l'involucro",
+            "body": "Appoggia il monitor con la parte anteriore verso il basso su una superficie morbida. Rimuovi tutte le viti sul retro — alcune potrebbero trovarsi sotto coperture in plastica o gomma, rimovibili con un sottile cacciavite a taglio. Con il pry tool percorri la fessura tra il guscio posteriore e il telaio per staccare i punti di colla, e fai leva con delicatezza sulle parti dell'involucro finché i ganci a scatto non si sganciano in modo udibile. Attenzione: nella zona dei tasti di comando i cavi possono essere collegati alla copertura — non tirare di scatto. Scollega con cautela il cavo tra telaio ed elettronica.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Rimuovere le coperture interne",
+            "body": "Metti da parte le parti in plastica e appoggia lo schermo in piano. Rimuovi tutte le viti visibili dei supporti interni (ne abbiamo contate 8). Stacca con cautela i cavi fissati con nastro adesivo o adesivi. Scollega il cavo piatto di collegamento tra elettronica e LCD; i due cavi verso gli angoli dello schermo possono restare collegati. Rimuovi la scatoletta più piccola a destra, scollega e svita la scheda con le porte USB sottostante (non serve più). Infine smonta l'involucro più grande — rimuovi prima la colla.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Rimuovere la scheda di controllo e modificare il connettore",
+            "body": "Smonta la scheda di controllo di destra (non quella in cui entra la corrente) e mettila da parte — non serve più. Nel connettore rimanente i pin vengono ponticellati con delle resistenze; lo schema elettrico preciso seguirà non appena verificato. Copri con cura tutte le parti metalliche esposte delle resistenze e dei contatti con nastro isolante e fissa il connettore modificato con del nastro adesivo, così non si stacca. Poi mettilo da parte — il prossimo è il pannello LCD.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Rimuovere il pannello LCD",
+            "body": "Stacca il modulo del display dal telaio metallico — è fissato con gli stessi ganci a scatto dell'inizio; sganciali con cautela, eventualmente con un cacciavite a taglio. Scollega il cavo piatto verso l'elettronica di controllo LCD, se ancora collegato. L'elettronica di controllo LCD si trova sotto una copertura metallica e potrebbe essere incollata — stacca entrambe. Rimuovi con cautela il pannello LCD (lo strato scuro più esterno); non serve più. Poi rimonta il telaio metallico. Nota: mantieni gli strati diffusori e luminosi sottostanti il più puliti e integri possibile.",
+            "images": []
+          },
+          {
+            "n": 5,
+            "title": "Rimontaggio e prova di funzionamento",
+            "body": "Fissa nuovamente in modo sicuro tutti i componenti rimanenti e riavvita l'involucro (alcune viti non servono più). Solo dopo aver completato il rimontaggio inserisci la spina e verifica che la retroilluminazione si accenda come desiderato. Attenzione: non eseguire mai prove di funzionamento su un dispositivo aperto e sotto tensione, se non sono state adottate misure di protezione a regola d'arte.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Fatto!",
+          "body": "Dopo la conversione riuscita, la retroilluminazione funge da sorgente luminosa a grande superficie: rimuovendo il pannello LCD la luce diventa visibile e il monitor può essere usato come lampada o pannello luminoso. (Le foto del risultato seguiranno.)"
+        },
+        "feedback": {
+          "title": "Hai un'idea migliore? Scrivici.",
+          "body": "Questa guida è aperta e vive dei contributi. Se hai trovato un ponticello migliore, una regolazione della luminosità o un montaggio più elegante — accettiamo volentieri i contributi.",
+          "cta": "Contribuisci"
+        },
+        "ui": {
+          "openPhoto": "Ingrandisci foto",
+          "closePhoto": "Chiudi",
+          "playVideo": "Riproduci video",
+          "pauseVideo": "Metti in pausa il video",
+          "stepProgressLabel": "Passo",
+          "stepProgressOf": "di",
+          "jumpToStep": "Vai al passo",
+          "photoCountLabel": "Foto",
+          "photoCountOf": "di"
+        }
+      },
+      "hp_z23n": {
+        "meta": {
+          "title": "HP Z23n — Da monitor a lampada | Monitor-Upcycling",
+          "description": "Guida passo passo: smontare il monitor HP Z23n, rimuovere l'LCD e riutilizzare la retroilluminazione come pannello luminoso."
+        },
+        "back": "← Torna alla panoramica",
+        "eyebrow": "GUIDA · MONITOR-UPCYCLING",
+        "title": "HP Z23n",
+        "subtitle": "Trasformare un monitor da 23 pollici in una lampada",
+        "metaLine": "Modello: HP Z23n · Durata: circa 1 ora · Difficoltà: facile · Bozza",
+        "credit": "Guida di Bruno, RevampIT · Bozza — non ancora pubblicata",
+        "safety": {
+          "title": "Prima la sicurezza",
+          "body": "Non lavorare mai sotto tensione. Scollega completamente il monitor dalla rete elettrica e attendi 1–2 minuti prima di iniziare. Prima di ogni prova di funzionamento adotta le necessarie misure di protezione — in caso di dubbio chiama un collega esperto di elettronica."
+        },
+        "tools": {
+          "title": "Attrezzi e materiale",
+          "items": [
+            "Cacciavite a croce (diverse misure)",
+            "Eventualmente cacciavite a taglio",
+            "Pry tool (leva in plastica)",
+            "Due resistenze adatte (secondo lo schema elettrico)",
+            "Nastro isolante o altro nastro adesivo",
+            "Contenitore per le viti"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "Fase 1",
+            "title": "Smontare il monitor",
+            "intro": "Assicurati di avere spazio e una postazione di lavoro pulita. Durante lo smontaggio mantieni l'orientamento dei componenti (pulsanti verso il basso, come nelle immagini) e usa un cacciavite magnetico con un contenitore per le viti, così non si perde nulla."
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "Fase 2",
+            "title": "Ponticellare l'elettronica",
+            "intro": "L'elettronica di controllo viene rimossa e il connettore rimanente viene ponticellato, così il pannello resta acceso in modo permanente senza comandi."
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "Fase 3",
+            "title": "Rimuovere l'LCD",
+            "intro": "Togli il vetro nero dell'LCD — gli strati diffusori e luminosi sottostanti restano puliti e integri; saranno loro a garantire in seguito una luce uniforme."
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "Fase 4",
+            "title": "Rimontaggio e prova di funzionamento",
+            "intro": "Rimonta tutto in modo sicuro — e solo allora collega alla rete."
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "Aprire l'involucro e scollegare i cavi di collegamento",
+            "body": "Appoggia il monitor con la parte anteriore verso il basso su una superficie morbida e rimuovi tutte le viti sul retro. Con il pry tool percorri la fessura tra il guscio posteriore e il telaio, stacca i punti di colla e fai leva sulle parti dell'involucro finché i ganci a scatto non si sganciano in modo udibile; metti da parte il guscio posteriore. Allenta le viti e la colla che tengono il telaio in plastica sul display (9 pezzi). Attenzione: nella zona dei tasti di comando i cavi possono essere collegati alla copertura — non tirare di scatto. Rimuovi le 4 viti in basso sulla barra dei comandi, scollega i cavi di collegamento verso la barra dei comandi e rimuovila con cautela dalla parte anteriore (eventualmente facendo leva con il pry tool). Per rimuovere il telaio in plastica, togli prima l'involucro metallico: rimuovi tutte le strisce adesive e allenta le due viti all'estremità superiore. Infine scollega il cavo piatto di collegamento tra elettronica e schermo.",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "Rimuovere la scheda di controllo e modificare il connettore",
+            "body": "Smonta la scheda di controllo di destra (quella da cui esce il cavo piatto del passaggio precedente). È fissata con due viti dall'interno, due dall'esterno e due viti esagonali M2 dall'esterno (accanto al connettore VGA). Metti da parte scheda e viti — non servono più. Nel connettore rimanente i pin vengono ponticellati con delle resistenze; lo schema elettrico preciso seguirà non appena verificato. Copri con cura tutte le parti metalliche esposte con nastro isolante e fissa il connettore modificato con del nastro adesivo, così non si stacca.",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "Rimuovere il pannello LCD",
+            "body": "Stacca il modulo del display dal telaio metallico — è fissato con gli stessi ganci a scatto dell'inizio; sganciali con cautela, eventualmente con un cacciavite a taglio. Scollega il cavo piatto verso l'elettronica di controllo LCD, se ancora collegato. L'elettronica di controllo LCD si trova sotto una copertura metallica e potrebbe essere incollata — stacca entrambe. Rimuovi con cautela il pannello LCD (lo strato scuro più esterno); non serve più. Poi rimonta il telaio metallico. Nota: mantieni gli strati diffusori e luminosi sottostanti il più puliti e integri possibile.",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "Rimontaggio e prova di funzionamento",
+            "body": "Fissa nuovamente in modo sicuro tutti i componenti rimanenti e riavvita l'involucro (alcune viti non servono più). Solo dopo aver completato il rimontaggio inserisci la spina e verifica che la retroilluminazione si accenda come desiderato. Attenzione: non eseguire mai prove di funzionamento su un dispositivo aperto e sotto tensione, se non sono state adottate misure di protezione a regola d'arte.",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "Fatto!",
+          "body": "Dopo la conversione riuscita, la retroilluminazione funge da sorgente luminosa a grande superficie: rimuovendo il pannello LCD la luce diventa visibile e il monitor può essere usato come lampada o pannello luminoso. (Le foto del risultato seguiranno.)"
+        },
+        "feedback": {
+          "title": "Hai un'idea migliore? Scrivici.",
+          "body": "Questa guida è aperta e vive dei contributi. Se hai trovato un ponticello migliore, una regolazione della luminosità o un montaggio più elegante — accettiamo volentieri i contributi.",
+          "cta": "Contribuisci"
+        },
+        "ui": {
+          "openPhoto": "Ingrandisci foto",
+          "closePhoto": "Chiudi",
+          "playVideo": "Riproduci video",
+          "pauseVideo": "Metti in pausa il video",
+          "stepProgressLabel": "Passo",
+          "stepProgressOf": "di",
+          "jumpToStep": "Vai al passo",
+          "photoCountLabel": "Foto",
+          "photoCountOf": "di"
         }
       }
     }
@@ -6451,7 +6786,39 @@
               "Funzionalità enterprise limitate"
             ]
           }
-        ]
+        ],
+        "chooser": {
+          "heading": "Quale distribuzione fa per te?",
+          "subtitle": "Non sei sicuro? Scegli ciò che conta di più per te — ti consigliamo un buon punto di partenza.",
+          "recommendedLabel": "Consigliata",
+          "items": [
+            {
+              "need": "Passaggio da Windows / principianti",
+              "distro": "Linux Mint",
+              "why": "Interfaccia familiare, funziona subito, quasi nessun apprendimento necessario."
+            },
+            {
+              "need": "Più guide e aiuto disponibili in rete",
+              "distro": "Ubuntu",
+              "why": "La community più grande — per quasi ogni problema c'è una guida."
+            },
+            {
+              "need": "Software e tecnologia più recenti",
+              "distro": "Fedora",
+              "why": "Pacchetti aggiornatissimi, vicini allo sviluppo — per utenti curiosi."
+            },
+            {
+              "need": "Massima stabilità e durata nel tempo",
+              "distro": "Debian",
+              "why": "Estremamente stabile — ideale per server e computer che devono semplicemente funzionare."
+            },
+            {
+              "need": "Hardware più vecchio o meno potente",
+              "distro": "MX Linux",
+              "why": "Leggero sulle risorse — dà nuova vita anche ai dispositivi più datati."
+            }
+          ]
+        }
       },
       "finalCta": {
         "heading": "Pronto per passare a Linux?",
@@ -6672,7 +7039,10 @@
         "reusedLabel": "Componenti riutilizzati",
         "reusedValue": "4 su 4 parti principali",
         "circularLabel": "Economia circolare",
-        "circularValue": "Prolunga la vita dell'hardware"
+        "circularValue": "Prolunga la vita dell'hardware",
+        "browseComponents": "Guarda i componenti",
+        "resultNote": "Costruiamo il tuo dispositivo con componenti ricondizionati e verificati. Guarda i pezzi adatti nel nostro marketplace o richiedi direttamente un build già pronto.",
+        "sustainabilityNote": "Ogni componente riutilizzato prolunga la vita dell'hardware e risparmia le emissioni di una nuova produzione."
       },
       "features": {
         "heading": "Perché scegliere il nostro sistema di build IA?",
@@ -7825,6 +8195,46 @@
         "eyebrow": "DISPOSITIVO",
         "title": "Consegna un portatile, fisso o monitor.",
         "body": "Accettiamo dispositivi funzionanti o riparabili, li ricondizioniamo e li passiamo. Possiamo cancellare i tuoi dati personali sul posto."
+      }
+    },
+    "wishlist": {
+      "prefillTemplate": "Vorrei donare quanto segue: {title}",
+      "eyebrow": "ESIGENZE SPECIFICHE ATTUALI",
+      "heading": "La nostra lista dei desideri",
+      "intro": "Per mantenere in funzione la nostra officina e rimettere a nuovo i dispositivi salvati, abbiamo regolarmente bisogno di determinati attrezzi o componenti. Puoi sostenerci donando l'oggetto fisico oppure finanziandone l'acquisto.",
+      "donateItem": "Dona l'oggetto",
+      "fundItem": "Finanzia l'acquisto",
+      "funded": "{amount} di {target} finanziati",
+      "received": "{count} di {target} ricevuti",
+      "copyReference": "Copia la causale",
+      "referenceCopied": "Copiato!",
+      "close": "Chiudi",
+      "fundTitle": "Finanzia {title}",
+      "fundIntro": "Puoi finanziare questo oggetto effettuando un bonifico bancario dell'importo indicato. Usa la causale indicata qui sotto, così potremo attribuire la tua donazione a questo oggetto:",
+      "priorityHigh": "Priorità alta",
+      "priorityMedium": "Priorità media",
+      "priorityLow": "Priorità bassa",
+      "donateHeading": "Dona questo oggetto",
+      "donateIntro": "Se hai questo oggetto e desideri donarlo, usa il modulo di consegna qui sotto. Abbiamo già inserito i dettagli per te.",
+      "items": {
+        "ifixit": {
+          "title": "Kit iFixit Pro Tech",
+          "whyNeeded": "Attrezzi professionali indispensabili per aprire laptop e smartphone senza danneggiarli. Ci servono altri set per le nostre officine di volontariato.",
+          "costLabel": "CHF 79.00 a set",
+          "purpose": "Donazione: kit iFixit Pro Tech"
+        },
+        "ssd": {
+          "title": "SSD SATA da 2.5\" (500GB)",
+          "whyNeeded": "I lenti dischi rigidi meccanici sono il principale collo di bottiglia nei laptop più vecchi. Sostituirli con SSD moderni li rende di nuovo veloci e utilizzabili.",
+          "costLabel": "CHF 35.00 a SSD",
+          "purpose": "Donazione: SSD SATA 2.5 500GB"
+        },
+        "soldering": {
+          "title": "Stazione saldante (Ersa i-CON Pico)",
+          "whyNeeded": "Per riparazioni avanzate della scheda madre (sostituzione di condensatori difettosi, prese di ricarica), per salvare dispositivi che altrimenti diventerebbero rifiuti elettronici.",
+          "costLabel": "CHF 160.00",
+          "purpose": "Donazione: Ersa i-CON Pico"
+        }
       }
     }
   },
@@ -8981,7 +9391,9 @@
         "columnNumber": "#",
         "columnStatus": "Status",
         "ofText": "of",
-        "productsText": "products"
+        "productsText": "products",
+        "prevPage": "Pagina precedente",
+        "nextPage": "Pagina successiva"
       },
       "bulkActionBar": {
         "deselectAll": "Deseleziona tutto",
@@ -9039,6 +9451,23 @@
         "updateFailed": "Impossibile aggiornare il prodotto",
         "saveFailed": "Impossibile salvare il prodotto",
         "genericSaveError": "Errore durante il salvataggio. La preghiamo di riprovare."
+      },
+      "storageLocation": {
+        "label": "Luogo di stoccaggio",
+        "placeholder": "Scegli la sede…",
+        "loading": "Caricamento…",
+        "addNew": "Aggiungi sede",
+        "newNamePlaceholder": "Nome della sede",
+        "kindLabel": "Tipo",
+        "save": "Salva"
+      },
+      "voiceEntry": {
+        "start": "Avvia registrazione",
+        "stop": "Ferma registrazione",
+        "processing": "Elaborazione in corso…",
+        "hint": "Descrivi il dispositivo: produttore, modello, condizioni, prezzo.",
+        "transcription": "Riconosciuto: {text}",
+        "errorGeneric": "Non è stato possibile elaborare l'audio. Riprova."
       }
     },
     "eWasteProblem": {
@@ -9642,7 +10071,14 @@
       "bulkSelected": "{count, plural, one {1 giorno selezionato} other {# giorni selezionati}}",
       "bulkFill": "Compila dal piano",
       "bulkClear": "Svuota",
-      "bulkCancel": "Annulla selezione"
+      "bulkCancel": "Annulla selezione",
+      "lockedApproved": "Approvato e bloccato",
+      "reopen2": "Riapri (Admin)",
+      "bulkAbsenceLabel": "Assente",
+      "fillSkippedNonPlanDays": "{count, plural, one {1 giorno senza piano di lavoro saltato (0 ore previste)} other {# giorni senza piano di lavoro saltati (0 ore previste)}}",
+      "fillNonPlanDay": "Nessun giorno pianificato — nessuna ora prevista. Inserisci gli orari manualmente se necessario.",
+      "selectHintTouch": "Tocca i giorni per selezionarli (tocca di nuovo per deselezionare) · l'abbreviazione del giorno (Lu, Ma …) seleziona l'intera colonna · poi scegli un'azione in basso.",
+      "submittedUnchanged": "Inviato — in attesa di approvazione. Le modifiche richiedono un nuovo invio."
     },
     "appointments": {
       "pageTitle": "Appuntamenti",
@@ -9892,7 +10328,8 @@
         "unverifyConfirm": {
           "title": "Rimuovi verifica",
           "message": "Rimuovere davvero la verifica?"
-        }
+        },
+        "verifyFailed": "Azione non riuscita. Riprova."
       },
       "reports": {
         "filters": {
@@ -10046,7 +10483,9 @@
       "expandSidebarTitle": "Espandi la barra laterale",
       "collapseSidebarTitle": "Comprimi la barra laterale",
       "openAria": "Apri la barra laterale",
-      "mobileMore": "Altro"
+      "mobileMore": "Altro",
+      "filterPlaceholder": "Cerca sezione…",
+      "filterNoResults": "Nessuna sezione trovata"
     },
     "commandBar": {
       "placeholder": "Cerca o comando…",
@@ -10075,7 +10514,8 @@
       "relativeJustNow": "Proprio ora",
       "relativeMinutes": "{count} min fa",
       "relativeHours": "{count} h fa",
-      "relativeDays": "{count, plural, one {# giorno fa} other {# giorni fa}}"
+      "relativeDays": "{count, plural, one {# giorno fa} other {# giorni fa}}",
+      "closeAriaLabel": "Chiudi le notifiche"
     },
     "forms": {
       "cancel": "Annulla",
@@ -10362,7 +10802,10 @@
       "sensitive": "Sensibile",
       "system": "Sistema",
       "analyse": "Analisi",
-      "seller-onboarding": "Diventa venditore"
+      "seller-onboarding": "Diventa venditore",
+      "presentations": "Presentazioni",
+      "hr-vacancies": "Posizioni aperte",
+      "hr-applications": "Candidature"
     },
     "errorPage": {
       "title": "Qualcosa è andato storto",
@@ -10404,6 +10847,77 @@
     "command": {
       "label": "Avvia in locale",
       "text": "npm run d"
+    }
+  },
+  "kennzahlen": {
+    "meta": {
+      "title": "Dati chiave",
+      "description": "Tutti i numeri importanti di Revamp-IT – resi pubblici, con fonte e grado di affidabilità. Nessun valore abbellito."
+    },
+    "hero": {
+      "title": "Dati chiave",
+      "subtitle": "Tutti i numeri che contano per noi – resi pubblici, con fonte e grado di affidabilità"
+    },
+    "intro": "Ogni numero è contrassegnato da un grado di affidabilità e – dove possibile – supportato da calcolo e fonte. Preferiamo mostrare una stima onesta piuttosto che un numero abbellito.",
+    "categories": {
+      "impact": "Impatto ecologico",
+      "social": "Impatto sociale",
+      "economic": "Economico",
+      "operations": "Organizzazione"
+    },
+    "confidence": {
+      "high": "Documentato",
+      "medium": "Fondato",
+      "estimated": "Stima",
+      "target": "Obiettivo"
+    },
+    "howCalculated": "Come è calcolato?",
+    "source": "Fonte",
+    "lastVerified": "Ultima verifica",
+    "co2Note": "Dettagli sulla metodologia CO₂",
+    "backToTransparenz": "Torna alla panoramica sulla trasparenza",
+    "linkFromOverview": "Vedi tutti i dati chiave"
+  },
+  "hirn": {
+    "title": "Hirn",
+    "subtitle": "L'assistente di {orgName}",
+    "open": "Apri Hirn",
+    "inputPlaceholder": "Chiedi qualcosa a Hirn…",
+    "send": "Invia",
+    "thinking": "Hirn sta pensando…",
+    "emptyTitle": "Come posso aiutarti?",
+    "emptyHint": "Scegli un suggerimento o fai la tua domanda.",
+    "suggestionsLabel": "Suggerimenti",
+    "quickActionsLabel": "Link utili",
+    "loginPrompt": "Accedi per chattare con Hirn — l'assistente di {orgName}.",
+    "loginCta": "Accedi",
+    "rateLimited": "Troppe richieste — riprova più tardi.",
+    "error": "Hirn al momento non è raggiungibile. Riprova più tardi.",
+    "proactiveDismiss": "Chiudi l'avviso"
+  },
+  "invite": {
+    "title": "Invita gli amici",
+    "subtitle": "Invita i tuoi amici su {orgName} — e ne trarrete vantaggio entrambi.",
+    "friendReceives": "Il tuo amico riceve",
+    "friendReceivesDesc": "Sconto sul primo acquisto nello shop",
+    "youReceive": "Tu ricevi",
+    "youReceiveDesc": "Un buono quando il tuo amico completa il suo primo acquisto",
+    "linkLabel": "Il tuo link d'invito personale",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "inviteByEmail": "Invita via e-mail",
+    "emailPlaceholder": "email@esempio.ch",
+    "send": "Invita",
+    "sending": "Invio…",
+    "inviteSent": "Invito inviato a {email}!",
+    "sendError": "Errore durante l'invio.",
+    "invitesSent": "Inviti inviati",
+    "registrations": "Registrazioni"
+  },
+  "payment": {
+    "method": {
+      "title": "Metodo di pagamento",
+      "subtitle": "Scegli come vuoi pagare"
     }
   }
 }

@@ -339,7 +339,10 @@
       "errorVerificationError": "メール確認中にエラーが発生しました",
       "errorConnection": "接続の問題が発生しました。1分後にもう一度お試しください。",
       "backHome": "ホームに戻る",
-      "pageTitle": "ログイン | RevampIT"
+      "pageTitle": "ログイン | RevampIT",
+      "errorLocked": "アカウントが一時的にロックされています。数分後にもう一度お試しください。",
+      "errorNoPassword": "このアカウントにはまだパスワードが設定されていません。「パスワードをお忘れの方」からアカウントを有効化してください。",
+      "errorUnverified": "まずメールアドレスを確認してください。受信トレイをご確認ください。"
     },
     "register": {
       "title": "新規登録",
@@ -1249,7 +1252,11 @@
     "subtitle": "コミュニティからの知識",
     "readMore": "続きを読む",
     "by": "著者：",
-    "categories": "カテゴリー"
+    "categories": "カテゴリー",
+    "back": "ブログに戻る",
+    "onThisPage": "このページの内容",
+    "unlisted": "非公開",
+    "minutesShort": "分"
   },
   "contact": {
     "meta": {
@@ -2549,7 +2556,16 @@
       "markCompletedSaving": "保存中...",
       "markCompletedButton": "完了としてマーク",
       "messageOfferer": "メッセージ",
-      "askQuestion": "質問する"
+      "askQuestion": "質問する",
+      "becomeTechnicianTitle": "手伝いたいですか？",
+      "becomeTechnicianBody": "ヘルプ依頼に返信できるのは登録済みの技術者だけです。無料の技術者プロフィールを作れば、この依頼にも他の依頼にも見積もりを出せます。",
+      "becomeTechnicianCta": "技術者プロフィールを作成",
+      "noOffersNudge": {
+        "title": "まだ見積もりがありませんか？",
+        "bodyPaid": "より多くの技術者を引き寄せるには：報酬を上げる、必要なスキルの幅を広げる、期限を延ばす。依頼が魅力的なほど、早く連絡が来ます。",
+        "bodyFree": "無料の依頼は公開されています。周りの人に共有する、必要なスキルの幅を広げる、期限を延ばす。少額の任意報酬を付けると、早く見つかりやすくなります。",
+        "cta": "依頼を編集する"
+      }
     },
     "create": {
       "backToList": "一覧に戻る",
@@ -2687,7 +2703,8 @@
       "errorImageOnly": "画像ファイルのみ許可されています",
       "errorTooLarge": "ファイルが大きすぎます（最大10MB）",
       "errorUploadFailed": "画像のアップロードに失敗しました。もう一度お試しください。",
-      "imageAlt": "画像 {index}"
+      "imageAlt": "画像 {index}",
+      "removeImage": "画像{index}を削除"
     },
     "offer": {
       "offerButton": "オファーを提出",
@@ -3369,6 +3386,16 @@
       "paymentSuccess": "お支払いが完了しました！ご注文が確定しました。",
       "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
       "paymentCancelled": "お支払いがキャンセルされました。"
+    },
+    "aiCamera": {
+      "analyzing": "製品を分析中...",
+      "analyzingHint": "AIが製品のメーカー・モデル・状態を判別します"
+    },
+    "osInstall": {
+      "heading": "Linuxを無料でプリインストール",
+      "body": "ご希望に応じて、お好きなLinuxディストリビューションを無料でインストールします。軽量・安全で、ライセンス費用もかかりません。まずは選ぶか、比べてみてください。",
+      "selected": "選択済み：{distro} — ご注文時やお問い合わせの際にお知らせください。",
+      "compare": "迷っていますか？ディストリビューションを比較する"
     }
   },
   "membership": {
@@ -4288,6 +4315,54 @@
           "body": "物件やカフェ、展示空間にパイロット照明を設置します。または、自分で作る方法をお教えします。",
           "primary": "パイロット設置を依頼",
           "secondary": "自分で作る"
+        },
+        "installs": {
+          "eyebrow": "稼働中",
+          "title": "実際の設置、実際の成果",
+          "intro": "CGではありません。これらの照明は実際に設置され、毎日使われています。この経験は、Swicoプロジェクト「IT機器の機能的な循環利用」の最終報告書によるものです。",
+          "photoBadge": "写真：2026年7月",
+          "noPhotoBadge": "写真は後日",
+          "items": {
+            "repairhub": {
+              "title": "RepairHubの曲面照明",
+              "location": "zuerich.repair、Zürich",
+              "story": "画面が割れた大型の曲面モニターが作業場の照明になりました。影のない均一な光は、作業する修理担当者にとても喜ばれています。そして、この設置は訪れた人の目をすぐに引きつける見どころにもなっています。"
+            },
+            "laden": {
+              "title": "revamp-itの店舗＆事務所",
+              "location": "Birmensdorferstrasse 379、Zürich",
+              "story": "店舗の入口では、2台のアップサイクル照明が既存の天井灯に取って代わりました。お客様の反応はどれも好評です。事務所ではもう1台が1年以上、問題なく稼働しています。"
+            },
+            "werkraum4": {
+              "title": "作業室 Werkraum4",
+              "location": "Zürich",
+              "story": "約20台の照明が、およそ1年にわたり毎日使われています。広範囲を影なく照らす光は、手仕事に最適です。成果：電源ユニットの故障が1件のみで、簡単な交換で修理できました。LEDバックライトには問題はありませんでした。"
+            },
+            "recreazzz": {
+              "title": "RecreaZZZの衛生設備",
+              "location": "旧中央クリーニング工場、Zürich",
+              "story": "2台の照明が1年以上使われ、来訪のたびにオンオフされています。頻繁な切り替えでも問題は一切なく、正の字方式で集めた声もおおむね好評です。"
+            },
+            "ambossrampe": {
+              "title": "倉庫 AmbossRampe",
+              "location": "Zürich",
+              "story": "この設置は、倉庫が理にかなった用途であることを裏づけます。約1年前に設置した照明は問題なく動いています。"
+            }
+          }
+        },
+        "szenarien": {
+          "eyebrow": "活用シーン",
+          "title": "こんな使い方ができます",
+          "intro": "写真ではなく合成イメージです。これらのビジュアルは、典型的な空間で照明がどう見えるかを示しています。実際に設置され毎日ついているものは、上の「稼働中」でご覧いただけます。",
+          "badge": "イメージ図",
+          "items": {
+            "schaufenster": "ショーウィンドウ · 小売",
+            "garage": "地下駐車場 · 常時運転",
+            "party": "催し＆イベント · 雰囲気照明",
+            "treppenhaus": "階段室 · 集合住宅",
+            "vorlesung": "講義室 · 教育施設",
+            "buero": "オフィス · 作業スペース"
+          }
         }
       },
       "gallery": {
@@ -4313,7 +4388,8 @@
           "body": "私たちが撮影できない限り、各モデルは SVG スケッチのままです。チューリッヒでワークショップ撮影が好きな方、ぜひご連絡を。",
           "cta": "参加する"
         },
-        "statsLine": "記録 {documented} · 待ち {queued}"
+        "statsLine": "記録 {documented} · 待ち {queued}",
+        "installsCta": "すべての設置事例を見る"
       },
       "buildYourOwn": {
         "meta": {
@@ -4354,7 +4430,10 @@
           "body": "プラットフォームコードとすべてのガイドは GitHub にあります。Fork、Issue、Pull Request、いずれも歓迎します。",
           "repoCta": "GitHub で見る",
           "repoUrl": "https://github.com/g-but/revampit",
-          "licenseLabel": "Creative Commons CC-BY-SA · プラットフォームコードは MIT"
+          "licenseLabel": "Creative Commons CC-BY-SA · プラットフォームコードは MIT",
+          "wikiTitle": "改造Wiki：monitor-upcycling.org",
+          "wikiBody": "すべての改造手順書は公開Wikiでも見られます。世界中の電子技術者がほかのモデルを記録できるように作られています。ライセンスはCC-BY-SAで、商用利用も自由です。",
+          "wikiCta": "Wikiを開く"
         },
         "contribute": {
           "title": "参加する",
@@ -4367,6 +4446,32 @@
             "別のバックライトドライバ向けの回路図バリエーション",
             "安全レビューまたは CE 表示に関する情報"
           ]
+        },
+        "artifacts": {
+          "eyebrow": "工房から",
+          "title": "改造を可能にする2つのパーツ",
+          "intro": "手に取れるオープンハードウェア：スタンバイ問題を解決するコネクタと、取り付け用の3Dプリント可能なマウント。",
+          "standby": {
+            "alt": "3Dプリントのケースに封入された、2つの抵抗を持つ分圧コネクタ",
+            "caption": "分圧コネクタがスタンバイ問題を解決 — 工房で製作できます。"
+          },
+          "mount": {
+            "alt": "ハニカム構造を持つ3Dプリント天井マウントのCAD図",
+            "caption": "3Dプリント可能な天井マウント — CADモデルはオープンに公開されています。"
+          }
+        },
+        "teaching": {
+          "eyebrow": "知識を共有する",
+          "title": "手順書が授業になる",
+          "body": "ルツェルン応用科学大学の学際的な学士課程モジュール「Local Loops — Circularity locally made」で、14人の学生が私たちの廃棄モニターから独自の照明を設計・試作しました。オープンな手順書はまさにそのためにあります。私たちは知識を共有し、工房でも団体でも講義室でも、どこでも作れるようにしています。",
+          "workshop": {
+            "alt": "モジュール「Local Loops」で廃棄モニターから独自の照明を設計するHSLUの学生たち",
+            "caption": "HSLUモジュール「Local Loops」：14人の学生が私たちのモニターから独自の照明デザインを生み出しました。"
+          },
+          "kreativ": {
+            "alt": "HSLUの学生が作った、布製シェード付きの独創的な照明の試作品",
+            "caption": "学生の試作品：モニターの発光面を土台にした、布製シェード付きの照明。"
+          }
         }
       },
       "lenovo_l2251pwd": {
@@ -5557,7 +5662,12 @@
             }
           ],
           "caveat": "These figures are not the marketing highlight, they're our working baseline. Validated with every pilot. Detailed methodology on the transparency page.",
-          "transparencyLink": "Open transparency page"
+          "transparencyLink": "Open transparency page",
+          "comparison": {
+            "eyebrow": "新品との比較",
+            "alt": "CHF 79.95の値札が付いた、売り場の新品24W LEDパネル",
+            "caption": "同等の新品24W LEDパネルは店頭でCHF 79.95。そしてそれは、まるまる新規製造を意味します。"
+          }
         },
         "scientific": {
           "eyebrow": "SCIENCE",
@@ -5570,7 +5680,28 @@
             "Validation against Apple PER, Öko-Institut and Circular Computing studies"
           ],
           "timeline": "Start: April 2026 · Interim results: June 2026 · Final report: Q3 2026.",
-          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA."
+          "commitment": "We publish the result unchanged — even if unfavourable. An LCA that only \"wins\" is not an LCA.",
+          "results": {
+            "eyebrow": "暫定結果 · 中間報告 2026.05.28",
+            "quote": "現在のモデル化と寿命シナリオのもとでは、モニター照明はどの場合でもLED照明より優れています。",
+            "quoteSource": "ZHAW School of Engineering、持続可能な開発研究所 — C. Baumgartner、M. Grünholz",
+            "stats": {
+              "ghg": {
+                "value": "−82.7%",
+                "label": "メガルーメン時あたりの温室効果ガス · 平均シナリオ"
+              },
+              "scarcity": {
+                "value": "−84.8%",
+                "label": "総合環境影響 · 生態学的希少性法"
+              },
+              "range": {
+                "value": "52〜86%",
+                "label": "すべての寿命シナリオでの削減率"
+              }
+            },
+            "specs": "基準照明（DELL U2412b、改造品）：実測13.6W · 実測約965lm · メガルーメン時あたり、ゆりかごから墓場まで（cradle-to-grave）で、一般的なLED照明と比較。",
+            "caveat": "進行中のInnosuisseイノベーションチェックによる暫定値で、最終的なZHAW報告書によって置き換えられます。方向性はすべてのシナリオで明確です。"
+          }
         },
         "openHardware": {
           "eyebrow": "オープンハードウェア",
@@ -5663,6 +5794,210 @@
           "title": "現在のプロジェクト状況",
           "body": "数字・マイルストーン・期限をコンパクトに — 計画書を読み直さずに.",
           "cta": "ステータスへ"
+        }
+      },
+      "lenovo_l2440pwc": {
+        "meta": {
+          "title": "Lenovo L2440pwC — モニターを照明に | モニターのアップサイクル",
+          "description": "ステップごとの手順：Lenovo L2440pwCモニターを分解し、LCDを取り外して、バックライトを発光パネルとして再利用します。"
+        },
+        "back": "← 一覧に戻る",
+        "eyebrow": "手順書 · モニターのアップサイクル",
+        "title": "Lenovo L2440pwC",
+        "subtitle": "24インチモニターを照明に改造する",
+        "metaLine": "モデル：Lenovo L2440pwC · 所要時間：約1時間 · 難易度：やさしい · 下書き",
+        "credit": "手順書：RevampITのBruno · 下書き — 未公開",
+        "safety": {
+          "title": "まず安全から",
+          "body": "通電したまま作業しないでください。始める前にモニターを電源から完全に切り離し、1〜2分待ちます。動作テストのたびに必要な安全対策を取り、不安があれば電子工作に詳しい仲間を呼びましょう。"
+        },
+        "tools": {
+          "title": "工具＆材料",
+          "items": [
+            "プラスドライバー（各サイズ）",
+            "必要に応じてマイナスドライバー",
+            "プライツール（プラスチック製のこじ開け工具）",
+            "適切な抵抗2個（回路図に従う）",
+            "絶縁テープまたはその他の粘着テープ",
+            "ネジ入れ容器"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "フェーズ1",
+            "title": "モニターを分解する",
+            "intro": "作業スペースを確保し、清潔に保ちましょう。分解の際は部品の向きをそのまま保ち（写真のようにボタンを下に）、マグネット付きドライバーとネジ入れ容器を使って、何も失くさないようにします。"
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "フェーズ2",
+            "title": "電子回路をバイパスする",
+            "intro": "制御基板を取り外し、残ったコネクタをバイパスして、操作なしでパネルが常に点灯するようにします。"
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "フェーズ3",
+            "title": "LCDを取り外す",
+            "intro": "黒いLCDパネルを取り出します。その下の拡散板や導光層はきれいで無傷のまま残し、後で均一な光を生み出します。"
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "フェーズ4",
+            "title": "組み立て＆動作テスト",
+            "intro": "すべてをしっかり組み立て直してから、初めて電源につなぎます。"
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "筐体を開ける",
+            "body": "モニターの前面を下にして、柔らかい敷物の上に置きます。背面のネジをすべて外します。一部はプラスチックやゴムのカバーの下にあることがあり、細いマイナスドライバーで取り外せます。プライツールを背面シェルとフレームの隙間に沿って動かして接着部を剥がし、ツメが音を立てて外れるまで筐体を慎重にこじ開けます。注意：操作ボタンの周辺ではケーブルがカバーとつながっていることがあります。急に引っ張らないでください。フレームと基板の間のケーブルを慎重に抜きます。",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "内側のカバーを外す",
+            "body": "プラスチック部品を脇に置き、画面を平らに寝かせます。内側の固定部の見えるネジをすべて外します（8本ありました）。テープや粘着パッドで留められたケーブルを慎重に外します。基板とLCDの間のフラットケーブルを抜きます。画面の角へ向かう2本のケーブルは差したままで構いません。右側の小さいボックスを外し、その下のUSBポート基板を抜いてネジを外します（もう不要です）。最後に大きい方の筐体を外します。まず接着剤を取り除いてください。",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "制御基板を外してコネクタを改造する",
+            "body": "右側の制御基板（電源が入る方ではない）を取り外して脇に置きます。もう使いません。残ったコネクタで、ピンを抵抗でバイパスします。正確な回路図は検証でき次第、追って示します。抵抗と接点の露出した金属部分をすべて絶縁テープで丁寧に覆い、改造したコネクタが外れないようテープで固定します。その後、脇に置きます。次はLCDパネルの番です。",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "LCDパネルを外す",
+            "body": "ディスプレイモジュールを金属フレームから外します。最初と同じツメで留まっているので、必要ならマイナスドライバーを使って慎重に外します。まだつながっていれば、LCD制御基板へのフラットケーブルを抜きます。LCD制御基板は金属カバーの下にあり、接着されていることがあります。両方を金属面から外します。LCDパネル（一番外側の暗い層）を慎重に取り外します。もう不要です。その後、金属フレームを取り付け直します。ヒント：その下の拡散板や導光層は、できるだけきれいで無傷のまま残してください。",
+            "images": []
+          },
+          {
+            "n": 5,
+            "title": "組み立てと動作テスト",
+            "body": "残りの部品をすべてしっかり固定し、筐体をネジ留めします（一部のネジはもう不要です）。完全に組み立ててから電源プラグを差し込み、バックライトが思い通りに光るか確認します。注意：適切な安全対策を取っていない限り、開いたまま通電した機器で動作テストを行ってはいけません。",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "完成！",
+          "body": "改造が成功すると、バックライトが広い面光源になります。LCDパネルを取り除くことで光が見えるようになり、モニターをランプや発光パネルとして使えます。（完成写真は後日掲載します。）"
+        },
+        "feedback": {
+          "title": "もっと良いアイデアが？ぜひ教えてください。",
+          "body": "この手順書はオープンで、改善によって育っていきます。より良いバイパス回路、明るさ調整、もっときれいな取り付け方を見つけたら、ぜひ投稿してください。",
+          "cta": "投稿する"
+        },
+        "ui": {
+          "openPhoto": "写真を拡大",
+          "closePhoto": "閉じる",
+          "playVideo": "動画を再生",
+          "pauseVideo": "動画を一時停止",
+          "stepProgressLabel": "ステップ",
+          "stepProgressOf": "／",
+          "jumpToStep": "ステップへ移動",
+          "photoCountLabel": "写真",
+          "photoCountOf": "／"
+        }
+      },
+      "hp_z23n": {
+        "meta": {
+          "title": "HP Z23n — モニターを照明に | モニターのアップサイクル",
+          "description": "ステップごとの手順：HP Z23nモニターを分解し、LCDを取り外して、バックライトを発光パネルとして再利用します。"
+        },
+        "back": "← 一覧に戻る",
+        "eyebrow": "手順書 · モニターのアップサイクル",
+        "title": "HP Z23n",
+        "subtitle": "23インチモニターを照明に改造する",
+        "metaLine": "モデル：HP Z23n · 所要時間：約1時間 · 難易度：やさしい · 下書き",
+        "credit": "手順書：RevampITのBruno · 下書き — 未公開",
+        "safety": {
+          "title": "まず安全から",
+          "body": "通電したまま作業しないでください。始める前にモニターを電源から完全に切り離し、1〜2分待ちます。動作テストのたびに必要な安全対策を取り、不安があれば電子工作に詳しい仲間を呼びましょう。"
+        },
+        "tools": {
+          "title": "工具＆材料",
+          "items": [
+            "プラスドライバー（各サイズ）",
+            "必要に応じてマイナスドライバー",
+            "プライツール（プラスチック製のこじ開け工具）",
+            "適切な抵抗2個（回路図に従う）",
+            "絶縁テープまたはその他の粘着テープ",
+            "ネジ入れ容器"
+          ]
+        },
+        "stages": [
+          {
+            "key": "disassemble",
+            "stageNumber": "フェーズ1",
+            "title": "モニターを分解する",
+            "intro": "作業スペースを確保し、清潔に保ちましょう。分解の際は部品の向きをそのまま保ち（写真のようにボタンを下に）、マグネット付きドライバーとネジ入れ容器を使って、何も失くさないようにします。"
+          },
+          {
+            "key": "bridge",
+            "stageNumber": "フェーズ2",
+            "title": "電子回路をバイパスする",
+            "intro": "制御基板を取り外し、残ったコネクタをバイパスして、操作なしでパネルが常に点灯するようにします。"
+          },
+          {
+            "key": "lcd",
+            "stageNumber": "フェーズ3",
+            "title": "LCDを取り外す",
+            "intro": "黒いLCDパネルを取り出します。その下の拡散板や導光層はきれいで無傷のまま残し、後で均一な光を生み出します。"
+          },
+          {
+            "key": "assemble",
+            "stageNumber": "フェーズ4",
+            "title": "組み立て＆動作テスト",
+            "intro": "すべてをしっかり組み立て直してから、初めて電源につなぎます。"
+          }
+        ],
+        "steps": [
+          {
+            "n": 1,
+            "title": "筐体を開けて接続ケーブルを抜く",
+            "body": "モニターの前面を下にして柔らかい敷物の上に置き、背面のネジをすべて外します。プライツールを背面シェルとフレームの隙間に沿って動かして接着部を剥がし、ツメが音を立てて外れるまで筐体をこじ開けて、背面シェルを脇に置きます。プラスチックフレームをディスプレイに固定しているネジと接着剤（9本）を外します。注意：操作ボタンの周辺ではケーブルがカバーとつながっていることがあります。急に引っ張らないでください。操作バー下部の4本のネジを外し、操作バーへの接続ケーブルを抜いて、前面から慎重に取り外します（必要ならプライツールでこじ開けます）。プラスチックフレームを外すには、まず金属筐体を取り外します。すべての粘着テープを剥がし、上端の2本のネジを外します。最後に、基板と画面の間のフラットケーブルを抜きます。",
+            "images": []
+          },
+          {
+            "n": 2,
+            "title": "制御基板を外してコネクタを改造する",
+            "body": "右側の制御基板（前のステップのフラットケーブルが出ている方）を取り外します。内側から2本、外側から2本、そしてVGA端子の横にある外側からの六角M2ネジ2本で固定されています。基板とネジは脇に置きます。もう不要です。残ったコネクタで、ピンを抵抗でバイパスします。正確な回路図は検証でき次第、追って示します。露出した金属部分をすべて絶縁テープで丁寧に覆い、改造したコネクタが外れないようテープで固定します。",
+            "images": []
+          },
+          {
+            "n": 3,
+            "title": "LCDパネルを外す",
+            "body": "ディスプレイモジュールを金属フレームから外します。最初と同じツメで留まっているので、必要ならマイナスドライバーを使って慎重に外します。まだつながっていれば、LCD制御基板へのフラットケーブルを抜きます。LCD制御基板は金属カバーの下にあり、接着されていることがあります。両方を外します。LCDパネル（一番外側の暗い層）を慎重に取り外します。もう不要です。その後、金属フレームを取り付け直します。ヒント：その下の拡散板や導光層は、できるだけきれいで無傷のまま残してください。",
+            "images": []
+          },
+          {
+            "n": 4,
+            "title": "組み立てと動作テスト",
+            "body": "残りの部品をすべてしっかり固定し、筐体をネジ留めします（一部のネジはもう不要です）。完全に組み立ててから電源プラグを差し込み、バックライトが思い通りに光るか確認します。注意：適切な安全対策を取っていない限り、開いたまま通電した機器で動作テストを行ってはいけません。",
+            "images": []
+          }
+        ],
+        "done": {
+          "title": "完成！",
+          "body": "改造が成功すると、バックライトが広い面光源になります。LCDパネルを取り除くことで光が見えるようになり、モニターをランプや発光パネルとして使えます。（完成写真は後日掲載します。）"
+        },
+        "feedback": {
+          "title": "もっと良いアイデアが？ぜひ教えてください。",
+          "body": "この手順書はオープンで、改善によって育っていきます。より良いバイパス回路、明るさ調整、もっときれいな取り付け方を見つけたら、ぜひ投稿してください。",
+          "cta": "投稿する"
+        },
+        "ui": {
+          "openPhoto": "写真を拡大",
+          "closePhoto": "閉じる",
+          "playVideo": "動画を再生",
+          "pauseVideo": "動画を一時停止",
+          "stepProgressLabel": "ステップ",
+          "stepProgressOf": "／",
+          "jumpToStep": "ステップへ移動",
+          "photoCountLabel": "写真",
+          "photoCountOf": "／"
         }
       }
     }
@@ -6451,7 +6786,39 @@
               "エンタープライズ機能が限定的"
             ]
           }
-        ]
+        ],
+        "chooser": {
+          "heading": "あなたに合うディストリビューションは？",
+          "subtitle": "迷っていますか？一番大切なことを選べば、ぴったりの出発点をおすすめします。",
+          "recommendedLabel": "おすすめ",
+          "items": [
+            {
+              "need": "Windowsからの乗り換え／初心者の方",
+              "distro": "Linux Mint",
+              "why": "親しみやすい画面で、すぐに使えて、学習もほとんど不要です。"
+            },
+            {
+              "need": "ネット上に解説やサポートが一番多い",
+              "distro": "Ubuntu",
+              "why": "最大のコミュニティ — ほぼどんな問題にも解説が見つかります。"
+            },
+            {
+              "need": "最新のソフトウェアと技術",
+              "distro": "Fedora",
+              "why": "最新のパッケージで開発の最前線に近い — 好奇心旺盛な方向け。"
+            },
+            {
+              "need": "最高の安定性と長寿命",
+              "distro": "Debian",
+              "why": "非常に安定 — サーバーや、ただ動き続けてほしいマシンに最適です。"
+            },
+            {
+              "need": "古い、または性能の低いハードウェア",
+              "distro": "MX Linux",
+              "why": "省リソースで、古い機器にも新しい命を吹き込みます。"
+            }
+          ]
+        }
       },
       "finalCta": {
         "heading": "Linuxに切り替える準備はできていますか？",
@@ -6672,7 +7039,10 @@
         "reusedLabel": "再利用コンポーネント",
         "reusedValue": "主要4パーツ中4つ",
         "circularLabel": "循環型経済",
-        "circularValue": "ハードウェアの寿命を延ばす"
+        "circularValue": "ハードウェアの寿命を延ばす",
+        "browseComponents": "パーツを見る",
+        "resultNote": "検査済みのリファービッシュ品パーツで機器を組み立てます。マーケットプレイスで合うパーツを見るか、完成品を直接ご相談ください。",
+        "sustainabilityNote": "再利用されるパーツは、ハードウェアの寿命を延ばし、新規製造による排出を減らします。"
       },
       "features": {
         "heading": "なぜ当社のAIビルドシステムを選ぶのか？",
@@ -7825,6 +8195,46 @@
         "eyebrow": "デバイス",
         "title": "ノートPC、デスクトップ、モニターを寄付。",
         "body": "動作する、または修理可能なデバイスを受け取り、整備して譲り渡します。個人データはその場で消去できます。"
+      }
+    },
+    "wishlist": {
+      "prefillTemplate": "次のものを寄付したいです：{title}",
+      "eyebrow": "現在の具体的なニーズ",
+      "heading": "私たちのウィッシュリスト",
+      "intro": "工房を動かし続け、救い出した機器を修繕するために、私たちは定期的に特定の工具やパーツを必要としています。現物を寄付するか、その購入費を負担することで、私たちを支えられます。",
+      "donateItem": "現物を寄付する",
+      "fundItem": "購入費を負担する",
+      "funded": "{target}のうち{amount}が集まりました",
+      "received": "{target}のうち{count}を受け取りました",
+      "copyReference": "振込目的をコピー",
+      "referenceCopied": "コピーしました！",
+      "close": "閉じる",
+      "fundTitle": "{title}の購入費を負担する",
+      "fundIntro": "記載の金額を銀行振込することで、この品の購入費を負担できます。あなたの寄付をこの品に紐づけられるよう、下記の振込目的をご利用ください：",
+      "priorityHigh": "優先度：高",
+      "priorityMedium": "優先度：中",
+      "priorityLow": "優先度：低",
+      "donateHeading": "この品を寄付する",
+      "donateIntro": "この品をお持ちで寄付したい場合は、下の引き渡しフォームをご利用ください。詳細はすでに入力済みです。",
+      "items": {
+        "ifixit": {
+          "title": "iFixit Pro Tech ツールキット",
+          "whyNeeded": "ノートパソコンやスマートフォンを傷つけずに開けるための、欠かせないプロ用工具です。ボランティアの工房のために、さらにセットが必要です。",
+          "costLabel": "1セットあたりCHF 79.00",
+          "purpose": "寄付：iFixit Pro Tech ツールキット"
+        },
+        "ssd": {
+          "title": "2.5インチ SATA SSD（500GB）",
+          "whyNeeded": "遅い機械式ハードディスクは、古いノートパソコンの主なボトルネックです。最新のSSDに交換すると、再び速く使いやすくなります。",
+          "costLabel": "SSD 1台あたりCHF 35.00",
+          "purpose": "寄付：2.5 SATA SSD 500GB"
+        },
+        "soldering": {
+          "title": "はんだステーション（Ersa i-CON Pico）",
+          "whyNeeded": "高度なマザーボード修理（不良コンデンサや充電端子の交換）のために。そうでなければ電子廃棄物になる機器を救います。",
+          "costLabel": "CHF 160.00",
+          "purpose": "寄付：Ersa i-CON Pico"
+        }
       }
     }
   },
@@ -8981,7 +9391,9 @@
         "columnNumber": "#",
         "columnStatus": "Status",
         "ofText": "of",
-        "productsText": "products"
+        "productsText": "products",
+        "prevPage": "前のページ",
+        "nextPage": "次のページ"
       },
       "bulkActionBar": {
         "deselectAll": "選択を解除",
@@ -9039,6 +9451,23 @@
         "updateFailed": "製品を更新できませんでした",
         "saveFailed": "製品を保存できませんでした",
         "genericSaveError": "保存中にエラーが発生しました。もう一度お試しください。"
+      },
+      "storageLocation": {
+        "label": "保管場所",
+        "placeholder": "場所を選択…",
+        "loading": "読み込み中…",
+        "addNew": "場所を追加",
+        "newNamePlaceholder": "場所の名前",
+        "kindLabel": "種類",
+        "save": "保存"
+      },
+      "voiceEntry": {
+        "start": "録音を開始",
+        "stop": "録音を停止",
+        "processing": "処理中…",
+        "hint": "機器を説明してください：メーカー、モデル、状態、価格。",
+        "transcription": "認識結果：{text}",
+        "errorGeneric": "音声を処理できませんでした。もう一度お試しください。"
       }
     },
     "eWasteProblem": {
@@ -9642,7 +10071,14 @@
       "bulkSelected": "{count}日を選択中",
       "bulkFill": "計画から入力",
       "bulkClear": "クリア",
-      "bulkCancel": "選択を解除"
+      "bulkCancel": "選択を解除",
+      "lockedApproved": "承認・ロック済み",
+      "reopen2": "再度開く（管理者）",
+      "bulkAbsenceLabel": "欠勤",
+      "fillSkippedNonPlanDays": "{count, plural, one {勤務予定のない1日をスキップしました（所定時間0）} other {勤務予定のない#日をスキップしました（所定時間0）}}",
+      "fillNonPlanDay": "勤務予定日ではありません — 所定時間はなし。必要に応じて手動で時間を入力してください。",
+      "selectHintTouch": "日をタップして選択（もう一度タップで解除）· 曜日の略称（月・火 …）で列全体を選択 · その後、下でアクションを選びます。",
+      "submittedUnchanged": "提出済み — 承認待ちです。変更すると、再提出が必要になります。"
     },
     "appointments": {
       "pageTitle": "予約",
@@ -9892,7 +10328,8 @@
         "unverifyConfirm": {
           "title": "検証を解除",
           "message": "検証を本当に解除しますか？"
-        }
+        },
+        "verifyFailed": "操作に失敗しました。もう一度お試しください。"
       },
       "reports": {
         "filters": {
@@ -10046,7 +10483,9 @@
       "expandSidebarTitle": "サイドバーを展開",
       "collapseSidebarTitle": "サイドバーを折りたたむ",
       "openAria": "サイドバーを開く",
-      "mobileMore": "もっと見る"
+      "mobileMore": "もっと見る",
+      "filterPlaceholder": "セクションを検索…",
+      "filterNoResults": "セクションが見つかりません"
     },
     "commandBar": {
       "placeholder": "検索またはコマンド…",
@@ -10075,7 +10514,8 @@
       "relativeJustNow": "たった今",
       "relativeMinutes": "{count}分前",
       "relativeHours": "{count}時間前",
-      "relativeDays": "{count, plural, one {#日前} other {#日前}}"
+      "relativeDays": "{count, plural, one {#日前} other {#日前}}",
+      "closeAriaLabel": "通知を閉じる"
     },
     "forms": {
       "cancel": "キャンセル",
@@ -10362,7 +10802,10 @@
       "sensitive": "機密",
       "system": "システム",
       "analyse": "分析",
-      "seller-onboarding": "出品者になる"
+      "seller-onboarding": "出品者になる",
+      "presentations": "プレゼンテーション",
+      "hr-vacancies": "求人",
+      "hr-applications": "応募"
     },
     "errorPage": {
       "title": "問題が発生しました",
@@ -10404,6 +10847,77 @@
     "command": {
       "label": "ローカルで起動",
       "text": "npm run d"
+    }
+  },
+  "kennzahlen": {
+    "meta": {
+      "title": "主要指標",
+      "description": "Revamp-ITの重要な数字をすべて公開。出典と信頼度つき。誇張のない数値です。"
+    },
+    "hero": {
+      "title": "主要指標",
+      "subtitle": "私たちが大切にしている数字をすべて公開 — 出典と信頼度つき"
+    },
+    "intro": "それぞれの数字には信頼度を示し、可能な限り計算と出典を添えています。誇張した数値より、正直な見積もりをお見せします。",
+    "categories": {
+      "impact": "環境への効果",
+      "social": "社会への効果",
+      "economic": "経済面",
+      "operations": "組織運営"
+    },
+    "confidence": {
+      "high": "実証済み",
+      "medium": "裏付けあり",
+      "estimated": "推計",
+      "target": "目標"
+    },
+    "howCalculated": "計算方法は？",
+    "source": "出典",
+    "lastVerified": "最終確認",
+    "co2Note": "CO₂算定方法の詳細",
+    "backToTransparenz": "透明性の概要に戻る",
+    "linkFromOverview": "すべての指標を見る"
+  },
+  "hirn": {
+    "title": "Hirn",
+    "subtitle": "{orgName}のアシスタント",
+    "open": "Hirnを開く",
+    "inputPlaceholder": "Hirnに質問してみましょう…",
+    "send": "送信",
+    "thinking": "Hirnが考えています…",
+    "emptyTitle": "どうお手伝いしましょう？",
+    "emptyHint": "候補を選ぶか、自分で質問してみてください。",
+    "suggestionsLabel": "候補",
+    "quickActionsLabel": "関連リンク",
+    "loginPrompt": "{orgName}のアシスタントHirnとチャットするには、ログインしてください。",
+    "loginCta": "ログイン",
+    "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+    "error": "Hirnは現在ご利用いただけません。しばらくしてからもう一度お試しください。",
+    "proactiveDismiss": "お知らせを閉じる"
+  },
+  "invite": {
+    "title": "友だちを招待",
+    "subtitle": "友だちを{orgName}に招待すると、お二人ともお得です。",
+    "friendReceives": "友だちがもらえるもの",
+    "friendReceivesDesc": "ショップでの初回購入が割引に",
+    "youReceive": "あなたがもらえるもの",
+    "youReceiveDesc": "友だちが初めての購入を完了すると、クーポンがもらえます",
+    "linkLabel": "あなた専用の招待リンク",
+    "copy": "コピー",
+    "copied": "コピーしました！",
+    "inviteByEmail": "メールで招待",
+    "emailPlaceholder": "email@beispiel.ch",
+    "send": "招待する",
+    "sending": "送信中…",
+    "inviteSent": "{email}に招待を送信しました！",
+    "sendError": "送信中にエラーが発生しました。",
+    "invitesSent": "送信した招待",
+    "registrations": "登録数"
+  },
+  "payment": {
+    "method": {
+      "title": "支払い方法",
+      "subtitle": "お支払い方法をお選びください"
     }
   }
 }
