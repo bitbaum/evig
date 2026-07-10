@@ -32,6 +32,8 @@ export const blogPosts = pgTable('blog_posts', {
   featuredImage: text('featured_image'),
   categoryId: uuid('category_id').references(() => blogCategories.id, { onDelete: 'set null' }),
   tags: text('tags').array().default([]),
+  // public | unlisted — matches the file frontmatter `visibility`. App-validated.
+  visibility: text('visibility').notNull().default('public'),
 
   // Publishing status
   isPublished: boolean('is_published').default(false),
@@ -80,6 +82,19 @@ export const blogComments = pgTable('blog_comments', {
 
 export type BlogComment = typeof blogComments.$inferSelect
 export type NewBlogComment = typeof blogComments.$inferInsert
+
+// =============================================================================
+// BLOG HIDDEN SLUGS
+// =============================================================================
+// Suppression list for "deleting" a git/file-authored post from the admin UI:
+// the markdown can't be removed at runtime, so its slug is hidden here and the
+// public readers skip it. DB-authored posts are deleted for real, not hidden.
+
+export const blogHiddenSlugs = pgTable('blog_hidden_slugs', {
+  slug: text('slug').primaryKey(),
+  hiddenBy: uuid('hidden_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+})
 
 // =============================================================================
 // BLOG SUBMISSIONS

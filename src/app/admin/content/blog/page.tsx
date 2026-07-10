@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { getAllPosts as getFilePosts } from '@/lib/blog'
+import { getHiddenSlugs } from '@/lib/blog-db'
 import {
   Plus,
   FileText,
@@ -60,6 +61,7 @@ interface DbBlogRow {
   title: string
   excerpt: string | null
   is_published: boolean
+  visibility: string
   published_at: string | null
   created_at: string
   updated_at: string
@@ -82,6 +84,7 @@ async function getBlogPosts(): Promise<BlogPost[]> {
         bp.title,
         bp.excerpt,
         bp.is_published,
+        bp.visibility,
         bp.published_at,
         bp.created_at,
         bp.updated_at,
@@ -91,14 +94,19 @@ async function getBlogPosts(): Promise<BlogPost[]> {
        ORDER BY bp.created_at DESC
        LIMIT 50`
     )
-    dbPosts = result.rows.map((r): BlogPost => ({ ...r, source: 'db', visibility: 'public' }))
+    dbPosts = result.rows.map((r): BlogPost => ({
+      ...r,
+      source: 'db',
+      visibility: r.visibility === 'unlisted' ? 'unlisted' : 'public',
+    }))
   } catch {
     // Table might not exist — fall through to file posts only.
   }
 
   const dbSlugs = new Set(dbPosts.map((p) => p.slug))
+  const hidden = await getHiddenSlugs()
   const filePosts: BlogPost[] = getFilePosts('de')
-    .filter((p) => !dbSlugs.has(p.slug))
+    .filter((p) => !dbSlugs.has(p.slug) && !hidden.has(p.slug))
     .map((p) => ({
       id: `file:${p.slug}`,
       slug: p.slug,

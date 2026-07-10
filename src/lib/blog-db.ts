@@ -9,7 +9,7 @@
  */
 
 import { db } from '@/db'
-import { blogPosts, blogCategories } from '@/db/schema/content'
+import { blogPosts, blogCategories, blogHiddenSlugs } from '@/db/schema/content'
 import { users } from '@/db/schema/auth'
 import { eq, and, lte, desc, asc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
@@ -41,6 +41,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         authorName: users.name,
         categoryName: blogCategories.name,
         tags: blogPosts.tags,
+        visibility: blogPosts.visibility,
         publishedAt: blogPosts.publishedAt,
         createdAt: blogPosts.createdAt,
       })
@@ -72,6 +73,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         authorName: users.name,
         categoryName: blogCategories.name,
         tags: blogPosts.tags,
+        visibility: blogPosts.visibility,
         publishedAt: blogPosts.publishedAt,
         createdAt: blogPosts.createdAt,
       })
@@ -139,6 +141,7 @@ export async function getPostsByCategory(categoryName: string): Promise<BlogPost
         authorName: users.name,
         categoryName: blogCategories.name,
         tags: blogPosts.tags,
+        visibility: blogPosts.visibility,
         publishedAt: blogPosts.publishedAt,
         createdAt: blogPosts.createdAt,
       })
@@ -173,6 +176,7 @@ function mapPostFromDb(row: {
   authorName: string | null
   categoryName: string | null
   tags: string[] | null
+  visibility: string
   publishedAt: string | null
   createdAt: string | null
 }): BlogPost {
@@ -188,6 +192,20 @@ function mapPostFromDb(row: {
     published: true, // Only published posts are returned
     body: row.content,
     createdAt: row.createdAt || '',
-    visibility: 'public', // DB-authored posts are public; unlisted lives in file frontmatter
+    visibility: row.visibility === 'unlisted' ? 'unlisted' : 'public',
+  }
+}
+
+/**
+ * Slugs an admin has "deleted" from the UI. For git/file posts the markdown
+ * can't be removed at runtime, so the public readers skip these instead.
+ */
+export async function getHiddenSlugs(): Promise<Set<string>> {
+  try {
+    const rows = await db.select({ slug: blogHiddenSlugs.slug }).from(blogHiddenSlugs)
+    return new Set(rows.map((r) => r.slug))
+  } catch (error) {
+    logger.error('Failed to get hidden slugs', { error })
+    return new Set()
   }
 }

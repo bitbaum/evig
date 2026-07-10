@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
+import { importFilePostForEdit, hideFilePost } from './actions'
 
 interface BlogPost {
   id: string
@@ -54,14 +55,27 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   const handleDelete = async () => {
     if (!deleteTarget) return
     setDeleting(true)
-    const result = await apiFetch(`/api/admin/blog/${deleteTarget.id}`, { method: 'DELETE' })
-    setDeleting(false)
-    if (result.success) {
-      toast.success('Artikel gelöscht')
-      setDeleteTarget(null)
-      router.refresh()
-    } else {
-      toast.error(result.error || 'Artikel konnte nicht gelöscht werden')
+    try {
+      if (deleteTarget.source === 'file') {
+        // Git/file post: hide the slug (the markdown stays as a fallback).
+        await hideFilePost(deleteTarget.slug)
+        toast.success('Artikel entfernt')
+        setDeleteTarget(null)
+        router.refresh()
+      } else {
+        const result = await apiFetch(`/api/admin/blog/${deleteTarget.id}`, { method: 'DELETE' })
+        if (result.success) {
+          toast.success('Artikel gelöscht')
+          setDeleteTarget(null)
+          router.refresh()
+        } else {
+          toast.error(result.error || 'Artikel konnte nicht gelöscht werden')
+        }
+      }
+    } catch {
+      toast.error('Artikel konnte nicht entfernt werden')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -176,12 +190,28 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               </Button>
             </>
           ) : (
-            <span
-              className="text-text-muted cursor-not-allowed"
-              title="In Git verwaltet — im Repository (content/posts) bearbeiten"
-            >
-              <GitBranch className="w-4 h-4" />
-            </span>
+            <>
+              <form action={importFilePostForEdit.bind(null, post.slug)}>
+                <button
+                  type="submit"
+                  className="text-action hover:text-action"
+                  title="Bearbeiten — übernimmt den Beitrag aus Git in die Datenbank"
+                  aria-label="Artikel bearbeiten"
+                >
+                  <Edit className="w-4 h-4" />
+                </button>
+              </form>
+              <Button
+                variant="destructive-ghost"
+                size="icon"
+                className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
+                onClick={() => setDeleteTarget(post)}
+                aria-label="Artikel entfernen"
+                title="Aus dem Blog entfernen"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </>
           )}
         </div>
       ),

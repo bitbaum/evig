@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { getPostBySlug } from '@/lib/blog-db'
+import { getPostBySlug, getHiddenSlugs } from '@/lib/blog-db'
 import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { APP_URL } from '@/config/urls'
@@ -26,7 +26,11 @@ interface BlogPostPageProps {
 async function getPost(slug: string, locale: string) {
   const dbPost = await getPostBySlug(slug)
   if (dbPost) return dbPost
-  return getFilePost(slug, locale)
+  // A file post the admin "deleted" is hidden (its markdown stays as fallback).
+  const file = getFilePost(slug, locale)
+  if (!file) return null
+  const hidden = await getHiddenSlugs()
+  return hidden.has(slug) ? null : file
 }
 
 // Unified DB + git-file read layer (deduped by slug).
