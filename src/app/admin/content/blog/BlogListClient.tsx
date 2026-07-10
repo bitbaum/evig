@@ -192,14 +192,16 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           ) : (
             <>
               <form action={importFilePostForEdit.bind(null, post.slug)}>
-                <button
+                <Button
                   type="submit"
+                  variant="ghost"
+                  size="icon"
                   className="text-action hover:text-action"
                   title="Bearbeiten — übernimmt den Beitrag aus Git in die Datenbank"
                   aria-label="Artikel bearbeiten"
                 >
                   <Edit className="w-4 h-4" />
-                </button>
+                </Button>
               </form>
               <Button
                 variant="destructive-ghost"

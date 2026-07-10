@@ -8,6 +8,7 @@ import { MessageSquare, Trash2, Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { formatDate } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { ROUTES } from '@/config/routes'
 import { COMMENT_BODY_MAX } from '@/config/blog-comments'
 
@@ -88,13 +89,13 @@ export default function BlogComments({ slug }: { slug: string }) {
         {/* Composer */}
         {session?.user ? (
           <form onSubmit={submit} className="mt-6">
-            <textarea
+            <Textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               maxLength={COMMENT_BODY_MAX}
               rows={3}
               placeholder={t('placeholder')}
-              className="w-full resize-y rounded-lg border border-default bg-surface-base px-4 py-3 text-[15px] text-text-primary placeholder:text-text-tertiary focus:border-action focus:outline-none focus:ring-1 focus:ring-action"
+              className="resize-y"
             />
             {error && <p className="mt-2 text-sm text-error-600">{error}</p>}
             <div className="mt-3 flex justify-end">
@@ -123,7 +124,6 @@ export default function BlogComments({ slug }: { slug: string }) {
             comments.map((c) => (
               <div key={c.id} className="flex gap-3">
                 {c.authorImage ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={c.authorImage} alt="" className="h-9 w-9 shrink-0 rounded-full" />
                 ) : (
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-action text-xs font-semibold text-white">
@@ -137,15 +137,17 @@ export default function BlogComments({ slug }: { slug: string }) {
                       <time className="font-mono text-xs text-text-tertiary">{formatDate(c.createdAt)}</time>
                     )}
                     {canModerate(c) && (
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="icon"
                         onClick={() => remove(c.id)}
-                        className="ml-auto text-text-tertiary transition-colors hover:text-error-600"
+                        className="ml-auto h-7 w-7 text-text-tertiary hover:text-error-600"
                         aria-label={t('delete')}
                         title={t('delete')}
                       >
                         <Trash2 className="h-4 w-4" />
-                      </button>
+                      </Button>
                     )}
                   </div>
                   <p className="mt-1 whitespace-pre-wrap text-[15px] leading-relaxed text-text-secondary">

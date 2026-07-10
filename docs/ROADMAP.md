@@ -1,6 +1,28 @@
 # RevampIT Build Roadmap
 
-Living queue of what we're building. Updated 2026-07-09. Keep in sync as items ship.
+Living queue of what we're building. Updated 2026-07-10. Keep in sync as items ship.
+
+## ✅ Shipped (2026-07-10 session) — blog + site i18n
+
+- **Blog overhaul**: sticky floating Table of Contents on long posts, an on-brand
+  title image on every post, artifact-grade tables/code/callouts, and SEO
+  (file posts in the sitemap, `/feed.xml` RSS, JSON-LD, hreflang, `noindex` on
+  unlisted posts).
+- **Site-wide i18n**: filled ~1,800 message keys that existed only in German
+  (the cause of German leaking onto non-German pages), moved the `/about` history
+  timeline out of `history.ts` into messages, and translated all 5 public posts
+  into every locale. `/about` verified French, not German.
+- **Mastodon runbook** published as an unlisted post + correctness fixes
+  (`SKIP_POST_DEPLOYMENT_MIGRATIONS`, federation-backfill note).
+- **Unlisted posts** are password-gated (`BLOG_UNLISTED_PASSWORD`, default `revamp`).
+- **Blog comments** — any logged-in user can comment; author/staff delete (migration 119).
+- **Admin manages every post** — git/file posts are now Edit (import to DB) /
+  Delete (hide slug) from the admin UI, no git needed; posts carry a `visibility`
+  column (migration 120).
+- **`/support` deduped** into `/get-involved/donate`.
+- **Verified (not a bug):** the "technician UI shown to a non-technician" report —
+  the only `technician_profiles` row is the owner's own (active); `butaeff@gmail.com`
+  has none, and every surface gates on an active profile. No change needed.
 
 ## ✅ Shipped — autonomous run (2026-07-09, part 2)
 - **build-your-computer** fixed: broken option cards (Button base crushed stacked title+desc → overlap) → accessible OptionCard; dropped 11 fabricated "global inventory network / Europa" claims → honest local copy. Browser-verified.
