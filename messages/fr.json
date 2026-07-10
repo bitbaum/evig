@@ -9246,7 +9246,56 @@
       "currentTitle": "Aujourd'hui",
       "yearsActive": "Années d'activité",
       "teamMembers": "Membres de l'équipe",
-      "devicesPerYear": "Appareils sauvés par an"
+      "devicesPerYear": "Appareils sauvés par an",
+      "founding": {
+        "title": "La fondation de {orgName}",
+        "subtitle": "D'une cave à fromage à un mouvement",
+        "p1": "{orgName} a été fondée en décembre {foundingYear} à Zürich – née d'un simple constat : de plus en plus d'ordinateurs encore utilisables finissaient à la poubelle. « Il faut faire quelque chose », telle a été la pensée qui a tout déclenché.",
+        "p2": "Le premier local était une ancienne cave à fromage de la Toni Molkerei. C'est là qu'est née l'idée qui nous porte encore aujourd'hui : associer le recyclage du matériel et Linux. Car avec des logiciels open source, même les appareils plus anciens fonctionnent encore pendant des années.",
+        "p3": "Ce qui a commencé comme un petit projet est devenu un mouvement. Sans vraiment chercher de monde, des personnes venaient sans cesse nous rejoindre en disant : « C'est génial, ce que vous faites. » Aujourd'hui, plus de 20 ans plus tard, nous traitons environ 1000 appareils par an – dont à peu près 150 sont remis en état et vendus, le reste servant à récupérer des pièces de rechange et à un recyclage dans les règles de l'art."
+      },
+      "milestones": {
+        "2003": {
+          "title": "Fondation",
+          "description": "{orgName} est fondée à la Toni Molkerei à Zürich – dans une ancienne cave à fromage. La vision : sauver de la poubelle des ordinateurs encore utilisables."
+        },
+        "2004": {
+          "title": "Premiers projets",
+          "description": "Les ateliers Linux et les premiers projets en Afrique démarrent. L'association du recyclage du matériel et de l'open source montre toute sa force."
+        },
+        "2005": {
+          "title": "Anniversaire de Debian",
+          "description": "Les 10 ans de Debian fêtés sur le toit de la Toni Molkerei. La communauté open source se rassemble."
+        },
+        "2008": {
+          "title": "Déménagement à Wipkingen",
+          "description": "De nouveaux locaux dans l'église réformée de Wipkingen. Plus de place pour l'atelier et une équipe qui s'agrandit."
+        },
+        "2012": {
+          "title": "Croissance",
+          "description": "Röschibachstrasse – plus d'espace, plus de possibilités. L'équipe s'agrandit et la demande augmente."
+        },
+        "2015": {
+          "title": "Deux sites",
+          "description": "Magasin à la {storeStreet}, entrepôt à la {warehouseStreet}. {orgName} s'installe durablement dans le quartier."
+        },
+        "2017": {
+          "title": "Nouveaux locaux",
+          "description": "Déménagement dans l'ancienne banque de la {storeStreet}. Plus de place pour l'atelier, le magasin et la communauté."
+        },
+        "2020": {
+          "title": "Le numérique malgré la pandémie",
+          "description": "Pendant la pandémie, nous aidons les écoles et les familles avec des ordinateurs portables bon marché pour l'école à la maison. Les ateliers en ligne démarrent."
+        },
+        "2022": {
+          "title": "Hébergement et services cloud",
+          "description": "Élargissement aux services cloud et d'hébergement suisses. La souveraineté des données pour les PME qui veulent garder leurs données en Suisse."
+        },
+        "2024": {
+          "title": "21 ans d'informatique durable",
+          "description": "Environ 1000 appareils traités par an, dont ~150 vendus. Plus de 43 tonnes de CO₂ économisées chaque année. ~40% de taux de réussite pour les stages. {orgName} est un modèle d'informatique durable en Suisse."
+        }
+      }
     },
     "impactStatsSection": {
       "sectionTitle": "Chiffres & Faits",

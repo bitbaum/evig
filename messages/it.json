@@ -9246,7 +9246,56 @@
       "currentTitle": "Oggi",
       "yearsActive": "Anni di attività",
       "teamMembers": "Membri del team",
-      "devicesPerYear": "Dispositivi salvati all'anno"
+      "devicesPerYear": "Dispositivi salvati all'anno",
+      "founding": {
+        "title": "La fondazione di {orgName}",
+        "subtitle": "Da una cantina del formaggio a un movimento",
+        "p1": "{orgName} è stata fondata nel dicembre {foundingYear} a Zürich, nata da una semplice constatazione: sempre più computer ancora utilizzabili finivano tra i rifiuti. \"Bisogna fare qualcosa\", è stato il pensiero che ha messo tutto in moto.",
+        "p2": "La prima sede è stata una vecchia cantina del formaggio nella Toni Molkerei. Lì è nata l'idea che ci accompagna ancora oggi: unire il riciclo dell'hardware e Linux. Perché con il software open source anche i dispositivi più vecchi continuano a funzionare per anni.",
+        "p3": "Quello che è iniziato come un piccolo progetto è diventato un movimento. Senza cercare troppo, continuavano ad arrivare persone che dicevano: \"Che bello quello che fate.\" Oggi, oltre 20 anni dopo, trattiamo circa 1000 dispositivi all'anno, di cui circa 150 vengono ricondizionati e venduti, mentre il resto viene destinato al recupero di pezzi di ricambio e al riciclo a regola d'arte."
+      },
+      "milestones": {
+        "2003": {
+          "title": "Fondazione",
+          "description": "{orgName} viene fondata nella Toni Molkerei a Zürich, in una vecchia cantina del formaggio. La visione: salvare dai rifiuti i computer ancora utilizzabili."
+        },
+        "2004": {
+          "title": "Primi progetti",
+          "description": "Partono i workshop su Linux e i primi progetti in Africa. La combinazione di riciclo dell'hardware e open source mostra tutta la sua forza."
+        },
+        "2005": {
+          "title": "Anniversario di Debian",
+          "description": "Il decimo anniversario di Debian sul tetto della Toni Molkerei. La comunità open source cresce e si unisce."
+        },
+        "2008": {
+          "title": "Trasloco a Wipkingen",
+          "description": "Nuovi spazi nella chiesa riformata di Wipkingen. Più spazio per l'officina e per un team in crescita."
+        },
+        "2012": {
+          "title": "Crescita",
+          "description": "Röschibachstrasse: più spazio, più possibilità. Il team cresce e la domanda aumenta."
+        },
+        "2015": {
+          "title": "Due sedi",
+          "description": "Negozio in {storeStreet}, magazzino in {warehouseStreet}. {orgName} si radica nel quartiere."
+        },
+        "2017": {
+          "title": "Nuovi locali",
+          "description": "Trasloco nell'ex banca in {storeStreet}. Più spazio per l'officina, il negozio e la comunità."
+        },
+        "2020": {
+          "title": "Digitali nonostante la pandemia",
+          "description": "Durante la pandemia aiutiamo scuole e famiglie con laptop a basso costo per la didattica a distanza. Partono i workshop online."
+        },
+        "2022": {
+          "title": "Hosting e servizi cloud",
+          "description": "Ampliamento con servizi cloud e di hosting svizzeri. Sovranità dei dati per le PMI che vogliono conservare i propri dati in Svizzera."
+        },
+        "2024": {
+          "title": "21 anni di IT sostenibile",
+          "description": "Circa 1000 dispositivi trattati all'anno, di cui ~150 venduti. Oltre 43 tonnellate di CO₂ risparmiate ogni anno. ~40% di tasso di successo nei tirocini. {orgName} è un modello per l'IT sostenibile in Svizzera."
+        }
+      }
     },
     "impactStatsSection": {
       "sectionTitle": "Numeri & Fatti",
