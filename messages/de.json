@@ -9257,6 +9257,55 @@
       "methodologyLink": "Wie berechnet?"
     },
     "geschichteSection": {
+      "founding": {
+        "title": "Die Gründung von {orgName}",
+        "subtitle": "Vom Käsekeller zur Bewegung",
+        "p1": "{orgName} wurde im Dezember {foundingYear} in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. \"Da muss etwas passieren\", war der Gedanke, der alles ins Rollen brachte.",
+        "p2": "Der erste Standort war ein alter Käsekeller in der Toni Molkerei. Dort entstand die Idee, die bis heute trägt: Hardware-Recycling und Linux kombinieren. Denn mit Open-Source-Software funktionieren auch ältere Geräte noch jahrelang.",
+        "p3": "Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: \"Toll, was ihr da macht.\" Heute, über 20 Jahre später, verarbeiten wir jährlich rund 1000 Geräte – davon werden etwa 150 aufbereitet und verkauft, der Rest geht in Ersatzteilgewinnung und fachgerechtes Recycling."
+      },
+      "milestones": {
+        "2003": {
+          "title": "Gründung",
+          "description": "{orgName} wird in der Toni Molkerei in Zürich gegründet – in einem alten Käsekeller. Die Vision: Brauchbare Computer vor dem Müll retten."
+        },
+        "2004": {
+          "title": "Erste Projekte",
+          "description": "Linux-Workshops und erste Afrika-Projekte starten. Die Kombination von Hardware-Recycling und Open Source zeigt ihre Stärke."
+        },
+        "2005": {
+          "title": "Debian-Jubiläum",
+          "description": "10-jähriges Debian-Jubiläum auf dem Dach der Toni Molkerei. Die Open-Source-Community wächst zusammen."
+        },
+        "2008": {
+          "title": "Umzug nach Wipkingen",
+          "description": "Neue Räume in der Reformierten Kirche Wipkingen. Mehr Platz für Werkstatt und wachsendes Team."
+        },
+        "2012": {
+          "title": "Wachstum",
+          "description": "Röschibachstrasse – mehr Raum, mehr Möglichkeiten. Das Team wächst und die Nachfrage steigt."
+        },
+        "2015": {
+          "title": "Zwei Standorte",
+          "description": "Laden an der {storeStreet}, Lager an der {warehouseStreet}. {orgName} etabliert sich im Quartier."
+        },
+        "2017": {
+          "title": "Neue Räumlichkeiten",
+          "description": "Umzug in die ehemalige Bank an der {storeStreet}. Mehr Platz für Werkstatt, Laden und Community."
+        },
+        "2020": {
+          "title": "Digital trotz Pandemie",
+          "description": "Während der Pandemie helfen wir Schulen und Familien mit günstigen Laptops für Homeschooling. Online-Workshops starten."
+        },
+        "2022": {
+          "title": "Hosting & Cloud-Services",
+          "description": "Erweiterung um Schweizer Cloud- und Hosting-Services. Datensouveränität für KMU, die ihre Daten in der Schweiz behalten wollen."
+        },
+        "2024": {
+          "title": "21 Jahre nachhaltige IT",
+          "description": "Rund 1000 Geräte pro Jahr verarbeitet, davon ~150 verkauft. Über 43 Tonnen CO₂ pro Jahr eingespart. ~40% Erfolgsquote bei Praktika. {orgName} ist Vorbild für nachhaltige IT in der Schweiz."
+        }
+      },
       "badge": "Unsere Geschichte",
       "milestoneTitle": "Meilensteine",
       "milestoneDesc": "Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT in der Schweiz.",

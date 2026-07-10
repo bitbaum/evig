@@ -2,7 +2,8 @@
  * Geschichte (History) Section Component
  *
  * Displays RevampIT's founding story and timeline of milestones.
- * Uses warm, storytelling-focused design with visual timeline.
+ * Structure (year/type/highlight) comes from `HISTORY_CONFIG`; all human-readable
+ * strings come from messages so the timeline is translated per locale.
  */
 
 'use client'
@@ -10,10 +11,8 @@
 import { Clock, Rocket, Award, TrendingUp, Users, Building } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
-import {
-  HISTORY_CONFIG,
-  type Milestone,
-} from '@/data/history'
+import { ORG, LOCATIONS } from '@/config/org'
+import { HISTORY_CONFIG, type Milestone } from '@/data/history'
 
 const getTypeIcon = (type: Milestone['type']) => {
   switch (type) {
@@ -47,40 +46,32 @@ const getTypeColor = (type: Milestone['type']) => {
 
 function TimelineItem({
   milestone,
+  title,
+  description,
   isLeft,
 }: {
   milestone: Milestone
+  title: string
+  description: string
   isLeft: boolean
 }) {
   return (
-    <div
-      className={`flex items-center gap-4 md:gap-8 ${isLeft ? 'md:flex-row-reverse' : ''}`}
-    >
+    <div className={`flex items-center gap-4 md:gap-8 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
       {/* Content Card */}
-      <div
-        className={`flex-1 ${isLeft ? 'md:text-right' : ''}`}
-      >
-        <div
-          className={`card-shell p-6 ${milestone.highlight ? 'ring-2 ring-action ring-offset-2' : ''}`}
-        >
-          <div
-            className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}
-          >
-            <span
-              className={`${getTypeColor(milestone.type)} text-white p-2 rounded-lg`}
-            >
+      <div className={`flex-1 ${isLeft ? 'md:text-right' : ''}`}>
+        <div className={`card-shell p-6 ${milestone.highlight ? 'ring-2 ring-action ring-offset-2' : ''}`}>
+          <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
+            <span className={`${getTypeColor(milestone.type)} text-white p-2 rounded-lg`}>
               {getTypeIcon(milestone.type)}
             </span>
             <div>
-              <span className="text-sm font-medium text-text-tertiary">
-                {milestone.year}
-              </span>
+              <span className="text-sm font-medium text-text-tertiary">{milestone.year}</span>
               <Heading level={3} className="text-lg font-bold text-text-primary">
-                {milestone.title}
+                {title}
               </Heading>
             </div>
           </div>
-          <p className="text-text-secondary">{milestone.description}</p>
+          <p className="text-text-secondary">{description}</p>
         </div>
       </div>
 
@@ -101,7 +92,16 @@ function TimelineItem({
 
 export default function GeschichteSection() {
   const t = useTranslations('components.geschichteSection')
-  const { founding, milestones, currentState } = HISTORY_CONFIG
+  const { milestones, currentState } = HISTORY_CONFIG
+
+  // next-intl keys are statically typed; the timeline reads them by year.
+  type MsgKey = Parameters<typeof t>[0]
+  const foundingParams = { orgName: ORG.name, foundingYear: ORG.foundingYear }
+  const milestoneParams = {
+    orgName: ORG.name,
+    storeStreet: LOCATIONS.store.street,
+    warehouseStreet: LOCATIONS.warehouse.street,
+  }
 
   return (
     <section className="py-20 bg-surface-raised">
@@ -113,20 +113,18 @@ export default function GeschichteSection() {
             {t('badge')}
           </div>
           <Heading level={2} className="text-4xl md:text-5xl font-bold text-text-primary mb-6">
-            {founding.title}
+            {t('founding.title', foundingParams)}
           </Heading>
-          <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-            {founding.subtitle}
-          </p>
+          <p className="text-xl text-text-secondary max-w-3xl mx-auto">{t('founding.subtitle')}</p>
         </div>
 
         {/* Founding Story */}
         <div className="max-w-3xl mx-auto mb-20">
           <div className="card-shell rounded-2xl p-8">
             <div className="prose prose-lg max-w-none">
-              {founding.paragraphs.map((paragraph, index) => (
-                <p key={index} className="text-text-secondary mb-4 last:mb-0">
-                  {paragraph}
+              {(['p1', 'p2', 'p3'] as const).map((k) => (
+                <p key={k} className="text-text-secondary mb-4 last:mb-0">
+                  {t(`founding.${k}`, foundingParams)}
                 </p>
               ))}
             </div>
@@ -138,9 +136,7 @@ export default function GeschichteSection() {
           <Heading level={3} className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
             {t('milestoneTitle')}
           </Heading>
-          <p className="text-text-secondary max-w-2xl mx-auto">
-            {t('milestoneDesc')}
-          </p>
+          <p className="text-text-secondary max-w-2xl mx-auto">{t('milestoneDesc')}</p>
         </div>
 
         {/* Timeline */}
@@ -154,6 +150,8 @@ export default function GeschichteSection() {
               <TimelineItem
                 key={milestone.year}
                 milestone={milestone}
+                title={t(`milestones.${milestone.year}.title` as MsgKey)}
+                description={t(`milestones.${milestone.year}.description` as MsgKey, milestoneParams)}
                 isLeft={index % 2 === 0}
               />
             ))}
