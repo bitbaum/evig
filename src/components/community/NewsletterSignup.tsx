@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
+import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -21,36 +20,14 @@ export function NewsletterSignup({
   const t = useTranslations('home.newsletter')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [errorMsg, setErrorMsg] = useState('')
+  const { status, errorMsg, subscribe } = useNewsletterSubscribe(t('networkError'))
 
   const resolvedTitle = title ?? t('title')
   const resolvedDescription = description ?? t('subtitle')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!email) return
-
-    setStatus('loading')
-    setErrorMsg('')
-
-    try {
-      const { error: apiError } = await apiFetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        body: { email, name: name || undefined, source },
-      })
-
-      if (!apiError) {
-        setStatus('success')
-      } else {
-        setErrorMsg(apiError)
-        setStatus('error')
-      }
-    } catch (err) {
-      logger.warn('Newsletter signup failed', { error: err })
-      setErrorMsg(t('networkError'))
-      setStatus('error')
-    }
+    await subscribe({ email, name, source })
   }
 
   if (status === 'success') {

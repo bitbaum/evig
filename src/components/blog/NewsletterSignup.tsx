@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { Mail, Heart, Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
+import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,31 +13,12 @@ import { ROUTES } from '@/config/routes'
 export default function NewsletterSignup() {
   const t = useTranslations('components.newsletterSignup')
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [message, setMessage] = useState('')
+  const { status, errorMsg, subscribe } = useNewsletterSubscribe(t('networkError'))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setStatus('loading')
-
-    try {
-      const { error: apiError } = await apiFetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        body: { email },
-      })
-
-      if (!apiError) {
-        setStatus('success')
-        setMessage(t('successMessage'))
-        setEmail('')
-      } else {
-        setStatus('error')
-        setMessage(apiError)
-      }
-    } catch {
-      setStatus('error')
-      setMessage(t('networkError'))
-    }
+    const ok = await subscribe({ email })
+    if (ok) setEmail('')
   }
 
   return (
@@ -89,7 +70,7 @@ export default function NewsletterSignup() {
             <div className="inline-flex items-center justify-center w-12 h-12 bg-action-muted rounded-full mb-3">
               <Check className="w-6 h-6 text-action" />
             </div>
-            <p className="text-action font-semibold mb-1">{message}</p>
+            <p className="text-action font-semibold mb-1">{t('successMessage')}</p>
             <p className="text-action text-sm">
               {t('confirmEmail')}
             </p>
@@ -120,7 +101,7 @@ export default function NewsletterSignup() {
             </div>
 
             {status === 'error' && (
-              <p id="newsletter-error" className="text-error-600 text-sm">{message}</p>
+              <p id="newsletter-error" className="text-error-600 text-sm">{errorMsg}</p>
             )}
 
             <p className="text-xs text-text-tertiary text-center">
