@@ -3440,6 +3440,13 @@
     "by": "by",
     "back": "Back to blog",
     "onThisPage": "On this page",
+    "gate": {
+      "eyebrow": "Internal · Confidential",
+      "intro": "This post isn't publicly listed. Enter the password to read it.",
+      "placeholder": "Password",
+      "submit": "Open",
+      "error": "Wrong password. Please try again."
+    },
     "unlisted": "Unlisted",
     "minutesShort": "min",
     "categories": "Categories",

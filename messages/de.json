@@ -3412,6 +3412,13 @@
     "by": "von",
     "back": "Zurück zum Blog",
     "onThisPage": "Auf dieser Seite",
+    "gate": {
+      "eyebrow": "Intern · Vertraulich",
+      "intro": "Dieser Beitrag ist nicht öffentlich gelistet. Gib das Passwort ein, um ihn zu lesen.",
+      "placeholder": "Passwort",
+      "submit": "Öffnen",
+      "error": "Falsches Passwort. Bitte erneut versuchen."
+    },
     "unlisted": "Nicht gelistet",
     "minutesShort": "Min",
     "categories": "Kategorien",

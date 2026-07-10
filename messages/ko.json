@@ -1256,7 +1256,14 @@
     "back": "블로그로 돌아가기",
     "onThisPage": "이 페이지에서",
     "unlisted": "목록에 없음",
-    "minutesShort": "분"
+    "minutesShort": "분",
+    "gate": {
+      "eyebrow": "내부 · 기밀",
+      "intro": "이 게시물은 공개 목록에 없습니다. 읽으려면 비밀번호를 입력하세요.",
+      "placeholder": "비밀번호",
+      "submit": "열기",
+      "error": "비밀번호가 틀렸습니다. 다시 시도하세요."
+    }
   },
   "contact": {
     "meta": {

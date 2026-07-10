@@ -8,6 +8,8 @@ import { getMergedPosts } from '@/lib/blog-merge'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
 import { defaultLocale } from '@/i18n/routing'
+import { isUnlistedUnlocked } from '@/lib/blog-unlisted-auth'
+import BlogPasswordGate from './BlogPasswordGate'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
 import RelatedPosts from '@/components/blog/RelatedPosts'
@@ -84,6 +86,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post || !post.published) {
     notFound();
+  }
+
+  // Closed (unlisted) posts sit behind a shared password by default — the body
+  // never reaches the HTML until it's unlocked.
+  if (post.visibility === 'unlisted' && !(await isUnlistedUnlocked())) {
+    return (
+      <main>
+        <BlogPasswordGate title={post.title} />
+      </main>
+    );
   }
 
   // Related = same category, public only (never surface unlisted posts to a

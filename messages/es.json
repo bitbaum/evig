@@ -1256,7 +1256,14 @@
     "back": "Volver al blog",
     "onThisPage": "En esta página",
     "unlisted": "No listado",
-    "minutesShort": "min"
+    "minutesShort": "min",
+    "gate": {
+      "eyebrow": "Interno · Confidencial",
+      "intro": "Esta entrada no está listada públicamente. Introduce la contraseña para leerla.",
+      "placeholder": "Contraseña",
+      "submit": "Abrir",
+      "error": "Contraseña incorrecta. Inténtalo de nuevo."
+    }
   },
   "contact": {
     "meta": {

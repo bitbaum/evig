@@ -1256,7 +1256,14 @@
     "back": "Torna al blog",
     "onThisPage": "In questa pagina",
     "unlisted": "Non elencato",
-    "minutesShort": "min"
+    "minutesShort": "min",
+    "gate": {
+      "eyebrow": "Interno · Riservato",
+      "intro": "Questo articolo non è elencato pubblicamente. Inserisci la password per leggerlo.",
+      "placeholder": "Password",
+      "submit": "Apri",
+      "error": "Password errata. Riprova."
+    }
   },
   "contact": {
     "meta": {

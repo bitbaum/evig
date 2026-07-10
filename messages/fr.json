@@ -3531,7 +3531,14 @@
     "back": "Retour au blog",
     "onThisPage": "Sur cette page",
     "unlisted": "Non répertorié",
-    "minutesShort": "min"
+    "minutesShort": "min",
+    "gate": {
+      "eyebrow": "Interne · Confidentiel",
+      "intro": "Cet article n'est pas listé publiquement. Saisis le mot de passe pour le lire.",
+      "placeholder": "Mot de passe",
+      "submit": "Ouvrir",
+      "error": "Mot de passe incorrect. Réessaie."
+    }
   },
   "auth": {
     "login": {
