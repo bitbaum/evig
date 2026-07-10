@@ -33,7 +33,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
       <div
         className={
           showToc
-            ? 'mx-auto grid max-w-[1120px] gap-x-12 px-4 sm:px-6 xl:grid-cols-[210px_minmax(0,1fr)]'
+            ? 'mx-auto grid max-w-[1120px] gap-x-12 px-4 sm:px-6 lg:grid-cols-[200px_minmax(0,1fr)]'
             : ''
         }
       >

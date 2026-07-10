@@ -37,7 +37,7 @@ export default function BlogTableOfContents({ headings }: Props) {
   }, [headings])
 
   return (
-    <aside className="hidden xl:block">
+    <aside className="hidden lg:block">
       <nav
         aria-label={t('onThisPage')}
         className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
