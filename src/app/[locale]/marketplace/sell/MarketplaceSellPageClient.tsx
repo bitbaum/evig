@@ -50,6 +50,10 @@ function SellPageContent() {
   }
 
   if (!session?.user) {
+    // Return to the sell page after auth so a first-time seller doesn't lose
+    // their place, and lead with "create account" — most people listing an item
+    // don't have one yet.
+    const callback = encodeURIComponent(ROUTES.public.marketplaceSell)
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <Package className="w-16 h-16 text-text-muted mx-auto mb-4" />
@@ -59,9 +63,14 @@ function SellPageContent() {
         <p className="text-text-secondary mb-6">
           {t('loginRequiredDesc')}
         </p>
-        <Button as={Link} href={ROUTES.public.login} variant="primary">
-          {t('login')}
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Button as={Link} href={`${ROUTES.public.register}?callbackUrl=${callback}`} variant="primary">
+            {t('createAccount')}
+          </Button>
+          <Button as={Link} href={`${ROUTES.public.login}?callbackUrl=${callback}`} variant="outline">
+            {t('login')}
+          </Button>
+        </div>
       </div>
     )
   }

@@ -3041,7 +3041,8 @@
       "imageAlt": "Foto del producto {index}",
       "removeImageLabel": "Eliminar foto {index}",
       "label": "Publicar anuncio",
-      "imagesHelp": "Las buenas fotos se venden más rápido. La primera imagen es la imagen principal"
+      "imagesHelp": "Las buenas fotos se venden más rápido. La primera imagen es la imagen principal",
+      "createAccount": "Crear cuenta"
     },
     "listingsAvailable": "{count, plural, one {# anuncio} other {# anuncios}} disponible{count, plural, one {} other {s}}",
     "searchPlaceholder": "Portátil, monitor, smartphone...",

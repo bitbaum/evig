@@ -645,6 +645,7 @@
       "label": "Inserat aufgeben",
       "loginRequired": "Anmeldung erforderlich",
       "loginRequiredDesc": "Melde dich an, um Inserate zu erstellen.",
+      "createAccount": "Konto erstellen",
       "login": "Anmelden",
       "backToMarketplace": "Zurück zum Marketplace",
       "editTitle": "Inserat bearbeiten",

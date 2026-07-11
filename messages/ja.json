@@ -3041,7 +3041,8 @@
       "imageAlt": "商品写真 {index}",
       "removeImageLabel": "写真 {index} を削除",
       "label": "出品する",
-      "imagesHelp": "良い写真ほど早く売れます。最初の画像がメイン画像になります"
+      "imagesHelp": "良い写真ほど早く売れます。最初の画像がメイン画像になります",
+      "createAccount": "アカウント作成"
     },
     "listingsAvailable": "{count, plural, other {{count}件の出品}}が利用可能",
     "searchPlaceholder": "ラップトップ、モニター、スマートフォン...",

@@ -3041,7 +3041,8 @@
       "imageAlt": "Foto del prodotto {index}",
       "removeImageLabel": "Rimuovi foto {index}",
       "label": "Pubblica annuncio",
-      "imagesHelp": "Le belle foto vendono più velocemente. La prima immagine è quella principale"
+      "imagesHelp": "Le belle foto vendono più velocemente. La prima immagine è quella principale",
+      "createAccount": "Crea un account"
     },
     "listingsAvailable": "{count, plural, one {# annuncio} other {# annunci}} disponibili",
     "searchPlaceholder": "Laptop, monitor, smartphone...",

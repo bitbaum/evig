@@ -3041,7 +3041,8 @@
       "imageAlt": "제품 사진 {index}",
       "removeImageLabel": "사진 {index} 삭제",
       "label": "판매 등록",
-      "imagesHelp": "좋은 사진은 더 빨리 판매됩니다. 첫 번째 이미지가 대표 이미지입니다"
+      "imagesHelp": "좋은 사진은 더 빨리 판매됩니다. 첫 번째 이미지가 대표 이미지입니다",
+      "createAccount": "계정 만들기"
     },
     "listingsAvailable": "{count, plural, other {# 개의}} 판매 목록 이용 가능",
     "searchPlaceholder": "노트북, 모니터, 스마트폰...",

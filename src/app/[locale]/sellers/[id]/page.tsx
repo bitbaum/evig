@@ -147,7 +147,12 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
               {t('seller.publicProfile')}
             </div>
-            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">{displayName}</Heading>
+            <div className="mt-2 flex items-center gap-2">
+              <Heading level={1} className="text-3xl font-semibold text-text-primary sm:text-4xl">{displayName}</Heading>
+              {seller.is_verified && (
+                <BadgeCheck className="h-6 w-6 shrink-0 text-action" aria-label={t('seller.verified')} />
+              )}
+            </div>
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-text-tertiary">
               {seller.city && (
                 <span className="flex items-center gap-1">
@@ -160,10 +165,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 {t('seller.memberSince', { date: formatDateShort(seller.member_since) })}
               </span>
               {seller.is_verified && (
-                <span className="flex items-center gap-1 font-medium text-action">
-                  <BadgeCheck className="w-4 h-4" />
-                  {t('seller.verified')}
-                </span>
+                <span className="font-medium text-action">{t('seller.verified')}</span>
               )}
             </div>
             {seller.bio && (
