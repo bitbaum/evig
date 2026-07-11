@@ -24,6 +24,7 @@ export interface ListingItem {
   seller_display_name: string | null
   seller_rating: number | null
   seller_city: string | null
+  seller_is_verified: boolean | null
   thumbnail: string | null
   verified_at: string | null
   specs?: Array<{ key: string; value: string; unit: string | null }>

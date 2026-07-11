@@ -816,6 +816,7 @@
       "conditionMeaningFor": "Que signifie \"{condition}\" pour {category}?",
       "loadError": "Erreur lors du chargement de l'annonce",
       "verified": "Vérifié",
+      "sellerVerified": "Vendeur vérifié",
       "free": "Gratuit",
       "trust": {
         "verified": "Vérifié et testé par Revamp-IT",

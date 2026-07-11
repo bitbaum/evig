@@ -816,6 +816,7 @@
       "conditionMeaningFor": "What does \"{condition}\" mean for {category}?",
       "loadError": "Error loading listing",
       "verified": "Verified",
+      "sellerVerified": "Verified seller",
       "free": "Free",
       "trust": {
         "verified": "Checked & tested by Revamp-IT",

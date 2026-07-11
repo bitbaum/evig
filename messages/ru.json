@@ -834,6 +834,7 @@
       "conditionMeaningFor": "Что означает «{condition}» для {category}?",
       "loadError": "Ошибка при загрузке объявления",
       "verified": "Проверено",
+      "sellerVerified": "Проверенный продавец",
       "free": "Бесплатно",
       "trust": {
         "verified": "Проверено и протестировано Revamp-IT",

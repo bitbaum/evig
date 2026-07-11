@@ -141,6 +141,7 @@ export async function GET(request: NextRequest) {
         seller_display_name: sellerProfiles.displayName,
         seller_rating: sellerProfiles.averageRating,
         seller_city: sellerProfiles.city,
+        seller_is_verified: sellerProfiles.isVerified,
         thumbnail: listingThumbnailSubquery,
       })
       .from(listings)

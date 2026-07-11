@@ -238,6 +238,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   seller_display_name: displayName,
                   seller_rating: rating,
                   seller_city: seller.city,
+                  seller_is_verified: seller.is_verified,
                   thumbnail: listing.thumbnail,
                 }}
               />

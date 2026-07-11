@@ -3126,6 +3126,7 @@
       "conditionMeaningFor": "{category}에서 \"{condition}\"은(는) 무엇을 의미하나요?",
       "loadError": "게시물 로드 오류",
       "verified": "검증됨",
+      "sellerVerified": "인증된 판매자",
       "free": "무료",
       "trust": {
         "verified": "Revamp-IT가 검수 및 테스트 완료",

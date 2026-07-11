@@ -12,7 +12,7 @@
  */
 
 import { type MouseEvent } from 'react'
-import { ShoppingCart, Check } from 'lucide-react'
+import { ShoppingCart, Check, BadgeCheck } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { normalizeConditionValue, ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
@@ -38,6 +38,7 @@ export interface ListingCardData {
   seller_display_name: string | null
   seller_rating: number | null
   seller_city: string | null
+  seller_is_verified?: boolean | null
   thumbnail: string | null
   verified_at?: string | null
   specs?: Array<{ key: string; value: string; unit: string | null }>
@@ -103,9 +104,17 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
             {isGratis ? t('listing.free').toUpperCase() : formatCHF(Number(listing.price_chf))}
           </div>
 
-          <div className="mt-3 pt-3 border-t border-subtle font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary truncate">
-            {sellerName}
-            {location && <> · {location}</>}
+          <div className="mt-3 pt-3 border-t border-subtle font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary flex items-center gap-1 min-w-0">
+            <span className="truncate">
+              {sellerName}
+              {location && <> · {location}</>}
+            </span>
+            {listing.seller_is_verified && (
+              <BadgeCheck
+                className="h-3.5 w-3.5 shrink-0 text-action"
+                aria-label={t('listing.sellerVerified')}
+              />
+            )}
           </div>
         </div>
       </Link>

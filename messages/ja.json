@@ -3126,6 +3126,7 @@
       "conditionMeaningFor": "{category}における「{condition}」とは？",
       "loadError": "リスト読み込みエラー",
       "verified": "検証済み",
+      "sellerVerified": "認証済み出品者",
       "free": "無料",
       "trust": {
         "verified": "Revamp-ITが検査・テスト済み",
