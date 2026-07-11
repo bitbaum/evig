@@ -160,6 +160,7 @@ jest.mock('@/db/schema', () => ({
     id: 'lf_id', userId: 'lf_userId', listingId: 'lf_listingId', createdAt: 'lf_createdAt',
   },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
+  userProfiles: { userId: 'up_userId', displayName: 'up_displayName', bio: 'up_bio', avatarUrl: 'up_avatarUrl', isVerified: 'up_isVerified' },
   sellerProfiles: {
     id: 'sp_id', userId: 'sp_userId', displayName: 'sp_displayName', city: 'sp_city',
     averageRating: 'sp_averageRating', bio: 'sp_bio', avatarUrl: 'sp_avatarUrl',
@@ -342,7 +343,7 @@ describe('GET /api/listings/[id] — not found', () => {
     // First batch: listing query (where terminal) + auth() in parallel
     // listing query: from → innerJoin → leftJoin → where → resolves to []
     const mockListingWhere = jest.fn().mockResolvedValue([])
-    const mockListingLeftJoin = jest.fn().mockReturnValue({ where: mockListingWhere })
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
     const mockListingInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockListingLeftJoin, where: mockListingWhere })
     mockFrom.mockReturnValueOnce({ innerJoin: mockListingInnerJoin, where: mockListingWhere })
 
@@ -370,7 +371,7 @@ describe('GET /api/listings/[id] — success (no session)', () => {
   it('returns 200 with full listing data and is_favorited: false', async () => {
     // 1st select: listing query — terminal: where
     const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING])
-    const mockListingLeftJoin = jest.fn().mockReturnValue({ where: mockListingWhere })
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
     const mockListingInnerJoin = jest.fn().mockReturnValue({
       leftJoin: mockListingLeftJoin,
       where: mockListingWhere,
@@ -409,7 +410,7 @@ describe('GET /api/listings/[id] — success (with session)', () => {
 
     // 1st select: listing
     const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING])
-    const mockListingLeftJoin = jest.fn().mockReturnValue({ where: mockListingWhere })
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
     const mockListingInnerJoin = jest.fn().mockReturnValue({
       leftJoin: mockListingLeftJoin,
       where: mockListingWhere,
@@ -443,7 +444,7 @@ describe('GET /api/listings/[id] — success (with session)', () => {
     mockUpdateWhere.mockResolvedValue(undefined)
 
     const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING])
-    const mockListingLeftJoin = jest.fn().mockReturnValue({ where: mockListingWhere })
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
     const mockListingInnerJoin = jest.fn().mockReturnValue({
       leftJoin: mockListingLeftJoin,
       where: mockListingWhere,

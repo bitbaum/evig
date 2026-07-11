@@ -6,7 +6,7 @@ import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingFavorites, users, sellerProfiles } from '@/db/schema';
+import { listings, listingFavorites, users, sellerProfiles, userProfiles } from '@/db/schema';
 import { eq, and, ne, sql } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
 import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
@@ -40,7 +40,7 @@ export const GET = withAuth(async (
         favorite_count: listings.favoriteCount,
         created_at: listings.createdAt,
         seller_name: users.name,
-        seller_display_name: sellerProfiles.displayName,
+        seller_display_name: userProfiles.displayName,
         seller_city: sellerProfiles.city,
         thumbnail: listingThumbnailSubquery,
         favorited_at: listingFavorites.createdAt,
@@ -49,6 +49,7 @@ export const GET = withAuth(async (
       .innerJoin(listings, eq(listingFavorites.listingId, listings.id))
       .innerJoin(users, eq(listings.sellerId, users.id))
       .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+      .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
       .where(where)
       .orderBy(sql`${listingFavorites.createdAt} DESC`)
       .limit(limit)

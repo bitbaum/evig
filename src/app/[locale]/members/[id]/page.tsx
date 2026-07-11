@@ -43,7 +43,6 @@ interface MemberProfile {
   member_since: string
   is_verified: boolean
   is_seller: boolean
-  seller_display_name: string | null
   seller_listings: number
   reviews: MemberReview[]
   stats: {

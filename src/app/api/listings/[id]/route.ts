@@ -9,7 +9,7 @@ import { auth } from '@/auth';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingImages, listingSpecs, listingFavorites, users, sellerProfiles } from '@/db/schema';
+import { listings, listingImages, listingSpecs, listingFavorites, users, sellerProfiles, userProfiles } from '@/db/schema';
 import { eq, and, ne, asc, sql } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
@@ -66,9 +66,11 @@ export async function GET(
           verification_notes: listings.verificationNotes,
           condition_checks: listings.conditionChecks,
           seller_name: users.name,
-          seller_display_name: sellerProfiles.displayName,
-          seller_bio: sellerProfiles.bio,
-          seller_avatar_url: sellerProfiles.avatarUrl,
+          // Identity (display_name/bio/avatar) from user_profiles SSOT; city/
+          // canton stay on seller_profiles (storefront location).
+          seller_display_name: userProfiles.displayName,
+          seller_bio: userProfiles.bio,
+          seller_avatar_url: userProfiles.avatarUrl,
           seller_city: sellerProfiles.city,
           seller_canton: sellerProfiles.canton,
           seller_rating: sellerProfiles.averageRating,
@@ -78,6 +80,7 @@ export async function GET(
         .from(listings)
         .innerJoin(users, eq(listings.sellerId, users.id))
         .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+        .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
         .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED))),
       auth(),
     ]);

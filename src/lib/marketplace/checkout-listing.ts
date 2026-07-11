@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { listings, listingImages, users, sellerProfiles } from '@/db/schema'
+import { listings, listingImages, users, sellerProfiles, userProfiles } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { LISTING_STATUS } from '@/config/marketplace'
 import type { ListingForCheckout } from '@/hooks/useCheckout'
@@ -20,7 +20,7 @@ export async function getListingForCheckout(
       payment_mode: listings.paymentMode,
       pickup_location: listings.pickupLocation,
       seller_name: users.name,
-      seller_display_name: sellerProfiles.displayName,
+      seller_display_name: userProfiles.displayName,
       seller_id: listings.sellerId,
       // SSOT: the stored column decides — staff selling privately are P2P.
       is_revampit: listings.isRevampit,
@@ -28,6 +28,7 @@ export async function getListingForCheckout(
     .from(listings)
     .innerJoin(users, eq(listings.sellerId, users.id))
     .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+    .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
     .where(and(eq(listings.id, listingId), eq(listings.status, LISTING_STATUS.ACTIVE)))
     .limit(1)
 

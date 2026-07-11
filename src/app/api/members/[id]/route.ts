@@ -16,7 +16,7 @@
 import { NextRequest } from 'next/server';
 import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { users, reviews, listings, sellerProfiles } from '@/db/schema';
+import { users, reviews, listings, sellerProfiles, userProfiles } from '@/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
@@ -29,26 +29,27 @@ export async function GET(
     const { id } = await params;
     if (!id) return apiNotFound('Profil');
 
-    // Identity — 404 if the user doesn't exist at all.
+    // Identity — 404 if the user doesn't exist at all. Public identity
+    // (display_name / avatar / is_verified) comes from user_profiles, the SSOT.
     const [user] = await db
       .select({
         user_id: users.id,
         name: users.name,
+        display_name: userProfiles.displayName,
         image: users.image,
+        avatar_url: userProfiles.avatarUrl,
+        is_verified: userProfiles.isVerified,
         member_since: users.createdAt,
       })
       .from(users)
+      .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
       .where(eq(users.id, id));
 
     if (!user) return apiNotFound('Profil');
 
-    // Seller facet (for the cross-link to their storefront + verified badge).
+    // Seller facet — only needed for the cross-link to their storefront.
     const [seller] = await db
-      .select({
-        display_name: sellerProfiles.displayName,
-        is_verified: sellerProfiles.isVerified,
-        total_listings: sellerProfiles.totalListings,
-      })
+      .select({ total_listings: sellerProfiles.totalListings })
       .from(sellerProfiles)
       .where(eq(sellerProfiles.userId, id));
 
@@ -96,10 +97,13 @@ export async function GET(
     return apiSuccessCached(
       {
         profile: {
-          ...user,
-          is_verified: seller?.is_verified ?? false,
+          user_id: user.user_id,
+          // Prefer the person's chosen public name/avatar; fall back to account.
+          name: user.display_name || user.name,
+          image: user.avatar_url || user.image,
+          member_since: user.member_since,
+          is_verified: !!user.is_verified,
           is_seller: isSeller,
-          seller_display_name: seller?.display_name ?? null,
           seller_listings: seller?.total_listings ?? 0,
         },
         reviews: reviewsWritten,

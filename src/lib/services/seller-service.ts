@@ -8,7 +8,7 @@
 
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
-import { listings, listingImages, marketplaceOrders, sellerProfiles } from '@/db/schema'
+import { listings, listingImages, marketplaceOrders, sellerProfiles, userProfiles } from '@/db/schema'
 import { logger } from '@/lib/logger'
 import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
 
@@ -23,16 +23,21 @@ import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
  *
  * Route-specific extras (updated_at for /me, user_name for /[id]) are
  * added at the call site.
+ *
+ * Identity fields (display_name / bio / avatar_url / is_verified) come from
+ * user_profiles — the SSOT (migration 121). Every query spreading this MUST
+ * `.leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))`.
+ * City/canton stay on seller_profiles (storefront location, a seller-facet fact).
  */
 export const sellerProfileCoreFields = {
   id: sellerProfiles.id,
   user_id: sellerProfiles.userId,
-  display_name: sellerProfiles.displayName,
-  bio: sellerProfiles.bio,
-  avatar_url: sellerProfiles.avatarUrl,
+  display_name: userProfiles.displayName,
+  bio: userProfiles.bio,
+  avatar_url: userProfiles.avatarUrl,
   city: sellerProfiles.city,
   canton: sellerProfiles.canton,
-  is_verified: sellerProfiles.isVerified,
+  is_verified: userProfiles.isVerified,
   average_rating: sellerProfiles.averageRating,
   total_reviews: sellerProfiles.totalReviews,
   total_listings: sellerProfiles.totalListings,

@@ -5,7 +5,7 @@
 import { NextRequest } from 'next/server';
 import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { sellerProfiles, listings, users, reviews } from '@/db/schema';
+import { sellerProfiles, listings, users, reviews, userProfiles } from '@/db/schema';
 import { eq, and, sql, getTableName } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
@@ -33,6 +33,7 @@ export async function GET(
       })
       .from(sellerProfiles)
       .innerJoin(users, eq(sellerProfiles.userId, users.id))
+      .leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))
       .where(eq(sellerProfiles.userId, id));
 
     if (!profile) {

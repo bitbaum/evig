@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { db } from '@/db'
-import { sellerProfiles, users } from '@/db/schema'
+import { sellerProfiles, users, userProfiles } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { ORG } from '@/config/org'
 import { APP_URL } from '@/config/urls'
@@ -24,16 +24,17 @@ async function getSellerMeta(id: string): Promise<SellerMeta | null> {
   try {
     const [row] = await db
       .select({
-        display_name: sellerProfiles.displayName,
+        display_name: userProfiles.displayName,
         user_name: users.name,
-        bio: sellerProfiles.bio,
+        bio: userProfiles.bio,
         city: sellerProfiles.city,
         canton: sellerProfiles.canton,
-        avatar_url: sellerProfiles.avatarUrl,
+        avatar_url: userProfiles.avatarUrl,
         total_listings: sellerProfiles.totalListings,
       })
       .from(sellerProfiles)
       .innerJoin(users, eq(sellerProfiles.userId, users.id))
+      .leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))
       .where(eq(sellerProfiles.userId, id))
     return row ?? null
   } catch (err) {

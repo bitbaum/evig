@@ -45,21 +45,29 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }))
 
-// Select chain: select().from().where()
+// Select chain: select().from().where()  AND  select().from().leftJoin().where()
+// (GET + PATCH re-read join user_profiles; the PATCH exists-check does not.)
 const mockSelectWhere = jest.fn()
-const mockSelectFrom = jest.fn().mockReturnValue({ where: mockSelectWhere })
+const mockSelectLeftJoin = jest.fn().mockReturnValue({ where: mockSelectWhere })
+const mockSelectFrom = jest.fn().mockReturnValue({ where: mockSelectWhere, leftJoin: mockSelectLeftJoin })
 const mockSelect = jest.fn().mockReturnValue({ from: mockSelectFrom })
 
-// Update chain: update().set().where().returning()
-const mockReturning = jest.fn()
-const mockUpdateWhere = jest.fn().mockReturnValue({ returning: mockReturning })
+// Update chain: update().set().where()  (no returning — identity lives on
+// user_profiles now, so the response is re-selected via the join above).
+const mockUpdateWhere = jest.fn()
 const mockSet = jest.fn().mockReturnValue({ where: mockUpdateWhere })
 const mockUpdate = jest.fn().mockReturnValue({ set: mockSet })
+
+// Insert chain: insert().values().onConflictDoUpdate()  (identity upsert)
+const mockOnConflict = jest.fn()
+const mockValues = jest.fn().mockReturnValue({ onConflictDoUpdate: mockOnConflict })
+const mockInsert = jest.fn().mockReturnValue({ values: mockValues })
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect.apply(null, args),
     update: (...args: unknown[]) => mockUpdate.apply(null, args),
+    insert: (...args: unknown[]) => mockInsert.apply(null, args),
   },
 }))
 
@@ -70,6 +78,10 @@ jest.mock('@/db/schema', () => ({
     isVerified: 'sp_isVerified', averageRating: 'sp_averageRating',
     totalReviews: 'sp_totalReviews', totalListings: 'sp_totalListings',
     totalSold: 'sp_totalSold', createdAt: 'sp_createdAt', updatedAt: 'sp_updatedAt',
+  },
+  userProfiles: {
+    userId: 'up_userId', displayName: 'up_displayName', bio: 'up_bio',
+    avatarUrl: 'up_avatarUrl', isVerified: 'up_isVerified',
   },
 }))
 
@@ -146,16 +158,19 @@ beforeEach(() => {
   jest.clearAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
 
-  // Default: select returns profile
+  // Default: select (both plain and joined) returns profile
   mockSelect.mockReturnValue({ from: mockSelectFrom })
-  mockSelectFrom.mockReturnValue({ where: mockSelectWhere })
+  mockSelectFrom.mockReturnValue({ where: mockSelectWhere, leftJoin: mockSelectLeftJoin })
+  mockSelectLeftJoin.mockReturnValue({ where: mockSelectWhere })
   mockSelectWhere.mockResolvedValue([MOCK_PROFILE])
 
-  // Default: update returns updated profile
+  // Default: update + insert resolve
   mockUpdate.mockReturnValue({ set: mockSet })
   mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockReturnValue({ returning: mockReturning })
-  mockReturning.mockResolvedValue([MOCK_PROFILE])
+  mockUpdateWhere.mockResolvedValue(undefined)
+  mockInsert.mockReturnValue({ values: mockValues })
+  mockValues.mockReturnValue({ onConflictDoUpdate: mockOnConflict })
+  mockOnConflict.mockResolvedValue(undefined)
 })
 
 // ============================================================================
@@ -243,11 +258,18 @@ describe('PATCH /api/sellers/me — success', () => {
 
   it('returns the updated profile data', async () => {
     const updated = { ...MOCK_PROFILE, display_name: 'Neuer Name' }
-    mockReturning.mockResolvedValueOnce([updated])
+    // Response is re-selected via the joined query after the writes.
+    mockSelectWhere.mockResolvedValue([updated])
     const response = await PATCH(makePatchRequest({ display_name: 'Neuer Name' }))
     const body = await response.json()
     expect(body.success).toBe(true)
     expect(body.data.display_name).toBe('Neuer Name')
+  })
+
+  it('upserts identity fields into user_profiles', async () => {
+    await PATCH(makePatchRequest({ display_name: 'Neuer Name' }))
+    expect(mockInsert).toHaveBeenCalled()
+    expect(mockOnConflict).toHaveBeenCalled()
   })
 
   it('calls db.update when valid fields are provided', async () => {
@@ -257,8 +279,8 @@ describe('PATCH /api/sellers/me — success', () => {
 })
 
 describe('PATCH /api/sellers/me — DB error', () => {
-  it('returns 500 when update throws', async () => {
-    mockReturning.mockRejectedValueOnce(new Error('DB error'))
+  it('returns 500 when the write throws', async () => {
+    mockOnConflict.mockRejectedValueOnce(new Error('DB error'))
     const response = await PATCH(makePatchRequest({ display_name: 'Test' }))
     expect(response.status).toBe(500)
   })

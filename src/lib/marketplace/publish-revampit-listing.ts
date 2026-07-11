@@ -91,6 +91,7 @@ export async function publishRevampitListing(
       productName: aiExtractedProducts.productName,
       shortDescription: aiExtractedProducts.shortDescription,
       category: aiExtractedProducts.category,
+      subcategory: aiExtractedProducts.subcategory,
       condition: aiExtractedProducts.condition,
       estimatedPriceChf: aiExtractedProducts.estimatedPriceChf,
       sellingPriceChf: inventoryItems.sellingPriceChf,
@@ -119,6 +120,9 @@ export async function publishRevampitListing(
     (data.productName ?? 'Produkt')
   const description = opts?.description ?? data.shortDescription ?? ''
   const category = mapCategory(data.category)
+  // Granular component code (701 GPU …) for part-matching — stored as-is (no
+  // enum coercion; it's the KATEGORIEN sub-code the erfassung captured).
+  const subcategory = data.subcategory ?? null
   const condition = mapCondition(data.condition)
   const priceChf = String(opts?.priceChf ?? data.sellingPriceChf ?? data.estimatedPriceChf ?? '0')
   const nowIso = new Date().toISOString()
@@ -139,6 +143,7 @@ export async function publishRevampitListing(
         description,
         priceChf,
         category,
+        subcategory,
         condition,
         brand: data.brand ?? null,
         model: data.productName ?? null,
@@ -157,6 +162,7 @@ export async function publishRevampitListing(
         description,
         priceChf,
         category,
+        subcategory,
         condition,
         brand: data.brand ?? null,
         model: data.productName ?? null,

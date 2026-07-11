@@ -9,7 +9,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db';
-import { sellerProfiles } from '@/db/schema';
+import { sellerProfiles, userProfiles } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { sellerProfileCoreFields } from '@/lib/services/seller-service';
@@ -38,6 +38,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         updated_at: sellerProfiles.updatedAt,
       })
       .from(sellerProfiles)
+      .leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))
       .where(eq(sellerProfiles.userId, session.user.id));
 
     if (!profile) {
@@ -80,28 +81,43 @@ export const PATCH = withAuth(async (request: NextRequest, session: ValidSession
 
     const data = parsed.data;
 
-    // Build dynamic UPDATE from validated fields
-    const update: Record<string, unknown> = {};
-    if (data.display_name !== undefined) update.displayName = data.display_name;
-    if (data.bio !== undefined) update.bio = data.bio;
-    if (data.avatar_url !== undefined) update.avatarUrl = data.avatar_url;
-    if (data.city !== undefined) update.city = data.city;
-    if (data.canton !== undefined) update.canton = data.canton;
+    // Identity fields live on user_profiles (SSOT); city/canton (storefront)
+    // stay on seller_profiles. Split the write across the two owners.
+    const identity: Record<string, unknown> = {};
+    if (data.display_name !== undefined) identity.displayName = data.display_name;
+    if (data.bio !== undefined) identity.bio = data.bio;
+    if (data.avatar_url !== undefined) identity.avatarUrl = data.avatar_url;
 
-    if (Object.keys(update).length === 0) {
+    const sellerUpdate: Record<string, unknown> = {};
+    if (data.city !== undefined) sellerUpdate.city = data.city;
+    if (data.canton !== undefined) sellerUpdate.canton = data.canton;
+
+    if (Object.keys(identity).length === 0 && Object.keys(sellerUpdate).length === 0) {
       return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED);
     }
 
-    update.updatedAt = sql`NOW()`;
+    if (Object.keys(identity).length > 0) {
+      await db
+        .insert(userProfiles)
+        .values({ userId: session.user.id, ...identity })
+        .onConflictDoUpdate({ target: userProfiles.userId, set: identity });
+    }
 
-    const [updated] = await db
+    // Always bump seller updatedAt so /me reflects the edit time.
+    await db
       .update(sellerProfiles)
-      .set(update)
-      .where(eq(sellerProfiles.userId, session.user.id))
-      .returning({
+      .set({ ...sellerUpdate, updatedAt: sql`NOW()` })
+      .where(eq(sellerProfiles.userId, session.user.id));
+
+    // Re-read the joined profile (identity spans user_profiles) for the response.
+    const [updated] = await db
+      .select({
         ...sellerProfileCoreFields,
         updated_at: sellerProfiles.updatedAt,
-      });
+      })
+      .from(sellerProfiles)
+      .leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))
+      .where(eq(sellerProfiles.userId, session.user.id));
 
     logger.info('Seller profile updated', { userId: session.user.id });
     return apiSuccess(updated);

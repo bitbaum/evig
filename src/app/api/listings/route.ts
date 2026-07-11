@@ -7,7 +7,7 @@ import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiSuccessCached, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingImages, listingSpecs, users, sellerProfiles } from '@/db/schema';
+import { listings, listingImages, listingSpecs, users, sellerProfiles, userProfiles } from '@/db/schema';
 import { eq, and, sql, gte, lte, desc, asc, inArray, type SQL } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
@@ -138,15 +138,19 @@ export async function GET(request: NextRequest) {
         created_at: listings.createdAt,
         verified_at: listings.verifiedAt,
         seller_name: users.name,
-        seller_display_name: sellerProfiles.displayName,
+        // Identity fields (display_name / is_verified) come from user_profiles,
+        // the SSOT — never re-read off seller_profiles. City stays: it's the
+        // storefront location, a seller-facet fact, not identity.
+        seller_display_name: userProfiles.displayName,
         seller_rating: sellerProfiles.averageRating,
         seller_city: sellerProfiles.city,
-        seller_is_verified: sellerProfiles.isVerified,
+        seller_is_verified: userProfiles.isVerified,
         thumbnail: listingThumbnailSubquery,
       })
       .from(listings)
       .innerJoin(users, eq(listings.sellerId, users.id))
       .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+      .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
       .where(whereCondition)
       .orderBy(orderByClause)
       .limit(filters.limit)

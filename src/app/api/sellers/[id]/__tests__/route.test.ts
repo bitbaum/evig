@@ -47,6 +47,13 @@ jest.mock('@/db/schema', () => ({
     id: 'u_id',
     name: 'u_name',
   },
+  userProfiles: {
+    userId: 'up_userId',
+    displayName: 'up_displayName',
+    bio: 'up_bio',
+    avatarUrl: 'up_avatarUrl',
+    isVerified: 'up_isVerified',
+  },
   reviews: {
     id: 'r_id',
     targetType: 'r_targetType',
@@ -136,9 +143,10 @@ const MOCK_REVIEW_STATS = {
 
 function makeSelectChain(result: unknown[]) {
   const where = jest.fn().mockResolvedValue(result)
-  const innerJoin = jest.fn().mockReturnValue({ where })
+  const leftJoin = jest.fn().mockReturnValue({ where })
+  const innerJoin = jest.fn().mockReturnValue({ leftJoin, where })
   const from = jest.fn().mockReturnValue({ innerJoin, where })
-  return { from, innerJoin, where }
+  return { from, innerJoin, leftJoin, where }
 }
 
 beforeEach(() => {
@@ -180,7 +188,8 @@ describe('GET /api/sellers/[id] — success', () => {
   it('returns 200 with profile, listings, and review stats', async () => {
     // First select: profile query
     const profileWhere = jest.fn().mockResolvedValue([MOCK_PROFILE])
-    const profileInnerJoin = jest.fn().mockReturnValue({ where: profileWhere })
+    const profileLeftJoin = jest.fn().mockReturnValue({ where: profileWhere })
+    const profileInnerJoin = jest.fn().mockReturnValue({ leftJoin: profileLeftJoin })
     const profileFrom = jest.fn().mockReturnValue({ innerJoin: profileInnerJoin })
     const chain1 = { from: profileFrom }
 
@@ -206,7 +215,8 @@ describe('GET /api/sellers/[id] — success', () => {
   it('returns 200 with zero review stats when no reviews', async () => {
     // First select: profile query
     const profileWhere = jest.fn().mockResolvedValue([MOCK_PROFILE])
-    const profileInnerJoin = jest.fn().mockReturnValue({ where: profileWhere })
+    const profileLeftJoin = jest.fn().mockReturnValue({ where: profileWhere })
+    const profileInnerJoin = jest.fn().mockReturnValue({ leftJoin: profileLeftJoin })
     const profileFrom = jest.fn().mockReturnValue({ innerJoin: profileInnerJoin })
     const chain1 = { from: profileFrom }
 

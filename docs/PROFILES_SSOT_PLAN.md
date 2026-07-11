@@ -55,6 +55,15 @@ SSOT read chokepoint: `src/lib/services/public-identity.ts`
 - Drizzle: `userProfiles.isVerified` / `.verificationDate`.
 - New `public-identity.ts` SSOT service (unused until Slice 2).
 
+**Split note:** Slice 2 is executed by DOMAIN (2a seller, 2b technician), each
+switching reads AND writes together so there's never a stale-name window on the
+live site (public read from user_profiles + write still to role table = divergence).
+
+**Slice 2a — seller identity (reads + /me write). ✅ code done, tests green.**
+`/me` PATCH now upserts identity into user_profiles + writes city/canton to
+seller_profiles; all public seller reads join user_profiles. Verify badge/member/
+seller page on prod.
+
 **Slice 2 — switch READS to SSOT (behavioural, verify badge parity).**
 Re-point these at `user_profiles` for display_name/avatar/bio/is_verified:
 - seller (7): `lib/services/seller-service.ts` (`sellerProfileCoreFields`),

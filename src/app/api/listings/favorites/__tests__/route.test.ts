@@ -82,6 +82,7 @@ jest.mock('@/db/schema', () => ({
   },
   listingFavorites: { id: 'lf_id', userId: 'lf_userId', listingId: 'lf_listingId', createdAt: 'lf_createdAt' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
+  userProfiles: { userId: 'up_userId', displayName: 'up_displayName', bio: 'up_bio', avatarUrl: 'up_avatarUrl', isVerified: 'up_isVerified' },
   sellerProfiles: { id: 'sp_id', userId: 'sp_userId', displayName: 'sp_displayName', city: 'sp_city' },
 }))
 

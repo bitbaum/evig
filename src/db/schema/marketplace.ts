@@ -18,6 +18,9 @@ export const listings = pgTable('listings', {
   description: text('description').notNull(),
   priceChf: decimal('price_chf', { precision: 10, scale: 2 }).notNull(),
   category: text('category').notNull(),
+  // Granular KATEGORIEN sub-code (e.g. 701 GPU, 704 CPU) for part-matching —
+  // nullable; carried from ai_extracted_products.subcategory on publish (mig 118).
+  subcategory: text('subcategory'),
   // CHECK (condition IN ('new', 'like_new', 'good', 'fair', 'poor', 'defect'))
   condition: text('condition').notNull(),
   brand: text('brand'),
