@@ -7825,7 +7825,8 @@
         "titleFallback": "판매자 프로필 – RevampIT Marketplace",
         "description": "RevampIT Marketplace 의 {name} – 활성 상품 {count} 개. 중고 기술 제품을 구매하고 순환 경제에 기여하세요."
       },
-      "publicProfile": "판매자 프로필"
+      "publicProfile": "판매자 프로필",
+      "verified": "인증됨"
     }
   },
   "workshops": {

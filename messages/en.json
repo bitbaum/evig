@@ -4879,7 +4879,8 @@
         "title": "{name} – seller on the RevampIT Marketplace",
         "titleFallback": "Seller profile – RevampIT Marketplace",
         "description": "{name} on the RevampIT Marketplace – {count} active listings. Buy used tech and contribute to the circular economy."
-      }
+      },
+      "verified": "Verified"
     }
   },
   "agb": {

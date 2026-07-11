@@ -7825,7 +7825,8 @@
         "titleFallback": "Profilo venditore – Marketplace RevampIT",
         "description": "{name} sul Marketplace RevampIT – {count} annunci attivi. Acquistare tecnologia usata e contribuire all'economia circolare."
       },
-      "publicProfile": "Profilo del venditore"
+      "publicProfile": "Profilo del venditore",
+      "verified": "Verificato"
     }
   },
   "workshops": {

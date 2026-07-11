@@ -7825,7 +7825,8 @@
         "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
         "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
       },
-      "publicProfile": "出品者プロフィール"
+      "publicProfile": "出品者プロフィール",
+      "verified": "認証済み"
     }
   },
   "workshops": {

@@ -4880,7 +4880,8 @@
         "titleFallback": "Profil vendeur – Marché RevampIT",
         "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
       },
-      "publicProfile": "Profil de vendeur"
+      "publicProfile": "Profil de vendeur",
+      "verified": "Vérifié"
     }
   },
   "support": {

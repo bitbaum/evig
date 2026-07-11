@@ -13,6 +13,7 @@ import {
   AlertCircle,
   Calendar,
   ShoppingBag,
+  BadgeCheck,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
@@ -32,6 +33,7 @@ interface SellerProfile {
   avatar_url: string | null
   city: string | null
   canton: string | null
+  is_verified: boolean
   total_listings: number
   total_sold: number
   average_rating: number | null
@@ -157,6 +159,12 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 <Calendar className="w-4 h-4" />
                 {t('seller.memberSince', { date: formatDateShort(seller.member_since) })}
               </span>
+              {seller.is_verified && (
+                <span className="flex items-center gap-1 font-medium text-action">
+                  <BadgeCheck className="w-4 h-4" />
+                  {t('seller.verified')}
+                </span>
+              )}
             </div>
             {seller.bio && (
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-text-secondary">{seller.bio}</p>

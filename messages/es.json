@@ -7825,7 +7825,8 @@
         "titleFallback": "Perfil de vendedor – Marketplace de Revamp-IT",
         "description": "{name} en el marketplace de Revamp-IT – {count} anuncios activos. Compre tecnología de segunda mano y contribuya a la economía circular."
       },
-      "publicProfile": "Perfil de vendedor"
+      "publicProfile": "Perfil de vendedor",
+      "verified": "Verificado"
     }
   },
   "workshops": {

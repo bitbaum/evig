@@ -7934,7 +7934,8 @@
       "loadingProfile": "Профиль загружается...",
       "sellerNotFound": "Продавец не найден",
       "errorLoading": "Ошибка загрузки профиля",
-      "publicProfile": "Профиль продавца"
+      "publicProfile": "Профиль продавца",
+      "verified": "Проверено"
     }
   },
   "faq": {
