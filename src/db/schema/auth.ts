@@ -156,6 +156,12 @@ export const userProfiles = pgTable('user_profiles', {
   // CHECK (profile_visibility IN ('public', 'private')) — validated at app layer
   profileVisibility: text('profile_visibility').default('public'),
 
+  // Per-PERSON verification (SSOT, migration 121). Verified once, surfaced in
+  // whatever role the person acts (seller badge, technician badge). Replaces the
+  // per-role is_verified on seller_profiles/technician_profiles.
+  isVerified: boolean('is_verified').notNull().default(false),
+  verificationDate: timestamp('verification_date', { withTimezone: true, mode: 'string' }),
+
   // Privacy toggles (033)
   showEmail: boolean('show_email').default(false),
   showPhone: boolean('show_phone').default(false),
