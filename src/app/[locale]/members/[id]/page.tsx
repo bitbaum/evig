@@ -72,6 +72,9 @@ export default function MemberProfilePage({ params }: { params: Promise<{ id: st
   const [member, setMember] = useState<MemberProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // OAuth avatars (users.image) live on hosts outside next/image's allowlist,
+  // so the optimizer can reject them — fall back to the icon on any load error.
+  const [avatarError, setAvatarError] = useState(false)
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -138,8 +141,15 @@ export default function MemberProfilePage({ params }: { params: Promise<{ id: st
       <div className="mb-8 border-b border-subtle pb-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
           <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-subtle bg-action-muted flex items-center justify-center">
-            {member.image ? (
-              <Image src={member.image} alt={displayName} width={80} height={80} className="h-20 w-20 object-cover" />
+            {member.image && !avatarError ? (
+              <Image
+                src={member.image}
+                alt={displayName}
+                width={80}
+                height={80}
+                className="h-20 w-20 object-cover"
+                onError={() => setAvatarError(true)}
+              />
             ) : (
               <User className="h-9 w-9 text-action" />
             )}
