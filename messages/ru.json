@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "Участник сообщества",
+    "verified": "Проверено",
+    "memberSince": "Участник с {date}",
+    "reviewsWritten": "Написано отзывов",
+    "helpfulVotes": "Голоса «полезно»",
+    "alsoSeller": "Также продавец",
+    "sellerListings": "{count} активных объявлений",
+    "reviewsTitle": "Отзывы ({count})",
+    "noReviewsTitle": "Пока нет отзывов",
+    "noReviewsDescription": "Этот участник ещё не оставил публичных отзывов.",
+    "reviewFor": "Отзыв о {title}",
+    "helpfulCount": "{count} посчитали это полезным",
+    "backToMarketplace": "Назад в маркетплейс",
+    "loading": "Загрузка профиля...",
+    "notFound": "Профиль не найден",
+    "errorLoading": "Ошибка загрузки профиля",
+    "anonymous": "Участник"
+  },
   "nav": {
     "home": "Главная",
     "shop": "Магазин",

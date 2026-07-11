@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "커뮤니티 회원",
+    "verified": "인증됨",
+    "memberSince": "{date}부터 회원",
+    "reviewsWritten": "작성한 리뷰",
+    "helpfulVotes": "도움이 됨 투표",
+    "alsoSeller": "판매자이기도 함",
+    "sellerListings": "활성 등록 {count}개",
+    "reviewsTitle": "리뷰 ({count})",
+    "noReviewsTitle": "아직 리뷰가 없습니다",
+    "noReviewsDescription": "이 회원은 아직 공개 리뷰를 작성하지 않았습니다.",
+    "reviewFor": "{title}에 대한 리뷰",
+    "helpfulCount": "{count}명이 도움이 되었다고 평가",
+    "backToMarketplace": "마켓플레이스로 돌아가기",
+    "loading": "프로필 로딩 중...",
+    "notFound": "프로필을 찾을 수 없습니다",
+    "errorLoading": "프로필 로딩 오류",
+    "anonymous": "회원"
+  },
   "nav": {
     "home": "홈",
     "shop": "쇼핑",

@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "Community member",
+    "verified": "Verified",
+    "memberSince": "Member since {date}",
+    "reviewsWritten": "Reviews written",
+    "helpfulVotes": "Helpful votes",
+    "alsoSeller": "Also a seller",
+    "sellerListings": "{count} active listings",
+    "reviewsTitle": "Reviews ({count})",
+    "noReviewsTitle": "No reviews yet",
+    "noReviewsDescription": "This member hasn't written any public reviews yet.",
+    "reviewFor": "Review for {title}",
+    "helpfulCount": "{count} found this helpful",
+    "backToMarketplace": "Back to marketplace",
+    "loading": "Loading profile...",
+    "notFound": "Profile not found",
+    "errorLoading": "Error loading profile",
+    "anonymous": "Member"
+  },
   "nav": {
     "home": "Home",
     "shop": "Shop",

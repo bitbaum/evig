@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "Membro della community",
+    "verified": "Verificato",
+    "memberSince": "Membro dal {date}",
+    "reviewsWritten": "Recensioni scritte",
+    "helpfulVotes": "Voti utili",
+    "alsoSeller": "Anche venditore",
+    "sellerListings": "{count} annunci attivi",
+    "reviewsTitle": "Recensioni ({count})",
+    "noReviewsTitle": "Ancora nessuna recensione",
+    "noReviewsDescription": "Questo membro non ha ancora scritto recensioni pubbliche.",
+    "reviewFor": "Recensione per {title}",
+    "helpfulCount": "{count} l'hanno trovata utile",
+    "backToMarketplace": "Torna al marketplace",
+    "loading": "Caricamento del profilo...",
+    "notFound": "Profilo non trovato",
+    "errorLoading": "Errore nel caricamento del profilo",
+    "anonymous": "Membro"
+  },
   "nav": {
     "home": "Home",
     "shop": "Shop",

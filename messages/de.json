@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "Community-Mitglied",
+    "verified": "Verifiziert",
+    "memberSince": "Mitglied seit {date}",
+    "reviewsWritten": "Bewertungen geschrieben",
+    "helpfulVotes": "Hilfreich-Stimmen",
+    "alsoSeller": "Auch Verkäufer:in",
+    "sellerListings": "{count} aktive Inserate",
+    "reviewsTitle": "Bewertungen ({count})",
+    "noReviewsTitle": "Noch keine Bewertungen",
+    "noReviewsDescription": "Dieses Mitglied hat noch keine öffentlichen Bewertungen geschrieben.",
+    "reviewFor": "Bewertung für {title}",
+    "helpfulCount": "{count} fanden das hilfreich",
+    "backToMarketplace": "Zurück zum Marketplace",
+    "loading": "Profil wird geladen...",
+    "notFound": "Profil nicht gefunden",
+    "errorLoading": "Fehler beim Laden des Profils",
+    "anonymous": "Mitglied"
+  },
   "nav": {
     "home": "Startseite",
     "shop": "Shop",
@@ -1765,11 +1784,31 @@
           "subtitle": "Nicht sicher? Wähle aus, was dir am wichtigsten ist — wir empfehlen dir einen guten Startpunkt.",
           "recommendedLabel": "Empfehlung",
           "items": [
-            { "need": "Umstieg von Windows / Einsteiger:innen", "distro": "Linux Mint", "why": "Vertraute Oberfläche, funktioniert sofort, kaum Einarbeitung." },
-            { "need": "Am meisten Anleitungen & Hilfe im Netz", "distro": "Ubuntu", "why": "Die grösste Community — für fast jedes Problem gibt es eine Anleitung." },
-            { "need": "Neueste Software & Technik", "distro": "Fedora", "why": "Aktuellste Pakete, nah an der Entwicklung — für neugierige Nutzer:innen." },
-            { "need": "Maximale Stabilität & Langlebigkeit", "distro": "Debian", "why": "Extrem stabil — ideal für Server und Rechner, die einfach laufen sollen." },
-            { "need": "Ältere oder schwächere Hardware", "distro": "MX Linux", "why": "Ressourcenschonend — haucht auch älteren Geräten neues Leben ein." }
+            {
+              "need": "Umstieg von Windows / Einsteiger:innen",
+              "distro": "Linux Mint",
+              "why": "Vertraute Oberfläche, funktioniert sofort, kaum Einarbeitung."
+            },
+            {
+              "need": "Am meisten Anleitungen & Hilfe im Netz",
+              "distro": "Ubuntu",
+              "why": "Die grösste Community — für fast jedes Problem gibt es eine Anleitung."
+            },
+            {
+              "need": "Neueste Software & Technik",
+              "distro": "Fedora",
+              "why": "Aktuellste Pakete, nah an der Entwicklung — für neugierige Nutzer:innen."
+            },
+            {
+              "need": "Maximale Stabilität & Langlebigkeit",
+              "distro": "Debian",
+              "why": "Extrem stabil — ideal für Server und Rechner, die einfach laufen sollen."
+            },
+            {
+              "need": "Ältere oder schwächere Hardware",
+              "distro": "MX Linux",
+              "why": "Ressourcenschonend — haucht auch älteren Geräten neues Leben ein."
+            }
           ]
         },
         "items": [

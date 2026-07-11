@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "コミュニティメンバー",
+    "verified": "認証済み",
+    "memberSince": "{date}から登録",
+    "reviewsWritten": "投稿したレビュー",
+    "helpfulVotes": "役立った票",
+    "alsoSeller": "出品者でもあります",
+    "sellerListings": "出品中 {count} 件",
+    "reviewsTitle": "レビュー ({count})",
+    "noReviewsTitle": "まだレビューがありません",
+    "noReviewsDescription": "このメンバーはまだ公開レビューを投稿していません。",
+    "reviewFor": "{title} へのレビュー",
+    "helpfulCount": "{count} 人が役に立ったと評価",
+    "backToMarketplace": "マーケットプレイスに戻る",
+    "loading": "プロフィールを読み込み中...",
+    "notFound": "プロフィールが見つかりません",
+    "errorLoading": "プロフィールの読み込みエラー",
+    "anonymous": "メンバー"
+  },
   "nav": {
     "home": "ホーム",
     "shop": "ショップ",

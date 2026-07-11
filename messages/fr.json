@@ -1,4 +1,23 @@
 {
+  "members": {
+    "communityMember": "Membre de la communauté",
+    "verified": "Vérifié",
+    "memberSince": "Membre depuis {date}",
+    "reviewsWritten": "Avis rédigés",
+    "helpfulVotes": "Votes utiles",
+    "alsoSeller": "Également vendeur",
+    "sellerListings": "{count} annonces actives",
+    "reviewsTitle": "Avis ({count})",
+    "noReviewsTitle": "Pas encore d'avis",
+    "noReviewsDescription": "Ce membre n'a pas encore rédigé d'avis public.",
+    "reviewFor": "Avis pour {title}",
+    "helpfulCount": "{count} ont trouvé cet avis utile",
+    "backToMarketplace": "Retour au marketplace",
+    "loading": "Chargement du profil...",
+    "notFound": "Profil introuvable",
+    "errorLoading": "Erreur lors du chargement du profil",
+    "anonymous": "Membre"
+  },
   "nav": {
     "home": "Accueil",
     "shop": "Boutique",

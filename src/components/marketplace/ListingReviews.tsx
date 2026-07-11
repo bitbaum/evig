@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Star, MessageSquare } from 'lucide-react'
 import ReviewForm from './ReviewForm'
+import { Link } from '@/i18n/navigation'
+import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
@@ -119,9 +121,12 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm text-text-primary">
+                  <Link
+                    href={ROUTES.public.member(review.reviewerId)}
+                    className="font-medium text-sm text-text-primary hover:text-action hover:underline"
+                  >
                     {review.reviewerName}
-                  </span>
+                  </Link>
                   <div className="flex items-center gap-0.5">
                     {Array.from({ length: 5 }, (_, i) => (
                       <Star

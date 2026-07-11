@@ -86,6 +86,7 @@ export const ROUTES = {
     marketplaceListing:       (id: string) => `/marketplace/${id}`,
     marketplaceCheckout:      (id: string) => `/marketplace/checkout/${id}`,
     seller:                   (id: string) => `/sellers/${id}`,
+    member:                   (id: string) => `/members/${id}`,
     itHilfe:                  '/it-hilfe',
     itHilfeBrowseRequests:    '/it-hilfe/anfragen',
     itHilfeCreate:            '/it-hilfe/create',
