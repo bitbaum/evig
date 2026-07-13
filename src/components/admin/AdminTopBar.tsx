@@ -60,10 +60,10 @@ export function AdminTopBar({
             <Menu className="h-4 w-4 text-text-tertiary" />
           </Button>
 
-          {/* Shown from lg where — with the email hidden below xl — there's room
-              for the full trail beside the actions group without collision. */}
+          {/* Shown from lg; the min-w-0 chain lets the last crumb ellipsize
+              rather than collide with the actions group when space is tight. */}
           <div className="hidden min-w-0 lg:block">
-            <Breadcrumbs className="mb-0 flex" />
+            <Breadcrumbs className="mb-0 flex min-w-0" />
           </div>
         </div>
 
