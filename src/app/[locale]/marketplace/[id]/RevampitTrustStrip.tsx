@@ -3,16 +3,17 @@
 /**
  * Trust strip for RevampIT (is_revampit) listings — the org's real
  * differentiators over a generic used-goods ad: CO₂ avoided (sourced and
- * linked to the methodology via CO2Badge), staff-verified status, and the
- * non-profit reuse mission.
+ * linked to the methodology via CO2Badge), staff-verified status, the
+ * non-profit reuse mission, and the refurbished-stock guarantee.
  *
- * Deliberately makes NO warranty/return-window claims — there is no such
- * policy in config, and fabricating trust statements is forbidden. Credibility
- * here comes from honest, sourced facts, not confident-looking promises.
+ * The warranty/return figures come from the org's STATED policy (config
+ * REVAMPIT_GUARANTEE — sourced from the intake warranty label + AGB), never
+ * invented, and only ever on is_revampit stock (P2P sales carry no guarantee).
  */
-import { ShieldCheck, Recycle } from 'lucide-react'
+import { ShieldCheck, Recycle, BadgeCheck, RotateCcw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { CO2Badge } from '@/components/marketplace/CO2Badge'
+import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
 import type { ListingDetail } from './types'
 
 export function RevampitTrustStrip({
@@ -36,6 +37,14 @@ export function RevampitTrustStrip({
             {t('trust.verified')}
           </li>
         )}
+        <li className="flex items-center gap-2">
+          <BadgeCheck className="h-4 w-4 shrink-0 text-action" aria-hidden="true" />
+          {t('trust.warranty', { months: REVAMPIT_GUARANTEE.warrantyMonths })}
+        </li>
+        <li className="flex items-center gap-2">
+          <RotateCcw className="h-4 w-4 shrink-0 text-action" aria-hidden="true" />
+          {t('trust.returnPolicy', { days: REVAMPIT_GUARANTEE.returnDays })}
+        </li>
         <li className="flex items-center gap-2">
           <Recycle className="h-4 w-4 shrink-0 text-action" aria-hidden="true" />
           {t('trust.mission')}

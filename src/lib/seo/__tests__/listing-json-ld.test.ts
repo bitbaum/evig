@@ -97,5 +97,17 @@ describe('buildListingJsonLd', () => {
     expect(offer.itemCondition).toBe('https://schema.org/NewCondition')
     expect(offer.availability).toBe('https://schema.org/SoldOut')
     expect((offer.seller as Record<string, unknown>)['@type']).toBe('Organization')
+    // RevampIT stock advertises the guarantee; P2P does not.
+    expect((offer.warranty as Record<string, unknown>)?.['@type']).toBe('WarrantyPromise')
+    expect((offer.hasMerchantReturnPolicy as Record<string, unknown>)?.['@type']).toBe('MerchantReturnPolicy')
+  })
+
+  it('omits warranty/return policy for P2P (non-RevampIT) listings', () => {
+    const [product] = buildListingJsonLd(makeListing({ is_revampit: false }), noReviews, CTX) as [
+      Record<string, unknown>,
+    ]
+    const offer = product.offers as Record<string, unknown>
+    expect(offer.warranty).toBeUndefined()
+    expect(offer.hasMerchantReturnPolicy).toBeUndefined()
   })
 })

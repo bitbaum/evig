@@ -863,7 +863,9 @@
       "free": "Gratis",
       "trust": {
         "verified": "Von Revamp-IT geprüft & getestet",
-        "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein"
+        "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein",
+        "warranty": "{months} Monate Garantie",
+        "returnPolicy": "{days} Tage Rückgaberecht bei Online-Kauf"
       },
       "zoomOpen": "Vergrössern",
       "zoomClose": "Schliessen",

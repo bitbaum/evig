@@ -6,6 +6,7 @@
  */
 
 import type { ListingPublic, ListingReviewStats } from '@/lib/marketplace/listing-detail'
+import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
 
 export interface ListingJsonLdContext {
   /** Absolute canonical URL of this listing. */
@@ -59,6 +60,28 @@ export function buildListingJsonLd(
       '@type': listing.is_revampit ? 'Organization' : 'Person',
       name: sellerName,
     },
+    // RevampIT refurbished stock carries the org's stated warranty + return
+    // policy (config SSOT). P2P listings make no such promise (AGB §6).
+    ...(listing.is_revampit
+      ? {
+          warranty: {
+            '@type': 'WarrantyPromise',
+            durationOfWarranty: {
+              '@type': 'QuantitativeValue',
+              value: REVAMPIT_GUARANTEE.warrantyMonths,
+              unitCode: 'MON',
+            },
+          },
+          hasMerchantReturnPolicy: {
+            '@type': 'MerchantReturnPolicy',
+            applicableCountry: 'CH',
+            returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+            merchantReturnDays: REVAMPIT_GUARANTEE.returnDays,
+            returnMethod: 'https://schema.org/ReturnByMail',
+            returnFees: 'https://schema.org/FreeReturn',
+          },
+        }
+      : {}),
   }
 
   const product: Record<string, unknown> = {

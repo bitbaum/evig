@@ -334,6 +334,21 @@ export const VERIFICATION_CONFIG = {
   },
 } as const;
 
+/**
+ * RevampIT's own refurbished-stock guarantee — shown ONLY on is_revampit
+ * listings (P2P third-party sales carry no such guarantee, per AGB §6).
+ * These are the org's STATED terms, sourced — not invented:
+ *   • warrantyMonths (6): the 6-month warranty label physically applied to every
+ *     refurbished device at intake — see config/intake-checklist.ts 'warranty_label'.
+ *   • returnDays (14): the voluntary 14-day return right for online purchases —
+ *     AGB §5 Widerrufsrecht (messages/de.json legal.terms).
+ * If the real policy changes, change it here (single source of truth).
+ */
+export const REVAMPIT_GUARANTEE = {
+  warrantyMonths: 6,
+  returnDays: 14,
+} as const;
+
 // ============================================================================
 // Spec Filter Config — filterable specs per category
 // ============================================================================
