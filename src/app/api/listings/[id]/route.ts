@@ -9,11 +9,12 @@ import { auth } from '@/auth';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingImages, listingSpecs, listingFavorites, users, sellerProfiles, userProfiles } from '@/db/schema';
-import { eq, and, ne, asc, sql } from 'drizzle-orm';
+import { listings, listingImages, listingSpecs, users, sellerProfiles } from '@/db/schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
 import { LISTING_STATUS, normalizeSpecValue } from '@/config/marketplace';
+import { getListingDetail, isListingFavorited, incrementListingView } from '@/lib/marketplace/listing-detail';
 import { isStaffEmail } from '@/lib/permissions';
 import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/search/meilisearch';
 import { buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
@@ -32,100 +33,18 @@ export async function GET(
     if (!id) return apiNotFound('Inserat');
 
     // Increment view count (fire and forget)
-    db.update(listings)
-      .set({ viewCount: sql`${listings.viewCount} + 1` })
-      .where(and(eq(listings.id, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
-      .catch(err => logger.error('Failed to increment view count', { error: err, listingId: id }));
+    incrementListingView(id);
 
-    // Fetch listing + session in parallel (session needed for favorite check)
-    const [[listing], session] = await Promise.all([
-      db
-        .select({
-          id: listings.id,
-          seller_id: listings.sellerId,
-          title: listings.title,
-          description: listings.description,
-          price_chf: listings.priceChf,
-          category: listings.category,
-          condition: listings.condition,
-          brand: listings.brand,
-          model: listings.model,
-          delivery_options: listings.deliveryOptions,
-          shipping_cost_chf: listings.shippingCostChf,
-          pickup_location: listings.pickupLocation,
-          payment_mode: listings.paymentMode,
-          status: listings.status,
-          // SSOT: the stored column; never re-derive from email.
-          is_revampit: listings.isRevampit,
-          view_count: listings.viewCount,
-          favorite_count: listings.favoriteCount,
-          created_at: listings.createdAt,
-          updated_at: listings.updatedAt,
-          verified_at: listings.verifiedAt,
-          verified_by: listings.verifiedBy,
-          verification_notes: listings.verificationNotes,
-          condition_checks: listings.conditionChecks,
-          seller_name: users.name,
-          // Identity (display_name/bio/avatar) from user_profiles SSOT; city/
-          // canton stay on seller_profiles (storefront location).
-          seller_display_name: userProfiles.displayName,
-          seller_bio: userProfiles.bio,
-          seller_avatar_url: userProfiles.avatarUrl,
-          seller_city: sellerProfiles.city,
-          seller_canton: sellerProfiles.canton,
-          seller_rating: sellerProfiles.averageRating,
-          seller_total_sold: sellerProfiles.totalSold,
-          seller_total_reviews: sellerProfiles.totalReviews,
-        })
-        .from(listings)
-        .innerJoin(users, eq(listings.sellerId, users.id))
-        .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
-        .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
-        .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED))),
-      auth(),
-    ]);
-
+    // Shared SSOT fetch (used by the server-rendered detail page too). Session
+    // is only needed for the viewer-specific favourite flag.
+    const [listing, session] = await Promise.all([getListingDetail(id), auth()]);
     if (!listing) return apiNotFound('Inserat');
 
-    // Images, specs, and favorite check are all independent — run in parallel
-    const [images, specs, favRows] = await Promise.all([
-      db
-        .select({
-          id: listingImages.id,
-          url: listingImages.url,
-          position: listingImages.position,
-          is_primary: listingImages.isPrimary,
-        })
-        .from(listingImages)
-        .where(eq(listingImages.listingId, id))
-        .orderBy(asc(listingImages.position)),
-      db
-        .select({
-          spec_key: listingSpecs.specKey,
-          spec_value: listingSpecs.specValue,
-          spec_unit: listingSpecs.specUnit,
-          normalized_value: listingSpecs.normalizedValue,
-        })
-        .from(listingSpecs)
-        .where(eq(listingSpecs.listingId, id))
-        .orderBy(asc(listingSpecs.specKey)),
-      session?.user?.id
-        ? db
-            .select({ id: listingFavorites.id })
-            .from(listingFavorites)
-            .where(and(
-              eq(listingFavorites.userId, session.user.id),
-              eq(listingFavorites.listingId, id)
-            ))
-        : Promise.resolve([]),
-    ]);
+    const is_favorited = session?.user?.id
+      ? await isListingFavorited(session.user.id, id)
+      : false;
 
-    return apiSuccess({
-      ...listing,
-      images,
-      specs,
-      is_favorited: favRows.length > 0,
-    });
+    return apiSuccess({ ...listing, is_favorited });
   } catch (error) {
     return apiError(error, 'Fehler beim Laden des Inserats');
   }

@@ -1,184 +1,117 @@
-'use client'
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
+import { ChevronRight, Home } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { auth } from '@/auth'
+import { APP_URL } from '@/config/urls'
+import { ORG } from '@/config/org'
+import { getCategoryLabel, LISTING_STATUS } from '@/config/marketplace'
+import { safeJsonLd } from '@/lib/seo/json-ld'
+import { buildListingJsonLd } from '@/lib/seo/listing-json-ld'
 import {
-  ArrowLeft,
-  Clock,
-  Eye,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react'
-import { formatDateShort } from '@/lib/date-formats'
-import { useListingDetail } from './useListingDetail'
-import { useListingActions } from './useListingActions'
-import { ListingImageGallery } from './ListingImageGallery'
-import { ListingInfoPanel } from './ListingInfoPanel'
-import { ListingActionButtons } from './ListingActionButtons'
-import { ListingSellerCard } from './ListingSellerCard'
-import { OsInstallHint } from '@/components/marketplace/OsInstallHint'
-import { RevampitTrustStrip } from './RevampitTrustStrip'
-import { AddToCartButton } from '@/components/marketplace/cart/AddToCartButton'
-import { ListingDetails } from './ListingDetails'
-import { ReportModal } from './ReportModal'
-import { SimilarListings } from './SimilarListings'
-import type { ListingImageData } from './types'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
+  getListingDetail,
+  getListingReviewStats,
+  isListingFavorited,
+  incrementListingView,
+} from '@/lib/marketplace/listing-detail'
+import { ListingDetailClient } from './ListingDetailClient'
 
-export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { data: session } = useSession()
-  const [selectedImage, setSelectedImage] = useState(0)
-  const t = useTranslations('marketplace')
+type PageParams = { locale: string; id: string }
 
-  const {
-    listing,
-    isLoading,
-    error,
-    isFavorited,
-    setIsFavorited,
-    favoriteCount,
-    setFavoriteCount,
-    similarListings,
-  } = useListingDetail(params)
+/**
+ * Per-listing SEO. Runs server-side and shares the cached `getListingDetail`
+ * fetch with the page body (one DB round-trip). Non-ACTIVE/SOLD listings are
+ * marked noindex so drafts/reserved pages don't leak into search.
+ */
+export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
+  const { locale, id } = await params
+  const listing = await getListingDetail(id)
+  if (!listing) return {}
 
-  const sessionUserId = session?.user?.id
-  const actions = useListingActions({
-    listing,
-    sessionUserId,
-    isFavorited,
-    setIsFavorited,
-    setFavoriteCount,
+  const url = `${APP_URL}/${locale}/marketplace/${id}`
+  const image = listing.images.find((i) => i.url)?.url
+  const description = (listing.description || '').replace(/\s+/g, ' ').trim().slice(0, 160)
+  const indexable = listing.status === LISTING_STATUS.ACTIVE || listing.status === LISTING_STATUS.SOLD
+
+  return {
+    title: listing.title,
+    description,
+    alternates: { canonical: url },
+    ...(indexable ? {} : { robots: { index: false, follow: true } }),
+    openGraph: {
+      type: 'website',
+      title: listing.title,
+      description,
+      url,
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
+  }
+}
+
+export default async function ListingDetailPage({ params }: { params: Promise<PageParams> }) {
+  const { locale, id } = await params
+  const listing = await getListingDetail(id)
+  if (!listing) notFound()
+
+  const session = await auth()
+  const [reviewStats, isFavorited] = await Promise.all([
+    getListingReviewStats(id),
+    session?.user?.id ? isListingFavorited(session.user.id, id) : Promise.resolve(false),
+  ])
+  // The server render IS the page view; the client island no longer refetches.
+  incrementListingView(id)
+
+  const tb = await getTranslations('components.breadcrumbs')
+  const categoryLabel = getCategoryLabel(listing.category)
+  const categoryQuery = `/marketplace?category=${encodeURIComponent(listing.category)}`
+
+  const jsonLd = buildListingJsonLd(listing, reviewStats, {
+    listingUrl: `${APP_URL}/${locale}/marketplace/${id}`,
+    marketplaceUrl: `${APP_URL}/${locale}/marketplace`,
+    categoryUrl: `${APP_URL}/${locale}${categoryQuery}`,
+    homeUrl: `${APP_URL}/${locale}`,
+    homeLabel: tb('home'),
+    marketplaceLabel: tb('marketplace'),
+    categoryLabel,
+    orgName: ORG.name,
   })
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-action animate-spin" aria-hidden="true" />
-        <span className="ml-3 text-text-secondary">{t('listing.loading')}</span>
-      </div>
-    )
-  }
-
-  if (error || !listing) {
-    return (
-      <div className="max-w-4xl mx-auto py-12 text-center">
-        <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" aria-hidden="true" />
-        <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
-          {error || t('listing.notFound')}
-        </Heading>
-        <Link href={ROUTES.public.marketplace} className="text-action hover:text-action font-medium focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm px-2 py-1">
-          {t('listing.backToMarketplace')}
-        </Link>
-      </div>
-    )
-  }
-
-  const sellerName = listing.seller_display_name || listing.seller_name
-  const images: ListingImageData[] = listing.images.length > 0
-    ? listing.images
-    : [{ id: 'placeholder', url: '', position: 0, is_primary: true }]
-  const isOwner = sessionUserId === listing.seller_id
-  const isGratis = Number(listing.price_chf) === 0
-  const isVerified = !!listing.verified_at
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* Back navigation */}
-      <Link
-        href={ROUTES.public.marketplace}
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm px-2 py-1 min-h-touch"
-      >
-        <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-        {t('listing.backToMarketplace')}
-      </Link>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        <ListingImageGallery
-          images={images}
-          title={listing.title}
-          selectedImage={selectedImage}
-          onSelectImage={setSelectedImage}
-        />
-
-        <div className="space-y-4">
-          <ListingInfoPanel listing={listing} isVerified={isVerified} isGratis={isGratis} />
-
-          {/* RevampIT stock = add-to-cart (primary). P2P listings keep the
-              direct buy / contact flow in ListingActionButtons below. */}
-          {listing.is_revampit && !isOwner && !isGratis && (
-            <AddToCartButton
-              item={{
-                id: listing.id,
-                title: listing.title,
-                priceChf: Number(listing.price_chf),
-                thumbnail: images[0]?.url || null,
-                category: listing.category,
-                condition: listing.condition,
-              }}
-            />
-          )}
-
-          <ListingActionButtons
-            listing={listing}
-            isOwner={isOwner}
-            sessionUserId={sessionUserId}
-            sellerName={sellerName}
-            isFavorited={isFavorited}
-            favoriteCount={favoriteCount}
-            togglingFav={actions.togglingFav}
-            onToggleFavorite={actions.toggleFavorite}
-            showMessageForm={actions.showMessageForm}
-            onShowMessageForm={actions.setShowMessageForm}
-            contactMessage={actions.contactMessage}
-            onContactMessageChange={actions.setContactMessage}
-            sendingMessage={actions.sendingMessage}
-            messageSent={actions.messageSent}
-            onSendMessage={actions.sendMessage}
-            shareConfirm={actions.shareConfirm}
-            onShare={actions.handleShare}
-            onShowReportModal={() => { actions.clearActionError(); actions.setShowReportModal(true) }}
-            actionError={actions.actionError}
-          />
-
-          <RevampitTrustStrip listing={listing} isVerified={isVerified} />
-
-          <ListingSellerCard listing={listing} sellerName={sellerName} />
-
-          <OsInstallHint category={listing.category} />
-
-          {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-text-muted">
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" aria-hidden="true" />
-              {formatDateShort(listing.created_at)}
+      {/* Breadcrumb trail — mirrors the BreadcrumbList JSON-LD above. */}
+      <nav aria-label="Breadcrumb" className="mb-6">
+        <ol className="flex flex-wrap items-center gap-1.5 text-sm text-text-tertiary">
+          <li>
+            <Link href="/" className="flex items-center gap-1 hover:text-text-primary transition-colors">
+              <Home className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="sr-only sm:not-sr-only">{tb('home')}</span>
+            </Link>
+          </li>
+          <li className="flex items-center gap-1.5">
+            <ChevronRight className="h-3.5 w-3.5 text-text-muted shrink-0" aria-hidden="true" />
+            <Link href="/marketplace" className="hover:text-text-primary transition-colors">
+              {tb('marketplace')}
+            </Link>
+          </li>
+          <li className="flex items-center gap-1.5">
+            <ChevronRight className="h-3.5 w-3.5 text-text-muted shrink-0" aria-hidden="true" />
+            <Link href={categoryQuery} className="hover:text-text-primary transition-colors truncate max-w-[160px]">
+              {categoryLabel}
+            </Link>
+          </li>
+          <li className="flex items-center gap-1.5">
+            <ChevronRight className="h-3.5 w-3.5 text-text-muted shrink-0" aria-hidden="true" />
+            <span className="font-medium text-text-primary truncate max-w-[240px]" aria-current="page">
+              {listing.title}
             </span>
-            <span className="flex items-center gap-1">
-              <Eye className="w-3 h-3" aria-hidden="true" />
-              {t('listing.views_count', { count: listing.view_count })}
-            </span>
-          </div>
-        </div>
-      </div>
+          </li>
+        </ol>
+      </nav>
 
-      <ListingDetails listing={listing} isVerified={isVerified} />
-
-      {actions.showReportModal && (
-        <ReportModal
-          reportReason={actions.reportReason}
-          onReportReasonChange={actions.setReportReason}
-          reportDetails={actions.reportDetails}
-          onReportDetailsChange={actions.setReportDetails}
-          reportSending={actions.reportSending}
-          reportSent={actions.reportSent}
-          onReport={actions.handleReport}
-          onClose={actions.closeReportModal}
-          actionError={actions.actionError}
-        />
-      )}
-
-      <SimilarListings listings={similarListings} />
+      <ListingDetailClient listing={{ ...listing, is_favorited: isFavorited }} />
     </div>
   )
 }
