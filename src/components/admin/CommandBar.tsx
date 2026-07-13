@@ -117,7 +117,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
   const items: ResultItem[] = []
 
   if (index) {
-    // Sections
+    // Sections are static + small → filtered client-side.
     for (const s of index.sections) {
       if (matches(s.label, q) || matches(s.description, q)) {
         items.push({
@@ -131,50 +131,43 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
       }
     }
 
-    // Users
+    // Users / decisions / listings are already matched server-side for the
+    // current query (full-table ILIKE) — show them as-is, no client re-filter.
     for (const u of index.recentUsers) {
-      if (matches(u.name, q) || matches(u.email, q)) {
-        items.push({
-          key: `user-${u.id}`,
-          label: u.name || u.email,
-          sub: u.email,
-          href: ROUTES.admin.user(u.id),
-          icon: <User className="w-4 h-4" />,
-          group: 'Benutzer',
-        })
-      }
+      items.push({
+        key: `user-${u.id}`,
+        label: u.name || u.email,
+        sub: u.email,
+        href: ROUTES.admin.user(u.id),
+        icon: <User className="w-4 h-4" />,
+        group: 'Benutzer',
+      })
     }
 
-    // Decisions
     for (const d of index.recentDecisions) {
-      if (matches(d.title, q)) {
-        items.push({
-          key: `decision-${d.id}`,
-          label: d.title,
-          sub: d.status,
-          href: ROUTES.admin.decision(d.id),
-          icon: <Vote className="w-4 h-4" />,
-          group: 'Entscheide',
-        })
-      }
+      items.push({
+        key: `decision-${d.id}`,
+        label: d.title,
+        sub: d.status,
+        href: ROUTES.admin.decision(d.id),
+        icon: <Vote className="w-4 h-4" />,
+        group: 'Entscheide',
+      })
     }
 
-    // Listings
     for (const l of index.recentListings) {
-      if (matches(l.title, q)) {
-        items.push({
-          key: `listing-${l.id}`,
-          label: l.title,
-          sub: l.status,
-          href: `${ROUTES.admin.marketplace}?listing=${l.id}`,
-          icon: <Monitor className="w-4 h-4" />,
-          group: 'Inserate',
-        })
-      }
+      items.push({
+        key: `listing-${l.id}`,
+        label: l.title,
+        sub: l.status,
+        href: `${ROUTES.admin.marketplace}?listing=${l.id}`,
+        icon: <Monitor className="w-4 h-4" />,
+        group: 'Inserate',
+      })
     }
   }
 
-  // Also filter action commands
+  // Action commands are always client-filtered.
   const matchedActions = ACTION_COMMANDS.filter(a => matches(a.label, q))
 
   return [...matchedActions, ...items]
@@ -190,6 +183,7 @@ export function CommandBar() {
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState<SearchIndex | null>(null)
   const [activeIdx, setActiveIdx] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -198,13 +192,30 @@ export function CommandBar() {
   // Portal target only exists after mount (SSR has no document).
   useEffect(() => setMounted(true), [])
 
-  // Fetch index once when first opened
+  // Debounce the query so we search the server (not just a prefetched slice)
+  // on a settled term rather than every keystroke.
+  const [debouncedQuery, setDebouncedQuery] = useState('')
   useEffect(() => {
-    if (!open || index) return
-    apiFetch<SearchIndex>('/api/admin/search-index').then(result => {
-      if (result.success && result.data) setIndex(result.data)
-    })
-  }, [open, index])
+    const id = setTimeout(() => setDebouncedQuery(query.trim()), 180)
+    return () => clearTimeout(id)
+  }, [query])
+
+  // Fetch server-side matches whenever open or the debounced term changes.
+  // The `cancelled` guard drops out-of-order responses from fast typing.
+  useEffect(() => {
+    if (!open) return
+    let cancelled = false
+    const qs = debouncedQuery ? `?q=${encodeURIComponent(debouncedQuery)}` : ''
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- loading flag for the fetch below
+    setLoading(true)
+    apiFetch<SearchIndex>(`/api/admin/search-index${qs}`)
+      .then(result => {
+        if (cancelled) return
+        if (result.success && result.data) setIndex(result.data)
+      })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [open, debouncedQuery])
 
   // Global keyboard shortcut
   useEffect(() => {
@@ -334,7 +345,7 @@ export function CommandBar() {
         <div className="overflow-y-auto max-h-96 py-2">
           {results.length === 0 ? (
             <p className="px-4 py-8 text-center text-sm text-text-muted">
-              Keine Ergebnisse für &ldquo;{query}&rdquo;
+              {loading ? t('searching') : t('noResults', { query })}
             </p>
           ) : (
             Array.from(groups.entries()).map(([groupLabel, items]) => (

@@ -10646,8 +10646,9 @@
     "commandBar": {
       "placeholder": "Suche oder Befehl…",
       "openShortcut": "Befehlsleiste öffnen",
-      "noResults": "Keine Ergebnisse",
-      "recentlyVisited": "Zuletzt besucht"
+      "noResults": "Keine Ergebnisse für «{query}»",
+      "recentlyVisited": "Zuletzt besucht",
+      "searching": "Suchen …"
     },
     "userMenu": {
       "darkMode": "Erscheinungsbild",

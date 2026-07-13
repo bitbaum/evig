@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 
-export const GET = withAdmin(async (_request: NextRequest, session) => {
+export const GET = withAdmin(async (request: NextRequest, session) => {
   try {
     // Scope everything by the CALLER's permissions — the ⌘K index otherwise
     // leaks user PII and sensitive section names to permission-limited staff.
@@ -18,30 +18,36 @@ export const GET = withAdmin(async (_request: NextRequest, session) => {
     const canSeeDecisions = canAccessSection(staffUser, 'decisions')
     const canSeeListings = canAccessSection(staffUser, 'marketplace')
 
+    // With `?q=`, search the FULL tables (ILIKE) rather than just the most
+    // recent rows — so old users/listings/decisions are findable, not only
+    // whatever happens to be newest. No `q` → recent rows (initial/empty state).
+    const q = new URL(request.url).searchParams.get('q')?.trim() ?? ''
+    const term = q ? `%${q.replace(/[%_\\]/g, (c) => `\\${c}`)}%` : ''
+
     const [usersResult, decisionsResult, listingsResult] = await Promise.allSettled([
       canSeeUsers
-        ? db.execute(sql`
-            SELECT id, name, email
-            FROM ${sql.raw(TABLE_NAMES.USERS)}
-            ORDER BY "createdAt" DESC
-            LIMIT 20
-          `)
+        ? db.execute(q
+            ? sql`SELECT id, name, email FROM ${sql.raw(TABLE_NAMES.USERS)}
+                   WHERE name ILIKE ${term} OR email ILIKE ${term}
+                   ORDER BY "createdAt" DESC LIMIT 8`
+            : sql`SELECT id, name, email FROM ${sql.raw(TABLE_NAMES.USERS)}
+                   ORDER BY "createdAt" DESC LIMIT 8`)
         : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
       canSeeDecisions
-        ? db.execute(sql`
-            SELECT id, title, status
-            FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
-            ORDER BY created_at DESC
-            LIMIT 10
-          `)
+        ? db.execute(q
+            ? sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
+                   WHERE title ILIKE ${term}
+                   ORDER BY created_at DESC LIMIT 8`
+            : sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.DECISIONS)}
+                   ORDER BY created_at DESC LIMIT 8`)
         : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
       canSeeListings
-        ? db.execute(sql`
-            SELECT id, title, status
-            FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
-            ORDER BY created_at DESC
-            LIMIT 10
-          `)
+        ? db.execute(q
+            ? sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
+                   WHERE title ILIKE ${term}
+                   ORDER BY created_at DESC LIMIT 8`
+            : sql`SELECT id, title, status FROM ${sql.raw(TABLE_NAMES.LISTINGS)}
+                   ORDER BY created_at DESC LIMIT 8`)
         : Promise.resolve({ rows: [] as Record<string, unknown>[] }),
     ])
 
