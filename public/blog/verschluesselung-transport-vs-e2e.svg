@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 360" font-family="Inter, system-ui, sans-serif" role="img" aria-label="Transportverschlüsselung versus Ende-zu-Ende-Verschlüsselung">
+  <rect x="0" y="0" width="860" height="360" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+
+  <!-- reusable lock glyph via <defs> -->
+  <defs>
+    <g id="lock">
+      <rect x="-9" y="-2" width="18" height="14" rx="2.5" fill="#16a34a"/>
+      <path d="M -5 -2 v -4 a 5 5 0 0 1 10 0 v 4" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+    </g>
+  </defs>
+
+  <!-- ============ Lane 1: Transportverschlüsselung ============ -->
+  <text x="30" y="52" font-size="18" font-weight="700" fill="#1c1917">Transportverschlüsselung</text>
+  <text x="30" y="74" font-size="13" fill="#78716c">z. B. Telegram (Standard-Chats), SMS, jede reine „HTTPS"-Sicherheit</text>
+
+  <!-- endpoints -->
+  <g transform="translate(90,120)"><circle r="24" fill="#a8a29e"/><text y="5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Du</text></g>
+  <rect x="360" y="96" width="140" height="48" rx="8" fill="#fff5eb" stroke="#ea580c" stroke-width="2"/>
+  <text x="430" y="116" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">Server</text>
+  <text x="430" y="134" text-anchor="middle" font-size="12" fill="#c2410c">liest im Klartext mit</text>
+  <g transform="translate(770,120)"><circle r="24" fill="#a8a29e"/><text y="5" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Empf.</text></g>
+  <!-- arrows + locks -->
+  <line x1="118" y1="120" x2="352" y2="120" stroke="#d6d3d1" stroke-width="2"/>
+  <line x1="508" y1="120" x2="742" y2="120" stroke="#d6d3d1" stroke-width="2"/>
+  <use href="#lock" x="235" y="120"/>
+  <use href="#lock" x="625" y="120"/>
+  <text x="430" y="176" text-anchor="middle" font-size="12.5" fill="#c2410c" font-weight="600">Verschlüsselt nur bis zum Server — der kann alles lesen.</text>
+
+  <line x1="30" y1="205" x2="830" y2="205" stroke="#e7e5e4" stroke-width="1"/>
+
+  <!-- ============ Lane 2: Ende-zu-Ende ============ -->
+  <text x="30" y="243" font-size="18" font-weight="700" fill="#1c1917">Ende-zu-Ende-Verschlüsselung (E2E)</text>
+  <text x="30" y="265" font-size="13" fill="#78716c">Signal, Threema, WhatsApp, Matrix, iMessage — Inhalt standardmässig geschützt</text>
+
+  <g transform="translate(90,312)"><circle r="24" fill="#16a34a"/><text y="5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Du</text></g>
+  <rect x="360" y="288" width="140" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="430" y="308" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">Server</text>
+  <text x="430" y="326" text-anchor="middle" font-size="12" fill="#15803d" font-family="monospace">a7#k2$…</text>
+  <g transform="translate(770,312)"><circle r="24" fill="#16a34a"/><text y="5" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Empf.</text></g>
+  <line x1="118" y1="312" x2="352" y2="312" stroke="#86efac" stroke-width="2"/>
+  <line x1="508" y1="312" x2="742" y2="312" stroke="#86efac" stroke-width="2"/>
+  <use href="#lock" x="235" y="312"/>
+  <use href="#lock" x="625" y="312"/>
+</svg>

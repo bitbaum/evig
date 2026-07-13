@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" font-family="Inter, system-ui, sans-serif" role="img" aria-label="Drei Netzwerk-Topologien: zentral, föderiert, relay/peer-to-peer">
+  <rect x="0" y="0" width="860" height="340" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+  <!-- ================= Panel 1: Zentral ================= -->
+  <text x="143" y="42" text-anchor="middle" font-size="19" font-weight="700" fill="#1c1917">Zentral</text>
+  <text x="143" y="64" text-anchor="middle" font-size="13" fill="#78716c">Ein Betreiber, ein Schalter</text>
+  <!-- lines -->
+  <g stroke="#d6d3d1" stroke-width="2">
+    <line x1="143" y1="180" x2="63" y2="120"/><line x1="143" y1="180" x2="223" y2="120"/>
+    <line x1="143" y1="180" x2="53" y2="215"/><line x1="143" y1="180" x2="233" y2="215"/>
+    <line x1="143" y1="180" x2="103" y2="270"/><line x1="143" y1="180" x2="183" y2="270"/>
+  </g>
+  <!-- clients -->
+  <g fill="#a8a29e">
+    <circle cx="63" cy="120" r="11"/><circle cx="223" cy="120" r="11"/>
+    <circle cx="53" cy="215" r="11"/><circle cx="233" cy="215" r="11"/>
+    <circle cx="103" cy="270" r="11"/><circle cx="183" cy="270" r="11"/>
+  </g>
+  <!-- central server -->
+  <circle cx="143" cy="180" r="26" fill="#ea580c"/>
+  <text x="143" y="185" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Firma</text>
+  <text x="143" y="312" text-anchor="middle" font-size="12" fill="#78716c">Sperrt der Betreiber, ist alles weg.</text>
+
+  <line x1="287" y1="70" x2="287" y2="290" stroke="#e7e5e4" stroke-width="1"/>
+
+  <!-- ================= Panel 2: Föderiert ================= -->
+  <text x="430" y="42" text-anchor="middle" font-size="19" font-weight="700" fill="#1c1917">Föderiert</text>
+  <text x="430" y="64" text-anchor="middle" font-size="13" fill="#78716c">Viele Server, verbunden — wie E-Mail</text>
+  <!-- server-to-server links -->
+  <g stroke="#16a34a" stroke-width="2.5">
+    <line x1="360" y1="150" x2="500" y2="150"/><line x1="360" y1="150" x2="430" y2="245"/><line x1="500" y1="150" x2="430" y2="245"/>
+  </g>
+  <!-- client links -->
+  <g stroke="#d6d3d1" stroke-width="1.5">
+    <line x1="360" y1="150" x2="330" y2="100"/><line x1="360" y1="150" x2="318" y2="185"/>
+    <line x1="500" y1="150" x2="530" y2="100"/><line x1="500" y1="150" x2="542" y2="185"/>
+    <line x1="430" y1="245" x2="395" y2="290"/><line x1="430" y1="245" x2="465" y2="290"/>
+  </g>
+  <!-- servers -->
+  <g fill="#16a34a"><circle cx="360" cy="150" r="18"/><circle cx="500" cy="150" r="18"/><circle cx="430" cy="245" r="18"/></g>
+  <!-- clients -->
+  <g fill="#a8a29e">
+    <circle cx="330" cy="100" r="9"/><circle cx="318" cy="185" r="9"/>
+    <circle cx="530" cy="100" r="9"/><circle cx="542" cy="185" r="9"/>
+    <circle cx="395" cy="290" r="9"/><circle cx="465" cy="290" r="9"/>
+  </g>
+  <text x="430" y="325" text-anchor="middle" font-size="12" fill="#78716c">Ein Server fällt weg? Du ziehst um.</text>
+
+  <line x1="573" y1="70" x2="573" y2="290" stroke="#e7e5e4" stroke-width="1"/>
+
+  <!-- ================= Panel 3: Relay / P2P ================= -->
+  <text x="717" y="42" text-anchor="middle" font-size="19" font-weight="700" fill="#1c1917">Relay / P2P</text>
+  <text x="717" y="64" text-anchor="middle" font-size="13" fill="#78716c">Kein Zentrum, Identität = Schlüssel</text>
+  <!-- mesh links (loose) -->
+  <g stroke="#d6d3d1" stroke-width="1.5">
+    <line x1="650" y1="120" x2="720" y2="160"/><line x1="720" y1="160" x2="790" y2="115"/>
+    <line x1="720" y1="160" x2="660" y2="220"/><line x1="720" y1="160" x2="785" y2="215"/>
+    <line x1="650" y1="120" x2="660" y2="220"/><line x1="790" y1="115" x2="785" y2="215"/>
+  </g>
+  <!-- relays (green rings) -->
+  <g fill="#ffffff" stroke="#16a34a" stroke-width="3">
+    <circle cx="650" cy="120" r="13"/><circle cx="790" cy="115" r="13"/>
+    <circle cx="660" cy="220" r="13"/><circle cx="785" cy="215" r="13"/>
+    <circle cx="720" cy="160" r="13"/>
+  </g>
+  <!-- key badge -->
+  <circle cx="717" cy="272" r="15" fill="#1c1917"/>
+  <text x="717" y="278" text-anchor="middle" font-size="15" fill="#fbbf24">&#128273;</text>
+  <text x="717" y="325" text-anchor="middle" font-size="12" fill="#78716c">Ein Relay sperrt? Nimm drei andere.</text>
+</svg>

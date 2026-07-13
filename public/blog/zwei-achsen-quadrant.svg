@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 560" font-family="Inter, system-ui, sans-serif" role="img" aria-label="Quadrant: Quelloffenheit gegen Ausweichbarkeit, Dienste eingeordnet">
+  <rect x="0" y="0" width="820" height="560" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+  <text x="410" y="40" text-anchor="middle" font-size="19" font-weight="700" fill="#1c1917">Wer hat die Kontrolle über deine Kommunikation?</text>
+
+  <!-- plot frame -->
+  <rect x="120" y="70" width="620" height="410" fill="#fafaf9" stroke="#e7e5e4"/>
+  <!-- quadrant divider lines -->
+  <line x1="430" y1="70" x2="430" y2="480" stroke="#e7e5e4" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="120" y1="275" x2="740" y2="275" stroke="#e7e5e4" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- axis labels -->
+  <text x="430" y="512" text-anchor="middle" font-size="14" font-weight="600" fill="#57534e">Quelloffen &amp; nachprüfbar  →</text>
+  <text x="132" y="60" font-size="14" font-weight="600" fill="#57534e">↑ Ausweichbar / selbst hostbar</text>
+  <text x="128" y="470" font-size="11" fill="#a8a29e">geschlossen</text>
+  <text x="700" y="470" text-anchor="end" font-size="11" fill="#a8a29e">offen</text>
+
+  <!-- direction hint -->
+  <text x="700" y="100" text-anchor="end" font-size="12" font-style="italic" fill="#16a34a">mehr Kontrolle bei dir ↗</text>
+
+  <!-- ===== bottom-left: closed + locked-in cluster ===== -->
+  <rect x="150" y="345" width="250" height="112" rx="10" fill="#fef2f2" stroke="#fecaca"/>
+  <text x="275" y="372" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">Geschlossen &amp; ortsgebunden</text>
+  <text x="275" y="394" text-anchor="middle" font-size="12" fill="#7f1d1d">X · Meta (FB/IG) · TikTok</text>
+  <text x="275" y="412" text-anchor="middle" font-size="12" fill="#7f1d1d">Telegram · WhatsApp · iMessage</text>
+  <text x="275" y="438" text-anchor="middle" font-size="11" fill="#b91c1c">ein Betreiber entscheidet — du kannst nicht weg</text>
+
+  <!-- ===== bottom-right: open/verifiable but central ===== -->
+  <g fill="#0d9488"><circle cx="620" cy="400" r="8"/><circle cx="560" cy="430" r="8"/></g>
+  <text x="634" y="404" font-size="13" font-weight="600" fill="#0f766e">Signal</text>
+  <text x="574" y="434" font-size="13" font-weight="600" fill="#0f766e">Threema</text>
+  <text x="620" y="360" text-anchor="middle" font-size="11" fill="#78716c">offen &amp; privat,</text>
+  <text x="620" y="375" text-anchor="middle" font-size="11" fill="#78716c">aber zentral</text>
+
+  <!-- ===== top-right: open + escapable ===== -->
+  <g fill="#16a34a">
+    <circle cx="690" cy="120" r="9"/><circle cx="640" cy="165" r="9"/>
+    <circle cx="595" cy="120" r="9"/><circle cx="675" cy="210" r="9"/>
+  </g>
+  <text x="690" y="112" text-anchor="end" font-size="13" font-weight="700" fill="#15803d">Nostr</text>
+  <text x="654" y="169" font-size="13" font-weight="700" fill="#15803d">Mastodon</text>
+  <text x="589" y="112" text-anchor="end" font-size="13" font-weight="700" fill="#15803d">Lemmy</text>
+  <text x="689" y="214" font-size="13" font-weight="700" fill="#15803d">Matrix</text>
+  <text x="628" y="255" text-anchor="middle" font-size="11" fill="#16a34a">quelloffen + du kannst wechseln/hosten</text>
+
+  <!-- ===== top-mid: Bluesky ===== -->
+  <circle cx="470" cy="205" r="8" fill="#0284c7"/>
+  <text x="484" y="209" font-size="13" font-weight="600" fill="#0369a1">Bluesky</text>
+  <text x="484" y="226" font-size="10.5" fill="#78716c">Protokoll ausweichbar, App noch zentral</text>
+</svg>
