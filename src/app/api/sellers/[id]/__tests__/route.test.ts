@@ -246,7 +246,8 @@ describe('GET /api/sellers/[id] — success', () => {
     expect(body.success).toBe(true)
     expect(body.data.profile.displayName).toBe('Test Seller')
     expect(body.data.listings).toHaveLength(1)
-    expect(body.data.review_stats.average_rating).toBe(4.5)
+    // avg + total are derived from the histogram (5×7 + 4×3) / 10 = 4.7
+    expect(body.data.review_stats.average_rating).toBe(4.7)
     expect(body.data.review_stats.total_reviews).toBe(10)
     expect(body.data.review_stats.histogram['5']).toBe(7)
     expect(body.data.reviews).toHaveLength(1)

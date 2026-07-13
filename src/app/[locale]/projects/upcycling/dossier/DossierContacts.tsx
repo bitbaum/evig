@@ -141,7 +141,7 @@ function ContactCard({
   outreach: DossierOutreach
 }) {
   return (
-    <div className="flex min-w-0 flex-col rounded-xl border border-subtle bg-surface-base p-5 transition-colors hover:border-neutral-300 dark:hover:border-neutral-700">
+    <div className="flex min-w-0 flex-col rounded-xl border border-subtle bg-surface-base p-5 transition-colors hover:border-strong">
       <div className="flex items-start justify-between gap-3">
         <h4 className="min-w-0 break-words text-base font-semibold text-text-primary">{contact.name}</h4>
         <span className="shrink-0 rounded-full border border-subtle bg-surface-raised px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary">

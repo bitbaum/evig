@@ -153,7 +153,9 @@
       "itHelpHubDesc": "Reparieren, OS installieren, IT-Probleme lösen — ein Einstieg",
       "viewSection": "Übersicht",
       "sectionDevices": "Geräte",
-      "sectionHelp": "Hilfe"
+      "sectionHelp": "Hilfe",
+      "howItWorks": "So funktioniert’s",
+      "howItWorksDesc": "Der Weg deines Geräts — von der Spende bis zum neuen Zuhause"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -11007,6 +11009,68 @@
     "method": {
       "title": "Zahlungsart",
       "subtitle": "Wähle, wie du bezahlen möchtest"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "So funktioniert’s — Der Weg deines Geräts",
+      "description": "Wie aus gespendeten Computern wieder zuverlässige Geräte werden: sichere Datenlöschung, Tests, Linux, Garantie — und was mit Geräten passiert, die sich nicht mehr verkaufen lassen."
+    },
+    "hero": {
+      "title": "Der Weg deines Geräts",
+      "subtitle": "Von der Spende zum neuen Zuhause: wie aus einem ausgedienten Computer bei {org} wieder ein zuverlässiges Gerät wird — oder wertvolle Ersatzteile."
+    },
+    "journey": {
+      "heading": "Von der Spende zum neuen Zuhause",
+      "intro": "Jedes gespendete Gerät durchläuft denselben sorgfältigen Prozess — transparent und nachvollziehbar."
+    },
+    "phases": {
+      "donation": {
+        "title": "Spende oder Rückgabe",
+        "body": "Privatpersonen und Firmen geben uns ihre ausgedienten Geräte — persönlich abgegeben oder von uns abgeholt."
+      },
+      "intake": {
+        "title": "Eingang & Zustandsbewertung",
+        "body": "Jedes Gerät wird erfasst, sichtgeprüft und in einen klaren Zustandsgrad eingeteilt — von «Wie neu» bis «Defekt»."
+      },
+      "wipe": {
+        "title": "Sichere Datenlöschung",
+        "body": "Alle Datenträger werden nach dem NIST-800-88-Standard sicher gelöscht. Vorherige Daten sind unwiederbringlich entfernt."
+      },
+      "refurbish": {
+        "title": "Test & Aufbereitung",
+        "body": "Die Hardware wird durchgetestet, gereinigt und wo nötig aufgerüstet. Danach installieren wir ein quelloffenes Betriebssystem (Linux)."
+      },
+      "quality": {
+        "title": "Qualitätskontrolle & Garantie",
+        "body": "Eine Abschlusskontrolle stellt sicher, dass alles läuft. Aufbereitete Geräte erhalten {months} Monate Garantie."
+      },
+      "rehome": {
+        "title": "Ein neues Zuhause",
+        "body": "Das Gerät kommt zu einem fairen, solidarischen Preis auf den Marktplatz — bereit für ein zweites Leben."
+      }
+    },
+    "paths": {
+      "heading": "Nicht jedes Gerät wird verkauft",
+      "intro": "Ehrlich gesagt: nicht jede Spende lässt sich wiederverwenden. Aber nichts wird verschwendet — jedes Gerät nimmt einen von drei Wegen.",
+      "refurbish": {
+        "title": "Aufbereiten & verkaufen",
+        "body": "Der Grossteil der funktionsfähigen Geräte wird aufbereitet und im Marktplatz weitergegeben."
+      },
+      "parts": {
+        "title": "Ersatzteile gewinnen",
+        "body": "Aus nicht mehr verkäuflichen Geräten gewinnen wir funktionierende Komponenten — RAM, SSDs, Netzteile — für Reparaturen."
+      },
+      "recycle": {
+        "title": "Fachgerecht recyceln",
+        "body": "Was nicht mehr brauchbar ist, geht in die SWICO-zertifizierte Entsorgung. Keine Komponente landet im Hausmüll."
+      }
+    },
+    "cta": {
+      "heading": "Hilf mit, den Kreislauf zu schliessen",
+      "body": "Kauf aufbereitete Technik oder gib deinem alten Gerät ein zweites Leben.",
+      "buy": "Marktplatz entdecken",
+      "donate": "Gerät spenden"
     }
   }
 }

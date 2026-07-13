@@ -6,7 +6,7 @@ import { NextRequest } from 'next/server';
 import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { sellerProfiles, listings, users, reviews, reviewResponses, userProfiles } from '@/db/schema';
-import { eq, and, sql, getTableName } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
 import { LISTING_STATUS } from '@/config/marketplace';
@@ -57,33 +57,22 @@ export async function GET(
       .where(and(eq(listings.sellerId, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
       .orderBy(sql`${listings.createdAt} DESC`);
 
-    // Aggregate review stats via raw SQL (cross-table join with listings)
-    const reviewStatsResult = await db.execute(sql`
-      SELECT
-        ROUND(AVG(r.overall_rating)::numeric, 2) as avg_rating,
-        COUNT(r.id) as review_count
-      FROM ${sql.raw(getTableName(reviews))} r
-      JOIN ${listings} l ON r.target_id = l.id
-      WHERE r.target_type = ${REVIEW_TARGET_TYPES.LISTING}
-        AND l.seller_id = ${id}
-        AND r.status = ${REVIEW_STATUS.PUBLISHED}
-    `);
+    // One filter drives both review queries (DRY). Reviews are listing-scoped;
+    // the seller page aggregates them to the person.
+    const sellerReviewFilter = and(
+      eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING),
+      eq(listings.sellerId, id),
+      eq(reviews.status, REVIEW_STATUS.PUBLISHED),
+    );
 
-    const reviewStats = reviewStatsResult.rows[0] as { avg_rating: string | null; review_count: string } | undefined;
-
-    // Rating histogram (5★…1★) + the most recent reviews across this seller's
-    // listings, with the seller's response where present. Reviews are
-    // listing-scoped; the seller page aggregates them to the person.
+    // The rating distribution is the SINGLE SOURCE for this seller's aggregate —
+    // average + total are derived from it, so the review set is queried once.
     const [histogramRows, sellerReviews] = await Promise.all([
       db
         .select({ rating: reviews.overallRating, count: sql<string>`COUNT(*)` })
         .from(reviews)
         .innerJoin(listings, eq(reviews.targetId, listings.id))
-        .where(and(
-          eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING),
-          eq(listings.sellerId, id),
-          eq(reviews.status, REVIEW_STATUS.PUBLISHED),
-        ))
+        .where(sellerReviewFilter)
         .groupBy(reviews.overallRating),
       db
         .select({
@@ -106,27 +95,30 @@ export async function GET(
           reviewResponses,
           and(eq(reviewResponses.reviewId, reviews.id), eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED)),
         )
-        .where(and(
-          eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING),
-          eq(listings.sellerId, id),
-          eq(reviews.status, REVIEW_STATUS.PUBLISHED),
-        ))
+        .where(sellerReviewFilter)
         .orderBy(sql`${reviews.createdAt} DESC`)
         .limit(10),
     ]);
 
     const histogram: Record<string, number> = { '5': 0, '4': 0, '3': 0, '2': 0, '1': 0 };
+    let totalReviews = 0;
+    let ratingSum = 0;
     for (const row of histogramRows) {
-      if (row.rating != null) histogram[String(row.rating)] = Number(row.count);
+      if (row.rating == null) continue;
+      const count = Number(row.count);
+      histogram[String(row.rating)] = count;
+      totalReviews += count;
+      ratingSum += row.rating * count;
     }
+    const averageRating = totalReviews > 0 ? Math.round((ratingSum / totalReviews) * 100) / 100 : 0;
 
     // Public seller profiles are semi-static — cache 60s, stale 30s
     return apiSuccessCached({
       profile,
       listings: activeListings,
       review_stats: {
-        average_rating: reviewStats?.avg_rating ? Number(reviewStats.avg_rating) : 0,
-        total_reviews: reviewStats?.review_count ? Number(reviewStats.review_count) : 0,
+        average_rating: averageRating,
+        total_reviews: totalReviews,
         histogram,
       },
       reviews: sellerReviews,

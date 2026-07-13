@@ -81,6 +81,7 @@ export const ROUTES = {
     /** Online shop canonical route. Legacy /shop URLs redirect here. */
     shop:                     '/marketplace',
     services:                 '/services',
+    soFunktioniert:           '/so-funktionierts',
     marketplace:              '/marketplace',
     marketplaceSell:          '/marketplace/sell',
     marketplaceListing:       (id: string) => `/marketplace/${id}`,

@@ -56,7 +56,7 @@ export default function CareersListClient({ postings, activeTrack }: Props) {
               className={cn(
                 'rounded-full px-4 py-1.5 text-sm border transition-colors',
                 active
-                  ? 'bg-action text-white border-action'
+                  ? 'bg-action text-action-text border-action'
                   : 'border-neutral-200 hover:border-neutral-300',
               )}
             >

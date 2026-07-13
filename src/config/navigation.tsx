@@ -73,6 +73,12 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'impactDesc',
       },
       {
+        name: 'So funktioniert’s',
+        nameKey: 'howItWorks',
+        href: '/so-funktionierts',
+        descriptionKey: 'howItWorksDesc',
+      },
+      {
         name: 'Standorte',
         nameKey: 'locations',
         href: '/space',
