@@ -63,15 +63,22 @@ jest.mock('@/db', () => ({
 
 jest.mock('@/db/schema/content', () => ({
   blogPosts: {
-    slug: 'bp_slug', title: 'bp_title', excerpt: 'bp_excerpt',
+    id: 'bp_id', slug: 'bp_slug', title: 'bp_title', excerpt: 'bp_excerpt',
     content: 'bp_content', featuredImage: 'bp_featuredImage',
     categoryId: 'bp_categoryId', createdBy: 'bp_createdBy',
     tags: 'bp_tags', publishedAt: 'bp_publishedAt', createdAt: 'bp_createdAt',
-    isPublished: 'bp_isPublished',
+    isPublished: 'bp_isPublished', visibility: 'bp_visibility',
+    seoTitle: 'bp_seoTitle', seoDescription: 'bp_seoDescription',
   },
   blogCategories: {
     id: 'bc_id', slug: 'bc_slug', name: 'bc_name',
     description: 'bc_description', color: 'bc_color',
+  },
+  blogHiddenSlugs: { slug: 'bh_slug' },
+  blogPostTranslations: {
+    postId: 'bt_postId', locale: 'bt_locale', title: 'bt_title',
+    excerpt: 'bt_excerpt', content: 'bt_content',
+    seoTitle: 'bt_seoTitle', seoDescription: 'bt_seoDescription',
   },
 }))
 

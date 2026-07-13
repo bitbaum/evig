@@ -23,6 +23,7 @@ import {
   useBlogPostForm,
   BlogPostEditor,
   BlogPostSidebar,
+  BlogTranslationTabs,
 } from './blog'
 import type { BlogPostFormProps } from './blog'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
@@ -43,8 +44,18 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
     setTagInput,
     addTag,
     removeTag,
-    handleTitleChange,
     handleSubmit,
+    activeLocale,
+    setActiveLocale,
+    isBase,
+    activeDoc,
+    updateActiveDoc,
+    handleActiveTitleChange,
+    localeHasContent,
+    translatableLocales,
+    canTranslate,
+    translating,
+    translateAll,
   } = useBlogPostForm({ initialData, isEdit })
 
   return (
@@ -121,11 +132,25 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
       )}
 
+      <BlogTranslationTabs
+        activeLocale={activeLocale}
+        translatableLocales={translatableLocales}
+        onSelect={setActiveLocale}
+        hasContent={localeHasContent}
+        canTranslate={canTranslate}
+        translating={translating}
+        onTranslateAll={translateAll}
+      />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <BlogPostEditor
-          formData={formData}
-          onFormDataChange={setFormData}
-          onTitleChange={handleTitleChange}
+          isBase={isBase}
+          locale={activeLocale}
+          doc={activeDoc}
+          slug={formData.slug}
+          onDocChange={updateActiveDoc}
+          onTitleChange={handleActiveTitleChange}
+          onSlugChange={(slug) => setFormData((prev) => ({ ...prev, slug }))}
         />
 
         <BlogPostSidebar

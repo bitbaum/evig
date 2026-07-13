@@ -12,6 +12,7 @@ import { eq, desc } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { syncPostTranslations } from '@/lib/services/blog-translations'
 
 export const GET = withAdmin('content', async (request, session) => {
   try {
@@ -45,7 +46,7 @@ export const GET = withAdmin('content', async (request, session) => {
 export const POST = withAdmin('content', async (request, session) => {
   try {
     const body = await request.json()
-    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished } = body
+    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, translations } = body
 
     if (!title || !content) {
       return apiBadRequest('Titel und Inhalt sind erforderlich')
@@ -87,6 +88,11 @@ export const POST = withAdmin('content', async (request, session) => {
         updatedBy: session.user.id,
       })
       .returning({ id: blogPosts.id })
+
+    if (translations !== undefined) {
+      const result = await syncPostTranslations(post.id, translations)
+      if (!result.success) return apiBadRequest(result.error!)
+    }
 
     logger.info('Blog post created', { postId: post.id, userId: session.user.id })
 

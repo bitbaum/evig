@@ -8,5 +8,6 @@
 export { useBlogPostForm } from './useBlogPostForm'
 export { BlogPostEditor } from './BlogPostEditor'
 export { BlogPostSidebar } from './BlogPostSidebar'
+export { BlogTranslationTabs } from './BlogTranslationTabs'
 
-export type { BlogPostData, BlogPostFormProps, Category } from './types'
+export type { BlogPostData, BlogPostFormProps, Category, BlogTranslationDraft, BlogTranslationRow, EditorDoc } from './types'

@@ -60,6 +60,7 @@ export const TABLE_NAMES = {
   BLOG_CATEGORIES: 'blog_categories',
   BLOG_COMMENTS: 'blog_comments',
   BLOG_HIDDEN_SLUGS: 'blog_hidden_slugs',
+  BLOG_POST_TRANSLATIONS: 'blog_post_translations',
   STATIC_PAGES: 'static_pages',
 
   // Applications

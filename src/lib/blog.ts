@@ -38,6 +38,13 @@ export interface BlogPost {
   createdAt: string
   locale?: string
   /**
+   * Optional SEO overrides (DB posts only). When present they drive the
+   * `<title>`/meta description instead of the display title/excerpt. File posts
+   * leave these undefined and fall back to title/excerpt.
+   */
+  seoTitle?: string
+  seoDescription?: string
+  /**
    * `public` (default) is listed on the blog and visible to everyone.
    * `unlisted` is hidden from the public listing but its direct link works for
    * anyone (no account needed) — staff share it deliberately. Logged-in staff

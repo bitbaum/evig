@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, timestamp, integer, jsonb, index } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, timestamp, integer, jsonb, index, primaryKey } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 
 // =============================================================================
@@ -59,6 +59,33 @@ export const blogPosts = pgTable('blog_posts', {
 
 export type BlogPost = typeof blogPosts.$inferSelect
 export type NewBlogPost = typeof blogPosts.$inferInsert
+
+// =============================================================================
+// BLOG POST TRANSLATIONS
+// =============================================================================
+// Per-locale overlay for DB-authored posts. blog_posts holds the canonical
+// German text + all locale-independent fields; a row here supplies the text for
+// one non-German locale. Readers fall back to the German base when a locale has
+// no row (mirrors the site-wide DE fallback). `locale` is app-validated against
+// i18n `locales` (no SQL CHECK — migration-110 policy).
+
+export const blogPostTranslations = pgTable('blog_post_translations', {
+  postId: uuid('post_id').notNull().references(() => blogPosts.id, { onDelete: 'cascade' }),
+  locale: text('locale').notNull(),
+  title: text('title').notNull(),
+  excerpt: text('excerpt'),
+  content: text('content').notNull(),
+  seoTitle: text('seo_title'),
+  seoDescription: text('seo_description'),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  primaryKey({ columns: [table.postId, table.locale] }),
+  index('idx_blog_post_translations_post').on(table.postId),
+])
+
+export type BlogPostTranslation = typeof blogPostTranslations.$inferSelect
+export type NewBlogPostTranslation = typeof blogPostTranslations.$inferInsert
 
 // =============================================================================
 // BLOG COMMENTS

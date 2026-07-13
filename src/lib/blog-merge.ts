@@ -9,7 +9,7 @@ import { getAllPosts as getFilePosts, type BlogPost } from '@/lib/blog'
  * up in BOTH the public blog and the admin list regardless of where it lives.
  */
 export async function getMergedPosts(locale: string): Promise<BlogPost[]> {
-  const dbPosts = await getDbPosts()
+  const dbPosts = await getDbPosts(locale)
   const filePosts = getFilePosts(locale)
   const dbSlugs = new Set(dbPosts.map((p) => p.slug))
   const hidden = await getHiddenSlugs()

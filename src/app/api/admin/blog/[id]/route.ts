@@ -13,6 +13,7 @@ import { eq, and, ne, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { syncPostTranslations, getPostTranslations } from '@/lib/services/blog-translations'
 
 export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: postId } = context!.params!
@@ -44,7 +45,9 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
       return apiNotFound('Blog-Artikel')
     }
 
-    return apiSuccess(post)
+    const translations = await getPostTranslations(postId)
+
+    return apiSuccess({ ...post, translations })
   } catch (error) {
     logger.error('Failed to get blog post', { postId, error })
     return apiError(error, 'Blog-Artikel konnte nicht geladen werden')
@@ -67,6 +70,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       isPublished,
       seoTitle,
       seoDescription,
+      translations,
     } = body
 
     // Check if post exists
@@ -116,12 +120,20 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     update.updatedBy = session.user.id
     update.updatedAt = sql`NOW()`
 
-    // Check if there are actual field changes beyond updatedBy/updatedAt
-    if (Object.keys(update).length <= 2) {
-      return apiSuccess({ message: 'Keine Änderungen' })
+    // Sync translations first so an "only translations changed" edit persists
+    // even when no base field changed.
+    if (translations !== undefined) {
+      const result = await syncPostTranslations(postId, translations)
+      if (!result.success) return apiBadRequest(result.error!)
     }
 
-    await db.update(blogPosts).set(update).where(eq(blogPosts.id, postId))
+    // Touch the base row only when a base field actually changed (beyond the
+    // always-set updatedBy/updatedAt).
+    if (Object.keys(update).length > 2) {
+      await db.update(blogPosts).set(update).where(eq(blogPosts.id, postId))
+    } else if (translations === undefined) {
+      return apiSuccess({ message: 'Keine Änderungen' })
+    }
 
     logger.info('Blog post updated', { postId, userId: session.user.id })
 

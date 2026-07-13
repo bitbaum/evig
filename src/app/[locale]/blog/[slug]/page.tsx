@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { getPostBySlug, getHiddenSlugs } from '@/lib/blog-db'
+import { getPostBySlug, getHiddenSlugs, getDbPostLocales } from '@/lib/blog-db'
 import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { APP_URL } from '@/config/urls'
@@ -24,7 +24,7 @@ interface BlogPostPageProps {
 // Helper to get post from DB or file system (file posts are locale-aware,
 // falling back to the German original when a translation is absent).
 async function getPost(slug: string, locale: string) {
-  const dbPost = await getPostBySlug(slug)
+  const dbPost = await getPostBySlug(slug, locale)
   if (dbPost) return dbPost
   // A file post the admin "deleted" is hidden (its markdown stays as fallback).
   const file = getFilePost(slug, locale)
@@ -51,15 +51,20 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   const isUnlisted = post.visibility === 'unlisted'
   const canonical = `${APP_URL}/blog/${slug}`
-  const localesForSlug = getPostLocales(slug)
+  // Union of file-post locales (sibling .md files) and DB-post locales
+  // (translation rows) so hreflang is correct wherever the post lives.
+  const localesForSlug = Array.from(
+    new Set([...getPostLocales(slug), ...(await getDbPostLocales(slug))]),
+  )
   const languages: Record<string, string> = {}
   for (const loc of localesForSlug) {
     languages[loc] = loc === defaultLocale ? canonical : `${APP_URL}/${loc}/blog/${slug}`
   }
 
   return {
-    title: { absolute: `${post.title} | Revamp-IT Blog` },
-    description: post.excerpt || '',
+    // SEO overrides (DB posts) take precedence over the display title/excerpt.
+    title: { absolute: `${post.seoTitle || post.title} | Revamp-IT Blog` },
+    description: post.seoDescription || post.excerpt || '',
     // Unlisted posts are link-only: keep them out of the index even if a crawler
     // ever finds the URL. Listed posts get canonical + hreflang alternates.
     ...(isUnlisted ? { robots: { index: false, follow: false } } : {}),

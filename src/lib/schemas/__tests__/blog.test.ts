@@ -6,7 +6,7 @@
  * submission record reaches the DB.
  */
 
-import { BlogSubmissionSchema } from '../blog'
+import { BlogSubmissionSchema, BlogTranslationSchema, BlogTranslationsSchema } from '../blog'
 
 const valid = {
   name: 'Anna',
@@ -62,5 +62,55 @@ describe('BlogSubmissionSchema', () => {
     expect(result.success).toBe(true)
     if (!result.success) return
     expect(result.data.submissionType).toBe('idea')
+  })
+})
+
+describe('BlogTranslationSchema', () => {
+  const validT = { locale: 'en', title: 'Open vs closed social media', content: 'Full body...' }
+
+  it('accepts a valid translation', () => {
+    expect(BlogTranslationSchema.safeParse(validT).success).toBe(true)
+  })
+
+  it('rejects the German base locale — the base is not a translation (SSOT)', () => {
+    expect(BlogTranslationSchema.safeParse({ ...validT, locale: 'de' }).success).toBe(false)
+  })
+
+  it('rejects an unknown locale', () => {
+    expect(BlogTranslationSchema.safeParse({ ...validT, locale: 'zz' }).success).toBe(false)
+  })
+
+  it('requires title and content', () => {
+    expect(BlogTranslationSchema.safeParse({ ...validT, title: '' }).success).toBe(false)
+    expect(BlogTranslationSchema.safeParse({ ...validT, content: '' }).success).toBe(false)
+  })
+
+  it('allows excerpt and seo fields to be null or omitted', () => {
+    expect(
+      BlogTranslationSchema.safeParse({ ...validT, excerpt: null, seoTitle: null, seoDescription: null }).success,
+    ).toBe(true)
+    expect(BlogTranslationSchema.safeParse(validT).success).toBe(true)
+  })
+})
+
+describe('BlogTranslationsSchema', () => {
+  it('accepts an empty array', () => {
+    expect(BlogTranslationsSchema.safeParse([]).success).toBe(true)
+  })
+
+  it('accepts multiple distinct locales', () => {
+    const result = BlogTranslationsSchema.safeParse([
+      { locale: 'en', title: 'A', content: 'a' },
+      { locale: 'fr', title: 'B', content: 'b' },
+    ])
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects a duplicated locale', () => {
+    const result = BlogTranslationsSchema.safeParse([
+      { locale: 'en', title: 'A', content: 'a' },
+      { locale: 'en', title: 'B', content: 'b' },
+    ])
+    expect(result.success).toBe(false)
   })
 })
