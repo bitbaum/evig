@@ -520,6 +520,7 @@
     --primitive-green-500: #22c55e;
     --primitive-green-600: #16a34a;
     --primitive-green-700: #15803d;
+    --primitive-green-800: #166534;
     --primitive-orange-500: #F7931A;
 
     /* ─── Semantic tokens (light) ───────────────────────────────────────
@@ -536,26 +537,26 @@
     /* Text — role-based */
     --text-primary:          #0a0a0a;       /* headings, primary body */
     --text-secondary:        #404040;       /* body, descriptions */
-    --text-tertiary:         #737373;       /* meta, labels */
-    --text-muted:            #a3a3a3;       /* placeholders, disabled */
+    --text-tertiary:         #525252;       /* meta, labels — darkened for AA on light */
+    --text-muted:            #737373;       /* placeholders, disabled — darkened for AA on light */
     --text-inverted:         #fafafa;       /* text on dark/action surfaces */
 
     /* Surfaces — role-based */
     --surface-page:          #fafafa;       /* body bg */
     --surface-base:          #ffffff;       /* cards, panels, modals */
-    --surface-raised:        #f5f5f5;       /* sections, secondary fills */
-    --surface-overlay:       #ededed;       /* dropdowns, tooltips */
+    --surface-raised:        #f1f1f1;       /* sections, secondary fills — wider step for separation */
+    --surface-overlay:       #e8e8e8;       /* dropdowns, tooltips */
 
     /* Borders — role-based */
-    --border-subtle:         rgba(0, 0, 0, 0.06);
-    --border-default:        rgba(0, 0, 0, 0.10);
-    --border-strong:         rgba(0, 0, 0, 0.20);
+    --border-subtle:         rgba(0, 0, 0, 0.08);
+    --border-default:        rgba(0, 0, 0, 0.14);
+    --border-strong:         rgba(0, 0, 0, 0.24);
 
     /* Action accent — RevampIT brand green. The ONLY chromatic color
      * outside status badges. Used for primary buttons, links, focus
      * rings, key icons. Everything else stays achromatic. */
-    --accent-action:         var(--primitive-green-600);    /* #16a34a */
-    --accent-action-hover:   var(--primitive-green-700);    /* #15803d — darker on hover */
+    --accent-action:         var(--primitive-green-700);    /* #15803d — darker for AA as text/links on white */
+    --accent-action-hover:   var(--primitive-green-800);    /* #166534 — darker on hover */
     --accent-action-muted:   rgba(22, 163, 74, 0.10);        /* subtle fills */
     --accent-action-text:    #ffffff;                        /* text ON action surfaces */
 

@@ -46,8 +46,14 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false }
     // those routes in the old language. Setting it here makes the switcher the
     // single source of truth for the cookie.
     document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`
+    // Preserve query string + hash so switching language on a filtered/paginated
+    // listing (e.g. /marketplace?category=10&page=3) or an auth page with a
+    // ?callbackUrl doesn't throw the user back to the unfiltered page.
+    const search = typeof window !== 'undefined' ? window.location.search : ''
+    const hash = typeof window !== 'undefined' ? window.location.hash : ''
+    const href = `${pathname}${search}${hash}`
     startTransition(() => {
-      router.replace(pathname, { locale: next })
+      router.replace(href, { locale: next })
       setOpen(false)
     })
   }

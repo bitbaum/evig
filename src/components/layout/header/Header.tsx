@@ -28,9 +28,11 @@ const CommandPaletteTrigger = dynamic(() => import('@/components/search/CommandP
 const MobileMenu = dynamic(() => import('../MobileMenu').then(m => ({ default: m.MobileMenu })), { ssr: false })
 import { mainNavigation } from '@/config/navigation'
 import { NavItem } from './NavItem'
+import { navItemLabel, type NavTranslator } from './nav-i18n'
 
 export function Header() {
   const tAccessibility = useTranslations('accessibility')
+  const tNav = useTranslations('nav')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [anyDropdownOpen, setAnyDropdownOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -44,6 +46,10 @@ export function Header() {
 
   // Filter navigation - separate main nav from action items
   const primaryNavItems = mainNavigation.filter(item => !item.highlight)
+  // Highlighted items (e.g. Kontakt) render as a CTA in the desktop action
+  // cluster — previously they were filtered out of the bar with no desktop
+  // render path, so the contact CTA was unreachable on desktop.
+  const actionNavItems = mainNavigation.filter(item => item.highlight)
 
   // Scroll detection for header styling + smart hide/show.
   // Threshold of 5px on the delta filters out micro-jitter from trackpads
@@ -156,6 +162,13 @@ export function Header() {
 
               {/* Theme Toggle */}
               <ThemeToggle />
+
+              {/* Highlighted CTA(s) — e.g. Kontakt (was unreachable on desktop) */}
+              {actionNavItems.map((item) => (
+                <Button key={item.name} href={item.href} variant="outline" size="sm">
+                  {item.nameKey ? navItemLabel(tNav as NavTranslator, item.nameKey) : item.name}
+                </Button>
+              ))}
 
               {/* Divider */}
               <div className="w-px h-5 bg-surface-overlay dark:bg-surface-base/10" />

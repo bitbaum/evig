@@ -14,7 +14,7 @@
 
 import { useState, useRef, useEffect, useCallback, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
+import { Link, usePathname } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import type { NavigationItem } from '@/config/navigation'
@@ -30,7 +30,14 @@ interface NavItemProps {
 
 export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
   const t = useTranslations('nav')
+  const pathname = usePathname()
   const label = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
+  // Active when this is the current page, or (for section parents) when the
+  // current path is nested under it. Home ('/') only matches exactly.
+  const isActive =
+    item.href === '/'
+      ? pathname === '/'
+      : pathname === item.href || pathname.startsWith(item.href + '/')
   const [isOpen, setIsOpen] = useState(false)
   const hasDropdown = item.subItems && item.subItems.length > 0
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -125,10 +132,14 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
     return (
       <Link
         href={item.href}
+        aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          "relative px-4 py-2 text-sm font-medium text-text-secondary whitespace-nowrap",
-          "hover:text-text-primary transition-colors duration-200",
-          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
+          "relative px-4 py-2 text-sm font-medium whitespace-nowrap",
+          "transition-colors duration-200",
+          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg",
+          isActive
+            ? "text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50"
+            : "text-text-secondary hover:text-text-primary"
         )}
       >
         {label}
@@ -153,12 +164,15 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         href={item.href}
         onMouseEnter={handleMouseEnter}
         onKeyDown={handleTriggerKeyDown}
+        aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          "group inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap",
+          "group relative inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap",
           "transition-all duration-200",
           isOpen
             ? "text-text-primary bg-surface-raised dark:bg-surface-base/6"
             : "text-text-secondary hover:text-text-primary dark:text-text-muted",
+          isActive && !isOpen &&
+            "text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50",
           "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950"
         )}
         aria-expanded={isOpen}
