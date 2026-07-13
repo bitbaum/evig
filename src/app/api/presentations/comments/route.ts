@@ -3,8 +3,9 @@ import { inArray } from 'drizzle-orm'
 import { auth } from '@/auth'
 import { db } from '@/db'
 import { presentationComments, users } from '@/db/schema'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { PRESENTATION_DECKS } from '@/config/presentations'
 import { SUPER_ADMIN_EMAILS, isStaffEmail } from '@/lib/permissions'
 import { createNotification } from '@/lib/services/notifications'
@@ -29,6 +30,9 @@ export async function GET() {
  */
 export async function POST(req: NextRequest) {
   try {
+    // CSRF-exempt public endpoint → rate-limit per IP to blunt spam.
+    if (!rateLimiters.apiGeneral(getClientIdentifier(req))) return apiRateLimited()
+
     const json = (await req.json().catch(() => ({}))) as Record<string, unknown>
 
     // Honeypot: bots fill hidden fields. Pretend success, store nothing.

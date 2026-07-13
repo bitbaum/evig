@@ -56,6 +56,9 @@ const CSRF_CONFIG = {
     '/api/payments/payrexx-webhook', // External Payrexx webhook
     '/api/payments/webhook',         // External payment webhook
     '/api/it-hilfe/accept-offer-via-token', // HMAC token in body = auth (email magic link)
+    '/api/presentations/comments',   // Public: posted from STATIC decks (served outside
+                                     // middleware, so no CSRF cookie exists). Anonymous
+                                     // comment creation — protected by honeypot + rate limit.
   ],
 }
 

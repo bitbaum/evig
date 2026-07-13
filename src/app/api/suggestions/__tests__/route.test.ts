@@ -31,11 +31,24 @@ jest.mock('@/lib/security/rate-limit', () => ({
   getClientIdentifier: jest.fn().mockReturnValue('127.0.0.1'),
 }))
 
-const mockSendCustomEmail = jest.fn().mockResolvedValue(undefined)
+const mockSendCustomEmail = jest.fn().mockResolvedValue({ success: true })
 
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
 }))
+
+// Persistence + notification + auth are best-effort side channels — stub them
+// so the route's email behavior (the subject of these tests) is exercised.
+jest.mock('@/auth', () => ({ auth: () => Promise.resolve(null) }))
+jest.mock('@/db', () => ({
+  db: {
+    insert: () => ({ values: () => Promise.resolve() }),
+    select: () => ({ from: () => ({ where: () => Promise.resolve([]) }) }),
+  },
+}))
+jest.mock('@/db/schema', () => ({ siteSuggestions: {}, users: {} }))
+jest.mock('@/lib/services/notifications', () => ({ createNotification: jest.fn().mockResolvedValue(undefined) }))
+jest.mock('@/lib/permissions', () => ({ SUPER_ADMIN_EMAILS: [] }))
 
 jest.mock('@/config/org', () => ({
   CONTACT: { email: 'kontakt@revamp-it.ch' },

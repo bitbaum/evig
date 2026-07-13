@@ -143,6 +143,33 @@ export type PresentationComment = typeof presentationComments.$inferSelect
 export type NewPresentationComment = typeof presentationComments.$inferInsert
 
 // =============================================================================
+// SITE SUGGESTIONS (public feedback widget)
+// =============================================================================
+// The floating SuggestionButton on public pages. Persisted so nothing is lost
+// when email delivery fails; email + in-app notification are best-effort.
+// See migration 127.
+
+export const siteSuggestions = pgTable('site_suggestions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  suggestion: text('suggestion').notNull(),
+  contact: text('contact'),
+  page: text('page'),
+  url: text('url'),
+  pageTitle: text('page_title'),
+  pageSection: text('page_section'),
+  scope: text('scope'),
+  selectedElements: jsonb('selected_elements'),
+  authorUserId: uuid('author_user_id').references(() => users.id, { onDelete: 'set null' }),
+  resolved: boolean('resolved').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  index('site_suggestions_unresolved_idx').on(table.resolved, table.createdAt),
+])
+
+export type SiteSuggestion = typeof siteSuggestions.$inferSelect
+export type NewSiteSuggestion = typeof siteSuggestions.$inferInsert
+
+// =============================================================================
 // BLOG HIDDEN SLUGS
 // =============================================================================
 // Suppression list for "deleting" a git/file-authored post from the admin UI:
