@@ -45,6 +45,11 @@ export interface BlogPost {
   seoTitle?: string
   seoDescription?: string
   /**
+   * True when the *displayed* locale is a machine translation (DB posts only).
+   * Drives the public "automatisch übersetzt" note. Undefined = human/base.
+   */
+  isMachine?: boolean
+  /**
    * `public` (default) is listed on the blog and visible to everyone.
    * `unlisted` is hidden from the public listing but its direct link works for
    * anyone (no account needed) — staff share it deliberately. Logged-in staff

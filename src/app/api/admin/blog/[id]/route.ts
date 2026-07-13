@@ -14,6 +14,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { syncPostTranslations, getPostTranslations } from '@/lib/services/blog-translations'
+import { fillMissingTranslations } from '@/lib/services/blog-translate'
 
 export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: postId } = context!.params!
@@ -32,6 +33,7 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
         tags: blogPosts.tags,
         is_published: blogPosts.isPublished,
         published_at: blogPosts.publishedAt,
+        auto_translate: blogPosts.autoTranslate,
         seo_title: blogPosts.seoTitle,
         seo_description: blogPosts.seoDescription,
         created_at: blogPosts.createdAt,
@@ -71,11 +73,17 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       seoTitle,
       seoDescription,
       translations,
+      autoTranslate,
     } = body
 
     // Check if post exists
     const [existing] = await db
-      .select({ id: blogPosts.id, isPublished: blogPosts.isPublished, publishedAt: blogPosts.publishedAt })
+      .select({
+        id: blogPosts.id,
+        isPublished: blogPosts.isPublished,
+        publishedAt: blogPosts.publishedAt,
+        autoTranslate: blogPosts.autoTranslate,
+      })
       .from(blogPosts)
       .where(eq(blogPosts.id, postId))
 
@@ -115,6 +123,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     }
     if (seoTitle !== undefined) update.seoTitle = seoTitle || null
     if (seoDescription !== undefined) update.seoDescription = seoDescription || null
+    if (autoTranslate !== undefined) update.autoTranslate = autoTranslate === true
 
     // Always update updated_by
     update.updatedBy = session.user.id
@@ -136,6 +145,16 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     }
 
     logger.info('Blog post updated', { postId, userId: session.user.id })
+
+    // Fill missing locales in the background when the post is (now) published
+    // and auto-translate is on. Fire-and-forget; never overwrites a human tab.
+    const nowPublished = isPublished !== undefined ? !!isPublished : existing.isPublished
+    const autoOn = autoTranslate !== undefined ? autoTranslate !== false : existing.autoTranslate
+    if (nowPublished && autoOn) {
+      void fillMissingTranslations(postId).catch((err) =>
+        logger.error('Auto-translate on update failed', { postId, err }),
+      )
+    }
 
     return apiSuccess({ message: 'Artikel aktualisiert' })
   } catch (error) {

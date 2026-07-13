@@ -14,8 +14,14 @@
  */
 
 import { callWithFallback, extractJson } from '@/lib/ai/providers'
-import { localeLabels, defaultLocale, type Locale } from '@/i18n/routing'
+import { locales, localeLabels, defaultLocale, type Locale } from '@/i18n/routing'
 import { logger } from '@/lib/logger'
+import { db } from '@/db'
+import { blogPosts } from '@/db/schema/content'
+import { eq } from 'drizzle-orm'
+import { syncPostTranslations, getPostTranslations } from '@/lib/services/blog-translations'
+
+const TRANSLATABLE_LOCALES = locales.filter((l) => l !== defaultLocale)
 
 export interface BlogTranslationSource {
   title: string
@@ -44,11 +50,13 @@ function languageName(locale: string): string {
  * Backoff 2s → 6s gives the per-minute budget a chance to recover without
  * stalling the request for a full minute.
  */
+// No real backoff under test (keeps the suite fast); real delay in prod.
+const RETRY_BASE_MS = process.env.JEST_WORKER_ID ? 0 : 2000
 async function withRetry<T>(fn: () => Promise<T | null>, attempts = 3): Promise<T | null> {
   for (let i = 0; i < attempts; i++) {
     const result = await fn()
     if (result) return result
-    if (i < attempts - 1) await new Promise((r) => setTimeout(r, 2000 * (i + 1)))
+    if (i < attempts - 1) await new Promise((r) => setTimeout(r, RETRY_BASE_MS * (i + 1)))
   }
   return null
 }
@@ -115,4 +123,63 @@ export async function translateBlogPost(
     logger.error('Blog translation failed', { targetLocale, error })
     return null
   }
+}
+
+export interface FillTranslationsResult {
+  translated: string[]
+  failed: string[]
+  notFound?: boolean
+}
+
+/**
+ * Fill a post's missing locales from its German base and persist them (flagged
+ * machine-made). Shared by the manual endpoint and the auto-on-publish trigger.
+ * Missing-only by default — a human (or already-machine) translation is never
+ * overwritten unless `overwrite` is set or the locale is explicitly requested.
+ * Sequential to respect the provider's per-minute token limit.
+ */
+export async function fillMissingTranslations(
+  postId: string,
+  opts: { overwrite?: boolean; locales?: string[] } = {},
+): Promise<FillTranslationsResult> {
+  const { overwrite = false, locales: requested } = opts
+
+  const [post] = await db
+    .select({ title: blogPosts.title, excerpt: blogPosts.excerpt, content: blogPosts.content })
+    .from(blogPosts)
+    .where(eq(blogPosts.id, postId))
+  if (!post) return { translated: [], failed: [], notFound: true }
+
+  const existing = await getPostTranslations(postId)
+  const existingByLocale = new Map(existing.map((t) => [t.locale, t]))
+
+  const inScope = (l: string) => TRANSLATABLE_LOCALES.includes(l as (typeof TRANSLATABLE_LOCALES)[number])
+  const targets = (requested?.filter(inScope) ?? TRANSLATABLE_LOCALES.filter((l) => !existingByLocale.has(l))).filter(
+    (l) => overwrite || requested?.includes(l) || !existingByLocale.has(l),
+  )
+  if (targets.length === 0) return { translated: [], failed: [] }
+
+  const translated: Array<{ locale: string; title: string; excerpt: string | null; content: string }> = []
+  const failed: string[] = []
+  for (const locale of targets) {
+    const t = await translateBlogPost(post, locale)
+    if (t) translated.push({ locale, ...t })
+    else failed.push(locale)
+  }
+
+  const merged = new Map(existingByLocale)
+  for (const t of translated) {
+    merged.set(t.locale, {
+      locale: t.locale,
+      title: t.title,
+      excerpt: t.excerpt,
+      content: t.content,
+      seoTitle: existingByLocale.get(t.locale)?.seoTitle ?? null,
+      seoDescription: existingByLocale.get(t.locale)?.seoDescription ?? null,
+      isMachine: true,
+    })
+  }
+  await syncPostTranslations(postId, Array.from(merged.values()))
+
+  return { translated: translated.map((t) => t.locale), failed }
 }

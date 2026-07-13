@@ -11,6 +11,7 @@ const EMPTY_DRAFT: BlogTranslationDraft = {
   content: '',
   seoTitle: '',
   seoDescription: '',
+  isMachine: false,
 }
 
 /** Locales an admin can translate INTO — everything except the German base. */
@@ -35,6 +36,7 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
       isPublished: initialData?.isPublished || false,
       seoTitle: initialData?.seoTitle || '',
       seoDescription: initialData?.seoDescription || '',
+      autoTranslate: initialData?.autoTranslate ?? true,
       translations: initialData?.translations || {},
     },
     apiEndpoint: '/api/admin/blog',
@@ -96,7 +98,8 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
       ...prev,
       translations: {
         ...prev.translations,
-        [activeLocale]: { ...EMPTY_DRAFT, ...prev.translations[activeLocale], ...patch },
+        // A human edited this locale → it's no longer machine-only.
+        [activeLocale]: { ...EMPTY_DRAFT, ...prev.translations[activeLocale], ...patch, isMachine: false },
       },
     }))
   }, [isBase, activeLocale, setData])
@@ -113,6 +116,11 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
     return !!(t?.title?.trim() && t?.content?.trim())
   }, [data.translations])
 
+  /** True when a locale's content is machine-made and not yet human-reviewed. */
+  const localeIsMachine = useCallback((loc: string) => data.translations[loc]?.isMachine === true, [data.translations])
+
+  const setAutoTranslate = useCallback((on: boolean) => updateField('autoTranslate', on), [updateField])
+
   // Custom submit: fold the translations map into the array the API expects,
   // dropping any locale that isn't a complete (title + body) draft.
   const handleSubmit = useCallback(async (publish: boolean = false) => {
@@ -125,6 +133,7 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
         content: t.content,
         seoTitle: t.seoTitle || null,
         seoDescription: t.seoDescription || null,
+        isMachine: t.isMachine,
       }))
     const payload = { ...data, isPublished: publish || data.isPublished, translations }
     const succeeded = await submitCustom(payload)
@@ -148,7 +157,7 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
       if (res.success) {
         const fresh = await apiFetch<{ translations?: Array<{
           locale: string; title: string; excerpt: string | null; content: string
-          seoTitle: string | null; seoDescription: string | null
+          seoTitle: string | null; seoDescription: string | null; isMachine?: boolean
         }> }>(`/api/admin/blog/${id}`)
         if (fresh.success && fresh.data?.translations) {
           const map: Record<string, BlogTranslationDraft> = {}
@@ -159,6 +168,7 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
               content: t.content,
               seoTitle: t.seoTitle || '',
               seoDescription: t.seoDescription || '',
+              isMachine: t.isMachine ?? true,
             }
           }
           setData(prev => ({ ...prev, translations: map }))
@@ -191,10 +201,13 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
     updateActiveDoc,
     handleActiveTitleChange,
     localeHasContent,
+    localeIsMachine,
     translatableLocales: TRANSLATABLE_LOCALES,
     // AI translation
     canTranslate,
     translating,
     translateAll,
+    autoTranslate: data.autoTranslate,
+    setAutoTranslate,
   }
 }

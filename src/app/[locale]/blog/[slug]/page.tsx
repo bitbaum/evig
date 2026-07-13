@@ -2,7 +2,8 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { getPostBySlug, getHiddenSlugs, getDbPostLocales } from '@/lib/blog-db'
+import { getPostBySlug, getHiddenSlugs, getDbPostLocales, getDbPostForPreview } from '@/lib/blog-db'
+import { auth } from '@/auth'
 import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { APP_URL } from '@/config/urls'
@@ -23,9 +24,14 @@ interface BlogPostPageProps {
 
 // Helper to get post from DB or file system (file posts are locale-aware,
 // falling back to the German original when a translation is absent).
-async function getPost(slug: string, locale: string) {
+async function getPost(slug: string, locale: string, allowDraft = false) {
   const dbPost = await getPostBySlug(slug, locale)
   if (dbPost) return dbPost
+  // Staff previewing an unpublished DB post (draft) — fetch regardless of state.
+  if (allowDraft) {
+    const draft = await getDbPostForPreview(slug, locale)
+    if (draft) return draft
+  }
   // A file post the admin "deleted" is hidden (its markdown stays as fallback).
   const file = getFilePost(slug, locale)
   if (!file) return null
@@ -92,11 +98,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const locale = await getLocale();
-  const post = await getPost(slug, locale);
+  // Staff may preview drafts; everyone else only sees published posts.
+  const session = await auth();
+  const isStaff = !!session?.user?.isStaff;
+  const post = await getPost(slug, locale, isStaff);
 
-  if (!post || !post.published) {
-    notFound();
-  }
+  if (!post) notFound();
+  const isDraft = !post.published;
+  if (isDraft && !isStaff) notFound();
 
   // Closed (unlisted) posts sit behind a shared password by default — the body
   // never reaches the HTML until it's unlocked.
@@ -135,6 +144,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+      )}
+      {isDraft && (
+        <div className="mx-auto mt-4 max-w-[960px] px-4 sm:px-6">
+          <div className="rounded-lg border border-warning-300 bg-warning-50 px-4 py-2.5 text-sm text-warning-800 dark:border-warning-800 dark:bg-warning-900/20 dark:text-warning-200">
+            Entwurf — nur für angemeldete Mitarbeitende sichtbar. Mit „Veröffentlichen" wird der Beitrag öffentlich.
+          </div>
+        </div>
+      )}
+      {post.isMachine && (
+        <div className="mx-auto mt-4 max-w-[960px] px-4 sm:px-6">
+          <div className="rounded-lg border border-subtle bg-surface-raised px-4 py-2.5 text-sm text-text-secondary">
+            Diese Übersetzung wurde automatisch erstellt und noch nicht redaktionell geprüft.
+          </div>
+        </div>
       )}
       <BlogPostHeader post={post} />
       {post.featuredImage && (

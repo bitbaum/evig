@@ -52,10 +52,13 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
     updateActiveDoc,
     handleActiveTitleChange,
     localeHasContent,
+    localeIsMachine,
     translatableLocales,
     canTranslate,
     translating,
     translateAll,
+    autoTranslate,
+    setAutoTranslate,
   } = useBlogPostForm({ initialData, isEdit })
 
   return (
@@ -81,25 +84,17 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
 
         <div className="flex items-center gap-3">
           {formData.slug && isEdit && (
-            formData.isPublished ? (
-              <Link
-                href={ROUTES.public.blogPost(formData.slug)}
-                target="_blank"
-                className={`inline-flex items-center gap-2 px-4 py-2 text-text-secondary ${adminInteractive.rowHover} rounded-lg transition-colors`}
-                title={t('previewTitle')}
-              >
-                <Eye className="w-4 h-4" />
-                {t('preview')}
-              </Link>
-            ) : (
-              <span
-                className="inline-flex items-center gap-2 px-4 py-2 text-text-muted cursor-not-allowed"
-                title={t('previewNotAvailable')}
-              >
-                <Eye className="w-4 h-4" />
-                {t('preview')}
-              </span>
-            )
+            // Staff can preview drafts too (the public page renders unpublished
+            // posts for logged-in staff), so the link is always available.
+            <Link
+              href={ROUTES.public.blogPost(formData.slug)}
+              target="_blank"
+              className={`inline-flex items-center gap-2 px-4 py-2 text-text-secondary ${adminInteractive.rowHover} rounded-lg transition-colors`}
+              title={t('previewTitle')}
+            >
+              <Eye className="w-4 h-4" />
+              {t('preview')}{!formData.isPublished && ' (Entwurf)'}
+            </Link>
           )}
           <Button
             onClick={() => handleSubmit(false)}
@@ -137,9 +132,12 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         translatableLocales={translatableLocales}
         onSelect={setActiveLocale}
         hasContent={localeHasContent}
+        isMachine={localeIsMachine}
         canTranslate={canTranslate}
         translating={translating}
         onTranslateAll={translateAll}
+        autoTranslate={autoTranslate}
+        onAutoTranslateChange={setAutoTranslate}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

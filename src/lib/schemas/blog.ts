@@ -13,6 +13,8 @@ export const BlogTranslationSchema = z.object({
   content: z.string().min(1, 'Inhalt ist erforderlich'),
   seoTitle: z.string().optional().nullable(),
   seoDescription: z.string().optional().nullable(),
+  // Machine-generated flag; absent/false means human-authored or -reviewed.
+  isMachine: z.boolean().optional(),
 })
 
 export type BlogTranslationInput = z.infer<typeof BlogTranslationSchema>

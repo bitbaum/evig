@@ -11,6 +11,8 @@ export interface BlogTranslationDraft {
   content: string
   seoTitle: string
   seoDescription: string
+  /** True = machine-generated, not yet human-reviewed (drives the tab badge). */
+  isMachine: boolean
 }
 
 export interface BlogPostData {
@@ -25,6 +27,8 @@ export interface BlogPostData {
   isPublished: boolean
   seoTitle: string
   seoDescription: string
+  /** Fill missing locales from the German base on publish (default true). */
+  autoTranslate: boolean
   /** Translations keyed by locale (e.g. 'en', 'fr'). German is the base above. */
   translations: Record<string, BlogTranslationDraft>
 }
@@ -37,6 +41,7 @@ export interface BlogTranslationRow {
   content: string
   seoTitle: string | null
   seoDescription: string | null
+  isMachine?: boolean
 }
 
 export interface BlogPostFormProps {

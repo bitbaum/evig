@@ -79,6 +79,7 @@ jest.mock('@/db/schema/content', () => ({
     postId: 'bt_postId', locale: 'bt_locale', title: 'bt_title',
     excerpt: 'bt_excerpt', content: 'bt_content',
     seoTitle: 'bt_seoTitle', seoDescription: 'bt_seoDescription',
+    isMachine: 'bt_isMachine',
   },
 }))
 

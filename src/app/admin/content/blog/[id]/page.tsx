@@ -33,13 +33,14 @@ async function getBlogPost(id: string) {
       category_id: string | null
       tags: string[]
       is_published: boolean
+      auto_translate: boolean
       seo_title: string | null
       seo_description: string | null
     }>(
       `SELECT
         id, slug, title, excerpt, content,
         featured_image, category_id, tags,
-        is_published, seo_title, seo_description
+        is_published, auto_translate, seo_title, seo_description
       FROM ${TABLE_NAMES.BLOG_POSTS}
       WHERE id = $1`,
       [id]
@@ -57,8 +58,9 @@ async function getBlogPost(id: string) {
       content: string
       seo_title: string | null
       seo_description: string | null
+      is_machine: boolean
     }>(
-      `SELECT locale, title, excerpt, content, seo_title, seo_description
+      `SELECT locale, title, excerpt, content, seo_title, seo_description, is_machine
        FROM ${TABLE_NAMES.BLOG_POST_TRANSLATIONS}
        WHERE post_id = $1`,
       [id]
@@ -66,7 +68,7 @@ async function getBlogPost(id: string) {
 
     const translations: Record<
       string,
-      { title: string; excerpt: string; content: string; seoTitle: string; seoDescription: string }
+      { title: string; excerpt: string; content: string; seoTitle: string; seoDescription: string; isMachine: boolean }
     > = {}
     for (const row of translationRows.rows) {
       translations[row.locale] = {
@@ -75,6 +77,7 @@ async function getBlogPost(id: string) {
         content: row.content,
         seoTitle: row.seo_title || '',
         seoDescription: row.seo_description || '',
+        isMachine: row.is_machine,
       }
     }
 
@@ -88,6 +91,7 @@ async function getBlogPost(id: string) {
       categoryId: post.category_id || '',
       tags: post.tags || [],
       isPublished: post.is_published,
+      autoTranslate: post.auto_translate,
       seoTitle: post.seo_title || '',
       seoDescription: post.seo_description || '',
       translations,

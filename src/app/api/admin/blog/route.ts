@@ -13,6 +13,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { syncPostTranslations } from '@/lib/services/blog-translations'
+import { fillMissingTranslations } from '@/lib/services/blog-translate'
 
 export const GET = withAdmin('content', async (request, session) => {
   try {
@@ -46,7 +47,7 @@ export const GET = withAdmin('content', async (request, session) => {
 export const POST = withAdmin('content', async (request, session) => {
   try {
     const body = await request.json()
-    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, translations } = body
+    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, translations, autoTranslate } = body
 
     if (!title || !content) {
       return apiBadRequest('Titel und Inhalt sind erforderlich')
@@ -84,6 +85,7 @@ export const POST = withAdmin('content', async (request, session) => {
         tags: tags || [],
         isPublished: isPublished || false,
         publishedAt: isPublished ? new Date().toISOString() : null,
+        autoTranslate: autoTranslate !== false,
         createdBy: session.user.id,
         updatedBy: session.user.id,
       })
@@ -95,6 +97,14 @@ export const POST = withAdmin('content', async (request, session) => {
     }
 
     logger.info('Blog post created', { postId: post.id, userId: session.user.id })
+
+    // Publishing with auto-translate on → fill missing locales in the background
+    // (fire-and-forget; the create response returns immediately).
+    if (isPublished && autoTranslate !== false) {
+      void fillMissingTranslations(post.id).catch((err) =>
+        logger.error('Auto-translate on create failed', { postId: post.id, err }),
+      )
+    }
 
     return apiSuccess({ id: post.id, slug: postSlug }, 201)
   } catch (error) {

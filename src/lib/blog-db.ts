@@ -53,6 +53,7 @@ const postColumns = {
   tContent: blogPostTranslations.content,
   tSeoTitle: blogPostTranslations.seoTitle,
   tSeoDescription: blogPostTranslations.seoDescription,
+  tIsMachine: blogPostTranslations.isMachine,
 }
 
 /**
@@ -121,6 +122,37 @@ export async function getPostBySlug(slug: string, locale?: string): Promise<Blog
     return mapPostFromDb(rows[0])
   } catch (error) {
     logger.error('Failed to get post by slug', { slug, error })
+    return null
+  }
+}
+
+/**
+ * Fetch a DB post by slug REGARDLESS of published state (for staff draft
+ * preview). Returns the real `published` flag so the page can show a draft
+ * banner and keep it out of the public path. Locale-overlaid like the rest.
+ */
+export async function getDbPostForPreview(slug: string, locale?: string): Promise<BlogPost | null> {
+  try {
+    const rows = await db
+      .select({ ...postColumns, isPub: blogPosts.isPublished })
+      .from(blogPosts)
+      .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
+      .leftJoin(users, eq(blogPosts.createdBy, users.id))
+      .leftJoin(
+        blogPostTranslations,
+        and(
+          eq(blogPostTranslations.postId, blogPosts.id),
+          eq(blogPostTranslations.locale, overlayLocale(locale)),
+        ),
+      )
+      .where(eq(blogPosts.slug, slug))
+
+    if (rows.length === 0) return null
+    const post = mapPostFromDb(rows[0])
+    post.published = rows[0].isPub ?? false
+    return post
+  } catch (error) {
+    logger.error('Failed to get post for preview', { slug, error })
     return null
   }
 }
@@ -239,6 +271,7 @@ function mapPostFromDb(row: {
   tContent?: string | null
   tSeoTitle?: string | null
   tSeoDescription?: string | null
+  tIsMachine?: boolean | null
 }): BlogPost {
   const isTranslated = !!row.tContent
   return {
@@ -247,6 +280,7 @@ function mapPostFromDb(row: {
     excerpt: (isTranslated ? row.tExcerpt || row.excerpt : row.excerpt) || undefined,
     seoTitle: (isTranslated ? row.tSeoTitle : row.seoTitle) || undefined,
     seoDescription: (isTranslated ? row.tSeoDescription : row.seoDescription) || undefined,
+    isMachine: isTranslated ? row.tIsMachine === true : undefined,
     featuredImage: row.featuredImage || undefined,
     author: row.authorName || 'Revamp-IT Team',
     category: row.categoryName || undefined,

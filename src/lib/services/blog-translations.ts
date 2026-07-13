@@ -49,6 +49,7 @@ export async function syncPostTranslations(
       }
 
       for (const t of rows) {
+        const isMachine = t.isMachine === true
         await tx
           .insert(blogPostTranslations)
           .values({
@@ -59,6 +60,7 @@ export async function syncPostTranslations(
             content: t.content,
             seoTitle: t.seoTitle || null,
             seoDescription: t.seoDescription || null,
+            isMachine,
           })
           .onConflictDoUpdate({
             target: [blogPostTranslations.postId, blogPostTranslations.locale],
@@ -68,6 +70,7 @@ export async function syncPostTranslations(
               content: t.content,
               seoTitle: t.seoTitle || null,
               seoDescription: t.seoDescription || null,
+              isMachine,
               updatedAt: new Date().toISOString(),
             },
           })
@@ -91,6 +94,7 @@ export async function getPostTranslations(postId: string): Promise<BlogTranslati
         content: blogPostTranslations.content,
         seoTitle: blogPostTranslations.seoTitle,
         seoDescription: blogPostTranslations.seoDescription,
+        isMachine: blogPostTranslations.isMachine,
       })
       .from(blogPostTranslations)
       .where(eq(blogPostTranslations.postId, postId))
@@ -101,6 +105,7 @@ export async function getPostTranslations(postId: string): Promise<BlogTranslati
       content: r.content,
       seoTitle: r.seoTitle,
       seoDescription: r.seoDescription,
+      isMachine: r.isMachine,
     }))
   } catch (error) {
     logger.error('Failed to read blog post translations', { postId, error })

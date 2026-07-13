@@ -40,6 +40,10 @@ export const blogPosts = pgTable('blog_posts', {
   isFeatured: boolean('is_featured').default(false),
   publishedAt: timestamp('published_at', { withTimezone: true, mode: 'string' }),
 
+  // When true, publishing fills missing locales from the German base in the
+  // background (missing-only — never overwrites a human translation).
+  autoTranslate: boolean('auto_translate').notNull().default(true),
+
   // SEO metadata
   seoTitle: text('seo_title'),
   seoDescription: text('seo_description'),
@@ -77,6 +81,9 @@ export const blogPostTranslations = pgTable('blog_post_translations', {
   content: text('content').notNull(),
   seoTitle: text('seo_title'),
   seoDescription: text('seo_description'),
+  // True = machine-generated (not yet human-reviewed). Drives the editor badge
+  // and the public "automatisch übersetzt" note. Cleared when a human edits it.
+  isMachine: boolean('is_machine').notNull().default(false),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [
