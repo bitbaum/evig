@@ -64,6 +64,27 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
     audience: 'Swico',
     createdMonth: '2026-07',
   },
+  {
+    slug: 'bewerbung-koch',
+    title: 'Bewerbung Kraftwerk1: Siedlung Koch',
+    description: 'Bewerbung für zwei Ladenlokale im Erdgeschoss der Siedlung Koch — für die Vergabekommission Kraftwerk1',
+    audience: 'Kraftwerk1',
+    createdMonth: '2026-07',
+  },
+  {
+    slug: 'bewerbung-koch-vorschlag',
+    title: 'Siedlung Koch — Gestaltungsvorschlag',
+    description: 'Die Inhalte des Team-Decks, neu gestaltet — gleiche Aussage, bessere Umsetzung',
+    audience: 'Kraftwerk1',
+    createdMonth: '2026-07',
+  },
+  {
+    slug: 'bewerbung-koch-original',
+    title: 'Siedlung Koch — Original (Team)',
+    description: 'Die Präsentation des Teams, inhaltlich unverändert übernommen',
+    audience: 'Kraftwerk1',
+    createdMonth: '2026-07',
+  },
 ]
 
 /**

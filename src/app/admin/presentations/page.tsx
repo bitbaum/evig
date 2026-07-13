@@ -8,14 +8,11 @@
  */
 
 import { Metadata } from 'next'
-import { ExternalLink, Info, Presentation } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Info, Presentation } from 'lucide-react'
 import { requireAnySection } from '@/lib/admin/guards'
-import { PRESENTATION_DECKS, presentationUrl } from '@/config/presentations'
-import { formatDateMonth } from '@/lib/date-formats'
+import { PRESENTATION_DECKS } from '@/config/presentations'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/admin/AdminHeading'
-import { CopyLinkButton } from './CopyLinkButton'
+import { PresentationsBrowser } from './PresentationsBrowser'
 
 export const metadata: Metadata = {
   title: 'Präsentationen',
@@ -43,42 +40,7 @@ export default async function PresentationsPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {PRESENTATION_DECKS.map(deck => (
-          <div
-            key={deck.slug}
-            className="flex flex-col bg-surface-base rounded-xl border border p-5 hover:border-strong transition-colors"
-          >
-            <Heading level={3} className="text-base text-text-primary mb-1">
-              {deck.title}
-            </Heading>
-            <p className="text-sm text-text-secondary mb-3">{deck.description}</p>
-
-            <div className="flex items-center gap-2 mb-4 mt-auto">
-              <span className="inline-flex items-center px-2 py-0.5 bg-surface-raised text-text-secondary rounded-full text-xs font-medium">
-                {deck.audience}
-              </span>
-              <span className="text-xs text-text-muted">
-                {formatDateMonth(`${deck.createdMonth}-01`)}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                href={presentationUrl(deck.slug)}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outline"
-                size="sm"
-              >
-                <ExternalLink className="w-4 h-4" aria-hidden="true" />
-                Öffnen
-              </Button>
-              <CopyLinkButton slug={deck.slug} />
-            </div>
-          </div>
-        ))}
-      </div>
+      <PresentationsBrowser decks={PRESENTATION_DECKS} />
     </AdminPageWrapper>
   )
 }
