@@ -5,7 +5,7 @@ import { sql, getTableName, SQL, and, eq } from 'drizzle-orm'
 import { itHilfeRequests } from '@/db/schema/itHilfe'
 import { userSkills } from '@/db/schema/itHilfe'
 import { repairerProfiles } from '@/db/schema/services'
-import { users } from '@/db/schema/auth'
+import { users, userProfiles } from '@/db/schema/auth'
 import { apiError, apiSuccess, apiSuccessCached, apiBadRequest, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
@@ -267,10 +267,11 @@ export async function POST(request: NextRequest) {
           userId: repairerProfiles.userId,
           isActive: repairerProfiles.isActive,
           profileTier: repairerProfiles.profileTier,
-          isVerified: repairerProfiles.isVerified,
+          isVerified: userProfiles.isVerified,
           status: repairerProfiles.status,
         })
         .from(repairerProfiles)
+        .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
         .where(eq(repairerProfiles.id, preferredTechnicianId))
       if (!preferred || !canAcceptDirectItHilfeRequest(preferred)) {
         return apiBadRequest('Der gewählte Techniker ist nicht mehr verfügbar')

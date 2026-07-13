@@ -1,6 +1,6 @@
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { repairerProfiles, users, userSkills } from '@/db/schema'
+import { repairerProfiles, userProfiles, users, userSkills } from '@/db/schema'
 import { eq, and, sql, desc, ne } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
@@ -23,7 +23,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
       conditions.push(eq(repairerProfiles.isActive, true))
       conditions.push(ne(repairerProfiles.status, 'suspended'))
     } else if (status === HELPER_STATUS.VERIFIED) {
-      conditions.push(eq(repairerProfiles.isVerified, true))
+      conditions.push(eq(userProfiles.isVerified, true))
     } else if (status === HELPER_STATUS.SUSPENDED) {
       conditions.push(eq(repairerProfiles.status, 'suspended'))
     }
@@ -52,8 +52,8 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
         location_city: repairerProfiles.city,
         location_canton: repairerProfiles.canton,
         is_active: repairerProfiles.isActive,
-        is_verified: repairerProfiles.isVerified,
-        verified_at: repairerProfiles.verificationDate,
+        is_verified: userProfiles.isVerified,
+        verified_at: userProfiles.verificationDate,
         suspended_at: sql<string | null>`CASE WHEN ${repairerProfiles.status} = 'suspended' THEN ${repairerProfiles.updatedAt} ELSE NULL END`,
         total_helps_completed: repairerProfiles.totalJobsCompleted,
         average_rating: repairerProfiles.averageRating,
@@ -64,6 +64,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
       })
       .from(repairerProfiles)
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .where(where)
       .orderBy(desc(repairerProfiles.createdAt))
       .limit(limit)
@@ -72,6 +73,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
     const [countRow] = await db
       .select({ total: sql<number>`count(*)` })
       .from(repairerProfiles)
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .where(where)
 
     const total = Number(countRow?.total ?? 0)

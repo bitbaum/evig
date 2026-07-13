@@ -20,6 +20,11 @@ jest.mock('@/db/schema', () => ({
     isVerified: 'isVerified',
     profileTier: 'profileTier',
     status: 'status',
+    userId: 'userId',
+  },
+  userProfiles: {
+    userId: 'up_userId',
+    isVerified: 'up_isVerified',
   },
 }))
 

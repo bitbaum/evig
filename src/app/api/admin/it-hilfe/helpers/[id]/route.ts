@@ -1,6 +1,6 @@
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { repairerProfiles } from '@/db/schema'
+import { repairerProfiles, userProfiles } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -20,9 +20,10 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
 
     const { action, admin_notes } = validation.data
 
-    // Check helper exists
+    // Check helper exists — also grab userId: verification is per-PERSON and
+    // lives on user_profiles (Profiles SSOT), keyed by user_id.
     const [existing] = await db
-      .select({ id: repairerProfiles.id })
+      .select({ id: repairerProfiles.id, userId: repairerProfiles.userId })
       .from(repairerProfiles)
       .where(eq(repairerProfiles.id, id))
 
@@ -30,18 +31,38 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
       return apiNotFound(ERROR_MESSAGES.HELPER_NOT_FOUND)
     }
 
+    // `verify` marks the PERSON verified in the identity SSOT (user_profiles),
+    // not the role table. Upsert because a professional applicant may predate
+    // slice 1's backfill and lack a user_profiles row. The role table only
+    // records that the helper is now active.
+    if (action === 'verify') {
+      await db
+        .insert(userProfiles)
+        .values({ userId: existing.userId, isVerified: true, verificationDate: sql`NOW()` })
+        .onConflictDoUpdate({
+          target: userProfiles.userId,
+          set: { isVerified: true, verificationDate: sql`NOW()`, updatedAt: sql`NOW()` },
+        })
+
+      const [updated] = await db
+        .update(repairerProfiles)
+        .set({ status: 'active', updatedAt: sql`NOW()` })
+        .where(eq(repairerProfiles.id, id))
+        .returning()
+
+      logger.info('Admin performed helper action', {
+        helperId: id,
+        action,
+        adminEmail: session.user.email,
+      })
+
+      return apiSuccess({ ...updated, isVerified: true })
+    }
+
+    // suspend / reactivate are role status changes — stay on repairer_profiles.
     let update: Record<string, unknown>
 
     switch (action) {
-      case 'verify':
-        update = {
-          isVerified: true,
-          verificationDate: sql`NOW()`,
-          status: 'active',
-          updatedAt: sql`NOW()`,
-        }
-        break
-
       case 'suspend':
         update = {
           status: 'suspended',

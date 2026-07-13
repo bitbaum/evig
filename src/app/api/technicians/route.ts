@@ -8,7 +8,7 @@
 
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { repairerProfiles, userSkills, users } from '@/db/schema'
+import { repairerProfiles, userProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiRateLimited, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -103,12 +103,13 @@ export async function GET(request: NextRequest) {
         acceptsGratis: repairerProfiles.acceptsGratis,
         acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
         isActive: repairerProfiles.isActive,
-        isVerified: repairerProfiles.isVerified,
+        isVerified: userProfiles.isVerified,
         serviceDeliveryTypes: repairerProfiles.serviceDeliveryTypes,
         skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
       })
       .from(repairerProfiles)
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(whereCondition)
       .groupBy(
@@ -128,11 +129,11 @@ export async function GET(request: NextRequest) {
         repairerProfiles.acceptsGratis,
         repairerProfiles.acceptsKulturlegi,
         repairerProfiles.isActive,
-        repairerProfiles.isVerified,
+        userProfiles.isVerified,
         repairerProfiles.serviceDeliveryTypes,
       )
       .orderBy(
-        desc(repairerProfiles.isVerified),
+        desc(userProfiles.isVerified),
         desc(repairerProfiles.averageRating),
         asc(users.name)
       )
@@ -144,6 +145,7 @@ export async function GET(request: NextRequest) {
       .select({ total: sql<string>`COUNT(DISTINCT ${repairerProfiles.id})` })
       .from(repairerProfiles)
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(whereCondition)
 

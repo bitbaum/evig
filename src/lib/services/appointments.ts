@@ -15,6 +15,7 @@ import {
   serviceAppointments,
   serviceTypes,
   users,
+  userProfiles,
   repairerProfiles,
 } from '@/db/schema'
 import { eq, and, asc, desc, sql, type SQL } from 'drizzle-orm'
@@ -183,10 +184,11 @@ export async function listActiveRepairers(): Promise<AssignableRepairer[]> {
     })
     .from(repairerProfiles)
     .innerJoin(users, eq(repairerProfiles.userId, users.id))
+    .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
     .where(
       and(
         eq(repairerProfiles.isActive, true),
-        eq(repairerProfiles.isVerified, true),
+        eq(userProfiles.isVerified, true),
       ),
     )
     .orderBy(asc(users.name))

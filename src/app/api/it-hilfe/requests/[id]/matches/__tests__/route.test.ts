@@ -23,6 +23,7 @@ jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', categoryId: 'ihr_categoryId', skillsNeeded: 'ihr_skillsNeeded', canton: 'ihr_canton', budgetAmountCents: 'ihr_budgetAmountCents', budgetType: 'ihr_budgetType', budgetTier: 'ihr_budgetTier', serviceType: 'ihr_serviceType', preferredTechnicianId: 'ihr_preferredTechnicianId' },
   repairerProfiles: { id: 'rp_id', userId: 'rp_userId', isActive: 'rp_isActive', isVerified: 'rp_isVerified', profileTier: 'rp_profileTier', description: 'rp_description', hourlyRateCents: 'rp_hourlyRateCents', acceptsGratis: 'rp_acceptsGratis', acceptsKulturlegi: 'rp_acceptsKulturlegi', serviceDeliveryTypes: 'rp_serviceDeliveryTypes', canton: 'rp_canton', city: 'rp_city', averageRating: 'rp_averageRating', totalJobsCompleted: 'rp_totalJobsCompleted' },
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
+  userProfiles: { userId: 'up_userId', isVerified: 'up_isVerified' },
   users: { id: 'u_id', name: 'u_name' },
 }))
 
@@ -138,7 +139,7 @@ describe('GET /api/it-hilfe/requests/[id]/matches', () => {
     // First select: request not found
     mockGroupBy.mockResolvedValue([])
     mockWhere.mockReturnValue({ groupBy: mockGroupBy })
-    mockLeftJoin.mockReturnValue({ where: mockWhere })
+    mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
     mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
     mockFrom.mockReturnValue({ where: mockWhere, innerJoin: mockInnerJoin })
     mockSelect.mockReturnValue({ from: mockFrom })
@@ -165,7 +166,7 @@ describe('GET /api/it-hilfe/requests/[id]/matches', () => {
     // Second select: helpers
     mockGroupBy.mockResolvedValue([MOCK_HELPER])
     mockWhere.mockReturnValue({ groupBy: mockGroupBy })
-    mockLeftJoin.mockReturnValue({ where: mockWhere })
+    mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
     mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
     mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
     mockSelect.mockReturnValue({ from: mockFrom })
@@ -190,7 +191,7 @@ describe('GET /api/it-hilfe/requests/[id]/matches', () => {
     // No helpers found
     mockGroupBy.mockResolvedValue([])
     mockWhere.mockReturnValue({ groupBy: mockGroupBy })
-    mockLeftJoin.mockReturnValue({ where: mockWhere })
+    mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
     mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
     mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
     mockSelect.mockReturnValue({ from: mockFrom })

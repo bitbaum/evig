@@ -9,7 +9,7 @@
 
 import { db } from '@/db'
 import {
-  repairerProfiles, listings, workshops, reviews,
+  repairerProfiles, userProfiles, listings, workshops, reviews,
   itHilfeRequests, users,
 } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
@@ -32,7 +32,8 @@ export async function validateReviewTarget(
     const result = await db
       .select({ id: repairerProfiles.id })
       .from(repairerProfiles)
-      .where(and(eq(repairerProfiles.id, targetId), eq(repairerProfiles.isVerified, true)))
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
+      .where(and(eq(repairerProfiles.id, targetId), eq(userProfiles.isVerified, true)))
     return result.length > 0
   }
 

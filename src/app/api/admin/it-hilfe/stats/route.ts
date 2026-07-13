@@ -23,7 +23,7 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
         high: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = ${URGENCY.HIGH})`,
         urgent: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = ${URGENCY.URGENT})`,
         activeHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${repairerProfiles.isActive} = true AND ${repairerProfiles.status} != ${REPAIRER_STATUS.SUSPENDED} AND ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
-        verifiedHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${repairerProfiles.isVerified} = true AND ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
+        verifiedHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} tp JOIN ${sql.raw(TABLE_NAMES.USER_PROFILES)} up ON up.user_id = tp.user_id WHERE up.is_verified = true AND tp.profile_tier = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
         totalOffers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)})`,
       })
       .from(itHilfeRequests)

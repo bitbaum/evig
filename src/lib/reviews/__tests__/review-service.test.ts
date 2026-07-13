@@ -41,6 +41,7 @@ function makeSelectChain(result: unknown[] = []) {
   chain.from = jest.fn().mockReturnValue(chain)
   chain.where = jest.fn().mockReturnValue(chain)
   chain.innerJoin = jest.fn().mockReturnValue(chain)
+  chain.leftJoin = jest.fn().mockReturnValue(chain)
   chain.limit = jest.fn().mockReturnValue(chain)
   chain.then = resolved.then.bind(resolved)
   chain.catch = resolved.catch.bind(resolved)
@@ -77,6 +78,7 @@ jest.mock('@/db', () => ({
 
 jest.mock('@/db/schema', () => ({
   repairerProfiles: { id: 'repairerProfiles', isVerified: 'isVerified', userId: 'userId', businessName: 'businessName' },
+  userProfiles: { userId: 'up_userId', isVerified: 'up_isVerified' },
   listings: { id: 'listings' },
   workshops: { id: 'workshops' },
   reviews: { id: 'reviews' },

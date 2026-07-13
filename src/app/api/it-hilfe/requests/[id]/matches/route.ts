@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { itHilfeRequests, repairerProfiles, userSkills, users } from '@/db/schema'
+import { itHilfeRequests, repairerProfiles, userProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, ne, sql } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -184,6 +184,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       })
       .from(repairerProfiles)
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(and(
         ne(repairerProfiles.userId, requestData.requesterId),

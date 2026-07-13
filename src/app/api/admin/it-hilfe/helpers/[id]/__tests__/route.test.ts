@@ -47,19 +47,27 @@ const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
 const mockReturning = jest.fn()
+const mockInsert = jest.fn()
+const mockValues = jest.fn()
+const mockOnConflictDoUpdate = jest.fn()
 const mockValidateBody = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
   },
 }))
 
 jest.mock('@/db/schema', () => ({
   repairerProfiles: {
-    id: 'rp_id', isVerified: 'rp_isVerified', verificationDate: 'rp_verificationDate',
+    id: 'rp_id', userId: 'rp_userId', isVerified: 'rp_isVerified', verificationDate: 'rp_verificationDate',
     status: 'rp_status', isActive: 'rp_isActive', updatedAt: 'rp_updatedAt',
+  },
+  userProfiles: {
+    userId: 'up_userId', isVerified: 'up_isVerified', verificationDate: 'up_verificationDate',
+    updatedAt: 'up_updatedAt',
   },
 }))
 
@@ -119,7 +127,7 @@ const MOCK_SESSION = {
   expires: '2027-01-01',
 }
 
-const MOCK_HELPER = { id: 'hp-1', isVerified: false, isActive: true }
+const MOCK_HELPER = { id: 'hp-1', userId: 'user-1', isVerified: false, isActive: true }
 
 function makeRequest(body: Record<string, unknown> = { action: 'verify' }) {
   return new NextRequest('http://localhost/api/admin/it-hilfe/helpers/hp-1', {
@@ -143,6 +151,10 @@ beforeEach(() => {
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockReturnValue({ returning: mockReturning })
   mockReturning.mockResolvedValue([{ ...MOCK_HELPER, isVerified: true }])
+
+  // verify upserts the person's is_verified into user_profiles
+  mockValues.mockReturnValue({ onConflictDoUpdate: mockOnConflictDoUpdate })
+  mockOnConflictDoUpdate.mockResolvedValue(undefined)
 
   mockValidateBody.mockReturnValue({ success: true, data: { action: 'verify' } })
 })

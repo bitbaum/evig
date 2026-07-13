@@ -37,6 +37,8 @@ jest.mock('@/lib/api/middleware', () => ({
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
 const mockInnerJoin = jest.fn()
+const mockLeftJoin = jest.fn()
+const mockCountLeftJoin = jest.fn()
 const mockWhere = jest.fn()
 const mockOrderBy = jest.fn()
 const mockLimit = jest.fn()
@@ -56,6 +58,9 @@ jest.mock('@/db/schema', () => ({
     isVerified: 'rp_isVerified', verificationDate: 'rp_verifiedAt', status: 'rp_status',
     updatedAt: 'rp_updatedAt', totalJobsCompleted: 'rp_totalHelps',
     averageRating: 'rp_avgRating', createdAt: 'rp_createdAt',
+  },
+  userProfiles: {
+    userId: 'up_userId', isVerified: 'up_isVerified', verificationDate: 'up_verifiedAt',
   },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
@@ -125,12 +130,14 @@ beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
 
-  // Items query: from().innerJoin().where().orderBy().limit().offset()
-  // Count query: from().where()  (sequential, after items)
+  // Items query: from().innerJoin().leftJoin(userProfiles).where().orderBy().limit().offset()
+  // Count query: from().leftJoin(userProfiles).where()  (sequential, after items)
   mockFrom
-    .mockReturnValueOnce({ innerJoin: mockInnerJoin })  // items query
-    .mockReturnValueOnce({ where: mockWhere })          // count query
-  mockInnerJoin.mockReturnValue({ where: mockWhere })
+    .mockReturnValueOnce({ innerJoin: mockInnerJoin })       // items query
+    .mockReturnValueOnce({ leftJoin: mockCountLeftJoin })    // count query
+  mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
+  mockLeftJoin.mockReturnValue({ where: mockWhere })
+  mockCountLeftJoin.mockReturnValue({ where: mockWhere })
   mockWhere
     .mockReturnValueOnce({ orderBy: mockOrderBy })      // items query
     .mockResolvedValueOnce([{ total: '1' }])            // count query

@@ -57,6 +57,10 @@ jest.mock('@/db/schema', () => ({
   listingImages: { id: 'listingImages' },
   marketplaceOrders: { id: 'marketplaceOrders' },
   sellerProfiles: { id: 'sellerProfiles' },
+  userProfiles: {
+    userId: 'up_userId', displayName: 'up_displayName', bio: 'up_bio',
+    avatarUrl: 'up_avatarUrl', isVerified: 'up_isVerified',
+  },
 }))
 
 jest.mock('@/config/marketplace', () => ({

@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { itHilfeOffers, itHilfeRequests, users, repairerProfiles } from '@/db/schema'
+import { itHilfeOffers, itHilfeRequests, users, userProfiles, repairerProfiles } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -68,13 +68,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         createdAt: itHilfeOffers.createdAt,
         repairerProfileId: itHilfeOffers.repairerProfileId,
         repairerBusinessName: repairerProfiles.businessName,
-        repairerIsVerified: repairerProfiles.isVerified,
+        repairerIsVerified: userProfiles.isVerified,
         repairerAverageRating: repairerProfiles.averageRating,
         repairerTotalReviews: repairerProfiles.totalReviews,
       })
       .from(itHilfeOffers)
       .innerJoin(users, eq(itHilfeOffers.helperId, users.id))
       .leftJoin(repairerProfiles, eq(itHilfeOffers.repairerProfileId, repairerProfiles.id))
+      .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .where(eq(itHilfeOffers.requestId, id))
       .orderBy(desc(itHilfeOffers.createdAt))
 

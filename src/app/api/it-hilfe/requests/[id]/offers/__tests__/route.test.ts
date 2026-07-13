@@ -46,6 +46,7 @@ jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', status: 'ihr_status', title: 'ihr_title', offerCount: 'ihr_offerCount', expiresAt: 'ihr_expiresAt' },
   itHilfeOffers: { id: 'iho_id', requestId: 'iho_requestId', helperId: 'iho_helperId', status: 'iho_status', message: 'iho_message', estimatedTime: 'iho_estimatedTime', proposedCompensation: 'iho_proposedCompensation', proposedAmountCents: 'iho_proposedAmountCents', relevantSkills: 'iho_relevantSkills', createdAt: 'iho_createdAt', repairerProfileId: 'iho_repairerProfileId' },
   repairerProfiles: { id: 'rp_id', userId: 'rp_userId', businessName: 'rp_businessName', isVerified: 'rp_isVerified', averageRating: 'rp_averageRating', totalReviews: 'rp_totalReviews', isActive: 'rp_isActive' },
+  userProfiles: { userId: 'up_userId', isVerified: 'up_isVerified' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }))
 
@@ -143,7 +144,7 @@ function makeRequest(id: string, method = 'GET', body?: unknown) {
 function buildSelectChain(rows: unknown[]) {
   mockOrderBy.mockResolvedValue(rows)
   mockWhere.mockReturnValue({ orderBy: mockOrderBy })
-  mockLeftJoin.mockReturnValue({ where: mockWhere })
+  mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
   mockInnerJoin.mockReturnValue({ where: mockWhere, leftJoin: mockLeftJoin })
   mockFrom.mockReturnValue({ where: mockWhere, innerJoin: mockInnerJoin })
   mockSelect.mockReturnValue({ from: mockFrom })
@@ -206,7 +207,7 @@ describe('GET /api/it-hilfe/requests/[id]/offers', () => {
     }
     mockOrderBy.mockResolvedValue([offerRow])
     mockWhere.mockReturnValue({ orderBy: mockOrderBy })
-    mockLeftJoin.mockReturnValue({ where: mockWhere })
+    mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
     mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
     mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
     mockSelect.mockReturnValue({ from: mockFrom })

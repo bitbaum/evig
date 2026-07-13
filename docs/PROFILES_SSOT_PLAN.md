@@ -64,19 +64,20 @@ live site (public read from user_profiles + write still to role table = divergen
 seller_profiles; all public seller reads join user_profiles. Verify badge/member/
 seller page on prod.
 
-**Slice 2 — switch READS to SSOT (behavioural, verify badge parity).**
-Re-point these at `user_profiles` for display_name/avatar/bio/is_verified:
-- seller (7): `lib/services/seller-service.ts` (`sellerProfileCoreFields`),
-  `api/listings/route.ts`, `api/listings/[id]/route.ts`,
-  `api/listings/favorites/route.ts`, `api/members/[id]/route.ts`,
-  `sellers/[id]/layout.tsx`, `lib/marketplace/checkout-listing.ts`
-- technician `is_verified` (9): `api/technicians/route.ts`,
-  `lib/domain/technician-visibility.ts`, `lib/services/technician-service.ts`,
-  `lib/services/appointments.ts`, `lib/reviews/review-service.ts`,
-  `api/it-hilfe/requests/route.ts`, `api/it-hilfe/requests/[id]/offers/route.ts`,
-  `api/admin/it-hilfe/helpers/route.ts`, `api/admin/it-hilfe/stats/route.ts`
-- Verify on prod: seller badge + member profile + technician verified filter
-  still correct.
+**Slice 2b — technician identity (reads + verify write). ✅ code done, tests green.**
+`is_verified` is per-PERSON, so technician verification now reads/writes
+`user_profiles` everywhere. The verify action (`api/admin/it-hilfe/helpers/[id]`)
+upserts `user_profiles.is_verified`; suspend/reactivate stay on the role table
+(role status, not identity). All readers join `user_profiles`:
+- `lib/domain/technician-visibility.ts` (SSOT visibility conditions — every
+  caller must `leftJoin userProfiles`), `api/technicians/route.ts` (main+count),
+  `lib/services/technician-service.ts`, `lib/services/appointments.ts`
+  (`listActiveRepairers`), `lib/reviews/review-service.ts` (`validateReviewTarget`),
+  `api/it-hilfe/requests/route.ts` (preferred-technician gate),
+  `api/it-hilfe/requests/[id]/offers/route.ts`,
+  `api/it-hilfe/requests/[id]/matches/route.ts`,
+  `api/admin/it-hilfe/helpers/route.ts` (main+count), `api/admin/it-hilfe/stats/route.ts`.
+- Verify on prod: technician verified filter/badge + verified-helper stat correct.
 
 **Slice 3 — switch WRITES + contract (drop columns).**
 - Profile edit / verify actions write `user_profiles` (identity + is_verified);

@@ -38,6 +38,10 @@ jest.mock('@/db/schema', () => ({
     userId: 'us_userId',
     skillId: 'us_skillId',
   },
+  userProfiles: {
+    userId: 'up_userId',
+    isVerified: 'up_isVerified',
+  },
   users: {
     id: 'u_id',
     name: 'u_name',
@@ -116,13 +120,16 @@ function buildSelectChain(mainRows: unknown[], countRow: unknown) {
   const mockOrderBy = jest.fn().mockReturnValue({ limit: mockLimit, offset: mockOffset })
   const mockGroupBy = jest.fn().mockReturnValue({ orderBy: mockOrderBy })
   const mockWhere = jest.fn().mockReturnValue({ groupBy: mockGroupBy, orderBy: mockOrderBy })
-  const mockLeftJoin = jest.fn().mockReturnValue({ where: mockWhere, innerJoin: jest.fn() })
+  // leftJoin is chainable (userProfiles then userSkills) → returns itself
+  const mockLeftJoin = jest.fn()
+  mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere, innerJoin: jest.fn() })
   const mockInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
   const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin, leftJoin: mockLeftJoin, where: mockWhere })
 
-  // Count query chain: .from().innerJoin().leftJoin().where() resolves to array
+  // Count query chain: .from().innerJoin().leftJoin(userProfiles).leftJoin(userSkills).where() resolves to array
   const mockCountWhere = jest.fn().mockResolvedValue([countRow])
-  const mockCountLeftJoin = jest.fn().mockReturnValue({ where: mockCountWhere })
+  const mockCountLeftJoin = jest.fn()
+  mockCountLeftJoin.mockReturnValue({ leftJoin: mockCountLeftJoin, where: mockCountWhere })
   const mockCountInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockCountLeftJoin, where: mockCountWhere })
   const mockCountFrom = jest.fn().mockReturnValue({ innerJoin: mockCountInnerJoin, leftJoin: mockCountLeftJoin, where: mockCountWhere })
 
