@@ -22,6 +22,13 @@
 
 BEGIN;
 
+-- helper_profiles_v is a dead view (last recreated in 064, DROPped in 073 when
+-- its TS was removed — no codebase reader). It was already gone in the from-zero
+-- replay, but lingered on the prod DB (drift) and still references
+-- technician_profiles.is_verified, which blocked the column drop. Drop the
+-- remnant here; IF EXISTS makes it a no-op on the clean replay.
+DROP VIEW IF EXISTS helper_profiles_v;
+
 -- Single-column indexes drop with their columns, but be explicit + idempotent.
 DROP INDEX IF EXISTS idx_seller_profiles_verified;
 DROP INDEX IF EXISTS idx_repairer_profiles_verified;
