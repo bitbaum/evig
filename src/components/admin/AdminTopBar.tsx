@@ -60,7 +60,9 @@ export function AdminTopBar({
             <Menu className="h-4 w-4 text-text-tertiary" />
           </Button>
 
-          <div className="hidden min-w-0 overflow-hidden sm:block">
+          {/* Shown from lg where — with the email hidden below xl — there's room
+              for the full trail beside the actions group without collision. */}
+          <div className="hidden min-w-0 lg:block">
             <Breadcrumbs className="mb-0 flex" />
           </div>
         </div>
