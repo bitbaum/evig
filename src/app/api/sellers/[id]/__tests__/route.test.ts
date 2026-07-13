@@ -60,6 +60,17 @@ jest.mock('@/db/schema', () => ({
     targetId: 'r_targetId',
     status: 'r_status',
     overallRating: 'r_overallRating',
+    reviewerId: 'r_reviewerId',
+    title: 'r_title',
+    content: 'r_content',
+    createdAt: 'r_createdAt',
+    isVerifiedPurchase: 'r_isVerifiedPurchase',
+  },
+  reviewResponses: {
+    reviewId: 'rr_reviewId',
+    content: 'rr_content',
+    createdAt: 'rr_createdAt',
+    status: 'rr_status',
   },
 }))
 
@@ -149,6 +160,27 @@ function makeSelectChain(result: unknown[]) {
   return { from, innerJoin, leftJoin, where }
 }
 
+// histogram: from().innerJoin().where().groupBy()
+function histogramChain(rows: unknown[]) {
+  const groupBy = jest.fn().mockResolvedValue(rows)
+  const where = jest.fn().mockReturnValue({ groupBy })
+  const innerJoin = jest.fn().mockReturnValue({ where })
+  const from = jest.fn().mockReturnValue({ innerJoin })
+  return { from }
+}
+
+// reviews: from().innerJoin().innerJoin().leftJoin().where().orderBy().limit()
+function reviewsChain(rows: unknown[]) {
+  const limit = jest.fn().mockResolvedValue(rows)
+  const orderBy = jest.fn().mockReturnValue({ limit })
+  const where = jest.fn().mockReturnValue({ orderBy })
+  const leftJoin = jest.fn().mockReturnValue({ where })
+  const innerJoinInner = jest.fn().mockReturnValue({ leftJoin })
+  const innerJoinOuter = jest.fn().mockReturnValue({ innerJoin: innerJoinInner })
+  const from = jest.fn().mockReturnValue({ innerJoin: innerJoinOuter })
+  return { from }
+}
+
 beforeEach(() => {
   jest.resetAllMocks()
   mockExecute.mockResolvedValue(MOCK_REVIEW_STATS)
@@ -199,7 +231,13 @@ describe('GET /api/sellers/[id] — success', () => {
     const listingsFrom = jest.fn().mockReturnValue({ where: listingsWhere })
     const chain2 = { from: listingsFrom }
 
-    mockSelect.mockReturnValueOnce(chain1).mockReturnValueOnce(chain2)
+    mockSelect
+      .mockReturnValueOnce(chain1)
+      .mockReturnValueOnce(chain2)
+      .mockReturnValueOnce(histogramChain([{ rating: 5, count: '7' }, { rating: 4, count: '3' }]))
+      .mockReturnValueOnce(reviewsChain([
+        { id: 'rev-1', rating: 5, title: 'Top', content: 'Super', created_at: new Date().toISOString(), is_verified_purchase: true, reviewer_name: 'Buyer', listing_id: 'listing-1', listing_title: 'ThinkPad X1', response_content: null, response_created_at: null },
+      ]))
 
     const req = new NextRequest('http://localhost/api/sellers/seller-1')
     const response = await GET(req, { params: Promise.resolve({ id: 'seller-1' }) })
@@ -210,6 +248,9 @@ describe('GET /api/sellers/[id] — success', () => {
     expect(body.data.listings).toHaveLength(1)
     expect(body.data.review_stats.average_rating).toBe(4.5)
     expect(body.data.review_stats.total_reviews).toBe(10)
+    expect(body.data.review_stats.histogram['5']).toBe(7)
+    expect(body.data.reviews).toHaveLength(1)
+    expect(body.data.reviews[0].is_verified_purchase).toBe(true)
   })
 
   it('returns 200 with zero review stats when no reviews', async () => {
@@ -226,7 +267,11 @@ describe('GET /api/sellers/[id] — success', () => {
     const listingsFrom = jest.fn().mockReturnValue({ where: listingsWhere })
     const chain2 = { from: listingsFrom }
 
-    mockSelect.mockReturnValueOnce(chain1).mockReturnValueOnce(chain2)
+    mockSelect
+      .mockReturnValueOnce(chain1)
+      .mockReturnValueOnce(chain2)
+      .mockReturnValueOnce(histogramChain([]))
+      .mockReturnValueOnce(reviewsChain([]))
 
     // No review stats
     mockExecute.mockResolvedValueOnce({ rows: [{ avg_rating: null, review_count: '0' }] })

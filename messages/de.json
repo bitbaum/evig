@@ -7981,7 +7981,13 @@
       "noListingsDescription": "Dieser Verkäufer hat momentan keine aktiven Inserate.",
       "loadingProfile": "Profil wird geladen...",
       "sellerNotFound": "Verkäufer nicht gefunden",
-      "errorLoading": "Fehler beim Laden des Profils"
+      "errorLoading": "Fehler beim Laden des Profils",
+      "reviewsHeading": "Bewertungen",
+      "verifiedPurchase": "Verifizierter Kauf",
+      "sellerResponse": "Antwort des Verkäufers",
+      "reviewForListing": "zu {title}",
+      "noReviewsTitle": "Noch keine Bewertungen",
+      "noReviewsDescription": "Dieser Verkäufer hat noch keine Bewertungen erhalten."
     }
   },
   "faq": {

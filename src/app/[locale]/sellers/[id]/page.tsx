@@ -21,6 +21,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { ListingCard } from '@/components/marketplace/ListingCard'
+import { SellerReviews, type SellerReview } from '@/components/marketplace/SellerReviews'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 
@@ -53,7 +54,9 @@ interface SellerProfile {
   review_stats: {
     average_rating: number | null
     review_count: number
+    histogram: Record<string, number>
   }
+  reviews: SellerReview[]
 }
 
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -67,13 +70,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       try {
         const { id } = await params
         const result = await apiFetch<{
-          profile: Omit<SellerProfile, 'member_since' | 'listings' | 'review_stats'> & { created_at: string }
+          profile: Omit<SellerProfile, 'member_since' | 'listings' | 'review_stats' | 'reviews'> & { created_at: string }
           listings: SellerProfile['listings']
-          review_stats: { average_rating: number | null; total_reviews: number }
+          review_stats: { average_rating: number | null; total_reviews: number; histogram: Record<string, number> }
+          reviews: SellerReview[]
         }>(`/api/sellers/${id}`)
 
         if (result.success && result.data) {
-          const { profile, listings, review_stats } = result.data
+          const { profile, listings, review_stats, reviews } = result.data
           setSeller({
             ...profile,
             member_since: profile.created_at,
@@ -81,7 +85,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             review_stats: {
               average_rating: review_stats.average_rating,
               review_count: review_stats.total_reviews,
+              histogram: review_stats.histogram,
             },
+            reviews,
           })
         } else {
           setError(result.error || t('seller.sellerNotFound'))
@@ -246,6 +252,13 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
           </div>
         )}
       </div>
+
+      <SellerReviews
+        reviews={seller.reviews}
+        average={Number(rating) || 0}
+        total={reviewCount}
+        histogram={seller.review_stats.histogram}
+      />
     </div>
   )
 }
