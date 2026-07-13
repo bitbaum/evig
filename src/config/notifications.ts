@@ -95,6 +95,8 @@ export const RELATED_TYPES = {
   TIMECARD_REVIEW: 'timecard_review',
   JOB_APPLICATION: 'job_application',
   JOB_VACANCY: 'job_vacancy',
+  PRESENTATION: 'presentation',
+  SUGGESTION: 'suggestion',
 } as const
 
 export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
@@ -126,4 +128,10 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.TIMECARD_REVIEW]: '/admin/team/approvals?id=',
   [RELATED_TYPES.JOB_APPLICATION]: '/admin/hr/applications/',
   [RELATED_TYPES.JOB_VACANCY]: '/admin/hr/vacancies/',
+  // Presentation-comment + site-feedback notifications were un-clickable
+  // (no mapping → relatedHref() returned null → no "Öffnen →", no navigation).
+  // Land on the admin review page where the comment/feedback is addressed; both
+  // pages ignore the appended id, so use a query-param base like the queues above.
+  [RELATED_TYPES.PRESENTATION]: '/admin/presentations/feedback?slug=',
+  [RELATED_TYPES.SUGGESTION]: '/admin/feedback?page=',
 }
