@@ -1,5 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { RichTextEditor } from './RichTextEditor'
 import type { EditorDoc } from './types'
 
 interface Props {
@@ -78,17 +79,15 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
         <p className="text-xs text-text-tertiary mt-1">{doc.excerpt.length}/160 Zeichen</p>
       </div>
 
-      {/* Content */}
+      {/* Content — WYSIWYG (author sees real formatting; stored as Markdown) */}
       <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
         <label className="block text-sm font-medium text-text-secondary mb-2">
-          Inhalt * (Markdown)
+          Inhalt *
         </label>
-        <Textarea
+        <RichTextEditor
           value={doc.content}
-          onChange={(e) => onDocChange({ content: e.target.value })}
-          rows={20}
-          className="font-mono text-sm"
-          placeholder="# Überschrift&#10;&#10;Schreibe hier deinen Artikel in Markdown..."
+          onChange={(content) => onDocChange({ content })}
+          placeholder="Schreibe hier deinen Artikel…"
         />
       </div>
     </div>
