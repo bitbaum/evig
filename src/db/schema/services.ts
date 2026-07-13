@@ -183,9 +183,8 @@ export const repairerProfiles = pgTable('technician_profiles', {
   responseTimeHours: integer('response_time_hours').default(24),
   typicalTurnaroundDays: integer('typical_turnaround_days').default(3),
 
-  // Verification and ratings
-  isVerified: boolean('is_verified').default(false),
-  verificationDate: timestamp('verification_date', { withTimezone: true, mode: 'string' }),
+  // Verification and ratings. is_verified / verification_date moved to
+  // user_profiles (Profiles SSOT — per-person verification) — migration 122.
   verificationDocuments: text('verification_documents').array().default([]),
 
   // Performance metrics
@@ -217,7 +216,6 @@ export const repairerProfiles = pgTable('technician_profiles', {
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [
   index('idx_repairer_profiles_user_id').on(table.userId),
-  index('idx_repairer_profiles_verified').on(table.isVerified),
   index('idx_repairer_profiles_active').on(table.isActive),
   index('idx_repairer_profiles_rating').on(table.averageRating),
   index('idx_repairer_profiles_location').on(table.city, table.postalCode),

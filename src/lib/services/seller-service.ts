@@ -25,7 +25,8 @@ import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
  * added at the call site.
  *
  * Identity fields (display_name / bio / avatar_url / is_verified) come from
- * user_profiles — the SSOT (migration 121). Every query spreading this MUST
+ * user_profiles — the SSOT (migration 121; the seller_profiles duplicates were
+ * dropped in 122). Every query spreading this MUST
  * `.leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))`.
  * City/canton stay on seller_profiles (storefront location, a seller-facet fact).
  */

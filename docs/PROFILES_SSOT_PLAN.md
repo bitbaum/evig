@@ -79,14 +79,18 @@ upserts `user_profiles.is_verified`; suspend/reactivate stay on the role table
   `api/admin/it-hilfe/helpers/route.ts` (main+count), `api/admin/it-hilfe/stats/route.ts`.
 - Verify on prod: technician verified filter/badge + verified-helper stat correct.
 
-**Slice 3 — switch WRITES + contract (drop columns).**
-- Profile edit / verify actions write `user_profiles` (identity + is_verified);
-  role tables only get role data.
-- Migration `1NN_drop_profile_identity_dupes.sql`: drop
+**Slice 3 — contract (drop columns). ✅ code done, tests green.**
+Writes already moved in 2a/2b, so this is purely the contract:
+- Migration `122_drop_profile_identity_dupes.sql`: drops
   `seller_profiles.{display_name,avatar_url,bio,is_verified,verification_date}`
-  and `technician_profiles.{is_verified,verification_date}`. Separate deploy,
-  only after Slice 2 is confirmed live so no old reader hits dropped columns.
-- Update seller/technician tests + `sellerProfileCoreFields` doc.
+  and `technician_profiles.{is_verified,verification_date}` (+ their verified
+  indexes). Idempotent; ordered after 121's backfill for the from-zero replay.
+- Drizzle: identity columns removed from `sellerProfiles` / `repairerProfiles`.
+- MUST deploy as a SEPARATE deploy, only after 2a+2b are confirmed live (they
+  are — 2b shipped and prod-verified) so no old reader hits the dropped columns.
+
+**Done.** user_profiles is now the sole owner of public identity + per-person
+verification; the role tables hold only role facts.
 
 ## Guardrails
 - Prod auto-applies migrations before activating; a failed migration/build keeps

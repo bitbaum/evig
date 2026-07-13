@@ -274,8 +274,9 @@ export type NewMarketplaceOrderItem = typeof marketplaceOrderItems.$inferInsert
 // =============================================================================
 // Seller profiles for the marketplace. Created from approved seller applications
 // (006) or auto-created on first P2P listing (031).
-// Final state includes columns from 006 + 031 (display_name, bio, avatar_url,
-// canton, total_listings, total_sold). Columns made nullable by 031.
+// Final state includes columns from 006 + 031 (canton, total_listings,
+// total_sold; columns made nullable by 031). Public identity (display_name, bio,
+// avatar_url, is_verified) lives on user_profiles as of migration 122.
 
 export const sellerProfiles = pgTable('seller_profiles', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -293,8 +294,8 @@ export const sellerProfiles = pgTable('seller_profiles', {
 
   // Seller settings
   productTypes: text('product_types').array().default([]),
-  isVerified: boolean('is_verified').default(false),
-  verificationDate: timestamp('verification_date', { withTimezone: true, mode: 'string' }),
+  // is_verified / verification_date moved to user_profiles (Profiles SSOT,
+  // per-person verification) — migration 122.
 
   // Performance metrics
   totalSales: integer('total_sales').default(0),
@@ -306,10 +307,8 @@ export const sellerProfiles = pgTable('seller_profiles', {
   autoPublish: boolean('auto_publish').default(true),
   notificationPreferences: jsonb('notification_preferences').default({ email: true, sms: false }),
 
-  // Added by 031: P2P-specific fields
-  displayName: text('display_name'),
-  bio: text('bio'),
-  avatarUrl: text('avatar_url'),
+  // Added by 031: P2P-specific fields. display_name / bio / avatar_url moved to
+  // user_profiles (Profiles SSOT — one public identity per person) — migration 122.
   canton: text('canton'),
   totalListings: integer('total_listings').default(0),
   totalSold: integer('total_sold').default(0),
@@ -318,7 +317,6 @@ export const sellerProfiles = pgTable('seller_profiles', {
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [
   index('idx_seller_profiles_user').on(table.userId),
-  index('idx_seller_profiles_verified').on(table.isVerified),
   index('idx_seller_profiles_rating').on(table.averageRating),
 ])
 
