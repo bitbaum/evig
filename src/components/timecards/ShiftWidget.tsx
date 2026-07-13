@@ -180,10 +180,10 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
             <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Jetzt arbeiten?</p>
             <p className="mt-1 text-sm text-text-secondary">Starte eine Schicht — sie landet direkt in dieser Zeitkarte.</p>
           </div>
-          {/* Select + button are height-matched (min-h-touch) and centre-aligned
-              so they sit as a single cohesive control, not two stray boxes. */}
-          <div className="flex items-stretch gap-2">
-            <label className="flex-1 sm:flex-none">
+          {/* Stacked full-width on mobile (no cramped side-by-side / overflow);
+              height-matched row from sm up. */}
+          <div className="flex flex-col items-stretch gap-2 sm:flex-row">
+            <label className="sm:flex-none">
               <span className="sr-only">Kategorie</span>
               <Select
                 value={category}
@@ -195,7 +195,7 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
                 ))}
               </Select>
             </label>
-            <Button type="button" variant="primary" onClick={handleStart} className="gap-2 whitespace-nowrap">
+            <Button type="button" variant="primary" onClick={handleStart} className="w-full justify-center gap-2 whitespace-nowrap sm:w-auto">
               <Play className="h-4 w-4" aria-hidden="true" />
               Schicht starten
             </Button>

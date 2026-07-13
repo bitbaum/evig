@@ -169,7 +169,7 @@ export function CheckoutPageClient({
                     placeholder={t('address.streetPlaceholder')}
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
                     <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.postalCode')}</label>
                     <Input
@@ -187,7 +187,7 @@ export function CheckoutPageClient({
                       <p className="text-xs text-error-500 mt-1">{t('address.postalCodeError')}</p>
                     )}
                   </div>
-                  <div className="col-span-2">
+                  <div className="sm:col-span-2">
                     <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.city')}</label>
                     <Input
                       type="text"

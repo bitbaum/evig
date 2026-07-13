@@ -108,7 +108,7 @@ export function TimeOffPanel() {
                 ))}
               </Select>
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="block">
                 <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Von</span>
                 <Input type="date" value={startsOn} onChange={e => setStartsOn(e.target.value)} className="mt-1 min-h-touch" />

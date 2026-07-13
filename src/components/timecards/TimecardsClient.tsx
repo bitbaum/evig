@@ -282,7 +282,7 @@ export function TimecardsClient({
       {/* Sticky action bar — keeps Save/Einreichen one tap away right after
           filling (the fill + leave controls sit mid-page; without this the user
           had to scroll back up to the header to submit). Locked once approved. */}
-      <div className="sticky bottom-0 z-20 -mx-1 flex items-center justify-between gap-3 border-t border-subtle bg-surface-base/95 px-1 py-3 backdrop-blur-sm">
+      <div className="sticky bottom-0 z-20 -mx-1 flex flex-col gap-2 border-t border-subtle bg-surface-base/95 px-1 py-3 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3">
         {/* Feedback lives NEXT TO the buttons that trigger it — the header
             message is off-screen when the user submits from down here. */}
         {tc.errorMessage ? (

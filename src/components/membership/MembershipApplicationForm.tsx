@@ -221,7 +221,7 @@ export function MembershipApplicationForm() {
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
           <label htmlFor="plz" className="block text-sm font-medium text-text-secondary mb-1">{t('plzLabel')} *</label>
           <Input
@@ -235,7 +235,7 @@ export function MembershipApplicationForm() {
             className="border-default rounded-lg"
           />
         </div>
-        <div className="col-span-2">
+        <div className="sm:col-span-2">
           <label htmlFor="city" className="block text-sm font-medium text-text-secondary mb-1">{t('cityLabel')} *</label>
           <Input
             id="city"

@@ -78,7 +78,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1">{t('modal.category')}</label>
               <Select
