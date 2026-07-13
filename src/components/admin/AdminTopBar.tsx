@@ -68,9 +68,13 @@ export function AdminTopBar({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <Link href={ROUTES.public.home} className={adminChrome.websiteLink}>
+          <Link
+            href={ROUTES.public.home}
+            className={adminChrome.websiteLink}
+            title={tUser('toWebsite')}
+          >
             <Globe className="h-3.5 w-3.5" />
-            {tUser('toWebsite')}
+            <span className="hidden xl:inline">{tUser('toWebsite')}</span>
           </Link>
 
           <div className={adminChrome.actionDivider} aria-hidden="true" />

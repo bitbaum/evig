@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
@@ -189,9 +190,13 @@ export function CommandBar() {
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState<SearchIndex | null>(null)
   const [activeIdx, setActiveIdx] = useState(0)
+  const [mounted, setMounted] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+
+  // Portal target only exists after mount (SSR has no document).
+  useEffect(() => setMounted(true), [])
 
   // Fetch index once when first opened
   useEffect(() => {
@@ -279,26 +284,30 @@ export function CommandBar() {
 
   return (
     <>
-      {/* Trigger in top bar. Mobile (no keyboard, so ⌘K is unreachable): a
-          tappable icon button. sm+: the full "Suche ⌘K" box. */}
+      {/* Trigger in top bar. Icon-only below xl (keeps the dense header from
+          crowding the breadcrumb); the full "Suche ⌘K" box appears at xl+. */}
       <Button
         variant="ghost"
         size="sm"
         onClick={() => setOpen(true)}
-        className="flex h-9 w-9 items-center justify-center rounded-md p-0 text-text-tertiary hover:bg-surface-overlay sm:h-8 sm:w-auto sm:gap-2 sm:border sm:border sm:bg-surface-raised sm:px-3 sm:text-xs dark:sm:bg-surface-base/4 dark:hover:sm:bg-surface-base/8"
+        className="flex h-9 w-9 items-center justify-center rounded-md p-0 text-text-tertiary hover:bg-surface-overlay xl:h-8 xl:w-auto xl:gap-2 xl:border xl:bg-surface-raised xl:px-3 xl:text-xs dark:xl:bg-surface-base/4 dark:hover:xl:bg-surface-base/8"
         aria-label="Suche öffnen (⌘K)"
       >
-        <Search className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
-        <span className="hidden text-xs sm:inline">Suche</span>
-        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-surface-overlay rounded-sm text-xs font-mono leading-none">
+        <Search className="h-4 w-4 xl:h-3.5 xl:w-3.5" />
+        <span className="hidden text-xs xl:inline">Suche</span>
+        <kbd className="hidden xl:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-surface-overlay rounded-sm text-xs font-mono leading-none">
           ⌘K
         </kbd>
       </Button>
 
-      {/* Native dialog */}
+      {/* Portalled to <body>: the header has `backdrop-blur`, which creates a
+          containing block that otherwise pins this showModal() dialog to the
+          top-left instead of the viewport. Top-anchored (~12vh) + centered,
+          matching command-palette convention (Spotlight/VSCode/Linear). */}
+      {mounted && createPortal(
       <dialog
         ref={dialogRef}
-        className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
+        className="fixed left-1/2 top-[12vh] m-0 w-full max-w-xl -translate-x-1/2 rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
         onKeyDown={handleKeyDown}
         onClose={close}
         aria-label={t('openShortcut')}
@@ -389,7 +398,9 @@ export function CommandBar() {
             Schliessen
           </span>
         </div>
-      </dialog>
+      </dialog>,
+      document.body,
+      )}
     </>
   )
 }
