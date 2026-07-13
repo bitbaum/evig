@@ -47,7 +47,8 @@ export const GET = withAdmin('content', async (request, session) => {
 export const POST = withAdmin('content', async (request, session) => {
   try {
     const body = await request.json()
-    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, translations, autoTranslate } = body
+    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, translations, autoTranslate, visibility } = body
+    const cleanVisibility = ['public', 'unlisted', 'link'].includes(visibility) ? visibility : 'public'
 
     if (!title || !content) {
       return apiBadRequest('Titel und Inhalt sind erforderlich')
@@ -83,6 +84,7 @@ export const POST = withAdmin('content', async (request, session) => {
         featuredImage: featuredImage || null,
         categoryId: categoryId || null,
         tags: tags || [],
+        visibility: cleanVisibility,
         isPublished: isPublished || false,
         publishedAt: isPublished ? new Date().toISOString() : null,
         autoTranslate: autoTranslate !== false,

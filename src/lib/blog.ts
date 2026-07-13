@@ -52,22 +52,25 @@ export interface BlogPost {
   /**
    * `public` (default) is listed on the blog and visible to everyone.
    * `unlisted` is hidden from the public listing but its direct link works for
-   * anyone (no account needed) — staff share it deliberately. Logged-in staff
-   * still see unlisted posts in the listing so they can grab the link.
+   * `link` is viewable by anyone with the link (no account, no password) but
+   * kept out of the listing/index — the normal "share a link" case. `unlisted`
+   * is the same but behind a shared password (sensitive ops content, e.g. the
+   * ops runbook). Both stay out of the public listing and the search index.
    */
-  visibility: 'public' | 'unlisted'
+  visibility: 'public' | 'unlisted' | 'link'
 }
 
-// Frontmatter `visibility:` accepts a few intuitive spellings for "not public".
+// Frontmatter `visibility:`. `link` → shareable, no password. The "not public"
+// spellings (`unlisted`/`staff`/`internal`) → password-gated. Else → public.
 function parseVisibility(value: unknown): BlogPost['visibility'] {
-  return value === 'unlisted' || value === 'staff' || value === 'internal'
-    ? 'unlisted'
-    : 'public'
+  if (value === 'link') return 'link'
+  if (value === 'unlisted' || value === 'staff' || value === 'internal') return 'unlisted'
+  return 'public'
 }
 
-/** A post belongs in the public listing unless it is explicitly unlisted. */
+/** Only genuinely public posts appear in the listing; link-only ones don't. */
 export function isListedPost(post: BlogPost): boolean {
-  return post.visibility !== 'unlisted'
+  return post.visibility === 'public'
 }
 
 // Filenames encode locale as a suffix: `tablets.md` (→ de), `tablets.en.md`,

@@ -11,6 +11,7 @@ import { ORG } from '@/config/org'
 import { defaultLocale } from '@/i18n/routing'
 import { isUnlistedUnlocked } from '@/lib/blog-unlisted-auth'
 import BlogPasswordGate from './BlogPasswordGate'
+import BlogUnavailable from './BlogUnavailable'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
 import BlogComments from '@/components/blog/BlogComments'
@@ -55,7 +56,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
-  const isUnlisted = post.visibility === 'unlisted'
+  // Link-only posts (shareable-link or password-gated) stay out of the index.
+  const isNoindex = post.visibility === 'unlisted' || post.visibility === 'link'
   const canonical = `${APP_URL}/blog/${slug}`
   // Union of file-post locales (sibling .md files) and DB-post locales
   // (translation rows) so hreflang is correct wherever the post lives.
@@ -73,10 +75,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     description: post.seoDescription || post.excerpt || '',
     // Unlisted posts are link-only: keep them out of the index even if a crawler
     // ever finds the URL. Listed posts get canonical + hreflang alternates.
-    ...(isUnlisted ? { robots: { index: false, follow: false } } : {}),
+    ...(isNoindex ? { robots: { index: false, follow: false } } : {}),
     alternates: {
       canonical,
-      ...(!isUnlisted && Object.keys(languages).length > 1 ? { languages } : {}),
+      ...(!isNoindex && Object.keys(languages).length > 1 ? { languages } : {}),
     },
     openGraph: {
       title: post.title,
@@ -105,11 +107,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post) notFound();
   const isDraft = !post.published;
-  if (isDraft && !isStaff) notFound();
+  // A draft is staff-only. Everyone else gets a friendly "not published yet"
+  // page (never a bare 404) plus a sign-in link in case they're staff.
+  if (isDraft && !isStaff) {
+    return (
+      <main>
+        <BlogUnavailable loginHref={`/auth/login?callbackUrl=/blog/${slug}`} />
+      </main>
+    );
+  }
 
-  // Closed (unlisted) posts sit behind a shared password by default — the body
-  // never reaches the HTML until it's unlocked.
-  if (post.visibility === 'unlisted' && !(await isUnlistedUnlocked())) {
+  // `link` = shareable, no gate (anyone with the link can read it).
+  // `unlisted` = the same but behind a shared password for sensitive ops
+  // content; staff and anyone who already unlocked skip it.
+  if (post.visibility === 'unlisted' && !isStaff && !(await isUnlistedUnlocked())) {
     return (
       <main>
         <BlogPasswordGate title={post.title} />
@@ -139,7 +150,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <main>
-      {post.visibility !== 'unlisted' && (
+      {post.visibility === 'public' && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

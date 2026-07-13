@@ -34,6 +34,7 @@ export function useBlogPostForm({ initialData, isEdit = false }: BlogPostFormPro
       categoryId: initialData?.categoryId || '',
       tags: initialData?.tags || [],
       isPublished: initialData?.isPublished || false,
+      visibility: initialData?.visibility || 'public',
       seoTitle: initialData?.seoTitle || '',
       seoDescription: initialData?.seoDescription || '',
       autoTranslate: initialData?.autoTranslate ?? true,

@@ -45,7 +45,7 @@ interface BlogPost {
   // `db` posts are authored in this UI (editable/deletable); `file` posts live
   // in content/posts/*.md and are managed in Git (read-only here).
   source: 'db' | 'file'
-  visibility: 'public' | 'unlisted'
+  visibility: 'public' | 'unlisted' | 'link'
 }
 
 interface BlogStats {
@@ -97,7 +97,7 @@ async function getBlogPosts(): Promise<BlogPost[]> {
     dbPosts = result.rows.map((r): BlogPost => ({
       ...r,
       source: 'db',
-      visibility: r.visibility === 'unlisted' ? 'unlisted' : 'public',
+      visibility: r.visibility === 'unlisted' ? 'unlisted' : r.visibility === 'link' ? 'link' : 'public',
     }))
   } catch {
     // Table might not exist — fall through to file posts only.

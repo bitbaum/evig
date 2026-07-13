@@ -36,7 +36,7 @@ interface BlogPost {
   updated_at: string
   category_name: string | null
   source: 'db' | 'file'
-  visibility: 'public' | 'unlisted'
+  visibility: 'public' | 'unlisted' | 'link'
 }
 
 const sourceBadgeClass =

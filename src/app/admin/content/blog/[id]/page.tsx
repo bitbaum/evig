@@ -34,13 +34,14 @@ async function getBlogPost(id: string) {
       tags: string[]
       is_published: boolean
       auto_translate: boolean
+      visibility: string
       seo_title: string | null
       seo_description: string | null
     }>(
       `SELECT
         id, slug, title, excerpt, content,
         featured_image, category_id, tags,
-        is_published, auto_translate, seo_title, seo_description
+        is_published, auto_translate, visibility, seo_title, seo_description
       FROM ${TABLE_NAMES.BLOG_POSTS}
       WHERE id = $1`,
       [id]
@@ -92,6 +93,7 @@ async function getBlogPost(id: string) {
       tags: post.tags || [],
       isPublished: post.is_published,
       autoTranslate: post.auto_translate,
+      visibility: (post.visibility as 'public' | 'unlisted' | 'link') || 'public',
       seoTitle: post.seo_title || '',
       seoDescription: post.seo_description || '',
       translations,

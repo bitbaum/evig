@@ -34,6 +34,7 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
         is_published: blogPosts.isPublished,
         published_at: blogPosts.publishedAt,
         auto_translate: blogPosts.autoTranslate,
+        visibility: blogPosts.visibility,
         seo_title: blogPosts.seoTitle,
         seo_description: blogPosts.seoDescription,
         created_at: blogPosts.createdAt,
@@ -74,6 +75,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       seoDescription,
       translations,
       autoTranslate,
+      visibility,
     } = body
 
     // Check if post exists
@@ -124,6 +126,9 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     if (seoTitle !== undefined) update.seoTitle = seoTitle || null
     if (seoDescription !== undefined) update.seoDescription = seoDescription || null
     if (autoTranslate !== undefined) update.autoTranslate = autoTranslate === true
+    if (visibility !== undefined && ['public', 'unlisted', 'link'].includes(visibility)) {
+      update.visibility = visibility
+    }
 
     // Always update updated_by
     update.updatedBy = session.user.id

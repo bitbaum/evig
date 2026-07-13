@@ -47,6 +47,25 @@ export function BlogPostSidebar({
         </div>
       </div>
 
+      {/* Sichtbarkeit */}
+      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+        <Heading level={3} className="font-medium text-text-primary mb-4">Sichtbarkeit</Heading>
+        <Select
+          value={formData.visibility}
+          onChange={(e) =>
+            onFormDataChange({ ...formData, visibility: e.target.value as BlogPostData['visibility'] })
+          }
+        >
+          <option value="public">Öffentlich — im Blog gelistet</option>
+          <option value="link">Über Link teilbar — nicht gelistet</option>
+          <option value="unlisted">Passwortgeschützt</option>
+        </Select>
+        <p className="text-xs text-text-tertiary mt-2">
+          „Über Link teilbar" ist für jeden mit dem Link sichtbar (ohne Login), erscheint aber nicht in der
+          Blog-Übersicht und nicht in Suchmaschinen.
+        </p>
+      </div>
+
       {/* Category */}
       <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
         <Heading level={3} className="font-medium text-text-primary mb-4">Kategorie</Heading>

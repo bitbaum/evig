@@ -289,7 +289,8 @@ function mapPostFromDb(row: {
     published: true, // Only published posts are returned
     body: row.tContent || row.content,
     createdAt: row.createdAt || '',
-    visibility: row.visibility === 'unlisted' ? 'unlisted' : 'public',
+    visibility:
+      row.visibility === 'link' ? 'link' : row.visibility === 'unlisted' ? 'unlisted' : 'public',
   }
 }
 

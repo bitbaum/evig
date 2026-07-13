@@ -25,6 +25,8 @@ export interface BlogPostData {
   categoryId: string
   tags: string[]
   isPublished: boolean
+  /** public = listed + indexed · link = shareable link · unlisted = password. */
+  visibility: 'public' | 'unlisted' | 'link'
   seoTitle: string
   seoDescription: string
   /** Fill missing locales from the German base on publish (default true). */
