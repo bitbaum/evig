@@ -1051,7 +1051,11 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
   function close(){panel.classList.remove('open');}
   document.getElementById('pc-btn').onclick=function(){panel.classList.contains('open')?close():open();};
   document.getElementById('pc-cancel').onclick=close;
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&panel.classList.contains('open'))close();});
+  // Keys typed inside the form must NOT reach the deck's arrow/space navigation
+  // (the nav listens on document; without this, typing arrows/space in the
+  // textarea would switch slides). Bubble-phase stopPropagation keeps normal
+  // typing intact while shielding the deck nav; Escape still closes the panel.
+  panel.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Escape')close();});
 
   document.getElementById('pc-send').onclick=function(){
     var body=document.getElementById('pc-body').value.trim();
