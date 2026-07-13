@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 }
 
 export default async function SiteFeedbackPage() {
-  await requireAnySection(['presentations', 'content'], 'content')
+  await requireAnySection(['siteFeedback', 'content'], 'siteFeedback')
 
   const rows = await db
     .select()

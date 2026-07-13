@@ -764,6 +764,22 @@ export const SECTIONS = {
     sidebarGroup: 'inhalte',
   },
 
+  siteFeedback: {
+    id: 'siteFeedback',
+    path: '/admin/feedback',
+    ui: {
+      label: 'Website-Feedback',
+      description: 'Rückmeldungen von Besucher:innen',
+      icon: MessageSquare,
+      emoji: '💬',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 105.8,
+    category: 'content',
+    sidebarGroup: 'inhalte',
+  },
+
   approvals: {
     id: 'approvals',
     path: '/admin/approvals',
@@ -798,6 +814,25 @@ export const SECTIONS = {
     sidebarGroup: 'personen',
   },
 
+  'team-board': {
+    id: 'team-board',
+    path: '/admin/team/board',
+    ui: {
+      label: 'Wer macht was',
+      description: 'Aktueller Fokus und Aufgaben des Teams',
+      icon: UserCheck,
+      emoji: '🧭',
+      color: 'info',
+    },
+    // Non-sensitive AND open to every staff member: transparency is the point.
+    // Drilling into a member's full profile stays gated by the sensitive `team`
+    // section, so HR/compensation never leaks through this board.
+    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    priority: 129,
+    category: 'management',
+    sidebarGroup: 'betrieb',
+  },
+
   tasks: {
     id: 'tasks',
     path: '/admin/tasks',
@@ -810,6 +845,24 @@ export const SECTIONS = {
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 130,
+    category: 'management',
+    sidebarGroup: 'betrieb',
+  },
+
+  deliverables: {
+    id: 'deliverables',
+    path: '/admin/deliverables',
+    ui: {
+      label: 'Liefergegenstände',
+      description: 'Berichte, Präsentationen, Mockups — teilen und Feedback sammeln',
+      icon: PackageCheck,
+      emoji: '📦',
+      color: 'info',
+    },
+    // Non-sensitive and open to every staff member — browsing "was hat X
+    // geliefert" is the point (same rationale as the team board).
+    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    priority: 131,
     category: 'management',
     sidebarGroup: 'betrieb',
   },
