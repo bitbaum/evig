@@ -255,8 +255,8 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     mockSelectChain.where.mockResolvedValueOnce([])
     // No existing offer
     mockSelectChain.where.mockResolvedValueOnce([])
-    // No repairer profile
-    mockSelectChain.where.mockResolvedValueOnce([])
+    // Active technician profile — required to offer (only technicians may respond)
+    mockSelectChain.where.mockResolvedValueOnce([{ id: 'rp-active' }])
     // INSERT offer
     mockInsertChain.returning.mockResolvedValueOnce([{ id: validOfferId }])
     // UPDATE offerCount increment
