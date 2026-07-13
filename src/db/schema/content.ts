@@ -118,6 +118,31 @@ export type BlogComment = typeof blogComments.$inferSelect
 export type NewBlogComment = typeof blogComments.$inferInsert
 
 // =============================================================================
+// PRESENTATION COMMENTS
+// =============================================================================
+// Per-slide feedback on shared presentation decks. Readers comment signed in
+// OR anonymously (author_user_id NULL + optional author_name); staff collect
+// it in /admin/presentations/feedback. See migration 126.
+
+export const presentationComments = pgTable('presentation_comments', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  deckSlug: text('deck_slug').notNull(),
+  slideIndex: integer('slide_index').notNull(),
+  slideTitle: text('slide_title'),
+  body: text('body').notNull(),
+  authorName: text('author_name'),
+  authorUserId: uuid('author_user_id').references(() => users.id, { onDelete: 'set null' }),
+  isStaff: boolean('is_staff').notNull().default(false),
+  resolved: boolean('resolved').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  index('presentation_comments_deck_idx').on(table.deckSlug, table.createdAt),
+])
+
+export type PresentationComment = typeof presentationComments.$inferSelect
+export type NewPresentationComment = typeof presentationComments.$inferInsert
+
+// =============================================================================
 // BLOG HIDDEN SLUGS
 // =============================================================================
 // Suppression list for "deleting" a git/file-authored post from the admin UI:
