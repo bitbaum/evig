@@ -19,6 +19,7 @@ import { normalizeConditionValue, ZUSTAND_OPTIONS } from '@/config/erfassung/con
 import { formatCHF } from '@/config/marketplace'
 import { Button } from '@/components/ui/button'
 import { ListingImage } from './ListingImage'
+import { CO2Badge } from './CO2Badge'
 import { useCart } from './cart/CartProvider'
 import { ORG } from '@/config/org'
 
@@ -103,6 +104,10 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
           <div className={`mt-3 font-mono tabular-nums ${isCompact ? 'text-base' : 'text-lg'} font-semibold text-text-primary`}>
             {isGratis ? t('listing.free').toUpperCase() : formatCHF(Number(listing.price_chf))}
           </div>
+
+          {/* Sustainability signal — the mission in one line. Self-hides when the
+              category has no defensible estimate (config SSOT). */}
+          <CO2Badge category={listing.category} compact className="mt-2" />
 
           <div className="mt-3 pt-3 border-t border-subtle font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary flex items-center gap-1 min-w-0">
             <span className="truncate">

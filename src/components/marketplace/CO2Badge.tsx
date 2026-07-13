@@ -22,13 +22,31 @@ import { cn } from '@/lib/utils'
 interface CO2BadgeProps {
   category: string
   className?: string
+  /**
+   * Compact chip for listing cards: leaf + "~X kg CO₂ vermieden", no
+   * methodology link (the card is already a link; the full linked badge lives
+   * on the detail page it navigates to). Same honest null-hiding + `~` prefix.
+   */
+  compact?: boolean
 }
 
-export function CO2Badge({ category, className = '' }: CO2BadgeProps) {
+export function CO2Badge({ category, className = '', compact = false }: CO2BadgeProps) {
   const t = useTranslations('components.co2Badge')
   const co2Saved = estimateCO2Savings(category)
 
   if (co2Saved == null || co2Saved <= 0) return null
+
+  if (compact) {
+    return (
+      <span
+        className={cn('inline-flex items-center gap-1 text-action text-xs font-medium', className)}
+        title={t('tooltip')}
+      >
+        <Leaf className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+        {t('saved', { amount: co2Saved })}
+      </span>
+    )
+  }
 
   return (
     <div
