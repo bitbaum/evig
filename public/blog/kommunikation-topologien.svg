@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" font-family="Inter, system-ui, sans-serif" role="img" aria-label="Drei Netzwerk-Topologien: zentral, föderiert, relay/peer-to-peer">
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="340" viewBox="0 0 860 340" font-family="Inter, system-ui, sans-serif" role="img" aria-label="Drei Netzwerk-Topologien: zentral, föderiert, relay/peer-to-peer">
   <rect x="0" y="0" width="860" height="340" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
   <!-- ================= Panel 1: Zentral ================= -->
   <text x="143" y="42" text-anchor="middle" font-size="19" font-weight="700" fill="#1c1917">Zentral</text>
