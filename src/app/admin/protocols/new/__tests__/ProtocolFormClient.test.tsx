@@ -38,13 +38,9 @@ describe('ProtocolFormClient', () => {
   it('creates protocol with typed notes (multi-source flow, YY.1)', async () => {
     render(<ProtocolFormClient teamMembers={teamMembers} />)
 
-    // Setup: select meeting type
-    fireEvent.change(screen.getByLabelText(/Sitzungstyp/i), {
-      target: { value: 'team_weekly' },
-    })
-
-    // Content: enter notes in the "Zusätzliche Notizen" textarea
-    const textarea = await screen.findByLabelText(/Zusätzliche Notizen/i)
+    // Meeting type/title are optional now — the AI fills them from the
+    // transcript, so the only required input is content in the hero textarea.
+    const textarea = await screen.findByLabelText(/Notizen \/ Text einfügen/i)
     fireEvent.change(textarea, {
       target: { value: 'Dies ist ein genügend langes Transkript für die Verarbeitung mit mehr als fünfzig Zeichen.' },
     })

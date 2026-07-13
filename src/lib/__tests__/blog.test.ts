@@ -282,6 +282,7 @@ describe('getAllPosts — sort order', () => {
 
 describe('getPostBySlug', () => {
   it('returns the post when the file exists', () => {
+    mockExistsSync.mockReturnValue(true)
     mockReadFileSync.mockReturnValue(makeMd({
       title: 'My Post',
       excerpt: 'Summary',
@@ -313,6 +314,7 @@ describe('getPostBySlug', () => {
   })
 
   it('applies same defaults as getAllPosts (Untitled, RevampIt Team, [], published=true)', () => {
+    mockExistsSync.mockReturnValue(true)
     mockReadFileSync.mockReturnValue(makeMd({}, 'body'))
     mockStatSync.mockReturnValue(makeStat(new Date('2025-01-15')))
 
@@ -326,6 +328,7 @@ describe('getPostBySlug', () => {
   it('exposes drafts (published=false) when fetched by slug — getPostBySlug does NOT filter', () => {
     // Critical: getAllPosts filters drafts out for the public listing,
     // but getPostBySlug must return them so the admin preview works
+    mockExistsSync.mockReturnValue(true)
     mockReadFileSync.mockReturnValue(makeMd({ title: 'Draft', published: false }))
     mockStatSync.mockReturnValue(makeStat(new Date('2025-01-15')))
 

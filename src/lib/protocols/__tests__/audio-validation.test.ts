@@ -1,4 +1,5 @@
 import { validateAudioUpload } from '../audio-validation'
+import { FILE_SIZE_LIMITS } from '@/config/limits'
 
 describe('validateAudioUpload', () => {
   it('accepts supported audio file', () => {
@@ -10,11 +11,14 @@ describe('validateAudioUpload', () => {
   })
 
   it('rejects oversized file', () => {
+    // Derive from the config SSOT so the test tracks the real limit, not a
+    // hardcoded MB value that drifts when AUDIO_MAX changes.
+    const maxMb = Math.round(FILE_SIZE_LIMITS.AUDIO_MAX / (1024 * 1024))
     expect(validateAudioUpload({
-      size: 26 * 1024 * 1024,
+      size: FILE_SIZE_LIMITS.AUDIO_MAX + 1,
       type: 'audio/mpeg',
       name: 'lange-aufnahme.mp3',
-    })).toContain('maximal 25 MB')
+    })).toContain(`maximal ${maxMb} MB`)
   })
 
   it('rejects unsupported type', () => {
