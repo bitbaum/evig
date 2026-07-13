@@ -37,7 +37,10 @@ export function AdminTopBar({
   return (
     <div className={adminChrome.topBar}>
       <div className="flex h-14 items-center justify-between px-4 lg:px-6">
-        <div className="flex min-w-0 items-center gap-3">
+        {/* flex-1 + min-w-0 so this group yields space to the (shrink-0) actions
+            group, and overflow-hidden so a long breadcrumb clips/ellipsizes
+            instead of overlapping the "Zur Website" button at ~1024–1280px. */}
+        <div className="flex min-w-0 flex-1 items-center gap-3">
           <Button
             variant="ghost"
             size="icon"
@@ -57,7 +60,9 @@ export function AdminTopBar({
             <Menu className="h-4 w-4 text-text-tertiary" />
           </Button>
 
-          <Breadcrumbs className="mb-0 hidden sm:flex" />
+          <div className="hidden min-w-0 overflow-hidden sm:block">
+            <Breadcrumbs className="mb-0 flex" />
+          </div>
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">

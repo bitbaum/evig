@@ -62,11 +62,13 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'S'}
           </span>
         </div>
-        <div className="hidden text-right sm:block">
-          <p className="text-sm font-medium text-text-primary">
+        <div className="hidden max-w-[16rem] text-right sm:block">
+          <p className="truncate text-sm font-medium text-text-primary">
             {displayName}
           </p>
-          <p className="text-xs text-text-secondary">
+          {/* The email is the widest element in the bar; keep it for xl+ where
+              there's room, hide it below to avoid crowding the breadcrumb. */}
+          <p className="hidden truncate text-xs text-text-secondary xl:block">
             {user?.email}
           </p>
         </div>
