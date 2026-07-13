@@ -43,6 +43,7 @@ import {
   DashboardModeToggle,
 } from '@/components/admin/dashboard'
 import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
+import { TeamCurrentWidget } from '@/components/admin/dashboard/TeamCurrentWidget'
 import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
 import type { DashboardStats } from '@/components/admin/dashboard'
 import { getApprovalCounts, type ApprovalCounts } from '@/lib/approvals/counts'
@@ -218,6 +219,15 @@ export default async function AdminDashboard() {
       {userId && (
         <Suspense fallback={<PersonalSectionSkeleton />}>
           <PersonalSection userId={userId} />
+        </Suspense>
+      )}
+
+      {/* TEAM AKTUELL — what the rest of the team is on right now, linking to
+          the full "Wer macht was" board. Self-hides when the team has no
+          current focus/tasks to show. */}
+      {userId && (
+        <Suspense fallback={null}>
+          <TeamCurrentWidget userId={userId} />
         </Suspense>
       )}
 

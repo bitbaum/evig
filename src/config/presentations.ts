@@ -85,6 +85,9 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
     audience: 'Kraftwerk1',
     createdMonth: '2026-07',
   },
+  // NB: the Kivitendo intake mockup is served at /presentations/kivitendo-intake
+  // (the rewrite works without a registry entry) but is catalogued as a
+  // Deliverable (see /admin/deliverables), not a presentation deck.
 ]
 
 /**

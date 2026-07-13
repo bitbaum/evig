@@ -127,6 +127,15 @@ export const TABLE_NAMES = {
   TASK_REQUESTS: 'task_requests',
   TASK_PROJECTS: 'task_projects',
 
+  // Deliverables (delivered artifacts + review/feedback loop)
+  DELIVERABLES: 'deliverables',
+  DELIVERABLE_FEEDBACK: 'deliverable_feedback',
+
+  // Teams (first-class teams + many-to-many membership)
+  TEAMS: 'teams',
+  TEAM_MEMBERSHIPS: 'team_memberships',
+  TEAM_AGENDA_ITEMS: 'team_agenda_items',
+
   // Content Submissions
   USER_CONTENT_SUBMISSIONS: 'user_content_submissions',
 

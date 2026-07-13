@@ -1,0 +1,350 @@
+/* ============================================================================
+   Revamp-IT · Kivitendo — Auftragserfassung (sales_order_intake / Order/add)
+   Drop-in Stylesheet: tablet-tauglich + gut leserlich (grosse Schrift, Kontrast)
+   ----------------------------------------------------------------------------
+   ANWENDUNG:
+   Diese Datei fügt NUR Aussehen hinzu — sie ändert die Kivitendo-Struktur nicht.
+   Am saubersten einbinden über das Kivitendo-Benutzer-Stylesheet, z.B.:
+     - templates/webpages/…  ODER
+     - css/kivitendo/  eine eigene Datei und im Layout nach main.css laden
+   So bleibt ein Kivitendo-Update unberührt (kein Überschreiben von main.css).
+
+   WICHTIG — SELEKTOREN PRÜFEN:
+   Ich sehe deine Live-DOM nicht. Die mit  /* ⚠ PRÜFEN */  markierten Selektoren
+   sind sichere Annahmen für Kivitendo 3.9.x. Die Positions-Tabelle #row_table_id
+   ist von dir bestätigt. Falls ein Block nicht greift: mit F12 den echten
+   Klassen-/ID-Namen ablesen und hier ersetzen. Nichts geht dabei kaputt.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1) Stellschrauben — hier zentral anpassen (Schriftgrösse, Farben, Abstände)
+   --------------------------------------------------------------------------- */
+:root {
+  --ri-font:            0.5rem; /* wird unten überschrieben – siehe Basis */
+  --ri-text:            17px;   /* Basis-Schriftgrösse (älteren Augen zuliebe) */
+  --ri-text-lg:         19px;   /* Beschriftungen / wichtige Felder */
+  --ri-line:            1.5;    /* Zeilenhöhe */
+
+  --ri-ink:             #1a1a1a; /* Text (hoher Kontrast) */
+  --ri-ink-soft:        #444;    /* Sekundärtext */
+  --ri-line-color:      #c9c9c9; /* Rahmen */
+  --ri-line-strong:     #9a9a9a; /* kräftigerer Rahmen */
+  --ri-bg:              #ffffff; /* Feld-Hintergrund */
+  --ri-panel:           #f5f6f7; /* Karten/Panel-Hintergrund */
+  --ri-head:            #eef1f3; /* Tabellenkopf */
+  --ri-zebra:           #f7f9fa; /* Zeilenstreifen */
+  --ri-accent:          #0b6b5f; /* Revamp-Grün (Fokus/Aktion) */
+  --ri-accent-ink:      #ffffff;
+
+  --ri-touch:           44px;    /* Mindest-Touchfläche (Tablet) */
+  --ri-radius:          8px;
+  --ri-gap:             14px;
+}
+
+/* ---------------------------------------------------------------------------
+   2) Basis-Lesbarkeit für das Erfassungsformular
+   --------------------------------------------------------------------------- */
+body,
+.wrapper,                     /* ⚠ PRÜFEN — Kivitendo Haupt-Wrapper */
+#content {                    /* ⚠ PRÜFEN — Inhaltsbereich */
+  font-size: var(--ri-text);
+  line-height: var(--ri-line);
+  color: var(--ri-ink);
+}
+
+/* Überschrift der Maske */
+#content h1,
+.form-title,                  /* ⚠ PRÜFEN */
+h1.title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 var(--ri-gap);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ri-line-strong);
+}
+
+/* Beschriftungen gut lesbar */
+label,
+th,
+.label {
+  font-size: var(--ri-text-lg);
+  color: var(--ri-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   3) Eingabefelder — gross genug für Finger & Augen
+   --------------------------------------------------------------------------- */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="search"],
+select,
+textarea {
+  font-size: var(--ri-text);
+  min-height: var(--ri-touch);
+  padding: 8px 10px;
+  color: var(--ri-ink);
+  background: var(--ri-bg);
+  border: 1px solid var(--ri-line-strong);
+  border-radius: var(--ri-radius);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+textarea { min-height: 3lh; line-height: var(--ri-line); }
+
+/* Deutlich sichtbarer Fokus — hilft bei der Tastatur- und Tablet-Bedienung */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus,
+a.button:focus {
+  outline: 3px solid var(--ri-accent);
+  outline-offset: 1px;
+  border-color: var(--ri-accent);
+}
+
+/* Deaktivierte / berechnete Felder erkennbar, aber ruhig */
+input[readonly],
+input:disabled {
+  background: var(--ri-panel);
+  color: var(--ri-ink-soft);
+}
+
+/* ---------------------------------------------------------------------------
+   4) Kopfbereich (Kunde, Auftragsnr., Datum …) — auf Tablet sauber umbrechen
+   Kivitendo baut den Kopf oft als Tabelle. Wir lösen die starre Tabelle für
+   schmale Screens auf, damit nichts abgeschnitten wird.
+   --------------------------------------------------------------------------- */
+.form-header,                 /* ⚠ PRÜFEN — Container der Kopffelder */
+table.tbl-horizontal {        /* ⚠ PRÜFEN — häufige Kivitendo-Formulartabelle */
+  width: 100%;
+  background: var(--ri-panel);
+  border: 1px solid var(--ri-line-color);
+  border-radius: var(--ri-radius);
+  padding: var(--ri-gap);
+  margin-bottom: var(--ri-gap);
+}
+
+.form-header td,
+table.tbl-horizontal td,
+table.tbl-horizontal th {
+  padding: 6px 10px;
+  vertical-align: middle;
+}
+
+/* ---------------------------------------------------------------------------
+   5) POSITIONS-TABELLE  #row_table_id  (von Kivitendo befüllt)
+   Struktur bleibt — wir machen sie nur gross, ruhig und tablet-tauglich.
+   --------------------------------------------------------------------------- */
+
+/* Waagrechtes Scrollen auf schmalen Geräten statt Abschneiden.
+   Falls #row_table_id KEINEN eigenen Wrapper hat, greift der Fallback am table. */
+#row_table_id {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--ri-text);
+  display: block;               /* erlaubt eigenes horizontales Scrollen … */
+  overflow-x: auto;             /* … ohne die ganze Seite zu verschieben     */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Kopfzeile hervorheben und beim Scrollen oben halten */
+#row_table_id thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--ri-head);
+  color: var(--ri-ink);
+  font-size: var(--ri-text-lg);
+  font-weight: 700;
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 2px solid var(--ri-line-strong);
+  white-space: nowrap;
+}
+
+/* Zellen: mehr Luft, klare Trennlinien, angenehme Zeilenhöhe */
+#row_table_id td {
+  padding: 10px;
+  border-bottom: 1px solid var(--ri-line-color);
+  vertical-align: middle;
+}
+
+/* Zeilenstreifen für bessere Orientierung über die Breite */
+#row_table_id tbody tr:nth-child(odd) td { background: var(--ri-zebra); }
+#row_table_id tbody tr:hover td          { background: #eef6f4; }
+
+/* Eingabefelder INNERHALB der Positionszeilen füllen ihre Zelle aus */
+#row_table_id input[type="text"],
+#row_table_id input[type="number"],
+#row_table_id select,
+#row_table_id textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 8px;
+}
+
+/* Zahlen rechtsbündig (Menge, Preis, Rabatt, Betrag) — leichter zu prüfen.
+   Kivitendo nutzt dafür meist .numeric; sonst über die Spalten steuern. */
+#row_table_id td.numeric,     /* ⚠ PRÜFEN — Kivitendo-Klasse für Zahlen */
+#row_table_id input.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Positionsnummer klein & ruhig halten */
+#row_table_id td.row-number,  /* ⚠ PRÜFEN */
+#row_table_id td:first-child {
+  color: var(--ri-ink-soft);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   6) Summen / Fussbereich — das Wichtigste gross und deutlich
+   --------------------------------------------------------------------------- */
+.order-totals,                /* ⚠ PRÜFEN — Container der Summen */
+table.totals {                /* ⚠ PRÜFEN */
+  margin-top: var(--ri-gap);
+  margin-left: auto;          /* rechtsbündig unter der Tabelle */
+  font-size: var(--ri-text-lg);
+}
+.order-totals td,
+table.totals td { padding: 6px 12px; text-align: right; }
+
+.order-totals .grand-total,   /* ⚠ PRÜFEN — Zeile "Total" */
+tr.grand-total td {
+  font-size: 22px;
+  font-weight: 800;
+  border-top: 2px solid var(--ri-line-strong);
+}
+
+/* ---------------------------------------------------------------------------
+   7) Buttons — grosse, gut trennbare Touch-Ziele
+   --------------------------------------------------------------------------- */
+button,
+input[type="submit"],
+input[type="button"],
+a.button {
+  font-size: var(--ri-text-lg);
+  min-height: var(--ri-touch);
+  padding: 10px 18px;
+  border-radius: var(--ri-radius);
+  border: 1px solid var(--ri-line-strong);
+  background: #fff;
+  color: var(--ri-ink);
+  cursor: pointer;
+  margin: 4px 6px 4px 0;
+}
+button:hover,
+input[type="submit"]:hover,
+a.button:hover { background: var(--ri-panel); }
+
+/* Primäraktion (Speichern) hervorheben */
+input[type="submit"],
+button[type="submit"],
+.button--primary {            /* ⚠ PRÜFEN — falls vorhanden */
+  background: var(--ri-accent);
+  color: var(--ri-accent-ink);
+  border-color: var(--ri-accent);
+  font-weight: 700;
+}
+input[type="submit"]:hover,
+button[type="submit"]:hover { filter: brightness(0.94); }
+
+/* ---------------------------------------------------------------------------
+   8) Zeilen-Steuerelemente — Sortieren, Löschen, Auf-/Zuklappen
+   Diese Steuerelemente liefert Kivitendo selbst — das CSS entfernt NICHTS,
+   es macht sie nur gross genug fürs Tablet. Selektoren aus dem Standard-
+   Template (design40): img.dragdrop (Ziehen), img.row-icon/.expand (Icons);
+   der Loeschen-Knopf ist ein Button mit dem Text «X».
+   (⚠ PRÜFEN bei abweichender Kivitendo-Version — F12 zeigt die echten Namen.)
+   --------------------------------------------------------------------------- */
+
+/* Ziehen zum Umsortieren (updown.png) — grosses, greifbares Touch-Ziel */
+#row_table_id img.dragdrop {          /* ⚠ PRÜFEN */
+  width: 22px; height: 22px;
+  padding: 10px;
+  box-sizing: content-box;
+  cursor: grab;
+  opacity: 0.7;
+}
+#row_table_id img.dragdrop:hover { opacity: 1; }
+
+/* Auf-/Zuklappen (expand/collapse.svg) & «aus Stammdaten aktualisieren» */
+#row_table_id img.row-icon,           /* ⚠ PRÜFEN */
+#row_table_id img.expand {            /* ⚠ PRÜFEN */
+  width: 22px; height: 22px;
+  padding: 10px;
+  box-sizing: content-box;
+  cursor: pointer;
+  opacity: 0.7;
+}
+#row_table_id img.row-icon:hover,
+#row_table_id img.expand:hover { opacity: 1; }
+
+/* Löschen-Knopf (das «X») — kompaktes, aber sicher tippbares Quadrat.
+   Überschreibt in der Zeile die grosse Standard-Button-Regel aus Abschnitt 7. */
+#row_table_id .row_entry button,      /* ⚠ PRÜFEN — Zeile = <tbody class="row_entry"> */
+#row_table_id .row_entry input[type="button"] {
+  min-width: var(--ri-touch);
+  min-height: var(--ri-touch);
+  padding: 0 10px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 2px;
+}
+
+/* Schmale Steuer-Spalten nicht in die Breite ziehen; Icons mittig.
+   :has() unterstützen aktuelle Tablet-Browser; sonst wird die Regel ignoriert. */
+#row_table_id td:has(img.dragdrop),   /* ⚠ PRÜFEN */
+#row_table_id td:has(img.row-icon),
+#row_table_id td:has(img.expand),
+#row_table_id .row_entry td:has(button) {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Zentrale Eingabezeile ÜBER der Liste (neuer Artikel) — ebenfalls gross & leserlich */
+#input_row_table_id td,               /* ⚠ PRÜFEN */
+#input_row_table_id input,
+#input_row_table_id select {
+  font-size: var(--ri-text);
+  min-height: var(--ri-touch);
+}
+
+/* ---------------------------------------------------------------------------
+   9) Tablet-Feinschliff
+   --------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  :root { --ri-text: 18px; --ri-text-lg: 20px; }
+
+  /* Kopf-Formular stapeln statt zwängen (löst starre Tabellenzellen auf) */
+  .form-header,               /* ⚠ PRÜFEN */
+  table.tbl-horizontal,
+  .form-header tbody,
+  table.tbl-horizontal tbody { display: block; width: 100%; }
+
+  .form-header tr,
+  table.tbl-horizontal tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .form-header td,
+  table.tbl-horizontal td { display: block; padding: 2px 0; }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select { width: 100%; }
+}
+
+/* Sehr grosse Schrift optional: Body-Klasse `ri-xl` setzen für +2px überall */
+body.ri-xl { --ri-text: 20px; --ri-text-lg: 22px; }

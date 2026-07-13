@@ -7,15 +7,18 @@
  */
 
 import { useState, useMemo } from 'react'
-import { Target, Loader2, Check, X } from 'lucide-react'
+import { Target, Loader2, Check, X, AlertTriangle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import { useCurrentFocus } from './useActivityStream'
+import { focusFreshness } from '@/lib/team/focus-freshness'
 
 interface CurrentFocusInputProps {
   profileId: string
   initialFocus: string | null
+  /** When the focus was last saved — drives the freshness badge. */
+  initialUpdatedAt?: string | null
   onUpdate?: (newFocus: string | null) => void
   compact?: boolean
 }
@@ -23,12 +26,16 @@ interface CurrentFocusInputProps {
 export function CurrentFocusInput({
   profileId,
   initialFocus,
+  initialUpdatedAt = null,
   onUpdate,
   compact = false,
 }: CurrentFocusInputProps) {
   // Track if user has made local edits (reset when initialFocus changes via key prop)
   const [focus, setFocus] = useState(initialFocus || '')
   const [isEditing, setIsEditing] = useState(false)
+  // Track the save timestamp locally so the freshness badge updates the moment
+  // the focus is saved, without waiting for a server round-trip/refresh.
+  const [updatedAt, setUpdatedAt] = useState<string | null>(initialUpdatedAt)
   const { saving, error, updateFocus } = useCurrentFocus()
 
   // Derive hasChanges from current state (no effect needed)
@@ -36,11 +43,15 @@ export function CurrentFocusInput({
     return focus !== (initialFocus || '')
   }, [focus, initialFocus])
 
+  const fresh = focusFreshness(updatedAt)
+  const showFreshness = !compact && !isEditing && !hasChanges && focus.trim().length > 0 && fresh !== null
+
   const handleSave = async () => {
     const newFocus = focus.trim() || null
     const success = await updateFocus(profileId, newFocus)
     if (success) {
       setIsEditing(false)
+      setUpdatedAt(newFocus ? new Date().toISOString() : null)
       onUpdate?.(newFocus)
     }
   }
@@ -55,6 +66,7 @@ export function CurrentFocusInput({
     if (success) {
       setFocus('')
       setIsEditing(false)
+      setUpdatedAt(null)
       onUpdate?.(null)
     }
   }
@@ -113,6 +125,18 @@ export function CurrentFocusInput({
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-text-tertiary" />
         <Heading level={3} className="text-text-primary">Aktueller Fokus</Heading>
+        {showFreshness && (
+          <span
+            className={
+              fresh!.isStale
+                ? 'ml-auto inline-flex items-center gap-1 rounded-full bg-warning-100 px-2 py-0.5 text-[11px] font-medium text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
+                : 'ml-auto inline-flex items-center gap-1 text-[11px] text-text-tertiary'
+            }
+          >
+            {fresh!.isStale && <AlertTriangle className="h-3 w-3" aria-hidden="true" />}
+            {fresh!.label}
+          </span>
+        )}
       </div>
 
       {error && (

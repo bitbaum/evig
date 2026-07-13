@@ -47,6 +47,7 @@ export function TeamProfileView({
         <CurrentFocusInput
           profileId={profile.id}
           initialFocus={currentFocus}
+          initialUpdatedAt={profile.current_focus_updated_at}
           onUpdate={setCurrentFocus}
         />
 

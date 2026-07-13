@@ -1,0 +1,732 @@
+<style>
+  :root{
+    --bg:#eceeed; --surface:#ffffff; --surface-2:#f6f8f7;
+    --ink:#16201e; --ink-soft:#55635f; --ink-faint:#8a9691;
+    --line:#dde1e0; --line-soft:#e9eceb;
+    --accent:#0b6b5f; --accent-ink:#ffffff; --accent-soft:#e5f0ed; --accent-line:#bfdcd5;
+    --warn:#8a5a00; --warn-bg:#fbf3e2; --warn-line:#ecdcb2;
+    --code-bg:#122019; --code-ink:#d7e4de; --code-dim:#7f9a8f; --code-key:#8fd6bf;
+    --radius:12px; --radius-s:8px;
+    --maxw:940px;
+    --font: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font); font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+
+  /* ---- Header ---- */
+  header.masthead{padding:56px 0 8px}
+  .eyebrow{
+    font-size:12px; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--accent); display:inline-flex; align-items:center; gap:9px; margin:0 0 18px;
+  }
+  .eyebrow::before{content:""; width:22px; height:2px; background:var(--accent); border-radius:2px}
+  h1{
+    font-size:clamp(30px,5vw,42px); line-height:1.08; font-weight:800;
+    letter-spacing:-.02em; margin:0 0 14px; text-wrap:balance; max-width:20ch;
+  }
+  .lede{font-size:19px; color:var(--ink-soft); margin:0 0 26px; max-width:60ch}
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 4px}
+  .tag{
+    font-size:13px; font-weight:600; color:var(--ink-soft);
+    background:var(--surface); border:1px solid var(--line); border-radius:999px;
+    padding:6px 13px;
+  }
+  .tag.strong{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+
+  /* ---- Section scaffolding ---- */
+  section{padding:34px 0}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin:0 0 20px}
+  .sec-num{
+    font-family:var(--mono); font-size:13px; font-weight:600; color:var(--accent);
+    font-variant-numeric:tabular-nums; padding-top:4px;
+  }
+  h2{font-size:24px; font-weight:750; letter-spacing:-.01em; margin:0; line-height:1.2}
+  .sec-head p{margin:4px 0 0; color:var(--ink-soft); font-size:15px}
+
+  /* ---- What you get: cards ---- */
+  .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 20px 22px;
+  }
+  .card .k{
+    font-family:var(--mono); font-size:12px; font-weight:600; color:var(--accent);
+    letter-spacing:.04em; margin:0 0 12px;
+  }
+  .card h3{font-size:16px; font-weight:700; margin:0 0 6px}
+  .card p{margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.55}
+  .card code{font-family:var(--mono); font-size:12.5px; background:var(--surface-2);
+    border:1px solid var(--line-soft); border-radius:5px; padding:1px 5px}
+
+  /* ---- Live preview ---- */
+  .browser{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.05);
+  }
+  .chrome{
+    display:flex; align-items:center; gap:12px; padding:11px 15px;
+    background:var(--surface-2); border-bottom:1px solid var(--line);
+  }
+  .dots{display:flex; gap:6px; flex:0 0 auto}
+  .dots i{width:11px; height:11px; border-radius:50%; background:#d3d8d6; display:block}
+  .urlbar{
+    flex:1 1 auto; min-width:0; font-family:var(--mono); font-size:12.5px; color:var(--ink-faint);
+    background:var(--surface); border:1px solid var(--line); border-radius:999px;
+    padding:5px 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .seg{display:inline-flex; background:var(--surface); border:1px solid var(--line);
+    border-radius:999px; padding:3px; gap:2px; flex:0 0 auto}
+  .seg button{
+    font-family:var(--font); font-size:12.5px; font-weight:600; color:var(--ink-soft);
+    border:0; background:transparent; padding:5px 13px; border-radius:999px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .seg button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink)}
+  .stage{background:#e9edf0; padding:20px; display:flex; justify-content:center}
+  .frame{width:100%; max-width:100%; transition:max-width .35s ease}
+  .frame.tablet{max-width:768px}
+  iframe.preview{
+    width:100%; height:660px; border:0; border-radius:var(--radius-s);
+    background:#e9edf0; box-shadow:0 2px 10px rgba(0,0,0,.08);
+  }
+  .frame.tablet iframe.preview{box-shadow:0 4px 22px rgba(0,0,0,.14)}
+  .stagenote{font-size:13px; color:var(--ink-faint); text-align:center; margin:12px 0 0}
+
+  /* ---- Prose ---- */
+  .prose p{margin:0 0 14px; max-width:66ch}
+  .prose strong{color:var(--ink); font-weight:700}
+  .prose code{font-family:var(--mono); font-size:13px; background:var(--surface);
+    border:1px solid var(--line); border-radius:5px; padding:1px 6px}
+  .steps{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px}
+  .steps li{
+    display:grid; grid-template-columns:30px 1fr; gap:14px; align-items:start;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px;
+  }
+  .steps .n{
+    font-family:var(--mono); font-size:13px; font-weight:700; color:var(--accent-ink);
+    background:var(--accent); width:26px; height:26px; border-radius:7px;
+    display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;
+  }
+  .steps h3{margin:2px 0 4px; font-size:15.5px; font-weight:700}
+  .steps p{margin:0; font-size:14.5px; color:var(--ink-soft)}
+  .steps code{font-family:var(--mono); font-size:12.5px; background:var(--surface-2);
+    border:1px solid var(--line-soft); border-radius:5px; padding:1px 5px}
+
+  .callout{
+    display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
+    background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:var(--radius);
+    padding:16px 18px; margin:22px 0 0;
+  }
+  .callout .icon{font-family:var(--mono); font-weight:700; color:var(--warn); font-size:16px; line-height:1.5}
+  .callout p{margin:0; color:#6f4a05; font-size:14.5px; line-height:1.55}
+  .callout strong{color:var(--warn)}
+
+  /* ---- Code block ---- */
+  .codewrap{background:var(--code-bg); border-radius:var(--radius); overflow:hidden}
+  .codebar{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 16px; border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .codebar .fname{font-family:var(--mono); font-size:13px; color:var(--code-ink); display:flex; align-items:center; gap:9px}
+  .codebar .fname::before{content:""; width:9px; height:9px; border-radius:2px; background:var(--code-key)}
+  .copybtn{
+    font-family:var(--font); font-size:13px; font-weight:600; color:var(--code-bg);
+    background:var(--code-key); border:0; border-radius:7px; padding:7px 15px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:7px; transition:background .15s,transform .05s;
+  }
+  .copybtn:hover{background:#a6e6d1}
+  .copybtn:active{transform:translateY(1px)}
+  .copybtn.done{background:#cdeee0}
+  pre.code{
+    margin:0; padding:18px 16px; overflow-x:auto; max-height:440px;
+    font-family:var(--mono); font-size:12.5px; line-height:1.62; color:var(--code-ink);
+    font-variant-numeric:tabular-nums; -webkit-overflow-scrolling:touch;
+  }
+  pre.code::-webkit-scrollbar{height:9px; width:9px}
+  pre.code::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16); border-radius:9px}
+
+  .knobs{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:18px 0 0}
+  .knob{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-s);
+    padding:13px 15px}
+  .knob code{font-family:var(--mono); font-size:12.5px; color:var(--accent); font-weight:600}
+  .knob span{display:block; font-size:13.5px; color:var(--ink-soft); margin-top:3px}
+
+  /* ---- Footer ---- */
+  footer{border-top:1px solid var(--line); margin-top:26px; padding:30px 0 60px}
+  .sig{display:flex; align-items:center; gap:14px}
+  .sig .av{
+    width:44px; height:44px; border-radius:50%; background:var(--accent); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;
+    flex:0 0 auto; letter-spacing:.02em;
+  }
+  .sig .who{font-weight:700; font-size:15px}
+  .sig .who span{display:block; font-weight:400; color:var(--ink-soft); font-size:13.5px; margin-top:2px}
+
+  a{color:var(--accent)}
+  :focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+  @media (max-width:720px){
+    header.masthead{padding:40px 0 4px}
+    .cards{grid-template-columns:1fr}
+    .knobs{grid-template-columns:1fr}
+    iframe.preview{height:560px}
+    .urlbar{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">Übergabe · Revamp-IT</p>
+    <h1>Kivitendo Auftragserfassung, tablet-tauglich</h1>
+    <p class="lede">Ein reines Aussehen-Update für die Verkaufsauftrags-Maske: grössere Schrift,
+      ruhigere Kontraste, Touch-Ziele ab 44&nbsp;px und eine Positions-Tabelle, die auf dem Tablet
+      scrollt statt abzuschneiden. Die Kivitendo-Struktur bleibt unangetastet.</p>
+    <div class="tags">
+      <span class="tag strong">CSS-only</span>
+      <span class="tag">Update-sicher</span>
+      <span class="tag">Tablet ≥ 44px Touch</span>
+      <span class="tag">Grosse Schrift</span>
+      <span class="tag">Kivitendo 3.9.x</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="s1">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <div><h2 id="s1">Was du bekommst</h2></div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <p class="k">ANSEHEN</p>
+        <h3>Die Live-Vorschau</h3>
+        <p>Direkt hier unten — das Ziel-Aussehen, umschaltbar zwischen Desktop und Tablet. Nichts installieren.</p>
+      </div>
+      <div class="card">
+        <p class="k">EINBINDEN</p>
+        <h3>Ein Stylesheet</h3>
+        <p>Eine eigene <code>.css</code> nach der <code>main.css</code> laden. Kein Eingriff in Kivitendo, überlebt Updates.</p>
+      </div>
+      <div class="card">
+        <p class="k">PRÜFEN</p>
+        <h3>2 Minuten mit F12</h3>
+        <p>Ich sehe eure Live-DOM nicht. Alle unsicheren Selektoren sind mit <code>⚠ PRÜFEN</code> markiert.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="s2">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <div>
+        <h2 id="s2">Live-Vorschau</h2>
+        <p>Das exakte Ziel-Aussehen. Schalte auf Tablet um — die Kopffelder stapeln, die Positions-Tabelle scrollt waagrecht.</p>
+      </div>
+    </div>
+    <div class="browser">
+      <div class="chrome">
+        <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="urlbar">kivitendo · Order/add — Auftrag erfassen</div>
+        <div class="seg" role="group" aria-label="Vorschau-Breite">
+          <button id="btnDesktop" aria-pressed="true">Desktop</button>
+          <button id="btnTablet" aria-pressed="false">Tablet</button>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="frame" id="frame">
+          <iframe class="preview" id="preview" title="Mockup der Auftragserfassung" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+    <p class="stagenote" id="stagenote">Ansicht: Desktop — volle Breite</p>
+  </section>
+
+  <section aria-labelledby="s3" class="prose">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <div>
+        <h2 id="s3">Einbinden — update-sicher</h2>
+        <p>Nicht in <code>main.css</code> schreiben (wird bei Updates überschrieben). Als eigene Datei laden.</p>
+      </div>
+    </div>
+    <ol class="steps">
+      <li>
+        <span class="n">1</span>
+        <div>
+          <h3>Datei ablegen</h3>
+          <p>Speichere <code>kivitendo-intake.css</code> unter <code>css/kivitendo/revamp-intake.css</code> (oder einem eigenen Ordner deiner Wahl).</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <div>
+          <h3>Nach der main.css laden</h3>
+          <p>Im Layout-Template referenzieren — <strong>nach</strong> der <code>main.css</code>, damit dein Stil gewinnt. So bleibt ein Kivitendo-Update unberührt.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <div>
+          <h3>Öffnen &amp; kurz prüfen</h3>
+          <p>Auftragsmaske öffnen. Passt alles, bist du fertig. Greift ein Block nicht: F12 → echten Klassen-/ID-Namen ablesen → im CSS ersetzen.</p>
+        </div>
+      </li>
+    </ol>
+    <div class="callout">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <p><strong>Die Positions-Tabelle <code>#row_table_id</code></strong> füllt Kivitendo — an der Struktur ändern wir nichts.
+        Das CSS stylt sie nur um: grössere Zellen, fixierte Kopfzeile beim Scrollen, Zeilenstreifen, rechtsbündige Zahlen,
+        waagrechtes Scrollen auf dem Tablet. Diese ID ist bestätigt; die übrigen mit <strong>⚠ PRÜFEN</strong> markierten
+        Selektoren (Kopf-Wrapper, Summen-Container, Zahlen-Klasse) sind sichere Annahmen für 3.9.x — bei Bedarf mit F12 gegenprüfen.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s4">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <div>
+        <h2 id="s4">Das CSS zum Kopieren</h2>
+        <p>Die produktive Datei. Fügt nur Aussehen hinzu — keine Strukturänderung.</p>
+      </div>
+    </div>
+    <div class="codewrap">
+      <div class="codebar">
+        <span class="fname">kivitendo-intake.css</span>
+        <button class="copybtn" id="copyBtn" type="button">
+          <span id="copyLabel">Kopieren</span>
+        </button>
+      </div>
+      <pre class="code" id="cssCode" tabindex="0"></pre>
+    </div>
+  </section>
+
+  <section aria-labelledby="s5">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <div>
+        <h2 id="s5">Feintuning</h2>
+        <p>Ganz oben im CSS gibt es einen <code style="font-family:var(--mono)">:root</code>-Block mit Stellschrauben.</p>
+      </div>
+    </div>
+    <div class="knobs">
+      <div class="knob"><code>--ri-text: 17px</code><span>Basis-Schriftgrösse. Älteren Augen zuliebe hochsetzen.</span></div>
+      <div class="knob"><code>--ri-text-lg: 19px</code><span>Beschriftungen &amp; wichtige Felder.</span></div>
+      <div class="knob"><code>--ri-accent: #0b6b5f</code><span>Revamp-Grün für Fokus &amp; Primäraktion.</span></div>
+      <div class="knob"><code>--ri-touch: 44px</code><span>Mindest-Touchfläche fürs Tablet.</span></div>
+      <div class="knob"><code>body.ri-xl</code><span>Klasse am <code>&lt;body&gt;</code> setzen → +2px überall.</span></div>
+      <div class="knob"><code>--ri-radius: 8px</code><span>Ecken-Rundung von Feldern &amp; Buttons.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="sig">
+      <span class="av" aria-hidden="true">G</span>
+      <div class="who">Gruss George
+        <span>Revamp-IT · frag jederzeit nach, wenn ein Selektor nicht greift.</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // --- The live mockup, injected into an isolated iframe (no external request) ---
+  const MOCKUP = `<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{--ink:#1a1a1a;--ink-soft:#555;--line:#c9c9c9;--line-strong:#9a9a9a;--bg:#fff;--panel:#f5f6f7;--head:#eef1f3;--zebra:#f7f9fa;--accent:#0b6b5f;--touch:44px;--radius:8px;--text:17px;--text-lg:19px;}
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9edf0;color:var(--ink);font:var(--text)/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+  .page{max-width:1180px;margin:16px auto;padding:0 14px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 22px 26px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+  h1{font-size:26px;font-weight:800;margin:0 0 6px;}
+  .sub{color:var(--ink-soft);margin:0 0 20px}
+  .titlebar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--line-strong);padding-bottom:14px;margin-bottom:20px;}
+  .badge{background:var(--accent);color:#fff;font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px;white-space:nowrap;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 22px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:22px;}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field label{font-size:var(--text-lg);font-weight:600}
+  .field input,.field select{font-size:var(--text);min-height:var(--touch);padding:8px 10px;border:1px solid var(--line-strong);border-radius:var(--radius);background:#fff;width:100%;}
+  .field input:focus,.field select:focus{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .field .ro{background:var(--panel);color:var(--ink-soft)}
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--radius)}
+  table.rows{width:100%;border-collapse:separate;border-spacing:0;min-width:820px}
+  table.rows thead th{position:sticky;top:0;background:var(--head);font-size:var(--text-lg);font-weight:700;text-align:left;padding:12px 10px;border-bottom:2px solid var(--line-strong);white-space:nowrap;}
+  table.rows td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  table.rows tbody tr:nth-child(odd) td{background:var(--zebra)}
+  table.rows tbody tr:hover td{background:#eef6f4}
+  table.rows input{width:100%;min-height:40px;padding:6px 8px;font-size:var(--text);border:1px solid var(--line-strong);border-radius:6px}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .pos{color:var(--ink-soft);white-space:nowrap;width:44px}
+  .colw-art{width:150px}.colw-qty{width:92px}.colw-unit{width:88px}.colw-price{width:120px}.colw-disc{width:86px}.colw-sum{width:120px}
+  .addrow{margin-top:12px}
+  .btn{font-size:var(--text-lg);min-height:var(--touch);padding:10px 18px;border-radius:var(--radius);border:1px solid var(--line-strong);background:#fff;cursor:pointer;}
+  .btn:hover{background:var(--panel)}
+  .btn--ghost{border-style:dashed;color:var(--ink-soft)}
+  .totals{margin:20px 0 4px;margin-left:auto;width:320px;max-width:100%}
+  .totals .row{display:flex;justify-content:space-between;padding:6px 4px;font-size:var(--text-lg)}
+  .totals .grand{font-size:22px;font-weight:800;border-top:2px solid var(--line-strong);margin-top:6px;padding-top:12px;}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+  .btn--primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
+  .btn--primary:hover{filter:brightness(.94)}
+  @media (max-width:1024px){:root{--text:18px;--text-lg:20px}.grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:680px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><div class="page"><div class="card">
+  <div class="titlebar"><div><h1>Auftrag erfassen</h1><p class="sub">Verkaufsauftrag · Revamp-IT</p></div><span class="badge">Tablet-optimiert · gut leserlich</span></div>
+  <div class="grid">
+    <div class="field"><label for="kunde">Kunde</label><select id="kunde"><option>Musterkunde AG, Zürich</option></select></div>
+    <div class="field"><label for="nr">Auftragsnummer</label><input id="nr" class="ro" value="AB-2026-0142" readonly></div>
+    <div class="field"><label for="sb">Sachbearbeiter</label><select id="sb"><option>M. Muster</option></select></div>
+    <div class="field"><label for="datum">Datum</label><input id="datum" type="date" value="2026-07-13"></div>
+    <div class="field"><label for="lieferdatum">Lieferdatum</label><input id="lieferdatum" type="date" value="2026-07-20"></div>
+    <div class="field"><label for="referenz">Ihre Referenz</label><input id="referenz" placeholder="z.B. Bestellung Nr."></div>
+  </div>
+  <div class="tablewrap"><table class="rows"><thead><tr>
+    <th class="pos">#</th><th class="colw-art">Artikelnummer</th><th>Beschreibung</th>
+    <th class="colw-qty num">Menge</th><th class="colw-unit">Einheit</th><th class="colw-price num">Einzelpreis</th>
+    <th class="colw-disc num">Rabatt %</th><th class="colw-sum num">Betrag</th></tr></thead><tbody>
+    <tr><td class="pos">1</td><td><input value="RI-LT-0231"></td><td><input value="Lenovo ThinkPad T480, refurbished"></td><td class="num"><input class="num" value="2"></td><td><input value="Stk"></td><td class="num"><input class="num" value="320.00"></td><td class="num"><input class="num" value="0"></td><td class="num">640.00</td></tr>
+    <tr><td class="pos">2</td><td><input value="RI-MON-0098"></td><td><input value="Dell UltraSharp 24&quot; Monitor"></td><td class="num"><input class="num" value="2"></td><td><input value="Stk"></td><td class="num"><input class="num" value="95.00"></td><td class="num"><input class="num" value="10"></td><td class="num">171.00</td></tr>
+    <tr><td class="pos">3</td><td><input value="RI-SRV-0007"></td><td><input value="Einrichtung &amp; Datenübernahme"></td><td class="num"><input class="num" value="1"></td><td><input value="Std"></td><td class="num"><input class="num" value="90.00"></td><td class="num"><input class="num" value="0"></td><td class="num">90.00</td></tr>
+  </tbody></table></div>
+  <button class="btn btn--ghost addrow">+ Position hinzufügen</button>
+  <div class="totals"><div class="row"><span>Zwischensumme</span><span>901.00</span></div><div class="row"><span>MwSt 8.1 %</span><span>72.98</span></div><div class="row grand"><span>Total CHF</span><span>973.98</span></div></div>
+  <div class="actions"><button class="btn btn--primary">Speichern</button><button class="btn">Als PDF</button><button class="btn">Abbrechen</button></div>
+</div></div></body></html>`;
+
+  document.getElementById('preview').srcdoc = MOCKUP;
+
+  // --- Desktop / Tablet toggle ---
+  const frame = document.getElementById('frame');
+  const note = document.getElementById('stagenote');
+  const bD = document.getElementById('btnDesktop');
+  const bT = document.getElementById('btnTablet');
+  function setView(tablet){
+    frame.classList.toggle('tablet', tablet);
+    bD.setAttribute('aria-pressed', String(!tablet));
+    bT.setAttribute('aria-pressed', String(tablet));
+    note.textContent = tablet ? 'Ansicht: Tablet — 768 px, Kopffelder stapeln, Tabelle scrollt' : 'Ansicht: Desktop — volle Breite';
+  }
+  bD.addEventListener('click', () => setView(false));
+  bT.addEventListener('click', () => setView(true));
+
+  // --- Production CSS (single source: rendered in the block, copied from it) ---
+  const CSS = String.raw`/* ============================================================================
+   Revamp-IT · Kivitendo — Auftragserfassung (sales_order_intake / Order/add)
+   Drop-in Stylesheet: tablet-tauglich + gut leserlich (grosse Schrift, Kontrast)
+   ----------------------------------------------------------------------------
+   ANWENDUNG:
+   Diese Datei fügt NUR Aussehen hinzu — sie ändert die Kivitendo-Struktur nicht.
+   Am saubersten einbinden über das Kivitendo-Benutzer-Stylesheet, z.B.:
+     - templates/webpages/…  ODER
+     - css/kivitendo/  eine eigene Datei und im Layout nach main.css laden
+   So bleibt ein Kivitendo-Update unberührt (kein Überschreiben von main.css).
+
+   WICHTIG — SELEKTOREN PRÜFEN:
+   Ich sehe deine Live-DOM nicht. Die mit  /* ⚠ PRÜFEN */  markierten Selektoren
+   sind sichere Annahmen für Kivitendo 3.9.x. Die Positions-Tabelle #row_table_id
+   ist von dir bestätigt. Falls ein Block nicht greift: mit F12 den echten
+   Klassen-/ID-Namen ablesen und hier ersetzen. Nichts geht dabei kaputt.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1) Stellschrauben — hier zentral anpassen (Schriftgrösse, Farben, Abstände)
+   --------------------------------------------------------------------------- */
+:root {
+  --ri-text:            17px;   /* Basis-Schriftgrösse (älteren Augen zuliebe) */
+  --ri-text-lg:         19px;   /* Beschriftungen / wichtige Felder */
+  --ri-line:            1.5;    /* Zeilenhöhe */
+
+  --ri-ink:             #1a1a1a; /* Text (hoher Kontrast) */
+  --ri-ink-soft:        #444;    /* Sekundärtext */
+  --ri-line-color:      #c9c9c9; /* Rahmen */
+  --ri-line-strong:     #9a9a9a; /* kräftigerer Rahmen */
+  --ri-bg:              #ffffff; /* Feld-Hintergrund */
+  --ri-panel:           #f5f6f7; /* Karten/Panel-Hintergrund */
+  --ri-head:            #eef1f3; /* Tabellenkopf */
+  --ri-zebra:           #f7f9fa; /* Zeilenstreifen */
+  --ri-accent:          #0b6b5f; /* Revamp-Grün (Fokus/Aktion) */
+  --ri-accent-ink:      #ffffff;
+
+  --ri-touch:           44px;    /* Mindest-Touchfläche (Tablet) */
+  --ri-radius:          8px;
+  --ri-gap:             14px;
+}
+
+/* ---------------------------------------------------------------------------
+   2) Basis-Lesbarkeit für das Erfassungsformular
+   --------------------------------------------------------------------------- */
+body,
+.wrapper,                     /* ⚠ PRÜFEN — Kivitendo Haupt-Wrapper */
+#content {                    /* ⚠ PRÜFEN — Inhaltsbereich */
+  font-size: var(--ri-text);
+  line-height: var(--ri-line);
+  color: var(--ri-ink);
+}
+
+/* Überschrift der Maske */
+#content h1,
+.form-title,                  /* ⚠ PRÜFEN */
+h1.title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 var(--ri-gap);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ri-line-strong);
+}
+
+/* Beschriftungen gut lesbar */
+label,
+th,
+.label {
+  font-size: var(--ri-text-lg);
+  color: var(--ri-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   3) Eingabefelder — gross genug für Finger & Augen
+   --------------------------------------------------------------------------- */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="search"],
+select,
+textarea {
+  font-size: var(--ri-text);
+  min-height: var(--ri-touch);
+  padding: 8px 10px;
+  color: var(--ri-ink);
+  background: var(--ri-bg);
+  border: 1px solid var(--ri-line-strong);
+  border-radius: var(--ri-radius);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+textarea { min-height: 3lh; line-height: var(--ri-line); }
+
+/* Deutlich sichtbarer Fokus — hilft bei der Tastatur- und Tablet-Bedienung */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus,
+a.button:focus {
+  outline: 3px solid var(--ri-accent);
+  outline-offset: 1px;
+  border-color: var(--ri-accent);
+}
+
+/* Deaktivierte / berechnete Felder erkennbar, aber ruhig */
+input[readonly],
+input:disabled {
+  background: var(--ri-panel);
+  color: var(--ri-ink-soft);
+}
+
+/* ---------------------------------------------------------------------------
+   4) Kopfbereich (Kunde, Auftragsnr., Datum …) — auf Tablet sauber umbrechen
+   Kivitendo baut den Kopf oft als Tabelle. Wir lösen die starre Tabelle für
+   schmale Screens auf, damit nichts abgeschnitten wird.
+   --------------------------------------------------------------------------- */
+.form-header,                 /* ⚠ PRÜFEN — Container der Kopffelder */
+table.tbl-horizontal {        /* ⚠ PRÜFEN — häufige Kivitendo-Formulartabelle */
+  width: 100%;
+  background: var(--ri-panel);
+  border: 1px solid var(--ri-line-color);
+  border-radius: var(--ri-radius);
+  padding: var(--ri-gap);
+  margin-bottom: var(--ri-gap);
+}
+
+.form-header td,
+table.tbl-horizontal td,
+table.tbl-horizontal th {
+  padding: 6px 10px;
+  vertical-align: middle;
+}
+
+/* ---------------------------------------------------------------------------
+   5) POSITIONS-TABELLE  #row_table_id  (von Kivitendo befüllt)
+   Struktur bleibt — wir machen sie nur gross, ruhig und tablet-tauglich.
+   --------------------------------------------------------------------------- */
+
+/* Waagrechtes Scrollen auf schmalen Geräten statt Abschneiden.
+   Falls #row_table_id KEINEN eigenen Wrapper hat, greift der Fallback am table. */
+#row_table_id {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--ri-text);
+  display: block;               /* erlaubt eigenes horizontales Scrollen … */
+  overflow-x: auto;             /* … ohne die ganze Seite zu verschieben     */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Kopfzeile hervorheben und beim Scrollen oben halten */
+#row_table_id thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--ri-head);
+  color: var(--ri-ink);
+  font-size: var(--ri-text-lg);
+  font-weight: 700;
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 2px solid var(--ri-line-strong);
+  white-space: nowrap;
+}
+
+/* Zellen: mehr Luft, klare Trennlinien, angenehme Zeilenhöhe */
+#row_table_id td {
+  padding: 10px;
+  border-bottom: 1px solid var(--ri-line-color);
+  vertical-align: middle;
+}
+
+/* Zeilenstreifen für bessere Orientierung über die Breite */
+#row_table_id tbody tr:nth-child(odd) td { background: var(--ri-zebra); }
+#row_table_id tbody tr:hover td          { background: #eef6f4; }
+
+/* Eingabefelder INNERHALB der Positionszeilen füllen ihre Zelle aus */
+#row_table_id input[type="text"],
+#row_table_id input[type="number"],
+#row_table_id select,
+#row_table_id textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 8px;
+}
+
+/* Zahlen rechtsbündig (Menge, Preis, Rabatt, Betrag) — leichter zu prüfen.
+   Kivitendo nutzt dafür meist .numeric; sonst über die Spalten steuern. */
+#row_table_id td.numeric,     /* ⚠ PRÜFEN — Kivitendo-Klasse für Zahlen */
+#row_table_id input.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Positionsnummer klein & ruhig halten */
+#row_table_id td.row-number,  /* ⚠ PRÜFEN */
+#row_table_id td:first-child {
+  color: var(--ri-ink-soft);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   6) Summen / Fussbereich — das Wichtigste gross und deutlich
+   --------------------------------------------------------------------------- */
+.order-totals,                /* ⚠ PRÜFEN — Container der Summen */
+table.totals {                /* ⚠ PRÜFEN */
+  margin-top: var(--ri-gap);
+  margin-left: auto;          /* rechtsbündig unter der Tabelle */
+  font-size: var(--ri-text-lg);
+}
+.order-totals td,
+table.totals td { padding: 6px 12px; text-align: right; }
+
+.order-totals .grand-total,   /* ⚠ PRÜFEN — Zeile "Total" */
+tr.grand-total td {
+  font-size: 22px;
+  font-weight: 800;
+  border-top: 2px solid var(--ri-line-strong);
+}
+
+/* ---------------------------------------------------------------------------
+   7) Buttons — grosse, gut trennbare Touch-Ziele
+   --------------------------------------------------------------------------- */
+button,
+input[type="submit"],
+input[type="button"],
+a.button {
+  font-size: var(--ri-text-lg);
+  min-height: var(--ri-touch);
+  padding: 10px 18px;
+  border-radius: var(--ri-radius);
+  border: 1px solid var(--ri-line-strong);
+  background: #fff;
+  color: var(--ri-ink);
+  cursor: pointer;
+  margin: 4px 6px 4px 0;
+}
+button:hover,
+input[type="submit"]:hover,
+a.button:hover { background: var(--ri-panel); }
+
+/* Primäraktion (Speichern) hervorheben */
+input[type="submit"],
+button[type="submit"],
+.button--primary {            /* ⚠ PRÜFEN — falls vorhanden */
+  background: var(--ri-accent);
+  color: var(--ri-accent-ink);
+  border-color: var(--ri-accent);
+  font-weight: 700;
+}
+input[type="submit"]:hover,
+button[type="submit"]:hover { filter: brightness(0.94); }
+
+/* ---------------------------------------------------------------------------
+   8) Tablet-Feinschliff
+   --------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  :root { --ri-text: 18px; --ri-text-lg: 20px; }
+
+  /* Kopf-Formular stapeln statt zwängen (löst starre Tabellenzellen auf) */
+  .form-header,               /* ⚠ PRÜFEN */
+  table.tbl-horizontal,
+  .form-header tbody,
+  table.tbl-horizontal tbody { display: block; width: 100%; }
+
+  .form-header tr,
+  table.tbl-horizontal tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .form-header td,
+  table.tbl-horizontal td { display: block; padding: 2px 0; }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select { width: 100%; }
+}
+
+/* Sehr grosse Schrift optional: Body-Klasse \`ri-xl\` setzen für +2px überall */
+body.ri-xl { --ri-text: 20px; --ri-text-lg: 22px; }`;
+
+  document.getElementById('cssCode').textContent = CSS;
+
+  // --- Copy to clipboard ---
+  const copyBtn = document.getElementById('copyBtn');
+  const copyLabel = document.getElementById('copyLabel');
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(CSS);
+    } catch (e) {
+      const r = document.createRange();
+      r.selectNode(document.getElementById('cssCode'));
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(r);
+      try { document.execCommand('copy'); } catch (_) {}
+      sel.removeAllRanges();
+    }
+    copyBtn.classList.add('done');
+    copyLabel.textContent = 'Kopiert ✓';
+    setTimeout(() => { copyBtn.classList.remove('done'); copyLabel.textContent = 'Kopieren'; }, 1900);
+  });
+</script>

@@ -50,6 +50,7 @@ import {
   UserCheck,
   Presentation,
   Ticket,
+  Inbox,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
@@ -764,6 +765,23 @@ export const SECTIONS = {
     sidebarGroup: 'inhalte',
   },
 
+  presentationFeedback: {
+    id: 'presentationFeedback',
+    path: '/admin/presentations/feedback',
+    ui: {
+      label: 'Präsentations-Feedback',
+      description: 'Kommentare der Betrachter:innen zu den Präsentationsfolien',
+      icon: MessageSquare,
+      emoji: '💬',
+      color: 'info',
+    },
+    // Non-sensitive; visible to every staff member (matches the page guard).
+    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    priority: 105.72,
+    category: 'content',
+    sidebarGroup: 'inhalte',
+  },
+
   siteFeedback: {
     id: 'siteFeedback',
     path: '/admin/feedback',
@@ -776,6 +794,23 @@ export const SECTIONS = {
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 105.8,
+    category: 'content',
+    sidebarGroup: 'inhalte',
+  },
+
+  feedbackOverview: {
+    id: 'feedbackOverview',
+    path: '/admin/rueckmeldungen',
+    ui: {
+      label: 'Rückmeldungen',
+      description: 'Alle Rückmeldungen an einem Ort: Website, Präsentationen, Liefergegenstände',
+      icon: Inbox,
+      emoji: '📨',
+      color: 'info',
+    },
+    // Cross-cutting overview — visible to every staff member (transparency).
+    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    priority: 105.6,
     category: 'content',
     sidebarGroup: 'inhalte',
   },

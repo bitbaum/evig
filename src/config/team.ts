@@ -75,6 +75,37 @@ export const DEPARTMENT_COLORS: Record<Department, string> = {
 }
 
 // =============================================================================
+// WORK STATE — availability state machine (team_profiles.work_state)
+// =============================================================================
+// Values mirror the zod enum in src/lib/schemas/team.ts. This is the label +
+// colour SSOT for rendering that state (team board, member profile, forms).
+
+export const WORK_STATES = {
+  ACTIVE: 'active',
+  ON_LEAVE: 'on_leave',
+  UNAVAILABLE: 'unavailable',
+  INACTIVE: 'inactive',
+} as const
+
+export type WorkState = typeof WORK_STATES[keyof typeof WORK_STATES]
+
+export const WORK_STATE_OPTIONS = Object.values(WORK_STATES)
+
+export const WORK_STATE_LABELS: Record<WorkState, string> = {
+  active: 'Aktiv',
+  on_leave: 'Abwesend',
+  unavailable: 'Nicht verfügbar',
+  inactive: 'Inaktiv',
+}
+
+export const WORK_STATE_COLORS: Record<WorkState, string> = {
+  active: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+  on_leave: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
+  unavailable: 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300',
+  inactive: 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400',
+}
+
+// =============================================================================
 // PREFERRED CONTACT METHODS
 // =============================================================================
 

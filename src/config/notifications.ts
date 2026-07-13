@@ -32,6 +32,9 @@ export const NOTIFICATION_TYPES = {
   IT_HILFE_REQUEST_COMPLETED: 'it_hilfe_request_completed',
   IT_HILFE_REVIEW_RECEIVED: 'it_hilfe_review_received',
 
+  // Deliverables — feedback (comment / change_request / approval) to the owner
+  DELIVERABLE_FEEDBACK: 'deliverable_feedback',
+
   // Blog submissions
   BLOG_SUBMISSION_STATUS: 'blog_submission_status',
 
@@ -95,6 +98,7 @@ export const RELATED_TYPES = {
   TIMECARD_REVIEW: 'timecard_review',
   JOB_APPLICATION: 'job_application',
   JOB_VACANCY: 'job_vacancy',
+  DELIVERABLE: 'deliverable',
   PRESENTATION: 'presentation',
   SUGGESTION: 'suggestion',
 } as const
@@ -128,6 +132,7 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.TIMECARD_REVIEW]: '/admin/team/approvals?id=',
   [RELATED_TYPES.JOB_APPLICATION]: '/admin/hr/applications/',
   [RELATED_TYPES.JOB_VACANCY]: '/admin/hr/vacancies/',
+  [RELATED_TYPES.DELIVERABLE]: '/admin/deliverables/',
   // Presentation-comment + site-feedback notifications were un-clickable
   // (no mapping → relatedHref() returned null → no "Öffnen →", no navigation).
   // Land on the admin review page where the comment/feedback is addressed; both
