@@ -25,23 +25,26 @@ BEGIN;
 -- 1) Placeholder users. is_staff = TRUE (they are internal team members and must
 --    appear in staff/team views) is safe: with password_hash NULL and no OAuth
 --    account row, login is impossible until the row is claimed.
+-- Names: recognizable first name (maps to the real teammate) + a rock-legend
+-- surname so they read as real people. The @placeholder.revamp-it.ch email is
+-- the systematic "not-yet-claimed" marker (surname is no longer the marker).
 INSERT INTO users (name, email, is_staff, is_super_admin, password_hash, role)
 VALUES
-  ('Vera Platzhalter',   'vera@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
-  ('Dana Platzhalter',   'dana@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
-  ('Andres Platzhalter', 'andres@placeholder.revamp-it.ch', TRUE, FALSE, NULL, 'user'),
-  ('Cemo Platzhalter',   'cemo@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
-  ('Sila Platzhalter',   'sila@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
-  ('Robyn Platzhalter',  'robyn@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Simeo Platzhalter',  'simeo@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Anneke Platzhalter', 'anneke@placeholder.revamp-it.ch', TRUE, FALSE, NULL, 'user'),
-  ('Mohan Platzhalter',  'mohan@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Bruns Platzhalter',  'bruns@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Rezo Platzhalter',   'rezo@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
-  ('Romeu Platzhalter',  'romeu@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Carlo Platzhalter',  'carlo@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Tobin Platzhalter',  'tobin@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
-  ('Heino Platzhalter',  'heino@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user')
+  ('Vera Hendrix',      'vera@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
+  ('Dana Jagger',       'dana@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
+  ('Andres Bowie',      'andres@placeholder.revamp-it.ch', TRUE, FALSE, NULL, 'user'),
+  ('Cemo Mercury',      'cemo@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
+  ('Sila Lennon',       'sila@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
+  ('Robyn Cobain',      'robyn@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Simeo Springsteen', 'simeo@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Anneke Joplin',     'anneke@placeholder.revamp-it.ch', TRUE, FALSE, NULL, 'user'),
+  ('Mohan Dylan',       'mohan@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Bruns Marley',      'bruns@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Rezo Hetfield',     'rezo@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
+  ('Romeu Page',        'romeu@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Carlo Santana',     'carlo@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Tobin Morrison',    'tobin@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user'),
+  ('Heino Clapton',     'heino@placeholder.revamp-it.ch',  TRUE, FALSE, NULL, 'user')
 ON CONFLICT (email) DO NOTHING;
 
 -- 2) Memberships (team slug, member email, role). Roles map the Teamsliste's
