@@ -1,14 +1,18 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Users, Pencil, Mail, HeartPulse } from 'lucide-react'
+import { Users, Pencil, Mail, HeartPulse, CalendarClock } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { buttonClass } from '@/components/ui/button-class'
 import MembershipManager from '@/components/admin/teams/MembershipManager'
 import TeamFocusInput from '@/components/admin/teams/TeamFocusInput'
+import TeamJoinButton from '@/components/admin/teams/TeamJoinButton'
+import TeamGoalsSection from '@/components/admin/teams/TeamGoalsSection'
+import TeamMetricsSection from '@/components/admin/teams/TeamMetricsSection'
 import { ROUTES } from '@/config/routes'
 import { requireSection } from '@/lib/admin/guards'
 import { getTeamBySlug, getTeamMembers, listStaffCandidates, listTeams } from '@/lib/services/teams'
+import { listGoals, listMetrics } from '@/lib/services/team-coordination'
 import { getAccentClasses } from '@/config/teams'
 import { WORK_STATES, WORK_STATE_LABELS, WORK_STATE_COLORS, type WorkState } from '@/config/team'
 
@@ -29,12 +33,17 @@ export default async function TeamDetailPage({ params }: PageProps) {
   const team = await getTeamBySlug(slug)
   if (!team) notFound()
 
-  const [members, candidates, allTeams] = await Promise.all([
+  const [members, candidates, allTeams, goals, metrics] = await Promise.all([
     getTeamMembers(team.id),
     listStaffCandidates(),
     listTeams(),
+    listGoals(team.id),
+    listMetrics(team.id),
   ])
   const teamRefs = allTeams.map((t) => ({ id: t.id, name: t.name, accent: t.accent }))
+
+  // The viewer's own live membership in this team (drives the join/leave button).
+  const viewerMembership = members.find((m) => m.user_id === session.user.id) ?? null
 
   // Coverage: how many members are currently available (work_state) vs. away.
   const stateCount = (state: string) => members.filter((m) => (m.work_state ?? 'active') === state).length
@@ -51,12 +60,19 @@ export default async function TeamDetailPage({ params }: PageProps) {
       iconColor="blue"
       backButton={{ href: ROUTES.admin.teams, label: 'Alle Teams' }}
       actions={
-        session.user.isSuperAdmin ? (
-          <Link href={ROUTES.admin.teamEdit(team.slug)} className={buttonClass({ variant: 'secondary', size: 'sm' })}>
-            <Pencil className="w-4 h-4" />
-            Bearbeiten
-          </Link>
-        ) : undefined
+        <div className="flex items-center gap-2">
+          <TeamJoinButton
+            teamId={team.id}
+            viewerUserId={session.user.id}
+            viewerMembershipId={viewerMembership?.membership_id ?? null}
+          />
+          {session.user.isSuperAdmin && (
+            <Link href={ROUTES.admin.teamEdit(team.slug)} className={buttonClass({ variant: 'secondary', size: 'sm' })}>
+              <Pencil className="w-4 h-4" />
+              Bearbeiten
+            </Link>
+          )}
+        </div>
       }
     >
       <div className="space-y-5">
@@ -115,6 +131,19 @@ export default async function TeamDetailPage({ params }: PageProps) {
               initialUpdatedAt={team.current_focus_updated_at}
             />
           </div>
+
+          {team.meeting_cadence && (
+            <div className="flex items-center gap-1.5 text-sm text-text-secondary">
+              <CalendarClock className="w-4 h-4 shrink-0" aria-hidden />
+              <span>Sitzungsrhythmus: {team.meeting_cadence}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Coordination: goals + KPI metrics */}
+        <div className="grid gap-5 lg:grid-cols-2">
+          <TeamGoalsSection teamId={team.id} goals={goals} />
+          <TeamMetricsSection teamId={team.id} metrics={metrics} />
         </div>
 
         {/* Members */}

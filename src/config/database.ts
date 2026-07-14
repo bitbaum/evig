@@ -134,6 +134,8 @@ export const TABLE_NAMES = {
   // Teams (first-class teams + many-to-many membership)
   TEAMS: 'teams',
   TEAM_MEMBERSHIPS: 'team_memberships',
+  TEAM_GOALS: 'team_goals',
+  TEAM_METRICS: 'team_metrics',
   TEAM_AGENDA_ITEMS: 'team_agenda_items',
 
   // Content Submissions

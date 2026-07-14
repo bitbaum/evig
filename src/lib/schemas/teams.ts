@@ -1,9 +1,10 @@
 import { z } from 'zod'
-import { TEAM_ROLES, TEAM_ACCENT_OPTIONS } from '@/config/teams'
+import { TEAM_ROLES, TEAM_ACCENT_OPTIONS, GOAL_STATUS_OPTIONS } from '@/config/teams'
 
 // Enums as tuples for z.enum (derived from config — never hand-listed)
 const roles = Object.values(TEAM_ROLES) as [string, ...string[]]
 const accents = TEAM_ACCENT_OPTIONS as unknown as [string, ...string[]]
+const goalStatuses = GOAL_STATUS_OPTIONS as unknown as [string, ...string[]]
 
 // ---- Team create / update ---------------------------------------------------
 
@@ -57,6 +58,64 @@ export const transferMembershipSchema = z.object({
 export type AddMembershipInput = z.infer<typeof addMembershipSchema>
 export type ChangeRoleInput = z.infer<typeof changeRoleSchema>
 export type TransferMembershipInput = z.infer<typeof transferMembershipSchema>
+
+// ---- Goals ------------------------------------------------------------------
+
+export const createGoalSchema = z.object({
+  title: z.string().min(1, 'Titel erforderlich').max(200, 'Titel zu lang'),
+  detail: z.string().max(1000, 'Beschreibung zu lang').optional().nullable(),
+  status: z.enum(goalStatuses).default('open'),
+  target_label: z.string().max(40, 'Zeithorizont zu lang').optional().nullable(),
+  sort_order: z.number().int().min(0).max(9999).optional().default(0),
+})
+
+export const updateGoalSchema = createGoalSchema.partial()
+
+export type CreateGoalInput = z.infer<typeof createGoalSchema>
+export type UpdateGoalInput = z.infer<typeof updateGoalSchema>
+
+// ---- Metrics ----------------------------------------------------------------
+// Values arrive as numbers from the form; stored NUMERIC (string in JS).
+
+export const createMetricSchema = z.object({
+  label: z.string().min(1, 'Bezeichnung erforderlich').max(120, 'Bezeichnung zu lang'),
+  current_value: z.number().finite().optional().nullable(),
+  target_value: z.number().finite().optional().nullable(),
+  unit: z.string().max(20, 'Einheit zu lang').optional().nullable(),
+  higher_is_better: z.boolean().optional().default(true),
+  sort_order: z.number().int().min(0).max(9999).optional().default(0),
+})
+
+export const updateMetricSchema = createMetricSchema.partial()
+
+export type CreateMetricInput = z.infer<typeof createMetricSchema>
+export type UpdateMetricInput = z.infer<typeof updateMetricSchema>
+
+// ---- Coordination row shapes ------------------------------------------------
+
+export interface TeamGoalRow {
+  id: string
+  team_id: string
+  title: string
+  detail: string | null
+  status: string
+  target_label: string | null
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
+export interface TeamMetricRow {
+  id: string
+  team_id: string
+  label: string
+  current_value: string | null
+  target_value: string | null
+  unit: string | null
+  higher_is_better: boolean
+  sort_order: number
+  updated_at: string
+}
 
 // ---- Row shapes (SSOT for data returned to pages) ---------------------------
 

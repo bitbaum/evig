@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, integer, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, integer, numeric, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { users } from './auth'
 
@@ -63,3 +63,55 @@ export const teamMemberships = pgTable('team_memberships', {
 
 export type TeamMembership = typeof teamMemberships.$inferSelect
 export type NewTeamMembership = typeof teamMemberships.$inferInsert
+
+// =============================================================================
+// TEAM GOALS (structured objective list)
+// =============================================================================
+// A team's mini-roadmap: title + optional detail + status. `status` enum
+// authority is src/config/teams.ts + zod — plain text here, no CHECK.
+
+export const teamGoals = pgTable('team_goals', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  teamId: uuid('team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
+  title: text('title').notNull(),
+  detail: text('detail'),
+  /** Values: open | in_progress | done. Enum authority is src/config/teams.ts. */
+  status: text('status').notNull().default('open'),
+  /** Free-form horizon ("Q3", "2026", "laufend") — not a DATE by design. */
+  targetLabel: text('target_label'),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_team_goals_team').on(table.teamId, table.sortOrder),
+])
+
+export type TeamGoal = typeof teamGoals.$inferSelect
+export type NewTeamGoal = typeof teamGoals.$inferInsert
+
+// =============================================================================
+// TEAM METRICS (manual KPIs)
+// =============================================================================
+// label + current/target reading + unit. `higherIsBetter` drives progress
+// colouring; `sourceKey` is reserved (NULL = manual) for a future auto-compute.
+
+export const teamMetrics = pgTable('team_metrics', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  teamId: uuid('team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
+  label: text('label').notNull(),
+  /** NUMERIC → returned as string in JS; nullable (a metric may set only one side). */
+  currentValue: numeric('current_value'),
+  targetValue: numeric('target_value'),
+  unit: text('unit'),
+  higherIsBetter: boolean('higher_is_better').notNull().default(true),
+  /** NULL = manual value; reserved for a later live-query auto-compute path. */
+  sourceKey: text('source_key'),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_team_metrics_team').on(table.teamId, table.sortOrder),
+])
+
+export type TeamMetric = typeof teamMetrics.$inferSelect
+export type NewTeamMetric = typeof teamMetrics.$inferInsert

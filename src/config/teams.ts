@@ -47,6 +47,42 @@ export const TEAM_ROLE_SORT: Record<TeamRole, number> = {
 /** The two roles that must be unique per team (≤1 each) — enforced in the service. */
 export const UNIQUE_TEAM_ROLES: TeamRole[] = [TEAM_ROLES.LEAD, TEAM_ROLES.DEPUTY]
 
+// ---- Goal status ------------------------------------------------------------
+// App-level enum (plain TEXT column, no SQL CHECK — this config + zod is the
+// authority). Adding a status needs no migration.
+
+export const GOAL_STATUS = {
+  OPEN: 'open',
+  IN_PROGRESS: 'in_progress',
+  DONE: 'done',
+} as const
+
+export type GoalStatus = (typeof GOAL_STATUS)[keyof typeof GOAL_STATUS]
+
+export const GOAL_STATUS_OPTIONS = Object.values(GOAL_STATUS)
+
+export const GOAL_STATUS_LABELS: Record<GoalStatus, string> = {
+  open: 'Offen',
+  in_progress: 'In Arbeit',
+  done: 'Erreicht',
+}
+
+export const GOAL_STATUS_COLORS: Record<GoalStatus, string> = {
+  open: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300',
+  in_progress: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
+  done: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
+}
+
+export function getGoalStatusLabel(status: string | null | undefined): string {
+  if (!status) return GOAL_STATUS_LABELS.open
+  return GOAL_STATUS_LABELS[status as GoalStatus] ?? status
+}
+
+export function getGoalStatusColor(status: string | null | undefined): string {
+  if (!status) return GOAL_STATUS_COLORS.open
+  return GOAL_STATUS_COLORS[status as GoalStatus] ?? GOAL_STATUS_COLORS.open
+}
+
 // ---- Accent (semantic colour KEY, resolved to classes here) -----------------
 // A team's accent is a SectionColor key stored in the DB (e.g. 'info'), never a
 // class string or hex — so a design-token change never touches team rows.
