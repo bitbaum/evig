@@ -128,9 +128,11 @@ export function Header() {
         )}
       >
         <div className="max-w-7xl mx-auto">
-          <nav className="flex items-center justify-between gap-6 h-16 px-3 sm:px-6 lg:px-8">
-            {/* Logo */}
-            <div className="shrink-0">
+          <nav className="flex items-center justify-between gap-3 sm:gap-6 h-16 px-3 sm:px-6 lg:px-8">
+            {/* Logo — the ONE flexible item in the row (min-w-0, no shrink-0).
+                On narrow phones it scales down so the action cluster — most
+                importantly the menu button — is never pushed off-screen. */}
+            <div className="min-w-0">
               <Logo className="h-10" />
             </div>
 

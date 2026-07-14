@@ -160,9 +160,10 @@ export function UserMenu() {
             {initials}
           </div>
         )}
+        {/* Chevron is decorative — hidden on phones where header width is scarce */}
         <ChevronDown
           className={cn(
-            "w-4 h-4 text-text-tertiary transition-transform duration-200",
+            "hidden sm:block w-4 h-4 text-text-tertiary transition-transform duration-200",
             isOpen && "rotate-180 text-action"
           )}
         />

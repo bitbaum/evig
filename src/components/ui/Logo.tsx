@@ -11,13 +11,15 @@ interface LogoProps {
 
 export function Logo({ className, href = '/', showText = true }: LogoProps) {
   return (
-    <Link href={href} className={cn('group', className)}>
+    <Link href={href} className={cn('group block max-w-full', className)}>
+      {/* max-w-full + object-left let the logo scale down inside a shrinking
+          flex container (narrow phones) instead of overflowing the row. */}
       <Image
         src={ORG_IMAGES.logo}
         alt={ORG.name}
         width={200}
         height={48}
-        className="h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+        className="h-12 w-auto max-w-full object-contain object-left transition-transform duration-200 group-hover:scale-105"
         priority
       />
     </Link>
