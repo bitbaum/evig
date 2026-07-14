@@ -9,7 +9,7 @@ import { csrfMiddleware, generateCsrfToken, createCsrfCookie, getCsrfFromCookies
 const intlMiddleware = createIntlMiddleware(routing)
 
 // Routes that bypass intl routing and are handled directly
-const BYPASS_INTL = ['/api/', '/admin', '/auth', '/dashboard', '/profil', '/vote', '/d/', '/_next', '/_vercel']
+const BYPASS_INTL = ['/api/', '/admin', '/auth', '/dashboard', '/profil', '/vote', '/d/', '/einladung', '/_next', '/_vercel']
 
 // Non-default locales appear as a URL prefix (e.g. /fr/dashboard). Strip
 // it before running protected-route checks — otherwise `/fr/dashboard` would
